@@ -4,7 +4,6 @@
 /**
  * @package chamilo.include.search
  */
-
 require_once 'xapian.php';
 //TODO: think another way without including specific fields here
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -13,18 +12,19 @@ define('XAPIAN_DB', api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/');
 /**
  * Queries the database.
  * The xapian_query function queries the database using both a query string
- * and application-defined terms. Based on drupal-xapian
+ * and application-defined terms. Based on drupal-xapian.
  *
- * @param   string          $query_string   The search string. This string will
- *                                          be parsed and stemmed automatically.
- * @param   XapianDatabase  $db             Xapian database to connect
- * @param   int             $start          An integer defining the first
- *                                          document to return
- * @param   int             $length         The number of results to return.
- * @param   array           $extra          An array containing arrays of
- *                                          extra terms to search for.
- * @param   int             $count_type     Number of items to retrieve
- * @return  array                           An array of nids corresponding to the results.
+ * @param string         $query_string The search string. This string will
+ *                                     be parsed and stemmed automatically.
+ * @param XapianDatabase $db           Xapian database to connect
+ * @param int            $start        An integer defining the first
+ *                                     document to return
+ * @param int            $length       the number of results to return
+ * @param array          $extra        an array containing arrays of
+ *                                     extra terms to search for
+ * @param int            $count_type   Number of items to retrieve
+ *
+ * @return array an array of nids corresponding to the results
  */
 function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extra = [], $count_type = 0)
 {
@@ -63,8 +63,6 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
 
         $matches = $enquire->get_mset((int) $start, (int) $length);
 
-
-
         $specific_fields = get_specific_field_list();
 
         $results = [];
@@ -72,7 +70,6 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
 
         // Display the results.
         //echo $matches->get_matches_estimated().'results found';
-
 
         $count = 0;
 
@@ -113,15 +110,17 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
                 $count = $matches->get_matches_estimated();
                 break;
         }
+
         return [$count, $results];
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
+
         return null;
     }
 }
 
 /**
- * build a boolean query
+ * build a boolean query.
  */
 function xapian_get_boolean_query($term)
 {
@@ -129,12 +128,13 @@ function xapian_get_boolean_query($term)
 }
 
 /**
- * Retrieve a list db terms
+ * Retrieve a list db terms.
  *
- * @param   int             $count  Number of terms to retrieve
- * @param   char            $prefix The prefix of the term to retrieve
- * @param   XapianDatabase  $db     Xapian database to connect
- * @return  array
+ * @param int            $count  Number of terms to retrieve
+ * @param char           $prefix The prefix of the term to retrieve
+ * @param XapianDatabase $db     Xapian database to connect
+ *
+ * @return array
  */
 function xapian_get_all_terms($count = 0, $prefix, $db = null)
 {
@@ -161,15 +161,17 @@ function xapian_get_all_terms($count = 0, $prefix, $db = null)
         return $terms;
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
+
         return null;
     }
 }
 
 /**
- * Retrieve all terms of a document
+ * Retrieve all terms of a document.
  *
  * @param   XapianDocument  document searched
- * @return  array
+ *
+ * @return array
  */
 function xapian_get_doc_terms($doc = null, $prefix)
 {
@@ -195,16 +197,18 @@ function xapian_get_doc_terms($doc = null, $prefix)
         return $terms;
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
+
         return null;
     }
 }
 
 /**
- * Join xapian queries
+ * Join xapian queries.
  *
  * @param XapianQuery|array $query1
  * @param XapianQuery|array $query2
- * @param string $op
+ * @param string            $op
+ *
  * @return XapianQuery query joined
  */
 function xapian_join_queries($query1, $query2 = null, $op = 'or')
@@ -239,8 +243,10 @@ function xapian_join_queries($query1, $query2 = null, $op = 'or')
 
 /**
  * @author Isaac flores paz <florespaz@bidsoftperu.com>
- * @param String The xapian error message
- * @return String The chamilo error message
+ *
+ * @param string The xapian error message
+ *
+ * @return string The chamilo error message
  */
 function display_xapian_error($xapian_error_message)
 {

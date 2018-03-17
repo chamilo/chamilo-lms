@@ -5,6 +5,7 @@
  * This class takes the creation and querying of an SQLite DB in charge. The
  * goal of this DB is to get stats on the usage of language vars for a common
  * user.
+ *
  * @package chamilo.cron.lang
  */
 
@@ -13,7 +14,7 @@
  * goal of this DB is to get stats on the usage of language vars for a common
  * user. This class requires the SQLite extension of PHP to be installed. The
  * check for the availability of sqlite_open() should be made before calling
- * the constructor (preferrably)
+ * the constructor (preferrably).
  */
 class langstats
 {
@@ -27,6 +28,7 @@ class langstats
             case 'sqlite':
                 if (!class_exists('SQLite3')) {
                     $this->error = 'SQLiteNotAvailable';
+
                     return false; //cannot use if sqlite not installed
                 }
                 if (empty($file)) {
@@ -40,15 +42,17 @@ class langstats
                     } catch (Exception $e) {
                         $this->error = 'DatabaseCreateError';
                         error_log('Exception: '.$e->getMessage());
+
                         return false;
                     }
                     $err = $this->db->exec(
                         'CREATE TABLE lang_freq ('
-                        . ' id integer PRIMARY KEY AUTOINCREMENT, ' //autoincrement in SQLITE
-                        . ' term_name text, term_file text, term_count integer default 0)'
+                        .' id integer PRIMARY KEY AUTOINCREMENT, ' //autoincrement in SQLITE
+                        .' term_name text, term_file text, term_count integer default 0)'
                     );
                     if ($err === false) {
                         $this->error = 'CouldNotCreateTable';
+
                         return false;
                     }
                     $err = $this->db->exec(
@@ -56,6 +60,7 @@ class langstats
                     );
                     if ($err === false) {
                         $this->error = 'CouldNotCreateIndex';
+
                         return false;
                     }
                     // Table and index created, move on.
@@ -64,30 +69,35 @@ class langstats
             case 'mysql': //implementation not finished
                 if (!function_exists('mysql_connect')) {
                     $this->error = 'SQLiteNotAvailable';
+
                     return false; //cannot use if sqlite not installed
                 }
                 $err = Database::query('SELECT * FROM lang_freq');
                 if ($err === false) { //the database probably does not exist, create it
                     $err = Database::query(
                         'CREATE TABLE lang_freq ('
-                        . ' id int PRIMARY KEY AUTO_INCREMENT, '
-                        . ' term_name text, term_file text default \'\', term_count int default 0)'
+                        .' id int PRIMARY KEY AUTO_INCREMENT, '
+                        .' term_name text, term_file text default \'\', term_count int default 0)'
                     );
                     if ($err === false) {
                         $this->error = 'CouldNotCreateTable';
+
                         return false;
                     }
                 } // if no error, we assume the table exists
                 break;
         }
+
         return $this->db;
     }
 
     /**
-     * Add a count for a specific term
+     * Add a count for a specific term.
+     *
      * @param string The language term used
      * @param string The file from which the language term came from
-     * @return boolean true
+     *
+     * @return bool true
      */
     public function add_use($term, $term_file = '')
     {
@@ -97,6 +107,7 @@ class langstats
         $ress = $this->db->query($sql);
         if ($ress === false) {
             $this->error = 'CouldNotQueryTermFromTable';
+
             return false;
         }
         $i = 0;
@@ -108,6 +119,7 @@ class langstats
             );
             if ($res === false) {
                 $this->error = 'CouldNotUpdateTerm';
+
                 return false;
             } else {
                 return $row[0];
@@ -121,6 +133,7 @@ class langstats
             );
             if ($resi === false) {
                 $this->error = 'CouldNotInsertRow';
+
                 return false;
             } else {
                 return $this->db->lastInsertRowID();
@@ -129,9 +142,11 @@ class langstats
     }
 
     /**
-     * Function to get a list of the X most-requested terms
-     * @param    integer    Limit of terms to show
-     * @return    array    List of most requested terms
+     * Function to get a list of the X most-requested terms.
+     *
+     * @param    int    Limit of terms to show
+     *
+     * @return array List of most requested terms
      */
     public function get_popular_terms($num = 1000)
     {
@@ -142,16 +157,19 @@ class langstats
         while ($row = $res->fetchArray()) {
             $list[] = $row;
         }
+
         return $list;
     }
 
     /**
-     * Clear all records in lang_freq
-     * @return boolean true
+     * Clear all records in lang_freq.
+     *
+     * @return bool true
      */
     public function clear_all()
     {
         $res = sqlite_query($this->db, 'DELETE FROM lang_freq WHERE 1=1');
+
         return $list;
     }
 
@@ -159,6 +177,7 @@ class langstats
      * Returns an array of all the language variables with their corresponding
      * file of origin. This function tolerates a certain rate of error due to
      * the duplication of variables in language files.
+     *
      * @return array variable => origin file
      */
     public function get_variables_origin()

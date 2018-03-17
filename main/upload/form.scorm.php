@@ -4,12 +4,14 @@
 /**
  * Display part of the SCORM sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
 /**
- * Small function to list files in archive/
+ * Small function to list files in archive/.
  */
 function get_zip_files_in_garbage()
 {
@@ -35,7 +37,7 @@ function get_zip_files_in_garbage()
 }
 
 /**
- * Just display the form needed to upload a SCORM and give its settings
+ * Just display the form needed to upload a SCORM and give its settings.
  */
 $nameTools = get_lang("FileUpload");
 $interbreadcrumb[] = [
@@ -60,7 +62,7 @@ $form = new FormValidator(
     '',
     [
         'id' => "upload_form",
-        'enctype' => "multipart/form-data"
+        'enctype' => "multipart/form-data",
     ]
 );
 $form->addHeader($nameTools);

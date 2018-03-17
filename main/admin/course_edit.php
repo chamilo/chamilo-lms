@@ -1,14 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\UserBundle\Entity\User;
 
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -132,13 +131,13 @@ $form->addText(
     [
         get_lang('VisualCode'),
         get_lang('OnlyLettersAndNumbers'),
-        get_lang('ThisValueIsUsedInTheCourseURL')
+        get_lang('ThisValueIsUsedInTheCourseURL'),
     ],
     true,
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers')
+        'title' => get_lang('OnlyLettersAndNumbers'),
     ]
 );
 
@@ -298,7 +297,7 @@ $extra = $extra_field->addElements(
 $htmlHeadXtra[] = '
 <script>
 $(function() {
-    ' . $extra['jquery_ready_content'].'
+    '.$extra['jquery_ready_content'].'
 });
 </script>';
 

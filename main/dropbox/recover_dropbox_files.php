@@ -48,14 +48,14 @@ if (Database::num_rows($result)) {
                     get_lang('Recover'),
                     api_get_self().'?recover_id='.$file['id'],
                     ['class' => 'btn btn-default']
-                )
+                ),
             ];
         }
     }
     $headers = [
         get_lang('FileName'),
         get_lang('UploadedDate'),
-        get_lang('Action')
+        get_lang('Action'),
     ];
     echo Display::table($headers, $rows);
 }

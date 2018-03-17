@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Courses reporting
+ * Courses reporting.
+ *
  * @package chamilo.reporting
  */
-
 ob_start();
 $cidReset = true;
 
@@ -36,6 +36,7 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
 function count_courses()
 {
     global $nb_courses;
+
     return $nb_courses;
 }
 
@@ -117,7 +118,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         $actionsRight .= Display::url(
             Display::return_icon('printer.png', get_lang('Print'), [], 32),
             'javascript: void(0);',
-            ['onclick'=>'javascript: window.print();']
+            ['onclick' => 'javascript: window.print();']
         );
     }
 
@@ -322,7 +323,7 @@ function get_courses($from, $limit, $column, $direction)
                 is_null($messagesInCourse) ? '-' : $messagesInCourse,
                 is_null($assignmentsInCourse) ? '-' : $assignmentsInCourse,
                 $attendanceLink,
-                $courseIcon
+                $courseIcon,
             ];
         }
     }
@@ -358,7 +359,7 @@ $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : nu
 
 $params = [
     'session_id' => $sessionId,
-    'keyword' => $keyword
+    'keyword' => $keyword,
 ];
 $table->set_additional_parameters($params);
 

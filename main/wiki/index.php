@@ -7,7 +7,6 @@
  *
  * @package chamilo.wiki
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'wiki.inc.php';
 
@@ -63,11 +62,11 @@ if ($groupId) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups')
+        "name" => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.Security::remove_XSS($group_properties['name'])
+        "name" => get_lang('GroupSpace').' '.Security::remove_XSS($group_properties['name']),
     ];
     //ensure this tool in groups whe it's private or deactivated
     if ($group_properties['wiki_state'] == 0) {

@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -57,7 +56,7 @@ $columns = [
     get_lang('Name'),
     get_lang('CertificatesFiles'),
     get_lang('Skills'),
-    get_lang('Actions')
+    get_lang('Actions'),
 ];
 
 //Column config
@@ -66,21 +65,21 @@ $column_model = [
         'name' => 'name',
         'index' => 'name',
         'width' => '150',
-        'align' => 'left'
+        'align' => 'left',
     ],
     [
         'name' => 'certificate',
         'index' => 'certificate',
         'width' => '25',
         'align' => 'left',
-        'sortable' => 'false'
+        'sortable' => 'false',
     ],
     [
         'name' => 'skills',
         'index' => 'skills',
         'width' => '300',
         'align' => 'left',
-        'sortable' => 'false'
+        'sortable' => 'false',
     ],
     [
         'name' => 'actions',
@@ -88,8 +87,8 @@ $column_model = [
         'width' => '30',
         'align' => 'left',
         'formatter' => 'action_formatter',
-        'sortable' => 'false'
-    ]
+        'sortable' => 'false',
+    ],
 ];
 //Autowidth
 $extra_params['autowidth'] = 'true';

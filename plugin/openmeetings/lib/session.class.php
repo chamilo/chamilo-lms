@@ -1,12 +1,14 @@
 <?php
 /**
- * Definition of OpenMeetings session class
+ * Definition of OpenMeetings session class.
+ *
  * @package chamilo.plugin.openmeetings
  */
+
 namespace Chamilo\Plugin\OpenMeetings;
 
 /**
- * Class session
+ * Class session.
  */
 class Session
 {

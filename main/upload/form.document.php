@@ -4,11 +4,13 @@
 /**
  * Display part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
- * Just display the form needed to upload a SCORM and give its settings
+ * Just display the form needed to upload a SCORM and give its settings.
  */
 $nameTools = get_lang('FileUpload');
 $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang(TOOL_DOCUMENT)];
@@ -22,7 +24,7 @@ api_display_tool_title($nameTools.$add_group_to_title);
 <div id="upload_form_div" name="form_div" style="display:block;">
     <form method="POST" action="upload.php" id="upload_form"
           enctype="multipart/form-data"
-          onsubmit="javascript: myUpload.start('dynamic_div','progressbar_green.gif','<?php echo(get_lang('Uploading', '')); ?>', 'upload_form_div');">
+          onsubmit="javascript: myUpload.start('dynamic_div','progressbar_green.gif','<?php echo get_lang('Uploading', ''); ?>', 'upload_form_div');">
         <input type="hidden" name="curdirpath" value="<?php echo $path; ?>">
         <input type="hidden" name="tool" value="<?php echo $my_tool; ?>">
         <input type="file" name="user_file">

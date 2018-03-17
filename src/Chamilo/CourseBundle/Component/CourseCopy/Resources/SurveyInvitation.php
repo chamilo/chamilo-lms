@@ -4,36 +4,39 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * An SurveyInvitation
+ * An SurveyInvitation.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.backup
  */
 class SurveyInvitation extends Resource
 {
     /**
-     * Survey code
+     * Survey code.
      */
     public $code;
     /**
-     * User info
+     * User info.
      */
     public $user;
     /**
-     * Invitation code
+     * Invitation code.
      */
     public $invitation_code;
     /**
-     * Invitation date
+     * Invitation date.
      */
     public $invitation_date;
     /**
-     * Reminder date
+     * Reminder date.
      */
     public $reminder_date;
 
     /**
-     * Create a new SurveyInvitation
-     * @param int $id
+     * Create a new SurveyInvitation.
+     *
+     * @param int    $id
      * @param string $code
      * @param string $user
      * @param string $invitation_code
@@ -51,7 +54,7 @@ class SurveyInvitation extends Resource
     }
 
     /**
-     * Show this invitation
+     * Show this invitation.
      */
     public function show()
     {

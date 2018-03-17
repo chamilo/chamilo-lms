@@ -1,20 +1,20 @@
 <?php
 
 /**
- * Abstract base class for QuickForm validation rules
+ * Abstract base class for QuickForm validation rules.
  */
 
 /**
- * Validate urls
- *
+ * Validate urls.
  */
 class HTML_QuickForm_Rule_Url extends HTML_QuickForm_Rule
 {
     /**
-     * Validates url
+     * Validates url.
      *
      * @param string $url
-     * @return boolean  Returns true if valid, false otherwise.
+     *
+     * @return bool returns true if valid, false otherwise
      */
     public function validate($url, $options)
     {

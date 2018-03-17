@@ -2,7 +2,8 @@
 /* For license terms, see /license.txt */
 
 /**
- * List of pending payments of the Buy Courses plugin
+ * List of pending payments of the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
 //Initialization
@@ -40,7 +41,7 @@ if (isset($_GET['order'])) {
 
             $urlToRedirect .= http_build_query([
                 'status' => BuyCoursesPlugin::SALE_STATUS_COMPLETED,
-                'sale' => $sale['id']
+                'sale' => $sale['id'],
             ]);
             break;
         case 'cancel':
@@ -55,7 +56,7 @@ if (isset($_GET['order'])) {
 
             $urlToRedirect .= http_build_query([
                 'status' => BuyCoursesPlugin::SALE_STATUS_CANCELED,
-                'sale' => $sale['id']
+                'sale' => $sale['id'],
             ]);
             break;
     }
@@ -103,7 +104,7 @@ $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([
     'filter_type' => $selectedFilterType,
-    'status' => $selectedStatus
+    'status' => $selectedStatus,
 ]);
 
 switch ($selectedFilterType) {
@@ -128,7 +129,7 @@ foreach ($sales as $sale) {
         'product_name' => $sale['product_name'],
         'product_type' => $productTypes[$sale['product_type']],
         'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname']),
-        'payment_type' => $paymentTypes[$sale['payment_type']]
+        'payment_type' => $paymentTypes[$sale['payment_type']],
     ];
 }
 

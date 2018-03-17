@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserCourseCategory
+ * UserCourseCategory.
  *
  * @ORM\Table(name="user_course_category", indexes={@ORM\Index(name="idx_user_c_cat_uid", columns={"user_id"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserCourseCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class UserCourseCategory
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -37,16 +37,17 @@ class UserCourseCategory
     private $title;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sort", type="integer", nullable=true)
      */
     private $sort;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return UserCourseCategory
      */
     public function setUserId($userId)
@@ -57,9 +58,9 @@ class UserCourseCategory
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -67,9 +68,10 @@ class UserCourseCategory
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return UserCourseCategory
      */
     public function setTitle($title)
@@ -80,7 +82,7 @@ class UserCourseCategory
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -90,9 +92,10 @@ class UserCourseCategory
     }
 
     /**
-     * Set sort
+     * Set sort.
      *
-     * @param integer $sort
+     * @param int $sort
+     *
      * @return UserCourseCategory
      */
     public function setSort($sort)
@@ -103,9 +106,9 @@ class UserCourseCategory
     }
 
     /**
-     * Get sort
+     * Get sort.
      *
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -113,9 +116,9 @@ class UserCourseCategory
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

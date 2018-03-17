@@ -3,21 +3,21 @@
 
 /**
  * DashboardManager can be used to manage dashboard
- * author Christian Fasanando <christian1827@gmail.com>
+ * author Christian Fasanando <christian1827@gmail.com>.
+ *
  * @package chamilo.dashboard
  */
 class DashboardManager
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * This function allows easy activating and inactivating of dashboard plugins
-     * @return void
+     * This function allows easy activating and inactivating of dashboard plugins.
      */
     public static function handle_dashboard_plugins()
     {
@@ -108,9 +108,9 @@ class DashboardManager
     }
 
     /**
-     * display checkboxes for dashboard plugin list
-     * @param string  $plugin_path
+     * display checkboxes for dashboard plugin list.
      *
+     * @param string $plugin_path
      */
     public static function display_dashboard_plugin_checkboxes($plugin_path)
     {
@@ -118,7 +118,7 @@ class DashboardManager
 
         $sql = "SELECT * FROM $tbl_block
                 WHERE path = '".Database::escape_string($plugin_path)."' AND active = 1";
-        $rs  = Database::query($sql);
+        $rs = Database::query($sql);
 
         $checked = '';
         if (Database::num_rows($rs) > 0) {
@@ -132,9 +132,10 @@ class DashboardManager
 
     /**
      * This function allows easy activating and inactivating
-     * of plugins and save them inside db
+     * of plugins and save them inside db.
+     *
      * @param array $plugin_paths dashboard plugin paths
-     * return int affected rows
+     *                            return int affected rows
      */
     public static function store_dashboard_plugins($plugin_paths)
     {
@@ -251,7 +252,8 @@ class DashboardManager
     }
 
     /**
-     * Get all plugins path inside dashboard directory
+     * Get all plugins path inside dashboard directory.
+     *
      * @return array name plugins directories
      */
     public static function getPossibleDashboardPluginsPath()
@@ -262,7 +264,7 @@ class DashboardManager
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
         $handle = @opendir($dashboard_pluginpath);
         while (false !== ($file = readdir($handle))) {
-            if ($file <> '.' && $file <> '..' && is_dir($dashboard_pluginpath.$file)) {
+            if ($file != '.' && $file != '..' && is_dir($dashboard_pluginpath.$file)) {
                 $possiblePlugins[] = $file;
             }
         }
@@ -272,7 +274,8 @@ class DashboardManager
     }
 
     /**
-     * Get all blocks data without plugin directory
+     * Get all blocks data without plugin directory.
+     *
      * @return array Block data
      */
     public static function get_block_data_without_plugin()
@@ -311,9 +314,11 @@ class DashboardManager
     }
 
     /**
-     * get data about enabled dashboard block (stored insise block table)
-     * @param  string $path plugin path
-     * @return array    data
+     * get data about enabled dashboard block (stored insise block table).
+     *
+     * @param string $path plugin path
+     *
+     * @return array data
      */
     public static function get_enabled_dashboard_blocks($path = '')
     {
@@ -325,18 +330,20 @@ class DashboardManager
         }
 
         $sql = "SELECT * FROM $tbl_block WHERE active = 1 $condition_path ";
-        $rs  = Database::query($sql);
+        $rs = Database::query($sql);
         $block_data = [];
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 $block_data[$row['path']] = $row;
             }
         }
+
         return $block_data;
     }
 
     /**
-     * display user dashboard list
+     * display user dashboard list.
+     *
      * @param int  User id
      */
     public static function display_user_dashboard_list($user_id)
@@ -395,7 +402,7 @@ class DashboardManager
                           </td>';
                     $html .= '</tr>';
                 } else {
-                    $html .= Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, ['colspan'=>'3']));
+                    $html .= Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, ['colspan' => '3']));
                 }
             }
 
@@ -411,11 +418,13 @@ class DashboardManager
                     get_lang('ConfigureDashboardPlugin').'</a>';
             }
         }
+
         return $html;
     }
 
     /**
-     * display checkboxes for user dashboard list
+     * display checkboxes for user dashboard list.
+     *
      * @param int    User id
      * @param int    Block id
      */
@@ -433,15 +442,18 @@ class DashboardManager
         $html = "<td align=\"center\">";
         $html .= '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
         $html .= "</td>";
+
         return $html;
     }
 
     /**
      * This function store enabled blocks id with its column position (block_id1:colum;block_id2:colum; ...)
-     * inside extra user fields
-     * @param int $user_id User id
+     * inside extra user fields.
+     *
+     * @param int   $user_id        User id
      * @param array $enabled_blocks selected blocks
-     * @param array $columns columns position
+     * @param array $columns        columns position
+     *
      * @return bool
      */
     public static function store_user_blocks($user_id, $enabled_blocks, $columns)
@@ -467,9 +479,11 @@ class DashboardManager
     }
 
     /**
-     * This function get user block data (block id with its number of column) from extra user data
+     * This function get user block data (block id with its number of column) from extra user data.
+     *
      * @param int        User id
-     * @return array    data (block_id,column)
+     *
+     * @return array data (block_id,column)
      */
     public static function get_user_block_data($user_id)
     {
@@ -491,8 +505,9 @@ class DashboardManager
     }
 
     /**
-     * This function update extra user blocks data after closing a dashboard block
-     * @param int $user_id       User id
+     * This function update extra user blocks data after closing a dashboard block.
+     *
+     * @param int $user_id User id
      * @param string    plugin path
      *
      * @return bool
@@ -521,8 +536,9 @@ class DashboardManager
     }
 
     /**
-     * get links for styles from dashboard plugins
-     * @return string   links
+     * get links for styles from dashboard plugins.
+     *
+     * @return string links
      */
     public static function getStyleSheet()
     {

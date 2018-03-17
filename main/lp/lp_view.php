@@ -1,21 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use ChamiloSession as Session;
 
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
- * will be automatically created for it, and the files will be uncompressed there for example ;
+ * will be automatically created for it, and the files will be uncompressed there for example ;.
  *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org> - redesign
  * @author Denes Nagy, principal author
  * @author Isthvan Mandak, several new features
  * @author Roan Embrechts, code improvements and refactoring
  */
-
 $use_anonymous = true;
 $this_section = SECTION_COURSES;
 
@@ -152,15 +152,15 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 
 // additional APIs
 $htmlHeadXtra[] = '<script>
-chamilo_courseCode = "' . $course_code.'";
+chamilo_courseCode = "'.$course_code.'";
 </script>';
 // Document API
 $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
 // Storage API
 $htmlHeadXtra[] = '<script>
-var sv_user = \'' . api_get_user_id().'\';
+var sv_user = \''.api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
-var sv_sco = \'' . $lp_id.'\';
+var sv_sco = \''.$lp_id.'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
@@ -277,8 +277,8 @@ if (!empty($_REQUEST['exeId']) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
-                FROM ' . $TBL_TRACK_EXERCICES.'
-                WHERE exe_id = ' . $safe_exe_id;
+                FROM '.$TBL_TRACK_EXERCICES.'
+                WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
@@ -412,16 +412,16 @@ global $interbreadcrumb;
 if ($is_allowed_to_edit) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),
-        'name' => get_lang('LearningPaths')
+        'name' => get_lang('LearningPaths'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
-        'name' => $lp->get_name()
+        'name' => $lp->get_name(),
     ];
 
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('Preview')
+        'name' => get_lang('Preview'),
     ];
 }
 
@@ -429,11 +429,11 @@ if ($is_allowed_to_edit) {
 if ($is_allowed_to_edit) {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
-        'action' => 'return_to_course_homepage'
+        'action' => 'return_to_course_homepage',
     ]);
 } else {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
-        'action' => 'return_to_course_homepage'
+        'action' => 'return_to_course_homepage',
     ]);
 }
 

@@ -3,7 +3,9 @@
 
 /**
  * Code library for HotPotatoes integration.
+ *
  * @package chamilo.exercise
+ *
  * @author Istvan Mandak (original author)
  */
 
@@ -16,8 +18,10 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT);
  *
  * If a directory of that name already exists, don't create any.
  * If a file of that name exists, remove it and create a directory.
- * @param   string   $base_work_dir   Wanted path
- * @return  boolean     Always true so far
+ *
+ * @param string $base_work_dir Wanted path
+ *
+ * @return bool Always true so far
  */
 function hotpotatoes_init($base_work_dir)
 {
@@ -28,6 +32,7 @@ function hotpotatoes_init($base_work_dir)
             @unlink($document_path);
         }
         @mkdir($document_path, api_get_permissions_for_new_directories());
+
         return true;
     } else {
         return false;
@@ -44,9 +49,11 @@ function hotpotatoes_init($base_work_dir)
 
 /**
  * Gets the title of the quiz file given as parameter.
- * @param   string  $fname  File name
- * @param   string  $fpath  File path
- * @return  string    The exercise title
+ *
+ * @param string $fname File name
+ * @param string $fpath File path
+ *
+ * @return string The exercise title
  */
 function GetQuizName($fname, $fpath)
 {
@@ -67,15 +74,18 @@ function GetQuizName($fname, $fpath)
     if ($title == '') {
         $title = basename($fname);
     }
+
     return (string) $title;
 }
 
 /**
  * Gets the comment about a file from the corresponding database record.
- * @param   string    $path File path
- * @param   string    $courseCode (if not given, the course will be taken from the context)
- * @return  string    Comment from the database record
- * Added conditional to the table if is empty.
+ *
+ * @param string $path       File path
+ * @param string $courseCode (if not given, the course will be taken from the context)
+ *
+ * @return string comment from the database record
+ *                Added conditional to the table if is empty
  */
 function GetComment($path, $courseCode = '')
 {
@@ -89,16 +99,19 @@ function GetComment($path, $courseCode = '')
             return $row[0];
         }
     }
+
     return null;
 }
 
 /**
  * Sets the comment in the database for a particular path.
- * @param    string    $path File path
- * @param    string    $comment Comment to set
- * @return   Doctrine\DBAL\Driver\Statement|null
- * Result of the database operation
- * (Database::query will output some message directly on error anyway)
+ *
+ * @param string $path    File path
+ * @param string $comment Comment to set
+ *
+ * @return Doctrine\DBAL\Driver\Statement|null
+ *                                             Result of the database operation
+ *                                             (Database::query will output some message directly on error anyway)
  */
 function SetComment($path, $comment)
 {
@@ -115,8 +128,10 @@ function SetComment($path, $comment)
 
 /**
  * Reads the file contents into a string.
- * @param    string    $full_file_path Urlencoded path
- * @return   string    The file contents or false on security error
+ *
+ * @param string $full_file_path Urlencoded path
+ *
+ * @return string The file contents or false on security error
  */
 function ReadFileCont($full_file_path)
 {
@@ -130,17 +145,21 @@ function ReadFileCont($full_file_path)
             }
             $contents = fread($fp, filesize($full_file_path));
             fclose($fp);
+
             return $contents;
         }
     }
+
     return false;
 }
 
 /**
  * Writes the file contents into the given file path.
- * @param    string    $full_file_path Urlencoded path
- * @param    string    $content The file contents
- * @return   boolean   True on success, false on security error
+ *
+ * @param string $full_file_path Urlencoded path
+ * @param string $content        The file contents
+ *
+ * @return bool True on success, false on security error
  */
 function WriteFileCont($full_file_path, $content)
 {
@@ -161,16 +180,20 @@ function WriteFileCont($full_file_path, $content)
         if ($fp !== false) {
             fwrite($fp, $content);
             fclose($fp);
+
             return true;
         }
     }
+
     return false;
 }
 
 /**
  * Gets the name of an img whose path is given (without directories or extensions).
- * @param    string    $imageTag An image tag (<img src="...." ...>)
- * @return   string    The image file name or an empty string
+ *
+ * @param string $imageTag An image tag (<img src="...." ...>)
+ *
+ * @return string The image file name or an empty string
  */
 function GetImgName($imageTag)
 {
@@ -201,8 +224,10 @@ function GetImgName($imageTag)
 
 /**
  * Gets the source path of an image tag.
- * @param    string    $imageTag An image tag
- * @return   string    The image source or ""
+ *
+ * @param string $imageTag An image tag
+ *
+ * @return string The image source or ""
  */
 function GetSrcName($imageTag)
 {
@@ -221,10 +246,11 @@ function GetSrcName($imageTag)
 
 /**
  * Gets the image parameters from an image path.
- * @param    string       $fname File name
- * @param    string       $fpath File path
- * @param    array    $imgparams Reference to a list of image parameters (emptied, then used to return results)
- * @param    int    $imgcount Reference to a counter of images (emptied, then used to return results)
+ *
+ * @param string $fname     File name
+ * @param string $fpath     File path
+ * @param array  $imgparams Reference to a list of image parameters (emptied, then used to return results)
+ * @param int    $imgcount  Reference to a counter of images (emptied, then used to return results)
  */
 function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
 {
@@ -249,8 +275,10 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
 
 /**
  * Generates a list of hidden fields with the image params given as parameter to this function.
- * @param    array    $imgparams List of image parameters
- * @return   string   String containing the hidden parameters built from the list given
+ *
+ * @param array $imgparams List of image parameters
+ *
+ * @return string String containing the hidden parameters built from the list given
  */
 function GenerateHiddenList($imgparams)
 {
@@ -260,14 +288,17 @@ function GenerateHiddenList($imgparams)
             $list .= "<input type=\"hidden\" name=\"imgparams[]\" value=\"$string\" />\n";
         }
     }
+
     return $list;
 }
 
 /**
  * Searches for a node in the given array.
- * @param    array    $array Reference to the array to search
- * @param    string   $node  Node we are looking for in the array
- * @return   mixed    Node name or false if not found
+ *
+ * @param array  $array Reference to the array to search
+ * @param string $node  Node we are looking for in the array
+ *
+ * @return mixed Node name or false if not found
  */
 function myarraysearch(&$array, $node)
 {
@@ -281,26 +312,33 @@ function myarraysearch(&$array, $node)
         }
     }
     $array = $tmp_array;
+
     return $match;
 }
 
 /**
  * Searches an image name into an array.
- * @param    array        $imgparams Reference to an array to search
- * @param    string       $string String to look for
- * @return   mixed        String given if found, false otherwise
- * @uses     myarraysearch    This function is just an additional layer on the myarraysearch() function
+ *
+ * @param array  $imgparams Reference to an array to search
+ * @param string $string    String to look for
+ *
+ * @return mixed String given if found, false otherwise
+ *
+ * @uses     \myarraysearch    This function is just an additional layer on the myarraysearch() function
  */
 function CheckImageName(&$imgparams, $string)
 {
     $checked = myarraysearch($imgparams, $string);
+
     return $checked;
 }
 
 /**
  * Replaces an image tag by ???
- * @param    string    $content The content to replace
- * @return   string    The modified content
+ *
+ * @param string $content The content to replace
+ *
+ * @return string The modified content
  */
 function ReplaceImgTag($content)
 {
@@ -317,14 +355,17 @@ function ReplaceImgTag($content)
             }
         }
     }
+
     return $newcontent;
 }
 
 /**
  * Fills the folder name up to a certain length with "0".
- * @param    string    $name Original folder name
- * @param    integer   $nsize Length to reach
- * @return   string    Modified folder name
+ *
+ * @param string $name  Original folder name
+ * @param int    $nsize Length to reach
+ *
+ * @return string Modified folder name
  */
 function FillFolderName($name, $nsize)
 {
@@ -333,13 +374,16 @@ function FillFolderName($name, $nsize)
         $str .= '0';
     }
     $str .= $name;
+
     return $str;
 }
 
 /**
  * Generates the HotPotato folder tree.
- * @param    string    $folder Folder path
- * @return   string    Folder name (modified)
+ *
+ * @param string $folder Folder path
+ *
+ * @return string Folder name (modified)
  */
 function GenerateHpFolder($folder)
 {
@@ -366,25 +410,31 @@ function GenerateHpFolder($folder)
             $w = false;
         }
     }
+
     return $name;
 }
 
 /**
  * Gets the folder name (strips down path).
- * @param    string    $fname Path
- * @return   string    Folder name stripped down
+ *
+ * @param string $fname Path
+ *
+ * @return string Folder name stripped down
  */
 function GetFolderName($fname)
 {
     $name = explode('/', $fname);
     $name = $name[sizeof($name) - 2];
+
     return $name;
 }
 
 /**
  * Gets the folder path (with out the name of the folder itself) ?
- * @param    string    $fname Path
- * @return   string    Path stripped down
+ *
+ * @param string $fname Path
+ *
+ * @return string Path stripped down
  */
 function GetFolderPath($fname)
 {
@@ -393,13 +443,16 @@ function GetFolderPath($fname)
     for ($i = 0; $i < sizeof($name) - 1; $i++) {
         $str = $str.$name[$i].'/';
     }
+
     return $str;
 }
 
 /**
  * Checks if there are subfolders.
- * @param    string    $path Path
- * @return   integer   1 if a subfolder was found, 0 otherwise
+ *
+ * @param string $path Path
+ *
+ * @return int 1 if a subfolder was found, 0 otherwise
  */
 function CheckSubFolder($path)
 {
@@ -417,15 +470,16 @@ function CheckSubFolder($path)
             }
         }
     }
+
     return $dflag;
 }
 
 /**
- * Hotpotato Garbage Collector
- * @param    string     $folder Path
- * @param    integer    $flag Flag
- * @param    integer    $user_id User id
- * @return   void       No return value, but echoes results
+ * Hotpotato Garbage Collector.
+ *
+ * @param string $folder  Path
+ * @param int    $flag    Flag
+ * @param int    $user_id User id
  */
 function HotPotGCt($folder, $flag, $user_id)
 {
@@ -459,7 +513,8 @@ function HotPotGCt($folder, $flag, $user_id)
 }
 
 /**
- * Deletes an attempt from TABLE_STATISTIC_TRACK_E_HOTPOTATOES
+ * Deletes an attempt from TABLE_STATISTIC_TRACK_E_HOTPOTATOES.
+ *
  * @param int $id
  */
 function deleteAttempt($id)

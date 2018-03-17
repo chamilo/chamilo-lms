@@ -3,13 +3,12 @@
 
 namespace Chamilo\FaqBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * Class Category
+ * Class Category.
  *
  * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Entity\CategoryRepository")
  * @ORM\Table(
@@ -61,6 +60,7 @@ class Category
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)
@@ -69,9 +69,19 @@ class Category
     }
 
     /**
-     * Get id
+     * Returns a string representation of this object.
      *
-     * @return integer
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getHeadline();
+    }
+
+    /**
+     * Get id.
+     *
+     * @return int
      */
     public function getId()
     {
@@ -79,7 +89,7 @@ class Category
     }
 
     /**
-     * Get rank
+     * Get rank.
      *
      * @return string
      */
@@ -89,7 +99,7 @@ class Category
     }
 
     /**
-     * Set rank
+     * Set rank.
      *
      * @param string $rank
      *
@@ -103,9 +113,9 @@ class Category
     }
 
     /**
-     * Set is_active
+     * Set is_active.
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return Category
      */
@@ -117,9 +127,9 @@ class Category
     }
 
     /**
-     * Get isActive
+     * Get isActive.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {
@@ -127,7 +137,7 @@ class Category
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -141,7 +151,7 @@ class Category
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -151,7 +161,7 @@ class Category
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
      *
@@ -165,7 +175,7 @@ class Category
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -175,7 +185,7 @@ class Category
     }
 
     /**
-     * Add question
+     * Add question.
      *
      * @param Question $question
      *
@@ -189,7 +199,7 @@ class Category
     }
 
     /**
-     * Remove question
+     * Remove question.
      *
      * @param Question $question
      */
@@ -199,7 +209,7 @@ class Category
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -209,17 +219,7 @@ class Category
     }
 
     /**
-     * Returns a string representation of this object
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getHeadline();
-    }
-
-    /**
-     * Returns the route name for url generation
+     * Returns the route name for url generation.
      *
      * @return string
      */
@@ -229,14 +229,14 @@ class Category
     }
 
     /**
-     * Returns the route parameters for url generation
+     * Returns the route parameters for url generation.
      *
      * @return array
      */
     public function getRouteParameters()
     {
         return [
-            'categorySlug' => $this->getSlug()
+            'categorySlug' => $this->getSlug(),
         ];
     }
 }

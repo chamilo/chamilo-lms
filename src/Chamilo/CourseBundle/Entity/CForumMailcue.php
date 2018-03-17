@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumMailcue
+ * CForumMailcue.
  *
  * @ORM\Table(
  *  name="c_forum_mailcue",
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumMailcue
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -31,45 +31,45 @@ class CForumMailcue
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_id", type="integer")
      */
     private $threadId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_id", type="integer")
      */
     private $postId;
 
-
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CForumMailcue
      */
     public function setId($id)
@@ -80,9 +80,9 @@ class CForumMailcue
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -90,9 +90,10 @@ class CForumMailcue
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CForumMailcue
      */
     public function setCId($cId)
@@ -103,9 +104,9 @@ class CForumMailcue
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -113,9 +114,10 @@ class CForumMailcue
     }
 
     /**
-     * Set threadId
+     * Set threadId.
      *
-     * @param integer $threadId
+     * @param int $threadId
+     *
      * @return CForumMailcue
      */
     public function setThreadId($threadId)
@@ -126,9 +128,9 @@ class CForumMailcue
     }
 
     /**
-     * Get threadId
+     * Get threadId.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadId()
     {
@@ -136,9 +138,10 @@ class CForumMailcue
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CForumMailcue
      */
     public function setUserId($userId)
@@ -149,9 +152,9 @@ class CForumMailcue
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -159,9 +162,10 @@ class CForumMailcue
     }
 
     /**
-     * Set postId
+     * Set postId.
      *
-     * @param integer $postId
+     * @param int $postId
+     *
      * @return CForumMailcue
      */
     public function setPostId($postId)
@@ -172,9 +176,9 @@ class CForumMailcue
     }
 
     /**
-     * Get postId
+     * Get postId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostId()
     {

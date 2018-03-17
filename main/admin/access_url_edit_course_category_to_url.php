@@ -3,6 +3,7 @@
 
 /**
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
@@ -131,7 +132,7 @@ if ($add_type == 'multiple') {
 $url_list = UrlManager::get_url_data();
 ?>
 <div style="text-align: left;">
-	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
+	<?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>
 </div>
 <br /><br />
 <form
@@ -144,7 +145,7 @@ $url_list = UrlManager::get_url_data();
 >
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
-<option value="0">-- <?php echo get_lang('SelectUrl')?> -- </option>
+<option value="0">-- <?php echo get_lang('SelectUrl'); ?> -- </option>
 	<?php
     $url_selected = '';
     foreach ($url_list as $url_obj) {
@@ -166,11 +167,11 @@ $url_list = UrlManager::get_url_data();
 </select>
 <br /><br />
 <input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
+<input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <!-- Users -->
 <tr>
-  <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform'); ?> :</b>
   </td>
   <td></td>
   <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'), $url_selected); ?></b></td>

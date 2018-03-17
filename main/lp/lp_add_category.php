@@ -71,7 +71,7 @@ if ($form->validate()) {
         $item = learnpath::getCategory($id);
         $defaults = [
             'id' => $item->getId(),
-            'name' => $item->getName()
+            'name' => $item->getName(),
         ];
         $form->setDefaults($defaults);
     }

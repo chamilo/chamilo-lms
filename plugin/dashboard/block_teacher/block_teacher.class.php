@@ -3,15 +3,18 @@
 
 /**
  * This file is part of teacher block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
+ * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
+ *
  * @package chamilo.dashboard
+ *
  * @author Christian Fasanando
  */
 
 /**
  * This class is used like controller for teacher block plugin,
  * the class name must be registered inside path.info file
- * (e.g: controller = "BlockTeacher"), so dashboard controller will be instantiate it
+ * (e.g: controller = "BlockTeacher"), so dashboard controller will be instantiate it.
+ *
  * @package chamilo.dashboard
  */
 class BlockTeacher extends Block
@@ -22,7 +25,7 @@ class BlockTeacher extends Block
     private $permission = [DRH];
 
     /**
-     * Controller
+     * Controller.
      */
     public function __construct($user_id)
     {
@@ -34,9 +37,11 @@ class BlockTeacher extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param int        User id
-     * @return bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -46,6 +51,7 @@ class BlockTeacher extends Block
         if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
@@ -53,8 +59,9 @@ class BlockTeacher extends Block
      * This method return content html containing information about
      * teachers and its position for showing it inside dashboard interface
      * it's important to use the name 'get_block' for beeing used from
-     * dashboard controller
-     * @return array   column and content html
+     * dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
@@ -84,8 +91,9 @@ class BlockTeacher extends Block
 
     /**
      * This method return a content html, it's used inside get_block method
-     * for showing it inside dashboard interface
-     * @return string  content html
+     * for showing it inside dashboard interface.
+     *
+     * @return string content html
      */
     public function get_teachers_content_html_for_platform_admin()
     {
@@ -188,11 +196,13 @@ class BlockTeacher extends Block
         if (count($teachers) > 0) {
             $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('SeeMore').'</a></div>';
         }
+
         return $content;
     }
 
     /**
-     * Get number of teachers
+     * Get number of teachers.
+     *
      * @return int
      */
     public function get_number_of_teachers()

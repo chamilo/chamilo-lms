@@ -3,18 +3,15 @@
 
 namespace Chamilo\CoreBundle\Entity\Manager;
 
-use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
-use Sonata\CoreBundle\Model\BaseEntityManager;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
-use Sonata\DatagridBundle\Pager\Doctrine\pager;
-use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
-use Doctrine\Common\Collections\Criteria;
+use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * Class SessionManager
+ * Class SessionManager.
+ *
  * @package Chamilo\CoreBundle\Entity\Manager
  */
 class SessionManager extends BaseEntityManager
@@ -29,6 +26,7 @@ class SessionManager extends BaseEntityManager
 
     /**
      * @param $name
+     *
      * @return Session
      */
     public function findOneByName($name)
@@ -37,7 +35,7 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User $user
+     * @param User    $user
      * @param Session $session
      */
     public function addDrh(User $user, Session $session)
@@ -46,8 +44,9 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User $user
+     * @param User    $user
      * @param Session $session
+     *
      * @return bool
      */
     public function hasDrh(User $user, Session $session)
@@ -61,8 +60,8 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User $user
-     * @param Course $course
+     * @param User    $user
+     * @param Course  $course
      * @param Session $session
      */
     public function addStudentInCourse(
@@ -74,9 +73,10 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User $user
-     * @param Course $course
+     * @param User    $user
+     * @param Course  $course
      * @param Session $session
+     *
      * @return bool
      */
     public function hasStudentInCourse(
@@ -88,8 +88,8 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User $user
-     * @param Course $course
+     * @param User    $user
+     * @param Course  $course
      * @param Session $session
      */
     public function addCoachInCourse(
@@ -101,9 +101,10 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User $user
-     * @param Course $course
+     * @param User    $user
+     * @param Course  $course
      * @param Session $session
+     *
      * @return bool
      */
     public function hasCoachInCourse(
@@ -116,8 +117,8 @@ class SessionManager extends BaseEntityManager
 
     /**
      * @param $status
-     * @param User $user
-     * @param Course $course
+     * @param User    $user
+     * @param Course  $course
      * @param Session $session
      */
     private function addUserInCourse(

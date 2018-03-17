@@ -50,7 +50,6 @@ function plus_repeated_event() {
     });
 </script>";
 
-
 $htmlHeadXtra[] = '<script>
 var counter_image = 1;
 function add_image_form() {
@@ -299,17 +298,17 @@ if (!empty($group_id)) {
     $group_properties = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups')
+        "name" => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
 }
 if (!empty($actionName)) {
     $interbreadcrumb[] = [
         "url" => $url,
-        "name" => get_lang('Agenda')
+        "name" => get_lang('Agenda'),
     ];
 }
 

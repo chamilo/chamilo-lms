@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CDropboxPerson
+ * CDropboxPerson.
  *
  * @ORM\Table(
  *  name="c_dropbox_person",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxPerson
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,31 +29,31 @@ class CDropboxPerson
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="file_id", type="integer")
      */
     private $fileId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
-
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CDropboxPerson
      */
     public function setCId($cId)
@@ -64,9 +64,9 @@ class CDropboxPerson
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -74,9 +74,10 @@ class CDropboxPerson
     }
 
     /**
-     * Set fileId
+     * Set fileId.
      *
-     * @param integer $fileId
+     * @param int $fileId
+     *
      * @return CDropboxPerson
      */
     public function setFileId($fileId)
@@ -87,9 +88,9 @@ class CDropboxPerson
     }
 
     /**
-     * Get fileId
+     * Get fileId.
      *
-     * @return integer
+     * @return int
      */
     public function getFileId()
     {
@@ -97,9 +98,10 @@ class CDropboxPerson
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CDropboxPerson
      */
     public function setUserId($userId)
@@ -110,9 +112,9 @@ class CDropboxPerson
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {

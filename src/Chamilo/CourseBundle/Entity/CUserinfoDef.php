@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CUserinfoDef
+ * CUserinfoDef.
  *
  * @ORM\Table(
  *  name="c_userinfo_def",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CUserinfoDef
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CUserinfoDef
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -56,23 +56,24 @@ class CUserinfoDef
     private $comment;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="line_count", type="boolean", nullable=false)
      */
     private $lineCount;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="rank", type="boolean", nullable=false)
      */
     private $rank;
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CUserinfoDef
      */
     public function setTitle($title)
@@ -83,7 +84,7 @@ class CUserinfoDef
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -93,9 +94,10 @@ class CUserinfoDef
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CUserinfoDef
      */
     public function setComment($comment)
@@ -106,7 +108,7 @@ class CUserinfoDef
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -116,9 +118,10 @@ class CUserinfoDef
     }
 
     /**
-     * Set lineCount
+     * Set lineCount.
      *
-     * @param boolean $lineCount
+     * @param bool $lineCount
+     *
      * @return CUserinfoDef
      */
     public function setLineCount($lineCount)
@@ -129,9 +132,9 @@ class CUserinfoDef
     }
 
     /**
-     * Get lineCount
+     * Get lineCount.
      *
-     * @return boolean
+     * @return bool
      */
     public function getLineCount()
     {
@@ -139,9 +142,10 @@ class CUserinfoDef
     }
 
     /**
-     * Set rank
+     * Set rank.
      *
-     * @param boolean $rank
+     * @param bool $rank
+     *
      * @return CUserinfoDef
      */
     public function setRank($rank)
@@ -152,9 +156,9 @@ class CUserinfoDef
     }
 
     /**
-     * Get rank
+     * Get rank.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRank()
     {
@@ -162,9 +166,10 @@ class CUserinfoDef
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CUserinfoDef
      */
     public function setId($id)
@@ -175,9 +180,9 @@ class CUserinfoDef
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -185,9 +190,10 @@ class CUserinfoDef
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CUserinfoDef
      */
     public function setCId($cId)
@@ -198,9 +204,9 @@ class CUserinfoDef
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestAnswerFeedback toolbar configuration
+ * TestAnswerFeedback toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestAnswerFeedback extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -20,22 +21,22 @@ class TestAnswerFeedback extends Basic
             ['name' => 'document'],
             [
                 'name' => 'clipboard',
-                'groups' => ['clipboard', 'undo',]
+                'groups' => ['clipboard', 'undo'],
             ],
             [
                 'name' => 'basicstyles',
-                'groups' => ['basicstyles', 'cleanup',]
+                'groups' => ['basicstyles', 'cleanup'],
             ],
             [
                 'name' => 'paragraph',
-                'groups' => ['list', 'indent', 'blocks', 'align']
+                'groups' => ['list', 'indent', 'blocks', 'align'],
             ],
             ['name' => 'links'],
             ['name' => 'insert'],
             '/',
             ['name' => 'styles'],
             ['name' => 'colors'],
-            ['name' => 'mode']
+            ['name' => 'mode'],
         ];
 
         $config['toolbarCanCollapse'] = true;
@@ -55,7 +56,8 @@ class TestAnswerFeedback extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -74,23 +76,25 @@ class TestAnswerFeedback extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
     {
         return [
-            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor']
+            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -103,7 +107,7 @@ class TestAnswerFeedback extends Basic
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Asciimath', 'Asciisvg'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

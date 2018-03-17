@@ -1,16 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 
 /**
- * Prints an HTML page with a table containing the gradebook data
+ * Prints an HTML page with a table containing the gradebook data.
+ *
  * @param    array    Array containing the data to be printed in the table
  * @param    array    Table headers
  * @param    string    View to print as a title for the table
  * @param    string    Course name to print as title for the table
+ *
  * @return string
  */
 function print_table($data_array, $header_names, $view, $coursename)
@@ -88,12 +91,12 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 }
 
 /**
- * This function get a content html for export inside a pdf file
+ * This function get a content html for export inside a pdf file.
+ *
  * @param   array   table headers
  * @param   array   table body
  * @param   array   pdf headers
  * @param   array   pdf footers
- * @return void
  */
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
@@ -223,12 +226,12 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
 }
 
 /**
- * This function get a content html for export inside a pdf file
+ * This function get a content html for export inside a pdf file.
+ *
  * @param    array    table headers
  * @param    array    table body
  * @param    array    pdf headers
  * @param    array    pdf footers
- * @return void
  */
 function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
@@ -324,7 +327,8 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 }
 
 /**
- * Exports the data as a table on a PDF page
+ * Exports the data as a table on a PDF page.
+ *
  * @param    resource    The PDF object (ezpdf class) used to generate the file
  * @param    array        The data array
  * @param    array        Table headers

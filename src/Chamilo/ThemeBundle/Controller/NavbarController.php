@@ -13,19 +13,12 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class NavbarController
+ * Class NavbarController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class NavbarController extends Controller
 {
-    /**
-     * @return EventDispatcher
-     */
-    protected function getDispatcher()
-    {
-        return $this->get('event_dispatcher');
-    }
-
     public function notificationsAction($max = 5)
     {
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_NOTIFICATIONS)) {
@@ -89,5 +82,13 @@ class NavbarController extends Controller
                 'user' => $userEvent->getUser(),
             ]
         );
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    protected function getDispatcher()
+    {
+        return $this->get('event_dispatcher');
     }
 }

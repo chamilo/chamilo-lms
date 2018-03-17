@@ -1,7 +1,8 @@
 <?php
 /**
  * Chamilo-OpenMeetings integration plugin library, defining methods to connect
- * to OpenMeetings from Chamilo by calling its web services
+ * to OpenMeetings from Chamilo by calling its web services.
+ *
  * @package chamilo.plugin.openmeetings
  */
 
@@ -12,7 +13,7 @@ include_once __DIR__.'/room.class.php';
 include_once __DIR__.'/user.class.php';
 
 /**
- * Open Meetings-Chamilo connector class
+ * Open Meetings-Chamilo connector class.
  */
 class OpenMeetings
 {
@@ -33,7 +34,7 @@ class OpenMeetings
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
-     * required for the connection to the video conference server)
+     * required for the connection to the video conference server).
      */
     public function __construct()
     {
@@ -42,7 +43,7 @@ class OpenMeetings
         // initialize video server settings from global settings
         $plugin = \OpenMeetingsPlugin::create();
 
-        $om_plugin = (bool)$plugin->get('tool_enable');
+        $om_plugin = (bool) $plugin->get('tool_enable');
         $om_host = $plugin->get('host');
         $om_user = $plugin->get('user');
         $om_pass = $plugin->get('pass');
@@ -83,7 +84,8 @@ class OpenMeetings
     }
 
     /**
-     * Checks whether a user is teacher in the current course
+     * Checks whether a user is teacher in the current course.
+     *
      * @return bool True if the user can be considered a teacher in this course, false otherwise
      */
     public function isTeacher()
@@ -105,13 +107,11 @@ class OpenMeetings
             '*',
             $this->table,
             [
-                'where' =>
-                [
+                'where' => [
                     'c_id = ?' => $this->chamiloCourseId,
                     ' AND session_id = ? ' => $this->chamiloSessionId,
                     ' AND status <> ? ' => 2,
-
-                ]
+                ],
             ],
             'first'
         );
@@ -169,9 +169,12 @@ class OpenMeetings
     }
 
     /**
-     * Returns a meeting "join" URL
+     * Returns a meeting "join" URL.
+     *
      * @param string The name of the meeting (usually the course code)
+     *
      * @return mixed The URL to join the meeting, or false on error
+     *
      * @todo implement moderator pass
      * @assert ('') === false
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
@@ -192,6 +195,7 @@ class OpenMeetings
             if ($this->debug) {
                 error_log("meeting does not exist: $meetingId ");
             }
+
             return false;
         }
         $params = ['room_id' => $meetingData['room_id']];
@@ -202,7 +206,8 @@ class OpenMeetings
 
     /**
      * Checks if the videoconference server is running.
-     * Function currently disabled (always returns 1)
+     * Function currently disabled (always returns 1).
+     *
      * @return bool True if server is running, false otherwise
      * @assert () === false
      */
@@ -215,9 +220,10 @@ class OpenMeetings
     }
 
     /**
-    * Gets the password for a specific meeting for the current user
-    * @return string A moderator password if user is teacher, or the course code otherwise
-    */
+     * Gets the password for a specific meeting for the current user.
+     *
+     * @return string A moderator password if user is teacher, or the course code otherwise
+     */
     public function getMeetingUserPassword()
     {
         if ($this->isTeacher()) {
@@ -228,7 +234,8 @@ class OpenMeetings
     }
 
     /**
-     * Generated a moderator password for the meeting
+     * Generated a moderator password for the meeting.
+     *
      * @return string A password for the moderation of the video conference
      */
     public function getMeetingModerationPassword()
@@ -237,8 +244,10 @@ class OpenMeetings
     }
 
     /**
-     * Get information about the given meeting
+     * Get information about the given meeting.
+     *
      * @param array ...?
+     *
      * @return mixed Array of information on success, false on error
      * @assert (array()) === false
      */
@@ -258,11 +267,13 @@ class OpenMeetings
                 error_log(__FILE__.'+'.__LINE__.' Caught exception: ', $e->getMessage(), "\n");
             }
         }
+
         return false;
     }
 
     /**
      * @param array $params Array of parameters
+     *
      * @return mixed
      */
     public function setUserObjectAndGenerateRecordingHashByURL($params)
@@ -291,7 +302,8 @@ class OpenMeetings
     }
 
     /**
-     * @param Array $params Array of parameters
+     * @param array $params Array of parameters
+     *
      * @return mixed
      */
     public function setUserObjectAndGenerateRoomHashByURLAndRecFlag($params)
@@ -329,7 +341,8 @@ class OpenMeetings
     }
 
     /**
-     * Gets all the course meetings saved in the plugin_openmeetings table
+     * Gets all the course meetings saved in the plugin_openmeetings table.
+     *
      * @return array Array of current open meeting rooms
      */
     public function getCourseMeetings()
@@ -339,12 +352,11 @@ class OpenMeetings
         $meetingsList = \Database::select(
             '*',
             $this->table,
-            ['where' =>
-                [
+            ['where' => [
                     'c_id = ? ' => api_get_course_int_id(),
                     ' AND session_id = ? ' => api_get_session_id(),
-                    ' AND status <> ? ' => 2 // status deleted
-                ]
+                    ' AND status <> ? ' => 2, // status deleted
+                ],
             ]
         );
         $room = new Room();
@@ -503,8 +515,10 @@ class OpenMeetings
     }
 
     /**
-     * Send a command to the OpenMeetings server to close the meeting
+     * Send a command to the OpenMeetings server to close the meeting.
+     *
      * @param int $meetingId
+     *
      * @return int
      */
     public function endMeeting($meetingId)
@@ -524,7 +538,7 @@ class OpenMeetings
                     $this->table,
                     [
                         'status' => 0,
-                        'closed_at' => api_get_utc_datetime()
+                        'closed_at' => api_get_utc_datetime(),
                     ],
                     ['id = ? ' => $meetingId]
                 );
@@ -532,12 +546,14 @@ class OpenMeetings
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
             exit;
+
             return -1;
         }
     }
 
     /**
      * @param int $id
+     *
      * @return int
      */
     public function deleteMeeting($id)
@@ -549,14 +565,16 @@ class OpenMeetings
             \Database::update(
                 $this->table,
                 [
-                    'status' => 2
+                    'status' => 2,
                 ],
                 ['id = ? ' => $id]
             );
+
             return $id;
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
             exit;
+
             return -1;
         }
     }

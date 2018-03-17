@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumAttachment
+ * CForumAttachment.
  *
  * @ORM\Table(
  *  name="c_forum_attachment",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumAttachment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CForumAttachment
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -56,14 +56,14 @@ class CForumAttachment
     private $comment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
     private $size;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
@@ -77,9 +77,10 @@ class CForumAttachment
     private $filename;
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return CForumAttachment
      */
     public function setPath($path)
@@ -90,7 +91,7 @@ class CForumAttachment
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -100,9 +101,10 @@ class CForumAttachment
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CForumAttachment
      */
     public function setComment($comment)
@@ -113,7 +115,7 @@ class CForumAttachment
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -123,9 +125,10 @@ class CForumAttachment
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param integer $size
+     * @param int $size
+     *
      * @return CForumAttachment
      */
     public function setSize($size)
@@ -136,9 +139,9 @@ class CForumAttachment
     }
 
     /**
-     * Get size
+     * Get size.
      *
-     * @return integer
+     * @return int
      */
     public function getSize()
     {
@@ -146,9 +149,10 @@ class CForumAttachment
     }
 
     /**
-     * Set postId
+     * Set postId.
      *
-     * @param integer $postId
+     * @param int $postId
+     *
      * @return CForumAttachment
      */
     public function setPostId($postId)
@@ -159,9 +163,9 @@ class CForumAttachment
     }
 
     /**
-     * Get postId
+     * Get postId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostId()
     {
@@ -169,9 +173,10 @@ class CForumAttachment
     }
 
     /**
-     * Set filename
+     * Set filename.
      *
      * @param string $filename
+     *
      * @return CForumAttachment
      */
     public function setFilename($filename)
@@ -182,7 +187,7 @@ class CForumAttachment
     }
 
     /**
-     * Get filename
+     * Get filename.
      *
      * @return string
      */
@@ -192,9 +197,10 @@ class CForumAttachment
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CForumAttachment
      */
     public function setId($id)
@@ -205,9 +211,9 @@ class CForumAttachment
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -215,9 +221,10 @@ class CForumAttachment
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CForumAttachment
      */
     public function setCId($cId)
@@ -228,9 +235,9 @@ class CForumAttachment
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

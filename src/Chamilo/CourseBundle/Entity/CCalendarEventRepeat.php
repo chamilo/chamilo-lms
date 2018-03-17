@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CCalendarEventRepeat
+ * CCalendarEventRepeat.
  *
  * @ORM\Table(
  *  name="c_calendar_event_repeat",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventRepeat
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CCalendarEventRepeat
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_id", type="integer")
      */
     private $calId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -49,14 +49,14 @@ class CCalendarEventRepeat
     private $calType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_end", type="integer", nullable=true)
      */
     private $calEnd;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
      */
@@ -70,9 +70,10 @@ class CCalendarEventRepeat
     private $calDays;
 
     /**
-     * Set calType
+     * Set calType.
      *
      * @param string $calType
+     *
      * @return CCalendarEventRepeat
      */
     public function setCalType($calType)
@@ -83,7 +84,7 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Get calType
+     * Get calType.
      *
      * @return string
      */
@@ -93,9 +94,10 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Set calEnd
+     * Set calEnd.
      *
-     * @param integer $calEnd
+     * @param int $calEnd
+     *
      * @return CCalendarEventRepeat
      */
     public function setCalEnd($calEnd)
@@ -106,9 +108,9 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Get calEnd
+     * Get calEnd.
      *
-     * @return integer
+     * @return int
      */
     public function getCalEnd()
     {
@@ -116,9 +118,10 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Set calFrequency
+     * Set calFrequency.
      *
-     * @param integer $calFrequency
+     * @param int $calFrequency
+     *
      * @return CCalendarEventRepeat
      */
     public function setCalFrequency($calFrequency)
@@ -129,9 +132,9 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Get calFrequency
+     * Get calFrequency.
      *
-     * @return integer
+     * @return int
      */
     public function getCalFrequency()
     {
@@ -139,9 +142,10 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Set calDays
+     * Set calDays.
      *
      * @param string $calDays
+     *
      * @return CCalendarEventRepeat
      */
     public function setCalDays($calDays)
@@ -152,7 +156,7 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Get calDays
+     * Get calDays.
      *
      * @return string
      */
@@ -162,9 +166,10 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CCalendarEventRepeat
      */
     public function setCId($cId)
@@ -175,9 +180,9 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -185,9 +190,10 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Set calId
+     * Set calId.
      *
-     * @param integer $calId
+     * @param int $calId
+     *
      * @return CCalendarEventRepeat
      */
     public function setCalId($calId)
@@ -198,9 +204,9 @@ class CCalendarEventRepeat
     }
 
     /**
-     * Get calId
+     * Get calId.
      *
-     * @return integer
+     * @return int
      */
     public function getCalId()
     {

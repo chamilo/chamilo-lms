@@ -7,12 +7,364 @@ require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/webservice.php';
 
 /**
- * Web services available for the Session module. This class extends the WS class
+ * Web services available for the Session module. This class extends the WS class.
  */
 class WSSession extends WS
 {
     /**
-     * Creates a session (helper method)
+     * Creates a session.
+     *
+     * @param string API secret key
+     * @param string Name of the session
+     * @param string Start date, use the 'YYYY-MM-DD' format
+     * @param string End date, use the 'YYYY-MM-DD' format
+     * @param int Access delays of the coach (days before)
+     * @param int Access delays of the coach (days after)
+     * @param int Nolimit (0 = no limit of time, 1 = limit of time)
+     * @param int Visibility
+     * @param string User id field name for the coach
+     * @param string User id value for the coach
+     * @param string Original session id field name (use "chamilo_session_id" to use internal id)
+     * @param string Original session id value
+     * @param array Array of extra fields
+     *
+     * @return int Session id generated
+     */
+    public function CreateSession(
+        $secret_key,
+        $name,
+        $start_date,
+        $end_date,
+        $nb_days_access_before,
+        $nb_days_access_after,
+        $nolimit,
+        $visibility,
+        $user_id_field_name,
+        $user_id_value,
+        $session_id_field_name,
+        $session_id_value,
+        $extras
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $session_id = $this->createSessionHelper(
+                $name,
+                $start_date,
+                $end_date,
+                $nb_days_access_before,
+                $nb_days_access_after,
+                $nolimit,
+                $visibility,
+                $user_id_field_name,
+                $user_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                $extras
+            );
+            if ($session_id instanceof WSError) {
+                $this->handleError($session_id);
+            } else {
+                return $session_id;
+            }
+        }
+    }
+
+    /**
+     * Deletes a session.
+     *
+     * @param string API secret key
+     * @param string Session id field name
+     * @param string Session id value
+     */
+    public function DeleteSession(
+        $secret_key,
+        $session_id_field_name,
+        $session_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->deleteSessionHelper(
+                $session_id_field_name,
+                $session_id_value
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Edits a session.
+     *
+     * @param string API secret key
+     * @param string Name of the session
+     * @param string Start date, use the 'YYYY-MM-DD' format
+     * @param string End date, use the 'YYYY-MM-DD' format
+     * @param int Access delays of the coach (days before)
+     * @param int Access delays of the coach (days after)
+     * @param int Nolimit (0 = no limit of time, 1 = limit of time)
+     * @param int Visibility
+     * @param string User id field name for the coach
+     * @param string User id value for the coach
+     * @param string Original session id field name (use "chamilo_session_id" to use internal id)
+     * @param string Original session id value
+     * @param array Array of extra fields
+     */
+    public function EditSession(
+        $secret_key,
+        $name,
+        $start_date,
+        $end_date,
+        $nb_days_access_before,
+        $nb_days_access_after,
+        $nolimit,
+        $visibility,
+        $user_id_field_name,
+        $user_id_value,
+        $session_id_field_name,
+        $session_id_value,
+        $extras
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->editSessionHelper(
+                $name,
+                $start_date,
+                $end_date,
+                $nb_days_access_before,
+                $nb_days_access_after,
+                $nolimit,
+                $visibility,
+                $user_id_field_name,
+                $user_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                $extras
+            );
+            if ($session_id_value instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Subscribe user to a session.
+     *
+     * @param string API secret key
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     */
+    public function SubscribeUserToSession(
+        $secret_key,
+        $user_id_field_name,
+        $user_id_value,
+        $session_id_field_name,
+        $session_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeUserSubscription(
+                $user_id_field_name,
+                $user_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                1
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Subscribe user to a session.
+     *
+     * @param string API secret key
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     */
+    public function UnsubscribeUserFromSession(
+        $secret_key,
+        $user_id_field_name,
+        $user_id_value,
+        $session_id_field_name,
+        $session_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeUserSubscription(
+                $user_id_field_name,
+                $user_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                0
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Subscribe teacher to a session course.
+     *
+     * @param string API secret key
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     * @param string Course id field name
+     * @param string Course id value
+     */
+    public function SubscribeTeacherToSessionCourse(
+        $secret_key,
+        $user_id_field_name,
+        $user_id_value,
+        $session_id_field_name,
+        $session_id_value,
+        $course_id_field_name,
+        $course_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeUserSubscription(
+                $user_id_field_name,
+                $user_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                $course_id_field_name,
+                $course_id_value,
+                1
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Subscribe teacher to a session course.
+     *
+     * @param string API secret key
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     * @param string Course id field name
+     * @param string Course id value
+     */
+    public function UnsubscribeTeacherFromSessionCourse(
+        $secret_key,
+        $user_id_field_name,
+        $user_id_value,
+        $session_id_field_name,
+        $session_id_value,
+        $course_id_field_name,
+        $course_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeUserSubscription(
+                $user_id_field_name,
+                $user_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                $course_id_field_name,
+                $course_id_value,
+                0
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Subscribe course to session.
+     *
+     * @param string API secret key
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Session id field name
+     * @param string Session id value
+     */
+    public function SubscribeCourseToSession(
+        $secret_key,
+        $course_id_field_name,
+        $course_id_value,
+        $session_id_field_name,
+        $session_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeCourseSubscription(
+                $course_id_field_name,
+                $course_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                1
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Unsubscribe course from session.
+     *
+     * @param string API secret key
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Session id field name
+     * @param string Session id value
+     */
+    public function UnsubscribeCourseFromSession(
+        $secret_key,
+        $course_id_field_name,
+        $course_id_value,
+        $session_id_field_name,
+        $session_id_value
+    ) {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeCourseSubscription(
+                $course_id_field_name,
+                $course_id_value,
+                $session_id_field_name,
+                $session_id_value,
+                0
+            );
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Creates a session (helper method).
      *
      * @param string Name of the session
      * @param string Start date, use the 'YYYY-MM-DD' format
@@ -26,6 +378,7 @@ class WSSession extends WS
      * @param string Original session id field name (use "chamilo_session_id" to use internal id)
      * @param string Original session id value
      * @param array Array of extra fields
+     *
      * @return mixed Generated id in case of success, WSError otherwise
      */
     protected function createSessionHelper(
@@ -105,69 +458,11 @@ class WSSession extends WS
     }
 
     /**
-     * Creates a session
-     *
-     * @param string API secret key
-     * @param string Name of the session
-     * @param string Start date, use the 'YYYY-MM-DD' format
-     * @param string End date, use the 'YYYY-MM-DD' format
-     * @param int Access delays of the coach (days before)
-     * @param int Access delays of the coach (days after)
-     * @param int Nolimit (0 = no limit of time, 1 = limit of time)
-     * @param int Visibility
-     * @param string User id field name for the coach
-     * @param string User id value for the coach
-     * @param string Original session id field name (use "chamilo_session_id" to use internal id)
-     * @param string Original session id value
-     * @param array Array of extra fields
-     * @return int Session id generated
-     */
-    public function CreateSession(
-        $secret_key,
-        $name,
-        $start_date,
-        $end_date,
-        $nb_days_access_before,
-        $nb_days_access_after,
-        $nolimit,
-        $visibility,
-        $user_id_field_name,
-        $user_id_value,
-        $session_id_field_name,
-        $session_id_value,
-        $extras
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $session_id = $this->createSessionHelper(
-                $name,
-                $start_date,
-                $end_date,
-                $nb_days_access_before,
-                $nb_days_access_after,
-                $nolimit,
-                $visibility,
-                $user_id_field_name,
-                $user_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                $extras
-            );
-            if ($session_id instanceof WSError) {
-                $this->handleError($session_id);
-            } else {
-                return $session_id;
-            }
-        }
-    }
-
-    /**
-     * Deletes a session (helper method)
+     * Deletes a session (helper method).
      *
      * @param string Session id field name
      * @param string Session id value
+     *
      * @return mixed True in case of success, WSError otherwise
      */
     protected function deleteSessionHelper(
@@ -188,33 +483,7 @@ class WSSession extends WS
     }
 
     /**
-     * Deletes a session
-     *
-     * @param string API secret key
-     * @param string Session id field name
-     * @param string Session id value
-     */
-    public function DeleteSession(
-        $secret_key,
-        $session_id_field_name,
-        $session_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->deleteSessionHelper(
-                $session_id_field_name,
-                $session_id_value
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Edits a session (helper method)
+     * Edits a session (helper method).
      *
      * @param string Name of the session
      * @param string Start date, use the 'YYYY-MM-DD' format
@@ -228,6 +497,7 @@ class WSSession extends WS
      * @param string Original session id field name (use "chamilo_session_id" to use internal id)
      * @param string Original session id value
      * @param array Array of extra fields
+     *
      * @return mixed True on success, WSError otherwise
      */
     protected function editSessionHelper(
@@ -317,69 +587,14 @@ class WSSession extends WS
     }
 
     /**
-     * Edits a session
-     *
-     * @param string API secret key
-     * @param string Name of the session
-     * @param string Start date, use the 'YYYY-MM-DD' format
-     * @param string End date, use the 'YYYY-MM-DD' format
-     * @param int Access delays of the coach (days before)
-     * @param int Access delays of the coach (days after)
-     * @param int Nolimit (0 = no limit of time, 1 = limit of time)
-     * @param int Visibility
-     * @param string User id field name for the coach
-     * @param string User id value for the coach
-     * @param string Original session id field name (use "chamilo_session_id" to use internal id)
-     * @param string Original session id value
-     * @param array Array of extra fields
-     */
-    public function EditSession(
-        $secret_key,
-        $name,
-        $start_date,
-        $end_date,
-        $nb_days_access_before,
-        $nb_days_access_after,
-        $nolimit,
-        $visibility,
-        $user_id_field_name,
-        $user_id_value,
-        $session_id_field_name,
-        $session_id_value,
-        $extras
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->editSessionHelper(
-                $name,
-                $start_date,
-                $end_date,
-                $nb_days_access_before,
-                $nb_days_access_after,
-                $nolimit,
-                $visibility,
-                $user_id_field_name,
-                $user_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                $extras
-            );
-            if ($session_id_value instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Change user subscription (helper method)
+     * Change user subscription (helper method).
      *
      * @param string User id field name
      * @param string User id value
      * @param string Session id field name
      * @param string Session id value
      * @param int State (1 to subscribe, 0 to unsubscribe)
+     *
      * @return mixed True on success, WSError otherwise
      */
     protected function changeUserSubscription(
@@ -424,73 +639,7 @@ class WSSession extends WS
     }
 
     /**
-     * Subscribe user to a session
-     *
-     * @param string API secret key
-     * @param string User id field name
-     * @param string User id value
-     * @param string Session id field name
-     * @param string Session id value
-     */
-    public function SubscribeUserToSession(
-        $secret_key,
-        $user_id_field_name,
-        $user_id_value,
-        $session_id_field_name,
-        $session_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->changeUserSubscription(
-                $user_id_field_name,
-                $user_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                1
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Subscribe user to a session
-     *
-     * @param string API secret key
-     * @param string User id field name
-     * @param string User id value
-     * @param string Session id field name
-     * @param string Session id value
-     */
-    public function UnsubscribeUserFromSession(
-        $secret_key,
-        $user_id_field_name,
-        $user_id_value,
-        $session_id_field_name,
-        $session_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->changeUserSubscription(
-                $user_id_field_name,
-                $user_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                0
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Change Teacher subscription (helper method)
+     * Change Teacher subscription (helper method).
      *
      * @param string User id field name
      * @param string User id value
@@ -499,6 +648,7 @@ class WSSession extends WS
      * @param string Course id field name
      * @param string Course id value
      * @param int State (1 to subscribe, 0 to unsubscribe)
+     *
      * @return mixed True on success, WSError otherwise
      */
     protected function changeTeacherSubscription(
@@ -556,91 +706,14 @@ class WSSession extends WS
     }
 
     /**
-     * Subscribe teacher to a session course
-     *
-     * @param string API secret key
-     * @param string User id field name
-     * @param string User id value
-     * @param string Session id field name
-     * @param string Session id value
-     * @param string Course id field name
-     * @param string Course id value
-     */
-    public function SubscribeTeacherToSessionCourse(
-        $secret_key,
-        $user_id_field_name,
-        $user_id_value,
-        $session_id_field_name,
-        $session_id_value,
-        $course_id_field_name,
-        $course_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->changeUserSubscription(
-                $user_id_field_name,
-                $user_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                $course_id_field_name,
-                $course_id_value,
-                1
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Subscribe teacher to a session course
-     *
-     * @param string API secret key
-     * @param string User id field name
-     * @param string User id value
-     * @param string Session id field name
-     * @param string Session id value
-     * @param string Course id field name
-     * @param string Course id value
-     */
-    public function UnsubscribeTeacherFromSessionCourse(
-        $secret_key,
-        $user_id_field_name,
-        $user_id_value,
-        $session_id_field_name,
-        $session_id_value,
-        $course_id_field_name,
-        $course_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->changeUserSubscription(
-                $user_id_field_name,
-                $user_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                $course_id_field_name,
-                $course_id_value,
-                0
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Change course subscription
+     * Change course subscription.
      *
      * @param string Course id field name
      * @param string Course id value
      * @param string Session id field name
      * @param string Session id value
      * @param int State (1 to subscribe, 0 to unsubscribe)
+     *
      * @return mixed True on success, WSError otherwise
      */
     protected function changeCourseSubscription(
@@ -685,72 +758,6 @@ class WSSession extends WS
                         );
                     }
                 }
-            }
-        }
-    }
-
-    /**
-     * Subscribe course to session
-     *
-     * @param string API secret key
-     * @param string Course id field name
-     * @param string Course id value
-     * @param string Session id field name
-     * @param string Session id value
-     */
-    public function SubscribeCourseToSession(
-        $secret_key,
-        $course_id_field_name,
-        $course_id_value,
-        $session_id_field_name,
-        $session_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->changeCourseSubscription(
-                $course_id_field_name,
-                $course_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                1
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
-            }
-        }
-    }
-
-    /**
-     * Unsubscribe course from session
-     *
-     * @param string API secret key
-     * @param string Course id field name
-     * @param string Course id value
-     * @param string Session id field name
-     * @param string Session id value
-     */
-    public function UnsubscribeCourseFromSession(
-        $secret_key,
-        $course_id_field_name,
-        $course_id_value,
-        $session_id_field_name,
-        $session_id_value
-    ) {
-        $verifKey = $this->verifyKey($secret_key);
-        if ($verifKey instanceof WSError) {
-            $this->handleError($verifKey);
-        } else {
-            $result = $this->changeCourseSubscription(
-                $course_id_field_name,
-                $course_id_value,
-                $session_id_field_name,
-                $session_id_value,
-                0
-            );
-            if ($result instanceof WSError) {
-                $this->handleError($result);
             }
         }
     }

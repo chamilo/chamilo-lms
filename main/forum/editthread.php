@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Edit a Forum Thread
+ * Edit a Forum Thread.
+ *
  * @Author José Loguercio <jose.loguercio@beeznest.com>
  *
  * @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -37,7 +37,7 @@ $forumSettings = $forum_setting;
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -59,19 +59,19 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] <> 0) || $currentForum['locked'] <> 0)
+    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] != 0) || $currentForum['locked'] != 0)
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    $currentForum['allow_new_threads'] <> 1
+    $currentForum['allow_new_threads'] != 1
 ) {
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] && $currentForum['allow_anonymous'] <> 1) {
+if (!$_user['user_id'] && $currentForum['allow_anonymous'] != 1) {
     api_not_allowed();
 }
 
@@ -156,7 +156,7 @@ $actions = [
         Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM),
         'viewforum.php?forum='.$forumId.'&'.$cidreq
     ),
-    search_link()
+    search_link(),
 ];
 
 $threadData = getThreadInfo($threadId, $cId);
@@ -213,7 +213,7 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
     $form->addGroup(
         $group,
         '',
-        [get_lang('ForumThreadPeerScoring'), get_lang('ForumThreadPeerScoringComment'), ]
+        [get_lang('ForumThreadPeerScoring'), get_lang('ForumThreadPeerScoringComment')]
     );
     $form->addElement('html', '</div>');
 }

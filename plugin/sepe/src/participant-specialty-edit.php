@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  *    This script displays a participant specialty edit form.
  */
-
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -227,7 +224,6 @@ if (api_is_platform_admin()) {
         $listSpecialtyTutorials = getListSpecialtyTutorial(intval($_GET['specialty_id']));
         $tpl->assign('listSpecialtyTutorials', $listSpecialtyTutorials);
     }
-
 
     $listYear = [];
     if ($registrationYear > $leaveYear) {

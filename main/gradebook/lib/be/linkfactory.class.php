@@ -3,21 +3,25 @@
 
 /**
  * Class LinkFactory
- * Factory for link objects
+ * Factory for link objects.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class LinkFactory
 {
     /**
      * Retrieve links and return them as an array of extensions of AbstractLink.
-     * @param int $id link id
-     * @param int $type link type
-     * @param int $ref_id reference id
-     * @param int $user_id user id (link owner)
+     *
+     * @param int    $id          link id
+     * @param int    $type        link type
+     * @param int    $ref_id      reference id
+     * @param int    $user_id     user id (link owner)
      * @param string $course_code course code
-     * @param int $category_id parent category
-     * @param int $visible visible
+     * @param int    $category_id parent category
+     * @param int    $visible     visible
+     *
      * @return array
      */
     public static function load(
@@ -41,7 +45,7 @@ class LinkFactory
     }
 
     /**
-     * Get the link object referring to an evaluation
+     * Get the link object referring to an evaluation.
      */
     public function get_evaluation_link($eval_id)
     {
@@ -51,12 +55,15 @@ class LinkFactory
                 return $link;
             }
         }
+
         return null;
     }
 
     /**
-     * Find links by name
+     * Find links by name.
+     *
      * @param string $name_mask search string
+     *
      * @return array link objects matching the search criterium
      */
     public function find_links($name_mask, $selectcat)
@@ -65,7 +72,8 @@ class LinkFactory
     }
 
     /**
-     * Static method to create specific link objects
+     * Static method to create specific link objects.
+     *
      * @param $type link type
      */
     public static function create($type)
@@ -89,11 +97,13 @@ class LinkFactory
             case LINK_SURVEY:
                 return new SurveyLink();
         }
+
         return null;
     }
 
     /**
-     * Return an array of all known link types
+     * Return an array of all known link types.
+     *
      * @return array
      */
     public static function get_all_types()
@@ -107,7 +117,7 @@ class LinkFactory
             LINK_LEARNPATH,
             LINK_FORUM_THREAD,
             LINK_ATTENDANCE,
-            LINK_SURVEY
+            LINK_SURVEY,
         ];
     }
 

@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_comment
+ * Class ch_comment.
  */
 class ch_comment extends survey_question
 {
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param string $answers
+     * @param array         $questionData
+     * @param string        $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = '')
     {

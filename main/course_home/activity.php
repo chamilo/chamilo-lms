@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  HOME PAGE FOR EACH COURSE
+ *  HOME PAGE FOR EACH COURSE.
  *
  *  This page, included in every course's index.php is the home
  *  page. To make administration simple, the teacher edits his
@@ -12,7 +12,6 @@
  *
  * @package chamilo.course_home
  */
-
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
@@ -78,7 +77,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $blocks[] = [
         'title' => get_lang('Authoring'),
         'class' => 'course-tools-author',
-        'content' => CourseHome::show_tools_category($my_list)
+        'content' => CourseHome::show_tools_category($my_list),
     ];
 
     $list1 = CourseHome::get_tools_category(TOOL_INTERACTION);
@@ -88,7 +87,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $blocks[] = [
         'title' => get_lang('Interaction'),
         'class' => 'course-tools-interaction',
-        'content' => CourseHome::show_tools_category($my_list)
+        'content' => CourseHome::show_tools_category($my_list),
     ];
 
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
@@ -96,7 +95,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $blocks[] = [
         'title' => get_lang('Administration'),
         'class' => 'course-tools-administration',
-        'content' => CourseHome::show_tools_category($my_list)
+        'content' => CourseHome::show_tools_category($my_list),
     ];
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
@@ -112,7 +111,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 
     $blocks[] = [
-        'content' => CourseHome::show_tools_category($my_list)
+        'content' => CourseHome::show_tools_category($my_list),
     ];
 
     $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
@@ -131,7 +130,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
 
         $blocks[] = [
             'title' => get_lang('Administration'),
-            'content' => CourseHome::show_tools_category($onlyMaintenanceList)
+            'content' => CourseHome::show_tools_category($onlyMaintenanceList),
         ];
     }
 } else {
@@ -164,7 +163,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
                 'added_tool' => '0',
                 'target' => '_self',
                 'category' => 'interaction',
-                'session_id' => api_get_session_id()
+                'session_id' => api_get_session_id(),
             ];
         }
     }

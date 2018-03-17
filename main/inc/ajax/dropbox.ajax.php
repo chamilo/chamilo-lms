@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls for the document upload
+ * Responses to AJAX calls for the document upload.
  */
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'dropbox/dropbox_functions.inc.php';

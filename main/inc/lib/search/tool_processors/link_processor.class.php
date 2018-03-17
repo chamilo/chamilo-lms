@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Process links before pass it to search listing scripts
+ * Process links before pass it to search listing scripts.
+ *
  * @package chamilo.include.search
  */
 class link_processor extends search_processor
@@ -84,7 +85,7 @@ class link_processor extends search_processor
     }
 
     /**
-     * Get document information
+     * Get document information.
      */
     private function get_information($course_id, $link_id)
     {

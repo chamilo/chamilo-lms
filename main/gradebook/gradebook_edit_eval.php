@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -50,7 +50,7 @@ if ($form->validate()) {
 $selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat_inter,
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 
 $htmlHeadXtra[] = '<script>

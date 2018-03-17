@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SequenceRowEntity
+ * Class SequenceRowEntity.
  *
  * @ORM\Table(name="sequence_row_entity")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRowEntity
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,21 +23,21 @@ class SequenceRowEntity
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer")
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="row_id", type="integer")
      */
@@ -53,13 +53,13 @@ class SequenceRowEntity
     /**
      * @ORM\ManyToOne(targetEntity="SequenceTypeEntity")
      * @ORM\JoinColumn(name="sequence_type_entity_id", referencedColumnName="id")
-     **/
+     */
     private $type;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -76,6 +76,7 @@ class SequenceRowEntity
 
     /**
      * @param int $cId
+     *
      * @return SequenceRowEntity
      */
     public function setCId($cId)
@@ -95,6 +96,7 @@ class SequenceRowEntity
 
     /**
      * @param int $sessionId
+     *
      * @return SequenceRowEntity
      */
     public function setSessionId($sessionId)
@@ -114,6 +116,7 @@ class SequenceRowEntity
 
     /**
      * @param int $rowId
+     *
      * @return SequenceRowEntity
      */
     public function setRowId($rowId)
@@ -133,6 +136,7 @@ class SequenceRowEntity
 
     /**
      * @param string $name
+     *
      * @return SequenceRowEntity
      */
     public function setName($name)
@@ -152,6 +156,7 @@ class SequenceRowEntity
 
     /**
      * @param mixed $type
+     *
      * @return SequenceRowEntity
      */
     public function setType($type)

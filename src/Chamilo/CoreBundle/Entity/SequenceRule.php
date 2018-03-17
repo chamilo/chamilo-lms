@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SequenceRule
+ * Class SequenceRule.
  *
  * @ORM\Table(name="sequence_rule")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRule
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,9 +30,9 @@ class SequenceRule
     private $description;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -49,6 +49,7 @@ class SequenceRule
 
     /**
      * @param string $description
+     *
      * @return SequenceRule
      */
     public function setDescription($description)

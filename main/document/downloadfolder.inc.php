@@ -4,11 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * Functions and main code for the download folder feature
+ * Functions and main code for the download folder feature.
  *
  * @package chamilo.document
  */
-
 set_time_limit(0);
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -330,7 +329,7 @@ if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
 
 /**
  * Returns the difference between two arrays, as an array of those key/values
- * Use this as array_diff doesn't give the
+ * Use this as array_diff doesn't give the.
  *
  * @param array $arr1 first array
  * @param array $arr2 second array
@@ -341,7 +340,7 @@ function diff($arr1, $arr2)
 {
     $res = [];
     $r = 0;
-    foreach ($arr1 as & $av) {
+    foreach ($arr1 as &$av) {
         if (!in_array($av, $arr2)) {
             $res[$r] = $av;
             $r++;

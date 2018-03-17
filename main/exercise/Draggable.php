@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class Draggable
+ * Class Draggable.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
@@ -12,7 +12,7 @@ class Draggable extends Question
     public static $explanationLangVar = 'Draggable';
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -22,7 +22,7 @@ class Draggable extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -96,9 +96,9 @@ class Draggable extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="85%">' . get_lang('Answer').'</th>
-                    <th width="15%">' . get_lang('MatchesTo').'</th>
-                    <th width="10">' . get_lang('Weighting').'</th>
+                    <th width="85%">'.get_lang('Answer').'</th>
+                    <th width="15%">'.get_lang('MatchesTo').'</th>
+                    <th width="10">'.get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -148,7 +148,7 @@ class Draggable extends Question
         $group = [
             $form->addButtonDelete(get_lang('DelElem'), 'lessMatches', true),
             $form->addButtonCreate(get_lang('AddElem'), 'moreMatches', true),
-            $form->addButtonSave($text, 'submitQuestion', true)
+            $form->addButtonSave($text, 'submitQuestion', true),
         ];
 
         $form->addGroup($group);
@@ -166,13 +166,13 @@ class Draggable extends Question
         $form->setConstants(
             [
                 'nb_matches' => $nb_matches,
-                'nb_options' => $nb_options
+                'nb_options' => $nb_options,
             ]
         );
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -208,7 +208,7 @@ class Draggable extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {

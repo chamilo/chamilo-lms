@@ -6,7 +6,8 @@ namespace Chamilo\ContactBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloContactBundle
+ * Class ChamiloContactBundle.
+ *
  * @package Chamilo\ChamiloContactBundle
  */
 class ChamiloContactBundle extends Bundle

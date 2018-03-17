@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * MatchingDraggable
+ * MatchingDraggable.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
@@ -12,7 +12,7 @@ class MatchingDraggable extends Question
     public static $explanationLangVar = 'MatchingDraggable';
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -22,7 +22,7 @@ class MatchingDraggable extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -118,7 +118,7 @@ class MatchingDraggable extends Question
         $editorConfig = [
             'ToolbarSet' => 'TestMatching',
             'Width' => '100%',
-            'Height' => '125'
+            'Height' => '125',
         ];
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
@@ -161,8 +161,8 @@ class MatchingDraggable extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="15%">' . get_lang('Number').'</th>
-                    <th width="85%">' . get_lang('Answer').'</th>
+                    <th width="15%">'.get_lang('Number').'</th>
+                    <th width="85%">'.get_lang('Answer').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -215,13 +215,13 @@ class MatchingDraggable extends Question
         $form->setConstants(
             [
                 'nb_matches' => $nb_matches,
-                'nb_options' => $nb_options
+                'nb_options' => $nb_options,
             ]
         );
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -259,7 +259,7 @@ class MatchingDraggable extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {

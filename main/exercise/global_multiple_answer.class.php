@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * Class GlobalMultipleAnswer
+ * Class GlobalMultipleAnswer.
  */
 class GlobalMultipleAnswer extends Question
 {
@@ -22,7 +22,7 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -97,7 +97,7 @@ class GlobalMultipleAnswer extends Question
                 $defaults['pts'] = 1;
             }
 
-            $renderer = & $form->defaultRenderer();
+            $renderer = &$form->defaultRenderer();
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
@@ -200,7 +200,7 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -257,7 +257,7 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header(
         $exercise,

@@ -6,25 +6,18 @@
  * main/img/icons/64/ranking_na.png
  */
 /**
- * Description of test2pdf_plugin
+ * Description of test2pdf_plugin.
+ *
  * @package chamilo.plugin.test2pdf
+ *
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  */
 /**
- * Plugin class for the Test2pdf plugin
+ * Plugin class for the Test2pdf plugin.
  */
 class Test2pdfPlugin extends Plugin
 {
     public $isCoursePlugin = true;
-    /**
-     *
-     * @return StaticPlugin
-     */
-    public static function create()
-    {
-        static $result = null;
-        return $result ? $result : $result = new self();
-    }
 
     protected function __construct()
     {
@@ -32,31 +25,41 @@ class Test2pdfPlugin extends Plugin
             '1.0',
             'Jose Angel Ruiz - NoSoloRed (original author)',
             [
-                'enable_plugin' => 'boolean'
+                'enable_plugin' => 'boolean',
             ]
         );
     }
 
     /**
-     * This method creates the tables required to this plugin
+     * @return StaticPlugin
+     */
+    public static function create()
+    {
+        static $result = null;
+
+        return $result ? $result : $result = new self();
+    }
+
+    /**
+     * This method creates the tables required to this plugin.
      */
     public function install()
     {
         //Installing course settings
         $this->install_course_fields_in_all_courses();
-        require_once api_get_path(SYS_PLUGIN_PATH) . 'test2pdf/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'test2pdf/database.php';
     }
 
     /**
-     * This method drops the plugin tables
+     * This method drops the plugin tables.
      */
     public function uninstall()
     {
         //Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
-        
+
         $tablesToBeDeleted = [
-            TABLE_TEST2PDF
+            TABLE_TEST2PDF,
         ];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);

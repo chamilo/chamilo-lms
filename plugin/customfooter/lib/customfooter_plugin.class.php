@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of Custom Footer
+ * Description of Custom Footer.
  *
  * @copyright (c) 2014 VF Consulting
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -9,8 +9,12 @@
  */
 class CustomFooterPlugin extends Plugin
 {
+    protected function __construct()
+    {
+        parent::__construct('1.1', 'Valery Fremaux');
+    }
+
     /**
-     *
      * @return CustomFooterPlugin
      */
     public static function create()
@@ -23,11 +27,6 @@ class CustomFooterPlugin extends Plugin
     public function get_name()
     {
         return 'customfooter';
-    }
-
-    protected function __construct()
-    {
-        parent::__construct('1.1', 'Valery Fremaux');
     }
 
     public function pix_url($pixname, $size = 16)

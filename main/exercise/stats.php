@@ -121,7 +121,7 @@ $headers = [
     get_lang('Question'),
     get_lang('Answer'),
     get_lang('Correct'),
-    get_lang('NumberStudentWhoSelectedIt')
+    get_lang('NumberStudentWhoSelectedIt'),
 ];
 
 $data = [];
@@ -318,7 +318,7 @@ $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_ci
         ICON_SIZE_MEDIUM
     )
     .'</a>';
-$actions = Display::div($actions, ['class'=> 'actions']);
+$actions = Display::div($actions, ['class' => 'actions']);
 $content = $actions.$content;
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

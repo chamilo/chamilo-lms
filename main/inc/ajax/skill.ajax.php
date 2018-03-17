@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -34,7 +34,7 @@ switch ($action) {
         }
         break;
     case 'find_skills':
-        $skills = $skill->find('all', ['where' => ['name LIKE %?% '=>$_REQUEST['q']]]);
+        $skills = $skill->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['q']]]);
         $return_skills = [[
             'items' => [],
         ]];
@@ -175,9 +175,9 @@ switch ($action) {
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
                 $return[$skill['data']['id']] = [
-                    'id'    => $skill['data']['id'],
-                    'name'  => $skill['data']['name'],
-                    'passed'=> $skill['data']['passed'],
+                    'id' => $skill['data']['id'],
+                    'name' => $skill['data']['name'],
+                    'passed' => $skill['data']['passed'],
                 ];
             }
         }
@@ -197,10 +197,10 @@ switch ($action) {
         $skills = $skill->getDirectParents($id);
         $return = [];
         foreach ($skills as $skill) {
-            $return [$skill['data']['id']] = [
-                'id'        => $skill['data']['id'],
+            $return[$skill['data']['id']] = [
+                'id' => $skill['data']['id'],
                 'parent_id' => $skill['data']['parent_id'],
-                'name'      => $skill['data']['name'],
+                'name' => $skill['data']['name'],
             ];
         }
         echo json_encode($return);
@@ -209,7 +209,7 @@ switch ($action) {
         $skill_rel_user = new SkillRelUser();
         $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : []);
         $total_skills_to_search = $skills;
-        $users  = $skill_rel_user->getUserBySkills($skills);
+        $users = $skill_rel_user->getUserBySkills($skills);
         $user_list = [];
         $count_skills = count($skills);
         $ordered_user_list = null;

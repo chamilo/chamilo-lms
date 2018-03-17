@@ -4,7 +4,6 @@
 /**
  * @package chamilo.user
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -60,7 +59,7 @@ if (api_is_allowed_to_edit()) {
         $options = [
             -1 => get_lang('All'),
             1 => get_lang('SocialGroups'),
-            0 => get_lang('Classes')
+            0 => get_lang('Classes'),
         ];
         $form->addSelect(
             'group_filter',
@@ -117,7 +116,7 @@ $columns = [
 
 // Column config
 $columnModel = [
-    ['name'=>'name',
+    ['name' => 'name',
         'index' => 'name',
         'width' => '35',
         'align' => 'left',

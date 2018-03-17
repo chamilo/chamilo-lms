@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for attendance calendar (list, edit, add)
+ * View (MVC patter) for attendance calendar (list, edit, add).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.attendance
  */
 
@@ -89,7 +91,7 @@ if (isset($action) && $action == 'calendar_add') {
     $a_repeat_type = [
         'daily' => get_lang('RepeatDaily'),
         'weekly' => get_lang('RepeatWeekly'),
-        'monthlyByDate' => get_lang('RepeatMonthlyByDate')
+        'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
     ];
     $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $a_repeat_type);
 
@@ -97,7 +99,7 @@ if (isset($action) && $action == 'calendar_add') {
         'date_picker',
         'end_date_time',
         get_lang('RepeatEnd'),
-        ['form_name'=>'attendance_calendar_add']
+        ['form_name' => 'attendance_calendar_add']
     );
     $defaults['end_date_time'] = date('Y-m-d');
     $form->addElement('html', '</div>');
@@ -137,7 +139,7 @@ if (isset($action) && $action == 'calendar_add') {
                 $form->addDateTimePicker(
                     'date_time',
                     [get_lang('Date')],
-                    ['form_name'=>'attendance_calendar_edit'],
+                    ['form_name' => 'attendance_calendar_edit'],
                     5
                 );
                 $defaults['date_time'] = $calendar['date_time'];
@@ -170,9 +172,9 @@ if (isset($action) && $action == 'calendar_add') {
                     if (api_is_allowed_to_edit()) {
                         echo '<div class="pull-right">';
                         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
-                            Display::return_icon('edit.png', get_lang('Edit'), ['style'=>'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
                         echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), ['style'=>'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
                         echo '</div>';
                     }
                 }

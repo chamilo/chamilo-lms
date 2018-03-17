@@ -9,10 +9,11 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 30/January/2011
+ *
  * @todo clean all file
-*/
-
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (api_get_setting('enabled_support_paint') === 'false') {
@@ -118,7 +119,7 @@ if (empty($document_data['parents'])) {
     foreach ($document_data['parents'] as $document_sub_data) {
         $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title']
+            'name' => $document_sub_data['title'],
         ];
     }
 }
@@ -156,7 +157,7 @@ if ($_SERVER['HTTP_HOST'] == "localhost") {
 				<allow-access-from domain="cdn.pixlr.com" />
 				<site-control permitted-cross-domain-policies="master-only"/>
 				<allow-http-request-headers-from domain="cnd.pixlr.com" headers="*" secure="true"/>
-			</cross-domain-policy>';//more open domain="*"
+			</cross-domain-policy>'; //more open domain="*"
         @file_put_contents($path_and_file, $crossdomain);
     }
     $credentials = 'true';

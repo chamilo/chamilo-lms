@@ -4,17 +4,17 @@
 /** @author Julio Montoya */
 
 /**
- * Class HTML_QuickForm_Rule_MimeType
+ * Class HTML_QuickForm_Rule_MimeType.
  */
 class HTML_QuickForm_Rule_MimeType extends HTML_QuickForm_Rule
 {
     /**
-     * Checks if the given element contains an uploaded file of the right mime type
+     * Checks if the given element contains an uploaded file of the right mime type.
      *
-     * @param     array     Uploaded file info (from $_FILES)
+     * @param array     Uploaded file info (from $_FILES)
      * @param     mixed     Mime Type (can be an array of allowed types)
-     * @access    private
-     * @return    bool      true if mimetype is correct, false otherwise
+     *
+     * @return bool true if mimetype is correct, false otherwise
      */
     public function validate($elementValue, $mimeType)
     {
@@ -24,6 +24,9 @@ class HTML_QuickForm_Rule_MimeType extends HTML_QuickForm_Rule
         if (is_array($mimeType)) {
             return in_array($elementValue['type'], $mimeType);
         }
+
         return $elementValue['type'] == $mimeType;
-    } // end func _ruleCheckMimeType
+    }
+
+    // end func _ruleCheckMimeType
 }

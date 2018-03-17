@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradeComponents
+ * GradeComponents.
  *
  * @ORM\Table(name="grade_components")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradeComponents
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -44,16 +44,17 @@ class GradeComponents
     private $acronym;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="grade_model_id", type="integer", nullable=false)
      */
     private $gradeModelId;
 
     /**
-     * Set percentage
+     * Set percentage.
      *
      * @param string $percentage
+     *
      * @return GradeComponents
      */
     public function setPercentage($percentage)
@@ -64,7 +65,7 @@ class GradeComponents
     }
 
     /**
-     * Get percentage
+     * Get percentage.
      *
      * @return string
      */
@@ -74,9 +75,10 @@ class GradeComponents
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return GradeComponents
      */
     public function setTitle($title)
@@ -87,7 +89,7 @@ class GradeComponents
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -97,9 +99,10 @@ class GradeComponents
     }
 
     /**
-     * Set acronym
+     * Set acronym.
      *
      * @param string $acronym
+     *
      * @return GradeComponents
      */
     public function setAcronym($acronym)
@@ -110,7 +113,7 @@ class GradeComponents
     }
 
     /**
-     * Get acronym
+     * Get acronym.
      *
      * @return string
      */
@@ -120,9 +123,10 @@ class GradeComponents
     }
 
     /**
-     * Set gradeModelId
+     * Set gradeModelId.
      *
-     * @param integer $gradeModelId
+     * @param int $gradeModelId
+     *
      * @return GradeComponents
      */
     public function setGradeModelId($gradeModelId)
@@ -133,9 +137,9 @@ class GradeComponents
     }
 
     /**
-     * Get gradeModelId
+     * Get gradeModelId.
      *
-     * @return integer
+     * @return int
      */
     public function getGradeModelId()
     {
@@ -143,9 +147,9 @@ class GradeComponents
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

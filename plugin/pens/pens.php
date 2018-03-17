@@ -18,12 +18,11 @@
 
 /**
  * Provides an implementation of the PENS server, using the php-pens library.
- * This file must be required by a file pens.php accessible at the Chamilo root
+ * This file must be required by a file pens.php accessible at the Chamilo root.
  *
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once __DIR__.'/lib/pens.php';
 require_once __DIR__.'/chamilo_pens.php';

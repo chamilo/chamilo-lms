@@ -1,18 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This tool allows platform admins to add skills by uploading a CSV or XML file
+ * This tool allows platform admins to add skills by uploading a CSV or XML file.
+ *
  * @package chamilo.admin
  * @documentation Some interesting basic skills can be found in the "Skills"
  * section here: http://en.wikipedia.org/wiki/Personal_knowledge_management
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Validate the imported data.
+ *
  * @param $skills
+ *
  * @return array
  */
 function validate_data($skills)
@@ -48,10 +50,11 @@ function validate_data($skills)
 }
 
 /**
- * Save the imported data
+ * Save the imported data.
+ *
  * @param   array   List of users
- * @return  void
- * @uses global variable $inserted_in_course,
+ *
+ * @uses \global variable $inserted_in_course,
  * which returns the list of courses the user was inserted in
  */
 function save_data($skills)
@@ -75,8 +78,10 @@ function save_data($skills)
 }
 
 /**
- * Read the CSV-file
+ * Read the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All userinformation read from the file
  */
 function parse_csv_data($file)
@@ -90,7 +95,7 @@ function parse_csv_data($file)
 }
 
 /**
- * XML-parser: handle start of element
+ * XML-parser: handle start of element.
  */
 function element_start($parser, $data)
 {
@@ -107,7 +112,7 @@ function element_start($parser, $data)
 }
 
 /**
- * XML-parser: handle end of element
+ * XML-parser: handle end of element.
  */
 function element_end($parser, $data)
 {
@@ -126,7 +131,7 @@ function element_end($parser, $data)
 }
 
 /**
- * XML-parser: handle character data
+ * XML-parser: handle character data.
  */
 function character_data($parser, $data)
 {
@@ -136,8 +141,10 @@ function character_data($parser, $data)
 }
 
 /**
- * Read the XML-file
+ * Read the XML-file.
+ *
  * @param string $file Path to the XML-file
+ *
  * @return array All userinformation read from the file
  */
 function parse_xml_data($file)

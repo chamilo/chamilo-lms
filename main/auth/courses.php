@@ -4,11 +4,13 @@
 use Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
-* Template (front controller in MVC pattern) used for dispatching
- * to the controllers depend on the current action
-* @author Christian Fasanando <christian1827@gmail.com> - Beeznest
-* @package chamilo.auth
-*/
+ * Template (front controller in MVC pattern) used for dispatching
+ * to the controllers depend on the current action.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
+ *
+ * @package chamilo.auth
+ */
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset
 
@@ -53,7 +55,7 @@ $actions = [
     'display_sessions',
     'subscribe_to_session',
     'search_tag',
-    'search_session'
+    'search_session',
 ];
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';

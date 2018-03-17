@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SessionCategory
+ * SessionCategory.
  *
  * @ORM\Table(name="session_category")
  * @ORM\Entity
@@ -14,7 +14,17 @@ use Doctrine\ORM\Mapping as ORM;
 class SessionCategory
 {
     /**
-     * @var integer
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategory", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
+     */
+    protected $url;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
+     */
+    protected $session;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -44,17 +54,6 @@ class SessionCategory
     private $dateEnd;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategory", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
-     */
-    protected $url;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
-     **/
-    protected $session;
-
-    /**
      * @return string
      */
     public function __toString()
@@ -63,9 +62,10 @@ class SessionCategory
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param $url
+     *
      * @return SessionCategory
      */
     public function setUrl($url)
@@ -84,9 +84,9 @@ class SessionCategory
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -94,9 +94,10 @@ class SessionCategory
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return SessionCategory
      */
     public function setName($name)
@@ -107,7 +108,7 @@ class SessionCategory
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -117,9 +118,10 @@ class SessionCategory
     }
 
     /**
-     * Set dateStart
+     * Set dateStart.
      *
      * @param \DateTime $dateStart
+     *
      * @return SessionCategory
      */
     public function setDateStart($dateStart)
@@ -130,7 +132,7 @@ class SessionCategory
     }
 
     /**
-     * Get dateStart
+     * Get dateStart.
      *
      * @return \DateTime
      */
@@ -140,9 +142,10 @@ class SessionCategory
     }
 
     /**
-     * Set dateEnd
+     * Set dateEnd.
      *
      * @param \DateTime $dateEnd
+     *
      * @return SessionCategory
      */
     public function setDateEnd($dateEnd)
@@ -153,7 +156,7 @@ class SessionCategory
     }
 
     /**
-     * Get dateEnd
+     * Get dateEnd.
      *
      * @return \DateTime
      */
@@ -163,9 +166,10 @@ class SessionCategory
     }
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return SessionCategory
      */
     public function setAccessUrlId($accessUrlId)
@@ -176,9 +180,9 @@ class SessionCategory
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {

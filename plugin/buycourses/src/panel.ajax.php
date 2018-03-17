@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -170,7 +170,7 @@ switch ($action) {
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
-        require_once("paypalfunctions.php");
+        require_once "paypalfunctions.php";
         $allPayouts = [];
         $totalAccounts = 0;
         $totalPayout = 0;
@@ -190,7 +190,6 @@ switch ($action) {
         $currentCurrency = $plugin->getSelectedCurrency();
 
         $isoCode = $currentCurrency['iso_code'];
-
 
         $result = MassPayment($allPayouts, $isoCode);
 

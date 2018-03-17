@@ -5,7 +5,9 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
  * A WWW-link from the Links-module in a Chamilo-course.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class ToolIntro extends Resource
@@ -13,13 +15,14 @@ class ToolIntro extends Resource
     public $id;
 
     /**
-     * intro text
+     * intro text.
      */
     public $intro_text;
 
     /**
-     * Create a new text introduction
-     * @param int $id The id of this tool introduction in the Chamilo-course
+     * Create a new text introduction.
+     *
+     * @param int    $id         The id of this tool introduction in the Chamilo-course
      * @param string $intro_text
      */
     public function __construct($id, $intro_text)
@@ -30,7 +33,7 @@ class ToolIntro extends Resource
     }
 
     /**
-     * Show this resource
+     * Show this resource.
      */
     public function show()
     {

@@ -4,13 +4,15 @@
 use ChamiloSession as Session;
 
 /**
- * API event handler functions for AICC / CMIv4 in HACP communication mode
+ * API event handler functions for AICC / CMIv4 in HACP communication mode.
  *
  * @author   Denes Nagy <darkden@freemail.hu>
  * @author   Yannick Warnier <ywarnier@beeznest.org>
+ *
  * @version  v 1.0
- * @access   public
+ *
  * @package  chamilo.learnpath
+ *
  * @license    GNU/GPL
  */
 
@@ -19,7 +21,7 @@ use ChamiloSession as Session;
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
  * The third section defines the event handlers for Chamilo's internal messaging
- * and frames refresh
+ * and frames refresh.
  *
  * This script implements the HACP messaging for AICC. The API messaging is
  * made by another set of scripts.
@@ -62,7 +64,7 @@ if ($debug > 2) {
 // Is this needed? This is probabaly done in the header file.
 $file = Session::read('file');
 $oLP = unserialize(Session::read('lpobject'));
-$oItem = & $oLP->items[$oLP->current];
+$oItem = &$oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);
     exit;

@@ -5,19 +5,21 @@
  * of courses that have a certain level of visibility
  * on this chamilo portal.
  * It is set to work with the Chamilo module for Drupal:
- * http://drupal.org/project/chamilo
+ * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.webservices
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string Security key (the Dokeos install's API key)
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
+ *
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
 function courses_list($security_key, $visibilities = 'public')

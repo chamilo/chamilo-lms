@@ -32,20 +32,6 @@
             "main/inc/lib/hook"
         ]
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ywarnier/iCalcreator"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/jmontoyaa/PHPWord"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/chamilo/pclzip"
-        }
-    ],
     "require": {
         "php": ">=5.5",
         "ext-intl": "*",
@@ -60,7 +46,6 @@
         "twig/extensions": "~1.0",
         "doctrine/orm": "~2.4",
         "doctrine/dbal": "~2.4",
-
         "doctrine/migrations": "~1.0@dev",
         "symfony/doctrine-bridge": "~2.8",
         "symfony/validator": "~2.8",
@@ -77,14 +62,14 @@
 
         "emojione/emojione": "1.3.0",
 
-        "zendframework/zend-config": "2.5.1|~2.6",
-        "zendframework/zend-feed": "2.5.1|~2.6",
-        "zendframework/zend-http": "2.5.1|~2.6",
-        "zendframework/zend-soap": "2.5.1|~2.6",
+        "zendframework/zend-config": "2.5.1|~2.6|^3.0",
+        "zendframework/zend-feed": "2.5.1|~2.6|^3.0",
+        "zendframework/zend-http": "2.5.1|~2.6|^3.0",
+        "zendframework/zend-soap": "2.5.1|~2.6|^3.0",
         "robrichards/xmlseclibs": "3.0.*",
 
         "ezyang/htmlpurifier": "4.9.*",
-        "szymach/c-pchart": "3.0.4",
+        "szymach/c-pchart": "3.0.6",
         "aferrandini/phpqrcode": "1.0.1",
         "mpdf/mpdf": "6.1.*",
         "studio-42/elfinder": "2.1.*",
@@ -104,13 +89,13 @@
         "sunra/php-simple-html-dom-parser": "~1.5.0",
         "media-alchemyst/media-alchemyst": "~0.5",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
-        "imagine/imagine": "0.6.2",
+        "imagine/imagine": "0.6.3",
         "jeroendesloovere/vcard": "^1.2",
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.14",
-        "phpoffice/phpword": "^0.13.0||dev-master",
+        "phpoffice/phpword": "^0.14",
         "facebook/php-sdk-v4": "~5.0",
-        "kigkonsult/icalcreator": "2.22.5",
+        "kigkonsult/icalcreator": "2.24",
         "essence/essence": "2.6.1",
         "chamilo/pclzip": "^2.8",
         "chamilo/chash": "0.1.1",

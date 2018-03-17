@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EventSent
+ * EventSent.
  *
  * @ORM\Table(name="event_sent", indexes={@ORM\Index(name="event_name_index", columns={"event_type_name"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class EventSent
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,14 +23,14 @@ class EventSent
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_from", type="integer", nullable=false)
      */
     private $userFrom;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_to", type="integer", nullable=true)
      */
@@ -44,9 +44,10 @@ class EventSent
     private $eventTypeName;
 
     /**
-     * Set userFrom
+     * Set userFrom.
      *
-     * @param integer $userFrom
+     * @param int $userFrom
+     *
      * @return EventSent
      */
     public function setUserFrom($userFrom)
@@ -57,9 +58,9 @@ class EventSent
     }
 
     /**
-     * Get userFrom
+     * Get userFrom.
      *
-     * @return integer
+     * @return int
      */
     public function getUserFrom()
     {
@@ -67,9 +68,10 @@ class EventSent
     }
 
     /**
-     * Set userTo
+     * Set userTo.
      *
-     * @param integer $userTo
+     * @param int $userTo
+     *
      * @return EventSent
      */
     public function setUserTo($userTo)
@@ -80,9 +82,9 @@ class EventSent
     }
 
     /**
-     * Get userTo
+     * Get userTo.
      *
-     * @return integer
+     * @return int
      */
     public function getUserTo()
     {
@@ -90,9 +92,10 @@ class EventSent
     }
 
     /**
-     * Set eventTypeName
+     * Set eventTypeName.
      *
      * @param string $eventTypeName
+     *
      * @return EventSent
      */
     public function setEventTypeName($eventTypeName)
@@ -103,7 +106,7 @@ class EventSent
     }
 
     /**
-     * Get eventTypeName
+     * Get eventTypeName.
      *
      * @return string
      */
@@ -113,9 +116,9 @@ class EventSent
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

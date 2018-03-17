@@ -9,14 +9,15 @@ use ChamiloSession as Session;
  * through the session, and calculates the score of the student for
  * that exercise.
  * Then it shows the results on the screen.
+ *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert, main author
  * @author Roan Embrechts, some refactoring
  * @author Julio Montoya switchable fill in blank option added
  *
  * @todo    split more code up in functions, move functions to library?
  */
-
 $debug = false;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -106,7 +107,7 @@ $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $
 
 if ($origin == 'learnpath') {
     ?>
-    <form method="GET" action="exercise.php?<?php echo api_get_cidreq() ?>">
+    <form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>"/>
@@ -123,7 +124,7 @@ $attemptButton = Display::toolbarButton(
         'exerciseId' => $objExercise->id,
         'learnpath_id' => $learnpath_id,
         'learnpath_item_id' => $learnpath_item_id,
-        'learnpath_item_view_id' => $learnpath_item_view_id
+        'learnpath_item_view_id' => $learnpath_item_view_id,
     ]),
     'pencil-square-o',
     'info'

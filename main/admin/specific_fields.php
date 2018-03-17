@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Manage specific fields
+ * Manage specific fields.
  *
  * @package chamilo.admin
  */
@@ -24,7 +24,7 @@ include_once $libpath.'specific_fields_manager.lib.php';
 
 // Create an add-field box
 $form = new FormValidator('add_field', 'post', '', '', null, false);
-$renderer = & $form->defaultRenderer();
+$renderer = &$form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addElement(
     'static',
@@ -60,6 +60,7 @@ function edit_filter($id, $url_params, $row)
         Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
     $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
         Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+
     return $return;
 }
 

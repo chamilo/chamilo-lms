@@ -5,10 +5,11 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 /**
- * Special exports
+ * Special exports.
  *
  * @author Jhon Hinojosa
  * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
+ *
  * @package chamilo.include.export
  */
 
@@ -197,7 +198,7 @@ function create_zip()
         'PATH_TEMP_ARCHIVE' => $temp_zip_dir,
         'PATH_COURSE' => $sys_course_path,
         'TEMP_FILE_ZIP' => $temp_zip_file,
-        'PATH_REMOVE' => $remove_dir
+        'PATH_REMOVE' => $remove_dir,
     ];
 }
 
@@ -312,6 +313,7 @@ function fullexportspecial()
     } else {
         echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error'); //main API
         $export = false;
+
         return false;
     }
 }

@@ -5,11 +5,10 @@ namespace Chamilo\CoreBundle\Component\Editor;
 
 use elFinder;
 use elFinderSession;
-use Exception;
 use elFinderSessionInterface;
+use Exception;
 
 /**
- *
  * Based in \elFinder this class only has a small change that allows use
  * drivers with out adding elFinderVolume as class name.
  *
@@ -24,9 +23,10 @@ use elFinderSessionInterface;
 class Finder extends \elFinder
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param  array  $opts elFinder and roots configurations
+     * @param array $opts elFinder and roots configurations
+     *
      * @author Dmitry (dio) Levashov
      */
     public function __construct($opts)
@@ -80,9 +80,9 @@ class Finder extends \elFinder
             $sessionOpts = [
                 'base64encode' => !empty($opts['base64encodeSessionData']),
                 'keys' => [
-                    'default'   => !empty($opts['sessionCacheKey']) ? $opts['sessionCacheKey'] : 'elFinderCaches',
-                    'netvolume' => !empty($opts['netVolumesSessionKey']) ? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes'
-                ]
+                    'default' => !empty($opts['sessionCacheKey']) ? $opts['sessionCacheKey'] : 'elFinderCaches',
+                    'netvolume' => !empty($opts['netVolumesSessionKey']) ? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes',
+                ],
             ];
             if (!class_exists('elFinderSession')) {
                 include_once __DIR__.'/elFinderSession.php';

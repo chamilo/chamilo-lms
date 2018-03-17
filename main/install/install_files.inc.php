@@ -3,7 +3,7 @@
 
 /**
  * Install the Chamilo files
- * Notice : This script has to be included by install/index.php
+ * Notice : This script has to be included by install/index.php.
  *
  * The script creates two files:
  * - configuration.php, the file that contains very important info for Chamilo
@@ -13,9 +13,7 @@
  *
  * @package chamilo.install
  */
-
 if (defined('SYSTEM_INSTALLATION')) {
-
     // Write the system config file
     write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.php');
 
@@ -49,10 +47,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     copy(
         api_get_path(CONFIGURATION_PATH).'auth.conf.dist.php',
         api_get_path(CONFIGURATION_PATH).'auth.conf.php'
-    );
-    copy(
-        api_get_path(CONFIGURATION_PATH).'portfolio.conf.dist.php',
-        api_get_path(CONFIGURATION_PATH).'portfolio.conf.php'
     );
 } else {
     echo 'You are not allowed here !'.__FILE__;

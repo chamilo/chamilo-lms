@@ -62,22 +62,22 @@ if (!empty($group_id)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups')
+        'name' => get_lang('Groups'),
     ];
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
+    'name' => get_lang('StudentPublications'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
-    'name' =>  $my_folder_data['title']
+    'name' => $my_folder_data['title'],
 ];
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
@@ -224,7 +224,7 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('Date'),
         get_lang('Status'),
         get_lang('UploadCorrection'),
-        get_lang('Actions')
+        get_lang('Actions'),
     ];
 
     $column_model = [
@@ -272,7 +272,7 @@ if (!empty($work_data['enable_qualification']) &&
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',
-            'title' => 'false'
+            'title' => 'false',
         ],
         [
             'name' => 'actions',
@@ -291,7 +291,7 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('Feedback'),
         get_lang('Date'),
         get_lang('UploadCorrection'),
-        get_lang('Actions')
+        get_lang('Actions'),
     ];
 
     $column_model = [
@@ -340,9 +340,9 @@ if (!empty($work_data['enable_qualification']) &&
             'width' => '30',
             'align' => 'left',
             'search' => 'false',
-            'sortable' => 'false'
+            'sortable' => 'false',
             //'wrap_cell' => 'true',
-        ]
+        ],
     ];
 }
 

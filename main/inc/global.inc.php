@@ -10,9 +10,9 @@
  * - include of language files.
  *
  * @package chamilo.include
+ *
  * @todo remove the code that displays the button that links to the install page
  * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
- *
  */
 
 // Showing/hiding error codes in global error messages.
@@ -130,7 +130,7 @@ $dbParams = [
     // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
     'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
-    'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
+    'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
 ];
 
 try {
@@ -212,8 +212,8 @@ ChamiloSession::start($alreadyInstalled);
 if ($_configuration['access_url'] != 1) {
     $url_info = api_get_access_url($_configuration['access_url']);
     if ($url_info['active'] == 1) {
-        $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
-        foreach ($settings_by_access as & $row) {
+        $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+        foreach ($settings_by_access as &$row) {
             if (empty($row['variable'])) {
                 $row['variable'] = 0;
             }
@@ -228,8 +228,8 @@ if ($_configuration['access_url'] != 1) {
     }
 }
 
-$result = & api_get_settings(null, 'list', 1);
-foreach ($result as & $row) {
+$result = &api_get_settings(null, 'list', 1);
+foreach ($result as &$row) {
     if ($_configuration['access_url'] != 1) {
         if ($url_info['active'] == 1) {
             $var = empty($row['variable']) ? 0 : $row['variable'];
@@ -269,10 +269,10 @@ foreach ($result as & $row) {
     }
 }
 
-$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = [];
-foreach ($result as & $row) {
-    $key = & $row['variable'];
+foreach ($result as &$row) {
+    $key = &$row['variable'];
     if (isset($_setting[$key]) && is_string($_setting[$key])) {
         $_setting[$key] = [];
     }
@@ -321,7 +321,6 @@ $configurationFiles = [
     'add_course.conf.php',
     'events.conf.php',
     'auth.conf.php',
-    'portfolio.conf.php'
 ];
 
 foreach ($configurationFiles as $file) {
@@ -524,7 +523,7 @@ if (!empty($valid_languages)) {
 $language_interface_initial_value = $language_interface;
 
 /**
- * Include the trad4all language file
+ * Include the trad4all language file.
  */
 // if the sub-language feature is on
 $parent_path = SubLanguageManager::get_parent_language_path($language_interface);

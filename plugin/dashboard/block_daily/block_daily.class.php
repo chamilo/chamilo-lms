@@ -1,20 +1,23 @@
 <?php
 /**
  * This file is part of course block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
+ * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
+ *
  * @package chamilo.dashboard
+ *
  * @author Marco Sousa original code
  * @author Julio Montoya class named was changed of name, and some minor changes
  */
 
 /**
- * required files for getting data
+ * required files for getting data.
  */
 
 /**
  * This class is used like controller for this course block plugin,
  * the class name must be registered inside path.info file
- * (e.g: controller = "BlockDiario"), so dashboard controller will be instantiate it
+ * (e.g: controller = "BlockDiario"), so dashboard controller will be instantiate it.
+ *
  * @package chamilo.dashboard
  */
 class BlockDaily extends Block
@@ -25,7 +28,7 @@ class BlockDaily extends Block
     private $permission = [DRH];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($user_id)
     {
@@ -39,9 +42,11 @@ class BlockDaily extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param    int        User id
-     * @return    bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -55,13 +60,15 @@ class BlockDaily extends Block
         ) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
     /**
      * This method return content html containing information about courses and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for beeing used from dashboard controller
-     * @return array   column and content html
+     * it's important to use the name 'get_block' for beeing used from dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
@@ -70,8 +77,8 @@ class BlockDaily extends Block
         $data = [];
         $content = $this->get_content_html();
         $html = '<div class="panel panel-default" id="intro">
-		                <div class="panel-heading">' . get_lang('GradebookAndAttendances').'
-		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\'' . addslashes(
+		                <div class="panel-heading">'.get_lang('GradebookAndAttendances').'
+		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(
                 api_htmlentities(
                     get_lang('ConfirmYourChoice'),
                     ENT_QUOTES,
@@ -82,7 +89,7 @@ class BlockDaily extends Block
                         </a></div>
 		                </div>
 		                <div class="panel-body">
-		                   ' . $content.'
+		                   '.$content.'
 		                </div>
 		            </div>
 				';
@@ -93,8 +100,9 @@ class BlockDaily extends Block
     }
 
     /**
-     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
-     * @return string  content html
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface.
+     *
+     * @return string content html
      */
     public function get_content_html()
     {
@@ -104,10 +112,10 @@ class BlockDaily extends Block
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
             $data_table .= '<tr>
-	    						<th>' . get_lang('CourseTitle').'</th>
-	    						<th width="20%">' . get_lang('NbStudents').'</th>
-	    						<th width="20%">' . get_lang('Evaluation').'</th>
-	    						<th width="20%">' . get_lang('ToolAttendance').'</th>
+	    						<th>'.get_lang('CourseTitle').'</th>
+	    						<th width="20%">'.get_lang('NbStudents').'</th>
+	    						<th width="20%">'.get_lang('Evaluation').'</th>
+	    						<th width="20%">'.get_lang('ToolAttendance').'</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -133,14 +141,15 @@ class BlockDaily extends Block
         $content .= $data_table;
         if (!empty($course_data)) {
             $content .= '<div style="text-align:right;margin-top:10px;">
-            <a href="' . api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
+            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
         }
         //$content .= '</div>';
         return $content;
     }
 
     /**
-     * Get number of courses
+     * Get number of courses.
+     *
      * @return int
      */
     public function get_number_of_courses()
@@ -149,7 +158,8 @@ class BlockDaily extends Block
     }
 
     /**
-     * Get course information data
+     * Get course information data.
+     *
      * @return array
      */
     public function get_course_information_data()
@@ -220,7 +230,7 @@ class BlockDaily extends Block
                 TABLE_MAIN_GRADEBOOK_CATEGORY
             );
             $sql = "SELECT id from ".$tbl_grade_categories."
-                    WHERE course_code ='" . $course_code."'";
+                    WHERE course_code ='".$course_code."'";
             $rs = Database::query($sql);
             $category = null;
             while ($row = Database::fetch_array($rs)) {
@@ -253,6 +263,7 @@ class BlockDaily extends Block
             $table_row[] = $attendances[0];
             $course_data[] = $table_row;
         }
+
         return $course_data;
     }
 }

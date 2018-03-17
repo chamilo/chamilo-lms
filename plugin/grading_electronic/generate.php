@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\Common\Collections\Criteria;
-use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 
 require_once '../../main/inc/global.inc.php';
 
@@ -48,7 +48,7 @@ try {
     $cFieldValue->save([
         'variable' => GradingElectronicPlugin::EXTRAFIELD_COURSE_ID,
         'item_id' => $course->getId(),
-        'value' => $values['course']
+        'value' => $values['course'],
     ]);
 
     $item = $cFieldValue->get_item_id_from_field_variable_and_field_value(
@@ -104,7 +104,7 @@ try {
         $exerciseLink = $gradebook->get_links()[0];
         $exerciseId = $exerciseLink->get_ref_id();
         $exerciseInfo = ExerciseLib::get_exercise_by_id($exerciseId, $course->getId());
-    */
+     */
     $dateStart = new DateTime($values['range_start'].' 00:00:00', new DateTimeZone('UTC'));
     $dateEnd = new DateTime($values['range_end'].' 23:59:59', new DateTimeZone('UTC'));
 
@@ -145,7 +145,7 @@ try {
                 if (!$dateEnd) {
                     continue;
                 }
-        */
+         */
         $fieldStudent = $uFieldValue->get_values_by_handler_and_field_variable(
             $student->getId(),
             GradingElectronicPlugin::EXTRAFIELD_STUDENT_ID
@@ -164,7 +164,7 @@ try {
                     $gradebook,
                     true
                 );
-        */
+         */
         $fileData[] = sprintf(
             "2 %sPASS%s %s %s",
             $fieldStudent ? $fieldStudent['value'] : null,

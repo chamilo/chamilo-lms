@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Configures the WSReport SOAP service
+ * Configures the WSReport SOAP service.
+ *
  * @package chamilo.webservices
  */
 require_once __DIR__.'/webservice_report.php';
@@ -75,7 +76,6 @@ $s->wsdl->addComplexType(
     )
 );*/
 
-
 $s->wsdl->addComplexType(
     'user_result',
     'complexType',
@@ -138,7 +138,6 @@ $s->wsdl->addComplexType(
     ],
     'tns:user_result'
 );
-
 
 $s->register(
     'WSReport.GetTimeSpentOnPlatform',

@@ -3,11 +3,11 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\Room;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CThematicAdvance
+ * CThematicAdvance.
  *
  * @ORM\Table(
  *  name="c_thematic_advance",
@@ -21,7 +21,7 @@ use Chamilo\CoreBundle\Entity\Room;
 class CThematicAdvance
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,28 +30,28 @@ class CThematicAdvance
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thematic_id", type="integer", nullable=false)
      */
     private $thematicId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
@@ -72,14 +72,14 @@ class CThematicAdvance
     private $startDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="duration", type="integer", nullable=false)
      */
     private $duration;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="done_advance", type="boolean", nullable=false)
      */
@@ -90,13 +90,14 @@ class CThematicAdvance
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     **/
+     */
     private $room;
 
     /**
-     * Set thematicId
+     * Set thematicId.
      *
-     * @param integer $thematicId
+     * @param int $thematicId
+     *
      * @return CThematicAdvance
      */
     public function setThematicId($thematicId)
@@ -107,9 +108,9 @@ class CThematicAdvance
     }
 
     /**
-     * Get thematicId
+     * Get thematicId.
      *
-     * @return integer
+     * @return int
      */
     public function getThematicId()
     {
@@ -117,9 +118,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set attendanceId
+     * Set attendanceId.
      *
-     * @param integer $attendanceId
+     * @param int $attendanceId
+     *
      * @return CThematicAdvance
      */
     public function setAttendanceId($attendanceId)
@@ -130,9 +132,9 @@ class CThematicAdvance
     }
 
     /**
-     * Get attendanceId
+     * Get attendanceId.
      *
-     * @return integer
+     * @return int
      */
     public function getAttendanceId()
     {
@@ -140,9 +142,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return CThematicAdvance
      */
     public function setContent($content)
@@ -153,7 +156,7 @@ class CThematicAdvance
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -163,9 +166,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set startDate
+     * Set startDate.
      *
      * @param \DateTime $startDate
+     *
      * @return CThematicAdvance
      */
     public function setStartDate($startDate)
@@ -176,7 +180,7 @@ class CThematicAdvance
     }
 
     /**
-     * Get startDate
+     * Get startDate.
      *
      * @return \DateTime
      */
@@ -186,9 +190,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set duration
+     * Set duration.
      *
-     * @param integer $duration
+     * @param int $duration
+     *
      * @return CThematicAdvance
      */
     public function setDuration($duration)
@@ -199,9 +204,9 @@ class CThematicAdvance
     }
 
     /**
-     * Get duration
+     * Get duration.
      *
-     * @return integer
+     * @return int
      */
     public function getDuration()
     {
@@ -209,9 +214,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set doneAdvance
+     * Set doneAdvance.
      *
-     * @param boolean $doneAdvance
+     * @param bool $doneAdvance
+     *
      * @return CThematicAdvance
      */
     public function setDoneAdvance($doneAdvance)
@@ -222,9 +228,9 @@ class CThematicAdvance
     }
 
     /**
-     * Get doneAdvance
+     * Get doneAdvance.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDoneAdvance()
     {
@@ -232,9 +238,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CThematicAdvance
      */
     public function setId($id)
@@ -245,9 +252,9 @@ class CThematicAdvance
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -255,9 +262,10 @@ class CThematicAdvance
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CThematicAdvance
      */
     public function setCId($cId)
@@ -268,9 +276,9 @@ class CThematicAdvance
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -307,11 +315,13 @@ class CThematicAdvance
 
     /**
      * @param int $iid
+     *
      * @return CThematicAdvance
      */
     public function setIid($iid)
     {
         $this->iid = $iid;
+
         return $this;
     }
 }

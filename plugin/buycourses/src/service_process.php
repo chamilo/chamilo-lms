@@ -1,15 +1,15 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Process payments for the Buy Courses plugin
+ * Process payments for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../config.php';
@@ -110,7 +110,7 @@ $form->addHtml(
     )
 );
 $selectOptions = [
-    0 => get_lang('None')
+    0 => get_lang('None'),
 ];
 
 if ($typeUser) {

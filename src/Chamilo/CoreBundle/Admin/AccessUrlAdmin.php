@@ -4,17 +4,27 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class AccessUrlAdmin
+ * Class AccessUrlAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class AccessUrlAdmin extends AbstractAdmin
 {
+    /**
+     * @param $course
+     *
+     * @return mixed|void
+     */
+    public function preUpdate($course)
+    {
+        //$course->setUsers($course->getUsers());
+    }
+
     /**
      * @param FormMapper $formMapper
      */
@@ -52,14 +62,5 @@ class AccessUrlAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('url')
         ;
-    }
-
-    /**
-     * @param $course
-     * @return mixed|void
-     */
-    public function preUpdate($course)
-    {
-        //$course->setUsers($course->getUsers());
     }
 }

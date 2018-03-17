@@ -4,15 +4,14 @@
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Translation\Translator;
 
 //use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class elFinder Connector - editor + Chamilo repository
+ * Class elFinder Connector - editor + Chamilo repository.
+ *
  * @package Chamilo\CoreBundle\Component\Editor
  */
 class Connector
@@ -75,26 +74,12 @@ class Connector
 
     /**
      * Available driver list.
+     *
      * @param array
      */
     public function setDriverList($list)
     {
         $this->driverList = $list;
-    }
-
-    /**
-     * Available driver list.
-     * @return array
-     */
-    private function getDefaultDriverList()
-    {
-        return [
-            'CourseDriver',
-            'CourseUserDriver',
-            'DropBoxDriver',
-            'HomeDriver',
-            'PersonalDriver'
-        ];
     }
 
     /**
@@ -117,6 +102,7 @@ class Connector
 
     /**
      * @param string $driverName
+     *
      * @return Driver $driver
      */
     public function getDriver($driverName)
@@ -144,7 +130,7 @@ class Connector
                     'chamilo' => [
                         'driverName' => $driver->getName(),
                         'connector' => $this,
-                    ]
+                    ],
                 ];
                 $configuration = $driver->getConfiguration();
                 $driver->setup();
@@ -159,7 +145,9 @@ class Connector
 
     /**
      * Merges the default driver settings.
+     *
      * @param array $driver
+     *
      * @return array
      */
     public function updateWithDefaultValues($driver)
@@ -185,6 +173,7 @@ class Connector
 
     /**
      * Get default driver settings.
+     *
      * @return array
      */
     public function getDefaultDriverSettings()
@@ -208,8 +197,8 @@ class Connector
                 'application/xml',
                 'application/vnd.oasis.opendocument.text',
                 'application/x-shockwave-flash',
-                'application/vnd.adobe.flash.movie'
-            ], # allow files
+                'application/vnd.adobe.flash.movie',
+            ], // allow files
             //'uploadDeny' => array('text/x-php'),
             'uploadOrder' => ['allow'], // only executes allow
             'disabled' => [
@@ -224,16 +213,16 @@ class Connector
                 'extract',
                 'archive',
                 'help',
-                'resize'
+                'resize',
             ],
-            'attributes' =>  [
+            'attributes' => [
                 // Hiding dangerous files
                 [
                     'pattern' => '/\.(php|py|pl|sh|xml)$/i',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
-                    'locked' => false
+                    'locked' => false,
                 ],
                 // Hiding _DELETED_ files
                 [
@@ -241,7 +230,7 @@ class Connector
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
-                    'locked' => false
+                    'locked' => false,
                 ],
                 // Hiding thumbnails
                 [
@@ -249,23 +238,23 @@ class Connector
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
-                    'locked' => false
+                    'locked' => false,
                 ],
                 [
                     'pattern' => '/.thumbs/',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
-                    'locked' => false
+                    'locked' => false,
                 ],
                 [
                     'pattern' => '/.quarantine/',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
-                    'locked' => false
-                ]
-            ]
+                    'locked' => false,
+                ],
+            ],
         ];
     }
 
@@ -278,9 +267,9 @@ class Connector
         $opts = [
             //'debug' => true,
             'bind' => [
-                'upload rm mkdir' => [$this, 'manageCommands']
+                'upload rm mkdir' => [$this, 'manageCommands'],
             ],
-            'sessionCloseEarlier' => false
+            'sessionCloseEarlier' => false,
         ];
 
         $this->setDrivers();
@@ -290,7 +279,7 @@ class Connector
     }
 
     /**
-     * Set drivers from list
+     * Set drivers from list.
      */
     public function setDrivers()
     {
@@ -301,6 +290,7 @@ class Connector
 
     /**
      * Sets a driver.
+     *
      * @param string $driverName
      */
     public function setDriver($driverName)
@@ -316,25 +306,26 @@ class Connector
 
     /**
      * Simple function to demonstrate how to control file access using "accessControl" callback.
-     * This method will disable accessing files/folders starting from  '.' (dot)
+     * This method will disable accessing files/folders starting from  '.' (dot).
      *
-     * @param string $attr  attribute name (read|write|locked|hidden)
-     * @param string $path  file path relative to volume root directory started with directory separator
+     * @param string $attr   attribute name (read|write|locked|hidden)
+     * @param string $path   file path relative to volume root directory started with directory separator
      * @param string $data
      * @param string $volume
+     *
      * @return bool|null
-     **/
+     */
     public function access($attr, $path, $data, $volume)
     {
         return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
             ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-            :  null; // else elFinder decide it itself
+            : null; // else elFinder decide it itself
     }
 
     /**
      * @param string $cmd
-     * @param array $result
-     * @param array $args
+     * @param array  $result
+     * @param array  $args
      * @param Finder $elFinder
      */
     public function manageCommands($cmd, $result, $args, $elFinder)
@@ -385,6 +376,22 @@ class Connector
                 //$log .= "\tCHANGED: ".$elfinder->realpath($file['hash'])."\n";
             }
         }
+    }
+
+    /**
+     * Available driver list.
+     *
+     * @return array
+     */
+    private function getDefaultDriverList()
+    {
+        return [
+            'CourseDriver',
+            'CourseUserDriver',
+            'DropBoxDriver',
+            'HomeDriver',
+            'PersonalDriver',
+        ];
     }
 
     /**

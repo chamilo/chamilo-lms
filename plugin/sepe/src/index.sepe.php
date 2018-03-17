@@ -2,9 +2,8 @@
 /* For license terms, see /license.txt */
 
 /**
- * Index of the Sepe plugin
+ * Index of the Sepe plugin.
  */
-
 $plugin = SepePlugin::create();
 $enable = $plugin->get('sepe_enable') == 'true';
 $title = $plugin->get_lang('AdministratorSepe');

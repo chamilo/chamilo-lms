@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Code for Aiken import integration.
-* @package chamilo.exercise
-* @author Ronny Velasquez <ronny.velasquez@beeznest.com>
-* @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
-*/
-
+ * Code for Aiken import integration.
+ *
+ * @package chamilo.exercise
+ *
+ * @author Ronny Velasquez <ronny.velasquez@beeznest.com>
+ * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 $main_path = api_get_path(SYS_CODE_PATH);

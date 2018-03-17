@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookLinkevalLog
+ * GradebookLinkevalLog.
  *
  * @ORM\Table(name="gradebook_linkeval_log")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookLinkevalLog
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)
      */
@@ -42,14 +42,14 @@ class GradebookLinkevalLog
     private $createdAt;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="weight", type="smallint", nullable=true)
      */
     private $weight;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
@@ -63,14 +63,14 @@ class GradebookLinkevalLog
     private $type;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id_log", type="integer", nullable=false)
      */
     private $userIdLog;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -78,12 +78,11 @@ class GradebookLinkevalLog
      */
     private $id;
 
-
-
     /**
-     * Set idLinkevalLog
+     * Set idLinkevalLog.
      *
-     * @param integer $idLinkevalLog
+     * @param int $idLinkevalLog
+     *
      * @return GradebookLinkevalLog
      */
     public function setIdLinkevalLog($idLinkevalLog)
@@ -94,9 +93,9 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get idLinkevalLog
+     * Get idLinkevalLog.
      *
-     * @return integer
+     * @return int
      */
     public function getIdLinkevalLog()
     {
@@ -104,9 +103,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return GradebookLinkevalLog
      */
     public function setName($name)
@@ -117,7 +117,7 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -127,9 +127,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return GradebookLinkevalLog
      */
     public function setDescription($description)
@@ -140,7 +141,7 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -150,9 +151,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return GradebookLinkevalLog
      */
     public function setCreatedAt($createdAt)
@@ -163,7 +165,7 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -173,9 +175,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
-     * @param integer $weight
+     * @param int $weight
+     *
      * @return GradebookLinkevalLog
      */
     public function setWeight($weight)
@@ -186,9 +189,9 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
-     * @return integer
+     * @return int
      */
     public function getWeight()
     {
@@ -196,9 +199,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set visible
+     * Set visible.
      *
-     * @param boolean $visible
+     * @param bool $visible
+     *
      * @return GradebookLinkevalLog
      */
     public function setVisible($visible)
@@ -209,9 +213,9 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get visible
+     * Get visible.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisible()
     {
@@ -219,9 +223,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return GradebookLinkevalLog
      */
     public function setType($type)
@@ -232,7 +237,7 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -242,9 +247,10 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set userIdLog
+     * Set userIdLog.
      *
-     * @param integer $userIdLog
+     * @param int $userIdLog
+     *
      * @return GradebookLinkevalLog
      */
     public function setUserIdLog($userIdLog)
@@ -255,9 +261,9 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get userIdLog
+     * Get userIdLog.
      *
-     * @return integer
+     * @return int
      */
     public function getUserIdLog()
     {
@@ -265,9 +271,9 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

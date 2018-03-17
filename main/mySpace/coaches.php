@@ -37,9 +37,8 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 /**
- * MAIN PART
+ * MAIN PART.
  */
-
 if (isset($_POST['export'])) {
     $order_clause = api_is_western_name_order(PERSON_NAME_DATA_EXPORT) ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 } else {
@@ -222,8 +221,8 @@ echo "<br /><br />";
 echo "
     <br /><br />
     <form method='post' action='coaches.php'>
-        <button type='submit' class='save' name='export' value='" . get_lang('ExportExcel')."'>
-            " . get_lang('ExportExcel')."
+        <button type='submit' class='save' name='export' value='".get_lang('ExportExcel')."'>
+            ".get_lang('ExportExcel')."
         </button>
     <form>
 ";

@@ -1,42 +1,41 @@
 <?php
 /**
- *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
 
 //Needed in order to show the plugin title
-$strings['plugin_title']        = "OpenMeetings";
-$strings['plugin_comment']      = "Add a videoconference room in a Chamilo course using OpenMeetings";
+$strings['plugin_title'] = "OpenMeetings";
+$strings['plugin_comment'] = "Add a videoconference room in a Chamilo course using OpenMeetings";
 
-$strings['Videoconference']     = "Videoconference";
-$strings['MeetingOpened']       = "Meeting opened";
-$strings['MeetingClosed']       = "Meeting closed";
+$strings['Videoconference'] = "Videoconference";
+$strings['MeetingOpened'] = "Meeting opened";
+$strings['MeetingClosed'] = "Meeting closed";
 $strings['MeetingClosedComment'] = "If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.";
-$strings['CloseMeeting']        = "Close meeting";
+$strings['CloseMeeting'] = "Close meeting";
 
-$strings['MeetingDeleted']        = "Delete meeting";
+$strings['MeetingDeleted'] = "Delete meeting";
 $strings['MeetingDeletedComment'] = "";
 
-$strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s";
-$strings['VideoConferenceAddedToTheCalendar']   = "Videoconference added to the calendar";
-$strings['VideoConferenceAddedToTheLinkTool']   = "Videoconference added to the link tool";
+$strings['VideoConferenceXCourseX'] = "Videoconference #%s course %s";
+$strings['VideoConferenceAddedToTheCalendar'] = "Videoconference added to the calendar";
+$strings['VideoConferenceAddedToTheLinkTool'] = "Videoconference added to the link tool";
 
 $strings['GoToTheVideoConference'] = "Go to the videoconference";
 
-$strings['Records']             = "Recording";
-$strings['Meeting']             = "Meeting";
+$strings['Records'] = "Recording";
+$strings['Meeting'] = "Meeting";
 
-$strings['ViewRecord']          = "View recording";
-$strings['CopyToLinkTool']      = "Copy to link tool";
+$strings['ViewRecord'] = "View recording";
+$strings['CopyToLinkTool'] = "Copy to link tool";
 
-$strings['EnterConference']     = "Enter the videoconference";
-$strings['RecordList']          = "Recording list";
-$strings['ServerIsNotRunning']  = "Videoconference server is not running";
+$strings['EnterConference'] = "Enter the videoconference";
+$strings['RecordList'] = "Recording list";
+$strings['ServerIsNotRunning'] = "Videoconference server is not running";
 $strings['ServerIsNotConfigured'] = "Videoconference server is not configured";
 
-$strings['XUsersOnLine']        = "%s user(s) online";
+$strings['XUsersOnLine'] = "%s user(s) online";
 
 $strings['host'] = 'OpenMeetings host';
 $strings['host_help'] = 'This is the full address of your OpenMeeetings server interface. Might be http://localhost:5080/openmeetings, an IP address (e.g. http://192.168.13.54:5080/openmeetings) or a domain name (e.g. http://my.video.com:5080/openmeetings).';

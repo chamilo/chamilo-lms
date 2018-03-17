@@ -4,8 +4,10 @@
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
- * Class PersonalDriver
+ * Class PersonalDriver.
+ *
  * @todo add more checks in upload/rm
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class PersonalDriver extends Driver implements DriverInterface
@@ -13,7 +15,7 @@ class PersonalDriver extends Driver implements DriverInterface
     public $name = 'PersonalDriver';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setup()
     {
@@ -61,7 +63,7 @@ class PersonalDriver extends Driver implements DriverInterface
                         'extract',
                         'archive',
                         'help',
-                        'resize'
+                        'resize',
                     ],
                 ];
 

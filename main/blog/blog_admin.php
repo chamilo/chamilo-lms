@@ -4,9 +4,9 @@
 /**
  * BLOG HOMEPAGE
  * This file takes care of all blog navigation and displaying.
+ *
  * @package chamilo.blogs
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_BLOGS;
 

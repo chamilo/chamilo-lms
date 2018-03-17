@@ -17,19 +17,18 @@
  */
 
 /**
- * ChamiloPens
+ * ChamiloPens.
  *
  * This file provides the ChamiloPens class
  *
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once __DIR__.'/lib/pens.php';
 
 /**
- * ChamiloPens
+ * ChamiloPens.
  *
  * Model class that stores a PENS request made to a Chamilo server into the database
  *
@@ -39,78 +38,90 @@ require_once __DIR__.'/lib/pens.php';
 class ChamiloPens extends Plugin
 {
     /**
-     * Database table to be used
+     * Database table to be used.
      */
     const TABLE_NAME = "plugin_pens";
 
     /**
-     * Id of the object
+     * Id of the object.
+     *
      * @var int
      */
     protected $_id = null;
 
     /**
      * PENS Version to be used. Currently, the only valid value is 1.0.0. Required.
+     *
      * @var string
      */
     protected $_pens_version = null;
 
     /**
-     * Package type being used. The only valid values are aicc-pkg, scorm-pif, ims-qti. Required
+     * Package type being used. The only valid values are aicc-pkg, scorm-pif, ims-qti. Required.
+     *
      * @var string
      */
     protected $_package_type = null;
 
     /**
-     * Package type version. Required
+     * Package type version. Required.
+     *
      * @var string
      */
     protected $_package_type_version = null;
 
     /**
-     * Package format. The only valid values are zip, url, jar, war and xml. Required
+     * Package format. The only valid values are zip, url, jar, war and xml. Required.
+     *
      * @var string
      */
     protected $_package_format = null;
 
     /**
-     * Package id. Requires a valid URI according to RFC 2396. Required
+     * Package id. Requires a valid URI according to RFC 2396. Required.
+     *
      * @var string
      */
     protected $_package_id = null;
 
     /**
      * Name or ID for client submitting the content package to the target system. Required.
+     *
      * @var string
      */
     protected $_client = null;
 
     /**
      * Unstructured character string that may be used to transfer vendor-specific data such as processing hints or deployment information. Optional.
+     *
      * @var string
      */
     protected $_vendor_data = null;
 
     /**
-     * Package name
+     * Package name.
+     *
      * @var string
      */
     protected $_package_name = null;
 
     /**
-     * Date of creation
+     * Date of creation.
+     *
      * @var DateTime
      */
     protected $_created_at = null;
 
     /**
-     * Update date
+     * Update date.
+     *
      * @var DateTime
      */
     protected $_updated_at = null;
 
     /**
-     * Constructor. Takes a PENSRequest as an argument
+     * Constructor. Takes a PENSRequest as an argument.
+     *
      * @param object $request Request
      */
     public function __construct($request)
@@ -145,8 +156,7 @@ class ChamiloPens extends Plugin
     }
 
     /**
-     * Saves the object in the DB
-     * @return void
+     * Saves the object in the DB.
      */
     public function save()
     {
@@ -178,9 +188,10 @@ class ChamiloPens extends Plugin
     }
 
     /**
-     * Returns a ChamiloPens object, based on package id
+     * Returns a ChamiloPens object, based on package id.
      *
      * @param string $package_id Package id
+     *
      * @return ChamiloPens|null
      */
     public static function findByPackageId($package_id)
@@ -191,6 +202,7 @@ class ChamiloPens extends Plugin
         $number = Database::num_rows($results);
         if ($number == 1) {
             $obj = Database::fetch_assoc($results);
+
             return new ChamiloPens($obj);
         } else {
             return null;
@@ -198,7 +210,7 @@ class ChamiloPens extends Plugin
     }
 
     /**
-     * Returns an array of all the objects of the DB
+     * Returns an array of all the objects of the DB.
      *
      * @return array Array of ChamiloPens objects
      */
@@ -211,6 +223,7 @@ class ChamiloPens extends Plugin
         while ($assoc = Database::fetch_assoc($results)) {
             $return[] = new ChamiloPens($assoc);
         }
+
         return $return;
     }
 

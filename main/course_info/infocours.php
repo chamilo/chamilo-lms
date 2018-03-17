@@ -6,14 +6,16 @@
  * and activate the changes.
  *
  * See ./inc/conf/course_info.conf.php for settings
+ *
  * @todo Move $canBeEmpty from course_info.conf.php to config-settings
  * @todo Take those config settings into account in this script
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Roan Embrechts, refactoring and improved course visibility|subscribe|unsubscribe options
  * @author Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
+ *
  * @package chamilo.course_info
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
@@ -104,7 +106,7 @@ $form->addElement(
     'category_code',
     get_lang('Fac'),
     $categories,
-    ['style'=>'width:350px', 'id'=>'category_code']
+    ['style' => 'width:350px', 'id' => 'category_code']
 );
 $form->addSelectLanguage(
     'course_language',
@@ -271,14 +273,14 @@ $form->addHtml('
 if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
     $group = [
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
-        $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible')
+        $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible'),
     ];
     $form->addGroup($group, '', [get_lang('DocumentsDefaultVisibility')]);
 }
 
 $group = [
     $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
-    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2)
+    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
 ];
 $form->addGroup($group, '', [get_lang('ShowSystemFolders')]);
 
@@ -501,7 +503,7 @@ if ($allowLPReturnLink === 'true') {
             null,
             get_lang('RedirectToCourseHome'),
             0
-        )
+        ),
     ];
     $form->addGroup($group, '', [get_lang("LpReturnLink")]);
 }
@@ -526,7 +528,7 @@ if ($exerciseInvisible === 'true' &&
             null,
             get_lang('No'),
             0
-        )
+        ),
     ];
     $form->addGroup($group, '', [get_lang("ExerciseInvisibleInSession")]);
 }
@@ -647,7 +649,6 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
-
 // Plugin course settings
 $appPlugin = new AppPlugin();
 $appPlugin->add_course_settings_form($form);
@@ -754,7 +755,7 @@ if ($form->validate() && is_settings_editable()) {
         'tutor_name',
         'course_registration_password',
         'legal',
-        'activate_legal'
+        'activate_legal',
     ];
 
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;

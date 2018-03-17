@@ -2,22 +2,22 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Announcement Email
+ * Announcement Email.
  *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  * @author Julio Montoya <gugli100@gmail.com> Adding session support
  */
 class AnnouncementEmail
 {
-    protected $course = null;
-    protected $announcement = null;
     public $session_id = null;
     public $logger;
+    protected $course = null;
+    protected $announcement = null;
 
     /**
-     * @param array $courseInfo
-     * @param int $sessionId
-     * @param int $announcementId
+     * @param array           $courseInfo
+     * @param int             $sessionId
+     * @param int             $announcementId
      * @param \Monolog\Logger $logger
      */
     public function __construct($courseInfo, $sessionId, $announcementId, $logger = null)
@@ -37,7 +37,7 @@ class AnnouncementEmail
     }
 
     /**
-     * Course info
+     * Course info.
      *
      * @param string $key
      *
@@ -52,9 +52,10 @@ class AnnouncementEmail
     }
 
     /**
-     * Announcement info
+     * Announcement info.
      *
      * @param string $key
+     *
      * @return array
      */
     public function announcement($key = '')
@@ -67,7 +68,7 @@ class AnnouncementEmail
 
     /**
      * Returns either all course users or all session users depending on whether
-     * session is turned on or not
+     * session is turned on or not.
      *
      * @return array
      */
@@ -146,7 +147,7 @@ class AnnouncementEmail
     /**
      * Returns the list of user info to which an announcement was sent.
      * This function returns a list of actual users even when recipient
-     * are groups
+     * are groups.
      *
      * @return array
      */
@@ -189,7 +190,7 @@ class AnnouncementEmail
     }
 
     /**
-     * Email subject
+     * Email subject.
      *
      * @return string
      */
@@ -202,7 +203,8 @@ class AnnouncementEmail
     }
 
     /**
-     * Email message
+     * Email message.
+     *
      * @param int $receiverUserId
      *
      * @return string
@@ -275,10 +277,11 @@ class AnnouncementEmail
 
     /**
      * Send emails to users.
+     *
      * @param bool $sendToUsersInSession
-     * @param bool $sendToDrhUsers send a copy of the message to the DRH users
-     * @param int $senderId
-     * related to the main user
+     * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
+     * @param int  $senderId
+     *                                   related to the main user
      */
     public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0)
     {
@@ -347,7 +350,7 @@ class AnnouncementEmail
     }
 
     /**
-     * Store that emails where sent
+     * Store that emails where sent.
      */
     public function logMailSent()
     {

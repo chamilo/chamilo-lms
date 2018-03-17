@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use ChamiloSession as Session;
 
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
- * will be automatically created for it, and the files will be uncompressed there for example ;
+ * will be automatically created for it, and the files will be uncompressed there for example ;.
  *
  * @package chamilo.learnpath
+ *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
-
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
@@ -25,7 +25,7 @@ $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
 /**
- * Display initialisation and security checks
+ * Display initialisation and security checks.
  */
 // Extra javascript functions for in html head:
 $htmlHeadXtra[]
@@ -43,7 +43,7 @@ Event::event_access_tool(TOOL_LEARNPATH);
 api_protect_course_script();
 
 /**
- * Display
+ * Display.
  */
 /* Require the search widget and prepare the header with its stuff. */
 if (api_get_setting('search_enabled') === 'true') {
@@ -144,7 +144,7 @@ $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
 $categories = [
-    $categoryTest
+    $categoryTest,
 ];
 
 if (!empty($categoriesTempList)) {
@@ -729,7 +729,7 @@ foreach ($categories as $item) {
                         ."&action=delete&lp_id=$id",
                         [
                             'onclick' => "javascript: return confirmation('"
-                                .addslashes($name)."');"
+                                .addslashes($name)."');",
                         ]
                     );
                 } else {
@@ -861,7 +861,7 @@ foreach ($categories as $item) {
                 'action_order' => $dsp_order,
                 'action_serious_game' => $actionSeriousGame,
                 'action_subscribe_users' => $subscribeUsers,
-                'action_update_scorm' => $actionUpdateScormFile
+                'action_update_scorm' => $actionUpdateScormFile,
             ];
 
             $lpIsShown = true;
@@ -882,7 +882,7 @@ foreach ($categories as $item) {
             $item,
             $courseInfo['real_id']
         ),
-        'lp_list' => $listData
+        'lp_list' => $listData,
     ];
 }
 

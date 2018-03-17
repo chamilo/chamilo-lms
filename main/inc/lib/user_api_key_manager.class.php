@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Manage user api keys
+ * Manage user api keys.
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -18,9 +18,6 @@ class UserApiKeyManager
         return 'chamilo';
     }
 
-    /**
-     *
-     */
     public static function end_of_time()
     {
         $time = 2147483647; //mysql int max value
@@ -35,15 +32,16 @@ class UserApiKeyManager
             return false;
         }
         $result = Database::fetch_array($res, 'ASSOC');
+
         return $result;
     }
 
     /**
-     *
-     * @param int $duration in seconds
-     * @param int $user_id
+     * @param int    $duration      in seconds
+     * @param int    $user_id
      * @param string $api_service
      * @param string $api_end_point
+     *
      * @return AccessToken
      */
     public static function create_temp_token($api_service = null, $duration = 60, $user_id = null, $api_end_point = null)
@@ -51,18 +49,19 @@ class UserApiKeyManager
         $time = time();
         $validity_start_date = $time;
         $validity_end_date = $time + $duration;
+
         return self::create_token($user_id, $api_key = null, $api_service, $api_end_point, $validity_start_date, $validity_end_date);
     }
 
     /**
-     *
-     * @param int $user_id
+     * @param int    $user_id
      * @param string $api_key
      * @param string $api_service
      * @param string $api_end_point
-     * @param int $validity_start_date
-     * @param int $validity_end_date
+     * @param int    $validity_start_date
+     * @param int    $validity_end_date
      * @param string $description
+     *
      * @return AccessToken
      */
     public static function create_token($user_id = null, $api_key = null, $api_service = null, $api_end_point = null, $validity_start_date = null, $validity_end_date = null, $description = '')
@@ -96,6 +95,7 @@ class UserApiKeyManager
         $table = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
 
         $id = Database::insert($table, $values);
+
         return AccessToken::create($id, $user_id, $api_key);
     }
 }

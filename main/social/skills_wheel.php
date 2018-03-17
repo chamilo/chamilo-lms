@@ -45,7 +45,7 @@ $dialogForm->addLabel(
 $dialogForm->addLabel(
     [
         get_lang('Gradebook'),
-        get_lang('WithCertificate')
+        get_lang('WithCertificate'),
     ],
     Display::tag(
         'ul',

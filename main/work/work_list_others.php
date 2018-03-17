@@ -98,7 +98,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Qualification'),
         get_lang('Date'),
         get_lang('Status'),
-        get_lang('Actions')
+        get_lang('Actions'),
     ];
     $column_model = [
         [

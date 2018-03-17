@@ -35,6 +35,7 @@ if (!empty($_GET['logout'])) {
 /**
  * Registers in the track_e_default table (view in important activities in admin
  * interface) a possible attempted break in, sending auth data through get.
+ *
  * @todo This piece of code should probably move to local.inc.php where the
  * actual login / logout procedure is handled.
  * The real use of this code block should be seriously considered as well.

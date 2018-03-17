@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
- * Chamilo LMS
+ * Chamilo LMS.
  *
  * Only updates the  main/inc/conf/configuration.php
+ *
  * @package chamilo.install
  */
 if (defined('SYSTEM_INSTALLATION')) {

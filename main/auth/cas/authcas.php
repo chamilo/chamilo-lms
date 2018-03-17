@@ -11,8 +11,7 @@ require_once api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php'
 
 /**
  * @return true if cas is configured
- *
- **/
+ */
 function cas_configured()
 {
     global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
@@ -24,12 +23,11 @@ function cas_configured()
     return $res;
 }
 
-
 /**
- * checks if the user already get a session
+ * checks if the user already get a session.
+ *
  * @return the user login if the user already has a session ,false otherwise
- **/
-
+ */
 function cas_is_authenticated()
 {
     global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
@@ -113,6 +111,7 @@ function cas_is_authenticated()
                         );
                     }
                 }
+
                 return $login;
             } // user not found
             else {
@@ -154,6 +153,7 @@ function cas_is_authenticated()
                     default:
                         break;
                 }
+
                 return $user_added;
             }
         }
@@ -186,7 +186,7 @@ function cas_is_authenticated()
 
 /**
  * Logs out the user of the cas
- * The user MUST be logged in with cas to use this function
+ * The user MUST be logged in with cas to use this function.
  *
  * @param $uinfo array user info (not needed)
  * @param $location string redirect url
@@ -223,5 +223,6 @@ function getCASLogoHTML()
     if (api_get_setting("casLogoURL") != "") {
         $out_res = "<img src='".api_get_setting("casLogoURL")."' alt='CAS Logo' />";
     }
+
     return $out_res;
 }

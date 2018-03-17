@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CDropboxFile
+ * CDropboxFile.
  *
  * @ORM\Table(
  *  name="c_dropbox_file",
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxFile
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -32,21 +32,21 @@ class CDropboxFile
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="uploader_id", type="integer", nullable=false)
      */
@@ -60,7 +60,7 @@ class CDropboxFile
     private $filename;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="filesize", type="integer", nullable=false)
      */
@@ -102,23 +102,24 @@ class CDropboxFile
     private $lastUploadDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
     private $catId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * Set uploaderId
+     * Set uploaderId.
      *
-     * @param integer $uploaderId
+     * @param int $uploaderId
+     *
      * @return CDropboxFile
      */
     public function setUploaderId($uploaderId)
@@ -129,9 +130,9 @@ class CDropboxFile
     }
 
     /**
-     * Get uploaderId
+     * Get uploaderId.
      *
-     * @return integer
+     * @return int
      */
     public function getUploaderId()
     {
@@ -139,9 +140,10 @@ class CDropboxFile
     }
 
     /**
-     * Set filename
+     * Set filename.
      *
      * @param string $filename
+     *
      * @return CDropboxFile
      */
     public function setFilename($filename)
@@ -152,7 +154,7 @@ class CDropboxFile
     }
 
     /**
-     * Get filename
+     * Get filename.
      *
      * @return string
      */
@@ -162,9 +164,10 @@ class CDropboxFile
     }
 
     /**
-     * Set filesize
+     * Set filesize.
      *
-     * @param integer $filesize
+     * @param int $filesize
+     *
      * @return CDropboxFile
      */
     public function setFilesize($filesize)
@@ -175,9 +178,9 @@ class CDropboxFile
     }
 
     /**
-     * Get filesize
+     * Get filesize.
      *
-     * @return integer
+     * @return int
      */
     public function getFilesize()
     {
@@ -185,9 +188,10 @@ class CDropboxFile
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CDropboxFile
      */
     public function setTitle($title)
@@ -198,7 +202,7 @@ class CDropboxFile
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -208,9 +212,10 @@ class CDropboxFile
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CDropboxFile
      */
     public function setDescription($description)
@@ -221,7 +226,7 @@ class CDropboxFile
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -231,9 +236,10 @@ class CDropboxFile
     }
 
     /**
-     * Set author
+     * Set author.
      *
      * @param string $author
+     *
      * @return CDropboxFile
      */
     public function setAuthor($author)
@@ -244,7 +250,7 @@ class CDropboxFile
     }
 
     /**
-     * Get author
+     * Get author.
      *
      * @return string
      */
@@ -254,9 +260,10 @@ class CDropboxFile
     }
 
     /**
-     * Set uploadDate
+     * Set uploadDate.
      *
      * @param \DateTime $uploadDate
+     *
      * @return CDropboxFile
      */
     public function setUploadDate($uploadDate)
@@ -267,7 +274,7 @@ class CDropboxFile
     }
 
     /**
-     * Get uploadDate
+     * Get uploadDate.
      *
      * @return \DateTime
      */
@@ -277,9 +284,10 @@ class CDropboxFile
     }
 
     /**
-     * Set lastUploadDate
+     * Set lastUploadDate.
      *
      * @param \DateTime $lastUploadDate
+     *
      * @return CDropboxFile
      */
     public function setLastUploadDate($lastUploadDate)
@@ -290,7 +298,7 @@ class CDropboxFile
     }
 
     /**
-     * Get lastUploadDate
+     * Get lastUploadDate.
      *
      * @return \DateTime
      */
@@ -300,9 +308,10 @@ class CDropboxFile
     }
 
     /**
-     * Set catId
+     * Set catId.
      *
-     * @param integer $catId
+     * @param int $catId
+     *
      * @return CDropboxFile
      */
     public function setCatId($catId)
@@ -313,9 +322,9 @@ class CDropboxFile
     }
 
     /**
-     * Get catId
+     * Get catId.
      *
-     * @return integer
+     * @return int
      */
     public function getCatId()
     {
@@ -323,9 +332,10 @@ class CDropboxFile
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CDropboxFile
      */
     public function setSessionId($sessionId)
@@ -336,9 +346,9 @@ class CDropboxFile
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -346,9 +356,10 @@ class CDropboxFile
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CDropboxFile
      */
     public function setId($id)
@@ -359,9 +370,9 @@ class CDropboxFile
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -369,9 +380,10 @@ class CDropboxFile
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CDropboxFile
      */
     public function setCId($cId)
@@ -382,9 +394,9 @@ class CDropboxFile
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -401,11 +413,13 @@ class CDropboxFile
 
     /**
      * @param int $iid
+     *
      * @return CDropboxFile
      */
     public function setIid($iid)
     {
         $this->iid = $iid;
+
         return $this;
     }
 }

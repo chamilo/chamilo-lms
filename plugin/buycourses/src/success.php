@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Success page for the purchase of a course in the Buy Courses plugin
+ * Success page for the purchase of a course in the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
@@ -41,7 +41,7 @@ $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
 
-require_once("paypalfunctions.php");
+require_once "paypalfunctions.php";
 
 $form = new FormValidator(
     'success',

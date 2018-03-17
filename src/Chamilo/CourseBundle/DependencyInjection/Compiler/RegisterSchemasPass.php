@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Register all the course settings schemas in the schema registry.
  * Save the configuration names in parameter for the provider.
- *
  */
 class RegisterSchemasPass implements CompilerPassInterface
 {

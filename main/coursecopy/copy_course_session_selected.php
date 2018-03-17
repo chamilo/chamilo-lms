@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use ChamiloSession as Session;
 
 /**
  * Copy resources from one course in a session to another one.
@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com> Code conventions
+ *
  * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -51,7 +52,7 @@ $nameTools = get_lang('CopyCourse');
 $returnLink = api_get_path(WEB_CODE_PATH).'course_info/maintenance_coach.php?'.api_get_cidreq();
 $interbreadcrumb[] = [
     'url' => $returnLink,
-    'name' => get_lang('Maintenance')
+    'name' => get_lang('Maintenance'),
 ];
 
 // Database Table Definitions
@@ -96,11 +97,13 @@ function make_select_session_list($name, $sessions, $attr = [])
         }
     }
     $output .= '</select>';
+
     return $output;
 }
 
 /**
- * Show the form to copy courses
+ * Show the form to copy courses.
+ *
  * @global string $returnLink
  * @global string $courseCode
  */
@@ -231,6 +234,7 @@ function searchCourses($idSession, $type)
             api_utf8_encode($return)
         );
     }
+
     return $xajaxResponse;
 }
 

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SettingsOptions
+ * SettingsOptions.
  *
  * @ORM\Table(name="settings_options", uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SettingsOptions
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -44,9 +44,10 @@ class SettingsOptions
     private $displayText;
 
     /**
-     * Set variable
+     * Set variable.
      *
      * @param string $variable
+     *
      * @return SettingsOptions
      */
     public function setVariable($variable)
@@ -57,7 +58,7 @@ class SettingsOptions
     }
 
     /**
-     * Get variable
+     * Get variable.
      *
      * @return string
      */
@@ -67,9 +68,10 @@ class SettingsOptions
     }
 
     /**
-     * Set value
+     * Set value.
      *
      * @param string $value
+     *
      * @return SettingsOptions
      */
     public function setValue($value)
@@ -80,7 +82,7 @@ class SettingsOptions
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string
      */
@@ -90,9 +92,10 @@ class SettingsOptions
     }
 
     /**
-     * Set displayText
+     * Set displayText.
      *
      * @param string $displayText
+     *
      * @return SettingsOptions
      */
     public function setDisplayText($displayText)
@@ -103,7 +106,7 @@ class SettingsOptions
     }
 
     /**
-     * Get displayText
+     * Get displayText.
      *
      * @return string
      */
@@ -113,9 +116,9 @@ class SettingsOptions
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

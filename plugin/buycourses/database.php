@@ -2,11 +2,12 @@
 /* For license terms, see /license.txt */
 /**
  * Plugin database installation script. Can only be executed if included
- * inside another script loading global.inc.php
+ * inside another script loading global.inc.php.
+ *
  * @package chamilo.plugin.buycourses
  */
 /**
- * Check if script can be called
+ * Check if script can be called.
  */
 if (!function_exists('api_get_path')) {
     die('This script must be loaded through the Chamilo plugin installer sequence');
@@ -312,7 +313,7 @@ $paypalExtraField = Database::select(
     "*",
     $extraFieldTable,
     [
-        'where' => ['variable = ?' => 'paypal']
+        'where' => ['variable = ?' => 'paypal'],
     ],
     'first'
 );
@@ -330,7 +331,7 @@ if (!$paypalExtraField) {
             'visible_to_self' => 1,
             'changeable' => 1,
             'filter' => 0,
-            'created_at' => api_get_utc_datetime()
+            'created_at' => api_get_utc_datetime(),
         ]
     );
 }
@@ -341,7 +342,7 @@ Database::insert(
         'username' => '',
         'password' => '',
         'signature' => '',
-        'sandbox' => true
+        'sandbox' => true,
     ]
 );
 
@@ -350,21 +351,21 @@ Database::insert(
     [
         'commerce_code' => '',
         'api_key' => '',
-        'integration' => 1
+        'integration' => 1,
     ]
 );
 
 Database::insert(
     $globalTable,
     [
-        'terms_and_conditions' => ''
+        'terms_and_conditions' => '',
     ]
 );
 
 Database::insert(
     $commissionTable,
     [
-        'commission' => 0
+        'commission' => 0,
     ]
 );
 
@@ -617,7 +618,7 @@ $currencies = [
     ['YT', 'Mayotte', 'EUR', 'MYT'],
     ['ZA', 'South Africa', 'ZAR', 'ZAF'],
     ['ZM', 'Zambia', 'ZMK', 'ZMB'],
-    ['ZW', 'Zimbabwe', 'ZWL', 'ZWE']
+    ['ZW', 'Zimbabwe', 'ZWL', 'ZWE'],
 ];
 
 foreach ($currencies as $currency) {
@@ -626,7 +627,7 @@ foreach ($currencies as $currency) {
         [
             'country_code' => $currency[0],
             'country_name' => $currency[1],
-            'iso_code' => $currency[2]
+            'iso_code' => $currency[2],
         ]
     );
 }

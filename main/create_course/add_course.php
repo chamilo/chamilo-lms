@@ -1,15 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 
 /**
  * This script allows professors and administrative staff to create course sites.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Roan Embrechts, refactoring
+ *
  * @package chamilo.create_course
  * "Course validation" feature:
+ *
  * @author Jose Manuel Abuin Mosquera <chema@cesga.es>, Centro de Supercomputacion de Galicia
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
@@ -56,7 +59,7 @@ $htmlHeadXtra[] = '<script>
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'user_portal.php',
-    'name' => get_lang('MyCourses')
+    'name' => get_lang('MyCourses'),
 ];
 
 // Displaying the header.
@@ -76,10 +79,10 @@ $form->addElement(
     'title',
     [
         get_lang('CourseName'),
-        get_lang('Ex')
+        get_lang('Ex'),
     ],
     [
-        'id' => 'title'
+        'id' => 'title',
     ]
 );
 $form->applyFilter('title', 'html_filter');
@@ -130,13 +133,13 @@ $form->addText(
     'wanted_code',
     [
         get_lang('Code'),
-        get_lang('OnlyLettersAndNumbers')
+        get_lang('OnlyLettersAndNumbers'),
     ],
     '',
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers')
+        'title' => get_lang('OnlyLettersAndNumbers'),
     ]
 );
 $form->applyFilter('wanted_code', 'html_filter');
@@ -148,7 +151,7 @@ $form->addRule(
 );
 
 // The teacher
-$titular = & $form->addElement('hidden', 'tutor_name', '');
+$titular = &$form->addElement('hidden', 'tutor_name', '');
 if ($course_validation_feature) {
     // Description of the requested course.
     $form->addElement(

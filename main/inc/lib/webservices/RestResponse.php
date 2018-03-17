@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class RestApiResponse
+ * Class RestApiResponse.
  */
 class RestResponse
 {

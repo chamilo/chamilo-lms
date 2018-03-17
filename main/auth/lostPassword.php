@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * SCRIPT PURPOSE :
+ * SCRIPT PURPOSE :.
  *
  * This script allows users to retrieve the password of their profile(s)
  * on the basis of their e-mail address. The password is send via email
@@ -15,7 +15,6 @@
  *
  * @package chamilo.auth
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Custom pages
@@ -78,7 +77,7 @@ if ($allowCaptcha) {
             'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
             'font_file' => 'OpenSans-Regular.ttf',
             //'output' => 'gif'
-        ]
+        ],
     ];
 
     $captcha_question = $form->addElement(

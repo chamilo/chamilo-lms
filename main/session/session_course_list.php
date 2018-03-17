@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-*/
+ *	@package chamilo.admin
+ */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -80,7 +80,7 @@ $tableHeader[] = [get_lang('Actions')];
 
 $tableCourses = [];
 
-foreach ($Courses as $key=>$enreg) {
+foreach ($Courses as $key => $enreg) {
     $course = [];
     $course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['id'].'">';
     $course[] = api_htmlentities($enreg['title'], ENT_QUOTES, $charset);

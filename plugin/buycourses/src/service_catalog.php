@@ -1,10 +1,9 @@
 <?php
 /**
- * List of services
+ * List of services.
+ *
  * @package chamilo.plugin.buycourses
  */
-
-
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -55,7 +54,7 @@ $appliesToOptions = [
     1 => get_lang('User'),
     2 => get_lang('Course'),
     3 => get_lang('Session'),
-    4 => get_lang('TemplateTitleCertificate')
+    4 => get_lang('TemplateTitleCertificate'),
 ];
 $form->addSelect('applies_to', $plugin->get_lang('AppliesTo'), $appliesToOptions);
 $form->addHtml('<hr>');
@@ -67,16 +66,16 @@ $serviceList = $plugin->getCatalogServiceList($nameFilter, $minFilter, $maxFilte
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
         'url' => 'configuration.php',
-        'name' => $plugin->get_lang('AvailableCoursesConfiguration')
+        'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
     ];
     $interbreadcrumb[] = [
         'url' => 'paymentsetup.php',
-        'name' => $plugin->get_lang('PaymentsConfiguration')
+        'name' => $plugin->get_lang('PaymentsConfiguration'),
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => '../index.php',
-        'name' => $plugin->get_lang('UserPanel')
+        'name' => $plugin->get_lang('UserPanel'),
     ];
 }
 

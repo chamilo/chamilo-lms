@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Php library to Bake the PNG Images
- *
+ * Php library to Bake the PNG Images.
  */
 class PNGImageBaker
 {
@@ -42,10 +41,10 @@ class PNGImageBaker
      * Checks if a key already exists in the chunk of said type.
      * We need to avoid writing same keyword into file chunks.
      *
-     * @param string $type Chunk type, like iTXt, tEXt, etc.
-     * @param string $check Keyword that needs to be checked.
+     * @param string $type  chunk type, like iTXt, tEXt, etc
+     * @param string $check keyword that needs to be checked
      *
-     * @return boolean (true|false) True if file is safe to write this keyword, false otherwise.
+     * @return bool (true|false) True if file is safe to write this keyword, false otherwise
      */
     public function checkChunks($type, $check)
     {
@@ -54,21 +53,23 @@ class PNGImageBaker
                 list($key, $data) = explode("\0", $this->_chunks[$type][$typekey]);
                 if (strcmp($key, $check) == 0) {
                     echo 'Key "'.$check.'" already exists in "'.$type.'" chunk.';
+
                     return false;
                 }
             }
         }
+
         return true;
     }
 
     /**
-     * Add a chunk by type with given key and text
+     * Add a chunk by type with given key and text.
      *
-     * @param string $chunkType Chunk type, like iTXt, tEXt, etc.
-     * @param string $key Keyword that needs to be added.
-     * @param string $value Currently an assertion URL that is added to an image metadata.
+     * @param string $chunkType chunk type, like iTXt, tEXt, etc
+     * @param string $key       keyword that needs to be added
+     * @param string $value     currently an assertion URL that is added to an image metadata
      *
-     * @return string $result File content with a new chunk as a string.
+     * @return string $result file content with a new chunk as a string
      */
     public function addChunk($chunkType, $key, $value)
     {
@@ -78,19 +79,20 @@ class PNGImageBaker
 
         $newChunk = $len.$chunkType.$chunkData.$crc;
         $result = substr($this->_contents, 0, $this->_size - 12)
-                . $newChunk
-                . substr($this->_contents, $this->_size - 12, 12);
+                .$newChunk
+                .substr($this->_contents, $this->_size - 12, 12);
+
         return $result;
     }
 
     /**
-     * removes a chunk by type with given key and text
+     * removes a chunk by type with given key and text.
      *
-     * @param string $chunkType Chunk type, like iTXt, tEXt, etc.
-     * @param string $key Keyword that needs to be deleted.
-     * @param string $png the png image.
+     * @param string $chunkType chunk type, like iTXt, tEXt, etc
+     * @param string $key       keyword that needs to be deleted
+     * @param string $png       the png image
      *
-     * @return string $result New File content.
+     * @return string $result new File content
      */
     public function removeChunks($chunkType, $key, $png)
     {
@@ -126,18 +128,18 @@ class PNGImageBaker
             $chunkHeader = substr($png, $ipos, 8);
             $ipos = $ipos + 8;
         }
+
         return $retval;
     }
 
     /**
-     * Extracts the baked PNG info by the Key
+     * Extracts the baked PNG info by the Key.
      *
      * @param string $png the png image
-     * @param string $key Keyword that needs to be searched.
+     * @param string $key keyword that needs to be searched
      *
      * @return mixed - If there is an error - boolean false is returned
-     * If there is PNG information that matches the key an array is returned
-     *
+     *               If there is PNG information that matches the key an array is returned
      */
     public function extractBadgeInfo($png, $key = 'openbadges')
     {

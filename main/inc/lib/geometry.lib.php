@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Arnaud Ligot (CBlue SPRL) <arnaud@cblue.be>
+ *
  * @package chamilo.include.geometry
  */
-
 define('DEBUG', false);
 /**
- * poly_init -    build the array which will store the image of the polygone
+ * poly_init -    build the array which will store the image of the polygone.
+ *
  * @param max[x]    X resolution
  * @param max[y]    Y resolution
  * @returns an array such as: for all i in [0..max[x][ : for all j in [0..max[y][ : array[i][j] = FALSE
@@ -21,11 +22,10 @@ function poly_init($max)
     );
 }
 
-
 /**
  * poly_compile - return an array which holds the image of the polygone
  *            FALSE = blank pixel
- *            TRUE = black pixel
+ *            TRUE = black pixel.
  *
  * @param poly        points from the polygone
  *            example:
@@ -40,7 +40,7 @@ function poly_init($max)
  *                poly[n+1]['y'] = <empty>
  *                ...
  * @param max        see poly_init
- * @param boolean    print or not a debug
+ * @param bool    print or not a debug
  *
  * @returns an array such as: for all i in [0..max[x][ : for all j in [0..max[y][ : array[i][j] = in_poly(poly, i,j)
  *                in_poly(poly,i,j) = true iff (i,j) is inside the polygon defined by poly
@@ -130,7 +130,6 @@ function poly_compile($poly, $max, $test = false)
 //        if (DEBUG) echo "init: ".$poly[$i-1]['y']."  dy_inc: ".$dy_inc.
 //            "   end: ".$poly[$i]['y']."   pente:".$pente;
 
-
         /* computing points between $poly[$i-1]['y'] and $poly[$i-1]['y'] */
 
         // we iterate w/ $dy in ]$poly[$i-1]['y'],$poly[$i-1]['y'][
@@ -147,7 +146,6 @@ function poly_compile($poly, $max, $test = false)
 
     // closing the polygone (the edge between $poly[$i-1] and $poly[0])
     if ($poly[$i - 1]['y'] != $poly[0]['y']) {// droite--> rien à faire
-
         // elevation between $poly[0]['x'] and $poly[1]['x'])
         $rest = $poly[0]['y'] - $poly[1]['y'];
         if ($rest != 0) {
@@ -178,7 +176,6 @@ function poly_compile($poly, $max, $test = false)
             }
             //if (DEBUG) echo '*('.$poly[$i-1]['x'].';'.$poly[$i-1]['y'].')   ';
         }
-
 
         $dy_inc = ($poly[0]['y'] - $poly[$i - 1]['y']) > 0 ? 1 : -1;
         $x = $poly[$i - 1]['x'];
@@ -228,13 +225,13 @@ function poly_compile($poly, $max, $test = false)
 }
 
 /**
- * poly_dump - dump an image on the screen
+ * poly_dump - dump an image on the screen.
  *
  * @param array       the polygone as output by poly_compile()
  * @param array       see above (poly_init)
  * @param string      Format ('raw' text or 'html')
  *
- * @return string     html code of the representation of the polygone image
+ * @return string html code of the representation of the polygone image
  */
 function poly_dump(&$poly, $max, $format = 'raw')
 {
@@ -252,11 +249,12 @@ function poly_dump(&$poly, $max, $format = 'raw')
         $s .= ($format == 'html' ? "<br />\n" : "\n");
     }
     $s .= ($format == 'html' ? "</pre></div>\n" : "\n");
+
     return $s;
 }
 
 /**
- * poly_result    -    compute statis for two polygones
+ * poly_result    -    compute statis for two polygones.
  *
  * @param poly1        first polygone as returned by poly_compile
  * @param poly2        second ....
@@ -289,11 +287,11 @@ function poly_result(&$poly1, &$poly2, $max)
         "s2" => $surfaceOf2,
         "both" => $surfaceOf1 - $onlyIn1,
         "s1Only" => $onlyIn1,
-        "s2Only" => $surfaceOf2 - ($surfaceOf1 - $onlyIn1)];
+        "s2Only" => $surfaceOf2 - ($surfaceOf1 - $onlyIn1), ];
 }
 
 /**
- * poly_touch    -    compute statis for two polygones
+ * poly_touch    -    compute statis for two polygones.
  *
  * @param poly1        first polygone as returned by poly_compile
  * @param poly2        second ....
@@ -311,16 +309,19 @@ function poly_touch(&$poly1, &$poly2, $max)
             }
         }
     }
+
     return false;
 }
 
 /**
  * Convert a list of points in x1;y1|x2;y2|x3;y3 or x1;y1/x2;y2 format to
- * the format in which the functions in this library are expecting their data
+ * the format in which the functions in this library are expecting their data.
+ *
  * @param   string  List of points in x1;y1|... format (or /)
  * @param   string  The points separator for the list (| or /)
- * @return  array   An array of points in the right format to use with the
- *                  local functions
+ *
+ * @return array An array of points in the right format to use with the
+ *               local functions
  */
 function convert_coordinates($coords, $sep = '|')
 {
@@ -328,16 +329,19 @@ function convert_coordinates($coords, $sep = '|')
     $pairs = explode($sep, $coords);
     foreach ($pairs as $idx => $pcoord) {
         list($x, $y) = explode(';', $pcoord);
-        $points[] = ['x'=>$x, 'y'=>$y];
+        $points[] = ['x' => $x, 'y' => $y];
     }
+
     return $points;
 }
 
 /**
  * Returns the maximum coordinates in x,y (from 0,0) that the geometrical form
- * can reach
+ * can reach.
+ *
  * @param   array   Coordinates of one polygon
- * @return  array   ('x'=>val,'y'=>val)
+ *
+ * @return array ('x'=>val,'y'=>val)
  */
 function poly_get_max(&$coords1, &$coords2)
 {
@@ -359,18 +363,21 @@ function poly_get_max(&$coords1, &$coords2)
             $my = $coord['y'];
         }
     }
-    return ['x'=>$mx, 'y'=>$my];
+
+    return ['x' => $mx, 'y' => $my];
 }
 
 /**
  * Class Geometry
- * Utils for decode hotspots and check if the user choices are correct
+ * Utils for decode hotspots and check if the user choices are correct.
  */
 class Geometry
 {
     /**
-     * Decode a user choice as a point
+     * Decode a user choice as a point.
+     *
      * @param string $coordinates
+     *
      * @return array The x and y properties for a point
      */
     public static function decodePoint($coordinates)
@@ -379,13 +386,15 @@ class Geometry
 
         return [
             'x' => intval($coordinates[0]),
-            'y' => intval($coordinates[1])
+            'y' => intval($coordinates[1]),
         ];
     }
 
     /**
-     * Decode a square info as properties
+     * Decode a square info as properties.
+     *
      * @param string $coordinates
+     *
      * @return array The x, y, width, and height properties for a square
      */
     public static function decodeSquare($coordinates)
@@ -397,13 +406,15 @@ class Geometry
             'x' => intval($originString[0]),
             'y' => intval($originString[1]),
             'width' => intval($coordinates[1]),
-            'height' => intval($coordinates[2])
+            'height' => intval($coordinates[2]),
         ];
     }
 
     /**
-     * Decode an ellipse info as properties
+     * Decode an ellipse info as properties.
+     *
      * @param string $coordinates
+     *
      * @return array The center_x, center_y, radius_x, radius_x properties for an ellipse
      */
     public static function decodeEllipse($coordinates)
@@ -415,13 +426,15 @@ class Geometry
             'center_x' => intval($originString[0]),
             'center_y' => intval($originString[1]),
             'radius_x' => intval($coordinates[1]),
-            'radius_y' => intval($coordinates[2])
+            'radius_y' => intval($coordinates[2]),
         ];
     }
 
     /**
-     * Decode a polygon info as properties
+     * Decode a polygon info as properties.
+     *
      * @param string $coordinates
+     *
      * @return array The array of points for a polygon
      */
     public static function decodePolygon($coordinates)
@@ -435,7 +448,7 @@ class Geometry
 
             $points[] = [
                 intval($point[0]),
-                intval($point[1])
+                intval($point[1]),
             ];
         }
 
@@ -443,10 +456,12 @@ class Geometry
     }
 
     /**
-     * Check if the point is inside of a square
+     * Check if the point is inside of a square.
+     *
      * @param array $properties The hotspot properties
-     * @param array $point The point properties
-     * @return boolean
+     * @param array $point      The point properties
+     *
+     * @return bool
      */
     public static function pointIsInSquare($properties, $point)
     {
@@ -462,10 +477,12 @@ class Geometry
     }
 
     /**
-     * Check if the point is inside of an ellipse
+     * Check if the point is inside of an ellipse.
+     *
      * @param array $properties The hotspot properties
-     * @param array $point The point properties
-     * @return boolean
+     * @param array $point      The point properties
+     *
+     * @return bool
      */
     public static function pointIsInEllipse($properties, $point)
     {
@@ -479,10 +496,12 @@ class Geometry
     }
 
     /**
-     * Check if the point is inside of a polygon
+     * Check if the point is inside of a polygon.
+     *
      * @param array $properties The hotspot properties
-     * @param array $point The point properties
-     * @return boolean
+     * @param array $point      The point properties
+     *
+     * @return bool
      */
     public static function pointIsInPolygon($properties, $point)
     {

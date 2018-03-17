@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Shows who is online in a specific session
+ * Shows who is online in a specific session.
+ *
  * @package chamilo.main
  */
-
 include_once './main/inc/global.inc.php';
 api_block_anonymous_users();
 
@@ -14,9 +14,8 @@ $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_US
 
 /**
  * Header
- * include the HTTP, HTML headers plus the top banner
+ * include the HTTP, HTML headers plus the top banner.
  */
-
 Display::display_header(get_lang('UserOnlineListSession'));
 ?>
 <br />

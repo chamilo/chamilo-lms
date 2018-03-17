@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@author Bart Mollet, Julio Montoya lot of fixes
-*	@package chamilo.admin
-*/
-
+ *	@author Bart Mollet, Julio Montoya lot of fixes
+ *
+ *	@package chamilo.admin
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -135,12 +135,12 @@ if ($allowTutors === 'true') {
     <table class="data_table">
     <tr>
         <td><?php echo get_lang('GeneralCoach'); ?> :</td>
-        <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
+        <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')'; ?></td>
     </tr>
     <?php if (!empty($session_category)) {
         ?>
     <tr>
-        <td><?php echo get_lang('SessionCategory') ?></td>
+        <td><?php echo get_lang('SessionCategory'); ?></td>
         <td><?php echo $session_category; ?></td>
     </tr>
     <?php
@@ -170,23 +170,23 @@ if ($allowTutors === 'true') {
     <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
     <tr>
         <td>
-            <?php echo api_ucfirst(get_lang('SessionCoachStartDate')) ?> :
+            <?php echo api_ucfirst(get_lang('SessionCoachStartDate')); ?> :
         </td>
         <td>
-            <?php echo intval($session['coach_access_start_date']) ?>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <?php echo api_ucfirst(get_lang('SessionCoachEndDate')) ?> :
-        </td>
-        <td>
-            <?php echo intval($session['coach_session_access_end_date']) ?>
+            <?php echo intval($session['coach_access_start_date']); ?>
         </td>
     </tr>
     <tr>
         <td>
-            <?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
+            <?php echo api_ucfirst(get_lang('SessionCoachEndDate')); ?> :
+        </td>
+        <td>
+            <?php echo intval($session['coach_session_access_end_date']); ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo api_ucfirst(get_lang('SessionVisibility')); ?> :
         </td>
         <td>
             <?php if ($session['visibility'] == 1) {
@@ -331,7 +331,7 @@ if ($allowTutors === 'true') {
         }
 
         $result = Database::query($sql);
-        $users  = Database::store_result($result);
+        $users = Database::store_result($result);
         // change breadcrumb in destination page
         $orig_param = '&origin=resume_session&id_session='.$id_session;
         foreach ($users as $user) {

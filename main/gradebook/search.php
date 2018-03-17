@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Search user certificates if them are publics
+ * Search user certificates if them are publics.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.gradebook
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

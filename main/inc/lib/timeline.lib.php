@@ -3,7 +3,8 @@
 
 /**
  * Class Timeline
- * Timeline model class definition
+ * Timeline model class definition.
+ *
  * @package chamilo.library
  */
 class Timeline extends Model
@@ -21,7 +22,7 @@ class Timeline extends Model
         'title_slide',
         'parent_id',
         'status',
-        'c_id'
+        'c_id',
     ];
     public $is_course_model = true;
 
@@ -34,7 +35,8 @@ class Timeline extends Model
     }
 
     /**
-     * Get the count of elements
+     * Get the count of elements.
+     *
      * @return int
      */
     public function get_count()
@@ -47,17 +49,19 @@ class Timeline extends Model
                 'where' => [
                     'parent_id = ? AND c_id = ?' => [
                         '0',
-                        $course_id
-                    ]
-                ]
+                        $course_id,
+                    ],
+                ],
             ],
             'first'
         );
+
         return $row['count'];
     }
 
     /**
      * @param array $where_conditions
+     *
      * @return array
      */
     public function get_all($where_conditions = [])
@@ -70,7 +74,7 @@ class Timeline extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function listing()
     {
@@ -80,6 +84,7 @@ class Timeline extends Model
             Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
         $html .= '</div>';
         $html .= Display::grid_html('timelines');
+
         return $html;
     }
 
@@ -90,16 +95,19 @@ class Timeline extends Model
     {
         return [
             TIMELINE_STATUS_ACTIVE => get_lang('Active'),
-            TIMELINE_STATUS_INACTIVE => get_lang('Inactive')
+            TIMELINE_STATUS_INACTIVE => get_lang('Inactive'),
         ];
     }
 
     /**
-     * Returns a Form validator Obj
+     * Returns a Form validator Obj.
+     *
      * @todo the form should be auto generated
+     *
      * @param   string  url
      * @param   string  action add, edit
-     * @return  obj     form validator obj
+     *
+     * @return obj form validator obj
      */
     public function return_form($url, $action)
     {
@@ -141,12 +149,14 @@ class Timeline extends Model
 
         // Setting the rules
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
+
         return $form;
     }
 
     /**
      * @param $url
      * @param $action
+     *
      * @return FormValidator
      */
     public function return_item_form($url, $action)
@@ -187,11 +197,13 @@ class Timeline extends Model
 
         // Setting the rules
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
+
         return $form;
     }
 
     /**
      * @param array $params
+     *
      * @return bool
      */
     public function save_item($params)
@@ -201,11 +213,13 @@ class Timeline extends Model
         if (!empty($id)) {
             //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
         }
+
         return $id;
     }
 
     /**
      * @param array $params
+     *
      * @return bool
      */
     public function save($params)
@@ -217,6 +231,7 @@ class Timeline extends Model
         if (!empty($id)) {
             //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
         }
+
         return $id;
     }
 
@@ -231,6 +246,7 @@ class Timeline extends Model
 
     /**
      * @param int $id
+     *
      * @return string
      */
     public function get_url($id)
@@ -240,6 +256,7 @@ class Timeline extends Model
 
     /**
      * @param int $id
+     *
      * @return array
      */
     public function get_timeline_content($id)
@@ -247,8 +264,9 @@ class Timeline extends Model
         $timeline = [];
         $course_id = api_get_course_int_id();
         $timeline['timeline'] = $this->process_item($this->get($id));
-        $items = $this->process_items($this->get_all(['parent_id = ? AND c_id = ? ' =>[$id, $course_id]]));
+        $items = $this->process_items($this->get_all(['parent_id = ? AND c_id = ? ' => [$id, $course_id]]));
         $timeline['timeline']['date'] = $items;
+
         return $timeline;
     }
 
@@ -261,6 +279,7 @@ class Timeline extends Model
         foreach ($items as $item) {
             $new_array[] = $item;
         }
+
         return $new_array;
     }
 
@@ -293,6 +312,7 @@ class Timeline extends Model
         unset($item['title_slide']);
         unset($item['parent_id']);
         unset($item['c_id']);
+
         return $item;
     }
 }

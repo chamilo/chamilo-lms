@@ -5,14 +5,13 @@ use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
-* This file displays the user's profile,
-* optionally it allows users to modify their profile as well.
-*
-* See inc/conf/profile.conf.php to modify settings
-*
-* @package chamilo.auth
-*/
-
+ * This file displays the user's profile,
+ * optionally it allows users to modify their profile as well.
+ *
+ * See inc/conf/profile.conf.php to modify settings
+ *
+ * @package chamilo.auth
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -206,14 +205,14 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
         'picture',
         [
             $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
-            get_lang('OnlyImagesAllowed')
+            get_lang('OnlyImagesAllowed'),
         ],
         [
             'id' => 'picture',
             'class' => 'picture-form',
             'crop_image' => true,
             'crop_ratio' => '1 / 1',
-            'accept' => 'image/*'
+            'accept' => 'image/*',
         ]
     );
 
@@ -313,7 +312,7 @@ if (is_platform_authentication() &&
     api_get_setting('profile', 'password') == 'true'
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
-    $form->addElement('password', 'password1', get_lang('NewPass'), ['id'=> 'password1', 'size' => 40]);
+    $form->addElement('password', 'password1', get_lang('NewPass'), ['id' => 'password1', 'size' => 40]);
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
     if ($checkPass == 'true') {
@@ -371,18 +370,19 @@ $form->setDefaults($user_data);
 /**
  * Is user auth_source is platform ?
  *
- * @return  boolean if auth_source is platform
+ * @return bool if auth_source is platform
  */
 function is_platform_authentication()
 {
     $tab_user_info = api_get_user_info();
+
     return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
 }
 
 /**
  * Can a user edit his/her profile?
  *
- * @return    boolean    Editability of the profile
+ * @return bool Editability of the profile
  */
 function is_profile_editable()
 {
@@ -400,8 +400,9 @@ function is_profile_editable()
 /**
  * Upload a submitted user production.
  *
- * @param    $user_id    User id
- * @return    The filename of the new production or FALSE if the upload has failed
+ * @param   $user_id User id
+ *
+ * @return The filename of the new production or FALSE if the upload has failed
  */
 function upload_user_production($user_id)
 {
@@ -418,14 +419,18 @@ function upload_user_production($user_id)
             return $filename;
         }
     }
+
     return false; // this should be returned if anything went wrong with the upload
 }
 
 /**
- * Check current user's current password
+ * Check current user's current password.
+ *
  * @param    char    email
- * @return    bool true o false
- * @uses Gets user ID from global variable
+ *
+ * @return bool true o false
+ *
+ * @uses \Gets user ID from global variable
  */
 function check_user_email($email)
 {
@@ -438,6 +443,7 @@ function check_user_email($email)
     $sql = "SELECT * FROM $table_user
             WHERE user_id='".$user_id."' AND email='".$email."'";
     $result = Database::query($sql);
+
     return Database::num_rows($result) != 0;
 }
 

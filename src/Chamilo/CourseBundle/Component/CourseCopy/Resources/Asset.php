@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class Asset
+ * Class Asset.
+ *
  * @package chamilo.backup
  */
 class Asset extends Resource
@@ -15,6 +16,7 @@ class Asset extends Resource
 
     /**
      * Asset constructor.
+     *
      * @param int $id
      * @param int $path
      * @param $title
@@ -27,7 +29,7 @@ class Asset extends Resource
     }
 
     /**
-     * Show this document
+     * Show this document.
      */
     public function show()
     {

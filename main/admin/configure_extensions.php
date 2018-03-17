@@ -4,7 +4,8 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
- * Edition of extensions configuration
+ * Edition of extensions configuration.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -146,12 +147,12 @@ Display::display_header($nameTool);
     <div class="chamilo-rapid">
     <div class="row">
         <div class="col-md-12">
-            <?php echo Display::panel(get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5'), get_lang('Ppt2lp')) ?>
+            <?php echo Display::panel(get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5'), get_lang('Ppt2lp')); ?>
         </div>
     </div>
         <div class="row">
             <div class="col-md-5">
-                <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp'), ['class'=>'img-responsive']); ?>
+                <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp'), ['class' => 'img-responsive']); ?>
             </div>
             <div class="col-md-7">
                 <form method="POST" class="form-horizontal" action="<?php echo api_get_self(); ?>">

@@ -88,7 +88,6 @@ function change_select(val) {
 </script>';
 
 $form_sent = 0;
-
 $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = [];
 if (is_array($extra_field_list)) {
@@ -124,12 +123,14 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     // If "social group" you need to select a role
     if ($groupInfo['group_type'] == 1 && empty($relation)) {
-        Display::addFlash(Display::return_message(get_lang('SelectRole')));
+        Display::addFlash(Display::return_message(get_lang('SelectRole'), 'warning'));
+        header('Location: '.api_get_self().'?id='.$id);
+        exit;
     }
 
     if ($form_sent == 1) {
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        //added a parameter to send emails when registering a user
+        // Added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup(
             $id,
             $elements_posted,

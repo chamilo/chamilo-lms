@@ -399,7 +399,7 @@ if ($form->validate()) {
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
-        if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
+        if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
             $expiration_date = $user['expiration_date'];
         } else {
             $expiration_date = null;

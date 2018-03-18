@@ -64,19 +64,19 @@ $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $isTutor = false;
 if (!empty($group_id)) {
-    $group_properties = GroupManager:: get_group_properties($group_id);
+    $groupProperties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+        "name" => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 
     if ($allowToEdit === false) {
         // Check if user is tutor group
-        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties, $courseId);
+        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
         if ($isTutor) {
             $allowToEdit = true;
         }
@@ -119,8 +119,8 @@ switch ($action) {
                     FROM $tbl_announcement announcement,
                     $tbl_item_property itemproperty
                     WHERE
-                        announcement.c_id =  $courseId AND
-                        itemproperty.c_id =  $courseId AND
+                        announcement.c_id = $courseId AND
+                        itemproperty.c_id = $courseId AND
                         itemproperty.ref = announcement.id AND
                         itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
                         itemproperty.visibility <> 2
@@ -455,7 +455,7 @@ switch ($action) {
             }
             $element = CourseManager::addUserGroupMultiSelect($form, []);
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties, []);
+            $element = CourseManager::addGroupMultiSelect($form, $groupProperties, []);
         }
 
         $form->addHtml('</div>');
@@ -567,7 +567,7 @@ switch ($action) {
                         $sendToUsersInSession
                     );
 
-                    /*		MAIL FUNCTION	*/
+                    // Send mail
                     if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
                         AnnouncementManager::sendEmail(
                             api_get_course_info(),
@@ -624,7 +624,7 @@ switch ($action) {
                         )
                     );
 
-                    /* MAIL FUNCTION */
+                    // Send mail
                     if (isset($data['email_ann']) && $data['email_ann']) {
                         AnnouncementManager::sendEmail(
                             api_get_course_info(),
@@ -647,7 +647,7 @@ if (!empty($_GET['remind_inactive'])) {
 }
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-    //we are not in the learning path
+    // We are not in the learning path
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 

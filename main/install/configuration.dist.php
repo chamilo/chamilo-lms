@@ -807,3 +807,6 @@ ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (u
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
 */
 //$_configuration['allow_portfolio_tool'] = false;
+
+// Disable average and best columns in gradebook see BT#
+//$_configuration['disable_gradebook_stats'] = false;

@@ -90,7 +90,8 @@ class GradebookDataGenerator
         $start = 0,
         $count = null,
         $ignore_score_color = false,
-        $studentList = []
+        $studentList = [],
+        $loadStats = true
     ) {
         // do some checks on count, redefine if invalid value
         if (!isset($count)) {
@@ -107,7 +108,7 @@ class GradebookDataGenerator
 
         // Get selected items
         $visibleItems = array_slice($allitems, $start, $count);
-        $userCount = count($studentList);
+        $userCount = !empty($studentList) ? count($studentList) : 0;
 
         // Generate the data to display
         $data = [];
@@ -154,6 +155,7 @@ class GradebookDataGenerator
                     $ranking = $this->buildRankingColumn($item, $userId, $userCount);
                     $row['ranking'] = $ranking['display'];
                     $row['ranking_score'] = $ranking['score'];
+
                     $row[] = $item;
                 }
             } else {
@@ -173,27 +175,31 @@ class GradebookDataGenerator
                 $row['best'] = $best['display'];
                 $row['best_score'] = $best['score'];
 
+                $rankingStudentList = [];
+                $invalidateResults = true;
+
                 // Average
                 $average = $this->buildAverageResultColumn($item);
                 $row['average'] = $average['display'];
                 $row['average_score'] = $average['score'];
 
                 // Ranking
-                $rankingStudentList = [];
-                $invalidateResults = true;
-                foreach ($studentList as $user) {
-                    $score = $this->build_result_column(
-                        $user['user_id'],
-                        $item,
-                        $ignore_score_color,
-                        true
-                    );
+                if (!empty($studentList)) {
+                    foreach ($studentList as $user) {
+                        $score = $this->build_result_column(
+                            $user['user_id'],
+                            $item,
+                            $ignore_score_color,
+                            true
+                        );
 
-                    if (!empty($score['score'][0])) {
-                        $invalidateResults = false;
+                        if (!empty($score['score'][0])) {
+                            $invalidateResults = false;
+                        }
+                        $rankingStudentList[$user['user_id']] = $score['score'][0];
                     }
-                    $rankingStudentList[$user['user_id']] = $score['score'][0];
                 }
+
 
                 $scoreDisplay = ScoreDisplay::instance();
                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);

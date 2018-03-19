@@ -3030,8 +3030,9 @@ function getVersionTable()
  *
  * @param string $installationProfile The name of the JSON file in main/install/profiles/ folder
  *
- * @return bool false on failure (no bad consequences anyway, just ignoring profile)
  * @throws \Doctrine\DBAL\DBALException
+ *
+ * @return bool false on failure (no bad consequences anyway, just ignoring profile)
  */
 function installProfileSettings($installationProfile = '')
 {
@@ -3104,8 +3105,9 @@ function rrmdir($dir)
  * @param bool   $preview
  * @param bool   $anonymous
  *
- * @return array
  * @throws \Doctrine\DBAL\DBALException
+ *
+ * @return array
  */
 function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $anonymous = false)
 {
@@ -3165,8 +3167,9 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
  * @param EntityManager $manager
  * @param bool          $processFiles
  *
- * @return bool Always returns true except if the process is broken
  * @throws \Doctrine\DBAL\DBALException
+ *
+ * @return bool Always returns true except if the process is broken
  */
 function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {

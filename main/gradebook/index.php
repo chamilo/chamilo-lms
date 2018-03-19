@@ -666,7 +666,6 @@ if (isset($_GET['studentoverview'])) {
     //if $category = 0 (which happens when GET['selectcat'] is undefined)
     // then Category::load() will create a new 'root' category with empty
     // course and session fields in memory (Category::create_root_category())
-
     if ($_in_course === true) {
         // When *inside* a course, we want to make sure there is one (and only
         // one) category for this course or for this session.
@@ -692,8 +691,8 @@ if (isset($_GET['studentoverview'])) {
             // There is no category for this course+session, so create one
             $cat = new Category();
             if (!empty($session_id)) {
-                $s_name = api_get_session_name($session_id);
-                $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
+                $sessionName = api_get_session_name($session_id);
+                $cat->set_name($course_code.' - '.get_lang('Session').' '.$sessionName);
                 $cat->set_session_id($session_id);
             } else {
                 $cat->set_name($course_code);
@@ -895,6 +894,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
         $i = 0;
         $allcat = [];
+
         /** @var Category $cat */
         foreach ($cats as $cat) {
             $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -934,13 +934,24 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
+                $teacher = api_is_allowed_to_edit(null, true);
+                if ($teacher) {
+                    $loadStats = false;
+                } else {
+                    $loadStats = api_get_configuration_value('disable_gradebook_stats') === false;
+                }
+
                 $gradebookTable = new GradebookTable(
                     $cat,
                     $allcat,
                     $alleval,
                     $alllink,
                     $addparams,
-                    $exportToPdf
+                    $exportToPdf,
+                    null,
+                    null,
+                    [],
+                    $loadStats
                 );
 
                 $model = ExerciseLib::getCourseScoreModel();
@@ -951,13 +962,23 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                 } else {
                     if (empty($model)) {
-                        $gradebookTable->td_attributes = [
-                            3 => 'class="text-right"',
-                            4 => 'class="text-center"',
-                            5 => 'class="text-center"',
-                            6 => 'class="text-center"',
-                            7 => 'class="text-center"',
-                        ];
+                        if ($loadStats) {
+                            $gradebookTable->td_attributes = [
+                                3 => 'class="text-right"',
+                                4 => 'class="text-center"',
+                                5 => 'class="text-center"',
+                                6 => 'class="text-center"',
+                                7 => 'class="text-center"',
+                            ];
+                        } else {
+                            $gradebookTable->td_attributes = [
+                                3 => 'class="text-right"',
+                                4 => 'class="text-center"',
+                                5 => 'class="text-center"',
+                                //6 => 'class="text-center"',
+                                //7 => 'class="text-center"',
+                            ];
+                        }
                     } else {
                         $gradebookTable->td_attributes = [
                             3 => 'class="text-right"',

@@ -804,5 +804,9 @@ ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFE
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id);
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
+INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
 */
 //$_configuration['allow_portfolio_tool'] = false;
+
+// Disable average and best columns in gradebook see BT#
+//$_configuration['disable_gradebook_stats'] = false;

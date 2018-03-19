@@ -443,8 +443,8 @@ class Category implements GradebookItem
             return $cats;
         }
 
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT * FROM '.$tbl_grade_categories;
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT * FROM '.$table;
         $paramcount = 0;
         if (isset($id)) {
             $sql .= ' WHERE id = '.intval($id);
@@ -808,9 +808,9 @@ class Category implements GradebookItem
             $name = $this->name;
             $parent = $this->parent;
         }
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = "SELECT count(id) AS number
-                FROM $tbl_grade_categories
+                FROM $table
                 WHERE name = '".Database::escape_string($name)."'";
 
         if (api_is_allowed_to_edit()) {
@@ -836,7 +836,6 @@ class Category implements GradebookItem
         } else {
             $sql .= ' AND parent_id = '.intval($parent);
         }
-
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -1193,12 +1192,12 @@ class Category implements GradebookItem
     ) {
         $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
         $course_code = Database::escape_string($course_code);
         $session_id = (int) $session_id;
 
-        $sql = "SELECT * FROM $tbl_grade_categories WHERE parent_id = 0";
+        $sql = "SELECT * FROM $table WHERE parent_id = 0";
 
         if (!api_is_allowed_to_edit()) {
             $sql .= ' AND visible = 1';
@@ -1481,6 +1480,7 @@ class Category implements GradebookItem
                 WHERE 
                     cc.id = cu.c_id AND 
                     cu.status = '.COURSEMANAGER;
+
         if (!api_is_platform_admin()) {
             $sql .= ' AND cu.user_id = '.$user_id;
         }
@@ -1662,17 +1662,6 @@ class Category implements GradebookItem
         $session_id = null,
         $order = null
     ) {
-        if (!empty($session_id)) {
-            /*$tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
-            $result_session = Database::query($sql);
-            if (Database::num_rows($result_session) > 0) {
-                $data_session = Database::fetch_array($result_session);
-                $parent_id = $data_session['id'];
-                return self::load(null, null, null, $parent_id, null, null, $order);
-            }*/
-        }
-
         // 1 student
         if (isset($studentId)) {
             // Special case: this is the root

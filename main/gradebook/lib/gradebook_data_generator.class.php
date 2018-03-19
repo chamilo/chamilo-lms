@@ -200,7 +200,6 @@ class GradebookDataGenerator
                     }
                 }
 
-
                 $scoreDisplay = ScoreDisplay::instance();
                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                 $row['ranking'] = $scoreDisplay->display_score(

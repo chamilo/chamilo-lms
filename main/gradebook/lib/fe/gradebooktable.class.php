@@ -539,7 +539,6 @@ class GradebookTable extends SortableTable
                                 if (count($eval_n_links) > 0) {
                                     $value_data = isset($data[4]) ? $data[4] : null;
                                     if (!is_null($value_data)) {
-
                                         // Result
                                         $row[] = $value_data;
                                         $best = isset($data['best']) ? $data['best'] : null;
@@ -858,6 +857,7 @@ class GradebookTable extends SortableTable
 
             $sortable_data[] = $rowTotal;
         }
+
         return $sortable_data;
     }
 

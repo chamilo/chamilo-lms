@@ -29,7 +29,7 @@ $userList = CourseManager::get_user_list_from_course_code(
     $sessionId,
     null,
     null,
-    $statusFilter
+    $statusToFilter
 );
 
 switch ($action) {

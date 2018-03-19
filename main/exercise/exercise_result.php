@@ -84,8 +84,6 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
 }
 
-/* DISPLAY AND MAIN PROCESS */
-
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
@@ -203,6 +201,7 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
     }
     Display::display_footer();
 } else {
@@ -213,6 +212,7 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
     }
 
     Session::write('attempt_remaining', $remainingMessage);

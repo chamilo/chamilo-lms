@@ -419,7 +419,8 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
             Security::remove_XSS($attachment['comment'], STUDENT).'</span>';
 
         if (($current_forum['allow_edit'] == 1 && $rows[$display_post_id]['user_id'] == $_user['user_id']) ||
-            (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
+            (api_is_allowed_to_edit(false, true) &&
+            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
         ) {
             echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.
                 api_get_cidreq().'&action=delete_attach&id_attach='.$attachment['id'].'&forum='.$forumId.

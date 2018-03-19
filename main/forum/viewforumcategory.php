@@ -256,8 +256,8 @@ if ($action != 'add') {
                 // 1.v it is a not a group forum (teacher and student)
                 // 2.v it is a group forum and it is public (teacher and student)
                 // 3. it is a group forum and it is private (always for teachers only if the user is member of the forum
-                // if the forum is private and it is a group forum and the user is not a member of the group forum then it cannot be displayed
-                //if (!($forum['forum_group_public_private']=='private' AND !is_null($forum['forum_of_group']) AND !in_array($forum['forum_of_group'], $groups_of_user))) {
+                // if the forum is private and it is a group forum and the user
+                // is not a member of the group forum then it cannot be displayed
                 $show_forum = false;
                 // SHOULD WE SHOW THIS PARTICULAR FORUM
                 // you are teacher => show forum
@@ -268,7 +268,8 @@ if ($action != 'add') {
                 } else {
                     // you are not a teacher
                     //echo 'student';
-                    // it is not a group forum => show forum (invisible forums are already left out see get_forums function)
+                    // it is not a group forum => show forum
+                    // (invisible forums are already left out see get_forums function)
                     if ($forum['forum_of_group'] == '0') {
                         //echo '-gewoon forum';
                         $show_forum = true;
@@ -344,7 +345,8 @@ if ($action != 'add') {
                     $html .= '<div class="row">';
                     $html .= '<div class="col-md-6">';
                     $html .= '<div class="col-md-3">';
-                    $html .= '<div class="number-post">'.$forum_image.'<p>'.$my_number_threads.' '.get_lang('ForumThreads').'</p></div>';
+                    $html .= '<div class="number-post">'.$forum_image.
+                        '<p>'.$my_number_threads.' '.get_lang('ForumThreads').'</p></div>';
                     $html .= '</div>';
 
                     $html .= '<div class="col-md-9">';

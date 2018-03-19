@@ -64,9 +64,7 @@ if (isset($current_thread['thread_id'])) {
                 $current_thread['locked'] == 0 ||
                 api_is_allowed_to_edit(false, true)
             ) {
-                if ($_user['user_id'] ||
-                    ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])
-                ) {
+                if ($userId || ($current_forum['allow_anonymous'] == 1 && !$userId)) {
                     if ((api_is_anonymous() && $current_forum['allow_anonymous'] == 1) ||
                         (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true))
                     ) {
@@ -175,7 +173,7 @@ if (isset($current_thread['thread_id'])) {
             // The course admin him/herself can do this off course always
             $groupInfo = GroupManager::get_group_properties($groupId);
             if ((isset($groupInfo['iid']) && GroupManager::is_tutor_of_group($userId, $groupInfo)) ||
-                ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
+                ($current_forum['allow_edit'] == 1 && $posterId == $userId) ||
                 (
                 api_is_allowed_to_edit(false, true) &&
                 !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
@@ -317,7 +315,7 @@ if (isset($current_thread['thread_id'])) {
                 $post_image = Display::return_icon('forumpost.gif');
             }
 
-            if ($row['post_notification'] == '1' && $row['poster_id'] == $_user['user_id']) {
+            if ($row['post_notification'] == '1' && $row['poster_id'] == $userId) {
                 $post_image .= Display::return_icon('forumnotification.gif', get_lang('YouWillBeNotified'));
             }
             // The post title
@@ -330,8 +328,9 @@ if (isset($current_thread['thread_id'])) {
                     $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
                     $html .= '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
 
-                    if (($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
-                        (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
+                    if (($current_forum['allow_edit'] == 1 && $posterId == $userId) ||
+                        (api_is_allowed_to_edit(false, true) &&
+                        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
                     ) {
                         $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
                             .$attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id

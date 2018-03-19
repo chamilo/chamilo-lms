@@ -1654,7 +1654,6 @@ abstract class Question
                     $form->addGroup($buttonGroup);
                     break;
             }
-
             //Medias
             //$course_medias = self::prepare_course_media_select(api_get_course_int_id());
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
@@ -1781,8 +1780,8 @@ abstract class Question
 
         echo '<div class="well">';
         echo '<ul class="question_menu">';
-
         foreach ($question_type_custom_list as $i => $a_type) {
+            // @todo remove require_once classes are already loaded using composer
             // include the class of the type
             require_once $a_type[0];
             // get the picture of the type and the langvar which describes it
@@ -1934,9 +1933,9 @@ abstract class Question
      */
     public function return_header($exercise, $counter = null, $score = [])
     {
-        $counter_label = '';
+        $counterLabel = '';
         if (!empty($counter)) {
-            $counter_label = intval($counter);
+            $counterLabel = intval($counter);
         }
         $score_label = get_lang('Wrong');
         $class = 'error';
@@ -1972,13 +1971,16 @@ abstract class Question
         if ($exercise->display_category_name) {
             $header = TestCategory::returnCategoryAndTitle($this->id);
         }
-        $show_media = null;
+        $show_media = '';
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-
-        $header .= Display::page_subheader2($counter_label.". ".$this->question);
-        $header .= ExerciseLib::getQuestionRibbon($class, $score_label, $score['result']);
+        $scoreCurrent = [
+            'used' => $score['score'],
+            'missing' => $score['weight'],
+        ];
+        $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+        $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(
@@ -2295,7 +2297,7 @@ abstract class Question
      */
     public function returnFormatFeedback()
     {
-        return Display::return_message($this->feedback, 'normal', false);
+        return '<br />'.Display::return_message($this->feedback, 'normal', false);
     }
 
     /**

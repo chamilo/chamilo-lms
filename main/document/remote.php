@@ -66,7 +66,7 @@ if ($action == 'list') {
     }
 
     // get files list
-    $files = DocumentManager::get_all_document_data($_course, $cwd, 0, null, false);
+    $files = DocumentManager::getAllDocumentData($_course, $cwd, 0, null, false);
 
     // adding download link to files
     foreach ($files as $k => $f) {

@@ -52,7 +52,8 @@ class UniqueAnswerImage extends UniqueAnswer
             $commentTitle = '<th >'.get_lang('Comment').'</th>';
         }
 
-        $html = '<div class="alert alert-success" role="alert">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+        $html = '<div class="alert alert-success" role="alert">'.
+                get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
@@ -367,5 +368,30 @@ class UniqueAnswerImage extends UniqueAnswer
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
+    }
+
+    /**
+     * @param Exercise $exercise
+     * @param null     $counter
+     * @param null     $score
+     *
+     * @return string
+     */
+    public function return_header($exercise, $counter = null, $score = null)
+    {
+        if ($exercise->showExpectedChoice()) {
+            $header = '<table class="'.$this->question_table_class.'">
+			<tr>
+				<th>'.get_lang('Choice').'</th>
+				<th>'.get_lang('ExpectedChoice').'</th>
+				<th>'.get_lang('Answer').'</th>';
+            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th>'.get_lang('Comment').'</th>';
+            $header .= '</tr>';
+        } else {
+            $header = parent::return_header($exercise, $counter, $score);
+        }
+
+        return $header;
     }
 }

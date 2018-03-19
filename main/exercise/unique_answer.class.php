@@ -58,7 +58,6 @@ class UniqueAnswer extends Question
          */
 
         $feedback_title = '';
-
         if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
             $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
@@ -144,7 +143,6 @@ class UniqueAnswer extends Question
                 if (isset($answer->destination[$i])) {
                     $item_list = explode('@@', $answer->destination[$i]);
                 }
-
                 $try = isset($item_list[0]) ? $item_list[0] : '';
                 $lp = isset($item_list[1]) ? $item_list[1] : '';
                 $list_dest = isset($item_list[2]) ? $item_list[2] : '';
@@ -417,12 +415,14 @@ class UniqueAnswer extends Question
         $score = null
     ) {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-			<tr>
-				<th>'.get_lang("Choice").'</th>
-				<th>'.get_lang("ExpectedChoice").'</th>
-				<th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang("Comment").'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
+        $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
         return $header;

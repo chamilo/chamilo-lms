@@ -41,8 +41,9 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = api_get_origin();
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
-/* 	Constants and variables */
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss();
+/* Constants and variables */
+
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss() || api_is_session_admin();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

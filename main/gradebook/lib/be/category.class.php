@@ -789,9 +789,9 @@ class Category implements GradebookItem
      */
     public function show_message_resource_delete($course_id)
     {
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(*) AS num 
-                FROM '.$tbl_grade_categories.'
+                FROM '.$table.'
                 WHERE
                     c_id = "'.Database::escape_string($course_id).'" AND
                     visible = 3';

@@ -539,8 +539,6 @@ class FillBlanks extends Question
                     $resultOptions[sha1($item)] = $item;
                 }
 
-                //var_dump($resultOptions, $correctItem);
-
                 foreach ($resultOptions as $key => $value) {
                     if ($correctItem == $value) {
                         $selected = $key;
@@ -548,12 +546,19 @@ class FillBlanks extends Question
                         break;
                     }
                 }
+                $width = '';
+                if (!empty($attributes['style'])) {
+                    $width = str_replace('width:', '', $attributes['style']);
+                }
 
                 $result = Display::select(
                     "choice[$questionId][]",
                     $resultOptions,
                     $selected,
-                    ['class' => 'selectpicker'],
+                    [
+                        'class' => 'selectpicker',
+                        'data-width' => $width,
+                    ],
                     false
                 );
                 break;
@@ -677,7 +682,6 @@ class FillBlanks extends Question
                 $correctAnswer = api_html_entity_decode($correctAnswer);
                 $studentAnswer = htmlspecialchars($studentAnswer);
                 $result = $studentAnswer == self::trimOption($correctAnswer);
-
                 break;
         }
         //var_dump($result);
@@ -954,10 +958,10 @@ class FillBlanks extends Question
     {
         $outRes = 0;
         // for each student in group
-        foreach ($resultList as $userId => $tabValue) {
+        foreach ($resultList as $list) {
             $found = false;
             // for each bracket, if student has at least one answer ( choice > -2) then he pass the question
-            foreach ($tabValue as $i => $choice) {
+            foreach ($list as $choice) {
                 if ($choice > -2 && !$found) {
                     $outRes++;
                     $found = true;
@@ -1178,10 +1182,9 @@ class FillBlanks extends Question
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $resultsDisabled = true;
             if ($showTotalScoreAndUserChoices) {
                 $resultsDisabled = false;
-            } else {
-                $resultsDisabled = true;
             }
         }
 
@@ -1240,26 +1243,29 @@ class FillBlanks extends Question
         $showTotalScoreAndUserChoices = false
     ) {
         $hideExpectedAnswer = false;
-        if ($feedbackType == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
+        if ($feedbackType == 0 && $resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
             $hideExpectedAnswer = true;
         }
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $hideExpectedAnswer = true;
             if ($showTotalScoreAndUserChoices) {
                 $hideExpectedAnswer = false;
-            } else {
-                $hideExpectedAnswer = true;
             }
         }
 
-        $style = "color: green";
+        $style = 'feedback-green';
+        $iconAnswer = Display::return_icon('attempt-check.png', get_lang('Correct'), null, ICON_SIZE_SMALL);
         if (!$right) {
-            $style = "color: red; text-decoration: line-through;";
+            $style = 'feedback-red';
+            $iconAnswer = Display::return_icon('attempt-nocheck.png', get_lang('Incorrect'), null, ICON_SIZE_SMALL);
         }
+
+        $correctAnswerHtml = '';
         $type = self::getFillTheBlankAnswerType($correct);
+
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
-                $correctAnswerHtml = '';
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
                 $correctAnswerHtml .= " <span style='font-weight:normal'>(";
@@ -1272,25 +1278,27 @@ class FillBlanks extends Question
                 $correctAnswerHtml .= ")</span>";
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-                $listCorrects = explode("||", $correct);
+                $listCorrects = explode('||', $correct);
                 $firstCorrect = $correct;
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span style='color: green'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span class='feedback-green'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span style='color: green'>".$correct."</span>";
+                $correctAnswerHtml = "<span class='feedback-green'>".$correct."</span>";
         }
 
         if ($hideExpectedAnswer) {
-            $correctAnswerHtml = "<span title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> - </span>";
+            $correctAnswerHtml = "<span 
+                class='feedback-green' 
+                title='".get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."'> &#8212; </span>";
         }
 
-        $result = "<span style='border:1px solid black; border-radius:5px; padding:2px; font-weight:bold;'>";
-        $result .= "<span style='$style'>".$answer."</span>";
-        $result .= "&nbsp;<span style='font-size:120%;'>/</span>&nbsp;";
+        $result = "<span class='feedback-question'>";
+        $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
+        $result .= "<span class='feedback-separator'> / </span>";
         $result .= $correctAnswerHtml;
         $result .= "</span>";
 
@@ -1332,6 +1340,7 @@ class FillBlanks extends Question
      * @param string $correct
      * @param string $feedbackType
      * @param bool   $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
      *
      * @return string
      */

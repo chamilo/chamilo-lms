@@ -149,9 +149,17 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
     if ($url != false) {
         $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png', get_lang('DelImage')).'</a>';
-        $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>');
+        $form->addElement(
+            'html',
+            '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>'
+        );
     }
-    $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+    $form->addRule(
+        'pdf_export_watermark_path',
+        get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+        'filetype',
+        $allowed_picture_types
+    );
 }
 
 if (api_get_setting('allow_course_theme') == 'true') {

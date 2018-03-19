@@ -262,7 +262,9 @@ class OralExpression extends Question
             mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id);
         }
 
-        if (!empty($this->userId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId)) {
+        if (!empty($this->userId) &&
+            !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId)
+        ) {
             mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId);
         }
 

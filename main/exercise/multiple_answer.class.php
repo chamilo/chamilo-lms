@@ -39,7 +39,8 @@ class MultipleAnswer extends Question
             'Height' => '125',
         ];
 
-        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4; // The previous default value was 2. See task #1759.
+        // The previous default value was 2. See task #1759.
+        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $obj_ex = Session::read('objExercise');
@@ -229,12 +230,14 @@ class MultipleAnswer extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-            <tr>
-                <th>'.get_lang("Choice").'</th>
-                <th>'.get_lang("ExpectedChoice").'</th>
-                <th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang("Comment").'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
+        $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
         return $header;

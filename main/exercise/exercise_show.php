@@ -88,8 +88,11 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin()
-    || api_is_drh() || api_is_student_boss();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+    api_is_course_tutor() ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_student_boss();
 
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
@@ -149,7 +152,6 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
 
 $this_section = SECTION_COURSES;
-
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
@@ -234,43 +236,41 @@ if (!empty($track_exercise_info)) {
     // if the results_disabled of the Quiz is 1 when block the script
     $result_disabled = $track_exercise_info['results_disabled'];
 
-    if (true) {
-        if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
-            $show_results = false;
-        } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-            $show_results = false;
+    if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+        $show_results = false;
+    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
+        $show_results = false;
+        $show_only_total_score = true;
+        if ($origin != 'learnpath') {
+            if ($currentUserId == $student_id) {
+                echo Display::return_message(
+                    get_lang('ThankYouForPassingTheTest'),
+                    'warning',
+                    false
+                );
+            }
+        }
+    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+        $attempts = Event::getExerciseResultsByUser(
+            $currentUserId,
+            $objExercise->id,
+            api_get_course_int_id(),
+            api_get_session_id(),
+            $track_exercise_info['orig_lp_id'],
+            $track_exercise_info['orig_lp_item_id'],
+            'desc'
+        );
+        $numberAttempts = count($attempts);
+        if ($numberAttempts >= $track_exercise_info['max_attempt']) {
+            $show_results = true;
             $show_only_total_score = true;
-            if ($origin != 'learnpath') {
-                if ($currentUserId == $student_id) {
-                    echo Display::return_message(
-                        get_lang('ThankYouForPassingTheTest'),
-                        'warning',
-                        false
-                    );
-                }
-            }
-        } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $attempts = Event::getExerciseResultsByUser(
-                $currentUserId,
-                $objExercise->id,
-                api_get_course_int_id(),
-                api_get_session_id(),
-                $track_exercise_info['orig_lp_id'],
-                $track_exercise_info['orig_lp_item_id'],
-                'desc'
-            );
-            $numberAttempts = count($attempts);
-            if ($numberAttempts >= $track_exercise_info['max_attempt']) {
-                $show_results = true;
-                $show_only_total_score = true;
-                // Attempt reach max so show score/feedback now
-                $showTotalScoreAndUserChoicesInLastAttempt = true;
-            } else {
-                $show_results = true;
-                $show_only_total_score = true;
-                // Last attempt not reach don't show score/feedback
-                $showTotalScoreAndUserChoicesInLastAttempt = false;
-            }
+            // Attempt reach max so show score/feedback now
+            $showTotalScoreAndUserChoicesInLastAttempt = true;
+        } else {
+            $show_results = true;
+            $show_only_total_score = true;
+            // Last attempt not reach don't show score/feedback
+            $showTotalScoreAndUserChoicesInLastAttempt = false;
         }
     }
 } else {
@@ -327,15 +327,15 @@ $sql = "SELECT attempts.question_id, answer
             attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
-$question_list_from_database = [];
+$questionListFromDatabase = [];
 $exerciseResult = [];
 
 while ($row = Database::fetch_array($result)) {
-    $question_list_from_database[] = $row['question_id'];
+    $questionListFromDatabase[] = $row['question_id'];
     $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-//Fixing #2073 Fixing order of questions
+// Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking'])) {
     $temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
@@ -345,16 +345,16 @@ if (!empty($track_exercise_info['data_tracking'])) {
     }
     // If for some reason data_tracking is empty we select the question list from db
     if (empty($questionList)) {
-        $questionList = $question_list_from_database;
+        $questionList = $questionListFromDatabase;
     }
 } else {
-    $questionList = $question_list_from_database;
+    $questionList = $questionListFromDatabase;
 }
 
 // Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->selectTextWhenFinished();
-if (!empty($end_of_message) && ($origin == 'learnpath')) {
-    echo Display::return_message($end_of_message, 'normal', false);
+$endOfMessage = $objExercise->selectTextWhenFinished();
+if (!empty($endOfMessage) && ($origin == 'learnpath')) {
+    echo Display::return_message($endOfMessage, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
 }
 
@@ -362,14 +362,15 @@ if (!empty($end_of_message) && ($origin == 'learnpath')) {
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
     $objQuestionTmp = Question::read($questionId);
-    $total_weighting += $objQuestionTmp->selectWeighting();
+    if ($objQuestionTmp) {
+        $total_weighting += $objQuestionTmp->selectWeighting();
+    }
 }
 
 $counter = 1;
 $exercise_content = '';
 $category_list = [];
 $useAdvancedEditor = true;
-
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
@@ -381,9 +382,14 @@ foreach ($questionList as $questionId) {
     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
     unset($objQuestionTmp);
-
-    // creates a temporary Question object
+    $questionWeighting = 0;
+    $answerType = 0;
+    $questionScore = 0;
+    // Creates a temporary Question object
     $objQuestionTmp = Question::read($questionId);
+    if (empty($objQuestionTmp)) {
+        continue;
+    }
     $questionWeighting = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
 
@@ -614,7 +620,7 @@ foreach ($questionList as $questionId) {
 
                 //showing the score
                 $queryfree = "SELECT marks from ".$TBL_TRACK_ATTEMPT." 
-                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId)."";
+                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId);
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");
                 $totalScore += $questionScore;
@@ -755,7 +761,6 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
-
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
@@ -907,7 +912,7 @@ foreach ($questionList as $questionId) {
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
-    if ($show_results) {
+    if ($show_results && $objQuestionTmp) {
         $objQuestionTmp->export = $action == 'export';
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
@@ -1055,6 +1060,15 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             .'&id_session='.api_get_session_id();
     }
 
+    Skill::addSkillsToUserForm(
+        $emailForm,
+        ITEM_TYPE_EXERCISE,
+        $exercise_id,
+        $student_id,
+        $track_exercise_info['exe_id'],
+        true
+    );
+
     $content = ExerciseLib::getEmailNotification(
         $currentUserId,
         api_get_course_info(),
@@ -1062,6 +1076,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         $url
     );
     $emailForm->setDefaults(['notification_content' => $content]);
+
     $emailForm->addButtonSend(
         get_lang('CorrectTest'),
         'submit',
@@ -1124,3 +1139,5 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
+
+Session::erase('calculatedAnswerId');

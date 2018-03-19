@@ -71,7 +71,7 @@ $code = isset($code) ? $code : null;
         <h2 class="title-courses"><?php echo get_lang('CourseManagement'); ?></h2>
         <div class="search-courses">
             <div class="row">
-                <?php if ($showCourses) {
+<?php if ($showCourses) {
         ?>
                     <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
                         <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
@@ -97,8 +97,8 @@ $code = isset($code) ? $code : null;
         } ?>
                     </div>
                     <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
-                        <?php
-                        $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+<?php
+    $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $form = '<form action="'.$webAction.'" method="GET">';
         $form .= '<input type="hidden" name="action" value="'.$action.'">';
         $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
@@ -113,40 +113,40 @@ $code = isset($code) ? $code : null;
                 continue;
             }
             $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
-                                .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
+                            .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
             if (!empty($browse_course_categories[$categoryCode])) {
                 foreach ($browse_course_categories[$categoryCode] as $subCategory) {
                     if (empty($subCategory['count_courses'])) {
                         continue;
                     }
                     $subCategoryCode = $subCategory['code'];
-                    $form .= '<option '
-                                        .($subCategoryCode == $codeType
-                                            ? 'selected="selected" '
-                                            : '')
-                                        .' value="'.$subCategory['code'].'">---'.$subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
+                    $form .= '<option '.($subCategoryCode == $codeType
+                                        ? 'selected="selected" '
+                                        : '')
+                                    .' value="'.$subCategory['code'].'">---';
+                    echo $subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
                 }
             }
         }
         $form .= '</select>';
         $form .= '</div>';
         $form .= '</form>';
-        echo $form; ?>
-                    </div>
-                <?php
-    } ?>
-                <?php if ($showSessions) {
-        ?>
-                    <div class="col-md-4">
-                        <div class="return-catalog">
-                            <a class="btn btn-default btn-lg btn-block"
-                               href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
-                                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
-                            </a>
-                        </div>
-                    </div>
-                <?php
-    } ?>
+        echo $form;
+        echo '</div>';
+    }
+
+if ($showSessions) {
+    ?>
+    <div class="col-md-4">
+        <div class="return-catalog">
+            <a class="btn btn-default btn-lg btn-block"
+               href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
+            </a>
+        </div>
+    </div>
+<?php
+} ?>
             </div>
         </div>
     </div>

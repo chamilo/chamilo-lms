@@ -32,18 +32,17 @@ class CalculatedAnswer extends Question
     public function createAnswersForm($form)
     {
         $defaults = [];
+        $defaults['answer'] = get_lang('DefaultTextInBlanks');
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
             $defaults['answer'] = array_shift($preArray);
-            $defaults['answer'] = preg_replace("/\[.*\]/", "", $defaults['answer']);
+            $defaults['answer'] = preg_replace("/\[.*\]/", '', $defaults['answer']);
             $defaults['weighting'] = $this->weighting;
-        } else {
-            $defaults['answer'] = get_lang('DefaultTextInBlanks');
         }
-        $lowestValue = "1.00";
-        $highestValue = "20.00";
+        $lowestValue = '1.00';
+        $highestValue = '20.00';
 
         // javascript //
         echo '<script>
@@ -79,7 +78,6 @@ class CalculatedAnswer extends Question
             });
 
             var firstTime = true;
-
             function updateBlanks(e) {
                 if (firstTime) {
                     field = document.getElementById("answer");
@@ -213,25 +211,24 @@ class CalculatedAnswer extends Question
                 if ($nb > 0) {
                     for ($i = 0; $i < $nb; ++$i) {
                         $blankItem = $blanks[0][$i];
-                        $replace = ["[", "]"];
-                        $newBlankItem = str_replace($replace, "", $blankItem);
-                        $newBlankItem = "[".trim($newBlankItem)."]";
+
                         // take random float values when one or both edge values have a decimal point
                         $randomValue =
                             (strpos($lowestValues[$i], '.') !== false ||
                             strpos($highestValues[$i], '.') !== false) ?
                             mt_rand($lowestValues[$i] * 100, $highestValues[$i] * 100) / 100 : mt_rand($lowestValues[$i], $highestValues[$i]);
+
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                         $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                     }
                     $math = new EvalMath();
                     $result = $math->evaluate($auxFormula);
-                    $result = number_format($result, 2, ".", "");
+                    $result = number_format($result, 2, '.', '');
                     // Remove decimal trailing zeros
-                    $result = rtrim($result, "0");
+                    $result = rtrim($result, '0');
                     // If it is an integer (ends in .00) remove the decimal point
-                    if (mb_substr($result, -1) === ".") {
-                        $result = str_replace(".", "", $result);
+                    if (mb_substr($result, -1) === '.') {
+                        $result = str_replace('.', '', $result);
                     }
                     // Attach formula
                     $auxAnswer .= " [".$result."]@@".$formula;
@@ -251,10 +248,14 @@ class CalculatedAnswer extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-            <tr>
-                <th>'.get_lang("Answer").'</th>
-            </tr>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
+        $header .= '</tr>';
 
         return $header;
     }

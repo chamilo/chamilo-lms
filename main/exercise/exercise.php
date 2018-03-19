@@ -29,7 +29,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 require_once 'hotpotatoes.lib.php';
 
-/* 	Constants and variables */
+/*  Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();
@@ -72,6 +72,7 @@ Session::erase('objAnswer');
 Session::erase('questionList');
 Session::erase('exerciseResult');
 Session::erase('firstTime');
+Session::erase('calculatedAnswerId');
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
@@ -298,7 +299,7 @@ if ($is_allowedToEdit) {
                         }
                         break;
                     case 'copy_exercise': //copy an exercise
-                        $objExerciseTmp->copy_exercise();
+                        $objExerciseTmp->copyExercise();
                         echo Display::return_message(
                             get_lang('ExerciseCopied'),
                             'confirmation'

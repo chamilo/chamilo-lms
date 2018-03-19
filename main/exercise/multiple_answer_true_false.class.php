@@ -63,7 +63,6 @@ class MultipleAnswerTrueFalse extends Question
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $correct = 0;
         $answer = null;
 
         if (!empty($this->id)) {
@@ -268,11 +267,10 @@ class MultipleAnswerTrueFalse extends Question
 
         /* Getting quiz_question_options (true, false, doubt) because
         it's possible that there are more options in the future */
-
         $new_options = Question::readQuestionOption($this->id, $course_id);
-        $sorted_by_position = [];
+        $sortedByPosition = [];
         foreach ($new_options as $item) {
-            $sorted_by_position[$item['position']] = $item;
+            $sortedByPosition[$item['position']] = $item;
         }
 
         /* Saving quiz_question.extra values that has the correct scores of
@@ -292,7 +290,7 @@ class MultipleAnswerTrueFalse extends Question
             if (empty($options)) {
                 //If this is the first time that the question is created when
                 // change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
+                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['id'] : '';
             }
             $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
@@ -311,13 +309,15 @@ class MultipleAnswerTrueFalse extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-        <tr>
-            <th>'.get_lang("Choice").'</th>
-            <th>'.get_lang("ExpectedChoice").'</th>
-            <th>'.get_lang("Answer").'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>
+            <th>'.get_lang('ExpectedChoice').'</th>
+            <th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
         if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $header .= '<th>'.get_lang("Comment").'</th>';
+            $header .= '<th>'.get_lang('Comment').'</th>';
         } else {
             $header .= '<th>&nbsp;</th>';
         }

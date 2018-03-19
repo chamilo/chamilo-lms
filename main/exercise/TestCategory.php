@@ -641,37 +641,36 @@ class TestCategory
 
     /**
      * @param int $questionId
+     * @param int $displayCategoryName
      */
-    public static function displayCategoryAndTitle($questionId)
+    public static function displayCategoryAndTitle($questionId, $displayCategoryName = 1)
     {
-        echo self::returnCategoryAndTitle($questionId);
+        echo self::returnCategoryAndTitle($questionId, $displayCategoryName);
     }
 
     /**
      * @param int $questionId
+     * @param int $in_display_category_name
      *
      * @return null|string
      */
-    public static function returnCategoryAndTitle($questionId)
+    public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
     {
-        $isStudent = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
+        $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
         $objExercise = Session::read('objExercise');
-        if (empty($objExercise)) {
-            return '';
+        if (!empty($objExercise)) {
+            $in_display_category_name = $objExercise->display_category_name;
+        }
+        $content = null;
+        if (self::getCategoryNameForQuestion($questionId) != '' &&
+            ($in_display_category_name == 1 || !$is_student)
+        ) {
+            $content .= '<div class="page-header">';
+            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
+            $content .= "</div>";
         }
 
-        $showCategoryName = (bool) $objExercise->display_category_name; //double negation to get a boolean value
-        $categoryName = self::getCategoryNameForQuestion($questionId);
-
-        if (empty($categoryName) || (!$showCategoryName && $isStudent)) {
-            return '';
-        }
-
-        return Display::page_header(
-            get_lang('Category').': '.$categoryName,
-            null,
-            'h4'
-        );
+        return $content;
     }
 
     /**
@@ -1054,7 +1053,7 @@ class TestCategory
     public function returnCategoryForm(Exercise $exercise)
     {
         $categories = $this->getListOfCategoriesForTest($exercise);
-        $saved_categories = $exercise->get_categories_in_exercise();
+        $saved_categories = $exercise->getCategoriesInExercise();
         $return = null;
 
         if (!empty($categories)) {
@@ -1090,7 +1089,6 @@ class TestCategory
                 $cat_id = $category['iid'];
                 $return .= '<tr>';
                 $return .= '<td>';
-                //$return .= Display::div(isset($category['parent_path']) ? $category['parent_path'] : '');
                 $return .= Display::div($category['name']);
                 $return .= '</td>';
                 $return .= '<td>';
@@ -1279,13 +1277,21 @@ class TestCategory
         return $html;
     }
 
-    // To allowed " in javascript dialog box without bad surprises
-    // replace " with two '
-    public function protectJSDialogQuote($in_txt)
+    /**
+     * To allowed " in javascript dialog box without bad surprises
+     * replace " with two '.
+     *
+     * @param string $text
+     *
+     * @return mixed
+     */
+    public function protectJSDialogQuote($text)
     {
-        $res = $in_txt;
+        $res = $text;
         $res = str_replace("'", "\'", $res);
-        $res = str_replace('"', "\'\'", $res); // super astuce pour afficher les " dans les boite de dialogue
+        // super astuce pour afficher les " dans les boite de dialogue
+        $res = str_replace('"', "\'\'", $res);
+
         return $res;
     }
 }

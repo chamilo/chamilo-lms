@@ -16,6 +16,7 @@ $current_course_tool = TOOL_QUIZ;
 
 // Clear the exercise session just in case
 Session::erase('objExercise');
+Session::erase('calculatedAnswerId');
 
 $this_section = SECTION_COURSES;
 
@@ -109,11 +110,6 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
     $learnpath_item_id,
     0
 );
-
-/*$attempt_list = null;
-if (isset($exercise_stat_info['exe_id'])) {
-    $attempt_list = Event::getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
-}*/
 
 //1. Check if this is a new attempt or a previous
 $label = get_lang('StartTest');

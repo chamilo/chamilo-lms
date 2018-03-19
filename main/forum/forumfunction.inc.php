@@ -53,6 +53,7 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
 $forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
 
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
 // The next javascript script is to delete file by ajax
 $htmlHeadXtra[] = '<script>
 $(function () {
@@ -65,7 +66,7 @@ $(function () {
         if (confirm("'.get_lang('AreYouSureToDeleteJS').'", filename)) {
             $.ajax({
                 type: "POST",
-                url: "'.api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
                 dataType: "json",
                 success: function(data) {
                     if (data.error == false) {
@@ -389,6 +390,10 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         'filetype',
         ['jpg', 'jpeg', 'png', 'gif']
     );
+
+    //$forumId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM, $forumId);
+
     $form->addElement('html', '</div>');
 
     // The OK button
@@ -435,6 +440,9 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         $defaults['public_private_group_forum_group']['public_private_group_forum'] = isset($inputvalues['forum_group_public_private']) ? $inputvalues['forum_group_public_private'] : null;
         $defaults['group_forum'] = isset($inputvalues['forum_of_group']) ? $inputvalues['forum_of_group'] : null;
     }
+
+    // $defaults['skills'] = array_keys($skillList);
+
     $form->setDefaults($defaults);
     // Validation or display
     if ($form->validate()) {
@@ -6169,7 +6177,7 @@ function clearAttachedFiles($postId = null, $courseId = null)
  *
  * @return array
  */
-function getAttachmentIdsByPostId($postId, $courseId = null)
+function getAttachmentIdsByPostId($postId, $courseId = 0)
 {
     $array = [];
     $courseId = intval($courseId);
@@ -6250,6 +6258,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 /**
  * @param array $current_forum
  * @param array $row
+ * @param bool  $addWrapper
  *
  * @return string
  */

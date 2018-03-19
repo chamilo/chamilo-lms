@@ -112,7 +112,6 @@ class Annotation extends Question
      */
     public function createAnswersForm($form)
     {
-        // nothing
     }
 
     /**

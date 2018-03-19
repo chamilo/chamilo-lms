@@ -35,7 +35,7 @@ class MatchingDraggable extends Question
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0) {
+            if (!empty($answer->nbrAnswers) && count($answer->nbrAnswers) > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
                     if (empty($correct)) {
@@ -264,11 +264,18 @@ class MatchingDraggable extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-                <tr>
-                    <th>'.get_lang('ElementList').'</th>
-                    <th>'.get_lang('CorrespondsTo').'</th>
-                </tr>';
+        $header .= '<table class="matching '.$this->question_table_class.'"><tr>';
+
+        $header .= '<th>'.get_lang('ElementList').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('Status').'</th>';
+        } else {
+            $header .= '<th>'.get_lang('ElementList').'</th>';
+            $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
+        }
+        $header .= '</tr>';
 
         return $header;
     }

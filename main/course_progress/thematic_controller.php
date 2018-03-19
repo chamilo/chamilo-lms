@@ -462,7 +462,6 @@ class ThematicController
                     $data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
 
                     // render to the view
-
                     $this->view->set_data($data);
                     $this->view->set_layout('layout');
                     $this->view->set_template('thematic_plan');
@@ -472,7 +471,6 @@ class ThematicController
         }
 
         $thematic_id = intval($_GET['thematic_id']);
-
         if ($action == 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
         }
@@ -525,7 +523,7 @@ class ThematicController
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = [];
-        $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
+        $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
 
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
@@ -536,9 +534,8 @@ class ThematicController
         }
 
         $thematic_id = intval($_REQUEST['thematic_id']);
-        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? intval($_REQUEST['thematic_advance_id']) : null;
+        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? (int) $_REQUEST['thematic_advance_id'] : null;
         $thematic_advance_data = [];
-
         switch ($action) {
             case 'thematic_advance_delete':
                 if (!empty($thematic_advance_id)) {

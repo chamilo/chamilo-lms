@@ -66,7 +66,7 @@ if ($is_certificate_mode) {
     $nameTools = get_lang('CreateDocument');
 }
 
-/*	Constants and variables */
+/* Constants and variables */
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 $courseCode = api_get_course_id();
@@ -114,8 +114,6 @@ if (empty($document_data)) {
     $folder_id = $document_data['id'];
     $dir = $document_data['path'];
 }
-
-/*	MAIN CODE */
 
 // Please, do not modify this dirname formatting
 if (strstr($dir, '..')) {

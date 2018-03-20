@@ -48,7 +48,7 @@ if ($_GET['type'] == 'question' || $_GET['type'] == 'all') {
         }
         $pdf->SetFont('Arial', '', 12);
         $pdf->SetTextColor(64);
-        $pdf->MultiCell(0, 7, ($key+$j).' - '.$infoQuestion['question'], 0, 'L', false);
+        $pdf->MultiCell(0, 7, ($key + $j).' - '.$infoQuestion['question'], 0, 'L', false);
         if (!empty($infoQuestion['description'])) {
             $pdf->WriteHTML(removeQuotes($infoQuestion['description']));
         }
@@ -83,7 +83,7 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
                 $infoQuestion['type'] == 14
             ) {
                 $infoAnswer = getAnswers($courseId, $value);
-                $answers .= ' '.($key+$j).' -';
+                $answers .= ' '.($key + $j).' -';
                 foreach ($infoAnswer as $key2 => $value2) {
                     if ($value2['correct'] == 1) {
                         $answers .= ' '.$letters[$key2].',';
@@ -97,7 +97,7 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
                 $infoAnswer = getAnswers($courseId, $value);
                 foreach ($infoAnswer as $key2 => $value2) {
                     if ($value2['correct'] == 1) {
-                        $answers .= ' '.($key+$j).' - '.$letters[$key2].' ';
+                        $answers .= ' '.($key + $j).' - '.$letters[$key2].' ';
                         break;
                     }
                 }

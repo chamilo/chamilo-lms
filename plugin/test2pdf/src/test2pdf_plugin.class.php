@@ -1,35 +1,38 @@
 <?php
 /**
- * Plugin class for the Test2Pdf plugin
+ * Plugin class for the Test2Pdf plugin.
+ * 
  * @package chamilo.plugin.test2pdf
+ * 
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  */
 class Test2pdfPlugin extends Plugin
 {
     public $isCoursePlugin = true;
-    /**
-     *
-     * @return StaticPlugin
-     */
-    public static function create()
-    {
-        static $result = null;
-        return $result ? $result : $result = new self();
-    }
-
+    
     protected function __construct()
     {
         parent::__construct(
             '1.0',
             'Jose Angel Ruiz - NoSoloRed (original author)',
             [
-                'enable_plugin' => 'boolean'
+                'enable_plugin' => 'boolean',
             ]
         );
     }
+    
+    /**
+     * @return StaticPlugin
+     */
+    public static function create()
+    {
+        static $result = null;
+        
+        return $result ? $result : $result = new self();
+    }
 
     /**
-     * This method creates the tables required to this plugin
+     * This method creates the tables required to this plugin.
      */
     public function install()
     {
@@ -48,7 +51,7 @@ class Test2pdfPlugin extends Plugin
     }
 
     /**
-     * This method drops the plugin tables
+     * This method drops the plugin tables.
      */
     public function uninstall()
     {

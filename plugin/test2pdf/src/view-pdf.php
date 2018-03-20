@@ -1,11 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Configuration script for the Test to Pdf plugin
+ * Configuration script for the Test to Pdf plugin.
+ * 
  * @package chamilo.plugin.test2pdf
  */
 /**
- * Initialization
+ * Initialization.
  */
 require_once '../config.php';
 api_protect_course_script(true);
@@ -18,12 +19,11 @@ if ($enable) {
     $tpl = new Template($templateName);
     $courseId = api_get_course_int_id();
     $sessionId = api_get_session_id();
-    
-    // Leer Datos y Mostrar tabla
+
     $infoExercise = showExerciseCourse($courseId, $sessionId);
     $tpl->assign('infoExercise', $infoExercise);
     $tpl->assign('course_id', $courseId);
-    
+
     $listing_tpl = 'test2pdf/view/view-pdf.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);

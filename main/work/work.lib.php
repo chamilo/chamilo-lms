@@ -3410,6 +3410,10 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $parentWork['title']);
     $content = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work['title'], $url);
 
+    if (!empty($data['comment'])) {
+        $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
+    }
+
     if (!empty($userIdListToSend)) {
         foreach ($userIdListToSend as $userIdToSend) {
             MessageManager::send_message_simple(

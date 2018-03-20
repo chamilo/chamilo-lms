@@ -1076,11 +1076,12 @@ class AnnouncementManager
         $id = (int) $id;
         $courseId = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $table
+        $sql = "SELECT to_user_id, to_group_id FROM $table
                 WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
         $result = Database::query($sql);
         $to = [];
         while ($row = Database::fetch_array($result)) {
+            // This is the iid of c_group_info
             $toGroup = $row['to_group_id'];
             switch ($toGroup) {
                 // it was send to one specific user

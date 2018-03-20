@@ -2117,9 +2117,7 @@ class CourseManager
             return [];
         }
 
-        $group_list = [];
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-
         if ($in_get_empty_group == 0) {
             // get only groups that are not empty
             $sql = "SELECT DISTINCT g.id, g.iid, g.name
@@ -2135,14 +2133,15 @@ class CourseManager
                     $session_condition
                     AND c_id = $course_id";
         }
-        $result = Database::query($sql);
 
-        while ($group_data = Database::fetch_array($result)) {
-            $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
-            $group_list[$group_data['id']] = $group_data;
+        $result = Database::query($sql);
+        $groupList = [];
+        while ($groupData = Database::fetch_array($result)) {
+            $groupData['userNb'] = GroupManager::number_of_students($groupData['id'], $course_id);
+            $groupList[$groupData['iid']] = $groupData;
         }
 
-        return $group_list;
+        return $groupList;
     }
 
     /**

@@ -769,7 +769,6 @@ class AnnouncementManager
         $courseId = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-
         $id = intval($id);
 
         $params = [
@@ -825,14 +824,20 @@ class AnnouncementManager
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
                     $groupInfo = GroupManager::get_group_properties($group);
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_ANNOUNCEMENT,
-                        $id,
-                        'AnnouncementUpdated',
-                        api_get_user_id(),
-                        $groupInfo
-                    );
+                    if (empty($groupInfo)) {
+                        // Probably the group id and iid are different try checking the iid
+                        $groupInfo = GroupManager::get_group_properties($group, true);
+                    }
+                    if ($groupInfo) {
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_ANNOUNCEMENT,
+                            $id,
+                            'AnnouncementUpdated',
+                            api_get_user_id(),
+                            $groupInfo
+                        );
+                    }
                 }
             }
 
@@ -1068,7 +1073,7 @@ class AnnouncementManager
     {
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
-        $id = intval($id);
+        $id = (int) $id;
         $courseId = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table
@@ -1087,7 +1092,7 @@ class AnnouncementManager
                     return 'everyone';
                     break;
                 default:
-                    $to[] = "GROUP:".$row['to_group_id'];
+                    $to[] = "GROUP:".$toGroup;
             }
         }
 

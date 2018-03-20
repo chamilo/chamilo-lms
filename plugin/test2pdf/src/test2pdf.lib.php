@@ -5,39 +5,32 @@
  *
  * @package chamilo.plugin.test2pdf
  */
-/**
- * Init.
- */
-require_once '../../../main/inc/global.inc.php';
-require_once '../config.php';
-require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
 
 $letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 /**
  * List exercises.
  *
- * @param int $course_id  Course ID
- * @param int $session_id Session ID
+ * @param int $courseId Course ID
+ * @param int $sessionId Session ID
  *
  * @throws Exception
  *
  * @return array Results (list of exercice details)
  */
-function showExerciseCourse($course_id, $session_id = 0)
+
+function showExerciseCourse($courseId, $sessionId = 0)
 {
-    $course_id = (int) $course_id;
-    $session_id = (int) $session_id;
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
     $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+    $conditionSession = api_get_session_condition($sessionId, true, true, 'a.session_id');
     $sql = "SELECT a.* 
-      FROM $tableQuiz a 
-        LEFT JOIN $tableLpItem b 
-        ON a.iid = b.path AND a.c_id = b.c_id 
-      WHERE a.c_id = $course_id
-        AND (a.session_id = $session_id OR a.session_id IS NULL) 
-        AND (a.active = 1 OR (item_type = 'quiz' AND b.c_id = $course_id)) 
-        ORDER BY a.title ASC;";
+            FROM $tableQuiz a 
+            LEFT JOIN $tableLpItem b ON a.iid = b.path AND a.c_id = b.c_id 
+            WHERE a.c_id = $courseId
+            AND (a.active = 1 OR (item_type = 'quiz' AND b.c_id = $courseId)) 
+            $conditionSession
+            ORDER BY a.title ASC;";
     $res = Database::query($sql);
     if (!$res) {
         die("Error Database $tableQuiz");
@@ -57,12 +50,10 @@ function showExerciseCourse($course_id, $session_id = 0)
  *
  * @return array Results (list of quiz details)
  */
-function getInfoQuiz($c_id, $id)
+function getInfoQuiz($courseId, $id)
 {
-    $c_id = (int) $c_id;
-    $id = (int) $id;
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT * FROM $tableQuiz WHERE c_id = $c_id AND iid = $id";
+    $sql = "SELECT * FROM $tableQuiz WHERE c_id = $courseId AND iid = $id";
     $res = Database::query($sql);
     if (!$res) {
         die("Error Database $tableQuiz");
@@ -79,18 +70,21 @@ function getInfoQuiz($c_id, $id)
  *
  * @return array Results (list question ID)
  */
-function getQuestions($c_id, $quizId)
+function getQuestions($courseId, $quizId, $sessionId = 0)
 {
-    $c_id = (int) $c_id;
-    $quizId = (int) $quizId;
     $tableQuizQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+    $conditionSession = api_get_session_condition($sessionId, true, true, 'q.session_id');
+
     $sql = "SELECT a.question_id AS question_id 
-        FROM $tableQuizQuestion a 
-        INNER JOIN $tableQuestion b ON a.question_id = b.iid 
-        WHERE a.c_id = $c_id AND b.c_id = a.c_id AND a.exercice_id = $quizId 
-        AND (b.type IN (1, 2, 9, 10, 11, 12, 14))
-        ORDER BY question_order ASC;";
+            FROM $tableQuizQuestion a 
+            INNER JOIN $tableQuestion b ON a.question_id = b.iid 
+            INNER JOIN $tableQuiz q ON q.iid = a.exercice_id 
+            WHERE a.c_id = $courseId AND b.c_id = a.c_id AND a.exercice_id = $quizId 
+            AND (b.type IN (1, 2, 9, 10, 11, 12, 14)) 
+            $conditionSession 
+            ORDER BY question_order ASC;";
     $res = Database::query($sql);
     if (!$res) {
         die("Error Database $tableQuizQuestion");
@@ -99,7 +93,6 @@ function getQuestions($c_id, $quizId)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row['question_id'];
     }
-
     return $aux;
 }
 
@@ -110,15 +103,13 @@ function getQuestions($c_id, $quizId)
  *
  * @return array Results (list of question details)
  */
-function getInfoQuestion($c_id, $id)
+function getInfoQuestion($courseId, $id)
 {
-    $c_id = (int) $c_id;
-    $id = (int) $id;
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $sql = "SELECT * FROM $tableQuestion 
-        WHERE c_id = $c_id 
-        AND iid = $id
-        AND (type IN (1, 2, 9, 10, 11, 12, 14))";
+            WHERE c_id = $courseId 
+            AND iid = $id
+            AND (type IN (1, 2, 9, 10, 11, 12, 14))";
     $res = Database::query($sql);
     if (!$res) {
         die("Error Database $tableQuestion");
@@ -135,14 +126,12 @@ function getInfoQuestion($c_id, $id)
  *
  * @return array Results (list of answer by question_id)
  */
-function getAnswers($c_id, $id)
+function getAnswers($courseId, $id)
 {
-    $c_id = (int) $c_id;
-    $id = (int) $id;
     $tableQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $sql = "SELECT * FROM $tableQuizAnswer
-	    WHERE c_id = $c_id AND question_id = $id
-	    ORDER BY position ASC;";
+    	    WHERE c_id = $courseId AND question_id = $id
+    	    ORDER BY position ASC;";
     $res = Database::query($sql);
     if (!$res) {
         die("Error Database $tableQuizAnswer");
@@ -174,37 +163,35 @@ function removeHtml($string)
     $txt = str_replace("</html>", "", $txt);
     $txt = strip_tags($txt);
     $txt = str_replace(chr(13).chr(10), "", $txt);
-
-    /*
-    $txt=str_replace("&nbsp;"," ",$txt);
-    $txt=str_replace("&Aacute;","Á",$txt);
-    $txt=str_replace("&aacute;","á",$txt);
-    $txt=str_replace("&Eacute;","É",$txt);
-    $txt=str_replace("&eacute;","é",$txt);
-    $txt=str_replace("&Iacute;","Í",$txt);
-    $txt=str_replace("&iacute;","í",$txt);
-    $txt=str_replace("&Oacute;","Ó",$txt);
-    $txt=str_replace("&oacute;","ó",$txt);
-    $txt=str_replace("&Uacute;","Ú",$txt);
-    $txt=str_replace("&uacute;","ú",$txt);
-    $txt=str_replace("&Ntilde;","Ñ",$txt);
-    $txt=str_replace("&ntilde;","ñ",$txt);
-    $txt=str_replace("&agrave;","à",$txt);
-    $txt=str_replace("&Agrave;","À",$txt);
-    $txt=str_replace("&iexcl;","¡",$txt);
-    $txt=str_replace("&middot;","·",$txt);
-    $txt=str_replace("&Ccedil;","Ç",$txt);
-    $txt=str_replace("&ccedil;","ç",$txt);
-    $txt=str_replace("&quot;",'"',$txt);
-    $txt=str_replace("&ordf;",'ª',$txt);
-    $txt=str_replace("&ordm;",'º',$txt);
-    $txt=str_replace("&amp;",'&',$txt);
-    $txt=str_replace("&bull;",'•',$txt);
-    $txt=str_replace("&iquest;",'¿',$txt);
-    $txt=str_replace("&euro;",'EUR',$txt);
-    $txt=str_replace("&uuml;",'ü',$txt);
-    $txt=str_replace("&Uuml;",'Ü',$txt);
-    $txt=str_replace("&uml;",'¨',$txt);*/
+    $txt = str_replace("&nbsp;", " ", $txt);
+    $txt = str_replace("&Aacute;", "Á", $txt);
+    $txt = str_replace("&aacute;", "á", $txt);
+    $txt = str_replace("&Eacute;", "É", $txt);
+    $txt = str_replace("&eacute;", "é", $txt);
+    $txt = str_replace("&Iacute;", "Í", $txt);
+    $txt = str_replace("&iacute;", "í", $txt);
+    $txt = str_replace("&Oacute;", "Ó", $txt);
+    $txt = str_replace("&oacute;", "ó", $txt);
+    $txt = str_replace("&Uacute;", "Ú", $txt);
+    $txt = str_replace("&uacute;", "ú", $txt);
+    $txt = str_replace("&Ntilde;", "Ñ", $txt);
+    $txt = str_replace("&ntilde;", "ñ", $txt);
+    $txt = str_replace("&agrave;", "à", $txt);
+    $txt = str_replace("&Agrave;", "À", $txt);
+    $txt = str_replace("&iexcl;", "¡", $txt);
+    $txt = str_replace("&middot;", "·", $txt);
+    $txt = str_replace("&Ccedil;", "Ç", $txt);
+    $txt = str_replace("&ccedil;", "ç", $txt);
+    $txt = str_replace("&quot;", '"', $txt);
+    $txt = str_replace("&ordf;", 'ª', $txt);
+    $txt = str_replace("&ordm;", 'º', $txt);
+    $txt = str_replace("&amp;", '&', $txt);
+    $txt = str_replace("&bull;", '•', $txt);
+    $txt = str_replace("&iquest;", '¿', $txt);
+    $txt = str_replace("&euro;", 'EUR', $txt);
+    $txt = str_replace("&uuml;", 'ü', $txt);
+    $txt = str_replace("&Uuml;", 'Ü', $txt);
+    $txt = str_replace("&uml;", '¨', $txt);
 
     return $txt;
 }
@@ -218,7 +205,6 @@ function removeHtml($string)
  */
 function removeQuotes($string)
 {
-    //$txt=strip_tags($cadena);
     $txt = str_replace("&nbsp;", " ", $string);
     $txt = str_replace("&Aacute;", "Á", $txt);
     $txt = str_replace("&aacute;", "á", $txt);
@@ -250,54 +236,4 @@ function removeQuotes($string)
     $txt = str_replace("uml;", '¨', $txt);
 
     return $txt;
-}
-
-/**
- * Returns an associative array (keys: R,G,B) from a hex html code (e.g. #3FE5AA).
- *
- * @param string $color
- *
- * @return array
- */
-function hex2dec($color = '#000000')
-{
-    $R = substr($color, 1, 2);
-    $rouge = hexdec($R);
-    $V = substr($color, 3, 2);
-    $vert = hexdec($V);
-    $B = substr($color, 5, 2);
-    $bleu = hexdec($B);
-    $tbl_couleur = [];
-    $tbl_couleur['R'] = $rouge;
-    $tbl_couleur['V'] = $vert;
-    $tbl_couleur['B'] = $bleu;
-
-    return $tbl_couleur;
-}
-
-/**
- * Conversion of pixel -> millimeter at 72 dpi.
- *
- * @param $px
- *
- * @return float|int
- */
-function px2mm($px)
-{
-    return $px * 25.4 / 72;
-}
-
-/**
- * Transform from HTML to text.
- *
- * @param string $html HTML string
- *
- * @return string Pure text version of the given string
- */
-function txtentities($html)
-{
-    $trans = get_html_translation_table(HTML_ENTITIES);
-    $trans = array_flip($trans);
-
-    return strtr($html, $trans);
 }

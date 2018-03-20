@@ -3,7 +3,7 @@
 
 /**
  * This script initiates a test2pdf plugin.
- * 
+ *
  * @package chamilo.plugin.test2pdf
  */
 require_once __DIR__.'/../../vendor/autoload.php';

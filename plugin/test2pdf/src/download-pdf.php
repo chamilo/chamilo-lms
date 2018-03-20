@@ -52,7 +52,7 @@ if ($_GET['type'] == 'question' || $_GET['type'] == 'all') {
         if (!empty($infoQuestion['description'])) {
             $pdf->WriteHTML(removeQuotes($infoQuestion['description']));
         }
-        
+
         $infoAnswer = getAnswers($courseId, $value);
         foreach ($infoAnswer as $key2 => $value2) {
             $pdf->SetFont('Arial', 'I', 10);

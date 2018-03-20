@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 /**
  * Configuration script for the Test to Pdf plugin.
- * 
+ *
  * @package chamilo.plugin.test2pdf
  */
 /**

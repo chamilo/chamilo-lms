@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin class for the Test2Pdf plugin.
- * 
+ *
  * @package chamilo.plugin.test2pdf
- * 
+ *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  */
 class Test2pdfPlugin extends Plugin
 {
     public $isCoursePlugin = true;
-    
+
     protected function __construct()
     {
         parent::__construct(
@@ -20,14 +20,14 @@ class Test2pdfPlugin extends Plugin
             ]
         );
     }
-    
+
     /**
      * @return StaticPlugin
      */
     public static function create()
     {
         static $result = null;
-        
+
         return $result ? $result : $result = new self();
     }
 
@@ -38,7 +38,7 @@ class Test2pdfPlugin extends Plugin
     {
         //Installing course settings
         $this->install_course_fields_in_all_courses();
-        
+
         $srcfile1 = __DIR__.'/../resources/img/64/test2pdf.png';
         $srcfile2 = __DIR__.'/../resources/img/64/test2pdf_na.png';
         $srcfile3 = __DIR__.'/../resources/img/22/test2pdf.png';

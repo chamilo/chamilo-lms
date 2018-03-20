@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 /**
  * Functions.
- * 
+ *
  * @package chamilo.plugin.test2pdf
  */
 
@@ -10,13 +10,13 @@ $letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'
 
 /**
  * List exercises.
- * 
+ *
  * @param int $courseId Course ID
  * @param int $sessionId Session ID
- * 
+ *
  * @throws Exception
- * 
- *  * @return array Results (list of exercice details)
+ *
+ * @return array Results (list of exercice details)
  */
 
 function showExerciseCourse($courseId, $sessionId = 0)
@@ -39,14 +39,15 @@ function showExerciseCourse($courseId, $sessionId = 0)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
 /**
  * List quiz details.
- * 
+ *
  * @throws Exception
- * 
+ *
  * @return array Results (list of quiz details)
  */
 function getInfoQuiz($courseId, $id)
@@ -58,14 +59,15 @@ function getInfoQuiz($courseId, $id)
         die("Error Database $tableQuiz");
     }
     $row = Database::fetch_assoc($res);
+
     return $row;
 }
 
 /**
  * List question_id.
- * 
+ *
  * @throws Exception
- * 
+ *
  * @return array Results (list question ID)
  */
 function getQuestions($courseId, $quizId, $sessionId = 0)
@@ -74,7 +76,7 @@ function getQuestions($courseId, $quizId, $sessionId = 0)
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
     $conditionSession = api_get_session_condition($sessionId, true, true, 'q.session_id');
-    
+
     $sql = "SELECT a.question_id AS question_id 
             FROM $tableQuizQuestion a 
             INNER JOIN $tableQuestion b ON a.question_id = b.iid 
@@ -98,7 +100,7 @@ function getQuestions($courseId, $quizId, $sessionId = 0)
  * List question details.
  *
  * @throws Exception
- * 
+ *
  * @return array Results (list of question details)
  */
 function getInfoQuestion($courseId, $id)
@@ -113,14 +115,15 @@ function getInfoQuestion($courseId, $id)
         die("Error Database $tableQuestion");
     }
     $row = Database::fetch_assoc($res);
+
     return $row;
 }
 
 /**
  * List answer details.
- * 
+ *
  * @throws Exception
- * 
+ *
  * @return array Results (list of answer by question_id)
  */
 function getAnswers($courseId, $id)
@@ -137,14 +140,15 @@ function getAnswers($courseId, $id)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
 /**
  * Remove all html tag.
- * 
+ *
  * @param string $string The string to be stripped of HTML
- * 
+ *
  * @return string clean of html tag
  */
 function removeHtml($string)
@@ -188,15 +192,15 @@ function removeHtml($string)
     $txt = str_replace("&uuml;", 'ü', $txt);
     $txt = str_replace("&Uuml;", 'Ü', $txt);
     $txt = str_replace("&uml;", '¨', $txt);
-    
+
     return $txt;
 }
 
 /**
  * Remove all html tag.
- * 
+ *
  * @param string $string The string to be stripped of accents
- * 
+ *
  * @return string clean of html tag
  */
 function removeQuotes($string)
@@ -230,5 +234,6 @@ function removeQuotes($string)
     $txt = str_replace("&uuml;", 'ü', $txt);
     $txt = str_replace("&Uuml;", 'Ü', $txt);
     $txt = str_replace("uml;", '¨', $txt);
+
     return $txt;
 }

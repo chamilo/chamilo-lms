@@ -8139,4 +8139,6 @@ $Portfolio = "Portafolio";
 $AddPortfolioItem = "Agregar elemento al portafolio";
 $NewDocumentAddedToCourseX = "Un nuevo documento ha sido agregado al curso %s";
 $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "El nuevo documento %s ha sido agregado a la herramienta documentos del curso %s por %s.";
+$PendingSurveys = "Encuestas pendientes";
+$NoPendingSurveys = "Sin encuestas pendientes";
 ?>

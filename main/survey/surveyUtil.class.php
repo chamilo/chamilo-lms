@@ -3774,6 +3774,7 @@ class SurveyUtil
             INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
                 WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
             WHERE si.user = :user_id AND s.availFrom <= :now AND s.availTill >= :now
+                AND si.answered = 0
             ORDER BY s.availTill ASC
         ";
 

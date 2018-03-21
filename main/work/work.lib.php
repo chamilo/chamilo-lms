@@ -284,7 +284,9 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = $groupInfo['iid'];
+        }
     }
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);

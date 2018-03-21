@@ -3757,4 +3757,31 @@ class SurveyUtil
 
         return $response > 0;
     }
+
+    /**
+     * Get the pending surveys for a user
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getUserPendingInvitations($userId)
+    {
+        $now = api_get_utc_datetime(null, false, true);
+
+        $dql = "
+            SELECT s, si FROM ChamiloCourseBundle:CSurvey s
+            INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
+                WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
+            WHERE si.user = :user_id AND s.availFrom <= :now AND s.availTill >= :now
+            ORDER BY s.availTill ASC
+        ";
+
+        $pendingSurveys = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['user_id' => $userId, 'now' => $now->format('Y-m-d')])
+            ->getResult();
+
+        return $pendingSurveys;
+    }
 }

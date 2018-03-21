@@ -70,6 +70,11 @@
                                         <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
                                     </a>
                                 </li>
+                                <li class="user-body">
+                                    <a href="{{ _p.web_main ~ 'survey/pending.php' }}">
+                                        <em class="fa fa-pie-chart"></em> {{ 'PendingSurveys'|get_lang }}
+                                    </a>
+                                </li>
                                 {% if certificate_url %}
                                     <li class="user-body">
                                         <a title="{{ "MyCertificates"|get_lang }}" href="{{ certificate_url }}">

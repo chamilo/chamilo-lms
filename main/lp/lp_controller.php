@@ -291,7 +291,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 error_log('New LP - querying '.$sel, 0);
             }
             $res = Database::query($sel);
-
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $type = $row['lp_type'];

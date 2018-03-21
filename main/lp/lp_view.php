@@ -20,7 +20,7 @@ $use_anonymous = true;
 $this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {
-    header('location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
+    header('Location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
     exit;
 }
 
@@ -128,10 +128,6 @@ $(document).ready(function() {
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
-
-if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame() == 1) {
-    $htmlHeadXtra[] = '';
-}
 
 // Impress js
 if ($_SESSION['oLP']->mode == 'impress') {

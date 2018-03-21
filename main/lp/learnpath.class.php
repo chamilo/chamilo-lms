@@ -8351,7 +8351,6 @@ class learnpath
 
         $result = Database::query($sql);
         $arrLP = [];
-
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
                 'id' => $row['id'],
@@ -8371,7 +8370,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
@@ -8629,6 +8628,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
         $arrLP = [];
+
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
                 'id' => $row['id'],
@@ -8648,7 +8648,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         if ($action == 'add') {
@@ -9230,9 +9230,9 @@ class learnpath
 
         $sql = "SELECT * FROM $tbl_lp_item 
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-
         $result = Database::query($sql);
         $arrLP = [];
+
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
                 'id' => $row['id'],
@@ -9592,7 +9592,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $return = '';
-
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
@@ -9938,7 +9937,13 @@ class learnpath
             ),
         ];
         $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
-        $form->setDefaults(['if_exists' => 'rename']);
+
+        $fileExistsOption = api_get_setting('document_if_file_exists_option');
+        $defaultFileExistsOption = 'rename';
+        if (!empty($fileExistsOption)) {
+            $defaultFileExistsOption = $fileExistsOption;
+        }
+        $form->setDefaults(['if_exists' => $defaultFileExistsOption]);
 
         // Check box options
         $form->addElement(
@@ -10885,21 +10890,8 @@ class learnpath
                         $my_item->appendChild($my_masteryscore);
 
                         // Attach this item to the organization element or hits parent if there is one.
-
                         if (!empty($item->parent) && $item->parent != 0) {
                             $children = $organization->childNodes;
-                            /*for ($i = 0; $i < $children->length; $i++) {
-                                $item_temp = $children->item($i);
-                                if ($exe_id == 81) {
-                                error_log($item_temp->nodeName );
-                                    error_log($item_temp->getAttribute('identifier'));
-                                }
-                                if ($item_temp->nodeName == 'item') {
-                                    if ($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent) {
-                                        $item_temp->appendChild($my_item);
-                                    }
-                                }
-                            }*/
                             $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                             if ($possible_parent) {
                                 if ($possible_parent->getAttribute('identifier') == 'ITEM_'.$item->parent) {
@@ -11011,17 +11003,11 @@ class learnpath
                                             // The calculated real path is really inside the chamilo root path.
                                             // Reduce file path to what's under the DocumentRoot.
                                             $file_path = substr($file_path, strlen($root_path));
-                                            //echo $file_path;echo '<br /><br />';
-                                            //error_log('Reduced path: '.$file_path, 0);
                                             $zip_files_abs[] = $file_path;
                                             $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
                                             $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                             $my_dep->setAttribute('xml:base', '');
                                         } elseif (empty($file_path)) {
-                                            /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
-                                            if (strpos($document_root,-1) == '/') {
-                                                $document_root = substr(0, -1, $document_root);
-                                            }*/
                                             $file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
                                             $file_path = str_replace('//', '/', $file_path);
                                             if (file_exists($file_path)) {
@@ -11527,7 +11513,7 @@ EOD;
 
         // Get the max order of the items
         $sql = "SELECT max(display_order) AS display_order FROM $table_lp_item
-                WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'";
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $rs_max_order = Database::query($sql);
         $row_max_order = Database::fetch_object($rs_max_order);
         $max_order = $row_max_order->display_order;
@@ -11535,8 +11521,8 @@ EOD;
         $sql = "SELECT id as previous FROM $table_lp_item
                 WHERE 
                     c_id = $course_id AND 
-                    lp_id = '".$this->lp_id."' AND 
-                    display_order = '".$max_order."' ";
+                    lp_id = ".$this->lp_id." AND 
+                    display_order = '$max_order' ";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
 
@@ -12866,6 +12852,7 @@ EOD;
      */
     private static function getCategoryLinkForTool($categoryId)
     {
+        $categoryId = (int) $categoryId;
         $link = 'lp/lp_controller.php?'.api_get_cidreq().'&'
             .http_build_query(
                 [

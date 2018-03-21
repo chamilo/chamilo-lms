@@ -35,4 +35,8 @@
             </div>
         </div>
     </div>
+{% else %}
+    <div class="alert alert-info">
+        {{ 'NoPendingSurveys'|get_lang }}
+    </div>
 {% endfor %}

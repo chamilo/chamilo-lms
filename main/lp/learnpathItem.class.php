@@ -2793,7 +2793,8 @@ class learnpathItem
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug) {
             error_log('learnpathItem::save()', 0);
         }
         // First check if parameters passed via GET can be saved here
@@ -2804,7 +2805,7 @@ class learnpathItem
                 $status != $this->possible_status[0] && // not attempted
                 $status != $this->possible_status[1]    //incomplete
             ) {
-                if (self::DEBUG > 1) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::save() - save reinit blocked by setting',
                         0
@@ -2813,7 +2814,7 @@ class learnpathItem
                 // Do nothing because the status has already been set. Don't allow it to change.
                 // TODO: Check there isn't a special circumstance where this should be saved.
             } else {
-                if (self::DEBUG > 1) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::save() - SCORM save request received',
                         0
@@ -2822,7 +2823,7 @@ class learnpathItem
 
                 // Get all new settings from the URL
                 if ($from_outside) {
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log(
                             'learnpathItem::save() - Getting item data from outside',
                             0
@@ -2832,7 +2833,7 @@ class learnpathItem
                         switch ($param) {
                             case 'score':
                                 $this->set_score($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting score to '.$value,
                                         0
@@ -2841,7 +2842,7 @@ class learnpathItem
                                 break;
                             case 'max':
                                 $this->set_max_score($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting view_max_score to '.$value,
                                         0
@@ -2850,7 +2851,7 @@ class learnpathItem
                                 break;
                             case 'min':
                                 $this->min_score = $value;
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting min_score to '.$value,
                                         0
@@ -2860,7 +2861,7 @@ class learnpathItem
                             case 'lesson_status':
                                 if (!empty($value)) {
                                     $this->set_status($value);
-                                    if (self::DEBUG > 2) {
+                                    if ($debug) {
                                         error_log(
                                             'learnpathItem::save() - setting status to '.$value,
                                             0
@@ -2870,7 +2871,7 @@ class learnpathItem
                                 break;
                             case 'time':
                                 $this->set_time($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting time to '.$value,
                                         0
@@ -2879,7 +2880,7 @@ class learnpathItem
                                 break;
                             case 'suspend_data':
                                 $this->current_data = $value;
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting suspend_data to '.$value,
                                         0
@@ -2888,7 +2889,7 @@ class learnpathItem
                                 break;
                             case 'lesson_location':
                                 $this->set_lesson_location($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting lesson_location to '.$value,
                                         0
@@ -2897,7 +2898,7 @@ class learnpathItem
                                 break;
                             case 'core_exit':
                                 $this->set_core_exit($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting core_exit to '.$value,
                                         0
@@ -2914,7 +2915,7 @@ class learnpathItem
                         }
                     }
                 } else {
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log(
                             'learnpathItem::save() - Using inside item status',
                             0
@@ -2926,6 +2927,9 @@ class learnpathItem
         } else {
             // If not SCO, such messages should not be expected.
             $type = strtolower($this->type);
+            if ($debug) {
+                error_log("type: $type");
+            }
             switch ($type) {
                 case 'asset':
                     if ($prereqs_complete) {
@@ -2947,7 +2951,7 @@ class learnpathItem
             }
         }
 
-        if (self::DEBUG > 1) {
+        if ($debug) {
             error_log(
                 'New LP - End of learnpathItem::save() - Calling write_to_db()',
                 0
@@ -3756,13 +3760,14 @@ class learnpathItem
      */
     public function write_to_db()
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug) {
             error_log('learnpathItem::write_to_db()', 0);
         }
 
         // Check the session visibility.
         if (!api_is_allowed_to_session_edit()) {
-            if (self::DEBUG > 0) {
+            if ($debug) {
                 error_log('return false api_is_allowed_to_session_edit');
             }
 
@@ -3806,7 +3811,7 @@ class learnpathItem
            ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
            ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
-            if (self::DEBUG > 1) {
+            if ($debug) {
                 error_log(
                     "This info shouldn't be saved as the credit or lesson mode info prevent it"
                 );
@@ -3840,7 +3845,7 @@ class learnpathItem
                     //"max_time_allowed" => ,
                     "lesson_location" => $this->lesson_location,
                 ];
-                if (self::DEBUG > 2) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
                         0
@@ -3862,7 +3867,7 @@ class learnpathItem
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".intval($this->get_attempt_id());
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::write_to_db() - Querying item_view: '.$sql,
                     0
@@ -3887,7 +3892,7 @@ class learnpathItem
                     "lesson_location" => $this->lesson_location,
                 ];
 
-                if (self::DEBUG > 2) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
                         0
@@ -4071,7 +4076,7 @@ class learnpathItem
                     }
                     $this->current_start_time = time();
                 }
-                if (self::DEBUG > 2) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::write_to_db() - Updating item_view: '.$sql,
                         0
@@ -4095,7 +4100,7 @@ class learnpathItem
                 if (Database::num_rows($res) > 0) {
                     $row = Database::fetch_array($res);
                     $lp_iv_id = $row[0];
-                    if (self::DEBUG > 2) {
+                    if ($debug) {
                         error_log(
                             'learnpathItem::write_to_db() - Got item_view_id '.
                                 $lp_iv_id.', now checking interactions ',
@@ -4193,7 +4198,7 @@ class learnpathItem
             }
         }
 
-        if (self::DEBUG > 2) {
+        if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }
 

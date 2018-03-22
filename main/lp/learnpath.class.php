@@ -5569,49 +5569,50 @@ class learnpath
      */
     public function stop_previous_item()
     {
-        if ($this->debug > 0) {
+        $debug = $this->debug;
+        if ($debug) {
             error_log('New LP - In learnpath::stop_previous_item()', 0);
         }
 
         if ($this->last != 0 && $this->last != $this->current && is_object($this->items[$this->last])) {
-            if ($this->debug > 2) {
+            if ($debug) {
                 error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' is object', 0);
             }
             switch ($this->get_type()) {
                 case '3':
                     if ($this->items[$this->last]->get_type() != 'au') {
-                        if ($this->debug > 2) {
+                        if ($debug> 2) {
                             error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 3 is <> au', 0);
                         }
                         $this->items[$this->last]->close();
                     } else {
-                        if ($this->debug > 2) {
+                        if ($debug > 2) {
                             error_log('New LP - In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals', 0);
                         }
                     }
                     break;
                 case '2':
                     if ($this->items[$this->last]->get_type() != 'sco') {
-                        if ($this->debug > 2) {
+                        if ($debug > 2) {
                             error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 2 is <> sco', 0);
                         }
                         $this->items[$this->last]->close();
                     } else {
-                        if ($this->debug > 2) {
+                        if ($debug > 2) {
                             error_log('New LP - In learnpath::stop_previous_item() - Item is a SCO, saving is managed by SCO signals', 0);
                         }
                     }
                     break;
                 case '1':
                 default:
-                    if ($this->debug > 2) {
+                    if ($debug > 2) {
                         error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 1 is asset', 0);
                     }
                     $this->items[$this->last]->close();
                     break;
             }
         } else {
-            if ($this->debug > 2) {
+            if ($debug > 2) {
                 error_log('New LP - In learnpath::stop_previous_item() - No previous element found, ignoring...', 0);
             }
 

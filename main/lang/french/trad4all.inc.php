@@ -8045,4 +8045,6 @@ $MessagesExchangeBetweenXAndY = "Échange de messages entre %s et %s";
 $YouWillReceivedASecondEmail = "Vous allez recevoir un autre mail avec votre mot de passe.";
 $YouReceivedAnEmailWithTheUsername = "Vous avez du recevoir un autre mail avec votre identifiant.";
 $YourChoice = "Votre choix";
+$NewDocumentAddedToCourseX = "Un nouveau document a été déposé dans le cours %s";
+$DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "Un nouveau document %s a été déposé dans l'outil document de votre cours %s par %s.";
 ?>

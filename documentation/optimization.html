@@ -194,7 +194,17 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
     find out about these possible bottlenecks after we release stable versions of Chamilo. This is why we list those
     queries here. However, as soon as we confirm them with a few real life scenarios, we add them into the core of
     Chamilo so you can benefit from them immediately by installing a new version.
-
+    <p>In Chamilo 1.11.x you can boost the DB tables related surveys invitations by adding the following indexes:</p>
+    <pre>
+        CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id);
+        CREATE INDEX idx_survey_code ON c_survey (code);
+        CREATE INDEX idx_survey_inv_code ON c_survey_invitation (survey_code);
+        CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id);
+    </pre>
+    Also by adding a index on access_url_rel_session to improve the course/session list
+    <pre>
+        CREATE INDEX idx_accessurs_sid ON access_url_rel_session (session_id);
+    </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.6/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />

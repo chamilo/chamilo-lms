@@ -81,7 +81,9 @@ class GradeBookResult
      *
      * @param array $data
      *
-     * @return bool|null False on error
+     * @return void False on error
+     * @throws PHPExcel_Exception
+     * @throws PHPExcel_Writer_Exception
      */
     public function exportCompleteReportXLS($data)
     {
@@ -91,14 +93,14 @@ class GradeBookResult
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $line = 0;
-        $column = 1;
+        $line = 1;
+        $column = 0;
 
         //headers
         foreach ($data[0] as $header_col) {
             $worksheet->SetCellValueByColumnAndRow(
-                $line,
                 $column,
+                $line,
                 html_entity_decode(strip_tags($header_col))
             );
             $column++;
@@ -111,8 +113,8 @@ class GradeBookResult
             $column = 0;
             foreach ($data[1][$i] as $col_name) {
                 $worksheet->SetCellValueByColumnAndRow(
-                    $line,
                     $column,
+                    $line,
                     html_entity_decode(strip_tags($col_name))
                 );
                 $column++;

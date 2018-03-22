@@ -1313,8 +1313,8 @@ function filter_extension(&$filename)
  * @param int    $readonly
  * @param bool   $saveVisibility
  * @param int    $group_id       group.id
- * @param int    $session_id     Session ID, if any
- * @param int    $userId         creator id
+ * @param int    $sessionId     Session ID, if any
+ * @param int    $userId creator user id
  *
  * @return int id if inserted document
  */
@@ -1328,13 +1328,13 @@ function add_document(
     $readonly = 0,
     $saveVisibility = true,
     $group_id = 0,
-    $session_id = 0,
+    $sessionId = 0,
     $userId = 0
 ) {
-    $session_id = empty($session_id) ? api_get_session_id() : $session_id;
+    $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
 
-    $readonly = intval($readonly);
+    $readonly = (int) $readonly;
     $c_id = $courseInfo['real_id'];
     $params = [
         'c_id' => $c_id,
@@ -1344,7 +1344,7 @@ function add_document(
         'title' => $title,
         'comment' => $comment,
         'readonly' => $readonly,
-        'session_id' => $session_id,
+        'session_id' => $sessionId,
     ];
     $table = Database::get_course_table(TABLE_DOCUMENT);
     $documentId = Database::insert($table, $params);
@@ -1358,9 +1358,32 @@ function add_document(
                 TOOL_DOCUMENT,
                 $group_id,
                 $courseInfo,
-                $session_id,
+                $sessionId,
                 $userId
             );
+        }
+
+        $allowNotification = api_get_configuration_value('send_notification_when_document_added');
+        if ($allowNotification) {
+            $courseTitle = $courseInfo['title'];
+            if (!empty($sessionId)) {
+                $sessionInfo = api_get_session_info($sessionId);
+                $courseTitle .= " ( ".$sessionInfo['name'].") ";
+            }
+
+            $url = api_get_path(WEB_CODE_PATH).
+                'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$documentId;
+            $link = Display::url(basename($title), $url, ['target' => '_blank']);
+            $userInfo = api_get_user_info($userId);
+
+            $message = sprintf(
+                get_lang('DocumentXHasBeenAddedToDocumentInYourCourseXByUserX'),
+                $link,
+                $courseTitle,
+                $userInfo['complete_name']
+            );
+            $subject = sprintf(get_lang('NewDocumentAddedToCourseX'), $courseTitle);
+            MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
         }
 
         return $documentId;

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use League\Csv\Reader;
-use Patchwork\Utf8;
+use Ddeboer\DataImport\Reader\ExcelReader;
 
 /**
  * Class Import
@@ -67,5 +67,21 @@ class Import
         }
 
         return [];
+    }
+
+    /**
+     * @param string $filename
+     * @return array
+     */
+    public static function xlsToArray($filename)
+    {
+        if (empty($filename)) {
+            return [];
+        }
+
+        $file = new \SplFileObject($filename);
+        $reader = new ExcelReader($file, 0);
+
+        return $reader;
     }
 }

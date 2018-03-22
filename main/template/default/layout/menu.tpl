@@ -57,9 +57,10 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li class="user-header">
                                     <div class="text-center">
-                                        <img class="img-circle" src="{{ _u.avatar_medium }}"
-                                             alt="{{ _u.complete_name }}"/>
-                                        <p class="name"><a href="{{ profile_url }}">{{ _u.complete_name }}</a></p>
+                                        <a href="{{ profile_url }}">
+                                            <img class="img-circle" src="{{ _u.avatar_medium }}" alt="{{ _u.complete_name }}"/>
+                                            <p class="name">{{ _u.complete_name }}</p>
+                                        </a>
                                         <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ _u.email }}</p>
                                     </div>
                                 </li>
@@ -67,6 +68,11 @@
                                 <li class="user-body">
                                     <a title="{{ "Inbox"|get_lang }}" href="{{ message_url }}">
                                         <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                                    </a>
+                                </li>
+                                <li class="user-body">
+                                    <a href="{{ _p.web_main ~ 'survey/pending.php' }}">
+                                        <em class="fa fa-pie-chart"></em> {{ 'PendingSurveys'|get_lang }}
                                     </a>
                                 </li>
                                 {% if certificate_url %}

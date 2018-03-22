@@ -400,19 +400,14 @@ class GlossaryManager
                 Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        if (!api_is_anonymous()) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-                Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
-        }
-
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
-                Display::return_icon('import_csv.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (!api_is_anonymous()) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="export_opener" href="'.api_get_self().'?'.api_get_cidreq().'&action=export">'.
+                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (($view == 'table') || (!isset($view))) {
@@ -753,6 +748,7 @@ class GlossaryManager
         $template = new Template('', false, false, false, true, false, false);
         $layout = $template->get_template('glossary/export_pdf.tpl');
         $template->assign('items', $data);
+
         $html = $template->fetch($layout);
         $courseCode = api_get_course_id();
         $pdf = new PDF();
@@ -803,5 +799,46 @@ class GlossaryManager
         }
 
         return false;
+    }
+
+    /**
+     * @param string $format
+     */
+    public static function exportToFormat($format)
+    {
+        if ($format == 'pdf') {
+            self::export_to_pdf();
+            return ;
+        }
+
+        $data = GlossaryManager::get_glossary_data(
+            0,
+            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+            0,
+            'ASC'
+        );
+        usort($data, 'sorter');
+        $list = [];
+        $list[] = ['term', 'definition'];
+        $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');
+        foreach ($data as $line) {
+            $definition = $line[1];
+            if ($allowStrip) {
+                // htmlspecialchars_decode replace &#39 to '
+                // strip_tags remove HTML tags
+                $definition = htmlspecialchars_decode(strip_tags($definition), ENT_QUOTES);
+            }
+            $list[] = [$line[0], $definition];
+        }
+        $filename = 'glossary_course_'.api_get_course_id();
+
+        switch ($format) {
+            case 'csv':
+                Export::arrayToCsv($list, $filename);
+                break;
+            case 'xls':
+                Export::arrayToXls($list, $filename);
+                break;
+        }
     }
 }

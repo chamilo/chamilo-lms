@@ -2831,6 +2831,9 @@ class SurveyUtil
      *
      * @return string html code that are the actions that can be performed on any survey
      *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version January 2007
@@ -2850,12 +2853,15 @@ class SurveyUtil
         }
 
         $survey_id = $survey->getSurveyId();
-        $return = '';
+        $actions = [];
         $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
+        $codePath = api_get_path(WEB_CODE_PATH);
+        $params = [];
+        parse_str(api_get_cidreq(), $params);
 
         $reportingLink = Display::url(
-            Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
+            Display::return_icon('statistics.png', get_lang('Reporting')),
+            $codePath.'survey/reporting.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
 
         if ($drh) {
@@ -2866,50 +2872,64 @@ class SurveyUtil
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
-            $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq()
-                .'&action=edit&survey_id='.$survey_id.'">'
-                .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)
-                .'</a>';
+            $actions[] = Display::url(
+                Display::return_icon('edit.png', get_lang('Edit')),
+                $codePath.'survey/create_new_survey.php?'
+                    .http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id])
+            );
             if (SurveyManager::survey_generation_hash_available()) {
-                $return .= Display::url(
-                    Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink'), '', ICON_SIZE_SMALL),
-                    api_get_path(WEB_CODE_PATH).'survey/generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq()
+                $actions[] = Display::url(
+                    Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink')),
+                    $codePath.'survey/generate_link.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
             }
-            $return .= Display::url(
-                Display::return_icon('backup.png', get_lang('CopySurvey'), '', ICON_SIZE_SMALL),
-                'copy_survey.php?survey_id='.$survey_id.'&'.api_get_cidreq()
+            $actions[] = Display::url(
+                Display::return_icon('backup.png', get_lang('CopySurvey')),
+                $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
             );
-            $return .= Display::url(
-                Display::return_icon('copy.png', get_lang('DuplicateSurvey'), '', ICON_SIZE_SMALL),
-                'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq()
+            $actions[] = Display::url(
+                Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
+                $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
             );
 
-            $return .= ' <a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq()
-                .'&action=empty&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''
-                .addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'
-                .Display::return_icon('clean.png', get_lang('EmptySurvey'), '', ICON_SIZE_SMALL)
-                .'</a>&nbsp;';
+            $actions[] = Display::url(
+                Display::return_icon('clean.png', get_lang('EmptySurvey')),
+                $codePath.'survey/survey_list.php'
+                    .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
+                [
+                    'onclick' => "javascript: if (!confirm('"
+                        .addslashes(api_htmlentities(get_lang("EmptySurvey").'?'))
+                        ."')) return false;"
+                ]
+            );
         }
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'
-            .Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_SMALL)
-            .'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'
-            .Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_SMALL)
-            .'</a>&nbsp;';
-        $return .= $hideReportingButton ? '' : $reportingLink;
+        $actions[] = Display::url(
+            Display::return_icon('preview_view.png', get_lang('Preview')),
+            $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = Display::url(
+            Display::return_icon('mail_send.png', get_lang('Publish')),
+            $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = $hideReportingButton ? null : $reportingLink;
 
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
-            $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq()
-                .'&action=delete&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''
-                .addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'
-                .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL)
-                .'</a>&nbsp;';
+            $actions[] = Display::url(
+                Display::return_icon('delete.png', get_lang('Delete')),
+                $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
+                [
+                    'onclick' => "javascript: if(!confirm('"
+                        .addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES))
+                        ."')) return false;"
+                ]
+            );
         }
 
-        return $return;
+        return implode(PHP_EOL, $actions);
     }
 
     /**
@@ -2920,16 +2940,30 @@ class SurveyUtil
     public static function modify_filter_for_coach($survey_id)
     {
         $survey_id = (int) $survey_id;
-        $return = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'
-            .Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.
-            Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_SMALL)
-            .'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=empty&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''
-            .addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES)).'\')) return false;">'
-            .Display::return_icon('clean.png', get_lang('EmptySurvey'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+        $actions = [];
+        $codePath = api_get_path(WEB_CODE_PATH);
+        $params = [];
+        parse_str(api_get_cidreq(), $params);
+        $actions[] = Display::url(
+            Display::return_icon('preview_view.png', get_lang('Preview')),
+            $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = Display::url(
+            Display::return_icon('mail_send.png', get_lang('Publish')),
+            $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = Display::url(
+            Display::return_icon('clean.png', get_lang('EmptySurvey')),
+            $codePath.'survey/survey_list.php?'
+                .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
+            [
+                'onclick' => "javascript: if(!confirm('"
+                    .addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES))
+                    ."')) return false;"
+            ]
+        );
 
-        return $return;
+        return implode(PHP_EOL, $actions);
     }
 
     /**
@@ -3722,5 +3756,33 @@ class SurveyUtil
         $response = Database::affected_rows($result);
 
         return $response > 0;
+    }
+
+    /**
+     * Get the pending surveys for a user
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getUserPendingInvitations($userId)
+    {
+        $now = api_get_utc_datetime(null, false, true);
+
+        $dql = "
+            SELECT s, si FROM ChamiloCourseBundle:CSurvey s
+            INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
+                WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
+            WHERE si.user = :user_id AND s.availFrom <= :now AND s.availTill >= :now
+                AND si.answered = 0
+            ORDER BY s.availTill ASC
+        ";
+
+        $pendingSurveys = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['user_id' => $userId, 'now' => $now->format('Y-m-d')])
+            ->getResult();
+
+        return $pendingSurveys;
     }
 }

@@ -284,7 +284,9 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = $groupInfo['iid'];
+        }
     }
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -3409,6 +3411,10 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$work['id'];
     $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $parentWork['title']);
     $content = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work['title'], $url);
+
+    if (!empty($data['comment'])) {
+        $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
+    }
 
     if (!empty($userIdListToSend)) {
         foreach ($userIdListToSend as $userIdToSend) {

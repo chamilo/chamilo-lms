@@ -513,7 +513,7 @@ class MessageManager
      * @param bool   $directMessage
      * @param array  $smsParameters
      * @param bool   $uploadFiles        Do not upload files using the MessageManager class
-     * @param bool   $attachmentList
+     * @param array $attachmentList
      *
      * @return bool
      */
@@ -2400,7 +2400,16 @@ class MessageManager
         }
 
         foreach ($users as $userInfo) {
-            self::send_message_simple($userInfo['user_id'], $subject, $message, $senderId);
+            self::send_message_simple(
+                $userInfo['user_id'],
+                $subject,
+                $message,
+                $senderId,
+                false,
+                false,
+                [],
+                false
+            );
         }
     }
 

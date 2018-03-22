@@ -8113,4 +8113,8 @@ $YouNeedToCreateASkillProfile = "You need to create a skill profile";
 $SkillLevel = "Skill level";
 $Portfolio = "Portfolio";
 $AddPortfolioItem = "Add item to portfolio";
+$NewDocumentAddedToCourseX = "New document added to course %s";
+$DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "A new document %s has been added to the document tool in your course %s by %s.";
+$PendingSurveys = "Pending surveys";
+$NoPendingSurveys = "No pending surveys";
 ?>

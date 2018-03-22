@@ -1,27 +1,28 @@
 <?php
+/* For license terms, see /license.txt */
 
 /**
  * This script initiates a test2pdf plugin.
  *
  * @package chamilo.plugin.test2pdf
  */
-require __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 $course_plugin = 'test2pdf'; //needed in order to load the plugin lang variables
-require_once dirname(__FILE__).'/config.php';
-
-//$_setting['student_view_enabled'] = 'false';
+require_once __DIR__.'/config.php';
 
 $tool_name = get_lang('Test2pdf');
-$tpl = new Template($tool_name);
 
 $plugin = Test2pdfPlugin::create();
-$t2p_plugin = $plugin->get('enable_plugin');
+$enable = $plugin->get('enable_plugin') == 'true';
 
-if ($t2p_plugin == "true") {
+if ($enable) {
     $url = 'src/view-pdf.php?'.api_get_cidreq();
     header('Location: '.$url);
     exit;
 } else {
-    echo get_lang('PluginDisabledFromAdminPanel');
+    Display::addFlash(Display::return_message($plugin->get_lang('PluginDisabledFromAdminPanel')));
+    $url = api_get_path(WEB_PATH).'courses/'.api_get_course_id().'/index.php?id_session='.api_get_session_id();
+    header('Location:'.$url);
+    exit;
 }

@@ -25,8 +25,33 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#glossary_title").focus();
 }
+
 $(document).ready(function () {
     setFocus();
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );
+    $( "#dialog-confirm" ).dialog({
+        autoOpen: false,
+        show: "blind",
+        resizable: false,
+        height:300,
+        modal: true
+    });
+    $("#export_opener").click(function() {
+        var targetUrl = $(this).attr("href");        
+        $( "#dialog-confirm" ).dialog({
+            width:400,
+            height:300,
+            buttons: {
+                "'.addslashes(get_lang('Download')).'": function() {
+                    var export_format = $("input[name=export_format]:checked").val();
+                    location.href = targetUrl+"&export_format="+export_format;
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        $( "#dialog-confirm" ).dialog("open");
+        return false;
+    });
 });
 </script>';
 
@@ -225,11 +250,28 @@ switch ($action) {
             'post',
             api_get_self().'?action=import&'.api_get_cidreq()
         );
-        $form->addHeader('header', get_lang('ImportGlossary'));
-        $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
+        $form->addHeader(get_lang('ImportGlossary'));
+        $form->addElement('file', 'file', get_lang('File'));
+        $group = [];
+        $group[] = $form->createElement(
+            'radio',
+            'file_type',
+            '',
+            'CSV',
+            'csv'
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'file_type',
+            '',
+            'XLS',
+            'xls'
+        );
+        $form->addGroup($group, '', get_lang('FileType'), null);
         $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
         $form->addElement('checkbox', 'update', null, get_lang('UpdateExistingGlossaryTerms'));
         $form->addButtonImport(get_lang('Import'), 'SubmitImport');
+        $form->setDefaults(['file_type' => 'csv']);
         $content = $form->returnForm();
 
         $content .= get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')';
@@ -240,6 +282,8 @@ switch ($action) {
         </pre>';
 
         if ($form->validate()) {
+            $values = $form->getSubmitValues();
+
             $termsDeleted = [];
             //this is a bad idea //jm
             if (isset($_POST['replace']) && $_POST['replace']) {
@@ -255,7 +299,17 @@ switch ($action) {
             }
 
             $updateTerms = isset($_POST['update']) && $_POST['update'] ? true : false;
-            $data = Import::csvToArray($_FILES['file']['tmp_name']);
+
+            $format = $values['file_type'];
+            switch ($format) {
+                case 'csv':
+                    $data = Import::csvToArray($_FILES['file']['tmp_name']);
+                    break;
+                case 'xls':
+                    $data = Import::xlsToArray($_FILES['file']['tmp_name']);
+                    break;
+            }
+
             $goodList = [];
             $updatedList = [];
             $addedList = [];
@@ -368,32 +422,8 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $data = GlossaryManager::get_glossary_data(
-            0,
-            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
-            0,
-            'ASC'
-        );
-
-        usort($data, 'sorter');
-        $list = [];
-        $list[] = ['term', 'definition'];
-        $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');
-        foreach ($data as $line) {
-            $definition = $line[1];
-            if ($allowStrip) {
-                $definition = strip_tags($definition);
-            }
-            $list[] = [$line[0], $definition];
-        }
-        $filename = 'glossary_course_'.api_get_course_id();
-        Export::arrayToCsv($list, $filename);
-        break;
-    case 'export_to_pdf':
-        if (!api_is_allowed_to_edit(null, true)) {
-            api_not_allowed(true);
-        }
-        GlossaryManager::export_to_pdf();
+        $format = isset($_GET['export_format']) ? $_GET['export_format'] : 'csv';
+        GlossaryManager::exportToFormat($format);
         break;
     case 'changeview':
         if (in_array($_GET['view'], ['list', 'table'])) {
@@ -428,5 +458,44 @@ Display::display_header($tool_name);
 Display::display_introduction_section(TOOL_GLOSSARY);
 
 echo $content;
+
+$extra = '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
+$form = new FormValidator(
+    'report',
+    'post',
+    api_get_self().'?'.api_get_cidreq(),
+    null,
+    ['class' => 'form-vertical']
+);
+$form->addElement(
+    'radio',
+    'export_format',
+    null,
+    get_lang('ExportAsCSV'),
+    'csv',
+    ['id' => 'export_format_csv_label']
+);
+$form->addElement(
+    'radio',
+    'export_format',
+    null,
+    get_lang('ExportAsXLS'),
+    'xls',
+    ['id' => 'export_format_xls_label']
+);
+$form->addElement(
+    'radio',
+    'export_format',
+    null,
+    get_lang('ExportToPDF'),
+    'pdf',
+    ['id' => 'export_format_pdf_label']
+);
+
+$form->setDefaults(['export_format' => 'csv']);
+$extra .= $form->returnForm();
+$extra .= '</div>';
+
+echo $extra;
 
 Display::display_footer();

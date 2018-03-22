@@ -116,7 +116,7 @@ class learnpathItem
                 $course_id = intval($course_id);
             }
             $sql = "SELECT * FROM $items_table
-                    WHERE c_id = $course_id AND id = $id";
+                    WHERE iid = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
                 $this->error = 'Could not find given learnpath item in learnpath_item table';
@@ -154,7 +154,7 @@ class learnpathItem
 
         // Load children list
         if (!empty($this->lp_id)) {
-            $sql = "SELECT id FROM $items_table
+            $sql = "SELECT iid FROM $items_table
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->lp_id." AND
@@ -162,7 +162,7 @@ class learnpathItem
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_assoc($res)) {
-                    $this->children[] = $row['id'];
+                    $this->children[] = $row['iid'];
                 }
             }
 
@@ -236,20 +236,6 @@ class learnpathItem
         if (($index + 1) > $this->interactions_count) {
             $this->interactions_count = $index + 1;
         }
-        /*
-        if (is_array($this->interactions[$index]) && count($this->interactions[$index]) > 0) {
-            $this->interactions[$index] = $params;
-            return false;
-        } else {
-            if (count($params)==8) {
-            // We rely on the calling script to provide parameters in the right order.
-                $this->interactions[$index] = $params;
-                return true;
-            } else {
-                return false;
-            }
-        }
-        */
     }
 
     /**
@@ -312,7 +298,6 @@ class learnpathItem
         }
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
         $course_id = api_get_course_int_id();
 
         $sql = "DELETE FROM $lp_item_view
@@ -323,14 +308,14 @@ class learnpathItem
         Database::query($sql);
 
         $sql = "SELECT * FROM $lp_item
-                WHERE c_id = $course_id AND id = ".$this->db_id;
+                WHERE iid = ".$this->db_id;
         $res_sel = Database::query($sql);
         if (Database::num_rows($res_sel) < 1) {
             return false;
         }
 
         $sql = "DELETE FROM $lp_item
-                WHERE c_id = $course_id AND id = ".$this->db_id;
+                WHERE iid = ".$this->db_id;
         Database::query($sql);
         if (self::DEBUG > 0) {
             error_log('Deleting from lp_item: '.$sql);
@@ -535,7 +520,7 @@ class learnpathItem
                             FROM '.$table_doc.'
                             WHERE
                                 c_id = '.$course_id.' AND
-                                id = '.$path;
+                                iid = '.$path;
                     $res = Database::query($sql);
                     $row = Database::fetch_array($res);
                     $real_path = 'document'.$row['path'];
@@ -631,7 +616,7 @@ class learnpathItem
 
         if ($checkdb) {
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id FROM $tbl
+            $sql = "SELECT iid FROM $tbl
                     WHERE
                         c_id = $course_id AND
                         lp_item_id = ".$this->db_id." AND
@@ -768,10 +753,10 @@ class learnpathItem
     public function get_lesson_mode()
     {
         $mode = 'normal';
-        if ($this->get_prevent_reinit() != 0) { // If prevent_reinit == 0
+        if ($this->get_prevent_reinit() != 0) {
+            // If prevent_reinit == 0
             $my_status = $this->get_status();
-            if ($my_status != $this->possible_status[0]
-                    && $my_status != $this->possible_status[1]) {
+            if ($my_status != $this->possible_status[0] && $my_status != $this->possible_status[1]) {
                 $mode = 'review';
             }
         }
@@ -940,7 +925,6 @@ class learnpathItem
      */
     public function get_prevent_reinit()
     {
-        $course_id = api_get_course_int_id();
         if (self::DEBUG > 2) {
             error_log('learnpathItem::get_prevent_reinit()', 0);
         }
@@ -949,7 +933,7 @@ class learnpathItem
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT prevent_reinit
                     FROM $table
-                    WHERE c_id = $course_id AND id = ".$this->lp_id;
+                    WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in lp table";
@@ -994,13 +978,12 @@ class learnpathItem
         if (self::DEBUG > 2) {
             error_log('learnpathItem::get_seriousgame_mode()', 0);
         }
-        $course_id = api_get_course_int_id();
         if (!isset($this->seriousgame_mode)) {
             if (!empty($this->lp_id)) {
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT seriousgame_mode
                         FROM $table
-                        WHERE c_id = $course_id AND id = ".$this->lp_id;
+                        WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in learnpath table";
@@ -1795,12 +1778,9 @@ class learnpathItem
      */
     public function get_terms()
     {
-        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $lp_item
-                WHERE
-                    c_id = $course_id AND
-                    id='".intval($this->db_id)."'";
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $table
+                WHERE iid = ".intval($this->db_id);
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -2509,7 +2489,9 @@ class learnpathItem
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                        if ($quiz['exe_result'] >= $minScore &&
+                                                            $quiz['exe_result'] <= $maxScore
+                                                        ) {
                                                             $returnstatus = true;
                                                         } else {
                                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
@@ -2517,7 +2499,9 @@ class learnpathItem
                                                         }
                                                     } else {
                                                         // Classic way
-                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                        if ($quiz['exe_result'] >=
+                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                        ) {
                                                             $returnstatus = true;
                                                         } else {
                                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
@@ -2581,7 +2565,6 @@ class learnpathItem
                                     } else {
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
-
                                         if (!$returnstatus) {
                                             if (self::DEBUG > 1) {
                                                 error_log(
@@ -2607,7 +2590,7 @@ class learnpathItem
                                                 TABLE_LP_VIEW
                                             );
 
-                                            $sql = 'SELECT id FROM '.$lp_view.'
+                                            $sql = 'SELECT iid FROM '.$lp_view.'
                                                     WHERE
                                                         c_id = '.$course_id.' AND
                                                         user_id = '.$user_id.'  AND
@@ -2627,9 +2610,7 @@ class learnpathItem
                                                         lp_item_id = '.$refs_list[$prereqs_string].'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $status_array = Database::fetch_row(
-                                                $rs_lp
-                                            );
+                                            $status_array = Database::fetch_row($rs_lp);
                                             $status = $status_array[0];
 
                                             $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
@@ -2795,8 +2776,6 @@ class learnpathItem
             //$this->current_score = 0;
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
-            //$this->current_data = '';scorm
-            //$this->status = $this->possible_status[0];
             $this->interactions_count = $this->get_interactions_count(true);
         }
 
@@ -2926,21 +2905,9 @@ class learnpathItem
                                 }
                                 break;
                             case 'interactions':
-                                //$interactions = unserialize($value);
-                                //foreach($interactions as $interaction){
-                                //	;
-                                //}
                                 break;
                             case 'objectives':
                                 break;
-                            //case 'maxtimeallowed':
-                            //$this->set_max_time_allowed($value);
-                            //break;
-                            /*
-                            case 'objectives._count':
-                                $this->attempt_id = $value;
-                                break;
-                            */
                             default:
                                 // Ignore.
                                 break;
@@ -3368,7 +3335,6 @@ class learnpathItem
     public function set_terms($terms)
     {
         global $charset;
-        $course_id = api_get_course_int_id();
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $a_terms = preg_split('/,/', $terms);
         $i_terms = preg_split('/,/', $this->get_terms());
@@ -3384,9 +3350,7 @@ class learnpathItem
         $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset));
         $sql = "UPDATE $lp_item
                 SET terms = '$terms'
-                WHERE
-                    c_id = $course_id AND
-                    id=".$this->get_id();
+                WHERE iid=".$this->get_id();
         Database::query($sql);
         // Save it to search engine.
         if (api_get_setting('search_enabled') == 'true') {
@@ -3624,8 +3588,7 @@ class learnpathItem
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($this->lp_id);
-        $sql = "SELECT * FROM $lp_table
-                WHERE id = $lp_id AND c_id = $course_id";
+        $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
@@ -3718,7 +3681,7 @@ class learnpathItem
         if (is_array($this->objectives) && count($this->objectives) > 0) {
             // Save objectives.
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id
+            $sql = "SELECT iid
                     FROM $tbl
                     WHERE
                         c_id = $course_id AND
@@ -3740,7 +3703,7 @@ class learnpathItem
                     $iva_table = Database::get_course_table(
                         TABLE_LP_IV_OBJECTIVE
                     );
-                    $iva_sql = "SELECT id FROM $iva_table
+                    $iva_sql = "SELECT iid FROM $iva_table
                                 WHERE
                                     c_id = $course_id AND
                                     lp_iv_id = $lp_iv_id AND
@@ -3759,7 +3722,7 @@ class learnpathItem
                             "score_raw = '".Database::escape_string($objective[2])."',".
                             "score_min = '".Database::escape_string($objective[4])."',".
                             "score_max = '".Database::escape_string($objective[3])."' ".
-                            "WHERE c_id = $course_id AND id = $iva_id";
+                            "WHERE c_id = $course_id AND iid = $iva_id";
                         Database::query($ivau_sql);
                     } else {
                         // Insert new one.
@@ -4122,7 +4085,7 @@ class learnpathItem
             ) {
                 // Save interactions.
                 $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                $sql = "SELECT id FROM $tbl
+                $sql = "SELECT iid FROM $tbl
                         WHERE
                             c_id = $course_id AND
                             lp_item_id = ".$this->db_id." AND
@@ -4156,7 +4119,7 @@ class learnpathItem
                         );
 
                         //also check for the interaction ID as it must be unique for this SCO view
-                        $iva_sql = "SELECT id FROM $iva_table
+                        $iva_sql = "SELECT iid FROM $iva_table
                                     WHERE
                                         c_id = $course_id AND
                                         lp_iv_id = $lp_iv_id AND
@@ -4196,7 +4159,7 @@ class learnpathItem
                                 $iva_table,
                                 $params,
                                 [
-                                    'c_id = ? AND id = ?' => [
+                                    'c_id = ? AND iid = ?' => [
                                         $course_id,
                                         $iva_id,
                                     ],
@@ -4308,9 +4271,7 @@ class learnpathItem
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item SET
                         audio = '".Database::escape_string($file_path)."'
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        id = '".intval($this->db_id)."'";
+                    WHERE iid = ".intval($this->db_id);
             Database::query($sql);
         }
 
@@ -4332,15 +4293,14 @@ class learnpathItem
             $course_info['code']
         );
 
+        $file_path = '';
         if (!empty($document_data)) {
             $file_path = basename($document_data['path']);
             // Store the mp3 file in the lp_item table.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "UPDATE $tbl_lp_item SET
+            $table = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "UPDATE $table SET
                         audio = '".Database::escape_string($file_path)."'
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        id = ".intval($this->db_id);
+                    WHERE iid = ".intval($this->db_id);
             Database::query($sql);
         }
 
@@ -4356,14 +4316,13 @@ class learnpathItem
      */
     public function remove_audio()
     {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = api_get_course_int_id();
         if (empty($this->db_id)) {
             return false;
         }
-        $sql = "UPDATE $tbl_lp_item SET
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "UPDATE $table SET
                 audio = ''
-                WHERE c_id = $course_id AND id IN (".$this->db_id.")";
+                WHERE iid IN (".$this->db_id.")";
         Database::query($sql);
     }
 
@@ -4412,6 +4371,7 @@ class learnpathItem
         if ($type == 'simple') {
             if (in_array($status, ['failed', 'passed', 'browsed'])) {
                 $myLessonStatus = get_lang('ScormIncomplete');
+
                 $classStatus = 'warning';
             }
         }
@@ -4566,7 +4526,7 @@ class learnpathItem
      */
     public function createForumThread($currentForumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'/forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $em = Database::getManager();
         $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
@@ -4615,7 +4575,7 @@ class learnpathItem
      */
     public function dissociateForumThread($threadIid)
     {
-        $threadIid = intval($threadIid);
+        $threadIid = (int) $threadIid;
         $em = Database::getManager();
 
         $forumThread = $em->find('ChamiloCourseBundle:CForumThread', $threadIid);
@@ -4624,9 +4584,7 @@ class learnpathItem
             return false;
         }
 
-        $forumThread->setThreadTitle(
-            "{$this->get_title()} - {$this->db_id}"
-        );
+        $forumThread->setThreadTitle("{$this->get_title()} - {$this->db_id}");
         $forumThread->setLpItemId(0);
 
         $em->persist($forumThread);

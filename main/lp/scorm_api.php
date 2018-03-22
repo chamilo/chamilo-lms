@@ -1622,7 +1622,7 @@ function switch_item(current_item, next_item){
     }
 
     //(3) open the new item in the content_id frame
-    switch (next_item){
+    switch (next_item) {
         case 'next':
             next_item = olms.lms_next_item;
             olms.info_lms_item[0] = olms.info_lms_item[1];
@@ -1663,7 +1663,7 @@ function switch_item(current_item, next_item){
         xajax_start_timer();
     }
 
-    //(4) refresh the audio player if needed
+    // (4) refresh the audio player if needed
     $.ajax({
         type: "POST",
         url: "lp_nav.php"+courseUrl,
@@ -1672,8 +1672,9 @@ function switch_item(current_item, next_item){
         },
         beforeSend: function() {
             $.each($('audio'), function () {
-                var player = new MediaElementPlayer($(this));
-                player.pause();
+                if (this.player && this.player !== undefined) {
+                    this.player.pause();
+                }
             });
         },
         success: function(tmp_data) {

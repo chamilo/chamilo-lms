@@ -21,7 +21,7 @@ $this_section = SECTION_COURSES;
 
 $linkId = intval($_GET['link_id']);
 
-$linkInfo = Link::get_link_info($linkId);
+$linkInfo = Link::getLinkInfo($linkId);
 $linkUrl = html_entity_decode(Security::remove_XSS($linkInfo['url']));
 // Launch event
 Event::event_link($linkId);

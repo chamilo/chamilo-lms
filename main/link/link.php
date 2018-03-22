@@ -107,7 +107,9 @@ switch ($action) {
             $form = Link::getLinkForm(null, 'addlink', $token);
             if ($form->validate() && Security::check_token('get')) {
                 // Here we add a link
-                Link::addlinkcategory("link");
+                $linkId = Link::addlinkcategory('link');
+                Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+
                 Security::clear_token();
                 header('Location: '.$linkListUrl);
                 exit;
@@ -119,6 +121,7 @@ switch ($action) {
         $form = Link::getLinkForm($id, 'editlink');
         if ($form->validate()) {
             Link::editLink($id, $form->getSubmitValues());
+            Skill::saveSkills($form, ITEM_TYPE_LINK, $id);
             header('Location: '.$linkListUrl);
             exit;
         }

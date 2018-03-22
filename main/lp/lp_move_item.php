@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
@@ -12,12 +14,14 @@
  * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
-
 api_protect_course_script();
+
+/** @var learnpath $learnPath */
+$learnPath = Session::read('oLP');
 
 /* Header and action code */
 $htmlHeadXtra[] = '<script>'.
-$_SESSION['oLP']->get_js_dropdown_array().
+$learnPath->get_js_dropdown_array().
 "
     function load_cbo(id) {
         if (!id) {
@@ -53,10 +57,6 @@ $_SESSION['oLP']->get_js_dropdown_array().
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : '';
 $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : '';
@@ -68,8 +68,7 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql = "SELECT * FROM $tbl_lp
-        WHERE c_id = $course_id AND id = $learnpath_id";
+$sql = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
 
 $result = Database::query($sql);
 $therow = Database::fetch_array($result);
@@ -101,7 +100,7 @@ $interbreadcrumb[] = [
 
 // Theme calls
 $show_learn_path = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme();
+$lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(get_lang('Move'), 'Path');
 
@@ -130,10 +129,10 @@ function confirmation(name) {
 </script>
 <?php
 
-echo $_SESSION['oLP']->build_action_menu();
+echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div class="col-md-3">';
-    echo $_SESSION['oLP']->return_new_tree();
+    echo $learnPath->return_new_tree();
 echo '</div>';
 
 echo '<div class="col-md-9">';
@@ -142,13 +141,11 @@ if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been moved.';
     $msg .= '</div>';
-    echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
+    echo $learnPath->display_item($_GET['id'], $msg);
 } else {
-    echo $_SESSION['oLP']->display_move_item($_GET['id']);
+    echo $learnPath->display_move_item($_GET['id']);
 }
 echo '</div>';
 echo '</div>';
-
-/* FOOTER */
 
 Display::display_footer();

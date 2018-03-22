@@ -220,6 +220,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "update_toc('$mylesson_status','".$new_item_id."');".
         "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
     $return .= 'updateGamificationValues(); ';
+    // ofaj
     $return .= "$('#item-parent-names').load('"
         .api_get_path(WEB_AJAX_PATH)
         ."lp.ajax.php?a=get_parent_names&new_item=$new_item_id');";

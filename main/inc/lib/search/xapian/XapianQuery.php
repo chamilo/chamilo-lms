@@ -43,7 +43,6 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
 
         $query = null;
         $enquire = new XapianEnquire($db);
-
         if (!empty($query_string)) {
             $query_parser = new XapianQueryParser();
             //TODO: choose stemmer

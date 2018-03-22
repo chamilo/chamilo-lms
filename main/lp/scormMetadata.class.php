@@ -36,7 +36,7 @@ class scormMetadata
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.
-                    return false;
+                    break;
                     //break;
                 case 'manifest': // Do the same as the default.
                     $children = $element->childNodes;
@@ -95,13 +95,9 @@ class scormMetadata
                             }
                         }
                     }
-
-                    return true;
                 //break;
             }
             // End parsing using PHP5 DOMXML methods.
         }
-
-        return false;
     }
 }

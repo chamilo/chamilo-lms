@@ -23,6 +23,8 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param   int View ID
  * @param   int Current item ID
  * @param   int New item ID
+ *
+ * @return string
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {
@@ -139,10 +141,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      * -lms_view_id
      * -lms_user_id
      */
-    $mytotal = $mylp->getTotalItemsCountWithoutDirs();
-    $mycomplete = $mylp->get_complete_items_count();
-    $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
     $mynext = $mylp->get_next_item_id();
     $myprevious = $mylp->get_previous_item_id();
     $myitemtype = $mylpi->get_type();
@@ -150,9 +148,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $mycredit = $mylpi->get_credit();
     $mylaunch_data = $mylpi->get_launch_data();
     $myinteractions_count = $mylpi->get_interactions_count();
-    $myobjectives_count = $mylpi->get_objectives_count();
     $mycore_exit = $mylpi->get_core_exit();
-
     $return .=
             "olms.lms_lp_id=".$lp_id.";".
             "olms.lms_item_id=".$next_item.";".

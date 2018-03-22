@@ -46,7 +46,7 @@ class scormItem extends learnpathItem
                     parent::__construct($element, api_get_user_id(), $course_id);
                     $this->scorm_contact = false;
                     // TODO: Implement this way of metadata object creation.
-                    return false;
+                    break;
                 case 'manifest': // Do the same as the default.
                 default:
                     //if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
@@ -138,13 +138,9 @@ class scormItem extends learnpathItem
                             }
                         }
                     }
-
-                    return true;
             }
             // End parsing using PHP5 DOMXML methods.
         }
-
-        return false;
     }
 
     /**

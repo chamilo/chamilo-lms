@@ -62,7 +62,6 @@ if ($debug > 2) {
 }
 
 // Is this needed? This is probabaly done in the header file.
-//$_user							= $_SESSION['_user'];
 $file = Session::read('file');
 $oLP = unserialize(Session::read('lpobject'));
 $oItem = &$oLP->items[$oLP->current];

@@ -333,7 +333,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     dataUrl = canvas.toDataURL();
 
                 $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
-                $(\'[name="'.$id.'_crop_image_base_64]"\').val(dataUrl);
+                $(\'[name="'.$id.'_crop_image_base_64"]\').val(dataUrl);
                 $cropButton.hide();
             });
         });

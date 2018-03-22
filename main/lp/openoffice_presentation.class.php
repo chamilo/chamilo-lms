@@ -141,14 +141,16 @@ class OpenofficePresentation extends OpenofficeDocument
 
             $slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$dir.utf8_encode($file_name);
             $slide_src = str_replace('\/\/', '/', $slide_src);
-            fwrite($fp,
+            fwrite(
+                $fp,
 '<html>
     <head>
     </head>
     <body>
         <img src="'.$slide_src.'" />
     </body>
-</html>'); // This indentation is to make the generated html files to look well.
+</html>'
+            ); // This indentation is to make the generated html files to look well.
 
             fclose($fp);
             $document_id = add_document(

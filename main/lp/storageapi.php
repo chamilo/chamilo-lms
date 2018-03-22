@@ -46,7 +46,7 @@ switch ($_REQUEST['action']) {
         break;
     case "stackgetall":
         if (storage_can_set($_REQUEST['svuser'])) {
-            print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+            echo storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
         }
         break;
     case "getposition":

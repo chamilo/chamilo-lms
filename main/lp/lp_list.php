@@ -50,7 +50,7 @@ if (api_get_setting('search_enabled') === 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
     search_widget_prepare($htmlHeadXtra);
 }
-$current_session = api_get_session_id();
+$sessionId = api_get_session_id();
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 
@@ -90,7 +90,7 @@ if ($is_allowed_to_edit) {
         }
     }
     $actionLeft = '';
-    if (!$current_session) {
+    if (!$sessionId) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'new_folder.png',
@@ -154,7 +154,7 @@ if (!empty($categoriesTempList)) {
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 $lpIsShown = false;
-$filteredCategoryId = $action === 'view_category' && !empty($_GET['id']) ? intval($_GET['id']) : 0;
+$filteredCategoryId = ($action === 'view_category' && !empty($_GET['id'])) ? intval($_GET['id']) : 0;
 
 if ($filteredCategoryId) {
     /** @var CLpCategory $category */
@@ -169,7 +169,7 @@ if ($filteredCategoryId) {
 }
 
 $test_mode = api_get_setting('server_type');
-$user = UserManager::getRepository()->find($userId);
+$user = api_get_user_entity($userId);
 
 $data = [];
 /** @var CLpCategory $item */
@@ -182,8 +182,8 @@ foreach ($categories as $item) {
 
     $list = new LearnpathList(
         api_get_user_id(),
-        null,
-        null,
+        api_get_course_id(),
+        api_get_session_id(),
         null,
         false,
         $categoryId
@@ -196,8 +196,7 @@ foreach ($categories as $item) {
         continue;
     }
 
-    $showBlockedPrerequisite
-        = api_get_configuration_value('show_prerequisite_as_blocked');
+    $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
     $listData = [];
 
     if (!empty($flat_list)) {
@@ -369,7 +368,7 @@ foreach ($categories as $item) {
             }
 
             if ($is_allowed_to_edit) {
-                $dsp_progress = '<center>'.$progress.'</center>';
+                $dsp_progress = '<center>'.$progress.'%</center>';
             } else {
                 $dsp_progress = '';
                 if (!api_is_invitee()) {
@@ -386,10 +385,11 @@ foreach ($categories as $item) {
             $copy = null;
             $lp_auto_launch_icon = null;
             $actionSeriousGame = null;
+            $actionUpdateScormFile = '';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
-                if ($current_session == $details['lp_session']) {
+                if ($sessionId == $details['lp_session']) {
                     $dsp_edit_lp = Display::url(
                         Display::return_icon(
                             'settings.png',
@@ -406,7 +406,7 @@ foreach ($categories as $item) {
                 }
 
                 // BUILD
-                if ($current_session == $details['lp_session']) {
+                if ($sessionId == $details['lp_session']) {
                     if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
                         $dsp_build = Display::url(
                             Display::return_icon(
@@ -476,7 +476,7 @@ foreach ($categories as $item) {
                 );
 
                 /* PUBLISH COMMAND */
-                if ($current_session == $details['lp_session']) {
+                if ($sessionId == $details['lp_session']) {
                     if ($details['lp_published'] == "i") {
                         $dsp_publish = Display::url(
                             Display::return_icon(
@@ -509,7 +509,7 @@ foreach ($categories as $item) {
                  * When lp status is completed, user can still modify the attempt (adds/time change score, and browse it)
                  * It is thus a mix betwenn multiple attempt and mono attempt
                  */
-                if ($current_session == $details['lp_session']) {
+                if ($sessionId == $details['lp_session']) {
                     if ($details['seriousgame_mode'] == 1
                         && $details['lp_prevent_reinit'] == 1
                     ) {
@@ -557,7 +557,7 @@ foreach ($categories as $item) {
                 }
 
                 /* SCREEN LP VIEW */
-                if ($current_session == $details['lp_session']) {
+                if ($sessionId == $details['lp_session']) {
                     switch ($details['lp_view_mode']) {
                         case 'fullscreen':
                             $dsp_default_view = Display::url(
@@ -619,7 +619,7 @@ foreach ($categories as $item) {
                 }
 
                 /*  DEBUG  */
-                if ($test_mode == 'test' or api_is_platform_admin()) {
+                if ($test_mode == 'test' || api_is_platform_admin()) {
                     if ($details['lp_scorm_debug'] == 1) {
                         $dsp_debug = Display::url(
                             Display::return_icon(
@@ -644,13 +644,13 @@ foreach ($categories as $item) {
                 /* Export */
                 if ($details['lp_type'] == 1) {
                     $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('Export')),
+                        Display::return_icon('cd.png', get_lang('ExportShort')),
                         api_get_self()."?".api_get_cidreq()
                             ."&action=export&lp_id=$id"
                     );
                 } elseif ($details['lp_type'] == 2) {
                     $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('Export')),
+                        Display::return_icon('cd.png', get_lang('ExportShort')),
                         api_get_self()."?".api_get_cidreq()
                             ."&action=export&lp_id=$id&export_name="
                             .api_replace_dangerous_char($name).".zip"
@@ -658,7 +658,7 @@ foreach ($categories as $item) {
                 } else {
                     $dsp_disk = Display::return_icon(
                         'cd_na.png',
-                        get_lang('Export')
+                        get_lang('ExportShort')
                     );
                 }
 
@@ -719,7 +719,7 @@ foreach ($categories as $item) {
                 );
 
                 /* Delete */
-                if ($current_session == $details['lp_session']) {
+                if ($sessionId == $details['lp_session']) {
                     $dsp_delete = Display::url(
                         Display::return_icon(
                             'delete.png',
@@ -741,7 +741,7 @@ foreach ($categories as $item) {
 
                 /* COLUMN ORDER	 */
                 // Only active while session mode is not active
-                if ($current_session == 0) {
+                if ($sessionId == 0) {
                     if ($details['lp_display_order'] == 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown')),
@@ -768,6 +768,14 @@ foreach ($categories as $item) {
                                 ."&action=move_lp_up&lp_id=$id&category_id=$categoryId"
                         );
                     }
+                }
+
+                if ($details['lp_type'] == 2) {
+                    $url = api_get_path(WEB_CODE_PATH)."lp/lp_update_scorm.php?".api_get_cidreq()."&lp_id=$id";
+                    $actionUpdateScormFile = Display::url(
+                        Display::return_icon('upload_file.png', get_lang('Update')),
+                        $url
+                    );
                 }
 
                 if ($is_allowed_to_edit) {
@@ -853,6 +861,7 @@ foreach ($categories as $item) {
                 'action_order' => $dsp_order,
                 'action_serious_game' => $actionSeriousGame,
                 'action_subscribe_users' => $subscribeUsers,
+                'action_update_scorm' => $actionUpdateScormFile,
             ];
 
             $lpIsShown = true;
@@ -867,7 +876,7 @@ foreach ($categories as $item) {
             $courseInfo,
             TOOL_LEARNPATH_CATEGORY,
             $item->getId(),
-            $current_session
+            $sessionId
         ),
         'category_is_published' => learnpath::categoryIsPublished(
             $item,

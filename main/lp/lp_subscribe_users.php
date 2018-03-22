@@ -152,15 +152,11 @@ $groupMultiSelect = $form->addElement(
 // submit button
 $form->addButtonSave(get_lang('Save'));
 
-Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
-
 $defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
 }
 $form->setDefaults($defaults);
-
-$tpl = new Template();
 
 $currentUser = api_get_user_entity(api_get_user_id());
 
@@ -202,13 +198,13 @@ if ($form->validate()) {
     header("Location: $url");
     exit;
 } else {
+    Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
     $headers = [
         get_lang('SubscribeUsersToLp'),
         get_lang('SubscribeGroupsToLp'),
     ];
+    $tpl = new Template();
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('tabs', $tabs);
+    $tpl->assign('content', $tabs);
+    $tpl->display_one_col_template();
 }
-
-$layout = $tpl->get_template('learnpath/subscribe_users.tpl');
-$tpl->display($layout);

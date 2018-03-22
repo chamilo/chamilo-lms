@@ -280,10 +280,11 @@ EOT;
     /**
      * @param string $name
      * @param string $value
+     * @param array  $attributes
      */
-    public function addHidden($name, $value)
+    public function addHidden($name, $value, $attributes = [])
     {
-        $this->addElement('hidden', $name, $value);
+        $this->addElement('hidden', $name, $value, $attributes);
     }
 
     /**
@@ -301,11 +302,12 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param string $icon       font-awesome
-     * @param string $style      default|primary|success|info|warning|danger|link
-     * @param string $size       large|default|small|extra-small
-     * @param string $class      Example plus is transformed to icon fa fa-plus
+     * @param string $icon          font-awesome
+     * @param string $style         default|primary|success|info|warning|danger|link
+     * @param string $size          large|default|small|extra-small
+     * @param string $class         Example plus is transformed to icon fa fa-plus
      * @param array  $attributes
+     * @param bool   $createElement
      *
      * @return HTML_QuickForm_button
      */
@@ -972,9 +974,8 @@ EOT;
 
         if ($geolocalization) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $this->addHtml(
-                '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>'
-            );
+            $url = '//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey;
+            $this->addHtml('<script type="text/javascript" src="'.$url.'" ></script>');
         }
         $this->addElement(
             'text',
@@ -988,10 +989,10 @@ EOT;
             <div class="form-group">
                 <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
                 <div class="col-sm-8">
-                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit">
+                    <button class="null btn btn-default" id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit">
                         <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
                     </button>
-                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit">
+                    <button class="null btn btn-default" id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit">
                     <em class="fa fa-crosshairs"></em> 
                     '.get_lang('MyLocation').'
                     </button>
@@ -1012,7 +1013,7 @@ EOT;
         ');
 
         $this->addHtml('<script>
-            $(document).ready(function() {
+            $(function() {
                 if (typeof google === "object") {
                     var address = $("#'.$name.'").val();
                     initializeGeo'.$name.'(address, false);
@@ -1074,9 +1075,7 @@ EOT;
                 };
 
                 map_'.$name.' = new google.maps.Map(document.getElementById("map_'.$name.'"), myOptions);
-
                 var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
-
                 if (geocoder && parameter) {
                     geocoder.geocode(parameter, function(results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {

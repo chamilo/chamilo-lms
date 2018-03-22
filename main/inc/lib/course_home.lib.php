@@ -510,7 +510,9 @@ class CourseHome
 
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
-                $conditions = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
+                $conditions = ' WHERE visibility = 1 AND 
+                                (category = "authoring" OR category = "interaction" OR category = "plugin") AND 
+                                name <> "notebookteacher" ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
                     $conditions = ' WHERE (
                         visibility = 1 AND (

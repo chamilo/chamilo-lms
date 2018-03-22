@@ -108,7 +108,7 @@ class AppPlugin
         $pluginList = [];
         if (!empty($pluginListName)) {
             foreach ($pluginListName as $pluginName) {
-                $pluginInfo = $this->getPluginInfo($pluginName);
+                $pluginInfo = $this->getPluginInfo($pluginName, true);
                 if (isset($pluginInfo['plugin_class'])) {
                     $pluginList[] = $pluginInfo['plugin_class']::create();
                 }

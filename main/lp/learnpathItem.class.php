@@ -3381,27 +3381,26 @@ class learnpathItem
      * often give it as 00:00:00.0000.
      *
      * @param    string    Time as given by SCORM
+     * @param string $format
      */
     public function set_time($scorm_time, $format = 'scorm')
     {
         $debug = self::DEBUG;
-        if ($debug > 0) {
-            error_log('learnpathItem::set_time('.$scorm_time.')', 0);
+        if ($debug) {
+            error_log("learnpathItem::set_time($scorm_time, $format)");
+            error_log("this->type: ".$this->type);
+            error_log("this->current_start_time: ".$this->current_start_time);
         }
 
         if ($scorm_time == '0' &&
             $this->type != 'sco' &&
             $this->current_start_time != 0
         ) {
-            $my_time = time() - $this->current_start_time;
-            if ($my_time > 0) {
-                $this->update_time($my_time);
-                if ($debug > 0) {
-                    error_log(
-                        'learnpathItem::set_time('.$scorm_time.') - '.
-                            'found asset - set time to '.$my_time,
-                        0
-                    );
+            $myTime = time() - $this->current_start_time;
+            if ($myTime > 0) {
+                $this->update_time($myTime);
+                if ($debug) {
+                    error_log('found asset - set time to '.$myTime);
                 }
             }
         } else {
@@ -3418,11 +3417,11 @@ class learnpathItem
                         $min = $res[2];
                         $sec = $res[3];
                         // Getting total number of seconds spent.
-                        $total_sec = $hour * 3600 + $min * 60 + $sec;
-                        if ($debug > 0) {
-                            error_log("total_sec : $total_sec");
+                        $totalSec = $hour * 3600 + $min * 60 + $sec;
+                        if ($debug) {
+                            error_log("totalSec : $totalSec");
                         }
-                        $this->scorm_update_time($total_sec);
+                        $this->scorm_update_time($totalSec);
                     }
                     break;
                 case 'int':
@@ -3515,42 +3514,20 @@ class learnpathItem
     /**
      * Updates the time info according to the given session_time.
      *
-     * @param int $total_sec Time in seconds
+     * @param int $totalSec Time in seconds
      */
-    public function update_time($total_sec = 0)
+    public function update_time($totalSec = 0)
     {
         if (self::DEBUG > 0) {
-            error_log('learnpathItem::update_time('.$total_sec.')', 0);
+            error_log('learnpathItem::update_time('.$totalSec.')');
         }
-        if ($total_sec >= 0) {
+        if ($totalSec >= 0) {
             // Getting start time from finish time. The only problem in the calculation is it might be
             // modified by the scripts processing time.
             $now = time();
-            $start = $now - $total_sec;
+            $start = $now - $totalSec;
             $this->current_start_time = $start;
             $this->current_stop_time = $now;
-            /*if (empty($this->current_start_time)) {
-                $this->current_start_time = $start;
-                $this->current_stop_time  = $now;
-            } else {
-                //if ($this->current_stop_time != $this->current_start_time) {
-                    // If the stop time has already been set before to something else
-                    // than the start time, add the given time to what's already been
-                    // recorder.
-                    // This is the SCORM way of doing things, because the time comes from
-                    // core.session_time, not core.total_time
-                    // UPDATE: adding time to previous time is only done on SCORM's finish()
-                    // call, not normally, so for now ignore this section.
-                    //$this->current_stop_time = $this->current_stop_time + $stop;
-                    //error_log('New LP - Adding '.$stop.' seconds - now '.$this->current_stop_time, 0);
-                //} else {
-                    // If no previous stop time set, use the one just calculated now from
-                    // start time.
-                    //$this->current_start_time = $start;
-                    //$this->current_stop_time  = $now;
-                    //error_log('New LP - Setting '.$stop.' seconds - now '.$this->current_stop_time, 0);
-                //}
-            }*/
         }
     }
 
@@ -3563,7 +3540,7 @@ class learnpathItem
     public function scorm_update_time($total_sec = 0)
     {
         $debug = self::DEBUG;
-        if ($debug > 0) {
+        if ($debug) {
             error_log('learnpathItem::scorm_update_time()');
             error_log("total_sec: $total_sec");
         }
@@ -3587,7 +3564,7 @@ class learnpathItem
         } else {
             $total_time = $row['total_time'];
         }
-        if ($debug > 0) {
+        if ($debug) {
             error_log("Original total_time: $total_time");
         }
 
@@ -3603,12 +3580,14 @@ class learnpathItem
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
         if ($this->type == 'sco' && $accumulateScormTime != 0) {
+            if ($debug) {
+                error_log("accumulateScormTime is on. total_time modified: $total_time + $total_sec");
+            }
             $total_time += $total_sec;
         } else {
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
             $total_sec = $this->fixAbusiveTime($total_sec);
-
-            if ($debug > 0) {
+            if ($debug) {
                 error_log("after fix abusive: $total_sec");
                 error_log("total_time: $total_time");
                 error_log("this->last_scorm_session_time: ".$this->last_scorm_session_time);
@@ -3622,8 +3601,7 @@ class learnpathItem
             }
         }
 
-        if ($debug > 0) {
-            error_log("accumulate_scorm_time: $accumulateScormTime");
+        if ($debug) {
             error_log("total_time modified: $total_time");
         }
 
@@ -3646,8 +3624,10 @@ class learnpathItem
                         lp_item_id = {$this->db_id} AND 
                         lp_view_id = {$this->view_id} AND 
                         view_count = {$this->get_attempt_id()}";
-            if ($debug > 0) {
+            if ($debug) {
+                error_log('-------------total_time updated ------------------------');
                 error_log($sql);
+                error_log('-------------------------------------');
             }
             Database::query($sql);
         }
@@ -4109,10 +4089,10 @@ class learnpathItem
                     $this->current_start_time = time();
                 }
                 if ($debug) {
-                    error_log(
-                        'learnpathItem::write_to_db() - Updating item_view: '.$sql,
-                        0
-                    );
+                    error_log('-------------------------------------------');
+                    error_log('learnpathItem::write_to_db() - Updating item_view:');
+                    error_log($sql);
+                    error_log('-------------------------------------------');
                 }
                 Database::query($sql);
             }

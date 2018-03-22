@@ -1811,7 +1811,8 @@ class learnpathItem
      */
     public function get_total_time()
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug) {
             error_log(
                 'learnpathItem::get_total_time() for item '.$this->db_id.
                 ' - Initially, current_start_time = '.$this->current_start_time.
@@ -1821,7 +1822,7 @@ class learnpathItem
         }
         if ($this->current_start_time == 0) {
             // Shouldn't be necessary thanks to the open() method.
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::get_total_time() - Current start time was empty',
                     0
@@ -1833,7 +1834,7 @@ class learnpathItem
         if (time() < $this->current_stop_time ||
             $this->current_stop_time == 0
         ) {
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::get_total_time() - Current stop time was '
                     .'greater than the current time or was empty',
@@ -1849,7 +1850,7 @@ class learnpathItem
         $time = $this->current_stop_time - $this->current_start_time;
 
         if ($time < 0) {
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::get_total_time() - Time smaller than 0. Returning 0',
                     0
@@ -1859,7 +1860,7 @@ class learnpathItem
             return 0;
         } else {
             $time = $this->fixAbusiveTime($time);
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'Current start time = '.$this->current_start_time.', current stop time = '.
                     $this->current_stop_time.' Returning '.$time."-----------\n"
@@ -3601,7 +3602,7 @@ class learnpathItem
         }
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
-        if ($accumulateScormTime != 0) {
+        if ($this->type == 'sco' && $accumulateScormTime != 0) {
             $total_time += $total_sec;
         } else {
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
@@ -3949,6 +3950,9 @@ class learnpathItem
                             $mytime = ((int) $time_exe_date - (int) $time_start_date);
                             $mytime = $this->fixAbusiveTime($mytime);
                             $total_time = " total_time = ".$mytime.", ";
+                            if ($debug) {
+                                error_log("quiz: $total_time");
+                            }
                         }
                     } else {
                         $my_type_lp = learnpath::get_type_static($this->lp_id);
@@ -3964,6 +3968,9 @@ class learnpathItem
                         if ($this->seriousgame_mode == 1 && $this->type == 'sco') {
                             $total_time = " total_time = total_time +".$this->get_total_time().", ";
                             $my_status = " status = '".$this->get_status(false)."' ,";
+                            if ($debug) {
+                                error_log("seriousgame_mode time changed: $total_time");
+                            }
                         } elseif ($this->get_prevent_reinit() == 1) {
                             // Process of status verified into data base.
                             $sql = 'SELECT status FROM '.$item_view_table.'
@@ -3983,6 +3990,9 @@ class learnpathItem
                             ) {
                                 $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("get_prevent_reinit = 1 time changed: $total_time");
+                                }
                             } else {
                                 // Verified into database.
                                 if (!in_array($row_verified['status'], $case_completed) &&
@@ -3990,17 +4000,26 @@ class learnpathItem
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
+                                    if ($debug) {
+                                        error_log("total_time time changed case 1: $total_time");
+                                    }
                                 } elseif (in_array($row_verified['status'], $case_completed) &&
                                     $my_type_lp == 2 && $this->type != 'sco'
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
+                                    if ($debug) {
+                                        error_log("total_time time changed case 2: $total_time");
+                                    }
                                 } else {
                                     if (($my_type_lp == 3 && $this->type == 'au') ||
                                         ($my_type_lp == 1 && $this->type != 'dir')) {
                                         // Is AICC or Chamilo LP
                                         $total_time = " total_time = total_time + ".$this->get_total_time().", ";
                                         $my_status = " status = '".$this->get_status(false)."' ,";
+                                        if ($debug) {
+                                            error_log("total_time time changed case 3: $total_time");
+                                        }
                                     }
                                 }
                             }
@@ -4009,13 +4028,22 @@ class learnpathItem
                             if (in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
                                 // Reset zero new attempt ?
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("total_time time changed Multiple attempt case 1: $total_time");
+                                }
                             } elseif (!in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
                                 $total_time = " total_time = ".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("total_time time changed Multiple attempt case 2: $total_time");
+                                }
                             } else {
                                 // It is chamilo LP.
                                 $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("total_time time changed Multiple attempt case 3: $total_time");
+                                }
                             }
 
                             // This code line fixes the problem of wrong status.
@@ -4038,6 +4066,10 @@ class learnpathItem
                                     $total_time = '';
                                 } else {
                                     $total_time = " total_time = total_time + ".$this->get_total_time().", ";
+                                }
+
+                                if ($debug) {
+                                    error_log("total_time time my_type_lp: $total_time");
                                 }
                             }
                         }

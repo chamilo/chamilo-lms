@@ -1,6 +1,7 @@
 <?php
 $strings['plugin_title'] = "Notas profesores";
-$strings['plugin_comment'] = "Este plugin permite a los profesores de un curso tener un bloc de notas compartido. Alumnos no tienen acceso.";
+$strings['plugin_comment'] = "Este plugin permite a los profesores de un curso tener un bloc de notas compartido.
+                              Alumnos no tienen acceso.";
 $strings['NotebookTeacher'] = "Notas profesores";
 $strings['enable_plugin_notebookteacher'] = "Activar plugin";
 $strings['ToolDisabled'] = "La herramienta está deshabilitada desde la administración";

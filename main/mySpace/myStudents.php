@@ -429,7 +429,7 @@ if ($notebookTeacherEnable && !empty($student_id) && !empty($course_code)) {
         Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM).
     '</a>';
 }
-    
+
 if (api_can_login_as($student_id)) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$student_id.'&sec_token='.$token.'">'.
         Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';

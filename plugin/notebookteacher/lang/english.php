@@ -1,6 +1,7 @@
 <?php
 $strings['plugin_title'] = "Teacher notes";
-$strings['plugin_comment'] = "This plugin allows the teachers of a course to have a shared notebook. Students do not have access.";
+$strings['plugin_comment'] = "This plugin allows the teachers of a course to have a shared notebook.
+                              Students do not have access.";
 $strings['NotebookTeacher'] = "Teacher notes";
 $strings['enable_plugin_notebookteacher'] = "Enable plugin";
 $strings['ToolDisabled'] = "The tool is disabled from the administration";

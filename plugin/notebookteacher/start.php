@@ -14,7 +14,7 @@ $enable = $plugin->get('enable_plugin_notebookteacher') == 'true';
 if ($enable) {
     if (api_is_teacher() || api_is_drh()) {
         $url = 'src/index.php?'.api_get_cidreq();
-        header('Location: ' . $url);
+        header('Location: '.$url);
         exit;
     } else {
         /** @var \Chamilo\CoreBundle\Entity\Session $session */
@@ -28,7 +28,7 @@ if ($enable) {
             Display::return_message($plugin->get_lang('ToolForTeacher'))
         );
 
-        header('Location: ' . $url);
+        header('Location: '.$url);
     }
 } else {
     echo $plugin->get_lang('ToolDisabled');

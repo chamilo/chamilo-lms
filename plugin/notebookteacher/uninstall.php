@@ -8,7 +8,7 @@
  * @package chamilo.plugin.notebookteacher
  */
 /**
- * Queries
+ * Queries.
  */
-require_once __DIR__ . '/config.php';
+require_once __DIR__.'/config.php';
 NotebookTeacherPlugin::create()->uninstall();

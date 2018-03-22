@@ -29,7 +29,6 @@ class NotebookTeacherPlugin extends Plugin
     }
 
     /**
-     *
      * @return StaticPlugin
      */
     public static function create()
@@ -48,7 +47,7 @@ class NotebookTeacherPlugin extends Plugin
         $this->install_course_fields_in_all_courses();
 
         $tablesToBeCompared = [
-                self::TABLE_NOTEBOOKTEACHER
+                self::TABLE_NOTEBOOKTEACHER,
         ];
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -72,7 +71,7 @@ class NotebookTeacherPlugin extends Plugin
         copy($srcfile3, $dstfile3);
         copy($srcfile4, $dstfile4);
 
-        require_once api_get_path(SYS_PLUGIN_PATH) . 'notebookteacher/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'notebookteacher/database.php';
     }
 
     /**
@@ -84,11 +83,11 @@ class NotebookTeacherPlugin extends Plugin
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
 
         $tablesToBeDeleted = [
-            TABLE_NOTEBOOKTEACHER
+            TABLE_NOTEBOOKTEACHER,
         ];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
-            $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";
+            $sql = "DROP TABLE IF EXISTS $table";
             Database::query($sql);
         }
         $this->manageTab(false);
@@ -118,7 +117,7 @@ class NotebookTeacherPlugin extends Plugin
         copy($srcfile3, $dstfile3);
         copy($srcfile4, $dstfile4);
 
-        Display::display_header(get_lang(ucfirst($tool)));
+        Display::display_header(get_lang(ucfirst(self::TABLE_NOTEBOOKTEACHER)));
         echo 'Plugin actualizado';
         Display::display_footer();
     }

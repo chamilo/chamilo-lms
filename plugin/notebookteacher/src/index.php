@@ -21,7 +21,7 @@ if ($enable) {
         $location = 'index.php?'.api_get_cidreq();
 
         // Additional javascript
-        $htmlHeadXtra[] = NotebookTeacher::javascript_notebook();
+        $htmlHeadXtra[] = NotebookTeacher::javascriptNotebook();
         $htmlHeadXtra[] = '<script>
         function setFocus(){
             $("#note_title").focus();
@@ -47,11 +47,17 @@ if ($enable) {
         // Tool name
         if ($action === 'addnote') {
             $tool = 'NoteAddNew';
-            $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => $plugin->get_lang('NotebookTeacher')];
+            $interbreadcrumb[] = [
+                'url' => 'index.php?'.api_get_cidreq(),
+                'name' => $plugin->get_lang('NotebookTeacher'),
+            ];
         }
         if ($action === 'editnote') {
             $tool = 'ModifyNote';
-            $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => $plugin->get_lang('NotebookTeacher')];
+            $interbreadcrumb[] = [
+                'url' => 'index.php?'.api_get_cidreq(),
+                'name' => $plugin->get_lang('NotebookTeacher')
+            ];
         }
 
         // Displaying the header
@@ -112,9 +118,9 @@ if ($enable) {
                 } else {
                     $sql .= " AND session_course_user.status = 0 ";
                 }
-                $sql .= $sort_by_first_name ? 
-                        ' ORDER BY user.firstname, user.lastname' : 
-                        ' ORDER BY user.lastname, user.firstname';
+                $sql .= $sort_by_first_name
+                        ? ' ORDER BY user.firstname, user.lastname'
+                        : ' ORDER BY user.lastname, user.firstname';
 
                 $rs = Database::query($sql);
 
@@ -174,13 +180,13 @@ if ($enable) {
                 $check = Security::check_token('post');
                 if ($check) {
                     $values = $form->exportValues();
-                    $res = NotebookTeacher::save_note($values);
+                    $res = NotebookTeacher::saveNote($values);
                     if ($res) {
                         echo Display::return_message(get_lang('NoteAdded'), 'confirmation');
                     }
                 }
                 Security::clear_token();
-                NotebookTeacher::display_notes();
+                NotebookTeacher::displayNotes();
             } else {
                 echo '<div class="actions">';
                 echo '<a href="index.php">'.
@@ -195,7 +201,7 @@ if ($enable) {
         } elseif ($action === 'editnote' && is_numeric($_GET['notebook_id'])) {
             // Action handling: Editing a note
             if (!empty($_GET['isStudentView']) || api_is_drh()) {
-                NotebookTeacher::display_notes();
+                NotebookTeacher::displayNotes();
                 exit;
             }
 
@@ -246,7 +252,7 @@ if ($enable) {
                 } else {
                     $sql .= " AND session_course_user.status = 0 ";
                 }
-                $sql .= $sort_by_first_name 
+                $sql .= $sort_by_first_name
                         ? ' ORDER BY user.firstname, user.lastname'
                         : ' ORDER BY user.lastname, user.firstname';
 
@@ -301,7 +307,7 @@ if ($enable) {
             $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 
             // Setting the defaults
-            $defaults = NotebookTeacher::get_note_information(Security::remove_XSS($_GET['notebook_id']));
+            $defaults = NotebookTeacher::getNoteInformation(Security::remove_XSS($_GET['notebook_id']));
             $form->setDefaults($defaults);
 
             // Setting the rules
@@ -312,13 +318,13 @@ if ($enable) {
                 $check = Security::check_token('post');
                 if ($check) {
                     $values = $form->exportValues();
-                    $res = NotebookTeacher::update_note($values);
+                    $res = NotebookTeacher::updateNote($values);
                     if ($res) {
                         echo Display::return_message(get_lang('NoteUpdated'), 'confirmation');
                     }
                 }
                 Security::clear_token();
-                NotebookTeacher::display_notes();
+                NotebookTeacher::displayNotes();
             } else {
                 echo '<div class="actions">';
                 echo '<a href="index.php">'.
@@ -331,12 +337,12 @@ if ($enable) {
             }
         } elseif ($action === 'deletenote' && is_numeric($_GET['notebook_id'])) {
             // Action handling: deleting a note
-            $res = NotebookTeacher::delete_note($_GET['notebook_id']);
+            $res = NotebookTeacher::deleteNote($_GET['notebook_id']);
             if ($res) {
                 echo Display::return_message(get_lang('NoteDeleted'), 'confirmation');
             }
 
-            NotebookTeacher::display_notes();
+            NotebookTeacher::displayNotes();
         } elseif (
             $action === 'changeview' && in_array($_GET['view'], ['creation_date', 'update_date', 'title'])) {
 
@@ -365,9 +371,9 @@ if ($enable) {
                     break;
             }
             $_SESSION['notebook_view'] = $_GET['view'];
-            NotebookTeacher::display_notes();
+            NotebookTeacher::displayNotes();
         } else {
-            NotebookTeacher::display_notes();
+            NotebookTeacher::displayNotes();
         }
         
         Display::display_footer();
@@ -383,7 +389,7 @@ if ($enable) {
             Display::return_message($plugin->get_lang('ToolForTeacher'))
         );
 
-        header('Location: ' . $url);
+        header('Location: '.$url);
     }
 } else {
     echo $plugin->get_lang('ToolDisabled');

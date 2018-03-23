@@ -1543,6 +1543,7 @@ class Skill extends Model
                         'id' => '1',
                         'name' => get_lang('Root'),
                         'parent_id' => '0',
+                        'status' => 1
                     ];
                     $skillInfo = $this->getSkillInfo($skill_id);
 

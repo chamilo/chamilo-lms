@@ -132,7 +132,7 @@ class learnpath
             $sql = "SELECT * FROM $lp_table
                     WHERE iid = $lp_id";
             if ($debug) {
-                error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
+                error_log('learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
             }
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -5579,7 +5579,7 @@ class learnpath
             error_log($this->lp_view_session_id);
             error_log('api session id');
             error_log(api_get_session_id());
-            error_log('New LP - End of learnpath::start_current_item()');
+            error_log('End of learnpath::start_current_item()');
         }
 
         return true;
@@ -11880,19 +11880,25 @@ EOD;
         $learnPath = null;
         $lpObject = Session::read('lpobject');
         if ($lpObject !== null) {
+            $learnPath = unserialize($lpObject);
             if ($debug) {
                 error_log('getLpFromSession: unserialize');
+                error_log('------getLpFromSession------');
+                error_log('------unserialize------');
+                error_log("lp_view_session_id: ".$learnPath->lp_view_session_id);
+                error_log("api_get_sessionid: ".api_get_session_id());
             }
-            $learnPath = unserialize($lpObject);
         }
 
         if (!is_object($learnPath)) {
+            $learnPath = new learnpath($courseCode, $lpId, $user_id);
             if ($debug) {
                 error_log('------getLpFromSession------');
                 error_log('getLpFromSession: create new learnpath');
                 error_log("create new LP with $courseCode - $lpId - $user_id");
+                error_log("lp_view_session_id: ".$learnPath->lp_view_session_id);
+                error_log("api_get_sessionid: ".api_get_session_id());
             }
-            $learnPath = new learnpath($courseCode, $lpId, $user_id);
         }
 
         return $learnPath;

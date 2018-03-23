@@ -18,7 +18,7 @@ $htmlHeadXtra[] = '<script>
     var chamilo_xajax_handler = window.parent.oxajax;
 </script>';
 
-$lpItemId = isset($_REQUEST['lp_item']) ? intval($_REQUEST['lp_item']) : 0;
+$lpItemId = isset($_REQUEST['lp_item']) ? (int) $_REQUEST['lp_item'] : 0;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 
 if (!$lpItemId) {
@@ -47,7 +47,6 @@ if ($myLP) {
     } else {
         $lp_theme_css = $my_style;
     }
-
     $progress_bar = $myLP->getProgressBar();
     $navigation_bar = $myLP->get_navigation_bar();
     $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);

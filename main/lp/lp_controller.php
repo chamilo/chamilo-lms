@@ -253,12 +253,11 @@ if (!empty($lpObject)) {
         }
     }
 }
+if ($debug) {
+    error_log('$lp_found: '.$lp_found);
+}
 
 $course_id = api_get_course_int_id();
-
-if ($debug > 0) {
-    error_log(' Passed data remains check');
-}
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {

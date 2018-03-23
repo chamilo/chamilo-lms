@@ -437,6 +437,7 @@ if ($is_allowed_to_edit) {
     ]);
 }
 
+$buttonHomeText = get_lang('CourseHomepageLink');
 $returnLink = api_get_course_setting('lp_return_link');
 switch ($returnLink) {
     case 1: // lp list

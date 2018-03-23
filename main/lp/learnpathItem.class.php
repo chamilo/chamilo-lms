@@ -3604,6 +3604,7 @@ class learnpathItem
         }
 
         if ($debug) {
+            error_log("accumulate_scorm_time: $accumulateScormTime");
             error_log("total_time modified: $total_time");
         }
 
@@ -3800,7 +3801,7 @@ class learnpathItem
                 );
                 error_log(
                     'learnpathItem::write_to_db() - credit('.$credit.') or'.
-                        ' lesson_mode('.$mode.') prevent recording!',
+                    ' lesson_mode('.$mode.') prevent recording!',
                     0
                 );
             }
@@ -4117,7 +4118,7 @@ class learnpathItem
                     if ($debug) {
                         error_log(
                             'learnpathItem::write_to_db() - Got item_view_id '.
-                                $lp_iv_id.', now checking interactions ',
+                            $lp_iv_id.', now checking interactions ',
                             0
                         );
                     }

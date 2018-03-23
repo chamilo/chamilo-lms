@@ -297,6 +297,23 @@ switch ($action) {
         echo json_encode($position);
 
         break;
+    case 'get_parent_names':
+        $newItemId = isset($_GET['new_item']) ? intval($_GET['new_item']) : 0;
+
+        if (!$newItemId) {
+            break;
+        }
+
+        /** @var \learnpath $lp */
+        $lp = Session::read('oLP');
+        $parentNames = $lp->getCurrentItemParentNames($newItemId);
+        $response = '';
+        foreach ($parentNames as $parentName) {
+            $response .= '<p class="h5 hidden-xs hidden-md">'.$parentName.'</p>';
+        }
+
+        echo $response;
+        break;
     default:
         echo '';
 }

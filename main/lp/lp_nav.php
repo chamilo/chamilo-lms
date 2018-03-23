@@ -19,6 +19,7 @@ $htmlHeadXtra[] = '<script>
 </script>';
 
 $lpItemId = isset($_REQUEST['lp_item']) ? intval($_REQUEST['lp_item']) : 0;
+$lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 
 if (!$lpItemId) {
     echo '';
@@ -29,7 +30,7 @@ $progress_bar = '';
 $navigation_bar = '';
 $autostart = 'true';
 
-$myLP = learnpath::getLpFromSession(api_get_course_id(), '', '');
+$myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
 
 if ($myLP) {
     $lp_theme_css = $myLP->get_theme();

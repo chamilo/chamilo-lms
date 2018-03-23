@@ -81,7 +81,6 @@ class GradeBookResult
      *
      * @param array $data
      *
-     * @return void False on error
      * @throws PHPExcel_Exception
      * @throws PHPExcel_Writer_Exception
      */

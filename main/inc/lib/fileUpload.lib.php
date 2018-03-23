@@ -1304,17 +1304,17 @@ function filter_extension(&$filename)
 /**
  * Adds a new document to the database.
  *
- * @param array  $courseInfo
+ * @param array $courseInfo
  * @param string $path
  * @param string $fileType
- * @param int    $fileSize
+ * @param int $fileSize
  * @param string $title
  * @param string $comment
- * @param int    $readonly
- * @param bool   $saveVisibility
- * @param int    $group_id       group.id
- * @param int    $sessionId     Session ID, if any
- * @param int    $userId creator user id
+ * @param int $readonly
+ * @param bool $saveVisibility
+ * @param int $group_id group.id
+ * @param int $sessionId Session ID, if any
+ * @param int $userId creator user id
  *
  * @return int id if inserted document
  */

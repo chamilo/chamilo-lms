@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use League\Csv\Reader;
 use Ddeboer\DataImport\Reader\ExcelReader;
+use League\Csv\Reader;
 
 /**
  * Class Import

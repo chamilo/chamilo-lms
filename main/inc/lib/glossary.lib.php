@@ -808,6 +808,7 @@ class GlossaryManager
     {
         if ($format == 'pdf') {
             self::export_to_pdf();
+
             return ;
         }
 

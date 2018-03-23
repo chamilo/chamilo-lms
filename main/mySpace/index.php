@@ -413,6 +413,15 @@ if ($skipData == false) {
     }
 }
 
+$view = new Template($toolName);
+$view->assign('header', $toolName);
+$view->assign('actions',Display::toolbarAction('toolbar', [$actions]));
+$view->assign('content', $content);
+$template = $view->get_template('my_space/index.tpl');
+$content = $view->fetch($template);
+$view->display_one_col_template();
+
+
 // Send the csv file if asked
 if ($export_csv) {
     ob_end_clean();

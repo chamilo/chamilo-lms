@@ -886,6 +886,10 @@ foreach ($categories as $item) {
     ];
 }
 
+// Deleting the objects
+Session::erase('oLP');
+Session::erase('lpobject');
+
 $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
@@ -903,7 +907,4 @@ $template->assign('content', $content);
 $template->display_one_col_template();
 learnpath::generate_learning_path_folder($courseInfo);
 
-// Deleting the objects
-Session::erase('oLP');
-Session::erase('lpobject');
 DocumentManager::removeGeneratedAudioTempFile();

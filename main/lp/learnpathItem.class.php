@@ -2015,6 +2015,8 @@ class learnpathItem
     /**
      * Opens/launches the item. Initialises runtime values.
      *
+     * @param bool $allow_new_attempt
+     *
      * @return bool true on success, false on failure
      */
     public function open($allow_new_attempt = false)
@@ -4608,5 +4610,13 @@ class learnpathItem
         $em->flush();
 
         return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastScormSessionTime()
+    {
+        return $this->last_scorm_session_time;
     }
 }

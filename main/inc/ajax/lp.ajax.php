@@ -8,11 +8,16 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
-$action = $_REQUEST['a'];
+
+$debug = false;
+$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 
 $course_id = api_get_course_int_id();
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $sessionId = api_get_session_id();
+
+if ($debug) {
+    error_log('----------lp.ajax-------------- action '.$action);
+}
 
 switch ($action) {
     case 'get_documents':
@@ -102,6 +107,8 @@ switch ($action) {
                 }
             }
 
+            $table = Database::get_course_table(TABLE_LP_ITEM);
+
             foreach ($LP_item_list->list as $LP_item) {
                 $params = [];
                 $params['display_order'] = $LP_item->display_order;
@@ -110,7 +117,7 @@ switch ($action) {
                 $params['parent_item_id'] = $LP_item->parent_item_id;
 
                 Database::update(
-                    $tbl_lp_item,
+                    $table,
                     $params,
                     [
                         'id = ? AND c_id = ? ' => [

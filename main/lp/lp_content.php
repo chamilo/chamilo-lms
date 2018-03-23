@@ -14,13 +14,13 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $debug = 0;
 if ($debug > 0) {
-    error_log('New lp - In lp_content.php', 0);
+    error_log('New lp - In lp_content.php');
 }
 if (empty($lp_controller_touched)) {
     if ($debug > 0) {
-        error_log('New lp - In lp_content.php - Redirecting to lp_controller', 0);
+        error_log('New lp - In lp_content.php - Redirecting to lp_controller');
     }
-    header('location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
+    header('Location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
     exit;
 }
 
@@ -35,7 +35,9 @@ $lp_item_id = $learnPath->get_current_item_id();
  */
 $src = '';
 if ($debug > 0) {
-    error_log('New lp - In lp_content.php - Looking for file url', 0);
+    error_log('New lp - In lp_content.php - Looking for file url');
+    error_log("lp_type $lp_type");
+    error_log("lp_item_id $lp_item_id");
 }
 
 $list = $learnPath->get_toc();
@@ -93,7 +95,7 @@ if ($dir) {
 }
 
 if ($debug > 0) {
-    error_log('New lp - In lp_content.php - File url is '.$src, 0);
+    error_log('New lp - In lp_content.php - File url is '.$src);
 }
 $learnPath->set_previous_item($lp_item_id);
 
@@ -114,7 +116,7 @@ $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
 $_setting['show_navigation_menu'] = false;
 if ($debug > 0) {
-    error_log('New LP - In lp_content.php - Loading '.$src, 0);
+    error_log('New LP - In lp_content.php - Loading '.$src);
 }
 Session::write('oLP', $learnPath);
 header("Location: ".urldecode($src));

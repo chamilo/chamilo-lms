@@ -28,7 +28,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {
-    global $debug;
+    $debug = false;
     $return = '';
     if ($debug > 0) {
         error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0);
@@ -175,6 +175,8 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     }
     if ($debug > 1) {
         error_log("return = $return ");
+        error_log("ini sessop,:");
+        error_log($mylp->lp_view_session_id);
     }
 
     return $return;

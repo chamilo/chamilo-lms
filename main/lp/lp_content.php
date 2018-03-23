@@ -20,7 +20,7 @@ if (empty($lp_controller_touched)) {
     if ($debug > 0) {
         error_log('New lp - In lp_content.php - Redirecting to lp_controller', 0);
     }
-    header('location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
+    header('Location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
     exit;
 }
 
@@ -36,6 +36,8 @@ $lp_item_id = $learnPath->get_current_item_id();
 $src = '';
 if ($debug > 0) {
     error_log('New lp - In lp_content.php - Looking for file url', 0);
+    error_log("lp_type $lp_type");
+    error_log("lp_item_id $lp_item_id");
 }
 
 $list = $learnPath->get_toc();

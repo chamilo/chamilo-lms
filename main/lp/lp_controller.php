@@ -16,25 +16,15 @@ use ChamiloSession as Session;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-
 $debug = 0;
-if ($debug > 0) {
-    error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
+
+if ($debug) {
+    error_log('Entering lp_controller.php. Checking if LP exist in current session');
 }
 
-// Language files that needs to be included.
-if (isset($_GET['action'])) {
-    if ($_GET['action'] === 'export') {
-        // Only needed on export.
-        $language_file[] = 'hotspot';
-    }
-}
-
-// Including the global initialization file.
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
-
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 
@@ -243,10 +233,12 @@ if (!empty($lpObject)) {
             $oLP->cc != api_get_course_id() ||
             $oLP->lp_view_session_id != $session_id
         ) {
-            if ($debug > 0) {
+            if ($debug) {
                 error_log('New LP - Course has changed, discard lp object');
                 error_log('New LP - $oLP->lp_view_session_id: '.$oLP->lp_view_session_id);
+                error_log('New LP - api_get_session_id(): '.$session_id);
                 error_log('New LP - $oLP->cc: '.$oLP->cc);
+                error_log('New LP - api_get_course_id(): '.api_get_course_id());
             }
             if ($myrefresh == 1) {
                 $myrefresh_id = $oLP->get_id();
@@ -260,16 +252,15 @@ if (!empty($lpObject)) {
         }
     }
 }
+if ($debug) {
+    error_log('$lp_found: '.$lp_found);
+}
 
 $course_id = api_get_course_int_id();
 
-if ($debug > 0) {
-    error_log('New LP - Passed data remains check', 0);
-}
-
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {
-        error_log('New LP - oLP is not object, has changed or refresh been asked, getting new', 0);
+        error_log('New LP - oLP is not object, has changed or refresh been asked, getting new');
     }
     // Regenerate a new lp object? Not always as some pages don't need the object (like upload?)
     if (!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)) {
@@ -296,7 +287,8 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 $lpIid = $row['iid'];
                 $type = $row['lp_type'];
                 if ($debug > 0) {
-                    error_log('New LP - found row - type '.$type.' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                    error_log('New LP - found row - type '.$type);
+                    error_log('Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                 }
                 switch ($type) {
                     case 1:
@@ -304,7 +296,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
-                            error_log($oLP->error, 0);
+                            error_log($oLP->error);
                         }
                         break;
                     case 2:
@@ -312,7 +304,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
-                            error_log($oLP->error, 0);
+                            error_log($oLP->error);
                         }
                         break;
                     case 3:
@@ -320,7 +312,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
-                            error_log($oLP->error, 0);
+                            error_log($oLP->error);
                         }
                         break;
                     default:
@@ -328,7 +320,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
-                            error_log($oLP->error, 0);
+                            error_log($oLP->error);
                         }
                         break;
                 }
@@ -347,16 +339,12 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         Session::write('oLP', $oLP);
     }
 }
-
-if ($debug > 0) {
-    error_log('New LP - Passed oLP creation check', 0);
-}
+$debug = 0;
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
     $_SESSION['oLP']->update_queue = [];
-    // Reinitialises array used by javascript to update items in the TOC.
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
@@ -378,6 +366,9 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
 }
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
+if ($debug > 0) {
+    error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
+}
 
 // format title to be displayed correctly if QUIZ
 $post_title = '';
@@ -1152,7 +1143,9 @@ switch ($action) {
         }
         break;
     case 'content':
+        $debug = 100;
         if ($debug > 0) {
+            error_log('lp_controller: action: content');
             error_log('New LP - Item id is '.intval($_GET['item_id']), 0);
         }
         if (!$lp_found) {
@@ -1163,7 +1156,7 @@ switch ($action) {
             }
             $_SESSION['oLP']->save_last();
             if ($debug > 0) {
-                error_log('New LP - set_current_item()', 0);
+                error_log('New LP - set_current_item('.$_GET['item_id'].')');
             }
             $_SESSION['oLP']->set_current_item($_GET['item_id']);
             if ($debug > 0) {

@@ -557,7 +557,7 @@ class Career extends Model
                         } else {
                             // subgroup__123 id
                             $firstConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[0]);
-                            $simpleFirstConnection = 'sg_'.(int) str_replace('SG', '', $explode[0]);
+                            $simpleFirstConnection = 'sg'.(int) str_replace('SG', '', $explode[0]);
                         }
 
                         $pos = false;

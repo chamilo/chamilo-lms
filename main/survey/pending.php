@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CSurvey;
-use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 
 $cidReset = true;
 
@@ -34,17 +34,15 @@ foreach ($pending as $i => $item) {
     /** @var Session $session */
     $session = $em->find('ChamiloCoreBundle:Session', $survey->getSessionId());
 
+    $course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
+    $session = $session ? ['id' => $session->getId(), 'name' => $session->getName()] : null;
     $surveysData[$survey->getSurveyId()] = [
         'title' => $survey->getTitle(),
         'invitation_code' => $invitation->getInvitationCode(),
         'avail_from' => $survey->getAvailFrom(),
         'avail_till' => $survey->getAvailTill(),
-        'course' => $course
-            ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()]
-            : null,
-        'session' => $session
-            ? ['id' => $session->getId(), 'name' => $session->getName()]
-            : null
+        'course' => $course,
+        'session' => $session,
     ];
 }
 

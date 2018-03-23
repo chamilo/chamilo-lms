@@ -1247,7 +1247,7 @@ function clean_up_path($path)
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include').
  *
  * @param string $filename passed by reference. The filename will be modified
- * if filter rules say so! (you can include path but the filename should look like 'abc.html')
+ *                         if filter rules say so! (you can include path but the filename should look like 'abc.html')
  *
  * @return int 0 to skip file, 1 to keep file
  */
@@ -1304,17 +1304,17 @@ function filter_extension(&$filename)
 /**
  * Adds a new document to the database.
  *
- * @param array $courseInfo
+ * @param array  $courseInfo
  * @param string $path
  * @param string $fileType
- * @param int $fileSize
+ * @param int    $fileSize
  * @param string $title
  * @param string $comment
- * @param int $readonly
- * @param bool $saveVisibility
- * @param int $group_id group.id
- * @param int $sessionId Session ID, if any
- * @param int $userId creator user id
+ * @param int    $readonly
+ * @param bool   $saveVisibility
+ * @param int    $group_id       group.id
+ * @param int    $sessionId      Session ID, if any
+ * @param int    $userId         creator user id
  *
  * @return int id if inserted document
  */

@@ -52,7 +52,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             $mylp->next();
             $new_item_id = $mylp->get_current_item_id();
             if ($debug > 1) {
-                error_log('In {next} - next item is '.$new_item_id.'(current: '.$current_item.')', 0);
+                error_log('In {next} - next item is '.$new_item_id.'(current: '.$current_item.')');
             }
             break;
         case 'previous':
@@ -60,7 +60,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             $mylp->previous();
             $new_item_id = $mylp->get_current_item_id();
             if ($debug > 1) {
-                error_log('In {previous} - next item is '.$new_item_id.'(current: '.$current_item.')', 0);
+                error_log('In {previous} - next item is '.$new_item_id.'(current: '.$current_item.')');
             }
             break;
         case 'first':
@@ -68,7 +68,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             $mylp->first();
             $new_item_id = $mylp->get_current_item_id();
             if ($debug > 1) {
-                error_log('In {first} - next item is '.$new_item_id.'(current: '.$current_item.')', 0);
+                error_log('In {first} - next item is '.$new_item_id.'(current: '.$current_item.')');
             }
             break;
         case 'last':
@@ -82,7 +82,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             $new_item_id = $next_item;
             $mylp->set_current_item($new_item_id);
             if ($debug > 1) {
-                error_log('In {default} - next item is '.$new_item_id.'(current: '.$current_item.')', 0);
+                error_log('In {default} - next item is '.$new_item_id.'(current: '.$current_item.')');
             }
             break;
     }
@@ -123,7 +123,9 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mylaunch_data = $mylpi->get_launch_data();
     /*
     if ($mylpi->get_type() == 'asset') {
-        // Temporary measure to save completion of an asset. Later on, Chamilo should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
+        // Temporary measure to save completion of an asset. Later on,
+        // Chamilo should trigger something on unload, maybe...
+        // (even though that would mean the last item cannot be completed)
         $mylesson_status = 'completed';
         $mylpi->set_status('completed');
         $mylpi->save();

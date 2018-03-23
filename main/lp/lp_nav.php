@@ -9,6 +9,7 @@
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -19,6 +20,7 @@ $htmlHeadXtra[] = '<script>
 
 $lpItemId = isset($_REQUEST['lp_item']) ? (int) $_REQUEST['lp_item'] : 0;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
+
 if (!$lpItemId) {
     echo '';
     exit;
@@ -49,6 +51,7 @@ if ($myLP) {
     $navigation_bar = $myLP->get_navigation_bar();
     $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
 }
+session_write_close();
 ?>
 <script>
     $(document).ready(function() {

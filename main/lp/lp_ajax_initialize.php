@@ -28,10 +28,10 @@ require_once __DIR__.'/../inc/global.inc.php';
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {
-    $debug = false;
+    $debug = 0;
     $return = '';
-    if ($debug > 0) {
-        error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0);
+    if ($debug) {
+        error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')');
     }
     /*$item_id may be one of:
      * -'next'
@@ -42,18 +42,18 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      */
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylp->set_current_item($next_item);
-    if ($debug > 1) {
-        error_log('In initialize_item() - new item is '.$next_item, 0);
+    if ($debug) {
+        error_log('In initialize_item() - new item is '.$next_item);
     }
     $mylp->start_current_item(true);
 
     if (is_object($mylp->items[$next_item])) {
-        if ($debug > 1) {
+        if ($debug) {
             error_log('In initialize_item - recovering existing item object '.$next_item, 0);
         }
         $mylpi = $mylp->items[$next_item];
     } else {
-        if ($debug > 1) {
+        if ($debug) {
             error_log('In initialize_item - generating new item object '.$next_item, 0);
         }
         $mylpi = new learnpathItem($next_item, $user_id);
@@ -170,13 +170,10 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
-    if ($debug > 1) {
+    if ($debug) {
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
-    }
-    if ($debug > 1) {
         error_log("return = $return ");
-        error_log("ini sessop,:");
-        error_log($mylp->lp_view_session_id);
+        error_log("mylp->lp_view_session_id: ".$mylp->lp_view_session_id);
     }
 
     return $return;

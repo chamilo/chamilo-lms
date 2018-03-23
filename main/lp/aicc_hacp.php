@@ -269,6 +269,7 @@ if (!empty($_REQUEST['command'])) {
 }
 
 Session::write('lpobject', serialize($oLP));
+Session::write('oLP', $oLP);
 session_write_close();
 // Content type must be text/plain.
 header('Content-type: text/plain');

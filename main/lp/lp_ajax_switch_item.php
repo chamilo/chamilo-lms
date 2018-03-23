@@ -229,6 +229,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     // Save the new item ID for the exercise tool to use.
     Session::write('scorm_item_id', $new_item_id);
     Session::write('lpobject', serialize($mylp));
+    Session::write('oLP', $mylp);
 
     return $return;
 }

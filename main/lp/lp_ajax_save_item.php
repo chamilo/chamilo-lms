@@ -478,6 +478,7 @@ function save_item(
     $myLP->save_last();
 
     Session::write('lpobject', serialize($myLP));
+    Session::write('oLP', $myLP);
     if ($debug > 0) {
         error_log('---------------- lp_ajax_save_item.php : save_item end ----- ');
     }

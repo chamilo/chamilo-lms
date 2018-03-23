@@ -230,6 +230,8 @@ class learnpath
                         'session_id' => $session_id,
                         'last_item' => 0,
                     ];
+                    $this->last_item_seen = 0;
+                    $this->lp_view_session_id = $session_id;
                     $this->lp_view_id = Database::insert($lp_table, $params);
                     if (!empty($this->lp_view_id)) {
                         $sql = "UPDATE $lp_table SET id = iid

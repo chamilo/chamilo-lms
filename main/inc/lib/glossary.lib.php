@@ -809,7 +809,7 @@ class GlossaryManager
         if ($format == 'pdf') {
             self::export_to_pdf();
 
-            return ;
+            return;
         }
 
         $data = GlossaryManager::get_glossary_data(

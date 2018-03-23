@@ -510,7 +510,7 @@ if ($allowLPReturnLink === 'true') {
             null,
             get_lang('MyCourses'),
             2
-        )
+        ),
     ];
     $form->addGroup($group, '', [get_lang("LpReturnLink")]);
 }

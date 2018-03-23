@@ -1246,7 +1246,7 @@ function clean_up_path($path)
  * The list of extensions accepted/rejected can be found from
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include').
  *
- * @param	string 	filename passed by reference. The filename will be modified
+ * @param string $filename passed by reference. The filename will be modified
  * if filter rules say so! (you can include path but the filename should look like 'abc.html')
  *
  * @return int 0 to skip file, 1 to keep file

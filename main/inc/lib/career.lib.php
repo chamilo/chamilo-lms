@@ -997,7 +997,7 @@ class Career extends Model
                             $connections[] = [
                                 'from' => $firstPrefix.$firstId,
                                 'to' => $secondPrefix.$secondId,
-                                $defaultArrow
+                                $defaultArrow,
                             ];
                             $found = true;
                         }

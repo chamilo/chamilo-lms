@@ -298,7 +298,7 @@
                         {type: 'stylesheet', id: '_fr5', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'},
                         {type: 'stylesheet', id: '_fr6', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'},
                         {type: 'script', id: '_fr2', src: '{{ _p.web_lib }}javascript/jquery.highlight.js'},
-                        {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_req }}'}
+                        {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_query }}'}
                     ]
                 });
             }

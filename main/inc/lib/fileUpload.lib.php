@@ -1246,8 +1246,8 @@ function clean_up_path($path)
  * The list of extensions accepted/rejected can be found from
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include').
  *
- * @param	string 	filename passed by reference. The filename will be modified
- * if filter rules say so! (you can include path but the filename should look like 'abc.html')
+ * @param string $filename passed by reference. The filename will be modified
+ *                         if filter rules say so! (you can include path but the filename should look like 'abc.html')
  *
  * @return int 0 to skip file, 1 to keep file
  */
@@ -1313,8 +1313,8 @@ function filter_extension(&$filename)
  * @param int    $readonly
  * @param bool   $saveVisibility
  * @param int    $group_id       group.id
- * @param int    $sessionId     Session ID, if any
- * @param int    $userId creator user id
+ * @param int    $sessionId      Session ID, if any
+ * @param int    $userId         creator user id
  *
  * @return int id if inserted document
  */

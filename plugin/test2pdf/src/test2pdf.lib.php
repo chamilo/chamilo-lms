@@ -6,7 +6,34 @@
  * @package chamilo.plugin.test2pdf
  */
 
-$letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+$letters = [
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+];
 
 /**
  * List exercises.
@@ -16,7 +43,7 @@ $letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'
  *
  * @throws Exception
  *
- * @return array Results (list of exercice details)
+ * @return array Results (list of exercise details)
  */
 
 function showExerciseCourse($courseId, $sessionId = 0)

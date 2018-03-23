@@ -1811,7 +1811,8 @@ class learnpathItem
      */
     public function get_total_time()
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug) {
             error_log(
                 'learnpathItem::get_total_time() for item '.$this->db_id.
                 ' - Initially, current_start_time = '.$this->current_start_time.
@@ -1821,7 +1822,7 @@ class learnpathItem
         }
         if ($this->current_start_time == 0) {
             // Shouldn't be necessary thanks to the open() method.
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::get_total_time() - Current start time was empty',
                     0
@@ -1833,7 +1834,7 @@ class learnpathItem
         if (time() < $this->current_stop_time ||
             $this->current_stop_time == 0
         ) {
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::get_total_time() - Current stop time was '
                     .'greater than the current time or was empty',
@@ -1849,7 +1850,7 @@ class learnpathItem
         $time = $this->current_stop_time - $this->current_start_time;
 
         if ($time < 0) {
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::get_total_time() - Time smaller than 0. Returning 0',
                     0
@@ -1859,7 +1860,7 @@ class learnpathItem
             return 0;
         } else {
             $time = $this->fixAbusiveTime($time);
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'Current start time = '.$this->current_start_time.', current stop time = '.
                     $this->current_stop_time.' Returning '.$time."-----------\n"
@@ -2013,6 +2014,8 @@ class learnpathItem
 
     /**
      * Opens/launches the item. Initialises runtime values.
+     *
+     * @param bool $allow_new_attempt
      *
      * @return bool true on success, false on failure
      */
@@ -2793,7 +2796,8 @@ class learnpathItem
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug) {
             error_log('learnpathItem::save()', 0);
         }
         // First check if parameters passed via GET can be saved here
@@ -2804,7 +2808,7 @@ class learnpathItem
                 $status != $this->possible_status[0] && // not attempted
                 $status != $this->possible_status[1]    //incomplete
             ) {
-                if (self::DEBUG > 1) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::save() - save reinit blocked by setting',
                         0
@@ -2813,7 +2817,7 @@ class learnpathItem
                 // Do nothing because the status has already been set. Don't allow it to change.
                 // TODO: Check there isn't a special circumstance where this should be saved.
             } else {
-                if (self::DEBUG > 1) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::save() - SCORM save request received',
                         0
@@ -2822,7 +2826,7 @@ class learnpathItem
 
                 // Get all new settings from the URL
                 if ($from_outside) {
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log(
                             'learnpathItem::save() - Getting item data from outside',
                             0
@@ -2832,7 +2836,7 @@ class learnpathItem
                         switch ($param) {
                             case 'score':
                                 $this->set_score($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting score to '.$value,
                                         0
@@ -2841,7 +2845,7 @@ class learnpathItem
                                 break;
                             case 'max':
                                 $this->set_max_score($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting view_max_score to '.$value,
                                         0
@@ -2850,7 +2854,7 @@ class learnpathItem
                                 break;
                             case 'min':
                                 $this->min_score = $value;
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting min_score to '.$value,
                                         0
@@ -2860,7 +2864,7 @@ class learnpathItem
                             case 'lesson_status':
                                 if (!empty($value)) {
                                     $this->set_status($value);
-                                    if (self::DEBUG > 2) {
+                                    if ($debug) {
                                         error_log(
                                             'learnpathItem::save() - setting status to '.$value,
                                             0
@@ -2870,7 +2874,7 @@ class learnpathItem
                                 break;
                             case 'time':
                                 $this->set_time($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting time to '.$value,
                                         0
@@ -2879,7 +2883,7 @@ class learnpathItem
                                 break;
                             case 'suspend_data':
                                 $this->current_data = $value;
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting suspend_data to '.$value,
                                         0
@@ -2888,7 +2892,7 @@ class learnpathItem
                                 break;
                             case 'lesson_location':
                                 $this->set_lesson_location($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting lesson_location to '.$value,
                                         0
@@ -2897,7 +2901,7 @@ class learnpathItem
                                 break;
                             case 'core_exit':
                                 $this->set_core_exit($value);
-                                if (self::DEBUG > 2) {
+                                if ($debug) {
                                     error_log(
                                         'learnpathItem::save() - setting core_exit to '.$value,
                                         0
@@ -2914,7 +2918,7 @@ class learnpathItem
                         }
                     }
                 } else {
-                    if (self::DEBUG > 1) {
+                    if ($debug) {
                         error_log(
                             'learnpathItem::save() - Using inside item status',
                             0
@@ -2926,6 +2930,9 @@ class learnpathItem
         } else {
             // If not SCO, such messages should not be expected.
             $type = strtolower($this->type);
+            if ($debug) {
+                error_log("type: $type");
+            }
             switch ($type) {
                 case 'asset':
                     if ($prereqs_complete) {
@@ -2947,7 +2954,7 @@ class learnpathItem
             }
         }
 
-        if (self::DEBUG > 1) {
+        if ($debug) {
             error_log(
                 'New LP - End of learnpathItem::save() - Calling write_to_db()',
                 0
@@ -3376,27 +3383,26 @@ class learnpathItem
      * often give it as 00:00:00.0000.
      *
      * @param    string    Time as given by SCORM
+     * @param string $format
      */
     public function set_time($scorm_time, $format = 'scorm')
     {
         $debug = self::DEBUG;
-        if ($debug > 0) {
-            error_log('learnpathItem::set_time('.$scorm_time.')', 0);
+        if ($debug) {
+            error_log("learnpathItem::set_time($scorm_time, $format)");
+            error_log("this->type: ".$this->type);
+            error_log("this->current_start_time: ".$this->current_start_time);
         }
 
         if ($scorm_time == '0' &&
             $this->type != 'sco' &&
             $this->current_start_time != 0
         ) {
-            $my_time = time() - $this->current_start_time;
-            if ($my_time > 0) {
-                $this->update_time($my_time);
-                if ($debug > 0) {
-                    error_log(
-                        'learnpathItem::set_time('.$scorm_time.') - '.
-                            'found asset - set time to '.$my_time,
-                        0
-                    );
+            $myTime = time() - $this->current_start_time;
+            if ($myTime > 0) {
+                $this->update_time($myTime);
+                if ($debug) {
+                    error_log('found asset - set time to '.$myTime);
                 }
             }
         } else {
@@ -3413,11 +3419,11 @@ class learnpathItem
                         $min = $res[2];
                         $sec = $res[3];
                         // Getting total number of seconds spent.
-                        $total_sec = $hour * 3600 + $min * 60 + $sec;
-                        if ($debug > 0) {
-                            error_log("total_sec : $total_sec");
+                        $totalSec = $hour * 3600 + $min * 60 + $sec;
+                        if ($debug) {
+                            error_log("totalSec : $totalSec");
                         }
-                        $this->scorm_update_time($total_sec);
+                        $this->scorm_update_time($totalSec);
                     }
                     break;
                 case 'int':
@@ -3510,42 +3516,20 @@ class learnpathItem
     /**
      * Updates the time info according to the given session_time.
      *
-     * @param int $total_sec Time in seconds
+     * @param int $totalSec Time in seconds
      */
-    public function update_time($total_sec = 0)
+    public function update_time($totalSec = 0)
     {
         if (self::DEBUG > 0) {
-            error_log('learnpathItem::update_time('.$total_sec.')', 0);
+            error_log('learnpathItem::update_time('.$totalSec.')');
         }
-        if ($total_sec >= 0) {
+        if ($totalSec >= 0) {
             // Getting start time from finish time. The only problem in the calculation is it might be
             // modified by the scripts processing time.
             $now = time();
-            $start = $now - $total_sec;
+            $start = $now - $totalSec;
             $this->current_start_time = $start;
             $this->current_stop_time = $now;
-            /*if (empty($this->current_start_time)) {
-                $this->current_start_time = $start;
-                $this->current_stop_time  = $now;
-            } else {
-                //if ($this->current_stop_time != $this->current_start_time) {
-                    // If the stop time has already been set before to something else
-                    // than the start time, add the given time to what's already been
-                    // recorder.
-                    // This is the SCORM way of doing things, because the time comes from
-                    // core.session_time, not core.total_time
-                    // UPDATE: adding time to previous time is only done on SCORM's finish()
-                    // call, not normally, so for now ignore this section.
-                    //$this->current_stop_time = $this->current_stop_time + $stop;
-                    //error_log('New LP - Adding '.$stop.' seconds - now '.$this->current_stop_time, 0);
-                //} else {
-                    // If no previous stop time set, use the one just calculated now from
-                    // start time.
-                    //$this->current_start_time = $start;
-                    //$this->current_stop_time  = $now;
-                    //error_log('New LP - Setting '.$stop.' seconds - now '.$this->current_stop_time, 0);
-                //}
-            }*/
         }
     }
 
@@ -3558,7 +3542,7 @@ class learnpathItem
     public function scorm_update_time($total_sec = 0)
     {
         $debug = self::DEBUG;
-        if ($debug > 0) {
+        if ($debug) {
             error_log('learnpathItem::scorm_update_time()');
             error_log("total_sec: $total_sec");
         }
@@ -3582,7 +3566,7 @@ class learnpathItem
         } else {
             $total_time = $row['total_time'];
         }
-        if ($debug > 0) {
+        if ($debug) {
             error_log("Original total_time: $total_time");
         }
 
@@ -3597,13 +3581,15 @@ class learnpathItem
         }
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
-        if ($accumulateScormTime != 0) {
+        if ($this->type == 'sco' && $accumulateScormTime != 0) {
+            if ($debug) {
+                error_log("accumulateScormTime is on. total_time modified: $total_time + $total_sec");
+            }
             $total_time += $total_sec;
         } else {
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
             $total_sec = $this->fixAbusiveTime($total_sec);
-
-            if ($debug > 0) {
+            if ($debug) {
                 error_log("after fix abusive: $total_sec");
                 error_log("total_time: $total_time");
                 error_log("this->last_scorm_session_time: ".$this->last_scorm_session_time);
@@ -3617,7 +3603,7 @@ class learnpathItem
             }
         }
 
-        if ($debug > 0) {
+        if ($debug) {
             error_log("accumulate_scorm_time: $accumulateScormTime");
             error_log("total_time modified: $total_time");
         }
@@ -3641,8 +3627,10 @@ class learnpathItem
                         lp_item_id = {$this->db_id} AND 
                         lp_view_id = {$this->view_id} AND 
                         view_count = {$this->get_attempt_id()}";
-            if ($debug > 0) {
+            if ($debug) {
+                error_log('-------------total_time updated ------------------------');
                 error_log($sql);
+                error_log('-------------------------------------');
             }
             Database::query($sql);
         }
@@ -3756,13 +3744,14 @@ class learnpathItem
      */
     public function write_to_db()
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug) {
             error_log('learnpathItem::write_to_db()', 0);
         }
 
         // Check the session visibility.
         if (!api_is_allowed_to_session_edit()) {
-            if (self::DEBUG > 0) {
+            if ($debug) {
                 error_log('return false api_is_allowed_to_session_edit');
             }
 
@@ -3806,13 +3795,13 @@ class learnpathItem
            ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
            ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
-            if (self::DEBUG > 1) {
+            if ($debug) {
                 error_log(
                     "This info shouldn't be saved as the credit or lesson mode info prevent it"
                 );
                 error_log(
                     'learnpathItem::write_to_db() - credit('.$credit.') or'.
-                        ' lesson_mode('.$mode.') prevent recording!',
+                    ' lesson_mode('.$mode.') prevent recording!',
                     0
                 );
             }
@@ -3840,7 +3829,7 @@ class learnpathItem
                     //"max_time_allowed" => ,
                     "lesson_location" => $this->lesson_location,
                 ];
-                if (self::DEBUG > 2) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
                         0
@@ -3862,7 +3851,7 @@ class learnpathItem
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".intval($this->get_attempt_id());
-            if (self::DEBUG > 2) {
+            if ($debug) {
                 error_log(
                     'learnpathItem::write_to_db() - Querying item_view: '.$sql,
                     0
@@ -3887,7 +3876,7 @@ class learnpathItem
                     "lesson_location" => $this->lesson_location,
                 ];
 
-                if (self::DEBUG > 2) {
+                if ($debug) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
                         0
@@ -3944,6 +3933,9 @@ class learnpathItem
                             $mytime = ((int) $time_exe_date - (int) $time_start_date);
                             $mytime = $this->fixAbusiveTime($mytime);
                             $total_time = " total_time = ".$mytime.", ";
+                            if ($debug) {
+                                error_log("quiz: $total_time");
+                            }
                         }
                     } else {
                         $my_type_lp = learnpath::get_type_static($this->lp_id);
@@ -3959,6 +3951,9 @@ class learnpathItem
                         if ($this->seriousgame_mode == 1 && $this->type == 'sco') {
                             $total_time = " total_time = total_time +".$this->get_total_time().", ";
                             $my_status = " status = '".$this->get_status(false)."' ,";
+                            if ($debug) {
+                                error_log("seriousgame_mode time changed: $total_time");
+                            }
                         } elseif ($this->get_prevent_reinit() == 1) {
                             // Process of status verified into data base.
                             $sql = 'SELECT status FROM '.$item_view_table.'
@@ -3978,6 +3973,9 @@ class learnpathItem
                             ) {
                                 $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("get_prevent_reinit = 1 time changed: $total_time");
+                                }
                             } else {
                                 // Verified into database.
                                 if (!in_array($row_verified['status'], $case_completed) &&
@@ -3985,17 +3983,26 @@ class learnpathItem
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
+                                    if ($debug) {
+                                        error_log("total_time time changed case 1: $total_time");
+                                    }
                                 } elseif (in_array($row_verified['status'], $case_completed) &&
                                     $my_type_lp == 2 && $this->type != 'sco'
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
+                                    if ($debug) {
+                                        error_log("total_time time changed case 2: $total_time");
+                                    }
                                 } else {
                                     if (($my_type_lp == 3 && $this->type == 'au') ||
                                         ($my_type_lp == 1 && $this->type != 'dir')) {
                                         // Is AICC or Chamilo LP
                                         $total_time = " total_time = total_time + ".$this->get_total_time().", ";
                                         $my_status = " status = '".$this->get_status(false)."' ,";
+                                        if ($debug) {
+                                            error_log("total_time time changed case 3: $total_time");
+                                        }
                                     }
                                 }
                             }
@@ -4004,13 +4011,22 @@ class learnpathItem
                             if (in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
                                 // Reset zero new attempt ?
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("total_time time changed Multiple attempt case 1: $total_time");
+                                }
                             } elseif (!in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
                                 $total_time = " total_time = ".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("total_time time changed Multiple attempt case 2: $total_time");
+                                }
                             } else {
                                 // It is chamilo LP.
                                 $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
+                                if ($debug) {
+                                    error_log("total_time time changed Multiple attempt case 3: $total_time");
+                                }
                             }
 
                             // This code line fixes the problem of wrong status.
@@ -4033,6 +4049,10 @@ class learnpathItem
                                     $total_time = '';
                                 } else {
                                     $total_time = " total_time = total_time + ".$this->get_total_time().", ";
+                                }
+
+                                if ($debug) {
+                                    error_log("total_time time my_type_lp: $total_time");
                                 }
                             }
                         }
@@ -4071,11 +4091,11 @@ class learnpathItem
                     }
                     $this->current_start_time = time();
                 }
-                if (self::DEBUG > 2) {
-                    error_log(
-                        'learnpathItem::write_to_db() - Updating item_view: '.$sql,
-                        0
-                    );
+                if ($debug) {
+                    error_log('-------------------------------------------');
+                    error_log('learnpathItem::write_to_db() - Updating item_view:');
+                    error_log($sql);
+                    error_log('-------------------------------------------');
                 }
                 Database::query($sql);
             }
@@ -4095,10 +4115,10 @@ class learnpathItem
                 if (Database::num_rows($res) > 0) {
                     $row = Database::fetch_array($res);
                     $lp_iv_id = $row[0];
-                    if (self::DEBUG > 2) {
+                    if ($debug) {
                         error_log(
                             'learnpathItem::write_to_db() - Got item_view_id '.
-                                $lp_iv_id.', now checking interactions ',
+                            $lp_iv_id.', now checking interactions ',
                             0
                         );
                     }
@@ -4193,7 +4213,7 @@ class learnpathItem
             }
         }
 
-        if (self::DEBUG > 2) {
+        if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }
 
@@ -4591,5 +4611,13 @@ class learnpathItem
         $em->flush();
 
         return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastScormSessionTime()
+    {
+        return $this->last_scorm_session_time;
     }
 }

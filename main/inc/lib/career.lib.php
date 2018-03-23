@@ -557,7 +557,7 @@ class Career extends Model
                         } else {
                             // subgroup__123 id
                             $firstConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[0]);
-                            $simpleFirstConnection = 'sg_'.(int) str_replace('SG', '', $explode[0]);
+                            $simpleFirstConnection = 'sg'.(int) str_replace('SG', '', $explode[0]);
                         }
 
                         $pos = false;
@@ -631,6 +631,7 @@ class Career extends Model
         foreach ($groupsBetweenColumns as $group => $items) {
             self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
         }
+
         $graphHtml .= '</div>';
 //        $graphHtml .= $connections;
         $graphHtml .= '<style>
@@ -724,7 +725,7 @@ class Career extends Model
                 $width = $data['max_width'] + $subGroupDiffX * 2;
                 $height = $data['max_height'] + $subGroupDiffX * 2;
                 $label = '<h4>'.$data['label'].'</h4>';
-                $vertexData = "var g$subGroupId = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
+                $vertexData = "var sg$subGroupId = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
                 $subGroupList[] = $vertexData;
             }
         }
@@ -957,6 +958,7 @@ class Career extends Model
                         }
                     }
                 } else {
+                    // Case is only one subgroup value example: SG1
                     $parts = explode('SG', $arrow);
                     if (empty($parts[0]) && count($parts) == 2) {
                         $subGroupArrow = $parts[1];
@@ -972,14 +974,44 @@ class Career extends Model
                         ];
                     }
                 }
+
                 if ($found == false) {
+                    // case is connected to 2 subgroups: Example SG1-SG2
+                    $parts = explode('-', $arrow);
+                    if (count($parts) == 2 && !empty($parts[0]) && !empty($parts[1])) {
+                        $defaultArrow = ['Top', 'Bottom'];
+                        $firstPrefix = '';
+                        $firstId = '';
+                        $secondId = '';
+                        $secondPrefix = '';
+                        if (is_numeric($pos = strpos($parts[0], 'SG'))) {
+                            $firstPrefix = 'sg';
+                            $firstId = str_replace('SG', '', $parts[0]);
+                        }
+
+                        if (is_numeric($pos = strpos($parts[1], 'SG'))) {
+                            $secondPrefix = 'sg';
+                            $secondId = str_replace('SG', '', $parts[1]);
+                        }
+                        if (!empty($secondId) && !empty($firstId)) {
+                            $connections[] = [
+                                'from' => $firstPrefix.$firstId,
+                                'to' => $secondPrefix.$secondId,
+                                $defaultArrow,
+                            ];
+                            $found = true;
+                        }
+                    }
+                }
+
+                if ($found == false) {
+                    // case DrawArrowFrom is an integer
                     $defaultArrow = ['Left', 'Right'];
                     if (isset($groupCourseList[$column]) &&
                         in_array($arrow, $groupCourseList[$column])
                     ) {
                         $defaultArrow = ['Top', 'Bottom'];
                     }
-                    //$defaultArrow = ['Top', 'Bottom'];
                     $graphHtml .= self::createConnection(
                         "row_$arrow",
                         "row_$id",

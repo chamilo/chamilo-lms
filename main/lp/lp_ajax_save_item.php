@@ -60,11 +60,11 @@ function save_item(
     $userNavigatesAway = 0,
     $statusSignalReceived = 0
 ) {
-    //global $debug;
     $debug = 0;
     $return = null;
 
     if ($debug > 0) {
+        error_log('--------------------------------------');
         error_log('lp_ajax_save_item.php : save_item() params: ');
         error_log("item_id: $item_id");
         error_log("lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
@@ -478,7 +478,9 @@ function save_item(
     $myLP->save_last();
 
     Session::write('lpobject', serialize($myLP));
+    Session::write('oLP', $myLP);
     if ($debug > 0) {
+        error_log("lp_view_session_id :".$myLP->lp_view_session_id);
         error_log('---------------- lp_ajax_save_item.php : save_item end ----- ');
     }
 

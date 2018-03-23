@@ -2829,12 +2829,12 @@ class SurveyUtil
      * @param int  $survey_id the id of the survey
      * @param bool $drh
      *
-     * @return string html code that are the actions that can be performed on any survey
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
+     * @return string html code that are the actions that can be performed on any survey
      *
      * @version January 2007
      */
@@ -2893,14 +2893,13 @@ class SurveyUtil
                     .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
             );
 
+            $warning = addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('clean.png', get_lang('EmptySurvey')),
                 $codePath.'survey/survey_list.php'
                     .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
                 [
-                    'onclick' => "javascript: if (!confirm('"
-                        .addslashes(api_htmlentities(get_lang("EmptySurvey").'?'))
-                        ."')) return false;"
+                    'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
                 ]
             );
         }
@@ -2917,14 +2916,13 @@ class SurveyUtil
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
+            $warning = addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),
                 $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
                 [
-                    'onclick' => "javascript: if(!confirm('"
-                        .addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES))
-                        ."')) return false;"
+                    'onclick' => "javascript: if(!confirm('".$warning."')) return false;",
                 ]
             );
         }
@@ -2952,14 +2950,13 @@ class SurveyUtil
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
+        $warning = addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES));
         $actions[] = Display::url(
             Display::return_icon('clean.png', get_lang('EmptySurvey')),
             $codePath.'survey/survey_list.php?'
                 .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
             [
-                'onclick' => "javascript: if(!confirm('"
-                    .addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES))
-                    ."')) return false;"
+                'onclick' => "javascript: if(!confirm('".$warning."')) return false;",
             ]
         );
 
@@ -3759,7 +3756,7 @@ class SurveyUtil
     }
 
     /**
-     * Get the pending surveys for a user
+     * Get the pending surveys for a user.
      *
      * @param int $userId
      *
@@ -3773,8 +3770,11 @@ class SurveyUtil
             SELECT s, si FROM ChamiloCourseBundle:CSurvey s
             INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
                 WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
-            WHERE si.user = :user_id AND s.availFrom <= :now AND s.availTill >= :now
-                AND si.answered = 0
+            WHERE 
+                si.user = :user_id AND 
+                s.availFrom <= :now AND 
+                s.availTill >= :now AND 
+                si.answered = 0
             ORDER BY s.availTill ASC
         ";
 

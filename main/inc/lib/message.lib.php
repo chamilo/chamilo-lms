@@ -505,14 +505,14 @@ class MessageManager
     }
 
     /**
-     * @param int    $receiver_user_id
-     * @param int    $subject
+     * @param int $receiver_user_id
+     * @param int $subject
      * @param string $message
-     * @param int    $sender_id
-     * @param bool   $sendCopyToDrhUsers send copy to related DRH users
-     * @param bool   $directMessage
-     * @param array  $smsParameters
-     * @param bool   $uploadFiles        Do not upload files using the MessageManager class
+     * @param int $sender_id
+     * @param bool $sendCopyToDrhUsers send copy to related DRH users
+     * @param bool $directMessage
+     * @param array $smsParameters
+     * @param bool $uploadFiles Do not upload files using the MessageManager class
      * @param array $attachmentList
      *
      * @return bool

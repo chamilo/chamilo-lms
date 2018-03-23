@@ -528,6 +528,7 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
+$template->assign('title_course', $lp->course_info['title']);
 $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
 $template->assign('lp_id', $lp->lp_id);
 $template->assign('lp_current_item_id', $lp->get_current_item_id());
@@ -543,14 +544,14 @@ $template->assign(
 );
 
 // supprimer pour OFAJ
-//$template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
-$template->assign('lp_id', $_SESSION['oLP']->lp_id);
-$template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
+//$template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+$template->assign('lp_id', $lp->lp_id);
+$template->assign('lp_current_item_id', $lp->get_current_item_id());
 
 if (api_get_configuration_value('lp_new_style') === true && $lpType == 1) {
-    $template->assign('data_panel', $_SESSION['oLP']->getParentToc($get_toc_list));
+    $template->assign('data_panel', $lp->getParentToc($get_toc_list));
 } else {
-    $template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
+    $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
 }
 
 $view = $template->get_template('learnpath/view.tpl');
@@ -562,7 +563,7 @@ $template->display_no_layout_template();
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;
 
-Session::write('lp', $lp);
+Session::write('oLP', $lp);
 
 if ($debug) {
     error_log(' ------- end lp_view.php ------');

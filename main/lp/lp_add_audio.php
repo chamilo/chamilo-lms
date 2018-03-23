@@ -119,7 +119,6 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRAR
 $tpl = new Template(null);
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
-$tpl->assign('php_session_id', session_id());
 $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
 $tpl->assign('enable_record_audio', api_get_setting('enable_record_audio') === 'true');
 $tpl->assign('cur_dir_path', '/audio');

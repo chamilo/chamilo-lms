@@ -886,6 +886,12 @@ foreach ($categories as $item) {
     ];
 }
 
+// Deleting the objects
+Session::erase('oLP');
+Session::erase('lpobject');
+learnpath::generate_learning_path_folder($courseInfo);
+DocumentManager::removeGeneratedAudioTempFile();
+
 $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
@@ -901,9 +907,3 @@ $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);
 $template->display_one_col_template();
-learnpath::generate_learning_path_folder($courseInfo);
-
-// Deleting the objects
-Session::erase('oLP');
-Session::erase('lpobject');
-DocumentManager::removeGeneratedAudioTempFile();

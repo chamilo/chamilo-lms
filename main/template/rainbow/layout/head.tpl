@@ -20,27 +20,26 @@
 {{ js_file_to_string }}
 {{ extra_headers }}
 <script>
-    /* Global chat variables */
-    var ajax_url = '{{ _p.web_ajax }}chat.ajax.php';
-    var online_button = '{{ online_button }}';
-    var offline_button = '{{ offline_button }}';
-    var connect_lang = '{{ "ChatConnected"|get_lang }}';
-    var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
+/* Global chat variables */
+var ajax_url = '{{ _p.web_ajax }}chat.ajax.php';
+var online_button = '{{ online_button }}';
+var offline_button = '{{ offline_button }}';
+var connect_lang = '{{ "ChatConnected"|get_lang }}';
+var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
+var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
 
-    var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout';
-
-    $(document).ready(function () {
-        // Executes course logout when user close the browser tab/window
-        $(window).on('beforeunload', function () {
-            // Logout of course just in case
-            $.ajax({
-                url: logOutUrl,
-                success: function (data) {
-                    return 1;
-                }
-            });
+$(function() {
+    // Executes course logout when user close the browser tab/window
+    $(window).on('beforeunload', function () {
+        // Logout of course just in case
+        $.ajax({
+            url: logOutUrl,
+            success: function (data) {
+                return 1;
+            }
         });
     });
+});
 
 </script>
 

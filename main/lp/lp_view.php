@@ -437,11 +437,16 @@ if ($is_allowed_to_edit) {
     ]);
 }
 
-$buttonHomeText = get_lang('CourseHomepageLink');
-// Return to lp list
-if (api_get_course_setting('lp_return_link') == 1) {
-    $buttonHomeUrl .= '&redirectTo=lp_list';
-    $buttonHomeText = get_lang('LearningPathList');
+$returnLink = api_get_course_setting('lp_return_link');
+switch ($returnLink) {
+    case 1: // lp list
+        $buttonHomeUrl .= '&redirectTo=lp_list';
+        $buttonHomeText = get_lang('LearningPathList');
+        break;
+    case 2: // user portal
+        $buttonHomeUrl .= '&redirectTo=my_courses';
+        $buttonHomeText = get_lang('MyCourses');
+        break;
 }
 
 $lpPreviewImagePath = Display::returnIconPath('unknown.png', ICON_SIZE_BIG);
@@ -542,7 +547,7 @@ $template->display_no_layout_template();
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;
 
-Session::write('lp', $lp);
+Session::write('oLP', $lp);
 
 if ($debug) {
     error_log(' ------- end lp_view.php ------');

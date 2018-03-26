@@ -3775,12 +3775,12 @@ class Exercise
                                     $choice[$j] = null;
                                 }
                             } else {
-                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                // This value is the user input, not escaped while correct answer is escaped by ckeditor
                                 $choice[$j] = api_htmlentities(trim($choice[$j]));
                             }
 
                             $user_tags[] = $choice[$j];
-                            //put the contents of the [] answer tag into correct_tags[]
+                            // Put the contents of the [] answer tag into correct_tags[]
                             $correct_tags[] = api_substr($temp, 0, $pos);
                             $j++;
                             $temp = api_substr($temp, $pos + 1);
@@ -3788,7 +3788,6 @@ class Exercise
                         $answer = '';
                         $real_correct_tags = $correct_tags;
                         $chosen_list = [];
-
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if ($i == 0) {
                                 $answer .= $real_text[0];
@@ -4732,7 +4731,7 @@ class Exercise
                                         $result_comment = get_lang('Unacceptable');
                                         $comment = $answerDestination = $objAnswerTmp->selectComment(1);
                                         $answerDestination = $objAnswerTmp->selectDestination(1);
-                                        //checking the destination parameters parsing the "@@"
+                                        // checking the destination parameters parsing the "@@"
                                         $destination_items = explode('@@', $answerDestination);
                                     }
                                 } elseif ($answerId > 1) {
@@ -4747,10 +4746,6 @@ class Exercise
                                     if ($debug > 0) {
                                         error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0);
                                     }
-                                    //check the intersection between the oar and the user
-                                    //echo 'user';	print_r($x_user_list);		print_r($y_user_list);
-                                    //echo 'official';print_r($x_list);print_r($y_list);
-                                    //$result = get_intersection_data($x_list,$y_list,$x_user_list,$y_user_list);
                                     $inter = $result['success'];
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
@@ -5431,11 +5426,9 @@ class Exercise
                 }
             }
 
-            //if ($origin != 'learnpath') {
             if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
-            //	}
         }
         unset($objAnswerTmp);
 
@@ -5547,7 +5540,12 @@ class Exercise
                     false,
                     $objQuestionTmp->getAbsoluteFilePath()
                 );
-            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION])) {
+            } elseif (
+                in_array(
+                    $answerType,
+                    [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION]
+                )
+            ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
@@ -5797,19 +5795,22 @@ class Exercise
     }
 
     /**
-     * @param array  $user_data  result of api_get_user_info()
-     * @param string $start_date
-     * @param null   $duration
-     * @param string $ip         Optional. The user IP
+     * @param array $user_data result of api_get_user_info()
+     * @param array $trackExerciseInfo
      *
      * @return string
      */
-    public function show_exercise_result_header(
+    public function showExerciseResultHeader(
         $user_data,
-        $start_date = null,
-        $duration = null,
-        $ip = null
+        $trackExerciseInfo
     ) {
+        $start_date = null;
+        if (isset($trackExerciseInfo['start_date'])) {
+            $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
+        }
+        $duration = isset($trackExerciseInfo['duration_formatted']) ? $trackExerciseInfo['duration_formatted'] : null;
+        $ip = isset($trackExerciseInfo['user_ip']) ? $trackExerciseInfo['user_ip'] : null;
+
         $array = [];
         if (!empty($user_data)) {
             $array[] = [
@@ -6558,21 +6559,12 @@ class Exercise
         $new_array = [];
         if (Database::num_rows($result) > 0) {
             $new_array = Database::fetch_array($result, 'ASSOC');
-            $new_array['duration'] = null;
             $start_date = api_get_utc_datetime($new_array['start_date'], true);
             $end_date = api_get_utc_datetime($new_array['exe_date'], true);
-
-            if (!empty($start_date) && !empty($end_date)) {
-                $start_date = api_strtotime($start_date, 'UTC');
-                $end_date = api_strtotime($end_date, 'UTC');
-                if ($start_date && $end_date) {
-                    $mytime = $end_date - $start_date;
-                    $new_learnpath_item = new learnpathItem(null);
-                    $time_attemp = $new_learnpath_item->get_scorm_time('js', $mytime);
-                    $h = get_lang('h');
-                    $time_attemp = str_replace('NaN', '00'.$h.'00\'00"', $time_attemp);
-                    $new_array['duration'] = $time_attemp;
-                }
+            $new_array['duration_formatted'] = '';
+            if (!empty($new_array['exe_duration']) && !empty($start_date) && !empty($end_date)) {
+                $time = api_format_time($new_array['exe_duration'], 'js');
+                $new_array['duration_formatted'] = $time;
             }
         }
 
@@ -7482,7 +7474,6 @@ class Exercise
         }
 
         $sessionId = intval($sessionId);
-
         $ids = is_array($quizId) ? $quizId : [$quizId];
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
@@ -7892,25 +7883,25 @@ class Exercise
         $course_info = api_get_course_info($courseCode);
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
-            .get_lang('AttemptDetails').' : <br /><br />'
-            .'<table>'
-            .'<tr>'
-            .'<td><em>'.get_lang('CourseName').'</em></td>'
-            .'<td>&nbsp;<b>#course#</b></td>'
-            .'</tr>'
-            .'<tr>'
-            .'<td>'.get_lang('TestAttempted').'</td>'
-            .'<td>&nbsp;#exercise#</td>'
-            .'</tr>'
-            .'<tr>'
-            .'<td>'.get_lang('StudentName').'</td>'
-            .'<td>&nbsp;#firstName# #lastName#</td>'
-            .'</tr>'
-            .'<tr>'
-            .'<td>'.get_lang('StudentEmail').'</td>'
-            .'<td>&nbsp;#mail#</td>'
-            .'</tr>'
-            .'</table>';
+                    .get_lang('AttemptDetails').' : <br /><br />'
+                    .'<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td>&nbsp;<b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>&nbsp;#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>&nbsp;#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>&nbsp;#mail#</td>'
+                        .'</tr>'
+                    .'</table>';
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -7991,19 +7982,18 @@ class Exercise
                 $answer = '';
             }
             $answer_type = $item['answer_type'];
-
             if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
                 if (!empty($file)) {
                     $file = Display::url($file, $file);
                 }
                 $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
                     .'<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
                     .'</tr>'
                     .'<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
                     .'</tr></table>';
             }
         }
@@ -8011,24 +8001,24 @@ class Exercise
         if (!empty($oral_question_list)) {
             $msg = get_lang('OralQuestionsAttempted').'<br /><br />
                     '.get_lang('AttemptDetails').' : <br /><br />'
-                .'<table>'
-                .'<tr>'
-                .'<td><em>'.get_lang('CourseName').'</em></td>'
-                .'<td>&nbsp;<b>#course#</b></td>'
-                .'</tr>'
-                .'<tr>'
-                .'<td>'.get_lang('TestAttempted').'</td>'
-                .'<td>&nbsp;#exercise#</td>'
-                .'</tr>'
-                .'<tr>'
-                .'<td>'.get_lang('StudentName').'</td>'
-                .'<td>&nbsp;#firstName# #lastName#</td>'
-                .'</tr>'
-                .'<tr>'
-                .'<td>'.get_lang('StudentEmail').'</td>'
-                .'<td>&nbsp;#mail#</td>'
-                .'</tr>'
-                .'</table>';
+                    .'<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td>&nbsp;<b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>&nbsp;#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>&nbsp;#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>&nbsp;#mail#</td>'
+                        .'</tr>'
+                    .'</table>';
             $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);

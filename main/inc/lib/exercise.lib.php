@@ -1360,6 +1360,11 @@ HOTSPOT;
 
             $res_fb_type = Database::query($sql);
             $result = Database::fetch_array($res_fb_type, 'ASSOC');
+            $result['duration_formatted'] = '';
+            if (!empty($result['exe_duration'])) {
+                $time = api_format_time($result['exe_duration'], 'js');
+                $result['duration_formatted'] = $time;
+            }
         }
 
         return $result;
@@ -1668,6 +1673,7 @@ HOTSPOT;
      * @param bool   $showSessionField
      * @param bool   $showExerciseCategories
      * @param array  $userExtraFieldsToAdd
+     * @param bool   $useCommaAsDecimalPoint
      *
      * @return array
      */
@@ -1682,7 +1688,8 @@ HOTSPOT;
         $courseCode = null,
         $showSessionField = false,
         $showExerciseCategories = false,
-        $userExtraFieldsToAdd = []
+        $userExtraFieldsToAdd = [],
+        $useCommaAsDecimalPoint = false
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1695,7 +1702,12 @@ HOTSPOT;
         }
 
         $course_id = $courseInfo['real_id'];
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
+        $is_allowedToEdit =
+            api_is_allowed_to_edit(null, true) ||
+            api_is_allowed_to_edit(true) ||
+            api_is_drh() ||
+            api_is_student_boss() ||
+            api_is_session_admin();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
@@ -1922,9 +1934,7 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code(
-            $courseCode
-        );
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -1949,7 +1959,6 @@ HOTSPOT;
             while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
                 $results[] = $rowx;
             }
-
             $group_list = GroupManager::get_group_list(null, $courseInfo);
             $clean_group_list = [];
             if (!empty($group_list)) {
@@ -1962,7 +1971,7 @@ HOTSPOT;
             $lp_list = $lp_list_obj->get_flat_list();
             $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
 
-            if (is_array($results)) {
+            if (!empty($results)) {
                 $users_array_id = [];
                 $from_gradebook = false;
                 if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1970,11 +1979,7 @@ HOTSPOT;
                 }
                 $sizeof = count($results);
                 $user_list_id = [];
-                $locked = api_resource_is_locked_by_gradebook(
-                    $exercise_id,
-                    LINK_EXERCISE
-                );
-
+                $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
                 $timeNow = strtotime(api_get_utc_datetime());
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
@@ -2056,10 +2061,9 @@ HOTSPOT;
                     // we filter the results if we have the permission to
                     $result_disabled = 0;
                     if (isset($results[$i]['results_disabled'])) {
-                        $result_disabled = intval(
-                            $results[$i]['results_disabled']
-                        );
+                        $result_disabled = (int) $results[$i]['results_disabled'];
                     }
+
                     if ($result_disabled == 0) {
                         $my_res = $results[$i]['exe_result'];
                         $my_total = $results[$i]['exe_weighting'];
@@ -2074,6 +2078,7 @@ HOTSPOT;
                         $score = self::show_score($my_res, $my_total);
 
                         $actions = '<div class="pull-right">';
+
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(
@@ -2490,9 +2495,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        //$modelWithStyle = get_lang($model['name']);
         $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-        //$modelWithStyle .= $percentage;
 
         return $modelWithStyle;
     }
@@ -4101,14 +4104,9 @@ EOT;
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
                     // Shows exercise header
-                    echo $objExercise->show_exercise_result_header(
+                    echo $objExercise->showExerciseResultHeader(
                         $user_info,
-                        api_convert_and_format_date(
-                            $exercise_stat_info['start_date'],
-                            DATE_TIME_FORMAT_LONG
-                        ),
-                        $exercise_stat_info['duration'],
-                        $exercise_stat_info['user_ip']
+                        $exercise_stat_info
                     );
                 }
             }

@@ -546,13 +546,7 @@ function lp_upload_quiz_action_handling()
         if (!empty($lpObject)) {
             $oLP = unserialize($lpObject);
             if (is_object($oLP)) {
-                if ($debug > 0) {
-                    error_log('New LP - oLP is object', 0);
-                }
                 if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
-                    if ($debug > 0) {
-                        error_log('New LP - Course has changed, discard lp object', 0);
-                    }
                     $oLP = null;
                     Session::erase('oLP');
                     Session::erase('lpobject');

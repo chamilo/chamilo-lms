@@ -35,7 +35,6 @@ if (empty($track_exercise_info)) {
 }
 
 $exercise_id = $track_exercise_info['id'];
-$exercise_date = $track_exercise_info['start_date'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
@@ -120,7 +119,6 @@ if (empty($objExercise)) {
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
-
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $currentUserId) {
@@ -149,7 +147,6 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
 
 $this_section = SECTION_COURSES;
-
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
@@ -293,11 +290,9 @@ if ($action == 'export') {
 $user_info = api_get_user_info($student_id);
 if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
     // Shows exercise header
-    echo $objExercise->show_exercise_result_header(
+    echo $objExercise->showExerciseResultHeader(
         $user_info,
-        api_convert_and_format_date($exercise_date),
-        null,
-        $track_exercise_info['user_ip']
+        $track_exercise_info
     );
 }
 
@@ -362,14 +357,15 @@ if (!empty($end_of_message) && ($origin == 'learnpath')) {
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
     $objQuestionTmp = Question::read($questionId);
-    $total_weighting += $objQuestionTmp->selectWeighting();
+    if ($objQuestionTmp) {
+        $total_weighting += $objQuestionTmp->selectWeighting();
+    }
 }
 
 $counter = 1;
 $exercise_content = '';
 $category_list = [];
 $useAdvancedEditor = true;
-
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
@@ -381,9 +377,14 @@ foreach ($questionList as $questionId) {
     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
     unset($objQuestionTmp);
-
-    // creates a temporary Question object
+    $questionWeighting = 0;
+    $answerType = 0;
+    $questionScore = 0;
+    // Creates a temporary Question object
     $objQuestionTmp = Question::read($questionId);
+    if (empty($objQuestionTmp)) {
+        continue;
+    }
     $questionWeighting = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
 
@@ -755,7 +756,6 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
-
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
@@ -907,7 +907,7 @@ foreach ($questionList as $questionId) {
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
-    if ($show_results) {
+    if ($show_results && $objQuestionTmp) {
         $objQuestionTmp->export = $action == 'export';
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
@@ -1055,6 +1055,15 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             .'&id_session='.api_get_session_id();
     }
 
+    Skill::addSkillsToUserForm(
+        $emailForm,
+        ITEM_TYPE_EXERCISE,
+        $exercise_id,
+        $student_id,
+        $track_exercise_info['exe_id'],
+        true
+    );
+
     $content = ExerciseLib::getEmailNotification(
         $currentUserId,
         api_get_course_info(),
@@ -1062,6 +1071,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         $url
     );
     $emailForm->setDefaults(['notification_content' => $content]);
+
     $emailForm->addButtonSend(
         get_lang('CorrectTest'),
         'submit',
@@ -1124,3 +1134,5 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
+
+Session::erase('calculatedAnswerId');

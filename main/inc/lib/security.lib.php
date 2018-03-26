@@ -380,7 +380,7 @@ class Security
             $config->set('HTML.DefinitionID', 'html5-definitions'); // unqiue id
             $config->set('HTML.DefinitionRev', 1);
             if ($def = $config->maybeGetRawHTMLDefinition()) {
-                // http://developers.whatwg.org/the-video-element.html#the-video-element
+                // https://html.spec.whatwg.org/dev/media.html#the-video-element
                 $def->addElement(
                     'video',
                     'Block',
@@ -394,6 +394,21 @@ class Security
                         'poster' => 'URI',
                         'preload' => 'Enum#auto,metadata,none',
                         'controls' => 'Bool',
+                    ]
+                );
+                // https://html.spec.whatwg.org/dev/media.html#the-audio-element
+                $def->addElement(
+                    'audio',
+                    'Block',
+                    'Optional: (source, Flow) | (Flow, source) | Flow',
+                    'Common',
+                    [
+                        'autoplay' => 'Bool',
+                        'src' => 'URI',
+                        'loop' => 'Bool',
+                        'preload' => 'Enum#auto,metadata,none',
+                        'controls' => 'Bool',
+                        'muted' => 'Bool',
                     ]
                 );
                 $def->addElement(
@@ -456,9 +471,11 @@ class Security
     }
 
     /**
-     * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.
-     * Image paths are supposed to be given by programmers - people who know what they do, anyway, this method encourages
-     * a safe practice for generating icon paths, without using heavy solutions based on HTMLPurifier for example.
+     * This method provides specific protection (against XSS and other kinds of attacks)
+     * for static images (icons) used by the system.
+     * Image paths are supposed to be given by programmers - people who know what they do, anyway,
+     * this method encourages a safe practice for generating icon paths, without using heavy solutions
+     * based on HTMLPurifier for example.
      *
      * @param string $img_path the input path of the image, it could be relative or absolute URL
      *

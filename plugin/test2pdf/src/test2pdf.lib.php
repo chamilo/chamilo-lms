@@ -117,6 +117,7 @@ function getQuestions($courseId, $quizId, $sessionId = 0)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row['question_id'];
     }
+
     return $aux;
 }
 

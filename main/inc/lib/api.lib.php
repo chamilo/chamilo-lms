@@ -279,15 +279,17 @@ define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 define('IS_WINDOWS_OS', api_is_windows_os());
 
 // Checks for installed optional php-extensions.
-define('INTL_INSTALLED', function_exists('intl_get_error_code')); // intl extension (from PECL), it is installed by default as of PHP 5.3.0
-define('ICONV_INSTALLED', function_exists('iconv')); // iconv extension, for PHP5 on Windows it is installed by default.
+// intl extension (from PECL), it is installed by default as of PHP 5.3.0.
+define('INTL_INSTALLED', function_exists('intl_get_error_code'));
+// iconv extension, for PHP5 on Windows it is installed by default.
+define('ICONV_INSTALLED', function_exists('iconv'));
 define('MBSTRING_INSTALLED', function_exists('mb_strlen')); // mbstring extension.
 
-// Patterns for processing paths.                                   // Examples:
+// Patterns for processing paths. Examples.
 define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/'); // $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
 define('VALID_WEB_PATH', '/https?:\/\/[^\/]*(\/.*)?/i'); // $is_valid_path = preg_match(VALID_WEB_PATH, $path);
-define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i'); // $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
-
+// $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
+define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 // basic (leaf elements)
 define('REL_CODE_PATH', 'REL_CODE_PATH');
@@ -737,9 +739,10 @@ function api_get_path($path = '', $configuration = [])
                             : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
                                 : (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
                                     : 'localhost')));
-                    if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
-                        && (($server_protocol == 'http'
-                                && $_SERVER['SERVER_PORT'] != 80) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
+                    if (isset($_SERVER['SERVER_PORT']) &&
+                        !strpos($server_name, ':') &&
+                        (($server_protocol == 'http' && $_SERVER['SERVER_PORT'] != 80) ||
+                        ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
                     ) {
                         $server_name .= ":".$_SERVER['SERVER_PORT'];
                     }
@@ -754,7 +757,7 @@ function api_get_path($path = '', $configuration = [])
     if (isset($configuration['multiple_access_urls']) &&
         $configuration['multiple_access_urls']
     ) {
-        // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
+        // To avoid that the api_get_access_url() function fails since global.inc.php also calls the api.lib.php.
         if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
             // We look into the DB the function api_get_access_url
             $urlInfo = api_get_access_url($configuration['access_url']);

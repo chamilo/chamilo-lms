@@ -37,7 +37,7 @@ $letters = [
 /**
  * List exercises.
  *
- * @param int $courseId Course ID
+ * @param int $courseId  Course ID
  * @param int $sessionId Session ID
  *
  * @throws Exception

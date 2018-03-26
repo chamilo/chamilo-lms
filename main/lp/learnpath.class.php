@@ -6182,7 +6182,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
         $default_data = null;
         $default_content = null;
@@ -7506,7 +7506,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         $form = new FormValidator(
@@ -7918,7 +7918,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         if ($action == 'add') {
@@ -8135,7 +8135,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         $form = new FormValidator(
@@ -9039,7 +9039,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         if ($action == 'add') {
@@ -9252,7 +9252,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         $form = new FormValidator('frm_student_publication', 'post', '#');
@@ -9745,7 +9745,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         for ($i = 0; $i < count($arrLP); $i++) {

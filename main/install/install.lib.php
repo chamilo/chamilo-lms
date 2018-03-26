@@ -1641,6 +1641,8 @@ function panel($content = null, $title = null, $id = null, $style = null)
  * @param string $formFieldName
  * @param string $parameterValue
  * @param string $displayWhenUpdate
+ *
+ * @return string
  */
 function display_configuration_parameter(
     $installType,
@@ -2786,6 +2788,195 @@ function fixIds(EntityManager $em)
 }
 
 /**
+ * @param \Doctrine\DBAL\Connection  $connection
+ * @param $debug
+ *
+ * @throws \Doctrine\DBAL\DBALException
+ */
+function fixLpId($connection, $debug)
+{
+    if ($debug) {
+        error_log('Fix lp.id lp.iids');
+    }
+
+    $sql = "SELECT id, title, code FROM course";
+    $result = $connection->query($sql);
+    $courses = $result->fetchAll();
+
+    $sql = "SELECT id FROM session";
+    $result = $connection->query($sql);
+    $sessions = $result->fetchAll();
+
+    $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
+    $tblCLpItem = Database::get_course_table(TABLE_LP_ITEM);
+    $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
+
+    if (!empty($sessions)) {
+        $sessions = array_column($sessions, 'id');
+    } else {
+        $sessions = [0];
+    }
+
+    foreach ($courses as $course) {
+        $courseId = $course['id'];
+        $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId AND iid <> id";
+        $result = $connection->query($sql);
+        if ($debug) {
+            error_log('-------------');
+            error_log("Entering Lps in course #$courseId");
+            error_log($sql);
+        }
+        $lpList = $result->fetchAll();
+        if (!empty($lpList)) {
+            foreach ($lpList as $lpInfo) {
+                $lpIid = $lpInfo['iid'];
+                $oldId = $lpInfo['id'];
+
+                if ($lpIid == $oldId) {
+                    // Do nothing
+                    continue;
+                }
+                $sql = "SELECT * FROM $tblCLpItem WHERE c_id = $courseId AND lp_id = $oldId";
+
+                $result = $connection->query($sql);
+                $items = $result->fetchAll();
+                $itemList = [];
+                foreach ($items as $subItem) {
+                    $itemList[$subItem['id']] = $subItem['iid'];
+                }
+                $variablesToFix = [
+                    'parent_item_id',
+                    'next_item_id',
+                    'prerequisite',
+                    'previous_item_id'
+                ];
+
+                foreach ($sessions as $sessionId) {
+                    $correctLink = "lp/lp_controller.php?action=view&lp_id=$lpIid&id_session=$sessionId";
+                    $link = "newscorm/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
+                    $secondLink = "lp/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
+                    $sql = "UPDATE $toolTable 
+                        SET link = '$correctLink'
+                        WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
+                    $connection->query($sql);
+                    if ($debug) {
+                        error_log("Fix wrong c_tool links");
+                        error_log($sql);
+                    }
+                }
+
+                foreach ($items as $item) {
+                    $itemIid = $item['iid'];
+                    $itemId = $item['id'];
+                    foreach ($variablesToFix as $variable) {
+                        if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
+                            $newId = $itemList[$item[$variable]];
+                            $sql = "UPDATE $tblCLpItem SET $variable = $newId 
+                                    WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
+                            $connection->query($sql);
+                            if ($debug) {
+                                error_log($sql);
+                            }
+                        }
+                    }
+
+                    if ($item['item_type'] == 'document' && !empty($item['path'])) {
+                        $oldDocumentId = $item['path'];
+                        $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $oldDocumentId";
+                        $result = $connection->query($sql);
+                        $document = $result->fetch();
+                        if (!empty($document)) {
+                            $newDocumentId = $document['iid'];
+                            if (!empty($newDocumentId)) {
+                                $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
+                                    WHERE iid = $itemIid AND c_id = $courseId";
+                                $connection->query($sql);
+                                if ($debug) {
+                                    error_log("Fix document: ");
+                                    error_log($sql);
+                                }
+                            }
+                        }
+                    }
+
+                    // c_lp_view
+                    $sql = "UPDATE c_lp_view SET last_item = $itemIid 
+                            WHERE c_id = $courseId AND last_item = $itemId AND lp_id = $oldId";
+                    $connection->query($sql);
+
+                    // c_lp_item_view
+                    $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid 
+                            WHERE c_id = $courseId AND lp_item_id = $itemId";
+                    $connection->query($sql);
+
+                    // Update track_exercises
+                    $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid 
+                            WHERE c_id = $courseId AND orig_lp_id = $oldId AND orig_lp_item_id = $itemId";
+                    $connection->query($sql);
+
+                    // c_forum_thread
+                    $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid 
+                            WHERE c_id = $courseId AND lp_item_id = $itemId";
+                    $connection->query($sql);
+
+                    // orig_lp_item_view_id
+                    $sql = "SELECT * FROM c_lp_view
+                            WHERE c_id = $courseId AND lp_id = $oldId";
+                    $itemViewList = Database::store_result(Database::query($sql),'ASSOC');
+                    if ($itemViewList) {
+                        foreach ($itemViewList as $itemView) {
+                            $userId = $itemView['user_id'];
+                            $oldItemViewId = $itemView['id'];
+                            $newItemView = $itemView['iid'];
+                            if (empty($oldItemViewId)) {
+                                continue;
+                            }
+
+                            $sql = "UPDATE track_e_exercises 
+                                SET orig_lp_item_view_id = $newItemView 
+                                WHERE 
+                                  c_id = $courseId AND 
+                                  orig_lp_id = $oldId AND 
+                                  orig_lp_item_id = $itemIid AND 
+                                  orig_lp_item_view_id = $oldItemViewId AND 
+                                  exe_user_id = $userId                                       
+                                  ";
+                            $connection->query($sql);
+                        }
+                    }
+
+                    $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
+                        WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
+                    $connection->query($sql);
+
+                    $sql = "UPDATE $tblCLpItem SET id = iid 
+                        WHERE c_id = $courseId AND lp_id = $oldId";
+                    $connection->query($sql);
+                }
+
+                $sql = "UPDATE $tblCLp SET id = iid WHERE c_id = $courseId AND iid = $lpIid";
+                $connection->query($sql);
+
+                $sql = "UPDATE c_lp_view SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
+                $connection->query($sql);
+
+                $sql = "UPDATE c_forum_forum SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
+                $connection->query($sql);
+
+                // Update track_exercises
+                $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
+                        WHERE c_id = $courseId AND orig_lp_id = $oldId";
+                $connection->query($sql);
+            }
+        }
+    }
+
+    if ($debug) {
+        error_log('----- END - fixIds');
+    }
+}
+
+/**
  * After the schema was created (table creation), the function adds
  * admin/platform information.
  *
@@ -3220,6 +3411,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
                 fixIds($manager);
+                fixLpId($manager->getConnection(), true);
                 error_log('fixIds finished ('.date('Y-m-d H:i:s').')');
 
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
@@ -3272,6 +3464,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             );
 
             if ($result) {
+                fixLpId($connection, true);
+
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
 
                 fixPostGroupIds($connection);

@@ -48,6 +48,8 @@ function showExerciseCourse($courseId, $sessionId = 0)
 {
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
     $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+    $courseId = (int) $courseId;
+    $sessionId = (int) $sessionId;
     $conditionSession = api_get_session_condition($sessionId, true, true, 'a.session_id');
     $sql = "SELECT a.* 
             FROM $tableQuiz a 
@@ -57,9 +59,6 @@ function showExerciseCourse($courseId, $sessionId = 0)
             $conditionSession
             ORDER BY a.title ASC;";
     $res = Database::query($sql);
-    if (!$res) {
-        die("Error Database $tableQuiz");
-    }
     $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
@@ -77,12 +76,11 @@ function showExerciseCourse($courseId, $sessionId = 0)
  */
 function getInfoQuiz($courseId, $id)
 {
+    $courseId = (int) $courseId;
+    $id = (int) $id;
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
     $sql = "SELECT * FROM $tableQuiz WHERE c_id = $courseId AND iid = $id";
     $res = Database::query($sql);
-    if (!$res) {
-        die("Error Database $tableQuiz");
-    }
     $row = Database::fetch_assoc($res);
 
     return $row;
@@ -97,6 +95,10 @@ function getInfoQuiz($courseId, $id)
  */
 function getQuestions($courseId, $quizId, $sessionId = 0)
 {
+    $courseId = (int) $courseId;
+    $quizId = (int) $quizId;
+    $sessionId = (int) $sessionId;
+
     $tableQuizQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -111,9 +113,6 @@ function getQuestions($courseId, $quizId, $sessionId = 0)
             $conditionSession 
             ORDER BY question_order ASC;";
     $res = Database::query($sql);
-    if (!$res) {
-        die("Error Database $tableQuizQuestion");
-    }
     $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row['question_id'];
@@ -130,15 +129,14 @@ function getQuestions($courseId, $quizId, $sessionId = 0)
  */
 function getInfoQuestion($courseId, $id)
 {
+    $courseId = (int) $courseId;
+    $id = (int) $id;
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $sql = "SELECT * FROM $tableQuestion 
             WHERE c_id = $courseId 
             AND iid = $id
             AND (type IN (1, 2, 9, 10, 11, 12, 14))";
     $res = Database::query($sql);
-    if (!$res) {
-        die("Error Database $tableQuestion");
-    }
     $row = Database::fetch_assoc($res);
 
     return $row;
@@ -153,14 +151,13 @@ function getInfoQuestion($courseId, $id)
  */
 function getAnswers($courseId, $id)
 {
+    $courseId = (int) $courseId;
+    $id = (int) $id;
     $tableQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $sql = "SELECT * FROM $tableQuizAnswer
     	    WHERE c_id = $courseId AND question_id = $id
     	    ORDER BY position ASC;";
     $res = Database::query($sql);
-    if (!$res) {
-        die("Error Database $tableQuizAnswer");
-    }
     $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;

@@ -5869,8 +5869,8 @@ class Exercise
     }
 
     /**
-     * @param array $user_data result of api_get_user_info()
-     * @param array $trackExerciseInfo
+     * @param array $user_data         result of api_get_user_info()
+     * @param array $trackExerciseInfo result of get_stat_track_exercise_info
      *
      * @return string
      */
@@ -5961,6 +5961,7 @@ class Exercise
      * @param int     Whether the results are show to the user (0) or not (1)
      * @param int     Maximum number of attempts (0 if no limit)
      * @param int     Feedback type
+     * @param int $propagateNegative
      *
      * @todo this was function was added due the import exercise via CSV
      *

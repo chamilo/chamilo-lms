@@ -3920,24 +3920,16 @@ class learnpathItem
                         if (!empty($_REQUEST['exeId'])) {
                             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
                             $exeId = (int) $_REQUEST['exeId'];
-                            $sql = "SELECT start_date, exe_date
+                            $sql = "SELECT exe_duration
                                     FROM $table
                                     WHERE exe_id = $exeId";
                             if ($debug) {
                                 error_log($sql);
                             }
                             $res = Database::query($sql);
-                            $row_dates = Database::fetch_array($res);
-
-                            $time_start_date = convert_sql_date(
-                                $row_dates['start_date']
-                            );
-                            $time_exe_date = convert_sql_date(
-                                $row_dates['exe_date']
-                            );
-                            $mytime = ((int) $time_exe_date - (int) $time_start_date);
-                            $mytime = $this->fixAbusiveTime($mytime);
-                            $total_time = " total_time = ".$mytime.", ";
+                            $exeRow = Database::fetch_array($res);
+                            $duration = $exeRow['exe_duration'];
+                            $total_time = " total_time = ".$duration.", ";
                             if ($debug) {
                                 error_log("quiz: $total_time");
                             }

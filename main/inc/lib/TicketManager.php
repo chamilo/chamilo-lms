@@ -705,7 +705,6 @@ class TicketManager
      * @param $message_id
      *
      * @return bool
-     *
      */
     public static function saveMessageAttachmentFile(
         $file_attach,

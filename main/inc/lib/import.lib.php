@@ -71,6 +71,7 @@ class Import
 
     /**
      * @param string $filename
+     *
      * @return array
      */
     public static function xlsToArray($filename)

@@ -5,7 +5,6 @@
  *
  * @package chamilo.plugin.test2pdf
  */
-
 $letters = [
     'a',
     'b',
@@ -45,7 +44,6 @@ $letters = [
  *
  * @return array Results (list of exercise details)
  */
-
 function showExerciseCourse($courseId, $sessionId = 0)
 {
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);

@@ -706,6 +706,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Google translate key
 //$_configuration['translate_app_google_key'] = '';
 
+// Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
+//$_configuration['allow_teacher_access_student_skills'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

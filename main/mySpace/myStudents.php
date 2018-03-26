@@ -1720,7 +1720,8 @@ echo '<div class="communications">';
 echo Tracking::displayUserSkills(
     $user_info['user_id'],
     $courseInfo ? $courseInfo['real_id'] : 0,
-    $sessionId
+    $sessionId,
+    api_get_configuration_value('allow_teacher_access_student_skills')
 );
 echo '</div>';
 

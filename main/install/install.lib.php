@@ -2785,6 +2785,8 @@ function fixIds(EntityManager $em)
     if ($debug) {
         error_log('Finish fixId function');
     }
+
+    fixLpId($connection, true);
 }
 
 /**
@@ -3411,7 +3413,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
                 fixIds($manager);
-                fixLpId($manager->getConnection(), true);
                 error_log('fixIds finished ('.date('Y-m-d H:i:s').')');
 
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");

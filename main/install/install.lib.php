@@ -2850,7 +2850,7 @@ function fixLpId($connection, $debug)
                     'parent_item_id',
                     'next_item_id',
                     'prerequisite',
-                    'previous_item_id'
+                    'previous_item_id',
                 ];
 
                 foreach ($sessions as $sessionId) {
@@ -2924,7 +2924,8 @@ function fixLpId($connection, $debug)
                     // orig_lp_item_view_id
                     $sql = "SELECT * FROM c_lp_view
                             WHERE c_id = $courseId AND lp_id = $oldId";
-                    $itemViewList = Database::store_result(Database::query($sql),'ASSOC');
+                    $result = $connection->query($sql);
+                    $itemViewList = $result->fetchAll();
                     if ($itemViewList) {
                         foreach ($itemViewList as $itemView) {
                             $userId = $itemView['user_id'];

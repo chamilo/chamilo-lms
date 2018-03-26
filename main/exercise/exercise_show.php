@@ -35,7 +35,6 @@ if (empty($track_exercise_info)) {
 }
 
 $exercise_id = $track_exercise_info['id'];
-$exercise_date = $track_exercise_info['start_date'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
@@ -123,7 +122,6 @@ if (empty($objExercise)) {
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
-
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $currentUserId) {
@@ -293,11 +291,9 @@ if ($action == 'export') {
 $user_info = api_get_user_info($student_id);
 if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
     // Shows exercise header
-    echo $objExercise->show_exercise_result_header(
+    echo $objExercise->showExerciseResultHeader(
         $user_info,
-        api_convert_and_format_date($exercise_date),
-        null,
-        $track_exercise_info['user_ip']
+        $track_exercise_info
     );
 }
 

@@ -1001,25 +1001,32 @@ class Template
 		        </div>';
         }
 
-        if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
+        if (api_get_setting('show_link_ticket_notification') == 'true' &&
+            $this->user_is_logged_in
+        ) {
             // by default is project_id = 1
-            $iconTicket = Display::return_icon(
-                'help.png',
-                get_lang('Ticket'),
-                [],
-                ICON_SIZE_LARGE
-            );
-            $courseInfo = api_get_course_info();
-            $courseParams = '';
-            if (!empty($courseInfo)) {
-                $courseParams = api_get_cidreq();
+            $defaultProjectId = 1;
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+            if ($allow) {
+                $iconTicket = Display::return_icon(
+                    'help.png',
+                    get_lang('Ticket'),
+                    [],
+                    ICON_SIZE_LARGE
+                );
+                $courseInfo = api_get_course_info();
+                $courseParams = '';
+                if (!empty($courseInfo)) {
+                    $courseParams = api_get_cidreq();
+                }
+                $url = api_get_path(WEB_CODE_PATH).
+                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
             }
-            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id=1&'.$courseParams;
-            $rightFloatMenu .= '<div class="help">
-		        <a href="'.$url.'" target="_blank">
-                    '.$iconTicket.'
-                </a>
-		    </div>';
         }
 
         $this->assign('bug_notification', $rightFloatMenu);

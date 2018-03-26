@@ -30,7 +30,7 @@ foreach ($courses as $course) {
         }
     }
     $courseId = $course['id'];
-    $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId";
+    $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId AND iid <> id";
     echo 'Select all lps';
     var_dump($sql);
     $result = Database::query($sql);

@@ -3912,15 +3912,20 @@ class learnpathItem
                 } else {
                     // For all other content types...
                     if ($this->type == 'quiz') {
+                        if ($debug) {
+                            error_log("item is quiz:");
+                        }
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
                             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-                            $safe_exe_id = intval($_REQUEST['exeId']);
+                            $exeId = (int) $_REQUEST['exeId'];
                             $sql = "SELECT start_date, exe_date
                                     FROM $table
-                                    WHERE exe_id = $safe_exe_id";
+                                    WHERE exe_id = $exeId";
+                            if ($debug) {
+                                error_log($sql);
+                            }
                             $res = Database::query($sql);
                             $row_dates = Database::fetch_array($res);
 

@@ -893,13 +893,13 @@ if (empty($details)) {
                     $progress = Tracking::get_avg_student_progress(
                         $user_info['user_id'],
                         $courseCodeItem,
-                        null,
+                        [],
                         $sId
                     );
                     $score = Tracking:: get_avg_student_score(
                         $user_info['user_id'],
                         $courseCodeItem,
-                        null,
+                        [],
                         $sId
                     );
                     $progress = empty($progress) ? '0%' : $progress.'%';
@@ -1603,10 +1603,12 @@ if (empty($details)) {
     </div>
 <?php
 } //end details
+
 echo Tracking::displayUserSkills(
     $user_info['user_id'],
     $courseInfo ? $courseInfo['real_id'] : 0,
-    $sessionId
+    $sessionId,
+    api_get_configuration_value('allow_teacher_access_student_skills')
 );
 
 if ($allowMessages === true) {

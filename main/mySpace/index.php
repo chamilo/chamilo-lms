@@ -15,7 +15,8 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'
+    .api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
@@ -246,7 +247,9 @@ $view->assign('students', $numberStudents);
 $view->assign('studentbosses', $numberStudentBosses);
 $view->assign('numberTeachers', $numberTeachers);
 $view->assign('humanresources', $countHumanResourcesUsers);
-$view->assign('total_user', $numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers);
+$view->assign(
+    'total_user',
+    $numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers);
 $view->assign('studentboss', STUDENT_BOSS);
 $view->assign('drh', DRH);
 $view->assign('stats', $stats);
@@ -289,8 +292,12 @@ if ($skipData == false) {
         $csv_content[] = [get_lang('InactivesStudents'), $nb_inactive_students];
         $csv_content[] = [get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent];
         $csv_content[] = [get_lang('AverageCoursePerStudent'), $avg_courses_per_student];
-        $csv_content[] = [get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress) ? null : round($avgTotalProgress, 2).'%'];
-        $csv_content[] = [get_lang('AverageResultsToTheExercices'), is_null($averageScore) ? null : round($averageScore, 2).'%'];
+        $csv_content[] = [get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress)
+            ? null
+            : round($avgTotalProgress, 2).'%'];
+        $csv_content[] = [get_lang('AverageResultsToTheExercices'), is_null($averageScore)
+            ? null
+            : round($averageScore, 2).'%'];
         $csv_content[] = [get_lang('AveragePostsInForum'), $posts];
         $csv_content[] = [get_lang('AverageAssignments'), $numberAssignments];
         $csv_content[] = [];
@@ -318,13 +325,19 @@ if ($skipData == false) {
             $sessionIdList,
             $studentIds
         );
-        $report['AverageCoursePerStudent'] = (is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2));
+        $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
+            ? ''
+            : round($avg_courses_per_student, 2);
         $report['InactivesStudents'] = $nb_inactive_students;
-        $report['AverageTimeSpentOnThePlatform'] = (is_null($totalTimeSpent) ? '00:00:00' : api_time_to_hms($totalTimeSpent));
-        $report['AverageProgressInLearnpath'] = (is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%');
-        $report['AvgCourseScore'] = (is_null($averageScore) ? '0' : round($averageScore, 2).'%');
-        $report['AveragePostsInForum'] = (is_null($posts) ? '0' : round($posts, 2));
-        $report['AverageAssignments'] = (is_null($numberAssignments) ? '' : round($numberAssignments, 2));
+        $report['AverageTimeSpentOnThePlatform'] = is_null($totalTimeSpent)
+            ? '00:00:00'
+            : api_time_to_hms($totalTimeSpent);
+        $report['AverageProgressInLearnpath'] = is_null($avgTotalProgress)
+            ? ''
+            : round($avgTotalProgress, 2).'%';
+        $report['AvgCourseScore'] = is_null($averageScore) ? '0' : round($averageScore, 2).'%';
+        $report['AveragePostsInForum'] = is_null($posts) ? '0' : round($posts, 2);
+        $report['AverageAssignments'] = is_null($numberAssignments) ? '' : round($numberAssignments, 2);
         $view->assign('report', $report);
     }
 }

@@ -5,6 +5,8 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\SkillBundle\Entity\SkillRelCourse;
+use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,9 +35,15 @@ class Skill
     protected $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
+     * 
+     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
      */
     protected $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"}).
+     */
+    protected $courses;
 
     /**
      * @var int
@@ -388,5 +396,119 @@ class Skill
     public function getIssuedSkills()
     {
         return $this->issuedSkills;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param ArrayCollection $items
+     *
+     * @return Skill
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+
+        return $this;
+    }
+
+    /**
+     * @param int $itemId
+     *
+     * @return bool
+     */
+    public function hasItem($typeId, $itemId)
+    {
+        if ($this->getItems()->count()) {
+            $found = false;
+            /** @var SkillRelItem $item */
+            foreach ($this->getItems() as $item) {
+                if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            return $found;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param SkillRelItem $skillRelItem
+     */
+    public function addItem(SkillRelItem $skillRelItem)
+    {
+        $skillRelItem->setSkill($this);
+        $this->items[] = $skillRelItem;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     *
+     * @return Skill
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * @param SkillRelCourse $searchItem
+     *
+     * @return bool
+     */
+    public function hasCourseAndSession(SkillRelCourse $searchItem)
+    {
+        if ($this->getCourses()->count()) {
+            $found = false;
+            /** @var SkillRelCourse $item */
+            foreach ($this->getCourses() as $item) {
+                $sessionPassFilter = false;
+                $session = $item->getSession();
+                $sessionId = !empty($session) ? $session->getId() : 0;
+                $searchSessionId = !empty($searchItem->getSession()) ? $searchItem->getSession()->getId() : 0;
+
+                if ($sessionId === $searchSessionId) {
+                    $sessionPassFilter = true;
+                }
+                if ($item->getCourse()->getId() == $searchItem->getCourse()->getId() &&
+                    $sessionPassFilter
+                ) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            return $found;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param SkillRelCourse $item
+     */
+    public function addToCourse(SkillRelCourse $item)
+    {
+        $item->setSkill($this);
+        $this->courses[] = $item;
     }
 }

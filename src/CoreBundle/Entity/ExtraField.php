@@ -5,7 +5,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
 
 /**
   * Class ExtraField.
@@ -29,6 +28,7 @@ use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
      const CAREER_FIELD_TYPE = 10;
      const USER_CERTIFICATE = 11;
      const SURVEY_FIELD_TYPE = 12;
+     const SCHEDULED_ANNOUNCEMENT = 13;
 
      /**
       * @var int

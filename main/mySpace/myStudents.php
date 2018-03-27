@@ -1660,7 +1660,7 @@ if ($allowMessages === true) {
     $form = new FormValidator(
         'messages',
         'post',
-        api_get_self().'?action=send_message&student='.$student_id
+        $currentUrl.'&action=send_message'
     );
     $form->addHtml('<div id="compose_message" style="display:none;">');
     $form->addText('subject', get_lang('Subject'));

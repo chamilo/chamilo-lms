@@ -2832,6 +2832,7 @@ class SurveyUtil
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @return string html code that are the actions that can be performed on any survey

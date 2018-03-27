@@ -893,13 +893,13 @@ if (empty($details)) {
                     $progress = Tracking::get_avg_student_progress(
                         $user_info['user_id'],
                         $courseCodeItem,
-                        null,
+                        [],
                         $sId
                     );
                     $score = Tracking:: get_avg_student_score(
                         $user_info['user_id'],
                         $courseCodeItem,
-                        null,
+                        [],
                         $sId
                     );
                     $progress = empty($progress) ? '0%' : $progress.'%';
@@ -1603,12 +1603,24 @@ if (empty($details)) {
     </div>
 <?php
 } //end details
-echo Tracking::displayUserSkills(
-    $user_info['user_id'],
-    $courseInfo ? $courseInfo['real_id'] : 0,
-    $sessionId
-);
 
+$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
+if ($allowAll) {
+    // Show all skills
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        0,
+        0,
+        true
+    );
+} else {
+    // Default behaviour - Show all skills depending the course and session id
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
+}
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
@@ -1658,7 +1670,7 @@ if ($allowMessages === true) {
     $form = new FormValidator(
         'messages',
         'post',
-        api_get_self().'?action=send_message&student='.$student_id
+        $currentUrl.'&action=send_message'
     );
     $form->addHtml('<div id="compose_message" style="display:none;">');
     $form->addText('subject', get_lang('Subject'));

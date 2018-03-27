@@ -1369,6 +1369,11 @@ HOTSPOT;
 
             $res_fb_type = Database::query($sql);
             $result = Database::fetch_array($res_fb_type, 'ASSOC');
+            $result['duration_formatted'] = '';
+            if (!empty($result['exe_duration'])) {
+                $time = api_format_time($result['exe_duration'], 'js');
+                $result['duration_formatted'] = $time;
+            }
         }
 
         return $result;
@@ -4118,14 +4123,9 @@ EOT;
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
                     // Shows exercise header
-                    echo $objExercise->show_exercise_result_header(
+                    echo $objExercise->showExerciseResultHeader(
                         $user_info,
-                        api_convert_and_format_date(
-                            $exercise_stat_info['start_date'],
-                            DATE_TIME_FORMAT_LONG
-                        ),
-                        $exercise_stat_info['duration'],
-                        $exercise_stat_info['user_ip']
+                        $exercise_stat_info
                     );
                 }
             }

@@ -34,8 +34,10 @@ class Version20161028123400 extends AbstractMigrationChamilo
         $table = $schema->getTable('personal_agenda');
         if ($table->hasIndex('id')) {
             $this->addSql('ALTER TABLE personal_agenda modify id INT NOT NULL');
-            $this->addSql('ALTER TABLE personal_agenda DROP index id');
-            $this->addSql('ALTER TABLE personal_agenda DROP PRIMARY KEY');
+            $table->dropIndex('id');
+            if ($table->hasPrimaryKey()) {
+                $table->dropPrimaryKey();
+            }
             $this->addSql('ALTER TABLE personal_agenda CHANGE id id INT AUTO_INCREMENT NOT NULL PRIMARY KEY');
         }
     }

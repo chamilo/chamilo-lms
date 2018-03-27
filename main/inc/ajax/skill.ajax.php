@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls.
  */
@@ -20,12 +21,12 @@ switch ($action) {
     case 'add':
         if (api_is_platform_admin() || api_is_drh()) {
             if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
-                $skill_id = $skill->edit($_REQUEST);
+                $skillId = $skill->edit($_REQUEST);
             } else {
-                $skill_id = $skill->add($_REQUEST);
+                $skillId = $skill->add($_REQUEST);
             }
         }
-        echo $skill_id;
+        echo $skillId;
         break;
     case 'delete_skill':
         if (api_is_platform_admin() || api_is_drh()) {
@@ -73,10 +74,10 @@ switch ($action) {
         echo json_encode($return);
         break;
     case 'get_course_info_popup':
-        $course_info = api_get_course_info($_REQUEST['code']);
+        $courseInfo = api_get_course_info($_REQUEST['code']);
         $courses = CourseManager::processHotCourseItem(
             [
-                ['c_id' => $course_info['real_id']],
+                ['c_id' => $courseInfo['real_id']],
             ]
         );
         Display::display_no_header();
@@ -93,39 +94,39 @@ switch ($action) {
         }
         break;
     case 'get_skills_by_profile':
-        $skill_rel_profile = new SkillRelProfile();
+        $skillRelProfile = new SkillRelProfile();
         $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
-        $skills = $skill_rel_profile->getSkillsByProfile($profile_id);
+        $skills = $skillRelProfile->getSkillsByProfile($profile_id);
         echo json_encode($skills);
         break;
     case 'get_saved_profiles':
-        $skill_profile = new SkillProfile();
-        $profiles = $skill_profile->get_all();
+        $skillProfile = new SkillProfile();
+        $profiles = $skillProfile->get_all();
         Display::display_no_header();
         Display::$global_template->assign('profiles', $profiles);
         $template = Display::$global_template->get_template('skill/profile_item.tpl');
         echo Display::$global_template->fetch($template);
         break;
     case 'get_skills':
-        $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
+        $loadUserData = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $id = intval($_REQUEST['id']);
-        $skills = $skill->get_all($load_user_data, false, $id);
+        $skills = $skill->get_all($loadUserData, false, $id);
         echo json_encode($skills);
         break;
     case 'get_skill_info':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $skill_info = $skill->getSkillInfo($id);
-        echo json_encode($skill_info);
+        $skillInfo = $skill->getSkillInfo($id);
+        echo json_encode($skillInfo);
         break;
     case 'get_skill_course_info':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $skill_info = $skill->getSkillInfo($id);
+        $skillInfo = $skill->getSkillInfo($id);
         $courses = $skill->getCoursesBySkill($id);
         $sessions = $skill->getSessionsBySkill($id);
         $html = '';
         if (!empty($courses) || !empty($sessions)) {
             Display::display_no_header();
-            Display::$global_template->assign('skill', $skill_info);
+            Display::$global_template->assign('skill', $skillInfo);
             Display::$global_template->assign('courses', $courses);
             Display::$global_template->assign('sessions', $sessions);
             $template = Display::$global_template->get_template('skill/skill_info.tpl');
@@ -218,7 +219,6 @@ switch ($action) {
                 $user_info = api_get_user_info($user['user_id']);
                 $user_list[$user['user_id']]['user'] = $user_info;
                 $my_user_skills = $skill_rel_user->getUserSkills($user['user_id']);
-
                 $user_skill_list = [];
                 foreach ($my_user_skills as $skill_item) {
                     $user_skill_list[] = $skill_item['skill_id'];
@@ -349,14 +349,36 @@ switch ($action) {
             ]
         );
         $returnSkills = [];
-
         foreach ($skills as $skill) {
             $returnSkills[] = [
                 'id' => $skill['id'],
                 'text' => $skill['name'],
             ];
         }
+        echo json_encode([
+            'items' => $returnSkills,
+        ]);
+        break;
+    case 'search_skills_in_course':
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
 
+        if (empty($courseId)) {
+            exit;
+        }
+        $em = Database::getManager();
+        $skills = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+            ['course' => $courseId, 'session' => $sessionId]
+        );
+
+        $returnSkills = [];
+        /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skill */
+        foreach ($skills as $skill) {
+            $returnSkills[] = [
+                'id' => $skill->getSkill()->getId(),
+                'text' => $skill->getSkill()->getName(),
+            ];
+        }
         echo json_encode([
             'items' => $returnSkills,
         ]);
@@ -378,6 +400,7 @@ switch ($action) {
         $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
         $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
         $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+        $resultId = isset($_REQUEST['result_id']) ? (int) $_REQUEST['result_id'] : 0;
 
         if (!empty($typeId) && !empty($itemId) && !empty($skillId) && !empty($userId) && !empty($courseId)) {
             $em = Database::getManager();
@@ -392,7 +415,6 @@ switch ($action) {
             }
 
             $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-
             /** @var \Chamilo\SkillBundle\Entity\SkillRelItem $skillRelItem */
             $skillRelItem = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findOneBy(
                 ['itemId' => $itemId, 'itemType' => $typeId, 'skill' => $skillId]
@@ -413,6 +435,7 @@ switch ($action) {
                     $skillRelItemRelUser
                         ->setUser($user)
                         ->setSkillRelItem($skillRelItem)
+                        ->setResultId($resultId)
                         ->setCreatedBy($creatorId)
                         ->setUpdatedBy($creatorId)
                     ;
@@ -422,6 +445,72 @@ switch ($action) {
             }
             echo Skill::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
         }
+        break;
+    case 'assign_user_to_skill':
+        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        if (empty($allowSkillInTools)) {
+            exit;
+        }
+
+        if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+
+        $skillId = isset($_REQUEST['skill_id']) ? (int) $_REQUEST['skill_id'] : 0;
+        $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
+
+        if (empty($skillId) || empty($userId)) {
+            exit;
+        }
+
+        $em = Database::getManager();
+        $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+        $skill = $skillRepo->find($skillId);
+        $user = api_get_user_entity($userId);
+
+        if (empty($skill) || empty($user)) {
+            exit;
+        }
+
+        $skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
+        $criteria = [
+            'user' => $user,
+            'skill' => $skill,
+        ];
+        $skillRelUsers = $skillUserRepo->findBy($criteria);
+        if (empty($skillRelUsers)) {
+            $skillUser = new \Chamilo\CoreBundle\Entity\SkillRelUser();
+            $skillUser->setUser($user);
+            $skillUser->setSkill($skill);
+            /*if ($showLevels) {
+                $level = $skillLevelRepo->find(intval($values['acquired_level']));
+                $skillUser->setAcquiredLevel($level);
+            }*/
+
+            $course = api_get_course_entity($courseId);
+            $skillUser->setCourse($course);
+            if (!empty($sessionId)) {
+                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                $skillUser->setSession($session);
+            }
+
+            $skillUser->setArgumentation('');
+            $skillUser->setArgumentationAuthorId(api_get_user_id());
+            $skillUser->setAcquiredSkillAt(new DateTime());
+            $skillUser->setAssignedBy(0);
+            $em->persist($skillUser);
+            $em->flush();
+            $result = 'success';
+        } else {
+            foreach ($skillRelUsers as $skillRelUser) {
+                $em->remove($skillRelUser);
+            }
+            $em->flush();
+            $result = 'danger';
+        }
+        echo $result;
         break;
     default:
         echo '';

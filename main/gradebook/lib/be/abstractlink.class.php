@@ -214,6 +214,10 @@ abstract class AbstractLink implements GradebookItem
 
     public function getStudentList()
     {
+        if (empty($this->studentList)) {
+            return [];
+        }
+
         return $this->studentList;
     }
 

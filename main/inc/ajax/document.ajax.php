@@ -118,6 +118,7 @@ switch ($action) {
                         get_lang('Uploaded')
                     );
                 } else {
+                    $json['name'] = isset($file['name']) ? $file['name'] : get_lang('Unknown');
                     $json['url'] = '';
                     $json['error'] = get_lang('Error');
                 }

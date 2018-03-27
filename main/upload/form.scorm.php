@@ -87,45 +87,7 @@ if (api_get_setting('search_enabled') == 'true') {
 if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
 }
-
-/* This is a special section that has to be enabled in specific cases
- * PLEASE DO NOT REMOVE
-$list = get_zip_files_in_garbage();
-if (count($list)>0) {
-    $select_file_name = &$form->addElement(
-        'select',
-        'file_name',
-        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
-    );
-    foreach($list as $file){
-        $select_file_name->addOption($file, $file);
-    }
-    $form->addElement('submit', 'submit', get_lang('Download'));
-} else {
-    $text_empty = &$form->addElement(
-        'text',
-        'empty',
-        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
-    );
-    $defaults["empty"] = get_lang('Empty');
-    $text_empty->freeze();
-}*/
-
 $form->addButtonUpload(get_lang('Upload'));
-
-/*
-TODO: check the pens plugin is enabled before using it
-if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
-    require_once api_get_path(PLUGIN_PATH)."/pens/chamilo_pens.php";
-    $list = ChamiloPens::findAll();
-    if (count($list) > 0) {
-        $select_pens = $form->addElement('select', 'pens_package', get_lang('Or').' '.get_lang('select a PENS package'));
-        foreach ($list as $package) {
-            $select_pens->addOption($package->getPackageName(), $package->getPackageName());
-        }
-    }
-}
-*/
 
 // the default values for the form
 $defaults = ['index_document' => 'checked="checked"', 'use_max_score' => 1];

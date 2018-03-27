@@ -18,7 +18,8 @@ if ($from == 'myspace') {
 }
 
 // Access restrictions.
-$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
+$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() ||
+    api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);

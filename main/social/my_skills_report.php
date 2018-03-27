@@ -25,7 +25,7 @@ if (!$isStudent && !$isStudentBoss && !$isDRH) {
 $action = isset($_GET['a']) ? $_GET['a'] : '';
 switch ($action) {
     case 'generate_custom_skill':
-        $certificate = new Certificate(0, api_get_user_id());
+        $certificate = new Certificate(0, api_get_user_id(), false, false);
         $certificate->generatePdfFromCustomCertificate();
         break;
 }

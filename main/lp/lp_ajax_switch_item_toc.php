@@ -161,6 +161,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     }
     Session::write('scorm_item_id', $newItemId);
     Session::write('lpobject', serialize($myLP));
+    Session::write('oLP', $myLP);
 
     return $return;
 }

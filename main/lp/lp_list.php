@@ -644,13 +644,13 @@ foreach ($categories as $item) {
                 /* Export */
                 if ($details['lp_type'] == 1) {
                     $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('Export')),
+                        Display::return_icon('cd.png', get_lang('ExportShort')),
                         api_get_self()."?".api_get_cidreq()
                             ."&action=export&lp_id=$id"
                     );
                 } elseif ($details['lp_type'] == 2) {
                     $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('Export')),
+                        Display::return_icon('cd.png', get_lang('ExportShort')),
                         api_get_self()."?".api_get_cidreq()
                             ."&action=export&lp_id=$id&export_name="
                             .api_replace_dangerous_char($name).".zip"
@@ -658,7 +658,7 @@ foreach ($categories as $item) {
                 } else {
                     $dsp_disk = Display::return_icon(
                         'cd_na.png',
-                        get_lang('Export')
+                        get_lang('ExportShort')
                     );
                 }
 
@@ -886,6 +886,12 @@ foreach ($categories as $item) {
     ];
 }
 
+// Deleting the objects
+Session::erase('oLP');
+Session::erase('lpobject');
+learnpath::generate_learning_path_folder($courseInfo);
+DocumentManager::removeGeneratedAudioTempFile();
+
 $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
@@ -901,9 +907,3 @@ $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);
 $template->display_one_col_template();
-learnpath::generate_learning_path_folder($courseInfo);
-
-// Deleting the objects
-Session::erase('oLP');
-Session::erase('lpobject');
-DocumentManager::removeGeneratedAudioTempFile();

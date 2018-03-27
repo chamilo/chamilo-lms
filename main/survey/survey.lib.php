@@ -30,12 +30,12 @@ class SurveyManager
             return false;
         }
         $course_id = api_get_course_int_id();
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table = Database::get_course_table(TABLE_SURVEY);
         $code = Database::escape_string($code);
         $num = 0;
         $new_code = $code;
         while (true) {
-            $sql = "SELECT * FROM $table_survey
+            $sql = "SELECT * FROM $table
                     WHERE code = '$new_code' AND c_id = $course_id";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -92,7 +92,6 @@ class SurveyManager
      */
     public static function get_surveys($course_code, $session_id = 0)
     {
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
         if (empty($course_code)) {
             return false;
         }
@@ -104,7 +103,8 @@ class SurveyManager
 
         $session_condition = api_get_session_condition($session_id, true, true);
 
-        $sql = "SELECT * FROM $table_survey
+        $table = Database::get_course_table(TABLE_SURVEY);
+        $sql = "SELECT * FROM $table
                 WHERE c_id = {$course_info['real_id']} $session_condition ";
         $result = Database::query($sql);
         $result = Database::store_result($result, 'ASSOC');
@@ -251,9 +251,7 @@ class SurveyManager
             }
 
             $values['anonymous'] = intval($values['anonymous']);
-            $additional['columns'] = '';
             $extraParams = [];
-
             if ($values['anonymous'] == 0) {
                 // Input_name_list
                 $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
@@ -409,9 +407,7 @@ class SurveyManager
             }
 
             $values['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
-            $values['one_question_per_page'] = isset($values['one_question_per_page'])
-                ? $values['one_question_per_page']
-                : null;
+            $values['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
             $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : null;
 
             $extraParams = [];
@@ -499,7 +495,6 @@ class SurveyManager
         }
 
         $gradebook_link_type = 8;
-
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             $courseCode,
             $gradebook_link_type,
@@ -1012,7 +1007,6 @@ class SurveyManager
         }
 
         // Getting the information of the question options
-
         $result = Database::query($sqlOption);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             /** @todo this should be renamed to options instead of answers */
@@ -1084,6 +1078,8 @@ class SurveyManager
      * @param array $survey_data
      * @param array $form_content all the information of the form
      *
+     * @return string
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version January 2007
@@ -1127,7 +1123,6 @@ class SurveyManager
                     $empty_answer = true;
                 }
             }
-            $additional = [];
             $course_id = api_get_course_int_id();
 
             if (!$empty_answer) {
@@ -1393,7 +1388,7 @@ class SurveyManager
      *
      * @param int $survey_id the id of the survey that has to be deleted
      *
-     * @return true
+     * @return bool
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
@@ -1422,6 +1417,8 @@ class SurveyManager
 
         // Deleting all the answers on this survey
         self::delete_all_survey_answers($survey_id);
+
+        return true;
     }
 
     /**
@@ -1440,14 +1437,14 @@ class SurveyManager
     public static function delete_survey_question($survey_id, $question_id, $shared = false)
     {
         $course_id = api_get_course_int_id();
-        // Table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         if ($shared) {
             self::delete_shared_survey_question($survey_id, $question_id);
         }
 
+        // Table definitions
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
         // Deleting the survey questions
-        $sql = "DELETE FROM $table_survey_question
+        $sql = "DELETE FROM $table
 		        WHERE
 		            c_id = $course_id AND
 		            survey_id='".intval($survey_id)."' AND
@@ -1679,9 +1676,9 @@ class SurveyManager
     public static function delete_all_survey_answers($survey_id)
     {
         $course_id = api_get_course_int_id();
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $survey_id = intval($survey_id);
-        $sql = "DELETE FROM $table_survey_answer 
+        $sql = "DELETE FROM $table 
                 WHERE c_id = $course_id AND survey_id=$survey_id";
         Database::query($sql);
 
@@ -1697,13 +1694,13 @@ class SurveyManager
      */
     public static function is_user_filled_survey($user_id, $survey_id, $course_id)
     {
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $user_id = intval($user_id);
         $course_id = intval($course_id);
         $survey_id = intval($survey_id);
 
         $sql = "SELECT DISTINCT user 
-                FROM $table_survey_answer
+                FROM $table
                 WHERE
                     c_id		= $course_id AND
                     user		= $user_id AND
@@ -1962,8 +1959,8 @@ class SurveyManager
      * This function copy survey specifying course id and session id where will be copied.
      *
      * @param int $surveyId
-     * @param int $courseId  target course id
-     * @param int $sessionId target session id
+     * @param int $targetCourseId  target course id
+     * @param int $targetSessionId target session id
      *
      * @return bool|int when fails or return the new survey id
      */

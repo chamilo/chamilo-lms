@@ -460,7 +460,6 @@ class ThematicController
                     $data['default_thematic_plan_icon'] = $thematic->get_default_thematic_plan_icon();
                     $data['default_thematic_plan_question'] = $thematic->get_default_question();
                     $data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
-
                     // render to the view
                     $this->view->set_data($data);
                     $this->view->set_layout('layout');

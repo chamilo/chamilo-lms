@@ -129,13 +129,53 @@ if (!api_is_invitee()) {
             get_lang('Actions'),
         ];
 
-        $column_model = [
-            ['name' => 'type', 'index' => 'file', 'width' => '5', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
-            ['name' => 'title', 'index' => 'title', 'width' => '40', 'align' => 'left', 'search' => 'false', 'wrap_cell' => 'true'],
-            ['name' => 'qualification', 'index' => 'qualification', 'width' => '30', 'align' => 'center', 'search' => 'true'],
-            ['name' => 'sent_date', 'index' => 'sent_date', 'width' => '30', 'align' => 'left', 'search' => 'true', 'wrap_cell' => 'true'],
-            ['name' => 'qualificator_id', 'index' => 'qualificator_id', 'width' => '20', 'align' => 'left', 'search' => 'true'],
-            ['name' => 'actions', 'index' => 'actions', 'width' => '20', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        $columnModel = [
+            [
+                'name' => 'type',
+                'index' => 'file',
+                'width' => '5',
+                'align' => 'left',
+                'search' => 'false',
+                'sortable' => 'false',
+            ],
+            [
+                'name' => 'title',
+                'index' => 'title',
+                'width' => '40',
+                'align' => 'left',
+                'search' => 'false',
+                'wrap_cell' => 'true',
+            ],
+            [
+                'name' => 'qualification',
+                'index' => 'qualification',
+                'width' => '30',
+                'align' => 'center',
+                'search' => 'true',
+            ],
+            [
+                'name' => 'sent_date',
+                'index' => 'sent_date',
+                'width' => '30',
+                'align' => 'left',
+                'search' => 'true',
+                'wrap_cell' => 'true',
+            ],
+            [
+                'name' => 'qualificator_id',
+                'index' => 'qualificator_id',
+                'width' => '20',
+                'align' => 'left',
+                'search' => 'true',
+            ],
+            [
+                'name' => 'actions',
+                'index' => 'actions',
+                'width' => '20',
+                'align' => 'left',
+                'search' => 'false',
+                'sortable' => 'false',
+            ],
         ];
     } else {
         $type = 'complex';
@@ -148,32 +188,67 @@ if (!api_is_invitee()) {
             get_lang('Actions'),
         ];
 
-        $column_model = [
-            ['name' => 'type', 'index' => 'file', 'width' => '5', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
-            ['name' => 'title', 'index' => 'title', 'width' => '60', 'align' => 'left', 'search' => 'false', 'wrap_cell' => "true"],
-            ['name' => 'qualification', 'index' => 'qualification', 'width' => '30', 'align' => 'center', 'search' => 'true'],
-            ['name' => 'sent_date', 'index' => 'sent_date', 'width' => '30', 'align' => 'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable' => 'false'],
-            ['name' => 'actions', 'index' => 'actions', 'width' => '20', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        $columnModel = [
+            [
+                'name' => 'type',
+                'index' => 'file',
+                'width' => '5',
+                'align' => 'left',
+                'search' => 'false',
+                'sortable' => 'false',
+            ],
+            [
+                'name' => 'title',
+                'index' => 'title',
+                'width' => '60',
+                'align' => 'left',
+                'search' => 'false',
+                'wrap_cell' => "true",
+            ],
+            [
+                'name' => 'qualification',
+                'index' => 'qualification',
+                'width' => '30',
+                'align' => 'center',
+                'search' => 'true',
+            ],
+            [
+                'name' => 'sent_date',
+                'index' => 'sent_date',
+                'width' => '30',
+                'align' => 'left',
+                'search' => 'true',
+                'wrap_cell' => 'true',
+                'sortable' => 'false',
+            ],
+            [
+                'name' => 'actions',
+                'index' => 'actions',
+                'width' => '20',
+                'align' => 'left',
+                'search' => 'false',
+                'sortable' => 'false',
+            ],
         ];
     }
 
-    $extra_params = [
+    $extraParams = [
         'autowidth' => 'true',
         'height' => 'auto',
-        'sortname' => 'firstname',
+        'sortname' => 'sent_date',
+        'sortorder' => 'desc',
     ];
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
     $content .= '
         <script>
             $(function() {
-                '.Display::grid_js('results', $url, $columns, $column_model, $extra_params).'            
+                '.Display::grid_js('results', $url, $columns, $columnModel, $extraParams).'            
             });
         </script>
     ';
 
     $content .= getAllDocumentsFromWorkToString($workId, $courseInfo);
-
     $tableWork = Display::grid_html('results');
     $content .= Display::panel($tableWork);
 }

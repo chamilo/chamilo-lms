@@ -1194,6 +1194,10 @@ switch ($action) {
         $course = api_get_course_info();
         // Used inside ExerciseLib::get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH).$course['path']."/document";
+        $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+            api_is_drh() ||
+            api_is_student_boss() ||
+            api_is_session_admin();
         if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = [
                 'firstname',
@@ -1316,7 +1320,8 @@ switch ($action) {
             $courseInfo['code'],
             true,
             true,
-            $extraFieldsToAdd
+            $extraFieldsToAdd,
+            true
         );
         break;
     case 'get_hotpotatoes_exercise_results':

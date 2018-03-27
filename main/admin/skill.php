@@ -64,7 +64,6 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
-
             $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);

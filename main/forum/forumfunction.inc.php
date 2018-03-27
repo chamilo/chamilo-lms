@@ -698,7 +698,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     }
 
     // Forum images
-    $image_moved = false;
     $has_attachment = false;
     $image_moved = true;
     if (!empty($_FILES['picture']['name'])) {
@@ -5573,30 +5572,6 @@ function count_number_of_post_for_user_thread($thread_id, $user_id)
     }
 
     return $count;
-}
-
-/**
- * This function counts the number of user register in course.
- *
- * @param int $course_id Course ID
- *
- * @deprecated use CourseManager::get_users_count_in_course
- *
- * @return int the number of user register in course
- *
- * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
- *
- * @version octubre 2008, dokeos 1.8
- */
-function count_number_of_user_in_course($course_id)
-{
-    $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-    $sql = "SELECT * FROM $table
-            WHERE c_id ='".intval($course_id)."' ";
-    $result = Database::query($sql);
-
-    return count(Database::store_result($result));
 }
 
 /**

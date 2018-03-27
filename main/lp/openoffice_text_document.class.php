@@ -211,7 +211,6 @@ class OpenOfficeTextDocument extends OpenofficeDocument
         $_course = api_get_course_info();
         // Split document to pages.
         $pages = explode('||page_break||', $body);
-        $first_item = 0;
         foreach ($pages as $key => $page_content) {
             // For every pages, we create a new file.
             $key += 1;

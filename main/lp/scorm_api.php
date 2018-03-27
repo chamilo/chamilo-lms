@@ -1666,7 +1666,7 @@ function switch_item(current_item, next_item){
     // (4) refresh the audio player if needed
     $.ajax({
         type: "POST",
-        url: "lp_nav.php"+courseUrl,
+        url: "lp_nav.php"+courseUrl+ "&lp_id=" + olms.lms_lp_id,
         data: {
             lp_item: next_item
         },

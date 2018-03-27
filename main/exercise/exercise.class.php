@@ -5869,19 +5869,22 @@ class Exercise
     }
 
     /**
-     * @param array  $user_data  result of api_get_user_info()
-     * @param string $start_date
-     * @param null   $duration
-     * @param string $ip         Optional. The user IP
+     * @param array $user_data         result of api_get_user_info()
+     * @param array $trackExerciseInfo result of get_stat_track_exercise_info
      *
      * @return string
      */
-    public function show_exercise_result_header(
+    public function showExerciseResultHeader(
         $user_data,
-        $start_date = null,
-        $duration = null,
-        $ip = null
+        $trackExerciseInfo
     ) {
+        $start_date = null;
+        if (isset($trackExerciseInfo['start_date'])) {
+            $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
+        }
+        $duration = isset($trackExerciseInfo['duration_formatted']) ? $trackExerciseInfo['duration_formatted'] : null;
+        $ip = isset($trackExerciseInfo['user_ip']) ? $trackExerciseInfo['user_ip'] : null;
+
         $array = [];
         if (!empty($user_data)) {
             $array[] = [
@@ -5958,6 +5961,7 @@ class Exercise
      * @param int     Whether the results are show to the user (0) or not (1)
      * @param int     Maximum number of attempts (0 if no limit)
      * @param int     Feedback type
+     * @param int $propagateNegative
      *
      * @todo this was function was added due the import exercise via CSV
      *
@@ -6630,21 +6634,12 @@ class Exercise
         $new_array = [];
         if (Database::num_rows($result) > 0) {
             $new_array = Database::fetch_array($result, 'ASSOC');
-            $new_array['duration'] = null;
             $start_date = api_get_utc_datetime($new_array['start_date'], true);
             $end_date = api_get_utc_datetime($new_array['exe_date'], true);
-
-            if (!empty($start_date) && !empty($end_date)) {
-                $start_date = api_strtotime($start_date, 'UTC');
-                $end_date = api_strtotime($end_date, 'UTC');
-                if ($start_date && $end_date) {
-                    $mytime = $end_date - $start_date;
-                    $new_learnpath_item = new learnpathItem(null);
-                    $time_attemp = $new_learnpath_item->get_scorm_time('js', $mytime);
-                    $h = get_lang('h');
-                    $time_attemp = str_replace('NaN', '00'.$h.'00\'00"', $time_attemp);
-                    $new_array['duration'] = $time_attemp;
-                }
+            $new_array['duration_formatted'] = '';
+            if (!empty($new_array['exe_duration']) && !empty($start_date) && !empty($end_date)) {
+                $time = api_format_time($new_array['exe_duration'], 'js');
+                $new_array['duration_formatted'] = $time;
             }
         }
 

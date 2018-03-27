@@ -220,6 +220,21 @@ switch ($action) {
             exit;
         }
         break;
+    case 'generate_certificate':
+        // Delete old certificate
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(
+            0,
+            $student_id
+        );
+        if ($myCertificate) {
+            $certificate = new Certificate($myCertificate['id'], $student_id);
+            $certificate->delete(true);
+        }
+        // Create new one
+        $certificate = new Certificate(0, $student_id);
+        $certificate->generatePdfFromCustomCertificate();
+        exit;
+        break;
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(
@@ -878,13 +893,13 @@ if (empty($details)) {
                     $progress = Tracking::get_avg_student_progress(
                         $user_info['user_id'],
                         $courseCodeItem,
-                        null,
+                        [],
                         $sId
                     );
                     $score = Tracking:: get_avg_student_score(
                         $user_info['user_id'],
                         $courseCodeItem,
-                        null,
+                        [],
                         $sId
                     );
                     $progress = empty($progress) ? '0%' : $progress.'%';
@@ -1479,7 +1494,8 @@ if (empty($details)) {
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
-            echo '<td class="text-center"><a href="'.api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$course_code.'&id_session='.$sessionId.'&id='.$results['id'].'">('.$documentNumber.')</a></td>';
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$course_code.'&id_session='.$sessionId.'&id='.$results['id'];
+            echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
             echo '<td class="text-center">'.$results['formatted_date'].'</td>';
@@ -1503,7 +1519,6 @@ if (empty($details)) {
                     echo '<td class="text-center">'.$field->getValue().'</td>';
                 }
             }
-
             echo '</tr>';
         }
     }
@@ -1588,10 +1603,12 @@ if (empty($details)) {
     </div>
 <?php
 } //end details
+
 echo Tracking::displayUserSkills(
     $user_info['user_id'],
     $courseInfo ? $courseInfo['real_id'] : 0,
-    $sessionId
+    $sessionId,
+    api_get_configuration_value('allow_teacher_access_student_skills')
 );
 
 if ($allowMessages === true) {
@@ -1643,7 +1660,7 @@ if ($allowMessages === true) {
     $form = new FormValidator(
         'messages',
         'post',
-        api_get_self().'?action=send_message&student='.$student_id
+        $currentUrl.'&action=send_message'
     );
     $form->addHtml('<div id="compose_message" style="display:none;">');
     $form->addText('subject', get_lang('Subject'));

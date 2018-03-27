@@ -227,7 +227,7 @@ switch ($action) {
         }
         break;
     case 'move':
-        /*	Move file form request */
+        // Move file form request
         if ($is_allowed_to_edit) {
             if (!empty($item_id)) {
                 $content = generateMoveForm(
@@ -340,7 +340,7 @@ switch ($action) {
 
         break;
     case 'list':
-        /*	Display list of student publications */
+        /* Display list of student publications */
         if (!empty($my_folder_data['description'])) {
             $content = '<div>'.
                 get_lang('Description').':'.Security::remove_XSS($my_folder_data['description'], STUDENT).

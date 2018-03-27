@@ -331,6 +331,13 @@ if ($allow === true) {
 
 $content = '<div id="course_tools">'.$diagram.$content.'</div>';
 
+// Deleting the objects
+Session::erase('_gid');
+Session::erase('oLP');
+Session::erase('lpobject');
+api_remove_in_gradebook();
+DocumentManager::removeGeneratedAudioTempFile();
+
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
@@ -338,10 +345,3 @@ $tpl->assign('content', $content);
 // Direct login to course
 $tpl->assign('course_code', $course_code);
 $tpl->display_one_col_template();
-
-// Deleting the objects
-Session::erase('_gid');
-Session::erase('oLP');
-Session::erase('lpobject');
-api_remove_in_gradebook();
-DocumentManager::removeGeneratedAudioTempFile();

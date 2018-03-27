@@ -119,7 +119,6 @@ foreach ($subscribedUsers as $user) {
 
 // Getting subscribed users to a category.
 $subscribedUsersInCategory = $category->getUsers();
-
 $selectedChoices = [];
 foreach ($subscribedUsersInCategory as $item) {
     $selectedChoices[] = $item->getUser()->getId();
@@ -138,7 +137,6 @@ $userMultiSelect = $formUsers->addElement(
 $formUsers->addButtonSave(get_lang('Save'));
 
 $defaults = [];
-
 if (!empty($selectedChoices)) {
     $defaults['users'] = $selectedChoices;
 }

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.plugin.ticket
+ * @package chamilo.ticket
  */
 $cidReset = true;
 

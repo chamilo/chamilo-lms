@@ -120,7 +120,8 @@ if (!empty($results)) {
         );
 
         $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
-        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
+        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
+            get_lang('SeeMore').'</a></div>';
         $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
         $groups_newest[] = [
             Display::url(

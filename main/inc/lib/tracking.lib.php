@@ -1022,17 +1022,11 @@ class Tracking
                                         $my_score = $row_attempts['exe_result'];
                                         $my_maxscore = $row_attempts['exe_weighting'];
                                         $my_exe_id = $row_attempts['exe_id'];
-                                        $my_orig_lp = $row_attempts['orig_lp_id'];
-                                        $my_orig_lp_item = $row_attempts['orig_lp_item_id'];
-                                        $my_exo_exe_id = $row_attempts['exe_exo_id'];
                                         $mktime_start_date = api_strtotime($row_attempts['start_date'], 'UTC');
                                         $mktime_exe_date = api_strtotime($row_attempts['exe_date'], 'UTC');
+                                        $time_attemp = ' - ';
                                         if ($mktime_start_date && $mktime_exe_date) {
-                                            $mytime = ((int) $mktime_exe_date - (int) $mktime_start_date);
-                                            $time_attemp = learnpathItem::getScormTimeFromParameter('js', $mytime);
-                                            $time_attemp = str_replace('NaN', '00'.$h.'00\'00"', $time_attemp);
-                                        } else {
-                                            $time_attemp = ' - ';
+                                            $time_attemp = api_format_time($row_attempts['exe_duration'], 'js');
                                         }
                                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                             $view_score = Display::return_icon(

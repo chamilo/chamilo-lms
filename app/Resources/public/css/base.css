@@ -665,7 +665,6 @@ input[type=checkbox], input[type=radio]{
     width: 100%;
 }
 .card .card-title a{
-    color: #666666;
     font-weight: bold;
 }
 .panel-view{

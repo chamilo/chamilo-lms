@@ -1716,13 +1716,27 @@ if (empty($_GET['details'])) {
     </div>
     <?php
 } //end details
+
 echo '<div class="communications">';
-echo Tracking::displayUserSkills(
-    $user_info['user_id'],
-    $courseInfo ? $courseInfo['real_id'] : 0,
-    $sessionId,
-    api_get_configuration_value('allow_teacher_access_student_skills')
-);
+
+$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
+if ($allowAll) {
+    // Show all skills
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        0,
+        0,
+        true
+    );
+} else {
+    // Default behaviour - Show all skills depending the course and session id
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
+}
+
 echo '</div>';
 
 if ($allowMessages === true) {

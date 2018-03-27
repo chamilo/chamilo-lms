@@ -47,7 +47,7 @@ class Message
     /**
      * @var bool
      *
-     * @ORM\Column(name="msg_status", type="boolean", nullable=false)
+     * @ORM\Column(name="msg_status", type="smallint", nullable=false)
      */
     private $msgStatus;
 

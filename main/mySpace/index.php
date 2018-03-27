@@ -19,7 +19,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
-Session::erase('this_section');
+//Session::erase('this_section');
 
 ob_start();
 $nameTools = get_lang('MySpace');
@@ -37,10 +37,10 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 // Access control
 api_block_anonymous_users();
-
+/*
 if (!$export_csv) {
-    /* Display :: display_header($nameTools); */
-}
+     Display :: display_header($nameTools);
+} */
 
 if ($is_session_admin) {
     header('location:session.php');
@@ -210,8 +210,6 @@ if (empty($session_id) ||
     }
 }
 
-/* echo '</div>'; */
-
 $userId = api_get_user_id();
 $stats = Tracking::getStats($userId, true);
 
@@ -246,7 +244,7 @@ $avg_courses_per_student = 0;
 $view = new Template($nameTools);
 $view->assign('students', $numberStudents);
 $view->assign('studentbosses', $numberStudentBosses);
-$view->assign('teachers', $numberTeachers);
+$view->assign('numberTeachers', $numberTeachers);
 $view->assign('humanresources', $countHumanResourcesUsers);
 $view->assign('total_user', $numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers);
 $view->assign('studentboss', STUDENT_BOSS);
@@ -322,10 +320,10 @@ if ($skipData == false) {
         );
         $report['AverageCoursePerStudent'] = (is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2));
         $report['InactivesStudents'] = $nb_inactive_students;
-        $report['AverageTimeSpentOnThePlatform'] = (is_null($totalTimeSpent) ? '' : api_time_to_hms($totalTimeSpent));
+        $report['AverageTimeSpentOnThePlatform'] = (is_null($totalTimeSpent) ? '00:00:00' : api_time_to_hms($totalTimeSpent));
         $report['AverageProgressInLearnpath'] = (is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%');
-        $report['AvgCourseScore'] = (is_null($averageScore) ? '' : round($averageScore, 2).'%');
-        $report['AveragePostsInForum'] = (is_null($posts) ? '' : round($posts, 2));
+        $report['AvgCourseScore'] = (is_null($averageScore) ? '0' : round($averageScore, 2).'%');
+        $report['AveragePostsInForum'] = (is_null($posts) ? '0' : round($posts, 2));
         $report['AverageAssignments'] = (is_null($numberAssignments) ? '' : round($numberAssignments, 2));
         $view->assign('report', $report);
     }
@@ -350,6 +348,8 @@ if ($export_csv) {
     exit;
 }
 
+/*
 if (!$export_csv) {
-    //Display::display_footer();
+    Display::display_footer();
 }
+*/

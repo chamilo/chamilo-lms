@@ -63,7 +63,7 @@
                         <div class="col-xs-7">
                             <div class="numbers">
 
-                                <h2>{{ teachers }}</h2>
+                                <h2>{{ numberTeachers }}</h2>
                             </div>
                         </div>
                     </div>

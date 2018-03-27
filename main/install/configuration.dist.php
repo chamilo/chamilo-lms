@@ -788,13 +788,6 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 // affect privacy protection.
 //$_configuration['allow_user_message_tracking'] = false;
 
-// ------ Custom DB changes
-// Add user activation by confirmation email
-// This option prevents the new user to login in the platform if your account is not confirmed via email
-// You need add a new option called "confirmation" to the registration settings
-//INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
-// ------ (End) Custom DB changes
-
 // Add a portfolio tool (duplicating the Notebook tool). Requires DB changes:
 /*
 CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -808,5 +801,15 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 */
 //$_configuration['allow_portfolio_tool'] = false;
 
-// Disable average and best columns in gradebook see BT#
+// Disable average and best columns in gradebook see BT#14126
 //$_configuration['disable_gradebook_stats'] = false;
+
+// Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
+//$_configuration['allow_teacher_access_student_skills'] = false;
+
+// ------ Custom DB changes (keep this at the end)
+// Add user activation by confirmation email
+// This option prevents the new user to login in the platform if your account is not confirmed via email
+// You need add a new option called "confirmation" to the registration settings
+//INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
+// ------ (End) Custom DB changes

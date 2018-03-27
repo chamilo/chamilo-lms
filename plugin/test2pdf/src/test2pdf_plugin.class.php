@@ -55,7 +55,7 @@ class Test2pdfPlugin extends Plugin
      */
     public function uninstall()
     {
-        //Deleting course settings
+        // Deleting course settings.
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
         $this->manageTab(false);
     }

@@ -276,16 +276,13 @@ if (!empty($_REQUEST['exeId']) &&
     if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
+        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
-        $time_start_date = api_strtotime($row_dates['start_date'], 'UTC');
-        $time_exe_date = api_strtotime($row_dates['exe_date'], 'UTC');
-
-        $mytime = (int) $time_exe_date - (int) $time_start_date;
+        $duration = (int) $row_dates['exe_duration'];
         $score = (float) $row_dates['exe_result'];
         $max_score = (float) $row_dates['exe_weighting'];
 
@@ -326,7 +323,7 @@ if (!empty($_REQUEST['exeId']) &&
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
                         status = '$status',
                         score = $score,
-                        total_time = $mytime
+                        total_time = $duration
                     WHERE iid = $lp_item_view_id";
             if ($debug) {
                 error_log($sql);

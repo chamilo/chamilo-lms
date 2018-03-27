@@ -5,9 +5,6 @@
  *
  * @package chamilo.plugin.test2pdf
  */
-/**
- * Initialization.
- */
 require_once '../config.php';
 api_protect_course_script(true);
 

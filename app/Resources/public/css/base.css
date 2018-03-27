@@ -602,6 +602,115 @@ input[type=checkbox], input[type=radio]{
 #exercise-description .panel-heading a.collapsed{
     background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat left center;
 }
+/* REPORTS */
+.panel-default.panel-view{
+    border: 1px solid #e4e4e4;
+    box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
+}
+.card {
+    border-radius: 6px;
+    box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
+    background-color: #FFFFFF;
+    color: #252422;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid #e4e4e4;
+}
+.card .content {
+    padding: 15px 15px 10px 15px;
+}
+.card .icon-big {
+    font-size: 2.5em;
+    min-height: 64px;
+}
+.card .numbers {
+    text-align: left;
+}
+.card .numbers h2{
+    font-size: 3.2em;
+    margin-top: 10px;
+    color: #666666;
+}
+.card .icon-big{
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 25px;
+}
+.card .icon-student{
+    background: #f1c435;
+}
+.card .icon-studentboss{
+    background: #4b73eb;
+}
+.card .icon-teachers{
+    background: #50bbc1;
+}
+.card .icon-humanresources{
+    background: #68ceeb;
+}
+.card .icon-big i {
+    line-height: 66px;
+    color: #fff;
+}
+.card .card-title{
+    text-align: center;
+    font-size: 12px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    display: inline-block;
+    width: 100%;
+}
+.card .card-title a{
+    color: #666666;
+    font-weight: bold;
+}
+.panel-view{
+    padding: 20px;
+    text-align: center;
+}
+.easypiechart {
+    position: relative;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    margin: 20px auto 10px auto;
+}
+#easypiechart-blue .percent { color: #30a5ff;}
+#easypiechart-teal .percent { color: #1ebfae;}
+#easypiechart-orange .percent { color: #ffb53e;}
+#easypiechart-red .percent { color: #ef4040;}
+
+.easypiechart .percent {
+    display: block;
+    position: absolute;
+    font-size: 26px;
+    top: 38px;
+    width: 120px;
+}
+.easypiechart-link{
+    padding-bottom: 5px;
+    padding-top: 5px;
+    display: inline-block;
+    width: 100%;
+}
+.item-report{
+    text-align: center;
+    min-height: 200px;
+}
+.item-report .panel-default{
+    background-color: #ededed;
+    border: 1px solid #e4e4e4;
+    box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
+}
+.item-report .item-report-number{
+    font-size: 35px;
+    font-weight: bold;
+    color: #666666;
+}
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/

@@ -255,8 +255,8 @@ class MessageManager
     {
         if (!empty($aboutUserInfo)) {
             $criteria = [
-              'userReceiverId' => $aboutUserInfo['id'],
-              'msgStatus' => MESSAGE_STATUS_CONVERSATION
+              'userReceiverId' => (int) $aboutUserInfo['id'],
+              'msgStatus' => (int) MESSAGE_STATUS_CONVERSATION,
             ];
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
             $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);

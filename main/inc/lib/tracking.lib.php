@@ -6446,15 +6446,18 @@ class Tracking
     }
 
     /**
-     * Get the HTML code for show a block with the achieved user skill on course/session
-     * @param int $userId
-     * @param int $courseId Optional.
-     * @param int $sessionId Optional.
+     * Get the HTML code for show a block with the achieved user skill on course/session.
+     *
+     * @param int  $userId
+     * @param int  $courseId
+     * @param int  $sessionId
+     * @param bool $forceView forces the view of the skills, not checking for deeper access
+     *
      * @return string
      */
-    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
+    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0, $forceView = false)
     {
-        if (Skill::isAllowed($userId, false) === false) {
+        if (Skill::isAllowed($userId, false) === false && $forceView == false) {
             return '';
         }
         $skillManager = new Skill();

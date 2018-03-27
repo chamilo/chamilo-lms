@@ -1733,6 +1733,7 @@ if ($allowMessages === true) {
         /** @var Message $message */
         foreach ($messages as $message) {
             $tag = 'message_'.$message->getId();
+
             $tagAccordion = 'accordion_'.$message->getId();
             $tagCollapse = 'collapse_'.$message->getId();
             $date = Display::dateToStringAgoAndLongDate(
@@ -1773,7 +1774,7 @@ if ($allowMessages === true) {
     $form = new FormValidator(
         'messages',
         'post',
-        api_get_self().'?action=send_message&student='.$student_id
+        $currentUrl.'&action=send_message'
     );
     $form->addHtml('<div id="compose_message" style="display:none;">');
     $form->addText('subject', get_lang('Subject'));

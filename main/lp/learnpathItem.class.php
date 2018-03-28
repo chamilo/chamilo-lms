@@ -3404,6 +3404,10 @@ class learnpathItem
                 if ($debug) {
                     error_log('found asset - set time to '.$myTime);
                 }
+            } else {
+                if ($debug) {
+                    error_log('Time not set');
+                }
             }
         } else {
             switch ($format) {
@@ -3422,11 +3426,16 @@ class learnpathItem
                         $totalSec = $hour * 3600 + $min * 60 + $sec;
                         if ($debug) {
                             error_log("totalSec : $totalSec");
+                            error_log("Now calling to scorm_update_time()");
                         }
                         $this->scorm_update_time($totalSec);
                     }
                     break;
                 case 'int':
+                    if ($debug) {
+                        error_log("scorm_time = $scorm_time");
+                        error_log("Now calling to scorm_update_time()");
+                    }
                     $this->scorm_update_time($scorm_time);
                     break;
             }

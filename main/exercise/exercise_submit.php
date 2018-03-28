@@ -95,7 +95,6 @@ $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 
 
 // Error message
 $error = '';
-
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
@@ -186,7 +185,15 @@ $current_expired_time_key = ExerciseLib::get_time_control_key(
     $learnpath_item_id
 );
 
-$_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
+Session::write('duration_time_previous', [$current_expired_time_key => $current_timestamp]);
+$durationTime = Session::read('duration_time');
+if (!empty($durationTime) && isset($durationTime[$current_expired_time_key])) {
+    Session::write(
+        'duration_time_previous',
+        [$current_expired_time_key => $durationTime[$current_expired_time_key]]
+    );
+}
+Session::write('duration_time', [$current_expired_time_key => $current_timestamp]);
 
 if ($time_control) {
     // Get the expired time of the current exercise in track_e_exercises
@@ -412,6 +419,7 @@ if (empty($exercise_stat_info)) {
     }
 }
 
+$saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');
 
 if (!isset($questionListInSession)) {
@@ -1069,9 +1077,7 @@ if (!empty($error)) {
             });*/
 
             $(\'form#exercise_form\').prepend($(\'#exercise-description\'));
-        });
-
-        $(document).on(\'ready\', function () {
+        
             $(\'button[name="previous_question_and_save"]\').on(\'click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1112,6 +1118,19 @@ if (!empty($error)) {
                 e.stopPropagation();
                 
                 validate_all();
+            });
+            
+            var saveDurationUrl = "'.$saveDurationUrl.'";
+            
+            // Save attempt duration
+            $(window).on(\'beforeunload\', function () {
+                // Logout of course just in case
+                $.ajax({
+                    url: saveDurationUrl,
+                    success: function (data) {
+                        return 1;
+                    }
+                });
             });
         });
 

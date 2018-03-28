@@ -61,7 +61,7 @@ function save_item(
     $statusSignalReceived = 0
 ) {
     //global $debug;
-    $debug = 0;
+    $debug = false;
     $return = null;
 
     if ($debug > 0) {

@@ -21,6 +21,89 @@ $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) :
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'update_duration':
+        $debug = true;
+        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
+        /** @var Exercise $exerciseInSession */
+        $exerciseInSession = Session::read('objExercise');
+        if (!empty($exeId) && !empty($exerciseInSession)) {
+            $em = Database::getManager();
+            /** @var \Chamilo\CoreBundle\Entity\TrackEExercises $attempt */
+            $attempt = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+            $onlyUpdateValue = 10;
+            $nowObject = api_get_utc_datetime(null, false, true);
+            $now = $nowObject->getTimestamp();
+            $exerciseId = $attempt->getExeExoId();
+            $userId = $attempt->getExeUserId();
+            $currentUserId = api_get_user_id();
+
+            if ($exerciseInSession->id != $exerciseId) {
+                if ($debug) {
+                    error_log("Cannot update exercise are different.");
+                }
+                exit;
+            }
+
+            if ($attempt->getStatus() != 'incomplete') {
+                if ($debug) {
+                    error_log("Cannot update exercise is already completed.");
+                }
+                exit;
+            }
+
+            // Check if we are dealing with the same exercise.
+            if ($attempt && $userId == $currentUserId) {
+                $timeWithOutUpdate = $now - $attempt->getExeDate()->getTimestamp();
+                if ($timeWithOutUpdate > $onlyUpdateValue) {
+                    $key = ExerciseLib::get_time_control_key(
+                        $exerciseId,
+                        $attempt->getOrigLpId(),
+                        $attempt->getOrigLpItemId()
+                    );
+                    $durationFromObject = $attempt->getExeDuration();
+                    $previousTime = Session::read('duration_time_previous');
+                    if (isset($previousTime[$key]) &&
+                        !empty($previousTime[$key])
+                    ) {
+                        $sessionTime = $previousTime[$key];
+                        $duration = $now - $sessionTime;
+                        if ($debug) {
+                            //error_log("Now in UTC: ".$nowObject->format('Y-m-d H:i:s'));
+                            //error_log("Session time in UTC: ".api_get_utc_datetime($sessionTime));
+                            error_log("Time spent in exercise: $duration just before an update");
+                        }
+                        if (!empty($durationFromObject)) {
+                            $duration += $durationFromObject;
+                        }
+                        $duration = (int) $duration;
+                        if (!empty($duration)) {
+                            if ($debug) {
+                                error_log("Exe_id: #".$exeId);
+                                error_log("Key: $key");
+                                error_log("Exercise to update: #$exerciseId for user: #$userId");
+                                error_log("Accumulate duration to save in DB: $duration");
+                                error_log("End date to save in DB: ".$nowObject->format('Y-m-d H:i:s'));
+                            }
+                            $attempt
+                                ->setExeDuration($duration)
+                                ->setExeDate($nowObject);
+                            $em->merge($attempt);
+                            $em->flush();
+                        }
+                    } else {
+                        if ($debug) {
+                            error_log("Nothing to update, 'duration_time_previous' session not set");
+                            error_log("Key: $key");
+                        }
+                    }
+                } else {
+                    if ($debug) {
+                        error_log("Cannot update, latest time diff is just $timeWithOutUpdate seconds");
+                    }
+                }
+            }
+        }
+        break;
     case 'get_live_stats':
         if (!api_is_allowed_to_edit(null, true)) {
             break;
@@ -485,8 +568,10 @@ switch ($action) {
                     $exercise_stat_info['orig_lp_item_id']
                 );
 
-                if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
-                    $duration = $now - $_SESSION['duration_time'][$key];
+                $durationTime = Session::read('duration_time');
+
+                if (isset($durationTime[$key]) && !empty($durationTime[$key])) {
+                    $duration = $now - $durationTime[$key];
                     if (!empty($exercise_stat_info['exe_duration'])) {
                         $duration += $exercise_stat_info['exe_duration'];
                     }
@@ -497,7 +582,7 @@ switch ($action) {
                     }
                 }
 
-                $_SESSION['duration_time'][$key] = time();
+                Session::write('duration_time', [$key => time()]);
 
                 Event::updateEventExercise(
                     $exe_id,

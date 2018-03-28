@@ -124,14 +124,11 @@ class CourseArchiver
         // Copy all scorm documents to the temp-dir
         if (isset($course->resources[RESOURCE_SCORM]) && is_array($course->resources[RESOURCE_SCORM])) {
             foreach ($course->resources[RESOURCE_SCORM] as $document) {
-                $doc_dir = dirname($backup_dir.$document->path);
-                @mkdir($doc_dir, $perm_dirs, true);
-                copyDirTo($course->path.$document->path, $doc_dir, false);
+                copyDirTo($course->path.$document->path, $backup_dir.$document->path, false);
             }
         }
 
         // Copy calendar attachments.
-
         if (isset($course->resources[RESOURCE_EVENT]) && is_array($course->resources[RESOURCE_EVENT])) {
             $doc_dir = dirname($backup_dir.'/upload/calendar/');
             @mkdir($doc_dir, $perm_dirs, true);

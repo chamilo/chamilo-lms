@@ -2958,12 +2958,12 @@ class CourseManager
     /**
      * Creates a new extra field for a given course.
      *
-     * @param    string    Field's internal variable name
-     * @param    int        Field's type
-     * @param    string    Field's language var name
-     * @param string $default
+     * @param string $variable    Field's internal variable name
+     * @param int    $fieldType   Field's type
+     * @param string $displayText Field's language var name
+     * @param string $default     Optional. The default value
      *
-     * @return bool new extra field id
+     * @return int New extra field ID
      */
     public static function create_course_extra_field($variable, $fieldType, $displayText, $default = '')
     {
@@ -3031,11 +3031,11 @@ class CourseManager
     /**
      * Update an extra field value for a given course.
      *
-     * @param    int    Course ID
-     * @param    string    Field variable name
-     * @param    string    Field value
+     * @param string $course_code Course code
+     * @param string $variable    Field variable name
+     * @param string $value       Optional. Default field value
      *
-     * @return bool|null true if field updated, false otherwise
+     * @return bool|int An integer when register a new extra field. And boolean when update the extrafield
      */
     public static function update_course_extra_field_value($course_code, $variable, $value = '')
     {

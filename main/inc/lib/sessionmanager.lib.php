@@ -2795,11 +2795,11 @@ class SessionManager
     /**
      * Update an extra field value for a given session.
      *
-     * @param int    Course ID
-     * @param string    Field variable name
-     * @param string    Field value
+     * @param int $sessionId Session ID
+     * @param string $variable    Field variable name
+     * @param string $value       Optional. Default field value
      *
-     * @return bool true if field updated, false otherwise
+     * @return bool|int An integer when register a new extra field. And boolean when update the extrafield
      */
     public static function update_session_extra_field_value($sessionId, $variable, $value = '')
     {

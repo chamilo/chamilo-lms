@@ -902,18 +902,21 @@ class ExtraField extends Model
     public function save($params, $show_query = false)
     {
         $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
-        $params = self::clean_parameters($params);
+        $params = $this->clean_parameters($params);
         $params['extra_field_type'] = $this->extraFieldType;
 
         if ($fieldInfo) {
             return $fieldInfo['id'];
         } else {
             $id = parent::save($params, $show_query);
-            if ($id) {
-                $session_field_option = new ExtraFieldOption($this->type);
-                $params['field_id'] = $id;
-                $session_field_option->save($params);
+
+            if (!$id) {
+                return 0;
             }
+
+            $session_field_option = new ExtraFieldOption($this->type);
+            $params['field_id'] = $id;
+            $session_field_option->save($params);
 
             return $id;
         }
@@ -924,7 +927,7 @@ class ExtraField extends Model
      */
     public function update($params, $showQuery = false)
     {
-        $params = self::clean_parameters($params);
+        $params = $this->clean_parameters($params);
         if (isset($params['id'])) {
             $field_option = new ExtraFieldOption($this->type);
             $params['field_id'] = $params['id'];
@@ -934,7 +937,7 @@ class ExtraField extends Model
             $field_option->save($params, $showQuery);
         }
 
-        parent::update($params, $showQuery);
+        return parent::update($params, $showQuery);
     }
 
     /**

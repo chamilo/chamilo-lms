@@ -260,7 +260,7 @@ class ExtraFieldValue extends Model
                             'value' => $fileDirStored.$fileName,
                             'comment' => $comment,
                         ];
-                        self::save($newParams);
+                        $this->save($newParams);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
@@ -306,7 +306,7 @@ class ExtraFieldValue extends Model
                             $new_params['comment'] = $comment;
                         }
 
-                        self::save($new_params);
+                        $this->save($new_params);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_CHECKBOX:
@@ -324,7 +324,7 @@ class ExtraFieldValue extends Model
                         'comment' => $comment,
                     ];
 
-                    self::save($newParams);
+                    $this->save($newParams);
 
                     break;
                 default:
@@ -334,7 +334,7 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment,
                     ];
-                    self::save($newParams, $showQuery);
+                    $this->save($newParams, $showQuery);
             }
         }
     }

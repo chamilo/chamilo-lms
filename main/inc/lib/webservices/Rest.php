@@ -1039,14 +1039,15 @@ class Rest extends WebService
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $extra_list = [];
+        $results = [];
 
         $title = isset($course_param['title']) ? $course_param['title'] : '';
         $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
         $wanted_code = isset($course_param['wanted_code']) ? intval($course_param['wanted_code']) : 0;
         $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
-        $admin_id = isset($course_param['admin_id']) ? $course_param['admin_id'] : null;
-        $language = isset($course_param['language']) ? $course_param['language'] : null;
-        $original_course_id = isset($course_param['original_course_id']) ? $course_param['original_course_id'] : null;
+        $course_language = isset($course_param['language']) ? $course_param['language'] : null;
+        $originalCourseIdName = isset($course_param['original_course_id_name']) ? $course_param['original_course_id_name'] : null;
+        $originalCourseIdValue = isset($course_param['original_course_id_value']) ? $course_param['original_course_id_value'] : null;
         $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
         $visibility = isset($course_param['visibility']) ? (int) $course_param['visibility'] : null;
 
@@ -1061,8 +1062,8 @@ class Rest extends WebService
 
         // Check whether exits $x_course_code into user_field_values table.
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-            'id',
-            $course_param['original_course_id_name']
+            $originalCourseIdValue,
+            $originalCourseIdName
         );
 
         if (!empty($courseInfo)) {
@@ -1091,13 +1092,7 @@ class Rest extends WebService
                     }
                 }
                 $results[] = $courseInfo['code'];
-            } else {
-                $results[] = 0;
             }
-        }
-
-        if (!empty($course_param['course_language'])) {
-            $course_language = $course_param['course_language'];
         }
 
         $params = [];
@@ -1110,13 +1105,8 @@ class Rest extends WebService
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
-
-        if (isset($subscribe) && $subscribe != '') { // Valid values: 0, 1
-            $params['subscribe'] = $subscribe;
-        }
-        if (isset($unsubscribe) && $subscribe != '') { // Valid values: 0, 1
-            $params['unsubscribe'] = $unsubscribe;
-        }
+        $params['subscribe'] = empty($course_param['subscribe']) ? 0 : 1;
+        $params['unsubscribe'] = empty($course_param['unsubscribe']) ? 0 : 1;
 
         $course_info = CourseManager::create_course($params, $params['user_id']);
 
@@ -1125,17 +1115,17 @@ class Rest extends WebService
 
             // Save new field label into course_field table
             CourseManager::create_course_extra_field(
-                $original_course_id_name,
+                $originalCourseIdName,
                 1,
-                $original_course_id_name,
+                $originalCourseIdName,
                 ''
             );
 
             // Save the external system's id into user_field_value table.
             CourseManager::update_course_extra_field_value(
                 $course_code,
-                $original_course_id_name,
-                $original_course_id_value
+                $originalCourseIdName,
+                $originalCourseIdValue
             );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
@@ -1158,8 +1148,6 @@ class Rest extends WebService
                 }
             }
             $results[] = $course_code;
-        } else {
-            $results[] = 0;
         }
 
         return $results;

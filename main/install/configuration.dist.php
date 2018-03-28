@@ -813,3 +813,6 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+
+// Sort by lastname in export all certificates.
+// $_configuration['sort_lastname_export_certificates'] = false;

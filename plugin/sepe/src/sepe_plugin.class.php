@@ -120,7 +120,6 @@ class SepePlugin extends Plugin
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function update()
     {

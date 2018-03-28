@@ -2304,8 +2304,6 @@ class MessageManager
     /**
      * @param int $userId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array
      */
     public static function getUsersThatHadConversationWithUser($userId)
@@ -2338,8 +2336,6 @@ class MessageManager
     /**
      * @param int $userId
      * @param int $otherUserId
-     *
-     * @throws \Doctrine\DBAL\DBALException
      *
      * @return array
      */

@@ -442,8 +442,6 @@ class DocumentManager
      * @param bool   $search
      * @param int    $sessionId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array with all document data
      */
     public static function getAllDocumentData(

@@ -31,7 +31,6 @@ class DictionaryPlugin extends Plugin
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function install()
     {
@@ -45,7 +44,6 @@ class DictionaryPlugin extends Plugin
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function uninstall()
     {

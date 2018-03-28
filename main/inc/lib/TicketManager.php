@@ -1541,7 +1541,6 @@ class TicketManager
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
      */
     public static function close_old_tickets()
     {

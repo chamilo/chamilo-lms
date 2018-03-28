@@ -70,9 +70,7 @@ class RedirectionPlugin extends Plugin
     /**
      * Get the current redirection for a given user (if any).
      *
-     * @param $userId
-     *
-     * @throws \Doctrine\DBAL\DBALException
+     * @param int $userId
      *
      * @return array
      */

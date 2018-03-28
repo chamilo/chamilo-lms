@@ -99,8 +99,8 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Creates the plugin tables on database
+     *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function createPluginTables()
     {
@@ -137,8 +137,8 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Drops the plugin tables on database
+     *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function dropPluginTables()
     {
@@ -157,7 +157,7 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     *
      */
     private function removeTools()
     {

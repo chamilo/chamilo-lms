@@ -210,7 +210,10 @@ class CourseArchiver
                     $date = $file_parts[0];
                     $ext = isset($file_parts[1]) ? $file_parts[1] : null;
                     if ($ext == 'zip' && ($user_id != null && $owner_id == $user_id || $user_id == null)) {
-                        $date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2).' '.substr($date, 9, 2).':'.substr($date, 11, 2).':'.substr($date, 13, 2);
+                        $date =
+                            substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.
+                            substr($date, 6, 2).' '.substr($date, 9, 2).':'.
+                            substr($date, 11, 2).':'.substr($date, 13, 2);
                         $backup_files[] = [
                             'file' => $file,
                             'date' => $date,

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Debug\ExceptionHandler;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
@@ -377,19 +378,22 @@ class Database
     /**
      * @param string $query
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return Statement
      */
     public static function query($query)
     {
         $connection = self::getManager()->getConnection();
-        if (api_get_setting('server_type') == 'test') {
+        $result = null;
+        try {
             $result = $connection->executeQuery($query);
-        } else {
-            try {
-                $result = $connection->executeQuery($query);
-            } catch (Exception $e) {
+        } catch (Exception $e) {
+            $debug = api_get_setting('server_type') == 'test';
+            if ($debug) {
+                // We use Symfony exception handler for better error information
+                $handler = new ExceptionHandler();
+                $handler->handle($e);
+                exit;
+            } else {
                 error_log($e->getMessage());
                 api_not_allowed(false, get_lang('GeneralError'));
             }

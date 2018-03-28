@@ -26,6 +26,8 @@ app/home/*
 # Upload content
 app/upload/*
 
+.php_cs.cache
+
 # Logs and databases #
 *.log
 

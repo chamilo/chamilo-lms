@@ -7478,13 +7478,11 @@ input.form-control[type="color"] {
 }
 
 .feedback-question {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    display: block;
+    margin: 5px 0;
 }
 
 .feedback-separator {
-    font-size:120%;
+    font-weight: bold;
 }
 
 .score-title {

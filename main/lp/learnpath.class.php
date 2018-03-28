@@ -97,7 +97,7 @@ class learnpath
      * Needs a database handler, a course code and a learnpath id from the database.
      * Also builds the list of items into $this->items.
      *
-     * @param string $course Course code
+     * @param string $course  Course code
      * @param int    $lp_id
      * @param int    $user_id
      *
@@ -478,15 +478,16 @@ class learnpath
      * @param int    $parent
      * @param int    $previous
      * @param string $type
-     * @param int    $id resource ID (ref)
+     * @param int    $id               resource ID (ref)
      * @param string $title
      * @param string $description
      * @param int    $prerequisites
      * @param int    $max_time_allowed
      * @param int    $userId
      *
-     * @return int
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int
      */
     public function add_item(
         $parent,
@@ -734,14 +735,15 @@ class learnpath
      * @param string $description
      * @param string $learnpath
      * @param string $origin
-     * @param string $zipname Zip file containing the learnpath or directory containing the learnpath
+     * @param string $zipname       Zip file containing the learnpath or directory containing the learnpath
      * @param string $publicated_on
      * @param string $expired_on
      * @param int    $categoryId
      * @param int    $userId
      *
-     * @return int The new learnpath ID on success, 0 on failure
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int The new learnpath ID on success, 0 on failure
      */
     public static function add_lp(
         $courseCode,
@@ -1038,11 +1040,12 @@ class learnpath
      * Static admin function allowing removal of a learnpath.
      *
      * @param array  $courseInfo
-     * @param int    $id     Learnpath ID
-     * @param string $delete Whether to delete data or keep it (default: 'keep', others: 'remove')
+     * @param int    $id         Learnpath ID
+     * @param string $delete     Whether to delete data or keep it (default: 'keep', others: 'remove')
+     *
+     * @throws \Doctrine\DBAL\DBALException
      *
      * @return bool True on success, false on failure (might change that to return number of elements deleted)
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function delete($courseInfo = null, $id = null, $delete = 'keep')
     {
@@ -1162,8 +1165,9 @@ class learnpath
      *
      * @param int $id Element ID of which children have to be removed
      *
-     * @return int Total number of children removed
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int Total number of children removed
      */
     public function delete_children_items($id)
     {
@@ -1197,9 +1201,10 @@ class learnpath
      * @param string $remove Whether to remove the resource/data from the system
      *                       or leave it (default: 'keep', others 'remove')
      *
+     * @throws \Doctrine\DBAL\DBALException
+     *
      * @return int Number of elements moved
      *
-     * @throws \Doctrine\DBAL\DBALException
      * @todo implement resource removal
      */
     public function delete_item($id, $remove = 'keep')
@@ -1281,18 +1286,19 @@ class learnpath
     /**
      * Updates an item's content in place.
      *
-     * @param int    $id            Element ID
-     * @param int    $parent        Parent item ID
-     * @param int    $previous      Previous item ID
-     * @param string $title         Item title
-     * @param string $description   Item description
-     * @param string $prerequisites Prerequisites (optional)
-     * @param array  $audio         The array resulting of the $_FILES[mp3] element
+     * @param int    $id               Element ID
+     * @param int    $parent           Parent item ID
+     * @param int    $previous         Previous item ID
+     * @param string $title            Item title
+     * @param string $description      Item description
+     * @param string $prerequisites    Prerequisites (optional)
+     * @param array  $audio            The array resulting of the $_FILES[mp3] element
      * @param int    $max_time_allowed
      * @param string $url
      *
-     * @return bool True on success, false on error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on success, false on error
      */
     public function edit_item(
         $id,
@@ -1542,8 +1548,9 @@ class learnpath
      * @param int    $mastery_score   Prerequisite min score
      * @param int    $max_score       Prerequisite max score
      *
-     * @return bool True on success, false on error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on success, false on error
      */
     public function edit_item_prereq(
         $id,
@@ -1599,8 +1606,9 @@ class learnpath
      *
      * @param int $id Item ID
      *
-     * @return array A list of all the "brother items" (or an empty array on failure)
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array A list of all the "brother items" (or an empty array on failure)
      */
     public function getSiblingDirectories($id)
     {
@@ -1645,8 +1653,9 @@ class learnpath
      *
      * @param int $id Item ID
      *
-     * @return array A list of all the "brother items" (or an empty array on failure)
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array A list of all the "brother items" (or an empty array on failure)
      */
     public function get_brother_items($id)
     {
@@ -2273,8 +2282,9 @@ class learnpath
      * @param int    $lpItemId
      * @param string $autostart
      *
-     * @return string The mediaplayer HTML
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string The mediaplayer HTML
      */
     public function get_mediaplayer($lpItemId, $autostart = 'true')
     {
@@ -2355,8 +2365,9 @@ class learnpath
      * @param array $courseInfo
      * @param int   $sessionId
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public static function isBlockedByPrerequisite(
         $studentId,
@@ -2398,8 +2409,9 @@ class learnpath
      * @param null $courseCode
      * @param int  $sessionId
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public static function is_lp_visible_for_student(
         $lp_id,
@@ -2532,8 +2544,9 @@ class learnpath
      * @param int $courseId
      * @param int $sessionId
      *
-     * @return int
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int
      */
     public static function getProgress($lpId, $userId, $courseId, $sessionId = 0)
     {
@@ -2919,11 +2932,12 @@ class learnpath
      * Return the number of interactions for the given learnpath Item View ID.
      * This method can be used as static.
      *
-     * @param int $lp_iv_id Item View ID
+     * @param int $lp_iv_id  Item View ID
      * @param int $course_id course id
      *
-     * @return int
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int
      */
     public static function get_interactions_count_from_db($lp_iv_id, $course_id)
     {
@@ -2949,9 +2963,10 @@ class learnpath
      *
      * @param int $lp_iv_id Learnpath Item View ID
      *
+     * @throws \Doctrine\DBAL\DBALException
+     *
      * @return array
      *
-     * @throws \Doctrine\DBAL\DBALException
      * @todo    Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
      */
     public static function get_iv_interactions_array($lp_iv_id)
@@ -3005,8 +3020,9 @@ class learnpath
      * @param int $lp_iv_id  Item View ID
      * @param int $course_id Course ID
      *
-     * @return int Number of objectives
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int Number of objectives
      */
     public static function get_objectives_count_from_db($lp_iv_id, $course_id)
     {
@@ -3032,9 +3048,10 @@ class learnpath
      *
      * @param int $lpItemViewId Learnpath Item View ID
      *
+     * @throws \Doctrine\DBAL\DBALException
+     *
      * @return array
      *
-     * @throws \Doctrine\DBAL\DBALException
      * @todo    Translate labels
      */
     public static function get_iv_objectives_array($lpItemViewId = 0)
@@ -3160,8 +3177,9 @@ class learnpath
      *
      * @param int $lp_id
      *
-     * @return mixed Type ID or name, depending on the parameter
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return mixed Type ID or name, depending on the parameter
      */
     public static function get_type_static($lp_id = 0)
     {
@@ -3185,12 +3203,13 @@ class learnpath
      * Gets a flat list of item IDs ordered for display (level by level ordered by order_display)
      * This method can be used as abstract and is recursive.
      *
-     * @param int $lp     Learnpath ID
-     * @param int $parent Parent ID of the items to look for
+     * @param int $lp        Learnpath ID
+     * @param int $parent    Parent ID of the items to look for
      * @param int $course_id
      *
-     * @return array Ordered list of item IDs (empty array on error)
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array Ordered list of item IDs (empty array on error)
      */
     public static function get_flat_ordered_items_list($lp = 1, $parent = 0, $course_id = 0)
     {
@@ -3244,8 +3263,9 @@ class learnpath
      *
      * @param $tree
      *
-     * @return array HTML TOC ready to display
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array HTML TOC ready to display
      */
     public function getParentToc($tree)
     {
@@ -3323,8 +3343,9 @@ class learnpath
      * @param int   $id
      * @param bool  $parent
      *
-     * @return array HTML TOC ready to display
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array HTML TOC ready to display
      */
     public function getChildrenToc($tree, $id, $parent = true)
     {
@@ -3394,8 +3415,9 @@ class learnpath
      *
      * @param array $toc_list
      *
-     * @return array HTML TOC ready to display
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array HTML TOC ready to display
      */
     public function getListArrayToc($toc_list = [])
     {
@@ -3544,13 +3566,13 @@ class learnpath
     /**
      * Gets a link to the resource from the present location, depending on item ID.
      *
-     * @param string $type    Type of link expected
-     * @param int    $item_id Learnpath item ID
-     *
+     * @param string $type         Type of link expected
+     * @param int    $item_id      Learnpath item ID
      * @param bool   $provided_toc
      *
-     * @return string $provided_toc Link to the lp_item resource
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string $provided_toc Link to the lp_item resource
      */
     public function get_link($type = 'http', $item_id = null, $provided_toc = false)
     {
@@ -3878,8 +3900,9 @@ class learnpath
      *
      * @param int $attempt_num Optional attempt number. If none given, takes the highest from the lp_view table
      *
-     * @return int DB lp_view id
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int DB lp_view id
      */
     public function get_view($attempt_num = 0)
     {
@@ -3999,8 +4022,9 @@ class learnpath
      * @param int    $id        Item to move up and down
      * @param string $direction Direction 'up' or 'down'
      *
-     * @return bool|int
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool|int
      */
     public function move_item($id, $direction)
     {
@@ -4163,8 +4187,9 @@ class learnpath
      * @param int $lp_id      Learnpath ID
      * @param int $categoryId Category ID
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public static function move_up($lp_id, $categoryId = 0)
     {
@@ -4225,8 +4250,9 @@ class learnpath
      * @param int $lp_id      Learnpath ID
      * @param int $categoryId Category ID
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public static function move_down($lp_id, $categoryId = 0)
     {
@@ -4436,8 +4462,9 @@ class learnpath
      * @param int $lp_id          Learnpath ID
      * @param int $set_visibility New visibility
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public static function toggle_visibility($lp_id, $set_visibility = 1)
     {
@@ -4463,12 +4490,13 @@ class learnpath
      * @param int $id
      * @param int $visibility
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return bool
      */
     public static function toggleCategoryVisibility($id, $visibility = 1)
     {
@@ -4510,8 +4538,9 @@ class learnpath
      * @param int    $lp_id          Learnpath id
      * @param string $set_visibility New visibility (v/i - visible/invisible)
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public static function toggle_publish($lp_id, $set_visibility = 'v')
     {
@@ -4603,11 +4632,12 @@ class learnpath
      * @param int $id
      * @param int $setVisibility
      *
-     * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return bool
      */
     public static function toggleCategoryPublish($id, $setVisibility = 1)
     {
@@ -4809,8 +4839,9 @@ class learnpath
      * Make sure the results are saved with anoter method. This method should probably be redefined in children classes.
      * To use a similar method  statically, use the create_new_attempt() method.
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public function restart()
     {
@@ -5052,9 +5083,11 @@ class learnpath
      *
      * @param string $enc New encoding
      *
-     * @return bool
-     * @todo (as of Chamilo 1.8.8): Check in the future whether this method is needed.
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
+     *
+     * @todo (as of Chamilo 1.8.8): Check in the future whether this method is needed.
      */
     public function set_encoding($enc = 'UTF-8')
     {
@@ -5087,8 +5120,9 @@ class learnpath
      *
      * @param string $lib Proximity setting
      *
-     * @return bool True on update success. False otherwise.
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on update success. False otherwise.
      */
     public function set_jslib($lib = '')
     {
@@ -5115,8 +5149,9 @@ class learnpath
      *
      * @param string $name Optional string giving the new content_maker of this learnpath
      *
-     * @return bool True
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True
      */
     public function set_maker($name = '')
     {
@@ -5145,8 +5180,9 @@ class learnpath
      *
      * @param string $name Optional string giving the new name of this learnpath
      *
-     * @return bool True/False
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True/False
      */
     public function set_name($name = null)
     {
@@ -5191,8 +5227,9 @@ class learnpath
      * @param string $terms_string Comma-separated list of terms
      * @param string $prefix       Xapian term prefix
      *
-     * @return bool False on error, true otherwise
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool False on error, true otherwise
      */
     public function set_terms_by_prefix($terms_string, $prefix)
     {
@@ -5269,8 +5306,9 @@ class learnpath
      *
      * @param string $name Optional string giving the new theme of this learnpath
      *
-     * @return bool Returns true if theme name is not empty
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool Returns true if theme name is not empty
      */
     public function set_theme($name = '')
     {
@@ -5296,8 +5334,9 @@ class learnpath
      *
      * @param string $name Optional string giving the new image of this learnpath
      *
-     * @return bool Returns true if theme name is not empty
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool Returns true if theme name is not empty
      */
     public function set_preview_image($name = '')
     {
@@ -5324,8 +5363,9 @@ class learnpath
      *
      * @param string $name Optional string giving the new author of this learnpath
      *
-     * @return bool Returns true if author's name is not empty
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool Returns true if author's name is not empty
      */
     public function set_author($name = '')
     {
@@ -5350,8 +5390,9 @@ class learnpath
      *
      * @param int $hide 1 if frame is hidden 0 then else
      *
-     * @return bool Returns true if author's name is not empty
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool Returns true if author's name is not empty
      */
     public function set_hide_toc_frame($hide)
     {
@@ -5381,8 +5422,9 @@ class learnpath
      *
      * @param int $prerequisite integer giving the new prerequisite of this learnpath
      *
-     * @return bool returns true if prerequisite is not empty
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool returns true if prerequisite is not empty
      */
     public function set_prerequisite($prerequisite)
     {
@@ -5407,8 +5449,9 @@ class learnpath
      *
      * @param string $name Optional string giving the new location of this learnpath
      *
-     * @return bool True on success / False on error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on success / False on error
      */
     public function set_proximity($name = '')
     {
@@ -5451,8 +5494,9 @@ class learnpath
      *
      * @param int $use_max_score Optional string giving the new location of this learnpath
      *
-     * @return bool True on success / False on error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on success / False on error
      */
     public function set_use_max_score($use_max_score = 1)
     {
@@ -5480,8 +5524,9 @@ class learnpath
      *
      * @param string $expired_on Optional string giving the new author of this learnpath
      *
-     * @return bool Returns true if author's name is not empty
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return bool Returns true if author's name is not empty
      */
     public function set_expired_on($expired_on)
     {
@@ -5521,8 +5566,9 @@ class learnpath
      *
      * @param string $publicated_on Optional string giving the new author of this learnpath
      *
-     * @return bool Returns true if author's name is not empty
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return bool Returns true if author's name is not empty
      */
     public function set_publicated_on($publicated_on)
     {
@@ -5559,8 +5605,9 @@ class learnpath
     /**
      * Sets and saves the expired_on date.
      *
-     * @return bool Returns true if author's name is not empty
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool Returns true if author's name is not empty
      */
     public function set_modified_on()
     {
@@ -5710,8 +5757,9 @@ class learnpath
     /**
      * Updates the default view mode from fullscreen to embedded and inversely.
      *
-     * @return string The current default view mode ('fullscreen' or 'embedded')
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string The current default view mode ('fullscreen' or 'embedded')
      */
     public function update_default_view_mode()
     {
@@ -5758,8 +5806,9 @@ class learnpath
     /**
      * Updates the default behaviour about auto-commiting SCORM updates.
      *
-     * @return bool True if auto-commit has been set to 'on', false otherwise
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True if auto-commit has been set to 'on', false otherwise
      */
     public function update_default_scorm_commit()
     {
@@ -5798,8 +5847,9 @@ class learnpath
     /**
      * Updates the order of learning paths (goes through all of them by order and fills the gaps).
      *
-     * @return bool True on success, false on failure
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on success, false on failure
      */
     public function update_display_order()
     {
@@ -5834,8 +5884,9 @@ class learnpath
     /**
      * Updates the "prevent_reinit" value that enables control on reinitialising items on second view.
      *
-     * @return bool True if prevent_reinit has been set to 'on', false otherwise (or 1 or 0 in this case)
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True if prevent_reinit has been set to 'on', false otherwise (or 1 or 0 in this case)
      */
     public function update_reinit()
     {
@@ -5905,9 +5956,10 @@ class learnpath
      *
      * @param string 'seriousgame', 'single' or 'multiple'
      *
+     * @throws \Doctrine\DBAL\DBALException
+     *
      * @return bool
      *
-     * @throws \Doctrine\DBAL\DBALException
      * @author ndiechburg <noel@cblue.be>
      */
     public function set_attempt_mode($mode)
@@ -5977,9 +6029,10 @@ class learnpath
      * Switch the lp in ktm mode. This is a special scorm mode with unique attempt
      * but possibility to do again a completed item.
      *
+     * @throws \Doctrine\DBAL\DBALException
+     *
      * @return bool true if seriousgame_mode has been set to 1, false otherwise
      *
-     * @throws \Doctrine\DBAL\DBALException
      * @author ndiechburg <noel@cblue.be>
      */
     public function set_seriousgame_mode()
@@ -6017,8 +6070,9 @@ class learnpath
     /**
      * Updates the "scorm_debug" value that shows or hide the debug window.
      *
-     * @return bool True if scorm_debug has been set to 'on', false otherwise (or 1 or 0 in this case)
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True if scorm_debug has been set to 'on', false otherwise (or 1 or 0 in this case)
      */
     public function update_scorm_debug()
     {
@@ -6153,8 +6207,9 @@ class learnpath
      *
      * @author Kevin Van Den Haute
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function overview()
     {
@@ -6216,8 +6271,9 @@ class learnpath
      * @param string $update_audio
      * @param bool   $drop_element_here
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function return_new_tree($update_audio = 'false', $drop_element_here = false)
     {
@@ -6924,10 +6980,11 @@ class learnpath
      * @param string $title
      * @param string $extension
      * @param int    $parentId
-     * @param int    $creatorId creator id
+     * @param int    $creatorId  creator id
+     *
+     * @throws \Doctrine\DBAL\DBALException
      *
      * @return int
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function create_document(
         $courseInfo,
@@ -7189,8 +7246,9 @@ class learnpath
      * @param string $msg
      * @param bool   $show_actions
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function display_item($item_id, $msg = null, $show_actions = true)
     {
@@ -7296,10 +7354,11 @@ class learnpath
      *
      * @param int $item_id
      *
-     * @return string
      * @throws Exception
      * @throws HTML_QuickForm_Error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function display_edit_item($item_id)
     {
@@ -7423,10 +7482,11 @@ class learnpath
      * Function that displays a list with al the resources that
      * could be added to the learning path.
      *
-     * @return bool
      * @throws Exception
      * @throws HTML_QuickForm_Error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public function display_resources()
     {
@@ -7501,8 +7561,9 @@ class learnpath
      * @param bool $iframe
      * @param bool $edit_link
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function display_document($id, $show_title = false, $iframe = true, $edit_link = false)
     {
@@ -7533,9 +7594,10 @@ class learnpath
      * @param int    $id         Item ID if already exists
      * @param mixed  $extra_info Extra information (quiz ID if integer)
      *
-     * @return string HTML form
      * @throws Exception
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
     {
@@ -7751,11 +7813,12 @@ class learnpath
      * Addition of Hotpotatoes tests.
      *
      * @param string $action
-     * @param int    $id Internal ID of the item
+     * @param int    $id         Internal ID of the item
      * @param string $extra_info
      *
-     * @return string HTML structure to display the hotpotatoes addition formular
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML structure to display the hotpotatoes addition formular
      */
     public function display_hotpotatoes_form($action = 'add', $id = 0, $extra_info = '')
     {
@@ -7947,12 +8010,13 @@ class learnpath
      * Return the form to display the forum edit/add option.
      *
      * @param string $action
-     * @param int    $id ID of the lp_item if already exists
+     * @param int    $id         ID of the lp_item if already exists
      * @param string $extra_info
      *
-     * @return string HTML form
      * @throws Exception
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_forum_form($action = 'add', $id = 0, $extra_info = '')
     {
@@ -8165,12 +8229,13 @@ class learnpath
      * Return HTML form to add/edit forum threads.
      *
      * @param string $action
-     * @param int    $id Item ID if already exists in learning path
+     * @param int    $id         Item ID if already exists in learning path
      * @param string $extra_info
      *
-     * @return string HTML form
      * @throws Exception
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_thread_form($action = 'add', $id = 0, $extra_info = '')
     {
@@ -8399,10 +8464,11 @@ class learnpath
      * @param int    $id
      * @param string $extra_info
      *
-     * @return string HTML form
      * @throws Exception
      * @throws HTML_QuickForm_Error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_item_form(
         $item_type,
@@ -8649,10 +8715,11 @@ class learnpath
      * @param int    $id         ID of the lp_item (if already exists)
      * @param mixed  $extra_info Integer if document ID, string if info ('new')
      *
-     * @return string HTML form
      * @throws Exception
      * @throws HTML_QuickForm_Error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
     {
@@ -9070,14 +9137,15 @@ class learnpath
     /**
      * Return HTML form to add/edit a link item.
      *
-     * @param string $action (add/edit)
-     * @param int    $id     Item ID if exists
+     * @param string $action     (add/edit)
+     * @param int    $id         Item ID if exists
      * @param mixed  $extra_info
      *
-     * @return string HTML form
      * @throws Exception
      * @throws HTML_QuickForm_Error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_link_form($action = 'add', $id = 0, $extra_info = '')
     {
@@ -9292,12 +9360,13 @@ class learnpath
      * Return HTML form to add/edit a student publication (work).
      *
      * @param string $action
-     * @param int    $id Item ID if already exists
+     * @param int    $id         Item ID if already exists
      * @param string $extra_info
      *
-     * @return string HTML form
      * @throws Exception
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_student_publication_form(
         $action = 'add',
@@ -9506,8 +9575,9 @@ class learnpath
      * @param id     $item_id
      * @param string $item_type
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function display_manipulate($item_id, $item_type = TOOL_DOCUMENT)
     {
@@ -9629,8 +9699,9 @@ class learnpath
     /**
      * Creates the javascript needed for filling up the checkboxes without page reload.
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function get_js_dropdown_array()
     {
@@ -9690,10 +9761,11 @@ class learnpath
      *
      * @param int $item_id Item ID
      *
-     * @return string HTML form
      * @throws Exception
      * @throws HTML_QuickForm_Error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_move_item($item_id)
     {
@@ -9759,9 +9831,10 @@ class learnpath
      * @param string $title
      * @param array  $data
      *
-     * @return string
      * @throws Exception
      * @throws HTML_QuickForm_Error
+     *
+     * @return string
      */
     public function display_item_small_form($item_type, $title = '', $data = [])
     {
@@ -9785,8 +9858,9 @@ class learnpath
      *
      * @param int Item ID
      *
-     * @return string HTML form
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_item_prerequisites_form($item_id = 0)
     {
@@ -9933,8 +10007,9 @@ class learnpath
     /**
      * Return HTML list to allow prerequisites selection for lp.
      *
-     * @return string HTML form
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string HTML form
      */
     public function display_lp_prerequisites_list()
     {
@@ -9974,9 +10049,10 @@ class learnpath
      *
      * @param bool $showInvisibleFiles
      *
-     * @return string
      * @throws Exception
      * @throws HTML_QuickForm_Error
+     *
+     * @return string
      */
     public function get_documents($showInvisibleFiles = false)
     {
@@ -10078,8 +10154,9 @@ class learnpath
     /**
      * Creates a list with all the exercises (quiz) in it.
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function get_exercises()
     {
@@ -10190,8 +10267,9 @@ class learnpath
     /**
      * Creates a list with all the links in it.
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public function get_links()
     {
@@ -10489,8 +10567,9 @@ class learnpath
      * creating a SCORM structure if there is one already. However, if the initial SCORM
      * path has been modified, it should use the generic method here below.
      *
-     * @return string Returns the zip package string, or null if error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string Returns the zip package string, or null if error
      */
     public function scorm_export()
     {
@@ -11414,8 +11493,9 @@ EOD;
     /**
      * @param int $lp_id
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public function scorm_export_to_pdf($lp_id)
     {
@@ -11510,8 +11590,9 @@ EOD;
     /**
      * Delete the image relative to this learning path. No parameter. Only works on instanciated object.
      *
-     * @return bool The results of the unlink function, or false if there was no image to start with
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool The results of the unlink function, or false if there was no image to start with
      */
     public function delete_lp_image()
     {
@@ -11537,8 +11618,9 @@ EOD;
      *
      * @param array    The image array, coming from the $_FILES superglobal
      *
-     * @return bool True on success, false on error
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool True on success, false on error
      */
     public function upload_image($image_array)
     {
@@ -11621,8 +11703,9 @@ EOD;
      *
      * @author Isaac flores paz
      *
-     * @return int Previous item ID
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int Previous item ID
      */
     public function select_previous_item_id()
     {
@@ -11870,8 +11953,9 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return int|mixed
      * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return int|mixed
      */
     public static function getCountCategories($courseId)
     {
@@ -11912,10 +11996,11 @@ EOD;
     /**
      * @param int $id
      *
-     * @return CLpCategory
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return CLpCategory
      */
     public static function getCategory($id)
     {
@@ -11944,11 +12029,12 @@ EOD;
     /**
      * @param int $id
      *
-     * @return mixed
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return mixed
      */
     public static function deleteCategory($id)
     {
@@ -12070,8 +12156,9 @@ EOD;
     /**
      * @param int $categoryId
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public function setCategoryId($categoryId)
     {
@@ -12102,8 +12189,9 @@ EOD;
      *
      * @param int $value (0 = false, 1 = true)
      *
-     * @return bool
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool
      */
     public function setSubscribeUsers($value)
     {
@@ -12130,8 +12218,9 @@ EOD;
      *
      * @param int $sessionId Optional. The session ID
      *
-     * @return int The count of stars
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return int The count of stars
      */
     public function getCalculateStars($sessionId = 0)
     {
@@ -12493,9 +12582,10 @@ EOD;
     /**
      * Get the LP Final Item form.
      *
-     * @return string
      * @throws Exception
      * @throws HTML_QuickForm_Error
+     *
+     * @return string
      */
     public function getFinalItemForm()
     {
@@ -12650,8 +12740,9 @@ EOD;
      *
      * @param int $value (0 = false, 1 = true)
      *
-     * @return bool Always returns true
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool Always returns true
      */
     public function setAccumulateScormTime($value)
     {
@@ -12685,8 +12776,9 @@ EOD;
      * @param int $id_in_path     the unique index in the items table
      * @param int $lpViewId
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public static function rl_get_resource_link_for_learnpath(
         $course_id,
@@ -12859,8 +12951,9 @@ EOD;
      * @param string $learningPathId The tool type (using constants declared in main_api.lib.php)
      * @param int    $id_in_path     The resource ID
      *
-     * @return string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return string
      */
     public static function rl_get_resource_name($course_code, $learningPathId, $id_in_path)
     {

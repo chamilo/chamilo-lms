@@ -2790,7 +2790,7 @@ function fixIds(EntityManager $em)
 }
 
 /**
- * @param \Doctrine\DBAL\Connection  $connection
+ * @param \Doctrine\DBAL\Connection $connection
  * @param $debug
  *
  * @throws \Doctrine\DBAL\DBALException

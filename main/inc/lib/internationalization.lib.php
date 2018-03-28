@@ -409,8 +409,8 @@ function api_get_timezone()
  * Returns the given date as a DATETIME in UTC timezone.
  * This function should be used before entering any date in the DB.
  *
- * @param mixed $time                        The date to be converted (can be a string supported by date() or a timestamp)
- * @param bool  $return_null_if_invalid_date if the date is not correct return null instead of the current date
+ * @param mixed $time                    date to be converted (can be a string supported by date() or a timestamp)
+ * @param bool  $returnNullIfInvalidDate if the date is not correct return null instead of the current date
  * @param bool  $returnObj
  *
  * @return string The DATETIME in UTC to be inserted in the DB,
@@ -421,12 +421,12 @@ function api_get_timezone()
  */
 function api_get_utc_datetime(
     $time = null,
-    $return_null_if_invalid_date = false,
+    $returnNullIfInvalidDate = false,
     $returnObj = false
 ) {
-    $from_timezone = api_get_timezone();
+    $fromTimezone = api_get_timezone();
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
-        if ($return_null_if_invalid_date) {
+        if ($returnNullIfInvalidDate) {
             return null;
         }
         if ($returnObj) {
@@ -438,12 +438,12 @@ function api_get_utc_datetime(
 
     // If time is a timestamp, return directly in utc
     if (is_numeric($time)) {
-        $time = intval($time);
+        $time = (int) $time;
 
         return gmdate('Y-m-d H:i:s', $time);
     }
     try {
-        $date = new DateTime($time, new DateTimezone($from_timezone));
+        $date = new DateTime($time, new DateTimezone($fromTimezone));
         $date->setTimezone(new DateTimeZone('UTC'));
         if ($returnObj) {
             return $date;

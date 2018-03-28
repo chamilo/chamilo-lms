@@ -1003,11 +1003,6 @@ function api_is_western_name_order($format = null, $language = null)
  */
 function api_sort_by_first_name($language = null)
 {
-    $userNameSortBy = api_get_setting('user_name_sort_by');
-    if (!empty($userNameSortBy) && in_array($userNameSortBy, ['firstname', 'lastname'])) {
-        return $userNameSortBy == 'firstname' ? true : false;
-    }
-
     static $sort_by_first_name = [];
 
     if (empty($language)) {

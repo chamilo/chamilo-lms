@@ -30,6 +30,7 @@ class DashboardController
      */
     public function display()
     {
+        $tpl = new Template(get_lang('Dashboard'));
         $user_id = $this->user_id;
         $dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
         $user_block_data = DashboardManager::get_user_block_data($user_id);
@@ -44,9 +45,9 @@ class DashboardController
 
                 $path = $block['path'];
                 $controller_class = $block['controller'];
-                $filename_controller = $path.'.class.php';
-                $dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
-                require_once $dashboard_plugin_path.$filename_controller;
+                $filename_controller = $path . '.class.php';
+                $dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH) . 'dashboard/' . $path . '/';
+                require_once $dashboard_plugin_path . $filename_controller;
                 if (class_exists($controller_class)) {
                     $obj = new $controller_class($user_id);
 
@@ -69,77 +70,47 @@ class DashboardController
         api_block_anonymous_users();
         $link_blocks_view = $link_list_view = null;
         if ($view == 'list') {
-            $link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.
-                Display::return_icon('blocks.png', get_lang('DashboardBlocks'), '', ICON_SIZE_MEDIUM).'</a>';
+            $link_blocks_view = '<a href="' . api_get_self() . '?view=blocks">' .
+                Display::return_icon('blocks.png', get_lang('DashboardBlocks'), '', ICON_SIZE_MEDIUM) . '</a>';
         } else {
-            $link_list_view = '<a href="'.api_get_self().'?view=list">'.
-                Display::return_icon('edit.png', get_lang('EditBlocks'), '', ICON_SIZE_MEDIUM).'</a>';
+            $link_list_view = '<a href="' . api_get_self() . '?view=list">' .
+                Display::return_icon('edit.png', get_lang('EditBlocks'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
         $configuration_link = null;
         if (api_is_platform_admin()) {
-            $configuration_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'
-                .Display::return_icon('settings.png', get_lang('ConfigureDashboardPlugin'), '', ICON_SIZE_MEDIUM).'</a>';
+            $configuration_link = '<a href="' . api_get_path(WEB_CODE_PATH) . 'admin/settings.php?category=Plugins">'
+                . Display::return_icon('settings.png', get_lang('ConfigureDashboardPlugin'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
-        $content = '<div class="actions">';
-        $content .= $link_blocks_view.$link_list_view.$configuration_link;
-        $content .= '</div>';
+        $actions = Display::toolbarAction('toolbar', [0 => $link_blocks_view . $link_list_view . $configuration_link]);
+        $tpl->assign('actions', $actions);
 
         // block dashboard view
+        $columns = [];
+        $blockList = null;
         if (isset($view) && $view == 'blocks') {
             if (isset($blocks) && count($blocks) > 0) {
-                $columns = [];
                 // group content html by number of column
                 if (is_array($blocks)) {
                     $tmp_columns = [];
                     foreach ($blocks as $block) {
                         $tmp_columns[] = $block['column'];
                         if (in_array($block['column'], $tmp_columns)) {
-                            $columns['column_'.$block['column']][] = $block['content_html'];
+                            $columns['column_' . $block['column']][] = $block['content_html'];
                         }
                     }
                 }
-
-                $content .= '<div id="columns" class="row">';
-                if (count($columns) > 0) {
-                    $columns_name = array_keys($columns);
-                    // blocks for column 1
-                    if (in_array('column_1', $columns_name)) {
-                        $content .= '<div id="column1" class="col-md-6">';
-                        foreach ($columns['column_1'] as $data) {
-                            $content .= $data;
-                        }
-                        $content .= '</div>';
-                    } else {
-                        $content .= '<div id="column1" class="col-md-6">';
-                        $content .= '&nbsp;';
-                        $content .= '</div>';
-                    }
-                    // blocks for column 2
-                    if (in_array('column_2', $columns_name)) {
-                        // blocks for column 1
-                        $content .= '<div id="column2" class="col-md-6">';
-                        foreach ($columns['column_2'] as $data) {
-                            $content .= $data;
-                        }
-                        $content .= '</div>';
-                    } else {
-                        $content .= '<div id="column2" class="col-md-6">';
-                        $content .= '&nbsp;';
-                        $content .= '</div>';
-                    }
-                }
-                $content .= '</div>';
-            } else {
-                $content .= '<div style="margin-top:20px;">'.get_lang('YouHaveNotEnabledBlocks').'</div>';
             }
         } else {
             $user_id = api_get_user_id();
-            $content .= DashboardManager::display_user_dashboard_list($user_id);
+            $blockList = DashboardManager::display_user_dashboard_list($user_id);
+            $tpl->assign('blocklist', $blockList);
         }
 
-        $tpl = new Template(get_lang('Dashboard'));
+        $tpl->assign('columns', $columns);
+        $template = $tpl->get_template('dashboard/index.tpl');
+        $content = $tpl->fetch($template);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     }

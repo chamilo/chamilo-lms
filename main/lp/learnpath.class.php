@@ -100,7 +100,6 @@ class learnpath
      * @param string $course  Course code
      * @param int    $lp_id
      * @param int    $user_id
-     *
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -11673,8 +11672,6 @@ EOD;
         Database::query($sql);
     }
 
-    /**
-     */
     public function set_previous_step_as_prerequisite_for_all_items()
     {
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);

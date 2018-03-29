@@ -120,7 +120,7 @@ class SepePlugin extends Plugin
     }
 
     /**
-     * Update
+     * Update.
      */
     public function update()
     {

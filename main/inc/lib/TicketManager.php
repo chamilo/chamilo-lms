@@ -1541,7 +1541,7 @@ class TicketManager
     }
 
     /**
-     * Close old tickets
+     * Close old tickets.
      */
     public static function close_old_tickets()
     {

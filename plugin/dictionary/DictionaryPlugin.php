@@ -31,7 +31,7 @@ class DictionaryPlugin extends Plugin
     }
 
     /**
-     * Installation process
+     * Installation process.
      */
     public function install()
     {
@@ -45,7 +45,7 @@ class DictionaryPlugin extends Plugin
     }
 
     /**
-     * Uninstall process
+     * Uninstall process.
      */
     public function uninstall()
     {

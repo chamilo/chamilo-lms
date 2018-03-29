@@ -235,8 +235,12 @@ class SortableTable extends HTML_Table
             $params['spacesBeforeSeparator'] = '';
             $params['spacesAfterSeparator'] = '';
             $query_vars = array_keys($_GET);
-            $query_vars_needed = [$this->param_prefix.'column', $this->param_prefix.'direction', $this->param_prefix.'per_page'];
-            if (count($this->additional_parameters) > 0) {
+            $query_vars_needed = [
+                $this->param_prefix.'column',
+                $this->param_prefix.'direction',
+                $this->param_prefix.'per_page',
+            ];
+            if (!empty($this->additional_parameters) && count($this->additional_parameters) > 0) {
                 $query_vars_needed = array_merge(
                     $query_vars_needed,
                     array_keys($this->additional_parameters)

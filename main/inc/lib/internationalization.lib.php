@@ -424,7 +424,6 @@ function api_get_utc_datetime(
     $returnNullIfInvalidDate = false,
     $returnObj = false
 ) {
-    $fromTimezone = api_get_timezone();
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($returnNullIfInvalidDate) {
             return null;
@@ -443,6 +442,7 @@ function api_get_utc_datetime(
         return gmdate('Y-m-d H:i:s', $time);
     }
     try {
+        $fromTimezone = api_get_timezone();
         $date = new DateTime($time, new DateTimezone($fromTimezone));
         $date->setTimezone(new DateTimeZone('UTC'));
         if ($returnObj) {

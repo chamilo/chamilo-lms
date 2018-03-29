@@ -13,8 +13,8 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
-$userId = isset($_REQUEST['user']) ? intval($_REQUEST['user']) : 0;
+$issue = isset($_REQUEST['issue']) ? (int) $_REQUEST['issue'] : 0;
+$userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
 
 if (empty($issue)) {
     api_not_allowed(true);
@@ -22,8 +22,6 @@ if (empty($issue)) {
 
 $entityManager = Database::getManager();
 $skillIssue = $entityManager->find('ChamiloCoreBundle:SkillRelUser', $issue);
-$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
 if (!$skillIssue) {
     Display::addFlash(
@@ -35,6 +33,9 @@ if (!$skillIssue) {
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
+$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
 $user = $skillIssue->getUser();
 $skill = $skillIssue->getSkill();
@@ -160,6 +161,7 @@ if ($profile) {
         'profile' => $profileId,
     ]);
 
+    $profileLevels = [];
     foreach ($levels as $level) {
         $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();
     }

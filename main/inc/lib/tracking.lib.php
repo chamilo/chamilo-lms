@@ -7409,10 +7409,13 @@ class TrackingCourseLog
             }
         }
 
-        while ($user = Database::fetch_array($res, 'ASSOC')) {
-            $courseInfo = api_get_course_info($course_code);
-            $courseId = $courseInfo['real_id'];
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
+        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$course_code.
+            '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
+
+        while ($user = Database::fetch_array($res, 'ASSOC')) {
             $user['official_code'] = $user['col0'];
             $user['lastname'] = $user['col1'];
             $user['firstname'] = $user['col2'];
@@ -7495,11 +7498,11 @@ class TrackingCourseLog
                 $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0).' / '.$total_surveys;
             }
 
-            $user['link'] = '<center>
-                             <a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
-                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                             </a>
-                         </center>';
+            $url = $urlBase.'&student='.$user['user_id'];
+
+            $user['link'] = '<center><a href="'.$url.'">
+                            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                             </a></center>';
 
             // store columns in array $users
             $is_western_name_order = api_is_western_name_order();

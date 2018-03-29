@@ -2795,9 +2795,9 @@ class SessionManager
     /**
      * Update an extra field value for a given session.
      *
-     * @param int $sessionId Session ID
-     * @param string $variable    Field variable name
-     * @param string $value       Optional. Default field value
+     * @param int    $sessionId Session ID
+     * @param string $variable  Field variable name
+     * @param string $value     Optional. Default field value
      *
      * @return bool|int An integer when register a new extra field. And boolean when update the extrafield
      */

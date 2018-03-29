@@ -1053,14 +1053,14 @@ class Rest extends WebService
             ? $courseParam['original_course_id_value']
             : null;
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
-        $visibility = isset($courseParam['visibility']) ? (int)$courseParam['visibility'] : null;
+        $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
                 $courseParam['visibility'] >= 0 &&
                 $courseParam['visibility'] <= 3
             ) {
-                $visibility = (int)$courseParam['visibility'];
+                $visibility = (int) $courseParam['visibility'];
             }
         }
 

@@ -7,7 +7,7 @@ use ChamiloSession as Session;
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
-$debug = false;
+
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
@@ -24,9 +24,32 @@ switch ($action) {
     case 'update_duration':
         $debug = true;
         $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
+
+        if (Session::read('login_as')) {
+            if ($debug) {
+                error_log("User is 'login as' don't update duration time.");
+            }
+            exit;
+        }
+
+        if (empty($exeId)) {
+            if ($debug) {
+                error_log("Exe id not provided.");
+            }
+            exit;
+        }
+
         /** @var Exercise $exerciseInSession */
         $exerciseInSession = Session::read('objExercise');
-        if (!empty($exeId) && !empty($exerciseInSession)) {
+
+        if (empty($exerciseInSession)) {
+            if ($debug) {
+                error_log("Exercise obj not provided.");
+            }
+            exit;
+        }
+
+        if (!empty($exerciseInSession)) {
             $em = Database::getManager();
             /** @var \Chamilo\CoreBundle\Entity\TrackEExercises $attempt */
             $attempt = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);

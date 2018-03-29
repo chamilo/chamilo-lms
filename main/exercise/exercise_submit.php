@@ -1107,8 +1107,7 @@ if (!empty($error)) {
         
             $(\'button[name="previous_question_and_save"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-    
+                e.stopPropagation();    
                 var
                     $this = $(this),
                     previousId = parseInt($this.data(\'prev\')) || 0,
@@ -1120,9 +1119,7 @@ if (!empty($error)) {
             $(\'button[name="save_question_list"]\').on(\'click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-
-                var
-                    $this = $(this),
+                var $this = $(this),
                     questionList = $this.data(\'list\').split(",");
 
                 save_question_list(questionList);
@@ -1146,8 +1143,8 @@ if (!empty($error)) {
             });
             
             // Save attempt duration
-            addExerciseEvent(window, \'unload\', updateDuration , false);
-            addExerciseEvent(window, \'beforeunload\', updateDuration , false);
+            addExerciseEvent(window, \'unload\', updateDuration , false);            
+            addExerciseEvent(window, \'beforeunload\', updateDuration , false);                        
         });
 
         function previous_question(question_num) {

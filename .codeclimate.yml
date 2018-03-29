@@ -7,7 +7,7 @@ checks:
   file-lines:
     enabled: false
   method-complexity:
-    enabled: false
+    enabled: true
   method-count:
     enabled: false
   method-lines:
@@ -34,7 +34,7 @@ plugins:
   phpcodesniffer:
     enabled: true
     config:
-      standard: "PSR1,PSR2"
+      standard: "Symfony"
       file_extensions: "php"
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:
@@ -109,6 +109,8 @@ exclude_patterns:
 - plugin/ims_lti/OAuthSimple.php
 - plugin/sepe/src/wsse/
 - plugin/test2pdf/class/
+- plugin/jcapture/lib/
+- plugin/jcapture/src/
 - tests/
 - vendor/
 - web/

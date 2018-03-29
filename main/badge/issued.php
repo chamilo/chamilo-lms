@@ -87,14 +87,14 @@ if ($skillIssue->getAcquiredLevel()) {
     $currentSkillLevel = $skillLevelRepo->find(['id' => $skillIssue->getAcquiredLevel()])->getName();
 }
 
-$argumentationAuthor = api_get_user_info($skillIssue->getArgumentationAuthorId());
+$author = api_get_user_info($skillIssue->getArgumentationAuthorId());
 
 $skillIssueInfo = [
     'id' => $skillIssue->getId(),
     'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
     'acquired_level' => $currentSkillLevel,
     'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
-    'argumentation_author_name' => api_get_person_name($argumentationAuthor['firstname'], $argumentationAuthor['lastname']),
+    'argumentation_author_name' => $author['complete_name'],
     'argumentation' => $skillIssue->getArgumentation(),
     'source_name' => $skillIssue->getSourceName(),
     'user_id' => $skillIssue->getUser()->getId(),

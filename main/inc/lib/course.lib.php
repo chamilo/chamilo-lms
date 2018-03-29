@@ -1445,7 +1445,6 @@ class CourseManager
                 }
                 $report_info = [];
                 $user_info = $user;
-                //$user_info['complete_name'] = api_get_person_name($user['firstname'], $user['lastname']);
                 $user_info['status'] = $user['status'];
                 if (isset($user['is_tutor'])) {
                     $user_info['is_tutor'] = $user['is_tutor'];

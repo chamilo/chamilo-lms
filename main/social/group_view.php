@@ -278,7 +278,13 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                 $userPicture = UserManager::getUserPicture($member['id']);
                 $member_content .= '<div class="col-md-3">';
                 $member_content .= '<div class="items-user">';
-                $member_name = Display::url(api_get_person_name(cut($member['user_info']['firstname'], 15), cut($member['user_info']['lastname'], 15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
+                $member_name = Display::url(
+                    api_get_person_name(
+                        cut($member['user_info']['firstname'], 15),
+                        cut($member['user_info']['lastname'], 15)
+                    ).'&nbsp;'.$icon,
+                    $member['user_info']['profile_url']
+                );
                 $member_content .= Display::div('<img class="img-circle" src="'.$userPicture.'"/>', ['class' => 'avatar']);
                 $member_content .= Display::div($member_name, ['class' => 'name']);
                 $member_content .= '</div>';

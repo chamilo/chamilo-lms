@@ -177,12 +177,9 @@ class CourseCategory
         }
         // Now we're at the top, get back down to update each child
         //$children_count = courseCategoryChildrenCount($categoryId);
+        $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).") WHERE code = '$categoryId'";
         if ($delta >= 0) {
-            $sql = "UPDATE $table SET children_count = (children_count + $delta)
-                WHERE code = '$categoryId'";
-        } else {
-            $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).")
-                WHERE code = '$categoryId'";
+            $sql = "UPDATE $table SET children_count = (children_count + $delta) WHERE code = '$categoryId'";
         }
         Database::query($sql);
     }

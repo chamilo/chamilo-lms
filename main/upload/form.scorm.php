@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * Display part of the SCORM sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
@@ -39,7 +39,7 @@ function get_zip_files_in_garbage()
 /**
  * Just display the form needed to upload a SCORM and give its settings.
  */
-$nameTools = get_lang("FileUpload");
+$nameTools = get_lang('FileUpload');
 $interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?action=list?".api_get_cidreq(),
     "name" => get_lang("ToolLearnpath"),

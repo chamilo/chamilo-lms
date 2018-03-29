@@ -1300,7 +1300,6 @@ class Agenda
                         }
                     }
                 }
-
                 break;
         }
 

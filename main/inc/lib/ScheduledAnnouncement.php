@@ -96,13 +96,14 @@ class ScheduledAnnouncement extends Model
     /**
      * Returns a Form validator Obj.
      *
+     * @param int    $id
      * @param string $url
      * @param string $action      add, edit
      * @param array  $sessionInfo
      *
      * @return FormValidator form validator obj
      */
-    public function returnSimpleForm($url, $action, $sessionInfo = [])
+    public function returnSimpleForm($id, $url, $action, $sessionInfo = [])
     {
         $form = new FormValidator(
             'announcement',
@@ -114,6 +115,12 @@ class ScheduledAnnouncement extends Model
         $form->addDateTimePicker('date', get_lang('Date'));
         $form->addText('subject', get_lang('Subject'));
         $form->addHtmlEditor('message', get_lang('Message'));
+
+        $extraField = new ExtraField('scheduled_announcement');
+        $extra = $extraField->addElements($form, $id);
+        $js = $extra['jquery_ready_content'];
+        $form->addHtml("<script> $(function() { $js }); </script> ");
+
         $this->setTagsInForm($form);
 
         $form->addCheckBox('sent', null, get_lang('MessageSent'));
@@ -232,6 +239,12 @@ class ScheduledAnnouncement extends Model
         $form->addHtml('</div>');
         $form->addText('subject', get_lang('Subject'));
         $form->addHtmlEditor('message', get_lang('Message'));
+
+        $extraField = new ExtraField('scheduled_announcement');
+        $extra = $extraField->addElements($form);
+        $js = $extra['jquery_ready_content'];
+        $form->addHtml("<script> $(function() { $js }); </script> ");
+
         $this->setTagsInForm($form);
 
         if ($action == 'edit') {
@@ -241,6 +254,37 @@ class ScheduledAnnouncement extends Model
         }
 
         return $form;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getAttachmentToString($id)
+    {
+        $file = $this->getAttachment($id);
+        if (!empty($file) && !empty($file['value'])) {
+            //$file = api_get_uploaded_web_url('schedule_announcement', $id, basename($file['value']));
+            $url = api_get_path(WEB_UPLOAD_PATH).$file['value'];
+
+            return get_lang('Attachment').': '.Display::url(basename($file['value']), $url, ['target' => '_blank']);
+        }
+
+        return '';
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getAttachment($id)
+    {
+        $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
+        $attachment = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'attachment');
+
+        return $attachment;
     }
 
     /**
@@ -277,6 +321,8 @@ class ScheduledAnnouncement extends Model
                         continue;
                     }
 
+                    $attachments = $this->getAttachmentToString($result['id']);
+
                     self::update(['id' => $result['id'], 'sent' => 1]);
 
                     $subject = $result['subject'];
@@ -299,7 +345,7 @@ class ScheduledAnnouncement extends Model
                                 $progress = Tracking::get_avg_student_progress(
                                     $user['user_id'],
                                     $courseInfo['code'],
-                                    null,
+                                    [],
                                     $sessionId
                                 );
                             }
@@ -345,6 +391,7 @@ class ScheduledAnnouncement extends Model
                             ];
 
                             $message = str_replace(array_keys($tags), $tags, $message);
+                            $message .= $attachments;
 
                             MessageManager::send_message(
                                 $userInfo['user_id'],

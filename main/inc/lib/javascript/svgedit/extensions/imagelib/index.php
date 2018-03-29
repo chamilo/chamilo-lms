@@ -15,7 +15,7 @@ $curdirpath='/images/gallery'; //path of library directory
 $course_info = api_get_course_info();
 
 // Get all files and folders
-$docs_and_folders = DocumentManager::get_all_document_data(
+$docs_and_folders = DocumentManager::getAllDocumentData(
     $course_info,
     $curdirpath,
     0,
@@ -25,7 +25,7 @@ $docs_and_folders = DocumentManager::get_all_document_data(
 );
 
 //get all filenames
-$array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
+$array_to_search = !empty($docs_and_folders) ? $docs_and_folders : [];
 
 if (count($array_to_search) > 0) {
 	while (list($key) = each($array_to_search)) {

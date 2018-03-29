@@ -513,7 +513,7 @@ class MessageManager
      * @param bool   $directMessage
      * @param array  $smsParameters
      * @param bool   $uploadFiles        Do not upload files using the MessageManager class
-     * @param bool   $attachmentList
+     * @param array  $attachmentList
      *
      * @return bool
      */
@@ -2250,8 +2250,7 @@ class MessageManager
             while (!feof($mailFile)) {
                 $mailLine = fgets($mailFile);
                 //if ($iX == 4 && preg_match('/(.*):\s(.*)$/', $mailLine, $matches)) {
-                if (
-                    $iX == 2 &&
+                if ($iX == 2 &&
                     preg_match('/(.*)(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s(.*)/', $mailLine, $detailsMatches)
                 ) {
                     $mail_queue[$i]['reason'] = $detailsMatches[3];
@@ -2278,8 +2277,6 @@ class MessageManager
 
     /**
      * @param int $userId
-     *
-     * @throws \Doctrine\DBAL\DBALException
      *
      * @return array
      */
@@ -2314,8 +2311,6 @@ class MessageManager
      * @param int $userId
      * @param int $otherUserId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array
      */
     public static function getAllMessagesBetweenStudents($userId, $otherUserId)
@@ -2343,6 +2338,49 @@ class MessageManager
         }
 
         return $list;
+    }
+
+    /**
+     * @param string $subject
+     * @param string $message
+     * @param array  $courseInfo
+     * @param int    $sessionId
+     *
+     * @return bool
+     */
+    public static function sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId = 0)
+    {
+        if (empty($courseInfo)) {
+            return false;
+        }
+        $senderId = api_get_user_id();
+        if (empty($senderId)) {
+            return false;
+        }
+        if (empty($sessionId)) {
+            // Course students and teachers
+            $users = CourseManager::get_user_list_from_course_code($courseInfo['code']);
+        } else {
+            // Course-session students and course session coaches
+            $users = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
+        }
+
+        if (empty($users)) {
+            return false;
+        }
+
+        foreach ($users as $userInfo) {
+            self::send_message_simple(
+                $userInfo['user_id'],
+                $subject,
+                $message,
+                $senderId,
+                false,
+                false,
+                [],
+                false
+            );
+        }
     }
 
     /**

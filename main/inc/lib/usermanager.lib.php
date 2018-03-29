@@ -305,6 +305,7 @@ class UserManager
 
         $currentDate = api_get_utc_datetime();
         $now = new DateTime();
+
         if (empty($expirationDate) || $expirationDate == '0000-00-00 00:00:00') {
             // Default expiration date
             // if there is a default duration of a valid account then
@@ -326,7 +327,7 @@ class UserManager
 
         /** @var User $user */
         $user = $userManager->createUser();
-        error_log('langua5');
+
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -476,18 +477,70 @@ class UserManager
                         'password' => $original_password,
                     ];
 
-                    api_mail_html(
-                        $recipient_name,
-                        $email,
-                        $emailSubject,
-                        $emailBody,
-                        $sender_name,
-                        $email_admin,
-                        null,
-                        null,
-                        null,
-                        $additionalParameters
-                    );
+                    $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
+                    if ($twoEmail === true) {
+                        $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
+                        $emailBody = $tplContent->fetch($layoutContent);
+
+                        api_mail_html(
+                            $recipient_name,
+                            $email,
+                            $emailSubject,
+                            $emailBody,
+                            $sender_name,
+                            $email_admin,
+                            null,
+                            null,
+                            null,
+                            $additionalParameters
+                        );
+
+                        $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
+                        $emailBody = $tplContent->fetch($layoutContent);
+
+                        api_mail_html(
+                            $recipient_name,
+                            $email,
+                            $emailSubject,
+                            $emailBody,
+                            $sender_name,
+                            $email_admin,
+                            null,
+                            null,
+                            null,
+                            $additionalParameters
+                        );
+                    } else {
+                        $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
+                        if ($sendToInbox) {
+                            $adminList = UserManager::get_all_administrators();
+                            $senderId = 1;
+                            if (!empty($adminList)) {
+                                $adminInfo = current($adminList);
+                                $senderId = $adminInfo['user_id'];
+                            }
+
+                            MessageManager::send_message_simple(
+                                $userId,
+                                $emailSubject,
+                                $emailBody,
+                                $senderId
+                            );
+                        } else {
+                            api_mail_html(
+                                $recipient_name,
+                                $email,
+                                $emailSubject,
+                                $emailBody,
+                                $sender_name,
+                                $email_admin,
+                                null,
+                                null,
+                                null,
+                                $additionalParameters
+                            );
+                        }
+                    }
 
                     $notification = api_get_configuration_value('send_notification_when_user_added');
                     if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {

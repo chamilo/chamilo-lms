@@ -208,8 +208,8 @@ class UserGroup extends Model
     /**
      * Gets a list of course ids by user group.
      *
-     * @param int   $id             user group id
-     * @param array $loadCourseData
+     * @param int  $id             user group id
+     * @param bool $loadCourseData
      *
      * @return array
      */
@@ -483,16 +483,17 @@ class UserGroup extends Model
     /**
      * Gets a list of user ids by user group.
      *
-     * @param int $id user group id
+     * @param int   $id    user group id
+     * @param array $roles
      *
      * @return array with a list of user ids
      */
-    public function get_users_by_usergroup($id = null, $relationList = [])
+    public function get_users_by_usergroup($id = null, $roles = [])
     {
         $relationCondition = '';
-        if (!empty($relationList)) {
+        if (!empty($roles)) {
             $relationConditionArray = [];
-            foreach ($relationList as $relation) {
+            foreach ($roles as $relation) {
                 $relation = (int) $relation;
                 if (empty($relation)) {
                     $relationConditionArray[] = " (relation_type = 0 OR relation_type IS NULL OR relation_type = '') ";
@@ -501,7 +502,7 @@ class UserGroup extends Model
                 }
             }
             $relationCondition = " AND ( ";
-            $relationCondition .= implode("AND", $relationConditionArray);
+            $relationCondition .= implode('OR', $relationConditionArray);
             $relationCondition .= " ) ";
         }
 
@@ -968,7 +969,7 @@ class UserGroup extends Model
             foreach ($result as $group) {
                 $group['sessions'] = count($this->get_sessions_by_usergroup($group['id']));
                 $group['courses'] = count($this->get_courses_by_usergroup($group['id']));
-
+                $roles = [];
                 switch ($group['group_type']) {
                     case 0:
                         $group['group_type'] = Display::label(get_lang('Class'), 'info');
@@ -2027,8 +2028,15 @@ class UserGroup extends Model
         } else {
             $num = intval($num);
         }
-        $where_relation_condition = " WHERE g.group_type = ".self::SOCIAL_CLASS." AND
-                                      gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
+
+        $where = " WHERE 
+                        g.group_type = ".self::SOCIAL_CLASS." AND
+                        gu.relation_type IN 
+                        ('".GROUP_USER_PERMISSION_ADMIN."' , 
+                        '".GROUP_USER_PERMISSION_READER."',
+                        '".GROUP_USER_PERMISSION_MODERATOR."',  
+                        '".GROUP_USER_PERMISSION_HRM."') 
+                    ";
         $sql = "SELECT DISTINCT
                   count(user_id) as count,
                   g.picture,
@@ -2038,7 +2046,7 @@ class UserGroup extends Model
                 FROM $tbl_group g
                 INNER JOIN $table_group_rel_user gu
                 ON gu.usergroup_id = g.id
-                $where_relation_condition
+                $where
                 GROUP BY g.id
                 ORDER BY created_at DESC
                 LIMIT $num ";

@@ -686,7 +686,7 @@ class Auth
             $form->addElement('hidden', 'sec_token', Security::getTokenFromSession());
             $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);
             $form->addElement('text', 'course_registration_code');
-            $form->addButton('submit', get_lang('SubmitRegistrationCode'));
+            $form->addButtonSave(get_lang('SubmitRegistrationCode'));
             $content = $form->returnForm();
 
             return ['message' => $message, 'content' => $content];
@@ -736,12 +736,8 @@ class Auth
             $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
         }
 
-        $ids = Database::store_result(
-            Database::query($sql)
-        );
-
+        $ids = Database::store_result(Database::query($sql));
         $sessions = [];
-
         foreach ($ids as $id) {
             $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
         }

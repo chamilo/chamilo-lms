@@ -43,10 +43,9 @@ class Export
         }
 
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
-
-        $writer = new CsvWriter();
-        $writer->setStream(fopen($filePath, 'w'));
-
+        $stream = fopen($filePath, 'w');
+        $writer = new CsvWriter(';', '"', $stream, true);
+        $writer->prepare();
         foreach ($data as $item) {
             if (empty($item)) {
                 $writer->writeItem([]);
@@ -78,7 +77,6 @@ class Export
         $file = new \SplFileObject($filePath, 'w');
         $writer = new ExcelWriter($file);
         $writer->prepare();
-
         foreach ($data as $row) {
             $writer->writeItem($row);
         }

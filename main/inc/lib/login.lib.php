@@ -215,7 +215,6 @@ class Login
      */
     public static function sendResetEmail(User $user)
     {
-        //if (null === $user->getConfirmationToken()) {
         $uniqueId = api_get_unique_id();
         $user->setConfirmationToken($uniqueId);
         $user->setPasswordRequestedAt(new \DateTime());
@@ -237,7 +236,6 @@ class Login
             $mailBody
         );
         Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
-        //}
     }
 
     /**

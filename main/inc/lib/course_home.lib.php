@@ -251,9 +251,7 @@ class CourseHome
         $html = '';
         $web_code_path = api_get_path(WEB_CODE_PATH);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-
         $course_id = api_get_course_int_id();
-
         switch ($course_tool_category) {
             case TOOL_PUBLIC:
                 $condition_display_tools = ' WHERE c_id = '.$course_id.' AND visibility = 1 ';
@@ -571,13 +569,18 @@ class CourseHome
         }
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-
-        $toolWithSessionValue = [];
-        foreach ($tools as $row) {
-            if (!empty($row['session_id'])) {
-                $toolWithSessionValue[$row['name']] = $row;
+        // If exists same tool (by name) from session in base course then avoid it. Allow them pass in other cases
+        $tools = array_filter($tools, function (array $toolToFilter) use ($sessionId, $tools) {
+            if (!empty($toolToFilter['session_id'])) {
+                foreach ($tools as $originalTool) {
+                    if ($toolToFilter['name'] == $originalTool['name'] && empty($originalTool['session_id'])) {
+                        return false;
+                    }
+                }
             }
-        }
+
+            return true;
+        });
 
         foreach ($tools as $temp_row) {
             $add = false;
@@ -587,13 +590,6 @@ class CourseHome
                 }
             } else {
                 $add = true;
-            }
-
-            if (isset($toolWithSessionValue[$temp_row['name']])) {
-                if (!empty($temp_row['session_id'])) {
-                    continue;
-                }
-                //$temp_row = $toolWithSessionValue[$temp_row['name']];
             }
 
             if ($allowEditionInSession && !empty($sessionId)) {
@@ -1240,14 +1236,18 @@ class CourseHome
                 }
 
                 $navigation_items[$row['id']] = $row;
-                if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
+                if (stripos($row['link'], 'http://') === false &&
+                    stripos($row['link'], 'https://') === false
+                ) {
                     $navigation_items[$row['id']]['link'] = api_get_path(WEB_CODE_PATH);
 
                     if ($row['category'] == 'plugin') {
                         $plugin = new AppPlugin();
                         $pluginInfo = $plugin->getPluginInfo($row['name']);
-                        $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
-                        $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
+                        if (isset($pluginInfo['title'])) {
+                            $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
+                            $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
+                        }
                     } else {
                         $navigation_items[$row['id']]['name'] = self::translate_tool_name($row);
                     }

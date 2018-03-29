@@ -5496,7 +5496,7 @@ function get_notifications_of_user($user_id = 0, $force = false)
 
     if (!isset($_SESSION['forum_notification']) ||
         $_SESSION['forum_notification']['course'] != $course_id ||
-        $force = true
+        $force == true
     ) {
         $_SESSION['forum_notification']['course'] = $course_id;
 

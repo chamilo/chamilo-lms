@@ -43,7 +43,7 @@ class Attendance
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function get_number_of_attendances($active = -1)
+    public static function getNumberOfAttendances($active = -1)
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $session_id = api_get_session_id();

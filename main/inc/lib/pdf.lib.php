@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 class PDF
 {
+    /** @var mPDF */
     public $pdf;
     public $custom_header = [];
     public $custom_footer = [];
@@ -32,9 +33,7 @@ class PDF
         $template = null
     ) {
         $this->template = $template;
-        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
-         * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
-         */
+        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF */
         if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
@@ -311,7 +310,8 @@ class PDF
 
                 $document_html = self::fixImagesPaths($document_html, $course_data, $dirName);
 
-                api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
+                // The library mPDF expects UTF-8 encoded input data.
+                api_set_encoding_html($document_html, 'UTF-8');
                 // TODO: Maybe it is better idea the title to be passed through
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
                 // $_GET[] too, as it is done with file name.
@@ -395,7 +395,6 @@ class PDF
         //absolute path for frames.css //TODO: necessary?
         $absolute_css_path = api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/frames.css';
         $document_html = str_replace('href="./css/frames.css"', 'href="'.$absolute_css_path.'"', $document_html);
-
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
@@ -419,8 +418,16 @@ class PDF
                     if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
                             if (strpos($old_src, '/main/inc/lib/') === false) {
-                                $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
-                                $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
+                                $old_src_fixed = str_replace(
+                                    api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/',
+                                    '',
+                                    $old_src
+                                );
+                                $old_src_fixed = str_replace(
+                                    'courses/'.$course_data['path'].'/document/',
+                                    '',
+                                    $old_src_fixed
+                                );
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
                             }
@@ -438,22 +445,9 @@ class PDF
         );
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
-        //replace relative path by absolute path for resources
-        //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
-        //$document_html= str_replace('src="/', 'temp_template_path', $document_html);// before save src templates not apply
-        //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
-
-        //$src_http_www= 'src="'.api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
-        //$document_html= str_replace('src="',$src_http_www, $document_html);
-        //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
-
         // The library mPDF expects UTF-8 encoded input data.
         api_set_encoding_html($document_html, 'UTF-8');
-        // TODO: Maybe it is better idea the title to be passed through
-        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
-        // $_GET[] too, as it is done with file name.
         // At the moment the title is retrieved from the html document itself.
-
         if ($returnHtml) {
             return "<style>$css</style>".$document_html;
         }
@@ -641,7 +635,6 @@ class PDF
         $this->pdf->defaultheaderline = 1; // 1 to include line below header/above footer
 
         $userId = api_get_user_id();
-
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
 
@@ -726,7 +719,6 @@ class PDF
             // Adding watermark
             if (api_get_setting('pdf_export_watermark_enable') == 'true') {
                 $watermark_file = self::get_watermark($course_code);
-
                 if ($watermark_file) {
                     //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
                     $this->pdf->SetWatermarkImage($watermark_file);

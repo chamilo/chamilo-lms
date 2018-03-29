@@ -190,11 +190,11 @@ class TicketManager
      */
     public static function addUsersToCategory($categoryId, $users)
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         if (empty($users) || empty($categoryId)) {
             return false;
         }
 
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         foreach ($users as $userId) {
             if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
                 $params = [
@@ -704,7 +704,7 @@ class TicketManager
      * @param $ticketId
      * @param $message_id
      *
-     * @return array
+     * @return bool
      */
     public static function saveMessageAttachmentFile(
         $file_attach,
@@ -718,7 +718,6 @@ class TicketManager
             stripslashes($file_attach['name']),
             $file_attach['type']
         );
-        $file_name = $file_attach['name'];
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if (!filter_extension($new_file_name)) {
             echo Display::return_message(
@@ -1113,7 +1112,6 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-
         $item = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->find($id);
         if ($item) {
             return $item;
@@ -1353,7 +1351,7 @@ class TicketManager
                     $onlyToUserId,
                     $titleEmail,
                     $messageEmail,
-                     0,
+                    0,
                     false,
                     false,
                     [],
@@ -1543,14 +1541,14 @@ class TicketManager
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * Close old tickets.
      */
     public static function close_old_tickets()
     {
-        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
+        $table = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
-        $sql = "UPDATE $table_support_tickets
+        $sql = "UPDATE $table
                 SET
                     status_id = '".self::STATUS_CLOSE."',
                     sys_lastedit_user_id ='$userId',
@@ -1667,7 +1665,7 @@ class TicketManager
                           OR user.username LIKE '%$keyword%')  ";
             }
         }
-        //Search advanced
+        // Search advanced
         if (isset($_GET['submit_advanced'])) {
             $keyword_category = Database::escape_string(
                 trim($_GET['keyword_category'])

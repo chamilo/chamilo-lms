@@ -101,14 +101,12 @@ window.HotspotQuestion = (function () {
 
             if (x >= startX) {
                 width = x - startX;
-
                 this.set('radiusX', Math.round(width / 2));
                 this.set('centerX', startX + this.get('radiusX'));
             }
 
             if (y >= startY) {
                 height = y - startY;
-
                 this.set('radiusY', Math.round(height / 2));
                 this.set('centerY', startY + this.get('radiusY'));
             }
@@ -258,12 +256,9 @@ window.HotspotQuestion = (function () {
 
         var HotspotSVG = function (modelModel, index) {
             var self = this;
-
             this.model = modelModel;
             this.hotspotIndex = index;
-
             this.el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
             this.model.onChange(function (hotspotModel) {
                 self.render();
             });
@@ -368,7 +363,6 @@ window.HotspotQuestion = (function () {
             </div>\n\
         ';
             $el.html(template);
-
             $el.find('select')
                 .on('change', function () {
                     selectedHotspotIndex = self.hotspotIndex;
@@ -747,7 +741,6 @@ window.HotspotQuestion = (function () {
                     hotspotsSVG = new AdminHotspotsSVG(hotspotsCollection, this);
 
                 $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
-
                 $(config.selector).parent().prepend('\n\
                     <div id="hotspot-messages" class="alert alert-info">\n\
                         <h4><span class="fa fa-info-circle" aria-hidden="true"></span> ' + lang.HotspotStatus1 + '</h4>\n\

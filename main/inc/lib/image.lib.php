@@ -65,27 +65,37 @@ class Image
         }
     }
 
+    /**
+     * @param $cropParameters
+     *
+     * @return bool
+     */
     public function crop($cropParameters)
     {
         $image_size = $this->get_image_size($this->image_wrapper->path);
         $src_width = $image_size['width'];
         $src_height = $image_size['height'];
-        $cropParameters = explode(",", $cropParameters);
-        $x = intval($cropParameters[0]);
-        $y = intval($cropParameters[1]);
-        $width = intval($cropParameters[2]);
-        $height = intval($cropParameters[3]);
+        $cropParameters = explode(',', $cropParameters);
 
-        $image = $this->image_wrapper->crop(
-            $x,
-            $y,
-            $width,
-            $height,
-            $src_width,
-            $src_height
-        );
+        if (isset($cropParameters[0]) && isset($cropParameters[1])) {
+            $x = intval($cropParameters[0]);
+            $y = intval($cropParameters[1]);
+            $width = intval($cropParameters[2]);
+            $height = intval($cropParameters[3]);
 
-        return $image;
+            $image = $this->image_wrapper->crop(
+                $x,
+                $y,
+                $width,
+                $height,
+                $src_width,
+                $src_height
+            );
+
+            return $image;
+        }
+
+        return false;
     }
 
     /**
@@ -278,6 +288,8 @@ class ImagickWrapper extends ImageWrapper
      * @param int $height     the height of the crop
      * @param int $src_width  the source width of the original image
      * @param int $src_height the source height of the original image
+     *
+     * @return bool
      */
     public function crop($x, $y, $width, $height, $src_width, $src_height)
     {
@@ -287,6 +299,8 @@ class ImagickWrapper extends ImageWrapper
         $this->image->cropimage($width, $height, $x, $y);
         $this->width = $width;
         $this->height = $height;
+
+        return true;
     }
 
     public function send_image(

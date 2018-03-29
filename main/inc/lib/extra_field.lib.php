@@ -140,6 +140,9 @@ class ExtraField extends Model
             case 'survey':
                 $this->extraFieldType = EntityExtraField::SURVEY_FIELD_TYPE;
                 break;
+            case 'scheduled_announcement':
+                $this->extraFieldType = EntityExtraField::SCHEDULED_ANNOUNCEMENT;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -160,7 +163,7 @@ class ExtraField extends Model
      */
     public static function getValidExtraFieldTypes()
     {
-        return [
+        $result = [
             'user',
             'course',
             'session',
@@ -174,6 +177,12 @@ class ExtraField extends Model
             'user_certificate',
             'survey',
         ];
+
+        if (api_get_configuration_value('allow_scheduled_announcements')) {
+            $result[] = 'scheduled_announcement';
+        }
+
+        return $result;
     }
 
     /**
@@ -893,18 +902,21 @@ class ExtraField extends Model
     public function save($params, $show_query = false)
     {
         $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
-        $params = self::clean_parameters($params);
+        $params = $this->clean_parameters($params);
         $params['extra_field_type'] = $this->extraFieldType;
 
         if ($fieldInfo) {
             return $fieldInfo['id'];
         } else {
             $id = parent::save($params, $show_query);
-            if ($id) {
-                $session_field_option = new ExtraFieldOption($this->type);
-                $params['field_id'] = $id;
-                $session_field_option->save($params);
+
+            if (!$id) {
+                return 0;
             }
+
+            $session_field_option = new ExtraFieldOption($this->type);
+            $params['field_id'] = $id;
+            $session_field_option->save($params);
 
             return $id;
         }
@@ -915,7 +927,7 @@ class ExtraField extends Model
      */
     public function update($params, $showQuery = false)
     {
-        $params = self::clean_parameters($params);
+        $params = $this->clean_parameters($params);
         if (isset($params['id'])) {
             $field_option = new ExtraFieldOption($this->type);
             $params['field_id'] = $params['id'];
@@ -925,7 +937,7 @@ class ExtraField extends Model
             $field_option->save($params, $showQuery);
         }
 
-        parent::update($params, $showQuery);
+        return parent::update($params, $showQuery);
     }
 
     /**
@@ -1150,8 +1162,8 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_SELECT_MULTIPLE:
                         $options = [];
-                        foreach ($field_details['options'] as $option_id => $option_details) {
-                            $options[$option_details['option_value']] = $option_details['display_text'];
+                        foreach ($field_details['options'] as $optionDetails) {
+                            $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                         }
                         $form->addElement(
                             'select',
@@ -1446,12 +1458,12 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
 
-                        $allowed_picture_types = ['jpg', 'jpeg', 'png', 'gif'];
+                        $allowedPictureTypes = ['jpg', 'jpeg', 'png', 'gif'];
                         $form->addRule(
                             'extra_'.$field_details['variable'],
-                            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+                            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowedPictureTypes).')',
                             'filetype',
-                            $allowed_picture_types
+                            $allowedPictureTypes
                         );
 
                         if ($freezeElement) {
@@ -1484,14 +1496,45 @@ class ExtraField extends Model
                             array_key_exists($fieldVariable, $extraData)
                         ) {
                             if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
-                                $fieldTexts[] = Display::url(
-                                    api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
+                                $linkToDelete = '';
+                                $divItemId = $field_details['variable'];
+                                if (api_is_platform_admin()) {
+                                    $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?type='.$this->type;
+                                    $url .= '&a=delete_file&field_id='.$field_details['id'].'&item_id='.$itemId;
+
+                                    $deleteId = $field_details['variable'].'_delete';
+                                    $form->addHtml("
+                                        <script>
+                                            $(document).ready(function() {                                      
+                                                $('#".$deleteId."').on('click', function() {
+                                                    $.ajax({			
+                                                        type: 'GET',
+                                                        url: '".$url."',			
+                                                        success: function(result) {		    
+                                                            if (result == 1) {
+                                                                $('#".$divItemId."').html('".get_lang('Deleted')."');
+                                                            }			    
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+                                    ");
+
+                                    $linkToDelete = '&nbsp;'.Display::url(
+                                        Display::return_icon('delete.png', get_lang('Delete')),
+                                        'javascript:void(0)',
+                                        ['id' => $deleteId]
+                                    );
+                                }
+                                $fieldTexts[] = '<div id="'.$divItemId.'">'.Display::url(
+                                    basename($extraData[$fieldVariable]),
                                     api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
                                     [
                                         'title' => $field_details['display_text'],
                                         'target' => '_blank',
                                     ]
-                                );
+                                ).$linkToDelete.'</div>';
                             }
                         }
 
@@ -1614,7 +1657,7 @@ class ExtraField extends Model
 
                                     $('#map_extra_{$field_details['variable']}')
                                         .html('<div class=\"alert alert-info\">"
-                                            .get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap')
+                                            .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
                                             ."</div>');
                                 });
 
@@ -1635,7 +1678,6 @@ class ExtraField extends Model
                                         var geoOptions = {
                                             enableHighAccuracy: true
                                         };
-
                                         navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
                                     }
                                 }

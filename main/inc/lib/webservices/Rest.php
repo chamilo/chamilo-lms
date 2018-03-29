@@ -311,7 +311,7 @@ class Rest extends WebService
         }
 
         $courseInfo = api_get_course_info_by_id($this->course->getId());
-        $documents = DocumentManager::get_all_document_data(
+        $documents = DocumentManager::getAllDocumentData(
             $courseInfo,
             $path,
             0,
@@ -322,7 +322,7 @@ class Rest extends WebService
         );
         $results = [];
 
-        if (is_array($documents)) {
+        if (!empty($documents)) {
             $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
 
             /** @var array $document */
@@ -1031,135 +1031,127 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $course_param
+     * @param array $courseParam
      *
      * @return array
      */
-    public function addCourse($course_param)
+    public function addCourse(array $courseParam)
     {
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $extra_list = [];
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $extraList = [];
+        $results = [];
 
-        $title = isset($course_param['title']) ? $course_param['title'] : '';
-        $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
-        $wanted_code = isset($course_param['wanted_code']) ? intval($course_param['wanted_code']) : 0;
-        $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
-        $admin_id = isset($course_param['admin_id']) ? $course_param['admin_id'] : null;
-        $language = isset($course_param['language']) ? $course_param['language'] : null;
-        $original_course_id = isset($course_param['original_course_id']) ? $course_param['original_course_id'] : null;
-        $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
-        $visibility = isset($course_param['visibility']) ? (int) $course_param['visibility'] : null;
+        $title = isset($courseParam['title']) ? $courseParam['title'] : '';
+        $categoryCode = isset($courseParam['category_code']) ? $courseParam['category_code'] : '';
+        $wantedCode = isset($courseParam['wanted_code']) ? intval($courseParam['wanted_code']) : 0;
+        $tutorName = isset($courseParam['tutor_name']) ? $courseParam['tutor_name'] : '';
+        $courseLanguage = isset($courseParam['language']) ? $courseParam['language'] : null;
+        $originalCourseIdName = isset($courseParam['original_course_id_name'])
+            ? $courseParam['original_course_id_name']
+            : null;
+        $originalCourseIdValue = isset($courseParam['original_course_id_value'])
+            ? $courseParam['original_course_id_value']
+            : null;
+        $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
+        $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
 
-        if (isset($course_param['visibility'])) {
-            if ($course_param['visibility'] &&
-                $course_param['visibility'] >= 0 &&
-                $course_param['visibility'] <= 3
+        if (isset($courseParam['visibility'])) {
+            if ($courseParam['visibility'] &&
+                $courseParam['visibility'] >= 0 &&
+                $courseParam['visibility'] <= 3
             ) {
-                $visibility = (int) $course_param['visibility'];
+                $visibility = (int) $courseParam['visibility'];
             }
         }
 
         // Check whether exits $x_course_code into user_field_values table.
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-            'id',
-            $course_param['original_course_id_name']
+            $originalCourseIdValue,
+            $originalCourseIdName
         );
 
         if (!empty($courseInfo)) {
             if ($courseInfo['visibility'] != 0) {
-                $sql = "UPDATE $table_course SET
-                            course_language = '".Database::escape_string($course_language)."',
+                $sql = "UPDATE $tableCourse SET
+                            course_language = '".Database::escape_string($courseLanguage)."',
                             title = '".Database::escape_string($title)."',
-                            category_code = '".Database::escape_string($category_code)."',
-                            tutor_name = '".Database::escape_string($tutor_name)."',
-                            visual_code = '".Database::escape_string($wanted_code)."'";
+                            category_code = '".Database::escape_string($categoryCode)."',
+                            tutor_name = '".Database::escape_string($tutorName)."',
+                            visual_code = '".Database::escape_string($wantedCode)."'";
                 if ($visibility !== null) {
                     $sql .= ", visibility = $visibility ";
                 }
                 $sql .= " WHERE id = ".$courseInfo['real_id'];
                 Database::query($sql);
-                if (is_array($extra_list) && count($extra_list) > 0) {
-                    foreach ($extra_list as $extra) {
-                        $extra_field_name = $extra['field_name'];
-                        $extra_field_value = $extra['field_value'];
+                if (is_array($extraList) && count($extraList) > 0) {
+                    foreach ($extraList as $extra) {
+                        $extraFieldName = $extra['field_name'];
+                        $extraFieldValue = $extra['field_value'];
                         // Save the external system's id into course_field_value table.
                         CourseManager::update_course_extra_field_value(
                             $courseInfo['code'],
-                            $extra_field_name,
-                            $extra_field_value
+                            $extraFieldName,
+                            $extraFieldValue
                         );
                     }
                 }
                 $results[] = $courseInfo['code'];
-            } else {
-                $results[] = 0;
             }
-        }
-
-        if (!empty($course_param['course_language'])) {
-            $course_language = $course_param['course_language'];
         }
 
         $params = [];
         $params['title'] = $title;
-        $params['wanted_code'] = $wanted_code;
-        $params['category_code'] = $category_code;
-        $params['course_category'] = $category_code;
-        $params['tutor_name'] = $tutor_name;
-        $params['course_language'] = $course_language;
+        $params['wanted_code'] = $wantedCode;
+        $params['category_code'] = $categoryCode;
+        $params['course_category'] = $categoryCode;
+        $params['tutor_name'] = $tutorName;
+        $params['course_language'] = $courseLanguage;
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
+        $params['subscribe'] = empty($courseParam['subscribe']) ? 0 : 1;
+        $params['unsubscribe'] = empty($courseParam['unsubscribe']) ? 0 : 1;
 
-        if (isset($subscribe) && $subscribe != '') { // Valid values: 0, 1
-            $params['subscribe'] = $subscribe;
-        }
-        if (isset($unsubscribe) && $subscribe != '') { // Valid values: 0, 1
-            $params['unsubscribe'] = $unsubscribe;
-        }
+        $courseInfo = CourseManager::create_course($params, $params['user_id']);
 
-        $course_info = CourseManager::create_course($params, $params['user_id']);
-
-        if (!empty($course_info)) {
-            $course_code = $course_info['code'];
+        if (!empty($courseInfo)) {
+            $courseCode = $courseInfo['code'];
 
             // Save new field label into course_field table
             CourseManager::create_course_extra_field(
-                $original_course_id_name,
+                $originalCourseIdName,
                 1,
-                $original_course_id_name,
+                $originalCourseIdName,
                 ''
             );
 
             // Save the external system's id into user_field_value table.
             CourseManager::update_course_extra_field_value(
-                $course_code,
-                $original_course_id_name,
-                $original_course_id_value
+                $courseCode,
+                $originalCourseIdName,
+                $originalCourseIdValue
             );
 
-            if (is_array($extra_list) && count($extra_list) > 0) {
-                foreach ($extra_list as $extra) {
-                    $extra_field_name = $extra['field_name'];
-                    $extra_field_value = $extra['field_value'];
+            if (is_array($extraList) && count($extraList) > 0) {
+                foreach ($extraList as $extra) {
+                    $extraFieldName = $extra['field_name'];
+                    $extraFieldValue = $extra['field_value'];
                     // Save new fieldlabel into course_field table.
                     CourseManager::create_course_extra_field(
-                        $extra_field_name,
+                        $extraFieldName,
                         1,
-                        $extra_field_name,
+                        $extraFieldName,
                         ''
                     );
                     // Save the external system's id into course_field_value table.
                     CourseManager::update_course_extra_field_value(
-                        $course_code,
-                        $extra_field_name,
-                        $extra_field_value
+                        $courseCode,
+                        $extraFieldName,
+                        $extraFieldValue
                     );
                 }
             }
-            $results[] = $course_code;
-        } else {
-            $results[] = 0;
+            $results[] = $courseCode;
         }
 
         return $results;

@@ -73,12 +73,15 @@ class Tracking
                         $courseInfo['real_id'],
                         $sessionId
                     );
-                    $avg_student_score += self::get_avg_student_score(
+                    $average = self::get_avg_student_score(
                         $user_data['user_id'],
                         $courseInfo['code'],
                         [],
                         $sessionId
                     );
+                    if (is_numeric($average)) {
+                        $avg_student_score += $average;
+                    }
                     $avg_student_progress += self::get_avg_student_progress(
                         $user_data['user_id'],
                         $courseInfo['code'],
@@ -1006,12 +1009,9 @@ class Tracking
                                         $my_exo_exe_id = $row_attempts['exe_exo_id'];
                                         $mktime_start_date = api_strtotime($row_attempts['start_date'], 'UTC');
                                         $mktime_exe_date = api_strtotime($row_attempts['exe_date'], 'UTC');
+                                        $time_attemp = ' - ';
                                         if ($mktime_start_date && $mktime_exe_date) {
-                                            $mytime = ((int) $mktime_exe_date - (int) $mktime_start_date);
-                                            $time_attemp = learnpathItem::getScormTimeFromParameter('js', $mytime);
-                                            $time_attemp = str_replace('NaN', '00'.$h.'00\'00"', $time_attemp);
-                                        } else {
-                                            $time_attemp = ' - ';
+                                            $time_attemp = api_format_time($row_attempts['exe_duration'], 'js');
                                         }
                                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                             $view_score = Display::return_icon(
@@ -2684,7 +2684,6 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-
             if (empty($session_id)) {
                 $sql = "SELECT DISTINCT(id), use_max_score
                         FROM $lp_table
@@ -3007,7 +3006,6 @@ class Tracking
                 if ($debug) {
                     echo '<h3>Final return</h3>';
                 }
-
                 if ($lp_with_quiz != 0) {
                     if (!$return_array) {
                         $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);
@@ -6558,15 +6556,16 @@ class Tracking
     /**
      * Get the HTML code for show a block with the achieved user skill on course/session.
      *
-     * @param int $userId
-     * @param int $courseId  optional
-     * @param int $sessionId optional
+     * @param int  $userId
+     * @param int  $courseId
+     * @param int  $sessionId
+     * @param bool $forceView forces the view of the skills, not checking for deeper access
      *
      * @return string
      */
-    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
+    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0, $forceView = false)
     {
-        if (Skill::isAllowed($userId, false) === false) {
+        if (Skill::isAllowed($userId, false) === false && $forceView == false) {
             return '';
         }
         $skillManager = new Skill();

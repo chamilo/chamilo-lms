@@ -104,12 +104,14 @@ class ExtraFieldValue extends Model
         }
 
         $type = $this->getExtraField()->getExtraFieldType();
+
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
             $field_variable = $fieldDetails['variable'];
+
             // if the field is not visible to the user in the end, we need to apply special rules
             if ($fieldDetails['visible_to_self'] != 1) {
                 //only admins should be able to add those values
@@ -125,10 +127,9 @@ class ExtraFieldValue extends Model
                 continue;
             }
 
+            $value = '';
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
-            } else {
-                $value = '';
             }
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
@@ -214,7 +215,6 @@ class ExtraFieldValue extends Model
                         $fieldRelTag->setFieldId($extraFieldInfo['id']);
                         $fieldRelTag->setItemId($params['item_id']);
                         $fieldRelTag->setTagId($tag->getId());
-
                         $em->persist($fieldRelTag);
                     }
 
@@ -260,7 +260,7 @@ class ExtraFieldValue extends Model
                             'value' => $fileDirStored.$fileName,
                             'comment' => $comment,
                         ];
-                        self::save($newParams);
+                        $this->save($newParams);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
@@ -280,6 +280,10 @@ class ExtraFieldValue extends Model
                         case 'work':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
                             $fileDirStored = "work/";
+                            break;
+                        case 'scheduled_announcement':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'scheduled_announcement/';
+                            $fileDirStored = 'scheduled_announcement/';
                             break;
                     }
 
@@ -302,7 +306,7 @@ class ExtraFieldValue extends Model
                             $new_params['comment'] = $comment;
                         }
 
-                        self::save($new_params);
+                        $this->save($new_params);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_CHECKBOX:
@@ -320,7 +324,7 @@ class ExtraFieldValue extends Model
                         'comment' => $comment,
                     ];
 
-                    self::save($newParams);
+                    $this->save($newParams);
 
                     break;
                 default:
@@ -330,7 +334,7 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment,
                     ];
-                    self::save($newParams, $showQuery);
+                    $this->save($newParams, $showQuery);
             }
         }
     }
@@ -401,12 +405,11 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                     if (is_array($value)) {
+                        $value_to_insert = null;
                         if (isset($value['extra_'.$extraFieldInfo['variable']]) &&
                             isset($value['extra_'.$extraFieldInfo['variable'].'_second'])
                         ) {
                             $value_to_insert = $value['extra_'.$extraFieldInfo['variable']].'::'.$value['extra_'.$extraFieldInfo['variable'].'_second'];
-                        } else {
-                            $value_to_insert = null;
                         }
                     }
                     break;
@@ -994,20 +997,35 @@ class ExtraFieldValue extends Model
      * @param int $itemId
      * @param int $fieldId
      * @param int $fieldValue
+     *
+     * @return bool
      */
     public function deleteValuesByHandlerAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
         $itemId = intval($itemId);
         $fieldId = intval($fieldId);
-        $fieldValue = Database::escape_string($fieldValue);
 
-        $sql = "DELETE FROM {$this->table}
+        $fieldData = $this->getExtraField()->get($fieldId);
+        if ($fieldData) {
+            $fieldValue = Database::escape_string($fieldValue);
+
+            $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$itemId' AND
                     field_id = '$fieldId' AND
                     value = '$fieldValue'
                 ";
-        Database::query($sql);
+            Database::query($sql);
+
+            // Delete file from uploads
+            if ($fieldData['field_type'] == ExtraField::FIELD_TYPE_FILE) {
+                api_remove_uploaded_file($this->type, basename($fieldValue));
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

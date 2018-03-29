@@ -2169,9 +2169,7 @@ class CourseManager
             return [];
         }
 
-        $group_list = [];
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-
         if ($in_get_empty_group == 0) {
             // get only groups that are not empty
             $sql = "SELECT DISTINCT g.id, g.iid, g.name
@@ -2187,14 +2185,15 @@ class CourseManager
                     $session_condition
                     AND c_id = $course_id";
         }
-        $result = Database::query($sql);
 
-        while ($group_data = Database::fetch_array($result)) {
-            $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
-            $group_list[$group_data['id']] = $group_data;
+        $result = Database::query($sql);
+        $groupList = [];
+        while ($groupData = Database::fetch_array($result)) {
+            $groupData['userNb'] = GroupManager::number_of_students($groupData['id'], $course_id);
+            $groupList[$groupData['iid']] = $groupData;
         }
 
-        return $group_list;
+        return $groupList;
     }
 
     /**
@@ -3011,12 +3010,12 @@ class CourseManager
     /**
      * Creates a new extra field for a given course.
      *
-     * @param    string    Field's internal variable name
-     * @param    int        Field's type
-     * @param    string    Field's language var name
-     * @param string $default
+     * @param string $variable    Field's internal variable name
+     * @param int    $fieldType   Field's type
+     * @param string $displayText Field's language var name
+     * @param string $default     Optional. The default value
      *
-     * @return bool new extra field id
+     * @return int New extra field ID
      */
     public static function create_course_extra_field($variable, $fieldType, $displayText, $default = '')
     {
@@ -3084,11 +3083,11 @@ class CourseManager
     /**
      * Update an extra field value for a given course.
      *
-     * @param    int    Course ID
-     * @param    string    Field variable name
-     * @param    string    Field value
+     * @param string $course_code Course code
+     * @param string $variable    Field variable name
+     * @param string $value       Optional. Default field value
      *
-     * @return bool|null true if field updated, false otherwise
+     * @return bool|int An integer when register a new extra field. And boolean when update the extrafield
      */
     public static function update_course_extra_field_value($course_code, $variable, $value = '')
     {
@@ -5980,38 +5979,38 @@ class CourseManager
      */
     public static function getCourseGroups()
     {
-        $session_id = api_get_session_id();
-        if ($session_id != 0) {
-            $new_group_list = self::get_group_list_of_course(
+        $sessionId = api_get_session_id();
+        if ($sessionId != 0) {
+            $groupList = self::get_group_list_of_course(
                 api_get_course_id(),
-                $session_id,
+                $sessionId,
                 1
             );
         } else {
-            $new_group_list = self::get_group_list_of_course(
+            $groupList = self::get_group_list_of_course(
                 api_get_course_id(),
                 0,
                 1
             );
         }
 
-        return $new_group_list;
+        return $groupList;
     }
 
     /**
      * @param FormValidator $form
-     * @param array         $to_already_selected
+     * @param array         $alreadySelected
      *
      * @return HTML_QuickForm_element
      */
-    public static function addUserGroupMultiSelect(&$form, $to_already_selected)
+    public static function addUserGroupMultiSelect(&$form, $alreadySelected)
     {
         $userList = self::getCourseUsers(true);
-        $group_list = self::getCourseGroups();
+        $groupList = self::getCourseGroups();
         $array = self::buildSelectOptions(
-            $group_list,
+            $groupList,
             $userList,
-            $to_already_selected
+            $alreadySelected
         );
 
         $result = [];
@@ -6090,38 +6089,39 @@ class CourseManager
     /**
      * this function shows the form for sending a message to a specific group or user.
      *
-     * @param array $group_list
+     * @param array $groupList
      * @param array $userList
-     * @param array $to_already_selected
+     * @param array $alreadySelected
      *
      * @return array
      */
     public static function buildSelectOptions(
-        $group_list = [],
+        $groupList = [],
         $userList = [],
-        $to_already_selected = []
+        $alreadySelected = []
     ) {
-        if (empty($to_already_selected)) {
-            $to_already_selected = [];
+        if (empty($alreadySelected)) {
+            $alreadySelected = [];
         }
 
         $result = [];
         // adding the groups to the select form
-        if ($group_list) {
-            foreach ($group_list as $this_group) {
-                if (is_array($to_already_selected)) {
+        if ($groupList) {
+            foreach ($groupList as $thisGroup) {
+                $groupId = $thisGroup['iid'];
+                if (is_array($alreadySelected)) {
                     if (!in_array(
-                        "GROUP:".$this_group['id'],
-                        $to_already_selected
+                        "GROUP:".$groupId,
+                        $alreadySelected
                     )
-                    ) { // $to_already_selected is the array containing the groups (and users) that are already selected
-                        $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
-                        $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled";
+                    ) { // $alreadySelected is the array containing the groups (and users) that are already selected
+                        $user_label = ($thisGroup['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
+                        $user_disabled = ($thisGroup['userNb'] > 0) ? "" : "disabled=disabled";
                         $result[] = [
                             'disabled' => $user_disabled,
-                            'value' => "GROUP:".$this_group['id'],
+                            'value' => "GROUP:".$groupId,
                             // The space before "G" is needed in order to advmultiselect.php js puts groups first
-                            'content' => " G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label,
+                            'content' => " G: ".$thisGroup['name']." - ".$thisGroup['userNb']." ".$user_label,
                         ];
                     }
                 }
@@ -6131,12 +6131,13 @@ class CourseManager
         // adding the individual users to the select form
         if ($userList) {
             foreach ($userList as $user) {
-                if (is_array($to_already_selected)) {
+                if (is_array($alreadySelected)) {
                     if (!in_array(
                         "USER:".$user['user_id'],
-                        $to_already_selected
+                        $alreadySelected
                     )
-                    ) { // $to_already_selected is the array containing the users (and groups) that are already selected
+                    ) {
+                        // $alreadySelected is the array containing the users (and groups) that are already selected
                         $result[] = [
                             'value' => "USER:".$user['user_id'],
                             'content' => api_get_person_name($user['firstname'], $user['lastname']),

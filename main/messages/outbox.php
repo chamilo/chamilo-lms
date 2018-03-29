@@ -49,29 +49,6 @@ if ($allowMessage) {
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
-$info_delete_outbox = [];
-$info_delete_outbox = isset($_GET['form_delete_outbox']) ? explode(',', $_GET['form_delete_outbox']) : '';
-$count_delete_outbox = count($info_delete_outbox) - 1;
-
-if (isset($info_delete_outbox[0]) && trim($info_delete_outbox[0]) == 'delete') {
-    for ($i = 1; $i <= $count_delete_outbox; $i++) {
-        MessageManager::delete_message_by_user_sender(api_get_user_id(), $info_delete_outbox[$i]);
-    }
-    $message_box = get_lang('SelectedMessagesDeleted').
-        '&nbsp
-        <br><a href="../social/index.php?#remote-tab-3">'.
-        get_lang('BackToOutbox').
-        '</a>';
-    Display::addFlash(
-        Display::return_message(
-            api_xml_http_response_encode($message_box),
-            'normal',
-            false
-        )
-    );
-    exit;
-}
-
 $action = null;
 if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];

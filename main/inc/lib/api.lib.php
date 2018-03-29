@@ -149,6 +149,7 @@ define('TOOL_GRADEBOOK', 'gradebook');
 define('TOOL_NOTEBOOK', 'notebook');
 define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
+define('TOOL_PORTFOLIO', 'portfolio');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -279,15 +280,17 @@ define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 define('IS_WINDOWS_OS', api_is_windows_os());
 
 // Checks for installed optional php-extensions.
-define('INTL_INSTALLED', function_exists('intl_get_error_code')); // intl extension (from PECL), it is installed by default as of PHP 5.3.0
-define('ICONV_INSTALLED', function_exists('iconv')); // iconv extension, for PHP5 on Windows it is installed by default.
+// intl extension (from PECL), it is installed by default as of PHP 5.3.0.
+define('INTL_INSTALLED', function_exists('intl_get_error_code'));
+// iconv extension, for PHP5 on Windows it is installed by default.
+define('ICONV_INSTALLED', function_exists('iconv'));
 define('MBSTRING_INSTALLED', function_exists('mb_strlen')); // mbstring extension.
 
-// Patterns for processing paths.                                   // Examples:
+// Patterns for processing paths. Examples.
 define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/'); // $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
 define('VALID_WEB_PATH', '/https?:\/\/[^\/]*(\/.*)?/i'); // $is_valid_path = preg_match(VALID_WEB_PATH, $path);
-define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i'); // $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
-
+// $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
+define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 // basic (leaf elements)
 define('REL_CODE_PATH', 'REL_CODE_PATH');
@@ -2038,13 +2041,27 @@ function api_get_course_info($course_code = null, $strict = false)
  *
  * @return \Chamilo\CoreBundle\Entity\Course
  */
-function api_get_course_entity($courseId)
+function api_get_course_entity($courseId = 0)
 {
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
 
     return CourseManager::getManager()->find($courseId);
+}
+
+/**
+ * @param int $id
+ *
+ * @return \Chamilo\CoreBundle\Entity\Session
+ */
+function api_get_session_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_session_id();
+    }
+
+    return Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($id);
 }
 
 /**
@@ -2180,7 +2197,8 @@ function api_format_course_array($course_data)
             null,
             null,
             null,
-            true
+            true,
+            false
         );
     }
     $_course['course_image_large'] = $url_image;
@@ -2597,11 +2615,11 @@ function api_get_session_image($session_id, $status_id)
     if ((int) $status_id != 5) { //check whether is not a student
         if ($session_id > 0) {
             $session_img = "&nbsp;&nbsp;".Display::return_icon(
-                    'star.png',
-                    get_lang('SessionSpecificResource'),
-                    ['align' => 'absmiddle'],
-                    ICON_SIZE_SMALL
-                );
+                'star.png',
+                get_lang('SessionSpecificResource'),
+                ['align' => 'absmiddle'],
+                ICON_SIZE_SMALL
+            );
         }
     }
 
@@ -2835,6 +2853,11 @@ function api_get_settings_params($params)
     return $result;
 }
 
+/**
+ * @param array $params example: [id = ? => '1']
+ *
+ * @return array
+ */
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -3072,7 +3095,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
 
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $sessionIsCoach = null;
+    $sessionIsCoach = [];
 
     if (!empty($courseId)) {
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
@@ -4088,17 +4111,17 @@ function api_item_property_update(
 
     $to_group_id = 0;
     if (!empty($groupInfo) && isset($groupInfo['iid'])) {
-        $to_group_id = $groupInfo['iid'];
+        $to_group_id = (int) $groupInfo['iid'];
     }
 
     $em = Database::getManager();
 
     // Definition of variables.
     $tool = Database::escape_string($tool);
-    $item_id = intval($item_id);
+    $item_id = (int) $item_id;
     $lastEditTypeNoFilter = $last_edit_type;
     $last_edit_type = Database::escape_string($last_edit_type);
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
 
     $startVisible = "NULL";
     if (!empty($start_visible)) {
@@ -4319,7 +4342,12 @@ function api_item_property_update(
             $user_id = api_get_anonymous_id();
             $objUser = api_get_user_entity($user_id);
         }
-        $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', intval($to_group_id));
+
+        $objGroup = null;
+        if (!empty($to_group_id)) {
+            $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', $to_group_id);
+        }
+
         $objToUser = api_get_user_entity($to_user_id);
         $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
 
@@ -4648,7 +4676,7 @@ function api_get_languages_combo($name = 'language')
  * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
  * @param bool $showAsButton
  *
- * @return string Display the box directly
+ * @return null|string Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
@@ -6867,7 +6895,7 @@ function api_browser_support($format = '')
             return false;
         }
     } elseif ($format == 'pdf') {
-        //native pdf support
+        // native pdf support
         if ($current_browser == 'Chrome' && $current_majorver >= 6) {
             $result[$format] = true;
 
@@ -7103,6 +7131,9 @@ function api_get_asset($file)
 /**
  * Returns the <script> HTML tag.
  *
+ * @param string $file
+ * @param string $media
+ *
  * @return string
  */
 function api_get_css_asset($file, $media = 'screen')
@@ -7114,6 +7145,7 @@ function api_get_css_asset($file, $media = 'screen')
  * Returns the <link> HTML tag.
  *
  * @param string $file
+ * @param string $media
  */
 function api_get_css($file, $media = 'screen')
 {
@@ -7617,11 +7649,17 @@ function api_set_default_visibility(
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
 
-    if (empty($group_id)) {
-        $group_id = api_get_group_id();
+    // if group is null force group_id = 0, this force is needed to create a LP folder with group = 0
+    if (is_null($group_id)) {
+        $group_id = 0;
+    } else {
+        $group_id = empty($group_id) ? api_get_group_id() : $group_id;
     }
 
-    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupInfo = [];
+    if (!empty($group_id)) {
+        $groupInfo = GroupManager::get_group_properties($group_id);
+    }
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {
@@ -9034,16 +9072,31 @@ function api_upload_file($type, $file, $itemId, $cropParameters = '')
  *
  * @return bool
  */
-function api_get_uploaded_file($type, $itemId, $file)
+function api_get_uploaded_web_url($type, $itemId, $file)
+{
+    return api_get_uploaded_file($type, $itemId, $file, true);
+}
+
+/**
+ * @param string $type
+ * @param int    $itemId
+ * @param string $file
+ * @param bool   $getUrl
+ *
+ * @return bool
+ */
+function api_get_uploaded_file($type, $itemId, $file, $getUrl = false)
 {
     $itemId = (int) $itemId;
     $pathId = '/'.substr((string) $itemId, 0, 1).'/'.$itemId.'/';
     $path = api_get_path(SYS_UPLOAD_PATH).$type.$pathId;
-
     $file = basename($file);
-
     $file = $path.'/'.$file;
-    if (file_exists($file)) {
+    if (Security::check_abs_path($file, $path) && is_file($file) && file_exists($file)) {
+        if ($getUrl) {
+            return str_replace(api_get_path(SYS_UPLOAD_PATH), api_get_path(WEB_UPLOAD_PATH), $file);
+        }
+
         return $file;
     }
 
@@ -9074,8 +9127,9 @@ function api_download_uploaded_file($type, $itemId, $file, $title = '')
  */
 function api_remove_uploaded_file($type, $file)
 {
-    $path = api_get_path(SYS_UPLOAD_PATH).$type.'/'.$file;
-    if (file_exists($path)) {
+    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
+    $path = $typePath.'/'.$file;
+    if (Security::check_abs_path($path, $typePath) && file_exists($path) && is_file($path)) {
         unlink($path);
     }
 }
@@ -9106,18 +9160,18 @@ function api_float_val($number)
  * 3.141516 => 3.14
  * 3,141516 => 3,14
  *
- * @todo WIP
- *
- * @param string $number   number in iso code
+ * @param string $number            number in iso code
  * @param int    $decimals
+ * @param string $decimalSeparator
+ * @param string $thousandSeparator
  *
  * @return bool|string
  */
-function api_number_format($number, $decimals = 0)
+function api_number_format($number, $decimals = 0, $decimalSeparator = '.', $thousandSeparator = ',')
 {
     $number = api_float_val($number);
 
-    return number_format($number, $decimals);
+    return number_format($number, $decimals, $decimalSeparator, $thousandSeparator);
 }
 
 /**

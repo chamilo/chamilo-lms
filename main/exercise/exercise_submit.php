@@ -1041,6 +1041,28 @@ if (!empty($error)) {
     }
 
     echo '<script>
+        function addExerciseEvent(elm, evType, fn, useCapture) {
+            if (elm.addEventListener) {
+                elm.addEventListener(evType, fn, useCapture);
+                return true;
+            } else if (elm.attachEvent) {
+                elm.attachEvent(\'on\' + evType, fn);
+            } else{
+                elm[\'on\'+evType] = fn;
+            }
+        }
+        
+        function updateDuration() {
+            var saveDurationUrl = "'.$saveDurationUrl.'";
+            // Logout of course just in case
+            $.ajax({
+                url: saveDurationUrl,
+                success: function (data) {
+                    return 1;
+                }
+            });
+        }
+        
         $(function() {
             //This pre-load the save.png icon
             var saveImage = new Image();
@@ -1103,8 +1125,7 @@ if (!empty($error)) {
 
             $(\'button[name="save_now"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                
+                e.stopPropagation();                
                 var
                     $this = $(this),
                     questionId = parseInt($this.data(\'question\')) || 0,
@@ -1115,23 +1136,12 @@ if (!empty($error)) {
 
             $(\'button[name="validate_all"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                
+                e.stopPropagation();                
                 validate_all();
             });
             
-            var saveDurationUrl = "'.$saveDurationUrl.'";
-            
             // Save attempt duration
-            $(window).on(\'beforeunload\', function () {
-                // Logout of course just in case
-                $.ajax({
-                    url: saveDurationUrl,
-                    success: function (data) {
-                        return 1;
-                    }
-                });
-            });
+            addExerciseEvent(window, \'unload\', updateDuration ,false);
         });
 
         function previous_question(question_num) {

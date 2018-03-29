@@ -28,17 +28,28 @@ var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
 
-$(function() {
-    // Executes course logout when user close the browser tab/window
-    $(window).on('beforeunload', function () {
-        // Logout of course just in case
-        $.ajax({
-            url: logOutUrl,
-            success: function (data) {
-                return 1;
-            }
-        });
+function addMainEvent(elm, evType, fn, useCapture) {
+    if (elm.addEventListener) {
+        elm.addEventListener(evType, fn, useCapture);
+        return true;
+    } else if (elm.attachEvent) {
+        elm.attachEvent('on' + evType, fn);
+    } else{
+        elm['on'+evType] = fn;
+    }
+}
+
+function courseLogout() {
+    $.ajax({
+        url: logOutUrl,
+        success: function (data) {
+            return 1;
+        }
     });
+}
+
+$(function() {
+    addMainEvent(window, 'unload', courseLogout ,false);
 });
 
 </script>

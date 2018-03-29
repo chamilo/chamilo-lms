@@ -39,17 +39,22 @@ function addMainEvent(elm, evType, fn, useCapture) {
     }
 }
 
+var calledLogout = false;
 function courseLogout() {
-    $.ajax({
-        url: logOutUrl,
-        success: function (data) {
-            return 1;
-        }
-    });
+    if (calledLogout === false) {
+        $.ajax({
+            url: logOutUrl,
+            success: function (data) {
+                calledLogout = true;
+                return 1;
+            }
+        });
+    }
 }
 
 $(function() {
-    addMainEvent(window, 'unload', courseLogout ,false);
+    addMainEvent(window, 'unload', courseLogout, false);
+    addMainEvent(window, 'beforeunload', courseLogout, false);
 });
 
 </script>

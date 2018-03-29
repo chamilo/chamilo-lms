@@ -1052,15 +1052,20 @@ if (!empty($error)) {
             }
         }
         
+        var calledUpdateDuration = false;
+        
         function updateDuration() {
-            var saveDurationUrl = "'.$saveDurationUrl.'";
-            // Logout of course just in case
-            $.ajax({
-                url: saveDurationUrl,
-                success: function (data) {
-                    return 1;
-                }
-            });
+            if (calledUpdateDuration === false) {
+                var saveDurationUrl = "'.$saveDurationUrl.'";
+                // Logout of course just in case
+                $.ajax({
+                    url: saveDurationUrl,
+                    success: function (data) {
+                        calledUpdateDuration = true;
+                        return 1;
+                    }
+                });
+            }
         }
         
         $(function() {
@@ -1141,7 +1146,8 @@ if (!empty($error)) {
             });
             
             // Save attempt duration
-            addExerciseEvent(window, \'unload\', updateDuration ,false);
+            addExerciseEvent(window, \'unload\', updateDuration , false);
+            addExerciseEvent(window, \'beforeunload\', updateDuration , false);
         });
 
         function previous_question(question_num) {

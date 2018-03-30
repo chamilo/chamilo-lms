@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 
 /**
@@ -21,6 +22,7 @@ if (empty($issue)) {
 }
 
 $entityManager = Database::getManager();
+/** @var SkillRelUser $skillIssue */
 $skillIssue = $entityManager->find('ChamiloCoreBundle:SkillRelUser', $issue);
 
 if (!$skillIssue) {
@@ -68,10 +70,12 @@ $skillInfo = [
     'courses' => [],
 ];
 
+$titleContent = sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'));
+
 // Open Graph Markup
 $htmlHeadXtra[] = "
     <meta property='og:type' content='article' />
-    <meta property='og:title' content='".sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'))."' />
+    <meta property='og:title' content='".$titleContent."' />
     <meta property='og:url' content='".api_get_path(WEB_PATH)."badge/".$issue."' />
     <meta property='og:description' content='".$skillInfo['description']."' />
     <meta property='og:image' content='".$skillInfo['badge_image']."' />
@@ -128,7 +132,6 @@ foreach ($skillIssueComments as $comment) {
 }
 
 $acquiredLevel = [];
-
 $profile = $skillRepo->find($skillId)->getProfile();
 
 if (!$profile) {

@@ -1040,6 +1040,15 @@ if (!empty($error)) {
         $onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
 
+    $saveIcon = Display::return_icon(
+        'save.png',
+        get_lang('Saved'),
+        [],
+        ICON_SIZE_SMALL,
+        false,
+        true
+    );
+
     echo '<script>
         function addExerciseEvent(elm, evType, fn, useCapture) {
             if (elm.addEventListener) {
@@ -1059,26 +1068,21 @@ if (!empty($error)) {
                 var saveDurationUrl = "'.$saveDurationUrl.'";
                 // Logout of course just in case
                 $.ajax({
+                    async: false, 
                     url: saveDurationUrl,
                     success: function (data) {
                         calledUpdateDuration = true;
                         return 1;
-                    }
+                    }, 
                 });
+                return 1;
             }
         }
         
         $(function() {
-            //This pre-load the save.png icon
+            // This pre-load the save.png icon
             var saveImage = new Image();
-            saveImage.src = \''.Display::return_icon(
-                'save.png',
-                get_lang('Saved'),
-                [],
-                ICON_SIZE_SMALL,
-                false,
-                true
-            ).'\';
+            saveImage.src = "'.$saveIcon.'";
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
@@ -1103,9 +1107,9 @@ if (!empty($error)) {
                 return false;
             });*/
 
-            $(\'form#exercise_form\').prepend($(\'#exercise-description\'));
+            $("form#exercise_form").prepend($("#exercise-description"));
         
-            $(\'button[name="previous_question_and_save"]\').on(\'click\', function (e) {
+            $(\'button[name="previous_question_and_save"]\').on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();    
                 var
@@ -1119,8 +1123,8 @@ if (!empty($error)) {
             $(\'button[name="save_question_list"]\').on(\'click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var $this = $(this),
-                    questionList = $this.data(\'list\').split(",");
+                var $this = $(this);
+                var questionList = $this.data(\'list\').split(",");
 
                 save_question_list(questionList);
             });
@@ -1144,7 +1148,7 @@ if (!empty($error)) {
             
             // Save attempt duration
             addExerciseEvent(window, \'unload\', updateDuration , false);            
-            addExerciseEvent(window, \'beforeunload\', updateDuration , false);                        
+            addExerciseEvent(window, \'beforeunload\', updateDuration , false);                                    
         });
 
         function previous_question(question_num) {

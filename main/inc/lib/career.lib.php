@@ -365,9 +365,7 @@ class Career extends Model
                     foreach ($items as $vertex) {
                         if ($vertex instanceof Vertex) {
                             $groupCourseList[$group][] = $vertex->getId();
-                            $connectionList = $vertex->getAttribute(
-                                'Connections'
-                            );
+                            $connectionList = $vertex->getAttribute('Connections');
                             $firstConnection = '';
                             $secondConnection = '';
                             if (!empty($connectionList)) {
@@ -525,8 +523,6 @@ class Career extends Model
                         if (empty($connectionList)) {
                             continue;
                         }
-                        $firstConnection = '';
-                        $secondConnection = '';
                         $simpleFirstConnection = '';
                         $simpleSecondConnection = '';
 
@@ -535,28 +531,26 @@ class Career extends Model
                         if ($pos === false) {
                             $pos = strpos($explode[0], 'G');
                             if (is_numeric($pos)) {
-                                // group_123 id
+                                // Is group
                                 $groupValueId = (int) str_replace(
                                     'G',
                                     '',
                                     $explode[0]
                                 );
-                                $secondConnection = 'group_'.$groupValueId;
-                                $firstConnection = 'row_'.(int) $rowId;
                                 $groupDrawLine[$groupValueId] = true;
 
-                                $simpleSecondConnection = 'g'.$groupValueId;
-                                $simpleFirstConnection = 'v'.(int) $rowId;
+                                /*$simpleFirstConnection = 'v'.(int) $rowId;
+                                $simpleSecondConnection = 'g'.$groupValueId;*/
+                                $simpleFirstConnection = 'g'.(int) $groupValueId;
+                                //$simpleSecondConnection = 'g'.$groupValueId;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0])) {
-                                    $firstConnection = 'row_'.(int) $explode[0];
                                     $simpleFirstConnection = 'v'.(int) $explode[0];
                                 }
                             }
                         } else {
                             // subgroup__123 id
-                            $firstConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[0]);
                             $simpleFirstConnection = 'sg'.(int) str_replace('SG', '', $explode[0]);
                         }
 
@@ -575,31 +569,28 @@ class Career extends Model
                                     '',
                                     $value
                                 );
-                                $secondConnection = 'group_'.$groupValueId;
                                 $simpleSecondConnection = 'g'.(int) $groupValueId;
                                 $groupDrawLine[$groupValueId] = true;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0]) && isset($explode[1])) {
-                                    $secondConnection = 'row_'.(int) $explode[1];
                                     $simpleSecondConnection = 'v'.(int) $explode[1];
                                 }
                             }
                         } else {
-                            $secondConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[1]);
                             $simpleSecondConnection = 'sg'.(int) str_replace('SG', '', $explode[1]);
                         }
 
-                        if (!empty($firstConnection) && !empty($firstConnection)) {
+                        if (!empty($simpleFirstConnection) && !empty($simpleSecondConnection)) {
                             $simpleConnectionList[] = [
                                 'from' => $simpleFirstConnection,
                                 'to' => $simpleSecondConnection,
                             ];
-                            $connections .= self::createConnection(
+                            /*$connections .= self::createConnection(
                                 $firstConnection,
                                 $secondConnection,
                                 ['Left', 'Right']
-                            );
+                            );*/
                         }
                     }
                 }
@@ -635,7 +626,6 @@ class Career extends Model
         $graphHtml .= '</div>';
 //        $graphHtml .= $connections;
         $graphHtml .= '<style>
-            panel-title
              #career_grid {
                  display: grid;
                  grid-gap: 40px;
@@ -711,8 +701,6 @@ class Career extends Model
                     $subGroupListData[$subGroupId]['min_y'] = $y;
                 }
 
-                /*$originalRow--;
-                $column--;*/
                 $subGroupListData[$subGroupId]['max_width'] = ($column + 1) * ($width + $graph->xGap) - $subGroupListData[$subGroupId]['min_x'];
                 $subGroupListData[$subGroupId]['max_height'] = ($originalRow + 1) * ($height + $graph->yGap) - $subGroupListData[$subGroupId]['min_y'];
             }
@@ -729,7 +717,6 @@ class Career extends Model
                 $subGroupList[] = $vertexData;
             }
         }
-
         // Create connections (arrows)
         if (!empty($simpleConnectionList)) {
             $connectionList = [];
@@ -841,6 +828,16 @@ class Career extends Model
         return $graphHtml;
     }
 
+    /**
+     * @param array    $groupCourseList
+     * @param array    $vertexList
+     * @param int      $addRow
+     * @param stdClass $graph
+     * @param int      $group
+     * @param array    $connections
+     *
+     * @return string
+     */
     public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections)
     {
         if (empty($vertexList)) {

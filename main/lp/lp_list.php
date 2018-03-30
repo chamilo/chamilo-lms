@@ -176,7 +176,7 @@ $data = [];
 foreach ($categories as $item) {
     $categoryId = $item->getId();
 
-    if (!learnpath::categoryIsVisibleForStudent($item, $user)) {
+    if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
         continue;
     }
 

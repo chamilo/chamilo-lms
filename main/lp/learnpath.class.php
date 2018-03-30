@@ -12947,7 +12947,11 @@ EOD;
      */
     private static function get_level_for_item($items, $currentItemId)
     {
-        $parentItemId = $items[$currentItemId]->parent;
+        $parentItemId = 0;
+        if (isset($items[$currentItemId])) {
+            $parentItemId = $items[$currentItemId]->parent;
+        }
+
         if ($parentItemId == 0) {
             return 0;
         } else {

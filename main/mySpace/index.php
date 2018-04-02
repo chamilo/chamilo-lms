@@ -154,7 +154,10 @@ $actionsRight .= Display::url(
 );
 
 if (!empty($session_id) &&
-    !in_array($display, ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'])
+    !in_array(
+        $display,
+        ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview']
+    )
 ) {
     $actionsLeft .= Display::url(
         Display::return_icon(
@@ -214,7 +217,10 @@ if (!empty($session_id) &&
 // Actions menu
 $nb_menu_items = count($menu_items);
 if (empty($session_id) ||
-    in_array($display, ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'])
+    in_array(
+        $display,
+        ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview']
+    )
 ) {
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
@@ -261,13 +267,11 @@ $view->assign('numberTeachers', $numberTeachers);
 $view->assign('humanresources', $countHumanResourcesUsers);
 $view->assign(
     'total_user',
-    $numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers);
+    $numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers
+);
 $view->assign('studentboss', STUDENT_BOSS);
 $view->assign('drh', DRH);
 $view->assign('stats', $stats);
-
-
-//echo Display::page_subheader(get_lang('Students').' ('.$numberStudents.')');
 
 $form = new FormValidator(
     'search_user',
@@ -359,7 +363,6 @@ if ($skipData == false) {
         $view->assign('report', $report);
     }
 }
-
 
 $view->assign('header', $nameTools);
 $view->assign('form', $form->returnForm());

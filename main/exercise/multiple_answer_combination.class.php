@@ -199,8 +199,8 @@ class MultipleAnswerCombination extends Question
             if ($goodAnswer) {
                 $weighting = abs($weighting);
             } else {
+                // $weighting = -$weighting;
                 $weighting = abs($weighting);
-                //	$weighting = -$weighting;
             }
             if ($weighting > 0) {
                 $questionWeighting += $weighting;

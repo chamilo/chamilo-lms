@@ -4144,11 +4144,11 @@ class Exercise
                                     question_id = $questionId AND
                                     correct = 0
                                 ";
-                        $res_answer = Database::query($sql);
+                        $result = Database::query($sql);
                         // Getting the real answer
                         $real_list = [];
-                        while ($real_answer = Database::fetch_array($res_answer)) {
-                            $real_list[$real_answer['id_auto']] = $real_answer['answer'];
+                        while ($realAnswer = Database::fetch_array($result)) {
+                            $real_list[$realAnswer['id_auto']] = $realAnswer['answer'];
                         }
 
                         $sql = "SELECT id, answer, correct, id_auto, ponderation
@@ -4158,10 +4158,10 @@ class Exercise
                                     question_id = $questionId AND
                                     correct <> 0
                                 ORDER BY id_auto";
-                        $res_answers = Database::query($sql);
+                        $result = Database::query($sql);
                         $options = [];
-                        while ($a_answers = Database::fetch_array($res_answers)) {
-                            $options[] = $a_answers;
+                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                            $options[] = $row;
                         }
 
                         $questionScore = 0;
@@ -4171,7 +4171,6 @@ class Exercise
                             $s_answer_label = $a_answers['answer']; // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
                             $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
-
                             $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                     WHERE
                                         exe_id = '$exeId' AND
@@ -4186,12 +4185,9 @@ class Exercise
                             } else {
                                 $s_user_answer = 0;
                             }
-
                             $i_answerWeighting = $a_answers['ponderation'];
-
                             $user_answer = '';
                             $status = Display::label(get_lang('Incorrect'), 'danger');
-
                             if (!empty($s_user_answer)) {
                                 if ($answerType == DRAGGABLE) {
                                     if ($s_user_answer == $i_answer_correct_answer) {
@@ -4253,8 +4249,6 @@ class Exercise
                                                 );
                                             }
                                         }
-
-                                        //echo '<td>' . $s_answer_label . '</td>';
                                         echo '<td>'.$status.'</td>';
                                         echo '</tr>';
                                         break;
@@ -4262,7 +4256,6 @@ class Exercise
                                         if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
                                             $s_answer_label = '';
                                         }
-
                                         echo '<tr>';
                                         echo '<td>'.$user_answer.'</td>';
                                         echo '<td>'.$s_answer_label.'</td>';
@@ -5795,8 +5788,8 @@ class Exercise
     }
 
     /**
-     * @param array $user_data result of api_get_user_info()
-     * @param array $trackExerciseInfo
+     * @param array $user_data         result of api_get_user_info()
+     * @param array $trackExerciseInfo result of get_stat_track_exercise_info
      *
      * @return string
      */
@@ -5887,6 +5880,7 @@ class Exercise
      * @param int     Whether the results are show to the user (0) or not (1)
      * @param int     Maximum number of attempts (0 if no limit)
      * @param int     Feedback type
+     * @param int $propagateNegative
      *
      * @todo this was function was added due the import exercise via CSV
      *

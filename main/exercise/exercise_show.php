@@ -87,8 +87,11 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin()
-    || api_is_drh() || api_is_student_boss();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+    api_is_course_tutor() ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_student_boss();
 
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
@@ -322,15 +325,15 @@ $sql = "SELECT attempts.question_id, answer
             attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
-$question_list_from_database = [];
+$questionListFromDatabase = [];
 $exerciseResult = [];
 
 while ($row = Database::fetch_array($result)) {
-    $question_list_from_database[] = $row['question_id'];
+    $questionListFromDatabase[] = $row['question_id'];
     $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-//Fixing #2073 Fixing order of questions
+// Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking'])) {
     $temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
@@ -340,16 +343,16 @@ if (!empty($track_exercise_info['data_tracking'])) {
     }
     // If for some reason data_tracking is empty we select the question list from db
     if (empty($questionList)) {
-        $questionList = $question_list_from_database;
+        $questionList = $questionListFromDatabase;
     }
 } else {
-    $questionList = $question_list_from_database;
+    $questionList = $questionListFromDatabase;
 }
 
 // Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->selectTextWhenFinished();
-if (!empty($end_of_message) && ($origin == 'learnpath')) {
-    echo Display::return_message($end_of_message, 'normal', false);
+$endOfMessage = $objExercise->selectTextWhenFinished();
+if (!empty($endOfMessage) && ($origin == 'learnpath')) {
+    echo Display::return_message($endOfMessage, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
 }
 

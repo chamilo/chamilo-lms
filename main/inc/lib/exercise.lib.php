@@ -70,7 +70,7 @@ class ExerciseLib
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    $titleToDisplay = null;
+                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
                     if ($answerType == READING_COMPREHENSION) {
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
@@ -79,8 +79,6 @@ class ExerciseLib
                             $current_item.'. '.get_lang('ReadingComprehension'),
                             ['class' => 'question_title']
                         );
-                    } else {
-                        $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
                     }
                     echo $titleToDisplay;
                 }
@@ -92,9 +90,7 @@ class ExerciseLib
                 }
             }
 
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION]) &&
-                $freeze
-            ) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION]) && $freeze) {
                 return '';
             }
 
@@ -334,15 +330,17 @@ class ExerciseLib
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             if ($show_comment) {
                                 if (empty($comment)) {
-                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" '
-                                        .'class="exercise-unique-answer-image" style="text-align: center">';
+                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                            class="exercise-unique-answer-image" style="text-align: center">';
                                 } else {
-                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" '
-                                        .'class="exercise-unique-answer-image col-xs-6 col-sm-12" style="text-align: center">';
+                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                            class="exercise-unique-answer-image col-xs-6 col-sm-12" 
+                                            style="text-align: center">';
                                 }
                             } else {
-                                $s .= '<div id="answer'.$questionId.$numAnswer.'" '
-                                    .'class="exercise-unique-answer-image col-xs-6 col-md-3" style="text-align: center">';
+                                $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                        class="exercise-unique-answer-image col-xs-6 col-md-3" 
+                                        style="text-align: center">';
                             }
                         }
 
@@ -688,7 +686,8 @@ class ExerciseLib
                             $correctAnswerList
                         );
 
-                        // get student answer to display it if student go back to previous calculated answer question in a test
+                        // get student answer to display it if student go back to
+                        // previous calculated answer question in a test
                         if (isset($user_choice[0]['answer'])) {
                             api_preg_match_all(
                                 '/\[[^]]+\]/',
@@ -698,9 +697,7 @@ class ExerciseLib
                             $studentAnswerListTobecleaned = $studentAnswerList[0];
                             $studentAnswerList = [];
 
-                            for ($i = 0; $i < count(
-                                $studentAnswerListTobecleaned
-                            ); $i++) {
+                            for ($i = 0; $i < count($studentAnswerListTobecleaned); $i++) {
                                 $answerCorrected = $studentAnswerListTobecleaned[$i];
                                 $answerCorrected = api_preg_replace(
                                     '| / <font color="green"><b>.*$|',
@@ -727,7 +724,8 @@ class ExerciseLib
                             }
                         }
 
-                        // If display preview of answer in test view for exemple, set the student answer to the correct answers
+                        // If display preview of answer in test view for exaemple,
+                        // set the student answer to the correct answers
                         if ($debug_mark_answer) {
                             // contain the rights answers surronded with brackets
                             $studentAnswerList = $correctAnswerList[0];
@@ -811,7 +809,9 @@ class ExerciseLib
                             // Id of select is # question + # of option
                             $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
-                                <select id="choice_id_'.$current_item.'_'.$lines_count.'" name="choice['.$questionId.']['.$numAnswer.']">';
+                                <select 
+                                    id="choice_id_'.$current_item.'_'.$lines_count.'" 
+                                    name="choice['.$questionId.']['.$numAnswer.']">';
 
                             // fills the list-box
                             foreach ($select_items as $key => $val) {
@@ -835,7 +835,12 @@ class ExerciseLib
                             $s .= '</select></div></td><td width="5%" class="separate">&nbsp;</td>';
                             $s .= '<td width="40%" valign="top" >';
                             if (isset($select_items[$lines_count])) {
-                                $s .= '<div class="text-right"><p class="indent">'.$select_items[$lines_count]['letter'].'.&nbsp; '.$select_items[$lines_count]['answer'].'</p></div>';
+                                $s .= '<div class="text-right">
+                                        <p class="indent">'.
+                                            $select_items[$lines_count]['letter'].'.&nbsp; '.
+                                            $select_items[$lines_count]['answer'].'
+                                        </p>
+                                        </div>';
                             } else {
                                 $s .= '&nbsp;';
                             }
@@ -850,7 +855,8 @@ class ExerciseLib
                                     $s .= '<tr>
                                       <td colspan="2"></td>
                                       <td valign="top">';
-                                    $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
+                                    $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.
+                                                $select_items[$lines_count]['answer'];
                                     $s .= "</td>
                                 </tr>";
                                     $lines_count++;
@@ -957,7 +963,8 @@ class ExerciseLib
                             $s .= <<<HTML
                             <tr>
                                 <td width="45%">
-                                    <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
+                                    <div id="window_{$windowId}" 
+                                        class="window window_left_question window{$questionId}_question">
                                         <strong>$lines_count.</strong> 
                                         $answer
                                     </div>
@@ -1029,7 +1036,8 @@ HTML;
                             if (isset($select_items[$lines_count])) {
                                 $s .= <<<HTML
                                 <div id="window_{$windowId}_answer" class="window window_right_question">
-                                    <strong>{$select_items[$lines_count]['letter']}.</strong> {$select_items[$lines_count]['answer']}
+                                    <strong>{$select_items[$lines_count]['letter']}.</strong> 
+                                    {$select_items[$lines_count]['answer']}
                                 </div>
 HTML;
                             } else {
@@ -1137,7 +1145,6 @@ HTML;
                     }
                 }
             }
-            $questionName = $objQuestionTmp->selectTitle();
             $questionDescription = $objQuestionTmp->selectDescription();
 
             // Get the answers, make a list
@@ -1309,12 +1316,16 @@ HOTSPOT;
                                         <div class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default active"
                                                 aria-label="'.get_lang('AddAnnotationPath').'">
-                                                <input type="radio" value="0" name="'.$questionId.'-options" autocomplete="off" checked>
+                                                <input 
+                                                    type="radio" value="0" 
+                                                    name="'.$questionId.'-options" autocomplete="off" checked>
                                                 <span class="fa fa-pencil" aria-hidden="true"></span>
                                             </label>
                                             <label class="btn btn-default"
                                                 aria-label="'.get_lang('AddAnnotationText').'">
-                                                <input type="radio" value="1" name="'.$questionId.'-options" autocomplete="off">
+                                                <input 
+                                                    type="radio" value="1" 
+                                                    name="'.$questionId.'-options" autocomplete="off">
                                                 <span class="fa fa-font fa-fw" aria-hidden="true"></span>
                                             </label>
                                         </div>
@@ -2295,7 +2306,9 @@ HOTSPOT;
                                                 $category_was_added_for_this_test = true;
                                             }
 
-                                            if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+                                            if (isset($objQuestionTmp->category_list) &&
+                                                !empty($objQuestionTmp->category_list)
+                                            ) {
                                                 foreach ($objQuestionTmp->category_list as $category_id) {
                                                     $category_list[$category_id]['score'] += $my_total_score;
                                                     $category_list[$category_id]['total'] += $my_total_weight;
@@ -3255,10 +3268,7 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval(
-                        $result['exe_weighting']
-                    ) != 0
-                ) {
+                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     $avg_score += $score;
                 }
@@ -4320,7 +4330,8 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= "<div class='normal-message'>".get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
+            $exercise_content .= "<div class='normal-message'>".
+                get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939
@@ -4424,14 +4435,6 @@ EOT;
                 '.$label.'
                 </div>'
             ;
-
-        /*return '<div class="ribbon">
-                    <div class="rib rib-'.$class.'">
-                        <h3>'.$scoreLabel.'</h3>
-                    </div>
-                    <h4>'.get_lang('Score').': '.$result.'</h4>
-                </div>'
-        ;*/
     }
 
     /**

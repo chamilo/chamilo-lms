@@ -144,7 +144,6 @@ $aType = [
 ];
 
 // tables used in the exercise tool
-
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
@@ -401,8 +400,7 @@ if ($inATest) {
     );
 
     if ($objExercise->random > 0) {
-        echo '<br />'.
-            sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        echo '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
     }
     echo '</div>';
 } elseif (isset($_GET['newQuestion'])) {

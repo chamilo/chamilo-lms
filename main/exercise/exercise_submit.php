@@ -95,6 +95,7 @@ $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 
 
 // Error message
 $error = '';
+
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,

@@ -116,10 +116,10 @@ class Answer
      */
     public function read()
     {
-        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql = "SELECT * FROM $TBL_ANSWER
+        $sql = "SELECT * FROM $table
                 WHERE
                     c_id = {$this->course_id} AND
                     question_id ='".$questionId."'
@@ -177,11 +177,11 @@ class Answer
      */
     public function selectAnswerId()
     {
-        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
         $sql = "SELECT id FROM
-              $TBL_ANSWER
+              $table
               WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
 
         $result = Database::query($sql);
@@ -363,10 +363,9 @@ class Answer
      */
     public function selectAnswerByAutoId($auto_id)
     {
-        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = intval($auto_id);
-        $sql = "SELECT id, answer, id_auto FROM $TBL_ANSWER
+        $sql = "SELECT id, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
         $rs = Database::query($sql);
 
@@ -474,8 +473,8 @@ class Answer
      */
     public function getQuestionType()
     {
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT type FROM $TBL_QUESTIONS
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT type FROM $table
                 WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
@@ -901,7 +900,7 @@ class Answer
                     $allAnswers[$this->id[$i]] = $this->answer[$i];
                 }
 
-                foreach ($temp as $index => $answer) {
+                foreach ($temp as $answer) {
                     if ($this->course['id'] != $course_info['id']) {
                         // check resources inside html from ckeditor tool and copy correct urls into recipient course
                         $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(

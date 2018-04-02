@@ -54,9 +54,7 @@ if (is_object($objQuestion)) {
         // Question
         $objQuestion->processCreation($form, $objExercise);
         $objQuestion->processAnswersCreation($form, $objExercise);
-
         // TODO: maybe here is the better place to index this tool, including answers text
-
         // redirect
         if ($objQuestion->type != HOT_SPOT &&
             $objQuestion->type != HOT_SPOT_DELINEATION

@@ -82,7 +82,6 @@ if (empty($choice_value)) {
         // this works for only radio buttons
         var f = self.parent.window.document.frm_exercise;
         var choice_js='';
-
         var hotspot = new Array();
         var hotspotcoord = new Array();
         var counter=0;
@@ -146,16 +145,6 @@ if (is_array($choice)) {
 // the script "exercise_result.php" will take the variable $exerciseResult from the session
 Session::write('exerciseResult', $exerciseResult);
 Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
-
-/*
-// if it is the last question (only for a sequential exercise)
-if($questionNum >= $nbrQuestions)
-{
-    if($debug>0){echo str_repeat('&nbsp;',0).'Redirecting to exercise_result.php - Remove debug option to let this happen'."<br />\n";}
-    // goes to the script that will show the result of the exercise
-    // header("Location: exercise_result.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
-    // echo 'location result';
-}*/
 
 // creates a temporary Question object
 if (in_array($questionid, $questionList)) {
@@ -224,7 +213,6 @@ if (!empty($choice_value)) {
         }
 
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-            //display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
             if ($studentChoice) {
                 $destination = $answerDestination;
                 $comment = $answerComment;
@@ -363,7 +351,7 @@ if (!empty($choice_value)) {
                     if (empty($_GET['hotspot'])) { //no user response
                         $overlap = false;
                     } else {
-                        //	poly_compile really works tested with gnuplot
+                        // poly_compile really works tested with gnuplot
                         $poly_user_compiled = poly_compile(
                             $poly_user,
                             $max_coord,
@@ -564,7 +552,9 @@ if ($destinationid == -1) {
                 'quiz.png',
                 '',
                 ['style' => 'padding-left:0px;padding-right:5px;']
-        ).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
+        );
+        $links .= '<a onclick="SendEx('.$num_value_array[0].');" href="#">'.
+            get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
     }
 }
 

@@ -165,7 +165,10 @@ function WriteFileCont($full_file_path, $content)
 {
     // Check if this is not an attack, trying to get into other directories or something like that.
     $_course = api_get_course_info();
-    if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH).$_course['path'].'/')) {
+    if (Security::check_abs_path(
+        dirname($full_file_path).'/',
+        api_get_path(SYS_COURSE_PATH).$_course['path'].'/'
+    )) {
         // Check if this is not an attack, trying to upload a php file or something like that.
         if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) {
             return false;
@@ -497,7 +500,8 @@ function HotPotGCt($folder, $flag, $user_id)
         }
         closedir($dir);
     }
-    while (list(, $val) = each($filelist)) {
+
+    foreach ($filelist as $val) {
         if (stristr($val, $user_id.'.t.html')) {
             if ($flag == 1) {
                 my_delete($folder.'/'.$val);

@@ -360,6 +360,7 @@ $table->set_header(2, get_lang('EnglishName'));
 $table->set_header(3, get_lang('OriginalName'));
 $table->set_header(4, get_lang('Translation'), false);
 $table->set_header(5, get_lang('Action'), false);
+$table->setHideColumn(0);
 $table->display();
 
 Display :: display_footer();

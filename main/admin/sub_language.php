@@ -180,14 +180,31 @@ function search_language_term(
                         $size =4;
                     }*/
 
-                    $obj_text = '<textarea rows="10" cols="40" name="txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$parent_name_variable.'" >'.$sub_language_name_variable.'</textarea>';
-                    $obj_button = '<button class="save" type="button" name="btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$parent_name_variable.'"  />'.get_lang('Save').'</button>';
+                    $obj_text = Display::tag(
+                        'textarea',
+                        $sub_language_name_variable,
+                        [
+                            'rows' => 10,
+                            'cols' => 40,
+                            'name' => 'txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file],
+                            'id' => 'txtid_'.$language_files_to_load_keys[$lang_file].'_'.$parent_name_variable,
+                        ]
+                    );
+                    $obj_button = Display::button(
+                        'btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file],
+                        get_lang('Save'),
+                        [
+                            'class' => 'save  btn btn-default btn-sm',
+                            'type' => 'button',
+                            'id' => 'btnid_'.$parent_name_variable,
+                        ]
+                    );
 
                     $list_info[$parent_name_variable] = [
                         $lang_file.'.inc.php',
                         $parent_name_variable,
-                        $english_name_variable,
-                        $parent_variable_value,
+                        htmlentities($english_name_variable),
+                        htmlentities($parent_variable_value),
                         $obj_text,
                         $obj_button,
                     ];
@@ -239,10 +256,25 @@ function search_language_term(
                         $parent_variable_value = $parent_language_array[$lang_file][$name_variable];
                     }
                     //config buttons
-                    $obj_text = '<textarea rows="10" cols="40" name="txt|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$name_variable.'" >'.
-                        $sub_language_name_variable.'
-                        </textarea>';
-                    $obj_button = '<button class="save" type="button" name="btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$name_variable.'"  />'.get_lang('Save').'</button>';
+                    $obj_text = Display::tag(
+                        'textarea',
+                        $sub_language_name_variable,
+                        [
+                            'rows' => 10,
+                            'cols' => 40,
+                            'name' => 'txt|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file],
+                            'id' => 'txtid_'.$language_files_to_load_keys[$lang_file].'_'.$name_variable,
+                        ]
+                    );
+                    $obj_button = Display::button(
+                        'btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file],
+                        get_lang('Save'),
+                        [
+                            'class' => 'save btn btn-default btn-sm',
+                            'type' => 'button',
+                            'id' => 'btnid_'.$name_variable,
+                        ]
+                    );
 
                     //loading variable from the english array
                     $english_name_variable = $english_language_array[$lang_file][$name_variable];
@@ -250,8 +282,8 @@ function search_language_term(
                     $list_info[] = [
                         $lang_file.'.inc.php',
                         $name_variable,
-                        $english_name_variable,
-                        $parent_variable_value,
+                        htmlentities($english_name_variable),
+                        htmlentities($parent_variable_value),
                         $obj_text,
                         $obj_button,
                     ];

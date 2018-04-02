@@ -2821,7 +2821,7 @@ function fixLpId($connection, $debug)
 
     foreach ($courses as $course) {
         $courseId = $course['id'];
-        $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId AND iid <> id";
+        $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId AND iid <> id ORDER by iid";
         $result = $connection->query($sql);
         if ($debug) {
             error_log('-------------');
@@ -2829,19 +2829,27 @@ function fixLpId($connection, $debug)
             error_log($sql);
         }
         $lpList = $result->fetchAll();
+        $myOnlyLpList = [];
         if (!empty($lpList)) {
             foreach ($lpList as $lpInfo) {
-                $lpIid = $lpInfo['iid'];
                 $oldId = $lpInfo['id'];
-
-                if ($lpIid == $oldId) {
-                    // Do nothing
-                    continue;
-                }
-                $sql = "SELECT * FROM $tblCLpItem WHERE c_id = $courseId AND lp_id = $oldId";
-
+                $sql = "SELECT * FROM $tblCLpItem WHERE c_id = $courseId AND lp_id = $oldId ORDER by iid";
                 $result = $connection->query($sql);
                 $items = $result->fetchAll();
+                $lpInfo['lp_list'] = $items;
+                $myOnlyLpList[] = $lpInfo;
+            }
+        }
+
+        if (!empty($myOnlyLpList)) {
+            foreach ($myOnlyLpList as $lpInfo) {
+                $lpIid = $lpInfo['iid'];
+                $oldId = $lpInfo['id'];
+                $items = $lpInfo['lp_list'];
+
+                if (empty($items)) {
+                    continue;
+                }
                 $itemList = [];
                 foreach ($items as $subItem) {
                     $itemList[$subItem['id']] = $subItem['iid'];
@@ -2949,16 +2957,13 @@ function fixLpId($connection, $debug)
                     }
 
                     $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
-                        WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
+                        WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
 
                     $sql = "UPDATE $tblCLpItem SET id = iid 
-                        WHERE c_id = $courseId AND lp_id = $oldId";
+                    WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
                 }
-
-                $sql = "UPDATE $tblCLp SET id = iid WHERE c_id = $courseId AND iid = $lpIid";
-                $connection->query($sql);
 
                 $sql = "UPDATE c_lp_view SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
                 $connection->query($sql);
@@ -2966,9 +2971,12 @@ function fixLpId($connection, $debug)
                 $sql = "UPDATE c_forum_forum SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
                 $connection->query($sql);
 
-                // Update track_exercises
+                // Update track_exercises.
                 $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
                         WHERE c_id = $courseId AND orig_lp_id = $oldId";
+                $connection->query($sql);
+
+                $sql = "UPDATE $tblCLp SET id = iid WHERE c_id = $courseId AND id = $oldId ";
                 $connection->query($sql);
             }
         }

@@ -22,7 +22,7 @@ class ExtraFieldRelTagRepository extends EntityRepository
      * @param ExtraField $extraField The extrafield
      * @param int        $itemId     The item ID
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getTags(ExtraField $extraField, $itemId)
     {

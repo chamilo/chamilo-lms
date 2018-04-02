@@ -20,7 +20,7 @@ class TemplatesRepository extends EntityRepository
      * @param Course $course
      * @param User   $user
      *
-     * @return ArrayCollection
+     * @return array
      */
     public function getCourseTemplates(Course $course, User $user)
     {

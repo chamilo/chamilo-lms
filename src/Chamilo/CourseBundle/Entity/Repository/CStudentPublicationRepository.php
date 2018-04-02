@@ -9,6 +9,10 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
+/**
+ * Class CStudentPublicationRepository
+ * @package Chamilo\CourseBundle\Entity\Repository
+ */
 class CStudentPublicationRepository extends EntityRepository
 {
     /**

@@ -374,7 +374,6 @@ $content = $view->fetch($template);
 $view->assign('content', $content);
 $view->display_one_col_template();
 
-
 // Send the csv file if asked
 if ($export_csv) {
     ob_end_clean();

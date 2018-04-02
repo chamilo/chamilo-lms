@@ -5206,7 +5206,7 @@ div#chat-remote-video video {
     position: absolute;
     bottom: 0px;
     right: -10px;
-    background-color: #9ec6d0a8;
+    background-color: #fd6600;
     color: #fff;
     padding: 5px 10px;
     font-size: 10px;
@@ -5223,7 +5223,7 @@ div#chat-remote-video video {
 .grid-courses .items .cribbon{
     width: 0;
     height: 0;
-    border-top: 10px solid #337AB7;
+    border-top: 10px solid #333333;
     border-right: 10px solid transparent;
     position: absolute;
     bottom: -10px;
@@ -6526,9 +6526,10 @@ ul#toolnavbox-two li a.btn{
     margin-right: 10px;
     vertical-align: middle;
 }
-#homepage-home, .welcome-home-top-temp{
+#home-welcome{
     display: block;
     width: 100%;
+    margin-bottom: 20px;
 }
 .label-subscribed{
     font-size: 12px;

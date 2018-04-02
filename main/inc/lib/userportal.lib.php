@@ -87,7 +87,9 @@ class IndexManager
                 $my_exercise = $exercise_list[0];
                 $url = Display::url(
                     $my_exercise['title'],
-                    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
+                    api_get_path(
+                        WEB_CODE_PATH
+                    ).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
                 );
                 $this->tpl->assign('exercise_url', $url);
                 $this->tpl->assign(
@@ -146,7 +148,7 @@ class IndexManager
     /**
      * Alias for the online_logout() function.
      *
-     * @param bool  $redirect   Whether to ask online_logout to redirect to index.php or not
+     * @param bool $redirect Whether to ask online_logout to redirect to index.php or not
      * @param array $logoutInfo Information stored by local.inc.php before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
      */
     public function logout($redirect = true, $logoutInfo = [])
@@ -228,7 +230,9 @@ class IndexManager
             if ($show_create_link) {
                 $html .= '<li class="add-course"><a href="'.api_get_path(WEB_CODE_PATH).'create_course/add_course.php">'
                     .Display::return_icon('new-course.png', get_lang('CourseCreate'))
-                    .(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate'))
+                    .(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang(
+                        'CourseCreate'
+                    ))
                     .'</a></li>';
             }
 
@@ -239,7 +243,9 @@ class IndexManager
                         .get_lang('CourseCatalog')
                         .'</a></li>';
                 } else {
-                    $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+                    $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'dashboard/index.php">'.get_lang(
+                            'Dashboard'
+                        ).'</a></li>';
                 }
             }
             $html .= '</ul>';
@@ -270,7 +276,7 @@ class IndexManager
         // Including the page for the news
         $html = '';
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string) file_get_contents($this->home.$_GET['include']);
+            $open = @(string)file_get_contents($this->home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
@@ -305,9 +311,9 @@ class IndexManager
             }
 
             if (trim($home_top_temp) == '' && api_is_platform_admin()) {
-                $home_top_temp = '<div class="welcome-mascot">'.get_lang('PortalHomepageDefaultIntroduction').'</div>';
+                $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
             } else {
-                $home_top_temp = '<div class="welcome-home-top-temp">'.$home_top_temp.'</div>';
+                $home_top_temp;
             }
             $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
@@ -324,9 +330,9 @@ class IndexManager
         $user_selected_language = api_get_interface_language();
         $html = '';
         // Notice
-        $home_notice = @(string) file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string)file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string) file_get_contents($this->home.'home_notice.html');
+            $home_notice = @(string)file_get_contents($this->home.'home_notice.html');
         }
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
@@ -358,7 +364,7 @@ class IndexManager
         }
 
         $html = '';
-        $home_menu = @(string) file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string)file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
@@ -568,7 +574,8 @@ class IndexManager
                 if ($category_has_open_courses) {
                     // The category contains courses accessible to anonymous visitors.
                     $htmlListCat .= '<li>';
-                    $htmlListCat .= '<a href="'.api_get_self().'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
+                    $htmlListCat .= '<a href="'.api_get_self(
+                        ).'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
                     if (api_get_setting('show_number_of_courses') == 'true') {
                         $htmlListCat .= ' ('.$catLine['nbCourse'].' '.get_lang('Courses').')';
                     }
@@ -577,7 +584,8 @@ class IndexManager
                 } elseif ($catLine['children_count'] > 0) {
                     // The category has children, subcategories.
                     $htmlListCat .= '<li>';
-                    $htmlListCat .= '<a href="'.api_get_self().'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
+                    $htmlListCat .= '<a href="'.api_get_self(
+                        ).'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
                     $htmlListCat .= "</li>";
                     $thereIsSubCat = true;
                 } elseif (api_get_setting('show_empty_course_categories') == 'true') {
@@ -696,7 +704,9 @@ class IndexManager
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
-                            $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&category_code='.Security::remove_XSS($_GET['category']).'">'.get_lang('Subscribe').'</a><br />';
+                            $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&category_code='.Security::remove_XSS(
+                                    $_GET['category']
+                                ).'">'.get_lang('Subscribe').'</a><br />';
                         } else {
                             $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
                         }
@@ -782,7 +792,7 @@ class IndexManager
      * @param $title
      * @param $content
      * @param string $id
-     * @param array  $params
+     * @param array $params
      * @param string $idAccordion
      * @param string $idCollapse
      *
@@ -1154,11 +1164,11 @@ class IndexManager
     /**
      * Prints the session and course list (user_portal.php).
      *
-     * @param int    $user_id
-     * @param bool   $showSessions
+     * @param int $user_id
+     * @param bool $showSessions
      * @param string $categoryCodeFilter
-     * @param bool   $useUserLanguageFilterIfAvailable
-     * @param bool   $loadHistory
+     * @param bool $useUserLanguageFilterIfAvailable
+     * @param bool $loadHistory
      *
      * @return array
      */
@@ -1302,9 +1312,13 @@ class IndexManager
                                     if (isset($category[0])) {
                                         if ($viewGrid) {
                                             if ($isCertificateAvailable) {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('Yes');
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
+                                                    'Yes'
+                                                );
                                             } else {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('No');
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
+                                                    'No'
+                                                );
                                             }
                                         } else {
                                             if ($isCertificateAvailable) {
@@ -1577,9 +1591,14 @@ class IndexManager
                                                     $course_session['student_info']['certificate'] = null;
                                                     if (isset($category[0])) {
                                                         if ($category[0]->is_certificate_available($user_id)) {
-                                                            $course_session['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                                            $course_session['student_info']['certificate'] = Display::label(
+                                                                get_lang('Yes'),
+                                                                'success'
+                                                            );
                                                         } else {
-                                                            $course_session['student_info']['certificate'] = Display::label(get_lang('No'));
+                                                            $course_session['student_info']['certificate'] = Display::label(
+                                                                get_lang('No')
+                                                            );
                                                         }
                                                     }
                                                 }
@@ -1603,7 +1622,9 @@ class IndexManager
                                     'id' => $session_id,
                                 ];
                                 $session_box = Display::get_session_title_box($session_id);
-                                $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
+                                $actions = api_get_path(
+                                        WEB_CODE_PATH
+                                    ).'session/resume_session.php?id_session='.$session_id;
                                 $coachId = $session_box['id_coach'];
                                 $extraFieldValue = new ExtraFieldValue('session');
                                 $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -1614,7 +1635,9 @@ class IndexManager
                                 $params['category_id'] = $session_box['category_id'];
                                 $params['title'] = $session_box['title'];
                                 $params['id_coach'] = $coachId;
-                                $params['coach_url'] = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
+                                $params['coach_url'] = api_get_path(
+                                        WEB_AJAX_PATH
+                                    ).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
                                 $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
                                 $params['coach_avatar'] = UserManager::getUserPicture(
                                     $coachId,
@@ -2248,8 +2271,7 @@ class IndexManager
 
                     $userFinished =
                         $countDependenciesPassed >= $gradeBooksToValidateInDependence &&
-                        $countCoursesPassedNoDependency >= $minToValidate
-                    ;
+                        $countCoursesPassedNoDependency >= $minToValidate;
 
                     if ($userFinished) {
                         $badgeList[$id]['finished'] = true;
@@ -2365,7 +2387,11 @@ class IndexManager
 
         $button = '';
         if ($displayButton) {
-            $button = '<input id="session-view-button-'.intval($id).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval($id).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
+            $button = '<input id="session-view-button-'.intval(
+                    $id
+                ).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval(
+                    $id
+                ).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
         }
 
         $icon = Display::return_icon(
@@ -2437,10 +2463,10 @@ class IndexManager
     /**
      * return HTML code for session.
      *
-     * @param int    $id                session id
-     * @param string $title             session title
-     * @param int    $categorySessionId
-     * @param array  $courseInfo
+     * @param int $id session id
+     * @param string $title session title
+     * @param int $categorySessionId
+     * @param array $courseInfo
      *
      * @return string
      */
@@ -2501,9 +2527,9 @@ class IndexManager
      * Get the session coach name, duration or dates
      * when $_configuration['show_simple_session_info'] is enabled.
      *
-     * @param string      $coachName
-     * @param string      $dates
-     * @param string|null $duration  Optional
+     * @param string $coachName
+     * @param string $dates
+     * @param string|null $duration Optional
      *
      * @return string
      */
@@ -2522,21 +2548,24 @@ class IndexManager
     /**
      * Filter the course list by category code.
      *
-     * @param array  $courseList   course list
+     * @param array $courseList course list
      * @param string $categoryCode
      *
      * @return array
      */
     private static function filterByCategory($courseList, $categoryCode)
     {
-        return array_filter($courseList, function ($courseInfo) use ($categoryCode) {
-            if (isset($courseInfo['category_code']) &&
-                $courseInfo['category_code'] === $categoryCode
-            ) {
-                return true;
-            }
+        return array_filter(
+            $courseList,
+            function ($courseInfo) use ($categoryCode) {
+                if (isset($courseInfo['category_code']) &&
+                    $courseInfo['category_code'] === $categoryCode
+                ) {
+                    return true;
+                }
 
-            return false;
-        });
+                return false;
+            }
+        );
     }
 }

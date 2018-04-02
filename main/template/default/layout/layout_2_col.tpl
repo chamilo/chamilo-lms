@@ -19,9 +19,9 @@
 
                 {{ sniff_notification }}
 
-                {% if home_page_block %}
-                    <article id="homepage-home">
-                        {{ home_page_block }}
+                {% if home_welcome %}
+                    <article id="home-welcome">
+                        {{ home_welcome }}
                     </article>
                 {% endif %}
 

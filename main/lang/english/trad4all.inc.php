@@ -8117,4 +8117,5 @@ $NewDocumentAddedToCourseX = "New document added to course %s";
 $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "A new document %s has been added to the document tool in your course %s by %s.";
 $PendingSurveys = "Pending surveys";
 $NoPendingSurveys = "No pending surveys";
+$HottestSessions = "Most popular sessions";
 ?>

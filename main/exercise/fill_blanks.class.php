@@ -671,10 +671,11 @@ class FillBlanks extends Question
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
                 $listSeveral = array_map(
                     function ($item) {
-                        return self::trimOption($item);
+                        return self::trimOption(api_html_entity_decode($item));
                     },
                     $listSeveral
                 );
+                $studentAnswer = htmlspecialchars($studentAnswer);
                 $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
@@ -684,7 +685,6 @@ class FillBlanks extends Question
                 $result = $studentAnswer == self::trimOption($correctAnswer);
                 break;
         }
-        //var_dump($result);
 
         return $result;
     }

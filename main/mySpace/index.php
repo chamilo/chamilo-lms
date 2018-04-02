@@ -15,10 +15,12 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = '<script type="text/javascript" src="'
+    .api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
-Session::erase('this_section');
+//Session::erase('this_section');
 
 ob_start();
 $nameTools = get_lang('MySpace');
@@ -36,10 +38,10 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 // Access control
 api_block_anonymous_users();
-
+/*
 if (!$export_csv) {
-    Display :: display_header($nameTools);
-}
+     Display :: display_header($nameTools);
+} */
 
 if ($is_session_admin) {
     header('location:session.php');
@@ -127,43 +129,72 @@ if ($is_drh) {
     );
 }
 
-echo '<div id="actions" class="actions">';
-echo '<span style="float:right">';
+$actionsRight = '';
+$actionsLeft = '';
 if ($display == 'useroverview' || $display == 'sessionoverview' || $display == 'courseoverview') {
-    echo '<a href="'.api_get_self().'?display='.$display.'&export=csv&view='.$view.'">';
-    echo Display::return_icon("export_csv.png", get_lang('ExportAsCSV'), [], 32);
-    echo '</a>';
+    $actionsRight .= Display::url(
+        Display::return_icon(
+            "export_csv.png",
+            get_lang('ExportAsCSV'),
+            null,
+            ICON_SIZE_MEDIUM),
+        api_get_self() . '?display=' . $display . '&export=csv&view=' . $view
+    );
 }
-echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
-    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</span>';
+$actionsRight .= Display::url(
+    Display::return_icon('printer.png',
+        get_lang('Print'),
+        null,
+        ICON_SIZE_MEDIUM),
+    'javascript: void(0);',
+    ['onclick'=>'javascript: window.print()']
+);
 
 if (!empty($session_id) &&
     !in_array($display, ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'])
 ) {
-    echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= Display::url(Display::return_icon(
+        'back.png',
+        get_lang('Back'),
+        null,
+        ICON_SIZE_MEDIUM),
+        'index.php');
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
             if ($is_coach) {
-                echo "<div align=\"right\">";
-                echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.
-                        Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
-                echo "</div><br />";
+                $actionsLeft .= Display::url(
+                    Display::return_icon('excel.png',
+                        get_lang('ImportUserList'),
+                        null,
+                        ICON_SIZE_MEDIUM),
+                    'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml');
             }
         }
     } else {
-        echo "<div align=\"right\">";
-        echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.
-                Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
-        echo "</div><br />";
+        Display::url(
+            Display::return_icon('excel.png',
+            get_lang('ImportUserList'),
+            null,
+            ICON_SIZE_MEDIUM),
+            'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml');
     }
+
 } else {
-    echo Display::url(
-        Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+
+    $actionsLeft .= Display::url(
+        Display::return_icon(
+            'stats.png',
+            get_lang('MyStats'),
+            null,
+            ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
-    echo Display::url(
-        Display::return_icon("certificate_list.png", get_lang("GradebookSeeListOfStudentsCertificates"), [], ICON_SIZE_MEDIUM),
+    $actionsLeft .= Display::url(
+        Display::return_icon(
+            "certificate_list.png",
+            get_lang("GradebookSeeListOfStudentsCertificates"),
+            null,
+            ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
     );
 }
@@ -175,12 +206,10 @@ if (empty($session_id) ||
 ) {
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
-            echo $item;
+            $actionsLeft .= $item;
         }
     }
 }
-
-echo '</div>';
 
 $userId = api_get_user_id();
 $stats = Tracking::getStats($userId, true);
@@ -213,103 +242,20 @@ $daysAgo = 7;
 $studentIds = [];
 $avg_courses_per_student = 0;
 
-$linkAddUser = null;
-$linkCourseDetailsAsTeacher = null;
-$linkAddCourse = null;
-$linkAddSession = null;
+$view = new Template($nameTools);
+$view->assign('students', $numberStudents);
+$view->assign('studentbosses', $numberStudentBosses);
+$view->assign('numberTeachers', $numberTeachers);
+$view->assign('humanresources', $countHumanResourcesUsers);
+$view->assign(
+    'total_user',
+    $numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers);
+$view->assign('studentboss', STUDENT_BOSS);
+$view->assign('drh', DRH);
+$view->assign('stats', $stats);
 
-if (api_is_platform_admin()) {
-    $linkAddUser = ' '.Display::url(
-        Display::return_icon('2rightarrow.png', get_lang('Add')),
-        api_get_path(WEB_CODE_PATH).'admin/dashboard_add_users_to_user.php?user='.api_get_user_id(),
-        ['class' => '']
-    );
-    $linkCourseDetailsAsTeacher = ' '.Display::url(
-        Display::return_icon('2rightarrow.png', get_lang('Details')),
-        api_get_path(WEB_CODE_PATH).'mySpace/course.php',
-        ['class' => '']
-    );
-    $linkAddCourse = ' '.Display::url(
-        Display::return_icon('2rightarrow.png', get_lang('Details')),
-        api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow',
-        ['class' => '']
-    );
-    $linkAddSession = ' '.Display::url(
-        Display::return_icon('2rightarrow.png', get_lang('Add')),
-        api_get_path(WEB_CODE_PATH).'admin/dashboard_add_sessions_to_user.php?user='.api_get_user_id(),
-        ['class' => '']
-    );
-}
 
-echo Display::page_subheader(get_lang('Overview'));
-echo '<div class="report_section">
-        <table class="table table-bordered table-striped">
-            <tr>
-                <td>'.Display::url(
-                    get_lang('FollowedStudents'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/student.php'
-                ).'</td>
-                <td align="right">'.$numberStudents.'</td>
-            </tr>
-            <tr>
-                <td>'.Display::url(
-                    get_lang('FollowedStudentBosses'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/users.php?status='.STUDENT_BOSS
-                ).'</td>
-                <td align="right">'.$numberStudentBosses.'</td>
-            </tr>
-            <tr>
-                <td>'.Display::url(
-                    get_lang('FollowedTeachers'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/teachers.php'
-                ).
-                '</td>
-                <td align="right">'.$numberTeachers.'</td>
-            </tr>
-            <tr>
-                <td>'.Display::url(
-                get_lang('FollowedHumanResources'),
-                api_get_path(WEB_CODE_PATH).'mySpace/users.php?status='.DRH
-            ).
-            '</td>
-            <td align="right">'.$countHumanResourcesUsers.'</td>
-            </tr>
-            <tr>
-             <td>'.Display::url(
-                get_lang('FollowedUsers'),
-                api_get_path(WEB_CODE_PATH).'mySpace/users.php'
-            ).
-            '</td>
-                <td align="right">'.($numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers).$linkAddUser.'</td>
-            </tr>
-            <tr>
-                <td>'.Display::url(
-                    get_lang('AssignedCourses'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/course.php'
-                ).
-                '</td>
-                <td align="right">'.$countCourses.$linkCourseDetailsAsTeacher.'</td>
-            </tr>
-            <tr>
-                <td>'.Display::url(
-                    get_lang('FollowedCourses'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow'
-                ).
-                '</td>
-                <td align="right">'.$countAssignedCourses.$linkAddCourse.'</td>
-            </tr>
-            <tr>
-                <td>'.Display::url(
-                    get_lang('FollowedSessions'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/session.php'
-                ).
-                '</td>
-            <td align="right">'.$countSessions.$linkAddSession.'</td>
-            </tr>
-            </table>';
-echo '</div>';
-
-echo Display::page_subheader(get_lang('Students').' ('.$numberStudents.')');
+//echo Display::page_subheader(get_lang('Students').' ('.$numberStudents.')');
 
 $form = new FormValidator(
     'search_user',
@@ -317,7 +263,6 @@ $form = new FormValidator(
     api_get_path(WEB_CODE_PATH).'mySpace/student.php'
 );
 $form = Tracking::setUserSearchForm($form);
-$form->display();
 
 $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
@@ -347,8 +292,12 @@ if ($skipData == false) {
         $csv_content[] = [get_lang('InactivesStudents'), $nb_inactive_students];
         $csv_content[] = [get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent];
         $csv_content[] = [get_lang('AverageCoursePerStudent'), $avg_courses_per_student];
-        $csv_content[] = [get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress) ? null : round($avgTotalProgress, 2).'%'];
-        $csv_content[] = [get_lang('AverageResultsToTheExercices'), is_null($averageScore) ? null : round($averageScore, 2).'%'];
+        $csv_content[] = [get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress)
+            ? null
+            : round($avgTotalProgress, 2).'%'];
+        $csv_content[] = [get_lang('AverageResultsToTheExercices'), is_null($averageScore)
+            ? null
+            : round($averageScore, 2).'%'];
         $csv_content[] = [get_lang('AveragePostsInForum'), $posts];
         $csv_content[] = [get_lang('AverageAssignments'), $numberAssignments];
         $csv_content[] = [];
@@ -376,42 +325,34 @@ if ($skipData == false) {
             $sessionIdList,
             $studentIds
         );
-
-        // html part
-        echo '<div class="report_section">
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <td>'.get_lang('AverageCoursePerStudent').'</td>
-                        <td align="right">'.(is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2)).'</td>
-                    </tr>
-                    <tr>
-                        <td>'.get_lang('InactivesStudents').'</td>
-                        <td align="right">'.$nb_inactive_students.'</td>
-                    </tr>
-                    <tr>
-                        <td>'.get_lang('AverageTimeSpentOnThePlatform').'</td>
-                        <td align="right">'.(is_null($totalTimeSpent) ? '' : api_time_to_hms($totalTimeSpent)).'</td>
-                    </tr>
-                    <tr>
-                        <td>'.get_lang('AverageProgressInLearnpath').'</td>
-                        <td align="right">'.(is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%').'</td>
-                    </tr>
-                    <tr>
-                        <td>'.get_lang('AvgCourseScore').'</td>
-                        <td align="right">'.(is_null($averageScore) ? '' : round($averageScore, 2).'%').'</td>
-                    </tr>
-                    <tr>
-                        <td>'.get_lang('AveragePostsInForum').'</td>
-                        <td align="right">'.(is_null($posts) ? '' : round($posts, 2)).'</td>
-                    </tr>
-                    <tr>
-                        <td>'.get_lang('AverageAssignments').'</td>
-                        <td align="right">'.(is_null($numberAssignments) ? '' : round($numberAssignments, 2)).'</td>
-                    </tr>
-                </table>
-             </div>';
+        $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
+            ? ''
+            : round($avg_courses_per_student, 2);
+        $report['InactivesStudents'] = $nb_inactive_students;
+        $report['AverageTimeSpentOnThePlatform'] = is_null($totalTimeSpent)
+            ? '00:00:00'
+            : api_time_to_hms($totalTimeSpent);
+        $report['AverageProgressInLearnpath'] = is_null($avgTotalProgress)
+            ? ''
+            : round($avgTotalProgress, 2).'%';
+        $report['AvgCourseScore'] = is_null($averageScore) ? '0' : round($averageScore, 2).'%';
+        $report['AveragePostsInForum'] = is_null($posts) ? '0' : round($posts, 2);
+        $report['AverageAssignments'] = is_null($numberAssignments) ? '' : round($numberAssignments, 2);
+        $view->assign('report', $report);
     }
 }
+
+
+$view->assign('header', $nameTools);
+$view->assign('form', $form->returnForm());
+$view->assign('actions',Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
+$view->assign('title', get_lang('Students').' ('.$numberStudents.')');
+
+$template = $view->get_template('my_space/index.tpl');
+$content = $view->fetch($template);
+$view->assign('content', $content);
+$view->display_one_col_template();
+
 
 // Send the csv file if asked
 if ($export_csv) {
@@ -420,6 +361,8 @@ if ($export_csv) {
     exit;
 }
 
+/*
 if (!$export_csv) {
     Display::display_footer();
 }
+*/

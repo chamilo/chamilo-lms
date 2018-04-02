@@ -4228,10 +4228,6 @@ ul.holder li.bit-box{
 .control-course{
     text-align: center;
 }
-.data_table tr td .form-control{
-    width: 20%;
-    display: inline-block;
-}
 #settings .form-inline{
     margin-bottom: 15px;
 }

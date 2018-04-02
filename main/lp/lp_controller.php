@@ -46,7 +46,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#idTitle").focus();
 }
-$(window).load(function () {
+$(window).on("load", function () {
     setFocus();
 });
 </script>';

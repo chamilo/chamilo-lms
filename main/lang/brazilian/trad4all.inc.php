@@ -7668,7 +7668,7 @@ $TicketDetail = "Detalhes do ticket";
 $StatusAll = "Todos";
 $StatusUnread = "Não lida";
 $StatusRead = "Ler";
-$Projects = "Projects";
+$Projects = "Projetos";
 $AssignUser = "Atribuir usuário";
 $TicketEnrollment = "Inscrição";
 $TicketGeneralInformation = "Informação geral";
@@ -7986,4 +7986,8 @@ $UserLinkingRequestRejected = "Solicitação de ligação do aluno rejeitada";
 $UserLinkRemoved = "Link do aluno removido";
 $SessionTemplate = "Modelo de sessão";
 $CloudFileLink = "Link de arquivo em nuvem";
+$ResetFieldX = "Redefinir %s";
+$MyGeneralCertificate = "Meu certificado global";
+$ScoreNote = "Pontuação";
+$ScoreTest = "Teste";
 ?>

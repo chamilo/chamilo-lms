@@ -5885,7 +5885,7 @@ $ShortCode = "Código corto";
 $CreateChildSkill = "Crear competencia hija";
 $SearchProfileMatches = "Buscar perfiles que correspondan";
 $IsThisWhatYouWereLookingFor = "Corresponde a lo que busca?";
-$WhatSkillsAreYouLookingFor = "Que competencias está buscando?";
+$WhatSkillsAreYouLookingFor = "Que competencias busca?";
 $ProfileSearch = "Búsqueda de perfil";
 $CourseSettingsRegisterDirectLink = "Si su curso es público o abierto, puede usar el enlace directo abajo para invitar a nuevos usuarios, de tal manera que estén enviados directamente en este curso al finalizar el formulario de registro al portal. Si desea, puede añadir el parámetro e=1 a este enlace, remplazando \"1\" por el ID del ejercicio, para mandar los usuarios directamente a un ejercicio o examen. El ID del ejercicio se puede obtener en la URL del ejercicio cuando le de clic para entrar al mismo.<br />
 %s";
@@ -8141,4 +8141,5 @@ $NewDocumentAddedToCourseX = "Un nuevo documento ha sido agregado al curso %s";
 $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "El nuevo documento %s ha sido agregado a la herramienta documentos del curso %s por %s.";
 $PendingSurveys = "Encuestas pendientes";
 $NoPendingSurveys = "Sin encuestas pendientes";
+$HottestSessions = "Sesiones más populares";
 ?>

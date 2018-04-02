@@ -349,12 +349,12 @@ class Chat extends Model
         $printResult = true,
         $sanitize = true
     ) {
-        $user_friend_relation = SocialManager::get_relation_between_contacts(
+        $relation = SocialManager::get_relation_between_contacts(
             $fromUserId,
             $to_user_id
         );
 
-        if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
+        if ($relation == USER_RELATION_TYPE_FRIEND) {
             $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
             $this->saveWindow($to_user_id);

@@ -565,7 +565,7 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), [], 32).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
-    } elseif ($call_from_tool == 'editpaint') {
+    } elseif ($call_from_tool == 'editpaint' && api_get_setting('enabled_support_pixlr') === 'true') {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), [], ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), [], 32).'</a>';

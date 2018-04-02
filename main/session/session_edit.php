@@ -226,11 +226,11 @@ function accessSwitcher(accessFromReady) {
     if (access == 1) {
         $('#duration_div').hide();
         $('#date_fields').show();
+        emptyDuration();
     } else {
         $('#duration_div').show();
         $('#date_fields').hide();
     }
-    emptyDuration();
 }
 
 function emptyDuration() {

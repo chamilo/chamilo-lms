@@ -100,6 +100,7 @@ if (api_get_setting('display_categories_on_homepage') === 'true') {
 }
 $controller->set_login_form();
 //@todo move this inside the IndexManager
+
 if (!api_is_anonymous()) {
     $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
@@ -109,10 +110,12 @@ if (!api_is_anonymous()) {
         $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
     }
 }
-$hot_courses = '';
+$hotCourses = '';
 $announcements_block = '';
+
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
+
 if ($useCookieValidation === 'true') {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
@@ -128,11 +131,15 @@ if ($useCookieValidation === 'true') {
 // When loading a chamilo page do not include the hot courses and news
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
-        $hot_courses = $controller->return_hot_courses();
+        $hotCourses = $controller->return_hot_courses();
     }
     $announcements_block = $controller->return_announcements();
 }
-$controller->tpl->assign('hot_courses', $hot_courses);
+if (api_get_configuration_value('show_hot_sessions') === true) {
+    $hotSessions = SessionManager::getHotSessions();
+    $controller->tpl->assign('hot_sessions', $hotSessions);
+}
+$controller->tpl->assign('hot_courses', $hotCourses);
 $controller->tpl->assign('announcements_block', $announcements_block);
 $controller->tpl->assign('home_page_block', $controller->return_home_page());
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());

@@ -57,6 +57,8 @@
 
                 {% include template ~ "/layout/hot_courses.tpl" %}
 
+                {% include template ~ "/session/sessions_current.tpl" %}
+
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">
                         {{ plugin_content_bottom }}

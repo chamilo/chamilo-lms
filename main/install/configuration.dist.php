@@ -693,6 +693,9 @@ $_configuration['gradebook_badge_sidebar'] = [
     ]
 ];*/
 
+// Show popular sessions on homepage
+//$_configuration['show_hot_sessions'] = false;
+
 // Hide skill levels options
 //$_configuration['hide_skill_levels'] = false;
 

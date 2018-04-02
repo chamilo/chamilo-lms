@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Report on students subscribed to courses I am teaching
+ * Report on students subscribed to courses I am teaching.
  *
  * @package chamilo.reporting
  */
@@ -130,7 +131,11 @@ function get_users($from, $limit, $column, $direction)
                 $courseId = $courseInfo['real_id'];
 
                 if (CourseManager::is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking::get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+                    $avg_time_spent += Tracking::get_time_spent_on_the_course(
+                        $student_id,
+                        $courseId,
+                        $_GET['id_session']
+                    );
                     $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
@@ -252,7 +257,7 @@ if (api_is_drh()) {
         '#'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon("statistics.png", get_lang("CompanyReport"), [], ICON_SIZE_MEDIUM),
+        Display::return_icon("statistics.png", get_lang('CompanyReport'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php"
     );
     $actionsLeft .= Display::url(

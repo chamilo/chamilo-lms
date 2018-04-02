@@ -137,56 +137,67 @@ if ($display == 'useroverview' || $display == 'sessionoverview' || $display == '
             "export_csv.png",
             get_lang('ExportAsCSV'),
             null,
-            ICON_SIZE_MEDIUM),
-        api_get_self() . '?display=' . $display . '&export=csv&view=' . $view
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_self().'?display='.$display.'&export=csv&view='.$view
     );
 }
 $actionsRight .= Display::url(
-    Display::return_icon('printer.png',
+    Display::return_icon(
+        'printer.png',
         get_lang('Print'),
         null,
-        ICON_SIZE_MEDIUM),
+        ICON_SIZE_MEDIUM
+    ),
     'javascript: void(0);',
-    ['onclick'=>'javascript: window.print()']
+    ['onclick' => 'javascript: window.print()']
 );
 
 if (!empty($session_id) &&
     !in_array($display, ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'])
 ) {
-    $actionsLeft .= Display::url(Display::return_icon(
-        'back.png',
-        get_lang('Back'),
-        null,
-        ICON_SIZE_MEDIUM),
-        'index.php');
+    $actionsLeft .= Display::url(
+        Display::return_icon(
+            'back.png',
+            get_lang('Back'),
+            null,
+            ICON_SIZE_MEDIUM
+        ),
+        'index.php'
+    );
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
             if ($is_coach) {
                 $actionsLeft .= Display::url(
-                    Display::return_icon('excel.png',
+                    Display::return_icon(
+                        'excel.png',
                         get_lang('ImportUserList'),
                         null,
-                        ICON_SIZE_MEDIUM),
-                    'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml');
+                        ICON_SIZE_MEDIUM
+                    ),
+                    'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml'
+                );
             }
         }
     } else {
         Display::url(
-            Display::return_icon('excel.png',
-            get_lang('ImportUserList'),
-            null,
-            ICON_SIZE_MEDIUM),
-            'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml');
+            Display::return_icon(
+                'excel.png',
+                get_lang('ImportUserList'),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml'
+        );
     }
-
 } else {
-
     $actionsLeft .= Display::url(
         Display::return_icon(
             'stats.png',
             get_lang('MyStats'),
             null,
-            ICON_SIZE_MEDIUM),
+            ICON_SIZE_MEDIUM
+        ),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
     $actionsLeft .= Display::url(
@@ -194,7 +205,8 @@ if (!empty($session_id) &&
             "certificate_list.png",
             get_lang("GradebookSeeListOfStudentsCertificates"),
             null,
-            ICON_SIZE_MEDIUM),
+            ICON_SIZE_MEDIUM
+        ),
         api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
     );
 }
@@ -292,12 +304,18 @@ if ($skipData == false) {
         $csv_content[] = [get_lang('InactivesStudents'), $nb_inactive_students];
         $csv_content[] = [get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent];
         $csv_content[] = [get_lang('AverageCoursePerStudent'), $avg_courses_per_student];
-        $csv_content[] = [get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress)
-            ? null
-            : round($avgTotalProgress, 2).'%'];
-        $csv_content[] = [get_lang('AverageResultsToTheExercices'), is_null($averageScore)
-            ? null
-            : round($averageScore, 2).'%'];
+        $csv_content[] = [
+            get_lang('AverageProgressInLearnpath'),
+            is_null($avgTotalProgress)
+                ? null
+                : round($avgTotalProgress, 2).'%',
+        ];
+        $csv_content[] = [
+            get_lang('AverageResultsToTheExercices'),
+            is_null($averageScore)
+                ? null
+                : round($averageScore, 2).'%',
+        ];
         $csv_content[] = [get_lang('AveragePostsInForum'), $posts];
         $csv_content[] = [get_lang('AverageAssignments'), $numberAssignments];
         $csv_content[] = [];
@@ -345,7 +363,7 @@ if ($skipData == false) {
 
 $view->assign('header', $nameTools);
 $view->assign('form', $form->returnForm());
-$view->assign('actions',Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
+$view->assign('actions', Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
 $view->assign('title', get_lang('Students').' ('.$numberStudents.')');
 
 $template = $view->get_template('my_space/index.tpl');
@@ -360,9 +378,3 @@ if ($export_csv) {
     Export:: arrayToCsv($csv_content, 'reporting_index');
     exit;
 }
-
-/*
-if (!$export_csv) {
-    Display::display_footer();
-}
-*/

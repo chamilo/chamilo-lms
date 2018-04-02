@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Report on users followed (filtered by status given in URL)
+ * Report on users followed (filtered by status given in URL).
  *
  * @package chamilo.reporting
  */

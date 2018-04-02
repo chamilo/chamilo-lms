@@ -538,11 +538,7 @@ class Career extends Model
                                     $explode[0]
                                 );
                                 $groupDrawLine[$groupValueId] = true;
-
-                                /*$simpleFirstConnection = 'v'.(int) $rowId;
-                                $simpleSecondConnection = 'g'.$groupValueId;*/
                                 $simpleFirstConnection = 'g'.(int) $groupValueId;
-                                //$simpleSecondConnection = 'g'.$groupValueId;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0])) {
@@ -586,11 +582,6 @@ class Career extends Model
                                 'from' => $simpleFirstConnection,
                                 'to' => $simpleSecondConnection,
                             ];
-                            /*$connections .= self::createConnection(
-                                $firstConnection,
-                                $secondConnection,
-                                ['Left', 'Right']
-                            );*/
                         }
                     }
                 }
@@ -624,7 +615,6 @@ class Career extends Model
         }
 
         $graphHtml .= '</div>';
-//        $graphHtml .= $connections;
         $graphHtml .= '<style>
              #career_grid {
                  display: grid;

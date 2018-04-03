@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 $course_plugin = 'notebookteacher';
 require_once __DIR__.'/../config.php';
-require_once __DIR__.'/notebookteacher.lib.php';
 
 $_setting['student_view_enabled'] = 'false';
 
@@ -56,7 +57,7 @@ if ($enable) {
             $tool = 'ModifyNote';
             $interbreadcrumb[] = [
                 'url' => 'index.php?'.api_get_cidreq(),
-                'name' => $plugin->get_lang('NotebookTeacher')
+                'name' => $plugin->get_lang('NotebookTeacher'),
             ];
         }
 
@@ -68,11 +69,11 @@ if ($enable) {
 
         // Action handling: Adding a note
         if ($action === 'addnote') {
-            if ((api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true) || api_is_drh())) {
+            if ((api_get_session_id() != 0 &&
+                !api_is_allowed_to_session_edit(false, true) || api_is_drh())) {
                 api_not_allowed();
             }
-
-            $_SESSION['notebook_view'] = 'creation_date';
+            Session::write('notebook_view', 'creation_date');
 
             $form = new FormValidator(
                 'note',
@@ -152,13 +153,13 @@ if ($enable) {
             }
 
             $form->addElement(
-                    'select',
-                    'student_id',
-                    get_lang('Student'),
-                    $studentList,
-                    [
-                        'id' => 'student_id',
-                    ]
+                'select',
+                'student_id',
+                get_lang('Student'),
+                $studentList,
+                [
+                    'id' => 'student_id',
+                ]
             );
 
             $form->addElement(
@@ -264,19 +265,19 @@ if ($enable) {
                 }
             } else {
                 $a_course_users = CourseManager::get_user_list_from_course_code(
-                        $courseCode,
-                        0,
-                        null,
-                        null,
-                        $status,
-                        null,
-                        false,
-                        false,
-                        null,
-                        null,
-                        null,
-                        $active
-                        );
+                    $courseCode,
+                    0,
+                    null,
+                    null,
+                    $status,
+                    null,
+                    false,
+                    false,
+                    null,
+                    null,
+                    null,
+                    $active
+                );
             }
 
             $studentList = [];
@@ -286,13 +287,13 @@ if ($enable) {
             }
 
             $form->addElement(
-                    'select',
-                    'student_id',
-                    get_lang('Student'),
-                    $studentList,
-                    [
-                       'id' => 'student_id',
-                    ]
+                'select',
+                'student_id',
+                get_lang('Student'),
+                $studentList,
+                [
+                    'id' => 'student_id',
+                ]
             );
 
             $form->addElement(
@@ -343,9 +344,7 @@ if ($enable) {
             }
 
             NotebookTeacher::displayNotes();
-        } elseif (
-            $action === 'changeview' && in_array($_GET['view'], ['creation_date', 'update_date', 'title'])) {
-
+        } elseif ($action === 'changeview' && in_array($_GET['view'], ['creation_date', 'update_date', 'title'])) {
             // Action handling: changing the view (sorting order)
             switch ($_GET['view']) {
                 case 'creation_date':
@@ -370,17 +369,15 @@ if ($enable) {
                     }
                     break;
             }
-            $_SESSION['notebook_view'] = $_GET['view'];
+            Session::write('notebook_view', Security::remove_XSS($_GET['view']));
             NotebookTeacher::displayNotes();
         } else {
             NotebookTeacher::displayNotes();
         }
-        
+
         Display::display_footer();
     } else {
-        /** @var \Chamilo\CoreBundle\Entity\Session $session */
-        $session = Database::getManager()
-            ->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $session = api_get_session_entity(api_get_session_id());
         $_course = api_get_course_info();
         $web_course_path = api_get_path(WEB_COURSE_PATH);
         $url = $web_course_path.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : '');
@@ -390,6 +387,7 @@ if ($enable) {
         );
 
         header('Location: '.$url);
+        exit;
     }
 } else {
     echo $plugin->get_lang('ToolDisabled');

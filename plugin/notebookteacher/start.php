@@ -17,19 +17,18 @@ if ($enable) {
         header('Location: '.$url);
         exit;
     } else {
-        /** @var \Chamilo\CoreBundle\Entity\Session $session */
-        $session = Database::getManager()
-        ->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $session = api_get_session_entity(api_get_session_id());
         $_course = api_get_course_info();
         $webCoursePath = api_get_path(WEB_COURSE_PATH);
         $url = $webCoursePath.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : '');
-        
+
         Display::addFlash(
             Display::return_message($plugin->get_lang('ToolForTeacher'))
         );
 
         header('Location: '.$url);
+        exit;
     }
 } else {
-    echo $plugin->get_lang('ToolDisabled');
+    api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }

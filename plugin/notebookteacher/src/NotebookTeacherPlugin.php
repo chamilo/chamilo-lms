@@ -1,14 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
- * Description of notebookteacher_plugin.
- *
+ * Plugin class for the NotebookTeacher plugin.
  * @package chamilo.plugin.notebookteacher
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
- */
-/**
- * Plugin class for the NotebookTeacher plugin.
  */
 class NotebookTeacherPlugin extends Plugin
 {
@@ -19,7 +16,7 @@ class NotebookTeacherPlugin extends Plugin
     {
         parent::__construct(
             '1.1',
-            'Jose Angel Ruiz - NoSoloRed (original author)',
+            'Jose Angel Ruiz - NoSoloRed (original author), Julio Montoya',
             [
                 'enable_plugin_notebookteacher' => 'boolean',
             ]
@@ -29,7 +26,7 @@ class NotebookTeacherPlugin extends Plugin
     }
 
     /**
-     * @return StaticPlugin
+     * @return NotebookTeacherPlugin
      */
     public static function create()
     {
@@ -46,9 +43,7 @@ class NotebookTeacherPlugin extends Plugin
         //Installing course settings
         $this->install_course_fields_in_all_courses();
 
-        $tablesToBeCompared = [
-                self::TABLE_NOTEBOOKTEACHER,
-        ];
+        $tablesToBeCompared = [self::TABLE_NOTEBOOKTEACHER];
         $em = Database::getManager();
         $cn = $em->getConnection();
         $sm = $cn->getSchemaManager();
@@ -79,12 +74,10 @@ class NotebookTeacherPlugin extends Plugin
      */
     public function uninstall()
     {
-        //Deleting course settings
+        // Deleting course settings.
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
 
-        $tablesToBeDeleted = [
-            TABLE_NOTEBOOKTEACHER,
-        ];
+        $tablesToBeDeleted = [TABLE_NOTEBOOKTEACHER];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
             $sql = "DROP TABLE IF EXISTS $table";

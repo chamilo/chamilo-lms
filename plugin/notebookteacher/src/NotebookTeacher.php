@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+
 require_once __DIR__.'/../config.php';
+
 /**
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
@@ -48,8 +50,8 @@ class NotebookTeacher
      *
      * @param array $values
      * @param int   $userId    Optional. The user ID
-+    * @param int   $courseId  Optional. The course ID
-+    * @param int   $sessionId Optional. The session ID
+     * @param int   $courseId  Optional. The course ID
+     * @param int   $sessionId Optional. The session ID
      *
      * @return bool
      */
@@ -154,6 +156,7 @@ class NotebookTeacher
                 ],
             ]
         );
+
         return true;
     }
 
@@ -196,7 +199,7 @@ class NotebookTeacher
         if (!isset($_GET['direction'])) {
             $sortDirection = 'ASC';
             $linkSortDirection = 'DESC';
-        } else if ($_GET['direction'] == 'ASC') {
+        } elseif ($_GET['direction'] == 'ASC') {
             $sortDirection = 'ASC';
             $linkSortDirection = 'DESC';
         } else {
@@ -205,7 +208,6 @@ class NotebookTeacher
         }
 
         $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
-        $selectStudent = '';
         $sessionId = api_get_session_id();
         $courseCode = api_get_course_id();
         $active = isset($_GET['active']) ? $_GET['active'] : null;
@@ -242,9 +244,9 @@ class NotebookTeacher
             } else {
                 $sql .= " AND session_course_user.status = 0 ";
             }
-            $sql .= $sortByfirstName 
-                    ? ' ORDER BY user.firstname, user.lastname'
-                    : ' ORDER BY user.lastname, user.firstname';
+            $sql .= $sortByfirstName
+                ? ' ORDER BY user.firstname, user.lastname'
+                : ' ORDER BY user.lastname, user.firstname';
 
             $rs = Database::query($sql);
 
@@ -331,25 +333,28 @@ class NotebookTeacher
         echo '</div>';
         echo '<div class="row">'.$selectStudent.'</div>';
 
-        if (!isset($_SESSION['notebook_view']) ||
-            !in_array($_SESSION['notebook_view'], ['creation_date', 'update_date', 'title'])
+        $view = Session::read('notebook_view');
+        if (!isset($view) ||
+            !in_array($view, ['creation_date', 'update_date', 'title'])
         ) {
-            $_SESSION['notebook_view'] = 'creation_date';
+            Session::write('notebook_view', 'creation_date');
         }
+
+        $view = Session::read('notebook_view');
 
         // Database table definition
         $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
-        if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
-            $orderBy = " ORDER BY ".$_SESSION['notebook_view']." $sortDirection ";
+        if ($view == 'creation_date' || $view == 'update_date') {
+            $orderBy = " ORDER BY $view $sortDirection ";
         } else {
-            $orderBy = " ORDER BY ".$_SESSION['notebook_view']." $sortDirection ";
+            $orderBy = " ORDER BY $view $sortDirection ";
         }
 
         //condition for the session
         $session_id = api_get_session_id();
         $conditionSession = api_get_session_condition($session_id);
 
-        $condExtra = ($_SESSION['notebook_view'] == 'update_date') ? " AND update_date <> ''" : " ";
+        $condExtra = $view == 'update_date' ? " AND update_date <> ''" : " ";
         $courseId = api_get_course_int_id();
 
         if ($studentId > 0) {
@@ -368,11 +373,10 @@ class NotebookTeacher
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {
                     if ($first) {
+                        $studentText = '';
                         if ($row['student_id'] > 0) {
                             $studentInfo = api_get_user_info($row['student_id']);
                             $studentText = $studentInfo['complete_name'];
-                        } else {
-                            $studentText = '';
                         }
                         echo Display::page_subheader($studentText);
                         $first = false;
@@ -386,7 +390,7 @@ class NotebookTeacher
                     }
                     $userInfo = api_get_user_info($row['user_id']);
                     $author = ', '.get_lang('Teacher').': '.$userInfo['complete_name'];
-
+                    $actions = '';
                     if (intval($row['user_id']) == api_get_user_id()) {
                         $actions = '<a href="'.
                                 api_get_self().'?'.
@@ -397,15 +401,12 @@ class NotebookTeacher
                                 '?action=deletenote&notebook_id='.$row['id'].
                                 '" onclick="return confirmation(\''.$row['title'].'\');">'.
                                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        $actions = '';
                     }
-
                     echo Display::panel(
-                            $row['description'],
-                            $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
-                            get_lang('CreationDate').': '.
-                            Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue.$author
+                        $row['description'],
+                        $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
+                        get_lang('CreationDate').': '.
+                        Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue.$author
                     );
                 }
             } else {
@@ -416,7 +417,6 @@ class NotebookTeacher
             foreach ($courseUsersList as $key => $userItem) {
                 $studentId = $key;
                 $studentText = $userItem['firstname'].' '.$userItem['lastname'];
-
                 $conditionStudent = " AND student_id = $studentId";
 
                 $sql = "SELECT * FROM $tableNotebook
@@ -431,7 +431,6 @@ class NotebookTeacher
                 if (Database::num_rows($result) > 0) {
                     echo Display::page_subheader($studentText);
                     while ($row = Database::fetch_array($result)) {
-
                         // Validation when belongs to a session
                         $sessionImg = api_get_session_image($row['session_id'], $userInfo['status']);
                         $updateValue = '';
@@ -446,26 +445,26 @@ class NotebookTeacher
 
                         if (intval($row['user_id']) == api_get_user_id()) {
                             $actions = '<a href="'.api_get_self().
-                                    '?action=editnote&notebook_id='.$row['id'].'&'.api_get_cidreq().'">'.
+                                '?action=editnote&notebook_id='.$row['id'].'&'.api_get_cidreq().'">'.
                                     Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
                             $actions .= '<a href="'.api_get_self().
                                     '?action=deletenote&notebook_id='.$row['id'].
                                     '" onclick="return confirmation(\''.$row['title'].'\');">'.
                                     Display::return_icon(
-                                            'delete.png',
-                                            get_lang('Delete'),
-                                            '',
-                                            ICON_SIZE_SMALL
+                                        'delete.png',
+                                        get_lang('Delete'),
+                                        '',
+                                        ICON_SIZE_SMALL
                                     ).'</a>';
                         } else {
                             $actions = '';
                         }
 
                         echo Display::panel(
-                                $row['description'],
-                                $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
-                                get_lang('CreationDate').': '.
-                                Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue.$author
+                            $row['description'],
+                            $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
+                            get_lang('CreationDate').': '.
+                            Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue.$author
                         );
                     }
                 }
@@ -485,7 +484,6 @@ class NotebookTeacher
             if (Database::num_rows($result) > 0) {
                 echo Display::page_subheader($plugin->get_lang('NotebookNoStudentAssigned'));
                 while ($row = Database::fetch_array($result)) {
-
                     // Validation when belongs to a session
                     $sessionImg = api_get_session_image($row['session_id'], $userInfo['status']);
                     $updateValue = '';
@@ -497,7 +495,7 @@ class NotebookTeacher
 
                     $userInfo = api_get_user_info($row['user_id']);
                     $author = ', '.get_lang('Teacher').': '.$userInfo['complete_name'];
-
+                    $actions = '';
                     if (intval($row['user_id']) == api_get_user_id()) {
                         $actions = '<a href="'.api_get_self().
                                 '?action=editnote&notebook_id='.$row['id'].'&'.api_get_cidreq().'">'.
@@ -506,15 +504,12 @@ class NotebookTeacher
                                 '?action=deletenote&notebook_id='.$row['id'].
                                 '" onclick="return confirmation(\''.$row['title'].'\');">'.
                                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        $actions = '';
                     }
-
                     echo Display::panel(
-                            $row['description'],
-                            $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
-                            get_lang('CreationDate').': '.
-                            Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue.$author
+                        $row['description'],
+                        $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
+                        get_lang('CreationDate').': '.
+                        Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue.$author
                     );
                 }
             }

@@ -419,9 +419,7 @@ if (!empty($student_id) && !empty($course_code)) {
         '</a>';
 }
 
-$notebookTeacherPlugin = NotebookTeacherPlugin::create();
-$notebookTeacherEnable = $notebookTeacherPlugin->get('enable_plugin_notebookteacher') === 'true';
-
+$notebookTeacherEnable = api_get_plugin_setting('notebookteacher', 'enable_plugin_notebookteacher') === 'true';
 if ($notebookTeacherEnable && !empty($student_id) && !empty($course_code)) {
     // link notebookteacher
     $optionsLink = 'student_id='.$student_id.'&origin='.$origin.'&cidReq='.$course_code.'&id_session='.$sessionId;

@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Plugin database installation script. Can only be executed if included
  * inside another script loading global.inc.php.
@@ -17,6 +18,10 @@ $entityManager = Database::getManager();
 $pluginSchema = new \Doctrine\DBAL\Schema\Schema();
 $connection = $entityManager->getConnection();
 $platform = $connection->getDatabasePlatform();
+
+if ($pluginSchema->hasTable(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER)) {
+    return;
+}
 
 //Create tables
 $notebookTable = $pluginSchema->createTable(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);

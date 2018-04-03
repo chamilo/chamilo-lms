@@ -489,12 +489,12 @@ class Template
      */
     public static function findTemplateFilePath($name)
     {
-        $sysCodePath = api_get_path(SYS_CODE_PATH);
+        $sysTemplatePath = api_get_path(SYS_TEMPLATE_PATH);
 
         // Check if the tpl file is present in the main/template/overrides/ dir
         // Overrides is a special directory meant for temporary template
         // customization. It must be taken into account before anything else
-        if (is_readable($sysCodePath."template/overrides/$name")) {
+        if (is_readable($sysTemplatePath."overrides/$name")) {
             return "overrides/$name";
         }
 
@@ -504,7 +504,7 @@ class Template
         // file, and if not found, go for the same file in the default template
         if ($defaultFolder && $defaultFolder != 'default') {
             // Avoid missing template error, use the default file.
-            if (file_exists($sysCodePath."template/$defaultFolder/$name")) {
+            if (file_exists($sysTemplatePath."$defaultFolder/$name")) {
                 return "$defaultFolder/$name";
             }
         }

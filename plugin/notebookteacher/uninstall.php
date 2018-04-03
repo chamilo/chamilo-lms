@@ -8,6 +8,5 @@
  *
  * @package chamilo.plugin.notebookteacher
  */
-
 require_once __DIR__.'/config.php';
 NotebookTeacherPlugin::create()->uninstall();

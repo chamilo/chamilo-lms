@@ -115,6 +115,7 @@ class NotebookTeacher
         if (Database::num_rows($result) != 1) {
             return [];
         }
+
         return Database::fetch_array($result);
     }
 
@@ -186,6 +187,7 @@ class NotebookTeacher
         if (Database::affected_rows($result) != 1) {
             return false;
         }
+
         return true;
     }
 

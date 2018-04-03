@@ -3,6 +3,7 @@
 
 /**
  * Plugin class for the NotebookTeacher plugin.
+ *
  * @package chamilo.plugin.notebookteacher
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>

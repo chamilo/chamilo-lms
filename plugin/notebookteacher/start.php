@@ -4,7 +4,6 @@
  *
  * @package chamilo.plugin.notebookteacher
  */
-
 $course_plugin = 'notebookteacher';
 require_once __DIR__.'/config.php';
 

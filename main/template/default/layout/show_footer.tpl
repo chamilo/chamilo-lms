@@ -1,9 +1,9 @@
     {% if show_footer == true %}
             </div>
         </section>
-        {% include template ~ "/layout/page_footer.tpl" %}
+        {% include 'layout/page_footer.tpl'|get_template %}
     {% endif %}
     </div>
-    {% include template ~ '/layout/footer.js.tpl' %}
+    {% include 'layout/footer.js.tpl'|get_template %}
 </body>
 </html>

@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/page.tpl" %}
+{% extends 'layout/page.tpl'|get_template %}
 {% block body %}
 <div id="maincontent" class="maincontent">
     {{ plugin_courses_block }}

@@ -171,6 +171,7 @@ class Template
                 'name' => 'format_date',
                 'callable' => 'Template::format_date',
             ],
+            ['name' => 'get_template', 'callable' => 'Template::findTemplateFilePath'],
         ];
 
         foreach ($filters as $filter) {
@@ -479,8 +480,42 @@ class Template
 
     /**
      * Returns the sub-folder and filename for the given tpl file.
-     * If template not found in overrides/ or custom template folder, the
-     * default template will be used.
+     *
+     * If template not found in overrides/ or custom template folder, the default template will be used.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function findTemplateFilePath($name)
+    {
+        $sysCodePath = api_get_path(SYS_CODE_PATH);
+
+        // Check if the tpl file is present in the main/template/overrides/ dir
+        // Overrides is a special directory meant for temporary template
+        // customization. It must be taken into account before anything else
+        if (is_readable($sysCodePath."template/overrides/$name")) {
+            return "overrides/$name";
+        }
+
+        $defaultFolder = api_get_configuration_value('default_template');
+
+        // If a template folder has been manually defined, search for the right
+        // file, and if not found, go for the same file in the default template
+        if ($defaultFolder && $defaultFolder != 'default') {
+            // Avoid missing template error, use the default file.
+            if (file_exists($sysCodePath."template/$defaultFolder/$name")) {
+                return "$defaultFolder/$name";
+            }
+        }
+
+        return "default/$name";
+    }
+
+    /**
+     * Call non-static for Template::findTemplateFilePath
+     *
+     * @see Template::findTemplateFilePath()
      *
      * @param string $name
      *
@@ -488,24 +523,7 @@ class Template
      */
     public function get_template($name)
     {
-        // Check if the tpl file is present in the main/template/overrides/ dir
-        // Overrides is a special directory meant for temporary template
-        // customization. It must be taken into account before anything else
-        $file = api_get_path(SYS_CODE_PATH).'template/overrides/'.$name;
-        if (is_readable($file)) {
-            return 'overrides/'.$name;
-        }
-        // If a template folder has been manually defined, search for the right
-        // file, and if not found, go for the same file in the default template
-        if ($this->templateFolder != 'default') {
-            // Avoid missing template error, use the default file.
-            $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
-            if (!file_exists($file)) {
-                return 'default/'.$name;
-            }
-        }
-
-        return $this->templateFolder.'/'.$name;
+        return self::findTemplateFilePath($name);
     }
 
     /**

@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/page.tpl" %}
+{% extends 'layout/page.tpl'|get_template %}
 
 {% block body %}
     {% if plugin_main_top %}
@@ -26,7 +26,7 @@
                 {% endif %}
 
                 {% block page_body %}
-                    {% include template ~ "/layout/page_body.tpl" %}
+                    {% include 'layout/page_body.tpl'|get_template %}
                 {% endblock %}
 
                 {% if welcome_to_course_block %}
@@ -55,9 +55,9 @@
                     </article>
                 {% endif %}
 
-                {% include template ~ "/layout/hot_courses.tpl" %}
+                {% include 'layout/hot_courses.tpl'|get_template %}
 
-                {% include template ~ "/session/sessions_current.tpl" %}
+                {% include 'session/sessions_current.tpl'|get_template %}
 
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">
@@ -74,7 +74,7 @@
                     </div>
                 {% endif %}
 
-                {% include template ~ "/layout/login_form.tpl" %}
+                {% include 'layout/login_form.tpl'|get_template %}
 
                 {% if _u.logged  == 1 %}
                     {{ user_image_block }}

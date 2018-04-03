@@ -35,7 +35,7 @@ $(document).ready( function() {
     </div>
     <div id="list-hot-courses" class="grid-courses">
         <div class="row">
-            {% include template ~ '/layout/hot_course_item.tpl' %}
+            {% include 'layout/hot_course_item.tpl'|get_template %}
         </div>
     </div>
 </section>

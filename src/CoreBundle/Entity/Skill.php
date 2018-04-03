@@ -35,7 +35,6 @@ class Skill
     protected $issuedSkills;
 
     /**
-     * 
      * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
      */
     protected $items;

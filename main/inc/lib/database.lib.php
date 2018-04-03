@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Debug\ExceptionHandler;
 
 /**
  * Class Database.

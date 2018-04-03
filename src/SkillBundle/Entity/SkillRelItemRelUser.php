@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SkillRelItemRelUser
+ * SkillRelItemRelUser.
  *
  * @ORM\Table(name="skill_rel_item_rel_user")
  * @ORM\Entity
@@ -94,11 +94,13 @@ class SkillRelItemRelUser
 
     /**
      * @param int $id
+     *
      * @return SkillRelItemRelUser
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -112,11 +114,13 @@ class SkillRelItemRelUser
 
     /**
      * @param SkillRelItem $skillRelItem
+     *
      * @return SkillRelItemRelUser
      */
     public function setSkillRelItem($skillRelItem)
     {
         $this->skillRelItem = $skillRelItem;
+
         return $this;
     }
 
@@ -130,11 +134,13 @@ class SkillRelItemRelUser
 
     /**
      * @param User $user
+     *
      * @return SkillRelItemRelUser
      */
     public function setUser($user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -148,11 +154,13 @@ class SkillRelItemRelUser
 
     /**
      * @param int $createdBy
+     *
      * @return SkillRelItemRelUser
      */
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 

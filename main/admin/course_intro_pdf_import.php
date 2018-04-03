@@ -73,7 +73,9 @@ Display::display_header($tool_name);
         </div>
         <div class="control-group">
             <div class="control">
-                <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
+                <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>">
+                    <?php echo get_lang('Import'); ?>
+                </button>
             </div>
         </div>
         <input type="hidden" name="formSent" value="1"/>

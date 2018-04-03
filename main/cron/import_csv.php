@@ -131,7 +131,8 @@ class ImportCsv
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
                 if (isset($fileInfo['extension']) && $fileInfo['extension'] === 'csv') {
-                    // Checking teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
+                    // Checking teachers_yyyymmdd.csv,
+                    // courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
                     $preMethod = ucwords($parts[1]);
                     $preMethod = str_replace('-static', 'Static', $preMethod);
@@ -178,9 +179,9 @@ class ImportCsv
                     } else {
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
                         echo "Trying to call $method".PHP_EOL;
-
                         echo "The file have to has this format:".PHP_EOL;
-                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
+                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, 
+                        prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
                     }
                 }
@@ -785,8 +786,12 @@ class ImportCsv
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
 
-            $expirationDateOnCreate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
-            $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
+            $expirationDateOnCreate = api_get_utc_datetime(
+                strtotime("+".intval($this->expirationDateInUserCreation)."years")
+            );
+            $expirationDateOnUpdate = api_get_utc_datetime(
+                strtotime("+".intval($this->expirationDateInUserUpdate)."years")
+            );
 
             $counter = 1;
             $secondsInYear = 365 * 24 * 60 * 60;

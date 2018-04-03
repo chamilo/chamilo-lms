@@ -1,4 +1,4 @@
-{% include template ~ '/skill/skill_wheel.js.tpl' %}
+{% include 'skill/skill_wheel.js.tpl'|get_template %}
 <script>
     /* Skill search input in the left menu */
     function check_skills_sidebar() {

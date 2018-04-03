@@ -54,7 +54,7 @@ $(function() {
 
 </script>
 
-{% include template ~ '/layout/header.js.tpl' %}
+{% include 'layout/header.js.tpl'|get_template %}
 
 {{ css_custom_file_to_string }}
 {{ css_style_print }}

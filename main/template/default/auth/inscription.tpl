@@ -1,7 +1,7 @@
 {%
     extends hide_header == true
-    ? template ~ "/layout/blank.tpl"
-    : template ~ "/layout/layout_1_col.tpl"
+    ? 'layout/blank.tpl'|get_template
+    : 'layout/layout_1_col.tpl'|get_template
 %}
 
 {% block content %}

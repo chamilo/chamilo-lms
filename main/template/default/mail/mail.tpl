@@ -23,7 +23,7 @@
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
                     <tr>
                         <td>
-                            {% include template ~ '/mail/header.tpl' %}
+                            {% include 'mail/header.tpl'|get_template %}
                         </td>
                     </tr>
                     <tr>
@@ -35,7 +35,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {% include template ~ '/mail/footer.tpl' %}
+                            {% include 'mail/footer.tpl'|get_template %}
                         </td>
                     </tr>
                 </table>

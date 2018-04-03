@@ -4,7 +4,7 @@
 {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
 {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
-{% import template ~ '/portfolio/items.html.twig' as items %}
+{% import 'portfolio/items.html.twig'|get_template as items %}
 
 {% if not allow_edit %}
     <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>

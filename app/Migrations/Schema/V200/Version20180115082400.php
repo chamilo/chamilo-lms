@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+namespace Application\Migrations\Schema\V200;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
@@ -14,7 +14,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20180115082400 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      *
@@ -26,7 +25,7 @@ class Version20180115082400 extends AbstractMigrationChamilo
         $colSession = $trackExe->getColumn('session_id');
 
         if ($colSession->getType() != Type::INTEGER) {
-            $colSession->setType(Type::INTEGER);
+            $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
         }
     }
 

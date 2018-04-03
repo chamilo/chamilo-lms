@@ -3251,6 +3251,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.10.4':
         case '1.10.6':
         case '1.10.8':
+        case '1.10.8':
             $database = new Database();
             $database->setManager($manager);
             // Migrate using the migration files located in:
@@ -3275,6 +3276,38 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     include __DIR__.'/update-configuration.inc.php';
                 }
                 error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+            }
+            // no break
+        case '1.11.0':
+        case '1.11.1':
+        case '1.11.2':
+        case '1.11.4':
+        case '1.11.6':
+        case '1.11.8':
+        case '1.11.10':
+            $database = new Database();
+            $database->setManager($manager);
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V111
+            $result = migrate(
+                200,
+                $manager
+            );
+
+            if ($result) {
+                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
+                $sql = "UPDATE settings_current SET selected_value = '2.0.0' WHERE variable = 'chamilo_database_version'";
+                $connection->executeQuery($sql);
+                if ($processFiles) {
+                    error_log('Update config files');
+                    $fromVersionShort = '1.10';
+                    include __DIR__.'/update-files-1.11.0-2.0.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include __DIR__.'/update-configuration.inc.php';
+                }
+                error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');
             } else {
                 error_log('There was an error during running migrations. Check error.log');
             }

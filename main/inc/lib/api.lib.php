@@ -2673,15 +2673,16 @@ function api_get_session_condition(
  * if (api_get_setting('show_navigation_menu') == true) //INCORRECT
  *
  * @param string $variable The variable name
- * @param string $key      The subkey (sub-variable) if any. Defaults to NULL
  *
  * @return string
  *
- * @author René Haentjens
- * @author Bart Mollet
  */
 function api_get_setting($variable)
 {
+    $settingsManager = Container::getSettingsManager();
+    if (empty($settingsManager)) {
+        return '';
+    }
     $variable = trim($variable);
     switch ($variable) {
         case 'header_extra_content':
@@ -2733,7 +2734,7 @@ function api_get_setting($variable)
             return false;
             break;
         case 'tool_visible_by_default_at_creation':
-            $values = Container::getSettingsManager()->getSetting($variable);
+            $values = $settingsManager->getSetting($variable);
             $newResult = [];
             foreach ($values as $parameter) {
                 $newResult[$parameter] = 'true';
@@ -2742,8 +2743,7 @@ function api_get_setting($variable)
             return $newResult;
             break;
         default:
-            /** @var \Doctrine\ORM\EntityManager $em */
-            return Container::getSettingsManager()->getSetting($variable);
+            return $settingsManager->getSetting($variable);
     }
 
     // Old code

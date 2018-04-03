@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
@@ -32,9 +33,32 @@ class Database
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
 
+        $config->setEntityNamespaces(
+            [
+                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
+                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
+                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
+                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
+                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
+            ]
+        );
+
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
         $connection = $entityManager->getConnection();
+
+
+        $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
+        AnnotationRegistry::registerFile(
+            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
+        );
+
+        // Registering gedmo extensions
+        AnnotationRegistry::registerAutoloadNamespace(
+            'Gedmo\Mapping\Annotation',
+            $sysPath."vendor/gedmo/doctrine-extensions/lib"
+        );
 
         $this->setConnection($connection);
         $this->setManager($entityManager);

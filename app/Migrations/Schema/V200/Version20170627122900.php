@@ -1,30 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+namespace Application\Migrations\Schema\V200;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Entity\CSurvey;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class Version20170627122900
  * @package Application\Migrations\Schema\V200
  */
-class Version20170627122900 extends AbstractMigrationChamilo implements ContainerAwareInterface
+class Version20170627122900 extends AbstractMigrationChamilo
 {
-    use ContainerAwareTrait;
-
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getEntityManager();
 
         /*if (!api_get_configuration_value('survey_answered_at_field')) {
             return;

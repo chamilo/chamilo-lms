@@ -758,6 +758,23 @@ if (@$_POST['step2']) {
             $perm = api_get_permissions_for_new_directories();
             $perm_file = api_get_permissions_for_new_files();
             migrateSwitch($my_old_version, $manager);
+
+            // Create .env file
+            $envFile = api_get_path(SYS_PATH).'.env';
+            $distFile = api_get_path(SYS_PATH).'.env.dist';
+
+            $params = [
+                '{{DATABASE_HOST}}' => $dbHostForm,
+                '{{DATABASE_PORT}}' => $dbPortForm,
+                '{{DATABASE_NAME}}' => $dbNameForm,
+                '{{DATABASE_USER}}' => $dbUsernameForm,
+                '{{DATABASE_PASSWORD}}' => $dbPassForm,
+                '{{APP_INSTALLED}}' => 1,
+                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+            ];
+
+            updateEnvFile($distFile, $envFile, $params);
+            (new Dotenv())->load($envFile);
         } else {
             set_file_folder_permissions();
             $database = connectToDatabase(

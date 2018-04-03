@@ -10,7 +10,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * Class CStudentPublicationRepository
+ * Class CStudentPublicationRepository.
+ *
  * @package Chamilo\CourseBundle\Entity\Repository
  */
 class CStudentPublicationRepository extends EntityRepository

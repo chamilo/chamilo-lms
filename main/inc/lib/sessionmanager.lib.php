@@ -3200,7 +3200,7 @@ class SessionManager
     }
 
     /**
-     * Get the session image
+     * Get the session image.
      *
      * @return image path
      */
@@ -3224,9 +3224,9 @@ class SessionManager
     }
 
     /**
-     * Get Hot Sessions (limit 8)
+     * Get Hot Sessions (limit 8).
      *
-     * @return Array with sessions
+     * @return array with sessions
      */
     public static function getHotSessions()
     {

@@ -148,7 +148,7 @@ class IndexManager
     /**
      * Alias for the online_logout() function.
      *
-     * @param bool $redirect Whether to ask online_logout to redirect to index.php or not
+     * @param bool  $redirect   Whether to ask online_logout to redirect to index.php or not
      * @param array $logoutInfo Information stored by local.inc.php before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
      */
     public function logout($redirect = true, $logoutInfo = [])
@@ -276,7 +276,7 @@ class IndexManager
         // Including the page for the news
         $html = '';
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string)file_get_contents($this->home.$_GET['include']);
+            $open = @(string) file_get_contents($this->home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
@@ -330,9 +330,9 @@ class IndexManager
         $user_selected_language = api_get_interface_language();
         $html = '';
         // Notice
-        $home_notice = @(string)file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string) file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string)file_get_contents($this->home.'home_notice.html');
+            $home_notice = @(string) file_get_contents($this->home.'home_notice.html');
         }
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
@@ -364,7 +364,7 @@ class IndexManager
         }
 
         $html = '';
-        $home_menu = @(string)file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string) file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
@@ -792,7 +792,7 @@ class IndexManager
      * @param $title
      * @param $content
      * @param string $id
-     * @param array $params
+     * @param array  $params
      * @param string $idAccordion
      * @param string $idCollapse
      *
@@ -1164,11 +1164,11 @@ class IndexManager
     /**
      * Prints the session and course list (user_portal.php).
      *
-     * @param int $user_id
-     * @param bool $showSessions
+     * @param int    $user_id
+     * @param bool   $showSessions
      * @param string $categoryCodeFilter
-     * @param bool $useUserLanguageFilterIfAvailable
-     * @param bool $loadHistory
+     * @param bool   $useUserLanguageFilterIfAvailable
+     * @param bool   $loadHistory
      *
      * @return array
      */
@@ -2463,10 +2463,10 @@ class IndexManager
     /**
      * return HTML code for session.
      *
-     * @param int $id session id
-     * @param string $title session title
-     * @param int $categorySessionId
-     * @param array $courseInfo
+     * @param int    $id                session id
+     * @param string $title             session title
+     * @param int    $categorySessionId
+     * @param array  $courseInfo
      *
      * @return string
      */
@@ -2527,9 +2527,9 @@ class IndexManager
      * Get the session coach name, duration or dates
      * when $_configuration['show_simple_session_info'] is enabled.
      *
-     * @param string $coachName
-     * @param string $dates
-     * @param string|null $duration Optional
+     * @param string      $coachName
+     * @param string      $dates
+     * @param string|null $duration  Optional
      *
      * @return string
      */
@@ -2548,7 +2548,7 @@ class IndexManager
     /**
      * Filter the course list by category code.
      *
-     * @param array $courseList course list
+     * @param array  $courseList   course list
      * @param string $categoryCode
      *
      * @return array

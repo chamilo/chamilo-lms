@@ -223,16 +223,14 @@ function accessSwitcher(accessFromReady) {
         access = accessFromReady;
         $('[name=access]').val(access);
     }
-
     if (access == 1) {
-        $('#duration').hide();
+        $('#duration_div').hide();
         $('#date_fields').show();
+        emptyDuration();
     } else {
-
-        $('#duration').show();
+        $('#duration_div').show();
         $('#date_fields').hide();
     }
-    emptyDuration();
 }
 
 function emptyDuration() {

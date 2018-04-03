@@ -785,6 +785,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
+     * @todo don't use api_get_person_name
+     *
      * @return string
      */
     public function getCompleteName()

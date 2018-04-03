@@ -1101,23 +1101,24 @@ class CourseRestorer
                 if ($new_id) {
                     $sql = "UPDATE $table_forum SET forum_id = iid WHERE iid = $new_id";
                     Database::query($sql);
-                }
+                    $this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 
-                $this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
-
-                $forum_topics = 0;
-                if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {
-                    foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
-                        if ($topic->obj->forum_id == $id) {
-                            $this->restore_topic($topic_id, $new_id, $sessionId);
-                            $forum_topics++;
+                    $forum_topics = 0;
+                    if (isset($this->course->resources[RESOURCE_FORUMTOPIC]) &&
+                        is_array($this->course->resources[RESOURCE_FORUMTOPIC])
+                    ) {
+                        foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
+                            if ($topic->obj->forum_id == $id) {
+                                $this->restore_topic($topic_id, $new_id, $sessionId);
+                                $forum_topics++;
+                            }
                         }
                     }
-                }
-                if ($forum_topics > 0) {
-                    $sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics."
-                            WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int) $new_id;
-                    Database::query($sql);
+                    if ($forum_topics > 0) {
+                        $sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics."
+                                WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int) $new_id;
+                        Database::query($sql);
+                    }
                 }
             }
         }

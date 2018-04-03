@@ -52,7 +52,7 @@ $htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
     }
-    $(window).on("load", function (e) {
+    $(window).on("load", function () {
         setFocus();
     });
 </script>';

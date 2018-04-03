@@ -280,10 +280,11 @@ EOT;
     /**
      * @param string $name
      * @param string $value
+     * @param array  $attributes
      */
-    public function addHidden($name, $value)
+    public function addHidden($name, $value, $attributes = [])
     {
-        $this->addElement('hidden', $name, $value);
+        $this->addElement('hidden', $name, $value, $attributes);
     }
 
     /**
@@ -1745,7 +1746,7 @@ EOT;
                 previewMaxHeight: 50,
                 previewCrop: true,
                 dropzone: $('#dropzone'),                                
-            }).on('fileuploadadd', function (e, data) {
+            }).on('fileuploadadd', function (e, data) {                
                 data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);                    
@@ -1756,13 +1757,9 @@ EOT;
                     file = data.files[index],
                     node = $(data.context.children()[index]);
                 if (file.preview) {
-                    data.context
-                        .prepend($('<div class=\"col-sm-2\">').html(file.preview))
-                    ;
+                    data.context.prepend($('<div class=\"col-sm-2\">').html(file.preview));
                 } else {
-                    data.context
-                        .prepend($('<div class=\"col-sm-2\">').html('".$icon."'))
-                    ;
+                    data.context.prepend($('<div class=\"col-sm-2\">').html('".$icon."'));
                 }
                 if (index + 1 === data.files.length) {
                     data.context.find('button')
@@ -1784,15 +1781,20 @@ EOT;
                         $(data.context.children()[index]).parent().wrap(link);
                         // Update file name with new one from Chamilo
                         $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                        var successMessage = $('<div class=\"col-sm-3\">').html(
+                        var message = $('<div class=\"col-sm-3\">').html(
                             $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                         );
-                        $(data.context.children()[index]).parent().append(successMessage);                    
+                        $(data.context.children()[index]).parent().append(message);                    
                     } else if (file.error) {
-                        var error = $('<div class=\"col-sm-3\">').html(
+                        var link = $('<div>')
+                            .attr({class : 'panel-image'})                            ;
+                        $(data.context.children()[index]).parent().wrap(link);
+                        // Update file name with new one from Chamilo
+                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                        var message = $('<div class=\"col-sm-3\">').html(
                             $('<span class=\"message-image-danger\"/>').text(file.error)
                         );
-                        $(data.context.children()[index]).parent().append(error);                        
+                        $(data.context.children()[index]).parent().append(message);
                     }
                 });                
                 $('#dropzone').removeClass('hover');                

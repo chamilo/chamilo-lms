@@ -9,7 +9,7 @@ Feature: Course tools basic testing
     Given I am a platform administrator
 
   Scenario: See the courses list
-    And I am on "/main/admin/course_list.php"
+    Given I am on "/main/admin/course_list.php"
     Then I should see "Course list"
     And I should not see "not authorized"
 

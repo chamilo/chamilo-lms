@@ -12,7 +12,6 @@ Feature: Exercise tool
     When I fill in the following:
       | category_name | Category 1 |
     And I fill in ckeditor field "category_description" with "Category 1 description"
-
     And I press "SubmitNote"
     Then I should see "Category added"
 

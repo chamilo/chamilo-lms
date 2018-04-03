@@ -26,7 +26,7 @@ Feature: User login
     Given I am an HR manager
     Then I should not see an ".alert-danger" element
 
-  Scenario: Login as student bott successfully
+  Scenario: Login as student boss successfully
     Given I am a student boss
     Then I should not see an ".alert-danger" element
 

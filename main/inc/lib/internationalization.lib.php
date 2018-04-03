@@ -420,10 +420,6 @@ function api_get_local_time(
     if (is_null($from_timezone)) {
         $from_timezone = 'UTC';
     }
-    // Determining the timezone to be converted to
-    if (is_null($to_timezone)) {
-        $to_timezone = api_get_timezone();
-    }
 
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
@@ -433,6 +429,7 @@ function api_get_local_time(
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s');
     }
+
     if (is_numeric($time)) {
         $time = intval($time);
         if ($return_null_if_invalid_date) {
@@ -450,6 +447,11 @@ function api_get_local_time(
     }
 
     try {
+        // Determining the timezone to be converted to
+        if (is_null($to_timezone)) {
+            $to_timezone = api_get_timezone();
+        }
+
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
 
@@ -789,8 +791,7 @@ function api_get_months_long($language = null)
  * @param string     $language   (optional)
  *                               The language id. If it is omitted, the current interface language is assumed.
  *                               This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
- * @param string     $encoding   (optional)    The used internally by this function
- *                               character encoding. If it is omitted, the platform character set will be used by default.
+ * @param string     $username
  *
  * @return string The result is sort of full name of the person.
  *                Sample results:
@@ -809,7 +810,6 @@ function api_get_person_name(
     $title = null,
     $format = null,
     $language = null,
-    $encoding = null,
     $username = null
 ) {
     static $valid = [];
@@ -2186,7 +2186,8 @@ function _api_get_character_map_name($encoding)
  */
 
 /**
- * A reverse function from php-core function strnatcmp(), performs string comparison in reverse natural (alpha-numerical) order.
+ * A reverse function from php-core function strnatcmp(),
+ * performs string comparison in reverse natural (alpha-numerical) order.
  *
  * @param string $string1 the first string
  * @param string $string2 the second string
@@ -2201,10 +2202,11 @@ function _api_strnatrcmp($string1, $string2)
 /**
  * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.
  *
- * @param string $encoding (optional)	When this parameter is given, the function sets the internal encoding
+ * @param string $encoding (optional)    When this parameter is given, the function sets the internal encoding
  *
  * @return string When $encoding parameter is not given, the function returns the internal encoding.
- *                Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
+ *                Note: This function is used in the global initialization script for setting the
+ *                internal encoding to the platform's character set.
  *
  * @see http://php.net/manual/en/function.mb-internal-encoding
  */

@@ -111,7 +111,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     *
      * @Given /^I am logged as "([^"]*)"$/
      */
     public function iAmLoggedAs($username)

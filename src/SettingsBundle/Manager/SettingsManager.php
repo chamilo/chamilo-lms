@@ -760,7 +760,9 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
         $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy(['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]);
+        $persistedParameters = $this->repository->findBy(
+            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
+        );
         $persistedParametersMap = [];
 
         foreach ($persistedParameters as $parameter) {

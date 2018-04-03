@@ -6630,6 +6630,7 @@ class DocumentManager
      */
     private static function getButtonEdit($isReadOnly, array $documentData, $extension, $isCertificateMode)
     {
+        $extension = strtolower($extension);
         $iconEn = Display::return_icon('edit.png', get_lang('Modify'));
         $iconDis = Display::return_icon('edit_na.png', get_lang('Modify'));
         $courseParams = api_get_cidreq();
@@ -6657,8 +6658,8 @@ class DocumentManager
             }
 
             if (
-                in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif']) ||
-                ($extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true')
+                in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
+                    api_get_setting('enabled_support_pixlr') == 'true'
             ) {
                 return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
             }
@@ -6695,8 +6696,8 @@ class DocumentManager
         }
 
         if (
-            in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif']) ||
-            ($extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true')
+            in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
+                api_get_setting('enabled_support_pixlr') == 'true'
         ) {
             return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
         }

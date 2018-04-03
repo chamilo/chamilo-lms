@@ -9,7 +9,7 @@ default:
                 browser: chrome
             default_session: selenium2
             javascript_session: selenium2
-            files_path: "%paths.base%/../../public/"
+            files_path: "%paths.base%/../../"
     suites:
         default:
             paths: ["%paths.base%/features"]

@@ -176,7 +176,7 @@ $data = [];
 foreach ($categories as $item) {
     $categoryId = $item->getId();
 
-    if (!learnpath::categoryIsVisibleForStudent($item, $user)) {
+    if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
         continue;
     }
 
@@ -889,6 +889,12 @@ foreach ($categories as $item) {
 // Deleting the objects
 Session::erase('oLP');
 Session::erase('lpobject');
+Session::erase('scorm_view_id');
+Session::erase('scorm_item_id');
+Session::erase('exerciseResult');
+Session::erase('objExercise');
+Session::erase('questionList');
+
 learnpath::generate_learning_path_folder($courseInfo);
 DocumentManager::removeGeneratedAudioTempFile();
 

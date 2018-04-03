@@ -3340,7 +3340,7 @@ class Exercise
         $hotspot_delineation_result = [],
         $showTotalScoreAndUserChoicesInLastAttempt = true
     ) {
-        global $debug;
+        $debug = false;
         //needed in order to use in the exercise_attempt() for the time
         global $learnpath_id, $learnpath_item_id;
         require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
@@ -3354,7 +3354,7 @@ class Exercise
             error_log('$from:  '.$from);
             error_log('$saved_results: '.intval($saved_results));
             error_log('$from_database: '.intval($from_database));
-            error_log('$show_result: '.$show_result);
+            error_log('$show_result: '.intval($show_result));
             error_log('$propagate_neg: '.$propagate_neg);
             error_log('$exerciseResultCoordinates: '.print_r($exerciseResultCoordinates, 1));
             error_log('$hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
@@ -3706,6 +3706,9 @@ class Exercise
                                     exe_id = $exeId AND
                                     question_id= ".intval($questionId);
                         $result = Database::query($sql);
+                        if ($debug) {
+                            error_log($sql);
+                        }
                         $str = $answerFromDatabase = Database::result($result, 0, 'answer');
                     }
 
@@ -3866,11 +3869,20 @@ class Exercise
                                 $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
                                 $correctAnswer = $listCorrectAnswers['words'][$i];
 
+                                if ($debug) {
+                                    error_log("Student answer: $i");
+                                    error_log($studentAnswer);
+                                }
+
                                 // This value is the user input, not escaped while correct answer is escaped by ckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
                                 // ENT_QUOTES is used in order to transform ' to &#039;
                                 if (!$from_database) {
                                     $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
+                                    if ($debug) {
+                                        error_log("Student answer cleaned:");
+                                        error_log($studentAnswer);
+                                    }
                                 }
 
                                 $isAnswerCorrect = 0;
@@ -3881,9 +3893,15 @@ class Exercise
                                     $totalScore += $answerWeighting[$i];
                                     $isAnswerCorrect = 1;
                                 }
+                                if ($debug) {
+                                    error_log("isAnswerCorrect $i: $isAnswerCorrect");
+                                }
 
                                 $studentAnswerToShow = $studentAnswer;
                                 $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
+                                if ($debug) {
+                                    error_log("Fill in blank type: $type");
+                                }
                                 if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
                                     $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
                                     if ($studentAnswer != '') {
@@ -3907,6 +3925,11 @@ class Exercise
                             for ($i = 0; $i < count($listStudentAnswerTemp); $i++) {
                                 $studentAnswer = trim($listStudentAnswerTemp[$i]);
                                 $studentAnswerToShow = $studentAnswer;
+
+                                if ($debug) {
+                                    error_log("Student answer: $i");
+                                    error_log($studentAnswer);
+                                }
 
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {

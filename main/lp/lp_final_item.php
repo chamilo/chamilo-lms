@@ -110,7 +110,6 @@ if ($accessGranted == false) {
     );
     // If not gradebook has been defined
     if (empty($catLoad)) {
-        // TODO: Missing validation of learning path completion
         $finalItemTemplate = generateLPFinalItemTemplate(
             $id,
             $courseCode,

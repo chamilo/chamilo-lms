@@ -92,7 +92,8 @@ class Course
 
     /**
      * Returns sample text based on the imported course content.
-     * This sample text is to be used for course language or encoding detection if there is missing (meta)data in the archive.
+     * This sample text is to be used for course language or encoding
+     * detection if there is missing (meta)data in the archive.
      *
      * @return string the resulting sample text extracted from some common resources' data fields
      */
@@ -283,7 +284,7 @@ class Course
                             $resource->question = api_to_system_encoding($resource->question, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             if (is_array($resource->answers) && count($resource->answers) > 0) {
-                                foreach ($resource->answers as $index => &$answer) {
+                                foreach ($resource->answers as &$answer) {
                                     $answer['answer'] = api_to_system_encoding($answer['answer'], $this->encoding);
                                     $answer['comment'] = api_to_system_encoding($answer['comment'], $this->encoding);
                                 }

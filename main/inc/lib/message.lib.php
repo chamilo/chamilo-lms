@@ -1077,15 +1077,25 @@ class MessageManager
             $userInfo = api_get_user_info($senderId);
             if ($request === true) {
                 $message[1] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.$userInfo['complete_name_with_username'].'</a>';
-                $message[2] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.str_replace("\\", "", $title).'</a>';
+                $message[2] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.str_replace(
+                        "\\",
+                        "",
+                        $title
+                    ).'</a>';
                 //date stays the same
                 $message[3] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
-                $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="delete_one_message_outbox('.$messageId.')" href="javascript:void(0)"  >'.
+                $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(
+                        get_lang('DeleteMessage')
+                    ).'" onclick="delete_one_message_outbox('.$messageId.')" href="javascript:void(0)"  >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             } else {
                 $message[1] = '<a '.$class.' onclick="show_sent_message('.$messageId.')" href="../messages/view_message.php?id_send='.$messageId.'">'.$title.'</a><br />'.$userInfo['complete_name_with_username'];
                 $message[2] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
-                $message[3] = '<a title="'.addslashes(get_lang('DeleteMessage')).'" href="outbox.php?action=deleteone&id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.
+                $message[3] = '<a title="'.addslashes(
+                        get_lang('DeleteMessage')
+                    ).'" href="outbox.php?action=deleteone&id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(
+                        api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                    )."'".')) return false;" >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             }
 

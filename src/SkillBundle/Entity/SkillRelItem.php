@@ -27,7 +27,7 @@ class SkillRelItem
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="items")
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
-     **/
+     */
     protected $skill;
 
     /**
@@ -92,7 +92,7 @@ class SkillRelItem
     protected $sessionId;
 
     /**
-     * @var \DateTime $created
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -100,7 +100,7 @@ class SkillRelItem
     protected $createdAt;
 
     /**
-     * @var \DateTime $updated
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
@@ -222,11 +222,13 @@ class SkillRelItem
 
     /**
      * @param bool $requiresValidation
+     *
      * @return SkillRelItem
      */
     public function setRequiresValidation($requiresValidation)
     {
         $this->requiresValidation = $requiresValidation;
+
         return $this;
     }
 
@@ -240,11 +242,13 @@ class SkillRelItem
 
     /**
      * @param bool $isReal
+     *
      * @return SkillRelItem
      */
     public function setIsReal($isReal)
     {
         $this->isReal = $isReal;
+
         return $this;
     }
 
@@ -258,11 +262,13 @@ class SkillRelItem
 
     /**
      * @param \DateTime $createdAt
+     *
      * @return SkillRelItem
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -276,11 +282,13 @@ class SkillRelItem
 
     /**
      * @param \DateTime $updatedAt
+     *
      * @return SkillRelItem
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -294,11 +302,13 @@ class SkillRelItem
 
     /**
      * @param int $createdBy
+     *
      * @return SkillRelItem
      */
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 
@@ -312,11 +322,13 @@ class SkillRelItem
 
     /**
      * @param int $updatedBy
+     *
      * @return SkillRelItem
      */
     public function setUpdatedBy($updatedBy)
     {
         $this->updatedBy = $updatedBy;
+
         return $this;
     }
 
@@ -330,11 +342,13 @@ class SkillRelItem
 
     /**
      * @param int $itemType
+     *
      * @return SkillRelItem
      */
     public function setItemType($itemType)
     {
         $this->itemType = $itemType;
+
         return $this;
     }
 
@@ -348,11 +362,13 @@ class SkillRelItem
 
     /**
      * @param int $courseId
+     *
      * @return SkillRelItem
      */
     public function setCourseId($courseId)
     {
         $this->courseId = $courseId;
+
         return $this;
     }
 
@@ -366,6 +382,7 @@ class SkillRelItem
 
     /**
      * @param int $sessionId
+     *
      * @return SkillRelItem
      */
     public function setSessionId($sessionId)

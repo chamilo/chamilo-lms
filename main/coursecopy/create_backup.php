@@ -46,8 +46,6 @@ Display::display_header($nameTools);
 // Display the tool title
 echo Display::page_header($nameTools);
 
-/*	MAIN CODE */
-
 if (Security::check_token('post') && (
         (
             isset($_POST['action']) &&
@@ -70,7 +68,9 @@ if (Security::check_token('post') && (
 
     $zip_file = CourseArchiver::createBackup($course);
     echo Display::return_message(get_lang('BackupCreated'), 'confirm');
-    echo '<br /><a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zip_file.'&'.api_get_cidreq().'">
+    echo '<br />
+        <a class="btn btn-primary btn-large" 
+        href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zip_file.'&'.api_get_cidreq().'">
     '.get_lang('Download').'</a>';
 } elseif (Security::check_token('post') && (
         isset($_POST['backup_option']) &&

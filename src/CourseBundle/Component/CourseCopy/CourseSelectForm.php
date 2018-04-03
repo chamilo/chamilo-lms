@@ -370,7 +370,10 @@ class CourseSelectForm
                     switch ($type) {
                         case RESOURCE_QUIZQUESTION:
                             foreach ($resources as $id => $resource) {
-                                echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
+                                echo '<input 
+                                    type="hidden" 
+                                    name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" 
+                                    id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
                             }
                             break;
                     }
@@ -390,7 +393,10 @@ class CourseSelectForm
                     switch ($type) {
                         case RESOURCE_SCORM:
                             foreach ($resources as $id => $resource) {
-                                echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.']" id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
+                                echo '<input 
+                                    type="hidden" 
+                                    name="resource['.RESOURCE_SCORM.']['.$id.']" 
+                                    id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
                             }
                             break;
                     }
@@ -702,7 +708,8 @@ class CourseSelectForm
             }
         }
         if ($avoid_serialize) {
-            //Documents are avoided due the huge amount of memory that the serialize php function "eats" (when there are directories with hundred/thousand of files)
+            // Documents are avoided due the huge amount of memory that the serialize php
+            // function "eats" (when there are directories with hundred/thousand of files)
             // this is a known issue of serialize
             $course->resources['document'] = null;
         }
@@ -713,7 +720,9 @@ class CourseSelectForm
                 echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
             }
         }
-        echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
+        echo '<br /><button class="save" type="submit" 
+            onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
+            get_lang('Ok').'</button>';
         self::display_hidden_quiz_questions($course);
         self::display_hidden_scorm_directories($course);
         echo '</form>';

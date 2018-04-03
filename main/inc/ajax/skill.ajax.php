@@ -34,18 +34,21 @@ switch ($action) {
         }
         break;
     case 'find_skills':
-        $skills = $skill->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['q']]]);
-        $return_skills = [[
+        $returnSkills = [[
             'items' => [],
         ]];
-        foreach ($skills as $skill) {
-            $return_skills['items'][] = [
-                'id' => $skill['id'],
-                'text' => $skill['name'],
-            ];
+
+        if (isset($_REQUEST['q']) && !empty($_REQUEST['q'])) {
+            $skills = $skill->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['q']]]);
+            foreach ($skills as $skill) {
+                $returnSkills['items'][] = [
+                    'id' => $skill['id'],
+                    'text' => $skill['name'],
+                ];
+            }
         }
         header('Content-Type: application/json');
-        echo json_encode($return_skills);
+        echo json_encode($returnSkills);
         break;
     case 'get_gradebooks':
         $gradebooks = $gradebook_list = $gradebook->get_all();
@@ -64,12 +67,14 @@ switch ($action) {
         echo json_encode($gradebook_list);
         break;
     case 'find_gradebooks':
-        $gradebooks = $gradebook->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['tag']]]);
         $return = [];
-        foreach ($gradebooks as $item) {
-            $item['key'] = $item['name'];
-            $item['value'] = $item['id'];
-            $return[] = $item;
+        if (isset($_REQUEST['tag']) && !empty($_REQUEST['tag'])) {
+            $gradebooks = $gradebook->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['tag']]]);
+            foreach ($gradebooks as $item) {
+                $item['key'] = $item['name'];
+                $item['value'] = $item['id'];
+                $return[] = $item;
+            }
         }
         echo json_encode($return);
         break;
@@ -207,7 +212,7 @@ switch ($action) {
         break;
     case 'profile_matches':
         $skill_rel_user = new SkillRelUser();
-        $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : []);
+        $skills = !empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : [];
         $total_skills_to_search = $skills;
         $users = $skill_rel_user->getUserBySkills($skills);
         $user_list = [];
@@ -342,22 +347,23 @@ switch ($action) {
         }
         break;
     case 'search_skills':
-        $skills = $skill->find(
-            'all',
-            [
-                'where' => ['name LIKE %?% ' => $_REQUEST['q']],
-            ]
-        );
         $returnSkills = [];
-        foreach ($skills as $skill) {
-            $returnSkills[] = [
-                'id' => $skill['id'],
-                'text' => $skill['name'],
-            ];
+        if (isset($_REQUEST['q']) && !empty($_REQUEST['q'])) {
+            $skills = $skill->find(
+                'all',
+                [
+                    'where' => ['name LIKE %?% ' => $_REQUEST['q']],
+                ]
+            );
+            foreach ($skills as $skill) {
+                $returnSkills[] = [
+                    'id' => $skill['id'],
+                    'text' => $skill['name'],
+                ];
+            }
         }
-        echo json_encode([
-            'items' => $returnSkills,
-        ]);
+
+        echo json_encode(['items' => $returnSkills]);
         break;
     case 'search_skills_in_course':
         $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;

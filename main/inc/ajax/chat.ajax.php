@@ -57,7 +57,7 @@ switch ($action) {
         $chat->startSession();
         break;
     case 'get_previous_messages':
-        $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+        $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
         $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : null;
         if (empty($userId)) {
             return '';

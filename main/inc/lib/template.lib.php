@@ -513,7 +513,7 @@ class Template
     }
 
     /**
-     * Call non-static for Template::findTemplateFilePath
+     * Call non-static for Template::findTemplateFilePath.
      *
      * @see Template::findTemplateFilePath()
      *

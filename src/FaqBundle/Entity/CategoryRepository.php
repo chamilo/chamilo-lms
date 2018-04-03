@@ -65,7 +65,6 @@ class CategoryRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
-
     /**
      * @return Category|null
      */

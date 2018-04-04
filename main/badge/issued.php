@@ -51,14 +51,11 @@ if (!$user || !$skill) {
     exit;
 }
 
-Skill::isAllowed($user->getId());
+if (!Skill::isToolAvailable()) {
+    api_not_allowed(true);
+}
 
 $showLevels = api_get_configuration_value('hide_skill_levels') === false;
-
-$userInfo = [
-    'id' => $user->getId(),
-    'complete_name' => $user->getCompleteName(),
-];
 
 $skillInfo = [
     'id' => $skill->getId(),
@@ -83,7 +80,8 @@ $htmlHeadXtra[] = "
 
 $currentUserId = api_get_user_id();
 $currentUser = api_get_user_entity($currentUserId);
-$allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
+$allowExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
+
 $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
 $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
 $currentSkillLevel = get_lang('NoLevelAcquiredYet');
@@ -177,7 +175,9 @@ if ($profile) {
     }
 }
 
-if ($showLevels) {
+$allowToEdit = Skill::isAllowed($user->getId(), false);
+
+if ($showLevels && $allowToEdit) {
     $formAcquiredLevel = new FormValidator('acquired_level');
     $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
     $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
@@ -212,7 +212,7 @@ $form->addHidden('user', $skillIssue->getUser()->getId());
 $form->addHidden('issue', $skillIssue->getId());
 $form->addButtonSend(get_lang('Send'));
 
-if ($form->validate() && $allowComment) {
+if ($form->validate() && $allowComment && $allowToEdit) {
     $values = $form->exportValues();
     $skillUserComment = new SkillRelUserComment();
     $skillUserComment
@@ -233,7 +233,7 @@ if ($form->validate() && $allowComment) {
 
 $badgeInfoError = '';
 $personalBadge = '';
-if ($allowDownloadExport) {
+if ($allowExport) {
     $backpack = 'https://backpack.openbadges.org/';
     $configBackpack = api_get_setting('openbadges_backpack');
 
@@ -267,7 +267,7 @@ if ($allowDownloadExport) {
             file_put_contents($bakedBadge."/badge_".$skillRelUserId.".png", $bakedInfo);
         }
 
-        //Process to validate a baked badge
+        // Process to validate a baked badge
         $badgeContent = file_get_contents($bakedBadge."/badge_".$skillRelUserId.".png");
         $verifyBakedBadge = $png->extractBadgeInfo($badgeContent);
         if (!is_array($verifyBakedBadge)) {
@@ -284,7 +284,7 @@ if ($allowDownloadExport) {
 $template = new Template(get_lang('IssuedBadgeInformation'));
 $template->assign('issue_info', $skillIssueInfo);
 $template->assign('allow_comment', $allowComment);
-$template->assign('allow_download_export', $allowDownloadExport);
+$template->assign('allow_export', $allowExport);
 $template->assign('comment_form', $form->returnForm());
 if ($showLevels) {
     $template->assign('acquired_level_form', $formAcquiredLevel->returnForm());

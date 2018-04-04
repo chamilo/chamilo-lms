@@ -1586,7 +1586,6 @@ class AnnouncementManager
                             $extraGroupCondition
                         $groupBy
                         ORDER BY display_order DESC";
-            //GROUP BY ip.ref
             } else {
                 // A.3 you are a course admin without any group or user filter
                 // A.3.a you are a course admin without user or group filter but WITH studentview
@@ -1605,8 +1604,6 @@ class AnnouncementManager
                                 $searchCondition
                             $groupBy
                             ORDER BY display_order DESC";
-
-                //GROUP BY ip.ref
                 } else {
                     // A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
                     // => see all the messages of all the users and groups with editing possibilities

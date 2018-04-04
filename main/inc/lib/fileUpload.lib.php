@@ -2055,6 +2055,7 @@ function add_all_documents_in_folder_to_database(
                     $whatIfFileExists
                 );
             } else {
+                // Rename
                 $uploadedFile = [
                     'name' => $file,
                     'tmp_name' => $sysFolderPath,

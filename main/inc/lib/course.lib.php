@@ -84,16 +84,15 @@ class CourseManager
                 $params['wanted_code'] = self::generate_course_code($substring);
             }
         }
+
         // Create the course keys
         $keys = AddCourse::define_course_keys($params['wanted_code']);
-
         $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
 
         if (count($keys)) {
             $params['code'] = $keys['currentCourseCode'];
             $params['visual_code'] = $keys['currentCourseId'];
             $params['directory'] = $keys['currentCourseRepository'];
-
             $course_info = api_get_course_info($params['code']);
             if (empty($course_info)) {
                 $course_id = AddCourse::register_course($params);
@@ -3820,7 +3819,7 @@ class CourseManager
                     course_rel_user.status status,
                     course.code as course_code,
                     user_course_cat,
-                    course_rel_user.sort                     
+                    course_rel_user.sort
                 FROM $TABLECOURS course 
                 INNER JOIN $TABLECOURSUSER course_rel_user
                 ON (course.id = course_rel_user.c_id)
@@ -5027,7 +5026,7 @@ class CourseManager
             $my_course['is_registered'] = $userRegistered;
             $my_course['title_cut'] = cut($course_info['title'], 45);
 
-            //Course visibility
+            // Course visibility
             if ($access_link && in_array('register', $access_link)) {
                 $my_course['register_button'] = Display::url(
                     get_lang('Subscribe').' '.

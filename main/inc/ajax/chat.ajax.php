@@ -35,7 +35,6 @@ if (!isset($_SESSION['openChatBoxes'])) {
 }
 
 $chat = new Chat();
-
 if (Chat::disableChat()) {
     exit;
 }
@@ -44,7 +43,6 @@ if ($chat->isChatBlockedByExercises()) {
     $chat->setUserStatus(0);
     exit;
 }
-
 switch ($action) {
     case 'chatheartbeat':
         $chat->heartbeat();

@@ -2034,7 +2034,6 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
  * @uses    lp_ajax_switch_item.php
  */
 function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
-
     var params = {
         'lid': lms_lp_id,
         'uid': lms_user_id,
@@ -2157,7 +2156,6 @@ function attach_glossary_into_scorm(type) {
 
                 var complex_array = new Array();
                 $("iframe").contents().find("body").on("click", ".glossary-ajax", function() {
-
                 div_show_id="div_show_id";
                 div_content_id="div_content_id";
 
@@ -2260,7 +2258,6 @@ function attach_glossary_into_scorm(type) {
                 objects.each(function (value, obj) {
                     var dialogId = this.id +'_dialog';
                     var openerId = this.id +'_opener';
-
                     var link = '<a id="'+openerId+'" href="#" class="generated btn">'+
                         '<div style="text-align: center"><img src="<?php echo Display::returnIconPath('play-circle-8x.png'); ?>"/><br />If video does not work, try clicking here.</div></a>';
                     var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
@@ -2373,6 +2370,5 @@ function attach_glossary_into_scorm(type) {
                 });
             });
         }
-
     }
 }

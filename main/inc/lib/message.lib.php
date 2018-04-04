@@ -558,9 +558,9 @@ class MessageManager
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(
-                            get_lang('CopyOfMessageSentToXUser'),
-                            $userInfo['complete_name']
-                        ).' <br />'.$message;
+                        get_lang('CopyOfMessageSentToXUser'),
+                        $userInfo['complete_name']
+                    ).' <br />'.$message;
 
                     self::send_message_simple(
                         $drhInfo['user_id'],

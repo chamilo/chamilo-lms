@@ -115,18 +115,48 @@ if (!$is_allowed_to_edit) {
 
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
-
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
 $htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
 </script>';
+$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
+    
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
+        
+    $(".scorm_item_normal").qtip({       
+        content: {
+            text: function(event, api) {
+                var item = $(this);                 
+                var itemId = $(this).attr("id");
+                itemId = itemId.replace("toc_", "");
+                var textToShow = "";
+                $.ajax({
+                    type: "GET",
+                    url: "'.$ajaxUrl.'&item_id="+ itemId,            
+                    async: false                 
+                })
+                .then(function(content) {                    
+                    if (content == 0) {
+                        textToShow = "'.addslashes(get_lang('YouNeedToCompletePrerequisites')).'";
+                    } else {
+                        textToShow = "'.addslashes(get_lang('ReadyToGo')).'";
+                    }                   
+                    // Set the tooltip content upon successful retrieval
+                    //api.set(\'content.text\', "content");                    
+                    return textToShow;
+                });
+                return textToShow;                
+            }
+        }
+    }); 
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';

@@ -41,7 +41,6 @@ switch ($action) {
             false,
             $folderId
         );
-
         break;
     case 'add_lp_item':
         if (api_is_allowed_to_edit(null, true)) {
@@ -313,6 +312,22 @@ switch ($action) {
         }
 
         echo $response;
+        break;
+    case 'get_item_prerequisites':
+        /** @var learnpath $lp */
+        $lp = Session::read('oLP');
+        $itemId = isset($_GET['item_id']) ? (int) $_GET['item_id'] : 0;
+        if (empty($lp) || empty($itemId)) {
+            exit;
+        }
+        $result = $lp->prerequisites_match($itemId);
+        if ($result) {
+            echo '1';
+        } else {
+            echo '0';
+        }
+        exit;
+
         break;
     default:
         echo '';

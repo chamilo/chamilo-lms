@@ -115,20 +115,45 @@
 
 {% import _self as blocks %}
 
+{% set session_image = 'window_list.png'|img(32, row.title) %}
+
 {% for row in session %}
     <div id="session-{{ item.id }}" class="session panel panel-default">
-        <div class="panel-heading">
-            <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                 alt="{{ row.title }}" title="{{ row.title }}"/>
-            {{ row.title }}
-            {% if row.edit_actions != '' %}
-                <div class="pull-right">
-                    <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
+        {% if row.course_list_session_style %} {# If not style then no show header #}
+            <div class="panel-heading">
+                {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %} {# Session link #}
+                    {% if remove_session_url == true %}
+                        {{ session_image }} {{ row.title }}
+                    {% else %}
+                        {# Default link #}
+                        {% set session_link = _p.web_main ~ 'session/index.php?session_id=' ~ row.id %}
+
+                        {% if row.course_list_session_style == 2 and row.courses|length == 1 %}
+                            {# Linkt to first course #}
+                            {% set session_link = row.courses.0.link %}
+                        {% endif %}
+
+                        <a href="{{ session_link }}">
+                            {{ session_image }} {{ row.title }}
+                        </a>
+                    {% endif %}
+                {% elseif row.course_list_session_style == 3 %} {# Collapsible panel #}
+                    {# Foldable #}
+                    <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
+                       aria-expanded="false">
+                        {{ session_image }} {{ row.title }}
                     </a>
-                </div>
-            {% endif %}
-        </div>
+                {% endif %}
+
+                {% if row.edit_actions != '' %}
+                    <div class="pull-right">
+                        <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="panel-body">
             {% if row.show_description %}
                 {{ row.description }}

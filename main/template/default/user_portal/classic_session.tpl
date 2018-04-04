@@ -1,44 +1,45 @@
+{% set session_image = 'window_list.png'|img(32, row.title) %}
+
 {% for row in session %}
     <div class="panel panel-default">
         {% if not row.show_simple_session_info %}
             {% set collapsable = '' %}
-            <div class="panel-heading">
-                {% if row.course_list_session_style == 1 %}
-                    {# Classic #}
-                    {% if remove_session_url == true %}
-                        <a style="cursor:default">
-                    {% else %}
-                        <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
-                    {% endif %}
+            {% if row.course_list_session_style %} {# If not style then no show header #}
+                <div class="panel-heading">
+                    {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %} {# Session link #}
+                        {% if remove_session_url == true %}
+                            {{ session_image }} {{ row.title }}
+                        {% else %}
+                            {# Default link #}
+                            {% set session_link = _p.web_main ~ 'session/index.php?session_id=' ~ row.id %}
 
-                    <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                         alt="{{ row.title }}" title="{{ row.title }}">
-                    {{ row.title }}
-                    </a>
-                {% elseif row.course_list_session_style == 2 %}
-                    {# No link #}
-                    <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                         alt="{{ row.title }}" title="{{ row.title }}">
-                    {{ row.title }}
-                {% elseif row.course_list_session_style == 3 %}
-                    {# Foldable #}
-                    <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
-                       aria-expanded="false">
-                        <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                             alt="{{ row.title }}" title="{{ row.title }}">
-                        {{ row.title }}
-                    </a>
-                    {% set collapsable = 'collapse' %}
-                {% endif %}
-                {% if row.show_actions %}
-                    <div class="pull-right">
-                        <a href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ row.id }}">
-                            <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
-                                 title="{{ "Edit"|get_lang }}">
+                            {% if row.course_list_session_style == 2 and row.courses|length == 1 %}
+                                {# Linkt to first course #}
+                                {% set session_link = row.courses.0.link %}
+                            {% endif %}
+
+                            <a href="{{ session_link }}">
+                                {{ session_image }} {{ row.title }}
+                            </a>
+                        {% endif %}
+                    {% elseif row.course_list_session_style == 3 %} {# Collapsible panel #}
+                        {# Foldable #}
+                        <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
+                           aria-expanded="false">
+                            {{ session_image }} {{ row.title }}
                         </a>
-                    </div>
-                {% endif %}
-            </div>
+                        {% set collapsable = 'collapse' %}
+                    {% endif %}
+                    {% if row.show_actions %}
+                        <div class="pull-right">
+                            <a href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ row.id }}">
+                                <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
+                                     title="{{ "Edit"|get_lang }}">
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
             <div class="session panel-body {{ collapsable }}" id="collapse_{{ row.id }}">
                 <div class="row">
                     <div class="col-md-12">

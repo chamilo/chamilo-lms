@@ -1085,9 +1085,7 @@ class ExtraFieldValue extends Model
         $valueList = [];
         /** @var ExtraFieldValues $fieldValue */
         foreach ($fieldValues as $fieldValue) {
-            $item = [
-                'value' => $fieldValue,
-            ];
+            $item = ['value' => $fieldValue];
             switch ($fieldValue->getField()->getFieldType()) {
                 case ExtraField::FIELD_TYPE_SELECT:
                     $item['option'] = $fieldOptionsRepo->findOneBy([
@@ -1096,7 +1094,6 @@ class ExtraFieldValue extends Model
                     ]);
                     break;
             }
-
             $valueList[] = $item;
         }
 

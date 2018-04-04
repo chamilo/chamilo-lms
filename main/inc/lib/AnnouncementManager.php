@@ -38,11 +38,21 @@ class AnnouncementManager
 
         $tags[] = '((teachers))';
 
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ?' => 1]);
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extra) {
+                $tags[] = "((extra_".$extra['variable']."))";
+            }
+        }
+
         if (!empty(api_get_session_id())) {
             $tags[] = '((coaches))';
             $tags[] = '((general_coach))';
             $tags[] = '((general_coach_email))';
         }
+
+
 
         return $tags;
     }
@@ -61,18 +71,15 @@ class AnnouncementManager
         $courseCode,
         $sessionId = 0
     ) {
-        $readerInfo = api_get_user_info($userId);
+        $readerInfo = api_get_user_info($userId, false, false, true, true);
         $courseInfo = api_get_course_info($courseCode);
-        $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
-            $courseInfo['code']
-        );
+        $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
 
         $generalCoachName = '';
         $generalCoachEmail = '';
         $coaches = '';
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
-
             $coaches = CourseManager::get_coachs_from_course_to_string(
                 $sessionId,
                 $courseInfo['real_id']
@@ -100,13 +107,38 @@ class AnnouncementManager
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
 
+        if (!empty($readerInfo)) {
+            $extraField = new ExtraField('user');
+            $extraFields = $extraField->get_all(['filter = ?' => 1]);
+            if (!empty($extraFields)) {
+                foreach ($extraFields as $extra) {
+                    $data["extra_".$extra['variable']] = '';
+                }
+            }
+
+            if (!empty($readerInfo['extra'])) {
+                foreach ($readerInfo['extra'] as $extra) {
+                    if (isset($extra['value'])) {
+                        /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
+                        $value = $extra['value'];
+                        $data['extra_'.$value->getField()->getVariable()] = $value->getValue();
+                    }
+                }
+            }
+        }
+
         if (!empty(api_get_session_id())) {
             $data['coaches'] = $coaches;
             $data['general_coach'] = $generalCoachName;
             $data['general_coach_email'] = $generalCoachEmail;
         }
 
-        $content = str_replace(self::getTags(), $data, $content);
+        $tags = self::getTags();
+        foreach ($tags as $tag) {
+            $simpleTag = str_replace(['((', '))'], '', $tag);
+            $value = isset($data[$simpleTag]) ? $data[$simpleTag] : '';
+            $content = str_replace($tag, $value, $content);
+        }
 
         return $content;
     }
@@ -390,15 +422,13 @@ class AnnouncementManager
             $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$id."\">".
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
 
+            $image_visibility = 'invisible';
+            $alt_visibility = get_lang('Visible');
             if ($itemProperty->getVisibility() === 1) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
-            } else {
-                $image_visibility = 'invisible';
-                $alt_visibility = get_lang('Visible');
             }
             global $stok;
-
             $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=showhide&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 

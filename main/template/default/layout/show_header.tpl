@@ -9,7 +9,7 @@
 <html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
     {% block head %}
-        {% include template ~ "/layout/head.tpl" %}
+        {% include 'layout/head.tpl'|get_template %}
     {% endblock %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
@@ -36,7 +36,7 @@
                 </form>
             </div>
         {% endif %}
-        {% include template ~ "/layout/page_header.tpl" %}
+        {% include 'layout/page_header.tpl'|get_template %}
         {% if show_course_shortcut is not null %}
             <div class="nav-tools">
                 {{ show_course_shortcut }}

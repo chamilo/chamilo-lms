@@ -1847,7 +1847,7 @@ class IndexManager
 
                             $this->tpl->assign('session_category', $categoryParams);
                             $sessions_with_category .= $this->tpl->fetch(
-                                "{$this->tpl->templateFolder}/user_portal/session_category.tpl"
+                                $this->tpl->get_template('user_portal/session_category.tpl')
                             );
                         }
                     }

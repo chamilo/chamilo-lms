@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/page.tpl" %}
+{% extends 'layout/page.tpl'|get_template %}
 
 {% block body %}
     <script>

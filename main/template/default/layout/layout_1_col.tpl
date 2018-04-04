@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/page.tpl" %}
+{% extends 'layout/page.tpl'|get_template %}
 
 {% block body %}
     {% if plugin_main_top %}
@@ -18,7 +18,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            {% include template ~ "/layout/page_body.tpl" %}
+            {% include 'layout/page_body.tpl'|get_template %}
             {% block content %}
                 {% if content is not null %}
                     <section id="main_content">

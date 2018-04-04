@@ -2075,7 +2075,7 @@ class CourseManager
                         'li',
                         Display::return_icon(
                             'teacher.png',
-                            $coachs,
+                            get_lang('Coach'),
                             null,
                             ICON_SIZE_TINY
                         ).' '.$coachs

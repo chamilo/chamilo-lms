@@ -1,5 +1,5 @@
 {# topbar #}
-{% include template ~ "/layout/topbar.tpl" %}
+{% include 'layout/topbar.tpl'|get_template %}
 <script>
 
 var SkillWheel = {

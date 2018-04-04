@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
 <div class="row" xmlns="http://www.w3.org/1999/html">

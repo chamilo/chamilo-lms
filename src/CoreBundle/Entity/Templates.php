@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Templates
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
@@ -54,15 +63,6 @@ class Templates
      * @ORM\Column(name="image", type="string", length=250, nullable=false)
      */
     private $image;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * Set title.

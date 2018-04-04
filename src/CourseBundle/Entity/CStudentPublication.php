@@ -206,6 +206,13 @@ class CStudentPublication
     private $documentId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="filesize", type="integer", nullable=true)
+     */
+    private $fileSize;
+
+    /**
      * Set url.
      *
      * @param string $url
@@ -789,5 +796,25 @@ class CStudentPublication
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFileSize(): int
+    {
+        return $this->fileSize;
+    }
+
+    /**
+     * @param int $fileSize
+     *
+     * @return CStudentPublication
+     */
+    public function setFileSize(int $fileSize): CStudentPublication
+    {
+        $this->fileSize = $fileSize;
+
+        return $this;
     }
 }

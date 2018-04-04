@@ -48,7 +48,6 @@ class Database
         $entityManager = EntityManager::create($params, $config);
         $connection = $entityManager->getConnection();
 
-
         $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
         AnnotationRegistry::registerFile(
             $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"

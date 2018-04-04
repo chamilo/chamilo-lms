@@ -2675,7 +2675,6 @@ function api_get_session_condition(
  * @param string $variable The variable name
  *
  * @return string
- *
  */
 function api_get_setting($variable)
 {

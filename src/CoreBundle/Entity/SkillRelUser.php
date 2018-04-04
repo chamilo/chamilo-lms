@@ -35,7 +35,6 @@ class SkillRelUser
      *
      * @var int
      *
-     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
      * @ORM\Column(name="validation_status", type="integer")
      */
     protected $validationStatus;

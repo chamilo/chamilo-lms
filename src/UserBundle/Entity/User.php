@@ -50,7 +50,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *             name="username",
  *             type="string",
  *             length=100,
- *             unique=false
+ *             unique=true
  *         )
  *     ),
  *      @ORM\AttributeOverride(name="email",
@@ -66,6 +66,14 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *             name="email_canonical",
  *             type="string",
  *             length=100,
+ *             unique=false
+ *         )
+ *     ),
+ *     @ORM\AttributeOverride(name="usernameCanonical",
+ *         column=@ORM\Column(
+ *             name="username_canonical",
+ *             type="string",
+ *             length=180,
  *             unique=false
  *         )
  *     )

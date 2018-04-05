@@ -348,12 +348,19 @@ function getextension($filename)
 /**
  * Get a list of all PHP (.php) files in a given directory. Includes .tpl files
  * @param $base_path The base path in which to find the corresponding files
+ * @param $includeStatic Include static .html, .htm and .css files
  * @return array
  */
-function getAllPhpFiles($base_path)
+function getAllPhpFiles($base_path, $includeStatic = false)
 {
     $list = scandir($base_path);
     $files = [];
+    $extensionsArray = ['.php', '.tpl'];
+    if ($includeStatic) {
+        $extensionsArray[] = 'html';
+        $extensionsArray[] = '.htm';
+        $extensionsArray[] = '.css';
+    }
     foreach ($list as $item) {
         if (substr($item, 0, 1) == '.') {
             continue;
@@ -363,11 +370,11 @@ function getAllPhpFiles($base_path)
             continue;
         }
         if (is_dir($base_path.$item)) {
-            $files = array_merge($files, get_all_php_files($base_path.$item.'/'));
+            $files = array_merge($files, getAllPhpFiles($base_path.$item.'/', $includeStatic));
         } else {
             //only analyse php files
             $sub = substr($item, -4);
-            if ($sub == '.php' or $sub == '.tpl') {
+            if (in_array($sub, $extensionsArray)) {
                 $files[] = $base_path.$item;
             }
         }

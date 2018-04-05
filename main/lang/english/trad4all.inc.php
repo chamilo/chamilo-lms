@@ -8118,4 +8118,5 @@ $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "A new document %s has be
 $PendingSurveys = "Pending surveys";
 $NoPendingSurveys = "No pending surveys";
 $HottestSessions = "Most popular sessions";
+$LPItemCanBeAccessed = "Item can be viewed - Prerequisites completed";
 ?>

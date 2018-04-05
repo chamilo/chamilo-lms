@@ -1,3 +1,4 @@
+{{ dump(is_premiun) }}
 <div id="about-session">
     <div class="row">
         <div class="col-xs-12">
@@ -234,24 +235,40 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default panel-subscription">
+                {% if is_premiun == false %}
+                    <div class="panel panel-default panel-subscription">
+                        <div class="panel-heading">
+                            <h4>{{ 'CourseSubscription'|get_lang }}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="panel-subscribe text-center">
+                                {% if _u.logged and not is_subscribed %}
+                                {{ subscribe_button }}
+                                {% elseif not _u.logged %}
+                                {% if 'allow_registration'|api_get_setting != 'false' %}
+                                <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
+                                </a>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4>{{ 'CourseSubscription'|get_lang }}</h4>
+                        {{ 'SalePrice'|get_lang }}
                     </div>
                     <div class="panel-body">
-                        <div class="panel-subscribe text-center">
-                            {% if _u.logged and not is_subscribed %}
-                            {{ subscribe_button }}
-                            {% elseif not _u.logged %}
-                            {% if 'allow_registration'|api_get_setting != 'false' %}
-                            <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
-                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
-                            </a>
-                            {% endif %}
-                            {% endif %}
+                        <div class="price-text">
+                            {{ is_premiun.iso_code }} {{ is_premiun.price }}
+                        </div>
+                        <div class="buy-box">
+                            <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premiun.product_id }}&t={{ is_premiun.product_type }}" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

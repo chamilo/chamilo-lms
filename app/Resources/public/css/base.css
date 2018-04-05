@@ -5006,7 +5006,24 @@ div#chat-remote-video video {
 #about-session .panel-tags .panel-body{
     text-align: center;
 }
-/* list courses classic*/
+#about-session .price-text {
+    color: #505763;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 40px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+#about-session .buy-box .btn-primary {
+    color: #fff;
+    background-color: #ec5252;
+    border: 1px solid transparent;
+    font-size: 15px;
+    line-height: 1.35135;
+    border-radius: 2px;
+}
+    /* list courses classic*/
 .classic-courses .list-teachers{
     font-size: 12px;
 }
@@ -5548,7 +5565,7 @@ div#chat-remote-video video {
 .return-catalog{
     margin-top: 23px;
 }
-.search-session, .search-courses{
+.search-session, .search-courses
     margin-bottom: 15px;
     margin-top: 25px;
 }

@@ -6,7 +6,7 @@ use ChamiloSession as Session;
 /**
  *  This script displays a form for registering new users.
  *
- *  @package    chamilo.auth
+ * @package    chamilo.auth
  */
 
 //quick hack to adapt the registration form result to the selected registration language
@@ -41,7 +41,9 @@ if ($geolocalization) {
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting('allow_registration') === 'false';
+$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting(
+        'allow_registration'
+    ) === 'false';
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -98,8 +100,9 @@ if ($user_already_registered_show_terms === false) {
                 get_lang('RegistrationRoleWhatDoYouWantToDo'),
                 [
                     STUDENT => '<p class="caption">'.get_lang('RegistrationRoleFollowCourses').'</p>',
-                    COURSEMANAGER => '<p class="caption">'.get_lang('RegistrationRoleTeachCourses').'</p>'
-                ],['class'=>'register-profile']
+                    COURSEMANAGER => '<p class="caption">'.get_lang('RegistrationRoleTeachCourses').'</p>',
+                ],
+                ['class' => 'register-profile']
             );
             $form->addRule('status', get_lang('ThisFieldIsRequired'), 'required');
         }
@@ -134,7 +137,7 @@ if ($user_already_registered_show_terms === false) {
             'email',
             sprintf(
                 get_lang('UsernameMaxXCharacters'),
-                (string) USERNAME_MAX_LENGTH
+                (string)USERNAME_MAX_LENGTH
             ),
             'maxlength',
             USERNAME_MAX_LENGTH
@@ -146,7 +149,6 @@ if ($user_already_registered_show_terms === false) {
     if (api_get_setting('openid_authentication') === 'true') {
         $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
     }
-
 
 
     // USERNAME
@@ -167,7 +169,7 @@ if ($user_already_registered_show_terms === false) {
             'username',
             sprintf(
                 get_lang('UsernameMaxXCharacters'),
-                (string) USERNAME_MAX_LENGTH
+                (string)USERNAME_MAX_LENGTH
             ),
             'maxlength',
             USERNAME_MAX_LENGTH
@@ -199,7 +201,6 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('pass1');
-
 
 
     // PHONE
@@ -248,7 +249,6 @@ if ($user_already_registered_show_terms === false) {
             }
         }
     }
-
 
 
     // EXTENDED FIELDS
@@ -324,7 +324,9 @@ if ($user_already_registered_show_terms === false) {
         in_array('extra_fields', $allowedFields)
     ) {
         $extraField = new ExtraField('user');
-        $extraFieldList = isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
+        $extraFieldList = isset($allowedFields['extra_fields']) && is_array(
+            $allowedFields['extra_fields']
+        ) ? $allowedFields['extra_fields'] : [];
         $returnParams = $extraField->addElements(
             $form,
             0,
@@ -464,7 +466,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-    $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+    $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     if (!empty($open)) {
@@ -494,7 +496,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
             if ($userInfo && $userInfo['status'] != ANONYMOUS) {
-                if ((int) $userInfo['profile_completed'] !== 1) {
+                if ((int)$userInfo['profile_completed'] !== 1) {
                     api_not_allowed(true);
                 }
             }
@@ -527,7 +529,9 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             'checkbox',
             'legal_accept',
             null,
-            get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>'
+            get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang(
+                'TermsAndConditions'
+            ).'</a>'
         );
         $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
     } else {

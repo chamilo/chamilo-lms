@@ -9,7 +9,7 @@
 if (PHP_SAPI!='cli') {
     die('Run this script through the command line or comment this line in the code');
 }
-require_once '../../inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 $path = api_get_path(SYS_CODE_PATH).'img/';
 ini_set('memory_limit', '128M');
 ini_set('max_execution_time', '240');

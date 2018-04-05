@@ -181,7 +181,6 @@ if ($showLevels && $allowToEdit) {
 
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
-
         $level = $skillLevelRepo->find(intval($values['acquired_level']));
         $skillIssue->setAcquiredLevel($level);
 
@@ -280,18 +279,22 @@ $template = new Template(get_lang('IssuedBadgeInformation'));
 $template->assign('issue_info', $skillIssueInfo);
 $template->assign('allow_comment', $allowComment);
 $template->assign('allow_export', $allowExport);
-$template->assign('comment_form', $form->returnForm());
-if ($showLevels) {
-    $template->assign('acquired_level_form', $formAcquiredLevel->returnForm());
+
+$commentForm = '';
+if ($allowComment && $allowToEdit) {
+    $commentForm = $form->returnForm();
 }
+$template->assign('comment_form', $commentForm);
+
+$levelForm = '';
+if ($showLevels && $allowToEdit) {
+    $levelForm = $formAcquiredLevel->returnForm();
+}
+$template->assign('acquired_level_form', $levelForm);
 $template->assign('badge_error', $badgeInfoError);
 $template->assign('personal_badge', $personalBadge);
 $template->assign('show_level', $showLevels);
-
-$content = $template->fetch(
-    $template->get_template('skill/issued.tpl')
-);
-
+$content = $template->fetch($template->get_template('skill/issued.tpl'));
 $template->assign('header', get_lang('IssuedBadgeInformation'));
 $template->assign('content', $content);
 $template->display_one_col_template();

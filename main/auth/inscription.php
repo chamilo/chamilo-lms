@@ -93,20 +93,6 @@ if ($user_already_registered_show_terms === false) {
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         if (in_array('status', $allowedFields)) {
-            /* $form->addElement(
-                'radio',
-                'status',
-                get_lang('Profile'),
-                get_lang('RegStudent'),
-                STUDENT
-            );
-            $form->addElement(
-                'radio',
-                'status',
-                null,
-                get_lang('RegAdmin'),
-                COURSEMANAGER
-            ); */
             $form->addRadio(
                 'status',
                 get_lang('RegistrationRoleWhatDoYouWantToDo'),
@@ -115,6 +101,7 @@ if ($user_already_registered_show_terms === false) {
                     COURSEMANAGER => '<p class="caption">'.get_lang('RegistrationRoleTeachCourses').'</p>'
                 ],['class'=>'register-profile']
             );
+            $form->addRule('status', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
 

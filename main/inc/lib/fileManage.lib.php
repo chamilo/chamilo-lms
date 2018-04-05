@@ -344,3 +344,35 @@ function getextension($filename)
 
     return [array_pop($bouts), implode('.', $bouts)];
 }
+
+/**
+ * Get a list of all PHP (.php) files in a given directory. Includes .tpl files
+ * @param $base_path The base path in which to find the corresponding files
+ * @return array
+ */
+function getAllPhpFiles($base_path)
+{
+    $list = scandir($base_path);
+    $files = [];
+    foreach ($list as $item) {
+        if (substr($item, 0, 1) == '.') {
+            continue;
+        }
+        $special_dirs = [api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH)];
+        if (in_array($base_path.$item.'/', $special_dirs)) {
+            continue;
+        }
+        if (is_dir($base_path.$item)) {
+            $files = array_merge($files, get_all_php_files($base_path.$item.'/'));
+        } else {
+            //only analyse php files
+            $sub = substr($item, -4);
+            if ($sub == '.php' or $sub == '.tpl') {
+                $files[] = $base_path.$item;
+            }
+        }
+    }
+    $list = null;
+
+    return $files;
+}

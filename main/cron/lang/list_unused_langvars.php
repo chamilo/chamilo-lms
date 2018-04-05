@@ -31,7 +31,7 @@ echo count($defined_terms)." terms were found in language files<br />";
 // time and memory)
 $usedTerms = [];
 $l = strlen(api_get_path(SYS_PATH));
-$files = get_all_php_files(api_get_path(SYS_PATH));
+$files = getAllPhpFget_iles(api_get_path(SYS_PATH));
 // Browse files
 foreach ($files as $file) {
     //echo 'Analyzing '.$file."<br />";
@@ -86,29 +86,3 @@ foreach ($defined_terms as $term => $file) {
 }
 echo "</table>\n";
 
-function get_all_php_files($base_path)
-{
-    $list = scandir($base_path);
-    $files = [];
-    foreach ($list as $item) {
-        if (substr($item, 0, 1) == '.') {
-            continue;
-        }
-        $special_dirs = [api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH)];
-        if (in_array($base_path.$item.'/', $special_dirs)) {
-            continue;
-        }
-        if (is_dir($base_path.$item)) {
-            $files = array_merge($files, get_all_php_files($base_path.$item.'/'));
-        } else {
-            //only analyse php files
-            $sub = substr($item, -4);
-            if ($sub == '.php' or $sub == '.tpl') {
-                $files[] = $base_path.$item;
-            }
-        }
-    }
-    $list = null;
-
-    return $files;
-}

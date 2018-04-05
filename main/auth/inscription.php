@@ -137,7 +137,7 @@ if ($user_already_registered_show_terms === false) {
             'email',
             sprintf(
                 get_lang('UsernameMaxXCharacters'),
-                (string)USERNAME_MAX_LENGTH
+                (string) USERNAME_MAX_LENGTH
             ),
             'maxlength',
             USERNAME_MAX_LENGTH
@@ -169,7 +169,7 @@ if ($user_already_registered_show_terms === false) {
             'username',
             sprintf(
                 get_lang('UsernameMaxXCharacters'),
-                (string)USERNAME_MAX_LENGTH
+                (string) USERNAME_MAX_LENGTH
             ),
             'maxlength',
             USERNAME_MAX_LENGTH
@@ -461,7 +461,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-    $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+    $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     if (!empty($open)) {
@@ -491,7 +491,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
             if ($userInfo && $userInfo['status'] != ANONYMOUS) {
-                if ((int)$userInfo['profile_completed'] !== 1) {
+                if ((int) $userInfo['profile_completed'] !== 1) {
                     api_not_allowed(true);
                 }
             }

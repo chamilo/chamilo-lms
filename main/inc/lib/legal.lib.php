@@ -215,7 +215,7 @@ class LegalManager
         switch ($term_preview['type']) {
             case 0:
                 if (!empty($term_preview['content'])) {
-                    $preview = '<div class="legal-terms">'.$term_preview['content'].'</div><br />';
+                    $preview = '<div class="terms-conditions"><div id="legal-terms" class="scrollbar-inner">'.$term_preview['content'].'</div></div>';
                 }
                 $preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
                 $courseInfo = api_get_course_info();

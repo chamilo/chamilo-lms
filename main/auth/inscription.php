@@ -481,7 +481,7 @@ if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     if (!empty($open)) {
-        $content = '<div class="well well-lg">'.$open.'</div>';
+        $content = '<div class="well well-sm help-registration">'.$open.'</div>';
     }
 }
 

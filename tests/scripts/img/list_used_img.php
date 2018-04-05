@@ -19,7 +19,7 @@ $found_img = get_img_files($path);
 // now get all terms found in all PHP files of Chamilo (this takes some time and memory)
 $unexisting_img = array();
 $l = strlen(api_get_path(SYS_PATH));
-$files = get_all_php_files(api_get_path(SYS_PATH));
+$files = getAllPhpFiles(api_get_path(SYS_PATH), true);
 $counter = 0;
 foreach ($files as $file) {
   $shortfile = substr($file,$l);
@@ -77,27 +77,6 @@ echo "</table>\n";
 echo "Analysed files:<br />\n";
 print_r($files);
 
-
-function get_all_php_files($base_path) {
-    $list = scandir($base_path);
-    $files = array();
-    foreach ($list as $item) {
-    	if (substr($item,0,1)=='.') {continue;}
-        $special_dirs = array(api_get_path(SYS_TEST_PATH),api_get_path(SYS_COURSE_PATH),api_get_path(SYS_LANG_PATH),api_get_path(SYS_ARCHIVE_PATH));
-        if (in_array($base_path.$item.'/',$special_dirs)) {continue;}
-        if (is_dir($base_path.$item)) {
-        	$files = array_merge($files,get_all_php_files($base_path.$item.'/'));
-        } else {
-            //only analyse php files
-                $ext = substr($item,-4);
-        	if (in_array($ext,array('.php','html','.htm','.css'))) {
-                  $files[] = $base_path.$item;
-        	}
-        }
-    }
-    $list = null;
-    return $files;
-}
 function get_img_files($path) {
   $files = array();
   //We know there are max 3 levels

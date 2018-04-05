@@ -427,7 +427,7 @@ class Rest extends WebService
                 $announcement['item_property']->getInsertDate(),
                 DATE_TIME_FORMAT_LONG_24H
             ),
-            'content' => AnnouncementManager::parse_content(
+            'content' => AnnouncementManager::parseContent(
                 $this->user->getId(),
                 $announcement['announcement']->getContent(),
                 $this->course->getCode(),

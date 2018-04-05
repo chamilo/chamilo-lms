@@ -215,7 +215,7 @@ class AnnouncementEmail
         $session_id = $this->session_id;
         $courseCode = $this->course('code');
 
-        $content = AnnouncementManager::parse_content(
+        $content = AnnouncementManager::parseContent(
             $receiverUserId,
             $content,
             $courseCode,

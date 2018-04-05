@@ -186,11 +186,6 @@ if ($user_already_registered_show_terms === false) {
         ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off']
     );
 
-    $checkPass = api_get_setting('allow_strength_pass_checker');
-    if ($checkPass === 'true') {
-        $form->addElement('label', null, '<div id="password_progress"></div>');
-    }
-
     $form->addElement(
         'password',
         'pass2',

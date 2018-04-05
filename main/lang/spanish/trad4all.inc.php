@@ -8145,4 +8145,7 @@ $HottestSessions = "Sesiones más populares";
 $LPItemCanBeAccessed = "Item accesible - prerequisitos completados.";
 $ItemXBlocksThisElement = "El item \"%s\" bloquea este paso";
 $YourResultAtXBlocksThisElement = "El resultado en el item \"%s\" bloquea esta etapa.";
+$RegistrationRoleWhatDoYouWantToDo = "¿Qué deseas hacer?";
+$RegistrationRoleFollowCourses = "Seguir cursos";
+$RegistrationRoleTeachCourses = "Dictar cursos";
 ?>

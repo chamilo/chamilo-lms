@@ -675,7 +675,7 @@ $userGroups = $userGroupManager->getNameListByUser(
             ?>
             <tr>
                 <td align="right"><?php echo get_lang('TimeSpentInTheCourse'); ?></td>
-                <td align="left"><?php echo  $time_spent_on_the_course; ?></td>
+                <td align="left"><?php echo $time_spent_on_the_course; ?></td>
             </tr>
             <tr>
                 <td align="right">
@@ -1086,7 +1086,6 @@ if (empty($details)) {
                 foreach ($flat_list as $learnpath) {
                     $lp_id = $learnpath['lp_old_id'];
                     $lp_name = $learnpath['lp_name'];
-
                     $any_result = false;
 
                     // Get progress in lp

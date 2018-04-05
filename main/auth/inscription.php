@@ -89,6 +89,36 @@ if (!empty($course_code_redirect)) {
 }
 
 if ($user_already_registered_show_terms === false) {
+
+    // STUDENT/TEACHER
+    if (api_get_setting('allow_registration_as_teacher') != 'false') {
+        if (in_array('status', $allowedFields)) {
+            /* $form->addElement(
+                'radio',
+                'status',
+                get_lang('Profile'),
+                get_lang('RegStudent'),
+                STUDENT
+            );
+            $form->addElement(
+                'radio',
+                'status',
+                null,
+                get_lang('RegAdmin'),
+                COURSEMANAGER
+            ); */
+            $form->addRadio(
+                'status',
+                get_lang('RegistrationRoleWhatDoYouWantToDo'),
+                [
+                    STUDENT => '<p class="caption">'.get_lang('RegistrationRoleFollowCourses').'</p>',
+                    COURSEMANAGER => '<p class="caption">'.get_lang('RegistrationRoleTeachCourses').'</p>'
+                ],['class'=>'register-profile']
+            );
+        }
+    }
+
+
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
@@ -130,24 +160,7 @@ if ($user_already_registered_show_terms === false) {
         $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
     }
 
-    // OFFICIAL CODE
-    if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-        if (in_array('official_code', $allowedFields)) {
-            $form->addElement(
-                'text',
-                'official_code',
-                get_lang('OfficialCode'),
-                ['size' => 40]
-            );
-            if (api_get_setting('registration', 'officialcode') == 'true') {
-                $form->addRule(
-                    'official_code',
-                    get_lang('ThisFieldIsRequired'),
-                    'required'
-                );
-            }
-        }
-    }
+
 
     // USERNAME
     if (api_get_setting('login_is_email') != 'true') {
@@ -200,6 +213,8 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('pass1');
 
+
+
     // PHONE
     if (in_array('phone', $allowedFields)) {
         $form->addElement(
@@ -227,72 +242,27 @@ if ($user_already_registered_show_terms === false) {
         }
     }
 
-    // STUDENT/TEACHER
-    if (api_get_setting('allow_registration_as_teacher') != 'false') {
-        if (in_array('status', $allowedFields)) {
+
+    // OFFICIAL CODE
+    if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
+        if (in_array('official_code', $allowedFields)) {
             $form->addElement(
-                'radio',
-                'status',
-                get_lang('Profile'),
-                get_lang('RegStudent'),
-                STUDENT
+                'text',
+                'official_code',
+                get_lang('OfficialCode'),
+                ['size' => 40]
             );
-            $form->addElement(
-                'radio',
-                'status',
-                null,
-                get_lang('RegAdmin'),
-                COURSEMANAGER
-            );
+            if (api_get_setting('registration', 'officialcode') == 'true') {
+                $form->addRule(
+                    'official_code',
+                    get_lang('ThisFieldIsRequired'),
+                    'required'
+                );
+            }
         }
     }
 
-    $captcha = api_get_setting('allow_captcha');
-    $allowCaptcha = $captcha === 'true';
 
-    if ($allowCaptcha) {
-        $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
-        $options = [
-            'width' => 220,
-            'height' => 90,
-            'callback' => $ajax.'&var='.basename(__FILE__, '.php'),
-            'sessionVar' => basename(__FILE__, '.php'),
-            'imageOptions' => [
-                'font_size' => 20,
-                'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
-                'font_file' => 'OpenSans-Regular.ttf',
-                //'output' => 'gif'
-            ],
-        ];
-
-        $captcha_question = $form->addElement(
-            'CAPTCHA_Image',
-            'captcha_question',
-            '',
-            $options
-        );
-        $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
-
-        $form->addElement(
-            'text',
-            'captcha',
-            get_lang('EnterTheLettersYouSee'),
-            ['size' => 40]
-        );
-        $form->addRule(
-            'captcha',
-            get_lang('EnterTheCharactersYouReadInTheImage'),
-            'required',
-            null,
-            'client'
-        );
-        $form->addRule(
-            'captcha',
-            get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
-            'CAPTCHA',
-            $captcha_question
-        );
-    }
 
     // EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' &&
@@ -377,6 +347,56 @@ if ($user_already_registered_show_terms === false) {
             $extraFieldList
         );
     }
+
+    //CAPTCHA
+
+    $captcha = api_get_setting('allow_captcha');
+    $allowCaptcha = $captcha === 'true';
+
+    if ($allowCaptcha) {
+        $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+        $options = [
+            'width' => 220,
+            'height' => 90,
+            'callback' => $ajax.'&var='.basename(__FILE__, '.php'),
+            'sessionVar' => basename(__FILE__, '.php'),
+            'imageOptions' => [
+                'font_size' => 20,
+                'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
+                'font_file' => 'OpenSans-Regular.ttf',
+                //'output' => 'gif'
+            ],
+        ];
+
+        $captcha_question = $form->addElement(
+            'CAPTCHA_Image',
+            'captcha_question',
+            '',
+            $options
+        );
+        $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+
+        $form->addElement(
+            'text',
+            'captcha',
+            get_lang('EnterTheLettersYouSee'),
+            ['size' => 40]
+        );
+        $form->addRule(
+            'captcha',
+            get_lang('EnterTheCharactersYouReadInTheImage'),
+            'required',
+            null,
+            'client'
+        );
+        $form->addRule(
+            'captcha',
+            get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+            'CAPTCHA',
+            $captcha_question
+        );
+    }
+
 }
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];

@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook controller
+ * Gradebook controller.
+ *
  * @package chamilo.gradebook
  */
 
@@ -79,7 +80,7 @@ $(document).ready(function() {
 api_block_anonymous_users();
 $htmlHeadXtra[] = '<script type="text/javascript">
 function confirmation() {
-	if (confirm("' . get_lang('DeleteAll').'?")) {
+	if (confirm("'.get_lang('DeleteAll').'?")) {
 		return true;
 	} else {
 		return false;
@@ -124,10 +125,10 @@ $_GET['selectcat'] = $selectCat;
 
 $isStudentView = api_is_student_view_active();
 if ($selectCat > 0 && $isStudentView) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?selectcat=0&isStudentView=true',
         'name' => get_lang('ToolGradebook'),
-    );
+    ];
 }
 
 // ACTIONS
@@ -173,8 +174,8 @@ if (isset($_GET['movecat'])) {
         );
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                . '&movecat='.intval($_GET['movecat'])
-                . '&targetcat='.$move_form->exportValue('move_cat'));
+                .'&movecat='.intval($_GET['movecat'])
+                .'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -207,8 +208,8 @@ if (isset($_GET['moveeval'])) {
 
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                . '&moveeval='.Security::remove_XSS($_GET['moveeval'])
-                . '&targetcat='.$move_form->exportValue('move_cat'));
+                .'&moveeval='.Security::remove_XSS($_GET['moveeval'])
+                .'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -397,7 +398,7 @@ if (isset($_GET['deletelink'])) {
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-        die ('Error: movecat or moveeval not defined');
+        die('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.intval($_GET['movecat'])
@@ -522,51 +523,51 @@ if (isset($_POST['action'])) {
     }
 }
 
-if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
+if (isset($_POST['submit']) && isset($_POST['keyword'])) {
     header('Location: '.api_get_self().'?selectcat='.$selectCat.'&search='.Security::remove_XSS($_POST['keyword']));
     exit;
 }
 
-if (isset ($_GET['categorymoved'])) {
+if (isset($_GET['categorymoved'])) {
     Display::addFlash(Display::return_message(get_lang('CategoryMoved'), 'confirmation', false));
 }
-if (isset ($_GET['evaluationmoved'])) {
+if (isset($_GET['evaluationmoved'])) {
     Display::addFlash(Display::return_message(get_lang('EvaluationMoved'), 'confirmation', false));
 }
-if (isset ($_GET['linkmoved'])) {
+if (isset($_GET['linkmoved'])) {
     Display::addFlash(Display::return_message(get_lang('LinkMoved'), 'confirmation', false));
 }
-if (isset ($_GET['addcat'])) {
+if (isset($_GET['addcat'])) {
     Display::addFlash(Display::return_message(get_lang('CategoryAdded'), 'confirmation', false));
 }
-if (isset ($_GET['linkadded'])) {
+if (isset($_GET['linkadded'])) {
     Display::addFlash(Display::return_message(get_lang('LinkAdded'), 'confirmation', false));
 }
-if (isset ($_GET['addresult'])) {
+if (isset($_GET['addresult'])) {
     Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
 }
-if (isset ($_GET['editcat'])) {
+if (isset($_GET['editcat'])) {
     Display::addFlash(Display::return_message(get_lang('CategoryEdited'), 'confirmation', false));
 }
-if (isset ($_GET['editeval'])) {
+if (isset($_GET['editeval'])) {
     Display::addFlash(Display::return_message(get_lang('EvaluationEdited'), 'confirmation', false));
 }
-if (isset ($_GET['linkedited'])) {
+if (isset($_GET['linkedited'])) {
     Display::addFlash(Display::return_message(get_lang('LinkEdited'), 'confirmation', false));
 }
-if (isset ($_GET['nolinkitems'])) {
+if (isset($_GET['nolinkitems'])) {
     Display::addFlash(Display::return_message(get_lang('NoLinkItems'), 'warning', false));
 }
-if (isset ($_GET['addallcat'])) {
+if (isset($_GET['addallcat'])) {
     Display::addFlash(Display::return_message(get_lang('AddAllCat'), 'normal', false));
 }
-if (isset ($confirmation_message)) {
+if (isset($confirmation_message)) {
     Display::addFlash(Display::return_message($confirmation_message, 'confirmation', $filter_confirm_msg));
 }
-if (isset ($warning_message)) {
+if (isset($warning_message)) {
     Display::addFlash(Display::return_message($warning_message, 'warning', $filter_warning_msg));
 }
-if (isset ($move_form)) {
+if (isset($move_form)) {
     Display::addFlash(Display::return_message($move_form->toHtml(), 'normal', false));
 }
 
@@ -575,22 +576,22 @@ $viewTitle = '';
 // DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf'])) {
     if (isset($_GET['studentoverview'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook')
-        );
+            'name' => get_lang('ToolGradebook'),
+        ];
         $viewTitle = get_lang('FlatView');
     } elseif (isset($_GET['search'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook')
-        );
+            'name' => get_lang('ToolGradebook'),
+        ];
         $viewTitle = get_lang('SearchResults');
     } elseif (!empty($selectCat)) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => '#',
-            'name' => get_lang('ToolGradebook')
-        );
+            'name' => get_lang('ToolGradebook'),
+        ];
     } else {
         $viewTitle = get_lang('ToolGradebook');
     }
@@ -609,22 +610,22 @@ if (isset($_GET['studentoverview'])) {
     $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
     $alleval = $cats[0]->get_evaluations($stud_id, true);
     $alllink = $cats[0]->get_links($stud_id, true);
-    if (isset ($_GET['exportpdf'])) {
+    if (isset($_GET['exportpdf'])) {
         $datagen = new GradebookDataGenerator($allcat, $alleval, $alllink);
-        $header_names = array(
+        $header_names = [
             get_lang('Name'),
             get_lang('Description'),
             get_lang('Weight'),
             get_lang('Date'),
-            get_lang('Results')
-        );
+            get_lang('Results'),
+        ];
         $data_array = $datagen->get_data(
             GradebookDataGenerator :: GDG_SORT_NAME,
             0,
             null,
             true
         );
-        $newarray = array();
+        $newarray = [];
         foreach ($data_array as $data) {
             $newarray[] = array_slice($data, 1);
         }
@@ -632,7 +633,7 @@ if (isset($_GET['studentoverview'])) {
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
-        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, array('justification'=>'center'));
+        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, ['justification' => 'center']);
         $pdf->line(50, 790, 550, 790);
         $pdf->line(50, 40, 550, 40);
         $pdf->ezSetY(750);
@@ -640,13 +641,13 @@ if (isset($_GET['studentoverview'])) {
             $newarray,
             $header_names,
             '',
-            array(
+            [
                 'showHeadings' => 1,
                 'shaded' => 1,
                 'showLines' => 1,
                 'rowGap' => 3,
                 'width' => 500,
-            )
+            ]
         );
         $pdf->ezStream();
         exit;
@@ -721,13 +722,13 @@ if (isset($_GET['studentoverview'])) {
         $stud_id = $stud_id;
     }
 
-    $allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+    $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
     $alleval = $cats[0]->get_evaluations($stud_id);
     $alllink = $cats[0]->get_links($stud_id);
 }
 
 // add params to the future links (in the table shown)
-$addparams = array('selectcat' => $selectCat);
+$addparams = ['selectcat' => $selectCat];
 
 if (isset($_GET['studentoverview'])) {
     $addparams['studentoverview'] = '';
@@ -742,7 +743,7 @@ if (isset($_GET['cidReq']) && $_GET['cidReq'] != '') {
 $no_qualification = false;
 
 // Show certificate link.
-$certificate = array();
+$certificate = [];
 $actionsLeft = '';
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
@@ -790,7 +791,7 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (!empty($actionsLeft)) {
     echo $toolbar = Display::toolbarAction(
         'gradebook-student-actions',
-        array($actionsLeft)
+        [$actionsLeft]
     );
 }
 
@@ -798,7 +799,7 @@ if (api_is_allowed_to_edit(null, true)) {
     // Tool introduction
     Display::display_introduction_section(
         TOOL_GRADEBOOK,
-        array('ToolbarSet' => 'AssessmentsIntroduction')
+        ['ToolbarSet' => 'AssessmentsIntroduction']
     );
 
     if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
@@ -854,7 +855,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         $value = $form_grade->exportValue('grade_model_id');
 
                         $gradebook = new Gradebook();
-                        $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);
+                        $gradebook->update(['id' => $cats[0]->get_id(), 'grade_model_id' => $value], true);
 
                         //do something
                         $obj = new GradeModel();
@@ -862,7 +863,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                         foreach ($components as $component) {
                             $gradebook = new Gradebook();
-                            $params = array();
+                            $params = [];
 
                             $params['name'] = $component['acronym'];
                             $params['description'] = $component['title'];
@@ -893,7 +894,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         }
 
         $i = 0;
-        $allcat = array();
+        $allcat = [];
         /** @var Category $cat */
         foreach ($cats as $cat) {
             $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -942,12 +943,11 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf
                 );
 
-
                 $model = ExerciseLib::getCourseScoreModel();
 
                 if (api_is_allowed_to_edit()) {
                     $gradebookTable->td_attributes = [
-                        4 => 'class="text-center"'
+                        4 => 'class="text-center"',
                     ];
                 } else {
                     if (empty($model)) {
@@ -956,12 +956,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                             4 => 'class="text-center"',
                             5 => 'class="text-center"',
                             6 => 'class="text-center"',
-                            7 => 'class="text-center"'
+                            7 => 'class="text-center"',
                         ];
                     } else {
                         $gradebookTable->td_attributes = [
                             3 => 'class="text-right"',
-                            4 => 'class="text-center"'
+                            4 => 'class="text-center"',
                         ];
                     }
 
@@ -975,7 +975,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                 if ($action == 'export_table') {
                     ob_clean();
-                    $params = array(
+                    $params = [
                         'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
                         'course_code' => api_get_course_id(),
                         'session_info' => '',
@@ -985,8 +985,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         'show_grade_generated_date' => true,
                         'show_real_course_teachers' => false,
                         'show_teacher_as_myself' => false,
-                        'orientation' => 'P'
-                    );
+                        'orientation' => 'P',
+                    ];
 
                     $pdf = new PDF('A4', $params['orientation'], $params);
                     $pdf->html_to_pdf_with_template(

@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Extends FormValidator with import and export forms
+ * Extends FormValidator with import and export forms.
+ *
  * @author Stijn Konings
+ *
  * @package chamilo.gradebook
  */
 class DataForm extends FormValidator
@@ -13,7 +15,8 @@ class DataForm extends FormValidator
     const TYPE_EXPORT_PDF = 3;
 
     /**
-     * Builds a form containing form items based on a given parameter
+     * Builds a form containing form items based on a given parameter.
+     *
      * @param int form_type 1=import, 2=export
      * @param obj cat_obj the category object
      * @param obj res_obj the result object
@@ -45,17 +48,27 @@ class DataForm extends FormValidator
         $this->setDefaults();
     }
 
+    public function display()
+    {
+        parent::display();
+    }
+
+    public function setDefaults($defaults = [], $filter = null)
+    {
+        parent::setDefaults($defaults, $filter);
+    }
+
     protected function build_pdf_export_form()
     {
-        $renderer = & $this->defaultRenderer();
+        $renderer = &$this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span>');
         $this->addElement('header', get_lang('ChooseOrientation'));
         $this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
         $this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');
         $this->addButtonExport(get_lang('Export'));
-        $this->setDefaults(array(
-            'orientation' => 'portrait'
-        ));
+        $this->setDefaults([
+            'orientation' => 'portrait',
+        ]);
     }
 
     protected function build_export_form()
@@ -65,9 +78,9 @@ class DataForm extends FormValidator
         $this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
         $this->addElement('radio', 'file_type', null, 'PDF (Portable Document Format)', 'pdf');
         $this->addButtonExport(get_lang('Export'));
-        $this->setDefaults(array(
-            'file_type' => 'csv'
-        ));
+        $this->setDefaults([
+            'file_type' => 'csv',
+        ]);
     }
 
     protected function build_export_form_option($show_pdf = true)
@@ -81,12 +94,12 @@ class DataForm extends FormValidator
             Display::return_icon('info3.gif', get_lang('ToExportMustLockEvaluation')),
             'PDF (Portable Document Format)',
             'pdf',
-            array('disabled')
+            ['disabled']
         );
         $this->addButtonExport(get_lang('Export'));
-        $this->setDefaults(array(
-            'file_type' => 'csv'
-        ));
+        $this->setDefaults([
+            'file_type' => 'csv',
+        ]);
     }
 
     protected function build_import_form()
@@ -94,29 +107,19 @@ class DataForm extends FormValidator
         $this->addElement('hidden', 'formSent');
         $this->addElement('header', get_lang('ImportFileLocation'));
         $this->addElement('file', 'import_file', get_lang('Location'));
-        $allowed_file_types = array(
+        $allowed_file_types = [
             'xml',
-            'csv'
-        );
+            'csv',
+        ];
         //$this->addRule('file', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')', 'filetype', $allowed_file_types);
         $this->addElement('radio', 'file_type', get_lang('FileType'), 'CSV (<a href="docs/example_csv.html" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
         $this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
         $this->addElement('checkbox', 'overwrite', null, get_lang('OverwriteScores'));
         $this->addElement('checkbox', 'ignoreerrors', null, get_lang('IgnoreErrors'));
         $this->addButtonImport(get_lang('Ok'));
-        $this->setDefaults(array(
+        $this->setDefaults([
             'formSent' => '1',
-            'file_type' => 'csv'
-        ));
-    }
-
-    public function display()
-    {
-        parent::display();
-    }
-
-    public function setDefaults($defaults = array(), $filter = null)
-    {
-        parent::setDefaults($defaults, $filter);
+            'file_type' => 'csv',
+        ]);
     }
 }

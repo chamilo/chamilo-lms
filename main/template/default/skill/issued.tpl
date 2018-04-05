@@ -20,17 +20,19 @@
                 {% endif %}
             </div>
         </div>
-        {% if allow_download_export %}
-            {% if badge_error %}
-                <hr>
-                <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|get_lang }}</div>
-            {% else %}
-                <p class="text-center">
-                    <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
-                        <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|get_lang }}
-                    </a>
-                </p>
-            {% endif %}
+
+        {% if badge_error %}
+            <hr>
+            <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|get_lang }}</div>
+        {% else %}
+            <p class="text-center">
+                <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
+                    <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|get_lang }}
+                </a>
+            </p>
+        {% endif %}
+
+        {% if allow_export %}
             <hr>
             <p class="text-center">
                 <a href="#" class="btn btn-success" id="badge-export-button">
@@ -131,7 +133,7 @@
         {% endif %}
     </div>
 </div>
-{% if allow_download_export %}
+{% if allow_export %}
     <script>
         $(document).on('ready', function () {
             $('#badge-export-button').on('click', function (e) {

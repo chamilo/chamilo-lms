@@ -3,9 +3,11 @@
 
 /**
  * Class UserTable
- * Table to display flat view of a student's evaluations and links
+ * Table to display flat view of a student's evaluations and links.
+ *
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised, use of caching, datagenerator class)
+ *
  * @package chamilo.gradebook
  */
 class UserTable extends SortableTable
@@ -14,9 +16,9 @@ class UserTable extends SortableTable
     private $datagen;
 
     /**
-     * Constructor
+     * Constructor.
      */
-    public function __construct($userid, $evals = array(), $links = array(), $addparams = null)
+    public function __construct($userid, $evals = [], $links = [], $addparams = null)
     {
         parent::__construct('userlist', null, null, 0);
         $this->userid = $userid;
@@ -39,15 +41,15 @@ class UserTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to get total number of items in the table
+     * Function used by SortableTable to get total number of items in the table.
      */
-    function get_total_number_of_items()
+    public function get_total_number_of_items()
     {
         return $this->datagen->get_total_items_count();
     }
 
     /**
-     * Function used by SortableTable to generate the data to display
+     * Function used by SortableTable to generate the data to display.
      */
     public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
     {
@@ -85,10 +87,10 @@ class UserTable extends SortableTable
         }
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
         // generate the data to display
-        $sortable_data = array();
+        $sortable_data = [];
         foreach ($data_array as $data) {
             if ($data[2] != "") {//filter by course removed
-                $row = array();
+                $row = [];
                 $row[] = $this->build_type_column($data[0]);
                 $row[] = $this->build_name_link($data[0]);
                 $row[] = $data[2];
@@ -107,6 +109,7 @@ class UserTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return string
      */
     private function build_type_column($item)
@@ -116,6 +119,7 @@ class UserTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return string
      */
     private function build_name_link($item)
@@ -124,15 +128,15 @@ class UserTable extends SortableTable
             // evaluation
             case 'E':
                 return '&nbsp;'
-                . '<a href="gradebook_view_result.php?selecteval='.$item->get_id().'">'
-                . $item->get_name()
-                . '</a>';
+                .'<a href="gradebook_view_result.php?selecteval='.$item->get_id().'">'
+                .$item->get_name()
+                .'</a>';
             // link
             case 'L':
                 return '&nbsp;<a href="'.$item->get_link().'">'
-                . $item->get_name()
-                . '</a>'
-                . '&nbsp;['.$item->get_type_name().']';
+                .$item->get_name()
+                .'</a>'
+                .'&nbsp;['.$item->get_type_name().']';
         }
     }
 }

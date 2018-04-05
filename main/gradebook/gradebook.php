@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 
@@ -84,8 +85,8 @@ if (isset($_GET['movecat'])) {
         );
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectcat
-                . '&movecat='.$move_cat
-                . '&targetcat='.$move_form->exportValue('move_cat'));
+                .'&movecat='.$move_cat
+                .'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -120,8 +121,8 @@ if (isset($_GET['moveeval'])) {
 
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectcat
-                . '&moveeval='.$get_move_eval
-                . '&targetcat='.$move_form->exportValue('move_cat'));
+                .'&moveeval='.$get_move_eval
+                .'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -370,7 +371,7 @@ if (isset($_POST['action'])) {
 
 if (isset($_POST['submit']) && isset($_POST['keyword'])) {
     header('Location: '.api_get_self().'?selectcat='.$selectcat
-        . '&search='.Security::remove_XSS($_POST['keyword']));
+        .'&search='.Security::remove_XSS($_POST['keyword']));
     exit;
 }
 
@@ -420,28 +421,28 @@ if (isset($move_form)) {
 // DISPLAY HEADERS AND MESSAGES                           -
 if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectcat,
-            'name' => get_lang('ToolGradebook')
-        );
+            'name' => get_lang('ToolGradebook'),
+        ];
         Display :: display_header(get_lang('FlatView'));
     } elseif (isset($_GET['search'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => Category::getUrl(),
-            'name' => get_lang('Gradebook')
-        );
+            'name' => get_lang('Gradebook'),
+        ];
 
         if ((isset($_GET['selectcat']) && $_GET['selectcat'] > 0)) {
             if (!empty($_GET['course'])) {
-                $interbreadcrumb[] = array(
+                $interbreadcrumb[] = [
                     'url' => Category::getUrl().'selectcat='.$selectcat,
-                    'name' => get_lang('Details')
-                );
+                    'name' => get_lang('Details'),
+                ];
             } else {
-                $interbreadcrumb[] = array(
+                $interbreadcrumb[] = [
                     'url' => Category::getUrl().'selectcat=0',
-                    'name' => get_lang('Details')
-                );
+                    'name' => get_lang('Details'),
+                ];
             }
         }
         Display :: display_header('');
@@ -480,12 +481,12 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 
 if (!empty($keyword)) {
     $cats = Category :: load($category);
-    $allcat = array();
+    $allcat = [];
     if ((isset($_GET['selectcat']) && $_GET['selectcat'] == 0) && isset($_GET['search'])) {
         $allcat = $cats[0]->get_subcategories(null);
         $allcat_info = Category::find_category($keyword, $allcat);
-        $alleval = array();
-        $alllink = array();
+        $alleval = [];
+        $alllink = [];
     } else {
         $alleval = Evaluation::findEvaluations($keyword, $cats[0]->get_id());
         $alllink = LinkFactory::find_links($keyword, $cats[0]->get_id());
@@ -494,20 +495,20 @@ if (!empty($keyword)) {
     //@todo this code seems to be deprecated because the gradebook tab is off
     $cats = Category :: load($category);
     $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
-    $allcat = array();
+    $allcat = [];
     $alleval = $cats[0]->get_evaluations($stud_id, true);
     $alllink = $cats[0]->get_links($stud_id, true);
     if (isset($_GET['exportpdf'])) {
         $datagen = new GradebookDataGenerator($allcat, $alleval, $alllink);
-        $header_names = array(
+        $header_names = [
             get_lang('Name'),
             get_lang('Description'),
             get_lang('Weight'),
             get_lang('Date'),
             get_lang('Results'),
-        );
+        ];
         $data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME, 0, null, true);
-        $newarray = array();
+        $newarray = [];
         foreach ($data_array as $data) {
             $newarray[] = array_slice($data, 1);
         }
@@ -515,7 +516,7 @@ if (!empty($keyword)) {
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
-        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, array('justification'=>'center'));
+        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, ['justification' => 'center']);
         $pdf->line(50, 790, 550, 790);
         $pdf->line(50, 40, 550, 40);
         $pdf->ezSetY(750);
@@ -523,13 +524,13 @@ if (!empty($keyword)) {
             $newarray,
             $header_names,
             '',
-            array(
+            [
                 'showHeadings' => 1,
                 'shaded' => 1,
                 'showLines' => 1,
                 'rowGap' => 3,
                 'width' => 500,
-            )
+            ]
         );
         $pdf->ezStream();
         exit;
@@ -568,14 +569,14 @@ if (!empty($keyword)) {
         $pdf->line(50, 550, 790, 550);
         $pdf->ezSetY(450);
         $pdf->ezSetY(480);
-        $pdf->ezText($certif_text, 28, array('justification'=>'center'));
+        $pdf->ezText($certif_text, 28, ['justification' => 'center']);
         //$pdf->ezSetY(750);
         $pdf->ezSetY(50);
-        $pdf->ezText($date, 18, array('justification'=>'center'));
+        $pdf->ezText($date, 18, ['justification' => 'center']);
         $pdf->ezSetY(580);
-        $pdf->ezText($organization_name, 22, array('justification'=>'left'));
+        $pdf->ezText($organization_name, 22, ['justification' => 'left']);
         $pdf->ezSetY(580);
-        $pdf->ezText($portal_name, 22, array('justification'=>'right'));
+        $pdf->ezText($portal_name, 22, ['justification' => 'right']);
         $pdf->ezStream();
     }
     exit;
@@ -586,7 +587,7 @@ if (!empty($keyword)) {
     $alleval = $cats[0]->get_evaluations($stud_id);
     $alllink = $cats[0]->get_links($stud_id);
 }
-$addparams = array('selectcat' => $cats[0]->get_id());
+$addparams = ['selectcat' => $cats[0]->get_id()];
 if (isset($_GET['search'])) {
     $addparams['search'] = $keyword;
 }
@@ -615,8 +616,8 @@ if (empty($allcat) && empty($alleval) && empty($alllink) &&
     echo Display::return_message(
         get_lang('GradebookWelcomeMessage').
         '<br /><br />
-        <form name="createcat" method="post" action="' . api_get_self().'?createallcategories=1">
-        <input type="submit" value="' . get_lang('CreateAllCat').'"></form>',
+        <form name="createcat" method="post" action="'.api_get_self().'?createallcategories=1">
+        <input type="submit" value="'.get_lang('CreateAllCat').'"></form>',
         'normal',
         false
     );

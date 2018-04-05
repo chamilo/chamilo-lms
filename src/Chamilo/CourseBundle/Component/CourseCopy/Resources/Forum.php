@@ -4,104 +4,106 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class forum
+ * Class forum.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class Forum extends Resource
 {
     /**
-     * The title
+     * The title.
      */
     public $title;
 
     /**
-     * The description
+     * The description.
      */
     public $description;
 
     /**
-     * Category-id
+     * Category-id.
      */
     public $category_id;
 
     /**
-     * Last post
+     * Last post.
      */
     public $last_post;
 
     /**
-     * Number of threads
+     * Number of threads.
      */
     public $topics;
 
     /**
-     * Number of posts
+     * Number of posts.
      */
     public $posts;
 
     /**
-     * Allow anonimous
+     * Allow anonimous.
      */
     public $allow_anonymous;
 
     /**
-     * Allow edit
+     * Allow edit.
      */
     public $allow_edit;
 
     /**
-     * Approval direct post
+     * Approval direct post.
      */
     public $approval_direct_post;
 
     /**
-     * Allow attachments
+     * Allow attachments.
      */
     public $allow_attachements;
 
     /**
-     * Allow new threads
+     * Allow new threads.
      */
     public $allow_new_topics;
 
     /**
-     * Default view
+     * Default view.
      */
     public $default_view;
 
     /**
-     * Group forum
+     * Group forum.
      */
     public $of_group;
 
     /**
-     * Public/private group forum
+     * Public/private group forum.
      */
     public $group_public_private;
 
     /**
-     * Order
+     * Order.
      */
     public $order;
 
     /**
-     * Locked or not
+     * Locked or not.
      */
     public $locked;
 
     /**
-     * Session id
+     * Session id.
      */
     public $session_id;
 
     /**
-     * Image
+     * Image.
      */
     public $image;
 
     /**
-     * Create a new Forum
+     * Create a new Forum.
      */
     public function __construct($obj)
     {
@@ -110,7 +112,7 @@ class Forum extends Resource
     }
 
     /**
-     * Show this resource
+     * Show this resource.
      */
     public function show()
     {

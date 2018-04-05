@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -41,7 +42,7 @@ $form = new CatForm(
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $select_course = isset($values['select_course']) ? $values['select_course'] : array();
+    $select_course = isset($values['select_course']) ? $values['select_course'] : [];
     $cat = new Category();
     if ($values['hid_parent_id'] == '0') {
         if ($select_course == 'COURSEINDEPENDENT') {
@@ -93,12 +94,12 @@ if ($form->validate()) {
 }
 
 if (!$_in_course) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl().'selectcat='.$get_select_cat,
-        'name' => get_lang('Gradebook')
-    );
+        'name' => get_lang('Gradebook'),
+    ];
 }
-$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolGradebook'));
+$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolGradebook')];
 Display :: display_header(get_lang('NewCategory'));
 
 $display_form = true;

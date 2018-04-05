@@ -43,10 +43,10 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_self().'?'.api_get_cidreq(),
             'name' => get_lang('CustomizeIcons'),
-        );
+        ];
         $toolName = Security::remove_XSS(stripslashes($tool['name']));
 
         $currentUrl = api_get_self().'?action=edit_icon&id='.$id.'&'.api_get_cidreq();
@@ -56,7 +56,7 @@ switch ($action) {
         $form->addHtml('<div class="col-md-7">');
         $form->addText('name', get_lang('Name'));
         $form->addText('link', get_lang('Links'));
-        $allowed_picture_types = array('jpg', 'jpeg', 'png');
+        $allowed_picture_types = ['jpg', 'jpeg', 'png'];
         $form->addFile('icon', get_lang('CustomIcon'));
         $form->addRule('icon', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
         $form->addSelect(
@@ -64,18 +64,18 @@ switch ($action) {
             get_lang('LinkTarget'),
             [
                 '_self' => get_lang('LinkOpenSelf'),
-                '_blank' => get_lang('LinkOpenBlank')
+                '_blank' => get_lang('LinkOpenBlank'),
             ]
         );
         $form->addSelect(
             'visibility',
             get_lang('Visibility'),
-            array(1 => get_lang('Visible'), 0 => get_lang('Invisible'))
+            [1 => get_lang('Visible'), 0 => get_lang('Invisible')]
         );
         $form->addTextarea(
             'description',
             get_lang('Description'),
-            array('rows' => '3', 'cols' => '40')
+            ['rows' => '3', 'cols' => '40']
         );
         $form->addButtonUpdate(get_lang('Update'));
         $form->addHtml('</div>');
@@ -131,7 +131,7 @@ switch ($action) {
                 $icon = Display::return_icon(
                     $image,
                     $toolIconName,
-                    array('id' => 'tool_'.$tool['id']),
+                    ['id' => 'tool_'.$tool['id']],
                     ICON_SIZE_BIG,
                     false
                 );

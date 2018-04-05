@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CQuizAnswer
+ * CQuizAnswer.
  *
  * @ORM\Table(
  *  name="c_quiz_answer",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuizAnswer
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer", options={"unsigned": true})
      * @ORM\Id
@@ -29,28 +29,28 @@ class CQuizAnswer
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_auto", type="integer", options={"unsigned": true, "default": null})
      */
     private $idAuto;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
@@ -64,7 +64,7 @@ class CQuizAnswer
     private $answer;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="correct", type="integer", nullable=true)
      */
@@ -85,7 +85,7 @@ class CQuizAnswer
     private $ponderation;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -133,9 +133,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CQuizAnswer
      */
     public function setId($id)
@@ -146,9 +147,9 @@ class CQuizAnswer
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -156,9 +157,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set questionId
+     * Set questionId.
      *
-     * @param integer $questionId
+     * @param int $questionId
+     *
      * @return CQuizAnswer
      */
     public function setQuestionId($questionId)
@@ -169,9 +171,9 @@ class CQuizAnswer
     }
 
     /**
-     * Get questionId
+     * Get questionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionId()
     {
@@ -179,9 +181,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set answer
+     * Set answer.
      *
      * @param string $answer
+     *
      * @return CQuizAnswer
      */
     public function setAnswer($answer)
@@ -192,7 +195,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get answer
+     * Get answer.
      *
      * @return string
      */
@@ -202,9 +205,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set correct
+     * Set correct.
      *
-     * @param integer $correct
+     * @param int $correct
+     *
      * @return CQuizAnswer
      */
     public function setCorrect($correct)
@@ -215,9 +219,9 @@ class CQuizAnswer
     }
 
     /**
-     * Get correct
+     * Get correct.
      *
-     * @return integer
+     * @return int
      */
     public function getCorrect()
     {
@@ -225,9 +229,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CQuizAnswer
      */
     public function setComment($comment)
@@ -238,7 +243,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -248,9 +253,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @param float $weight
+     *
      * @return CQuizAnswer
      */
     public function setPonderation($weight)
@@ -261,7 +267,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return float
      */
@@ -271,9 +277,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set position
+     * Set position.
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return CQuizAnswer
      */
     public function setPosition($position)
@@ -284,9 +291,9 @@ class CQuizAnswer
     }
 
     /**
-     * Get position
+     * Get position.
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -294,9 +301,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set hotspotCoordinates
+     * Set hotspotCoordinates.
      *
      * @param string $hotspotCoordinates
+     *
      * @return CQuizAnswer
      */
     public function setHotspotCoordinates($hotspotCoordinates)
@@ -307,7 +315,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get hotspotCoordinates
+     * Get hotspotCoordinates.
      *
      * @return string
      */
@@ -317,9 +325,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set hotspotType
+     * Set hotspotType.
      *
      * @param string $hotspotType
+     *
      * @return CQuizAnswer
      */
     public function setHotspotType($hotspotType)
@@ -330,7 +339,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get hotspotType
+     * Get hotspotType.
      *
      * @return string
      */
@@ -340,9 +349,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set destination
+     * Set destination.
      *
      * @param string $destination
+     *
      * @return CQuizAnswer
      */
     public function setDestination($destination)
@@ -353,7 +363,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get destination
+     * Get destination.
      *
      * @return string
      */
@@ -363,9 +373,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set answerCode
+     * Set answerCode.
      *
      * @param string $answerCode
+     *
      * @return CQuizAnswer
      */
     public function setAnswerCode($answerCode)
@@ -376,7 +387,7 @@ class CQuizAnswer
     }
 
     /**
-     * Get answerCode
+     * Get answerCode.
      *
      * @return string
      */
@@ -386,9 +397,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set idAuto
+     * Set idAuto.
      *
-     * @param integer $idAuto
+     * @param int $idAuto
+     *
      * @return CQuizAnswer
      */
     public function setIdAuto($idAuto)
@@ -399,9 +411,9 @@ class CQuizAnswer
     }
 
     /**
-     * Get idAuto
+     * Get idAuto.
      *
-     * @return integer
+     * @return int
      */
     public function getIdAuto()
     {
@@ -409,9 +421,10 @@ class CQuizAnswer
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CQuizAnswer
      */
     public function setCId($cId)
@@ -422,9 +435,9 @@ class CQuizAnswer
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -432,7 +445,8 @@ class CQuizAnswer
     }
 
     /**
-     * Get iid
+     * Get iid.
+     *
      * @return int
      */
     public function getIid()

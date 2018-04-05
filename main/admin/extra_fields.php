@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -19,7 +18,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $tool_name = null;
 
@@ -55,13 +54,13 @@ $action_links = $obj->getJqgridActionLinks($token);
 $htmlHeadXtra[] = '<script>
 $(function() {
     // grid definition see the $obj->display() function
-    ' .Display::grid_js(
+    '.Display::grid_js(
         $obj->type.'_fields',
         $url,
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     ).'
@@ -70,37 +69,37 @@ $(function() {
         id = $(this).val();
         switch(id) {
             case "1":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_text.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_text.png')).'");
                 break;
             case "2":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_text_area.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_text_area.png')).'");
                 break;
             case "3":
-                $("#example").html("' . addslashes(Display::return_icon('add_user_field_howto.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('add_user_field_howto.png')).'");
                 break;
             case "4":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_drop_down.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_drop_down.png')).'");
                 break;
             case "5":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_multidropdown.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_multidropdown.png')).'");
                 break;
             case "6":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_data.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");
                 break;
             case "7":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_date_time.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_date_time.png')).'");
                 break;
             case "8":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_doubleselect.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_doubleselect.png')).'");
                 break;
             case "9":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_divider.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_divider.png')).'");
                 break;
             case "10":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_user_tag.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_user_tag.png')).'");
                 break;
             case "11":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_data.png')).'");
+                $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");
                 break;
         }
     });
@@ -136,7 +135,7 @@ switch ($action) {
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;
@@ -161,7 +160,7 @@ switch ($action) {
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;

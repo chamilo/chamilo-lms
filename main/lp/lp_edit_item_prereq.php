@@ -4,12 +4,13 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ *
  * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
@@ -18,10 +19,6 @@ api_protect_course_script();
 
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
@@ -41,24 +38,24 @@ $lp = Session::read('oLP');
 $lp_theme_css = $lp->get_theme();
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list',
-    'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('LearningPaths'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
     'name' => stripslashes($lp->get_name()),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
-);
+];
 
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 

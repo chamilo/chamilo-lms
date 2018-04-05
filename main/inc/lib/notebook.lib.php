@@ -6,24 +6,27 @@ use ChamiloSession as Session;
 /**
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
+ *
  * @author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
+ *
  * @package chamilo.library
  */
 class NotebookManager
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * a little bit of javascript to display a prettier warning when deleting a note
+     * a little bit of javascript to display a prettier warning when deleting a note.
      *
      * @return string
      *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
+     *
      * @version januari 2009, dokeos 1.8.6
      */
     public static function javascript_notebook()
@@ -31,7 +34,7 @@ class NotebookManager
         return "<script>
 				function confirmation (name)
 				{
-					if (confirm(\" " . get_lang("NoteConfirmDelete")." \"+ name + \" ?\"))
+					if (confirm(\" ".get_lang("NoteConfirmDelete")." \"+ name + \" ?\"))
 						{return true;}
 					else
 						{return false;}
@@ -40,15 +43,18 @@ class NotebookManager
     }
 
     /**
-     * This functions stores the note in the database
+     * This functions stores the note in the database.
      *
      * @param array $values
-     * @param int $userId Optional. The user ID
-     * @param int $courseId Optional. The course ID
-     * @param int $sessionId Optional. The session ID
+     * @param int   $userId    Optional. The user ID
+     * @param int   $courseId  Optional. The course ID
+     * @param int   $sessionId Optional. The session ID
+     *
      * @return bool
+     *
      * @author Christian Fasanando <christian.fasanando@dokeos.com>
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
+     *
      * @version januari 2009, dokeos 1.8.6
      */
     public static function save_note($values, $userId = 0, $courseId = 0, $sessionId = 0)
@@ -75,7 +81,7 @@ class NotebookManager
             'description' => $values['note_comment'],
             'creation_date' => $now,
             'update_date' => $now,
-            'status' => 0
+            'status' => 0,
         ];
         $id = Database::insert($table, $params);
 
@@ -98,6 +104,7 @@ class NotebookManager
 
     /**
      * @param int $notebook_id
+     *
      * @return array
      */
     public static function get_note_information($notebook_id)
@@ -119,20 +126,22 @@ class NotebookManager
                WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
-            return array();
+            return [];
         }
 
         return Database::fetch_array($result);
     }
 
     /**
-     * This functions updates the note in the database
+     * This functions updates the note in the database.
      *
      * @param array $values
      *
      * @author Christian Fasanando <christian.fasanando@dokeos.com>
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
+     *
      * @return bool
+     *
      * @version januari 2009, dokeos 1.8.6
      */
     public static function update_note($values)
@@ -152,7 +161,7 @@ class NotebookManager
             'session_id' => $sessionId,
             'title' => $values['note_title'],
             'description' => $values['note_comment'],
-            'update_date' => api_get_utc_datetime()
+            'update_date' => api_get_utc_datetime(),
         ];
 
         Database::update(
@@ -161,7 +170,7 @@ class NotebookManager
             [
                 'c_id = ? AND notebook_id = ?' => [
                     $course_id,
-                    $values['notebook_id']
+                    $values['notebook_id'],
                 ],
             ]
         );
@@ -180,6 +189,7 @@ class NotebookManager
 
     /**
      * @param int $notebook_id
+     *
      * @return bool
      */
     public static function delete_note($notebook_id)
@@ -197,7 +207,7 @@ class NotebookManager
                 WHERE
                     c_id = $course_id AND
                     notebook_id='".intval($notebook_id)."' AND
-                    user_id = '" . api_get_user_id()."'";
+                    user_id = '".api_get_user_id()."'";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
         if ($affected_rows != 1) {
@@ -217,7 +227,7 @@ class NotebookManager
     }
 
     /**
-     * Display notes
+     * Display notes.
      */
     public static function display_notes()
     {
@@ -263,7 +273,7 @@ class NotebookManager
             $notebookView = 'creation_date';
         }
 
-        if (!in_array($notebookView, array('creation_date', 'update_date', 'title'))) {
+        if (!in_array($notebookView, ['creation_date', 'update_date', 'title'])) {
             Session::write('notebook_view', 'creation_date');
         }
 
@@ -290,7 +300,7 @@ class NotebookManager
             // Validation when belongs to a session
             $session_img = api_get_session_image($row['session_id'], $_user['status']);
             $updateValue = '';
-            if ($row['update_date'] <> $row['creation_date']) {
+            if ($row['update_date'] != $row['creation_date']) {
                 $updateValue = ', '.get_lang('UpdateDate').': '.Display::dateToStringAgoAndLongDate($row['update_date']);
             }
 

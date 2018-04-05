@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 /**
  * This tool allows platform admins to upload a massive amount of PDFs to be
- * uploaded in each course
+ * uploaded in each course.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -15,7 +16,7 @@ $subDir = '';
 $tool_name = get_lang('ImportPDFIntroToCourses');
 $errors = [];
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 
@@ -24,7 +25,7 @@ if ($_POST['formSent']) {
         $error_message = get_lang('UplUploadFailed');
         Display::addFlash(Display::return_message($error_message, 'error', false));
     } else {
-        $allowed_file_mimetype = array('zip');
+        $allowed_file_mimetype = ['zip'];
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
@@ -94,20 +95,23 @@ ENG101_Introduction_to_English-101.pdf
 Display::display_footer();
 
 /**
- * Import PDFs
- * @param   string $subDir  The subdirectory in which to put the files in each course
+ * Import PDFs.
+ *
+ * @param string $subDir The subdirectory in which to put the files in each course
+ *
  * @return array List of possible errors found
  */
 function import_pdfs($subDir = '/')
 {
     $baseDir = api_get_path(SYS_ARCHIVE_PATH);
     $uploadPath = 'pdfimport/';
-    $errors = array();
+    $errors = [];
     if (!is_dir($baseDir.$uploadPath)) {
         @mkdir($baseDir.$uploadPath);
     }
     if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024 * 1024 * 1024)) {
         error_log('Could not unzip uploaded file in '.__FILE__.', line '.__LINE__);
+
         return $errors;
     }
     $list = scandir($baseDir.$uploadPath);
@@ -152,7 +156,7 @@ function import_pdfs($subDir = '/')
                 );
                 // Redo visibility
                 api_set_default_visibility($docId, TOOL_DOCUMENT);
-                $errors[] = array('Line' => 0, 'Code' => $course['code'], 'Title' => $course['title']);
+                $errors[] = ['Line' => 0, 'Code' => $course['code'], 'Title' => $course['title']];
                 // Now add a link to the file from the Course description tool
                 $link = '<p>Sílabo de la asignatura 
                  <a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq_params($course['code']).'&action=download&id='.$docId.'" target="_blank">
@@ -169,12 +173,12 @@ function import_pdfs($subDir = '/')
             }
         } else {
             error_log($parts[0].' is not a course, apparently');
-            $errors[] = array('Line' => 0, 'Code' => $parts[0], 'Title' => $parts[0].' - '.get_lang('CodeDoesNotExists'));
+            $errors[] = ['Line' => 0, 'Code' => $parts[0], 'Title' => $parts[0].' - '.get_lang('CodeDoesNotExists')];
         }
         $i++; //found at least one entry that is not a dir or a .
     }
     if ($i == 0) {
-        $errors[] = array('Line' => 0, 'Code' => '.', 'Title' => get_lang('NoPDFFoundAtRoot'));
+        $errors[] = ['Line' => 0, 'Code' => '.', 'Title' => get_lang('NoPDFFoundAtRoot')];
     }
 
     return $errors;

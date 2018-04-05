@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathDocuments toolbar configuration
+ * LearningPathDocuments toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class LearningPathDocuments extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -29,7 +30,8 @@ class LearningPathDocuments extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -51,7 +53,7 @@ class LearningPathDocuments extends Basic
                 'Smiley',
                 'SpecialChar',
                 'Asciimath',
-                'Asciisvg'
+                'Asciisvg',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -61,12 +63,13 @@ class LearningPathDocuments extends Basic
             [api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -84,7 +87,7 @@ class LearningPathDocuments extends Basic
                 'Asciimath',
                 'Asciisvg',
                 'Table',
-                'SpecialChar'
+                'SpecialChar',
             ],
             [
                 'Outdent',
@@ -96,16 +99,17 @@ class LearningPathDocuments extends Basic
                 'BulletedList',
                 'JustifyLeft',
                 'JustifyCenter',
-                'JustifyRight'
+                'JustifyRight',
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
-            ['Bold', 'Italic', 'Underline', '-', 'Source']
+            ['Bold', 'Italic', 'Underline', '-', 'Source'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -118,7 +122,7 @@ class LearningPathDocuments extends Basic
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Toolbarswitch'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['ShowBlocks', 'Source']
+            ['ShowBlocks', 'Source'],
         ];
     }
 }

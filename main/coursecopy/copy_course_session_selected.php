@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use ChamiloSession as Session;
 
 /**
  * Copy resources from one course in a session to another one.
@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com> Code conventions
+ *
  * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -49,10 +50,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('CopyCourse');
 $returnLink = api_get_path(WEB_CODE_PATH).'course_info/maintenance_coach.php?'.api_get_cidreq();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => $returnLink,
-    'name' => get_lang('Maintenance')
-);
+    'name' => get_lang('Maintenance'),
+];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(
@@ -65,7 +66,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 /**
  * @param string $name
  */
-function make_select_session_list($name, $sessions, $attr = array())
+function make_select_session_list($name, $sessions, $attr = [])
 {
     $attrs = '';
     if (count($attr) > 0) {
@@ -96,11 +97,13 @@ function make_select_session_list($name, $sessions, $attr = array())
         }
     }
     $output .= '</select>';
+
     return $output;
 }
 
 /**
- * Show the form to copy courses
+ * Show the form to copy courses.
+ *
  * @global string $returnLink
  * @global string $courseCode
  */
@@ -226,6 +229,7 @@ function searchCourses($idSession, $type)
             api_utf8_encode($return)
         );
     }
+
     return $xajaxResponse;
 }
 
@@ -300,8 +304,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         displayForm();
     } else {
-        $arrCourseOrigin = array();
-        $arrCourseDestination = array();
+        $arrCourseOrigin = [];
+        $arrCourseDestination = [];
         $destinationSession = '';
 
         if (isset($_POST['SessionCoursesListDestination'])) {
@@ -357,7 +361,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         );
     }
 
-    $arrCourseDestination = array();
+    $arrCourseDestination = [];
     $destinationSession = '';
 
     if (isset($_POST['SessionCoursesListDestination'])) {
@@ -388,7 +392,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                 get_lang('Back').' '.get_lang('To').' '.get_lang(
                     'PlatformAdmin'
                 ),
-                array('style' => 'vertical-align:middle')
+                ['style' => 'vertical-align:middle']
             ).
             get_lang('Back').'</a></div>';
     } else {

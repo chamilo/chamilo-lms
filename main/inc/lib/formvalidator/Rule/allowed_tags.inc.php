@@ -13,7 +13,7 @@
  *    $allowed_tags_XXXX['tagname']['attributename'] = array();
  * - please keep the content of this file alphabetically structured
  *
- * @link http://www.w3schools.com/tags/
+ * @see http://www.w3schools.com/tags/
  */
 
 // KSES-COMPATIBLE SETTINGS
@@ -21,509 +21,519 @@
 // ALLOWED HTML FOR STUDENTS
 
 // a
-$allowed_tags_student['a'] = array();
-$allowed_tags_student['a']['class'] = array();
-$allowed_tags_student['a']['dir'] = array();
-$allowed_tags_student['a']['id'] = array();
-$allowed_tags_student['a']['href'] = array();
-$allowed_tags_student['a']['lang'] = array();
-$allowed_tags_student['a']['name'] = array();
-$allowed_tags_student['a']['rel'] = array();
-$allowed_tags_student['a']['rev'] = array();
-$allowed_tags_student['a']['style'] = array();
-$allowed_tags_student['a']['target'] = array();
-$allowed_tags_student['a']['title'] = array();
-$allowed_tags_student['a']['xml:lang'] = array();
+$allowed_tags_student['a'] = [];
+$allowed_tags_student['a']['class'] = [];
+$allowed_tags_student['a']['dir'] = [];
+$allowed_tags_student['a']['id'] = [];
+$allowed_tags_student['a']['href'] = [];
+$allowed_tags_student['a']['lang'] = [];
+$allowed_tags_student['a']['name'] = [];
+$allowed_tags_student['a']['rel'] = [];
+$allowed_tags_student['a']['rev'] = [];
+$allowed_tags_student['a']['style'] = [];
+$allowed_tags_student['a']['target'] = [];
+$allowed_tags_student['a']['title'] = [];
+$allowed_tags_student['a']['xml:lang'] = [];
 
 // abbr
-$allowed_tags_student['abbr'] = array();
-$allowed_tags_student['abbr']['class'] = array();
-$allowed_tags_student['abbr']['dir'] = array();
-$allowed_tags_student['abbr']['id'] = array();
-$allowed_tags_student['abbr']['lang'] = array();
-$allowed_tags_student['abbr']['style'] = array();
-$allowed_tags_student['abbr']['title'] = array();
-$allowed_tags_student['abbr']['xml:lang'] = array();
+$allowed_tags_student['abbr'] = [];
+$allowed_tags_student['abbr']['class'] = [];
+$allowed_tags_student['abbr']['dir'] = [];
+$allowed_tags_student['abbr']['id'] = [];
+$allowed_tags_student['abbr']['lang'] = [];
+$allowed_tags_student['abbr']['style'] = [];
+$allowed_tags_student['abbr']['title'] = [];
+$allowed_tags_student['abbr']['xml:lang'] = [];
 
 // acronym
-$allowed_tags_student['acronym'] = array();
-$allowed_tags_student['acronym']['class'] = array();
-$allowed_tags_student['acronym']['dir'] = array();
-$allowed_tags_student['acronym']['id'] = array();
-$allowed_tags_student['acronym']['lang'] = array();
-$allowed_tags_student['acronym']['style'] = array();
-$allowed_tags_student['acronym']['title'] = array();
-$allowed_tags_student['acronym']['xml:lang'] = array();
+$allowed_tags_student['acronym'] = [];
+$allowed_tags_student['acronym']['class'] = [];
+$allowed_tags_student['acronym']['dir'] = [];
+$allowed_tags_student['acronym']['id'] = [];
+$allowed_tags_student['acronym']['lang'] = [];
+$allowed_tags_student['acronym']['style'] = [];
+$allowed_tags_student['acronym']['title'] = [];
+$allowed_tags_student['acronym']['xml:lang'] = [];
 
 // address
-$allowed_tags_student['address'] = array();
-$allowed_tags_student['address']['class'] = array();
-$allowed_tags_student['address']['dir'] = array();
-$allowed_tags_student['address']['id'] = array();
-$allowed_tags_student['address']['lang'] = array();
-$allowed_tags_student['address']['style'] = array();
-$allowed_tags_student['address']['title'] = array();
-$allowed_tags_student['address']['xml:lang'] = array();
+$allowed_tags_student['address'] = [];
+$allowed_tags_student['address']['class'] = [];
+$allowed_tags_student['address']['dir'] = [];
+$allowed_tags_student['address']['id'] = [];
+$allowed_tags_student['address']['lang'] = [];
+$allowed_tags_student['address']['style'] = [];
+$allowed_tags_student['address']['title'] = [];
+$allowed_tags_student['address']['xml:lang'] = [];
 
 // b
-$allowed_tags_student['b'] = array();
-$allowed_tags_student['b']['class'] = array();
-$allowed_tags_student['b']['dir'] = array();
-$allowed_tags_student['b']['id'] = array();
-$allowed_tags_student['b']['lang'] = array();
-$allowed_tags_student['b']['style'] = array();
-$allowed_tags_student['b']['title'] = array();
-$allowed_tags_student['b']['xml:lang'] = array();
+$allowed_tags_student['b'] = [];
+$allowed_tags_student['b']['class'] = [];
+$allowed_tags_student['b']['dir'] = [];
+$allowed_tags_student['b']['id'] = [];
+$allowed_tags_student['b']['lang'] = [];
+$allowed_tags_student['b']['style'] = [];
+$allowed_tags_student['b']['title'] = [];
+$allowed_tags_student['b']['xml:lang'] = [];
 
 // base
-$allowed_tags_student_full_page['base'] = array();
-$allowed_tags_student_full_page['base']['href'] = array();
-$allowed_tags_student_full_page['base']['target'] = array();
+$allowed_tags_student_full_page['base'] = [];
+$allowed_tags_student_full_page['base']['href'] = [];
+$allowed_tags_student_full_page['base']['target'] = [];
 
 // basefont (IE only)
-$allowed_tags_student['basefont'] = array();
-$allowed_tags_student['basefont']['face'] = array();
-$allowed_tags_student['basefont']['color'] = array();
-$allowed_tags_student['basefont']['id'] = array();
-$allowed_tags_student['basefont']['size'] = array();
+$allowed_tags_student['basefont'] = [];
+$allowed_tags_student['basefont']['face'] = [];
+$allowed_tags_student['basefont']['color'] = [];
+$allowed_tags_student['basefont']['id'] = [];
+$allowed_tags_student['basefont']['size'] = [];
 
 // bdo
-$allowed_tags_student['bdo'] = array();
-$allowed_tags_student['bdo']['class'] = array();
-$allowed_tags_student['bdo']['dir'] = array();
-$allowed_tags_student['bdo']['id'] = array();
-$allowed_tags_student['bdo']['lang'] = array();
-$allowed_tags_student['bdo']['style'] = array();
-$allowed_tags_student['bdo']['title'] = array();
-$allowed_tags_student['bdo']['xml:lang'] = array();
+$allowed_tags_student['bdo'] = [];
+$allowed_tags_student['bdo']['class'] = [];
+$allowed_tags_student['bdo']['dir'] = [];
+$allowed_tags_student['bdo']['id'] = [];
+$allowed_tags_student['bdo']['lang'] = [];
+$allowed_tags_student['bdo']['style'] = [];
+$allowed_tags_student['bdo']['title'] = [];
+$allowed_tags_student['bdo']['xml:lang'] = [];
 
 // big
-$allowed_tags_student['big'] = array();
-$allowed_tags_student['big']['class'] = array();
-$allowed_tags_student['big']['dir'] = array();
-$allowed_tags_student['big']['id'] = array();
-$allowed_tags_student['big']['lang'] = array();
-$allowed_tags_student['big']['style'] = array();
-$allowed_tags_student['big']['title'] = array();
-$allowed_tags_student['big']['xml:lang'] = array();
+$allowed_tags_student['big'] = [];
+$allowed_tags_student['big']['class'] = [];
+$allowed_tags_student['big']['dir'] = [];
+$allowed_tags_student['big']['id'] = [];
+$allowed_tags_student['big']['lang'] = [];
+$allowed_tags_student['big']['style'] = [];
+$allowed_tags_student['big']['title'] = [];
+$allowed_tags_student['big']['xml:lang'] = [];
 
 // blockquote
-$allowed_tags_student['blockquote'] = array();
-$allowed_tags_student['blockquote']['cite'] = array();
-$allowed_tags_student['blockquote']['class'] = array();
-$allowed_tags_student['blockquote']['dir'] = array();
-$allowed_tags_student['blockquote']['id'] = array();
-$allowed_tags_student['blockquote']['lang'] = array();
-$allowed_tags_student['blockquote']['style'] = array();
-$allowed_tags_student['blockquote']['title'] = array();
-$allowed_tags_student['blockquote']['xml:lang'] = array();
+$allowed_tags_student['blockquote'] = [];
+$allowed_tags_student['blockquote']['cite'] = [];
+$allowed_tags_student['blockquote']['class'] = [];
+$allowed_tags_student['blockquote']['dir'] = [];
+$allowed_tags_student['blockquote']['id'] = [];
+$allowed_tags_student['blockquote']['lang'] = [];
+$allowed_tags_student['blockquote']['style'] = [];
+$allowed_tags_student['blockquote']['title'] = [];
+$allowed_tags_student['blockquote']['xml:lang'] = [];
 
 // body
-$allowed_tags_student_full_page['body'] = array();
-$allowed_tags_student_full_page['body']['alink'] = array();
-$allowed_tags_student_full_page['body']['background'] = array();
-$allowed_tags_student_full_page['body']['bgcolor'] = array();
-$allowed_tags_student_full_page['body']['link'] = array();
-$allowed_tags_student_full_page['body']['text'] = array();
-$allowed_tags_student_full_page['body']['vlink'] = array();
-$allowed_tags_student_full_page['body']['class'] = array();
-$allowed_tags_student_full_page['body']['dir'] = array();
-$allowed_tags_student_full_page['body']['id'] = array();
-$allowed_tags_student_full_page['body']['lang'] = array();
-$allowed_tags_student_full_page['body']['style'] = array();
-$allowed_tags_student_full_page['body']['title'] = array();
-$allowed_tags_student_full_page['body']['xml:lang'] = array();
+$allowed_tags_student_full_page['body'] = [];
+$allowed_tags_student_full_page['body']['alink'] = [];
+$allowed_tags_student_full_page['body']['background'] = [];
+$allowed_tags_student_full_page['body']['bgcolor'] = [];
+$allowed_tags_student_full_page['body']['link'] = [];
+$allowed_tags_student_full_page['body']['text'] = [];
+$allowed_tags_student_full_page['body']['vlink'] = [];
+$allowed_tags_student_full_page['body']['class'] = [];
+$allowed_tags_student_full_page['body']['dir'] = [];
+$allowed_tags_student_full_page['body']['id'] = [];
+$allowed_tags_student_full_page['body']['lang'] = [];
+$allowed_tags_student_full_page['body']['style'] = [];
+$allowed_tags_student_full_page['body']['title'] = [];
+$allowed_tags_student_full_page['body']['xml:lang'] = [];
 
 // br
-$allowed_tags_student['br'] = array();
-$allowed_tags_student['br']['class'] = array();
-$allowed_tags_student['br']['id'] = array();
-$allowed_tags_student['br']['style'] = array();
-$allowed_tags_student['br']['title'] = array();
+$allowed_tags_student['br'] = [];
+$allowed_tags_student['br']['class'] = [];
+$allowed_tags_student['br']['id'] = [];
+$allowed_tags_student['br']['style'] = [];
+$allowed_tags_student['br']['title'] = [];
 
 // caption
-$allowed_tags_student['caption'] = array();
-$allowed_tags_student['caption']['align'] = array();
-$allowed_tags_student['caption']['class'] = array();
-$allowed_tags_student['caption']['dir'] = array();
-$allowed_tags_student['caption']['id'] = array();
-$allowed_tags_student['caption']['lang'] = array();
-$allowed_tags_student['caption']['style'] = array();
-$allowed_tags_student['caption']['title'] = array();
-$allowed_tags_student['caption']['xml:lang'] = array();
+$allowed_tags_student['caption'] = [];
+$allowed_tags_student['caption']['align'] = [];
+$allowed_tags_student['caption']['class'] = [];
+$allowed_tags_student['caption']['dir'] = [];
+$allowed_tags_student['caption']['id'] = [];
+$allowed_tags_student['caption']['lang'] = [];
+$allowed_tags_student['caption']['style'] = [];
+$allowed_tags_student['caption']['title'] = [];
+$allowed_tags_student['caption']['xml:lang'] = [];
 
 // center
-$allowed_tags_student['center'] = array();
-$allowed_tags_student['center']['class'] = array();
-$allowed_tags_student['center']['dir'] = array();
-$allowed_tags_student['center']['id'] = array();
-$allowed_tags_student['center']['lang'] = array();
-$allowed_tags_student['center']['style'] = array();
-$allowed_tags_student['center']['title'] = array();
+$allowed_tags_student['center'] = [];
+$allowed_tags_student['center']['class'] = [];
+$allowed_tags_student['center']['dir'] = [];
+$allowed_tags_student['center']['id'] = [];
+$allowed_tags_student['center']['lang'] = [];
+$allowed_tags_student['center']['style'] = [];
+$allowed_tags_student['center']['title'] = [];
 
 // cite
-$allowed_tags_student['cite'] = array();
-$allowed_tags_student['cite']['class'] = array();
-$allowed_tags_student['cite']['dir'] = array();
-$allowed_tags_student['cite']['id'] = array();
-$allowed_tags_student['cite']['lang'] = array();
-$allowed_tags_student['cite']['style'] = array();
-$allowed_tags_student['cite']['title'] = array();
-$allowed_tags_student['cite']['xml:lang'] = array();
+$allowed_tags_student['cite'] = [];
+$allowed_tags_student['cite']['class'] = [];
+$allowed_tags_student['cite']['dir'] = [];
+$allowed_tags_student['cite']['id'] = [];
+$allowed_tags_student['cite']['lang'] = [];
+$allowed_tags_student['cite']['style'] = [];
+$allowed_tags_student['cite']['title'] = [];
+$allowed_tags_student['cite']['xml:lang'] = [];
 
 // code
-$allowed_tags_student['code'] = array();
-$allowed_tags_student['code']['class'] = array();
-$allowed_tags_student['code']['dir'] = array();
-$allowed_tags_student['code']['id'] = array();
-$allowed_tags_student['code']['lang'] = array();
-$allowed_tags_student['code']['style'] = array();
-$allowed_tags_student['code']['title'] = array();
-$allowed_tags_student['code']['xml:lang'] = array();
+$allowed_tags_student['code'] = [];
+$allowed_tags_student['code']['class'] = [];
+$allowed_tags_student['code']['dir'] = [];
+$allowed_tags_student['code']['id'] = [];
+$allowed_tags_student['code']['lang'] = [];
+$allowed_tags_student['code']['style'] = [];
+$allowed_tags_student['code']['title'] = [];
+$allowed_tags_student['code']['xml:lang'] = [];
 
 // col
-$allowed_tags_student['col'] = array();
-$allowed_tags_student['col']['align'] = array();
-$allowed_tags_student['col']['class'] = array();
-$allowed_tags_student['col']['dir'] = array();
-$allowed_tags_student['col']['id'] = array();
-$allowed_tags_student['col']['lang'] = array();
-$allowed_tags_student['col']['span'] = array();
-$allowed_tags_student['col']['style'] = array();
-$allowed_tags_student['col']['title'] = array();
-$allowed_tags_student['col']['valign'] = array();
-$allowed_tags_student['col']['width'] = array();
-$allowed_tags_student['col']['xml:lang'] = array();
+$allowed_tags_student['col'] = [];
+$allowed_tags_student['col']['align'] = [];
+$allowed_tags_student['col']['class'] = [];
+$allowed_tags_student['col']['dir'] = [];
+$allowed_tags_student['col']['id'] = [];
+$allowed_tags_student['col']['lang'] = [];
+$allowed_tags_student['col']['span'] = [];
+$allowed_tags_student['col']['style'] = [];
+$allowed_tags_student['col']['title'] = [];
+$allowed_tags_student['col']['valign'] = [];
+$allowed_tags_student['col']['width'] = [];
+$allowed_tags_student['col']['xml:lang'] = [];
 
 // colgroup
-$allowed_tags_student['colgroup'] = array();
-$allowed_tags_student['colgroup']['align'] = array();
-$allowed_tags_student['colgroup']['class'] = array();
-$allowed_tags_student['colgroup']['dir'] = array();
-$allowed_tags_student['colgroup']['id'] = array();
-$allowed_tags_student['colgroup']['lang'] = array();
-$allowed_tags_student['colgroup']['span'] = array();
-$allowed_tags_student['colgroup']['style'] = array();
-$allowed_tags_student['colgroup']['title'] = array();
-$allowed_tags_student['colgroup']['valign'] = array();
-$allowed_tags_student['colgroup']['width'] = array();
-$allowed_tags_student['colgroup']['xml:lang'] = array();
+$allowed_tags_student['colgroup'] = [];
+$allowed_tags_student['colgroup']['align'] = [];
+$allowed_tags_student['colgroup']['class'] = [];
+$allowed_tags_student['colgroup']['dir'] = [];
+$allowed_tags_student['colgroup']['id'] = [];
+$allowed_tags_student['colgroup']['lang'] = [];
+$allowed_tags_student['colgroup']['span'] = [];
+$allowed_tags_student['colgroup']['style'] = [];
+$allowed_tags_student['colgroup']['title'] = [];
+$allowed_tags_student['colgroup']['valign'] = [];
+$allowed_tags_student['colgroup']['width'] = [];
+$allowed_tags_student['colgroup']['xml:lang'] = [];
 
 // dd
-$allowed_tags_student['dd'] = array();
-$allowed_tags_student['dd']['class'] = array();
-$allowed_tags_student['dd']['dir'] = array();
-$allowed_tags_student['dd']['id'] = array();
-$allowed_tags_student['dd']['lang'] = array();
-$allowed_tags_student['dd']['style'] = array();
-$allowed_tags_student['dd']['title'] = array();
-$allowed_tags_student['dd']['xml:lang'] = array();
+$allowed_tags_student['dd'] = [];
+$allowed_tags_student['dd']['class'] = [];
+$allowed_tags_student['dd']['dir'] = [];
+$allowed_tags_student['dd']['id'] = [];
+$allowed_tags_student['dd']['lang'] = [];
+$allowed_tags_student['dd']['style'] = [];
+$allowed_tags_student['dd']['title'] = [];
+$allowed_tags_student['dd']['xml:lang'] = [];
 
 // del
-$allowed_tags_student['del'] = array();
-$allowed_tags_student['del']['cite'] = array();
-$allowed_tags_student['del']['class'] = array();
-$allowed_tags_student['del']['dir'] = array();
-$allowed_tags_student['del']['id'] = array();
-$allowed_tags_student['del']['lang'] = array();
-$allowed_tags_student['del']['style'] = array();
-$allowed_tags_student['del']['title'] = array();
-$allowed_tags_student['del']['xml:lang'] = array();
+$allowed_tags_student['del'] = [];
+$allowed_tags_student['del']['cite'] = [];
+$allowed_tags_student['del']['class'] = [];
+$allowed_tags_student['del']['dir'] = [];
+$allowed_tags_student['del']['id'] = [];
+$allowed_tags_student['del']['lang'] = [];
+$allowed_tags_student['del']['style'] = [];
+$allowed_tags_student['del']['title'] = [];
+$allowed_tags_student['del']['xml:lang'] = [];
 
 // dfn
-$allowed_tags_student['dfn'] = array();
-$allowed_tags_student['dfn']['class'] = array();
-$allowed_tags_student['dfn']['dir'] = array();
-$allowed_tags_student['dfn']['id'] = array();
-$allowed_tags_student['dfn']['lang'] = array();
-$allowed_tags_student['dfn']['style'] = array();
-$allowed_tags_student['dfn']['title'] = array();
-$allowed_tags_student['dfn']['xml:lang'] = array();
+$allowed_tags_student['dfn'] = [];
+$allowed_tags_student['dfn']['class'] = [];
+$allowed_tags_student['dfn']['dir'] = [];
+$allowed_tags_student['dfn']['id'] = [];
+$allowed_tags_student['dfn']['lang'] = [];
+$allowed_tags_student['dfn']['style'] = [];
+$allowed_tags_student['dfn']['title'] = [];
+$allowed_tags_student['dfn']['xml:lang'] = [];
 
 // dir
-$allowed_tags_student['dir'] = array();
-$allowed_tags_student['dir']['class'] = array();
-$allowed_tags_student['dir']['compact'] = array();
-$allowed_tags_student['dir']['dir'] = array();
-$allowed_tags_student['dir']['id'] = array();
-$allowed_tags_student['dir']['lang'] = array();
-$allowed_tags_student['dir']['style'] = array();
-$allowed_tags_student['dir']['title'] = array();
+$allowed_tags_student['dir'] = [];
+$allowed_tags_student['dir']['class'] = [];
+$allowed_tags_student['dir']['compact'] = [];
+$allowed_tags_student['dir']['dir'] = [];
+$allowed_tags_student['dir']['id'] = [];
+$allowed_tags_student['dir']['lang'] = [];
+$allowed_tags_student['dir']['style'] = [];
+$allowed_tags_student['dir']['title'] = [];
 
 // div
-$allowed_tags_student['div'] = array();
-$allowed_tags_student['div']['align'] = array();
-$allowed_tags_student['div']['class'] = array();
-$allowed_tags_student['div']['dir'] = array();
-$allowed_tags_student['div']['id'] = array();
-$allowed_tags_student['div']['lang'] = array();
-$allowed_tags_student['div']['style'] = array();
-$allowed_tags_student['div']['title'] = array();
-$allowed_tags_student['div']['xml:lang'] = array();
+$allowed_tags_student['div'] = [];
+$allowed_tags_student['div']['align'] = [];
+$allowed_tags_student['div']['class'] = [];
+$allowed_tags_student['div']['dir'] = [];
+$allowed_tags_student['div']['id'] = [];
+$allowed_tags_student['div']['lang'] = [];
+$allowed_tags_student['div']['style'] = [];
+$allowed_tags_student['div']['title'] = [];
+$allowed_tags_student['div']['xml:lang'] = [];
 
 // dl
-$allowed_tags_student['dl'] = array();
-$allowed_tags_student['dl']['class'] = array();
-$allowed_tags_student['dl']['dir'] = array();
-$allowed_tags_student['dl']['id'] = array();
-$allowed_tags_student['dl']['lang'] = array();
-$allowed_tags_student['dl']['style'] = array();
-$allowed_tags_student['dl']['title'] = array();
-$allowed_tags_student['dl']['xml:lang'] = array();
+$allowed_tags_student['dl'] = [];
+$allowed_tags_student['dl']['class'] = [];
+$allowed_tags_student['dl']['dir'] = [];
+$allowed_tags_student['dl']['id'] = [];
+$allowed_tags_student['dl']['lang'] = [];
+$allowed_tags_student['dl']['style'] = [];
+$allowed_tags_student['dl']['title'] = [];
+$allowed_tags_student['dl']['xml:lang'] = [];
 
 // dt
-$allowed_tags_student['dt'] = array();
-$allowed_tags_student['dt']['class'] = array();
-$allowed_tags_student['dt']['dir'] = array();
-$allowed_tags_student['dt']['id'] = array();
-$allowed_tags_student['dt']['lang'] = array();
-$allowed_tags_student['dt']['style'] = array();
-$allowed_tags_student['dt']['title'] = array();
-$allowed_tags_student['dt']['xml:lang'] = array();
+$allowed_tags_student['dt'] = [];
+$allowed_tags_student['dt']['class'] = [];
+$allowed_tags_student['dt']['dir'] = [];
+$allowed_tags_student['dt']['id'] = [];
+$allowed_tags_student['dt']['lang'] = [];
+$allowed_tags_student['dt']['style'] = [];
+$allowed_tags_student['dt']['title'] = [];
+$allowed_tags_student['dt']['xml:lang'] = [];
 
 // em
-$allowed_tags_student['em'] = array();
-$allowed_tags_student['em']['class'] = array();
-$allowed_tags_student['em']['dir'] = array();
-$allowed_tags_student['em']['id'] = array();
-$allowed_tags_student['em']['lang'] = array();
-$allowed_tags_student['em']['style'] = array();
-$allowed_tags_student['em']['title'] = array();
-$allowed_tags_student['em']['xml:lang'] = array();
+$allowed_tags_student['em'] = [];
+$allowed_tags_student['em']['class'] = [];
+$allowed_tags_student['em']['dir'] = [];
+$allowed_tags_student['em']['id'] = [];
+$allowed_tags_student['em']['lang'] = [];
+$allowed_tags_student['em']['style'] = [];
+$allowed_tags_student['em']['title'] = [];
+$allowed_tags_student['em']['xml:lang'] = [];
 
 // embed
-$allowed_tags_student['embed'] = array();
-$allowed_tags_student['embed']['height'] = array();
-$allowed_tags_student['embed']['width'] = array();
-$allowed_tags_student['embed']['type'] = array();
+$allowed_tags_student['embed'] = [];
+$allowed_tags_student['embed']['height'] = [];
+$allowed_tags_student['embed']['width'] = [];
+$allowed_tags_student['embed']['type'] = [];
 //$allowed_tags_student['embed']['quality'] = array();
-$allowed_tags_student['embed']['src'] = array();
-$allowed_tags_student['embed']['flashvars'] = array();
-$allowed_tags_student['embed']['allowscriptaccess'] = array();
+$allowed_tags_student['embed']['src'] = [];
+$allowed_tags_student['embed']['flashvars'] = [];
+$allowed_tags_student['embed']['allowscriptaccess'] = [];
 //$allowed_tags_student['embed']['allowfullscreen'] = array();
 //$allowed_tags_student['embed']['bgcolor'] = array();
 //$allowed_tags_student['embed']['pluginspage'] = array();
 
-
 // embed
-$allowed_tags_student['video'] = array();
-$allowed_tags_student['video']['height'] = array();
-$allowed_tags_student['video']['width'] = array();
-$allowed_tags_student['video']['type'] = array();
-$allowed_tags_student['video']['poster'] = array();
-$allowed_tags_student['video']['preload'] = array();
-$allowed_tags_student['video']['src'] = array();
-$allowed_tags_student['video']['controls'] = array();
-$allowed_tags_student['video']['id'] = array();
+$allowed_tags_student['video'] = [];
+$allowed_tags_student['video']['height'] = [];
+$allowed_tags_student['video']['width'] = [];
+$allowed_tags_student['video']['type'] = [];
+$allowed_tags_student['video']['poster'] = [];
+$allowed_tags_student['video']['preload'] = [];
+$allowed_tags_student['video']['src'] = [];
+$allowed_tags_student['video']['controls'] = [];
+$allowed_tags_student['video']['id'] = [];
+$allowed_tags_student['video']['class'] = [];
 
-$allowed_tags_student['source'] = array();
-$allowed_tags_student['source']['type'] = array();
-$allowed_tags_student['source']['src'] = array();
+$allowed_tags_student['audio'] = [];
+$allowed_tags_student['audio']['autoplay'] = [];
+$allowed_tags_student['audio']['src'] = [];
+$allowed_tags_student['audio']['loop'] = [];
+$allowed_tags_student['audio']['preload'] = [];
+$allowed_tags_student['audio']['controls'] = [];
+$allowed_tags_student['audio']['muted'] = [];
+$allowed_tags_student['audio']['id'] = [];
+$allowed_tags_student['audio']['class'] = [];
+
+$allowed_tags_student['source'] = [];
+$allowed_tags_student['source']['type'] = [];
+$allowed_tags_student['source']['src'] = [];
 
 // font
-$allowed_tags_student['font'] = array();
-$allowed_tags_student['font']['face'] = array();
-$allowed_tags_student['font']['class'] = array();
-$allowed_tags_student['font']['color'] = array();
-$allowed_tags_student['font']['dir'] = array();
-$allowed_tags_student['font']['id'] = array();
-$allowed_tags_student['font']['lang'] = array();
-$allowed_tags_student['font']['size'] = array();
-$allowed_tags_student['font']['style'] = array();
-$allowed_tags_student['font']['title'] = array();
+$allowed_tags_student['font'] = [];
+$allowed_tags_student['font']['face'] = [];
+$allowed_tags_student['font']['class'] = [];
+$allowed_tags_student['font']['color'] = [];
+$allowed_tags_student['font']['dir'] = [];
+$allowed_tags_student['font']['id'] = [];
+$allowed_tags_student['font']['lang'] = [];
+$allowed_tags_student['font']['size'] = [];
+$allowed_tags_student['font']['style'] = [];
+$allowed_tags_student['font']['title'] = [];
 
 // frame
-$allowed_tags_student_full_page['frame'] = array();
-$allowed_tags_student_full_page['frame']['class'] = array();
-$allowed_tags_student_full_page['frame']['frameborder'] = array();
-$allowed_tags_student_full_page['frame']['id'] = array();
-$allowed_tags_student_full_page['frame']['longsesc'] = array();
-$allowed_tags_student_full_page['frame']['marginheight'] = array();
-$allowed_tags_student_full_page['frame']['marginwidth'] = array();
-$allowed_tags_student_full_page['frame']['name'] = array();
-$allowed_tags_student_full_page['frame']['noresize'] = array();
-$allowed_tags_student_full_page['frame']['scrolling'] = array();
-$allowed_tags_student_full_page['frame']['src'] = array();
-$allowed_tags_student_full_page['frame']['style'] = array();
-$allowed_tags_student_full_page['frame']['title'] = array();
+$allowed_tags_student_full_page['frame'] = [];
+$allowed_tags_student_full_page['frame']['class'] = [];
+$allowed_tags_student_full_page['frame']['frameborder'] = [];
+$allowed_tags_student_full_page['frame']['id'] = [];
+$allowed_tags_student_full_page['frame']['longsesc'] = [];
+$allowed_tags_student_full_page['frame']['marginheight'] = [];
+$allowed_tags_student_full_page['frame']['marginwidth'] = [];
+$allowed_tags_student_full_page['frame']['name'] = [];
+$allowed_tags_student_full_page['frame']['noresize'] = [];
+$allowed_tags_student_full_page['frame']['scrolling'] = [];
+$allowed_tags_student_full_page['frame']['src'] = [];
+$allowed_tags_student_full_page['frame']['style'] = [];
+$allowed_tags_student_full_page['frame']['title'] = [];
 
 // frameset
-$allowed_tags_student_full_page['frameset'] = array();
-$allowed_tags_student_full_page['frameset']['class'] = array();
-$allowed_tags_student_full_page['frameset']['cols'] = array();
-$allowed_tags_student_full_page['frameset']['id'] = array();
-$allowed_tags_student_full_page['frameset']['rows'] = array();
-$allowed_tags_student_full_page['frameset']['style'] = array();
-$allowed_tags_student_full_page['frameset']['title'] = array();
+$allowed_tags_student_full_page['frameset'] = [];
+$allowed_tags_student_full_page['frameset']['class'] = [];
+$allowed_tags_student_full_page['frameset']['cols'] = [];
+$allowed_tags_student_full_page['frameset']['id'] = [];
+$allowed_tags_student_full_page['frameset']['rows'] = [];
+$allowed_tags_student_full_page['frameset']['style'] = [];
+$allowed_tags_student_full_page['frameset']['title'] = [];
 
 // head
-$allowed_tags_student_full_page['head'] = array();
-$allowed_tags_student_full_page['head']['dir'] = array();
-$allowed_tags_student_full_page['head']['lang'] = array();
-$allowed_tags_student_full_page['head']['profile'] = array();
-$allowed_tags_student_full_page['head']['xml:lang'] = array();
+$allowed_tags_student_full_page['head'] = [];
+$allowed_tags_student_full_page['head']['dir'] = [];
+$allowed_tags_student_full_page['head']['lang'] = [];
+$allowed_tags_student_full_page['head']['profile'] = [];
+$allowed_tags_student_full_page['head']['xml:lang'] = [];
 
 // h1
-$allowed_tags_student['h1'] = array();
-$allowed_tags_student['h1']['align'] = array();
-$allowed_tags_student['h1']['class'] = array();
-$allowed_tags_student['h1']['dir'] = array();
-$allowed_tags_student['h1']['id'] = array();
-$allowed_tags_student['h1']['lang'] = array();
-$allowed_tags_student['h1']['style'] = array();
-$allowed_tags_student['h1']['title'] = array();
-$allowed_tags_student['h1']['xml:lang'] = array();
+$allowed_tags_student['h1'] = [];
+$allowed_tags_student['h1']['align'] = [];
+$allowed_tags_student['h1']['class'] = [];
+$allowed_tags_student['h1']['dir'] = [];
+$allowed_tags_student['h1']['id'] = [];
+$allowed_tags_student['h1']['lang'] = [];
+$allowed_tags_student['h1']['style'] = [];
+$allowed_tags_student['h1']['title'] = [];
+$allowed_tags_student['h1']['xml:lang'] = [];
 
 // h2
-$allowed_tags_student['h2'] = array();
-$allowed_tags_student['h2']['align'] = array();
-$allowed_tags_student['h2']['class'] = array();
-$allowed_tags_student['h2']['dir'] = array();
-$allowed_tags_student['h2']['id'] = array();
-$allowed_tags_student['h2']['lang'] = array();
-$allowed_tags_student['h2']['style'] = array();
-$allowed_tags_student['h2']['title'] = array();
-$allowed_tags_student['h2']['xml:lang'] = array();
+$allowed_tags_student['h2'] = [];
+$allowed_tags_student['h2']['align'] = [];
+$allowed_tags_student['h2']['class'] = [];
+$allowed_tags_student['h2']['dir'] = [];
+$allowed_tags_student['h2']['id'] = [];
+$allowed_tags_student['h2']['lang'] = [];
+$allowed_tags_student['h2']['style'] = [];
+$allowed_tags_student['h2']['title'] = [];
+$allowed_tags_student['h2']['xml:lang'] = [];
 
 // h3
-$allowed_tags_student['h3'] = array();
-$allowed_tags_student['h3']['align'] = array();
-$allowed_tags_student['h3']['class'] = array();
-$allowed_tags_student['h3']['dir'] = array();
-$allowed_tags_student['h3']['id'] = array();
-$allowed_tags_student['h3']['lang'] = array();
-$allowed_tags_student['h3']['style'] = array();
-$allowed_tags_student['h3']['title'] = array();
-$allowed_tags_student['h3']['xml:lang'] = array();
+$allowed_tags_student['h3'] = [];
+$allowed_tags_student['h3']['align'] = [];
+$allowed_tags_student['h3']['class'] = [];
+$allowed_tags_student['h3']['dir'] = [];
+$allowed_tags_student['h3']['id'] = [];
+$allowed_tags_student['h3']['lang'] = [];
+$allowed_tags_student['h3']['style'] = [];
+$allowed_tags_student['h3']['title'] = [];
+$allowed_tags_student['h3']['xml:lang'] = [];
 
 // h4
-$allowed_tags_student['h4'] = array();
-$allowed_tags_student['h4']['align'] = array();
-$allowed_tags_student['h4']['class'] = array();
-$allowed_tags_student['h4']['dir'] = array();
-$allowed_tags_student['h4']['id'] = array();
-$allowed_tags_student['h4']['lang'] = array();
-$allowed_tags_student['h4']['style'] = array();
-$allowed_tags_student['h4']['title'] = array();
-$allowed_tags_student['h4']['xml:lang'] = array();
+$allowed_tags_student['h4'] = [];
+$allowed_tags_student['h4']['align'] = [];
+$allowed_tags_student['h4']['class'] = [];
+$allowed_tags_student['h4']['dir'] = [];
+$allowed_tags_student['h4']['id'] = [];
+$allowed_tags_student['h4']['lang'] = [];
+$allowed_tags_student['h4']['style'] = [];
+$allowed_tags_student['h4']['title'] = [];
+$allowed_tags_student['h4']['xml:lang'] = [];
 
 // h5
-$allowed_tags_student['h5'] = array();
-$allowed_tags_student['h5']['align'] = array();
-$allowed_tags_student['h5']['class'] = array();
-$allowed_tags_student['h5']['dir'] = array();
-$allowed_tags_student['h5']['id'] = array();
-$allowed_tags_student['h5']['lang'] = array();
-$allowed_tags_student['h5']['style'] = array();
-$allowed_tags_student['h5']['title'] = array();
-$allowed_tags_student['h5']['xml:lang'] = array();
+$allowed_tags_student['h5'] = [];
+$allowed_tags_student['h5']['align'] = [];
+$allowed_tags_student['h5']['class'] = [];
+$allowed_tags_student['h5']['dir'] = [];
+$allowed_tags_student['h5']['id'] = [];
+$allowed_tags_student['h5']['lang'] = [];
+$allowed_tags_student['h5']['style'] = [];
+$allowed_tags_student['h5']['title'] = [];
+$allowed_tags_student['h5']['xml:lang'] = [];
 
 // h6
-$allowed_tags_student['h6'] = array();
-$allowed_tags_student['h6']['align'] = array();
-$allowed_tags_student['h6']['class'] = array();
-$allowed_tags_student['h6']['dir'] = array();
-$allowed_tags_student['h6']['id'] = array();
-$allowed_tags_student['h6']['lang'] = array();
-$allowed_tags_student['h6']['style'] = array();
-$allowed_tags_student['h6']['title'] = array();
-$allowed_tags_student['h6']['xml:lang'] = array();
+$allowed_tags_student['h6'] = [];
+$allowed_tags_student['h6']['align'] = [];
+$allowed_tags_student['h6']['class'] = [];
+$allowed_tags_student['h6']['dir'] = [];
+$allowed_tags_student['h6']['id'] = [];
+$allowed_tags_student['h6']['lang'] = [];
+$allowed_tags_student['h6']['style'] = [];
+$allowed_tags_student['h6']['title'] = [];
+$allowed_tags_student['h6']['xml:lang'] = [];
 
 // hr
-$allowed_tags_student['hr'] = array();
-$allowed_tags_student['hr']['align'] = array();
-$allowed_tags_student['hr']['class'] = array();
-$allowed_tags_student['hr']['dir'] = array();
-$allowed_tags_student['hr']['id'] = array();
-$allowed_tags_student['hr']['lang'] = array();
-$allowed_tags_student['hr']['noshade'] = array();
-$allowed_tags_student['hr']['size'] = array();
-$allowed_tags_student['hr']['style'] = array();
-$allowed_tags_student['hr']['title'] = array();
-$allowed_tags_student['hr']['width'] = array();
-$allowed_tags_student['hr']['xml:lang'] = array();
+$allowed_tags_student['hr'] = [];
+$allowed_tags_student['hr']['align'] = [];
+$allowed_tags_student['hr']['class'] = [];
+$allowed_tags_student['hr']['dir'] = [];
+$allowed_tags_student['hr']['id'] = [];
+$allowed_tags_student['hr']['lang'] = [];
+$allowed_tags_student['hr']['noshade'] = [];
+$allowed_tags_student['hr']['size'] = [];
+$allowed_tags_student['hr']['style'] = [];
+$allowed_tags_student['hr']['title'] = [];
+$allowed_tags_student['hr']['width'] = [];
+$allowed_tags_student['hr']['xml:lang'] = [];
 
 // html
-$allowed_tags_student_full_page['html'] = array();
-$allowed_tags_student_full_page['html']['dir'] = array();
-$allowed_tags_student_full_page['html']['lang'] = array();
-$allowed_tags_student_full_page['html']['xml:lang'] = array();
-$allowed_tags_student_full_page['html']['xmlns'] = array();
+$allowed_tags_student_full_page['html'] = [];
+$allowed_tags_student_full_page['html']['dir'] = [];
+$allowed_tags_student_full_page['html']['lang'] = [];
+$allowed_tags_student_full_page['html']['xml:lang'] = [];
+$allowed_tags_student_full_page['html']['xmlns'] = [];
 
 // i
-$allowed_tags_student['i'] = array();
-$allowed_tags_student['i']['class'] = array();
-$allowed_tags_student['i']['dir'] = array();
-$allowed_tags_student['i']['id'] = array();
-$allowed_tags_student['i']['lang'] = array();
-$allowed_tags_student['i']['style'] = array();
-$allowed_tags_student['i']['title'] = array();
-$allowed_tags_student['i']['xml:lang'] = array();
+$allowed_tags_student['i'] = [];
+$allowed_tags_student['i']['class'] = [];
+$allowed_tags_student['i']['dir'] = [];
+$allowed_tags_student['i']['id'] = [];
+$allowed_tags_student['i']['lang'] = [];
+$allowed_tags_student['i']['style'] = [];
+$allowed_tags_student['i']['title'] = [];
+$allowed_tags_student['i']['xml:lang'] = [];
 
 // img
-$allowed_tags_student['img'] = array();
-$allowed_tags_student['img']['alt'] = array();
-$allowed_tags_student['img']['align'] = array();
-$allowed_tags_student['img']['border'] = array();
-$allowed_tags_student['img']['class'] = array();
-$allowed_tags_student['img']['dir'] = array();
-$allowed_tags_student['img']['id'] = array();
-$allowed_tags_student['img']['height'] = array();
-$allowed_tags_student['img']['hspace'] = array();
+$allowed_tags_student['img'] = [];
+$allowed_tags_student['img']['alt'] = [];
+$allowed_tags_student['img']['align'] = [];
+$allowed_tags_student['img']['border'] = [];
+$allowed_tags_student['img']['class'] = [];
+$allowed_tags_student['img']['dir'] = [];
+$allowed_tags_student['img']['id'] = [];
+$allowed_tags_student['img']['height'] = [];
+$allowed_tags_student['img']['hspace'] = [];
 //$allowed_tags_student['img']['ismap'] = array();
-$allowed_tags_student['img']['lang'] = array();
-$allowed_tags_student['img']['longdesc'] = array();
-$allowed_tags_student['img']['style'] = array();
-$allowed_tags_student['img']['src'] = array();
-$allowed_tags_student['img']['title'] = array();
+$allowed_tags_student['img']['lang'] = [];
+$allowed_tags_student['img']['longdesc'] = [];
+$allowed_tags_student['img']['style'] = [];
+$allowed_tags_student['img']['src'] = [];
+$allowed_tags_student['img']['title'] = [];
 //$allowed_tags_student['img']['usemap'] = array();
-$allowed_tags_student['img']['vspace'] = array();
-$allowed_tags_student['img']['width'] = array();
-$allowed_tags_student['img']['xml:lang'] = array();
+$allowed_tags_student['img']['vspace'] = [];
+$allowed_tags_student['img']['width'] = [];
+$allowed_tags_student['img']['xml:lang'] = [];
 
 // ins
-$allowed_tags_student['ins'] = array();
-$allowed_tags_student['ins']['cite'] = array();
-$allowed_tags_student['ins']['class'] = array();
-$allowed_tags_student['ins']['dir'] = array();
-$allowed_tags_student['ins']['id'] = array();
-$allowed_tags_student['ins']['lang'] = array();
-$allowed_tags_student['ins']['style'] = array();
-$allowed_tags_student['ins']['title'] = array();
-$allowed_tags_student['ins']['xml:lang'] = array();
+$allowed_tags_student['ins'] = [];
+$allowed_tags_student['ins']['cite'] = [];
+$allowed_tags_student['ins']['class'] = [];
+$allowed_tags_student['ins']['dir'] = [];
+$allowed_tags_student['ins']['id'] = [];
+$allowed_tags_student['ins']['lang'] = [];
+$allowed_tags_student['ins']['style'] = [];
+$allowed_tags_student['ins']['title'] = [];
+$allowed_tags_student['ins']['xml:lang'] = [];
 
 // kbd
-$allowed_tags_student['kbd'] = array();
-$allowed_tags_student['kbd']['class'] = array();
-$allowed_tags_student['kbd']['dir'] = array();
-$allowed_tags_student['kbd']['id'] = array();
-$allowed_tags_student['kbd']['lang'] = array();
-$allowed_tags_student['kbd']['style'] = array();
-$allowed_tags_student['kbd']['title'] = array();
-$allowed_tags_student['kbd']['xml:lang'] = array();
+$allowed_tags_student['kbd'] = [];
+$allowed_tags_student['kbd']['class'] = [];
+$allowed_tags_student['kbd']['dir'] = [];
+$allowed_tags_student['kbd']['id'] = [];
+$allowed_tags_student['kbd']['lang'] = [];
+$allowed_tags_student['kbd']['style'] = [];
+$allowed_tags_student['kbd']['title'] = [];
+$allowed_tags_student['kbd']['xml:lang'] = [];
 
 // li
-$allowed_tags_student['li'] = array();
-$allowed_tags_student['li']['class'] = array();
-$allowed_tags_student['li']['dir'] = array();
-$allowed_tags_student['li']['id'] = array();
-$allowed_tags_student['li']['lang'] = array();
-$allowed_tags_student['li']['style'] = array();
-$allowed_tags_student['li']['title'] = array();
-$allowed_tags_student['li']['type'] = array();
-$allowed_tags_student['li']['value'] = array();
-$allowed_tags_student['li']['xml:lang'] = array();
+$allowed_tags_student['li'] = [];
+$allowed_tags_student['li']['class'] = [];
+$allowed_tags_student['li']['dir'] = [];
+$allowed_tags_student['li']['id'] = [];
+$allowed_tags_student['li']['lang'] = [];
+$allowed_tags_student['li']['style'] = [];
+$allowed_tags_student['li']['title'] = [];
+$allowed_tags_student['li']['type'] = [];
+$allowed_tags_student['li']['value'] = [];
+$allowed_tags_student['li']['xml:lang'] = [];
 
 // link
-$allowed_tags_student_full_page['link'] = array();
-$allowed_tags_student_full_page['link']['charset'] = array();
-$allowed_tags_student_full_page['link']['href'] = array();
-$allowed_tags_student_full_page['link']['hreflang'] = array();
-$allowed_tags_student_full_page['link']['media'] = array();
-$allowed_tags_student_full_page['link']['rel'] = array();
-$allowed_tags_student_full_page['link']['rev'] = array();
-$allowed_tags_student_full_page['link']['target'] = array();
-$allowed_tags_student_full_page['link']['type'] = array();
+$allowed_tags_student_full_page['link'] = [];
+$allowed_tags_student_full_page['link']['charset'] = [];
+$allowed_tags_student_full_page['link']['href'] = [];
+$allowed_tags_student_full_page['link']['hreflang'] = [];
+$allowed_tags_student_full_page['link']['media'] = [];
+$allowed_tags_student_full_page['link']['rel'] = [];
+$allowed_tags_student_full_page['link']['rev'] = [];
+$allowed_tags_student_full_page['link']['target'] = [];
+$allowed_tags_student_full_page['link']['type'] = [];
 
 // map
 /*
@@ -539,372 +549,371 @@ $allowed_tags_student['map']['xml:lang'] = array();
 */
 
 // menu
-$allowed_tags_student['menu'] = array();
-$allowed_tags_student['menu']['class'] = array();
-$allowed_tags_student['menu']['compact'] = array();
-$allowed_tags_student['menu']['dir'] = array();
-$allowed_tags_student['menu']['id'] = array();
-$allowed_tags_student['menu']['lang'] = array();
-$allowed_tags_student['menu']['style'] = array();
-$allowed_tags_student['menu']['title'] = array();
+$allowed_tags_student['menu'] = [];
+$allowed_tags_student['menu']['class'] = [];
+$allowed_tags_student['menu']['compact'] = [];
+$allowed_tags_student['menu']['dir'] = [];
+$allowed_tags_student['menu']['id'] = [];
+$allowed_tags_student['menu']['lang'] = [];
+$allowed_tags_student['menu']['style'] = [];
+$allowed_tags_student['menu']['title'] = [];
 
 // meta
-$allowed_tags_student_full_page['meta'] = array();
-$allowed_tags_student_full_page['meta']['content'] = array();
-$allowed_tags_student_full_page['meta']['dir'] = array();
-$allowed_tags_student_full_page['meta']['http-equiv'] = array();
-$allowed_tags_student_full_page['meta']['lang'] = array();
-$allowed_tags_student_full_page['meta']['name'] = array();
-$allowed_tags_student_full_page['meta']['scheme'] = array();
-$allowed_tags_student_full_page['meta']['xml:lang'] = array();
+$allowed_tags_student_full_page['meta'] = [];
+$allowed_tags_student_full_page['meta']['content'] = [];
+$allowed_tags_student_full_page['meta']['dir'] = [];
+$allowed_tags_student_full_page['meta']['http-equiv'] = [];
+$allowed_tags_student_full_page['meta']['lang'] = [];
+$allowed_tags_student_full_page['meta']['name'] = [];
+$allowed_tags_student_full_page['meta']['scheme'] = [];
+$allowed_tags_student_full_page['meta']['xml:lang'] = [];
 
 // noframes
-$allowed_tags_student_full_page['noframes'] = array();
-$allowed_tags_student_full_page['noframes']['class'] = array();
-$allowed_tags_student_full_page['noframes']['dir'] = array();
-$allowed_tags_student_full_page['noframes']['id'] = array();
-$allowed_tags_student_full_page['noframes']['lang'] = array();
-$allowed_tags_student_full_page['noframes']['style'] = array();
-$allowed_tags_student_full_page['noframes']['title'] = array();
-$allowed_tags_student_full_page['noframes']['xml:lang'] = array();
+$allowed_tags_student_full_page['noframes'] = [];
+$allowed_tags_student_full_page['noframes']['class'] = [];
+$allowed_tags_student_full_page['noframes']['dir'] = [];
+$allowed_tags_student_full_page['noframes']['id'] = [];
+$allowed_tags_student_full_page['noframes']['lang'] = [];
+$allowed_tags_student_full_page['noframes']['style'] = [];
+$allowed_tags_student_full_page['noframes']['title'] = [];
+$allowed_tags_student_full_page['noframes']['xml:lang'] = [];
 
 // object
-$allowed_tags_student['object'] = array();
+$allowed_tags_student['object'] = [];
 //$allowed_tags_student['object']['align'] = array();
 //$allowed_tags_student['object']['archive'] = array();
 //$allowed_tags_student['object']['border'] = array();
-$allowed_tags_student['object']['class'] = array();
+$allowed_tags_student['object']['class'] = [];
 //$allowed_tags_student['object']['classid'] = array();
-$allowed_tags_student['object']['codebase'] = array();
+$allowed_tags_student['object']['codebase'] = [];
 //$allowed_tags_student['object']['codetype'] = array();
-$allowed_tags_student['object']['data'] = array();
+$allowed_tags_student['object']['data'] = [];
 //$allowed_tags_student['object']['declare'] = array();
-$allowed_tags_student['object']['dir'] = array();
-$allowed_tags_student['object']['id'] = array();
-$allowed_tags_student['object']['height'] = array();
+$allowed_tags_student['object']['dir'] = [];
+$allowed_tags_student['object']['id'] = [];
+$allowed_tags_student['object']['height'] = [];
 //$allowed_tags_student['object']['hspace'] = array();
-$allowed_tags_student['object']['lang'] = array();
+$allowed_tags_student['object']['lang'] = [];
 //$allowed_tags_student['object']['name'] = array();
 //$allowed_tags_student['object']['standby'] = array();
-$allowed_tags_student['object']['style'] = array();
-$allowed_tags_student['object']['title'] = array();
-$allowed_tags_student['object']['type'] = array();
+$allowed_tags_student['object']['style'] = [];
+$allowed_tags_student['object']['title'] = [];
+$allowed_tags_student['object']['type'] = [];
 //$allowed_tags_student['object']['usemap'] = array();
 //$allowed_tags_student['object']['vspace'] = array();
-$allowed_tags_student['object']['width'] = array();
-$allowed_tags_student['object']['xml:lang'] = array();
+$allowed_tags_student['object']['width'] = [];
+$allowed_tags_student['object']['xml:lang'] = [];
 
 // ol
-$allowed_tags_student['ol'] = array();
-$allowed_tags_student['ol']['class'] = array();
-$allowed_tags_student['ol']['compact'] = array();
-$allowed_tags_student['ol']['dir'] = array();
-$allowed_tags_student['ol']['id'] = array();
-$allowed_tags_student['ol']['lang'] = array();
-$allowed_tags_student['ol']['start'] = array();
-$allowed_tags_student['ol']['style'] = array();
-$allowed_tags_student['ol']['title'] = array();
-$allowed_tags_student['ol']['type'] = array();
-$allowed_tags_student['ol']['xml:lang'] = array();
+$allowed_tags_student['ol'] = [];
+$allowed_tags_student['ol']['class'] = [];
+$allowed_tags_student['ol']['compact'] = [];
+$allowed_tags_student['ol']['dir'] = [];
+$allowed_tags_student['ol']['id'] = [];
+$allowed_tags_student['ol']['lang'] = [];
+$allowed_tags_student['ol']['start'] = [];
+$allowed_tags_student['ol']['style'] = [];
+$allowed_tags_student['ol']['title'] = [];
+$allowed_tags_student['ol']['type'] = [];
+$allowed_tags_student['ol']['xml:lang'] = [];
 
 // p
-$allowed_tags_student['p'] = array();
-$allowed_tags_student['p']['align'] = array();
-$allowed_tags_student['p']['class'] = array();
-$allowed_tags_student['p']['dir'] = array();
-$allowed_tags_student['p']['id'] = array();
-$allowed_tags_student['p']['lang'] = array();
-$allowed_tags_student['p']['style'] = array();
-$allowed_tags_student['p']['title'] = array();
-$allowed_tags_student['p']['xml:lang'] = array();
+$allowed_tags_student['p'] = [];
+$allowed_tags_student['p']['align'] = [];
+$allowed_tags_student['p']['class'] = [];
+$allowed_tags_student['p']['dir'] = [];
+$allowed_tags_student['p']['id'] = [];
+$allowed_tags_student['p']['lang'] = [];
+$allowed_tags_student['p']['style'] = [];
+$allowed_tags_student['p']['title'] = [];
+$allowed_tags_student['p']['xml:lang'] = [];
 
 // param
-$allowed_tags_student['param'] = array();
-$allowed_tags_student['param']['name'] = array();
+$allowed_tags_student['param'] = [];
+$allowed_tags_student['param']['name'] = [];
 //$allowed_tags_student['param']['type'] = array();
-$allowed_tags_student['param']['value'] = array();
+$allowed_tags_student['param']['value'] = [];
 //$allowed_tags_student['param']['valuetype'] = array();
 
 // pre
-$allowed_tags_student['pre'] = array();
-$allowed_tags_student['pre']['class'] = array();
-$allowed_tags_student['pre']['dir'] = array();
-$allowed_tags_student['pre']['id'] = array();
-$allowed_tags_student['pre']['lang'] = array();
-$allowed_tags_student['pre']['style'] = array();
-$allowed_tags_student['pre']['title'] = array();
-$allowed_tags_student['pre']['width'] = array();
-$allowed_tags_student['pre']['xml:lang'] = array();
+$allowed_tags_student['pre'] = [];
+$allowed_tags_student['pre']['class'] = [];
+$allowed_tags_student['pre']['dir'] = [];
+$allowed_tags_student['pre']['id'] = [];
+$allowed_tags_student['pre']['lang'] = [];
+$allowed_tags_student['pre']['style'] = [];
+$allowed_tags_student['pre']['title'] = [];
+$allowed_tags_student['pre']['width'] = [];
+$allowed_tags_student['pre']['xml:lang'] = [];
 
 // q
-$allowed_tags_student['q'] = array();
-$allowed_tags_student['q']['cite'] = array();
-$allowed_tags_student['q']['class'] = array();
-$allowed_tags_student['q']['dir'] = array();
-$allowed_tags_student['q']['id'] = array();
-$allowed_tags_student['q']['lang'] = array();
-$allowed_tags_student['q']['style'] = array();
-$allowed_tags_student['q']['title'] = array();
-$allowed_tags_student['q']['xml:lang'] = array();
+$allowed_tags_student['q'] = [];
+$allowed_tags_student['q']['cite'] = [];
+$allowed_tags_student['q']['class'] = [];
+$allowed_tags_student['q']['dir'] = [];
+$allowed_tags_student['q']['id'] = [];
+$allowed_tags_student['q']['lang'] = [];
+$allowed_tags_student['q']['style'] = [];
+$allowed_tags_student['q']['title'] = [];
+$allowed_tags_student['q']['xml:lang'] = [];
 
 // s
-$allowed_tags_student['s'] = array();
-$allowed_tags_student['s']['class'] = array();
-$allowed_tags_student['s']['dir'] = array();
-$allowed_tags_student['s']['id'] = array();
-$allowed_tags_student['s']['lang'] = array();
-$allowed_tags_student['s']['style'] = array();
-$allowed_tags_student['q']['title'] = array();
+$allowed_tags_student['s'] = [];
+$allowed_tags_student['s']['class'] = [];
+$allowed_tags_student['s']['dir'] = [];
+$allowed_tags_student['s']['id'] = [];
+$allowed_tags_student['s']['lang'] = [];
+$allowed_tags_student['s']['style'] = [];
+$allowed_tags_student['q']['title'] = [];
 
 // samp
-$allowed_tags_student['samp'] = array();
-$allowed_tags_student['samp']['class'] = array();
-$allowed_tags_student['samp']['dir'] = array();
-$allowed_tags_student['samp']['id'] = array();
-$allowed_tags_student['samp']['lang'] = array();
-$allowed_tags_student['samp']['style'] = array();
-$allowed_tags_student['samp']['title'] = array();
-$allowed_tags_student['samp']['xml:lang'] = array();
+$allowed_tags_student['samp'] = [];
+$allowed_tags_student['samp']['class'] = [];
+$allowed_tags_student['samp']['dir'] = [];
+$allowed_tags_student['samp']['id'] = [];
+$allowed_tags_student['samp']['lang'] = [];
+$allowed_tags_student['samp']['style'] = [];
+$allowed_tags_student['samp']['title'] = [];
+$allowed_tags_student['samp']['xml:lang'] = [];
 
 // small
-$allowed_tags_student['small'] = array();
-$allowed_tags_student['small']['class'] = array();
-$allowed_tags_student['small']['dir'] = array();
-$allowed_tags_student['small']['id'] = array();
-$allowed_tags_student['small']['lang'] = array();
-$allowed_tags_student['small']['style'] = array();
-$allowed_tags_student['small']['title'] = array();
-$allowed_tags_student['small']['xml:lang'] = array();
+$allowed_tags_student['small'] = [];
+$allowed_tags_student['small']['class'] = [];
+$allowed_tags_student['small']['dir'] = [];
+$allowed_tags_student['small']['id'] = [];
+$allowed_tags_student['small']['lang'] = [];
+$allowed_tags_student['small']['style'] = [];
+$allowed_tags_student['small']['title'] = [];
+$allowed_tags_student['small']['xml:lang'] = [];
 
 // span
-$allowed_tags_student['span'] = array();
-$allowed_tags_student['span']['class'] = array();
-$allowed_tags_student['span']['dir'] = array();
-$allowed_tags_student['span']['id'] = array();
-$allowed_tags_student['span']['lang'] = array();
-$allowed_tags_student['span']['style'] = array();
-$allowed_tags_student['span']['title'] = array();
-$allowed_tags_student['span']['xml:lang'] = array();
+$allowed_tags_student['span'] = [];
+$allowed_tags_student['span']['class'] = [];
+$allowed_tags_student['span']['dir'] = [];
+$allowed_tags_student['span']['id'] = [];
+$allowed_tags_student['span']['lang'] = [];
+$allowed_tags_student['span']['style'] = [];
+$allowed_tags_student['span']['title'] = [];
+$allowed_tags_student['span']['xml:lang'] = [];
 
 // strike
-$allowed_tags_student['strike'] = array();
-$allowed_tags_student['strike']['class'] = array();
-$allowed_tags_student['strike']['dir'] = array();
-$allowed_tags_student['strike']['id'] = array();
-$allowed_tags_student['strike']['lang'] = array();
-$allowed_tags_student['strike']['style'] = array();
-$allowed_tags_student['strike']['title'] = array();
+$allowed_tags_student['strike'] = [];
+$allowed_tags_student['strike']['class'] = [];
+$allowed_tags_student['strike']['dir'] = [];
+$allowed_tags_student['strike']['id'] = [];
+$allowed_tags_student['strike']['lang'] = [];
+$allowed_tags_student['strike']['style'] = [];
+$allowed_tags_student['strike']['title'] = [];
 
 // strong
-$allowed_tags_student['strong'] = array();
-$allowed_tags_student['strong']['class'] = array();
-$allowed_tags_student['strong']['dir'] = array();
-$allowed_tags_student['strong']['id'] = array();
-$allowed_tags_student['strong']['lang'] = array();
-$allowed_tags_student['strong']['style'] = array();
-$allowed_tags_student['strong']['title'] = array();
-$allowed_tags_student['strong']['xml:lang'] = array();
+$allowed_tags_student['strong'] = [];
+$allowed_tags_student['strong']['class'] = [];
+$allowed_tags_student['strong']['dir'] = [];
+$allowed_tags_student['strong']['id'] = [];
+$allowed_tags_student['strong']['lang'] = [];
+$allowed_tags_student['strong']['style'] = [];
+$allowed_tags_student['strong']['title'] = [];
+$allowed_tags_student['strong']['xml:lang'] = [];
 
 // style
-$allowed_tags_student_full_page['style'] = array();
-$allowed_tags_student_full_page['style']['dir'] = array();
-$allowed_tags_student_full_page['style']['lang'] = array();
-$allowed_tags_student_full_page['style']['media'] = array();
-$allowed_tags_student_full_page['style']['title'] = array();
-$allowed_tags_student_full_page['style']['type'] = array();
-$allowed_tags_student_full_page['style']['xml:lang'] = array();
+$allowed_tags_student_full_page['style'] = [];
+$allowed_tags_student_full_page['style']['dir'] = [];
+$allowed_tags_student_full_page['style']['lang'] = [];
+$allowed_tags_student_full_page['style']['media'] = [];
+$allowed_tags_student_full_page['style']['title'] = [];
+$allowed_tags_student_full_page['style']['type'] = [];
+$allowed_tags_student_full_page['style']['xml:lang'] = [];
 
 // sub
-$allowed_tags_student['sub'] = array();
-$allowed_tags_student['sub']['class'] = array();
-$allowed_tags_student['sub']['dir'] = array();
-$allowed_tags_student['sub']['id'] = array();
-$allowed_tags_student['sub']['lang'] = array();
-$allowed_tags_student['sub']['style'] = array();
-$allowed_tags_student['sub']['title'] = array();
-$allowed_tags_student['sub']['xml:lang'] = array();
+$allowed_tags_student['sub'] = [];
+$allowed_tags_student['sub']['class'] = [];
+$allowed_tags_student['sub']['dir'] = [];
+$allowed_tags_student['sub']['id'] = [];
+$allowed_tags_student['sub']['lang'] = [];
+$allowed_tags_student['sub']['style'] = [];
+$allowed_tags_student['sub']['title'] = [];
+$allowed_tags_student['sub']['xml:lang'] = [];
 
 // sup
-$allowed_tags_student['sup'] = array();
-$allowed_tags_student['sup']['class'] = array();
-$allowed_tags_student['sup']['dir'] = array();
-$allowed_tags_student['sup']['id'] = array();
-$allowed_tags_student['sup']['lang'] = array();
-$allowed_tags_student['sup']['style'] = array();
-$allowed_tags_student['sup']['title'] = array();
-$allowed_tags_student['sup']['xml:lang'] = array();
+$allowed_tags_student['sup'] = [];
+$allowed_tags_student['sup']['class'] = [];
+$allowed_tags_student['sup']['dir'] = [];
+$allowed_tags_student['sup']['id'] = [];
+$allowed_tags_student['sup']['lang'] = [];
+$allowed_tags_student['sup']['style'] = [];
+$allowed_tags_student['sup']['title'] = [];
+$allowed_tags_student['sup']['xml:lang'] = [];
 
 // table
-$allowed_tags_student['table'] = array();
-$allowed_tags_student['table']['align'] = array();
-$allowed_tags_student['table']['bgcolor'] = array();
-$allowed_tags_student['table']['border'] = array();
-$allowed_tags_student['table']['cellpadding'] = array();
-$allowed_tags_student['table']['cellspacing'] = array();
-$allowed_tags_student['table']['class'] = array();
-$allowed_tags_student['table']['dir'] = array();
-$allowed_tags_student['table']['frame'] = array();
-$allowed_tags_student['table']['id'] = array();
-$allowed_tags_student['table']['lang'] = array();
-$allowed_tags_student['table']['rules'] = array();
-$allowed_tags_student['table']['style'] = array();
-$allowed_tags_student['table']['summary'] = array();
-$allowed_tags_student['table']['title'] = array();
-$allowed_tags_student['table']['width'] = array();
-$allowed_tags_student['table']['xml:lang'] = array();
+$allowed_tags_student['table'] = [];
+$allowed_tags_student['table']['align'] = [];
+$allowed_tags_student['table']['bgcolor'] = [];
+$allowed_tags_student['table']['border'] = [];
+$allowed_tags_student['table']['cellpadding'] = [];
+$allowed_tags_student['table']['cellspacing'] = [];
+$allowed_tags_student['table']['class'] = [];
+$allowed_tags_student['table']['dir'] = [];
+$allowed_tags_student['table']['frame'] = [];
+$allowed_tags_student['table']['id'] = [];
+$allowed_tags_student['table']['lang'] = [];
+$allowed_tags_student['table']['rules'] = [];
+$allowed_tags_student['table']['style'] = [];
+$allowed_tags_student['table']['summary'] = [];
+$allowed_tags_student['table']['title'] = [];
+$allowed_tags_student['table']['width'] = [];
+$allowed_tags_student['table']['xml:lang'] = [];
 
 // tbody
-$allowed_tags_student['tbody'] = array();
-$allowed_tags_student['tbody']['align'] = array();
+$allowed_tags_student['tbody'] = [];
+$allowed_tags_student['tbody']['align'] = [];
 //$allowed_tags_student['tbody']['char'] = array();
 //$allowed_tags_student['tbody']['charoff'] = array();
-$allowed_tags_student['tbody']['class'] = array();
-$allowed_tags_student['tbody']['dir'] = array();
-$allowed_tags_student['tbody']['id'] = array();
-$allowed_tags_student['tbody']['lang'] = array();
-$allowed_tags_student['tbody']['style'] = array();
-$allowed_tags_student['tbody']['title'] = array();
-$allowed_tags_student['tbody']['valign'] = array();
-$allowed_tags_student['tbody']['xml:lang'] = array();
+$allowed_tags_student['tbody']['class'] = [];
+$allowed_tags_student['tbody']['dir'] = [];
+$allowed_tags_student['tbody']['id'] = [];
+$allowed_tags_student['tbody']['lang'] = [];
+$allowed_tags_student['tbody']['style'] = [];
+$allowed_tags_student['tbody']['title'] = [];
+$allowed_tags_student['tbody']['valign'] = [];
+$allowed_tags_student['tbody']['xml:lang'] = [];
 
 // td
-$allowed_tags_student['td'] = array();
-$allowed_tags_student['td']['abbr'] = array();
-$allowed_tags_student['td']['align'] = array();
+$allowed_tags_student['td'] = [];
+$allowed_tags_student['td']['abbr'] = [];
+$allowed_tags_student['td']['align'] = [];
 //$allowed_tags_student['td']['axis'] = array();
-$allowed_tags_student['td']['bgcolor'] = array();
+$allowed_tags_student['td']['bgcolor'] = [];
 //$allowed_tags_student['td']['char'] = array();
 //$allowed_tags_student['td']['charoff'] = array();
-$allowed_tags_student['td']['class'] = array();
-$allowed_tags_student['td']['colspan'] = array();
-$allowed_tags_student['td']['dir'] = array();
+$allowed_tags_student['td']['class'] = [];
+$allowed_tags_student['td']['colspan'] = [];
+$allowed_tags_student['td']['dir'] = [];
 //$allowed_tags_student['td']['headers'] = array();
-$allowed_tags_student['td']['height'] = array();
-$allowed_tags_student['td']['id'] = array();
-$allowed_tags_student['td']['lang'] = array();
-$allowed_tags_student['td']['nowrap'] = array();
-$allowed_tags_student['td']['rowspan'] = array();
+$allowed_tags_student['td']['height'] = [];
+$allowed_tags_student['td']['id'] = [];
+$allowed_tags_student['td']['lang'] = [];
+$allowed_tags_student['td']['nowrap'] = [];
+$allowed_tags_student['td']['rowspan'] = [];
 //$allowed_tags_student['td']['scope'] = array();
-$allowed_tags_student['td']['style'] = array();
-$allowed_tags_student['td']['title'] = array();
-$allowed_tags_student['td']['valign'] = array();
-$allowed_tags_student['td']['width'] = array();
-$allowed_tags_student['td']['xml:lang'] = array();
+$allowed_tags_student['td']['style'] = [];
+$allowed_tags_student['td']['title'] = [];
+$allowed_tags_student['td']['valign'] = [];
+$allowed_tags_student['td']['width'] = [];
+$allowed_tags_student['td']['xml:lang'] = [];
 
 // tfoot
-$allowed_tags_student['tfoot'] = array();
-$allowed_tags_student['tfoot']['align'] = array();
+$allowed_tags_student['tfoot'] = [];
+$allowed_tags_student['tfoot']['align'] = [];
 //$allowed_tags_student['tfoot']['char'] = array();
 //$allowed_tags_student['tfoot']['charoff'] = array();
-$allowed_tags_student['tfoot']['class'] = array();
-$allowed_tags_student['tfoot']['dir'] = array();
-$allowed_tags_student['tfoot']['id'] = array();
-$allowed_tags_student['tfoot']['lang'] = array();
-$allowed_tags_student['tfoot']['style'] = array();
-$allowed_tags_student['tfoot']['title'] = array();
-$allowed_tags_student['tfoot']['valign'] = array();
-$allowed_tags_student['tfoot']['xml:lang'] = array();
+$allowed_tags_student['tfoot']['class'] = [];
+$allowed_tags_student['tfoot']['dir'] = [];
+$allowed_tags_student['tfoot']['id'] = [];
+$allowed_tags_student['tfoot']['lang'] = [];
+$allowed_tags_student['tfoot']['style'] = [];
+$allowed_tags_student['tfoot']['title'] = [];
+$allowed_tags_student['tfoot']['valign'] = [];
+$allowed_tags_student['tfoot']['xml:lang'] = [];
 
 // th
-$allowed_tags_student['th'] = array();
-$allowed_tags_student['th']['abbr'] = array();
-$allowed_tags_student['th']['align'] = array();
+$allowed_tags_student['th'] = [];
+$allowed_tags_student['th']['abbr'] = [];
+$allowed_tags_student['th']['align'] = [];
 //$allowed_tags_student['th']['axis'] = array();
-$allowed_tags_student['th']['bgcolor'] = array();
+$allowed_tags_student['th']['bgcolor'] = [];
 //$allowed_tags_student['th']['char'] = array();
 //$allowed_tags_student['th']['charoff'] = array();
-$allowed_tags_student['th']['class'] = array();
-$allowed_tags_student['th']['colspan'] = array();
-$allowed_tags_student['th']['dir'] = array();
+$allowed_tags_student['th']['class'] = [];
+$allowed_tags_student['th']['colspan'] = [];
+$allowed_tags_student['th']['dir'] = [];
 //$allowed_tags_student['th']['headers'] = array();
-$allowed_tags_student['th']['height'] = array();
-$allowed_tags_student['th']['id'] = array();
-$allowed_tags_student['th']['lang'] = array();
-$allowed_tags_student['th']['nowrap'] = array();
-$allowed_tags_student['th']['rowspan'] = array();
+$allowed_tags_student['th']['height'] = [];
+$allowed_tags_student['th']['id'] = [];
+$allowed_tags_student['th']['lang'] = [];
+$allowed_tags_student['th']['nowrap'] = [];
+$allowed_tags_student['th']['rowspan'] = [];
 //$allowed_tags_student['th']['scope'] = array();
-$allowed_tags_student['th']['style'] = array();
-$allowed_tags_student['th']['title'] = array();
-$allowed_tags_student['th']['valign'] = array();
-$allowed_tags_student['th']['width'] = array();
-$allowed_tags_student['th']['xml:lang'] = array();
+$allowed_tags_student['th']['style'] = [];
+$allowed_tags_student['th']['title'] = [];
+$allowed_tags_student['th']['valign'] = [];
+$allowed_tags_student['th']['width'] = [];
+$allowed_tags_student['th']['xml:lang'] = [];
 
 // thead
-$allowed_tags_student['thead'] = array();
-$allowed_tags_student['thead']['align'] = array();
-$allowed_tags_student['thead']['class'] = array();
+$allowed_tags_student['thead'] = [];
+$allowed_tags_student['thead']['align'] = [];
+$allowed_tags_student['thead']['class'] = [];
 //$allowed_tags_student['thead']['char'] = array();
 //$allowed_tags_student['thead']['charoff'] = array();
-$allowed_tags_student['thead']['dir'] = array();
-$allowed_tags_student['thead']['id'] = array();
-$allowed_tags_student['thead']['lang'] = array();
-$allowed_tags_student['thead']['style'] = array();
-$allowed_tags_student['thead']['title'] = array();
-$allowed_tags_student['thead']['valign'] = array();
-$allowed_tags_student['thead']['xml:lang'] = array();
+$allowed_tags_student['thead']['dir'] = [];
+$allowed_tags_student['thead']['id'] = [];
+$allowed_tags_student['thead']['lang'] = [];
+$allowed_tags_student['thead']['style'] = [];
+$allowed_tags_student['thead']['title'] = [];
+$allowed_tags_student['thead']['valign'] = [];
+$allowed_tags_student['thead']['xml:lang'] = [];
 
 // title
-$allowed_tags_student_full_page['title'] = array();
-$allowed_tags_student_full_page['title']['dir'] = array();
-$allowed_tags_student_full_page['title']['lang'] = array();
-$allowed_tags_student_full_page['title']['xml:lang'] = array();
+$allowed_tags_student_full_page['title'] = [];
+$allowed_tags_student_full_page['title']['dir'] = [];
+$allowed_tags_student_full_page['title']['lang'] = [];
+$allowed_tags_student_full_page['title']['xml:lang'] = [];
 
 // tr
-$allowed_tags_student['tr'] = array();
-$allowed_tags_student['tr']['align'] = array();
-$allowed_tags_student['tr']['bgcolor'] = array();
+$allowed_tags_student['tr'] = [];
+$allowed_tags_student['tr']['align'] = [];
+$allowed_tags_student['tr']['bgcolor'] = [];
 //$allowed_tags_student['tr']['char'] = array();
 //$allowed_tags_student['tr']['charoff'] = array();
-$allowed_tags_student['tr']['class'] = array();
-$allowed_tags_student['tr']['dir'] = array();
-$allowed_tags_student['tr']['id'] = array();
-$allowed_tags_student['tr']['lang'] = array();
-$allowed_tags_student['tr']['style'] = array();
-$allowed_tags_student['tr']['title'] = array();
-$allowed_tags_student['tr']['valign'] = array();
-$allowed_tags_student['tr']['xml:lang'] = array();
+$allowed_tags_student['tr']['class'] = [];
+$allowed_tags_student['tr']['dir'] = [];
+$allowed_tags_student['tr']['id'] = [];
+$allowed_tags_student['tr']['lang'] = [];
+$allowed_tags_student['tr']['style'] = [];
+$allowed_tags_student['tr']['title'] = [];
+$allowed_tags_student['tr']['valign'] = [];
+$allowed_tags_student['tr']['xml:lang'] = [];
 
 // tt
-$allowed_tags_student['tt'] = array();
-$allowed_tags_student['tt']['class'] = array();
-$allowed_tags_student['tt']['dir'] = array();
-$allowed_tags_student['tt']['id'] = array();
-$allowed_tags_student['tt']['lang'] = array();
-$allowed_tags_student['tt']['style'] = array();
-$allowed_tags_student['tt']['title'] = array();
-$allowed_tags_student['tt']['xml:lang'] = array();
+$allowed_tags_student['tt'] = [];
+$allowed_tags_student['tt']['class'] = [];
+$allowed_tags_student['tt']['dir'] = [];
+$allowed_tags_student['tt']['id'] = [];
+$allowed_tags_student['tt']['lang'] = [];
+$allowed_tags_student['tt']['style'] = [];
+$allowed_tags_student['tt']['title'] = [];
+$allowed_tags_student['tt']['xml:lang'] = [];
 
 // u
-$allowed_tags_student['u'] = array();
-$allowed_tags_student['u']['class'] = array();
-$allowed_tags_student['u']['dir'] = array();
-$allowed_tags_student['u']['id'] = array();
-$allowed_tags_student['u']['lang'] = array();
-$allowed_tags_student['u']['style'] = array();
-$allowed_tags_student['u']['title'] = array();
+$allowed_tags_student['u'] = [];
+$allowed_tags_student['u']['class'] = [];
+$allowed_tags_student['u']['dir'] = [];
+$allowed_tags_student['u']['id'] = [];
+$allowed_tags_student['u']['lang'] = [];
+$allowed_tags_student['u']['style'] = [];
+$allowed_tags_student['u']['title'] = [];
 
 // ul
-$allowed_tags_student['ul'] = array();
-$allowed_tags_student['ul']['class'] = array();
-$allowed_tags_student['ul']['compact'] = array();
-$allowed_tags_student['ul']['dir'] = array();
-$allowed_tags_student['ul']['id'] = array();
-$allowed_tags_student['ul']['lang'] = array();
-$allowed_tags_student['ul']['style'] = array();
-$allowed_tags_student['ul']['title'] = array();
-$allowed_tags_student['ul']['type'] = array();
-$allowed_tags_student['ul']['xml:lang'] = array();
+$allowed_tags_student['ul'] = [];
+$allowed_tags_student['ul']['class'] = [];
+$allowed_tags_student['ul']['compact'] = [];
+$allowed_tags_student['ul']['dir'] = [];
+$allowed_tags_student['ul']['id'] = [];
+$allowed_tags_student['ul']['lang'] = [];
+$allowed_tags_student['ul']['style'] = [];
+$allowed_tags_student['ul']['title'] = [];
+$allowed_tags_student['ul']['type'] = [];
+$allowed_tags_student['ul']['xml:lang'] = [];
 
 // var
-$allowed_tags_student['var'] = array();
-$allowed_tags_student['var']['class'] = array();
-$allowed_tags_student['var']['dir'] = array();
-$allowed_tags_student['var']['id'] = array();
-$allowed_tags_student['var']['lang'] = array();
-$allowed_tags_student['var']['style'] = array();
-$allowed_tags_student['var']['title'] = array();
-$allowed_tags_student['var']['xml:lang'] = array();
-
+$allowed_tags_student['var'] = [];
+$allowed_tags_student['var']['class'] = [];
+$allowed_tags_student['var']['dir'] = [];
+$allowed_tags_student['var']['id'] = [];
+$allowed_tags_student['var']['lang'] = [];
+$allowed_tags_student['var']['style'] = [];
+$allowed_tags_student['var']['title'] = [];
+$allowed_tags_student['var']['xml:lang'] = [];
 
 // ALLOWED HTML FOR TEACHERS
 
@@ -949,16 +958,16 @@ unset($allowed_tags_anonymous['embed']);
 unset($allowed_tags_anonymous['object']);
 unset($allowed_tags_anonymous['param']);
 
-
 // HTMLPURIFIER-COMPATIBLE SETTINGS
 
-function convert_kses_to_htmlpurifier($allowed_tags) {
-    $allowed_html = array();
-    foreach ($allowed_tags as $key1 => & $value1) {
+function convert_kses_to_htmlpurifier($allowed_tags)
+{
+    $allowed_html = [];
+    foreach ($allowed_tags as $key1 => &$value1) {
         $result[0][] = $key1;
         if (count($value1) > 0) {
-            $attr = array();
-            foreach ($value1 as $key2 => & $value2) {
+            $attr = [];
+            foreach ($value1 as $key2 => &$value2) {
                 $attr[] = $key2;
             }
             $allowed_html[] = $key1.'['.implode('|', $attr).']';
@@ -966,6 +975,7 @@ function convert_kses_to_htmlpurifier($allowed_tags) {
             $allowed_html[] = $key1;
         }
     }
+
     return implode(",\n", $allowed_html);
 }
 

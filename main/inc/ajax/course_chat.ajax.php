@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls for course chat
+ * Responses to AJAX calls for course chat.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 if (!api_protect_course_script(false)) {
@@ -37,8 +36,8 @@ switch ($_REQUEST['action']) {
                 'history' => $newFileSize !== $oldFileSize ? $courseChatUtils->readMessages(false, $friend) : null,
                 'usersOnline' => $newUsersOnline,
                 'userList' => $newUsersOnline != $oldUsersOnline ? $courseChatUtils->listUsersOnline() : null,
-                'currentFriend' => $friend
-            ]
+                'currentFriend' => $friend,
+            ],
         ];
 
         break;
@@ -46,8 +45,8 @@ switch ($_REQUEST['action']) {
         $json = [
             'status' => true,
             'data' => [
-                'message' => CourseChatUtils::prepareMessage($_REQUEST['message'])
-            ]
+                'message' => CourseChatUtils::prepareMessage($_REQUEST['message']),
+            ],
         ];
         break;
     case 'reset':
@@ -55,7 +54,7 @@ switch ($_REQUEST['action']) {
 
         $json = [
             'status' => true,
-            'data' => $courseChatUtils->readMessages(true, $friend)
+            'data' => $courseChatUtils->readMessages(true, $friend),
         ];
         break;
     case 'write':
@@ -65,8 +64,8 @@ switch ($_REQUEST['action']) {
         $json = [
             'status' => $writed,
             'data' => [
-                'writed' => $writed
-            ]
+                'writed' => $writed,
+            ],
         ];
         break;
 }

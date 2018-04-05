@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  This tool allows platform admins to add classes by uploading a CSV file
+ *  This tool allows platform admins to add classes by uploading a CSV file.
+ *
  *  @todo Add some langvars to DLTT
+ *
  * 	@package chamilo.admin
  */
 
@@ -12,7 +14,7 @@
  */
 function validate_data($classes)
 {
-    $errors = array();
+    $errors = [];
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {
         // 1. Check of class name is available.
@@ -35,7 +37,7 @@ function validate_data($classes)
 }
 
 /**
- * Save imported class data to database
+ * Save imported class data to database.
  *
  * @param $classes
  *
@@ -52,7 +54,7 @@ function save_data($classes)
         if ($id) {
             if (!empty($usersToAdd)) {
                 $usersToAddList = explode(',', $usersToAdd);
-                $userIdList = array();
+                $userIdList = [];
                 foreach ($usersToAddList as $username) {
                     $userInfo = api_get_user_info_from_username($username);
                     $userIdList[] = $userInfo['user_id'];
@@ -84,8 +86,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Database Table Definitions
 // Setting the name of the tool.
@@ -95,7 +97,7 @@ set_time_limit(0);
 
 $form = new FormValidator('import_classes');
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-$group = array();
+$group = [];
 $group[] = $form->createElement(
     'radio',
     'file_type',

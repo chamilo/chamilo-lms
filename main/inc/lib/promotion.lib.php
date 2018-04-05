@@ -5,12 +5,13 @@
  * Class Promotion
  * This class provides methods for the promotion management.
  * Include/require it in your code to use its features.
+ *
  * @package chamilo.library
  */
 class Promotion extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'id',
         'name',
         'description',
@@ -18,10 +19,10 @@ class Promotion extends Model
         'status',
         'created_at',
         'updated_at',
-    );
+    ];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -30,14 +31,14 @@ class Promotion extends Model
     }
 
     /**
-     * Get the count of elements
+     * Get the count of elements.
      */
     public function get_count()
     {
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
 
@@ -45,18 +46,20 @@ class Promotion extends Model
     }
 
     /**
-     * Copies the promotion to a new one
-     * @param   integer     Promotion ID
-     * @param   integer     Career ID, in case we want to change it
-     * @param   boolean     Whether or not to copy the sessions inside
-     * @return  integer     New promotion ID on success, false on failure
+     * Copies the promotion to a new one.
+     *
+     * @param   int     Promotion ID
+     * @param   int     Career ID, in case we want to change it
+     * @param   bool     Whether or not to copy the sessions inside
+     *
+     * @return int New promotion ID on success, false on failure
      */
     public function copy($id, $career_id = null, $copy_sessions = false)
     {
         $pid = false;
         $promotion = $this->get($id);
         if (!empty($promotion)) {
-            $new = array();
+            $new = [];
             foreach ($promotion as $key => $val) {
                 switch ($key) {
                     case 'id':
@@ -87,14 +90,14 @@ class Promotion extends Model
                  * When copying a session we do:
                  * 1. Copy a new session from the source
                  * 2. Copy all courses from the session (no user data, no user list)
-                 * 3. Create the promotion
+                 * 3. Create the promotion.
                  */
                 $session_list = SessionManager::get_all_sessions_by_promotion($id);
 
                 if (!empty($session_list)) {
                     $pid = $this->save($new);
                     if (!empty($pid)) {
-                        $new_session_list = array();
+                        $new_session_list = [];
 
                         foreach ($session_list as $item) {
                             $sid = SessionManager::copy(
@@ -124,20 +127,22 @@ class Promotion extends Model
     }
 
     /**
-     * Gets all promotions by career id
+     * Gets all promotions by career id.
+     *
      * @param   int     career id
      * @param bool $order
-     * @return  array   results
+     *
+     * @return array results
      */
     public function get_all_promotions_by_career_id($career_id, $order = false)
     {
         return Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array('career_id = ?' => $career_id),
+            [
+                'where' => ['career_id = ?' => $career_id],
                 'order' => $order,
-            )
+            ]
         );
     }
 
@@ -146,15 +151,16 @@ class Promotion extends Model
      */
     public function get_status_list()
     {
-        return array(
+        return [
             PROMOTION_STATUS_ACTIVE => get_lang('Active'),
             PROMOTION_STATUS_INACTIVE => get_lang('Inactive'),
-        );
+        ];
     }
 
     /**
-     * Displays the title + grid
-     * @return  string  html code
+     * Displays the title + grid.
+     *
+     * @return string html code
      */
     public function display()
     {
@@ -187,9 +193,10 @@ class Promotion extends Model
     }
 
     /**
-     * Update all session status by promotion
-     * @param   int $promotion_id
-     * @param   int $status (1, 0)
+     * Update all session status by promotion.
+     *
+     * @param int $promotion_id
+     * @param int $status       (1, 0)
      */
     public function update_all_sessions_status_by_promotion_id(
         $promotion_id,
@@ -204,11 +211,12 @@ class Promotion extends Model
     }
 
     /**
-     * Returns a Form validator Obj
-     * @param   string $url
-     * @param   string $action
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator
+     * @param string $url
+     * @param string $action
+     *
+     * @return FormValidator
      */
     public function return_form($url, $action = 'add')
     {
@@ -226,22 +234,22 @@ class Promotion extends Model
             'text',
             'name',
             get_lang('Name'),
-            array('size' => '70', 'id' => 'name')
+            ['size' => '70', 'id' => 'name']
         );
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarSet' => 'Careers',
                 'Width' => '100%',
-                'Height' => '250'
-            )
+                'Height' => '250',
+            ]
         );
         $career = new Career();
         $careers = $career->get_all();
-        $career_list = array();
+        $career_list = [];
         foreach ($careers as $item) {
             $career_list[$item['id']] = $item['name'];
         }
@@ -281,8 +289,7 @@ class Promotion extends Model
 
     /**
      * @param array $params
-     *
-     * @param bool $show_query
+     * @param bool  $show_query
      *
      * @return bool
      */

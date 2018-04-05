@@ -3,13 +3,10 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\TicketBundle\Entity\Category;
-use Chamilo\UserBundle\Entity\User;
 
 /**
- * CategoryRelUser
+ * CategoryRelUser.
  *
  * @ORM\Table(name="ticket_category_rel_user")
  * @ORM\Entity
@@ -17,7 +14,7 @@ use Chamilo\UserBundle\Entity\User;
 class CategoryRelUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,7 +27,7 @@ class CategoryRelUser
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     **/
+     */
     protected $category;
 
     /**
@@ -38,7 +35,6 @@ class CategoryRelUser
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     **/
+     */
     protected $user;
-
 }

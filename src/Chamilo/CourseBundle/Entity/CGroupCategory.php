@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CGroupCategory
+ * CGroupCategory.
  *
  * @ORM\Table(
  *  name="c_group_category",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CGroupCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CGroupCategory
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -56,93 +56,94 @@ class CGroupCategory
     private $description;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="doc_state", type="boolean", nullable=false)
      */
     private $docState;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
      */
     private $calendarState;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="work_state", type="boolean", nullable=false)
      */
     private $workState;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
      */
     private $announcementsState;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="forum_state", type="boolean", nullable=false)
      */
     private $forumState;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
      */
     private $wikiState;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="chat_state", type="boolean", nullable=false)
      */
     private $chatState;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="max_student", type="integer", nullable=false)
      */
     private $maxStudent;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="self_reg_allowed", type="boolean", nullable=false)
      */
     private $selfRegAllowed;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="self_unreg_allowed", type="boolean", nullable=false)
      */
     private $selfUnregAllowed;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="groups_per_user", type="integer", nullable=false)
      */
     private $groupsPerUser;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
     private $displayOrder;
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CGroupCategory
      */
     public function setTitle($title)
@@ -153,7 +154,7 @@ class CGroupCategory
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -163,9 +164,10 @@ class CGroupCategory
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CGroupCategory
      */
     public function setDescription($description)
@@ -176,7 +178,7 @@ class CGroupCategory
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -186,9 +188,10 @@ class CGroupCategory
     }
 
     /**
-     * Set docState
+     * Set docState.
      *
-     * @param boolean $docState
+     * @param bool $docState
+     *
      * @return CGroupCategory
      */
     public function setDocState($docState)
@@ -199,9 +202,9 @@ class CGroupCategory
     }
 
     /**
-     * Get docState
+     * Get docState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDocState()
     {
@@ -209,9 +212,10 @@ class CGroupCategory
     }
 
     /**
-     * Set calendarState
+     * Set calendarState.
      *
-     * @param boolean $calendarState
+     * @param bool $calendarState
+     *
      * @return CGroupCategory
      */
     public function setCalendarState($calendarState)
@@ -222,9 +226,9 @@ class CGroupCategory
     }
 
     /**
-     * Get calendarState
+     * Get calendarState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getCalendarState()
     {
@@ -232,9 +236,10 @@ class CGroupCategory
     }
 
     /**
-     * Set workState
+     * Set workState.
      *
-     * @param boolean $workState
+     * @param bool $workState
+     *
      * @return CGroupCategory
      */
     public function setWorkState($workState)
@@ -245,9 +250,9 @@ class CGroupCategory
     }
 
     /**
-     * Get workState
+     * Get workState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getWorkState()
     {
@@ -255,9 +260,10 @@ class CGroupCategory
     }
 
     /**
-     * Set announcementsState
+     * Set announcementsState.
      *
-     * @param boolean $announcementsState
+     * @param bool $announcementsState
+     *
      * @return CGroupCategory
      */
     public function setAnnouncementsState($announcementsState)
@@ -268,9 +274,9 @@ class CGroupCategory
     }
 
     /**
-     * Get announcementsState
+     * Get announcementsState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAnnouncementsState()
     {
@@ -278,9 +284,10 @@ class CGroupCategory
     }
 
     /**
-     * Set forumState
+     * Set forumState.
      *
-     * @param boolean $forumState
+     * @param bool $forumState
+     *
      * @return CGroupCategory
      */
     public function setForumState($forumState)
@@ -291,9 +298,9 @@ class CGroupCategory
     }
 
     /**
-     * Get forumState
+     * Get forumState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForumState()
     {
@@ -301,9 +308,10 @@ class CGroupCategory
     }
 
     /**
-     * Set wikiState
+     * Set wikiState.
      *
-     * @param boolean $wikiState
+     * @param bool $wikiState
+     *
      * @return CGroupCategory
      */
     public function setWikiState($wikiState)
@@ -314,9 +322,9 @@ class CGroupCategory
     }
 
     /**
-     * Get wikiState
+     * Get wikiState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getWikiState()
     {
@@ -324,9 +332,10 @@ class CGroupCategory
     }
 
     /**
-     * Set chatState
+     * Set chatState.
      *
-     * @param boolean $chatState
+     * @param bool $chatState
+     *
      * @return CGroupCategory
      */
     public function setChatState($chatState)
@@ -337,9 +346,9 @@ class CGroupCategory
     }
 
     /**
-     * Get chatState
+     * Get chatState.
      *
-     * @return boolean
+     * @return bool
      */
     public function getChatState()
     {
@@ -347,9 +356,10 @@ class CGroupCategory
     }
 
     /**
-     * Set maxStudent
+     * Set maxStudent.
      *
-     * @param integer $maxStudent
+     * @param int $maxStudent
+     *
      * @return CGroupCategory
      */
     public function setMaxStudent($maxStudent)
@@ -360,9 +370,9 @@ class CGroupCategory
     }
 
     /**
-     * Get maxStudent
+     * Get maxStudent.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxStudent()
     {
@@ -370,9 +380,10 @@ class CGroupCategory
     }
 
     /**
-     * Set selfRegAllowed
+     * Set selfRegAllowed.
      *
-     * @param boolean $selfRegAllowed
+     * @param bool $selfRegAllowed
+     *
      * @return CGroupCategory
      */
     public function setSelfRegAllowed($selfRegAllowed)
@@ -383,9 +394,9 @@ class CGroupCategory
     }
 
     /**
-     * Get selfRegAllowed
+     * Get selfRegAllowed.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSelfRegAllowed()
     {
@@ -393,9 +404,10 @@ class CGroupCategory
     }
 
     /**
-     * Set selfUnregAllowed
+     * Set selfUnregAllowed.
      *
-     * @param boolean $selfUnregAllowed
+     * @param bool $selfUnregAllowed
+     *
      * @return CGroupCategory
      */
     public function setSelfUnregAllowed($selfUnregAllowed)
@@ -406,9 +418,9 @@ class CGroupCategory
     }
 
     /**
-     * Get selfUnregAllowed
+     * Get selfUnregAllowed.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSelfUnregAllowed()
     {
@@ -416,9 +428,10 @@ class CGroupCategory
     }
 
     /**
-     * Set groupsPerUser
+     * Set groupsPerUser.
      *
-     * @param integer $groupsPerUser
+     * @param int $groupsPerUser
+     *
      * @return CGroupCategory
      */
     public function setGroupsPerUser($groupsPerUser)
@@ -429,9 +442,9 @@ class CGroupCategory
     }
 
     /**
-     * Get groupsPerUser
+     * Get groupsPerUser.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupsPerUser()
     {
@@ -439,9 +452,10 @@ class CGroupCategory
     }
 
     /**
-     * Set displayOrder
+     * Set displayOrder.
      *
-     * @param integer $displayOrder
+     * @param int $displayOrder
+     *
      * @return CGroupCategory
      */
     public function setDisplayOrder($displayOrder)
@@ -452,9 +466,9 @@ class CGroupCategory
     }
 
     /**
-     * Get displayOrder
+     * Get displayOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getDisplayOrder()
     {
@@ -462,9 +476,10 @@ class CGroupCategory
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CGroupCategory
      */
     public function setId($id)
@@ -475,9 +490,9 @@ class CGroupCategory
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -485,9 +500,10 @@ class CGroupCategory
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CGroupCategory
      */
     public function setCId($cId)
@@ -498,9 +514,9 @@ class CGroupCategory
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

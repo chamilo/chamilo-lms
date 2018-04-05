@@ -27,11 +27,11 @@ if (api_is_platform_admin() == false && $locked == true) {
 }
 
 $htmlHeadXtra[] = to_javascript_work();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    'name' => get_lang('StudentPublications'),
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 
 $form = new FormValidator(
     'edit_dir',
@@ -123,7 +123,6 @@ if ($form->validate()) {
         Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
         header('Location: '.$currentUrl);
         exit;
-
     } else {
         Display::addFlash(Display::return_message(get_lang('FileExists'), 'warning'));
     }

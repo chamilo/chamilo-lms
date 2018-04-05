@@ -6,8 +6,10 @@ use ChamiloSession as Session;
 /**
  * This script contains the server part of the ajax interaction process. The client part is located
  * in lp_api.php or other api's.
- * This script updated the TOC of the SCORM without updating the SCO's attributes
+ * This script updated the TOC of the SCORM without updating the SCO's attributes.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -16,13 +18,15 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Get one item's details
- * @param   integer $lpId LP ID
- * @param   integer $userId user ID
- * @param   integer $viewId View ID
- * @param   integer $currentItem Current item ID
- * @param   integer $nextItem New item ID
- * @return  string  JavaScript commands to be executed in scorm_api.php
+ * Get one item's details.
+ *
+ * @param int $lpId        LP ID
+ * @param int $userId      user ID
+ * @param int $viewId      View ID
+ * @param int $currentItem Current item ID
+ * @param int $nextItem    New item ID
+ *
+ * @return string JavaScript commands to be executed in scorm_api.php
  */
 function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
 {
@@ -102,7 +106,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     $interactionsCount = $myLPI->get_interactions_count();
     /**
      * Interactions are not returned by switch_item at the moment, but please
-     * leave commented code to allow for the addition of these in the future
+     * leave commented code to allow for the addition of these in the future.
      */
     /*
     $interactionsString = '';
@@ -157,6 +161,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     }
     Session::write('scorm_item_id', $newItemId);
     Session::write('lpobject', serialize($myLP));
+    Session::write('oLP', $myLP);
 
     return $return;
 }

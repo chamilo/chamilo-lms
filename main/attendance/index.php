@@ -3,13 +3,13 @@
 
 /**
  * Template (front controller in MVC pattern) used for dispatching
- * to the controllers depend on the current action
+ * to the controllers depend on the current action.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bug fixing, sql improvements
  *
  * @package chamilo.attendance
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'attendance_controller.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
@@ -23,7 +23,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Get actions
-$actions = array(
+$actions = [
     'attendance_list',
     'attendance_sheet_list',
     'attendance_sheet_add',
@@ -38,16 +38,16 @@ $actions = array(
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
     'attendance_sheet_list_no_edit',
-    'calendar_logins'
-);
+    'calendar_logins',
+];
 
-$actions_calendar = array(
+$actions_calendar = [
     'calendar_list',
     'calendar_add',
     'calendar_edit',
     'calendar_delete',
-    'calendar_all_delete'
-);
+    'calendar_all_delete',
+];
 
 $action = 'attendance_list';
 
@@ -82,7 +82,7 @@ $attendance = new Attendance();
 
 // attendance controller object
 $attendanceController = new AttendanceController();
-$attendance_data = array();
+$attendance_data = [];
 // get attendance data
 if (!empty($attendance_id)) {
     // attendance data by id
@@ -172,43 +172,43 @@ if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id,
-        'name' => $student_info['complete_name']
-    );
+        'name' => $student_info['complete_name'],
+    ];
 }
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php?'.api_get_cidreq().'&action=attendance_list&'.$student_param,
-    'name' => get_lang('ToolAttendance')
-);
+    'name' => get_lang('ToolAttendance'),
+];
 if ($action == 'attendance_add') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateANewAttendance'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateANewAttendance')];
 }
 if ($action == 'attendance_edit') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 }
 if ($action == 'attendance_sheet_list' || $action == 'attendance_sheet_add') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => $attendance_data['name']);
+    $interbreadcrumb[] = ['url' => '#', 'name' => $attendance_data['name']];
 }
 if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' || $action == 'calendar_all_delete') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
-        'name' => $attendance_data['name']
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AttendanceCalendar'));
+        'name' => $attendance_data['name'],
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AttendanceCalendar')];
 }
 if ($action == 'calendar_add') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
-        'name' => $attendance_data['name']
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddDateAndTime'));
+        'name' => $attendance_data['name'],
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddDateAndTime')];
 }
 
 $allowToEdit = api_is_allowed_to_edit(null, true);
@@ -312,11 +312,8 @@ switch ($action) {
         }
         break;
     case 'calendar_add':
-        //no break
     case 'calendar_edit':
-        //no break
     case 'calendar_all_delete':
-        //no break
     case 'calendar_delete':
         if (!$allowToEdit) {
             api_not_allowed(true);

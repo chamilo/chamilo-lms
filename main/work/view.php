@@ -20,10 +20,10 @@ $work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : 
 $work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
 
 $htmlHeadXtra[] = '<script>'.ExerciseLib::getJsCode().'</script>';
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('StudentPublications'),
-);
+];
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
@@ -49,9 +49,9 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
     }
 
     $userInfo = api_get_user_info($work['user_id']);
-    $interbreadcrumb[] = array('url' => $url_dir, 'name' => $my_folder_data['title']);
-    $interbreadcrumb[] = array('url' => '#', 'name' => $userInfo['complete_name']);
-    $interbreadcrumb[] = array('url' => '#', 'name' => $work['title']);
+    $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
+    $interbreadcrumb[] = ['url' => '#', 'name' => $userInfo['complete_name']];
+    $interbreadcrumb[] = ['url' => '#', 'name' => $work['title']];
 
     if (($courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&

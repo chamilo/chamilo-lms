@@ -3,9 +3,10 @@
 /**
  * This script provides the caller service with user details.
  * It is set to work with the Chamilo module for Drupal:
- * http://drupal.org/project/chamilo
+ * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ *
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -23,7 +24,7 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
+    [
         'name' => 'code',
         'type' => 'xsd:string',
         'name' => 'title',
@@ -34,7 +35,7 @@ $server->wsdl->addComplexType(
         'type' => 'xsd:string',
         'name' => 'language',
         'type' => 'xsd:string',
-    )
+    ]
 );
 
 $server->wsdl->addComplexType(
@@ -43,24 +44,24 @@ $server->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(
-        array(
+    [],
+    [
+        [
             'ref' => 'SOAP-ENC:arrayType',
             'wsdl:arrayType' => 'tns:courseDetails[]',
-        ),
-    ),
+        ],
+    ],
     'tns:courseDetails'
 );
 
 // Register the method to expose
 $server->register(
     'WSCourseListOfUser', // method name
-    array(
+    [
         'username' => 'xsd:string',
         'signature' => 'xsd:string',
-    ), // input parameters
-    array('return' => 'xsd:Array'), // output parameters
+    ], // input parameters
+    ['return' => 'xsd:Array'], // output parameters
     'urn:WSUserInfo', // namespace
     'urn:WSUserInfo#WSUserInfo', // soapaction
     'rpc', // style
@@ -72,8 +73,10 @@ $server->register(
  * Get a list of courses (code, url, title, teacher, language) for a specific
  * user and return to caller
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string User name in Chamilo
  * @param string Signature (composed of the sha1(username+apikey)
+ *
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
 function WSCourseListOfUser($username, $signature)
@@ -95,17 +98,17 @@ function WSCourseListOfUser($username, $signature)
         return -1; // The secret key is incorrect.
     }
 
-    $courses_list = array();
+    $courses_list = [];
     $courses_list_tmp = CourseManager::get_courses_list_by_user_id($user_id);
     foreach ($courses_list_tmp as $index => $course) {
         $course_info = CourseManager::get_course_information($course['code']);
-        $courses_list[] = array(
+        $courses_list[] = [
             'code' => $course['code'],
             'title' => api_utf8_encode($course_info['title']),
             'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/',
             'teacher' => api_utf8_encode($course_info['tutor_name']),
             'language' => $course_info['course_language'],
-        );
+        ];
     }
 
     return $courses_list;
@@ -119,7 +122,7 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
+    [
         'name' => 'datestart',
         'type' => 'xsd:string',
         'name' => 'dateend',
@@ -130,7 +133,7 @@ $server->wsdl->addComplexType(
         'type' => 'xsd:string',
         'name' => 'coursetitle',
         'type' => 'xsd:string',
-    )
+    ]
 );
 
 $server->wsdl->addComplexType(
@@ -139,13 +142,13 @@ $server->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(
-        array(
+    [],
+    [
+        [
             'ref' => 'SOAP-ENC:arrayType',
             'wsdl:arrayType' => 'tns:eventDetails[]',
-        ),
-    ),
+        ],
+    ],
     'tns:eventDetails'
 );
 
@@ -153,14 +156,14 @@ $server->wsdl->addComplexType(
 $server->register(
     'WSEventsList',
     // method name
-    array(
+    [
         'username' => 'xsd:string',
         'signature' => 'xsd:string',
         'datestart' => 'xsd:int',
         'dateend' => 'xsd:int',
-    ),
+    ],
     // input parameters
-    array('return' => 'xsd:Array'),
+    ['return' => 'xsd:Array'],
     // output parameters
     'urn:WSUserInfo',
     // namespace
@@ -176,15 +179,19 @@ $server->register(
 /**
  * Get a list of events between two dates for the given username
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string Username
  * @param string User's API key (the user's API key)
  * @param int    Start date, in YYYYMMDD format
  * @param int    End date, in YYYYMMDD format
+ *
  * @return array Events list
  */
-function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
-
-    if (empty($username) or empty($signature)) { return -1; }
+function WSEventsList($username, $signature, $datestart = 0, $dateend = 0)
+{
+    if (empty($username) or empty($signature)) {
+        return -1;
+    }
 
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
@@ -199,7 +206,7 @@ function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; // The secret key is incorrect.
     }
-    $events_list = array();
+    $events_list = [];
 
     $user_id = UserManager::get_user_id_from_username($username);
     if ($user_id === false) {
@@ -212,6 +219,7 @@ function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
         $ds,
         $de
     );
+
     return $events_list;
 }
 

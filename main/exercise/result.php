@@ -4,10 +4,9 @@
 use ChamiloSession as Session;
 
 /**
- * Shows the exercise results
+ * Shows the exercise results.
  *
  * @author Julio Montoya - Simple exercise result page
- *
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -59,7 +58,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/
 if ($show_headers) {
     $interbreadcrumb[] = [
         "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises')
+        "name" => get_lang('Exercises'),
     ];
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Result')];
     $this_section = SECTION_COURSES;

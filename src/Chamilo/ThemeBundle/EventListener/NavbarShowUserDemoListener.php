@@ -7,7 +7,8 @@ use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Chamilo\ThemeBundle\Model\UserModel;
 
 /**
- * Class NavbarShowUserDemoListener
+ * Class NavbarShowUserDemoListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class NavbarShowUserDemoListener

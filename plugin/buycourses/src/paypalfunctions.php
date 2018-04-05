@@ -1,9 +1,9 @@
 <?php
-/********************************************
+/*
  * PayPal API Module
  *
  * Defines all the global variables and the wrapper functions
- ********************************************/
+ */
 $PROXY_HOST = '127.0.0.1';
 $PROXY_PORT = '808';
 
@@ -13,7 +13,7 @@ $SandboxFlag = $pruebas;
  * PayPal API Credentials
  * Replace <API_USERNAME> with your API Username
  * Replace <API_PASSWORD> with your API Password
- * Replace <API_SIGNATURE> with your Signature
+ * Replace <API_SIGNATURE> with your Signature.
  */
 $API_UserName = $paypalUsername;
 $API_Password = $paypalPassword;
@@ -25,12 +25,11 @@ $sBNCode = "PP-ECWizard";
 /**
  * Define the PayPal Redirect URLs.
  * This is the URL that the buyer is first sent to do authorize payment with their paypal account
- * change the URL depending if you are testing on the sandbox or the live PayPal site
+ * change the URL depending if you are testing on the sandbox or the live PayPal site.
  *
  * For the sandbox, the URL is https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=
  * For the live site, the URL is https://www.paypal.com/webscr&cmd=_express-checkout&token=
  */
-
 if ($SandboxFlag == true) {
     $API_Endpoint = "https://api-3t.sandbox.paypal.com/nvp";
     $PAYPAL_URL = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=";
@@ -52,7 +51,7 @@ if (session_id() == "") {
  * In this example, when the script sees a token, the script
  * knows that the buyer has already authorized payment through
  * paypal.  If no token was found, the action is to send the buyer
- * to PayPal to first authorize payment
+ * to PayPal to first authorize payment.
  */
 
 /**
@@ -62,7 +61,7 @@ if (session_id() == "") {
  *        currencyCodeType:    Currency code value the PayPal API
  *        paymentType:        paymentType has to be one of the following values: Sale or Order or Authorization
  *        returnURL:            the page where buyers return to after they are done with the payment review on PayPal
- *        cancelURL:            the page where buyers return to when they cancel the payment review on PayPal
+ *        cancelURL:            the page where buyers return to when they cancel the payment review on PayPal.
  */
 function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $extra)
 {
@@ -81,7 +80,7 @@ function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $payment
     /**
      * Make the API call to PayPal
      * If the API call succeded, then redirect the buyer to PayPal to begin to authorize payment.
-     * If an error occured, show the resulting errors
+     * If an error occured, show the resulting errors.
      */
     $resArray = hash_call("SetExpressCheckout", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
@@ -108,7 +107,7 @@ function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $payment
  *        shipToCountryCode:    the Code for Ship to Country entered on the merchant's site
  *        shipToZip:            the Ship to ZipCode entered on the merchant's site
  *        shipToStreet2:        the Ship to Street2 entered on the merchant's site
- *        phoneNum:            the phoneNum  entered on the merchant's site
+ *        phoneNum:            the phoneNum  entered on the merchant's site.
  */
 function CallMarkExpressCheckout(
     $paymentAmount,
@@ -147,7 +146,7 @@ function CallMarkExpressCheckout(
     /**
      * Make the API call to PayPal
      * If the API call succeded, then redirect the buyer to PayPal to begin to authorize payment.
-     * If an error occured, show the resulting errors
+     * If an error occured, show the resulting errors.
      */
     $resArray = hash_call("SetExpressCheckout", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
@@ -160,7 +159,6 @@ function CallMarkExpressCheckout(
 }
 
 /**
- *
  * Purpose: Prepares the parameters for the GetExpressCheckoutDetails API Call.
  *
  * Inputs:
@@ -168,7 +166,6 @@ function CallMarkExpressCheckout(
  * Returns:
  *        The NVP Collection object of the GetExpressCheckoutDetails Call Response.
  */
-
 function GetShippingDetails($token)
 {
     /**
@@ -177,7 +174,7 @@ function GetShippingDetails($token)
      * of the authorization, including any shipping information of the
      * buyer.  Remember, the authorization is not a completed transaction
      * at this state - the buyer still needs an additional step to finalize
-     * the transaction
+     * the transaction.
      *
      * Build a second API request to PayPal, using the token as the
      * ID to get the details on the payment authorization
@@ -188,7 +185,7 @@ function GetShippingDetails($token)
      * Make the API call and store the results in an array.
      * If the call was a success, show the authorization details, and provide
      * an action to complete the payment.
-     * If failed, show the error
+     * If failed, show the error.
      */
     $resArray = hash_call("GetExpressCheckoutDetails", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
@@ -206,13 +203,12 @@ function GetShippingDetails($token)
  * Returns:
  *        The NVP Collection object of the GetExpressCheckoutDetails Call Response.
  */
-
 function ConfirmPayment($FinalPaymentAmt)
 {
     /**
      * Gather the information to make the final call to
      * finalize the PayPal payment.  The variable nvpstr
-     * holds the name value pairs
+     * holds the name value pairs.
      */
 
     //Format the other parameters that were stored in the session from the previous calls
@@ -234,14 +230,13 @@ function ConfirmPayment($FinalPaymentAmt)
             'PAYMENTREQUEST_0_AMT' => $FinalPaymentAmt,
             'PAYMENTREQUEST_0_CURRENCYCODE' => $currencyCodeType,
             'IPADDRESS' => $serverName,
-            'paymentactionspecified' => 'true'
+            'paymentactionspecified' => 'true',
         ]);
 
     /**
      * Make the call to PayPal to finalize payment
-     * If an error occured, show the resulting errors
+     * If an error occured, show the resulting errors.
      */
-
     $resArray = hash_call("DoExpressCheckoutPayment", $nvpstr);
 
     /**
@@ -249,12 +244,10 @@ function ConfirmPayment($FinalPaymentAmt)
      * If the response from PayPal was a success, display the response parameters
      * If the response was an error, display the errors received using APIError.php.
      */
-
     $ack = strtoupper($resArray["ACK"]);
 
     return $resArray;
 }
-
 
 /**
  * Purpose:    This function makes a DoDirectPayment API call
@@ -276,7 +269,6 @@ function ConfirmPayment($FinalPaymentAmt)
  * Returns:
  *        The NVP Collection object of the DoDirectPayment Call Response.
  */
-
 function DirectPayment(
     $paymentType,
     $paymentAmount,
@@ -312,7 +304,6 @@ function DirectPayment(
     $resArray = hash_call("DoDirectPayment", $nvpstr);
 
     return $resArray;
-
 }
 
 /**
@@ -323,10 +314,8 @@ function DirectPayment(
  * Returns:
  *        The NVP Collection object of the MassPay Call Response.
  */
-
 function MassPayment(array $beneficiaries, $currencyCode)
 {
-
     $nvpstr = "&RECEIVERTYPE=EmailAddress";
     $nvpstr .= "&CURRENCYCODE=".$currencyCode;
 
@@ -344,12 +333,11 @@ function MassPayment(array $beneficiaries, $currencyCode)
 }
 
 /**
+ * hash_call: Function to perform the API call to PayPal using API signature.
  *
- * hash_call: Function to perform the API call to PayPal using API signature
  * @methodName is name of API  method.
  * @nvpStr is nvp string.
  * returns an associtive array containing the response from the server.
- *
  */
 function hash_call($methodName, $nvpStr)
 {
@@ -393,7 +381,7 @@ function hash_call($methodName, $nvpStr)
         // moving to display page to display curl errors
         $_SESSION['curl_error_no'] = curl_errno($ch);
         $_SESSION['curl_error_msg'] = curl_error($ch);
-        //Execute the Error handling module to display errors.
+    //Execute the Error handling module to display errors.
     } else {
         //closing the curl
         curl_close($ch);
@@ -406,7 +394,6 @@ function hash_call($methodName, $nvpStr)
  * Purpose: Redirects to PayPal.com site.
  * Inputs:  NVP string.
  */
-
 function RedirectToPayPal($token)
 {
     global $PAYPAL_URL;
@@ -419,14 +406,14 @@ function RedirectToPayPal($token)
 /**
  * This function will take NVPString and convert it to an Associative Array and it will decode the response.
  * It is usefull to search for a particular key and displaying arrays.
+ *
  * @nvpstr is NVPString.
  * @nvpArray is Associative Array.
  */
-
 function deformatNVP($nvpstr)
 {
     $intial = 0;
-    $nvpArray = array();
+    $nvpArray = [];
 
     while (strlen($nvpstr)) {
         //postion of Key

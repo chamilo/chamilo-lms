@@ -3,13 +3,10 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="ticket_message")
  * @ORM\Entity
@@ -17,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 class Message
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -53,16 +50,16 @@ class Message
      */
     protected $ipAddress;
 
-     /**
+    /**
      * @var Ticket
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
-     **/
+     */
     protected $ticket;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
@@ -76,7 +73,7 @@ class Message
     protected $insertDateTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
@@ -88,5 +85,4 @@ class Message
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected $lastEditDateTime;
-
 }

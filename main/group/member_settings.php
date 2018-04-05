@@ -7,10 +7,11 @@
  *
  * @author various contributors
  * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
+ *
  * @package chamilo.group
+ *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -22,8 +23,8 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
+$interbreadcrumb[] = ['url' => 'group.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
 
 $is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
 
@@ -32,7 +33,7 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 }
 
 /**
- *  List all users registered to the course
+ *  List all users registered to the course.
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword)
 {
@@ -49,7 +50,7 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
 
 /**
  * Function to sort users after getting the list in the DB.
- * Necessary because there are 2 or 3 queries. Called by usort()
+ * Necessary because there are 2 or 3 queries. Called by usort().
  */
 function sort_users($user_a, $user_b)
 {
@@ -96,7 +97,7 @@ function sort_users($user_a, $user_b)
 }
 
 /**
- * Function to check if the number of selected group members is valid
+ * Function to check if the number of selected group members is valid.
  */
 function check_group_members($value)
 {
@@ -107,7 +108,7 @@ function check_group_members($value)
         isset($value['group_members']) &&
         $value['max_student'] < count($value['group_members'])
     ) {
-        return array('group_members' => get_lang('GroupTooMuchMembers'));
+        return ['group_members' => get_lang('GroupTooMuchMembers')];
     }
 
     return true;
@@ -136,7 +137,7 @@ if ($subscribedTutors) {
 }
 
 $orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-$possible_users = array();
+$possible_users = [];
 $userGroup = new UserGroup();
 
 if (!empty($complete_user_list)) {
@@ -171,7 +172,7 @@ if (!empty($complete_user_list)) {
 // Group members
 $group_member_list = GroupManager::get_subscribed_users($current_group);
 
-$selected_users = array();
+$selected_users = [];
 if (!empty($group_member_list)) {
     foreach ($group_member_list as $index => $user) {
         $selected_users[] = $user['user_id'];

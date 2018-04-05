@@ -3,13 +3,10 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
- * Project
+ * Project.
  *
  * @ORM\Table(name="ticket_project")
  * @ORM\Entity
@@ -17,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 class Project
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -54,7 +51,7 @@ class Project
     protected $otherArea;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
@@ -68,7 +65,7 @@ class Project
     protected $insertDateTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
@@ -99,6 +96,7 @@ class Project
 
     /**
      * @param int $id
+     *
      * @return Project
      */
     public function setId($id)
@@ -118,6 +116,7 @@ class Project
 
     /**
      * @param string $name
+     *
      * @return Project
      */
     public function setName($name)
@@ -137,6 +136,7 @@ class Project
 
     /**
      * @param string $description
+     *
      * @return Project
      */
     public function setDescription($description)
@@ -156,6 +156,7 @@ class Project
 
     /**
      * @param string $email
+     *
      * @return Project
      */
     public function setEmail($email)
@@ -175,6 +176,7 @@ class Project
 
     /**
      * @param string $otherArea
+     *
      * @return Project
      */
     public function setOtherArea($otherArea)
@@ -194,6 +196,7 @@ class Project
 
     /**
      * @param int $insertUserId
+     *
      * @return Project
      */
     public function setInsertUserId($insertUserId)
@@ -213,6 +216,7 @@ class Project
 
     /**
      * @param \DateTime $insertDateTime
+     *
      * @return Project
      */
     public function setInsertDateTime($insertDateTime)
@@ -232,6 +236,7 @@ class Project
 
     /**
      * @param int $lastEditUserId
+     *
      * @return Project
      */
     public function setLastEditUserId($lastEditUserId)
@@ -251,6 +256,7 @@ class Project
 
     /**
      * @param \DateTime $lastEditDateTime
+     *
      * @return Project
      */
     public function setLastEditDateTime($lastEditDateTime)
@@ -259,6 +265,4 @@ class Project
 
         return $this;
     }
-
-
 }

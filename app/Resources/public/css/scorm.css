@@ -5,28 +5,31 @@ See https://support.chamilo.org/issues/6976
 */
 /* LP SCORM */
 /* Default LP left column values */
+
+/* ofaj */
 body{
     background: #FFF !important;
 }
+
 .audio-scorm #container{
     min-height: 45px;
     margin-bottom: 5px;
 }
 #author_image {
-  border: 1px solid #CCCCCC;
-  float: left;
-  margin: 0;
-  padding: 8px;
-  position: relative;
-  width: 100%;
+    border: 1px solid #CCCCCC;
+    float: left;
+    margin: 0;
+    padding: 8px;
+    position: relative;
+    width: 100%;
 }
 #author_name {
-  float: left;
-  text-align:center;
-  width: 100%;
-  font-size: 11px;
-  color: #888;
-  margin-top: 2px;
+    float: left;
+    text-align:center;
+    width: 100%;
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
 }
 #learning_path_left_zone #scorm-gamification{
 }
@@ -38,12 +41,12 @@ body{
     color: #D9534F;
 }
 #learning_path_left_zone .navegation-bar .buttons{
-  padding-top: 5px;
-  padding-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 #learning_path_left_zone .description-autor{
-  text-align: left;
-  padding-top: 10px;
+    text-align: left;
+    padding-top: 10px;
 }
 .inner_lp_toc .scorm_item a {
     font-weight: bold;
@@ -143,64 +146,64 @@ body{
     padding-left: 30px;
 }
 #learning_path_breadcrumb_zone .breadcrumb{
-  background-color: #2b3d53;
-  border-radius: 0;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  color: #ffffff;
-  font-size: 12px;
+    background-color: #2b3d53;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    color: #ffffff;
+    font-size: 12px;
 }
 #learning_path_breadcrumb_zone .breadcrumb a{
-  color: #ffffff;
-  text-decoration: none;
+    color: #ffffff;
+    text-decoration: none;
 }
 #learning_path_breadcrumb_zone .breadcrumb a:hover{
-  color: #dddddd;
+    color: #dddddd;
 }
 .total{
-  width: 100%;
+    width: 100%;
 }
 .view-options{
     padding-top: 3px;
     margin-right: 5px;
 }
 .panel-default .panel-heading .btn{
-  top: -25px;
+    top: -25px;
 }
 .panel-default .panel-heading .dropdown-menu{
-  top: 30%;
+    top: 30%;
 }
 #content-scorm .breadcrumb{
-  padding: 5px;
+    padding: 5px;
 }
 .scorm-heading{
-  font-size: 14px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 #control-bottom{
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  left: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    left: 0;
 }
 #control-bottom.well{
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 /*SCORM CSS BASE */
 #learning_path_left_zone .home{
-  display: inline-block;
-  width: 94%;
-  margin-bottom: .5em;
-  margin-top: .5em;
-  font-size: 12px;
+    display: inline-block;
+    width: 94%;
+    margin-bottom: .5em;
+    margin-top: .5em;
+    font-size: 12px;
 }
 #learning_path_left_zone .scorm_title{
-  font-size: 20px;
-  color: #666;
-  margin-bottom: .5em;
-  margin-top: .5em;
+    font-size: 20px;
+    color: #666;
+    margin-bottom: .5em;
+    margin-top: .5em;
 }
 /* for section */
 .scorm_item_section{
@@ -212,47 +215,47 @@ body{
     background:url("../../main/img/scorm/folder-item-closed.png") no-repeat 10px center;
 }
 .scorm_item_section.scorm_completed .section{
-  background:url("../../main/img/scorm/folder-item-open.png") no-repeat 10px center;
-  padding-right: 1.5em;
+    background:url("../../main/img/scorm/folder-item-open.png") no-repeat 10px center;
+    padding-right: 1.5em;
 }
 .scorm_item_normal a.items-list{
-  color: #666666;
-  font-size: 12px;
+    color: #666666;
+    font-size: 12px;
 }
 .scorm_item_normal a:hover{
-   text-decoration: none;
+    text-decoration: none;
 }
 .scorm_item_normal.scorm_completed{
-   background-color: #F5F5F5;
+    background-color: #F5F5F5;
 }
 .scorm_item_section.scorm_completed{
-   background-color: #F5F5F5;
-   color: #000;
+    background-color: #F5F5F5;
+    color: #000;
 }
 .scorm_completed .item {
-  background:url("../../main/img/scorm/scorm_completed.png") no-repeat 10px center;
+    background:url("../../main/img/scorm/scorm_completed.png") no-repeat 10px center;
 }
 .scorm_completed .item a{
-  color: #000;
+    color: #000;
 }
 .scorm_failed .item{
-  background:url("../../main/img/scorm/scorm_failed.png") no-repeat 10px center;
+    background:url("../../main/img/scorm/scorm_failed.png") no-repeat 10px center;
 }
 .scorm_not_attempted .item{
-  background:url("../../main/img/scorm/scorm_not_attempted.png") no-repeat 10px center;	
+    background:url("../../main/img/scorm/scorm_not_attempted.png") no-repeat 10px center;
 }
 .scorm_highlight .item{
-  background:url("../../main/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
-  color: #009AB8;
+    background:url("../../main/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
+    color: #009AB8;
 }
 .scorm_highlight.scorm_completed .item{
-  background:url("../../main/img/scorm/scorm_current.png") no-repeat 10px center !important;
+    background:url("../../main/img/scorm/scorm_current.png") no-repeat 10px center !important;
 }
 .scorm_highlight.scorm_failed .item{
     background:url("../../main/img/scorm/scorm_failed.png") no-repeat 10px center !important;
 }
 .scorm_highlight a{
-  color: #FFFFFF !important;
+    color: #FFFFFF !important;
 }
 .scorm_item_normal.scorm_highlight{
     background-color: #00829C;
@@ -304,6 +307,8 @@ body{
     height: 100%;
     margin: 0;
     overflow: hidden;
+    position: absolute;
+    width: 100%;
 }
 #learning_path_left_zone,
 #learning_path_right_zone {
@@ -315,8 +320,12 @@ body{
     position: absolute;
     right: 0;
     top: 0;
-    transition-property: left width;
+    transition-property: left, width;
     transition-duration: 0.5s;
+}
+#learning_path_right_zone #wrapper-iframe {
+    height: 100%;
+    width: 100%;
 }
 #learning_path_left_zone .lp-view-zone-container,
 #learning_path_right_zone .lp-view-zone-container {
@@ -341,12 +350,15 @@ body{
     left: 100%;
     width: 100%;
 }
+#learning_path_right_zone.no-right-col {
+    left: 0;
+}
 #learning_path_right_zone .lp-view-tabs .tab-content {
     bottom: 5px;
     left: 5px;
     position: absolute;
     right: 5px;
-    top: 65px;
+    top: 60px;
 }
 #learning_path_right_zone .tab-pane{
     height: 100%;
@@ -375,22 +387,6 @@ body{
     background: none;
     padding: 0;
     margin: 0;
-}
-.movil-toolbar{
-    width: 100%;
-    height: 40px;
-    padding-top: 5px;
-}
-.btn-movil{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-.btn-movil li{
-    display: block;
-    float: left;
-    margin-left: 5px;
-    margin-right: 5px;
 }
 .icon-toolbar .fa{
     width: 35px;
@@ -427,23 +423,19 @@ body{
 #scorm-info .progress-bar{
     line-height: 17px;
 }
-#scorm-panel .panel-body{
-    padding: 0;
-}
-.section-list{
-    display: block;
+.actions_lp{
+    display: inline-block;
     width: 100%;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid #E1E1E1;
+    text-align: center;
 }
-.section-list .list-item{
-    padding: 5px 10px;
-    display: flex;
-    border-bottom: 1px solid #ededed;
+.navegation-bar {
+    display: block;
+    padding: 5px 10px 5px 5px;
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: 9999;
 }
-
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #scorm-info{
@@ -456,6 +448,9 @@ body{
     #learning_path_right_zone {
         left: 250px;
         width: calc(100% - 250px);
+    }
+    #learning_path_right_zone.no-right-col {
+        width: 100%;
     }
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
@@ -471,11 +466,11 @@ body{
     #learning_path_right_zone .lp-view-zone-container {
         padding-left: 5px;
     }
-    
+
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
         right: 10px;
-        top: 75px;
+        top: 60px;
     }
     #learning_path_right_zone .tab-pane{
     }
@@ -511,16 +506,16 @@ body{
         display: none;
     }
     #scorm-info {
-	padding: 0;
-	margin: 0;
+        padding: 0;
+        margin: 0;
     }
     #learning_path_left_zone .lp-view-zone-container,
     #learning_path_right_zone .lp-view-zone-container{
         padding: 0;
     }
     #scorm-info {
-	padding: 30px 0 0 0;
-	margin: 0;
+        padding: 30px 0 0 0;
+        margin: 0;
     }
     .nav-tabs-bar{
         display: none;
@@ -528,14 +523,60 @@ body{
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-    #home-course{
-        display: none !important;
-    }
     .scorm-title{
         font-size: 14px;
         padding: 10px;
     }
     .movil-toolbar{
-        padding-left: 35%;
+        width: 100%;
+        height: auto;
+    }
+    .scorm_item_normal{
+        padding: 10px 5px;
+    }
+    .actions_lp .btn-group .btn-sm{
+        padding: 10px;
+    }
+    .icon-toolbar .fa {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 22px;
+    }
+    .btn-movil {
+        width: 130px;
+        margin: auto;
+    }
+    #scorm-info {
+        padding: 30px 0 0 0;
+        margin: 0;
+    }
+    #learning_path_toc {
+        left: 0;
+        right: 0;
+        padding: 0;
+        border-radius: 5px;
+    }
+    #learning_path_right_zone {
+        left: 100%;
+        width: auto;
+    }
+    #panel-scorm .image-avatar{
+        display: none;
+    }
+    .navegation-bar {
+        display: block;
+        padding: 2px;
+        position: fixed;
+        top: 0;
+        right: 15px;
+        z-index: 999;
+    }
+    .nav-tabs-bar{
+        display: none;
+    }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container{
+        padding: 0;
     }
 }

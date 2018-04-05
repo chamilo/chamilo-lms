@@ -3,26 +3,28 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 use Database;
-use \CourseManager;
 use Display;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 
 /**
- * Class to show a form to select resources
+ * Class to show a form to select resources.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @package chamilo.backup
  */
 class CourseSelectForm
 {
     /**
-     * Display the form
+     * Display the form.
+     *
      * @param array $course
-     * @param array $hidden_fields Hidden fields to add to the form.
-     * @param boolean $avoid_serialize the document array will be serialize.
-     * This is used in the course_copy.php file
+     * @param array $hidden_fields   hidden fields to add to the form
+     * @param bool  $avoid_serialize the document array will be serialize.
+     *                               This is used in the course_copy.php file
      */
     public static function display_form(
         $course,
@@ -49,8 +51,7 @@ class CourseSelectForm
         $resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
         $resource_titles[RESOURCE_THEMATIC] = get_lang('Thematic');
         $resource_titles[RESOURCE_ATTENDANCE] = get_lang('Attendance');
-        $resource_titles[RESOURCE_WORK] = get_lang('ToolStudentPublication');
-?>
+        $resource_titles[RESOURCE_WORK] = get_lang('ToolStudentPublication'); ?>
         <script>
             function exp(item) {
                 el = document.getElementById('div_'+item);
@@ -170,9 +171,9 @@ class CourseSelectForm
         }
 
         $element_count = 0;
-        $forum_categories = array();
-        $forums = array();
-        $forum_topics = array();
+        $forum_categories = [];
+        $forums = [];
+        $forum_topics = [];
 
         echo '<p>';
         echo get_lang('SelectResources');
@@ -399,13 +400,15 @@ class CourseSelectForm
     }
 
     /**
-     * Get the posted course
-     * @param string $from who calls the function?
-     * It can be copy_course, create_backup, import_backup or recycle_course
-     * @param int $session_id
+     * Get the posted course.
+     *
+     * @param string $from        who calls the function?
+     *                            It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int    $session_id
      * @param string $course_code
+     *
      * @return course The course-object with all resources selected by the user
-     * in the form given by display_form(...)
+     *                in the form given by display_form(...)
      */
     public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
     {
@@ -467,7 +470,7 @@ class CourseSelectForm
                                         tool = '".RESOURCE_DOCUMENT."' AND
                                         ref = $resource_item ";
                             $res = Database::query($sql);
-                            $all_properties = array();
+                            $all_properties = [];
                             while ($item_property = Database::fetch_array($res, 'ASSOC')) {
                                 $all_properties[] = $item_property;
                             }
@@ -495,7 +498,7 @@ class CourseSelectForm
                     case RESOURCE_FORUMPOST:
                        //Add post from topic
                         if ($type == RESOURCE_FORUMTOPIC) {
-                            $posts_to_save = array();
+                            $posts_to_save = [];
                             $posts = $course->resources[RESOURCE_FORUMPOST];
                             foreach ($resources as $thread_id => $obj) {
                                 if (!isset($_POST['resource'][RESOURCE_FORUMTOPIC][$thread_id])) {
@@ -544,16 +547,13 @@ class CourseSelectForm
                         }
                         // no break
                     case RESOURCE_LINKCATEGORY:
-                        // no break
                     case RESOURCE_FORUMCATEGORY:
-                        // no break
                     case RESOURCE_QUIZQUESTION:
-                        // no break
                     case RESOURCE_DOCUMENT:
                         // Mark folders to import which are not selected by the user to import,
                         // but in which a document was selected.
                         $documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
-                        if (!empty($resources) && is_array($resources))
+                        if (!empty($resources) && is_array($resources)) {
                             foreach ($resources as $id => $obj) {
                                 if (isset($obj->file_type) && $obj->file_type == 'folder' &&
                                     !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) &&
@@ -575,6 +575,7 @@ class CourseSelectForm
                                     }
                                 }
                             }
+                        }
                         // no break
                     default:
                         if (!empty($resources) && is_array($resources)) {
@@ -602,10 +603,11 @@ class CourseSelectForm
     }
 
     /**
-     * Display the form session export
+     * Display the form session export.
+     *
      * @param array $list_course
-     * @param array $hidden_fields Hidden fields to add to the form.
-     * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
+     * @param array $hidden_fields   hidden fields to add to the form
+     * @param bool  $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
      */
     public static function display_form_session_export(
         $list_course,

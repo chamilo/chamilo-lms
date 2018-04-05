@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 //$cidReset = true;
@@ -52,10 +53,10 @@ if ($add_result_form->validate()) {
     header('Location: gradebook_view_result.php?addresult=&selecteval='.$selectEval.'&'.api_get_cidreq());
     exit;
 }
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
-);
+    'name' => get_lang('Gradebook'),
+];
 Display :: display_header(get_lang('AddResult'));
 DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo $table;

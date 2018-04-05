@@ -4,10 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * This script is the Tickets plugin main entry point
+ * This script is the Tickets plugin main entry point.
+ *
  * @package chamilo.plugin.ticket
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -20,7 +20,7 @@ function load_history_ticket(div_course, ticket_id) {
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(object) {
-        $("div#"+div_course).html("<img src=\'' . $webLibPath.'javascript/indicator.gif\' />"); },
+        $("div#"+div_course).html("<img src=\''.$webLibPath.'javascript/indicator.gif\' />"); },
         type: "POST",
         url: "ticket_assign_log.php",
         data: "ticket_id="+ticket_id,
@@ -43,10 +43,10 @@ $(document).ready(function() {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
     }
 }
 </script>';
@@ -59,8 +59,8 @@ $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $table = new SortableTable(
     'Tickets',
-    array('TicketManager', 'get_total_tickets_by_user_id'),
-    array('TicketManager', 'get_tickets_by_user_id'),
+    ['TicketManager', 'get_total_tickets_by_user_id'],
+    ['TicketManager', 'get_tickets_by_user_id'],
     2,
     20,
     'DESC'
@@ -79,8 +79,8 @@ switch ($action) {
         }
         break;
     case 'export':
-        $data = array(
-            array(
+        $data = [
+            [
                 '#',
                 get_lang('Date'),
                 get_lang('LastUpdate'),
@@ -89,13 +89,13 @@ switch ($action) {
                 get_lang('Program'),
                 get_lang('AssignedTo'),
                 get_lang('Status'),
-                get_lang('Description')
-            )
-        );
+                get_lang('Description'),
+            ],
+        ];
         $datos = $table->get_clean_html();
         foreach ($datos as $ticket) {
             $ticket[0] = substr(strip_tags($ticket[0]), 0, 12);
-            $ticket_rem = array(
+            $ticket_rem = [
                 utf8_decode(strip_tags($ticket[0])),
                 utf8_decode(api_html_entity_decode($ticket[1])),
                 utf8_decode(strip_tags($ticket[2])),
@@ -103,8 +103,8 @@ switch ($action) {
                 utf8_decode(strip_tags($ticket[4])),
                 utf8_decode(strip_tags($ticket[5])),
                 utf8_decode(strip_tags($ticket[6])),
-                utf8_decode(strip_tags($ticket[7]))
-            );
+                utf8_decode(strip_tags($ticket[7])),
+            ];
             $data[] = $ticket_rem;
         }
         Export::arrayToXls($data, get_lang('Tickets'));
@@ -157,7 +157,7 @@ if (!empty($projectId)) {
 
     $getParameters = [
         'Tickets_per_page',
-        'Tickets_column'
+        'Tickets_column',
     ];
     $get_parameter2 = '';
     foreach ($getParameters as $getParameter) {
@@ -181,12 +181,12 @@ if (!empty($projectId)) {
     }
 
     $admins = UserManager::get_user_list_like(
-        array('status' => '1'),
-        array('username'),
+        ['status' => '1'],
+        ['username'],
         true
     );
     $selectAdmins = [
-        0 => get_lang('Unassigned')
+        0 => get_lang('Unassigned'),
     ];
     foreach ($admins as $admin) {
         $selectAdmins[$admin['user_id']] = $admin['complete_name_with_username'];
@@ -201,7 +201,7 @@ if (!empty($projectId)) {
     $selectStatusUnread = [
         '' => get_lang('StatusAll'),
         'yes' => get_lang('StatusUnread'),
-        'no' => get_lang('StatusRead')
+        'no' => get_lang('StatusRead'),
     ];
 
     // Create a search-box
@@ -221,10 +221,10 @@ if (!empty($projectId)) {
         '<span id="img_plus_and_minus">&nbsp;'.
         Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
         'javascript://',
-        array(
+        [
             'class' => 'btn btn-default advanced-parameters',
-            'onclick' => 'display_advanced_search_form();'
-        )
+            'onclick' => 'display_advanced_search_form();',
+        ]
     );
 
     // Add link
@@ -236,7 +236,7 @@ if (!empty($projectId)) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id=' . $projectId.'&'.api_get_cidReq(),
+            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'&'.api_get_cidReq(),
             ['title' => get_lang('Add')]
         );
     }
@@ -267,11 +267,11 @@ if (!empty($projectId)) {
 
     echo Display::toolbarAction(
         'toolbar-tickets',
-        array(
+        [
             $form->returnForm(),
             $advancedSearch,
-            $actionRight
-        )
+            $actionRight,
+        ]
     );
 
     $ticketLabel = get_lang('AllTickets');
@@ -288,7 +288,7 @@ if (!empty($projectId)) {
         get_lang('Projects'),
         null,
         ICON_SIZE_MEDIUM
-        ) ;
+        );
     if ($isAdmin) {
         $options .= Display::url(
             $iconProject,
@@ -300,7 +300,7 @@ if (!empty($projectId)) {
         $ticketLabel,
         null,
         ICON_SIZE_MEDIUM
-        ) ;
+        );
     $options .= Display::url(
         $iconTicket,
         $url
@@ -309,9 +309,9 @@ if (!empty($projectId)) {
     if ($isAllow) {
         echo Display::toolbarAction(
             'toolbar-options',
-            array(
-                $options
-            )
+            [
+                $options,
+            ]
         );
     }
 

@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls for thematic
+ * Responses to AJAX calls for thematic.
  */
-
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 
@@ -82,29 +81,29 @@ switch ($action) {
         echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];*/
         break;
     case 'get_datetime_by_attendance':
-        $attendance_id       = intval($_REQUEST['attendance_id']);
+        $attendance_id = intval($_REQUEST['attendance_id']);
         $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
 
         $label = '';
         $input_select = '';
         if (!empty($attendance_id)) {
             $attendance = new Attendance();
-            $thematic   = new Thematic();
+            $thematic = new Thematic();
             $thematic_list = $thematic->get_thematic_list();
 
-            $my_list = $thematic_list_temp = array();
+            $my_list = $thematic_list_temp = [];
             foreach ($thematic_list as $item) {
                 $my_list = $thematic->get_thematic_advance_by_thematic_id($item['id']);
                 $thematic_list_temp = array_merge($my_list, $thematic_list_temp);
             }
-            $new_thematic_list = array();
+            $new_thematic_list = [];
 
             foreach ($thematic_list_temp as $item) {
                 if (!empty($item['attendance_id'])) {
-                    $new_thematic_list[$item['id']] = array(
+                    $new_thematic_list[$item['id']] = [
                         'attendance_id' => $item['attendance_id'],
                         'start_date' => $item['start_date'],
-                    );
+                    ];
                 }
             }
 
@@ -138,8 +137,8 @@ switch ($action) {
         }
         ?>
         <div class="form-group">
-            <label class="col-sm-2 control-label"><?php echo $label ?></label>
-            <div class="col-sm-8"><?php echo $input_select ?></div>
+            <label class="col-sm-2 control-label"><?php echo $label; ?></label>
+            <div class="col-sm-8"><?php echo $input_select; ?></div>
         </div>
         <?php
         break;

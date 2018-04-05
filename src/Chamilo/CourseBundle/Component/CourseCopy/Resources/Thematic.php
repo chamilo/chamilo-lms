@@ -4,21 +4,21 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Thematic backup script
+ * Thematic backup script.
+ *
  * @package chamilo.backup
  */
-
 class Thematic extends Resource
 {
-    public $params = array();
-    public $thematic_advance_list = array();
-    public $thematic_plan_list = array();
+    public $params = [];
+    public $thematic_advance_list = [];
+    public $thematic_plan_list = [];
 
     /**
-    * Create a new Thematic
-    *
-    * @param array $params
-    */
+     * Create a new Thematic.
+     *
+     * @param array $params
+     */
     public function __construct($params)
     {
         parent::__construct($params['id'], RESOURCE_THEMATIC);

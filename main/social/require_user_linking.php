@@ -51,7 +51,7 @@ $form->addSelectAjax(
 $form->addButtonSave(get_lang('Save'));
 $form->setDefaults([
     'hrm' => $hrm,
-    'users' => array_keys($requestOptions)
+    'users' => array_keys($requestOptions),
 ]);
 
 if ($form->validate()) {

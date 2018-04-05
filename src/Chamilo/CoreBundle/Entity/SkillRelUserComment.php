@@ -7,7 +7,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelUserComment class
+ * SkillRelUserComment class.
  *
  * @ORM\Table(
  *  name="skill_rel_user_comment",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelUserComment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -62,7 +62,8 @@ class SkillRelUserComment
     private $feedbackDateTime;
 
     /**
-     * Get id
+     * Get id.
+     *
      * @return int
      */
     public function getId()
@@ -71,7 +72,8 @@ class SkillRelUserComment
     }
 
     /**
-     * Get skillRelUser
+     * Get skillRelUser.
+     *
      * @return SkillRelUser
      */
     public function getSkillRelUser()
@@ -80,7 +82,8 @@ class SkillRelUserComment
     }
 
     /**
-     * Get feedbackGiver
+     * Get feedbackGiver.
+     *
      * @return User
      */
     public function getFeedbackGiver()
@@ -89,7 +92,8 @@ class SkillRelUserComment
     }
 
     /**
-     * Get feedbackText
+     * Get feedbackText.
+     *
      * @return string
      */
     public function getFeedbackText()
@@ -98,7 +102,8 @@ class SkillRelUserComment
     }
 
     /**
-     * Get feedbackValue
+     * Get feedbackValue.
+     *
      * @return int
      */
     public function getFeedbackValue()
@@ -107,7 +112,8 @@ class SkillRelUserComment
     }
 
     /**
-     * Get feedbackDateTime
+     * Get feedbackDateTime.
+     *
      * @return \DateTime
      */
     public function getFeedbackDateTime()
@@ -116,8 +122,10 @@ class SkillRelUserComment
     }
 
     /**
-     * Set skillRelUser
+     * Set skillRelUser.
+     *
      * @param SkillRelUser $skillRelUser
+     *
      * @return SkillRelUserComment
      */
     public function setSkillRelUser(SkillRelUser $skillRelUser)
@@ -128,8 +136,10 @@ class SkillRelUserComment
     }
 
     /**
-     * Set feedbackGiver
+     * Set feedbackGiver.
+     *
      * @param User $feedbackGiver
+     *
      * @return SkillRelUserComment
      */
     public function setFeedbackGiver(User $feedbackGiver)
@@ -140,8 +150,10 @@ class SkillRelUserComment
     }
 
     /**
-     * Set feedbackText
+     * Set feedbackText.
+     *
      * @param string $feedbackText
+     *
      * @return SkillRelUserComment
      */
     public function setFeedbackText($feedbackText)
@@ -152,8 +164,10 @@ class SkillRelUserComment
     }
 
     /**
-     * Set feebackValue
+     * Set feebackValue.
+     *
      * @param int $feedbackValue
+     *
      * @return SkillRelUserComment
      */
     public function setFeedbackValue($feedbackValue)
@@ -164,7 +178,8 @@ class SkillRelUserComment
     }
 
     /**
-     * Set feedbackDateTime
+     * Set feedbackDateTime.
+     *
      * @param \DateTime $feedbackDateTime
      *
      * @return SkillRelUserComment

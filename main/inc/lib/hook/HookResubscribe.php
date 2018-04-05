@@ -2,13 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class HookResubscribe
- * @var \SplObjectStorage $observers
+ * Class HookResubscribe.
+ *
+ * @var \SplObjectStorage
  */
 class HookResubscribe extends HookEvent implements HookResubscribeEventInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     protected function __construct()
     {
@@ -16,7 +17,8 @@ class HookResubscribe extends HookEvent implements HookResubscribeEventInterface
     }
 
     /**
-     * Update all the observers
+     * Update all the observers.
+     *
      * @param int $type
      *
      * @return int
@@ -28,6 +30,7 @@ class HookResubscribe extends HookEvent implements HookResubscribeEventInterface
         foreach ($this->observers as $observer) {
             $observer->hookResubscribe($this);
         }
+
         return 1;
     }
 }

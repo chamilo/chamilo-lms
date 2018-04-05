@@ -4,24 +4,146 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
-$debug = false;
+
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
-
+$debug = false;
 if ($debug) {
+    error_log("-----------------");
     error_log("$action ajax call");
+    error_log("-----------------");
 }
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'update_duration':
+        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
+
+        if (Session::read('login_as')) {
+            if ($debug) {
+                error_log("User is 'login as' don't update duration time.");
+            }
+            exit;
+        }
+
+        if (empty($exeId)) {
+            if ($debug) {
+                error_log("Exe id not provided.");
+            }
+            exit;
+        }
+
+        /** @var Exercise $exerciseInSession */
+        $exerciseInSession = Session::read('objExercise');
+
+        if (empty($exerciseInSession)) {
+            if ($debug) {
+                error_log("Exercise obj not provided.");
+            }
+            exit;
+        }
+
+        // If exercise was updated x seconds before, then don't updated duration.
+        $onlyUpdateValue = 10;
+
+        $em = Database::getManager();
+        /** @var \Chamilo\CoreBundle\Entity\TrackEExercises $attempt */
+        $attempt = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+
+        if (empty($attempt)) {
+            if ($debug) {
+                error_log("Attempt #$exeId doesn't exists.");
+            }
+            exit;
+        }
+
+        $nowObject = api_get_utc_datetime(null, false, true);
+        $now = $nowObject->getTimestamp();
+        $exerciseId = $attempt->getExeExoId();
+        $userId = $attempt->getExeUserId();
+        $currentUserId = api_get_user_id();
+
+        if ($userId != $currentUserId) {
+            if ($debug) {
+                error_log("User $currentUserId trying to change time for user $userId");
+            }
+            exit;
+        }
+
+        if ($exerciseInSession->id != $exerciseId) {
+            if ($debug) {
+                error_log("Cannot update, exercise are different.");
+            }
+            exit;
+        }
+
+        if ($attempt->getStatus() != 'incomplete') {
+            if ($debug) {
+                error_log("Cannot update exercise is already completed.");
+            }
+            exit;
+        }
+
+        // Check if we are dealing with the same exercise.
+        $timeWithOutUpdate = $now - $attempt->getExeDate()->getTimestamp();
+        if ($timeWithOutUpdate > $onlyUpdateValue) {
+            $key = ExerciseLib::get_time_control_key(
+                $exerciseId,
+                $attempt->getOrigLpId(),
+                $attempt->getOrigLpItemId()
+            );
+            $durationFromObject = $attempt->getExeDuration();
+            $previousTime = Session::read('duration_time_previous');
+            if (isset($previousTime[$key]) &&
+                !empty($previousTime[$key])
+            ) {
+                $sessionTime = $previousTime[$key];
+                $duration = $sessionTime = $now - $sessionTime;
+                /*if ($debug) {
+                    error_log("Now in UTC: ".$nowObject->format('Y-m-d H:i:s'));
+                    error_log("Session time in UTC: ".api_get_utc_datetime($sessionTime));
+                }*/
+                if (!empty($durationFromObject)) {
+                    $duration += $durationFromObject;
+                }
+                $duration = (int) $duration;
+                if (!empty($duration)) {
+                    if ($debug) {
+                        error_log("Exe_id: #".$exeId);
+                        error_log("Key: $key");
+                        error_log("Exercise to update: #$exerciseId of user: #$userId");
+                        error_log("Duration time found in DB before update: $durationFromObject");
+                        error_log("Current spent time $sessionTime before an update");
+                        error_log("Accumulate duration to save in DB: $duration");
+                        error_log("End date (UTC) before update: ".$attempt->getExeDate()->format('Y-m-d H:i:s'));
+                        error_log("End date (UTC) to be save in DB: ".$nowObject->format('Y-m-d H:i:s'));
+                    }
+                    $attempt
+                        ->setExeDuration($duration)
+                        ->setExeDate($nowObject);
+                    $em->merge($attempt);
+                    $em->flush();
+                }
+            } else {
+                if ($debug) {
+                    error_log("Nothing to update, 'duration_time_previous' session not set");
+                    error_log("Key: $key");
+                }
+            }
+        } else {
+            if ($debug) {
+                error_log("Can't update, time was already updated $timeWithOutUpdate seconds ago");
+            }
+        }
+
+        break;
     case 'get_live_stats':
         if (!api_is_allowed_to_edit(null, true)) {
             break;
@@ -35,7 +157,7 @@ switch ($action) {
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
-        if (!in_array($sord, array('asc', 'desc'))) {
+        if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
         // get index row - i.e. user click to sort $sord = $_GET['sord'];
@@ -57,8 +179,8 @@ switch ($action) {
                 FROM $track_exercise
                 WHERE $where_condition ";
         $result = Database::query($sql);
-        $count  = Database::fetch_row($result);
-        $count  = $count[0];
+        $count = Database::fetch_row($result);
+        $count = $count[0];
 
         //3. Calculating first, end, etc
         $total_pages = 0;
@@ -114,7 +236,7 @@ switch ($action) {
                 LIMIT $start, $limit";
 
         $result = Database::query($sql);
-        $results = array();
+        $results = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $results[] = $row;
         }
@@ -164,13 +286,13 @@ switch ($action) {
                             DATE_TIME_FORMAT_LONG
                     );
                 }
-                $array = array(
+                $array = [
                     $row['firstname'],
                     $row['lastname'],
                     $timeInfo,
                     $row['count_questions'],
-                    round($row['score'] * 100).'%'
-                );
+                    round($row['score'] * 100).'%',
+                ];
                 $response->rows[$i]['cell'] = $array;
                 $i++;
             }
@@ -189,12 +311,12 @@ switch ($action) {
             foreach ($new_list as $new_order_id) {
                 Database::insert(
                     $table,
-                    array(
+                    [
                         'exercise_order' => $counter,
                         'session_id' => $session_id,
                         'exercise_id' => intval($new_order_id),
-                        'c_id' => $course_id
-                    )
+                        'c_id' => $course_id,
+                    ]
                 );
                 $counter++;
             }
@@ -216,16 +338,16 @@ switch ($action) {
             foreach ($new_question_list as $new_order_id) {
                 Database::update(
                     $TBL_QUESTIONS,
-                    array('question_order' => $counter),
-                    array(
-                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => array(
+                    ['question_order' => $counter],
+                    [
+                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => [
                             intval(
                                 $new_order_id
                             ),
                             $course_id,
-                            $exercise_id
-                        )
-                    )
+                            $exercise_id,
+                        ],
+                    ]
                 )
                 ;
                 $counter++;
@@ -305,7 +427,7 @@ switch ($action) {
             // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
             $exercise_id = $exercise_stat_info['exe_exo_id'];
-            $attemptList = array();
+            $attemptList = [];
 
             // First time here we create an attempt (getting the exe_id).
             if (!empty($exercise_stat_info)) {
@@ -323,7 +445,7 @@ switch ($action) {
 
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
-                    $new_list = array();
+                    $new_list = [];
                     foreach ($bd_reminder_list as $item) {
                         if ($item != $question_id) {
                             $new_list[] = $item;
@@ -383,9 +505,7 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 // Getting free choice data.
-                if (($objQuestionTmp->type == FREE_ANSWER || $objQuestionTmp->type == ORAL_EXPRESSION) &&
-                    $type == 'all'
-                ) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type == 'all') {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
                         ? $_REQUEST['free_choice'][$my_question_id]
                         : null;
@@ -402,7 +522,6 @@ switch ($action) {
                 ) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
-
                 if ($type == 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
@@ -410,12 +529,12 @@ switch ($action) {
                         $my_question_id,
                         null,
                         'exercise_show',
-                        array(),
+                        [],
                         false,
                         true,
                         false,
                         $objExercise->selectPropagateNeg(),
-                        array()
+                        []
                     );
 
                     // Removing old score.
@@ -425,7 +544,7 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
-                        error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
+                        error_log("delete_attempt exe_id : $exe_id, my_question_id: $my_question_id");
                     }
                     Event::delete_attempt(
                         $exe_id,
@@ -486,19 +605,27 @@ switch ($action) {
                     $exercise_stat_info['orig_lp_item_id']
                 );
 
-                if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
-                    $duration = $now - $_SESSION['duration_time'][$key];
+                $durationTime = Session::read('duration_time');
+                if (isset($durationTime[$key]) && !empty($durationTime[$key])) {
+                    if ($debug) {
+                        error_log('Session time :'.$durationTime[$key]);
+                    }
+                    $duration = $now - $durationTime[$key];
                     if (!empty($exercise_stat_info['exe_duration'])) {
                         $duration += $exercise_stat_info['exe_duration'];
                     }
-                    $duration = intval($duration);
+                    $duration = (int) $duration;
                 } else {
                     if (!empty($exercise_stat_info['exe_duration'])) {
                         $duration = $exercise_stat_info['exe_duration'];
                     }
                 }
 
-                $_SESSION['duration_time'][$key] = time();
+                if ($debug) {
+                    error_log('duration to save in DB:'.$duration);
+                }
+
+                Session::write('duration_time', [$key => $now]);
 
                 Event::updateEventExercise(
                     $exe_id,
@@ -515,7 +642,7 @@ switch ($action) {
                     $remind_list
                 );
 
-                 // Destruction of the Question object
+                // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
                     error_log(" -- end question -- ");
@@ -540,8 +667,8 @@ switch ($action) {
             exit;
         }
 
-        $questionId = isset($_GET['question']) ? intval($_GET['question']) : 0;
-        $exerciseId = isset($_REQUEST['exercise']) ? intval($_REQUEST['exercise']) : 0;
+        $questionId = isset($_GET['question']) ? (int) $_GET['question'] : 0;
+        $exerciseId = isset($_REQUEST['exercise']) ? (int) $_REQUEST['exercise'] : 0;
 
         if (!$questionId || !$exerciseId) {
             break;
@@ -551,9 +678,15 @@ switch ($action) {
         $objExercise->read($exerciseId);
 
         $objQuestion = Question::read($questionId);
-        $objQuestion->get_question_type_name();
 
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
+        if ($objQuestion->type == FILL_IN_BLANKS) {
+            echo '<script>
+                $(function() {
+                    $(".selectpicker").selectpicker({});
+                });
+            </script>';
+        }
         ExerciseLib::showQuestion(
             $objExercise,
             $questionId,

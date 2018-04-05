@@ -12,13 +12,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class SidebarController
+ * Class SidebarController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class SidebarController extends Controller
 {
     /**
-     * "Hello user" section
+     * "Hello user" section.
+     *
      * @return Response
      */
     public function userPanelAction()
@@ -31,31 +33,25 @@ class SidebarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:user-panel.html.twig',
-            array(
-                'user' => $userEvent->getUser()
-            )
+            [
+                'user' => $userEvent->getUser(),
+            ]
         );
     }
 
     /**
-     * Search bar
+     * Search bar.
+     *
      * @return Response
      */
     public function searchFormAction()
     {
-        return $this->render('ChamiloThemeBundle:Sidebar:search-form.html.twig', array());
-    }
-
-    /**
-     * @return EventDispatcher
-     */
-    protected function getDispatcher()
-    {
-        return $this->get('event_dispatcher');
+        return $this->render('ChamiloThemeBundle:Sidebar:search-form.html.twig', []);
     }
 
     /**
      * @param Request $request
+     *
      * @return Response
      */
     public function menuAction(Request $request)
@@ -71,14 +67,15 @@ class SidebarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:menu.html.twig',
-            array(
-                'menu' => $event->getItems()
-            )
+            [
+                'menu' => $event->getItems(),
+            ]
         );
     }
 
     /**
      * @param Request $request
+     *
      * @return Response
      */
     public function menuKnpAction(Request $request)
@@ -95,9 +92,17 @@ class SidebarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:menu_knp.html.twig',
-            array(
-                'menu' => $event->getMenu()
-            )
+            [
+                'menu' => $event->getMenu(),
+            ]
         );
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    protected function getDispatcher()
+    {
+        return $this->get('event_dispatcher');
     }
 }

@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * List of pending payments of the Buy Courses plugin
+ * List of pending payments of the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../config.php';
@@ -40,7 +40,7 @@ foreach ($servicesSales as $sale) {
         'price' => $sale['price'],
         'service_type' => $sale['service']['applies_to'],
         'service_name' => $sale['service']['name'],
-        'complete_user_name' => $sale['buyer']['name']
+        'complete_user_name' => $sale['buyer']['name'],
     ];
 }
 

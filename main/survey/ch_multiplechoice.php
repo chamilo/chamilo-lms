@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_multiplechoice
+ * Class ch_multiplechoice.
  */
 class ch_multiplechoice extends survey_question
 {
@@ -16,16 +16,16 @@ class ch_multiplechoice extends survey_question
     {
         parent::createForm($survey_data, $formData);
 
-        $options = array(
+        $options = [
             'horizontal' => get_lang('Horizontal'),
-            'vertical' => get_lang('Vertical')
-        );
+            'vertical' => get_lang('Vertical'),
+        ];
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);
 
-        $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
+        $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         $total = count($formData['answers']);
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
@@ -50,10 +50,10 @@ class ch_multiplechoice extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
+    public function render(FormValidator $form, $questionData = [], $answers = [])
     {
         $question = new ch_yesno();
         $question->render($form, $questionData, $answers);

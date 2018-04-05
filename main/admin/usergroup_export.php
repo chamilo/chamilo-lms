@@ -13,8 +13,8 @@ api_protect_admin_script();
 
 $tool_name = get_lang('Export');
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 set_time_limit(0);
 
@@ -24,7 +24,7 @@ $form->addButtonExport(get_lang('Export'));
 
 if ($form->validate()) {
     $userGroup = new UserGroup();
-    $header = array(array('id', 'name', 'description', 'users'));
+    $header = [['id', 'name', 'description', 'users']];
     $data = $userGroup->getDataToExport();
     $data = array_merge($header, $data);
     $filename = 'export_classes_'.api_get_local_time();

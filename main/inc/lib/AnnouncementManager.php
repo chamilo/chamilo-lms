@@ -6,14 +6,17 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
 
 /**
  * Include file with functions for the announcements module.
+ *
  * @author jmontoya
+ *
  * @package chamilo.announcements
+ *
  * @todo use OOP
  */
 class AnnouncementManager
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -30,7 +33,7 @@ class AnnouncementManager
             '((user_lastname))',
             '((user_official_code))',
             '((course_title))',
-            '((course_link))'
+            '((course_link))',
         ];
 
         $tags[] = '((teachers))';
@@ -45,10 +48,10 @@ class AnnouncementManager
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $content
      * @param string $courseCode
-     * @param int $sessionId
+     * @param int    $sessionId
      *
      * @return string
      */
@@ -109,9 +112,11 @@ class AnnouncementManager
     }
 
     /**
-     * Gets all announcements from a course
+     * Gets all announcements from a course.
+     *
      * @param array $course_info
-     * @param int $session_id
+     * @param int   $session_id
+     *
      * @return array html with the content and count of announcements or false otherwise
      */
     public static function get_all_annoucement_by_course($course_info, $session_id = 0)
@@ -138,7 +143,7 @@ class AnnouncementManager
         $rs = Database::query($sql);
         $num_rows = Database::num_rows($rs);
         if ($num_rows > 0) {
-            $list = array();
+            $list = [];
             while ($row = Database::fetch_array($rs)) {
                 $list[] = $row;
             }
@@ -151,10 +156,12 @@ class AnnouncementManager
 
     /**
      * This functions switches the visibility a course resource
-     * using the visibility field in 'item_property'
-     * @param    array $courseInfo
-     * @param    int     $id ID of the element of the corresponding type
-     * @return   bool    False on failure, True on success
+     * using the visibility field in 'item_property'.
+     *
+     * @param array $courseInfo
+     * @param int   $id         ID of the element of the corresponding type
+     *
+     * @return bool False on failure, True on success
      */
     public static function change_visibility_announcement($courseInfo, $id)
     {
@@ -187,9 +194,10 @@ class AnnouncementManager
     }
 
     /**
-     * Deletes an announcement
+     * Deletes an announcement.
+     *
      * @param array $courseInfo the course array
-     * @param int $id the announcement id
+     * @param int   $id         the announcement id
      */
     public static function delete_announcement($courseInfo, $id)
     {
@@ -203,7 +211,8 @@ class AnnouncementManager
     }
 
     /**
-     * Deletes all announcements by course
+     * Deletes all announcements by course.
+     *
      * @param array $courseInfo the course array
      */
     public static function delete_all_announcements($courseInfo)
@@ -227,9 +236,9 @@ class AnnouncementManager
 
     /**
      * @param string $title
-     * @param int $courseId
-     * @param int $sessionId
-     * @param int $visibility 1 or 0
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param int    $visibility 1 or 0
      *
      * @return mixed
      */
@@ -335,12 +344,13 @@ class AnnouncementManager
 
         return [
             'announcement' => $result[0],
-            'item_property' => $result[1]
+            'item_property' => $result[1],
         ];
     }
 
     /**
-     * Displays one specific announcement
+     * Displays one specific announcement.
+     *
      * @param int $id, the id of the announcement you want to display
      *
      * @return string
@@ -423,7 +433,7 @@ class AnnouncementManager
             $html .= Display::tag(
                 'td',
                 get_lang('SentTo').': '.$sent_to_form,
-                array('class' => 'announcements_datum')
+                ['class' => 'announcements_datum']
             );
         }
         $attachment_list = self::get_attachment($id);
@@ -483,19 +493,20 @@ class AnnouncementManager
     }
 
     /**
-     * Store an announcement in the database (including its attached file if any)
-     * @param array $courseInfo
-     * @param int $sessionId
-     * @param string $title   Announcement title (pure text)
-     * @param string $newContent   Content of the announcement (can be HTML)
-     * @param array  $sentTo      Array of users and groups to send the announcement to
-     * @param array   $file     uploaded file $_FILES
-     * @param string  $file_comment  Comment describing the attachment
-     * @param string $end_date
-     * @param bool $sendToUsersInSession
-     * @param int $authorId
+     * Store an announcement in the database (including its attached file if any).
      *
-     * @return int      false on failure, ID of the announcement on success
+     * @param array  $courseInfo
+     * @param int    $sessionId
+     * @param string $title                Announcement title (pure text)
+     * @param string $newContent           Content of the announcement (can be HTML)
+     * @param array  $sentTo               Array of users and groups to send the announcement to
+     * @param array  $file                 uploaded file $_FILES
+     * @param string $file_comment         Comment describing the attachment
+     * @param string $end_date
+     * @param bool   $sendToUsersInSession
+     * @param int    $authorId
+     *
+     * @return int false on failure, ID of the announcement on success
      */
     public static function add_announcement(
         $courseInfo,
@@ -503,7 +514,7 @@ class AnnouncementManager
         $title,
         $newContent,
         $sentTo,
-        $file = array(),
+        $file = [],
         $file_comment = null,
         $end_date = null,
         $sendToUsersInSession = false,
@@ -525,14 +536,14 @@ class AnnouncementManager
         $order = self::get_last_announcement_order($courseInfo);
 
         // store in the table announcement
-        $params = array(
+        $params = [
             'c_id' => $courseId,
             'content' => $newContent,
             'title' => $title,
             'end_date' => $end_date,
             'display_order' => $order,
-            'session_id' => (int) $sessionId
-        );
+            'session_id' => (int) $sessionId,
+        ];
 
         $last_id = Database::insert($tbl_announcement, $params);
 
@@ -588,8 +599,8 @@ class AnnouncementManager
                         );
 
                         if (($counter % $batchSize) === 0) {
-                             $em->flush();
-                             $em->clear();
+                            $em->flush();
+                            $em->clear();
                         }
                         $counter++;
                     }
@@ -610,8 +621,8 @@ class AnnouncementManager
                         );
 
                         if (($counter % $batchSize) === 0) {
-                             $em->flush();
-                             $em->clear();
+                            $em->flush();
+                            $em->clear();
                         }
                         $counter++;
                     }
@@ -631,9 +642,9 @@ class AnnouncementManager
      * @param $newContent
      * @param $to
      * @param $to_users
-     * @param array $file
+     * @param array  $file
      * @param string $file_comment
-     * @param bool $sendToUsersInSession
+     * @param bool   $sendToUsersInSession
      *
      * @return bool|int
      */
@@ -642,7 +653,7 @@ class AnnouncementManager
         $newContent,
         $to,
         $to_users,
-        $file = array(),
+        $file = [],
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
@@ -662,7 +673,7 @@ class AnnouncementManager
             'title' => $title,
             'end_date' => $now,
             'display_order' => $order,
-            'session_id' => api_get_session_id()
+            'session_id' => api_get_session_id(),
         ];
 
         $last_id = Database::insert($tbl_announcement, $params);
@@ -734,22 +745,22 @@ class AnnouncementManager
 
     /**
      * This function stores the announcement item in the announcement table
-     * and updates the item_property table
+     * and updates the item_property table.
      *
-     * @param int   $id id of the announcement
+     * @param int    $id                   id of the announcement
      * @param string $title
      * @param string $newContent
-     * @param array $to users that will receive the announcement
-     * @param mixed $file attachment
-     * @param string $file_comment file comment
-     * @param bool $sendToUsersInSession
+     * @param array  $to                   users that will receive the announcement
+     * @param mixed  $file                 attachment
+     * @param string $file_comment         file comment
+     * @param bool   $sendToUsersInSession
      */
     public static function edit_announcement(
         $id,
         $title,
         $newContent,
         $to,
-        $file = array(),
+        $file = [],
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
@@ -762,7 +773,7 @@ class AnnouncementManager
 
         $params = [
             'title' => $title,
-            'content' => $newContent
+            'content' => $newContent,
         ];
 
         Database::update(
@@ -902,6 +913,7 @@ class AnnouncementManager
 
     /**
      * @param int $insert_id
+     *
      * @return bool
      */
     public static function update_mail_sent($insert_id)
@@ -919,9 +931,11 @@ class AnnouncementManager
     }
 
     /**
-     * Gets all announcements from a user by course
+     * Gets all announcements from a user by course.
+     *
      * @param string course db
      * @param int user id
+     *
      * @return array html with the content and count of announcements or false otherwise
      */
     public static function get_all_annoucement_by_user_course($course_code, $user_id)
@@ -958,7 +972,7 @@ class AnnouncementManager
             $num_rows = Database::num_rows($rs);
             $content = '';
             $i = 0;
-            $result = array();
+            $result = [];
             if ($num_rows > 0) {
                 while ($myrow = Database::fetch_array($rs)) {
                     $content .= '<strong>'.$myrow['title'].'</strong><br /><br />';
@@ -978,10 +992,11 @@ class AnnouncementManager
     }
 
     /**
-     * Returns announcement info from its id
+     * Returns announcement info from its id.
      *
      * @param int $courseId
      * @param int $id
+     *
      * @return array
      */
     public static function get_by_id($courseId, $id)
@@ -1011,12 +1026,13 @@ class AnnouncementManager
         if (Database::num_rows($result)) {
             return Database::fetch_array($result);
         }
+
         return [];
     }
 
     /**
      * this function gets all the groups of the course,
-     * not including linked courses
+     * not including linked courses.
      */
     public static function get_course_groups()
     {
@@ -1034,14 +1050,17 @@ class AnnouncementManager
                 1
             );
         }
+
         return $new_group_list;
     }
 
     /**
      * This tools loads all the users and all the groups who have received
-     * a specific item (in this case an announcement item)
+     * a specific item (in this case an announcement item).
+     *
      * @param string $tool
-     * @param int $id
+     * @param int    $id
+     *
      * @return array
      */
     public static function load_edit_users($tool, $id)
@@ -1054,7 +1073,7 @@ class AnnouncementManager
         $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
         $result = Database::query($sql);
-        $to = array();
+        $to = [];
         while ($row = Database::fetch_array($result)) {
             $to_group = $row['to_group_id'];
             switch ($to_group) {
@@ -1075,15 +1094,18 @@ class AnnouncementManager
     }
 
     /**
-     * constructs the form to display all the groups and users the message has been sent to
+     * constructs the form to display all the groups and users the message has been sent to.
+     *
      * @param array $sent_to_array
-     * input:
-     * $sent_to_array is a 2 dimensional array containing the groups and the users
-     * the first level is a distinction between groups and users:
-     * $sent_to_array['groups'] * and $sent_to_array['users']
-     * $sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
-     * containing all the id's of the groups (resp. users) who have received this message.
+     *                             input:
+     *                             $sent_to_array is a 2 dimensional array containing the groups and the users
+     *                             the first level is a distinction between groups and users:
+     *                             $sent_to_array['groups'] * and $sent_to_array['users']
+     *                             $sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
+     *                             containing all the id's of the groups (resp. users) who have received this message.
+     *
      * @return string
+     *
      * @author Patrick Cool <patrick.cool@>
      */
     public static function sent_to_form($sent_to_array)
@@ -1105,7 +1127,7 @@ class AnnouncementManager
         $total_numbers = $number_users + $number_groups;
 
         // starting the form if there is more than one user/group
-        $output = array();
+        $output = [];
         if ($total_numbers > 1) {
             // outputting the name of the groups
             if (is_array($sent_to_array['groups'])) {
@@ -1146,16 +1168,19 @@ class AnnouncementManager
             if (count($output) > 0) {
                 $output = implode(', ', $output);
             }
+
             return $output;
         }
     }
 
     /**
      * Returns all the users and all the groups a specific announcement item
-     * has been sent to
+     * has been sent to.
+     *
      * @param    string  The tool (announcement, agenda, ...)
      * @param    int     ID of the element of the corresponding type
-     * @return   array   Array of users and groups to whom the element has been sent
+     *
+     * @return array Array of users and groups to whom the element has been sent
      */
     public static function sent_to($tool, $id)
     {
@@ -1163,8 +1188,8 @@ class AnnouncementManager
         $tool = Database::escape_string($tool);
         $id = (int) $id;
 
-        $sent_to_group = array();
-        $sent_to = array();
+        $sent_to_group = [];
+        $sent_to = [];
         $courseId = api_get_course_int_id();
 
         $sql = "SELECT to_group_id, to_user_id
@@ -1174,7 +1199,7 @@ class AnnouncementManager
 
         while ($row = Database::fetch_array($result)) {
             // if to_user_id <> 0 then it is sent to a specific user
-            if ($row['to_user_id'] <> 0) {
+            if ($row['to_user_id'] != 0) {
                 $sent_to_user[] = $row['to_user_id'];
                 continue;
             }
@@ -1198,10 +1223,14 @@ class AnnouncementManager
     }
 
     /**
-     * Show a list with all the attachments according to the post's id
+     * Show a list with all the attachments according to the post's id.
+     *
      * @param int $announcementId
+     *
      * @return array with the post info
+     *
      * @author Arthur Portugal
+     *
      * @version November 2009, dokeos 1.8.6.2
      */
     public static function get_attachment($announcementId)
@@ -1209,23 +1238,26 @@ class AnnouncementManager
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcementId = intval($announcementId);
         $courseId = api_get_course_int_id();
-        $row = array();
+        $row = [];
         $sql = 'SELECT id, path, filename, comment 
                 FROM '.$table.'
-				WHERE c_id = ' . $courseId.' AND announcement_id = '.$announcementId;
+				WHERE c_id = '.$courseId.' AND announcement_id = '.$announcementId;
         $result = Database::query($sql);
         if (Database::num_rows($result) != 0) {
             $row = Database::fetch_array($result, 'ASSOC');
         }
+
         return $row;
     }
 
     /**
-     * This function add a attachment file into announcement
+     * This function add a attachment file into announcement.
+     *
      * @param int  announcement id
      * @param string file comment
      * @param array  uploaded file $_FILES
-     * @return int  -1 if failed, 0 if unknown (should not happen), 1 if success
+     *
+     * @return int -1 if failed, 0 if unknown (should not happen), 1 if success
      */
     public static function add_announcement_attachment_file(
         $announcement_id,
@@ -1283,10 +1315,12 @@ class AnnouncementManager
     }
 
     /**
-     * This function edit a attachment file into announcement
+     * This function edit a attachment file into announcement.
+     *
      * @param int attach id
      * @param array uploaded file $_FILES
      * @param string file comment
+     *
      * @return int
      */
     public static function edit_announcement_attachment_file(
@@ -1311,7 +1345,7 @@ class AnnouncementManager
                 $file['type']
             );
             // user's file name
-            $file_name = $file ['name'];
+            $file_name = $file['name'];
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
@@ -1345,12 +1379,15 @@ class AnnouncementManager
                 }
             }
         }
+
         return $return;
     }
 
     /**
-     * This function delete a attachment file by id
-     * @param integer $id attachment file Id
+     * This function delete a attachment file by id.
+     *
+     * @param int $id attachment file Id
+     *
      * @return bool
      */
     public static function delete_announcement_attachment_file($id)
@@ -1370,10 +1407,10 @@ class AnnouncementManager
 
     /**
      * @param array $courseInfo
-     * @param int $sessionId
-     * @param int $id
-     * @param bool $sendToUsersInSession
-     * @param bool $sendToDrhUsers
+     * @param int   $sessionId
+     * @param int   $id
+     * @param bool  $sendToUsersInSession
+     * @param bool  $sendToDrhUsers
      */
     public static function sendEmail(
         $courseInfo,
@@ -1389,16 +1426,17 @@ class AnnouncementManager
     /**
      * @param $stok
      * @param $announcement_number
-     * @param bool $getCount
-     * @param null $start
-     * @param null $limit
+     * @param bool   $getCount
+     * @param null   $start
+     * @param null   $limit
      * @param string $sidx
      * @param string $sord
      * @param string $titleToSearch
-     * @param int $userIdToSearch
-     * @param int $userId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int    $userIdToSearch
+     * @param int    $userId
+     * @param int    $courseId
+     * @param int    $sessionId
+     *
      * @return array
      */
     public static function getAnnouncements(
@@ -1537,7 +1575,7 @@ class AnnouncementManager
                             $extraGroupCondition
                         $groupBy
                         ORDER BY display_order DESC";
-                //GROUP BY ip.ref
+            //GROUP BY ip.ref
             } else {
                 // A.3 you are a course admin without any group or user filter
                 // A.3.a you are a course admin without user or group filter but WITH studentview
@@ -1557,7 +1595,7 @@ class AnnouncementManager
                             $groupBy
                             ORDER BY display_order DESC";
 
-                    //GROUP BY ip.ref
+                //GROUP BY ip.ref
                 } else {
                     // A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
                     // => see all the messages of all the users and groups with editing possibilities
@@ -1671,7 +1709,6 @@ class AnnouncementManager
                                 announcement.session_id IN ( 0,".api_get_session_id().")
                             $groupBy
                             ";
-
                 }
             }
         }
@@ -1759,7 +1796,7 @@ class AnnouncementManager
                 $username_span = Display::tag(
                     'span',
                     $user_info['complete_name'],
-                    array('title' => $username)
+                    ['title' => $username]
                 );
 
                 $title = Display::url(
@@ -1822,7 +1859,7 @@ class AnnouncementManager
                         $row['lastedit_date'],
                         DATE_TIME_FORMAT_LONG
                     ),
-                    'actions' => $modify_icons
+                    'actions' => $modify_icons,
                 ];
 
                 $results[] = $announcement;

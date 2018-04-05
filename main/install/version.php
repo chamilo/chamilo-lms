@@ -11,7 +11,7 @@
  */
 
 /**
- * Variables used from the main/install/index.php
+ * Variables used from the main/install/index.php.
  */
 $new_version = '1.11.6';
 $new_version_status = 'dev';

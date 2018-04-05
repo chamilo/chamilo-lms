@@ -3,11 +3,12 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ *
  * @version $Id: question.php 21734 2009-07-02 17:12:41Z cvargas1 $
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
@@ -59,14 +60,14 @@ if ($surveyData['survey_type'] == 1) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
     'name' => get_lang('SurveyList'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']),
     'name' => strip_tags($urlname),
-);
+];
 
 // Tool name
 if ($_GET['action'] == 'add') {
@@ -77,7 +78,7 @@ if ($_GET['action'] == 'edit') {
 }
 
 // The possible question types
-$possible_types = array(
+$possible_types = [
     'personality',
     'yesno',
     'multiplechoice',
@@ -87,8 +88,8 @@ $possible_types = array(
     'comment',
     'pagebreak',
     'percentage',
-    'score'
-);
+    'score',
+];
 
 // Actions
 $actions = '<div class="actions">';
@@ -109,11 +110,11 @@ $error_message = '';
 
 $ch_type = 'ch_'.$_GET['type'];
 /** @var survey_question $surveyQuestion */
-$surveyQuestion = new $ch_type;
+$surveyQuestion = new $ch_type();
 
 // The defaults values for the form
-$formData = array();
-$formData['answers'] = array('', '');
+$formData = [];
+$formData['answers'] = ['', ''];
 
 if ($_GET['type'] == 'yesno') {
     $formData['answers'][0] = get_lang('Yes');

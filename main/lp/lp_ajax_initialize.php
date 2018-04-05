@@ -5,7 +5,9 @@
  * This script contains the server part of the xajax interaction process.
  * This script, in particular, enables the process of SCO's initialization. It
  * resets the JavaScript values for each SCO to the current LMS status.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -14,18 +16,23 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Get one item's details
- * @param   integer LP ID
- * @param   integer user ID
- * @param   integer View ID
- * @param   integer Current item ID
- * @param   integer New item ID
+ * Get one item's details.
+ *
+ * @param   int LP ID
+ * @param   int user ID
+ * @param   int View ID
+ * @param   int Current item ID
+ * @param   int New item ID
+ *
+ * @return string
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {
-    global $debug;
+    $debug = 0;
     $return = '';
-    if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
+    if ($debug) {
+        error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')');
+    }
     /*$item_id may be one of:
      * -'next'
      * -'previous'
@@ -35,14 +42,20 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      */
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylp->set_current_item($next_item);
-    if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
+    if ($debug) {
+        error_log('In initialize_item() - new item is '.$next_item);
+    }
     $mylp->start_current_item(true);
 
     if (is_object($mylp->items[$next_item])) {
-        if ($debug > 1) { error_log('In initialize_item - recovering existing item object '.$next_item, 0); }
+        if ($debug) {
+            error_log('In initialize_item - recovering existing item object '.$next_item, 0);
+        }
         $mylpi = $mylp->items[$next_item];
     } else {
-        if ($debug > 1) { error_log('In initialize_item - generating new item object '.$next_item, 0); }
+        if ($debug) {
+            error_log('In initialize_item - generating new item object '.$next_item, 0);
+        }
         $mylpi = new learnpathItem($next_item, $user_id);
     }
 
@@ -86,7 +99,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
     $mylp_iv_id = $mylpi->db_item_view_id;
-    $phpobjectives = array();
+    $phpobjectives = [];
     if (!empty($mylp_iv_id)) {
         $sql = "SELECT objective_id, status, score_raw, score_max, score_min
                 FROM $mycoursedb
@@ -128,10 +141,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      * -lms_view_id
      * -lms_user_id
      */
-    $mytotal = $mylp->getTotalItemsCountWithoutDirs();
-    $mycomplete = $mylp->get_complete_items_count();
-    $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
     $mynext = $mylp->get_next_item_id();
     $myprevious = $mylp->get_previous_item_id();
     $myitemtype = $mylpi->get_type();
@@ -139,9 +148,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $mycredit = $mylpi->get_credit();
     $mylaunch_data = $mylpi->get_launch_data();
     $myinteractions_count = $mylpi->get_interactions_count();
-    $myobjectives_count = $mylpi->get_objectives_count();
     $mycore_exit = $mylpi->get_core_exit();
-
     $return .=
             "olms.lms_lp_id=".$lp_id.";".
             "olms.lms_item_id=".$next_item.";".
@@ -163,8 +170,11 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
-    if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
-    if ($debug > 1) { error_log("return = $return "); }
+    if ($debug) {
+        error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
+        error_log("return = $return ");
+        error_log("mylp->lp_view_session_id: ".$mylp->lp_view_session_id);
+    }
 
     return $return;
 }

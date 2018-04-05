@@ -5,7 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
+ *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert, original author
  * @author Denes Nagy, HotPotatoes integration
  * @author Wolfgang Schneider, code/html cleanup
@@ -70,6 +72,9 @@ Session::erase('objAnswer');
 Session::erase('questionList');
 Session::erase('exerciseResult');
 Session::erase('firstTime');
+Session::erase('calculatedAnswerId');
+Session::erase('duration_time_previous');
+Session::erase('duration_time');
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
@@ -90,7 +95,7 @@ if ($page < 0) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -377,7 +382,6 @@ if ($is_allowedToEdit) {
     }
 }
 
-
 // Actions div bar
 if ($is_allowedToEdit) {
     echo '<div class="actions">';
@@ -479,7 +483,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         '',
         [
             'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-            'href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
+            'href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token,
         ]
     );
 }
@@ -569,7 +573,6 @@ if (!empty($exerciseList) &&
         }
     }
 }
-
 
 if (isset($list_ordered) && !empty($list_ordered)) {
     $new_question_list = [];
@@ -713,7 +716,7 @@ if (!empty($exerciseList)) {
                 $move = Display::return_icon(
                     'all_directions.png',
                     get_lang('Move'),
-                    ['class'=>'moved', 'style'=>'margin-bottom:-0.5em;']
+                    ['class' => 'moved', 'style' => 'margin-bottom:-0.5em;']
                 );
                 $move = null;
                 $class_tip = '';
@@ -759,7 +762,7 @@ if (!empty($exerciseList)) {
                         '',
                         [
                             'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                            'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']
+                            'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
                         ]
                     );
 
@@ -775,7 +778,7 @@ if (!empty($exerciseList)) {
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']
+                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id'],
                             ]
                         );
                     } else {
@@ -877,7 +880,7 @@ if (!empty($exerciseList)) {
                         '',
                         [
                             'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                            'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']
+                            'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
                         ]
                     );
                 }
@@ -895,7 +898,7 @@ if (!empty($exerciseList)) {
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']
+                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
                             ]
                         );
                     } else {
@@ -1161,10 +1164,10 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                         $title,
                         'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
                             'file' => $path,
-                            'uid' => $userId
+                            'uid' => $userId,
                         ]),
                         ['class' => !$active ? 'text-muted' : null]
-                    )
+                    ),
                 ])
             );
             $item .= Display::tag('td', '-');
@@ -1213,7 +1216,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                         'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
                             'file' => $path,
                             'cid' => api_get_course_id(),
-                            'uid' => $userId
+                            'uid' => $userId,
                         ])
                     )
                 );
@@ -1268,12 +1271,12 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
         $headers = [
             get_lang('ExerciseName'),
             get_lang('QuantityQuestions'),
-            get_lang('Actions')
+            get_lang('Actions'),
         ];
     } else {
         $headers = [
             get_lang('ExerciseName'),
-            get_lang('Status')
+            get_lang('Status'),
         ];
 
         if ($isDrhOfCourse) {

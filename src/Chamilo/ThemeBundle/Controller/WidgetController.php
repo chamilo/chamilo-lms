@@ -4,16 +4,14 @@
 namespace Chamilo\ThemeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class WidgetController
+ * Class WidgetController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class WidgetController extends Controller
 {
-
     public function defaultBoxAction()
     {
     }

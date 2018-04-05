@@ -2,15 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_dropdown
+ * Class ch_dropdown.
  */
 class ch_dropdown extends survey_question
 {
     /**
      * @param array $survey_data
      * @param $formData
-     *
-     * @return void
      */
     public function createForm($survey_data, $formData)
     {
@@ -27,19 +25,16 @@ class ch_dropdown extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
-     * @return void
+     * @param array         $questionData
+     * @param array         $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
+    public function render(FormValidator $form, $questionData = [], $answers = [])
     {
         $name = 'question'.$questionData['question_id'];
-        $data = array(0 => '--') + $questionData['options'];
+        $data = [0 => '--'] + $questionData['options'];
         $form->addSelect($name, null, $data);
         if (!empty($answers)) {
             $form->setDefaults([$name => $answers]);
         }
     }
 }
-
-

@@ -8,7 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
 /**
- * Description of cm_soap_inbox
+ * Description of cm_soap_inbox.
  *
  * @author marcosousa
  */
@@ -25,7 +25,6 @@ class WSCMAnnouncements extends WSCM
             }
 
             return $announcements;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -80,12 +79,10 @@ class WSCMAnnouncements extends WSCM
             return (htmlcode) ? html_entity_decode(
                 $announcements[0][$field_table]
             ) : $announcements[0][$field_table];
-
         } else {
             return get_lang('InvalidId');
         }
     }
-
 
     private function get_announcements(
         $username,

@@ -3,16 +3,17 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
  * Test modification and rewriting large parts of the code
+ *
  * @version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
  *
  * @todo only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -47,21 +48,21 @@ $urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : nu
 
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-        'name' => get_lang('SurveyList')
-    );
+        'name' => get_lang('SurveyList'),
+    ];
     $tool_name = get_lang('CreateNewSurvey');
 }
 if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-        'name' => get_lang('SurveyList')
-    );
-    $interbreadcrumb[] = array(
+        'name' => get_lang('SurveyList'),
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
-        'name' => Security::remove_XSS($urlname)
-    );
+        'name' => Security::remove_XSS($urlname),
+    ];
     $tool_name = get_lang('EditSurvey');
 }
 $gradebook_link_id = null;
@@ -114,7 +115,7 @@ $survey_code = $form->addElement(
     'text',
     'survey_code',
     get_lang('SurveyCode'),
-    array('size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus')
+    ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
 if ($_GET['action'] == 'edit') {
@@ -127,19 +128,19 @@ $form->addElement(
     'survey_title',
     get_lang('SurveyTitle'),
     null,
-    array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200')
+    ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200']
 );
 $form->addElement(
     'html_editor',
     'survey_subtitle',
     get_lang('SurveySubTitle'),
     null,
-    array(
+    [
         'ToolbarSet' => 'Survey',
         'Width' => '100%',
         'Height' => '100',
         'ToolbarStartExpanded' => false,
-    )
+    ]
 );
 
 // Pass the language of the survey in the form
@@ -148,11 +149,11 @@ $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
 $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
 
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
-$visibleResults = array(
+$visibleResults = [
     SURVEY_VISIBLE_TUTOR => get_lang('Coach'),
     SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('CoachAndStudent'),
-    SURVEY_VISIBLE_PUBLIC => get_lang('Everyone')
-);
+    SURVEY_VISIBLE_PUBLIC => get_lang('Everyone'),
+];
 
 if (api_get_configuration_value('hide_survey_reporting_button')) {
     $form->addLabel(get_lang('ResultsVisibility'), get_lang('FeatureDisabledByAdministrator'));
@@ -160,8 +161,8 @@ if (api_get_configuration_value('hide_survey_reporting_button')) {
     $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
 }
 //$defaults['visible_results'] = 0;
-$form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
-$form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
+$form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]);
+$form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]);
 
 $extraField = new ExtraField('survey');
 $extraField->addElements($form, $survey_id);
@@ -240,7 +241,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
 
         if (is_array($field_list)) {
             // TODO hide and show the list in a fancy DIV
-            foreach ($field_list as $key => & $field) {
+            foreach ($field_list as $key => &$field) {
                 if ($field['visibility'] == 1) {
                     $form->addElement('checkbox', 'profile_'.$key, ' ', '&nbsp;&nbsp;'.$field['name']);
                     $input_name_list .= 'profile_'.$key.',';
@@ -253,7 +254,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
             // Set defaults form fields
             if ($survey_data['form_fields']) {
                 $form_fields = explode('@', $survey_data['form_fields']);
-                foreach ($form_fields as & $field) {
+                foreach ($form_fields as &$field) {
                     $field_value = explode(':', $field);
                     if ($field_value[0] != '' && $field_value[1] != '') {
                         $defaults[$field_value[0]] = $field_value[1];
@@ -287,7 +288,7 @@ $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 $form->addRule(
-    array('start_date', 'end_date'),
+    ['start_date', 'end_date'],
     get_lang('StartDateShouldBeBeforeEndDate'),
     'date_compare',
     'lte'

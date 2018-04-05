@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Notification
+ * Notification.
  *
  * @ORM\Table(
  *     name="notification",
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Notification
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="dest_user_id", type="integer", nullable=false)
      */
@@ -51,7 +51,7 @@ class Notification
     private $content;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="send_freq", type="smallint", nullable=true)
      */
@@ -72,7 +72,7 @@ class Notification
     private $sentAt;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
@@ -80,12 +80,11 @@ class Notification
      */
     private $id;
 
-
-
     /**
-     * Set destUserId
+     * Set destUserId.
      *
-     * @param integer $destUserId
+     * @param int $destUserId
+     *
      * @return Notification
      */
     public function setDestUserId($destUserId)
@@ -96,9 +95,9 @@ class Notification
     }
 
     /**
-     * Get destUserId
+     * Get destUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getDestUserId()
     {
@@ -106,9 +105,10 @@ class Notification
     }
 
     /**
-     * Set destMail
+     * Set destMail.
      *
      * @param string $destMail
+     *
      * @return Notification
      */
     public function setDestMail($destMail)
@@ -119,7 +119,7 @@ class Notification
     }
 
     /**
-     * Get destMail
+     * Get destMail.
      *
      * @return string
      */
@@ -129,9 +129,10 @@ class Notification
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Notification
      */
     public function setTitle($title)
@@ -142,7 +143,7 @@ class Notification
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -152,9 +153,10 @@ class Notification
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Notification
      */
     public function setContent($content)
@@ -165,7 +167,7 @@ class Notification
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -175,9 +177,10 @@ class Notification
     }
 
     /**
-     * Set sendFreq
+     * Set sendFreq.
      *
-     * @param integer $sendFreq
+     * @param int $sendFreq
+     *
      * @return Notification
      */
     public function setSendFreq($sendFreq)
@@ -188,9 +191,9 @@ class Notification
     }
 
     /**
-     * Get sendFreq
+     * Get sendFreq.
      *
-     * @return integer
+     * @return int
      */
     public function getSendFreq()
     {
@@ -198,9 +201,10 @@ class Notification
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return Notification
      */
     public function setCreatedAt($createdAt)
@@ -211,7 +215,7 @@ class Notification
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -221,9 +225,10 @@ class Notification
     }
 
     /**
-     * Set sentAt
+     * Set sentAt.
      *
      * @param \DateTime $sentAt
+     *
      * @return Notification
      */
     public function setSentAt($sentAt)
@@ -234,7 +239,7 @@ class Notification
     }
 
     /**
-     * Get sentAt
+     * Get sentAt.
      *
      * @return \DateTime
      */
@@ -244,9 +249,9 @@ class Notification
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

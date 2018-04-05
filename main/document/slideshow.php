@@ -7,6 +7,7 @@ use ChamiloSession as Session;
  * @author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
  * @author Julio Montoya Lots of improvements, cleaning, adding security
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
+ *
  * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +35,7 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $url = 'document.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('Documents');
 $_course = api_get_course_info();
-$interbreadcrumb[] = array('url' => Security::remove_XSS($url), 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => Security::remove_XSS($url), 'name' => $originaltoolname];
 $originaltoolname = get_lang('SlideShow');
 
 Display :: display_header($originaltoolname, 'Doc');
@@ -164,11 +165,11 @@ if ($imageResize == 'resizing') {
 
 /*	THUMBNAIL VIEW */
 // This is for viewing all the images in the slideshow as thumbnails.
-$image_tag = array();
+$image_tag = [];
 $html = '';
 if ($slide_id == 'all') {
     // Config for make thumbnails
-    $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
+    $allowed_thumbnail_types = ['jpg', 'jpeg', 'gif', 'png'];
     $max_thumbnail_width = 250;
     $max_thumbnail_height = 250;
     $png_compression = 0; //0(none)-9
@@ -245,12 +246,12 @@ if ($slide_id == 'all') {
                         if ($imagetype == "gif") {
                             $transindex = imagecolortransparent($source_img);
                             $palletsize = imagecolorstotal($source_img);
-                             //GIF89a for transparent and anim (first clip), either GIF87a
+                            //GIF89a for transparent and anim (first clip), either GIF87a
                             if ($transindex >= 0 && $transindex < $palletsize) {
-                                 $transcol = imagecolorsforindex($source_img, $transindex);
-                                 $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
-                                 imagefill($crop, 0, 0, $transindex);
-                                 imagecolortransparent($crop, $transindex);
+                                $transcol = imagecolorsforindex($source_img, $transindex);
+                                $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
+                                imagefill($crop, 0, 0, $transindex);
+                                imagecolortransparent($crop, $transindex);
                             }
                         }
 
@@ -298,7 +299,7 @@ if ($slide_id == 'all') {
                         if ($max_thumbnail_width < $original_image_size[0] || $max_thumbnail_height < $original_image_size[1]) {
                             $thumbnail_size = api_calculate_image_size($original_image_size[0], $original_image_size[1], $max_thumbnail_width, $max_thumbnail_height); //don't use resize_image because doesn't run with bmp files
                             $image_height = $thumbnail_size['height'];
-                            $image_width  = $thumbnail_size['width'];
+                            $image_width = $thumbnail_size['width'];
                         } else {
                             $image_height = $original_image_size[0];
                             $image_width = $original_image_size[1];
@@ -344,7 +345,6 @@ if ($slide_id == 'all') {
         }
     }
     $html .= '</div>';
-
 }//end slide==all
 echo $html;
 /*	ONE AT A TIME VIEW */
@@ -389,7 +389,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
         list($width, $height) = getimagesize($image);
         // Auto resize
         if ($imageResize == 'resizing') {
-        ?>
+            ?>
         <script>
             var initial_width='<?php echo $width; ?>';
             var initial_height='<?php echo $height; ?>';
@@ -477,7 +477,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
                     'id' => $row['id'],
                     'origin' => 'slideshow',
                     'origin_opt' => $edit_slide_id,
-                    'curdirpath' => $pathurl
+                    'curdirpath' => $pathurl,
                 ]),
                 'edit',
                 'link',

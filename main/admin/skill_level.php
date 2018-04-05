@@ -2,11 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Add a skill Level
+ * Add a skill Level.
  *
  * @package chamilo.skill
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -52,8 +51,8 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('SkillProfile'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillProfile')];
 
 $tpl = new Template($action);
 switch ($action) {

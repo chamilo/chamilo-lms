@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Interface for assigning users to Human Resources Manager
+ *  Interface for assigning users to Human Resources Manager.
+ *
  *  @package chamilo.admin
  */
 
@@ -23,8 +24,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'user_list.php', 'name' => get_lang('UserList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -33,7 +34,7 @@ $tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_US
 // initializing variables
 $user_id = intval($_GET['user']);
 $user_info = api_get_user_info($user_id);
-$user_anonymous  = api_get_anonymous_id();
+$user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
 $userStatus = api_get_user_status($user_id);
@@ -69,11 +70,10 @@ function search_users($needle, $type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        $assigned_users_to_hrm = array();
+        $assigned_users_to_hrm = [];
 
         switch ($userStatus) {
             case DRH:
-                //no break;
             case PLATFORM_ADMIN:
                 $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
                 break;
@@ -108,7 +108,6 @@ function search_users($needle, $type)
                         access_url_id = ".api_get_current_access_url_id()."
                     $order_clause
                     ";
-
         } else {
             $sql = "SELECT user_id, username, lastname, firstname
                     FROM $tbl_user user
@@ -248,20 +247,20 @@ function remove_item(origin) {
 
 $formSent = 0;
 $errorMsg = '';
-$UserList = array();
+$UserList = [];
 
 // Filters
-$filters = array(
-    array('type' => 'text', 'name' => 'username', 'label' => get_lang('Username')),
-    array('type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')),
-    array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
-    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
-    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))
-);
+$filters = [
+    ['type' => 'text', 'name' => 'username', 'label' => get_lang('Username')],
+    ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')],
+    ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')],
+    ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')],
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')],
+];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?user='.$user_id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer = & $searchForm->defaultRenderer();
+$renderer = &$searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'user', $user_id);
 foreach ($filters as $param) {
@@ -269,12 +268,12 @@ foreach ($filters as $param) {
 }
 $searchForm->addButtonSearch(get_lang('Search'));
 
-$filterData = array();
+$filterData = [];
 if ($searchForm->validate()) {
     $filterData = $searchForm->getSubmitValues();
 }
 
-$conditions = array();
+$conditions = [];
 if (!empty($filters) && !empty($filterData)) {
     foreach ($filters as $filter) {
         if (isset($filter['name']) && isset($filterData[$filter['name']])) {
@@ -290,7 +289,6 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $user_list = isset($_POST['UsersList']) ? $_POST['UsersList'] : null;
     switch ($userStatus) {
         case DRH:
-            //no break;
         case PLATFORM_ADMIN:
             $affected_rows = UserManager::subscribeUsersToHRManager($user_id, $user_list);
             break;
@@ -329,7 +327,7 @@ if ($userStatus != STUDENT_BOSS) {
 $actionsRight = Display::url(
     '<em class="fa fa-search"></em> '.get_lang('AdvancedSearch'),
     '#',
-    array('class' => 'btn btn-default advanced_options', 'id' => 'advanced_search')
+    ['class' => 'btn btn-default advanced_options', 'id' => 'advanced_search']
 );
 
 $toolbar = Display::toolbarAction('toolbar-dashboard', [$actionsLeft, $actionsRight]);
@@ -348,11 +346,10 @@ echo Display::page_header(
     'h3'
 );
 
-$assigned_users_to_hrm = array();
+$assigned_users_to_hrm = [];
 
 switch ($userStatus) {
     case DRH:
-        //no break;
     case PLATFORM_ADMIN:
         $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
         break;
@@ -375,7 +372,7 @@ if (!empty($firstLetterUser)) {
 
 $sqlConditions = null;
 if (!empty($conditions)) {
-    $temp_conditions = array();
+    $temp_conditions = [];
     foreach ($conditions as $field => $value) {
         $field = Database::escape_string($field);
         $value = Database::escape_string($value);
@@ -414,11 +411,13 @@ if (api_is_multiple_url_enabled()) {
 }
 $result = Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" class="form-horizontal" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" class="form-horizontal" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+}?>>
 <input type="hidden" name="formSent" value="1" />
 <div class="row">
     <div class="col-md-4">
-        <?php echo get_lang('UserListInPlatform') ?>
+        <?php echo get_lang('UserListInPlatform'); ?>
         <div class="form-group">
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">
@@ -429,7 +428,8 @@ $result = Database::query($sql);
                             <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
                             <?php echo $person_name.' ('.$enreg['username'].')'; ?>
                             </option>
-                        <?php } ?>
+                        <?php
+                        } ?>
                     </select>
                 </div>
             </div>
@@ -437,20 +437,25 @@ $result = Database::query($sql);
     </div>
     <div class="col-md-4">
         <div class="code-course">
-            <?php if ($add_type == 'multiple') { ?>
+            <?php if ($add_type == 'multiple') {
+                            ?>
                 <p><?php echo get_lang('FirstLetterUser'); ?></p>
                 <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
                     <option value="%">--</option>
                     <?php echo Display::get_alphabet_options($firstLetterUser); ?>
                 </select>
-            <?php } ?>
+            <?php
+                        } ?>
         </div>
         <div class="control-course">
-        <?php if ($ajax_search) { ?>
+        <?php if ($ajax_search) {
+                            ?>
             <div class="separate-action">
                 <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
             </div>
-        <?php } else { ?>
+        <?php
+                        } else {
+                            ?>
             <div class="separate-action">
                 <button id="add_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
@@ -461,7 +466,8 @@ $result = Database::query($sql);
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
-        <?php } ?>
+        <?php
+                        } ?>
             <div class="separate-action">
         <?php
         echo '<button id="assign_user" class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
@@ -492,12 +498,12 @@ $result = Database::query($sql);
                     <?php
                     if (is_array($assigned_users_to_hrm)) {
                         foreach ($assigned_users_to_hrm as $enreg) {
-                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
-                    ?>
+                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
                             <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
                             <?php echo $person_name.' ('.$enreg['username'].')'; ?>
                             </option>
-                        <?php }
+                        <?php
+                        }
                     }?>
                 </select>
             </div>

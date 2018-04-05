@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  HOME PAGE FOR EACH COURSE
+ *  HOME PAGE FOR EACH COURSE.
  *
  *  This page, included in every course's index.php is the home
  *  page. To make administration simple, the teacher edits his

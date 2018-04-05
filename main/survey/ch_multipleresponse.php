@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_multipleresponse
+ * Class ch_multipleresponse.
  */
 class ch_multipleresponse extends survey_question
 {
@@ -13,16 +13,16 @@ class ch_multipleresponse extends survey_question
     public function createForm($surveyData, $formData)
     {
         parent::createForm($surveyData, $formData);
-        $options = array(
+        $options = [
             'horizontal' => get_lang('Horizontal'),
-            'vertical' => get_lang('Vertical')
-        );
+            'vertical' => get_lang('Vertical'),
+        ];
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);
 
-        $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
+        $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor(
@@ -40,13 +40,13 @@ class ch_multipleresponse extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
     public function render(
         FormValidator $form,
-        $questionData = array(),
-        $answers = array()
+        $questionData = [],
+        $answers = []
     ) {
         if ($questionData['display'] == 'vertical') {
             $class = 'checkbox';
@@ -60,7 +60,7 @@ class ch_multipleresponse extends survey_question
             $name,
             null,
             $questionData['options'],
-            array('checkbox-class' => $class, 'label-class' => $class)
+            ['checkbox-class' => $class, 'label-class' => $class]
         );
 
         $defaults = [];

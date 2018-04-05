@@ -1,23 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya  - Improving the list of templates
+ *
  * @package chamilo.learnpath
-*/
-
+ */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
+/** @var learnpath $learnPath */
+$learnPath = Session::read('oLP');
+
 /* Header and action code */
 $htmlHeadXtra[] = '
-<script>'.$_SESSION['oLP']->get_js_dropdown_array().
+<script>'.$learnPath->get_js_dropdown_array().
 "
     function load_cbo(id) {
         if (!id) {
@@ -43,7 +48,7 @@ $htmlHeadXtra[] = '
         cbo.options[k].selected = true;
         $('#previous').selectpicker('refresh');
     }
-" .
+".
 '
 $(document).on("ready", function() {
     CKEDITOR.on("instanceReady", function (e) {
@@ -81,27 +86,27 @@ $therow = Database::fetch_array($result);
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('LearningPaths'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => Security::remove_XSS($therow['name'])
-);
-$interbreadcrumb[] = array(
+    'name' => Security::remove_XSS($therow['name']),
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep')
-);
+    'name' => get_lang('NewStep'),
+];
 
 // Theme calls.
 $show_learn_path = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme();
+$lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(get_lang('Edit'), 'Path');
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
@@ -134,7 +139,7 @@ $(document).ready(function() {
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem') ?>');
+        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem'); ?>');
 
         if (!associate) {
             e.preventDefault();
@@ -142,7 +147,7 @@ $(document).ready(function() {
     });
 
     $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem') ?>');
+        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem'); ?>');
 
         if (!dissociate) {
             e.preventDefault();
@@ -152,7 +157,7 @@ $(document).ready(function() {
 </script>
 <?php
 
-echo $_SESSION['oLP']->build_action_menu();
+echo $learnPath->build_action_menu();
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
@@ -169,12 +174,12 @@ $path_parts = pathinfo($path_file);
 if (Database::num_rows($res_doc) > 0 &&
     isset($path_parts['extension']) && $path_parts['extension'] == 'html'
 ) {
-    echo $_SESSION['oLP']->return_new_tree();
+    echo $learnPath->return_new_tree();
 
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
 } else {
-    echo $_SESSION['oLP']->return_new_tree();
+    echo $learnPath->return_new_tree();
 }
 
 echo '</div>';
@@ -184,17 +189,17 @@ if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';
     $msg .= '</div>';
-    echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
+    echo $learnPath->display_item($_GET['id'], $msg);
 } else {
-    echo $_SESSION['oLP']->display_edit_item($_GET['id']);
-    if (isset($_SESSION['finalItem'])) {
+    echo $learnPath->display_edit_item($_GET['id']);
+    $finalItem = Session::read('finalItem');
+    if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';
     }
-    unset($_SESSION['finalItem']);
+    Session::erase('finalItem');
 }
 
 echo '</div>';
 echo '</div>';
 
-/* FOOTER */
 Display::display_footer();

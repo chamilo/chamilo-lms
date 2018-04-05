@@ -13,7 +13,7 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @Copyright Ghent University
@@ -21,7 +21,6 @@
  *
  *  @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -65,46 +64,46 @@ if (!$isEditable) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 
 $group_properties = GroupManager::get_group_properties(api_get_group_id());
 if ($origin == 'group') {
     $_clean['toolgroup'] = api_get_group_id();
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']),
         'name' => prepare4display($current_forum['forum_title']),
-    );
-    $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
+    ];
+    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(),
         'name' => $nameTools,
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum_category['cat_title'])
-    );
-    $interbreadcrumb[] = array(
+        'name' => prepare4display($current_forum_category['cat_title']),
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum['forum_title'])
-    );
-    $interbreadcrumb[] = array(
+        'name' => prepare4display($current_forum['forum_title']),
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']),
-        'name' => prepare4display($current_thread['thread_title'])
-    );
-    $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
+        'name' => prepare4display($current_thread['thread_title']),
+    ];
+    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
 }
 
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -147,9 +146,9 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
-        $current_forum['locked'] <> 0 ||
-        $current_thread['locked'] <> 0
+        ($current_forum_category && $current_forum_category['locked'] != 0) ||
+        $current_forum['locked'] != 0 ||
+        $current_thread['locked'] != 0
     )
 ) {
     api_not_allowed(true);
@@ -217,7 +216,7 @@ echo Display::url(
     prepare4display($current_forum['forum_title']),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
-        'forum' => $current_forum['forum_id']
+        'forum' => $current_forum['forum_id'],
     ]),
     ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
 );

@@ -5,18 +5,19 @@ use Webit\Util\EvalMath\EvalMath;
 
 /**
  *  Class CalculatedAnswer
- *  This class contains calculated answer form and answer processing functions
+ *  This class contains calculated answer form and answer processing functions.
  *
  *  @author Imanol Losada
+ *
  *  @package chamilo.exercise
- **/
+ */
 class CalculatedAnswer extends Question
 {
     public static $typePicture = 'calculated_answer.png';
     public static $explanationLangVar = 'CalculatedAnswer';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -26,23 +27,22 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
         $defaults = [];
+        $defaults['answer'] = get_lang('DefaultTextInBlanks');
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
             $defaults['answer'] = array_shift($preArray);
-            $defaults['answer'] = preg_replace("/\[.*\]/", "", $defaults['answer']);
+            $defaults['answer'] = preg_replace("/\[.*\]/", '', $defaults['answer']);
             $defaults['weighting'] = $this->weighting;
-        } else {
-            $defaults['answer'] = get_lang('DefaultTextInBlanks');
         }
-        $lowestValue = "1.00";
-        $highestValue = "20.00";
+        $lowestValue = '1.00';
+        $highestValue = '20.00';
 
         // javascript //
         echo '<script>
@@ -78,7 +78,6 @@ class CalculatedAnswer extends Question
             });
 
             var firstTime = true;
-
             function updateBlanks(e) {
                 if (firstTime) {
                     field = document.getElementById("answer");
@@ -145,7 +144,7 @@ class CalculatedAnswer extends Question
             [
                 'class' => 'btn btn-info ajax',
                 'data-title' => get_lang('NotationList'),
-                '_target' => '_blank'
+                '_target' => '_blank',
             ]
         );
         $form->addElement(
@@ -182,7 +181,7 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -193,8 +192,8 @@ class CalculatedAnswer extends Question
                 [
                     'c_id = ? AND question_id = ?' => [
                         $this->course['real_id'],
-                        $this->id
-                    ]
+                        $this->id,
+                    ],
                 ]
             );
             $answer = $form->getSubmitValue('answer');
@@ -212,25 +211,24 @@ class CalculatedAnswer extends Question
                 if ($nb > 0) {
                     for ($i = 0; $i < $nb; ++$i) {
                         $blankItem = $blanks[0][$i];
-                        $replace = ["[", "]"];
-                        $newBlankItem = str_replace($replace, "", $blankItem);
-                        $newBlankItem = "[".trim($newBlankItem)."]";
+
                         // take random float values when one or both edge values have a decimal point
                         $randomValue =
                             (strpos($lowestValues[$i], '.') !== false ||
                             strpos($highestValues[$i], '.') !== false) ?
                             mt_rand($lowestValues[$i] * 100, $highestValues[$i] * 100) / 100 : mt_rand($lowestValues[$i], $highestValues[$i]);
+
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                         $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                     }
                     $math = new EvalMath();
                     $result = $math->evaluate($auxFormula);
-                    $result = number_format($result, 2, ".", "");
+                    $result = number_format($result, 2, '.', '');
                     // Remove decimal trailing zeros
-                    $result = rtrim($result, "0");
+                    $result = rtrim($result, '0');
                     // If it is an integer (ends in .00) remove the decimal point
-                    if (mb_substr($result, -1) === ".") {
-                        $result = str_replace(".", "", $result);
+                    if (mb_substr($result, -1) === '.') {
+                        $result = str_replace('.', '', $result);
                     }
                     // Attach formula
                     $auxAnswer .= " [".$result."]@@".$formula;
@@ -245,7 +243,7 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -257,12 +255,14 @@ class CalculatedAnswer extends Question
                 <th>'.get_lang('ExpectedChoice').'</th>
                 <th>'.get_lang('Status').'</th>
             </tr>';
+
         return $header;
     }
 
     /**
-     * Returns true if the current question has been attempted to be answered
-     * @return boolean
+     * Returns true if the current question has been attempted to be answered.
+     *
+     * @return bool
      */
     public function isAnswered()
     {
@@ -274,9 +274,9 @@ class CalculatedAnswer extends Question
                 'where' => [
                     'question_id = ? AND c_id = ?' => [
                         $this->id,
-                        $this->course['real_id']
-                    ]
-                ]
+                        $this->course['real_id'],
+                    ],
+                ],
             ]
         );
 

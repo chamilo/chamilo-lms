@@ -370,7 +370,6 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
                 $required,
                 $error
             );
-
             $this->_html .= str_replace('{element}', $element->toHtml(), $html);
         } elseif (!empty($this->_groupElementTemplate)) {
             $html = str_replace('{label}', $element->getLabel(), $this->_groupElementTemplate);
@@ -382,7 +381,6 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
                 $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN required -->.*<!-- END required -->([ \t\n\r]*)?/isU", '', $html);
             }
             $this->_groupElements[] = str_replace('{element}', $element->toHtml(), $html);
-
         } else {
             $this->_groupElements[] = $element->toHtml();
         }

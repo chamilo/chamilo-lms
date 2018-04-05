@@ -5,9 +5,9 @@
  * This script displays error messages on fatal errors during initialization.
  *
  * @package chamilo.include
+ *
  * @author Ivan Tcholakov, 2009-2010
  */
-
 $Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';
 $PoweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 
@@ -65,7 +65,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
     $css_base_file = $css_web_path.'base.css';
 
-    $css_list = array($bootstrap_file, $css_base_file, $themePath);
+    $css_list = [$bootstrap_file, $css_base_file, $themePath];
 
     $web_img = 'main/img';
     $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../')).'/';
@@ -78,7 +78,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         }
     }
 
-    $global_error_message = array();
+    $global_error_message = [];
 
     switch ($global_error_code) {
         case 1:

@@ -4,95 +4,98 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class CourseCopyLearnpath
+ * Class CourseCopyLearnpath.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class CourseCopyLearnpath extends Resource
 {
     /**
-     * Type of learnpath (can be dokeos (1), scorm (2), aicc (3))
+     * Type of learnpath (can be dokeos (1), scorm (2), aicc (3)).
      */
     public $lp_type;
     /**
-     * The name
+     * The name.
      */
     public $name;
     /**
-     * The reference
+     * The reference.
      */
     public $ref;
     /**
-     * The description
+     * The description.
      */
     public $description;
     /**
-     * Path to the learning path files
+     * Path to the learning path files.
      */
     public $path;
     /**
-     * Whether additional commits should be forced or not
+     * Whether additional commits should be forced or not.
      */
     public $force_commit;
     /**
-     * View mode by default ('embedded' or 'fullscreen')
+     * View mode by default ('embedded' or 'fullscreen').
      */
     public $default_view_mod;
     /**
-     * Default character encoding
+     * Default character encoding.
      */
     public $default_encoding;
     /**
-     * Display order
+     * Display order.
      */
     public $display_order;
     /**
-     * Content editor/publisher
+     * Content editor/publisher.
      */
     public $content_maker;
     /**
-     * Location of the content (local or remote)
+     * Location of the content (local or remote).
      */
     public $content_local;
     /**
-     * License of the content
+     * License of the content.
      */
     public $content_license;
     /**
-     * Whether to prevent reinitialisation or not
+     * Whether to prevent reinitialisation or not.
      */
     public $prevent_reinit;
     /**
-     * JavaScript library used
+     * JavaScript library used.
      */
     public $js_lib;
     /**
-     * Debug level for this lp
+     * Debug level for this lp.
      */
     public $debug;
     /**
-     * The items
+     * The items.
      */
     public $items;
     /**
-     * The learnpath visibility on the homepage
+     * The learnpath visibility on the homepage.
      */
     public $visibility;
 
     /**
-     * Author info
+     * Author info.
      */
     public $author;
 
     /**
-     * Author's image
+     * Author's image.
      */
     public $preview_image;
 
     /**
-     * Create a new learnpath
-     * @param integer ID
-     * @param integer Type (1,2,3,...)
+     * Create a new learnpath.
+     *
+     * @param int ID
+     * @param int Type (1,2,3,...)
      * @param string $name
      * @param string $path
      * @param string $ref
@@ -103,10 +106,10 @@ class CourseCopyLearnpath extends Resource
      * @param bool   $prevent_reinit
      * @param bool   $force_commit
      * @param string $content_maker
-     * @param integer $display_order
+     * @param int    $display_order
      * @param string $js_lib
      * @param string $content_license
-     * @param integer $debug
+     * @param int    $debug
      * @param string $visibility
      * @param array  $items
      */
@@ -169,17 +172,17 @@ class CourseCopyLearnpath extends Resource
     }
 
     /**
-     * Get the items
+     * Get the items.
      */
-    function get_items()
+    public function get_items()
     {
         return $this->items;
     }
 
     /**
-     * Check if a given resource is used as an item in this chapter
+     * Check if a given resource is used as an item in this chapter.
      */
-    function has_item($resource)
+    public function has_item($resource)
     {
         foreach ($this->items as $item) {
             if ($item['id'] == $resource->get_id() &&
@@ -188,13 +191,14 @@ class CourseCopyLearnpath extends Resource
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Show this learnpath
+     * Show this learnpath.
      */
-    function show()
+    public function show()
     {
         parent::show();
         echo $this->name;

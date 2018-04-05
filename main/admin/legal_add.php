@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Management of legal conditions
+ * Management of legal conditions.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -18,12 +19,12 @@ if (api_get_setting('allow_terms_conditions') !== 'true') {
 // Create the form
 $form = new FormValidator('addlegal');
 
-$defaults = array();
-$term_preview = array(
+$defaults = [];
+$term_preview = [
     'type' => 0,
     'content' => '',
-    'changes' => ''
-);
+    'changes' => '',
+];
 if ($form->validate()) {
     $check = Security::check_token('post');
     if ($check) {
@@ -104,20 +105,19 @@ $defaults['sec_token'] = $token;
 $form->addElement('header', get_lang('DisplayTermsConditions'));
 
 if (isset($_POST['language'])) {
-
-	$form->addElement('static', Security::remove_XSS($_POST['language']));
-	$form->addElement('hidden', 'language', Security::remove_XSS($_POST['language']));
+    $form->addElement('static', Security::remove_XSS($_POST['language']));
+    $form->addElement('hidden', 'language', Security::remove_XSS($_POST['language']));
     $form->addHtmlEditor(
         'content',
         get_lang('Content'),
         true,
         false,
-        array('ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250')
+        ['ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250']
     );
 
     $form->addElement('radio', 'type', '', get_lang('HTMLText'), '0');
     $form->addElement('radio', 'type', '', get_lang('PageLink'), '1');
-    $form->addElement('textarea', 'changes', get_lang('ExplainChanges'), array('width' => '20'));
+    $form->addElement('textarea', 'changes', get_lang('ExplainChanges'), ['width' => '20']);
 
     $preview = LegalManager::show_last_condition($term_preview);
 
@@ -135,15 +135,13 @@ if (isset($_POST['language'])) {
                 </div>
             </div>';
     $form->addElement('html', $buttons);
-
 } else {
-    $form->addSelectLanguage('language', get_lang('Language'), null, array());
-	$form->addButtonSearch(get_lang('Load'), 'send');
-
+    $form->addSelectLanguage('language', get_lang('Language'), null, []);
+    $form->addButtonSearch(get_lang('Load'), 'send');
 }
 
 $tool_name = get_lang('AddTermsAndConditions');
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 Display :: display_header($tool_name);
 
 echo '<script>

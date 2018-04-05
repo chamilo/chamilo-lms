@@ -3,18 +3,21 @@
 
 /**
  * This file contains the necessary elements to implement a Single Sign On
- * using chamilo as a SSO server
+ * using chamilo as a SSO server.
+ *
  * @package chamilo.auth.sso
  */
 class SsoServer
 {
     /**
-     * This is used to get the url with the SSO params
+     * This is used to get the url with the SSO params.
+     *
      * @param string $refererSso
-     * @param array $additionalParams
+     * @param array  $additionalParams
+     *
      * @return string
      */
-    public function getUrl($refererSso, $additionalParams = array())
+    public function getUrl($refererSso, $additionalParams = [])
     {
         if (empty($refererSso)) {
             return null;
@@ -51,7 +54,7 @@ class SsoServer
             .http_build_query([
                 'loginFailed' => 0,
                 'sso_referer' => $refererSso,
-                'sso_cookie' => $cookie
+                'sso_cookie' => $cookie,
             ]);
     }
 }

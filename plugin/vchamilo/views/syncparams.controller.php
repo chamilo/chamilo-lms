@@ -22,15 +22,15 @@ if ($action == 'syncall') {
 
         $value = $_REQUEST[$selkey];
 
-        $setting = api_get_settings_params_simple(array('id' => $settingId));
+        $setting = api_get_settings_params_simple(['id' => $settingId]);
 
-        $params = array(
+        $params = [
             'title' => $setting['title'],
             'variable' => $setting['variable'],
             'subkey' => $setting['subkey'],
             'category' => $setting['category'],
             'access_url' => $setting['access_url'],
-        );
+        ];
 
         foreach ($vchamilos as $vcid => $chm) {
             $table = $chm['main_database'].".settings_current ";
@@ -59,8 +59,8 @@ if ($action == 'syncthis') {
         $delifempty = isset($_REQUEST['del']) ? $_REQUEST['del'] : '';
         $value = $_REQUEST['value'];
         // Getting the local setting record.
-        $setting = api_get_settings_params_simple(array('id' => $settingId));
-        $params = array(
+        $setting = api_get_settings_params_simple(['id' => $settingId]);
+        $params = [
             'access_url_changeable' => $setting['access_url_changeable'],
             'title' => $setting['title'],
             'variable' => $setting['variable'],
@@ -69,20 +69,20 @@ if ($action == 'syncthis') {
             'type' => $setting['type'],
             'comment' => $setting['comment'],
             'access_url' => $setting['access_url'],
-        );
+        ];
 
         $errors = '';
         foreach ($vchamilos as $vcid => $chm) {
             $table = "settings_current";
 
             $config = new \Doctrine\DBAL\Configuration();
-            $connectionParams = array(
+            $connectionParams = [
                 'dbname' => $chm['main_database'],
                 'user' => $chm['db_user'],
                 'password' => $chm['db_password'],
                 'host' => $chm['db_host'],
                 'driver' => 'pdo_mysql',
-            );
+            ];
             $connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
             try {
                 if ($delifempty && empty($value)) {
@@ -113,6 +113,7 @@ if ($action == 'syncthis') {
                 echo $e->getMessage();
             }
         }
+
         return $errors;
     } else {
         return "Bad ID. Non numeric";

@@ -6,10 +6,11 @@ use ChamiloSession as Session;
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $toolFromSession = Session::read('my_tool');
@@ -28,7 +29,7 @@ if (!$is_allowed_to_edit) {
 }
 
 /**
- * Redirect to the correct script to handle this type of upload
+ * Redirect to the correct script to handle this type of upload.
  */
 switch ($toolFromSession) {
     case TOOL_LEARNPATH:

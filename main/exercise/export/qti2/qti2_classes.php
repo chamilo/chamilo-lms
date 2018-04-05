@@ -5,12 +5,14 @@
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> -
  * updated ImsAnswerHotspot to match QTI norms
+ *
  * @package chamilo.exercise
  */
 class Ims2Question extends Question
 {
     /**
-     * Include the correct answer class and create answer
+     * Include the correct answer class and create answer.
+     *
      * @return Answer
      */
     public function setAnswer()
@@ -33,7 +35,6 @@ class Ims2Question extends Question
 
                 return $answer;
             case MATCHING:
-                //no break
             case MATCHING_DRAGGABLE:
                 $answer = new ImsAnswerMatching($this->id);
 
@@ -60,7 +61,7 @@ class Ims2Question extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -69,14 +70,14 @@ class Ims2Question extends Question
 }
 
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.exercise
  */
 class ImsAnswerMultipleChoice extends Answer
 {
     /**
      * Return the XML flow for the possible answers.
-     *
      */
     public function imsExportResponses($questionIdent, $questionStatment)
     {
@@ -102,8 +103,7 @@ class ImsAnswerMultipleChoice extends Answer
     }
 
     /**
-     * Return the XML flow of answer ResponsesDeclaration
-     *
+     * Return the XML flow of answer ResponsesDeclaration.
      */
     public function imsExportResponsesDeclaration($questionIdent)
     {
@@ -146,15 +146,14 @@ class ImsAnswerMultipleChoice extends Answer
 }
 
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.exercise
  */
 class ImsAnswerFillInBlanks extends Answer
 {
     /**
      * Export the text with missing words.
-     *
-     *
      */
     public function imsExportResponses($questionIdent, $questionStatment)
     {
@@ -172,9 +171,6 @@ class ImsAnswerFillInBlanks extends Answer
         return $text;
     }
 
-    /**
-     *
-     */
     public function imsExportResponsesDeclaration($questionIdent)
     {
         $this->answerList = $this->getAnswersList(true);
@@ -203,7 +199,8 @@ class ImsAnswerFillInBlanks extends Answer
 }
 
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.exercise
  */
 class ImsAnswerMatching extends Answer
@@ -229,7 +226,7 @@ class ImsAnswerMatching extends Answer
                 $out .= '
                 <simpleAssociableChoice identifier="left_'.$leftKey.'" >
                     <![CDATA['.formatExerciseQtiText($leftElement['answer']).']]>
-                </simpleAssociableChoice>'. "\n";
+                </simpleAssociableChoice>'."\n";
             }
         }
 
@@ -243,7 +240,7 @@ class ImsAnswerMatching extends Answer
             foreach ($this->rightList as $rightKey => $rightElement) {
                 $out .= '<simpleAssociableChoice identifier="right_'.$i.'" >
                         <![CDATA['.formatExerciseQtiText($rightElement['answer']).']]>
-                        </simpleAssociableChoice>'. "\n";
+                        </simpleAssociableChoice>'."\n";
                 $i++;
             }
         }
@@ -253,9 +250,6 @@ class ImsAnswerMatching extends Answer
         return $out;
     }
 
-    /**
-     *
-     */
     public function imsExportResponsesDeclaration($questionIdent)
     {
         $this->answerList = $this->getAnswersList(true);
@@ -292,7 +286,8 @@ class ImsAnswerMatching extends Answer
 }
 
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.exercise
  */
 class ImsAnswerHotspot extends Answer
@@ -352,9 +347,6 @@ class ImsAnswerHotspot extends Answer
         return $text;
     }
 
-    /**
-     *
-     */
     public function imsExportResponsesDeclaration($questionIdent)
     {
         $this->answerList = $this->getAnswersList(true);
@@ -376,7 +368,8 @@ class ImsAnswerHotspot extends Answer
 }
 
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.exercise
  */
 class ImsAnswerFree extends Answer
@@ -392,15 +385,14 @@ class ImsAnswerFree extends Answer
         $questionMedia = ''
     ) {
         $questionDesc = formatExerciseQtiText($questionDesc);
+
         return '<extendedTextInteraction responseIdentifier="'.$questionIdent.'" >
             <prompt>
             '.$questionDesc.'
             </prompt>
             </extendedTextInteraction>';
     }
-    /**
-     *
-     */
+
     public function imsExportResponsesDeclaration($questionIdent, $question)
     {
         $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="string">';

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BranchTransactionStatus
+ * BranchTransactionStatus.
  *
  * @ORM\Table(name="branch_transaction_status")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class BranchTransactionStatus
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -30,9 +30,9 @@ class BranchTransactionStatus
     private $title;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -40,9 +40,10 @@ class BranchTransactionStatus
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return BranchTransactionStatus
      */
     public function setTitle($title)
@@ -53,7 +54,7 @@ class BranchTransactionStatus
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */

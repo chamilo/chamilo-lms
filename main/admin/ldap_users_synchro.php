@@ -4,23 +4,23 @@
  * @package chamilo.admin
  */
 /**
- * Code
+ * Code.
  */
 exit(); //not yet functional, needs to be revised
 
 $cidReset = true;
 
-require('../inc/global.inc.php');
+require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require("../auth/ldap/authldap.php");
+require "../auth/ldap/authldap.php";
 $annee_base = date('Y');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => api_get_self(), "name" => get_lang('SessionsList'));
+$interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_self(), "name" => get_lang('SessionsList')];
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -39,8 +39,8 @@ $id_session = intval($_GET['id_session']);
 
 $formSent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
-$UserList = $SessionList = array();
-$users = $sessions = array();
+$UserList = $SessionList = [];
+$users = $sessions = [];
 $noPHP_SELF = true;
 
 $page = intval($_GET['page']);
@@ -60,9 +60,9 @@ Display::display_header($tool_name);
 
 <?php
 if (isset($action) && ($action == "synchro")) {
-	$included = true;
-	require('ldap_synchro.php');
-	echo Display::return_message($message, 'normal', false);
+    $included = true;
+    require 'ldap_synchro.php';
+    echo Display::return_message($message, 'normal', false);
 }
 Display::display_footer();
 ?>

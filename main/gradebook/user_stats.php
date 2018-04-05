@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -16,10 +17,10 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 if (!$isDrhOfCourse) {
     GradebookUtils::block_students();
 }
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
-);
+    'name' => get_lang('Gradebook'),
+];
 
 $category = Category::load($_GET['selectcat']);
 $my_user_id = Security::remove_XSS($_GET['userid']);
@@ -27,15 +28,15 @@ $allevals = $category[0]->get_evaluations($my_user_id, true);
 $alllinks = $category[0]->get_links($my_user_id, true);
 
 if ($_GET['selectcat'] != null) {
-    $addparams = array(
+    $addparams = [
         'userid' => $my_user_id,
-        'selectcat' => Security::remove_XSS($_GET['selectcat'])
-    );
+        'selectcat' => Security::remove_XSS($_GET['selectcat']),
+    ];
 } else {
-    $addparams = array(
+    $addparams = [
         'userid' => $my_user_id,
-        'selecteval' => Security::remove_XSS($_GET['selecteval'])
-    );
+        'selecteval' => Security::remove_XSS($_GET['selecteval']),
+    ];
 }
 
 $user_table = new UserTable($my_user_id, $allevals, $alllinks, $addparams);
@@ -48,7 +49,7 @@ if (isset($_GET['exportpdf'])) {
         null,
         true
     );
-    $newarray = array();
+    $newarray = [];
     $displayscore = ScoreDisplay :: instance();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
@@ -57,25 +58,25 @@ if (isset($_GET['exportpdf'])) {
     $html .= get_lang('Results').' : '.$userInfo['complete_name'].' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')';
 
     if ($displayscore->is_custom()) {
-        $header_names = array(
+        $header_names = [
             get_lang('Evaluation'),
             get_lang('Course'),
             get_lang('Category'),
             get_lang('EvaluationAverage'),
             get_lang('Result'),
             get_lang('Display'),
-        );
+        ];
     } else {
-        $header_names = array(
+        $header_names = [
             get_lang('Evaluation'),
             get_lang('Course'),
             get_lang('Category'),
             get_lang('EvaluationAverage'),
             get_lang('Result'),
-        );
+        ];
     }
 
-    $table = new HTML_Table(array('class' => 'data_table'));
+    $table = new HTML_Table(['class' => 'data_table']);
     $row = 0;
     $column = 0;
     foreach ($header_names as $item) {
@@ -100,10 +101,10 @@ if (isset($_GET['exportpdf'])) {
 $actions = '<div class="actions">';
 
 if (isset($_GET['selectcat'])) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']),
-        'name' => get_lang('FlatView')
-    );
+        'name' => get_lang('FlatView'),
+    ];
     $actions .= '<a href=gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']).'>'.
         Display::return_icon(
             'back.png',
@@ -115,16 +116,16 @@ if (isset($_GET['selectcat'])) {
 }
 
 if (isset($_GET['selecteval'])) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']),
-        'name' => get_lang('ViewResult')
-    );
+        'name' => get_lang('ViewResult'),
+    ];
     $actions .= '<a href=gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'>
 	'.Display::return_icon('back.png', get_lang('BackToEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat='.$category[0]->get_id().'" target="_blank">
-' . Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+'.Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $actions .= '</div>';
 

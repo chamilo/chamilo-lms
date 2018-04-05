@@ -3,8 +3,10 @@
 
 /**
  * Defines a gradebook LearnpathLink object.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class LearnpathLink extends AbstractLink
@@ -14,7 +16,7 @@ class LearnpathLink extends AbstractLink
     private $learnpath_data = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -24,6 +26,7 @@ class LearnpathLink extends AbstractLink
 
     /**
      * Generate an array of learnpaths that a teacher hasn't created a link for.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_not_created_links()
@@ -36,17 +39,17 @@ class LearnpathLink extends AbstractLink
         $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $sql = 'SELECT id, name FROM '.$this->get_learnpath_table().' lp
-				WHERE c_id = ' . $this->course_id.' AND id NOT IN '
-            . ' (SELECT ref_id FROM '.$tbl_grade_links
-            . ' WHERE type = '.LINK_LEARNPATH
-            . " AND course_code = '".$this->get_course_code()."'"
-            . ') AND lp.session_id='.api_get_session_id().'';
+				WHERE c_id = '.$this->course_id.' AND id NOT IN '
+            .' (SELECT ref_id FROM '.$tbl_grade_links
+            .' WHERE type = '.LINK_LEARNPATH
+            ." AND course_code = '".$this->get_course_code()."'"
+            .') AND lp.session_id='.api_get_session_id().'';
 
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['name']);
+            $cats[] = [$data['id'], $data['name']];
         }
 
         return $cats;
@@ -54,6 +57,7 @@ class LearnpathLink extends AbstractLink
 
     /**
      * Generate an array of all learnpaths available.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_all_links()
@@ -70,17 +74,16 @@ class LearnpathLink extends AbstractLink
         }
 
         $sql = 'SELECT id, name FROM '.$this->get_learnpath_table().'
-                WHERE c_id = ' . $this->course_id.' '.$session_condition.' ';
+                WHERE c_id = '.$this->course_id.' '.$session_condition.' ';
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['name']);
+            $cats[] = [$data['id'], $data['name']];
         }
 
         return $cats;
     }
-
 
     /**
      * Has anyone used this learnpath yet ?
@@ -92,16 +95,19 @@ class LearnpathLink extends AbstractLink
 				WHERE c_id = ".$this->course_id." AND lp_id = ".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_array($result, 'NUM');
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     /**
      * Get the progress of this learnpath. Only the last attempt are taken into account.
+     *
      * @param $stud_id student id (default: all students who have results - then the average is returned)
      * @param $type The type of score we want to get: best|average|ranking
-     * @return    array (score, max) if student is given
-     *            array (sum of scores, number of scores) otherwise
-     *            or null if no scores available
+     *
+     * @return array (score, max) if student is given
+     *               array (sum of scores, number of scores) otherwise
+     *               or null if no scores available
      */
     public function calc_score($stud_id = null, $type = null)
     {
@@ -114,7 +120,7 @@ class LearnpathLink extends AbstractLink
         $sql = "SELECT * FROM $tbl_stats
                 WHERE
                 	c_id = ".$this->course_id." AND
-                    lp_id = " . $this->get_ref_id()." AND
+                    lp_id = ".$this->get_ref_id()." AND
                     session_id = $session_id ";
 
         if (isset($stud_id)) {
@@ -128,13 +134,13 @@ class LearnpathLink extends AbstractLink
         // for 1 student
         if (isset($stud_id)) {
             if ($data = Database::fetch_assoc($scores)) {
-                return array($data['progress'], 100);
+                return [$data['progress'], 100];
             } else {
                 return null;
             }
         } else {
             // all students -> get average
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $rescount = 0;
             $sum = 0;
@@ -158,16 +164,16 @@ class LearnpathLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, 100);
+                        return [$bestResult, 100];
                         break;
                     case 'average':
-                        return array($sumResult / $rescount, 100);
+                        return [$sumResult / $rescount, 100];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $rescount);
+                        return [$sum, $rescount];
                         break;
                 }
             }
@@ -188,37 +194,41 @@ class LearnpathLink extends AbstractLink
         } else {
             $url .= '&action=build&lp_id='.$this->get_ref_id();
         }
+
         return $url;
     }
 
     /**
-     * Get name to display: same as learnpath title
+     * Get name to display: same as learnpath title.
      */
     public function get_name()
     {
         $data = $this->get_learnpath_data();
+
         return $data['name'];
     }
 
     /**
-     * Get description to display: same as learnpath description
+     * Get description to display: same as learnpath description.
      */
     public function get_description()
     {
         $data = $this->get_learnpath_data();
+
         return $data['description'];
     }
 
     /**
-     * Check if this still links to a learnpath
+     * Check if this still links to a learnpath.
      */
     public function is_valid_link()
     {
         $sql = 'SELECT count(id) FROM '.$this->get_learnpath_table().'
-                WHERE c_id = ' . $this->course_id.' AND id = '.$this->get_ref_id().' ';
+                WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result, 'NUM');
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     public function get_type_name()
@@ -246,31 +256,33 @@ class LearnpathLink extends AbstractLink
         return false;
     }
 
+    public function get_icon_name()
+    {
+        return 'learnpath';
+    }
+
     /**
-     * Lazy load function to get the database table of the learnpath
+     * Lazy load function to get the database table of the learnpath.
      */
     private function get_learnpath_table()
     {
         $this->learnpath_table = Database::get_course_table(TABLE_LP_MAIN);
+
         return $this->learnpath_table;
     }
 
     /**
-     * Lazy load function to get the database contents of this learnpath
+     * Lazy load function to get the database contents of this learnpath.
      */
     private function get_learnpath_data()
     {
         if (!isset($this->learnpath_data)) {
             $sql = 'SELECT * FROM '.$this->get_learnpath_table().'
-                    WHERE c_id = ' . $this->course_id.' AND id = '.$this->get_ref_id().' ';
+                    WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' ';
             $result = Database::query($sql);
             $this->learnpath_data = Database::fetch_array($result);
         }
-        return $this->learnpath_data;
-    }
 
-    public function get_icon_name()
-    {
-        return 'learnpath';
+        return $this->learnpath_data;
     }
 }

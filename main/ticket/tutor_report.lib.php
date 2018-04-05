@@ -2,12 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Helper library for weekly reports
+ * Helper library for weekly reports.
+ *
  * @package chamilo.plugin.ticket
  */
 
 /**
  * @param $course_code
+ *
  * @return array|bool
  */
 function initializeReport($course_code)
@@ -44,7 +46,6 @@ function initializeReport($course_code)
         }
     }
 
-
     $sql = "REPLACE INTO $table_students_report (user_id, week_report_id, work_ok , thread_ok , quiz_ok , pc_ok)
 			SELECT cu.user_id, rs.id, 0, 0, 0, 0
 			FROM $table_course_rel_user cu
@@ -75,6 +76,7 @@ function initializeReport($course_code)
  * @param $courseInfo
  * @param $weeksCount
  * @param $page
+ *
  * @return array
  */
 function showResults($courseInfo, $weeksCount, $page)
@@ -90,8 +92,8 @@ function showResults($courseInfo, $weeksCount, $page)
     $tableThread = Database::get_course_table(TABLE_FORUM_THREAD);
     $tableWork = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $results = array();
-    $tableExport = array();
+    $results = [];
+    $tableExport = [];
     $sqlHeader = "SELECT rs.id as id,rs.week_id, w.title AS work_title,  t.thread_title ,'EVALUATION' as eval_title ,'QUIZ' as pc_title
                     FROM $tableWeeklyReport rs
                     LEFT JOIN $tableThread t ON t.thread_id =  rs.forum_id
@@ -99,11 +101,11 @@ function showResults($courseInfo, $weeksCount, $page)
                     WHERE rs.course_code = '$course_code'
                     ORDER BY rs.week_id";
     $resultHeader = Database::query($sqlHeader);
-    $ids = array();
+    $ids = [];
     $line = '<tr>
         <th ></th>';
-    $lineHeaderExport = array(null, null);
-    $lineHeaderExport2 = array(null, ull);
+    $lineHeaderExport = [null, null];
+    $lineHeaderExport2 = [null, ull];
     while ($rowe = Database::fetch_assoc($resultHeader)) {
         $lineHeaderExport[] = utf8_decode('Work'.$rowe['week_id']);
         $lineHeaderExport[] = utf8_decode('Forum'.$rowe['week_id']);
@@ -113,16 +115,16 @@ function showResults($courseInfo, $weeksCount, $page)
         $lineHeaderExport2[] = utf8_decode($rowe['thread_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['eval_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['pc_title']);
-        $fila_export = array('Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']);
+        $fila_export = ['Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']];
         if ($rowe['week_id'] > (($page - 1) * 7) && $rowe['week_id'] <= (7 * $page)) {
             $ids[$rowe['week_id']] = $rowe['id'];
             $line .= '<th>
-                <a href="#" onClick="showContent(' . "'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
-                        <div class="blackboard_hide" id="tarea' . $rowe['week_id'].'">'.$rowe['work_title'].'</div>
+                <a href="#" onClick="showContent('."'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
+                        <div class="blackboard_hide" id="tarea'.$rowe['week_id'].'">'.$rowe['work_title'].'</div>
                 </a></th>';
             $line .= '<th>
-                <a href="#" onClick="showContent(' . "'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
-                        <div class="blackboard_hide" id="foro' . $rowe['week_id'].'">'.$rowe['thread_title'].'</div>
+                <a href="#" onClick="showContent('."'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
+                        <div class="blackboard_hide" id="foro'.$rowe['week_id'].'">'.$rowe['thread_title'].'</div>
                 </a>
                 </th>';
         }
@@ -133,10 +135,10 @@ function showResults($courseInfo, $weeksCount, $page)
 
     $html = '<form action="tutor.php" name="semanas" id="semanas" method="POST">
             <div class="row">
-            ' . get_lang('SelectWeeksSpan').'
+            '.get_lang('SelectWeeksSpan').'
             <select name="weeksNumber" id="weeksNumber" onChange="submit();">
-            <option value="7" ' . (($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
-            <option value="14" ' . (($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>
+            <option value="7" '.(($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
+            <option value="14" '.(($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>
             </select>';
 
     if ($weeksCount == 14) {
@@ -149,7 +151,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '<tr>
             <th ></th>';
     for ($i = (7 * $page - 6); $i <= $page * 7; $i++) {
-        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), array('width' => '16', 'height' => '16'), 22).'</a></th>';
+        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), ['width' => '16', 'height' => '16'], 22).'</a></th>';
     }
     $html .= '</tr>';
     $html .= $line;
@@ -176,12 +178,13 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '
           </table>';
 
-    return array('show' => $html, 'export' => $tableExport);
+    return ['show' => $html, 'export' => $tableExport];
 }
 
 /**
  * @param $datos
  * @param $pagina
+ *
  * @return string
  */
 function showStudentResult($datos, $pagina)
@@ -202,11 +205,12 @@ function showStudentResult($datos, $pagina)
 /**
  * @param $data
  * @param $numero_semanas
+ *
  * @return array
  */
 function showStudentResultExport($data, $numero_semanas)
 {
-    $fila = array();
+    $fila = [];
     $fila[] = utf8_decode($data[1]['username']);
     $fila[] = utf8_decode($data[1]['fullname']);
     foreach ($data as $line) {

@@ -111,7 +111,7 @@ $(function() {
 
 $actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
-echo $actions = Display::div($actions, ['class'=> 'actions']);
+echo $actions = Display::div($actions, ['class' => 'actions']);
 
 echo Display::grid_html('live_stats');
 

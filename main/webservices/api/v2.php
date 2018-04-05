@@ -43,7 +43,7 @@ try {
             $restResponse->setData([
                 'url' => api_get_path(WEB_PATH),
                 'apiKey' => Rest::findUserApiKey($username, Rest::SERVIVE_NAME),
-                'gcmSenderId' => api_get_setting('messaging_gdc_project_number')
+                'gcmSenderId' => api_get_setting('messaging_gdc_project_number'),
             ]);
             break;
 
@@ -136,7 +136,7 @@ try {
                 'thread_id' => $_POST['thread'],
                 'forum_id' => $_POST['forum'],
                 'post_notification' => $notify,
-                'post_parent_id' => $parentId
+                'post_parent_id' => $parentId,
             ];
 
             $data = $restApi->saveForumPost($postValues, $forumId);
@@ -182,7 +182,7 @@ try {
                 'post_title' => $_POST['title'],
                 'forum_id' => $_POST['forum'],
                 'post_text' => nl2br($_POST['text']),
-                'post_notification' => $notify
+                'post_notification' => $notify,
             ];
 
             $data = $restApi->saveForumThread($threadInfo, $forumId);
@@ -195,7 +195,6 @@ try {
     $restResponse->setErrorMessage(
         $exeption->getMessage()
     );
-
 }
 
 header('Content-Type: application/json');

@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpCategoryUser;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpCategoryUser;
+use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -40,19 +40,20 @@ if (!$category) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => strip_tags($category->getName()));
+    'name' => get_lang('LearningPaths'),
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getName())];
 
 $url = api_get_self().'?'.api_get_cidreq().'&action=add_users_to_category&id='.$categoryId;
 
-Display::addFlash(Display::return_message(get_lang('UserLpCategorySubscriptionDescription')));
+$message = Display::return_message(get_lang('UserLpCategorySubscriptionDescription'));
 
 // Building the form for Groups
 $form = new FormValidator('lp_edit', 'post', $url);
 $form->addElement('hidden', 'group_form', 1);
+$form->addLabel('', $message);
 
 // Group list
 $groupList = \CourseManager::get_group_list_of_course(
@@ -83,7 +84,7 @@ $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
     $session
 );
 
-$selectedGroupChoices = array();
+$selectedGroupChoices = [];
 /** @var CItemProperty $itemProperty */
 foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
@@ -99,7 +100,7 @@ $groupMultiSelect = $form->addElement(
 // submit button
 $form->addButtonSave(get_lang('Save'));
 
-$defaults = array();
+$defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
 }
@@ -111,7 +112,7 @@ $subscribedUsers = $subscribedUsers->getQuery();
 $subscribedUsers = $subscribedUsers->execute();
 
 // Getting all users in a nice format.
-$choices = array();
+$choices = [];
 /** @var User $user */
 foreach ($subscribedUsers as $user) {
     $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
@@ -119,8 +120,7 @@ foreach ($subscribedUsers as $user) {
 
 // Getting subscribed users to a category.
 $subscribedUsersInCategory = $category->getUsers();
-
-$selectedChoices = array();
+$selectedChoices = [];
 foreach ($subscribedUsersInCategory as $item) {
     $selectedChoices[] = $item->getUser()->getId();
 }
@@ -128,6 +128,7 @@ foreach ($subscribedUsersInCategory as $item) {
 // Building the form for Users
 $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
+$formUsers->addLabel('', $message);
 
 $userMultiSelect = $formUsers->addElement(
     'advmultiselect',
@@ -137,8 +138,7 @@ $userMultiSelect = $formUsers->addElement(
 );
 $formUsers->addButtonSave(get_lang('Save'));
 
-$defaults = array();
-
+$defaults = [];
 if (!empty($selectedChoices)) {
     $defaults['users'] = $selectedChoices;
 }
@@ -202,11 +202,9 @@ if ($formUsers->validate()) {
 } else {
     $headers = [
         get_lang('SubscribeUsersToLpCategory'),
-        get_lang('SubscribeGroupsToLpCategory')
+        get_lang('SubscribeGroupsToLpCategory'),
     ];
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('tabs', $tabs);
+    $tpl->assign('content', $tabs);
+    $tpl->display_one_col_template();
 }
-
-$layout = $tpl->get_template('learnpath/subscribe_users.tpl');
-$tpl->display($layout);

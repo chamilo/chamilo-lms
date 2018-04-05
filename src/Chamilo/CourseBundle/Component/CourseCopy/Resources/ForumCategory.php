@@ -4,14 +4,16 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * A forum-category
+ * A forum-category.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class ForumCategory extends Resource
 {
     /**
-     * Create a new ForumCategory
+     * Create a new ForumCategory.
      */
     public function __construct($obj)
     {
@@ -20,7 +22,7 @@ class ForumCategory extends Resource
     }
 
     /**
-     * Show this resource
+     * Show this resource.
      */
     public function show()
     {

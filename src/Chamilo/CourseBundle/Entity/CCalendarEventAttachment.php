@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CCalendarEventAttachment
+ * CCalendarEventAttachment.
  *
  * @ORM\Table(
  *  name="c_calendar_event_attachment",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventAttachment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CCalendarEventAttachment
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -56,14 +56,14 @@ class CCalendarEventAttachment
     private $comment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
     private $size;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="agenda_id", type="integer", nullable=false)
      */
@@ -77,9 +77,10 @@ class CCalendarEventAttachment
     private $filename;
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return CCalendarEventAttachment
      */
     public function setPath($path)
@@ -90,7 +91,7 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -100,9 +101,10 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CCalendarEventAttachment
      */
     public function setComment($comment)
@@ -113,7 +115,7 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -123,9 +125,10 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param integer $size
+     * @param int $size
+     *
      * @return CCalendarEventAttachment
      */
     public function setSize($size)
@@ -136,9 +139,9 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get size
+     * Get size.
      *
-     * @return integer
+     * @return int
      */
     public function getSize()
     {
@@ -146,9 +149,10 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set agendaId
+     * Set agendaId.
      *
-     * @param integer $agendaId
+     * @param int $agendaId
+     *
      * @return CCalendarEventAttachment
      */
     public function setAgendaId($agendaId)
@@ -159,9 +163,9 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get agendaId
+     * Get agendaId.
      *
-     * @return integer
+     * @return int
      */
     public function getAgendaId()
     {
@@ -169,9 +173,10 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set filename
+     * Set filename.
      *
      * @param string $filename
+     *
      * @return CCalendarEventAttachment
      */
     public function setFilename($filename)
@@ -182,7 +187,7 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get filename
+     * Get filename.
      *
      * @return string
      */
@@ -192,9 +197,10 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CCalendarEventAttachment
      */
     public function setId($id)
@@ -205,9 +211,9 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -215,9 +221,10 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CCalendarEventAttachment
      */
     public function setCId($cId)
@@ -228,9 +235,9 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

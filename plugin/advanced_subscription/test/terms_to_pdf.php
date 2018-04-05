@@ -1,10 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * A script to render all mails templates
+ * A script to render all mails templates.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
-
 require_once __DIR__.'/../config.php';
 
 // Protect test

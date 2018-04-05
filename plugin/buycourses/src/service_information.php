@@ -3,11 +3,12 @@
 
 /**
  * Service information page
- * Show information about a service (for custom purposes)
+ * Show information about a service (for custom purposes).
+ *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.buycourses_plugin
  */
-
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';

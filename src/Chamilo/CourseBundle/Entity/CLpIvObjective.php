@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLpIvObjective
+ * CLpIvObjective.
  *
  * @ORM\Table(
  *  name="c_lp_iv_objective",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpIvObjective
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,28 +29,28 @@ class CLpIvObjective
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
     private $lpIvId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
@@ -92,9 +92,10 @@ class CLpIvObjective
     private $status;
 
     /**
-     * Set lpIvId
+     * Set lpIvId.
      *
-     * @param integer $lpIvId
+     * @param int $lpIvId
+     *
      * @return CLpIvObjective
      */
     public function setLpIvId($lpIvId)
@@ -105,9 +106,9 @@ class CLpIvObjective
     }
 
     /**
-     * Get lpIvId
+     * Get lpIvId.
      *
-     * @return integer
+     * @return int
      */
     public function getLpIvId()
     {
@@ -115,9 +116,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set orderId
+     * Set orderId.
      *
-     * @param integer $orderId
+     * @param int $orderId
+     *
      * @return CLpIvObjective
      */
     public function setOrderId($orderId)
@@ -128,9 +130,9 @@ class CLpIvObjective
     }
 
     /**
-     * Get orderId
+     * Get orderId.
      *
-     * @return integer
+     * @return int
      */
     public function getOrderId()
     {
@@ -138,9 +140,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set objectiveId
+     * Set objectiveId.
      *
      * @param string $objectiveId
+     *
      * @return CLpIvObjective
      */
     public function setObjectiveId($objectiveId)
@@ -151,7 +154,7 @@ class CLpIvObjective
     }
 
     /**
-     * Get objectiveId
+     * Get objectiveId.
      *
      * @return string
      */
@@ -161,9 +164,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set scoreRaw
+     * Set scoreRaw.
      *
      * @param float $scoreRaw
+     *
      * @return CLpIvObjective
      */
     public function setScoreRaw($scoreRaw)
@@ -174,7 +178,7 @@ class CLpIvObjective
     }
 
     /**
-     * Get scoreRaw
+     * Get scoreRaw.
      *
      * @return float
      */
@@ -184,9 +188,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set scoreMax
+     * Set scoreMax.
      *
      * @param float $scoreMax
+     *
      * @return CLpIvObjective
      */
     public function setScoreMax($scoreMax)
@@ -197,7 +202,7 @@ class CLpIvObjective
     }
 
     /**
-     * Get scoreMax
+     * Get scoreMax.
      *
      * @return float
      */
@@ -207,9 +212,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set scoreMin
+     * Set scoreMin.
      *
      * @param float $scoreMin
+     *
      * @return CLpIvObjective
      */
     public function setScoreMin($scoreMin)
@@ -220,7 +226,7 @@ class CLpIvObjective
     }
 
     /**
-     * Get scoreMin
+     * Get scoreMin.
      *
      * @return float
      */
@@ -230,9 +236,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
+     *
      * @return CLpIvObjective
      */
     public function setStatus($status)
@@ -243,7 +250,7 @@ class CLpIvObjective
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return string
      */
@@ -253,9 +260,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLpIvObjective
      */
     public function setId($id)
@@ -266,9 +274,9 @@ class CLpIvObjective
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -276,9 +284,10 @@ class CLpIvObjective
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLpIvObjective
      */
     public function setCId($cId)
@@ -289,9 +298,9 @@ class CLpIvObjective
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.classes
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -12,9 +12,9 @@ api_block_anonymous_users();
 
 $this_section = SECTION_COURSES;
 
-$interbreadcrumb[] = array('url' =>'classes.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = ['url' => 'classes.php', 'name' => get_lang('Classes')];
 if (isset($_GET['id'])) {
-    $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Groups')];
 }
 
 $content = '';

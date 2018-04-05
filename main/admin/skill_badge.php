@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Show information about Mozilla OpenBadges
+ * Show information about Mozilla OpenBadges.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin.openbadges
  */
 $cidReset = true;
@@ -21,12 +23,12 @@ if (strcmp($backpack, $configBackpack) !== 0) {
     $backpack = $configBackpack;
 }
 
-$interbreadcrumb = array(
-    array(
+$interbreadcrumb = [
+    [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-        'name' => get_lang('Administration')
-    )
-);
+        'name' => get_lang('Administration'),
+    ],
+];
 
 $toolbar = Display::url(
     Display::return_icon(

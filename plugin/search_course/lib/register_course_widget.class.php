@@ -20,6 +20,7 @@ class RegisterCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function post($key, $default = '')
@@ -32,6 +33,7 @@ class RegisterCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function get($key, $default = '')
@@ -40,7 +42,6 @@ class RegisterCourseWidget
     }
 
     /**
-     *
      * @return RegisterCourseWidget
      */
     public static function factory()
@@ -48,7 +49,7 @@ class RegisterCourseWidget
         return new self();
     }
 
-    function run()
+    public function run()
     {
         return $this->action_subscribe_user();
     }
@@ -58,7 +59,7 @@ class RegisterCourseWidget
      *
      * @return bool
      */
-    function action_subscribe_user()
+    public function action_subscribe_user()
     {
         $action = self::get('action');
         if ($action != self::ACTION_SUBSCRIBE) {
@@ -91,10 +92,11 @@ class RegisterCourseWidget
      *
      * @param string $course_code
      * @param string $registration_code
-     * @param int $user_id
+     * @param int    $user_id
+     *
      * @return bool
      */
-    function subscribe_user($course_code, $registration_code = '', $user_id = null)
+    public function subscribe_user($course_code, $registration_code = '', $user_id = null)
     {
         $course = api_get_course_info($course_code);
         $course_regisration_code = $course['registration_code'];
@@ -107,7 +109,7 @@ class RegisterCourseWidget
             $user_id = $_user['user_id'];
         }
 
-        return (bool)CourseManager::add_user_to_course($user_id, $course_code);
+        return (bool) CourseManager::add_user_to_course($user_id, $course_code);
     }
 
     /**
@@ -116,7 +118,7 @@ class RegisterCourseWidget
      *
      * @param string $course_code
      */
-    function display_form($course_code)
+    public function display_form($course_code)
     {
         global $stok;
 

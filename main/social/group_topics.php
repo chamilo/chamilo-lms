@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -41,7 +41,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
     $group_role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
 
     if (api_is_platform_admin() ||
-        in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))
+        in_array($group_role, [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR])
     ) {
         $usergroup->delete_topic($group_id, $topic_id);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -179,9 +179,9 @@ $(document).ready(function() {
 </script>';
 
 $this_section = SECTION_SOCIAL;
-$interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name']));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Discussions'));
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name'])];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Discussions')];
 
 $social_left_content = SocialManager::show_social_menu('member_list', $group_id);
 $show_message = null;

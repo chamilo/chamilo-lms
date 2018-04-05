@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CRoleUser
+ * CRoleUser.
  *
  * @ORM\Table(
  *  name="c_role_user",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CRoleUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,7 +29,7 @@ class CRoleUser
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -43,23 +43,24 @@ class CRoleUser
     private $scope;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="role_id", type="integer")
      */
     private $roleId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
+     *
      * @return CRoleUser
      */
     public function setScope($scope)
@@ -70,7 +71,7 @@ class CRoleUser
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -80,9 +81,10 @@ class CRoleUser
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CRoleUser
      */
     public function setCId($cId)
@@ -93,9 +95,9 @@ class CRoleUser
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -103,9 +105,10 @@ class CRoleUser
     }
 
     /**
-     * Set roleId
+     * Set roleId.
      *
-     * @param integer $roleId
+     * @param int $roleId
+     *
      * @return CRoleUser
      */
     public function setRoleId($roleId)
@@ -116,9 +119,9 @@ class CRoleUser
     }
 
     /**
-     * Get roleId
+     * Get roleId.
      *
-     * @return integer
+     * @return int
      */
     public function getRoleId()
     {
@@ -126,9 +129,10 @@ class CRoleUser
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CRoleUser
      */
     public function setUserId($userId)
@@ -139,9 +143,9 @@ class CRoleUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {

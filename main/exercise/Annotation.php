@@ -3,8 +3,10 @@
 
 /**
  * Class Annotation
- * Allow instanciate an object of type HotSpot extending the class question
+ * Allow instanciate an object of type HotSpot extending the class question.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.
  */
 class Annotation extends Question
@@ -27,7 +29,7 @@ class Annotation extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createForm(&$form, $exercise)
     {
@@ -84,7 +86,7 @@ class Annotation extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processCreation($form, $exercise)
     {
@@ -96,11 +98,13 @@ class Annotation extends Question
             if ($result) {
                 $this->weighting = $form->getSubmitValue('weighting');
                 $this->save($exercise);
+
                 return true;
             }
 
             return false;
         }
+
         return false;
     }
 
@@ -112,7 +116,7 @@ class Annotation extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -121,7 +125,7 @@ class Annotation extends Question
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = [])
     {

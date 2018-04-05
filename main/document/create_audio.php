@@ -9,10 +9,10 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 8/January/2011
  * TODO:clean all file
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -81,10 +81,10 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace')
-    );
+        "name" => get_lang('GroupSpace'),
+    ];
     $group = GroupManager:: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
@@ -92,10 +92,10 @@ if (!empty($groupId)) {
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
-    "name" => get_lang('Documents')
-);
+    "name" => get_lang('Documents'),
+];
 
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -111,12 +111,11 @@ if (!($is_allowed_to_edit || $groupRights ||
     api_not_allowed(true);
 }
 
-
 /*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group)) {
+if (isset($group)) {
     $display_dir = explode('/', $dir);
     unset($display_dir[0]);
     unset($display_dir[1]);
@@ -132,7 +131,7 @@ for ($i = 0; $i < $array_len; $i++) {
     $url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
     //Max char 80
     $url_to_who = cut($dir_array[$i], 80);
-    $interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
+    $interbreadcrumb[] = ['url' => $url_dir, 'name' => $url_to_who];
     $dir_acum .= $dir_array[$i].'/';
 }
 
@@ -210,12 +209,12 @@ $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
-$options = $options_pedia = array();
+$options = $options_pedia = [];
 $selected_language = null;
 
 while ($row = Database::fetch_array($result_select)) {
     $options[$row['isocode']] = $row['original_name'].' ('.$row['english_name'].')';
-    if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))) {
+    if (in_array($row['isocode'], ['de', 'en', 'es', 'fr'])) {
         $options_pedia[$row['isocode']] = $row['original_name'].' ('.$row['english_name'].')';
     }
 }
@@ -223,15 +222,15 @@ while ($row = Database::fetch_array($result_select)) {
 if ($service == 'google') {
     $selected_language = api_get_language_isocode(); //lang default is the course language
 
-    $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', array('id' => 'form1'));
+    $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', ['id' => 'form1']);
     $form->addHeader(get_lang('HelpText2Audio'));
     $form->addElement('hidden', 'text2voice_mode', 'google');
     $form->addElement('hidden', 'id', $document_id);
     $form->addElement('text', 'title', get_lang('Title'));
     $form->addElement('select', 'lang', get_lang('Language'), $options);
-    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google'));
+    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), ['id' => 'textarea_google']);
     $form->addButtonSave(get_lang('SaveMP3'));
-    $defaults = array();
+    $defaults = [];
     $defaults['lang'] = $selected_language;
     $form->setDefaults($defaults);
     $form->display();
@@ -243,29 +242,28 @@ if ($service == 'pediaphon') {
     $options_pedia['defaultmessage'] = get_lang('FirstSelectALanguage');
     $options['defaultmessage'] = get_lang('FirstSelectALanguage');
 
-    $form = new FormValidator('form2', 'post', api_get_self().'?'.api_get_cidreq(), '', array('id' => 'form2'));
+    $form = new FormValidator('form2', 'post', api_get_self().'?'.api_get_cidreq(), '', ['id' => 'form2']);
     $form->addHeader(get_lang('HelpText2Audio'));
     $form->addElement('hidden', 'text2voice_mode', 'pediaphon');
     $form->addElement('hidden', 'id', $document_id);
     $form->addElement('text', 'title', get_lang('Title'));
-    $form->addSelect('lang', get_lang('Language'), $options_pedia, array('class' => 'lang'));
-    $form->addSelect('voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array('id' => 'voices'));
-    $speed_options = array();
+    $form->addSelect('lang', get_lang('Language'), $options_pedia, ['class' => 'lang']);
+    $form->addSelect('voices', get_lang('Voice'), [get_lang('FirstSelectALanguage')], ['id' => 'voices']);
+    $speed_options = [];
     $speed_options['1'] = get_lang('Normal');
     $speed_options['0.75'] = get_lang('GoFaster');
     $speed_options['0.8'] = get_lang('Fast');
     $speed_options['1.2'] = get_lang('Slow');
     $speed_options['1.6'] = get_lang('SlowDown');
 
-    $form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());
-    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon'));
+    $form->addElement('select', 'speed', get_lang('Speed'), $speed_options, []);
+    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), ['id' => 'textarea_pediaphon']);
     //echo Display::return_icon('info3.gif', get_lang('HelpPediaphon'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
     $form->addButtonSave(get_lang('SaveMP3'));
-    $defaults = array();
+    $defaults = [];
     $defaults['lang'] = $selected_language;
     $form->setDefaults($defaults);
-    $form->display();
-    ?>
+    $form->display(); ?>
     <!-- javascript form name form2 update voices -->
     <script>
         var langslist = document.form2.lang
@@ -304,11 +302,13 @@ if ($service == 'pediaphon') {
 Display:: display_footer();
 
 /**
- * This function save a post into a file mp3 from google services
+ * This function save a post into a file mp3 from google services.
  *
  * @param $filepath
  * @param $dir
+ *
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
+ *
  * @version january 2011, chamilo 1.8.8
  */
 function downloadMP3_google($filepath, $dir)
@@ -318,6 +318,7 @@ function downloadMP3_google($filepath, $dir)
     //security
     if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
         echo '<script>window.location.href="'.$location.'"</script>';
+
         return;
     }
 
@@ -409,11 +410,13 @@ function downloadMP3_google($filepath, $dir)
 }
 
 /**
- * This function save a post into a file mp3 from pediaphon services
+ * This function save a post into a file mp3 from pediaphon services.
  *
  * @param $filepath
  * @param $dir
+ *
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
+ *
  * @version january 2011, chamilo 1.8.8
  */
 function downloadMP3_pediaphon($filepath, $dir)
@@ -422,6 +425,7 @@ function downloadMP3_pediaphon($filepath, $dir)
     //security
     if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
         echo '<script>window.location.href="'.$location.'"</script>';
+
         return;
     }
     $_course = api_get_course_info();
@@ -471,15 +475,14 @@ function downloadMP3_pediaphon($filepath, $dir)
     }
 
     $data = "stimme=".$clean_voices."&inputtext=".$clean_text."&speed=".$clean_speed."&go=speak";
-    $opts = array(
-        'http' =>
-            array(
+    $opts = [
+        'http' => [
                 'method' => 'POST',
                 'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
                 "Content-Length: ".strlen($data)."\r\n",
-                'content' => $data
-            )
-    );
+                'content' => $data,
+            ],
+    ];
 
     $context = stream_context_create($opts);
     // Download the whole HTML page

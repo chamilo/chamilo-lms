@@ -3,8 +3,10 @@
 
 /**
  * Script opened in an iframe and containing the
- * learning path's navigation and progress bar
+ * learning path's navigation and progress bar.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -16,7 +18,8 @@ $htmlHeadXtra[] = '<script>
     var chamilo_xajax_handler = window.parent.oxajax;
 </script>';
 
-$lpItemId = isset($_REQUEST['lp_item']) ? intval($_REQUEST['lp_item']) : 0;
+$lpItemId = isset($_REQUEST['lp_item']) ? (int) $_REQUEST['lp_item'] : 0;
+$lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 
 if (!$lpItemId) {
     echo '';
@@ -25,29 +28,25 @@ if (!$lpItemId) {
 
 $progress_bar = '';
 $navigation_bar = '';
-$display_mode = '';
 $autostart = 'true';
 
-$myLP = learnpath::getLpFromSession(api_get_course_id(), '', '');
+$myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
 
 if ($myLP) {
-    $display_mode = $myLP->mode;
-    $scorm_css_header = true;
     $lp_theme_css = $myLP->get_theme();
     $my_style = api_get_visual_theme();
 
     // Setting up the CSS theme if exists
-    $mycourselptheme = null;
+    $myCourseLpTheme = null;
     if (api_get_setting('allow_course_theme') === 'true') {
-        $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
+        $myCourseLpTheme = api_get_course_setting('allow_learning_path_theme');
     }
 
-    if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+    if (!empty($lp_theme_css) && !empty($myCourseLpTheme) && $myCourseLpTheme != -1 && $myCourseLpTheme == 1) {
         global $lp_theme_css;
     } else {
         $lp_theme_css = $my_style;
     }
-
     $progress_bar = $myLP->getProgressBar();
     $navigation_bar = $myLP->get_navigation_bar();
     $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
@@ -63,5 +62,5 @@ session_write_close();
     });
 </script>
 <span>
-    <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;' ?>
+    <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;'; ?>
 </span>

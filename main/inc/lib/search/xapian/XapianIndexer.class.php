@@ -4,26 +4,26 @@
 /**
  * @package chamilo.include.search
  */
-
 require_once 'xapian.php';
 
 /**
- * Abstract helper class
+ * Abstract helper class.
+ *
  * @package chamilo.include.search
  */
 abstract class XapianIndexer
 {
-    /* XapianWritableDatabase */
-    protected $db;
-    /* IndexableChunk[] */
-    protected $chunks;
     /* XapianTermGenerator */
     public $indexer;
     /* XapianStem */
     public $stemmer;
+    /* XapianWritableDatabase */
+    protected $db;
+    /* IndexableChunk[] */
+    protected $chunks;
 
     /**
-     * Class contructor
+     * Class contructor.
      */
     public function __construct()
     {
@@ -32,16 +32,26 @@ abstract class XapianIndexer
     }
 
     /**
-     * Generates a list of languages Xapian manages
+     * Class destructor.
+     */
+    public function __destruct()
+    {
+        unset($this->db);
+        unset($this->stemmer);
+    }
+
+    /**
+     * Generates a list of languages Xapian manages.
      *
      * This method enables the definition of more matches between
      * Chamilo languages and Xapian languages (through hardcoding)
-     * @return  array  Array of languages codes -> Xapian languages
+     *
+     * @return array Array of languages codes -> Xapian languages
      */
-    public final function xapian_languages()
+    final public function xapian_languages()
     {
         /* http://xapian.org/docs/apidoc/html/classXapian_1_1Stem.html */
-        return array(
+        return [
             'none' => 'none', //don't stem terms
             'da' => 'danish',
             'nl' => 'dutch',
@@ -60,11 +70,11 @@ abstract class XapianIndexer
             'ru' => 'russian',
             'es' => 'spanish',
             'sv' => 'swedish',
-        );
+        ];
     }
 
     /**
-     * Connect to the database, and create it if it doesn't exist
+     * Connect to the database, and create it if it doesn't exist.
      */
     public function connectDb($path = null, $dbMode = null, $lang = 'english')
     {
@@ -98,8 +108,9 @@ abstract class XapianIndexer
     }
 
     /**
-     * Simple getter for the db attribute
-     * @return  object  The db attribute
+     * Simple getter for the db attribute.
+     *
+     * @return object The db attribute
      */
     public function getDb()
     {
@@ -107,9 +118,9 @@ abstract class XapianIndexer
     }
 
     /**
-     * Add this chunk to the chunk array attribute
+     * Add this chunk to the chunk array attribute.
+     *
      * @param  string  Chunk of text
-     * @return  void
      */
     public function addChunk($chunk)
     {
@@ -117,9 +128,9 @@ abstract class XapianIndexer
     }
 
     /**
-     * Actually index the current data
+     * Actually index the current data.
      *
-     * @return integer  New Xapian document ID or null upon failure
+     * @return int New Xapian document ID or null upon failure
      */
     public function index()
     {
@@ -157,10 +168,11 @@ abstract class XapianIndexer
     }
 
     /**
-     * Get a specific document from xapian db
+     * Get a specific document from xapian db.
      *
      * @param   int     did     Xapian::docid
-     * @return  mixed   XapianDocument, or false on error
+     *
+     * @return mixed XapianDocument, or false on error
      */
     public function get_document($did)
     {
@@ -173,13 +185,15 @@ abstract class XapianIndexer
             //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
+
         return $docid;
     }
 
     /**
-     * Get document data on a xapian document
+     * Get document data on a xapian document.
      *
      * @param XapianDocument $doc xapian document to push into the db
+     *
      * @return mixed xapian document data or FALSE if error
      */
     public function get_document_data($doc)
@@ -192,6 +206,7 @@ abstract class XapianIndexer
                 return false;
             }
             $doc_data = $doc->get_data();
+
             return $doc_data;
         } catch (Exception $e) {
             //echo Display::return_message($e->getMessage(), 'error');
@@ -200,13 +215,14 @@ abstract class XapianIndexer
     }
 
     /**
-     * Replace all terms of a document in xapian db
+     * Replace all terms of a document in xapian db.
      *
-     * @param   int     $did     Xapian::docid
-     * @param   array   $terms   New terms of the document
-     * @param   string  $prefix  Prefix used to categorize the doc
-     * (usually 'T' for title, 'A' for author)
-     * @return  boolean false on error
+     * @param int    $did    Xapian::docid
+     * @param array  $terms  New terms of the document
+     * @param string $prefix Prefix used to categorize the doc
+     *                       (usually 'T' for title, 'A' for author)
+     *
+     * @return bool false on error
      */
     public function update_terms($did, $terms, $prefix)
     {
@@ -226,7 +242,7 @@ abstract class XapianIndexer
     }
 
     /**
-     * Remove a document from xapian db
+     * Remove a document from xapian db.
      *
      * @param int   did     Xapian::docid
      */
@@ -235,7 +251,8 @@ abstract class XapianIndexer
         if ($this->db == null) {
             $this->connectDb();
         }
-        if (is_numeric($did) && $did > 0) {
+        $did = (int) $did;
+        if ($did > 0) {
             $doc = $this->get_document($did);
             if ($doc !== false) {
                 $this->db->delete_document($did);
@@ -245,11 +262,12 @@ abstract class XapianIndexer
     }
 
     /**
-     * Adds a term to the document specified
+     * Adds a term to the document specified.
      *
-     * @param string $term The term to add
-     * @param XapianDocument $doc The xapian document where to add the term
-     * @return  mixed   XapianDocument, or false on error
+     * @param string         $term The term to add
+     * @param XapianDocument $doc  The xapian document where to add the term
+     *
+     * @return mixed XapianDocument, or false on error
      */
     public function add_term_to_doc($term, $doc)
     {
@@ -260,16 +278,18 @@ abstract class XapianIndexer
             $doc->add_term($term);
         } catch (Exception $e) {
             echo Display::return_message($e->getMessage(), 'error');
+
             return 1;
         }
     }
 
     /**
-     * Remove a term from the document specified
+     * Remove a term from the document specified.
      *
-     * @param string $term The term to add
-     * @param XapianDocument $doc The xapian document where to add the term
-     * @return  mixed   XapianDocument, or false on error
+     * @param string         $term The term to add
+     * @param XapianDocument $doc  The xapian document where to add the term
+     *
+     * @return mixed XapianDocument, or false on error
      */
     public function remove_term_from_doc($term, $doc)
     {
@@ -280,15 +300,17 @@ abstract class XapianIndexer
             $doc->remove_term($term);
         } catch (Exception $e) {
             echo Display::return_message($e->getMessage(), 'error');
+
             return 1;
         }
     }
 
     /**
-     * Replace a document in the actual db
+     * Replace a document in the actual db.
      *
      * @param XapianDocument $doc xapian document to push into the db
-     * @param int $did xapian document id of the document to replace
+     * @param int            $did xapian document id of the document to replace
+     *
      * @return mixed
      */
     public function replace_document($doc, $did)
@@ -304,16 +326,8 @@ abstract class XapianIndexer
             $this->getDb()->flush();
         } catch (Exception $e) {
             echo Display::return_message($e->getMessage(), 'error');
+
             return 1;
         }
-    }
-
-    /**
-     * Class destructor
-     */
-    public function __destruct()
-    {
-        unset($this->db);
-        unset($this->stemmer);
     }
 }

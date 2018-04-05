@@ -2,16 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for adding a course description
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
-*/
+ * View (MVC patter) for adding a course description.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_description
+ */
 
 // protect a course script
 api_protect_course_script(true);
 
 // display categories
-$categories = array();
+$categories = [];
 foreach ($default_description_titles as $id => $title) {
     $categories[$id] = $title;
 }
@@ -20,8 +22,8 @@ $categories[ADD_BLOCK] = get_lang('NewBloc');
 $i = 1;
 echo '<div class="actions" style="margin-bottom:30px">';
 echo '<a href="index.php?'.api_get_cidreq().'">'.
-	Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ToolCourseDescription'), '', ICON_SIZE_MEDIUM).
-	'</a>';
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ToolCourseDescription'), '', ICON_SIZE_MEDIUM).
+    '</a>';
 ksort($categories);
 foreach ($categories as $id => $title) {
     if ($i == ADD_BLOCK) {
@@ -77,11 +79,11 @@ $form->addHtmlEditor(
     get_lang('Content'),
     true,
     false,
-    array(
+    [
         'ToolbarSet' => 'TrainingDescription',
         'Width' => '100%',
         'Height' => '200',
-    )
+    ]
 );
 $form->addButtonCreate(get_lang('Save'));
 

@@ -3,40 +3,25 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use Chamilo\CoreBundle\Controller\LegacyController;
-use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
-use Chamilo\CoreBundle\Framework\Container;
-use Doctrine\ORM\EntityManager;
-use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Chamilo\CourseBundle\Controller\ToolInterface;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Chamilo\CourseBundle\Event\CourseAccess;
-use Chamilo\CourseBundle\Event\SessionAccess;
 
 /**
- * Class LocaleListener
+ * Class LocaleListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class LocaleListener implements EventSubscriberInterface
 {
-    private $defaultLocale;
-
     /** @var ContainerInterface */
     protected $container;
+    private $defaultLocale;
 
     /**
      * @param string $defaultLocale
@@ -96,9 +81,9 @@ class LocaleListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 15)),
-        );
+            KernelEvents::REQUEST => [['onKernelRequest', 15]],
+        ];
     }
 }

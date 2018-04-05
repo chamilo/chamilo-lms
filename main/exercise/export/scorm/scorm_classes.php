@@ -8,7 +8,7 @@
  * First, the HTML part (which is the presentation), and second the JavaScript
  * part (the process).
  * The two bits are separate to allow for a one-big-javascript and a one-big-html
- * files to be built. Each export function thus returns an array of HTML+JS
+ * files to be built. Each export function thus returns an array of HTML+JS.
  *
  *
  * @author Claro Team <cvs@claroline.net>
@@ -20,14 +20,16 @@ class ScormQuestion extends Question
 {
     public $js_id;
     public $answer;
+
     /**
-     * Returns the HTML + JS flow corresponding to one question
+     * Returns the HTML + JS flow corresponding to one question.
      *
-     * @param int $questionId The question ID
+     * @param int  $questionId The question ID
      * @param bool $standalone (ie including XML tag, DTD declaration, etc)
-     * @param int  $js_id The JavaScript ID for this question.
-     * Due to the nature of interactions, we must have a natural sequence for
-     * questions in the generated JavaScript.
+     * @param int  $js_id      The JavaScript ID for this question.
+     *                         Due to the nature of interactions, we must have a natural sequence for
+     *                         questions in the generated JavaScript.
+     *
      * @return string|array
      */
     public static function export_question(
@@ -54,7 +56,7 @@ class ScormQuestion extends Question
     }
 
     /**
-     * Include the correct answer class and create answer
+     * Include the correct answer class and create answer.
      */
     public function setAnswer()
     {
@@ -122,8 +124,9 @@ class ScormQuestion extends Question
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function export()
     {
@@ -142,7 +145,7 @@ class ScormQuestion extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -150,7 +153,7 @@ class ScormQuestion extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -158,7 +161,7 @@ class ScormQuestion extends Question
     }
 
     /**
-     * Returns an HTML-formatted question
+     * Returns an HTML-formatted question.
      */
     public function getQuestionHTML()
     {
@@ -175,11 +178,12 @@ class ScormQuestion extends Question
             <i>'.$description.'</i>
             </td>
             </tr>';
+
         return $s;
     }
 
     /**
-     * Return the JavaScript code bound to the question
+     * Return the JavaScript code bound to the question.
      */
     public function getQuestionJS()
     {
@@ -207,13 +211,14 @@ class ScormQuestion extends Question
 
 /**
  * This class handles the export to SCORM of a multiple choice question
- * (be it single answer or multiple answers)
+ * (be it single answer or multiple answers).
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAnswerMultipleChoice extends Answer
 {
     /**
-     * Return HTML code for possible answers
+     * Return HTML code for possible answers.
      */
     public function export()
     {
@@ -316,14 +321,15 @@ class ScormAnswerMultipleChoice extends Answer
 }
 
 /**
- * This class handles the SCORM export of true/false questions
+ * This class handles the SCORM export of true/false questions.
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAnswerTrueFalse extends Answer
 {
     /**
      * Return the XML flow for the possible answers.
-     * That's one <response_lid>, containing several <flow_label>
+     * That's one <response_lid>, containing several <flow_label>.
      *
      * @author Amand Tihon <amand@alrj.org>
      */
@@ -332,7 +338,7 @@ class ScormAnswerTrueFalse extends Answer
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
         $identifier = 'question_'.$this->questionJSId.'_tf';
-        $identifier_true  = $identifier.'_true';
+        $identifier_true = $identifier.'_true';
         $identifier_false = $identifier.'_false';
         $html .=
             '<tr>
@@ -369,7 +375,8 @@ class ScormAnswerTrueFalse extends Answer
 }
 
 /**
- * This class handles the SCORM export of fill-in-the-blanks questions
+ * This class handles the SCORM export of fill-in-the-blanks questions.
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAnswerFillInBlanks extends Answer
@@ -445,13 +452,15 @@ class ScormAnswerFillInBlanks extends Answer
 }
 
 /**
- * This class handles the SCORM export of matching questions
+ * This class handles the SCORM export of matching questions.
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAnswerMatching extends Answer
 {
     /**
      * Export the question part as a matrix-choice, with only one possible answer per line.
+     *
      * @author Amand Tihon <amand@alrj.org>
      */
     public function export()
@@ -545,7 +554,8 @@ class ScormAnswerMatching extends Answer
 }
 
 /**
- * This class handles the SCORM export of free-answer questions
+ * This class handles the SCORM export of free-answer questions.
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAnswerFree extends Answer
@@ -555,7 +565,6 @@ class ScormAnswerFree extends Answer
      *
      * As a side effect, it stores two lists in the class :
      * the missing words and their respective weightings.
-     *
      */
     public function export()
     {
@@ -592,14 +601,16 @@ class ScormAnswerFree extends Answer
 }
 
 /**
- * This class handles the SCORM export of hotpot questions
+ * This class handles the SCORM export of hotpot questions.
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAnswerHotspot extends Answer
 {
     /**
-     * Returns the javascript code that goes with HotSpot exercises
-     * @return string    The JavaScript code
+     * Returns the javascript code that goes with HotSpot exercises.
+     *
+     * @return string The JavaScript code
      */
     public function get_js_header()
     {
@@ -635,7 +646,6 @@ class ScormAnswerHotspot extends Answer
      *
      * As a side effect, it stores two lists in the class :
      * the missing words and their respective weightings.
-     *
      */
     public function export()
     {
@@ -691,6 +701,7 @@ HTML;
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
  * Attached files are NOT exported.
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormAssessmentItem
@@ -703,7 +714,7 @@ class ScormAssessmentItem
     /**
      * Constructor.
      *
-     * @param ScormQuestion $question The Question object we want to export.
+     * @param ScormQuestion $question the Question object we want to export
      */
     public function __construct($question, $standalone = false)
     {
@@ -717,7 +728,6 @@ class ScormAssessmentItem
      * Start the XML flow.
      *
      * This opens the <item> block, with correct attributes.
-     *
      */
     public function start_page()
     {
@@ -733,7 +743,6 @@ class ScormAssessmentItem
 
     /**
      * End the XML flow, closing the </item> tag.
-     *
      */
     public function end_page()
     {
@@ -745,7 +754,7 @@ class ScormAssessmentItem
     }
 
     /**
-     * Start document header
+     * Start document header.
      */
     public function start_header()
     {
@@ -757,7 +766,7 @@ class ScormAssessmentItem
     }
 
     /**
-     * Print CSS inclusion
+     * Print CSS inclusion.
      */
     public function css()
     {
@@ -777,7 +786,7 @@ class ScormAssessmentItem
     }
 
     /**
-     * End document header
+     * End document header.
      */
     public function end_header()
     {
@@ -787,9 +796,9 @@ class ScormAssessmentItem
 
         return '';
     }
+
     /**
-     * Start the itemBody
-     *
+     * Start the itemBody.
      */
     public function start_js()
     {
@@ -797,11 +806,12 @@ class ScormAssessmentItem
         if ($this->standalone) {
             return '<script>';
         }
+
         return $js;
     }
 
     /**
-     * Common JS functions
+     * Common JS functions.
      */
     public function common_js()
     {
@@ -850,12 +860,12 @@ class ScormAssessmentItem
         if ($this->standalone) {
             return $js."\n";
         }
+
         return '';
     }
 
     /**
      * End the itemBody part.
-     *
      */
     public function end_js()
     {
@@ -867,8 +877,7 @@ class ScormAssessmentItem
     }
 
     /**
-     * Start the itemBody
-     *
+     * Start the itemBody.
      */
     public function start_body()
     {
@@ -881,7 +890,6 @@ class ScormAssessmentItem
 
     /**
      * End the itemBody part.
-     *
      */
     public function end_body()
     {
@@ -895,24 +903,26 @@ class ScormAssessmentItem
     /**
      * Export the question as a SCORM Item.
      * This is a default behaviour, some classes may want to override this.
-     * @return string|array A string, the XML flow for an Item.
+     *
+     * @return string|array a string, the XML flow for an Item
      */
     public function export()
     {
         list($js, $html) = $this->question->export();
         if ($this->standalone) {
             $res = $this->start_page()
-                . $this->start_header()
-                . $this->css()
-                . $this->start_js()
-                . $this->common_js()
-                . $js
-                . $this->end_js()
-                . $this->end_header()
-                . $this->start_body()
-                . $html
-                . $this->end_body()
-                . $this->end_page();
+                .$this->start_header()
+                .$this->css()
+                .$this->start_js()
+                .$this->common_js()
+                .$js
+                .$this->end_js()
+                .$this->end_header()
+                .$this->start_body()
+                .$html
+                .$this->end_body()
+                .$this->end_page();
+
             return $res;
         } else {
             return [$js, $html];
@@ -930,6 +940,7 @@ class ScormAssessmentItem
  *   - max_attempts
  *   - show_answer
  *   - anonymous_attempts
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormSection
@@ -939,7 +950,9 @@ class ScormSection
 
     /**
      * Constructor.
+     *
      * @param Exercise $exe The Exercise instance to export
+     *
      * @author Amand Tihon <amand@alrj.org>
      */
     public function __construct($exe)
@@ -948,11 +961,12 @@ class ScormSection
     }
 
     /**
-     * Send a complete exercise in SCORM format, from its ID
+     * Send a complete exercise in SCORM format, from its ID.
      *
-     * @param Exercise $exercise The exercise to export
-     * @param boolean $standalone Wether it should include XML tag and DTD line.
-     * @return string XML as a string, or an empty string if there's no exercise with given ID.
+     * @param Exercise $exercise   The exercise to export
+     * @param bool     $standalone wether it should include XML tag and DTD line
+     *
+     * @return string XML as a string, or an empty string if there's no exercise with given ID
      */
     public static function export_exercise_to_scorm(
         Exercise $exercise,
@@ -968,7 +982,6 @@ class ScormSection
      * Start the XML flow.
      *
      * This opens the <item> block, with correct attributes.
-     *
      */
     public function start_page()
     {
@@ -980,7 +993,6 @@ class ScormSection
 
     /**
      * End the XML flow, closing the </item> tag.
-     *
      */
     public function end_page()
     {
@@ -988,7 +1000,7 @@ class ScormSection
     }
 
     /**
-     * Start document header
+     * Start document header.
      */
     public function start_header()
     {
@@ -996,32 +1008,7 @@ class ScormSection
     }
 
     /**
-     * Print CSS inclusion
-     */
-    private function css()
-    {
-        return '';
-    }
-
-    /**
-     * End document header
-     */
-    private function end_header()
-    {
-        return '</head>';
-    }
-
-    /**
-     * Start the itemBody
-     *
-     */
-    private function start_js()
-    {
-        return '<script>';
-    }
-
-    /**
-     * Common JS functions
+     * Common JS functions.
      */
     public function common_js()
     {
@@ -1076,12 +1063,12 @@ class ScormSection
 
         $js .= '';
         $js .= 'addEvent(window,\'load\',addListeners,false);'."\n";
+
         return $js."\n";
     }
 
     /**
      * End the itemBody part.
-     *
      */
     public function end_js()
     {
@@ -1089,8 +1076,7 @@ class ScormSection
     }
 
     /**
-     * Start the itemBody
-     *
+     * Start the itemBody.
      */
     public function start_body()
     {
@@ -1102,7 +1088,6 @@ class ScormSection
 
     /**
      * End the itemBody part.
-     *
      */
     public function end_body()
     {
@@ -1115,7 +1100,8 @@ class ScormSection
      * This is a default behaviour, some classes may want to override this.
      *
      * @param $standalone: Boolean stating if it should be exported as a stand-alone question
-     * @return string string, the XML flow for an Item.
+     *
+     * @return string string, the XML flow for an Item
      */
     public function export()
     {
@@ -1124,7 +1110,7 @@ class ScormSection
         $head = '';
         if ($this->standalone) {
             $head = '<?xml version = "1.0" encoding = "'.$charset.'" standalone = "no"?>'."\n"
-                . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">'."\n";
+                .'<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">'."\n";
         }
 
         list($js, $html) = $this->export_questions();
@@ -1146,19 +1132,8 @@ class ScormSection
     }
 
     /**
-     * @return string
-     */
-    private function globalAssets()
-    {
-        $assets = '<script type="text/javascript" src="assets/jquery/jquery.min.js"></script>';
-        $assets .= '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
-        $assets .= '<link href="assets/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
-
-        return $assets;
-    }
-
-    /**
-     * Export the questions, as a succession of <items>
+     * Export the questions, as a succession of <items>.
+     *
      * @author Amand Tihon <amand@alrj.org>
      */
     public function export_questions()
@@ -1173,5 +1148,41 @@ class ScormSection
         }
 
         return [$js, $html];
+    }
+
+    /**
+     * Print CSS inclusion.
+     */
+    private function css()
+    {
+        return '';
+    }
+
+    /**
+     * End document header.
+     */
+    private function end_header()
+    {
+        return '</head>';
+    }
+
+    /**
+     * Start the itemBody.
+     */
+    private function start_js()
+    {
+        return '<script>';
+    }
+
+    /**
+     * @return string
+     */
+    private function globalAssets()
+    {
+        $assets = '<script type="text/javascript" src="assets/jquery/jquery.min.js"></script>';
+        $assets .= '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
+        $assets .= '<link href="assets/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
+
+        return $assets;
     }
 }

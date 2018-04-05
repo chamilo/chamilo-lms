@@ -6,5 +6,3 @@ $strings['plugin_comment'] = "Care system (Zorgdossier) [CS]
     Competence based evaluation system (Competentie evaluatie systeem) [CBES]";
 $strings['tool_enable'] = 'Enable plugin';
 $strings['CareDetailView'] = 'Care detail view';
-
-

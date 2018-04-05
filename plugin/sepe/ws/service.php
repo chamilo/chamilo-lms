@@ -23,28 +23,19 @@ $wsdl = api_get_path(SYS_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
 $serviceUrl = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/service.php';
 
 /**
- * Class CustomServer
+ * Class CustomServer.
  */
 class CustomServer extends Zend\Soap\Server
 {
     /**
-     * @inheritdoc
-     **/
+     * {@inheritdoc}
+     */
     public function __construct($wsdl = null, array $options = null)
     {
         parent::__construct($wsdl, $options);
 
         // Response of handle will always be returned
         $this->setReturnResponse(true);
-    }
-
-    private function addNamespaceToTag($response, $tag, $namespace)
-    {
-        return str_replace(
-            $tag,
-            $namespace.":".$tag,
-            $response
-        );
     }
 
     public function handle($request = null)
@@ -78,11 +69,19 @@ class CustomServer extends Zend\Soap\Server
             $response
         );
 
-
         //$response = file_get_contents('/tmp/log4.xml');
         header('Content-Length:'.strlen($response));
         echo $response;
         exit;
+    }
+
+    private function addNamespaceToTag($response, $tag, $namespace)
+    {
+        return str_replace(
+            $tag,
+            $namespace.":".$tag,
+            $response
+        );
     }
 }
 
@@ -107,7 +106,7 @@ function authenticate($WSUser, $WSKey)
             return false;
         }
     } else {
-         return false;
+        return false;
     }
 }
 
@@ -123,9 +122,9 @@ if (!empty($post)) {
     if (!empty($WSUser) && !empty($WSKey)) {
         if (authenticate($WSUser, $WSKey)) {
             // pointing to the current file here
-            $options = array(
-                'soap_version' => SOAP_1_1
-            );
+            $options = [
+                'soap_version' => SOAP_1_1,
+            ];
             $soap = new CustomServer($wsdl, $options);
             $soap->setObject(new Sepe());
 

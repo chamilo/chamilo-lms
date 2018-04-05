@@ -11,14 +11,14 @@ use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class CourseRepository
- * The functions inside this class must return an instance of QueryBuilder
+ * The functions inside this class must return an instance of QueryBuilder.
  *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CourseRepository extends EntityRepository
 {
     /**
-     * Get all users that are registered in the course. No matter the status
+     * Get all users that are registered in the course. No matter the status.
      *
      * @param Course $course
      *
@@ -63,7 +63,7 @@ class CourseRepository extends EntityRepository
     }
 
     /**
-     * Gets students subscribed in the course
+     * Gets students subscribed in the course.
      *
      * @param Course $course
      *
@@ -75,7 +75,8 @@ class CourseRepository extends EntityRepository
     }
 
     /**
-     * Gets the students subscribed in the course
+     * Gets the students subscribed in the course.
+     *
      * @param Course $course
      *
      * @return QueryBuilder
@@ -88,8 +89,8 @@ class CourseRepository extends EntityRepository
     }
 
     /**
+     * Gets the teachers subscribed in the course.
      *
-     * Gets the teachers subscribed in the course
      * @param Course $course
      *
      * @return QueryBuilder
@@ -101,7 +102,8 @@ class CourseRepository extends EntityRepository
 
     /**
      * @param Course $course
-     * @param int $status use legacy chamilo constants COURSEMANAGER|STUDENT
+     * @param int    $status use legacy chamilo constants COURSEMANAGER|STUDENT
+     *
      * @return QueryBuilder
      */
     public function getSubscribedUsersByStatus(Course $course, $status)

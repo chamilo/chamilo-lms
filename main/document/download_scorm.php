@@ -8,7 +8,6 @@ use ChamiloSession as Session;
  *
  * @package chamilo.document
  */
-
 session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -38,7 +37,7 @@ $doc_url = isset($_GET['doc_url']) ? $_GET['doc_url'] : null;
 $doc_url = str_replace('///', '&', $doc_url);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
-$doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
+$doc_url = str_replace(['../', '\\..', '\\0', '..\\'], ['', '', '', ''], $doc_url); //echo $doc_url;
 
 if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
     $doc_url = '';

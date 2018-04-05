@@ -3,62 +3,65 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
-
 /**
  * Class Resource
  * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
  * Documents,...) should be derived.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>s
+ *
  * @package  chamilo.backup
+ *
  * @todo Use the globally defined constants voor tools and remove the RESOURCE_*
  * constants
  */
 class Resource
 {
     /**
-     * The id from this resource in the source course
+     * The id from this resource in the source course.
      */
     public $source_id;
 
     /**
-     * The id from this resource in the destination course
+     * The id from this resource in the destination course.
      */
     public $destination_id;
 
     /**
-     * The type of this resource
+     * The type of this resource.
      */
     public $type;
 
     /**
-     * Linked resources
+     * Linked resources.
      */
     public $linked_resources;
 
     /**
-     * The properties of this resource
+     * The properties of this resource.
      */
     public $item_properties;
 
     public $obj = null;
 
     /**
-     * Create a new Resource
-     * @param int $id The id of this resource in the source course.
-     * @param integer $type The type of this resource.
+     * Create a new Resource.
+     *
+     * @param int $id   the id of this resource in the source course
+     * @param int $type the type of this resource
      */
     public function __construct($id, $type)
     {
         $this->source_id = $id;
         $this->type = $type;
         $this->destination_id = -1;
-        $this->linked_resources = array();
-        $this->item_properties = array();
+        $this->linked_resources = [];
+        $this->item_properties = [];
     }
 
     /**
-     * Add linked resource
+     * Add linked resource.
      */
     public function add_linked_resource($type, $id)
     {
@@ -66,7 +69,7 @@ class Resource
     }
 
     /**
-     * Get linked resources
+     * Get linked resources.
      */
     public function get_linked_resources()
     {
@@ -74,9 +77,9 @@ class Resource
     }
 
     /**
-     * Checks if this resource links to a given resource
+     * Checks if this resource links to a given resource.
      */
-    public function links_to(& $resource)
+    public function links_to(&$resource)
     {
         self::setClassType($resource);
         $type = $resource->get_type();
@@ -88,12 +91,14 @@ class Resource
                 $this->linked_resources[$type]
             );
         }
+
         return false;
     }
 
     /**
      * Returns the id of this resource.
-     * @return int The id of this resource in the source course.
+     *
+     * @return int the id of this resource in the source course
      */
     public function get_id()
     {
@@ -101,8 +106,9 @@ class Resource
     }
 
     /**
-     * Resturns the type of this resource
-     * @return integer The type.
+     * Resturns the type of this resource.
+     *
+     * @return int the type
      */
     public function get_type()
     {
@@ -112,12 +118,14 @@ class Resource
     /**
      * Get the constant which defines the tool of this resource. This is
      * used in the item_properties table.
+     *
      * @param bool $for_item_property_table (optional)	Added by Ivan,
-     * 29-AUG-2009: A parameter for resolving differencies between defined TOOL_*
-     * constants and hardcoded strings that are stored in the database.
-     * Example: The constant TOOL_THREAD is defined in the main_api.lib.php
-     * with the value 'thread', but the "Forums" tool records in the field 'tool'
-     * in the item property table the hardcoded value 'forum_thread'.
+     *                                      29-AUG-2009: A parameter for resolving differencies between defined TOOL_*
+     *                                      constants and hardcoded strings that are stored in the database.
+     *                                      Example: The constant TOOL_THREAD is defined in the main_api.lib.php
+     *                                      with the value 'thread', but the "Forums" tool records in the field 'tool'
+     *                                      in the item property table the hardcoded value 'forum_thread'.
+     *
      * @todo once the RESOURCE_* constants are replaced by the globally
      * defined TOOL_* constants, this function will be replaced by get_type()
      */
@@ -144,6 +152,7 @@ class Resource
                 if ($for_item_property_table) {
                     return 'forum_thread'; // Ivan, 29-AUG-2009: A hardcoded value that the "Forums" tool stores in the item property table.
                 }
+
                 return TOOL_THREAD;
             case RESOURCE_FORUMPOST:
                 return TOOL_POST;
@@ -181,8 +190,9 @@ class Resource
     }
 
     /**
-     * Set the destination id
-     * @param int $id The id of this resource in the destination course.
+     * Set the destination id.
+     *
+     * @param int $id the id of this resource in the destination course
      */
     public function set_new_id($id)
     {
@@ -191,6 +201,7 @@ class Resource
 
     /**
      * Check if this resource is allready restored in the destination course.
+     *
      * @return bool true if allready restored (i.e. destination_id is set).
      */
     public function is_restored()
@@ -199,7 +210,7 @@ class Resource
     }
 
     /**
-     * Show this resource
+     * Show this resource.
      */
     public function show()
     {
@@ -208,9 +219,9 @@ class Resource
 
     /**
      * Fix objects coming from 1.9.x to 1.10.x
-     * Example class Event to CalendarEvent
+     * Example class Event to CalendarEvent.
      *
-     * @param Resource $resource
+     * @param resource $resource
      */
     public static function setClassType(&$resource)
     {

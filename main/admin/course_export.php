@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This tool allows platform admins to export courses to CSV file
+ * This tool allows platform admins to export courses to CSV file.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,13 +14,13 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $tool_name = get_lang('ExportCourses');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 
 $course_list = CourseManager::get_courses_list();
 $formSent = null;
-$courses = $selected_courses = array();
+$courses = $selected_courses = [];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
@@ -53,7 +53,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             'Teacher',
             'Language',
             'Users',
-            'OtherTeachers'
+            'OtherTeachers',
         ];
 
         $dataToExport = [];
@@ -152,7 +152,7 @@ if (!empty($course_list)) {
 
 $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
 $form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
-$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
+$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
 
 $form->setDefaults(['select_type' => '1', 'file_type' => 'csv']);
 

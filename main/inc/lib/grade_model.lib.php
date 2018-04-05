@@ -2,16 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class GradeModel
+ * Class GradeModel.
+ *
  * @package chamilo.library
  */
 class GradeModel extends Model
 {
     public $table;
-    public $columns = array('id', 'name', 'description');
+    public $columns = ['id', 'name', 'description'];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -24,12 +25,12 @@ class GradeModel extends Model
      *
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'name ASC')
+            ['where' => $where_conditions, 'order' => 'name ASC']
         );
     }
 
@@ -41,7 +42,7 @@ class GradeModel extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
 
@@ -49,27 +50,29 @@ class GradeModel extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
-	public function display()
+    public function display()
     {
-		// action links
-		echo '<div class="actions" style="margin-bottom:20px">';
+        // action links
+        echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="grade_models.php">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.
+        echo '<a href="'.api_get_self().'?action=add">'.
                 Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
-		echo '</div>';
+        echo '</div>';
         echo Display::grid_html('grade_model');
-	}
+    }
 
     /**
-     * Returns a Form validator Obj
-     * @todo the form should be auto generated
-     * @param   string  $url
-     * @param   string  $action add, edit
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator form validator obj
+     * @todo the form should be auto generated
+     *
+     * @param string $url
+     * @param string $action add, edit
+     *
+     * @return FormValidator form validator obj
      */
     public function return_form($url, $action)
     {
@@ -91,11 +94,11 @@ class GradeModel extends Model
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarSet' => 'careers',
                 'Width' => '100%',
-                'Height' => '250'
-            )
+                'Height' => '250',
+            ]
         );
 
         $form->addLabel(get_lang('Components'), '');
@@ -118,10 +121,9 @@ class GradeModel extends Model
 
         $form->addElement('hidden', 'maxvalue', '100');
         $form->addElement('hidden', 'minvalue', '0');
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
 
-        $component_array = array();
-
+        $component_array = [];
 
         for ($i = 0; $i <= $max; $i++) {
             $counter = $i;
@@ -145,10 +147,10 @@ class GradeModel extends Model
 
             $template_title =
             '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
-             <a href="javascript:plusItem(' . ($counter + 1).')">
+             <a href="javascript:plusItem('.($counter + 1).')">
                 '.Display::return_icon('add.png', get_lang('Add'), ['id' => 'plus-'.($counter + 1), 'style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none')]).'
             </a>
-            <a href="javascript:minItem(' . ($counter).')">
+            <a href="javascript:minItem('.($counter).')">
                 '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-'.($counter), 'style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none')]).'
             </a>
             </div></div>';
@@ -162,8 +164,8 @@ class GradeModel extends Model
                 $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
             }
             $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
-            $form->addRule(array('components['.$i.'][percentage]', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
-            $form->addRule(array('components['.$i.'][percentage]', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
+            $form->addRule(['components['.$i.'][percentage]', 'maxvalue'], get_lang('Over100'), 'compare', '<=');
+            $form->addRule(['components['.$i.'][percentage]', 'minvalue'], get_lang('UnderMin'), 'compare', '>=');
 
             $component_array[] = 'components['.$i.'][percentage]';
         }
@@ -198,20 +200,23 @@ class GradeModel extends Model
 
     /**
      * @param $id
+     *
      * @return array|null
      */
     public function get_components($id)
     {
         $obj = new GradeModelComponents();
         if (!empty($id)) {
-            return $obj->get_all(array('where'=> array('grade_model_id = ?' => $id)));
+            return $obj->get_all(['where' => ['grade_model_id = ?' => $id]]);
         }
+
         return null;
     }
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool  $show_query
+     *
      * @return bool
      */
     public function save($params, $show_query = false)
@@ -256,13 +261,14 @@ class GradeModel extends Model
      */
     public function delete($id)
     {
-	    parent::delete($id);
+        parent::delete($id);
     }
 
     /**
      * @param $form
      * @param string $name
-     * @param null $default_value
+     * @param null   $default_value
+     *
      * @return bool
      */
     public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
@@ -273,7 +279,7 @@ class GradeModel extends Model
 
         if (api_get_setting('teachers_can_change_grade_model_settings') === 'true' || api_is_platform_admin()) {
             $grade_models = $this->get_all();
-            $grade_model_options = array('-1' => get_lang('None'));
+            $grade_model_options = ['-1' => get_lang('None')];
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
                     $grade_model_options[$item['id']] = $item['name'];
@@ -293,37 +299,38 @@ class GradeModel extends Model
             }
 
             if (!empty($default) && $default != '-1') {
-                $form->setDefaults(array($name => $default));
+                $form->setDefaults([$name => $default]);
             }
         }
     }
 }
 
 /**
- * Class GradeModelComponents
+ * Class GradeModelComponents.
  */
 class GradeModelComponents extends Model
 {
     public $table;
-    public $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id');
+    public $columns = ['id', 'title', 'percentage', 'acronym', 'grade_model_id'];
 
     /**
      * GradeModelComponents constructor.
      */
-	public function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this->table = Database::get_main_table(TABLE_GRADE_MODEL_COMPONENTS);
-	}
+    }
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool  $show_query
+     *
      * @return bool
      */
     public function save($params, $show_query = false)
     {
-	    $id = parent::save($params, $show_query);
+        $id = parent::save($params, $show_query);
 
         return $id;
     }

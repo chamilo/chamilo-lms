@@ -3,16 +3,17 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Chamilo: cleanup, refactoring, security improvements
+ *
  * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
  *
  * @todo checking if the additional emails are valid (or add a rule for this)
  * @todo check if the mailtext contains the **link** part, if not, add the link to the end
  * @todo add rules: title and text cannot be empty
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -43,20 +44,20 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList')
-);
+    'name' => get_lang('SurveyList'),
+];
 if (api_is_course_admin()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => $urlname,
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => $urlname,
-    );
+    ];
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -82,7 +83,7 @@ if (Database::num_rows($result) > 1) {
 
 // Invited / answered message
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
-    $message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
+    $message = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
         $survey_data['answered'].'</a> ';
     $message .= get_lang('HaveAnswered').' ';
     $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
@@ -106,22 +107,22 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
     '',
     api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname'
 );
-$possible_users = array();
-foreach ($complete_user_list as & $user) {
+$possible_users = [];
+foreach ($complete_user_list as &$user) {
     $possible_users[$user['user_id']] = api_get_person_name(
         $user['firstname'],
         $user['lastname']
     );
 }
 
-CourseManager::addUserGroupMultiSelect($form, array());
+CourseManager::addUserGroupMultiSelect($form, []);
 
 // Additional users
 $form->addElement(
     'textarea',
     'additional_users',
-    array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')),
-    array('rows' => 5)
+    [get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')],
+    ['rows' => 5]
 );
 
 $form->addElement('html', '<div id="check_mail">');
@@ -134,9 +135,9 @@ $form->addText('mail_title', get_lang('MailTitle'), false);
 // The text of the mail
 $form->addHtmlEditor(
     'mail_text',
-    array(get_lang('MailText'), get_lang('UseLinkSyntax')),
+    [get_lang('MailText'), get_lang('UseLinkSyntax')],
     false,
-    array('ToolbarSet' => 'Survey', 'Height' => '150')
+    ['ToolbarSet' => 'Survey', 'Height' => '150']
 );
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
@@ -192,6 +193,7 @@ if ($form->validate()) {
             $defaults['send_mail'] = 1;
             $form->setDefaults($defaults);
             $form->display();
+
             return;
         }
     }
@@ -236,7 +238,7 @@ if ($form->validate()) {
     $total_invited = SurveyUtil::update_count_invited($survey_data['code']);
     $total_count = $count_course_users + $counter_additional_users;
     if ($total_invited > 0) {
-        $message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.
+        $message = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.
             $survey_data['answered'].'</a> ';
         $message .= get_lang('HaveAnswered').' ';
         $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.

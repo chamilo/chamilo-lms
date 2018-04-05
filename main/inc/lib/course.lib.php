@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use ChamiloSession as Session;
 
 /**
- * Class CourseManager
+ * Class CourseManager.
  *
  * This is the course library for Chamilo.
  *
@@ -28,13 +28,15 @@ class CourseManager
      * list (userportal), footer, etc */
     const USER_SEPARATOR = ' |';
     const COURSE_FIELD_TYPE_CHECKBOX = 10;
-    public $columns = array();
+    public $columns = [];
 
     /**
-     * Creates a course
-     * @param array $params columns in the main.course table
-     * @param int $authorId
-     * @return  mixed  false if the course was not created, array with the course info
+     * Creates a course.
+     *
+     * @param array $params   columns in the main.course table
+     * @param int   $authorId
+     *
+     * @return mixed false if the course was not created, array with the course info
      */
     public static function create_course($params, $authorId = 0)
     {
@@ -110,10 +112,14 @@ class CourseManager
     }
 
     /**
-     * Returns all the information of a given course code
+     * Returns all the information of a given course code.
+     *
      * @param string $course_code , the course code
+     *
      * @return array with all the fields of the course table
+     *
      * @deprecated Use api_get_course_info() instead
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @assert ('') === false
      */
@@ -122,21 +128,23 @@ class CourseManager
         return Database::fetch_array(
             Database::query(
                 "SELECT *, id as real_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code='" . Database::escape_string($course_code)."'"), 'ASSOC'
+                WHERE code='".Database::escape_string($course_code)."'"), 'ASSOC'
         );
     }
 
     /**
-     * Returns a list of courses. Should work with quickform syntax
-     * @param    integer $from Offset (from the 7th = '6'). Optional.
-     * @param    integer $howmany Number of results we want. Optional.
-     * @param    int $orderby The column we want to order it by. Optional, defaults to first column.
-     * @param    string $orderdirection The direction of the order (ASC or DESC). Optional, defaults to ASC.
-     * @param    int $visibility The visibility of the course, or all by default.
-     * @param    string $startwith If defined, only return results for which the course *title* begins with this string
-     * @param    string $urlId The Access URL ID, if using multiple URLs
-     * @param    bool $alsoSearchCode An extension option to indicate that we also want to search for course codes (not *only* titles)
-     * @param    array $conditionsLike
+     * Returns a list of courses. Should work with quickform syntax.
+     *
+     * @param int    $from           Offset (from the 7th = '6'). Optional.
+     * @param int    $howmany        Number of results we want. Optional.
+     * @param int    $orderby        The column we want to order it by. Optional, defaults to first column.
+     * @param string $orderdirection The direction of the order (ASC or DESC). Optional, defaults to ASC.
+     * @param int    $visibility     the visibility of the course, or all by default
+     * @param string $startwith      If defined, only return results for which the course *title* begins with this string
+     * @param string $urlId          The Access URL ID, if using multiple URLs
+     * @param bool   $alsoSearchCode An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param array  $conditionsLike
+     *
      * @return array
      */
     public static function get_courses_list(
@@ -148,7 +156,7 @@ class CourseManager
         $startwith = '',
         $urlId = null,
         $alsoSearchCode = false,
-        $conditionsLike = array()
+        $conditionsLike = []
     ) {
         $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
 
@@ -178,14 +186,14 @@ class CourseManager
             $sql .= " AND access_url_id= $urlId";
         }
 
-        $allowedFields = array(
+        $allowedFields = [
             'title',
-            'code'
-        );
+            'code',
+        ];
 
         if (count($conditionsLike) > 0) {
             $sql .= ' AND ';
-            $temp_conditions = array();
+            $temp_conditions = [];
             foreach ($conditionsLike as $field => $value) {
                 if (!in_array($field, $allowedFields)) {
                     continue;
@@ -211,7 +219,7 @@ class CourseManager
             $sql .= " ORDER BY 1 ";
         }
 
-        if (!in_array($orderdirection, array('ASC', 'DESC'))) {
+        if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
             $sql .= ($orderdirection == 'ASC' ? 'ASC' : 'DESC');
@@ -242,8 +250,9 @@ class CourseManager
 
     /**
      * Returns the status of a user in a course, which is COURSEMANAGER or STUDENT.
-     * @param   int $userId
-     * @param   int $courseId
+     *
+     * @param int $userId
+     * @param int $courseId
      *
      * @return int|bool the status of the user in that course (or false if the user is not in that course)
      */
@@ -322,7 +331,7 @@ class CourseManager
         $result = Database::fetch_array(
             Database::query("
                 SELECT is_tutor
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE
                     c_id = '".Database::escape_string($courseId)."' AND
                     user_id = ".intval($user_id)
@@ -333,13 +342,12 @@ class CourseManager
     }
 
     /**
-     * Unsubscribe one or more users from a course
+     * Unsubscribe one or more users from a course.
      *
      * @param   mixed   user_id or an array with user ids
      * @param   string  course code
      * @param   int     session id
      * @assert ('', '') === false
-     *
      */
     public static function unsubscribe_user($user_id, $course_code, $session_id = 0)
     {
@@ -347,7 +355,7 @@ class CourseManager
             return;
         }
         if (!is_array($user_id)) {
-            $user_id = array($user_id);
+            $user_id = [$user_id];
         }
 
         if (count($user_id) == 0) {
@@ -360,11 +368,11 @@ class CourseManager
             $session_id = api_get_session_id();
         }
 
-        $userList = array();
+        $userList = [];
 
         // Cleaning the $user_id variable
         if (is_array($user_id)) {
-            $new_user_id_list = array();
+            $new_user_id_list = [];
             foreach ($user_id as $my_user_id) {
                 $new_user_id_list[] = intval($my_user_id);
             }
@@ -431,8 +439,8 @@ class CourseManager
             // Delete in table session_rel_course_rel_user
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                     WHERE
-                        session_id ='" . $session_id."' AND
-                        c_id = '" . $course_id."' AND
+                        session_id ='".$session_id."' AND
+                        c_id = '".$course_id."' AND
                         user_id IN ($user_ids)";
             Database::query($sql);
 
@@ -446,7 +454,7 @@ class CourseManager
                     // Delete in table session_rel_user
                     $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
                             WHERE
-                                session_id ='" . $session_id."' AND
+                                session_id ='".$session_id."' AND
                                 user_id = '$uid' AND
                                 relation_type<>".SESSION_RELATION_TYPE_RRHH."";
                     Database::query($sql);
@@ -455,7 +463,7 @@ class CourseManager
 
             // Update the table session
             $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    WHERE session_id = '" . $session_id."' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                    WHERE session_id = '".$session_id."' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
             $row = Database::fetch_array(Database::query($sql));
             $count = $row[0];
             // number of users by session
@@ -521,13 +529,15 @@ class CourseManager
     /**
      * Subscribe a user to a course. No checks are performed here to see if
      * course subscription is allowed.
-     * @param   int     $user_id
-     * @param   string  $course_code
-     * @param   int     $status (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
-     * @param   int $session_id
-     * @param   int $userCourseCategoryId
      *
-     * @return  bool    True on success, false on failure
+     * @param int    $user_id
+     * @param string $course_code
+     * @param int    $status               (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param int    $session_id
+     * @param int    $userCourseCategoryId
+     *
+     * @return bool True on success, false on failure
+     *
      * @see add_user_to_course
      * @assert ('', '') === false
      */
@@ -583,7 +593,7 @@ class CourseManager
 
         if (!empty($session_id)) {
             SessionManager::subscribe_users_to_session_course(
-                array($user_id),
+                [$user_id],
                 $session_id,
                 $courseCode
             );
@@ -607,7 +617,6 @@ class CourseManager
                 $courseId,
                 $session_id
             );
-
         } else {
             self::add_user_to_course(
                 $user_id,
@@ -642,10 +651,11 @@ class CourseManager
 
     /**
      * Get the course id based on the original id and field name in the
-     * extra fields. Returns 0 if course was not found
+     * extra fields. Returns 0 if course was not found.
      *
      * @param string $original_course_id_value
      * @param string $original_course_id_name
+     *
      * @return int Course id
      *
      * @assert ('', '') === false
@@ -679,9 +689,10 @@ class CourseManager
     }
 
     /**
-     * Gets the course code from the course id. Returns null if course id was not found
+     * Gets the course code from the course id. Returns null if course id was not found.
      *
      * @param int $id Course id
+     *
      * @return string Course code
      * @assert ('') === false
      */
@@ -701,16 +712,17 @@ class CourseManager
 
     /**
      * Subscribe a user $user_id to a course defined by $courseCode.
+     *
      * @author Hugues Peeters
      * @author Roan Embrechts
      *
-     * @param   int $user_id the id of the user
-     * @param   string $courseCode the course code
-     * @param   int $status (optional) The user's status in the course
-     * @param   int $userCourseCategoryId
+     * @param int    $user_id              the id of the user
+     * @param string $courseCode           the course code
+     * @param int    $status               (optional) The user's status in the course
+     * @param int    $userCourseCategoryId
      * @param   int The user category in which this subscription will be classified
      *
-     * @return false|string true if subscription succeeds, boolean false otherwise.
+     * @return false|string true if subscription succeeds, boolean false otherwise
      * @assert ('', '') === false
      */
     public static function add_user_to_course(
@@ -739,6 +751,7 @@ class CourseManager
             if ($debug) {
                 error_log('The user has not been registered to the platform');
             }
+
             return false; // The user has not been registered to the platform.
         }
 
@@ -752,6 +765,7 @@ class CourseManager
             if ($debug) {
                 error_log('The user has been already subscribed to the course');
             }
+
             return false; // The user has been subscribed to the course.
         }
 
@@ -763,6 +777,7 @@ class CourseManager
                 if ($debug) {
                     error_log('Subscription is not allowed for this course');
                 }
+
                 return false; // Subscription is not allowed for this course.
             }
         }
@@ -775,7 +790,7 @@ class CourseManager
             'status' => $status,
             'sort' => $max_sort + 1,
             'relation_type' => 0,
-            'user_course_cat' => (int) $userCourseCategoryId
+            'user_course_cat' => (int) $userCourseCategoryId,
         ];
         $insertId = Database::insert($course_user_table, $params);
 
@@ -784,13 +799,14 @@ class CourseManager
 
     /**
      * Add the user $userId visibility to the course $courseCode in the catalogue.
+     *
      * @author David Nos (https://github.com/dnos)
      *
-     * @param  int $userId the id of the user
-     * @param  string $courseCode the course code
-     * @param  int $visible (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
+     * @param int    $userId     the id of the user
+     * @param string $courseCode the course code
+     * @param int    $visible    (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
      *
-     * @return boolean true if added succesfully, false otherwise.
+     * @return bool true if added succesfully, false otherwise
      */
     public static function addUserVisibilityToCourseInCatalogue(
         $userId,
@@ -815,6 +831,7 @@ class CourseManager
             if ($debug) {
                 error_log('The user has not been registered to the platform');
             }
+
             return false; // The user has not been registered to the platform.
         }
 
@@ -828,6 +845,7 @@ class CourseManager
             if ($debug) {
                 error_log('The user has been already registered to the course visibility in the catalogue');
             }
+
             return true; // The visibility of the user to the course in the catalogue does already exist.
         }
 
@@ -835,7 +853,7 @@ class CourseManager
         $params = [
             'user_id' => $userId,
             'c_id' => $courseId,
-            'visible' => $visible
+            'visible' => $visible,
         ];
         $insertId = Database::insert($courseUserTable, $params);
 
@@ -844,13 +862,14 @@ class CourseManager
 
     /**
      * Remove the user $userId visibility to the course $courseCode in the catalogue.
+     *
      * @author David Nos (https://github.com/dnos)
      *
-     * @param  int $userId the id of the user
-     * @param  string $courseCode the course code
-     * @param  int $visible (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
+     * @param int    $userId     the id of the user
+     * @param string $courseCode the course code
+     * @param int    $visible    (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
      *
-     * @return boolean true if removed succesfully or register not found, false otherwise.
+     * @return bool true if removed succesfully or register not found, false otherwise
      */
     public static function removeUserVisibilityToCourseInCatalogue(
         $userId,
@@ -874,13 +893,14 @@ class CourseManager
                     visible = ".$visible." AND
                     c_id = $courseId";
         if (Database::num_rows(Database::query($sql)) > 0) {
-            $cond = array(
-                'user_id = ? AND c_id = ? AND visible = ? ' => array(
+            $cond = [
+                'user_id = ? AND c_id = ? AND visible = ? ' => [
                     $userId,
                     $courseId,
-                    $visible
-                )
-            );
+                    $visible,
+                ],
+            ];
+
             return Database::delete($courseUserTable, $cond);
         } else {
             return true; // Register does not exist
@@ -889,8 +909,9 @@ class CourseManager
 
     /**
      * @param string $code
-     * @return boolean if there already are one or more courses
-     *  with the same code OR visual_code (visualcode), false otherwise
+     *
+     * @return bool if there already are one or more courses
+     *              with the same code OR visual_code (visualcode), false otherwise
      */
     public static function course_code_exists($code)
     {
@@ -904,20 +925,20 @@ class CourseManager
     }
 
     /**
-     * Get course list as coach
+     * Get course list as coach.
      *
-     * @param int $user_id
+     * @param int  $user_id
      * @param bool $include_courses_in_sessions
-     * @return array Course list
      *
-     **/
+     * @return array Course list
+     */
     public static function get_course_list_as_coach(
         $user_id,
         $include_courses_in_sessions = false
     ) {
         // 1. Getting courses as teacher (No session)
         $courses_temp = self::get_course_list_of_user_as_course_admin($user_id);
-        $courseList = array();
+        $courseList = [];
         if (!empty($courses_temp)) {
             foreach ($courses_temp as $course_item) {
                 $courseList[0][$course_item['code']] = $course_item['code'];
@@ -947,13 +968,14 @@ class CourseManager
     }
 
     /**
-     * @param int $user_id
+     * @param int  $user_id
      * @param bool $include_sessions
+     *
      * @return array
      */
     public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true)
     {
-        $students_in_courses = array();
+        $students_in_courses = [];
         $sessions = self::get_course_list_as_coach($user_id, true);
 
         if (!empty($sessions)) {
@@ -997,26 +1019,28 @@ class CourseManager
         if (!empty($students)) {
             $students = array_unique($students);
         }
+
         return $students;
     }
 
     /**
-     * @param int $user_id
+     * @param int    $user_id
      * @param string $startsWith Optional
-     * @return array An array with the course info of all the courses (real and virtual)
-     * of which the current user is course admin.
+     *
+     * @return array an array with the course info of all the courses (real and virtual)
+     *               of which the current user is course admin
      */
     public static function get_course_list_of_user_as_course_admin($user_id, $startsWith = '')
     {
         if ($user_id != strval(intval($user_id))) {
-            return array();
+            return [];
         }
 
         // Definitions database tables and variables
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $user_id = intval($user_id);
-        $data = array();
+        $data = [];
 
         $sql = "SELECT
                     course.code,
@@ -1074,9 +1098,10 @@ class CourseManager
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $courseInfo
-     * @return boolean|null
+     *
+     * @return bool|null
      */
     public static function isUserSubscribedInCourseAsDrh($userId, $courseInfo)
     {
@@ -1108,11 +1133,13 @@ class CourseManager
     }
 
     /**
-     * Check if user is subscribed inside a course
-     * @param  int $user_id
-     * @param  string $course_code , if this parameter is null, it'll check for all courses
-     * @param  bool $in_a_session True for checking inside sessions too, by default is not checked
-     * @return bool   $session_id true if the user is registered in the course, false otherwise
+     * Check if user is subscribed inside a course.
+     *
+     * @param int    $user_id
+     * @param string $course_code  , if this parameter is null, it'll check for all courses
+     * @param bool   $in_a_session True for checking inside sessions too, by default is not checked
+     *
+     * @return bool $session_id true if the user is registered in the course, false otherwise
      */
     public static function is_user_subscribed_in_course(
         $user_id,
@@ -1182,10 +1209,10 @@ class CourseManager
     /**
      * Is the user a teacher in the given course?
      *
-     * @param integer $user_id , the id (int) of the user
+     * @param int    $user_id     , the id (int) of the user
      * @param string $course_code , the course code
      *
-     * @return boolean if the user is a teacher in the course, false otherwise
+     * @return bool if the user is a teacher in the course, false otherwise
      */
     public static function is_course_teacher($user_id, $course_code)
     {
@@ -1214,8 +1241,10 @@ class CourseManager
      *
      * @param int the id of the user
      * @param int $courseId
+     *
      * @deprecated linked_courses definition doesn't exists
-     * @return boolean if the user is registered in the real course or linked courses, false otherwise
+     *
+     * @return bool if the user is registered in the real course or linked courses, false otherwise
      */
     public static function is_user_subscribed_in_real_or_linked_course($user_id, $courseId, $session_id = 0)
     {
@@ -1230,8 +1259,8 @@ class CourseManager
             $result = Database::fetch_array(
                 Database::query(
                     "SELECT *
-                    FROM " . Database::get_main_table(TABLE_MAIN_COURSE)." course
-                    LEFT JOIN " . Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
+                    FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
+                    LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
                     ON course.id = course_user.c_id
                     WHERE
                         course_user.user_id = '$user_id' AND
@@ -1239,15 +1268,15 @@ class CourseManager
                         ( course.id = '$courseId')"
                 )
             );
+
             return !empty($result);
         }
-
 
         // From here we trust session id.
         // Is he/she subscribed to the session's course?
         // A user?
         if (Database::num_rows(Database::query("SELECT user_id
-                FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+                FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                 WHERE session_id='".$session_id."'
                 AND user_id ='$user_id'"))
         ) {
@@ -1256,8 +1285,8 @@ class CourseManager
 
         // A course coach?
         if (Database::num_rows(Database::query("SELECT user_id
-                FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                WHERE session_id='" . $session_id."'
+                FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+                WHERE session_id='".$session_id."'
                 AND user_id = '$user_id' AND status = 2
                 AND c_id ='$courseId'"))
         ) {
@@ -1266,8 +1295,8 @@ class CourseManager
 
         // A session coach?
         if (Database::num_rows(Database::query("SELECT id_coach
-                FROM " . Database::get_main_table(TABLE_MAIN_SESSION)." AS session
-                WHERE session.id='" . $session_id."'
+                FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." AS session
+                WHERE session.id='".$session_id."'
                 AND id_coach='$user_id'"))
         ) {
             return true;
@@ -1279,22 +1308,24 @@ class CourseManager
     /**
      * Return user info array of all users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
-     * @param string $course_code
-     * @param int $session_id
-     * @param string $limit
-     * @param string $order_by the field to order the users by.
-     * Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
-     * that starts with ORDER BY ...
-     * @param integer|null $filter_by_status if using the session_id: 0 or 2 (student, coach),
-     * if using session_id = 0 STUDENT or COURSEMANAGER
-     * @param boolean|null $return_count
-     * @param bool $add_reports
-     * @param bool $resumed_report
-     * @param array $extra_field
-     * @param array $courseCodeList
-     * @param array $userIdList
-     * @param string $filterByActive
-     * @param array $sessionIdList
+     *
+     * @param string    $course_code
+     * @param int       $session_id
+     * @param string    $limit
+     * @param string    $order_by         the field to order the users by.
+     *                                    Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
+     *                                    that starts with ORDER BY ...
+     * @param int|null  $filter_by_status if using the session_id: 0 or 2 (student, coach),
+     *                                    if using session_id = 0 STUDENT or COURSEMANAGER
+     * @param bool|null $return_count
+     * @param bool      $add_reports
+     * @param bool      $resumed_report
+     * @param array     $extra_field
+     * @param array     $courseCodeList
+     * @param array     $userIdList
+     * @param string    $filterByActive
+     * @param array     $sessionIdList
+     *
      * @return array|int
      */
     public static function get_user_list_from_course_code(
@@ -1306,11 +1337,11 @@ class CourseManager
         $return_count = null,
         $add_reports = false,
         $resumed_report = false,
-        $extra_field = array(),
-        $courseCodeList = array(),
-        $userIdList = array(),
+        $extra_field = [],
+        $courseCodeList = [],
+        $userIdList = [],
         $filterByActive = null,
-        $sessionIdList = array()
+        $sessionIdList = []
     ) {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1323,7 +1354,7 @@ class CourseManager
             $courseId = $courseInfo['real_id'];
         }
 
-        $where = array();
+        $where = [];
         if (empty($order_by)) {
             $order_by = 'user.lastname, user.firstname';
             if (api_is_western_name_order()) {
@@ -1365,7 +1396,7 @@ class CourseManager
 
             $courseCondition = " course.id = $courseId";
             if (!empty($courseCodeList)) {
-                $courseCodeListForSession = array_map(array('Database', 'escape_string'), $courseCodeList);
+                $courseCodeListForSession = array_map(['Database', 'escape_string'], $courseCodeList);
                 $courseCodeListForSession = implode('","', $courseCodeListForSession);
                 $courseCondition = ' course.code IN ("'.$courseCodeListForSession.'")  ';
             }
@@ -1413,11 +1444,11 @@ class CourseManager
             }
 
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user '
-                  . ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
+                  .' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                       ON 
                         user.id = course_rel_user.user_id AND
-                        course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH.'  '
-                  . " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
+                        course_rel_user.relation_type <> '.COURSE_RELATION_TYPE_RRHH.'  '
+                  ." INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
 
             if (!empty($course_code)) {
                 $sql .= ' AND course_rel_user.c_id = "'.$courseId.'"';
@@ -1464,7 +1495,7 @@ class CourseManager
         }
 
         if (!empty($courseCodeList)) {
-            $courseCodeList = array_map(array('Database', 'escape_string'), $courseCodeList);
+            $courseCodeList = array_map(['Database', 'escape_string'], $courseCodeList);
             $courseCodeList = implode('","', $courseCodeList);
             if (empty($sessionIdList)) {
                 $sql .= ' AND course.code IN ("'.$courseCodeList.'")';
@@ -1485,7 +1516,7 @@ class CourseManager
         $sql .= ' '.$order_by.' '.$limit;
 
         $rs = Database::query($sql);
-        $users = array();
+        $users = [];
 
         $extra_fields = UserManager::get_extra_fields(
             0,
@@ -1510,7 +1541,7 @@ class CourseManager
                 if ($return_count) {
                     return $user['count'];
                 }
-                $report_info = array();
+                $report_info = [];
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
                 if (isset($user['is_tutor'])) {
@@ -1525,7 +1556,7 @@ class CourseManager
 
                 if ($add_reports) {
                     if ($resumed_report) {
-                        $extra = array();
+                        $extra = [];
 
                         if (!empty($extra_fields)) {
                             foreach ($extra_fields as $extra) {
@@ -1627,7 +1658,7 @@ class CourseManager
                             Tracking::get_avg_student_progress(
                                 $user['user_id'],
                                 $course_code,
-                                array(),
+                                [],
                                 $sessionId
                             )
                         );
@@ -1651,19 +1682,20 @@ class CourseManager
     }
 
     /**
-     * @param bool $resumed_report
+     * @param bool  $resumed_report
      * @param array $extra_field
      * @param array $courseCodeList
      * @param array $userIdList
      * @param array $sessionIdList
+     *
      * @return array|int
      */
     public static function get_count_user_list_from_course_code(
         $resumed_report = false,
-        $extra_field = array(),
-        $courseCodeList = array(),
-        $userIdList = array(),
-        $sessionIdList = array()
+        $extra_field = [],
+        $courseCodeList = [],
+        $userIdList = [],
+        $sessionIdList = []
     ) {
         return self::get_user_list_from_course_code(
             null,
@@ -1683,11 +1715,12 @@ class CourseManager
     }
 
     /**
-     * Gets subscribed users in a course or in a course/session
+     * Gets subscribed users in a course or in a course/session.
      *
-     * @param   string $course_code
-     * @param   int $session_id
-     * @return  int
+     * @param string $course_code
+     * @param int    $session_id
+     *
+     * @return int
      */
     public static function get_users_count_in_course(
         $course_code,
@@ -1709,7 +1742,7 @@ class CourseManager
             SELECT DISTINCT count(user.id) as count  
             FROM $tblUser as user
         ";
-        $where = array();
+        $where = [];
         if (!empty($session_id)) {
             $sql .= "
                 LEFT JOIN $tblSessionCourseUser as session_course_user
@@ -1751,11 +1784,13 @@ class CourseManager
     }
 
     /**
-     * Get a list of coaches of a course and a session
-     * @param   string  $course_code
-     * @param   int     $session_id
-     * @param   bool $addGeneralCoach
-     * @return  array   List of users
+     * Get a list of coaches of a course and a session.
+     *
+     * @param string $course_code
+     * @param int    $session_id
+     * @param bool   $addGeneralCoach
+     *
+     * @return array List of users
      */
     public static function get_coach_list_from_course_code(
         $course_code,
@@ -1763,14 +1798,14 @@ class CourseManager
         $addGeneralCoach = true
     ) {
         if (empty($course_code) || empty($session_id)) {
-            return array();
+            return [];
         }
 
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $session_id = intval($session_id);
-        $users = array();
+        $users = [];
 
         // We get the coach for the given course in a given session.
         $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
@@ -1803,12 +1838,13 @@ class CourseManager
      *  This only returns the users that are registered in this actual course, not linked courses.
      *
      * @param string $course_code
-     * @param boolean $with_session
-     * @param integer $session_id
+     * @param bool   $with_session
+     * @param int    $session_id
      * @param string $date_from
      * @param string $date_to
-     * @param boolean $includeInvitedUsers Whether include the invited users
-     * @param int $groupId
+     * @param bool   $includeInvitedUsers Whether include the invited users
+     * @param int    $groupId
+     *
      * @return array with user id
      */
     public static function get_student_list_from_course_code(
@@ -1825,7 +1861,7 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $students = array();
+        $students = [];
 
         if ($session_id == 0) {
             if (empty($groupId)) {
@@ -1865,7 +1901,7 @@ class CourseManager
             }
 
             $sql_query = "SELECT *
-                          FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
+                          FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
                           $joinSession
                           INNER JOIN $userTable u ON scu.user_id = u.user_id
                           WHERE scu.c_id = '$courseId' AND scu.status <> 2";
@@ -1898,6 +1934,7 @@ class CourseManager
      * This only returns the users that are registered in this actual course, not linked courses.
      *
      * @param string $course_code
+     *
      * @return array with user id
      */
     public static function get_teacher_list_from_course_code($course_code)
@@ -1915,14 +1952,14 @@ class CourseManager
                     u.email,
                     u.username,
                     u.status
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
-                INNER JOIN " . Database::get_main_table(TABLE_MAIN_USER)." u
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
                 ON (cu.user_id = u.id)
                 WHERE
                     cu.c_id = $courseId AND
                     cu.status = 1 ";
         $rs = Database::query($sql);
-        $teachers = array();
+        $teachers = [];
         while ($teacher = Database::fetch_array($rs)) {
             $teachers[$teacher['user_id']] = $teacher;
         }
@@ -1934,7 +1971,7 @@ class CourseManager
      * Return user info array of all teacher-users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
      *
-     * @param int $courseId
+     * @param int  $courseId
      * @param bool $loadAvatars
      *
      * @return array with user id
@@ -1954,15 +1991,15 @@ class CourseManager
                     u.email,
                     u.username,
                     u.status
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
-                INNER JOIN " . Database::get_main_table(TABLE_MAIN_USER)." u
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
                 ON (cu.user_id = u.id)
                 WHERE
                     cu.c_id = $courseId AND
                     cu.status = 1 ";
         $rs = Database::query($sql);
-        $listTeachers = array();
-        $teachers = array();
+        $listTeachers = [];
+        $teachers = [];
         $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&course_id='.$courseId;
         while ($teacher = Database::fetch_array($rs)) {
             $teachers['id'] = $teacher['user_id'];
@@ -1985,11 +2022,13 @@ class CourseManager
     }
 
     /**
-     * Returns a string list of teachers assigned to the given course
+     * Returns a string list of teachers assigned to the given course.
+     *
      * @param string $course_code
-     * @param string $separator between teachers names
-     * @param bool $add_link_to_profile Whether to add a link to the teacher's profile
-     * @param bool $orderList
+     * @param string $separator           between teachers names
+     * @param bool   $add_link_to_profile Whether to add a link to the teacher's profile
+     * @param bool   $orderList
+     *
      * @return string List of teachers teaching the course
      */
     public static function getTeacherListFromCourseCodeToString(
@@ -2000,7 +2039,7 @@ class CourseManager
     ) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
         $html = '';
-        $list = array();
+        $list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
                 $teacher_name = api_get_person_name(
@@ -2014,7 +2053,7 @@ class CourseManager
                         $url,
                         [
                             'class' => 'ajax',
-                            'data-title' => $teacher_name
+                            'data-title' => $teacher_name,
                         ]
                     );
                 }
@@ -2041,7 +2080,8 @@ class CourseManager
     }
 
     /**
-     * This function returns information about coachs from a course in session
+     * This function returns information about coachs from a course in session.
+     *
      * @param int $session_id
      * @param int $courseId
      *
@@ -2078,7 +2118,7 @@ class CourseManager
                     scu.status = 2";
         $rs = Database::query($sql);
 
-        $coaches = array();
+        $coaches = [];
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
@@ -2090,11 +2130,12 @@ class CourseManager
     }
 
     /**
-     * @param int $session_id
-     * @param int $courseId
+     * @param int    $session_id
+     * @param int    $courseId
      * @param string $separator
-     * @param bool $add_link_to_profile
-     * @param bool $orderList
+     * @param bool   $add_link_to_profile
+     * @param bool   $orderList
+     *
      * @return string
      */
     public static function get_coachs_from_course_to_string(
@@ -2105,7 +2146,7 @@ class CourseManager
         $orderList = false
     ) {
         $coachList = self::get_coachs_from_course($session_id, $courseId);
-        $course_coachs = array();
+        $course_coachs = [];
         if (!empty($coachList)) {
             foreach ($coachList as $coach_course) {
                 $coach_name = $coach_course['full_name'];
@@ -2116,7 +2157,7 @@ class CourseManager
                         $url,
                         [
                             'class' => 'ajax',
-                            'data-title' => $coach_name
+                            'data-title' => $coach_name,
                         ]
                     );
                 }
@@ -2149,11 +2190,13 @@ class CourseManager
     }
 
     /**
-     * Get the list of groups from the course
-     * @param   string $course_code
-     * @param   int $session_id Session ID (optional)
-     * @param   integer $in_get_empty_group get empty groups (optional)
-     * @return  array   List of groups info
+     * Get the list of groups from the course.
+     *
+     * @param string $course_code
+     * @param int    $session_id         Session ID (optional)
+     * @param int    $in_get_empty_group get empty groups (optional)
+     *
+     * @return array List of groups info
      */
     public static function get_group_list_of_course(
         $course_code,
@@ -2163,29 +2206,29 @@ class CourseManager
         $course_info = api_get_course_info($course_code);
 
         if (empty($course_info)) {
-            return array();
+            return [];
         }
         $course_id = $course_info['real_id'];
 
         if (empty($course_id)) {
-            return array();
+            return [];
         }
 
-        $group_list = array();
+        $group_list = [];
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
 
         if ($in_get_empty_group == 0) {
             // get only groups that are not empty
             $sql = "SELECT DISTINCT g.id, g.iid, g.name
-                    FROM " . Database::get_course_table(TABLE_GROUP)." AS g
-                    INNER JOIN " . Database::get_course_table(TABLE_GROUP_USER)." gu
+                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
+                    INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
                     ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
                     $session_condition
                     ORDER BY g.name";
         } else {
             // get all groups even if they are empty
             $sql = "SELECT g.id, g.name, g.iid 
-                    FROM " . Database::get_course_table(TABLE_GROUP)." AS g
+                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                     $session_condition
                     AND c_id = $course_id";
         }
@@ -2195,6 +2238,7 @@ class CourseManager
             $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
+
         return $group_list;
     }
 
@@ -2211,6 +2255,7 @@ class CourseManager
      * course.
      *
      * @param string $code The code of the course to delete
+     *
      * @todo When deleting a virtual course: unsubscribe users from that virtual
      * course from the groups in the real course if they are not subscribed in
      * that real course.
@@ -2391,8 +2436,10 @@ class CourseManager
     }
 
     /**
-     * Creates a file called mysql_dump.sql in the course folder
+     * Creates a file called mysql_dump.sql in the course folder.
+     *
      * @param string $course_code The code of the course
+     *
      * @todo Implementation for single database
      */
     public static function create_database_dump($course_code)
@@ -2414,7 +2461,7 @@ class CourseManager
                 $res_table = Database::query($sql);
 
                 while ($row = Database::fetch_array($res_table, 'ASSOC')) {
-                    $row_to_save = array();
+                    $row_to_save = [];
                     foreach ($row as $key => $value) {
                         $row_to_save[$key] = $key."='".Database::escape_string($row[$key])."'";
                     }
@@ -2437,9 +2484,12 @@ class CourseManager
 
     /**
      * Sort courses for a specific user ??
-     * @param   int    $user_id User ID
-     * @param   string  $course_code Course code
-     * @return  int     Minimum course order
+     *
+     * @param int    $user_id     User ID
+     * @param string $course_code Course code
+     *
+     * @return int Minimum course order
+     *
      * @todo Review documentation
      */
     public static function userCourseSort($user_id, $course_code)
@@ -2461,9 +2511,9 @@ class CourseManager
         );
 
         $sql = 'SELECT course.code as code, course.title as title, cu.sort as sort
-                FROM ' . $TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course
-                WHERE   course.id = cu.c_id AND user_id = "' . $user_id.'" AND
-                        cu.relation_type<>' . COURSE_RELATION_TYPE_RRHH.' AND
+                FROM '.$TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course
+                WHERE   course.id = cu.c_id AND user_id = "'.$user_id.'" AND
+                        cu.relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND
                         user_course_cat = 0
                 ORDER BY cu.sort';
         $result = Database::query($sql);
@@ -2485,22 +2535,21 @@ class CourseManager
                         $sql = 'UPDATE '.$TABLECOURSUSER.'
                                 SET sort = sort+1
                                 WHERE
-                                    user_id= "' . $user_id.'" AND
-                                    relation_type<>' . COURSE_RELATION_TYPE_RRHH.'
+                                    user_id= "'.$user_id.'" AND
+                                    relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                                     AND user_course_cat="0"
-                                    AND sort > "' . $course_sort.'"';
+                                    AND sort > "'.$course_sort.'"';
                         $course_sort++;
                     } else {
                         $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1
                                 WHERE
-                                    user_id= "' . $user_id.'" AND
-                                    relation_type<>' . COURSE_RELATION_TYPE_RRHH.' AND
+                                    user_id= "'.$user_id.'" AND
+                                    relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND
                                     user_course_cat="0" AND
-                                    sort >= "' . $course_sort.'"';
+                                    sort >= "'.$course_sort.'"';
                     }
                     Database::query($sql);
                     break;
-
                 } else {
                     $course_title_precedent = $courses['title'];
                 }
@@ -2514,28 +2563,34 @@ class CourseManager
                 Database::query('UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND user_course_cat="0"');
             }
         }
+
         return $course_sort;
     }
 
     /**
-     * check if course exists
+     * check if course exists.
+     *
      * @param string $course_code
-     * @return integer if exists, false else
+     *
+     * @return int if exists, false else
      */
     public static function course_exists($course_code)
     {
         $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_COURSE).'
-                WHERE code="' . Database::escape_string($course_code).'"';
+                WHERE code="'.Database::escape_string($course_code).'"';
 
         return Database::num_rows(Database::query($sql));
     }
 
     /**
-     * Send an email to tutor after the auth-suscription of a student in your course
+     * Send an email to tutor after the auth-suscription of a student in your course.
+     *
      * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
-     * @param  int $user_id the id of the user
-     * @param  string $courseId the course code
-     * @param  bool $send_to_tutor_also
+     *
+     * @param int    $user_id            the id of the user
+     * @param string $courseId           the course code
+     * @param bool   $send_to_tutor_also
+     *
      * @return false|null we return the message that is displayed when the action is successful
      */
     public static function email_to_tutor($user_id, $courseId, $send_to_tutor_also = false)
@@ -2550,7 +2605,7 @@ class CourseManager
 
         $name_course = $information['title'];
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." 
-                WHERE c_id ='" . $courseId."'";
+                WHERE c_id ='".$courseId."'";
 
         // TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
         //if ($send_to_tutor_also = true)
@@ -2583,12 +2638,12 @@ class CourseManager
                 api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
 
-            $additionalParameters = array(
+            $additionalParameters = [
                 'smsType' => SmsPlugin::NEW_USER_SUBSCRIBED_COURSE,
                 'userId' => $tutor['user_id'],
                 'userUsername' => $student['username'],
-                'courseCode' => $course_code
-            );
+                'courseCode' => $course_code,
+            ];
             api_mail_html(
                 $recipient_name,
                 $emailto,
@@ -2640,7 +2695,7 @@ class CourseManager
                     tcfv.value = 1  $where_access_url";
 
         $result = Database::query($sql);
-        $courseList = array();
+        $courseList = [];
 
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
@@ -2653,10 +2708,11 @@ class CourseManager
 
     /**
      * Get the course codes that have been restricted in the catalogue, and if byUserId is set
-     * then the courses that the user is allowed or not to see in catalogue
+     * then the courses that the user is allowed or not to see in catalogue.
      *
-     * @param bool $allowed Either if the courses have some users that are or are not allowed to see in catalogue
-     * @param int $byUserId if the courses are or are not allowed to see to the user
+     * @param bool $allowed  Either if the courses have some users that are or are not allowed to see in catalogue
+     * @param int  $byUserId if the courses are or are not allowed to see to the user
+     *
      * @return array Course codes allowed or not to see in catalogue by some user or the user
      */
     public static function getCatalogueCourseList($allowed = true, $byUserId = -1)
@@ -2693,7 +2749,7 @@ class CourseManager
                 WHERE tcruc.visible = $visibility $currentUserRestriction $whereAccessUrl";
 
         $result = Database::query($sql);
-        $courseList = array();
+        $courseList = [];
 
         if (Database::num_rows($result) > 0) {
             while ($resultRow = Database::fetch_array($result)) {
@@ -2705,16 +2761,18 @@ class CourseManager
     }
 
     /**
-     * Get list of courses for a given user
+     * Get list of courses for a given user.
      *
-     * @param int $user_id
-     * @param boolean $include_sessions Whether to include courses from session or not
-     * @param boolean $adminGetsAllCourses If the user is platform admin,
-     * whether he gets all the courses or just his. Note: This does *not* include all sessions
-     * @param bool $loadSpecialCourses
-     * @param array $skipCourseList List of course ids to skip
-     * @param bool $useUserLanguageFilterIfAvailable
+     * @param int   $user_id
+     * @param bool  $include_sessions                 Whether to include courses from session or not
+     * @param bool  $adminGetsAllCourses              If the user is platform admin,
+     *                                                whether he gets all the courses or just his. Note: This does *not* include all sessions
+     * @param bool  $loadSpecialCourses
+     * @param array $skipCourseList                   List of course ids to skip
+     * @param bool  $useUserLanguageFilterIfAvailable
+     *
      * @return array List of codes and db name
+     *
      * @author isaac flores paz
      */
     public static function get_courses_list_by_user_id(
@@ -2727,8 +2785,8 @@ class CourseManager
     ) {
         $user_id = intval($user_id);
         $urlId = api_get_current_access_url_id();
-        $course_list = array();
-        $codes = array();
+        $course_list = [];
+        $codes = [];
 
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2851,10 +2909,11 @@ class CourseManager
     }
 
     /**
-     * Get course ID from a given course directory name
-     * @param   string  $path Course directory (without any slash)
+     * Get course ID from a given course directory name.
      *
-     * @return  string  Course code, or false if not found
+     * @param string $path Course directory (without any slash)
+     *
+     * @return string Course code, or false if not found
      */
     public static function get_course_id_from_path($path)
     {
@@ -2873,57 +2932,67 @@ class CourseManager
     }
 
     /**
-     * Get course code(s) from visual code
+     * Get course code(s) from visual code.
+     *
      * @deprecated
+     *
      * @param   string  Visual code
-     * @return  array   List of codes for the given visual code
+     *
+     * @return array List of codes for the given visual code
      */
     public static function get_courses_info_from_visual_code($code)
     {
-        $result = array();
+        $result = [];
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE visual_code = '" . Database::escape_string($code)."'");
+                WHERE visual_code = '".Database::escape_string($code)."'");
         while ($virtual_course = Database::fetch_array($sql_result)) {
             $result[] = $virtual_course;
         }
+
         return $result;
     }
 
     /**
-     * Get emails of tutors to course
+     * Get emails of tutors to course.
+     *
      * @param int $courseId
+     *
      * @return array List of emails of tutors to course
      *
      * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
      * */
     public static function get_emails_of_tutors_to_course($courseId)
     {
-        $list = array();
+        $list = [];
         $res = Database::query("SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE c_id ='" . intval($courseId)."' AND status=1");
+                WHERE c_id ='".intval($courseId)."' AND status=1");
         while ($list_users = Database::fetch_array($res)) {
             $result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-                    WHERE user_id=" . $list_users['user_id']);
+                    WHERE user_id=".$list_users['user_id']);
             while ($row_user = Database::fetch_array($result)) {
                 $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname']);
-                $list[] = array($row_user['email'] => $name_teacher);
+                $list[] = [$row_user['email'] => $name_teacher];
             }
         }
+
         return $list;
     }
 
     /**
-     * Get coaches emails by session
+     * Get coaches emails by session.
+     *
      * @param int $session_id
      * @param int $courseId
-     * @return array  array(email => name_tutor)  by coach
+     *
+     * @return array array(email => name_tutor)  by coach
+     *
      * @author Carlos Vargas <carlos.vargas@dokeos.com>
      */
     public static function get_email_of_tutor_to_session($session_id, $courseId)
     {
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $coachs_emails = array();
+        $coachs_emails = [];
 
         $courseId = intval($courseId);
         $session_id = intval($session_id);
@@ -2938,8 +3007,7 @@ class CourseManager
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
-
-            $user_ids = array();
+            $user_ids = [];
             while ($row = Database::fetch_array($rs)) {
                 $user_ids[] = $row['user_id'];
             }
@@ -2949,23 +3017,26 @@ class CourseManager
             $rs_user = Database::query($sql);
 
             while ($row_emails = Database::fetch_array($rs_user)) {
-                $mail_tutor = array(
+                $mail_tutor = [
                     'email' => $row_emails['email'],
-                    'complete_name' => api_get_person_name($row_emails['firstname'], $row_emails['lastname'])
-                );
+                    'complete_name' => api_get_person_name($row_emails['firstname'], $row_emails['lastname']),
+                ];
                 $coachs_emails[] = $mail_tutor;
             }
         }
+
         return $coachs_emails;
     }
 
     /**
-     * Creates a new extra field for a given course
+     * Creates a new extra field for a given course.
+     *
      * @param    string    Field's internal variable name
      * @param    int        Field's type
      * @param    string    Field's language var name
      * @param string $default
-     * @return boolean     new extra field id
+     *
+     * @return bool new extra field id
      */
     public static function create_course_extra_field($variable, $fieldType, $displayText, $default = '')
     {
@@ -2974,7 +3045,7 @@ class CourseManager
             'variable' => $variable,
             'field_type' => $fieldType,
             'display_text' => $displayText,
-            'default_value' => $default
+            'default_value' => $default,
         ];
 
         return $extraField->save($params);
@@ -2982,14 +3053,14 @@ class CourseManager
 
     /**
      * Updates course attribute. Note that you need to check that your
-     * attribute is valid before you use this function
+     * attribute is valid before you use this function.
      *
-     * @param int $id Course id
-     * @param string $name Attribute name
+     * @param int    $id    Course id
+     * @param string $name  Attribute name
      * @param string $value Attribute value
      *
      * @return Doctrine\DBAL\Driver\Statement|null True if attribute was successfully updated,
-     * false if course was not found or attribute name is invalid
+     *                                             false if course was not found or attribute name is invalid
      */
     public static function update_attribute($id, $name, $value)
     {
@@ -3003,10 +3074,11 @@ class CourseManager
 
     /**
      * Update course attributes. Will only update attributes with a non-empty value.
-     * Note that you NEED to check that your attributes are valid before using this function
+     * Note that you NEED to check that your attributes are valid before using this function.
      *
      * @param int Course id
      * @param array Associative array with field names as keys and field values as values
+     *
      * @return Doctrine\DBAL\Driver\Statement|null True if update was successful, false otherwise
      */
     public static function update_attributes($id, $attributes)
@@ -3030,11 +3102,13 @@ class CourseManager
     }
 
     /**
-     * Update an extra field value for a given course
-     * @param    integer    Course ID
+     * Update an extra field value for a given course.
+     *
+     * @param    int    Course ID
      * @param    string    Field variable name
      * @param    string    Field value
-     * @return    boolean|null    true if field updated, false otherwise
+     *
+     * @return bool|null true if field updated, false otherwise
      */
     public static function update_course_extra_field_value($course_code, $variable, $value = '')
     {
@@ -3045,7 +3119,7 @@ class CourseManager
         $params = [
             'item_id' => $courseId,
             'variable' => $variable,
-            'value' => $value
+            'value' => $value,
         ];
 
         return $extraFieldValues->save($params);
@@ -3053,6 +3127,7 @@ class CourseManager
 
     /**
      * @param int $session_id
+     *
      * @return mixed
      */
     public static function get_session_category_id_by_session_id($session_id)
@@ -3062,10 +3137,10 @@ class CourseManager
         }
 
         $sql = 'SELECT sc.id session_category
-                FROM ' . Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY).' sc
-                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_SESSION).' s
+                FROM '.Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY).' sc
+                INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION).' s
                 ON sc.id = s.session_category_id 
-                WHERE s.id="' . intval($session_id).'"';
+                WHERE s.id="'.intval($session_id).'"';
 
         return Database::result(
             Database::query($sql),
@@ -3075,10 +3150,10 @@ class CourseManager
     }
 
     /**
-     * Gets the value of a course extra field. Returns null if it was not found
+     * Gets the value of a course extra field. Returns null if it was not found.
      *
      * @param string $variable Name of the extra field
-     * @param string $code Course code
+     * @param string $code     Course code
      *
      * @return string Value
      */
@@ -3097,11 +3172,13 @@ class CourseManager
     }
 
     /**
-     * Lists details of the course description
+     * Lists details of the course description.
+     *
      * @param array        The course description
      * @param string    The encoding
      * @param bool        If true is displayed if false is hidden
-     * @return string     The course description in html
+     *
+     * @return string The course description in html
      */
     public static function get_details_course_description_html(
         $descriptions,
@@ -3117,12 +3194,12 @@ class CourseManager
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),
                                 ENT_QUOTES, $charset)).'\')) return false;">';
                     $data .= Display::return_icon('delete.gif', get_lang('Delete'),
-                        array('style' => 'vertical-align:middle;float:right;'));
+                        ['style' => 'vertical-align:middle;float:right;']);
                     $data .= '</a> ';
                     //edit
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$description->id.'">';
                     $data .= Display::return_icon('edit.png', get_lang('Edit'),
-                        array('style' => 'vertical-align:middle;float:right; padding-right:4px;'), ICON_SIZE_SMALL);
+                        ['style' => 'vertical-align:middle;float:right; padding-right:4px;'], ICON_SIZE_SMALL);
                     $data .= '</a> ';
                 }
                 $data .= $description->title;
@@ -3139,9 +3216,10 @@ class CourseManager
     }
 
     /**
-     * Returns the details of a course category
+     * Returns the details of a course category.
      *
      * @param string $code Category code
+     *
      * @return array Course category
      */
     public static function get_course_category($code)
@@ -3149,13 +3227,15 @@ class CourseManager
         $table_categories = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = Database::escape_string($code);
         $sql = "SELECT * FROM $table_categories WHERE code = '$code'";
+
         return Database::fetch_array(Database::query($sql));
     }
 
     /**
-     * Returns the details of a course category
+     * Returns the details of a course category.
      *
      * @param string Category code
+     *
      * @return array Course category
      */
     public static function getCategoriesList()
@@ -3163,19 +3243,22 @@ class CourseManager
         $table_categories = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT * FROM $table_categories";
         $result = Database::query($sql);
-        $category = array();
+        $category = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $category[$row['code']] = $row['name'];
         }
+
         return $category;
     }
 
     /**
-     * Subscribes courses to human resource manager (Dashboard feature)
-     * @param    int   $hr_manager_id      Human Resource Manager id
-     * @param    array $courses_list       Courses code
+     * Subscribes courses to human resource manager (Dashboard feature).
+     *
+     * @param int   $hr_manager_id Human Resource Manager id
+     * @param array $courses_list  Courses code
+     *
      * @return int
-     **/
+     */
     public static function subscribeCoursesToDrhManager($hr_manager_id, $courses_list)
     {
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3192,7 +3275,7 @@ class CourseManager
                     WHERE
                         user_id = $hr_manager_id AND
                         relation_type=".COURSE_RELATION_TYPE_RRHH." AND
-                        access_url_id = " . api_get_current_access_url_id()."";
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT c_id FROM $tbl_course_rel_user
                     WHERE user_id = $hr_manager_id AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
@@ -3227,16 +3310,17 @@ class CourseManager
     }
 
     /**
-     * get courses followed by human resources manager
-     * @param int $user_id
-     * @param int $status
-     * @param int $from
-     * @param int $limit
+     * get courses followed by human resources manager.
+     *
+     * @param int    $user_id
+     * @param int    $status
+     * @param int    $from
+     * @param int    $limit
      * @param string $column
      * @param string $direction
-     * @param bool $getCount
+     * @param bool   $getCount
      *
-     * @return array    courses
+     * @return array courses
      */
     public static function get_courses_followed_by_drh(
         $user_id,
@@ -3259,18 +3343,20 @@ class CourseManager
     }
 
     /**
-     * get courses followed by user
-     * @param   int $user_id
-     * @param   int $status
-     * @param   int $from
-     * @param   int $limit
-     * @param   string $column
-     * @param   string $direction
-     * @param   boolean $getCount
-     * @param   string $keyword
-     * @param   int $sessionId
-     * @param   boolean $showAllAssignedCourses
-     * @return  array   courses
+     * get courses followed by user.
+     *
+     * @param int    $user_id
+     * @param int    $status
+     * @param int    $from
+     * @param int    $limit
+     * @param string $column
+     * @param string $direction
+     * @param bool   $getCount
+     * @param string $keyword
+     * @param int    $sessionId
+     * @param bool   $showAllAssignedCourses
+     *
+     * @return array courses
      */
     public static function getCoursesFollowedByUser(
         $user_id,
@@ -3310,7 +3396,7 @@ class CourseManager
                 $whereConditions .= " AND
                     cru.user_id = '$user_id' AND
                     cru.status = ".DRH." AND
-                    relation_type = '" . COURSE_RELATION_TYPE_RRHH."'
+                    relation_type = '".COURSE_RELATION_TYPE_RRHH."'
                 ";
                 break;
         }
@@ -3369,10 +3455,11 @@ class CourseManager
 
         if ($getCount) {
             $row = Database::fetch_array($result);
+
             return $row['count'];
         }
 
-        $courses = array();
+        $courses = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $courses[$row['code']] = $row;
@@ -3383,8 +3470,10 @@ class CourseManager
     }
 
     /**
-     * check if a course is special (autoregister)
+     * check if a course is special (autoregister).
+     *
      * @param int $courseId
+     *
      * @return bool
      */
     public static function isSpecialCourse($courseId)
@@ -3405,13 +3494,15 @@ class CourseManager
     }
 
     /**
-     * Update course picture
-     * @param   array  $courseInfo
+     * Update course picture.
+     *
+     * @param array $courseInfo
      * @param   string  File name
-     * @param   string  The full system name of the image
-     * from which course picture will be created.
-     * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
-     * @return  bool    Returns the resulting. In case of internal error or negative validation returns FALSE.
+     * @param   string  the full system name of the image
+     * from which course picture will be created
+     * @param string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
+     *
+     * @return bool Returns the resulting. In case of internal error or negative validation returns FALSE.
      */
     public static function update_course_picture(
         $courseInfo,
@@ -3454,7 +3545,8 @@ class CourseManager
     }
 
     /**
-     * Deletes the course picture
+     * Deletes the course picture.
+     *
      * @param string $courseCode
      */
     public static function deleteCoursePicture($courseCode)
@@ -3479,10 +3571,12 @@ class CourseManager
     }
 
     /**
-     * Builds the course block in user_portal.php
+     * Builds the course block in user_portal.php.
+     *
      * @todo use Twig
      *
      * @param array $params
+     *
      * @return string
      */
     public static function course_item_html_no_icon($params)
@@ -3506,7 +3600,7 @@ class CourseManager
                 Display::return_icon(
                     'teacher.png',
                     get_lang('Teacher'),
-                    array(),
+                    [],
                     ICON_SIZE_TINY
                 ).
                 $params['teachers'].'</h5>';
@@ -3516,7 +3610,7 @@ class CourseManager
                 Display::return_icon(
                     'teacher.png',
                     get_lang('Coach'),
-                    array(),
+                    [],
                     ICON_SIZE_TINY
                 ).
                 $params['coaches'].'</h5>';
@@ -3534,6 +3628,7 @@ class CourseManager
     /**
      * @param $params
      * @param bool|false $is_sub_content
+     *
      * @return string
      */
     public static function session_items_html($params, $is_sub_content = false)
@@ -3559,13 +3654,15 @@ class CourseManager
     }
 
     /**
-     * Display special courses (and only these) as several HTML divs of class userportal-course-item
+     * Display special courses (and only these) as several HTML divs of class userportal-course-item.
      *
      * Special courses are courses that stick on top of the list and are "auto-registerable"
      * in the sense that any user clicking them is registered as a student
-     * @param int       $user_id User id
-     * @param bool      $load_dirs Whether to show the document quick-loader or not
+     *
+     * @param int  $user_id                          User id
+     * @param bool $load_dirs                        Whether to show the document quick-loader or not
      * @param bool $useUserLanguageFilterIfAvailable
+     *
      * @return array
      */
     public static function returnSpecialCourses(
@@ -3637,13 +3734,13 @@ class CourseManager
                     $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'];
                     if ($load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
-                           . Display::returnFontAwesomeIcon('folder-open').'</a>';
+                           .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 } else {
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED && $load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
-                           . Display::returnFontAwesomeIcon('folder-open').'</a>';
+                           .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 }
@@ -3694,9 +3791,11 @@ class CourseManager
     /**
      * Display courses (without special courses) as several HTML divs
      * of course categories, as class userportal-catalog-item.
-     * @uses displayCoursesInCategory() to display the courses themselves
-     * @param int $user_id
-     * @param bool  $load_dirs Whether to show the document quick-loader or not
+     *
+     * @uses \displayCoursesInCategory() to display the courses themselves
+     *
+     * @param int  $user_id
+     * @param bool $load_dirs                        Whether to show the document quick-loader or not
      * @param bool $useUserLanguageFilterIfAvailable
      *
      * @return array
@@ -3719,7 +3818,7 @@ class CourseManager
         $result = Database::query($sql);
         $listItems = [
             'in_category' => [],
-            'not_category' => []
+            'not_category' => [],
         ];
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
@@ -3731,9 +3830,9 @@ class CourseManager
             );
 
             $params = [
-                'id_category' => $row ['id'],
+                'id_category' => $row['id'],
                 'title_category' => $row['title'],
-                'courses' => $courseInCategory
+                'courses' => $courseInCategory,
             ];
             $listItems['in_category'][] = $params;
         }
@@ -3756,10 +3855,12 @@ class CourseManager
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
-     * @param int      $user_category_id User category id
-     * @param bool $load_dirs Whether to show the document quick-loader or not
-     * @param int $user_id
+     *
+     * @param int  $user_category_id                 User category id
+     * @param bool $load_dirs                        Whether to show the document quick-loader or not
+     * @param int  $user_id
      * @param bool $useUserLanguageFilterIfAvailable
+     *
      * @return array
      */
     public static function returnCoursesCategories(
@@ -3848,7 +3949,7 @@ class CourseManager
                 : '';
             $iconName = basename($course_info['course_image']);
 
-            $params = array();
+            $params = [];
             //Param (course_code) needed to get the student process
             $params['course_code'] = $row['course_code'];
             $params['code'] = $row['course_code'];
@@ -3881,14 +3982,14 @@ class CourseManager
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
                     $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
-                               . Display::returnFontAwesomeIcon('folder-open').'</a>';
-                    $params['document'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container'));
+                               .Display::returnFontAwesomeIcon('folder-open').'</a>';
+                    $params['document'] .= Display::div('', ['id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container']);
                 }
             }
             if ($load_dirs) {
                 $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
-                    . Display::returnFontAwesomeIcon('folder-open').'</a>';
-                $params['document'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container'));
+                    .Display::returnFontAwesomeIcon('folder-open').'</a>';
+                $params['document'] .= Display::div('', ['id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container']);
             }
 
             $courseUrl = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
@@ -3937,9 +4038,12 @@ class CourseManager
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
+     *
      * @deprecated use self::returnCoursesCategories(0);
+     *
      * @param int      User category id
      * @param bool      Whether to show the document quick-loader or not
+     *
      * @return array
      */
     public static function returnCoursesWithoutCategories($user_category_id, $load_dirs = false)
@@ -3976,7 +4080,7 @@ class CourseManager
                 ON (url.c_id = course.id)
                 WHERE
                     course_rel_user.user_id = '".$user_id."' AND
-                    course_rel_user.user_course_cat = '" . $user_category_id."'
+                    course_rel_user.user_course_cat = '".$user_category_id."'
                     $without_special_courses ";
 
         // If multiple URL access mode is enabled, only fetch courses
@@ -4023,7 +4127,7 @@ class CourseManager
                 );
             }
 
-            $params = array();
+            $params = [];
             //Param (course_code) needed to get the student process
             $params['course_code'] = $row['code'];
             $params['edit_actions'] = '';
@@ -4032,14 +4136,14 @@ class CourseManager
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
                     $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
-                               . Display::returnFontAwesomeIcon('folder-open').'</a>';
-                    $params['document'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container'));
+                               .Display::returnFontAwesomeIcon('folder-open').'</a>';
+                    $params['document'] .= Display::div('', ['id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container']);
                 }
             }
             if ($load_dirs) {
                 $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
-                    . Display::returnFontAwesomeIcon('folder-open').'</a>';
-                $params['document'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container'));
+                    .Display::returnFontAwesomeIcon('folder-open').'</a>';
+                $params['document'] .= Display::div('', ['id' => 'document_result_'.$course_info['real_id'].'_0', 'class' => 'document_preview_container']);
             }
 
             $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
@@ -4076,8 +4180,10 @@ class CourseManager
     }
 
     /**
-     * Retrieves the user defined course categories
+     * Retrieves the user defined course categories.
+     *
      * @param int $userId
+     *
      * @return array
      */
     public static function get_user_course_categories($userId = 0)
@@ -4089,17 +4195,20 @@ class CourseManager
                 ORDER BY sort ASC
                 ";
         $result = Database::query($sql);
-        $output = array();
+        $output = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $output[$row['id']] = $row;
         }
+
         return $output;
     }
 
     /**
-     * Return an array the user_category id and title for the course $courseId for user $userId
+     * Return an array the user_category id and title for the course $courseId for user $userId.
+     *
      * @param $userId
      * @param $courseId
+     *
      * @return array
      */
     public static function getUserCourseCategoryForCourse($userId, $courseId)
@@ -4118,7 +4227,7 @@ class CourseManager
 
         $res = Database::query($sql);
 
-        $data = array();
+        $data = [];
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_assoc($res);
         }
@@ -4128,10 +4237,11 @@ class CourseManager
 
     /**
      * Get the course id based on the original id and field name in the extra fields.
-     * Returns 0 if course was not found
+     * Returns 0 if course was not found.
      *
-     * @param string $value Original course code
+     * @param string $value    Original course code
      * @param string $variable Original field name
+     *
      * @return array
      */
     public static function getCourseInfoFromOriginalId($value, $variable)
@@ -4144,6 +4254,7 @@ class CourseManager
 
         if (!empty($result)) {
             $courseInfo = api_get_course_info_by_id($result['item_id']);
+
             return $courseInfo;
         }
 
@@ -4160,14 +4271,16 @@ class CourseManager
      * $my_course['k']  - system course code
      *
      * @param   array       Course details
-     * @param   integer     Session ID
+     * @param   int     Session ID
      * @param   string      CSS class to apply to course entry
-     * @param   boolean     Whether the session is supposedly accessible now
+     * @param   bool     Whether the session is supposedly accessible now
      * (not in the case it has passed and is in invisible/unaccessible mode)
      * @param bool      Whether to show the document quick-loader or not
-     * @return  string      The HTML to be printed for the course entry
+     *
+     * @return string The HTML to be printed for the course entry
      *
      * @version 1.0.3
+     *
      * @todo refactor into different functions for database calls | logic | display
      * @todo replace single-character $my_course['d'] indices
      * @todo move code for what's new icons to a separate function to clear things up
@@ -4204,11 +4317,11 @@ class CourseManager
         // Display course entry.
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-        $params = array();
+        $params = [];
         $params['icon'] = Display::return_icon(
             'blackboard_blue.png',
             null,
-            array(),
+            [],
             ICON_SIZE_LARGE,
             null,
             true
@@ -4236,7 +4349,7 @@ class CourseManager
                 $sessionCourseStatus = api_get_session_visibility($session_id, $course_info['real_id']);
 
                 if (in_array($sessionCourseStatus,
-                    array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_AVAILABLE))) {
+                    [SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_AVAILABLE])) {
                     $sessionCourseAvailable = true;
                 }
 
@@ -4246,11 +4359,10 @@ class CourseManager
                 } else {
                     $session_title = $course_info['name'];
                 }
-
             } else {
                 $session_title =
                     $course_info['name'].' '.
-                    Display::tag('span', get_lang('CourseClosed'), array('class' => 'item_closed'));
+                    Display::tag('span', get_lang('CourseClosed'), ['class' => 'item_closed']);
             }
         } else {
             $session_title = $course_info['name'];
@@ -4290,10 +4402,10 @@ class CourseManager
                 if ($load_dirs) {
                     $params['document'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'.
                         Display::returnFontAwesomeIcon('folder-open').'</a>';
-                    $params['document'] .= Display::div('', array(
+                    $params['document'] .= Display::div('', [
                         'id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'],
-                        'class' => 'document_preview_container'
-                    ));
+                        'class' => 'document_preview_container',
+                    ]);
                 }
             }
         }
@@ -4346,7 +4458,7 @@ class CourseManager
                     }
                     $active = true;
                 } else {
-                    $session ['dates'] = ' - '.get_lang('From').' '.$session['access_start_date'].' '.get_lang('To').' '.$session['access_end_date'];
+                    $session['dates'] = ' - '.get_lang('From').' '.$session['access_start_date'].' '.get_lang('To').' '.$session['access_end_date'];
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
                     }
@@ -4359,14 +4471,14 @@ class CourseManager
             if (isset($course_info['user_course_cat'])) {
                 $user_course_category = $course_info['user_course_cat'];
             }
-            $output = array(
+            $output = [
                 $user_course_category,
                 $html,
                 $course_info['id_session'],
                 $session,
                 'active' => $active,
-                'session_category_id' => $session_category_id
-            );
+                'session_category_id' => $session_category_id,
+            ];
 
             if (Skill::isAllowed($user_id, false)) {
                 $em = Database::getManager();
@@ -4383,28 +4495,27 @@ class CourseManager
                 }
             }
         } else {
-            $output = array($course_info['user_course_cat'], $html);
+            $output = [$course_info['user_course_cat'], $html];
         }
 
         return $output;
     }
 
     /**
-     *
      * @param string $source_course_code
-     * @param int $source_session_id
+     * @param int    $source_session_id
      * @param string $destination_course_code
-     * @param int $destination_session_id
-     * @param array $params
+     * @param int    $destination_session_id
+     * @param array  $params
      *
-     * @return  bool
+     * @return bool
      */
     public static function copy_course(
         $source_course_code,
         $source_session_id,
         $destination_course_code,
         $destination_session_id,
-        $params = array()
+        $params = []
     ) {
         $course_info = api_get_course_info($source_course_code);
 
@@ -4419,13 +4530,15 @@ class CourseManager
                 true,
                 true
             );
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * A simpler version of the copy_course, the function creates an empty course with an autogenerated course code
+     * A simpler version of the copy_course, the function creates an empty course with an autogenerated course code.
      *
      * @param string $new_title new course title
      * @param string source course code
@@ -4433,14 +4546,14 @@ class CourseManager
      * @param int destination session id
      * @param bool new copied tools (Exercises and LPs)will be set to invisible by default?
      *
-     * @return     array
+     * @return array
      */
     public static function copy_course_simple(
         $new_title,
         $source_course_code,
         $source_session_id = 0,
         $destination_session_id = 0,
-        $params = array()
+        $params = []
     ) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
@@ -4470,12 +4583,13 @@ class CourseManager
     }
 
     /**
-     * Creates a new course code based in a given code
+     * Creates a new course code based in a given code.
      *
      * @param string    wanted code
      * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
      * if the course code doest not exist in the DB the same course code will be returned
-     * @return string    wanted unused code
+     *
+     * @return string wanted unused code
      */
     public static function generate_nice_next_course_code($wanted_code)
     {
@@ -4505,12 +4619,13 @@ class CourseManager
     }
 
     /**
-     * Gets the status of the users agreement in a course course-session
+     * Gets the status of the users agreement in a course course-session.
      *
-     * @param int $user_id
+     * @param int    $user_id
      * @param string $course_code
-     * @param int $session_id
-     * @return boolean
+     * @param int    $session_id
+     *
+     * @return bool
      */
     public static function is_user_accepted_legal($user_id, $course_code, $session_id = 0)
     {
@@ -4527,6 +4642,7 @@ class CourseManager
         if ($enabled == 'true') {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
             $plugin = CourseLegalPlugin::create();
+
             return $plugin->isUserAcceptedLegal($user_id, $course_code, $session_id);
         }
 
@@ -4541,6 +4657,7 @@ class CourseManager
                     return true;
                 }
             }
+
             return false;
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -4553,15 +4670,18 @@ class CourseManager
                     return true;
                 }
             }
+
             return false;
         }
     }
 
     /**
-     * Saves the user-course legal agreement
+     * Saves the user-course legal agreement.
+     *
      * @param   int user id
      * @param   string course code
      * @param   int session id
+     *
      * @return mixed
      */
     public static function save_user_legal($user_id, $course_code, $session_id = null)
@@ -4571,6 +4691,7 @@ class CourseManager
         if ($enabled == 'true') {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
             $plugin = CourseLegalPlugin::create();
+
             return $plugin->saveUserLegal($user_id, $course_code, $session_id);
         }
 
@@ -4598,6 +4719,7 @@ class CourseManager
      * @param int $course_id
      * @param int $session_id
      * @param int $url_id
+     *
      * @return bool
      */
     public static function get_user_course_vote($user_id, $course_id, $session_id = 0, $url_id = 0)
@@ -4611,26 +4733,27 @@ class CourseManager
             return false;
         }
 
-        $params = array(
+        $params = [
             'user_id' => $user_id,
             'c_id' => $course_id,
             'session_id' => $session_id,
-            'url_id' => $url_id
-        );
+            'url_id' => $url_id,
+        ];
 
         $result = Database::select(
             'vote',
             $table_user_course_vote,
-            array(
-                'where' => array(
-                    'user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params
-                )
-            ),
+            [
+                'where' => [
+                    'user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params,
+                ],
+            ],
             'first'
         );
         if (!empty($result)) {
             return $result['vote'];
         }
+
         return false;
     }
 
@@ -4638,6 +4761,7 @@ class CourseManager
      * @param int $course_id
      * @param int $session_id
      * @param int $url_id
+     *
      * @return array
      */
     public static function get_course_ranking(
@@ -4651,17 +4775,17 @@ class CourseManager
         $url_id = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
         $now = api_get_utc_datetime();
 
-        $params = array(
+        $params = [
             'c_id' => $course_id,
             'session_id' => $session_id,
             'url_id' => $url_id,
             'creation_date' => $now,
-        );
+        ];
 
         $result = Database::select(
             'c_id, accesses, total_score, users',
             $table_course_ranking,
-            array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)),
+            ['where' => ['c_id = ? AND session_id = ? AND url_id = ?' => $params]],
             'first'
         );
 
@@ -4688,18 +4812,19 @@ class CourseManager
     }
 
     /**
+     * Updates the course ranking.
      *
-     * Updates the course ranking
      * @param int   course id
-     * @param int   $session_id
+     * @param int $session_id
      * @param int    url id
      * @param $points_to_add
      * @param bool $add_access
      * @param bool $add_user
+     *
      * @return array
-     **/
+     */
     public static function update_course_ranking(
-        $course_id = 0 ,
+        $course_id = 0,
         $session_id = 0,
         $url_id = 0,
         $points_to_add = null,
@@ -4715,19 +4840,19 @@ class CourseManager
         $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
         $url_id = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
 
-        $params = array(
+        $params = [
             'c_id' => $course_id,
             'session_id' => $session_id,
             'url_id' => $url_id,
             'creation_date' => $now,
             'total_score' => 0,
-            'users' => 0
-        );
+            'users' => 0,
+        ];
 
         $result = Database::select(
             'id, accesses, total_score, users',
             $table_course_ranking,
-            array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)),
+            ['where' => ['c_id = ? AND session_id = ? AND url_id = ?' => $params]],
             'first'
         );
 
@@ -4745,7 +4870,7 @@ class CourseManager
             }
             $result = Database::insert($table_course_ranking, $params);
         } else {
-            $my_params = array();
+            $my_params = [];
 
             if ($add_access) {
                 $my_params['accesses'] = intval($result['accesses']) + 1;
@@ -4761,7 +4886,7 @@ class CourseManager
                 $result = Database::update(
                     $table_course_ranking,
                     $my_params,
-                    array('c_id = ? AND session_id = ? AND url_id = ?' => $params)
+                    ['c_id = ? AND session_id = ? AND url_id = ?' => $params]
                 );
             }
         }
@@ -4770,14 +4895,15 @@ class CourseManager
     }
 
     /**
-     * Add user vote to a course
+     * Add user vote to a course.
      *
      * @param   int user id
      * @param   int vote [1..5]
      * @param   int course id
      * @param   int session id
      * @param   int url id (access_url_id)
-     * @return    false|string 'added', 'updated' or 'nothing'
+     *
+     * @return false|string 'added', 'updated' or 'nothing'
      */
     public static function add_course_vote(
         $user_id,
@@ -4793,7 +4919,7 @@ class CourseManager
             return false;
         }
 
-        if (!in_array($vote, array(1, 2, 3, 4, 5))) {
+        if (!in_array($vote, [1, 2, 3, 4, 5])) {
             return false;
         }
 
@@ -4801,19 +4927,19 @@ class CourseManager
         $url_id = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
         $vote = intval($vote);
 
-        $params = array(
+        $params = [
             'user_id' => intval($user_id),
             'c_id' => $course_id,
             'session_id' => $session_id,
             'url_id' => $url_id,
-            'vote' => $vote
-        );
+            'vote' => $vote,
+        ];
 
         $action_done = 'nothing';
         $result = Database::select(
             'id, vote',
             $table_user_course_vote,
-            array('where' => array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)),
+            ['where' => ['user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params]],
             'first'
         );
 
@@ -4823,14 +4949,14 @@ class CourseManager
             $add_user = true;
             $action_done = 'added';
         } else {
-            $my_params = array('vote' => $vote);
+            $my_params = ['vote' => $vote];
             $points_to_add = $vote - $result['vote'];
             $add_user = false;
 
             Database::update(
                 $table_user_course_vote,
                 $my_params,
-                array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)
+                ['user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params]
             );
             $action_done = 'updated';
         }
@@ -4846,16 +4972,16 @@ class CourseManager
                 $add_user
             );
         }
+
         return $action_done;
     }
 
     /**
-     * Remove course ranking + user votes
+     * Remove course ranking + user votes.
      *
      * @param int $course_id
      * @param int $session_id
      * @param int $url_id
-     *
      */
     public static function remove_course_ranking($course_id, $session_id, $url_id = null)
     {
@@ -4864,26 +4990,28 @@ class CourseManager
 
         if (!empty($course_id) && isset($session_id)) {
             $url_id = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
-            $params = array(
+            $params = [
                 'c_id' => $course_id,
                 'session_id' => $session_id,
                 'url_id' => $url_id,
-            );
-            Database::delete($table_course_ranking, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
-            Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            ];
+            Database::delete($table_course_ranking, ['c_id = ? AND session_id = ? AND url_id = ?' => $params]);
+            Database::delete($table_user_course_vote, ['c_id = ? AND session_id = ? AND url_id = ?' => $params]);
         }
     }
 
     /**
-     * Returns an array with the hottest courses
-     * @param   int $days number of days
-     * @param   int $limit number of hottest courses
+     * Returns an array with the hottest courses.
+     *
+     * @param int $days  number of days
+     * @param int $limit number of hottest courses
+     *
      * @return array
      */
     public static function return_hot_courses($days = 30, $limit = 6)
     {
         if (api_is_invitee()) {
-            return array();
+            return [];
         }
 
         $limit = intval($limit);
@@ -4891,7 +5019,7 @@ class CourseManager
         // Getting my courses
         $my_course_list = self::get_courses_list_by_user_id(api_get_user_id());
 
-        $my_course_code_list = array();
+        $my_course_code_list = [];
         foreach ($my_course_list as $course) {
             $my_course_code_list[$course['real_id']] = $course['real_id'];
         }
@@ -4926,7 +5054,7 @@ class CourseManager
             ";
 
         $result = Database::query($sql);
-        $courses = array();
+        $courses = [];
 
         if (Database::num_rows($result)) {
             $courses = Database::store_result($result, 'ASSOC');
@@ -4939,9 +5067,10 @@ class CourseManager
     /**
      * @param array $courses
      * @param array $my_course_code_list
+     *
      * @return mixed
      */
-    public static function processHotCourseItem($courses, $my_course_code_list = array())
+    public static function processHotCourseItem($courses, $my_course_code_list = [])
     {
         $hotCourses = [];
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
@@ -4968,7 +5097,6 @@ class CourseManager
             $my_course['is_registered'] = $userRegistered;
             $my_course['title_cut'] = cut($course_info['title'], 45);
 
-
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
                 $my_course['register_button'] = Display::url(
@@ -4976,13 +5104,12 @@ class CourseManager
                     Display::returnFontAwesomeIcon('sign-in'),
                     api_get_path(WEB_COURSE_PATH).$course_info['path'].
                      '/index.php?action=subscribe&sec_token='.$stok,
-                    array(
+                    [
                         'class' => 'btn btn-success btn-sm',
                         'title' => get_lang('Subscribe'),
-                        'aria-label' => get_lang('Subscribe')
-                    )
+                        'aria-label' => get_lang('Subscribe'),
+                    ]
                 );
-
             }
 
             if ($access_link && in_array('enter', $access_link) ||
@@ -4992,13 +5119,12 @@ class CourseManager
                     get_lang('GoToCourse').' '.
                     Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php',
-                    array(
+                    [
                         'class' => 'btn btn-default btn-sm',
                         'title' => get_lang('GoToCourse'),
-                        'aria-label' => get_lang('GoToCourse')
-                    )
+                        'aria-label' => get_lang('GoToCourse'),
+                    ]
                 );
-
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
@@ -5006,12 +5132,12 @@ class CourseManager
                     get_lang('Unreg').' '.
                     Display::returnFontAwesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&unsubscribe='.$courseCode
-                    . '&sec_token='.$stok.'&category_code='.$categoryCode,
-                    array(
+                    .'&sec_token='.$stok.'&category_code='.$categoryCode,
+                    [
                         'class' => 'btn btn-danger btn-sm',
                         'title' => get_lang('Unreg'),
-                        'aria-label' => get_lang('Unreg')
-                    )
+                        'aria-label' => get_lang('Unreg'),
+                    ]
                 );
             }
 
@@ -5044,7 +5170,7 @@ class CourseManager
                     'class' => 'btn btn-default btn-sm ajax',
                     'data-title' => get_lang('Description'),
                     'title' => get_lang('Description'),
-                    'aria-label' => get_lang('Description')
+                    'aria-label' => get_lang('Description'),
                 ]
             );
             $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], true);
@@ -5060,11 +5186,13 @@ class CourseManager
             }
             $hotCourses[] = $my_course;
         }
+
         return $hotCourses;
     }
 
     /**
      * @param int $limit
+     *
      * @return array
      */
     public static function return_most_accessed_courses($limit = 5)
@@ -5075,7 +5203,7 @@ class CourseManager
         $result = Database::select(
             'c_id, accesses, total_score, users',
             $table_course_ranking,
-            array('where' => array('url_id = ?' => $params), 'order' => 'accesses DESC', 'limit' => $limit),
+            ['where' => ['url_id = ?' => $params], 'order' => 'accesses DESC', 'limit' => $limit],
             'all',
             true
         );
@@ -5084,7 +5212,8 @@ class CourseManager
     }
 
     /**
-     * Get courses count
+     * Get courses count.
+     *
      * @param int $access_url_id Access URL ID (optional)
      * @param int $visibility
      *
@@ -5120,6 +5249,7 @@ class CourseManager
      * Active = all courses except the ones with hidden visibility.
      *
      * @param int $urlId Access URL ID (optional)
+     *
      * @return int Number of courses
      */
     public static function countActiveCourses($urlId = null)
@@ -5138,14 +5268,16 @@ class CourseManager
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
+
         return $row[0];
     }
 
     /**
-     * Returns the SQL conditions to filter course only visible by the user in the catalogue
+     * Returns the SQL conditions to filter course only visible by the user in the catalogue.
      *
      * @param string $courseTableAlias Alias of the course table
-     * @param bool $hideClosed Whether to hide closed and hidden courses
+     * @param bool   $hideClosed       Whether to hide closed and hidden courses
+     *
      * @return string SQL conditions
      */
     public static function getCourseVisibilitySQLCondition(
@@ -5182,8 +5314,10 @@ class CourseManager
     }
 
     /**
-     * Get available le courses count
+     * Get available le courses count.
+     *
      * @param int $accessUrlId (optional)
+     *
      * @return int Number of courses
      */
     public static function countAvailableCourses($accessUrlId = 1)
@@ -5224,14 +5358,15 @@ class CourseManager
 
     /**
      * Return a link to go to the course, validating the visibility of the
-     * course and the user status
+     * course and the user status.
+     *
      * @param int $uid User ID
      * @param array Course details array
      * @param array  List of courses to which the user is subscribed (if not provided, will be generated)
      *
      * @return mixed 'enter' for a link to go to the course or 'register' for a link to subscribe, or false if no access
      */
-    static function get_access_link_by_user($uid, $course, $user_courses = array())
+    public static function get_access_link_by_user($uid, $course, $user_courses = [])
     {
         if (empty($uid) || empty($course)) {
             return false;
@@ -5250,11 +5385,11 @@ class CourseManager
         }
 
         if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) {
-            return array();
+            return [];
         }
 
         $is_admin = api_is_platform_admin_by_id($uid);
-        $options = array();
+        $options = [];
         // Register button
         if (!api_is_anonymous($uid) &&
             (
@@ -5297,12 +5432,12 @@ class CourseManager
     }
 
     /**
-     * @param array $courseInfo
-     * @param array $teachers
-     * @param bool $deleteTeachersNotInList
-     * @param bool $editTeacherInSessions
-     * @param bool $deleteSessionTeacherNotInList
-     * @param array $teacherBackup
+     * @param array          $courseInfo
+     * @param array          $teachers
+     * @param bool           $deleteTeachersNotInList
+     * @param bool           $editTeacherInSessions
+     * @param bool           $deleteSessionTeacherNotInList
+     * @param array          $teacherBackup
      * @param Monolog\Logger $logger
      *
      * @return false|null
@@ -5313,11 +5448,11 @@ class CourseManager
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
         $deleteSessionTeacherNotInList = false,
-        $teacherBackup = array(),
+        $teacherBackup = [],
         $logger = null
     ) {
         if (!is_array($teachers)) {
-            $teachers = array($teachers);
+            $teachers = [$teachers];
         }
 
         if (empty($courseInfo) || !isset($courseInfo['real_id'])) {
@@ -5343,7 +5478,7 @@ class CourseManager
 
             // Recover user categories
             $sql = 'SELECT * FROM '.$course_user_table.'
-                    WHERE c_id ="' . $courseId.'" AND status="1" AND relation_type = 0 '.$cond;
+                    WHERE c_id ="'.$courseId.'" AND status="1" AND relation_type = 0 '.$cond;
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $teachersToDelete = Database::store_result($result, 'ASSOC');
@@ -5354,7 +5489,7 @@ class CourseManager
             }
 
             $sql = 'DELETE FROM '.$course_user_table.'
-                    WHERE c_id ="' . $courseId.'" AND status="1" AND relation_type = 0 '.$cond;
+                    WHERE c_id ="'.$courseId.'" AND status="1" AND relation_type = 0 '.$cond;
 
             Database::query($sql);
         }
@@ -5364,12 +5499,12 @@ class CourseManager
                 $userId = intval($userId);
                 // We check if the teacher is already subscribed in this course
                 $sql = 'SELECT 1 FROM '.$course_user_table.'
-                        WHERE user_id = "' . $userId.'" AND c_id = "'.$courseId.'" ';
+                        WHERE user_id = "'.$userId.'" AND c_id = "'.$courseId.'" ';
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
                     $sql = 'UPDATE '.$course_user_table.' 
                             SET status = "1"
-                            WHERE c_id = "' . $courseId.'" AND user_id = "'.$userId.'"  ';
+                            WHERE c_id = "'.$courseId.'" AND user_id = "'.$userId.'"  ';
                 } else {
                     $userCourseCategory = '0';
                     if (isset($teacherBackup[$userId]) &&
@@ -5417,7 +5552,7 @@ class CourseManager
                             );
                         }
 
-                        $teachersToDelete = array();
+                        $teachersToDelete = [];
                         if (!empty($alreadyAddedTeachers)) {
                             $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
                         }
@@ -5454,14 +5589,16 @@ class CourseManager
     }
 
     /**
-     * Course available settings variables see c_course_setting table
+     * Course available settings variables see c_course_setting table.
+     *
      * @param AppPlugin $appPlugin
+     *
      * @return array
      */
     public static function getCourseSettingVariables(AppPlugin $appPlugin)
     {
         $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
-        $courseSettings = array(
+        $courseSettings = [
             // Get allow_learning_path_theme from table
             'allow_learning_path_theme',
             // Get allow_open_chat_window from table
@@ -5495,8 +5632,8 @@ class CourseManager
             'exercise_invisible_in_session',
             'enable_forum_auto_launch',
             'show_course_in_user_language',
-            'email_to_teachers_on_new_work_feedback'
-        );
+            'email_to_teachers_on_new_work_feedback',
+        ];
 
         if (!empty(ExerciseLib::getScoreModels())) {
             $courseSettings[] = 'score_model_id';
@@ -5518,10 +5655,11 @@ class CourseManager
     }
 
     /**
-     * @param AppPlugin $appPlugin
-     * @param string $variable
+     * @param AppPlugin    $appPlugin
+     * @param string       $variable
      * @param string|array $value
-     * @param int $courseId
+     * @param int          $courseId
+     *
      * @return bool
      */
     public static function saveCourseConfigurationSetting(AppPlugin $appPlugin, $variable, $value, $courseId)
@@ -5529,7 +5667,6 @@ class CourseManager
         $settingList = self::getCourseSettingVariables($appPlugin);
 
         if (!in_array($variable, $settingList)) {
-
             return false;
         }
 
@@ -5543,8 +5680,8 @@ class CourseManager
             // Update
             Database::update(
                 $courseSettingTable,
-                array('value' => $value),
-                array('variable = ? AND c_id = ?' => array($variable, $courseId))
+                ['value' => $value],
+                ['variable = ? AND c_id = ?' => [$variable, $courseId]]
             );
         } else {
             // Create
@@ -5558,13 +5695,16 @@ class CourseManager
                 ]
             );
         }
+
         return true;
     }
 
     /**
-     * Check if course setting exists
+     * Check if course setting exists.
+     *
      * @param string $variable
-     * @param int $courseId
+     * @param int    $courseId
+     *
      * @return bool
      */
     public static function hasCourseSetting($variable, $courseId)
@@ -5580,10 +5720,12 @@ class CourseManager
     }
 
     /**
-     * Get information from the track_e_course_access table
+     * Get information from the track_e_course_access table.
+     *
      * @param int $sessionId
      * @param int $userId
      * @param int $limit
+     *
      * @return array
      */
     public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = 0)
@@ -5606,11 +5748,13 @@ class CourseManager
     }
 
     /**
-     * Get information from the track_e_course_access table
-     * @param int $courseId
-     * @param int $sessionId
+     * Get information from the track_e_course_access table.
+     *
+     * @param int    $courseId
+     * @param int    $sessionId
      * @param string $startDate
      * @param string $endDate
+     *
      * @return array
      */
     public static function getCourseAccessPerCourseAndSession(
@@ -5639,9 +5783,11 @@ class CourseManager
 
     /**
      * Get login information from the track_e_course_access table, for any
-     * course in the given session
+     * course in the given session.
+     *
      * @param int $sessionId
      * @param int $userId
+     *
      * @return array
      */
     public static function getFirstCourseAccessPerSessionAndUser($sessionId, $userId)
@@ -5656,17 +5802,19 @@ class CourseManager
                 LIMIT 1";
 
         $result = Database::query($sql);
-        $courseAccess = array();
+        $courseAccess = [];
         if (Database::num_rows($result)) {
             $courseAccess = Database::fetch_array($result, 'ASSOC');
         }
+
         return $courseAccess;
     }
 
     /**
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int  $courseId
+     * @param int  $sessionId
      * @param bool $getAllSessions
+     *
      * @return mixed
      */
     public static function getCountForum(
@@ -5696,6 +5844,7 @@ class CourseManager
      * @param int $userId
      * @param int $courseId
      * @param int $sessionId
+     *
      * @return mixed
      */
     public static function getCountPostInForumPerUser(
@@ -5721,6 +5870,7 @@ class CourseManager
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+
         return $row['count'];
     }
 
@@ -5728,6 +5878,7 @@ class CourseManager
      * @param int $userId
      * @param int $courseId
      * @param int $sessionId
+     *
      * @return mixed
      */
     public static function getCountForumPerUser(
@@ -5753,20 +5904,23 @@ class CourseManager
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+
         return $row['count'];
     }
 
     /**
-     * Returns the course name from a given code
+     * Returns the course name from a given code.
+     *
      * @param string $code
+     *
      * @return string
      */
     public static function getCourseNameFromCode($code)
     {
         $tbl_main_categories = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = 'SELECT title
-                FROM ' . $tbl_main_categories.'
-                WHERE code = "' . Database::escape_string($code).'"';
+                FROM '.$tbl_main_categories.'
+                WHERE code = "'.Database::escape_string($code).'"';
         $result = Database::query($sql);
         if ($col = Database::fetch_array($result)) {
             return $col['title'];
@@ -5774,13 +5928,16 @@ class CourseManager
     }
 
     /**
-     * Generates a course code from a course title
+     * Generates a course code from a course title.
+     *
      * @todo Such a function might be useful in other places too. It might be moved in the CourseManager class.
      * @todo the function might be upgraded for avoiding code duplications (currently,
      * it might suggest a code that is already in use)
+     *
      * @param string $title A course title
+     *
      * @return string A proposed course code
-     * +
+     *                +
      * @assert (null,null) === false
      * @assert ('ABC_DEF', null) === 'ABCDEF'
      * @assert ('ABC09*^[%A', null) === 'ABC09A'
@@ -5796,6 +5953,7 @@ class CourseManager
 
     /**
      * @param $courseId
+     *
      * @return array
      */
     public static function getCourseSettings($courseId)
@@ -5804,18 +5962,20 @@ class CourseManager
         $courseId = intval($courseId);
         $sql = "SELECT * FROM $settingTable WHERE c_id = $courseId";
         $result = Database::query($sql);
-        $settings = array();
+        $settings = [];
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $settings[$row['variable']] = $row;
             }
         }
+
         return $settings;
     }
 
     /**
      * this function gets all the users of the course,
-     * including users from linked courses
+     * including users from linked courses.
+     *
      * @param $filterByActive
      *
      * @return array
@@ -5843,7 +6003,7 @@ class CourseManager
 
     /**
      * this function gets all the groups of the course,
-     * not including linked courses
+     * not including linked courses.
      */
     public static function getCourseGroups()
     {
@@ -5867,7 +6027,7 @@ class CourseManager
 
     /**
      * @param FormValidator $form
-     * @param array $to_already_selected
+     * @param array         $to_already_selected
      *
      * @return HTML_QuickForm_element
      */
@@ -5881,7 +6041,7 @@ class CourseManager
             $to_already_selected
         );
 
-        $result = array();
+        $result = [];
         foreach ($array as $content) {
             $result[$content['value']] = $content['content'];
         }
@@ -5891,21 +6051,23 @@ class CourseManager
             'users',
             get_lang('Users'),
             $result,
-            array('select_all_checkbox' => true)
+            ['select_all_checkbox' => true]
         );
     }
 
     /**
      * This function separates the users from the groups
      * users have a value USER:XXX (with XXX the groups id have a value
-     *  GROUP:YYY (with YYY the group id)
-     * @param  array $to Array of strings that define the type and id of each destination
+     *  GROUP:YYY (with YYY the group id).
+     *
+     * @param array $to Array of strings that define the type and id of each destination
+     *
      * @return array Array of groups and users (each an array of IDs)
      */
     public static function separateUsersGroups($to)
     {
-        $groupList = array();
-        $userList = array();
+        $groupList = [];
+        $userList = [];
 
         foreach ($to as $to_item) {
             if (!empty($to_item)) {
@@ -5932,9 +6094,10 @@ class CourseManager
 
     /**
      * Shows the form for sending a message to a specific group or user.
+     *
      * @param FormValidator $form
-     * @param array $groupInfo
-     * @param array $to
+     * @param array         $groupInfo
+     * @param array         $to
      *
      * @return HTML_QuickForm_element
      */
@@ -5943,7 +6106,7 @@ class CourseManager
         $group_users = GroupManager::get_subscribed_users($groupInfo);
         $array = self::buildSelectOptions(null, $group_users, $to);
 
-        $result = array();
+        $result = [];
         foreach ($array as $content) {
             $result[$content['value']] = $content['content'];
         }
@@ -5953,21 +6116,23 @@ class CourseManager
 
     /**
      * this function shows the form for sending a message to a specific group or user.
+     *
      * @param array $group_list
      * @param array $userList
      * @param array $to_already_selected
+     *
      * @return array
      */
     public static function buildSelectOptions(
-        $group_list = array(),
-        $userList = array(),
-        $to_already_selected = array()
+        $group_list = [],
+        $userList = [],
+        $to_already_selected = []
     ) {
         if (empty($to_already_selected)) {
-            $to_already_selected = array();
+            $to_already_selected = [];
         }
 
-        $result = array();
+        $result = [];
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {
@@ -5979,11 +6144,11 @@ class CourseManager
                     ) { // $to_already_selected is the array containing the groups (and users) that are already selected
                         $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
                         $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled";
-                        $result[] = array(
+                        $result[] = [
                             'disabled' => $user_disabled,
                             'value' => "GROUP:".$this_group['id'],
-                            'content' => "G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label
-                        );
+                            'content' => "G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label,
+                        ];
                     }
                 }
             }
@@ -5998,11 +6163,10 @@ class CourseManager
                         $to_already_selected
                     )
                     ) { // $to_already_selected is the array containing the users (and groups) that are already selected
-
-                        $result[] = array(
+                        $result[] = [
                             'value' => "USER:".$user['user_id'],
-                            'content' => api_get_person_name($user['firstname'], $user['lastname'])
-                        );
+                            'content' => api_get_person_name($user['firstname'], $user['lastname']),
+                        ];
                     }
                 }
             }
@@ -6012,34 +6176,40 @@ class CourseManager
     }
 
     /**
-     * @return array a list (array) of all courses.
+     * @return array a list (array) of all courses
      */
     public static function get_course_list()
     {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
+
         return Database::store_result(Database::query("SELECT *, id as real_id FROM $table"));
     }
 
     /**
-     * Returns course code from a given gradebook category's id
+     * Returns course code from a given gradebook category's id.
+     *
      * @param int  Category ID
-     * @return string  Course code
+     *
+     * @return string Course code
      */
     public static function get_course_by_category($category_id)
     {
         $category_id = intval($category_id);
         $info = Database::fetch_array(
             Database::query('SELECT course_code FROM '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).'
-            WHERE id=' . $category_id), 'ASSOC'
+            WHERE id='.$category_id), 'ASSOC'
         );
+
         return $info ? $info['course_code'] : false;
     }
 
     /**
-     * This function gets all the courses that are not in a session
+     * This function gets all the courses that are not in a session.
+     *
      * @param date Start date
      * @param date End date
-     * @param   bool    $includeClosed Whether to include closed and hidden courses
+     * @param bool $includeClosed Whether to include closed and hidden courses
+     *
      * @return array Not-in-session courses
      */
     public static function getCoursesWithoutSession(
@@ -6061,16 +6231,19 @@ class CourseManager
                 ORDER BY id";
 
         $result = Database::query($sql);
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result)) {
             $courses[] = $row;
         }
+
         return $courses;
     }
 
     /**
-     * Get list of courses based on users of a group for a group admin
+     * Get list of courses based on users of a group for a group admin.
+     *
      * @param int $userId The user id
+     *
      * @return array
      */
     public static function getCoursesFollowedByGroupAdmin($userId)
@@ -6119,13 +6292,12 @@ class CourseManager
     }
 
     /**
-     * Direct course link see #5299
+     * Direct course link see #5299.
      *
      * You can send to your students an URL like this
      * http://chamilodev.beeznest.com/main/auth/inscription.php?c=ABC&e=3
      * Where "c" is the course code and "e" is the exercise Id, after a successful
      * registration the user will be sent to the course or exercise
-     *
      */
     public static function redirectToCourse($form_data)
     {
@@ -6137,16 +6309,15 @@ class CourseManager
             $course_info = api_get_course_info($course_code_redirect);
             if (!empty($course_info)) {
                 if (in_array($course_info['visibility'],
-                    array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
+                    [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD])
                 ) {
                     if (self::is_user_subscribed_in_course($user_id, $course_info['code'])) {
-
                         $form_data['action'] = $course_info['course_public_url'];
                         $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
                         $form_data['button'] = Display::button(
                             'next',
                             get_lang('GoToCourse', null, $_user['language']),
-                            array('class' => 'btn btn-primary btn-large')
+                            ['class' => 'btn btn-primary btn-large']
                         );
 
                         $exercise_redirect = intval(Session::read('exercise_redirect'));
@@ -6161,7 +6332,7 @@ class CourseManager
                             $form_data['button'] = Display::button(
                                 'next',
                                 get_lang('Go', null, $_user['language']),
-                                array('class' => 'btn btn-primary btn-large')
+                                ['class' => 'btn btn-primary btn-large']
                             );
                         }
 
@@ -6178,9 +6349,11 @@ class CourseManager
     }
 
     /**
-     * return html code for displaying a course title in the standard view (not the Session view)
+     * return html code for displaying a course title in the standard view (not the Session view).
+     *
      * @param $courseId
      * @param bool $loadDirs
+     *
      * @return string
      */
     public static function displayCourseHtml($courseId, $loadDirs = false)
@@ -6195,9 +6368,11 @@ class CourseManager
      * Return tab of params to display a course title in the My Courses tab
      * Check visibility, right, and notification icons, and load_dirs option
      *  // get html course params
-     *   //
+     *   //.
+     *
      * @param $courseId
      * @param bool $loadDirs
+     *
      * @return array with keys ['right_actions'] ['teachers'] ['notifications']
      */
     public static function getCourseParamsForDisplay($courseId, $loadDirs = false)
@@ -6271,23 +6446,23 @@ class CourseManager
         $status_icon = Display::return_icon(
             'blackboard.png',
             $course_info['title'],
-            array(),
+            [],
             ICON_SIZE_LARGE
         );
 
-        $params = array();
+        $params = [];
         $params['right_actions'] = '';
 
         if (api_is_platform_admin()) {
             if ($loadDirs) {
-                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
-                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
                 $params['right_actions'] .= Display::div(
                     '',
-                    array(
+                    [
                         'id' => 'document_result_'.$course_info['real_id'].'_0',
                         'class' => 'document_preview_container',
-                    )
+                    ]
                 );
             } else {
                 $params['right_actions'] .= '<a class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::returnFontAwesomeIcon('pencil').'</a>';
@@ -6299,13 +6474,13 @@ class CourseManager
         } else {
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 if ($loadDirs) {
-                    $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
+                    $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
                     $params['right_actions'] .= Display::div(
                         '',
-                        array(
+                        [
                             'id' => 'document_result_'.$course_info['real_id'].'_0',
                             'class' => 'document_preview_container',
-                        )
+                        ]
                     );
                 } else {
                     if ($course_info['status'] == COURSEMANAGER) {
@@ -6323,7 +6498,7 @@ class CourseManager
             $course_title = $course_info['title'].' '.Display::tag(
                 'span',
                 get_lang('CourseClosed'),
-                array('class' => 'item_closed')
+                ['class' => 'item_closed']
             );
         }
 
@@ -6352,10 +6527,11 @@ class CourseManager
 
     /**
      * Get the course id based on the original id and field name in the extra fields.
-     * Returns 0 if course was not found
+     * Returns 0 if course was not found.
      *
      * @param string $original_course_id_value Original course id
-     * @param string $original_course_id_name Original field name
+     * @param string $original_course_id_name  Original field name
+     *
      * @return int Course id
      */
     public static function get_course_id_from_original_id($original_course_id_value, $original_course_id_name)
@@ -6369,14 +6545,15 @@ class CourseManager
         if ($value) {
             return $value['item_id'];
         }
+
         return 0;
     }
 
     /**
-     * Helper function to create a default gradebook (if necessary) upon course creation
-     * @param   int     $modelId    The gradebook model ID
-     * @param   string  $courseCode Course code
-     * @return  void
+     * Helper function to create a default gradebook (if necessary) upon course creation.
+     *
+     * @param int    $modelId    The gradebook model ID
+     * @param string $courseCode Course code
      */
     public static function createDefaultGradebook($modelId, $courseCode)
     {
@@ -6397,9 +6574,10 @@ class CourseManager
 
     /**
      * Helper function to check if there is a course template and, if so, to
-     * copy the template as basis for the new course
-     * @param   string  $courseCode   Course code
-     * @param   int     $courseTemplate 0 if no course template is defined
+     * copy the template as basis for the new course.
+     *
+     * @param string $courseCode     Course code
+     * @param int    $courseTemplate 0 if no course template is defined
      */
     public static function useTemplateAsBasisIfRequired($courseCode, $courseTemplate)
     {
@@ -6430,11 +6608,13 @@ class CourseManager
     }
 
     /**
-     * Helper method to get the number of users defined with a specific course extra field
-     * @param   string  $name   Field title
-     * @param   string  $tableExtraFields The extra fields table name
-     * @param   string  $tableUserFieldValues The user extra field value table name
-     * @return  int     The number of users with this extra field with a specific value
+     * Helper method to get the number of users defined with a specific course extra field.
+     *
+     * @param string $name                 Field title
+     * @param string $tableExtraFields     The extra fields table name
+     * @param string $tableUserFieldValues The user extra field value table name
+     *
+     * @return int The number of users with this extra field with a specific value
      */
     public static function getCountRegisteredUsersWithCourseExtraField(
         $name,
@@ -6468,11 +6648,74 @@ class CourseManager
     }
 
     /**
-     * Check if a specific access-url-related setting is a problem or not
-     * @param array $_configuration The $_configuration array
-     * @param int $accessUrlId The access URL ID
+     * Get the course categories form a course list.
+     *
+     * @param array $courseList
+     *
+     * @return array
+     */
+    public static function getCourseCategoriesFromCourseList(array $courseList)
+    {
+        $allCategories = array_column($courseList, 'category');
+        $categories = array_unique($allCategories);
+
+        sort($categories);
+
+        return $categories;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCountOpenCourses()
+    {
+        $visibility = [
+            COURSE_VISIBILITY_REGISTERED,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_OPEN_WORLD,
+        ];
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT count(id) count 
+                FROM $table 
+                WHERE visibility IN (".implode(',', $visibility).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCountExercisesFromOpenCourse()
+    {
+        $visibility = [
+            COURSE_VISIBILITY_REGISTERED,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_OPEN_WORLD,
+        ];
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "SELECT count(e.iid) count 
+                FROM $table c INNER JOIN $tableExercise e
+                ON (c.id = e.c_id)
+                WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
+    }
+
+    /**
+     * Check if a specific access-url-related setting is a problem or not.
+     *
+     * @param array  $_configuration The $_configuration array
+     * @param int    $accessUrlId    The access URL ID
      * @param string $param
      * @param string $msgLabel
+     *
      * @return bool|string
      */
     private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
@@ -6487,14 +6730,16 @@ class CourseManager
                 );
             }
         }
+
         return false;
     }
+
     /**
-     * Fill course with all necessary items
+     * Fill course with all necessary items.
+     *
      * @param array $courseInfo Course info array
-     * @param array $params Parameters from the course creation form
-     * @param int $authorId
-     * @return void
+     * @param array $params     Parameters from the course creation form
+     * @param int   $authorId
      */
     private static function fillCourse($courseInfo, $params, $authorId = 0)
     {
@@ -6529,64 +6774,5 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
-    }
-
-    /**
-     * Get the course categories form a course list
-     * @param array $courseList
-     * @return array
-     */
-    public static function getCourseCategoriesFromCourseList(array $courseList)
-    {
-        $allCategories = array_column($courseList, 'category');
-        $categories = array_unique($allCategories);
-
-        sort($categories);
-
-        return $categories;
-    }
-
-    /**
-     * @return int
-     */
-    public static function getCountOpenCourses()
-    {
-        $visibility = [
-            COURSE_VISIBILITY_REGISTERED,
-            COURSE_VISIBILITY_OPEN_PLATFORM,
-            COURSE_VISIBILITY_OPEN_WORLD
-        ];
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT count(id) count 
-                FROM $table 
-                WHERE visibility IN (".implode(',', $visibility).")";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return $row['count'];
-    }
-
-    /**
-     * @return int
-     */
-    public static function getCountExercisesFromOpenCourse()
-    {
-        $visibility = [
-            COURSE_VISIBILITY_REGISTERED,
-            COURSE_VISIBILITY_OPEN_PLATFORM,
-            COURSE_VISIBILITY_OPEN_WORLD
-        ];
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT count(e.iid) count 
-                FROM $table c INNER JOIN $tableExercise e
-                ON (c.id = e.c_id)
-                WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return $row['count'];
     }
 }

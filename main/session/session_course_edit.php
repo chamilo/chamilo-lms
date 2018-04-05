@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Implements the edition of course-session settings
+ * Implements the edition of course-session settings.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -42,17 +42,17 @@ if (!list($session_name, $course_title) = Database::fetch_row($result)) {
     exit();
 }
 
-$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang("SessionList"));
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang("SessionList")];
+$interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
     "name" => get_lang('SessionOverview'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => "session_course_list.php?id_session=$id_session",
     "name" => api_htmlentities($session_name, ENT_QUOTES, $charset),
-);
+];
 
-$arr_infos = array();
+$arr_infos = [];
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     // get all tutor by course_code in the session
     $sql = "SELECT user_id
@@ -60,7 +60,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
     $rs_coaches = Database::query($sql);
 
-    $coaches_course_session = array();
+    $coaches_course_session = [];
     if (Database::num_rows($rs_coaches) > 0) {
         while ($row_coaches = Database::fetch_row($rs_coaches)) {
             $coaches_course_session[] = $row_coaches[0];

@@ -1,13 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -15,8 +14,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $tool_name = get_lang('AddCourse');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
 
 $em = Database::getManager();
 /** @var CourseCategoryRepository $courseCategoriesRepo */
@@ -33,9 +32,9 @@ $form->addText(
     'title',
     get_lang('Title'),
     true,
-    array(
-        'aria-label' => get_lang('Title')
-    )
+    [
+        'aria-label' => get_lang('Title'),
+    ]
 );
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
@@ -43,16 +42,16 @@ $form->applyFilter('title', 'trim');
 // Code
 $form->addText(
     'visual_code',
-    array(
+    [
         get_lang('CourseCode'),
-        get_lang('OnlyLettersAndNumbers')
-    ),
+        get_lang('OnlyLettersAndNumbers'),
+    ],
     false,
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
         'title' => get_lang('OnlyLettersAndNumbers'),
-        'id' => 'visual_code'
+        'id' => 'visual_code',
     ]
 );
 
@@ -103,7 +102,7 @@ $form->addSelectAjax(
     [
         'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
         'id' => 'course_teachers',
-        'multiple' => 'multiple'
+        'multiple' => 'multiple',
     ]
 );
 $form->applyFilter('course_teachers', 'html_filter');
@@ -113,7 +112,7 @@ $form->addText(
     'department_name',
     get_lang('CourseDepartment'),
     false,
-    array('size' => '60', 'id' => 'department_name')
+    ['size' => '60', 'id' => 'department_name']
 );
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
@@ -123,7 +122,7 @@ $form->addText(
     'department_url',
     get_lang('CourseDepartmentURL'),
     false,
-    array('size' => '60', 'id' => 'department_url')
+    ['size' => '60', 'id' => 'department_url']
 );
 $form->applyFilter('department_url', 'html_filter');
 
@@ -136,8 +135,8 @@ if (count($languages['name']) === 1) {
     $form->addSelectLanguage(
         'course_language',
         get_lang('Ln'),
-        array(),
-        array('style' => 'width:150px')
+        [],
+        ['style' => 'width:150px']
     );
 }
 
@@ -156,7 +155,7 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
 
 $form->addElement('checkbox', 'exemplary_content', '', get_lang('FillWithExemplaryContent'));
 
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -165,19 +164,19 @@ $group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVis
 
 $form->addGroup($group, '', get_lang('CourseAccess'));
 
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 $form->addGroup($group, '', get_lang('Subscription'));
 
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
-$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')), array(
-    'id' => 'disk_quota'
-));
+$form->addElement('text', 'disk_quota', [get_lang('CourseQuota'), null, get_lang('MB')], [
+    'id' => 'disk_quota',
+]);
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $obj = new GradeModel();

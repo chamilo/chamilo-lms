@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file
- * This code is inherited from admin/user_import.php
+ * This code is inherited from admin/user_import.php.
+ *
  * @package chamilo.reporting
  * Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -15,12 +15,12 @@ $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
 $tool_name = get_lang('ImportUserListXMLCSV');
 api_block_anonymous_users();
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 $id_session = '';
 if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
- 	$id_session = intval($_GET['id_session']);
-	$interbreadcrumb[] = array('url' => 'session.php', 'name' => get_lang('Sessions'));
-	$interbreadcrumb[] = array('url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course'));
+    $id_session = intval($_GET['id_session']);
+    $interbreadcrumb[] = ['url' => 'session.php', 'name' => get_lang('Sessions')];
+    $interbreadcrumb[] = ['url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course')];
 }
 
 // Set this option to true to enforce strict purification for usenames.
@@ -66,7 +66,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
                 // Selecting all the courses from the session id requested.
                 $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'";
                 $result = Database::query($sql);
-                $course_list = array();
+                $course_list = [];
                 while ($row = Database::fetch_array($result)) {
                     $course_list[] = $row['c_id'];
                 }
@@ -89,7 +89,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 Display :: display_header($tool_name);
 
 if ($_FILES['import_file']['size'] == 0 && $_POST) {
-	echo Display::return_message(get_lang('ThisFieldIsRequired'), 'error');
+    echo Display::return_message(get_lang('ThisFieldIsRequired'), 'error');
 }
 
 if (count($errors) != 0) {
@@ -108,7 +108,7 @@ $form->addElement('hidden', 'formSent');
 $form->addElement('hidden', 'id_session', $id_session);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');
-$allowed_file_types = array('xml', 'csv');
+$allowed_file_types = ['xml', 'csv'];
 $form->addRule('import_file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="../admin/example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV (<a href="../admin/example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');

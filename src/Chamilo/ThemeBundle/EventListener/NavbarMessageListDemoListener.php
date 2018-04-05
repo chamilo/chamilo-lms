@@ -8,7 +8,8 @@ use Chamilo\ThemeBundle\Model\MessageModel;
 use Chamilo\ThemeBundle\Model\UserModel;
 
 /**
- * Class NavbarMessageListDemoListener
+ * Class NavbarMessageListDemoListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class NavbarMessageListDemoListener
@@ -22,9 +23,9 @@ class NavbarMessageListDemoListener
 
     protected function getMessages()
     {
-        return array(
+        return [
             new MessageModel(new UserModel('Karl kettenkit'), 'Dude! do something!', new \DateTime('-3 days')),
             new MessageModel(new UserModel('Jack Trockendoc'), 'This is some subject', new \DateTime('-10 month')),
-        );
+        ];
     }
 }

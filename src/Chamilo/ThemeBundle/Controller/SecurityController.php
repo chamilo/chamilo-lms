@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class SecurityController
+ * Class SecurityController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class SecurityController extends Controller
@@ -32,12 +33,12 @@ class SecurityController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Security:login.html.twig',
-            array(
+            [
                 'last_username' => $session->get(
                     SecurityContext::LAST_USERNAME
                 ),
                 'error' => $error,
-            )
+            ]
         );
     }
 }

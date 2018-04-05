@@ -13,7 +13,7 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @Copyright Ghent University
@@ -21,7 +21,6 @@
  *
  * @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -46,10 +45,10 @@ $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 
 /* Is the user allowed here? */
@@ -65,19 +64,19 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) || $current_forum['locked'] <> 0)
+    (($current_forum_category['visibility'] && $current_forum_category['locked'] != 0) || $current_forum['locked'] != 0)
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    $current_forum['allow_new_threads'] <> 1
+    $current_forum['allow_new_threads'] != 1
 ) {
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] && $current_forum['allow_anonymous'] <> 1) {
+if (!$_user['user_id'] && $current_forum['allow_anonymous'] != 1) {
     api_not_allowed();
 }
 
@@ -101,33 +100,33 @@ if (api_is_invitee()) {
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $groupProperties = GroupManager::get_group_properties($groupId);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq,
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq,
         'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
         'name' => $current_forum['forum_title'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),
         'name' => get_lang('NewTopic'),
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'],
         'name' => $current_forum_category['cat_title'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
         'name' => $current_forum['forum_title'],
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewTopic')];
 }
 
 $htmlHeadXtra[] = "

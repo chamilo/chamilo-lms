@@ -4,22 +4,22 @@
 namespace Chamilo\FaqBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class QuestionAdmin
+ * Class QuestionAdmin.
  *
  * @package Chamilo\FaqBundle\Admin
  */
 class QuestionAdmin extends Admin
 {
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_page' => 1,
         '_sort_by' => 'issueDate',
-        '_sort_order' => 'Desc'
-    );
+        '_sort_order' => 'Desc',
+    ];
 
     /**
      * @param DatagridMapper $datagridMapper
@@ -39,20 +39,20 @@ class QuestionAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('translations', null, array('identifier' => true))
+            ->add('translations', null, ['identifier' => true])
             ->add('Category')
             ->add('rank')
             ->add(
                 '_action',
                 'actions',
-                array(
-                    'actions' => array(
+                [
+                    'actions' => [
                         //'show' => array(),
-                        'preview' => array('template' => 'ChamiloFaqBundle:Faq:preview_question_partial.html.twig'),
-                        'edit' => array(),
-                        'delete' => array(),
-                    ),
-                )
+                        'preview' => ['template' => 'ChamiloFaqBundle:Faq:preview_question_partial.html.twig'],
+                        'edit' => [],
+                        'delete' => [],
+                    ],
+                ]
             );
     }
 
@@ -62,24 +62,24 @@ class QuestionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('translations', 'a2lix_translations',  array(
-                'fields' => array(
+            ->add('translations', 'a2lix_translations', [
+                'fields' => [
                     'headline' => [],
-                    'body' => array(
-                        'attr' => array('class' => 'ckeditor')
-                    )
-                )
-            ))
+                    'body' => [
+                        'attr' => ['class' => 'ckeditor'],
+                    ],
+                ],
+            ])
             ->add(
                 'category',
                 null,
-                array(
+                [
                     'expanded' => true,
                     'required' => true,
-                    'attr' => array('class' => 'radio-list vertical'),
-                )
+                    'attr' => ['class' => 'radio-list vertical'],
+                ]
             )
-            ->add('rank', null, array('required' => false))
+            ->add('rank', null, ['required' => false])
             ->add('onlyAuthUsers')
             ->add('isActive')
             ->end();

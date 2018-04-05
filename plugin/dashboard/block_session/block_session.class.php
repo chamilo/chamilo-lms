@@ -1,15 +1,18 @@
 <?php
 /**
  * This file is part of session block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
+ * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
+ *
  * @package chamilo.dashboard
+ *
  * @author Christian Fasanando
  */
 
 /**
  * This class is used like controller for this session block plugin,
  * the class name must be registered inside path.info file
- * (e.g: controller = "BlockSession"), so dashboard controller will be instantiate it
+ * (e.g: controller = "BlockSession"), so dashboard controller will be instantiate it.
+ *
  * @package chamilo.dashboard
  */
 class BlockSession extends Block
@@ -17,10 +20,10 @@ class BlockSession extends Block
     private $user_id;
     private $sessions;
     private $path;
-    private $permission = array(DRH, SESSIONADMIN);
+    private $permission = [DRH, SESSIONADMIN];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($user_id)
     {
@@ -32,9 +35,11 @@ class BlockSession extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param int        User id
-     * @return bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -44,20 +49,22 @@ class BlockSession extends Block
         if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
     /**
      * This method return content html containing
      * information about sessions and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for beeing used from dashboard controller
-     * @return array   column and content html
+     * it's important to use the name 'get_block' for beeing used from dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
         global $charset;
         $column = 2;
-        $data = array();
+        $data = [];
         $content = $this->get_content_html();
         $content_html = '<div class="panel panel-default" id="intro">
                             <div class="panel-heading">
@@ -79,8 +86,9 @@ class BlockSession extends Block
     }
 
     /**
-     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
-     * @return string  content html
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface.
+     *
+     * @return string content html
      */
     public function get_content_html()
     {
@@ -145,12 +153,12 @@ class BlockSession extends Block
     }
 
     /**
-     * Get number of sessions
+     * Get number of sessions.
+     *
      * @return int
      */
-    function get_number_of_sessions()
+    public function get_number_of_sessions()
     {
         return count($this->sessions);
     }
-
 }

@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Process purchase confirmation script for the Buy Courses plugin
+ * Process purchase confirmation script for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
@@ -47,7 +47,7 @@ switch ($serviceSale['payment_type']) {
         // The extra params for handle the hard job, this var is VERY IMPORTANT !!
         $extra = '';
 
-        require_once("paypalfunctions.php");
+        require_once "paypalfunctions.php";
 
         $extra .= "&L_PAYMENTREQUEST_0_NAME0={$serviceSale['service']['name']}";
         $extra .= "&L_PAYMENTREQUEST_0_QTY0=1";
@@ -117,7 +117,7 @@ switch ($serviceSale['payment_type']) {
                     'end_date' => api_format_date($serviceSale['end_date'], DATE_TIME_FORMAT_LONG_24H),
                     'currency' => $currency['currency'],
                     'price' => $serviceSale['price'],
-                    'reference' => $serviceSale['reference']
+                    'reference' => $serviceSale['reference'],
                 ]
             );
             $messageTemplate->assign('transfer_accounts', $transferAccounts);
@@ -250,4 +250,3 @@ switch ($serviceSale['payment_type']) {
         $template->display_one_col_template();
         break;
 }
-

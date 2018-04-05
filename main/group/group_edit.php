@@ -7,10 +7,11 @@
  *
  * @author various contributors
  * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
+ *
  * @package chamilo.group
+ *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -22,8 +23,8 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
+$interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
 
 $is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $current_group);
 
@@ -34,7 +35,7 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 /*	FUNCTIONS */
 
 /**
- *  List all users registered to the course
+ *  List all users registered to the course.
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword)
 {
@@ -51,7 +52,7 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
 
 /**
  * Function to sort users after getting the list in the DB.
- * Necessary because there are 2 or 3 queries. Called by usort()
+ * Necessary because there are 2 or 3 queries. Called by usort().
  */
 function sort_users($user_a, $user_b)
 {
@@ -83,7 +84,7 @@ function sort_users($user_a, $user_b)
 }
 
 /**
- * Function to check the given max number of members per group
+ * Function to check the given max number of members per group.
  */
 function check_max_number_of_members($value)
 {
@@ -92,11 +93,12 @@ function check_max_number_of_members($value)
         return true;
     }
     $max_member = $value['max_member'];
+
     return is_numeric($max_member);
 }
 
 /**
- * Function to check if the number of selected group members is valid
+ * Function to check if the number of selected group members is valid.
  */
 function check_group_members($value)
 {
@@ -106,8 +108,9 @@ function check_group_members($value)
     if (isset($value['max_member']) && isset($value['group_members']) &&
         $value['max_member'] < count($value['group_members'])
     ) {
-        return array('group_members' => get_lang('GroupTooMuchMembers'));
+        return ['group_members' => get_lang('GroupTooMuchMembers')];
     }
+
     return true;
 }
 
@@ -132,12 +135,12 @@ $form->addElement('hidden', 'referer');
 $form->addText('name', get_lang('GroupName'));
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows' => 6));
+$form->addElement('textarea', 'description', get_lang('Description'), ['rows' => 6]);
 
 $complete_user_list = GroupManager :: fill_groups_list($current_group);
 usort($complete_user_list, 'sort_users');
 
-$possible_users = array();
+$possible_users = [];
 foreach ($complete_user_list as $index => $user) {
     $possible_users[$user['user_id']] = api_get_person_name(
         $user['firstname'],
@@ -147,8 +150,8 @@ foreach ($complete_user_list as $index => $user) {
 
 // Group tutors
 $group_tutor_list = GroupManager::get_subscribed_tutors($current_group);
-$selected_users = array();
-$selected_tutors = array();
+$selected_users = [];
+$selected_tutors = [];
 foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
@@ -164,13 +167,13 @@ $group_tutors_element = $form->addElement(
 // Group members
 $group_member_list = GroupManager::get_subscribed_users($current_group);
 
-$selected_users = array();
+$selected_users = [];
 foreach ($group_member_list as $index => $user) {
     $selected_users[] = $user['user_id'];
 }
 
 // possible : number_groups_left > 0 and is group member
-$possible_users = array();
+$possible_users = [];
 foreach ($complete_user_list as $index => $user) {
     if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
         $possible_users[$user['user_id']] = api_get_person_name(
@@ -198,18 +201,18 @@ $form->addElement(
     get_lang('NoLimit'),
     GroupManager::MEMBER_PER_GROUP_NO_LIMIT
 );
-$group = array();
-$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
-$group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member'));
+$group = [];
+$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, ['id' => 'max_member_selected']);
+$group[] = $form->createElement('text', 'max_member', null, ['class' => 'span1', 'id' => 'max_member']);
 $group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, null, false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
 // Self registration
-$group = array(
+$group = [
     $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1),
-    $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1)
-);
+    $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1),
+];
 $form->addGroup(
     $group,
     '',
@@ -219,7 +222,7 @@ $form->addGroup(
 );
 
 // Documents settings
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
@@ -232,7 +235,7 @@ $form->addGroup(
 );
 
 // Work settings
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
@@ -245,7 +248,7 @@ $form->addGroup(
 );
 
 // Calendar settings
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
@@ -258,7 +261,7 @@ $form->addGroup(
 );
 
 // Announcements settings
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
@@ -271,7 +274,7 @@ $form->addGroup(
 );
 
 //Forum settings
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
@@ -284,11 +287,11 @@ $form->addGroup(
 );
 
 // Wiki settings
-$group = array(
+$group = [
     $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
-);
+    $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+];
 $form->addGroup(
     $group,
     '',
@@ -298,11 +301,11 @@ $form->addGroup(
 );
 
 // Chat settings
-$group = array(
+$group = [
     $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
-);
+    $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+];
 $form->addGroup(
     $group,
     '',

@@ -3,23 +3,22 @@
 
 namespace Chamilo\CourseBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 
 /**
- * Class CourseAdmin
+ * Class CourseAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class CourseRelUserAdmin extends Admin
 {
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     *
-     * @return void
      */
     protected function configureShowField(ShowMapper $showMapper)
     {
@@ -36,13 +35,13 @@ class CourseRelUserAdmin extends Admin
         $formMapper
             ->add('user')
             //->add('group', 'text')
-            ->add('status', 'choice', array(
-                    'choices' => CourseRelUser::getStatusList()
-                )
+            ->add('status', 'choice', [
+                    'choices' => CourseRelUser::getStatusList(),
+                ]
             )
-            ->add('relation_type', 'sonata_type_translatable_choice', array(
-                'choices' => CourseRelUser::getRelationTypeList()
-                )
+            ->add('relation_type', 'sonata_type_translatable_choice', [
+                'choices' => CourseRelUser::getRelationTypeList(),
+                ]
             )
             ->end()
         ;
@@ -68,9 +67,9 @@ class CourseRelUserAdmin extends Admin
             ->addIdentifier('user')
             ->addIdentifier('course')
             //->addIdentifier('group')
-            ->add('status', 'sonata_type_translatable_choice', array(
-                    'choices' => CourseRelUser::getStatusList()
-                )
+            ->add('status', 'sonata_type_translatable_choice', [
+                    'choices' => CourseRelUser::getStatusList(),
+                ]
             )
         ;
     }

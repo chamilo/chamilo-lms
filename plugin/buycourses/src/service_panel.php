@@ -1,9 +1,9 @@
 <?php
 /**
- * User Panel
+ * User Panel.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -40,7 +40,7 @@ foreach ($serviceSales as $sale) {
         'date_end' => api_format_date(api_get_local_time($sale['date_end']), DATE_TIME_FORMAT_LONG_24H),
         'currency' => $sale['currency'],
         'price' => $sale['price'],
-        'status' => $sale['status']
+        'status' => $sale['status'],
     ];
 }
 

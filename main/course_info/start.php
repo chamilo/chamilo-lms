@@ -12,8 +12,8 @@ if (!api_is_allowed_to_edit()) {
 
 $course_info = api_get_course_info();
 
-$directory  = $course_info['directory'];
-$title      = $course_info['title'];
+$directory = $course_info['directory'];
+$title = $course_info['title'];
 
 // Preparing a confirmation message.
 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
@@ -30,4 +30,3 @@ $content = $tpl->fetch($add_course_tpl);
 $tpl->assign('content', $content);
 $template = $tpl->get_template('layout/layout_1_col.tpl');
 $tpl->display($template);
-

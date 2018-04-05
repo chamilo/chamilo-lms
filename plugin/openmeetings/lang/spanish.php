@@ -1,35 +1,35 @@
 <?php /* License: see /license.txt */
 //Needed in order to show the plugin title
-$strings['plugin_title']        = "OpenMeetings";
-$strings['plugin_comment']      = "Añade una sala de videoconferencia en los cursos de Chamilo con OpenMeetings (om)";
+$strings['plugin_title'] = "OpenMeetings";
+$strings['plugin_comment'] = "Añade una sala de videoconferencia en los cursos de Chamilo con OpenMeetings (om)";
 
-$strings['Videoconference']     = "VideoconferenciaOM";
-$strings['MeetingOpened']       = "Sala abierta";
-$strings['MeetingClosed']       = "Sala cerrada";
+$strings['Videoconference'] = "VideoconferenciaOM";
+$strings['MeetingOpened'] = "Sala abierta";
+$strings['MeetingClosed'] = "Sala cerrada";
 $strings['MeetingClosedComment'] = "Si ha pedido grabar la sesión de videoconferencia en los parámetros del curso, esta grabación aparecerá en la lista siguiente una vez generada.";
-$strings['CloseMeeting']        = "Cerrar sala";
+$strings['CloseMeeting'] = "Cerrar sala";
 
-$strings['MeetingDeleted']        = "Eliminar sala";
+$strings['MeetingDeleted'] = "Eliminar sala";
 $strings['MeetingDeletedComment'] = "";
 
-$strings['VideoConferenceXCourseX']             = "Videoconferencia #%s, curso %s";
-$strings['VideoConferenceAddedToTheCalendar']   = "Videoconferencia añadida al calendario";
-$strings['VideoConferenceAddedToTheLinkTool']   = "Videoconferencia añadida como enlace. Puede editar y publicar el enlace en la página principal del curso desde la herramienta de enlace.";
+$strings['VideoConferenceXCourseX'] = "Videoconferencia #%s, curso %s";
+$strings['VideoConferenceAddedToTheCalendar'] = "Videoconferencia añadida al calendario";
+$strings['VideoConferenceAddedToTheLinkTool'] = "Videoconferencia añadida como enlace. Puede editar y publicar el enlace en la página principal del curso desde la herramienta de enlace.";
 
 $strings['GoToTheVideoConference'] = "Ir a la videoconferencia";
 
-$strings['Records']             = "Grabación";
-$strings['Meeting']             = "Sala de conferencia";
+$strings['Records'] = "Grabación";
+$strings['Meeting'] = "Sala de conferencia";
 
-$strings['ViewRecord']          = "Ver grabación";
-$strings['CopyToLinkTool']      = "Añadir como enlace del curso";
+$strings['ViewRecord'] = "Ver grabación";
+$strings['CopyToLinkTool'] = "Añadir como enlace del curso";
 
-$strings['EnterConference']     = "Entrar a la videoconferencia";
-$strings['RecordList']          = "Lista de grabaciones";
-$strings['ServerIsNotRunning']  = "El servidor de videoconferencia no está funcionando";
+$strings['EnterConference'] = "Entrar a la videoconferencia";
+$strings['RecordList'] = "Lista de grabaciones";
+$strings['ServerIsNotRunning'] = "El servidor de videoconferencia no está funcionando";
 $strings['ServerIsNotConfigured'] = "El servidor de videoconferencia no está configurado correctamente";
 
-$strings['XUsersOnLine']        = "%s usuario(s) en la sala";
+$strings['XUsersOnLine'] = "%s usuario(s) en la sala";
 
 $strings['host'] = 'Host de OpenMeetings';
 $strings['host_help'] = 'Este es el nombre del servidor donde su servidor OpenMeetings está corriendo. Puede ser http://localhost:5080/openmeetings, una dirección IP (ej: http://192.168.13.54:5080/openmeetings) o un nombre de dominio (ej: http://mi.video.com:5080/openmeetings).';
@@ -50,4 +50,3 @@ $strings['plugin_tool_openmeetings'] = 'Video';
 
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'No hay grabaciones de sesiones de videoconferencia';
 $strings['NoRecording'] = 'No hay grabación';
-

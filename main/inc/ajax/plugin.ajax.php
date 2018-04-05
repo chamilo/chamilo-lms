@@ -1,11 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
-use \Michelf\MarkdownExtra;
+use Michelf\MarkdownExtra;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 api_block_anonymous_users();

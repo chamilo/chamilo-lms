@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
@@ -40,7 +39,7 @@ switch ($action) {
                 $values = [
                     'contains_file' => 1,
                     'title' => $file['name'],
-                    'description' => ''
+                    'description' => '',
                 ];
 
                 $result = processWorkForm(
@@ -55,12 +54,12 @@ switch ($action) {
                     false
                 );
 
-                $json = array();
+                $json = [];
                 if (!empty($result) && is_array($result) && empty($result['error'])) {
                     $json['name'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['view_url']),
-                        array('target' => '_blank')
+                        ['target' => '_blank']
                     );
 
                     $json['url'] = $result['view_url'];
@@ -98,7 +97,7 @@ switch ($action) {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $itemId = isset($_GET['item_id']) ? intval($_GET['item_id']) : '';
 
-        $result = array();
+        $result = [];
 
         if (!empty($_FILES) && !empty($itemId)) {
             $file = $_FILES['file'];
@@ -129,11 +128,11 @@ switch ($action) {
                 $result['title'] = $resultUpload['filename'];
                 $result['url'] = 'view.php?'.api_get_cidreq().'&id='.$itemId;
 
-                $json = array();
+                $json = [];
                 $json['name'] = Display::url(
                     api_htmlentities($result['title']),
                     api_htmlentities($result['url']),
-                    array('target' => '_blank')
+                    ['target' => '_blank']
                 );
 
                 $json['type'] = api_htmlentities($file['type']);

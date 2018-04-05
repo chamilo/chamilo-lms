@@ -10,10 +10,10 @@ use Chamilo\UserBundle\Entity\User;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class NavBuilder
+ * Class NavBuilder.
+ *
  * @package Chamilo\CoreBundle\Menu
  */
 class NavBuilder extends ContainerAware
@@ -24,7 +24,7 @@ class NavBuilder extends ContainerAware
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function createCategoryMenu(array $itemOptions = array(), $currentUri = null)
+    public function createCategoryMenu(array $itemOptions = [], $currentUri = null)
     {
         $factory = $this->container->get('knp_menu.factory');
         $menu = $factory->createItem('categories', $itemOptions);
@@ -35,65 +35,24 @@ class NavBuilder extends ContainerAware
     }
 
     /**
-     * @param \Knp\Menu\ItemInterface $menu        The item to fill with $routes
-     * @param array                   $options     The item options
-     * @param string                  $currentUri  The current URI
+     * @param \Knp\Menu\ItemInterface $menu       The item to fill with $routes
+     * @param array                   $options    The item options
+     * @param string                  $currentUri The current URI
      */
-    public function buildCategoryMenu(ItemInterface $menu, array $options = array(), $currentUri = null)
+    public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
         //$categories = $this->categoryManager->getCategoryTree();
 
         //$this->fillMenu($menu, $categories, $options, $currentUri);
-        $menu->addChild('home', array('route' => 'home'));
+        $menu->addChild('home', ['route' => 'home']);
     }
 
     /**
-     * Get chamilo root
-     * @return string
-     */
-    private function getChamiloRoot()
-    {
-        $urlAppend = $this->container->getParameter('url_append');
-        $chamiloHost = $this->container->get('request')->getSchemeAndHttpHost();
-        if (!empty($urlAppend)) {
-            $chamiloHost .= '/'.$urlAppend.'/';
-        } else {
-            $chamiloHost .= '/';
-        }
-
-        return $chamiloHost;
-    }
-
-    /**
-     * Get chamilo locale
-     * @return string
-     */
-    private function getChamiloLocale()
-    {
-        // Locale from URL
-        $locale = $this->container->get('request')->get('_locale');
-        if (empty($locale)) {
-            // Try locale from symfony2
-            $locale = $this->container->get('request')->getLocale();
-        }
-
-        $chamiloLocale = 'french2';
-        switch ($locale) {
-            case 'de':
-                $chamiloLocale = 'german2';
-                break;
-            case 'fr':
-                $chamiloLocale = 'french2';
-                break;
-        }
-
-        return $chamiloLocale;
-    }
-
-    /**
-     * Top menu left
+     * Top menu left.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function leftMenu(FactoryInterface $factory, array $options)
@@ -122,27 +81,27 @@ class NavBuilder extends ContainerAware
         $chamiloHost = $this->getChamiloRoot();
         $menu->addChild(
             $translator->trans('Homepage'),
-            array(
+            [
                 /*'route' => 'main',
                 'routeParameters' => array(
                     'name' => '../index.php',
                     'language' => $chamiloLocale
                 )*/
-                'uri' => $chamiloHost.'index.php?language='.$chamiloLocale
-            )
+                'uri' => $chamiloHost.'index.php?language='.$chamiloLocale,
+            ]
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('My courses'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => '../user_portal.php',
                         'language' => $chamiloLocale
                     ),*/
-                    'uri' => $chamiloHost.'user_portal.php?language='.$chamiloLocale
-                )
+                    'uri' => $chamiloHost.'user_portal.php?language='.$chamiloLocale,
+                ]
             )->setAttribute('class', 'item-menu menu-2 my-course');
 
             /*$menu->addChild(
@@ -157,26 +116,26 @@ class NavBuilder extends ContainerAware
 
             $menu->addChild(
                 $translator->trans('Reporting'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'mySpace/index.php',
                         'language' => $chamiloLocale
                     ),*/
-                    'uri' => $chamiloHost.'main/mySpace/index.php?language='.$chamiloLocale
-                )
+                    'uri' => $chamiloHost.'main/mySpace/index.php?language='.$chamiloLocale,
+                ]
             )->setAttribute('class', 'item-menu menu-3 my-space');
 
             $menu->addChild(
                 $translator->trans('Social network'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'social/home.php',
                         'language' => $chamiloLocale
                     ),*/
-                    'uri' => $chamiloHost.'main/social/home.php?language='.$chamiloLocale
-                )
+                    'uri' => $chamiloHost.'main/social/home.php?language='.$chamiloLocale,
+                ]
             )->setAttribute('class', 'item-menu menu-4 social-network ');
             if ($checker->isGranted('ROLE_ADMIN')) {
                 /*$menu->addChild(
@@ -200,7 +159,7 @@ class NavBuilder extends ContainerAware
                 'FAQ',
                 [
                     'route' => 'faq_index',
-                    'routeParameters' => ['_locale' => $locale]
+                    'routeParameters' => ['_locale' => $locale],
                 ]
             )->setAttribute('class', 'item-menu menu-5 '.$active);
 
@@ -222,35 +181,34 @@ class NavBuilder extends ContainerAware
         if (!$checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('Subscription'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'auth/inscription.php',
                         'language' => $chamiloLocale
                     )*/
-                    'uri' => $chamiloHost.'main/auth/inscription.php?language='.$chamiloLocale
-                )
+                    'uri' => $chamiloHost.'main/auth/inscription.php?language='.$chamiloLocale,
+                ]
             )->setAttribute('class', 'item-menu menu-3');
 
             $menu->addChild(
                 $translator->trans('Demo'),
-                array(
-                    'uri' => $translator->trans('DemoMenuLink')
-                )
+                [
+                    'uri' => $translator->trans('DemoMenuLink'),
+                ]
             )->setAttribute('class', 'item-menu menu-4');
 
             $active = $pathInfo === 'contact' ? 'active' : '';
             $menu->addChild(
                 $translator->trans('Contact'),
-                array(
+                [
                     'route' => 'contact',
-                    'routeParameters' => ['_locale' => $locale]
-                )
+                    'routeParameters' => ['_locale' => $locale],
+                ]
             )->setAttribute('class', 'item-menu menu-5 '.$active);
         }
 
         return $menu;
-
 
         // Getting site information
 
@@ -258,10 +216,10 @@ class NavBuilder extends ContainerAware
         $host = $site->getRequestContext()->getHost();
         $siteManager = $this->container->get('sonata.page.manager.site');
         /** @var Site $site */
-        $site = $siteManager->findOneBy(array(
-            'host'    => array($host, 'localhost'),
+        $site = $siteManager->findOneBy([
+            'host' => [$host, 'localhost'],
             'enabled' => true,
-        ));
+        ]);
 
         if ($site) {
             $pageManager = $this->container->get('sonata.page.manager.page');
@@ -294,25 +252,26 @@ class NavBuilder extends ContainerAware
                 foreach ($page->getChildren() as $child) {
                     $subMenu->addChild(
                         $child->getName(),
-                        array(
+                        [
                             'route' => $page->getRouteName(),
-                            'routeParameters' => array(
+                            'routeParameters' => [
                                 'path' => $child->getUrl(),
-                            ),
-                        )
+                            ],
+                        ]
                     )->setAttribute('divider_append', true);
                 }
             }
         }
 
-
         return $menu;
     }
 
     /**
-     * Top menu right
+     * Top menu right.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function rightMenu(FactoryInterface $factory, array $options)
@@ -345,83 +304,83 @@ class NavBuilder extends ContainerAware
             $dropdown = $menu->addChild(
                 $image.'',
                 [
-                    'extras' => array('safe_label' => true)
+                    'extras' => ['safe_label' => true],
                 ]
             )->setAttribute('dropdown', true);
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $dropdown->addChild(
                     $translator->trans('Administration'),
-                    array(
+                    [
                         /*'route' => 'main',
                         'routeParameters' => array(
                             'name' => 'admin/',
                         ),*/
                         'uri' => $chamiloHost.'main/admin/index.php?language='.$chamiloLocale,
-                        'icon' => ' fa fa-cog'
-                    )
+                        'icon' => ' fa fa-cog',
+                    ]
                 );
             }
 
             $dropdown->addChild(
                 $translator->trans('Personal agenda'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'calendar/agenda_js.php',
                     ),*/
                     'uri' => $chamiloHost.'main/calendar/agenda_js.php?language='.$chamiloLocale,
-                    'icon' => ' fa fa-calendar'
-                )
+                    'icon' => ' fa fa-calendar',
+                ]
             );
 
             $dropdown->addChild(
                 '',
-                array(
-                    'divider' => true
-                )
+                [
+                    'divider' => true,
+                ]
             );
 
             $dropdown->addChild(
                 $translator->trans('Profile'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'social/home.php'
                     ),*/
                     'uri' => $chamiloHost.'main/social/home.php?language='.$chamiloLocale,
-                    'icon' => ' fa fa-user'
-                )
+                    'icon' => ' fa fa-user',
+                ]
             )->setAttribute('divider_append', true);
 
             $dropdown->addChild(
                 $translator->trans('Inbox'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'messages/inbox.php',
                     ),*/
                     'uri' => $chamiloHost.'main/messages/inbox.php?language='.$chamiloLocale,
-                    'icon' => ' fa fa-envelope'
-                )
+                    'icon' => ' fa fa-envelope',
+                ]
             )->setAttribute('divider_append', true);
 
-           $dropdown->addChild(
+            $dropdown->addChild(
                 $translator->trans('My certificates'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'gradebook/my_certificates.php',
                     ),*/
                     'uri' => $chamiloHost.'main/gradebook/my_certificates.php?language='.$chamiloLocale,
-                    'icon' => ' fa fa-graduation-cap'
-                )
+                    'icon' => ' fa fa-graduation-cap',
+                ]
             )->setAttribute('divider_append', true);
 
             // legacy logout
             $dropdown->addChild(
                 $translator->trans('Logout'),
-                array(
+                [
                     /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => '../index.php',
@@ -430,8 +389,8 @@ class NavBuilder extends ContainerAware
                     ),*/
                     'uri' => $chamiloHost.'index.php?logout=logout&uid='.$user->getId(),
                     'query' => '1',
-                    'icon' => ' fa fa-sign-out'
-                )
+                    'icon' => ' fa fa-sign-out',
+                ]
             );
 
             /* $logoutLink
@@ -447,6 +406,51 @@ class NavBuilder extends ContainerAware
         }
 
         return $menu;
+    }
+
+    /**
+     * Get chamilo root.
+     *
+     * @return string
+     */
+    private function getChamiloRoot()
+    {
+        $urlAppend = $this->container->getParameter('url_append');
+        $chamiloHost = $this->container->get('request')->getSchemeAndHttpHost();
+        if (!empty($urlAppend)) {
+            $chamiloHost .= '/'.$urlAppend.'/';
+        } else {
+            $chamiloHost .= '/';
+        }
+
+        return $chamiloHost;
+    }
+
+    /**
+     * Get chamilo locale.
+     *
+     * @return string
+     */
+    private function getChamiloLocale()
+    {
+        // Locale from URL
+        $locale = $this->container->get('request')->get('_locale');
+        if (empty($locale)) {
+            // Try locale from symfony2
+            $locale = $this->container->get('request')->getLocale();
+        }
+
+        $chamiloLocale = 'french2';
+        switch ($locale) {
+            case 'de':
+                $chamiloLocale = 'german2';
+                break;
+            case 'fr':
+                $chamiloLocale = 'french2';
+                break;
+        }
+
+        return $chamiloLocale;
     }
 
     /*public function profileMenu(FactoryInterface $factory, array $options)

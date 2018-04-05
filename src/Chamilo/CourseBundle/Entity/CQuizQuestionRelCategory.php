@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CQuizQuestionRelCategory
+ * CQuizQuestionRelCategory.
  *
  * @ORM\Table(
  *  name="c_quiz_question_rel_category",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuizQuestionRelCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,30 +29,31 @@ class CQuizQuestionRelCategory
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
     private $categoryId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer")
      */
     private $questionId;
 
     /**
-     * Set categoryId
+     * Set categoryId.
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return CQuizQuestionRelCategory
      */
     public function setCategoryId($categoryId)
@@ -63,9 +64,9 @@ class CQuizQuestionRelCategory
     }
 
     /**
-     * Get categoryId
+     * Get categoryId.
      *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -73,9 +74,10 @@ class CQuizQuestionRelCategory
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CQuizQuestionRelCategory
      */
     public function setCId($cId)
@@ -86,9 +88,9 @@ class CQuizQuestionRelCategory
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -96,9 +98,10 @@ class CQuizQuestionRelCategory
     }
 
     /**
-     * Set questionId
+     * Set questionId.
      *
-     * @param integer $questionId
+     * @param int $questionId
+     *
      * @return CQuizQuestionRelCategory
      */
     public function setQuestionId($questionId)
@@ -109,9 +112,9 @@ class CQuizQuestionRelCategory
     }
 
     /**
-     * Get questionId
+     * Get questionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionId()
     {

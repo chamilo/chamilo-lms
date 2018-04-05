@@ -2,10 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for creating course category
-* @author Christian Fasanando <christian1827@gmail.com> - Beeznest
-* @package chamilo.auth
-*/
+ * View (MVC patter) for creating course category.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
+ *
+ * @package chamilo.auth
+ */
 
 // Access rights: anonymous users can't do anything usefull here.
 api_block_anonymous_users();
@@ -15,7 +17,7 @@ $stok = Security::get_token();
 ?>
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
-    <a href="<?php echo api_get_self() ?>?action=sortmycourses">
+    <a href="<?php echo api_get_self(); ?>?action=sortmycourses">
         <?php echo Display::return_icon('back.png', get_lang('Back'), '', '32'); ?>
     </a>
 </div>

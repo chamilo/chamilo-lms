@@ -1,14 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 
 /**
  * @package chamilo.webservices
  */
 require_once '../inc/global.inc.php';
-
 
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
@@ -23,6 +21,7 @@ define('WS_ERROR_SETTING', 4);
 
 /**
  * @param string $code
+ *
  * @return null|soap_fault
  */
 function returnError($code)
@@ -42,11 +41,13 @@ function returnError($code)
             $fault = new soap_fault('Server', '', 'Please check the configuration for this webservice');
             break;
     }
+
     return $fault;
 }
 
 /**
  * @param array $params
+ *
  * @return bool
  */
 function WSHelperVerifyKey($params)
@@ -67,14 +68,16 @@ function WSHelperVerifyKey($params)
         list($ip1) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
-    if ($debug)
+    if ($debug) {
         error_log("ip: $ip");
+    }
     // Check if a file that limits access from webservices exists and contains
     // the restraining check
     if (is_file('webservice-auth-ip.conf.php')) {
         include 'webservice-auth-ip.conf.php';
-        if ($debug)
+        if ($debug) {
             error_log("webservice-auth-ip.conf.php file included");
+        }
         if (!empty($ws_auth_ip)) {
             $check_ip = true;
             $ip_matches = api_check_ip_in_range($ip, $ws_auth_ip);
@@ -85,7 +88,7 @@ function WSHelperVerifyKey($params)
     }
 
     if ($debug) {
-        error_log("checkip " . intval($check_ip));
+        error_log("checkip ".intval($check_ip));
     }
 
     if ($check_ip) {
@@ -100,6 +103,7 @@ function WSHelperVerifyKey($params)
     if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
     }
+
     return $result;
 }
 
@@ -114,7 +118,6 @@ $server->configureWSDL('WSTCC', 'urn:WSTCC');
 /* Register WSCreateUserPasswordCrypted function */
 // Register the data structures used by the service
 
-
 // Input params for editing users
 $server->wsdl->addComplexType(
     'paramsUpdateTCCUserIdAndGetUser',
@@ -122,26 +125,26 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'email' => array('name' => 'email', 'type' => 'xsd:string'),
-        'tcc_user_id' => array('name' => 'tcc_user_id', 'type' => 'xsd:string'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-    )
+    [
+        'email' => ['name' => 'email', 'type' => 'xsd:string'],
+        'tcc_user_id' => ['name' => 'tcc_user_id', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
 );
 
-$fields =  array(
-    'Genre' => array('name' => 'Genre', 'type' => 'xsd:string'),
-    'Nom' => array('name' => 'Nom', 'type' => 'xsd:string'),
-    'Prenom' => array('name' => 'Prenom', 'type' => 'xsd:string'),
-    'DateNaissance' => array('name' => 'DateNaissance', 'type' => 'xsd:string'),
-    'Langue' => array('name' => 'Langue', 'type' => 'xsd:string'),
-    'Nationalite' => array('name' => 'Nationalite', 'type' => 'xsd:string'),
-    'Pays' => array('name' => 'Pays', 'type' => 'xsd:string'),
-    'Adresse' => array('name' => 'Adresse', 'type' => 'xsd:string'),
-    'CodePostal' => array('name' => 'CodePostal', 'type' => 'xsd:string'),
-    'Ville' => array('name' => 'Ville', 'type' => 'xsd:string'),
-    'Email'=> array('name' => 'Email', 'type' => 'xsd:string')
-);
+$fields = [
+    'Genre' => ['name' => 'Genre', 'type' => 'xsd:string'],
+    'Nom' => ['name' => 'Nom', 'type' => 'xsd:string'],
+    'Prenom' => ['name' => 'Prenom', 'type' => 'xsd:string'],
+    'DateNaissance' => ['name' => 'DateNaissance', 'type' => 'xsd:string'],
+    'Langue' => ['name' => 'Langue', 'type' => 'xsd:string'],
+    'Nationalite' => ['name' => 'Nationalite', 'type' => 'xsd:string'],
+    'Pays' => ['name' => 'Pays', 'type' => 'xsd:string'],
+    'Adresse' => ['name' => 'Adresse', 'type' => 'xsd:string'],
+    'CodePostal' => ['name' => 'CodePostal', 'type' => 'xsd:string'],
+    'Ville' => ['name' => 'Ville', 'type' => 'xsd:string'],
+    'Email' => ['name' => 'Email', 'type' => 'xsd:string'],
+];
 
 $server->wsdl->addComplexType(
     'resultUpdateTCCUserIdAndGetUserArray',
@@ -154,8 +157,8 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('WSUpdateTCCUserIdAndGetUser',                            // method name
-    array('paramsUpdateTCCUserIdAndGetUser' => 'tns:paramsUpdateTCCUserIdAndGetUser'),  // input parameters
-    array('return' => 'tns:resultUpdateTCCUserIdAndGetUserArray'),                                        // output parameters
+    ['paramsUpdateTCCUserIdAndGetUser' => 'tns:paramsUpdateTCCUserIdAndGetUser'],  // input parameters
+    ['return' => 'tns:resultUpdateTCCUserIdAndGetUserArray'],                                        // output parameters
     'urn:WSTCC',                                                   // namespace
     'urn:WSTCC#WSCreateUserPasswordCrypted',                       // soapaction
     'rpc',                                                                  // style
@@ -168,8 +171,12 @@ function WSUpdateTCCUserIdAndGetUser($params)
 {
     global $_configuration, $debug;
     $debug = 1;
-    if ($debug) error_log('WSUpdateTCCUserIdAndGetUser');
-    if ($debug) error_log(print_r($params, 1));
+    if ($debug) {
+        error_log('WSUpdateTCCUserIdAndGetUser');
+    }
+    if ($debug) {
+        error_log(print_r($params, 1));
+    }
 
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
@@ -210,7 +217,7 @@ function WSUpdateTCCUserIdAndGetUser($params)
                 'terms_paysresidence',
                 'terms_nationalite',
                 'terms_codepostal',
-                'terms_adresse'
+                'terms_adresse',
             ];
 
             $extraFieldResults = [];
@@ -255,7 +262,9 @@ function WSUpdateTCCUserIdAndGetUser($params)
                 'Email' => $user->getEmail(),
             ];
 
-            if ($debug) error_log(print_r($result, 1));
+            if ($debug) {
+                error_log(print_r($result, 1));
+            }
 
             return $result;
         }
@@ -264,10 +273,9 @@ function WSUpdateTCCUserIdAndGetUser($params)
     return [];
 }
 
-
 $fields = $fields + [
-    'tcc_user_id' => array('name' => 'tcc_user_id', 'type' => 'xsd:string'),
-    'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    'tcc_user_id' => ['name' => 'tcc_user_id', 'type' => 'xsd:string'],
+    'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
 ];
 
 /* Register WSEditUser function */
@@ -283,8 +291,8 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('WSEditUserTCC',              // method name
-    array('editUser' => 'tns:editUser'),     // input parameters
-    array('return' => 'xsd:string'),         // output parameters
+    ['editUser' => 'tns:editUser'],     // input parameters
+    ['return' => 'xsd:string'],         // output parameters
     'urn:WSTCC',                    // namespace
     'urn:WSTCC#WSEditUserTCC',         // soapaction
     'rpc',                                   // style
@@ -305,7 +313,6 @@ function WSEditUserTCC($params)
         $userId = $data['item_id'];
         $user = api_get_user_entity($userId);
         if (!empty($user)) {
-
             switch ($params['Langue']) {
                 case 'fr-FR':
                     $params['Langue'] = 'french2';
@@ -336,7 +343,7 @@ function WSEditUserTCC($params)
                 'terms_paysresidence' => 'Pays',
                 'terms_nationalite' => 'Nationalite',
                 'terms_codepostal' => 'CodePostal',
-                'terms_adresse' => 'Adresse'
+                'terms_adresse' => 'Adresse',
             ];
 
             foreach ($fields as $extraFieldName => $externalName) {
@@ -348,7 +355,7 @@ function WSEditUserTCC($params)
                         break;
                     case 'terms_datedenaissance':
                         if (!empty($params[$externalName])) {
-                            $parts = explode('/', $params[$externalName]);// dd/mm/yyyy
+                            $parts = explode('/', $params[$externalName]); // dd/mm/yyyy
                             $params[$externalName] = $parts[2].'-'.$parts[1].'-'.$parts[0];
                         }
                         break;
@@ -358,7 +365,7 @@ function WSEditUserTCC($params)
                     $paramsToSave = [
                         'field_id' => $fieldInfo['id'],
                         'item_id' => $userId,
-                        'value' => $params[$externalName]
+                        'value' => $params[$externalName],
                     ];
                     error_log($extraFieldName);
                     error_log(print_r($paramsToSave, 1));

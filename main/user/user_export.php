@@ -96,11 +96,11 @@ if (strlen($course_code) > 0) {
     }
     $filename = 'export_users_'.api_get_local_time();
 }
-$data = array();
+$data = [];
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
 if ($export['addcsvheader'] == '1' && $export['file_type'] == 'csv') {
     if ($_configuration['password_encryption'] != 'none') {
-        $data[] = array(
+        $data[] = [
             'UserId',
             'LastName',
             'FirstName',
@@ -110,10 +110,10 @@ if ($export['addcsvheader'] == '1' && $export['file_type'] == 'csv') {
             'Status',
             'OfficialCode',
             'PhoneNumber',
-            'RegistrationDate'
-        );
+            'RegistrationDate',
+        ];
     } else {
-        $data[] = array(
+        $data[] = [
             'UserId',
             'LastName',
             'FirstName',
@@ -124,8 +124,8 @@ if ($export['addcsvheader'] == '1' && $export['file_type'] == 'csv') {
             'Status',
             'OfficialCode',
             'PhoneNumber',
-            'RegistrationDate'
-        );
+            'RegistrationDate',
+        ];
     }
 
     foreach ($extra_fields as $extra) {

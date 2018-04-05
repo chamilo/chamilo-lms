@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  *    This script displays a participant edit form.
  */
-
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -181,23 +178,23 @@ if (!empty($_POST)) {
 if (api_is_platform_admin()) {
     $actionId = intval($_GET['action_id']);
     $courseId = getCourse($actionId);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "/plugin/sepe/src/sepe-administration-menu.php",
         "name" => $plugin->get_lang('MenuSepe'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => "formative-actions-list.php",
         "name" => $plugin->get_lang('FormativesActionsList'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => "formative-action.php?cid=".$courseId,
         "name" => $plugin->get_lang('FormativeAction'),
-    );
+    ];
     if (isset($_GET['new_participant']) && intval($_GET['new_participant']) == 1) {
         $templateName = $plugin->get_lang('NewParticipantAction');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', $actionId);
-        $info = array();
+        $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_participant', '1');
     } else {
@@ -217,7 +214,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('listParticipantSpecialty', $listParticipantSpecialty);
     }
     $courseCode = getCourseCode($actionId);
-    $listStudentInfo = array();
+    $listStudentInfo = [];
     $listStudent = CourseManager::get_student_list_from_course_code($courseCode);
 
     foreach ($listStudent as $value) {
@@ -228,10 +225,10 @@ if (api_is_platform_admin()) {
         }
     }
     $tpl->assign('listStudent', $listStudentInfo);
-    $listTutorCompany = array();
+    $listTutorCompany = [];
     $listTutorCompany = listTutorType("company = '1'");
     $tpl->assign('list_tutor_company', $listTutorCompany);
-    $listTutorTraining = array();
+    $listTutorTraining = [];
     $listTutorTraining = listTutorType("training = '1'");
     $tpl->assign('list_tutor_training', $listTutorTraining);
     if (isset($_SESSION['sepe_message_info'])) {

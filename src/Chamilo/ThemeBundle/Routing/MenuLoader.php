@@ -2,17 +2,15 @@
 /**
  * MenuLoader.php
  * avanzu-admin
- * Date: 24.02.14
+ * Date: 24.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Routing;
 
-
 use Symfony\Component\Config\Loader\Loader;
-use Symfony\Component\Config\Loader\LoaderResolverInterface;
 
-class MenuLoader extends Loader {
-
+class MenuLoader extends Loader
+{
     /**
      * Loads a resource.
      *
@@ -29,11 +27,10 @@ class MenuLoader extends Loader {
      * @param mixed  $resource A resource
      * @param string $type     The resource type
      *
-     * @return Boolean true if this class supports the given resource, false otherwise
+     * @return bool true if this class supports the given resource, false otherwise
      */
     public function supports($resource, $type = null)
     {
         return true;
     }
-
 }

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="message", indexes={
  *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Message
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
@@ -30,21 +30,21 @@ class Message
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_sender_id", type="integer", nullable=false)
      */
     private $userSenderId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_receiver_id", type="integer", nullable=false)
      */
     private $userReceiverId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="msg_status", type="smallint", nullable=false)
      */
@@ -72,14 +72,14 @@ class Message
     private $content;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
@@ -93,16 +93,17 @@ class Message
     private $updateDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="votes", type="integer", nullable=true)
      */
     private $votes;
 
     /**
-     * Set userSenderId
+     * Set userSenderId.
      *
-     * @param integer $userSenderId
+     * @param int $userSenderId
+     *
      * @return Message
      */
     public function setUserSenderId($userSenderId)
@@ -113,9 +114,9 @@ class Message
     }
 
     /**
-     * Get userSenderId
+     * Get userSenderId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserSenderId()
     {
@@ -123,9 +124,10 @@ class Message
     }
 
     /**
-     * Set userReceiverId
+     * Set userReceiverId.
      *
-     * @param integer $userReceiverId
+     * @param int $userReceiverId
+     *
      * @return Message
      */
     public function setUserReceiverId($userReceiverId)
@@ -136,9 +138,9 @@ class Message
     }
 
     /**
-     * Get userReceiverId
+     * Get userReceiverId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserReceiverId()
     {
@@ -146,9 +148,10 @@ class Message
     }
 
     /**
-     * Set msgStatus
+     * Set msgStatus.
      *
-     * @param boolean $msgStatus
+     * @param bool $msgStatus
+     *
      * @return Message
      */
     public function setMsgStatus($msgStatus)
@@ -159,9 +162,9 @@ class Message
     }
 
     /**
-     * Get msgStatus
+     * Get msgStatus.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMsgStatus()
     {
@@ -169,9 +172,10 @@ class Message
     }
 
     /**
-     * Set sendDate
+     * Set sendDate.
      *
      * @param \DateTime $sendDate
+     *
      * @return Message
      */
     public function setSendDate($sendDate)
@@ -182,7 +186,7 @@ class Message
     }
 
     /**
-     * Get sendDate
+     * Get sendDate.
      *
      * @return \DateTime
      */
@@ -192,9 +196,10 @@ class Message
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Message
      */
     public function setTitle($title)
@@ -205,7 +210,7 @@ class Message
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -215,9 +220,10 @@ class Message
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Message
      */
     public function setContent($content)
@@ -228,7 +234,7 @@ class Message
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -238,9 +244,10 @@ class Message
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return Message
      */
     public function setGroupId($groupId)
@@ -251,9 +258,9 @@ class Message
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -261,9 +268,10 @@ class Message
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return Message
      */
     public function setParentId($parentId)
@@ -274,9 +282,9 @@ class Message
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -284,9 +292,10 @@ class Message
     }
 
     /**
-     * Set updateDate
+     * Set updateDate.
      *
      * @param \DateTime $updateDate
+     *
      * @return Message
      */
     public function setUpdateDate($updateDate)
@@ -297,7 +306,7 @@ class Message
     }
 
     /**
-     * Get updateDate
+     * Get updateDate.
      *
      * @return \DateTime
      */
@@ -307,9 +316,9 @@ class Message
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -317,9 +326,10 @@ class Message
     }
 
     /**
-     * Set votes
+     * Set votes.
      *
-     * @param integer $votes
+     * @param int $votes
+     *
      * @return Message
      */
     public function setVotes($votes)
@@ -330,9 +340,9 @@ class Message
     }
 
     /**
-     * Get votes
+     * Get votes.
      *
-     * @return integer
+     * @return int
      */
     public function getVotes()
     {

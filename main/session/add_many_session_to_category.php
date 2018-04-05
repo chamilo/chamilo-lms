@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* @package chamilo.admin
-* @todo use formvalidator
-*/
+ * @package chamilo.admin
+ *
+ * @todo use formvalidator
+ */
 // resetting the course id
 $cidReset = true;
 
@@ -16,7 +17,7 @@ $xajax->registerFunction('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -45,7 +46,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
     }
 }
 
-$xajax -> processRequests();
+$xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script>
@@ -81,14 +82,13 @@ function remove_item(origin)
 
 $formSent = 0;
 $errorMsg = $firstLetterCourse = $firstLetterSession = '';
-$CourseList = $SessionList = array();
-$courses = $sessions = array();
+$CourseList = $SessionList = [];
+$courses = $sessions = [];
 $categoryId = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
     $sessionCategoryList = $_POST['SessionCategoryList'];
-
 
     if ($categoryId != 0 && count($sessionCategoryList) > 0) {
         // Removing all
@@ -125,7 +125,7 @@ $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 Display::display_header($tool_name);
 
 $where = '';
-$rows_category_session = array();
+$rows_category_session = [];
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
     $where = 'WHERE session_category_id != '.$categoryId.' OR session_category_id IS NULL';
     $sql = 'SELECT id, name  FROM '.$tbl_session.' WHERE session_category_id ='.$categoryId.' ORDER BY name';
@@ -188,16 +188,17 @@ if (!empty($OkMsg)) {
     <td align="left"></td>
     <td align="left"></td>
     <td  align="center">
-    <b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
+    <b><?php echo get_lang('SessionCategoryName'); ?> :</b><br />
     <select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
         <option value="0" ></option>
         <?php
         if (!empty($rows_session_category)) {
             foreach ($rows_session_category as $category) {
-                if ($category['id'] == $categoryId)
-                        echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
-                    else
-                        echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+                if ($category['id'] == $categoryId) {
+                    echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+                } else {
+                    echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+                }
             }
         }
             ?>
@@ -205,24 +206,30 @@ if (!empty($OkMsg)) {
     </td>
 </tr>
 <tr>
-  <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform') ?> :</b></td>
+  <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform'); ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory') ?> :</b></td>
+  <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') { ?>
+<?php if ($add_type == 'multiple') {
+                ?>
 <tr>
 <td>&nbsp;</td></tr>
-<?php } ?>
+<?php
+            } ?>
 <tr>
   <td width="45%" align="center">
     <div id="ajax_list_courses_multiple">
     <select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
     <?php
     foreach ($rows_session as $enreg) {
-    ?>
-        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; if (in_array($enreg['id'], $CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
-    <?php } ?>
+        ?>
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"';
+        if (in_array($enreg['id'], $CourseList)) {
+            echo 'selected="selected"';
+        } ?>><?php echo $enreg['name']; ?></option>
+    <?php
+    } ?>
     </select></div>
 <?php unset($nosessionCourses); ?>
   </td>
@@ -242,9 +249,14 @@ if (!empty($OkMsg)) {
   <td width="45%" align="center">
   <select id='destination' name="SessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
     <?php
-    foreach ($rows_category_session as $enreg) { ?>
-        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; if (in_array($enreg['id'], $CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
-    <?php } ?>
+    foreach ($rows_category_session as $enreg) {
+        ?>
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"';
+        if (in_array($enreg['id'], $CourseList)) {
+            echo 'selected="selected"';
+        } ?>><?php echo $enreg['name']; ?></option>
+    <?php
+    } ?>
   </select></td>
 </tr>
 </table>

@@ -8118,4 +8118,10 @@ $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "A new document %s has be
 $PendingSurveys = "Pending surveys";
 $NoPendingSurveys = "No pending surveys";
 $HottestSessions = "Most popular sessions";
+$LPItemCanBeAccessed = "Item can be viewed - Prerequisites completed";
+$ItemXBlocksThisElement = "Item %s blocks this step";
+$YourResultAtXBlocksThisElement = "Your result at %s blocks this step";
+$RegistrationRoleWhatDoYouWantToDo = "What do you want to do?";
+$RegistrationRoleFollowCourses = "Follow courses";
+$RegistrationRoleTeachCourses = "Teach courses";
 ?>

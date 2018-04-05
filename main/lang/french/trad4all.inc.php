@@ -8055,4 +8055,10 @@ $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "Un nouveau document %s a
 $PendingSurveys = "Enquêtes en attente";
 $NoPendingSurveys = "Pas d'enquête en attente";
 $HottestSessions = "Sessions les plus populaires";
+$LPItemCanBeAccessed = "Etape accessible";
+$ItemXBlocksThisElement = "L'absence de consultation de l'étape \"%s\" ne vous permet pas d'accéder à celle-ci";
+$YourResultAtXBlocksThisElement = "Votre score à l'étape \"%s\" ne vous permet d'accéder à celle-ci";
+$RegistrationRoleWhatDoYouWantToDo = "Que souhaitez-vous faire?";
+$RegistrationRoleFollowCourses = "Suivre des cours";
+$RegistrationRoleTeachCourses = "Enseigner";
 ?>

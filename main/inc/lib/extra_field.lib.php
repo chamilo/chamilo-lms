@@ -897,7 +897,7 @@ class ExtraField extends Model
      * @param array $params
      * @param bool  $show_query
      *
-     * @return int
+     * @return int|bool
      */
     public function save($params, $show_query = false)
     {
@@ -909,14 +909,11 @@ class ExtraField extends Model
             return $fieldInfo['id'];
         } else {
             $id = parent::save($params, $show_query);
-
-            if (!$id) {
-                return 0;
+            if ($id) {
+                $fieldOption = new ExtraFieldOption($this->type);
+                $params['field_id'] = $id;
+                $fieldOption->save($params);
             }
-
-            $session_field_option = new ExtraFieldOption($this->type);
-            $params['field_id'] = $id;
-            $session_field_option->save($params);
 
             return $id;
         }
@@ -929,12 +926,12 @@ class ExtraField extends Model
     {
         $params = $this->clean_parameters($params);
         if (isset($params['id'])) {
-            $field_option = new ExtraFieldOption($this->type);
+            $fieldOption = new ExtraFieldOption($this->type);
             $params['field_id'] = $params['id'];
             if (empty($params['field_type'])) {
                 $params['field_type'] = $this->type;
             }
-            $field_option->save($params, $showQuery);
+            $fieldOption->save($params, $showQuery);
         }
 
         return parent::update($params, $showQuery);
@@ -943,7 +940,7 @@ class ExtraField extends Model
     /**
      * @param $id
      *
-     * @return bool|void
+     * @return bool
      */
     public function delete($id)
     {
@@ -961,7 +958,7 @@ class ExtraField extends Model
         $session_field_values = new ExtraFieldValue($this->type);
         $session_field_values->delete_all_values_by_field_id($id);
 
-        parent::delete($id);
+        return parent::delete($id);
     }
 
     /**

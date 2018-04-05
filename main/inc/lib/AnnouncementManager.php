@@ -52,8 +52,6 @@ class AnnouncementManager
             $tags[] = '((general_coach_email))';
         }
 
-
-
         return $tags;
     }
 
@@ -65,7 +63,7 @@ class AnnouncementManager
      *
      * @return string
      */
-    public static function parse_content(
+    public static function parseContent(
         $userId,
         $content,
         $courseCode,
@@ -444,7 +442,7 @@ class AnnouncementManager
         //$toUserId = !empty($toUser) ? $toUser->getId() : 0;
         // The user id is always the current one.
         $toUserId = api_get_user_id();
-        $content = self::parse_content(
+        $content = self::parseContent(
             $toUserId,
             $content,
             api_get_course_id(),
@@ -479,6 +477,8 @@ class AnnouncementManager
             $html .= '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
             $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
             if (api_is_allowed_to_edit(false, true)) {
+                $url = api_get_self()."?".api_get_cidreq().
+                    "&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok;
                 $html .= Display::url(
                     Display::return_icon(
                         'delete.png',
@@ -486,7 +486,7 @@ class AnnouncementManager
                         '',
                         16
                     ),
-                    api_get_self()."?".api_get_cidreq()."&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok
+                    $url
                 );
             }
             $html .= '</td></tr>';
@@ -501,7 +501,7 @@ class AnnouncementManager
      *
      * @return int
      */
-    public static function get_last_announcement_order($courseInfo)
+    public static function getLastAnnouncementOrder($courseInfo)
     {
         if (empty($courseInfo)) {
             return 0;
@@ -564,7 +564,7 @@ class AnnouncementManager
             $end_date = api_get_utc_datetime();
         }
 
-        $order = self::get_last_announcement_order($courseInfo);
+        $order = self::getLastAnnouncementOrder($courseInfo);
 
         // store in the table announcement
         $params = [
@@ -691,8 +691,8 @@ class AnnouncementManager
         $courseInfo = api_get_course_info();
 
         // Database definitions
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $order = self::get_last_announcement_order($courseInfo);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        $order = self::getLastAnnouncementOrder($courseInfo);
 
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
@@ -707,11 +707,11 @@ class AnnouncementManager
             'session_id' => api_get_session_id(),
         ];
 
-        $last_id = Database::insert($tbl_announcement, $params);
+        $last_id = Database::insert($table, $params);
 
         // Store the attach file
         if ($last_id) {
-            $sql = "UPDATE $tbl_announcement SET id = iid 
+            $sql = "UPDATE $table SET id = iid 
                     WHERE iid = $last_id";
             Database::query($sql);
 

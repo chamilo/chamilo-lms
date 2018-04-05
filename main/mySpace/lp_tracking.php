@@ -51,11 +51,11 @@ if (!api_is_platform_admin(true) &&
 if ($origin == 'user_course') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'],
-        'name' => $course_info['name']
+        'name' => $course_info['name'],
     ];
     $interbreadcrumb[] = [
         'url' => "../user/user.php?cidReq=$courseCode",
-        'name' => get_lang("Users")
+        'name' => get_lang("Users"),
     ];
 } elseif ($origin == 'tracking_course') {
     $interbreadcrumb[] = [

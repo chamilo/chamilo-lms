@@ -324,8 +324,9 @@ switch ($action) {
         if ($result) {
             echo '1';
         } else {
-            echo '0';
+            echo $lp->error;
         }
+        $lp->error = '';
         exit;
 
         break;

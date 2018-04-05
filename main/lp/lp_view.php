@@ -145,9 +145,9 @@ $(document).ready(function() {
                 })
                 .then(function(content) {                    
                     if (content == 0) {
-                        textToShow = "'.addslashes(get_lang('YouNeedToCompletePrerequisites')).'";
+                        textToShow = "'.addslashes(get_lang('LearnpathPrereqNotCompleted')).'";
                     } else {
-                        textToShow = "'.addslashes(get_lang('ReadyToGo')).'";
+                        textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
                     }                   
                     // Set the tooltip content upon successful retrieval
                     //api.set(\'content.text\', "content");                    

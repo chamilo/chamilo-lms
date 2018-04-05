@@ -9791,7 +9791,6 @@ class learnpath
                 'min_score' => $row['min_score'],
                 'mastery_score' => $row['mastery_score'],
                 'prerequisite' => $row['prerequisite'],
-                'next_item_id' => $row['next_item_id'],
                 'display_order' => $row['display_order'],
                 'prerequisite_min_score' => $row['prerequisite_min_score'],
                 'prerequisite_max_score' => $row['prerequisite_max_score'],
@@ -9836,27 +9835,64 @@ class learnpath
 
             if ($item['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
-                $tmp_obj_lp_item = new LpItem($course_id, $item['id']);
-                $tmp_obj_exercice = new Exercise($course_id);
-                $tmp_obj_exercice->read($tmp_obj_lp_item->path);
-                $tmp_obj_lp_item->max_score = $tmp_obj_exercice->get_max_score();
-                $tmp_obj_lp_item->update();
-                $item['max_score'] = $tmp_obj_lp_item->max_score;
+                $lpItemObj = new LpItem($course_id, $item['id']);
+                $exercise = new Exercise($course_id);
+                $exercise->read($lpItemObj->path);
+                $lpItemObj->max_score = $exercise->get_max_score();
+                $lpItemObj->update();
+                $item['max_score'] = $lpItemObj->max_score;
 
                 $return .= '<td>';
-                $return .= '<input class="form-control" size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
+                $return .= '<input 
+                    class="form-control" 
+                    size="4" maxlength="3" 
+                    name="min_'.$item['id'].'" 
+                    type="number" 
+                    min="0" 
+                    step="1" 
+                    max="'.$item['max_score'].'" 
+                    value="'.$selectedMinScoreValue.'" 
+                />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<input class="form-control" size="4" maxlength="3" readonly name="max_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMaxScoreValue.'" />';
+                $return .= '<input 
+                    class="form-control" 
+                    size="4" 
+                    maxlength="3" 
+                    name="max_'.$item['id'].'" 
+                    type="number" 
+                    min="0" 
+                    step="1" 
+                    max="'.$item['max_score'].'" 
+                    value="'.$selectedMaxScoreValue.'" 
+                />';
                 $return .= '</td>';
             }
 
             if ($item['item_type'] == TOOL_HOTPOTATOES) {
                 $return .= '<td>';
-                $return .= '<input size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
+                $return .= '<input 
+                    size="4" 
+                    maxlength="3" 
+                    name="min_'.$item['id'].'" 
+                    type="number" 
+                    min="0" 
+                    step="1" 
+                    max="'.$item['max_score'].'" 
+                    value="'.$selectedMinScoreValue.'" 
+                />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<input size="4" maxlength="3" name="max_'.$item['id'].'" readonly type="number" min="0" step="1" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue.'" />';
+                $return .= '<input 
+                    size="4" 
+                    maxlength="3" 
+                    name="max_'.$item['id'].'" 
+                    type="number" 
+                    min="0" 
+                    step="1" 
+                    max="'.$item['max_score'].'" 
+                    value="'.$selectedMaxScoreValue.'" 
+                />';
                 $return .= '</td>';
             }
             $return .= '</tr>';
@@ -9867,7 +9903,8 @@ class learnpath
         $return .= '</table>';
         $return .= '</div>';
         $return .= '<div class="form-group">';
-        $return .= '<button class="btn btn-primary" name="submit_button" type="submit">'.get_lang('ModifyPrerequisites').'</button>';
+        $return .= '<button class="btn btn-primary" name="submit_button" type="submit">'.
+            get_lang('ModifyPrerequisites').'</button>';
         $return .= '</form>';
 
         return $return;

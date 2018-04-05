@@ -470,12 +470,12 @@ $sepeParticipantsTable->addColumn(
 $sepeParticipantsTable->addColumn(
     'company_tutor_id',
     \Doctrine\DBAL\Types\Type::INTEGER,
-    ['unsigned' => true]
+    ['unsigned' => true, 'notnull' => false]
 );
 $sepeParticipantsTable->addColumn(
     'training_tutor_id',
     \Doctrine\DBAL\Types\Type::INTEGER,
-    ['unsigned' => true]
+    ['unsigned' => true, 'notnull' => false]
 );
 $sepeParticipantsTable->setPrimaryKey(['id']);
 $sepeParticipantsTable->addForeignKeyConstraint(

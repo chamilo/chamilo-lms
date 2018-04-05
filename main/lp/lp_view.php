@@ -131,7 +131,7 @@ $(document).ready(function() {
         $("div#log_content").empty();
     });
         
-    $(".scorm_item_normal").qtip({       
+    $(".scorm_item_normal").qtip({
         content: {
             text: function(event, api) {
                 var item = $(this);                 
@@ -144,13 +144,14 @@ $(document).ready(function() {
                     async: false                 
                 })
                 .then(function(content) {                    
-                    if (content == 0) {
-                        textToShow = "'.addslashes(get_lang('LearnpathPrereqNotCompleted')).'";
-                    } else {
+                    if (content == 1) {
                         textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
-                    }                   
-                    // Set the tooltip content upon successful retrieval
-                    //api.set(\'content.text\', "content");                    
+                        api.set("style.classes", "qtip-green qtip-shadow");                        
+                    } else {
+                        textToShow = content;                        
+                        api.set("style.classes", "qtip-red qtip-shadow");
+                    }
+                    
                     return textToShow;
                 });
                 return textToShow;                

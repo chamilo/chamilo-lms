@@ -2111,6 +2111,7 @@ class learnpathItem
 
             return false;
         }
+
         while (strpos($prereqs_string, '(') !== false) {
             // Remove any () set and replace with its value.
             $matches = [];
@@ -2435,7 +2436,7 @@ class learnpathItem
                                 }
                             } else {
                                 // Nothing found there either. Now return the
-                                //  value of the corresponding resource completion status.
+                                // value of the corresponding resource completion status.
                                 if (self::DEBUG > 1) {
                                     error_log(
                                         'New LP - Didnt find any group, returning value for '.$prereqs_string,
@@ -2446,12 +2447,19 @@ class learnpathItem
                                 if (isset($refs_list[$prereqs_string]) &&
                                     isset($items[$refs_list[$prereqs_string]])
                                 ) {
-                                    if ($items[$refs_list[$prereqs_string]]->type == 'quiz') {
+                                    /** @var learnpathItem $itemToCheck */
+                                    $itemToCheck = $items[$refs_list[$prereqs_string]];
+                                    if ($itemToCheck->type == 'quiz') {
                                         // 1. Checking the status in current items.
-                                        $status = $items[$refs_list[$prereqs_string]]->get_status(true);
+                                        $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
+                                            $explanation = sprintf(
+                                                get_lang('ItemXBlocksThisElement'),
+                                                $itemToCheck->get_title()
+                                            );
+                                            $this->prereq_alert = $explanation;
                                             if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' not complete',
@@ -2494,7 +2502,11 @@ class learnpathItem
                                                         ) {
                                                             $returnstatus = true;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $explanation = sprintf(
+                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                $itemToCheck->get_title()
+                                                            );
+                                                            $this->prereq_alert = $explanation;
                                                             $returnstatus = false;
                                                         }
                                                     } else {
@@ -2504,14 +2516,16 @@ class learnpathItem
                                                         ) {
                                                             $returnstatus = true;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $explanation = sprintf(
+                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                $itemToCheck->get_title()
+                                                            );
+                                                            $this->prereq_alert = $explanation;
                                                             $returnstatus = false;
                                                         }
                                                     }
                                                 } else {
-                                                    $this->prereq_alert = get_lang(
-                                                        'LearnpathPrereqNotCompleted'
-                                                    );
+                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                     $returnstatus = false;
                                                 }
                                             }
@@ -2538,7 +2552,11 @@ class learnpathItem
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $explanation = sprintf(
+                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                $itemToCheck->get_title()
+                                                            );
+                                                            $this->prereq_alert = $explanation;
                                                             $returnstatus = false;
                                                         }
                                                     } else {
@@ -2546,26 +2564,27 @@ class learnpathItem
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang(
-                                                                'LearnpathPrereqNotCompleted'
-                                                            );
+                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                             $returnstatus = false;
                                                         }
                                                     }
                                                 }
                                             } else {
-                                                $this->prereq_alert = get_lang(
-                                                    'LearnpathPrereqNotCompleted'
-                                                );
+                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 $returnstatus = false;
                                             }
                                         }
 
                                         return $returnstatus;
                                     } else {
-                                        $status = $items[$refs_list[$prereqs_string]]->get_status(false);
+                                        $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
                                         if (!$returnstatus) {
+                                            $explanation = sprintf(
+                                                get_lang('ItemXBlocksThisElement'),
+                                                $itemToCheck->get_title()
+                                            );
+                                            $this->prereq_alert = $explanation;
                                             if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite '.$prereqs_string.' not complete',
@@ -2689,16 +2708,13 @@ class learnpathItem
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
                     $returnstatus = $status == 'completed' || $status == 'passed';
                     if (!$returnstatus && empty($this->prereq_alert)) {
-                        $this->prereq_alert = get_lang(
-                            'LearnpathPrereqNotCompleted'
-                        );
+                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                     }
 
                     return $returnstatus;
                 }
             }
         }
-
         if (empty($this->prereq_alert)) {
             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
         }

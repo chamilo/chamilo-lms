@@ -8143,4 +8143,6 @@ $PendingSurveys = "Encuestas pendientes";
 $NoPendingSurveys = "Sin encuestas pendientes";
 $HottestSessions = "Sesiones más populares";
 $LPItemCanBeAccessed = "Item accesible - prerequisitos completados.";
+$ItemXBlocksThisElement = "El item \"%s\" bloquea este paso";
+$YourResultAtXBlocksThisElement = "El resultado en el item \"%s\" bloquea esta etapa.";
 ?>

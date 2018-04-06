@@ -11,7 +11,6 @@
 
 The installation instructions are located in the documentation here:
 [Installation](documentation/installation_guide.html)
-In sjp
 
 ## Upgrade
 The upgrade instructions are located in the documentation here:
@@ -32,6 +31,8 @@ The upgrade instructions are located in the documentation here:
 * Plugin images, css and js libs are loaded inside the public/plugins folder
   (composer update copies the content inside plugin_name/public inside web/plugins/plugin_name
 * Plugins templates use asset() function instead of using "_p.web_plugin"
+* bower replaced by [yarn](https://yarnpkg.com)
+
 
 ## Todo
 * Auth (CAS, Shibboleth, Oath2)

@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- *  This script displays a form for registering new users.
+ * This script displays a form for registering new users.
  *
  * @package    chamilo.auth
  */

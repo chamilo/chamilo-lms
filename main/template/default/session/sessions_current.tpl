@@ -25,26 +25,26 @@
                     </div>
                     <div class="block-info">
                         <i class="fa fa-user"></i> {{ session.users }} {{ "Users"|get_lang }}
-                        &nbsp;
-                        &nbsp;
                         <i class="fa fa-book"></i> {{ session.lessons }} {{ "Learnpaths"|get_lang }}
                     </div>
-                    {% if session.on_sale != false %}
-                        <div class="toolbar">
-                            <div class="buycourses-price">
-                                <span class="label label-primary label-price">
-                                    <strong>{{ session.on_sale.iso_code }} {{ session.on_sale.price }}</strong>
-                                </span>
+                    {% if session.on_sale is defined %}
+                        {% if session.on_sale != false %}
+                            <div class="toolbar">
+                                <div class="buycourses-price">
+                                    <span class="label label-primary label-price">
+                                        <strong>{{ session.on_sale.iso_code }} {{ session.on_sale.price }}</strong>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    {% else %}
-                        <div class="toolbar">
-                            <div class="buycourses-price">
-                                <span class="label label-primary label-free">
-                                    <strong>{{ 'Free'|get_plugin_lang('BuyCoursesPlugin') }}</strong>
-                                </span>
+                        {% else %}
+                            <div class="toolbar">
+                                <div class="buycourses-price">
+                                    <span class="label label-primary label-free">
+                                        <strong>{{ 'Free'|get_plugin_lang('BuyCoursesPlugin') }}</strong>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endif %}
                 </div>
 

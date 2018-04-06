@@ -6781,16 +6781,11 @@ ul#toolnavbox-two li a.btn{
     width: 100px;
 }
 .lp-accordion .panel-heading .panel-title{
-    width: 100%;
-    display: inline-block;
 }
 .lp-accordion .panel-heading .panel-title a{
-    width: 100%;
     display: block;
 }
 .lp-accordion .panel-heading .tools-actions{
-    position: relative;
-    top: -30px;
 }
 
 .panel-image:hover {

@@ -3282,7 +3282,7 @@ class learnpath
                     $classStyle = 'scorm_item_normal '.$classStyle.' ';
                 }
                 $subtree['title'] = $title;
-                $subtree['class'] = $cssStatus.' '.$classStyle;
+                $subtree['class'] = $classStyle.' '.$cssStatus;
                 $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
                 $subtree['current_id'] = $myCurrentId;
                 $listNotParent[] = $subtree;
@@ -3356,7 +3356,7 @@ class learnpath
                     $subtree['title'] = stripslashes($title);
                 } else {
                     $subtree['title'] = $title;
-                    $subtree['class'] = $cssStatus.' '.$classStyle;
+                    $subtree['class'] = $classStyle.' '.$cssStatus;
                     $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
                     $subtree['current_id'] = $mycurrentitemid;
                 }

@@ -18,7 +18,17 @@ The upgrade instructions are located in the documentation here:
  
 ## Dev environment install guide
 
-[Managing CSS and JavaScript in Chamilo](assets/README.md)
+First, apply the procedure described here: [Managing CSS and JavaScript in Chamilo](assets/README.md)
+Then make sure your database supports large prefixes (see [this Stack Overflow thread](https://stackoverflow.com/questions/43379717/how-to-enable-large-index-in-mariadb-10/43403017#43403017) if you use MySQL < 5.7 or MariaDB < 10.2.2)
+Finally, load the (your-domain)/main/install/ URL to start the installer.
+If you are installing this development version in a subdirectory, you will need to add "folder" in configuration.php:
+```
+$_configuration['url_append'] = 'the-folder';
+```
+and in the ".env" file in the root folder:
+```
+APP_URL_APPEND=the-folder
+```
 
 ## Changes from 1.x
 

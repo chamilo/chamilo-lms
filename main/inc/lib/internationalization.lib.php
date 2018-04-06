@@ -413,8 +413,9 @@ function api_get_timezone()
  * @param bool  $returnNullIfInvalidDate if the date is not correct return null instead of the current date
  * @param bool  $returnObj
  *
- * @return string The DATETIME in UTC to be inserted in the DB,
+ * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
  *                or null if the format of the argument is not supported
+ *                or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -429,7 +430,7 @@ function api_get_utc_datetime(
             return null;
         }
         if ($returnObj) {
-            return $date = new DateTime(gmdate('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+            return new DateTime(gmdate('Y-m-d H:i:s'), new DateTimeZone('UTC'));
         }
 
         return gmdate('Y-m-d H:i:s');

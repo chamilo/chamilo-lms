@@ -1263,7 +1263,6 @@ class FillBlanks extends Question
 
         $correctAnswerHtml = '';
         $type = self::getFillTheBlankAnswerType($correct);
-
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);

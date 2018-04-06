@@ -1025,9 +1025,6 @@ class Tracking
                                         $my_score = $row_attempts['exe_result'];
                                         $my_maxscore = $row_attempts['exe_weighting'];
                                         $my_exe_id = $row_attempts['exe_id'];
-                                        $my_orig_lp = $row_attempts['orig_lp_id'];
-                                        $my_orig_lp_item = $row_attempts['orig_lp_item_id'];
-                                        $my_exo_exe_id = $row_attempts['exe_exo_id'];
                                         $mktime_start_date = api_strtotime($row_attempts['start_date'], 'UTC');
                                         $mktime_exe_date = api_strtotime($row_attempts['exe_date'], 'UTC');
                                         $time_attemp = ' - ';
@@ -3026,6 +3023,7 @@ class Tracking
                 if ($debug) {
                     echo '<h3>Final return</h3>';
                 }
+
                 if ($lp_with_quiz != 0) {
                     if (!$return_array) {
                         $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);
@@ -3917,7 +3915,6 @@ class Tracking
                     ip.tool='work' AND
                     $conditionToString";
         $rs = Database::query($sql);
-
         $row = Database::fetch_array($rs, 'ASSOC');
 
         return $row['count'];

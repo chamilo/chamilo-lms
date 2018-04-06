@@ -3651,7 +3651,7 @@ i.size-32.icon-new-work{
 }
 
 .password-verdict {
-
+    font-size: 12px;
 }
 #password_progress {
     width: 220px;
@@ -5006,7 +5006,24 @@ div#chat-remote-video video {
 #about-session .panel-tags .panel-body{
     text-align: center;
 }
-/* list courses classic*/
+#about-session .price-text {
+    color: #505763;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 40px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+#about-session .buy-box .btn-primary {
+    color: #fff;
+    background-color: #ec5252;
+    border: 1px solid transparent;
+    font-size: 15px;
+    line-height: 1.35135;
+    border-radius: 2px;
+}
+    /* list courses classic*/
 .classic-courses .list-teachers{
     font-size: 12px;
 }
@@ -5292,7 +5309,240 @@ div#chat-remote-video video {
     font-weight: bold;
     margin-bottom: 25px;
 }
-/* new grid catalog */
+
+
+/*************** SCROLLBAR BASE CSS ***************/
+
+.scroll-wrapper {
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: relative;
+    height: 300px;
+}
+
+.scroll-wrapper > .scroll-content {
+    border: none !important;
+    box-sizing: content-box !important;
+    height: auto;
+    left: 0;
+    margin: 0;
+    max-height: none;
+    max-width: none !important;
+    overflow: scroll !important;
+    padding: 0;
+    position: relative !important;
+    top: 0;
+    width: auto !important;
+
+}
+
+.scroll-wrapper > .scroll-content::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+}
+
+.scroll-element {
+    display: none;
+}
+.scroll-element, .scroll-element div {
+    box-sizing: content-box;
+}
+
+.scroll-element.scroll-x.scroll-scrollx_visible,
+.scroll-element.scroll-y.scroll-scrolly_visible {
+    display: block;
+}
+
+.scroll-element .scroll-bar,
+.scroll-element .scroll-arrow {
+    cursor: default;
+}
+
+.scroll-textarea {
+    border: 1px solid #cccccc;
+    border-top-color: #999999;
+}
+.scroll-textarea > .scroll-content {
+    overflow: hidden !important;
+}
+.scroll-textarea > .scroll-content > textarea {
+    border: none !important;
+    box-sizing: border-box;
+    height: 100% !important;
+    margin: 0;
+    max-height: none !important;
+    max-width: none !important;
+    overflow: scroll !important;
+    outline: none;
+    padding: 2px;
+    position: relative !important;
+    top: 0;
+    width: 100% !important;
+}
+.scroll-textarea > .scroll-content > textarea::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+}
+
+/*************** SIMPLE INNER SCROLLBAR ***************/
+
+.scrollbar-inner > .scroll-element,
+.scrollbar-inner > .scroll-element div
+{
+    border: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 10;
+}
+
+.scrollbar-inner > .scroll-element div {
+    display: block;
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.scrollbar-inner > .scroll-element.scroll-x {
+    bottom: 2px;
+    height: 8px;
+    left: 0;
+    width: 100%;
+}
+
+.scrollbar-inner > .scroll-element.scroll-y {
+    height: 100%;
+    right: 2px;
+    top: 0;
+    width: 8px;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_outer {
+    overflow: hidden;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_outer,
+.scrollbar-inner > .scroll-element .scroll-element_track,
+.scrollbar-inner > .scroll-element .scroll-bar {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_track,
+.scrollbar-inner > .scroll-element .scroll-bar {
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+    filter: alpha(opacity=40);
+    opacity: 0.4;
+}
+
+.scrollbar-inner > .scroll-element .scroll-element_track { background-color: #e0e0e0; }
+.scrollbar-inner > .scroll-element .scroll-bar { background-color: #c2c2c2; }
+.scrollbar-inner > .scroll-element:hover .scroll-bar { background-color: #919191; }
+.scrollbar-inner > .scroll-element.scroll-draggable .scroll-bar { background-color: #919191; }
+
+
+/* update scrollbar offset if both scrolls are visible */
+
+.scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track { left: -12px; }
+.scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track { top: -12px; }
+
+
+.scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size { left: -12px; }
+.scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -12px; }
+
+
+/* FORM REGISTER */
+.terms-conditions{
+    padding: 15px 10px;
+    background-color: #DDD;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.help-registration{
+    background-color: #ececec;
+    box-shadow: none;
+}
+
+#registration #status .radio{
+    display: inline-block;
+    position: relative;
+}
+#registration #status .radio label p{
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.progress{
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 10px;
+}
+#registration input[name='status'] {
+    position: relative !important;
+    margin-left: 0 !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+#registration input[value='5']:after {
+    position: relative;
+    top: 0;
+    display: block;
+    content: ' ';
+    background: url(../../main/img/icons/svg/coursestudent_na.svg);
+    width: 132px;
+    height: 132px;
+    border-radius: 0;
+    -webkit-transition: color 1s, -webkit-box-shadow 1s;
+    transition: color 1s, -webkit-box-shadow 1s;
+    transition: box-shadow 1s, color 1s;
+    transition: box-shadow 1s, color 1s, -webkit-box-shadow 1s;
+    border: 4px solid #FFFFFF;
+}
+#registration input[value='5']:checked:after {
+    -webkit-box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    background: url(../../main/img/icons/svg/coursestudent.svg);
+    border-color: #E4CE80;
+    transition: all 250ms ease;
+    will-change: transition;
+    top: 5px;
+}
+#registration input[value='1']:after {
+    position: relative;
+    top: 0;
+    display: block;
+    content: ' ';
+    background: url(../../main/img/icons/svg/coursemanager_na.svg);
+    width: 132px;
+    height: 132px;
+    border-radius: 0;
+    -webkit-transition: color 1s, -webkit-box-shadow 1s;
+    transition: color 1s, -webkit-box-shadow 1s;
+    transition: box-shadow 1s, color 1s;
+    transition: box-shadow 1s, color 1s, -webkit-box-shadow 1s;
+    border: 4px solid #FFFFFF;
+}
+#registration input[value='1']:checked:after {
+    -webkit-box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    background: url(../../main/img/icons/svg/coursemanager.svg);
+    border-color: #76CDE4;
+    transition: all 250ms ease;
+    will-change: transition;
+    top: 5px;
+}
+
+
+/* GRID CATALOG */
 .section-course-wrapper{
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
@@ -5315,7 +5565,7 @@ div#chat-remote-video video {
 .return-catalog{
     margin-top: 23px;
 }
-.search-session, .search-courses{
+.search-session, .search-courses
     margin-bottom: 15px;
     margin-top: 25px;
 }

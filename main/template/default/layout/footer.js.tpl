@@ -11,6 +11,8 @@
             });
         });
 
+        $('.scrollbar-inner').scrollbar();
+
         // Date time settings.
         moment.locale('{{ locale }}');
         $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);

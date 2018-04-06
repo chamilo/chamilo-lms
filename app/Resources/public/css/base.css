@@ -5493,7 +5493,7 @@ div#chat-remote-video video {
     padding-top: 5px;
     padding-bottom: 5px;
 }
-.progress{
+#registration .progress{
     width: 100%;
     margin-top: 5px;
     margin-bottom: 5px;

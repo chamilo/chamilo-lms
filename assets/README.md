@@ -7,7 +7,7 @@ In order to accomplish this task there are some prerequisites.
 
 - Install yarn
 
-``sudo apt install yarn``
+Follow the installation instructions here https://yarnpkg.com/en/docs/install
 
 After the installation run this command in the Chamilo root:
 

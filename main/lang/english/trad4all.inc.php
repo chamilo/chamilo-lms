@@ -6680,7 +6680,7 @@ $ReviewQuestions = "Review selected questions";
 $YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this exercise earlier";
 $NoCookies = "You do not have cookies support enabled in your browser. Chamilo relies on the feature called \"cookies\" to store your connection details. This means you will not be able to login if cookies are not enabled. Please change your browser configuration (generally in the Edit -> Preferences menu) and reload this page.";
 $NoJavascript = "Your do not have JavaScript support enabled in your browser. Chamilo relies heavily on JavaScript to provide you with a more dynamic interface. It is likely that most feature will work, but you might not benefit from the latest improvements in usability. We recommend you change your browser configuration (generally under the Edit -> Preferences menu) and reload this page.";
-$NoFlash = "You do not seems to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don't have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser.";
+$NoFlash = "You do not seem to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don't have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser.";
 $ThereAreNoQuestionsForThisExercise = "There are no questions for this exercise";
 $Attempt = "Attempt";
 $SaveForNow = "Save and continue later";
@@ -8124,4 +8124,6 @@ $YourResultAtXBlocksThisElement = "Your result at %s blocks this step";
 $RegistrationRoleWhatDoYouWantToDo = "What do you want to do?";
 $RegistrationRoleFollowCourses = "Follow courses";
 $RegistrationRoleTeachCourses = "Teach courses";
+$EditPortfolioItem = "Edit portfolio item";
+$PortfolioItemAdded = "Portfolio item added";
 ?>

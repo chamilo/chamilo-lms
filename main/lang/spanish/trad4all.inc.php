@@ -8148,4 +8148,6 @@ $YourResultAtXBlocksThisElement = "El resultado en el item \"%s\" bloquea esta e
 $RegistrationRoleWhatDoYouWantToDo = "¿Qué deseas hacer?";
 $RegistrationRoleFollowCourses = "Seguir cursos";
 $RegistrationRoleTeachCourses = "Dictar cursos";
+$EditPortfolioItem = "Editar elemento del portafolio";
+$PortfolioItemAdded = "Elemento del portafolio editado";
 ?>

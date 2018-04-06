@@ -6590,7 +6590,7 @@ class CourseManager
             $title = $course['title'];
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
             $html = Display::url(
-                Display::returnFontAwesomeIcon('info-circle', 2),
+                Display::returnFontAwesomeIcon('info-circle', 'lg'),
                 $url,
                 [
                     'class' => 'ajax btn btn-default btn-sm',

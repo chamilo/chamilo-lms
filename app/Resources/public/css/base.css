@@ -5174,7 +5174,6 @@ div#chat-remote-video video {
 
 .hot-courses .grid-courses .items .title{
     padding: 0px;
-    font-size: 15px;
     font-weight: bold;
     margin: 0;
 }
@@ -5262,7 +5261,7 @@ div#chat-remote-video video {
     right: -10px;
 }
 .grid-courses .items .description{
-    padding: 5px 10px;
+    padding: 5px 10px 15px;
 }
 .grid-courses .items .description .text{
     font-size: 12px;

@@ -6,7 +6,6 @@
         </h4>
     </div>
     <div class="row">
-        <!-- Esto repite para mostar 8 sessiones recientes -->
         {% for session in hot_sessions %}
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="items items-hotcourse">
@@ -24,31 +23,34 @@
                                title="title-session">{{ session.name }}</a>
                         </h5>
                     </div>
-                    <div class="block-author">
-                        {{ dump(session) }}
-                        <a href="{{ _p.web_main }}inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{ session.id_coach }}"
-                           class="ajax" data-title="{{ session.firstname }} {{ session.lastname }}">
-                            <img src="{{ session.avatar }}"/>
-                        </a>
-                        <div class="teachers-details">
-                            <h5>
-                                <a href="#">{{ session.firstname }} {{ session.lastname }}</a>
-                            </h5>
-                            <p>{{ 'Teacher'|get_lang }}</p>
-                        </div>
-
-                    </div>
                     <div class="block-info">
                         <i class="fa fa-user"></i> {{ session.users }} {{ "Users"|get_lang }}
                         &nbsp;
                         &nbsp;
                         <i class="fa fa-book"></i> {{ session.lessons }} {{ "Learnpaths"|get_lang }}
                     </div>
+                    {% if session.on_sale != false %}
+                        <div class="toolbar">
+                            <div class="buycourses-price">
+                                <span class="label label-primary label-price">
+                                    <strong>{{ session.on_sale.iso_code }} {{ session.on_sale.price }}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="toolbar">
+                            <div class="buycourses-price">
+                                <span class="label label-primary label-free">
+                                    <strong>{{ 'Free'|get_plugin_lang('BuyCoursesPlugin') }}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
+
             </div>
         </div>
         {% endfor %}
-        <!-- Fin de 8 sessiones recientes -->
     </div>
 </section>
 {% endif %}

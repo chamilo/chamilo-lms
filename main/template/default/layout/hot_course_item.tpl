@@ -19,11 +19,11 @@
                 <div class="description">
                     <div class="block-title">
                         {% if item.is_registered or _u.is_admin %}
-                            <h4 class="title">
+                            <h5 class="title">
                                 <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ item.course_public_url }}">
                                     {{ item.title_cut}}
                                 </a>
-                            </h4>
+                            </h5>
                         {% else %}
                             <h4 class="title" title="{{ item.title }}">
                                 {{ item.title_cut}}
@@ -32,54 +32,6 @@
                     </div>
                     <div class="ranking">
                         {{ item.rating_html }}
-                    </div>
-                    <div class="block-author">
-                        {% if item.teachers | length > 6 %}
-                            <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
-                                <em class="fa fa-graduation-cap" aria-hidden="true"></em>
-                            </a>
-                            <div id="popover-content-plist-{{ loop.index }}" class="hide">
-                                {% for teacher in item.teachers %}
-                                    <div class="popover-teacher">
-                                        <a href="{{ teacher.url }}" class="ajax"
-                                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            <img src="{{ teacher.avatar }}" alt="{{ teacher.fullname }}"/>
-                                        </a>
-                                        <div class="teachers-details">
-                                            <h5>
-                                                <a href="{{ teacher.url }}" class="ajax"
-                                                   data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                    {{ teacher.firstname }} {{ teacher.lastname }}
-                                                </a>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {% for teacher in item.teachers %}
-                                {% if item.teachers | length <= 2 %}
-                                    <a href="{{ teacher.url }}" class="ajax"
-                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        <img src="{{ teacher.avatar }}" alt="{{ teacher.fullname }}"/>
-                                    </a>
-                                    <div class="teachers-details">
-                                        <h5>
-                                            <a href="{{ teacher.url }}" class="ajax"
-                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                {{ teacher.firstname }} {{ teacher.lastname }}
-                                            </a>
-                                        </h5>
-                                        <p>{{ 'Teacher' | get_lang }}</p>
-                                    </div>
-                                {% elseif item.teachers | length <= 6 %}
-                                    <a href="{{ teacher.url }}" class="ajax"
-                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        <img src="{{ teacher.avatar }}" alt="{{ teacher.fullname }}"/>
-                                    </a>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
                     </div>
                     <div class="toolbar row">
                         <div class="col-sm-4">

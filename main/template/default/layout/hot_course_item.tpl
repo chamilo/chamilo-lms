@@ -25,9 +25,9 @@
                                 </a>
                             </h5>
                         {% else %}
-                            <h4 class="title" title="{{ item.title }}">
+                            <h5 class="title" title="{{ item.title }}">
                                 {{ item.title_cut}}
-                            </h4>
+                            </h5>
                         {% endif %}
                     </div>
                     <div class="ranking">

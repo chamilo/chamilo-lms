@@ -1187,9 +1187,9 @@ class learnpath
     /**
      * Removes an item from the current learnpath.
      *
-     * @param int    $id     Elem ID (0 if first)
-     * @param string $remove Whether to remove the resource/data from the system
-     *                       or leave it (default: 'keep', others 'remove')
+     * @param int $id     Elem ID (0 if first)
+     * @param int $remove Whether to remove the resource/data from the
+     *                    system or leave it (default: 'keep', others 'remove')
      *
      * @return int Number of elements moved
      *
@@ -2568,7 +2568,8 @@ class learnpath
     }
 
     /**
-     * @param string $mode can be '%' or 'abs' otherwise this value will be used $this->progress_bar_mode
+     * @param string $mode can be '%' or 'abs'
+     *                     otherwise this value will be used $this->progress_bar_mode
      *
      * @return string
      */
@@ -2583,8 +2584,8 @@ class learnpath
      * Gets the progress bar info to display inside the progress bar.
      * Also used by scorm_api.php.
      *
-     * @param string $mode Mode of display (can be '%' or 'abs').abs means we display a number of completed elements
-     *                     per total elements
+     * @param string $mode Mode of display (can be '%' or 'abs').abs means
+     *                     we display a number of completed elements per total elements
      * @param int    $add  Additional steps to fake as completed
      *
      * @return array Percentage or number and symbol (% or /xx)
@@ -4401,7 +4402,9 @@ class learnpath
     }
 
     /**
-     * Publishes a learnpath. This basically means show or hide the learnpath to normal users. Can be used as abstract.
+     * Publishes a learnpath. This basically means show or hide the learnpath
+     * to normal users.
+     * Can be used as abstract.
      *
      * @param int $lp_id          Learnpath ID
      * @param int $set_visibility New visibility
@@ -8550,6 +8553,7 @@ class learnpath
             );
 
             $relative_prefix = '';
+
             $editor_config = [
                 'ToolbarSet' => 'LearningPathDocuments',
                 'Width' => '100%',

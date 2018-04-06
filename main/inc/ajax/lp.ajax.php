@@ -324,7 +324,11 @@ switch ($action) {
         if ($result) {
             echo '1';
         } else {
-            echo $lp->error;
+            if (!empty($lp->error)) {
+                echo $lp->error;
+            } else {
+                echo get_lang('LearnpathPrereqNotCompleted');
+            }
         }
         $lp->error = '';
         exit;

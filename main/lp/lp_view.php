@@ -179,6 +179,8 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
     Session::erase('exerciseResult');
     Session::erase('objExercise');
     Session::erase('questionList');
+    Session::erase('duration_time_previous');
+    Session::erase('duration_time');
 }
 
 // additional APIs

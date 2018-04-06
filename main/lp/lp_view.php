@@ -528,7 +528,8 @@ $template->assign('lp_author', $lp->get_author());
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
 $template->assign('title_course', $lp->course_info['title']);
-$template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+// remove in ofaj
+//$template->assign('data_list', $lp->getListArrayToc($get_toc_list));
 $template->assign('lp_id', $lp->lp_id);
 $template->assign('lp_current_item_id', $lp->get_current_item_id());
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));

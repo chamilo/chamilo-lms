@@ -4,7 +4,6 @@
 /**
  * @package chamilo.learnpath
  *
- * @author  Yannick Warnier <ywarnier@beeznest.org>
+ * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 echo time();

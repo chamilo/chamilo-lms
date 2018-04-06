@@ -2608,14 +2608,13 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
-        $sql = "
-            SELECT lp_id, view_count, progress 
-            FROM $lpViewTable lp_view
-            WHERE
-                $conditionToString
-                $groupBy
-            ORDER BY view_count DESC
-        ";
+        $sql = "SELECT lp_id, view_count, progress 
+                FROM $lpViewTable lp_view
+                WHERE
+                    $conditionToString
+                    $groupBy
+                ORDER BY view_count DESC";
+
         $result = Database::query($sql);
 
         $progress = [];
@@ -2720,7 +2719,6 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-
             if (empty($session_id)) {
                 $sql = "SELECT DISTINCT(id), use_max_score
                         FROM $lp_table
@@ -6731,7 +6729,8 @@ class Tracking
             $row_ip = Database::fetch_row($res_ip);
             if ($return_as_link) {
                 $ip = Display::url(
-                    (empty($body_replace) ? $row_ip[1] : $body_replace), 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
+                    (empty($body_replace) ? $row_ip[1] : $body_replace),
+                    'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
                     ['title' => get_lang('TraceIP'), 'target' => '_blank']
                 );
             } else {
@@ -7822,5 +7821,118 @@ class TrackingCourseLog
         }
 
         return $users;
+    }
+
+    /**
+     * @param string $current
+     */
+    public static function actionsLeft($current, $sessionId = 0)
+    {
+        $usersLink = Display::url(
+            Display::return_icon('user.png', get_lang('StudentsTracking'), [], ICON_SIZE_MEDIUM),
+            'courseLog.php?'.api_get_cidreq(true, false)
+        );
+
+        $groupsLink = Display::url(
+            Display::return_icon('group.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
+            'course_log_groups.php?'.api_get_cidreq()
+        );
+
+        $resourcesLink = Display::url(
+            Display::return_icon('tools.png', get_lang('ResourcesTracking'), [], ICON_SIZE_MEDIUM),
+            'course_log_resources.php?'.api_get_cidreq(true, false)
+        );
+
+        $courseLink = Display::url(
+            Display::return_icon('course.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
+            'course_log_tools.php?'.api_get_cidreq(true, false)
+        );
+
+        $examLink = Display::url(
+            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
+        );
+
+        $eventsLink = Display::url(
+            Display::return_icon('security.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
+        );
+
+        $attendanceLink = '';
+        if (!empty($sessionId)) {
+            $attendanceLink = Display::url(
+                Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
+            );
+        }
+
+        switch ($current) {
+            case 'users':
+                $usersLink = Display::url(
+                        Display::return_icon(
+                        'user_na.png',
+                        get_lang('StudentsTracking'),
+                        [],
+                        ICON_SIZE_MEDIUM
+                    ),
+                    '#'
+                );
+                break;
+            case 'groups':
+                $groupsLink = Display::url(
+                    Display::return_icon('group_na.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
+                    '#'
+                );
+                break;
+            case 'courses':
+                $courseLink = Display::url(
+                    Display::return_icon('course_na.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
+                    '#'
+                );
+                break;
+            case 'resources':
+                $resourcesLink = Display::url(
+                    Display::return_icon(
+                    'tools_na.png',
+                    get_lang('ResourcesTracking'),
+                    [],
+                    ICON_SIZE_MEDIUM
+                    ),
+                    '#'
+                );
+                break;
+            case 'exams':
+                $examLink = Display::url(
+                    Display::return_icon('quiz_na.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+                    '#'
+                );
+                break;
+            case 'logs':
+                $eventsLink = Display::url(
+                    Display::return_icon('security_na.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
+                    '#'
+                );
+                break;
+            case 'attendance':
+                if (!empty($sessionId)) {
+                    $attendanceLink = Display::url(
+                        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                        '#'
+                    );
+                }
+                break;
+        }
+
+        $items = [
+            $usersLink,
+            $groupsLink,
+            $courseLink,
+            $resourcesLink,
+            $examLink,
+            $eventsLink,
+            $attendanceLink,
+        ];
+
+        return implode('', $items).'&nbsp;';
     }
 }

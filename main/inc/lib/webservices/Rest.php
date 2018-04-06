@@ -40,7 +40,9 @@ class Rest extends WebService
     const GET_MESSAGE_USERS = 'message_users';
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
     const SAVE_FORUM_THREAD = 'save_forum_thread';
-
+    const SAVE_COURSE = 'save_course';
+    const SAVE_USER = 'save_user';
+    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
     /**

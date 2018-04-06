@@ -46,7 +46,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#idTitle").focus();
 }
-$(window).load(function () {
+$(window).on("load", function () {
     setFocus();
 });
 </script>';
@@ -997,8 +997,12 @@ switch ($action) {
                 $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
-            $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
-            $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
+            $_SESSION['oLP']->set_prerequisite(
+                isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0
+            );
+            $_SESSION['oLP']->set_use_max_score(
+                isset($_POST['use_max_score']) ? 1 : 0
+            );
 
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);

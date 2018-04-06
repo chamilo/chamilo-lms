@@ -676,10 +676,8 @@ class FillBlanks extends Question
                 $correctAnswer = api_html_entity_decode($correctAnswer);
                 $studentAnswer = htmlspecialchars($studentAnswer);
                 $result = $studentAnswer == self::trimOption($correctAnswer);
-
                 break;
         }
-        //var_dump($result);
 
         return $result;
     }
@@ -953,10 +951,10 @@ class FillBlanks extends Question
     {
         $outRes = 0;
         // for each student in group
-        foreach ($resultList as $userId => $tabValue) {
+        foreach ($resultList as $list) {
             $found = false;
             // for each bracket, if student has at least one answer ( choice > -2) then he pass the question
-            foreach ($tabValue as $i => $choice) {
+            foreach ($list as $choice) {
                 if ($choice > -2 && !$found) {
                     $outRes++;
                     $found = true;
@@ -1177,10 +1175,9 @@ class FillBlanks extends Question
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $resultsDisabled = true;
             if ($showTotalScoreAndUserChoices) {
                 $resultsDisabled = false;
-            } else {
-                $resultsDisabled = true;
             }
         }
 
@@ -1239,15 +1236,14 @@ class FillBlanks extends Question
         $showTotalScoreAndUserChoices = false
     ) {
         $hideExpectedAnswer = false;
-        if ($feedbackType == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
+        if ($feedbackType == 0 && $resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
             $hideExpectedAnswer = true;
         }
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $hideExpectedAnswer = true;
             if ($showTotalScoreAndUserChoices) {
                 $hideExpectedAnswer = false;
-            } else {
-                $hideExpectedAnswer = true;
             }
         }
 
@@ -1273,7 +1269,7 @@ class FillBlanks extends Question
                 $correctAnswerHtml .= ")</span>";
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-                $listCorrects = explode("||", $correct);
+                $listCorrects = explode('||', $correct);
                 $firstCorrect = $correct;
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
@@ -1333,6 +1329,7 @@ class FillBlanks extends Question
      * @param string $correct
      * @param string $feedbackType
      * @param bool   $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
      *
      * @return string
      */

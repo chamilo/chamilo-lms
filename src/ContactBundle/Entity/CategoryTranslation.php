@@ -10,7 +10,9 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  * Class CategoryTranslation.
  *
  * @ORM\Entity
- * @ORM\Table(name="contact_category_translation")
+ * @ORM\Table(
+ *     name="contact_category_translation",
+ *     options={"row_format":"DYNAMIC"}
  * )
  *
  * @package Chamilo\ContactBundle\Entity

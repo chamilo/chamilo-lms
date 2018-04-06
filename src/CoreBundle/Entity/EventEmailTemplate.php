@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EventEmailTemplate.
  *
- * @ORM\Table(name="event_email_template", indexes={@ORM\Index(name="event_name_index", columns={"event_type_name"})})
+ * @ORM\Table(
+ *     name="event_email_template",
+ *     options={"row_format":"DYNAMIC"},
+ *     indexes={@ORM\Index(name="event_name_index", columns={"event_type_name"})}
+ * )
  * @ORM\Entity
  */
 class EventEmailTemplate

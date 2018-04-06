@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * HookObserver.
  *
- * @ORM\Table(name="hook_observer", uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})})
+ * @ORM\Table(
+ *     name="hook_observer",
+ *     options={"row_format":"DYNAMIC"},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})}
+ * )
  * @ORM\Entity
  */
 class HookObserver

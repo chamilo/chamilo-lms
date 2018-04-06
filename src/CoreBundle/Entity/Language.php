@@ -9,7 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Language.
  *
- * @ORM\Table(name="language", indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})})
+ * @ORM\Table(
+ *     name="language",
+ *     options={"row_format":"DYNAMIC"},
+ *     indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})}
+ * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\LanguageRepository")
  */
 class Language

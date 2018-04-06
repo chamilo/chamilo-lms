@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SettingsOptions.
  *
- * @ORM\Table(name="settings_options", uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})})
+ * @ORM\Table(
+ *     name="settings_options",
+ *     options={"row_format":"DYNAMIC"},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})}
+ * )
  * @ORM\Entity
  */
 class SettingsOptions

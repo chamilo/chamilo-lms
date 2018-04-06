@@ -19,6 +19,9 @@
         <id name="id" type="string" column="id">
             <generator strategy="NONE"/>
         </id>
+        <options>
+            <option name="row_format">DYNAMIC</option>
+        </options>
 
     </entity>
 </doctrine-mapping>

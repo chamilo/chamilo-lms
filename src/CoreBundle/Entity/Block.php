@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Block.
  *
- * @ORM\Table(name="block", uniqueConstraints={@ORM\UniqueConstraint(name="path", columns={"path"})})
+ * @ORM\Table(
+ *     name="block",
+ *     options={"row_format":"DYNAMIC"},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="path", columns={"path"})}
+ * )
  * @ORM\Entity
  */
 class Block

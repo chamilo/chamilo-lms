@@ -11,7 +11,10 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  * Class CategoryTranslation.
  *
  * @ORM\Entity
- * @ORM\Table(name="faq_question_translation")
+ * @ORM\Table(
+ *     name="faq_question_translation",
+ *     options={"row_format":"DYNAMIC"}
+ * )
  *
  * @package Chamilo\FaqBundle\Entity
  */

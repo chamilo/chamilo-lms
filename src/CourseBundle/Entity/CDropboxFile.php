@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *  name="c_dropbox_file",
+ *  options={"row_format":"DYNAMIC"},
  *  uniqueConstraints={
  *      @ORM\UniqueConstraint(name="UN_filename", columns={"filename"})
  *  },

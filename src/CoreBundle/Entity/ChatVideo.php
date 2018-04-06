@@ -9,12 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  * Chat.
  *
  * @ORM\Table(
- *      name="chat_video", indexes={
- *          @ORM\Index(name="idx_chat_video_to_user", columns={"to_user"}),
- *          @ORM\Index(name="idx_chat_video_from_user", columns={"from_user"}),
- *          @ORM\Index(name="idx_chat_video_users", columns={"from_user", "to_user"}),
- *          @ORM\Index(name="idx_chat_video_room_name", columns={"room_name"})
- *      }
+ *     name="chat_video",
+ *     options={"row_format":"DYNAMIC"},
+ *     indexes={
+ *         @ORM\Index(name="idx_chat_video_to_user", columns={"to_user"}),
+ *         @ORM\Index(name="idx_chat_video_from_user", columns={"from_user"}),
+ *         @ORM\Index(name="idx_chat_video_users", columns={"from_user", "to_user"}),
+ *         @ORM\Index(name="idx_chat_video_room_name", columns={"room_name"})
+ *     }
  * )
  * @ORM\Entity
  */

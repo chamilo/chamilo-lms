@@ -3772,7 +3772,7 @@ i.size-32.icon-new-work{
     border: 1px solid #ddd;
 }
 #display-survey.table tbody tr:hover td,#display-survey.table tbody tr:hover th{
-    background-color: none;
+    background-color: transparent;
 }
 .answered-people{
     padding: 10px;
@@ -5565,7 +5565,7 @@ div#chat-remote-video video {
 .return-catalog{
     margin-top: 23px;
 }
-.search-session, .search-courses
+.search-session, .search-courses {
     margin-bottom: 15px;
     margin-top: 25px;
 }
@@ -6539,7 +6539,6 @@ ul#toolnavbox-two li a {
     margin-left: -2px;
     font-size: 12px;
     width: 50px;
-
 }
 ul#toolnavbox-two .tool-img{
     float: left;

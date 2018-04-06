@@ -56,11 +56,14 @@ foreach ($files as $file) {
                 if (substr($term, 0, 4) == 'lang') {
                     $term = substr($term, 4);
                 }
-                if (!empty($terms[$term])) {
-                    $translation = $terms[$term];
+                // Replace all variables by their English translation,
+                // except those translations larger than 120 characters
+                // as these would be impractical
+                if (!empty($terms[$term]) and strlen($terms[$term]) <= 120) {
+                    $translation = str_replace("'", "\\'", $terms[$term]);
                     $quotedTerm = $myTerms[1][0];
-                    //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                    system("sed -i \"s#$term#'$translation'#g\" $file");
+                    echo "Doing sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
+                    system("sed -i \"s#$quotedTerm#'$translation'#g\" $file");
                     $countReplaces++;
                 }
             }
@@ -73,11 +76,14 @@ foreach ($files as $file) {
                     if (substr($term, 0, 4) == 'lang') {
                         $term = substr($term, 4);
                     }
-                    if (!empty($terms[$term])) {
-                        $translation = $terms[$term];
+                    // Replace all variables by their English translation,
+                    // except those translations larger than 120 characters
+                    // as these would be impractical
+                    if (!empty($terms[$term]) and strlen($terms[$term]) <= 120) {
+                        $translation = str_replace("'", "\\'", $terms[$term]);
                         $quotedTerm = $myTerms[1][0];
-                        //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                        system("sed -i \"s#$term#'$translation'#g\" $file");
+                        echo "Doing sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
+                        system("sed -i \"s#$quotedTerm#'$translation'#g\" $file");
                         $countReplaces++;
                     }
                 }

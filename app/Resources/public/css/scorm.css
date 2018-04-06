@@ -5,12 +5,9 @@ See https://support.chamilo.org/issues/6976
 */
 /* LP SCORM */
 /* Default LP left column values */
-
-/* ofaj */
 body{
     background: #FFF !important;
 }
-
 .audio-scorm #container{
     min-height: 45px;
     margin-bottom: 5px;
@@ -307,8 +304,6 @@ body{
     height: 100%;
     margin: 0;
     overflow: hidden;
-    position: absolute;
-    width: 100%;
 }
 #learning_path_left_zone,
 #learning_path_right_zone {
@@ -320,12 +315,8 @@ body{
     position: absolute;
     right: 0;
     top: 0;
-    transition-property: left, width;
+    transition-property: left width;
     transition-duration: 0.5s;
-}
-#learning_path_right_zone #wrapper-iframe {
-    height: 100%;
-    width: 100%;
 }
 #learning_path_left_zone .lp-view-zone-container,
 #learning_path_right_zone .lp-view-zone-container {
@@ -350,15 +341,12 @@ body{
     left: 100%;
     width: 100%;
 }
-#learning_path_right_zone.no-right-col {
-    left: 0;
-}
 #learning_path_right_zone .lp-view-tabs .tab-content {
     bottom: 5px;
     left: 5px;
     position: absolute;
     right: 5px;
-    top: 60px;
+    top: 65px;
 }
 #learning_path_right_zone .tab-pane{
     height: 100%;
@@ -387,6 +375,22 @@ body{
     background: none;
     padding: 0;
     margin: 0;
+}
+.movil-toolbar{
+    width: 100%;
+    height: 40px;
+    padding-top: 5px;
+}
+.btn-movil{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.btn-movil li{
+    display: block;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .icon-toolbar .fa{
     width: 35px;
@@ -423,19 +427,23 @@ body{
 #scorm-info .progress-bar{
     line-height: 17px;
 }
-.actions_lp{
-    display: inline-block;
-    width: 100%;
-    text-align: center;
+#scorm-panel .panel-body{
+    padding: 0;
 }
-.navegation-bar {
+.section-list{
     display: block;
-    padding: 5px 10px 5px 5px;
-    right: 0;
-    top: 0;
-    position: absolute;
-    z-index: 9999;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #E1E1E1;
 }
+.section-list .list-item{
+    padding: 5px 10px;
+    display: flex;
+    border-bottom: 1px solid #ededed;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #scorm-info{
@@ -448,9 +456,6 @@ body{
     #learning_path_right_zone {
         left: 250px;
         width: calc(100% - 250px);
-    }
-    #learning_path_right_zone.no-right-col {
-        width: 100%;
     }
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
@@ -470,7 +475,7 @@ body{
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
         right: 10px;
-        top: 60px;
+        top: 75px;
     }
     #learning_path_right_zone .tab-pane{
     }
@@ -523,60 +528,14 @@ body{
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
+    #home-course{
+        display: none !important;
+    }
     .scorm-title{
         font-size: 14px;
         padding: 10px;
     }
     .movil-toolbar{
-        width: 100%;
-        height: auto;
-    }
-    .scorm_item_normal{
-        padding: 10px 5px;
-    }
-    .actions_lp .btn-group .btn-sm{
-        padding: 10px;
-    }
-    .icon-toolbar .fa {
-        width: 35px;
-        height: 35px;
-        line-height: 35px;
-        font-size: 22px;
-    }
-    .btn-movil {
-        width: 130px;
-        margin: auto;
-    }
-    #scorm-info {
-        padding: 30px 0 0 0;
-        margin: 0;
-    }
-    #learning_path_toc {
-        left: 0;
-        right: 0;
-        padding: 0;
-        border-radius: 5px;
-    }
-    #learning_path_right_zone {
-        left: 100%;
-        width: auto;
-    }
-    #panel-scorm .image-avatar{
-        display: none;
-    }
-    .navegation-bar {
-        display: block;
-        padding: 2px;
-        position: fixed;
-        top: 0;
-        right: 15px;
-        z-index: 999;
-    }
-    .nav-tabs-bar{
-        display: none;
-    }
-    #learning_path_left_zone .lp-view-zone-container,
-    #learning_path_right_zone .lp-view-zone-container{
-        padding: 0;
+        padding-left: 35%;
     }
 }

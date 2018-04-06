@@ -19,13 +19,13 @@
                 </div>
                 <div class="description">
                     <div class="block-title">
-                        <h3 class="title">
+                        <h5 class="title">
                             <a href="{{ _p.web }}session/{{ session.id }}/about/"
                                title="title-session">{{ session.name }}</a>
-                        </h3>
+                        </h5>
                     </div>
                     <div class="block-author">
-
+                        {{ dump(session) }}
                         <a href="{{ _p.web_main }}inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{ session.id_coach }}"
                            class="ajax" data-title="{{ session.firstname }} {{ session.lastname }}">
                             <img src="{{ session.avatar }}"/>

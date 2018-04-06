@@ -4855,6 +4855,26 @@ div#chat-remote-video video {
     background: #EEF4FF;
     border-radius: 10px;
 }
+
+/**** ABOUT SESSION ****/
+
+.label-price, .label-free {
+    background-color: transparent;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+    padding: 0;
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+.label-price {
+    color: #29303b;
+}
+.label-free {
+    color: #5cb85c;
+}
+
 #about-session .panel-body{
     background: #F7F9FD;
 }
@@ -5127,7 +5147,6 @@ div#chat-remote-video video {
 .grid-courses .items .title {
     line-height: 1.4;
     padding: 0px;
-    font-size: 15px;
     font-weight: bold;
     margin: 0;
 }
@@ -5155,7 +5174,6 @@ div#chat-remote-video video {
 
 .hot-courses .grid-courses .items .title{
     padding: 0px;
-    font-size: 15px;
     font-weight: bold;
     margin: 0;
 }
@@ -5243,7 +5261,7 @@ div#chat-remote-video video {
     right: -10px;
 }
 .grid-courses .items .description{
-    padding: 5px 10px;
+    padding: 5px 10px 15px;
 }
 .grid-courses .items .description .text{
     font-size: 12px;

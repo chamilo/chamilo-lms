@@ -183,11 +183,11 @@ class BuyCoursesPlugin extends Plugin
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {
-                $html .= '<span class="label label-primary"><strong>'.$item['iso_code'].' '.$item['price'].'</strong></span>';
+                $html .= '<span class="label label-primary label-price"><strong>'.$item['iso_code'].' '.$item['price'].'</strong></span>';
                 $return['verificator'] = true;
             } else {
                 if ($hideFree == false) {
-                    $html .= '<span class="label label-primary"><strong>'.$this->get_lang('Free').'</strong></span>';
+                    $html .= '<span class="label label-primary label-free"><strong>'.$this->get_lang('Free').'</strong></span>';
                 }
                 $return['verificator'] = false;
             }
@@ -212,7 +212,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.intval($productId).'&t='.$productType;
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
-            Display::returnFontAwesomeIcon('fa fa-shopping-cart').'</a>';
+            Display::returnFontAwesomeIcon('shopping-cart').'</a>';
 
         return $html;
     }

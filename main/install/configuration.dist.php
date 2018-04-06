@@ -402,6 +402,9 @@ $_configuration['agenda_colors'] = [
 // Show view accordion lp_category
 //$_configuration['lp_category_accordion'] = false;
 //
+// Show view accordion lp_item_view
+// $_configuration['lp_view_accordion'] = false;
+//
 // ------ HTTP headers security
 // This section relates to options to increase the security of your Chamilo
 // portal against attacks specifically focused on HTTP headers vulnerabilities

@@ -103,10 +103,8 @@ class learnpathItem
             $user_id = api_get_user_id();
         }
         if (self::DEBUG > 0) {
-            error_log(
-                "learnpathItem constructor: id: $id user_id: ".
-                "$user_id course_id: $course_id item_content: ".print_r($item_content, 1)
-            );
+            error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
+            error_log("item_content: ".print_r($item_content, 1));
         }
         $id = intval($id);
         if (empty($item_content)) {
@@ -1989,8 +1987,8 @@ class learnpathItem
         }
         $restart = 1;
         $mystatus = $this->get_status(true);
-        if ($this->get_prevent_reinit() > 0
-        ) { // If prevent_reinit == 1 (or more)
+        if ($this->get_prevent_reinit() > 0) {
+            // If prevent_reinit == 1 (or more)
             // If status is not attempted or incomplete, authorize retaking (of the same) anyway. Otherwise:
             if ($mystatus != $this->possible_status[0] && $mystatus != $this->possible_status[1]) {
                 $restart = -1;
@@ -2113,6 +2111,7 @@ class learnpathItem
 
             return false;
         }
+
         while (strpos($prereqs_string, '(') !== false) {
             // Remove any () set and replace with its value.
             $matches = [];
@@ -2197,7 +2196,6 @@ class learnpathItem
                 }
             } else {
                 // No ORs found, now look for ANDs.
-
                 if (self::DEBUG > 1) {
                     error_log('New LP - Didnt find any AND, looking for =', 0);
                 }
@@ -2438,7 +2436,7 @@ class learnpathItem
                                 }
                             } else {
                                 // Nothing found there either. Now return the
-                                //  value of the corresponding resource completion status.
+                                // value of the corresponding resource completion status.
                                 if (self::DEBUG > 1) {
                                     error_log(
                                         'New LP - Didnt find any group, returning value for '.$prereqs_string,
@@ -2586,12 +2584,8 @@ class learnpathItem
 
                                         if ($returnstatus && $this->prevent_reinit == 1) {
                                             // I would prefer check in the database.
-                                            $lp_item_view = Database::get_course_table(
-                                                TABLE_LP_ITEM_VIEW
-                                            );
-                                            $lp_view = Database::get_course_table(
-                                                TABLE_LP_VIEW
-                                            );
+                                            $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                                            $lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
                                             $sql = 'SELECT iid FROM '.$lp_view.'
                                                     WHERE
@@ -2601,9 +2595,7 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database::fetch_row(
-                                                $rs_lp
-                                            );
+                                            $lp_id = Database::fetch_row($rs_lp);
                                             $my_lp_id = $lp_id[0];
 
                                             $sql = 'SELECT status FROM '.$lp_item_view.'
@@ -2706,16 +2698,13 @@ class learnpathItem
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
                     $returnstatus = $status == 'completed' || $status == 'passed';
                     if (!$returnstatus && empty($this->prereq_alert)) {
-                        $this->prereq_alert = get_lang(
-                            'LearnpathPrereqNotCompleted'
-                        );
+                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                     }
 
                     return $returnstatus;
                 }
             }
         }
-
         if (empty($this->prereq_alert)) {
             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
         }

@@ -425,7 +425,6 @@ function api_get_utc_datetime(
     $returnNullIfInvalidDate = false,
     $returnObj = false
 ) {
-    $fromTimezone = api_get_timezone();
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($returnNullIfInvalidDate) {
             return null;
@@ -443,8 +442,8 @@ function api_get_utc_datetime(
 
         return gmdate('Y-m-d H:i:s', $time);
     }
-
     try {
+        $fromTimezone = api_get_timezone();
         $date = new DateTime($time, new DateTimezone($fromTimezone));
         $date->setTimezone(new DateTimeZone('UTC'));
         if ($returnObj) {
@@ -482,10 +481,6 @@ function api_get_local_time(
     if (is_null($from_timezone)) {
         $from_timezone = 'UTC';
     }
-    // Determining the timezone to be converted to
-    if (is_null($to_timezone)) {
-        $to_timezone = api_get_timezone();
-    }
 
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
@@ -495,6 +490,7 @@ function api_get_local_time(
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s');
     }
+
     if (is_numeric($time)) {
         $time = intval($time);
         if ($return_null_if_invalid_date) {
@@ -512,6 +508,11 @@ function api_get_local_time(
     }
 
     try {
+        // Determining the timezone to be converted to
+        if (is_null($to_timezone)) {
+            $to_timezone = api_get_timezone();
+        }
+
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
 
@@ -1002,11 +1003,6 @@ function api_is_western_name_order($format = null, $language = null)
  */
 function api_sort_by_first_name($language = null)
 {
-    $userNameSortBy = api_get_setting('user_name_sort_by');
-    if (!empty($userNameSortBy) && in_array($userNameSortBy, ['firstname', 'lastname'])) {
-        return $userNameSortBy == 'firstname' ? true : false;
-    }
-
     static $sort_by_first_name = [];
 
     if (empty($language)) {
@@ -2247,7 +2243,8 @@ function _api_get_character_map_name($encoding)
  */
 
 /**
- * A reverse function from php-core function strnatcmp(), performs string comparison in reverse natural (alpha-numerical) order.
+ * A reverse function from php-core function strnatcmp(),
+ * performs string comparison in reverse natural (alpha-numerical) order.
  *
  * @param string $string1 the first string
  * @param string $string2 the second string
@@ -2262,10 +2259,11 @@ function _api_strnatrcmp($string1, $string2)
 /**
  * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.
  *
- * @param string $encoding (optional)	When this parameter is given, the function sets the internal encoding
+ * @param string $encoding (optional)    When this parameter is given, the function sets the internal encoding
  *
  * @return string When $encoding parameter is not given, the function returns the internal encoding.
- *                Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
+ *                Note: This function is used in the global initialization script for setting the
+ *                internal encoding to the platform's character set.
  *
  * @see http://php.net/manual/en/function.mb-internal-encoding
  */

@@ -234,43 +234,41 @@ if (!empty($track_exercise_info)) {
     // if the results_disabled of the Quiz is 1 when block the script
     $result_disabled = $track_exercise_info['results_disabled'];
 
-    if (true) {
-        if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
-            $show_results = false;
-        } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-            $show_results = false;
+    if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+        $show_results = false;
+    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
+        $show_results = false;
+        $show_only_total_score = true;
+        if ($origin != 'learnpath') {
+            if ($currentUserId == $student_id) {
+                echo Display::return_message(
+                    get_lang('ThankYouForPassingTheTest'),
+                    'warning',
+                    false
+                );
+            }
+        }
+    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+        $attempts = Event::getExerciseResultsByUser(
+            $currentUserId,
+            $objExercise->id,
+            api_get_course_int_id(),
+            api_get_session_id(),
+            $track_exercise_info['orig_lp_id'],
+            $track_exercise_info['orig_lp_item_id'],
+            'desc'
+        );
+        $numberAttempts = count($attempts);
+        if ($numberAttempts >= $track_exercise_info['max_attempt']) {
+            $show_results = true;
             $show_only_total_score = true;
-            if ($origin != 'learnpath') {
-                if ($currentUserId == $student_id) {
-                    echo Display::return_message(
-                        get_lang('ThankYouForPassingTheTest'),
-                        'warning',
-                        false
-                    );
-                }
-            }
-        } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $attempts = Event::getExerciseResultsByUser(
-                $currentUserId,
-                $objExercise->id,
-                api_get_course_int_id(),
-                api_get_session_id(),
-                $track_exercise_info['orig_lp_id'],
-                $track_exercise_info['orig_lp_item_id'],
-                'desc'
-            );
-            $numberAttempts = count($attempts);
-            if ($numberAttempts >= $track_exercise_info['max_attempt']) {
-                $show_results = true;
-                $show_only_total_score = true;
-                // Attempt reach max so show score/feedback now
-                $showTotalScoreAndUserChoicesInLastAttempt = true;
-            } else {
-                $show_results = true;
-                $show_only_total_score = true;
-                // Last attempt not reach don't show score/feedback
-                $showTotalScoreAndUserChoicesInLastAttempt = false;
-            }
+            // Attempt reach max so show score/feedback now
+            $showTotalScoreAndUserChoicesInLastAttempt = true;
+        } else {
+            $show_results = true;
+            $show_only_total_score = true;
+            // Last attempt not reach don't show score/feedback
+            $showTotalScoreAndUserChoicesInLastAttempt = false;
         }
     }
 } else {

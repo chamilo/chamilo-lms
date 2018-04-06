@@ -39,7 +39,7 @@ if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0) {
 }
 /** @var learnpath $lp */
 $lp = Session::read('oLP');
-if ($lp) {
+if (!$lp) {
     api_not_allowed(true);
 }
 

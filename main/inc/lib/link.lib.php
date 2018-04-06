@@ -490,7 +490,7 @@ class Link extends Model
      *
      * @return array link info
      */
-    public static function get_link_info($id)
+    public static function getLinkInfo($id)
     {
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
@@ -1731,7 +1731,7 @@ class Link extends Model
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $linkInfo = self::get_link_info($linkId);
+        $linkInfo = self::getLinkInfo($linkId);
         $categoryId = isset($linkInfo['category_id']) ? $linkInfo['category_id'] : '';
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 

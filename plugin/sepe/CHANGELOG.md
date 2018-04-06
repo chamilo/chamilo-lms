@@ -3,7 +3,7 @@ v2.1 - 2018-04-05
 - Fix: SEPE plugin foreign key constraint fails [#2461](https://github.com/chamilo/chamilo-lms/issues/2461)
 
 ##### Database changes
-You need execute these SQL queries in your database after making the migration process from 1.9.x.
+You need execute these SQL queries in your database.
 
 ```sql
 ALTER TABLE plugin_sepe_participants MODIFY company_tutor_id INT( 10 ) UNSIGNED NULL;

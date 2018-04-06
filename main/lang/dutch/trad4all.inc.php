@@ -36,7 +36,7 @@ $Formula = "Formule";
 $MultipleConnectionsAreNotAllow = "Deze gebruiker is al ingelogd.";
 $Listen = "Luister";
 $AudioFileForItemX = "Geluidsbestand voor item %s";
-$ThereIsANewWorkFeedbackInWorkXHere = "Er is nieuwe feedback beschikbaar. Klik hier om het te zien.";
+$ThereIsANewWorkFeedbackInWorkXHere = "Er is nieuwe feedback beschikbaar: %s <a href='%s'>Klik hier</a> om het te zien.";
 $ThereIsANewWorkFeedback = "Er is nieuwe feedback in werk: %s";
 $LastUpload = "Laatste upload";
 $EditUserListCSV = "Bewerk gebruikerslijst CSV";

@@ -11,10 +11,15 @@
 
 The installation instructions are located in the documentation here:
 [Installation](documentation/installation_guide.html)
+In sjp
 
 ## Upgrade
 The upgrade instructions are located in the documentation here:
  [Upgrade](app/Resources/docs/upgrade.md)
+ 
+## Dev environment install guide
+
+[Managing CSS and JavaScript in Chamilo](assets/README.md)
 
 ## Changes from 1.x
 

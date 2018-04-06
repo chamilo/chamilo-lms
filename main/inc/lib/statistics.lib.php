@@ -300,7 +300,7 @@ class Statistics
                    WHERE track_default.default_user_id = user.user_id ";
         }
 
-        if (isset($_GET['keyword'])) {
+        if (!empty($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (user.username LIKE '%".$keyword."%' OR
                         default_event_type LIKE '%".$keyword."%' OR

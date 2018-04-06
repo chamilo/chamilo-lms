@@ -202,6 +202,8 @@ if ($origin != 'learnpath') {
         Session::erase('objExercise');
         Session::erase('exe_id');
         Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
     }
     Display::display_footer();
 } else {
@@ -213,6 +215,8 @@ if ($origin != 'learnpath') {
         Session::erase('objExercise');
         Session::erase('exe_id');
         Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
     }
 
     Session::write('attempt_remaining', $remainingMessage);

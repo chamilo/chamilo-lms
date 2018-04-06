@@ -124,7 +124,6 @@ $(document).ready(function() {
 
     // Global popup
     $('body').on('click', 'a.ajax', function(e) {
-        console.log('sss');
         e.preventDefault();
 
         var contentUrl = this.href,

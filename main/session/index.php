@@ -37,6 +37,8 @@ Session::write('id_session', $session_id);
 
 // Clear the exercise session just in case
 Session::erase('objExercise');
+Session::erase('duration_time_previous');
+Session::erase('duration_time');
 
 $userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);

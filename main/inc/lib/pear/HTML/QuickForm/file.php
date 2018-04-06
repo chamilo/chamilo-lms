@@ -257,7 +257,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $ratio = 'aspectRatio: '.$param['ratio'].',';
         }
         $scalable = 'false';
-        if (!empty($param['scalable'])) {
+        if (!empty($param['scalable']) && $param['scalable'] != 'false') {
             $ratio = '';
             $scalable = $param['scalable'];
         }

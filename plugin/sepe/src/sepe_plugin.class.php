@@ -33,7 +33,7 @@ class SepePlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.0',
+            '2.1',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br>
                 Julio Montoya (SOAP integration)
@@ -236,9 +236,9 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod_action` `action_id` INT( 10 ) UNSIGNED NOT NULL";
         Database::query($sql);
-        $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod_tutor_empresa` `company_tutor_id` INT( 10 ) UNSIGNED";
+        $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod_tutor_empresa` `company_tutor_id` INT( 10 ) UNSIGNED NULL";
         Database::query($sql);
-        $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod_tutor_formacion` `training_tutor_id` INT( 10 ) UNSIGNED";
+        $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod_tutor_formacion` `training_tutor_id` INT( 10 ) UNSIGNED NULL";
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod_user_chamilo` `platform_user_id` INT( 10 ) UNSIGNED";
         Database::query($sql);

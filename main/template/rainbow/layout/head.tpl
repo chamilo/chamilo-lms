@@ -20,13 +20,43 @@
 {{ js_file_to_string }}
 {{ extra_headers }}
 <script>
-
 /* Global chat variables */
 var ajax_url = '{{ _p.web_ajax }}chat.ajax.php';
 var online_button = '{{ online_button }}';
 var offline_button = '{{ offline_button }}';
 var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
+var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
+
+function addMainEvent(elm, evType, fn, useCapture) {
+    if (elm.addEventListener) {
+        elm.addEventListener(evType, fn, useCapture);
+        return true;
+    } else if (elm.attachEvent) {
+        elm.attachEvent('on' + evType, fn);
+    } else{
+        elm['on'+evType] = fn;
+    }
+}
+
+var calledLogout = false;
+function courseLogout() {
+    if (calledLogout === false) {
+        $.ajax({
+            url: logOutUrl,
+            success: function (data) {
+                calledLogout = true;
+                return 1;
+            }
+        });
+    }
+}
+
+$(function() {
+    addMainEvent(window, 'unload', courseLogout, false);
+    addMainEvent(window, 'beforeunload', courseLogout, false);
+});
+
 </script>
 
 {% include template ~ '/layout/header.js.tpl' %}

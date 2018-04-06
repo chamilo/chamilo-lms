@@ -9,14 +9,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 //use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use FOS\UserBundle\Model\GroupInterface;
+use FOS\UserBundle\Model\UserInterface;
 use Sonata\UserBundle\Model\User as BaseUser;
+//use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
-//use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use FOS\UserBundle\Model\UserInterface;
-use FOS\UserBundle\Model\GroupInterface;
 
 class User extends BaseUser
 {
@@ -28,7 +28,7 @@ class User extends BaseUser
     const ANONYMOUS = 6;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +37,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=true)
      */
@@ -65,25 +65,25 @@ class User extends BaseUser
     //protected $email;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="locked", type="boolean")
      */
     //protected $locked;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="enabled", type="boolean")
      */
     //protected $enabled;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="expired", type="boolean")
      */
     //protected $expired;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="credentials_expired", type="boolean")
      */
     //protected $credentialsExpired;
@@ -117,6 +117,127 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
+     */
+    protected $phone;
+
+    /**
+     * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri").
+     *
+     * note This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @var File
+     */
+    protected $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    //protected $salt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
+     */
+    //protected $lastLogin;
+
+    /**
+     * Random string sent to the user email address in order to verify it.
+     *
+     * @var string
+     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
+     */
+    //protected $confirmationToken;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
+     */
+    //protected $passwordRequestedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
+     */
+    protected $courses;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
+     */
+    //protected $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
+     */
+    protected $classes;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user").
+     */
+    protected $dropBoxReceivedFiles;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent").
+     */
+    protected $dropBoxSentFiles;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    //protected $roles;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
+     */
+    //protected $jurySubscriptions;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group")
+     * @ORM\JoinTable(name="fos_user_user_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
+
+    //private $isActive;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user").
+     */
+    protected $curriculumItems;
+
+    /*
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
+     *
+     */
+    protected $portals;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
+     */
+    protected $sessionAsGeneralCoach;
+
+    /**
+     * @var ArrayCollection
+     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     */
+    protected $extraFields;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
+     */
+    protected $resourceNodes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="user", cascade={"persist"})
+     */
+    protected $sessionCourseSubscriptions;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
     //protected $password;
@@ -129,7 +250,7 @@ class User extends BaseUser
     private $authSource;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
@@ -144,34 +265,19 @@ class User extends BaseUser
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
-     */
-    protected $phone;
-
-    /**
-     * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @var File $imageFile
-     */
-    protected $imageFile;
-
-    /**
-     * @var string
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
     private $pictureUri;
 
     /**
-     * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} )
+     * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} ).
+     *
      * @ORM\JoinColumn(name="picture_uri", referencedColumnName="id")
      */
     //protected $pictureUri;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="creator_id", type="integer", nullable=true, unique=false)
      */
@@ -255,120 +361,14 @@ class User extends BaseUser
     private $theme;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    //protected $salt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
-     */
-    //protected $lastLogin;
-
-    /**
-     * Random string sent to the user email address in order to verify it
-     *
-     * @var string
-     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
-     */
-    //protected $confirmationToken;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
-     */
-    //protected $passwordRequestedAt;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
-     **/
-    protected $courses;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
-     **/
-    //protected $items;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
-     **/
-    protected $classes;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user")
-     **/
-    protected $dropBoxReceivedFiles;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
-     **/
-    protected $dropBoxSentFiles;
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    //protected $roles;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
-     **/
-    //protected $jurySubscriptions;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group")
-     * @ORM\JoinTable(name="fos_user_user_group",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     * )
-     */
-    protected $groups;
-
-
-    //private $isActive;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")
-     **/
-    protected $curriculumItems;
-
-    /*
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
-     *
-     */
-    protected $portals;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
-     **/
-    protected $sessionAsGeneralCoach;
-
-    /**
-     * @var ArrayCollection
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
-     **/
-    protected $extraFields;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
-     **/
-    protected $resourceNodes;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="user", cascade={"persist"})
-     **/
-    protected $sessionCourseSubscriptions;
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -394,7 +394,7 @@ class User extends BaseUser
         $this->enabled = false;
         $this->locked = false;
         $this->expired = false;
-        $this->roles = array();
+        $this->roles = [];
         $this->credentialsExpired = false;
     }
 
@@ -407,7 +407,8 @@ class User extends BaseUser
     }
 
     /**
-     * Updates the id with the user_id
+     * Updates the id with the user_id.
+     *
      *  @ORM\PostPersist()
      */
     public function postPersist(LifecycleEventArgs $args)
@@ -485,12 +486,12 @@ class User extends BaseUser
     public static function getPasswordConstraints()
     {
         return
-            array(
-                new Assert\Length(array('min' => 5)),
+            [
+                new Assert\Length(['min' => 5]),
                 // Alpha numeric + "_" or "-"
-                new Assert\Regex(array(
+                new Assert\Regex([
                         'pattern' => '/^[a-z\-_0-9]+$/i',
-                        'htmlPattern' => '/^[a-z\-_0-9]+$/i')
+                        'htmlPattern' => '/^[a-z\-_0-9]+$/i', ]
                 ),
                 // Min 3 letters - not needed
                 /*new Assert\Regex(array(
@@ -498,11 +499,11 @@ class User extends BaseUser
                     'htmlPattern' => '/[a-z]{3}/i')
                 ),*/
                 // Min 2 numbers
-                new Assert\Regex(array(
+                new Assert\Regex([
                         'pattern' => '/[0-9]{2}/',
-                        'htmlPattern' => '/[0-9]{2}/')
+                        'htmlPattern' => '/[0-9]{2}/', ]
                 ),
-            )
+            ]
             ;
     }
 
@@ -536,7 +537,7 @@ class User extends BaseUser
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isEqualTo(UserInterface $user)
     {
@@ -607,9 +608,8 @@ class User extends BaseUser
         return $this->getIsActive();
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isEnabled()
     {
@@ -617,7 +617,6 @@ class User extends BaseUser
     }
 
     /**
-     *
      * @return ArrayCollection
      */
     /*public function getRolesObj()
@@ -626,7 +625,7 @@ class User extends BaseUser
     }*/
 
     /**
-     * Set salt
+     * Set salt.
      *
      * @param string $salt
      *
@@ -640,7 +639,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get salt
+     * Get salt.
      *
      * @return string
      */
@@ -657,9 +656,6 @@ class User extends BaseUser
         return $this->classes;
     }
 
-    /**
-     *
-     */
     public function getLps()
     {
         //return $this->lps;
@@ -678,6 +674,7 @@ class User extends BaseUser
 
     /**
      * @todo don't use api_get_person_name
+     *
      * @return string
      */
     public function getCompleteName()
@@ -686,13 +683,14 @@ class User extends BaseUser
     }
 
     /**
-     * Returns the list of classes for the user
+     * Returns the list of classes for the user.
+     *
      * @return string
      */
     public function getCompleteNameWithClasses()
     {
         $classSubscription = $this->getClasses();
-        $classList = array();
+        $classList = [];
         /** @var UsergroupRelUser $subscription */
         foreach ($classSubscription as $subscription) {
             $class = $subscription->getUsergroup();
@@ -704,9 +702,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -714,7 +712,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set lastname
+     * Set lastname.
      *
      * @param string $lastname
      *
@@ -727,9 +725,8 @@ class User extends BaseUser
         return $this;
     }
 
-
     /**
-     * Set firstname
+     * Set firstname.
      *
      * @param string $firstname
      *
@@ -743,9 +740,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
+     *
      * @return User
      */
     public function setPassword($password)
@@ -756,7 +754,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get password
+     * Get password.
      *
      * @return string
      */
@@ -766,9 +764,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set authSource
+     * Set authSource.
      *
      * @param string $authSource
+     *
      * @return User
      */
     public function setAuthSource($authSource)
@@ -779,7 +778,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get authSource
+     * Get authSource.
      *
      * @return string
      */
@@ -789,9 +788,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
+     *
      * @return User
      */
     public function setEmail($email)
@@ -802,7 +802,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -812,7 +812,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param int $status
      *
@@ -826,9 +826,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return boolean
+     * @return bool
      */
     public function getStatus()
     {
@@ -836,9 +836,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set officialCode
+     * Set officialCode.
      *
      * @param string $officialCode
+     *
      * @return User
      */
     public function setOfficialCode($officialCode)
@@ -849,7 +850,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get officialCode
+     * Get officialCode.
      *
      * @return string
      */
@@ -859,9 +860,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set phone
+     * Set phone.
      *
      * @param string $phone
+     *
      * @return User
      */
     public function setPhone($phone)
@@ -872,7 +874,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get phone
+     * Get phone.
      *
      * @return string
      */
@@ -882,9 +884,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set pictureUri
+     * Set pictureUri.
      *
      * @param string $pictureUri
+     *
      * @return User
      */
     public function setPictureUri($pictureUri)
@@ -895,7 +898,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get pictureUri
+     * Get pictureUri.
      *
      * @return Media
      */
@@ -905,9 +908,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set creatorId
+     * Set creatorId.
      *
-     * @param integer $creatorId
+     * @param int $creatorId
+     *
      * @return User
      */
     public function setCreatorId($creatorId)
@@ -918,9 +922,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get creatorId
+     * Get creatorId.
      *
-     * @return integer
+     * @return int
      */
     public function getCreatorId()
     {
@@ -928,9 +932,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set competences
+     * Set competences.
      *
      * @param string $competences
+     *
      * @return User
      */
     public function setCompetences($competences)
@@ -941,7 +946,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get competences
+     * Get competences.
      *
      * @return string
      */
@@ -951,9 +956,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set diplomas
+     * Set diplomas.
      *
      * @param string $diplomas
+     *
      * @return User
      */
     public function setDiplomas($diplomas)
@@ -964,7 +970,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get diplomas
+     * Get diplomas.
      *
      * @return string
      */
@@ -974,9 +980,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set openarea
+     * Set openarea.
      *
      * @param string $openarea
+     *
      * @return User
      */
     public function setOpenarea($openarea)
@@ -987,7 +994,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get openarea
+     * Get openarea.
      *
      * @return string
      */
@@ -997,9 +1004,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set teach
+     * Set teach.
      *
      * @param string $teach
+     *
      * @return User
      */
     public function setTeach($teach)
@@ -1010,7 +1018,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get teach
+     * Get teach.
      *
      * @return string
      */
@@ -1020,9 +1028,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set productions
+     * Set productions.
      *
      * @param string $productions
+     *
      * @return User
      */
     public function setProductions($productions)
@@ -1033,7 +1042,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get productions
+     * Get productions.
      *
      * @return string
      */
@@ -1043,9 +1052,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set language
+     * Set language.
      *
      * @param string $language
+     *
      * @return User
      */
     public function setLanguage($language)
@@ -1056,7 +1066,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get language
+     * Get language.
      *
      * @return string
      */
@@ -1066,9 +1076,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set registrationDate
+     * Set registrationDate.
      *
      * @param \DateTime $registrationDate
+     *
      * @return User
      */
     public function setRegistrationDate($registrationDate)
@@ -1079,7 +1090,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get registrationDate
+     * Get registrationDate.
      *
      * @return \DateTime
      */
@@ -1089,7 +1100,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set expirationDate
+     * Set expirationDate.
      *
      * @param \DateTime $expirationDate
      *
@@ -1103,7 +1114,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get expirationDate
+     * Get expirationDate.
      *
      * @return \DateTime
      */
@@ -1113,9 +1124,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return User
      */
     public function setActive($active)
@@ -1126,9 +1138,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -1136,9 +1148,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set openid
+     * Set openid.
      *
      * @param string $openid
+     *
      * @return User
      */
     public function setOpenid($openid)
@@ -1149,7 +1162,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get openid
+     * Get openid.
      *
      * @return string
      */
@@ -1159,9 +1172,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set theme
+     * Set theme.
      *
      * @param string $theme
+     *
      * @return User
      */
     public function setTheme($theme)
@@ -1172,7 +1186,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get theme
+     * Get theme.
      *
      * @return string
      */
@@ -1182,9 +1196,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set hrDeptId
+     * Set hrDeptId.
      *
-     * @param integer $hrDeptId
+     * @param int $hrDeptId
+     *
      * @return User
      */
     public function setHrDeptId($hrDeptId)
@@ -1195,9 +1210,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get hrDeptId
+     * Get hrDeptId.
      *
-     * @return integer
+     * @return int
      */
     public function getHrDeptId()
     {
@@ -1290,6 +1305,7 @@ class User extends BaseUser
 
     /**
      * @param $slug
+     *
      * @return User
      */
     public function setSlug($slug)
@@ -1298,7 +1314,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set lastLogin
+     * Set lastLogin.
      *
      * @param \DateTime $lastLogin
      *
@@ -1312,7 +1328,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get lastLogin
+     * Get lastLogin.
      *
      * @return \DateTime
      */
@@ -1372,8 +1388,8 @@ class User extends BaseUser
     public function removeExtraField(ExtraFieldValues $attribute)
     {
         //if ($this->hasExtraField($attribute)) {
-            //$this->extraFields->removeElement($attribute);
-            //$attribute->setUser($this);
+        //$this->extraFields->removeElement($attribute);
+        //$attribute->setUser($this);
         //}
 
         return $this;
@@ -1419,7 +1435,8 @@ class User extends BaseUser
     }
 
     /**
-     * Get sessionCourseSubscription
+     * Get sessionCourseSubscription.
+     *
      * @return ArrayCollection
      */
     public function getSessionCourseSubscriptions()
@@ -1455,9 +1472,9 @@ class User extends BaseUser
         return $this->passwordRequestedAt;
     }
 
-
     /**
      * @param int $ttl
+     *
      * @return bool
      */
     public function isPasswordRequestNonExpired($ttl)
@@ -1767,7 +1784,6 @@ class User extends BaseUser
         return $this->gplusUid;
     }
 
-
     /**
      * @return string
      */
@@ -1952,12 +1968,10 @@ class User extends BaseUser
         $this->plainPassword = null;
     }
 
-
     public function getUsernameCanonical()
     {
         return $this->usernameCanonical;
     }
-
 
     public function getEmailCanonical()
     {
@@ -1970,7 +1984,7 @@ class User extends BaseUser
     }
 
     /**
-     * Returns the user roles
+     * Returns the user roles.
      *
      * @return array The roles
      */
@@ -1998,7 +2012,7 @@ class User extends BaseUser
      *
      * @param string $role
      *
-     * @return boolean
+     * @return bool
      */
     public function hasRole($role)
     {
@@ -2085,9 +2099,8 @@ class User extends BaseUser
         return $this;
     }
 
-
     /**
-     * @param boolean $boolean
+     * @param bool $boolean
      *
      * @return User
      */
@@ -2107,7 +2120,7 @@ class User extends BaseUser
 
     public function setEnabled($boolean)
     {
-        $this->enabled = (Boolean) $boolean;
+        $this->enabled = (bool) $boolean;
 
         return $this;
     }
@@ -2115,13 +2128,13 @@ class User extends BaseUser
     /**
      * Sets this user to expired.
      *
-     * @param Boolean $boolean
+     * @param bool $boolean
      *
      * @return User
      */
     public function setExpired($boolean)
     {
-        $this->expired = (Boolean) $boolean;
+        $this->expired = (bool) $boolean;
 
         return $this;
     }
@@ -2170,10 +2183,9 @@ class User extends BaseUser
         return $this;
     }
 
-
     public function setRoles(array $roles)
     {
-        $this->roles = array();
+        $this->roles = [];
 
         foreach ($roles as $role) {
             $this->addRole($role);
@@ -2194,7 +2206,7 @@ class User extends BaseUser
 
     public function getGroupNames()
     {
-        $names = array();
+        $names = [];
         foreach ($this->getGroups() as $group) {
             $names[] = $group->getName();
         }
@@ -2248,7 +2260,7 @@ class User extends BaseUser
      */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->password,
             $this->salt,
             $this->usernameCanonical,
@@ -2258,7 +2270,7 @@ class User extends BaseUser
             $this->credentialsExpired,
             $this->enabled,
             $this->id,
-        ));
+        ]);
     }
 
     /**

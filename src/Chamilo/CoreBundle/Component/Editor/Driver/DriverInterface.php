@@ -6,25 +6,31 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 
 /**
- * Class DriverInterface
+ * Class DriverInterface.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 interface DriverInterface
 {
+    public function setup();
+
     /**
      * Gets driver name.
+     *
      * @return string
      */
     public function getName();
 
     /**
      * Gets driver name.
+     *
      * @param string $name
      */
     public function setName($name);
 
     /**
-     * Set connector
+     * Set connector.
+     *
      * @param Connector $connector
      */
     public function setConnector(Connector $connector);
@@ -43,6 +49,6 @@ interface DriverInterface
      * @return bool
      */
     public function allow();
+
     public function getConfiguration();
-    public function setup();
 }

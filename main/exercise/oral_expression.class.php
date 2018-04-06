@@ -4,7 +4,8 @@
 /**
  * Class OralExpression
  * This class allows to instantiate an object of type FREE_ANSWER,
- * extending the class question
+ * extending the class question.
+ *
  * @author Eric Marguin
  *
  * @package chamilo.exercise
@@ -13,6 +14,7 @@ class OralExpression extends Question
 {
     public static $typePicture = 'audio_question.png';
     public static $explanationLangVar = 'OralExpression';
+    public $available_extensions = ['wav', 'ogg'];
     private $sessionId;
     private $userId;
     private $exerciseId;
@@ -20,10 +22,9 @@ class OralExpression extends Question
     private $storePath;
     private $fileName;
     private $filePath;
-    public $available_extensions = ['wav', 'ogg'];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -33,7 +34,7 @@ class OralExpression extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -46,7 +47,7 @@ class OralExpression extends Question
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
-            $form -> setDefaults(['weighting' => float_format($this->weighting, 1)]);
+            $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {
                 $form->setDefaults(['weighting' => '10']);
@@ -55,7 +56,7 @@ class OralExpression extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -64,7 +65,7 @@ class OralExpression extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -79,7 +80,8 @@ class OralExpression extends Question
     }
 
     /**
-     * initialize the attributes to generate the file path
+     * initialize the attributes to generate the file path.
+     *
      * @param $sessionId integer
      * @param $userId integer
      * @param $exerciseId integer
@@ -100,85 +102,8 @@ class OralExpression extends Question
     }
 
     /**
-     * Generate the necessary directory for audios. If them not exists, are created
-     * @return string
-     */
-    private function generateDirectory()
-    {
-        $this->storePath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/exercises/';
-
-        if (!is_dir($this->storePath)) {
-            mkdir($this->storePath);
-        }
-
-        if (!is_dir($this->storePath.$this->sessionId)) {
-            mkdir($this->storePath.$this->sessionId);
-        }
-
-        if (!empty($this->exerciseId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId)) {
-            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId);
-        }
-
-        if (!empty($this->id) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id)) {
-            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id);
-        }
-
-        if (!empty($this->userId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId)) {
-            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId);
-        }
-
-        $params = [
-            $this->sessionId,
-            $this->exerciseId,
-            $this->id,
-            $this->userId,
-        ];
-
-        $this->storePath .= implode('/', $params).'/';
-
-        return $this->storePath;
-    }
-
-    /**
-     * Generate the file name
-     * @return string
-     */
-    private function generateFileName()
-    {
-        return implode(
-            '-',
-            [
-                $this->course['real_id'],
-                $this->sessionId,
-                $this->userId,
-                $this->exerciseId,
-                $this->id,
-                $this->exeId
-            ]
-        );
-    }
-
-    /**
-     * Generate a relative directory path
-     * @return string
-     */
-    private function generateRelativeDirectory()
-    {
-        $params = [
-            $this->sessionId,
-            $this->exerciseId,
-            $this->id,
-            $this->userId,
-        ];
-
-        $path = implode('/', $params);
-        $directory = '/exercises/'.$path.'/';
-
-        return $directory;
-    }
-
-    /**
-     * Return the HTML code to show the RecordRTC/Wami recorder
+     * Return the HTML code to show the RecordRTC/Wami recorder.
+     *
      * @return string
      */
     public function returnRecorder()
@@ -205,8 +130,10 @@ class OralExpression extends Question
     }
 
     /**
-     * Get the absolute file path. Return null if the file doesn't exists
+     * Get the absolute file path. Return null if the file doesn't exists.
+     *
      * @param bool $loadFromDatabase
+     *
      * @return string
      */
     public function getAbsoluteFilePath($loadFromDatabase = false)
@@ -224,7 +151,7 @@ class OralExpression extends Question
                         'userId' => $this->userId,
                         'questionId' => $this->id,
                         'sessionId' => $this->sessionId,
-                        'cId' => $this->course['real_id']
+                        'cId' => $this->course['real_id'],
                     ]);
 
                 if (!$result) {
@@ -263,7 +190,8 @@ class OralExpression extends Question
     }
 
     /**
-     * Get the URL for the audio file. Return null if the file doesn't exists
+     * Get the URL for the audio file. Return null if the file doesn't exists.
+     *
      * @param bool $loadFromDatabase
      *
      * @return string
@@ -284,7 +212,8 @@ class OralExpression extends Question
     }
 
     /**
-     * Tricky stuff to deal with the feedback = 0 in exercises (all question per page)
+     * Tricky stuff to deal with the feedback = 0 in exercises (all question per page).
+     *
      * @param $exe_id integer
      */
     public function replaceWithRealExe($exe_id)
@@ -306,5 +235,88 @@ class OralExpression extends Question
                 break;
             }
         }
+    }
+
+    /**
+     * Generate the necessary directory for audios. If them not exists, are created.
+     *
+     * @return string
+     */
+    private function generateDirectory()
+    {
+        $this->storePath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/exercises/';
+
+        if (!is_dir($this->storePath)) {
+            mkdir($this->storePath);
+        }
+
+        if (!is_dir($this->storePath.$this->sessionId)) {
+            mkdir($this->storePath.$this->sessionId);
+        }
+
+        if (!empty($this->exerciseId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId);
+        }
+
+        if (!empty($this->id) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id);
+        }
+
+        if (!empty($this->userId) &&
+            !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId)
+        ) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId);
+        }
+
+        $params = [
+            $this->sessionId,
+            $this->exerciseId,
+            $this->id,
+            $this->userId,
+        ];
+
+        $this->storePath .= implode('/', $params).'/';
+
+        return $this->storePath;
+    }
+
+    /**
+     * Generate the file name.
+     *
+     * @return string
+     */
+    private function generateFileName()
+    {
+        return implode(
+            '-',
+            [
+                $this->course['real_id'],
+                $this->sessionId,
+                $this->userId,
+                $this->exerciseId,
+                $this->id,
+                $this->exeId,
+            ]
+        );
+    }
+
+    /**
+     * Generate a relative directory path.
+     *
+     * @return string
+     */
+    private function generateRelativeDirectory()
+    {
+        $params = [
+            $this->sessionId,
+            $this->exerciseId,
+            $this->id,
+            $this->userId,
+        ];
+
+        $path = implode('/', $params);
+        $directory = '/exercises/'.$path.'/';
+
+        return $directory;
     }
 }

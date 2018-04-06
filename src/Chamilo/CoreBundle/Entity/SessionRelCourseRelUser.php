@@ -7,7 +7,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SessionRelCourseRelUser
+ * Class SessionRelCourseRelUser.
  *
  * @ORM\Table(
  *      name="session_rel_course_rel_user",
@@ -23,40 +23,10 @@ class SessionRelCourseRelUser
     const STATUS_STUDENT = 0;
     const STATUS_COURSE_COACH = 2;
 
-    public $statusList = array(
+    public $statusList = [
         0 => 'student',
-        2 => 'course_coach'
-    );
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $visibility;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $status;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $legalAgreement;
+        2 => 'course_coach',
+    ];
 
     /**
      * @var User
@@ -80,7 +50,37 @@ class SessionRelCourseRelUser
     protected $course;
 
     /**
-     * Constructor
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $visibility;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $status;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $legalAgreement;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
@@ -136,9 +136,9 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -146,9 +146,10 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Set visibility
+     * Set visibility.
      *
-     * @param integer $visibility
+     * @param int $visibility
+     *
      * @return SessionRelCourseRelUser
      */
     public function setVisibility($visibility)
@@ -159,9 +160,9 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Get visibility
+     * Get visibility.
      *
-     * @return integer
+     * @return int
      */
     public function getVisibility()
     {
@@ -169,9 +170,10 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int $status
+     *
      * @return SessionRelCourseRelUser
      */
     public function setStatus($status)
@@ -182,9 +184,9 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
@@ -192,9 +194,10 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Set legalAgreement
+     * Set legalAgreement.
      *
-     * @param integer $legalAgreement
+     * @param int $legalAgreement
+     *
      * @return SessionRelCourseRelUser
      */
     public function setLegalAgreement($legalAgreement)
@@ -205,9 +208,9 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * Get legalAgreement
+     * Get legalAgreement.
      *
-     * @return integer
+     * @return int
      */
     public function getLegalAgreement()
     {

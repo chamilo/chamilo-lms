@@ -28,7 +28,7 @@
         <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
             {% for item in data_panel.are_parents %}
                 <div class="panel panel-default {{ item.parent ? 'lower':'higher' }}" data-lp-id="{{ item.id }}"
-                    {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
+                        {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
                     <div class="status-heading">
                         <div class="panel-heading" role="tab" id="heading-{{ item.id }}">
                             <a role="button" data-toggle="collapse"

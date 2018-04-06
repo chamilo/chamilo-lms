@@ -9,14 +9,15 @@ use ChamiloSession as Session;
  * through the session, and calculates the score of the student for
  * that exercise.
  * Then it shows the results on the screen.
+ *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert, main author
  * @author Roan Embrechts, some refactoring
  * @author Julio Montoya switchable fill in blank option added
  *
  * @todo    split more code up in functions, move functions to library?
  */
-
 $debug = false;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -83,8 +84,6 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
 }
 
-/* DISPLAY AND MAIN PROCESS */
-
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
@@ -108,7 +107,7 @@ $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $
 
 if ($origin == 'learnpath') {
     ?>
-    <form method="GET" action="exercise.php?<?php echo api_get_cidreq() ?>">
+    <form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>"/>
@@ -125,7 +124,7 @@ $attemptButton = Display::toolbarButton(
         'exerciseId' => $objExercise->id,
         'learnpath_id' => $learnpath_id,
         'learnpath_item_id' => $learnpath_item_id,
-        'learnpath_item_view_id' => $learnpath_item_view_id
+        'learnpath_item_view_id' => $learnpath_item_view_id,
     ]),
     'pencil-square-o',
     'info'
@@ -202,6 +201,9 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
     }
     Display::display_footer();
 } else {
@@ -212,6 +214,9 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
     }
 
     Session::write('attempt_remaining', $remainingMessage);

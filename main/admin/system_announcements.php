@@ -3,6 +3,7 @@
 
 /**
  * This page allows the administrator to manage the system announcements.
+ *
  * @package chamilo.admin.announcement
  */
 
@@ -23,10 +24,10 @@ $action_todo = false;
 api_protect_admin_script(true);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => 'index.php',
     "name" => get_lang('PlatformAdmin'),
-);
+];
 
 $visibleList = SystemAnnouncementManager::getVisibilityList();
 
@@ -36,18 +37,18 @@ if (empty($_GET['lang'])) {
 }
 
 if (!empty($action)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "system_announcements.php",
         "name" => get_lang('SystemAnnouncements'),
-    );
+    ];
     if ($action == 'add') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => '#',
             "name" => get_lang('AddAnnouncement'),
-        );
+        ];
     }
     if ($action == 'edit') {
-        $interbreadcrumb[] = array("url" => '#', "name" => get_lang('Edit'));
+        $interbreadcrumb[] = ["url" => '#', "name" => get_lang('Edit')];
     }
 } else {
     $tool_name = get_lang('SystemAnnouncements');
@@ -57,7 +58,7 @@ if (!empty($action)) {
 Display :: display_header($tool_name);
 if ($action != 'add' && $action != 'edit') {
     echo '<div class="actions">';
-    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('AddAnnouncement'), array(), 32).'</a>';
+    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('AddAnnouncement'), [], 32).'</a>';
     echo '</div>';
 }
 
@@ -146,7 +147,7 @@ if ($action_todo) {
     $form->addElement('header', '', $form_title);
     $form->addText('title', get_lang('Title'), true);
 
-    $extraOption = array();
+    $extraOption = [];
     $extraOption['all'] = get_lang('All');
     $form->addSelectLanguage(
         'lang',
@@ -160,17 +161,17 @@ if ($action_todo) {
         get_lang('Content'),
         true,
         false,
-        array(
+        [
             'ToolbarSet' => 'PortalNews',
             'Width' => '100%',
             'Height' => '300',
-        )
+        ]
     );
     $form->addDateRangePicker(
         'range',
         get_lang('StartTimeWindow'),
         true,
-        array('id' => 'range')
+        ['id' => 'range']
     );
 
     $group = [];
@@ -207,7 +208,6 @@ if ($action_todo) {
         $text = get_lang('AddNews');
         $class = 'add';
         $form->addElement('hidden', 'action', 'add');
-
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
         $text = get_lang('EditNews');
         $class = 'save';
@@ -251,7 +251,7 @@ if ($action_todo) {
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $announcement_id,
-                            array($values['group'])
+                            [$values['group']]
                         );
                         echo Display::return_message(
                             get_lang('AnnouncementAdded'),
@@ -280,7 +280,7 @@ if ($action_todo) {
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $values['id'],
-                            array($values['group'])
+                            [$values['group']]
                         );
                         echo Display::return_message(
                             get_lang('AnnouncementUpdated'),
@@ -304,9 +304,9 @@ if ($action_todo) {
 
 if ($show_announcement_list) {
     $announcements = SystemAnnouncementManager :: get_all_announcements();
-    $announcement_data = array();
+    $announcement_data = [];
     foreach ($announcements as $index => $announcement) {
-        $row = array();
+        $row = [];
         $row[] = $announcement->id;
         $row[] = Display::return_icon(($announcement->visible ? 'accept.png' : 'exclamation.png'), ($announcement->visible ? get_lang('AnnouncementAvailable') : get_lang('AnnouncementNotAvailable')));
         $row[] = $announcement->title;
@@ -324,9 +324,8 @@ if ($show_announcement_list) {
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_STUDENT."&action=".($announcement->visible_student ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student ? 'eyes.png' : 'eyes-close.png'), get_lang('ShowOrHide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_GUEST."&action=".($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest ? 'eyes.png' : 'eyes-close.png'), get_lang('ShowOrHide'))."</a>";*/
 
-
         $row[] = $announcement->lang;
-        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)."</a>";
+        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)."</a>";
         $announcement_data[] = $row;
     }
     $table = new SortableTableFromArray($announcement_data);
@@ -344,7 +343,7 @@ if ($show_announcement_list) {
 
     $table->set_header($count++, get_lang('Language'));
     $table->set_header($count++, get_lang('Modify'), false, 'width="50px"');
-    $form_actions = array();
+    $form_actions = [];
     $form_actions['delete_selected'] = get_lang('Delete');
     $table->set_form_actions($form_actions);
     $table->display();

@@ -3,13 +3,13 @@
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 
-use Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 
 //use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
- * Class CkEditor
+ * Class CkEditor.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor
  */
 class CkEditor extends Editor
@@ -23,7 +23,7 @@ class CkEditor extends Editor
     }
 
     /**
-     * Set js to be include in the template
+     * Set js to be include in the template.
      */
     public function setJavascriptToInclude()
     {
@@ -36,7 +36,6 @@ class CkEditor extends Editor
      *
      * @return string
      */
-
     public function createHtml()
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
@@ -98,8 +97,6 @@ class CkEditor extends Editor
 
     /**
      * @param array $templates
-     *
-     * @return null
      */
     public function formatTemplates($templates)
     {
@@ -107,16 +104,16 @@ class CkEditor extends Editor
             return null;
         }
         /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
-        $templateList = array();
+        $templateList = [];
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
-        $replace = array(
+        $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
+        $replace = [
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
-            ''
-        );
+            '',
+        ];
 
         foreach ($templates as $template) {
             $image = $template->getImage();
@@ -130,19 +127,40 @@ class CkEditor extends Editor
 
             $content = str_replace($search, $replace, $template->getContent());
 
-            $templateList[] = array(
+            $templateList[] = [
                 'title' => $this->translator->trans($template->getTitle()),
                 'description' => $this->translator->trans($template->getComment()),
                 'image' => $image,
-                'html' => $content
-            );
+                'html' => $content,
+            ];
         }
 
         return json_encode($templateList);
     }
 
     /**
-     * Get the empty template
+     * Get the templates in JSON format.
+     *
+     * @return string|
+     */
+    public function simpleFormatTemplates()
+    {
+        $templates = $this->getEmptyTemplate();
+
+        if (api_is_allowed_to_edit(false, true)) {
+            $platformTemplates = $this->getPlatformTemplates();
+            $templates = array_merge($templates, $platformTemplates);
+        }
+
+        $personalTemplates = $this->getPersonalTemplates();
+        $templates = array_merge($templates, $personalTemplates);
+
+        return json_encode($templates);
+    }
+
+    /**
+     * Get the empty template.
+     *
      * @return array
      */
     private function getEmptyTemplate()
@@ -155,21 +173,22 @@ class CkEditor extends Editor
                 <!DOCYTPE html>
                 <html>
                     <head>
-                        <meta charset="' . api_get_system_encoding().'" />
+                        <meta charset="'.api_get_system_encoding().'" />
                     </head>
-                    <body  dir="' . api_get_text_direction().'">
+                    <body  dir="'.api_get_text_direction().'">
                         <p>
                             <br/>
                         </p>
                     </body>
                     </html>
                 </html>
-            '
+            ',
         ]];
     }
 
     /**
-     * Get the platform templates
+     * Get the platform templates.
+     *
      * @return array
      */
     private function getPlatformTemplates()
@@ -177,16 +196,16 @@ class CkEditor extends Editor
         $entityManager = \Database::getManager();
         $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
-        $replace = array(
+        $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
+        $replace = [
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             '',
-        );
+        ];
 
-        $templateList = array();
+        $templateList = [];
 
         foreach ($systemTemplates as $template) {
             $image = $template->getImage();
@@ -202,12 +221,12 @@ class CkEditor extends Editor
             $templateContent = $template->getContent();
             $content = str_replace($search, $replace, $templateContent);
 
-            $templateList[] = array(
+            $templateList[] = [
                 'title' => get_lang($template->getTitle()),
                 'description' => get_lang($template->getComment()),
                 'image' => $image,
-                'html' => $content
-            );
+                'html' => $content,
+            ];
         }
 
         return $templateList;
@@ -241,38 +260,19 @@ class CkEditor extends Editor
             $templateItem['title'] = $template->getTitle();
             $templateItem['description'] = $template->getDescription();
             $templateItem['image'] = api_get_path(WEB_APP_PATH)
-                . 'home/default_platform_document/template_thumb/noimage.gif';
+                .'home/default_platform_document/template_thumb/noimage.gif';
             $templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
-                . $courseDirectory.'/document'.$templateData['path']);
+                .$courseDirectory.'/document'.$templateData['path']);
 
             $image = $template->getImage();
             if (!empty($image)) {
                 $templateItem['image'] = api_get_path(WEB_COURSE_PATH)
-                    . $courseDirectory.'/upload/template_thumbnails/'.$template->getImage();
+                    .$courseDirectory.'/upload/template_thumbnails/'.$template->getImage();
             }
 
             $templateList[] = $templateItem;
         }
 
         return $templateList;
-    }
-
-    /**
-     * Get the templates in JSON format
-     * @return string|
-     */
-    public function simpleFormatTemplates()
-    {
-        $templates = $this->getEmptyTemplate();
-
-        if (api_is_allowed_to_edit(false, true)) {
-            $platformTemplates = $this->getPlatformTemplates();
-            $templates = array_merge($templates, $platformTemplates);
-        }
-
-        $personalTemplates = $this->getPersonalTemplates();
-        $templates = array_merge($templates, $personalTemplates);
-
-        return json_encode($templates);
     }
 }

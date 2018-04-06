@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Script showing information about a user (name, e-mail, courses and sessions)
+ * Script showing information about a user (name, e-mail, courses and sessions).
+ *
  * @author Bart Mollet
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -38,8 +39,8 @@ if (!api_is_student_boss()) {
     }
 }
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
 
 $userId = $user['user_id'];
 $tool_name = $userEntity->getCompleteName();
@@ -57,10 +58,10 @@ $actions = [
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
-            'student' => intval($_GET['user_id'])
+            'student' => intval($_GET['user_id']),
         ]),
         ['title' => get_lang('Reporting')]
-    )
+    ),
 ];
 
 if (api_can_login_as($userId)) {
@@ -80,7 +81,7 @@ if (api_is_platform_admin()) {
         Display::return_icon(
             'edit.png',
             get_lang('Edit'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
@@ -114,7 +115,7 @@ if (api_is_platform_admin()) {
             Display::return_icon(
                 'skill-badges.png',
                 get_lang('AddSkill'),
-                array(),
+                [],
                 ICON_SIZE_MEDIUM,
                 false
             ),
@@ -126,7 +127,7 @@ if (api_is_platform_admin()) {
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if ($studentBossList) {
-    $table = new HTML_Table(array('class' => 'data_table'));
+    $table = new HTML_Table(['class' => 'data_table']);
     $table->setHeaderContents(0, 0, get_lang('User'));
     $csvContent[] = [get_lang('StudentBoss')];
 
@@ -134,7 +135,7 @@ if ($studentBossList) {
     foreach ($studentBossList as $studentBossId) {
         $studentBoss = api_get_user_info($studentBossId['boss_id']);
         $table->setCellContents($row, 0, $studentBoss['complete_name_with_username']);
-        $csvContent[] = array($studentBoss['complete_name_with_username']);
+        $csvContent[] = [$studentBoss['complete_name_with_username']];
         $row++;
     }
     $studentBossListToString = $table->toHtml();
@@ -142,18 +143,18 @@ if ($studentBossList) {
 
 $registrationDate = $user['registration_date'];
 
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
 
 $csvContent[] = [get_lang('Information')];
-$data = array(
+$data = [
     get_lang('Name') => $user['complete_name'],
     get_lang('Email') => $user['email'],
     get_lang('Phone') => $user['phone'],
     get_lang('OfficialCode') => $user['official_code'],
     get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
     get_lang('Status') => $user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'),
-);
+];
 
 // Show info about who created this user and when
 $creatorId = $user['creator_id'];
@@ -173,18 +174,18 @@ foreach ($data as $label => $item) {
         $label = $label.': ';
     }
     $table->setCellContents($row, 0, $label.$item);
-    $csvContent[] = array($label, strip_tags($item));
+    $csvContent[] = [$label, strip_tags($item)];
     $row++;
 }
 $userInformation = $table->toHtml();
 
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
-$data = array(
+$data = [
     get_lang('FirstLogin') => Tracking::get_first_connection_date($userId),
-    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true)
-);
+    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true),
+];
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
@@ -217,14 +218,14 @@ foreach ($data as $label => $item) {
         $label = $label.': ';
     }
     $table->setCellContents($row, 0, $label.$item);
-    $csvContent[] = array($label, strip_tags($item));
+    $csvContent[] = [$label, strip_tags($item)];
     $row++;
 }
 $trackingInformation = $table->toHtml();
 $socialInformation = '';
 
 /**
- * Show social activity
+ * Show social activity.
  */
 if (api_get_setting('allow_social_tool') === 'true') {
     $em = Database::getManager();
@@ -258,36 +259,36 @@ if (api_get_setting('allow_social_tool') === 'true') {
 }
 
 /**
- * Show the sessions in which this user is subscribed
+ * Show the sessions in which this user is subscribed.
  */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
-$personal_course_list = array();
+$personal_course_list = [];
 $courseToolInformationTotal = null;
 if (count($sessions) > 0) {
     $sessionInformation = null;
-    $header = array(
-        array(get_lang('Code'), true),
-        array(get_lang('Title'), true),
-        array(get_lang('Status'), true),
-        array(get_lang('TimeSpentInTheCourse'), true),
-        array(get_lang('TotalPostsInAllForums'), true),
-        array('', false)
-    );
+    $header = [
+        [get_lang('Code'), true],
+        [get_lang('Title'), true],
+        [get_lang('Status'), true],
+        [get_lang('TimeSpentInTheCourse'), true],
+        [get_lang('TotalPostsInAllForums'), true],
+        ['', false],
+    ];
 
-    $headerList = array();
+    $headerList = [];
     foreach ($header as $item) {
         $headerList[] = $item[0];
     }
 
-    $csvContent[] = array();
-    $csvContent[] = array(get_lang('Sessions'));
+    $csvContent[] = [];
+    $csvContent[] = [get_lang('Sessions')];
 
     foreach ($sessions as $session_item) {
-        $data = array();
-        $personal_course_list = array();
+        $data = [];
+        $personal_course_list = [];
         $id_session = $session_item['session_id'];
 
-        $csvContent[] = array($session_item['session_name']);
+        $csvContent[] = [$session_item['session_name']];
         $csvContent[] = $headerList;
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
@@ -335,7 +336,7 @@ if (count($sessions) > 0) {
                 $id_session
             );
 
-            $row = array(
+            $row = [
                 Display::url(
                     $courseInfo['code'],
                     $courseInfo['course_public_url'].'?id_session='.$id_session
@@ -344,8 +345,8 @@ if (count($sessions) > 0) {
                 $status,
                 $timeSpent,
                 $totalForumMessages,
-                $tools
-            );
+                $tools,
+            ];
 
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
@@ -363,7 +364,7 @@ if (count($sessions) > 0) {
         }
 
         $dates = array_filter(
-            array($session_item['access_start_date'], $session_item['access_end_date'])
+            [$session_item['access_start_date'], $session_item['access_end_date']]
         );
 
         $sessionInformation .= Display::page_subheader(
@@ -375,9 +376,9 @@ if (count($sessions) > 0) {
         $sessionInformation .= Display::return_sortable_table(
             $header,
             $data,
-            array(),
-            array(),
-            array('user_id' => intval($_GET['user_id']))
+            [],
+            [],
+            ['user_id' => intval($_GET['user_id'])]
         );
         $sessionInformation .= $courseToolInformationTotal;
     }
@@ -387,7 +388,7 @@ if (count($sessions) > 0) {
 $courseToolInformationTotal = '';
 
 /**
- * Show the courses in which this user is subscribed
+ * Show the courses in which this user is subscribed.
  */
 $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c
         WHERE
@@ -396,24 +397,24 @@ $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c
             cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
 $res = Database::query($sql);
 if (Database::num_rows($res) > 0) {
-    $header = array(
-        array(get_lang('Code')),
-        array(get_lang('Title')),
-        array(get_lang('Status')),
-        array(get_lang('TimeSpentInTheCourse')),
-        array(get_lang('TotalPostsInAllForums')),
-        array('')
-    );
+    $header = [
+        [get_lang('Code')],
+        [get_lang('Title')],
+        [get_lang('Status')],
+        [get_lang('TimeSpentInTheCourse')],
+        [get_lang('TotalPostsInAllForums')],
+        [''],
+    ];
 
-    $headerList = array();
+    $headerList = [];
     foreach ($header as $item) {
         $headerList[] = $item[0];
     }
-    $csvContent[] = array();
-    $csvContent[] = array(get_lang('Courses'));
+    $csvContent[] = [];
+    $csvContent[] = [get_lang('Courses')];
     $csvContent[] = $headerList;
 
-    $data = array();
+    $data = [];
     $courseToolInformationTotal = null;
     while ($course = Database::fetch_object($res)) {
         $courseInfo = api_get_course_info_by_id($course->c_id);
@@ -449,14 +450,14 @@ if (Database::num_rows($res) > 0) {
             0
         );
 
-        $row = array(
+        $row = [
             Display::url($courseCode, $courseInfo['course_public_url']),
             $course->title,
             $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher'),
             $timeSpent,
             $totalForumMessages,
             $tools,
-        );
+        ];
 
         $csvContent[] = array_map('strip_tags', $row);
         $data[] = $row;
@@ -474,9 +475,9 @@ if (Database::num_rows($res) > 0) {
     $courseInformation .= Display::return_sortable_table(
         $header,
         $data,
-        array(),
-        array(),
-        array('user_id' => intval($_GET['user_id']))
+        [],
+        [],
+        ['user_id' => intval($_GET['user_id'])]
     );
     $courseInformation .= $courseToolInformationTotal;
 } else {
@@ -484,20 +485,20 @@ if (Database::num_rows($res) > 0) {
 }
 
 /**
- * Show the URL in which this user is subscribed
+ * Show the URL in which this user is subscribed.
  */
 $urlInformation = '';
 if (api_is_multiple_url_enabled()) {
     $urlList = UrlManager::get_access_url_from_user($userId);
     if (count($urlList) > 0) {
-        $header = array();
-        $header[] = array('URL', true);
-        $data = array();
+        $header = [];
+        $header[] = ['URL', true];
+        $data = [];
 
-        $csvContent[] = array();
-        $csvContent[] = array('Url');
+        $csvContent[] = [];
+        $csvContent[] = ['Url'];
         foreach ($urlList as $url) {
-            $row = array();
+            $row = [];
             $row[] = Display::url($url['url'], $url['url']);
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
@@ -507,9 +508,9 @@ if (api_is_multiple_url_enabled()) {
         $urlInformation .= Display::return_sortable_table(
             $header,
             $data,
-            array(),
-            array(),
-            array('user_id' => intval($_GET['user_id']))
+            [],
+            [],
+            ['user_id' => intval($_GET['user_id'])]
         );
     } else {
         $urlInformation = '<p>'.get_lang('NoUrlForThisUser').'</p>';
@@ -566,7 +567,7 @@ if (isset($_GET['action'])) {
             $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
             $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
             SessionManager::removeUsersFromCourseSession(
-                array($userId),
+                [$userId],
                 $sessionId,
                 api_get_course_info($courseCode)
             );

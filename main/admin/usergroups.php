@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -15,16 +14,16 @@ api_protect_limit_for_session_admin();
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 if ($action == 'add') {
-    $interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+    $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Classes'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Classes')];
 }
 
 // The header.
@@ -33,11 +32,11 @@ Display::display_header();
 // Tool name
 if ($action == 'add') {
     $tool = 'Add';
-    $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
+    $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Group')];
 }
 if ($action == 'edit') {
     $tool = 'Modify';
-    $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
+    $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Group')];
 }
 
 // jqgrid will use this URL to do the selects
@@ -45,24 +44,24 @@ if ($action == 'edit') {
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('Name'),
     get_lang('Users'),
     get_lang('Courses'),
     get_lang('Sessions'),
     get_lang('Type'),
     get_lang('Actions'),
-);
+];
 
 //Column config
-$column_model = array(
-    array('name'=>'name', 'index'=>'name', 'width'=>'35', 'align'=>'left'),
-    array('name'=>'users', 'index'=>'users', 'width'=>'15', 'align'=>'left'),
-    array('name'=>'courses', 'index'=>'courses', 'width'=>'15', 'align'=>'left'),
-    array('name'=>'sessions', 'index'=>'sessions', 'width'=>'15', 'align'=>'left'),
-    array('name'=>'group_type', 'index'=>'group_type', 'width'=>'15', 'align'=>'center'),
-    array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'center', 'sortable'=>'false', 'formatter'=>'action_formatter'),
-);
+$column_model = [
+    ['name' => 'name', 'index' => 'name', 'width' => '35', 'align' => 'left'],
+    ['name' => 'users', 'index' => 'users', 'width' => '15', 'align' => 'left'],
+    ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left'],
+    ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left'],
+    ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center'],
+    ['name' => 'actions', 'index' => 'actions', 'width' => '20', 'align' => 'center', 'sortable' => 'false', 'formatter' => 'action_formatter'],
+];
 
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -91,7 +90,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     );
@@ -140,7 +139,7 @@ if ($action == 'add') {
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         $form->display();
     }
 } elseif ($action == 'edit' && is_numeric($_GET['id'])) {

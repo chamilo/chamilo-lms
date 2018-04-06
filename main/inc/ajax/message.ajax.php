@@ -1,15 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Entity\Repository\UserRepository;
+use Chamilo\UserBundle\Entity\User;
 
 $_dont_save_user_course_access = true;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_GET['a'];
@@ -121,7 +120,7 @@ switch ($action) {
 
             $return['items'][] = [
                 'text' => $userName,
-                'id' => $user->getId()
+                'id' => $user->getId(),
             ];
         }
 
@@ -129,6 +128,5 @@ switch ($action) {
         break;
     default:
         echo '';
-
 }
 exit;

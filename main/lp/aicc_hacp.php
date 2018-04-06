@@ -4,13 +4,15 @@
 use ChamiloSession as Session;
 
 /**
- * API event handler functions for AICC / CMIv4 in HACP communication mode
+ * API event handler functions for AICC / CMIv4 in HACP communication mode.
  *
  * @author   Denes Nagy <darkden@freemail.hu>
  * @author   Yannick Warnier <ywarnier@beeznest.org>
+ *
  * @version  v 1.0
- * @access   public
+ *
  * @package  chamilo.learnpath
+ *
  * @license    GNU/GPL
  */
 
@@ -19,7 +21,7 @@ use ChamiloSession as Session;
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
  * The third section defines the event handlers for Chamilo's internal messaging
- * and frames refresh
+ * and frames refresh.
  *
  * This script implements the HACP messaging for AICC. The API messaging is
  * made by another set of scripts.
@@ -60,25 +62,24 @@ if ($debug > 2) {
 }
 
 // Is this needed? This is probabaly done in the header file.
-//$_user							= $_SESSION['_user'];
 $file = Session::read('file');
 $oLP = unserialize(Session::read('lpobject'));
-$oItem = & $oLP->items[$oLP->current];
+$oItem = &$oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);
     exit;
 }
 $autocomplete_when_80pct = 0;
 
-$result = array(
-    'core' => array(),
-    'core_lesson' => array(),
-    'core_vendor' => array(),
-    'evaluation' => array(),
-    'student_data' => array(),
-);
-$convert_enc = array('%25', '%0D', '%0A', '%09', '%20', '%2D', '%2F', '%3B', '%3F', '%7B', '%7D', '%7C', '%5C', '%5E', '%7E', '%5B', '%5D', '%60', '%23', '%3E', '%3C', '%22');
-$convert_dec = array('%', "\r", "\n", "\t", ' ', '-', '/', ';', '?', '{', '}', '|', '\\', '^', '~', '[', ']', '`', '#', '>', '<', '"');
+$result = [
+    'core' => [],
+    'core_lesson' => [],
+    'core_vendor' => [],
+    'evaluation' => [],
+    'student_data' => [],
+];
+$convert_enc = ['%25', '%0D', '%0A', '%09', '%20', '%2D', '%2F', '%3B', '%3F', '%7B', '%7D', '%7C', '%5C', '%5E', '%7E', '%5B', '%5D', '%60', '%23', '%3E', '%3C', '%22'];
+$convert_dec = ['%', "\r", "\n", "\t", ' ', '-', '/', ';', '?', '{', '}', '|', '\\', '^', '~', '[', ']', '`', '#', '>', '<', '"'];
 $crlf = "\r\n";
 //$tab = "\t";
 $tab = "";
@@ -86,7 +87,7 @@ $s_ec = 'error='; //string for error code
 $s_et = 'error_text='; //string for error text
 $s_ad = 'aicc_data='; //string for aicc_data
 
-$errors = array(0 => 'Successful', 1 => 'Invalid Command', 2 => 'Invalid AU password', 3 => 'Invalid Session ID');
+$errors = [0 => 'Successful', 1 => 'Invalid Command', 2 => 'Invalid AU password', 3 => 'Invalid Session ID'];
 
 $error_code = 0;
 $error_text = '';
@@ -159,7 +160,7 @@ if (!empty($_REQUEST['command'])) {
             //error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data, 0);
             // Treat the incoming request:
             $aicc = new aicc();
-            $msg_array = $aicc->parse_ini_string_quotes_safe($hacp_aicc_data, array('core_lesson', 'core_vendor'));
+            $msg_array = $aicc->parse_ini_string_quotes_safe($hacp_aicc_data, ['core_lesson', 'core_vendor']);
             //error_log('Message is now in this form: '.print_r($msg_array, true), 0);
             foreach ($msg_array as $key => $dummy) {
                 switch (strtolower($key)) {
@@ -268,6 +269,7 @@ if (!empty($_REQUEST['command'])) {
 }
 
 Session::write('lpobject', serialize($oLP));
+Session::write('oLP', $oLP);
 session_write_close();
 // Content type must be text/plain.
 header('Content-type: text/plain');

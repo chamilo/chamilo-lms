@@ -11,7 +11,7 @@ api_block_anonymous_users();
 
 $_course = api_get_course_info();
 
-# Save the audio to a URL-accessible directory for playback.
+// Save the audio to a URL-accessible directory for playback.
 parse_str($_SERVER['QUERY_STRING'], $params);
 
 if (isset($params['waminame']) && isset($params['wamidir']) && isset($params['wamiuserid'])) {
@@ -33,7 +33,7 @@ $waminame = Security::remove_XSS($waminame);
 $waminame = Database::escape_string($waminame);
 $waminame = api_replace_dangerous_char($waminame);
 $waminame = disable_dangerous_file($waminame);
-$wamidir  = Security::remove_XSS($wamidir);
+$wamidir = Security::remove_XSS($wamidir);
 $content = file_get_contents('php://input');
 
 if (empty($content)) {
@@ -77,15 +77,15 @@ fclose($fh);
 $fileInfo = pathinfo($documentPath);
 $courseInfo = api_get_course_info();
 
-$file = array(
-    'file' => array(
+$file = [
+    'file' => [
         'name' => $fileInfo['basename'],
         'tmp_name' => $documentPath,
         'size' => filesize($documentPath),
         'type' => 'audio/wav',
-        'from_file' => true
-    )
-);
+        'from_file' => true,
+    ],
+];
 $output = true;
 ob_start();
 

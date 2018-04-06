@@ -11,7 +11,7 @@
  * There are three modes
  * - standard: type a message, select a user to send it to, press send
  * - reply on message (when pressing reply when viewing a message)
- * - send to specific user (when pressing send message in the who is online list)
+ * - send to specific user (when pressing send message in the who is online list).
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -80,7 +80,7 @@ function show_compose_reply_to_message($message_id, $receiver_id)
         return $html;
     }
     $userInfo = api_get_user_info($row['user_sender_id']);
-    $default['users'] = array($row['user_sender_id']);
+    $default['users'] = [$row['user_sender_id']];
     $html = manageForm($default, null, $userInfo['complete_name_with_username']);
 
     return $html;
@@ -91,7 +91,7 @@ function show_compose_to_user($receiver_id)
     $userInfo = api_get_user_info($receiver_id);
     $html = get_lang('To').':&nbsp;<strong>'.$userInfo['complete_name'].'</strong>';
     $default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
-    $default['users'] = array($receiver_id);
+    $default['users'] = [$receiver_id];
     $html .= manageForm($default);
 
     return $html;
@@ -99,8 +99,9 @@ function show_compose_to_user($receiver_id)
 
 /**
  * @param $default
- * @param null $select_from_user_list
+ * @param null   $select_from_user_list
  * @param string $sent_to
+ *
  * @return string
  */
 function manageForm($default, $select_from_user_list = null, $sent_to = '')
@@ -113,7 +114,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
         null,
         api_get_self(),
         null,
-        array('enctype' => 'multipart/form-data')
+        ['enctype' => 'multipart/form-data']
     );
     if (empty($group_id)) {
         if (isset($select_from_user_list)) {
@@ -121,15 +122,15 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
                 'id_text_name',
                 get_lang('SendMessageTo'),
                 true,
-                array(
-                    'id'=>'id_text_name',
-                    'onkeyup'=>'send_request_and_search()',
-                    'autocomplete'=>'off'
-                )
+                [
+                    'id' => 'id_text_name',
+                    'onkeyup' => 'send_request_and_search()',
+                    'autocomplete' => 'off',
+                ]
             );
             $form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
             $form->addElement('html', '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
-            $form->addElement('hidden', 'user_list', 0, array('id'=>'user_list'));
+            $form->addElement('hidden', 'user_list', 0, ['id' => 'user_list']);
         } else {
             if (!empty($sent_to)) {
                 $form->addLabel(get_lang('SendMessageTo'), $sent_to);
@@ -140,14 +141,14 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
                     'select_ajax',
                     'users',
                     get_lang('SendMessageTo'),
-                    array(),
+                    [],
                     [
                         'multiple' => 'multiple',
-                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users'
+                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                     ]
                 );
             } else {
-                $form->addElement('hidden', 'hidden_user', $default['users'][0], array('id' => 'hidden_user'));
+                $form->addElement('hidden', 'hidden_user', $default['users'][0], ['id' => 'hidden_user']);
             }
         }
     } else {
@@ -165,7 +166,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
         get_lang('Message'),
         false,
         false,
-        array('ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250')
+        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250']
     );
 
     if (isset($_GET['re_id'])) {
@@ -304,7 +305,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         $html .= $form->returnForm();
     }
 
@@ -314,22 +315,22 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
 /* MAIN SECTION */
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork')
-    );
+        'name' => get_lang('SocialNetwork'),
+    ];
 } else {
     $this_section = SECTION_MYPROFILE;
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
-        'name' => get_lang('Profile')
-    );
+        'name' => get_lang('Profile'),
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
-    'name' => get_lang('Messages')
-);
+    'name' => get_lang('Messages'),
+];
 
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 $social_right_content = null;
@@ -365,7 +366,7 @@ if ($allowSocial) {
     $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+        Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="col-md-12">';
@@ -408,7 +409,7 @@ if (!isset($_POST['compose'])) {
                 $default['group_id'] = $_POST['group_id'];
             }
             if (isset($_POST['hidden_user'])) {
-                $default['users'] = array($_POST['hidden_user']);
+                $default['users'] = [$_POST['hidden_user']];
             }
             $social_right_content .= manageForm($default);
         } else {

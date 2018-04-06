@@ -3,14 +3,15 @@
 
 namespace Chamilo\CourseBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class ToolCompilerClass
  * Loads the services with tag "chamilo_course.tool" in order to be added
- * as a course tool (Documents, Notebook, etc)
+ * as a course tool (Documents, Notebook, etc).
+ *
  * @package Chamilo\CourseBundle\DependencyInjection\Compiler
  */
 class ToolCompilerClass implements CompilerPassInterface
@@ -30,7 +31,7 @@ class ToolCompilerClass implements CompilerPassInterface
         );
 
         foreach ($taggedServices as $id => $attributes) {
-            $definition->addMethodCall('addTool', array(new Reference($id)));
+            $definition->addMethodCall('addTool', [new Reference($id)]);
         }
     }
 }

@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for adding a attendance
+ * View (MVC patter) for adding a attendance.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.attendance
  */
 
@@ -34,7 +36,7 @@ $form->addHtmlEditor(
     get_lang('Description'),
     false,
     false,
-    array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150')
+    ['ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150']
 );
 
 // Advanced Parameters

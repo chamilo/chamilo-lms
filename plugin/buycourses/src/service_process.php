@@ -1,15 +1,15 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Process payments for the Buy Courses plugin
+ * Process payments for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../config.php';
@@ -110,7 +110,7 @@ $form->addHtml(
     )
 );
 $selectOptions = [
-    0 => get_lang('None')
+    0 => get_lang('None'),
 ];
 
 if ($typeUser) {
@@ -242,10 +242,10 @@ $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success'
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "service_catalog.php",
     "name" => $plugin->get_lang('ListOfServicesOnSale'),
-);
+];
 
 $tpl = new Template($templateName);
 $tpl->assign('buying_service', true);

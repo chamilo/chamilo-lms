@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Report
+ * Report.
+ *
  * @package chamilo.tracking
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -31,7 +31,7 @@ if (api_is_platform_admin()) {
 }
 $global = true;
 
-$course_list = $course_select_list = array();
+$course_list = $course_select_list = [];
 $html_result = '';
 $course_select_list[0] = get_lang('None');
 
@@ -56,9 +56,9 @@ foreach ($temp_course_list as $temp_course_item) {
 }
 
 //Get session list
-$session_list = SessionManager::get_sessions_list(array(), array('name'));
+$session_list = SessionManager::get_sessions_list([], ['name']);
 
-$my_session_list = array();
+$my_session_list = [];
 $my_session_list[0] = get_lang('None');
 foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
@@ -70,7 +70,7 @@ $form->addElement(
     'session_id',
     get_lang('Sessions'),
     $my_session_list,
-    array('id'=>'session_id', 'onchange'=>'load_courses();')
+    ['id' => 'session_id', 'onchange' => 'load_courses();']
 );
 $form->addElement(
     'select',
@@ -90,7 +90,7 @@ if (empty($course_code)) {
     $course_code = 0;
 }
 
-$form->setDefaults(array('course_code'=>(string) $course_code));
+$form->setDefaults(['course_code' => (string) $course_code]);
 
 $course_info = api_get_course_info($course_code);
 
@@ -98,7 +98,7 @@ if (!empty($course_info)) {
     $list = new LearnpathList('', $course_code);
     $lp_list = $list->get_flat_list();
 
-    $main_question_list = array();
+    $main_question_list = [];
 
     foreach ($lp_list as $lp_id => $lp) {
         $exercise_list = Event::get_all_exercises_from_lp(
@@ -175,14 +175,14 @@ if (!$export_to_xls) {
     }
 }
 
-$course_average = array();
+$course_average = [];
 $counter = 0;
 
 if (!empty($main_question_list) && is_array($main_question_list)) {
     $html_result .= '<table  class="data_table">';
     $html_result .= '<tr><th>'.get_lang('Question').
-                    Display::return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>';
-    $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display::return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), array('align' => 'absmiddle', 'hspace' => '3px')).' </th>';
+                    Display::return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
+    $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display::return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';
     $html_result .= '<th>'.get_lang('Quantity').'</th>';
 
     foreach ($main_question_list as $question) {

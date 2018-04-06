@@ -72,29 +72,29 @@ if (!empty($group_id)) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id,
-        'name' => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('StudentPublications'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
-    'name' =>  $my_folder_data['title']
-);
+    'name' => $my_folder_data['title'],
+];
 
 if (isset($_GET['list']) && $_GET['list'] == 'with') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UsersWithTask'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UsersWithTask')];
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UsersWithoutTask'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UsersWithoutTask')];
 }
 
 Display::display_header(null);
@@ -119,6 +119,5 @@ if (!empty($workId)) {
 
 echo $output;
 echo '</div>';
-
 
 display_list_users_without_publication($workId);

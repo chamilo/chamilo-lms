@@ -2,13 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class DisplayGradebook
+ * Class DisplayGradebook.
+ *
  * @package chamilo.gradebook
  */
 class DisplayGradebook
 {
     /**
-     * Displays the header for the result page containing the navigation tree and links
+     * Displays the header for the result page containing the navigation tree and links.
+     *
      * @param $evalobj
      * @param $selectcat
      * @param $shownavbar 1=show navigation bar
@@ -24,7 +26,7 @@ class DisplayGradebook
                     Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
                 if (($evalobj->get_course_code() != null) && !$evalobj->has_results()) {
                     $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
-    				' . Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM).'</a>';
+    				'.Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
 
                 if (api_is_platform_admin() || $evalobj->is_locked() == false) {
@@ -130,7 +132,8 @@ class DisplayGradebook
     }
 
     /**
-     * Displays the header for the flatview page containing filters
+     * Displays the header for the flatview page containing filters.
+     *
      * @param $catobj
      * @param $showeval
      * @param $showlink
@@ -155,7 +158,7 @@ class DisplayGradebook
         $exportCsvUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
             'export_format' => 'csv',
             'export_report' => 'export_report',
-            'selectcat' => $catobj->get_id()
+            'selectcat' => $catobj->get_id(),
         ]);
 
         $header .= Display::url(
@@ -171,7 +174,7 @@ class DisplayGradebook
         $exportXlsUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
             'export_format' => 'xls',
             'export_report' => 'export_report',
-            'selectcat' => $catobj->get_id()
+            'selectcat' => $catobj->get_id(),
         ]);
 
         $header .= Display::url(
@@ -187,7 +190,7 @@ class DisplayGradebook
         $exportDocUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
             'export_format' => 'doc',
             'export_report' => 'export_report',
-            'selectcat' => $catobj->get_id()
+            'selectcat' => $catobj->get_id(),
         ]);
 
         $header .= Display::url(
@@ -221,7 +224,7 @@ class DisplayGradebook
             'selectcat' => $catobj->get_id(),
             'offset' => $offset,
             'flatviewlist_page_nr' => $pageNum,
-            'flatviewlist_per_page' => $perPage
+            'flatviewlist_per_page' => $perPage,
         ]);
 
         $header .= Display::url(
@@ -239,21 +242,21 @@ class DisplayGradebook
     }
 
     /**
-     * Displays the header for the gradebook containing the navigation tree and links
+     * Displays the header for the gradebook containing the navigation tree and links.
+     *
      * @param Category $catobj
-     * @param int $showtree '1' will show the browse tree and naviation buttons
+     * @param int      $showtree '1' will show the browse tree and naviation buttons
      * @param $selectcat
-     * @param boolean $is_course_admin
-     * @param boolean $is_platform_admin
-     * @param bool $simple_search_form
-     * @param boolean $show_add_qualification Whether to show or not the link to add a new qualification
-     * (we hide it in case of the course-embedded tool where we have only one
-     * per course or session)
-     * @param boolean $show_add_link Whether to show or not the link to add a new item inside
-     * the qualification (we hide it in case of the course-embedded tool
-     * where we have only one qualification per course or session)
+     * @param bool  $is_course_admin
+     * @param bool  $is_platform_admin
+     * @param bool  $simple_search_form
+     * @param bool  $show_add_qualification Whether to show or not the link to add a new qualification
+     *                                      (we hide it in case of the course-embedded tool where we have only one
+     *                                      per course or session)
+     * @param bool  $show_add_link          Whether to show or not the link to add a new item inside
+     *                                      the qualification (we hide it in case of the course-embedded tool
+     *                                      where we have only one qualification per course or session)
      * @param array $certificateLinkInfo
-     * @return void Everything is printed on screen upon closing
      */
     public static function header(
         $catobj,
@@ -298,7 +301,7 @@ class DisplayGradebook
             );
         }
 
-        if (!$is_course_admin && ($status <> 1 || $sessionStatus == 0) && $selectcat <> 0) {
+        if (!$is_course_admin && ($status != 1 || $sessionStatus == 0) && $selectcat != 0) {
             $catcourse = Category::load($catobj->get_id());
             /** @var Category $category */
             $category = $catcourse[0];
@@ -321,7 +324,7 @@ class DisplayGradebook
             }
 
             $item_total = $main_weight;
-            $total_score = array($item_value_total, $item_total);
+            $total_score = [$item_value_total, $item_total];
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
@@ -333,7 +336,6 @@ class DisplayGradebook
                     $additionalButtons .= '</div>';
                 }
                 $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$additionalButtons).'</strong>';
-
             }
             echo Display::return_message($scoreinfo, 'normal', false);
         }
@@ -384,7 +386,7 @@ class DisplayGradebook
             ) {
                 $header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">
 							 '.Display::return_icon('pdf.png', get_lang('ExportPDF'), [], ICON_SIZE_MEDIUM).'
-							' . get_lang('ExportPDF').'</a>';
+							'.get_lang('ExportPDF').'</a>';
             }
             $header .= '</td></tr>';
             $header .= '</table></div>';
@@ -400,7 +402,7 @@ class DisplayGradebook
                     Display::return_icon(
                         'new_folder.png',
                         get_lang('AddGradebook'),
-                        array(),
+                        [],
                         ICON_SIZE_MEDIUM
                     ).'</a></td>';
             }
@@ -498,7 +500,7 @@ class DisplayGradebook
         if (api_is_allowed_to_edit(null, true)) {
             echo $toolbar = Display::toolbarAction(
                 'gradebook-actions',
-                array($actionsLeft, $actionsRight)
+                [$actionsLeft, $actionsRight]
             );
         }
 
@@ -509,14 +511,14 @@ class DisplayGradebook
             $min_certification = intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0;
             $min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
             $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
-                Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
 
             $msg = $weight.' - '.$min_certification.$edit_icon;
             //@todo show description
             $description = (($catobj->get_description() == '' || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
             echo Display::return_message($msg, 'normal', false);
             if (!empty($description)) {
-                echo Display::div($description, array());
+                echo Display::div($description, []);
             }
         }
     }
@@ -548,8 +550,9 @@ class DisplayGradebook
             $scoretotal = $cattotal[0]->calc_score(api_get_user_id());
             $scoretotal_display = isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable');
             $scoreinfo = get_lang('StatsStudent').' :<b> '.$user['complete_name'].'</b><br />';
-            if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search'])))
+            if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
                 $scoreinfo .= '<br />'.get_lang('TotalForThisCategory').' : <b>'.$scorecourse_display.'</b>';
+            }
             $scoreinfo .= '<br />'.get_lang('Total').' : <b>'.$scoretotal_display.'</b>';
             Display::addFlash(
                 Display::return_message($scoreinfo, 'normal', false)
@@ -573,6 +576,7 @@ class DisplayGradebook
     /**
      * @param $userId
      * @param $categoryId
+     *
      * @return string
      */
     public static function display_header_user($userId, $categoryId)
@@ -607,7 +611,7 @@ class DisplayGradebook
             $item_total += $item->get_weight();
         }
         $item_value = api_number_format($item_value, 2);
-        $total_score = array($item_value, $item_total);
+        $total_score = [$item_value, $item_total];
         $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
         $info = '<div class="row"><div class="col-md-3">';

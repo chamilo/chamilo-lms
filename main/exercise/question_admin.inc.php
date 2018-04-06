@@ -3,12 +3,14 @@
 
 /**
  * This script allows to manage the statements of questions.
- * It is included from the script admin.php
+ * It is included from the script admin.php.
+ *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert
+ *
  * @version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
  */
-
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
     $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
@@ -52,9 +54,7 @@ if (is_object($objQuestion)) {
         // Question
         $objQuestion->processCreation($form, $objExercise);
         $objQuestion->processAnswersCreation($form, $objExercise);
-
         // TODO: maybe here is the better place to index this tool, including answers text
-
         // redirect
         if ($objQuestion->type != HOT_SPOT &&
             $objQuestion->type != HOT_SPOT_DELINEATION

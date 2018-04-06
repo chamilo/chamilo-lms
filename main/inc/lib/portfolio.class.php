@@ -10,10 +10,10 @@
  * @deprecated
  */
 /**
- * Init
+ * Init.
  */
-use Model\Document;
 use Model\Course;
+use Model\Document;
 
 /**
  * A portfolio is used to present content to other people. In most cases it is
@@ -31,14 +31,14 @@ use Model\Course;
  *      - portfolio action
  *
  * Note:
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 //class Portfolio extends Portfolio\Portfolio
 class Portfolio
 {
-
     /**
-     * Returns all portfolios available
+     * Returns all portfolios available.
      *
      * @return array
      */
@@ -46,16 +46,18 @@ class Portfolio
     {
         $conf = api_get_path(SYS_CODE_PATH).'inc/conf/portfolio.conf.php';
         if (!is_readable($conf)) {
-            return array();
+            return [];
         }
         include $conf;
-        return isset($portfolios) ? $portfolios : array();
+
+        return isset($portfolios) ? $portfolios : [];
     }
 
     /**
      * Returns a portfolio from its name.
      *
      * @param string $name
+     *
      * @return Portfolio\Portfolio
      */
     public static function get($name)
@@ -66,13 +68,14 @@ class Portfolio
                 return $item;
             }
         }
+
         return Portfolio\Portfolio::none();
     }
 
     /**
      * True if portfolios are enabled. False otherwise.
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_enabled()
     {
@@ -87,6 +90,7 @@ class Portfolio
         if (count($portfolios) == 0) {
             return false;
         }
+
         return true;
     }
 
@@ -104,11 +108,12 @@ class Portfolio
      * Returns a share component/button.
      *
      * @param string $tool
-     * @param int $id
-     * @param array $attributes
+     * @param int    $id
+     * @param array  $attributes
+     *
      * @return \PortfolioShare
      */
-    public static function share($tool, $id, $attributes = array())
+    public static function share($tool, $id, $attributes = [])
     {
         return PortfolioShare::factory($tool, $id, $attributes);
     }
@@ -127,6 +132,7 @@ class Portfolio
      * Returns a temporary url to download files and/or folders.
      *
      * @param string|array $ids
+     *
      * @return string
      */
     public static function download_url($ids, $tool)
@@ -137,9 +143,9 @@ class Portfolio
         $params['id'] = $ids;
         $params[KeyAuth::PARAM_ACCESS_TOKEN] = KeyAuth::create_temp_token();
         $result = Uri::url("/main/$tool/file.php", $params, false);
+
         return $result;
     }
-
 }
 
 /**
@@ -150,12 +156,9 @@ class Portfolio
  *      if(Porfolio::contoller()->accept()){
  *          Portfolio::controller()->run();
  *      }
- *
- *
  */
 class PortfolioController
 {
-
     const PARAM_ACTION = 'action';
     const PARAM_ID = 'id';
     const PARAM_TOOL = 'tool';
@@ -165,24 +168,23 @@ class PortfolioController
     const ACTION_SHARE = 'share';
     const NAME = 'portfolio';
 
+    protected $message = '';
+
+    protected function __construct()
+    {
+    }
+
     /**
-     *
      * @return \PortfolioController
      */
-    static function instance()
+    public static function instance()
     {
         static $result = null;
         if (empty($result)) {
             $result = new self();
         }
+
         return $result;
-    }
-
-    protected $message = '';
-
-    protected function __construct()
-    {
-
     }
 
     public static function portfolios()
@@ -204,15 +206,17 @@ class PortfolioController
 
         $items = self::portfolios();
         if (empty($items)) {
-            $result = array();
+            $result = [];
+
             return $result;
         }
 
-        $result = array();
+        $result = [];
         foreach ($items as $item) {
             $action = PortfolioBulkAction::create($item);
             $result[] = $action;
         }
+
         return $result;
     }
 
@@ -220,9 +224,9 @@ class PortfolioController
      * Returns true if the controller accept to process the current request.
      * Returns false otherwise.
      *
-     * @return boolean
+     * @return bool
      */
-    function accept()
+    public function accept()
     {
         if (!Portfolio::is_enabled()) {
             return false;
@@ -254,7 +258,7 @@ class PortfolioController
      *
      * @return string
      */
-    function get_controller()
+    public function get_controller()
     {
         return Request::get(self::PARAM_CONTROLLER);
     }
@@ -265,9 +269,10 @@ class PortfolioController
      *
      * @return string
      */
-    function get_action()
+    public function get_action()
     {
         $result = Request::get(self::PARAM_ACTION);
+
         return ($result == self::ACTION_SHARE) ? self::ACTION_SHARE : '';
     }
 
@@ -276,7 +281,7 @@ class PortfolioController
      *
      * @return int
      */
-    function get_id()
+    public function get_id()
     {
         return (int) Request::get(self::PARAM_ID);
     }
@@ -286,7 +291,7 @@ class PortfolioController
      *
      * @return string
      */
-    function course_code()
+    public function course_code()
     {
         return ChamiloSession::instance()->course()->code();
     }
@@ -296,7 +301,7 @@ class PortfolioController
      *
      * @return type
      */
-    function get_portfolio()
+    public function get_portfolio()
     {
         return Request::get(self::PARAM_PORTFOLIO);
     }
@@ -305,19 +310,22 @@ class PortfolioController
      * Name of the tool: document, work, etc. Defaults to current_course_tool.
      *
      * @global string $current_course_tool
+     *
      * @return string
      */
-    function get_tool()
+    public function get_tool()
     {
         global $current_course_tool;
+
         return Request::get(self::PARAM_TOOL, $current_course_tool);
     }
 
     /**
      * Returns the end user message after running the controller..
+     *
      * @return string
      */
-    function message()
+    public function message()
     {
         return $this->message;
     }
@@ -331,7 +339,7 @@ class PortfolioController
      *
      * @return PortfolioController
      */
-    function run()
+    public function run()
     {
         if (!$this->accept()) {
             return $this;
@@ -346,7 +354,6 @@ class PortfolioController
 
         $action = $this->get_action();
         if ($action == self::ACTION_SHARE) {
-
             $user = new \Portfolio\User();
             $user->email = Chamilo::user()->email();
 
@@ -363,13 +370,14 @@ class PortfolioController
             } else {
                 $this->message = Display::return_message(get_lang('SentFailed'), 'error');
             }
+
             return $this;
         } else {
             $this->message = '';
         }
+
         return $this;
     }
-
 }
 
 /**
@@ -383,23 +391,39 @@ class PortfolioController
  *
  *      $button = Portfolio::share(...);
  *      echo $button;
- *
  */
 class PortfolioShare
 {
+    protected $id = 0;
+    protected $attributes = [];
+    protected $tool = '';
+
+    public function __construct($tool, $id, $attributes = [])
+    {
+        $this->tool = $tool;
+        $this->id = (int) $id;
+        $this->attributes = $attributes;
+    }
+
+    public function __toString()
+    {
+        return $this->display();
+    }
 
     /**
-     * Create a "send to portfolio" button
+     * Create a "send to portfolio" button.
      *
-     * @param string $tool          The name of the tool: document, work.
-     * @param int $c_id             The id of the course
-     * @param int $id               The id of the object
-     * @param array $attributes     Html attributes
+     * @param string $tool       the name of the tool: document, work
+     * @param int    $c_id       The id of the course
+     * @param int    $id         The id of the object
+     * @param array  $attributes Html attributes
+     *
      * @return \PortfolioShare
      */
-    static function factory($tool, $id, $attributes = array())
+    public static function factory($tool, $id, $attributes = [])
     {
         $result = new self($tool, $id, $attributes);
+
         return $result;
     }
 
@@ -408,40 +432,32 @@ class PortfolioShare
      *
      * @return type
      */
-    static function security_token()
+    public static function security_token()
     {
         static $result = null;
         if (empty($result)) {
             $result = Security::get_token();
         }
+
         return $result;
     }
 
-    protected $id = 0;
-    protected $attributes = array();
-    protected $tool = '';
-
-    function __construct($tool, $id, $attributes = array())
-    {
-        $this->tool = $tool;
-        $this->id = (int) $id;
-        $this->attributes = $attributes;
-    }
-
     /**
-     * Object id to send
+     * Object id to send.
+     *
      * @return int
      */
-    function get_id()
+    public function get_id()
     {
         return $this->id;
     }
 
     /**
-     * Object id to send
+     * Object id to send.
+     *
      * @return int
      */
-    function get_c_id()
+    public function get_c_id()
     {
         return $this->c_id;
     }
@@ -451,7 +467,7 @@ class PortfolioShare
      *
      * @return array
      */
-    function get_attributes()
+    public function get_attributes()
     {
         return $this->attributes;
     }
@@ -461,7 +477,7 @@ class PortfolioShare
      *
      * @return string
      */
-    function get_tool()
+    public function get_tool()
     {
         return $this->tool;
     }
@@ -471,7 +487,7 @@ class PortfolioShare
      *
      * @return string
      */
-    function display()
+    public function display()
     {
         if (!Portfolio::is_enabled()) {
             return '';
@@ -486,11 +502,11 @@ class PortfolioShare
             $s .= $key.'="'.$value.'" ';
         }
 
-        $result = array();
+        $result = [];
         $result[] = '<span '.$s.' >';
         $result[] = '<span class="dropdown" >';
         $result[] = '<a href="#" data-toggle="dropdown" class="dropdown-toggle">';
-        $result[] = Display::return_icon('document_send.png', get_lang('Send'), array(), ICON_SIZE_SMALL).'<b class="caret"></b>';
+        $result[] = Display::return_icon('document_send.png', get_lang('Send'), [], ICON_SIZE_SMALL).'<b class="caret"></b>';
         $result[] = '</a>';
         $result[] = '<ul class="dropdown-menu">';
 
@@ -512,19 +528,14 @@ class PortfolioShare
         $result[] = '</ul>';
         $result[] = '</span>';
         $result[] = '</span>';
+
         return implode("\n", $result);
     }
-
-    function __toString()
-    {
-        return $this->display();
-    }
-
 }
 
 /**
  * A "send to this portfolio" action. Actions are used by the SortableTable to
- * perform actions on a set of objects. An action is composed of
+ * perform actions on a set of objects. An action is composed of.
  *
  *      - a name
  *      - a title (displayed to the user)
@@ -544,23 +555,11 @@ class PortfolioShare
  */
 class PortfolioBulkAction
 {
-
-    /**
-     *
-     * @param \Portfolio\Portfolio $portfolio
-     * @return PortfolioBulkAction
-     */
-    public static function create($portfolio)
-    {
-        return new self($portfolio);
-    }
-
     protected $name = '';
     protected $title = '';
     protected $portfolio = null;
 
     /**
-     *
      * @param \Portfolio\Portfolio $portfolio
      */
     public function __construct($portfolio)
@@ -568,6 +567,16 @@ class PortfolioBulkAction
         $this->name = md5(__CLASS__).'_'.$portfolio->get_name();
         $this->title = $portfolio->get_title() ? $portfolio->get_title() : get_lang('SendTo').' '.$portfolio->get_name();
         $this->portfolio = $portfolio;
+    }
+
+    /**
+     * @param \Portfolio\Portfolio $portfolio
+     *
+     * @return PortfolioBulkAction
+     */
+    public static function create($portfolio)
+    {
+        return new self($portfolio);
     }
 
     public function get_name()
@@ -581,7 +590,6 @@ class PortfolioBulkAction
     }
 
     /**
-     *
      * @return \Portfolio\Portfolio
      */
     public function get_portfolio()
@@ -605,6 +613,7 @@ class PortfolioBulkAction
         if (empty($course)) {
             return false;
         }
+
         return true;
     }
 
@@ -617,9 +626,9 @@ class PortfolioBulkAction
         $course = Course::current();
 
         $pathes = Request::get('path');
-        $pathes = is_array($pathes) ? $pathes : array($pathes);
+        $pathes = is_array($pathes) ? $pathes : [$pathes];
 
-        $ids = array();
+        $ids = [];
         foreach ($pathes as $path) {
             $doc = Document::get_by_path($course, $path);
             if ($doc) {
@@ -638,7 +647,7 @@ class PortfolioBulkAction
 
         $portfolio = $this->get_portfolio();
         $result = $portfolio->send($user, $artefact);
+
         return $result;
     }
-
 }

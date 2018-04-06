@@ -3,11 +3,11 @@
 
 namespace Chamilo\PluginBundle\Entity\StudentFollowUp;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CarePost
+ * CarePost.
  *
  * @ORM\Table(name="sfu_post")
  * @ORM\Entity
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CarePost
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -44,18 +44,6 @@ class CarePost
      * @ORM\Column(name="external_care_id", type="string", nullable=true)
      */
     protected $externalCareId;
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="insert_user_id", referencedColumnName="id", nullable=false)
-     */
-    private $insertUser;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    private $user;
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
@@ -96,41 +84,53 @@ class CarePost
     protected $attachment;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="insert_user_id", referencedColumnName="id", nullable=false)
+     */
+    private $insertUser;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     */
+    private $user;
+
+    /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="CarePost", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $parent;
 
-     /**
+    /**
      * @ORM\OneToMany(targetEntity="CarePost", mappedBy="parent")
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $children;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
     private $lft;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
      */
     private $rgt;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
      */
     private $lvl;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
      */
@@ -155,6 +155,7 @@ class CarePost
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -174,6 +175,7 @@ class CarePost
 
     /**
      * @param string $title
+     *
      * @return CarePost
      */
     public function setTitle($title)
@@ -193,6 +195,7 @@ class CarePost
 
     /**
      * @param string $content
+     *
      * @return CarePost
      */
     public function setContent($content)
@@ -212,6 +215,7 @@ class CarePost
 
     /**
      * @param string $externalCareId
+     *
      * @return CarePost
      */
     public function setExternalCareId($externalCareId)
@@ -231,6 +235,7 @@ class CarePost
 
     /**
      * @param mixed $user
+     *
      * @return CarePost
      */
     public function setUser($user)
@@ -250,6 +255,7 @@ class CarePost
 
     /**
      * @param bool $private
+     *
      * @return CarePost
      */
     public function setPrivate($private)
@@ -269,6 +275,7 @@ class CarePost
 
     /**
      * @param bool $externalSource
+     *
      * @return CarePost
      */
     public function setExternalSource($externalSource)
@@ -288,6 +295,7 @@ class CarePost
 
     /**
      * @param string $attachment
+     *
      * @return CarePost
      */
     public function setAttachment($attachment)
@@ -307,6 +315,7 @@ class CarePost
 
     /**
      * @param mixed $parent
+     *
      * @return CarePost
      */
     public function setParent($parent)
@@ -334,6 +343,7 @@ class CarePost
 
     /**
      * @param mixed $children
+     *
      * @return CarePost
      */
     public function setChildren($children)
@@ -353,6 +363,7 @@ class CarePost
 
     /**
      * @param mixed $createdAt
+     *
      * @return CarePost
      */
     public function setCreatedAt($createdAt)
@@ -372,6 +383,7 @@ class CarePost
 
     /**
      * @param mixed $updatedAt
+     *
      * @return CarePost
      */
     public function setUpdatedAt($updatedAt)
@@ -391,6 +403,7 @@ class CarePost
 
     /**
      * @param array $tags
+     *
      * @return CarePost
      */
     public function setTags($tags)
@@ -410,6 +423,7 @@ class CarePost
 
     /**
      * @param mixed $insertUser
+     *
      * @return CarePost
      */
     public function setInsertUser($insertUser)
@@ -418,5 +432,4 @@ class CarePost
 
         return $this;
     }
-
 }

@@ -3,6 +3,7 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
@@ -40,14 +41,14 @@ if (empty($group_id)) {
     }
 }
 
-$interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']);
-$interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('SubscribeUsersToGroup'));
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('SubscribeUsersToGroup')];
 
 $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
-$UserList = $SessionList = array();
-$users = $sessions = array();
+$UserList = $SessionList = [];
+$users = $sessions = [];
 $content = null;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -56,14 +57,14 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $group_id = intval($_POST['id']);
 
     if (!is_array($user_list)) {
-        $user_list = array();
+        $user_list = [];
     }
 
     if ($form_sent == 1) {
         // invite this users
         $result = $usergroup->add_users_to_groups(
             $user_list,
-            array($group_id),
+            [$group_id],
             GROUP_USER_PERMISSION_PENDING_INVITATION
         );
         $title = get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
@@ -89,12 +90,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-$nosessionUsersList = $sessionUsersList = array();
+$nosessionUsersList = $sessionUsersList = [];
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 $friends = SocialManager::get_friends(api_get_user_id());
 
 $suggest_friends = false;
-$Users = array();
+$Users = [];
 if (!$friends) {
     $suggest_friends = true;
 } else {
@@ -111,22 +112,22 @@ if (!$friends) {
             if (!isset($group_friend_list[$group_id]) ||
                 isset($group_friend_list[$group_id]) &&
                 $group_friend_list[$group_id]['relation_type'] == '') {
-                $Users[$friend['friend_user_id']] = array(
+                $Users[$friend['friend_user_id']] = [
                     'user_id' => $friend['friend_user_id'],
                     'firstname' => $friend['firstName'],
                     'lastname' => $friend['lastName'],
                     'username' => $friend['username'],
-                    'group_id' => $friend_group_id
-                );
+                    'group_id' => $friend_group_id,
+                ];
             }
         } else {
-            $Users[$friend['friend_user_id']] = array(
+            $Users[$friend['friend_user_id']] = [
                 'user_id' => $friend['friend_user_id'],
-                'firstname' =>$friend['firstName'],
+                'firstname' => $friend['firstName'],
                 'lastname' => $friend['lastName'],
-                'username' =>$friend['username'],
-                'group_id' => null
-            );
+                'username' => $friend['username'],
+                'group_id' => null,
+            ];
         }
     }
 }
@@ -176,7 +177,7 @@ $social_right_content .= $form->returnForm();
 $members = $usergroup->get_users_by_group(
     $group_id,
     false,
-    array(GROUP_USER_PERMISSION_PENDING_INVITATION)
+    [GROUP_USER_PERMISSION_PENDING_INVITATION]
 );
 
 if (is_array($members) && count($members) > 0) {
@@ -187,12 +188,12 @@ if (is_array($members) && count($members) > 0) {
 
     $userList .= Display::return_sortable_grid(
         'invitation_profile',
-        array(),
+        [],
         $members,
-        array('hide_navigation' => true, 'per_page' => 100),
-        array(),
+        ['hide_navigation' => true, 'per_page' => 100],
+        [],
         false,
-        array(true, false, true, false)
+        [true, false, true, false]
     );
 
     $social_right_content .= Display::panel($userList, get_lang('UsersAlreadyInvited'));

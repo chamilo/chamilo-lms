@@ -4,18 +4,18 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Register toolbar configuration
+ * Register toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class Register extends Basic
 {
-
-    public $plugins = array(
-    );
+    public $plugins = [
+    ];
 
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -31,7 +31,8 @@ class Register extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -40,12 +41,13 @@ class Register extends Basic
             ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor']
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -54,8 +56,7 @@ class Register extends Basic
             ['Toolbarswitch', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor']
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
         ];
     }
-
 }

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SysAnnouncement
+ * SysAnnouncement.
  *
  * @ORM\Table(name="sys_announcement")
  * @ORM\Entity
@@ -28,21 +28,21 @@ class SysAnnouncement
     private $dateEnd;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible_teacher", type="boolean", nullable=false)
      */
     private $visibleTeacher;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible_student", type="boolean", nullable=false)
      */
     private $visibleStudent;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible_guest", type="boolean", nullable=false)
      */
@@ -70,14 +70,14 @@ class SysAnnouncement
     private $lang;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
     private $accessUrlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -85,12 +85,11 @@ class SysAnnouncement
      */
     private $id;
 
-
-
     /**
-     * Set dateStart
+     * Set dateStart.
      *
      * @param \DateTime $dateStart
+     *
      * @return SysAnnouncement
      */
     public function setDateStart($dateStart)
@@ -101,7 +100,7 @@ class SysAnnouncement
     }
 
     /**
-     * Get dateStart
+     * Get dateStart.
      *
      * @return \DateTime
      */
@@ -111,9 +110,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set dateEnd
+     * Set dateEnd.
      *
      * @param \DateTime $dateEnd
+     *
      * @return SysAnnouncement
      */
     public function setDateEnd($dateEnd)
@@ -124,7 +124,7 @@ class SysAnnouncement
     }
 
     /**
-     * Get dateEnd
+     * Get dateEnd.
      *
      * @return \DateTime
      */
@@ -134,9 +134,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set visibleTeacher
+     * Set visibleTeacher.
      *
-     * @param boolean $visibleTeacher
+     * @param bool $visibleTeacher
+     *
      * @return SysAnnouncement
      */
     public function setVisibleTeacher($visibleTeacher)
@@ -147,9 +148,9 @@ class SysAnnouncement
     }
 
     /**
-     * Get visibleTeacher
+     * Get visibleTeacher.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibleTeacher()
     {
@@ -157,9 +158,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set visibleStudent
+     * Set visibleStudent.
      *
-     * @param boolean $visibleStudent
+     * @param bool $visibleStudent
+     *
      * @return SysAnnouncement
      */
     public function setVisibleStudent($visibleStudent)
@@ -170,9 +172,9 @@ class SysAnnouncement
     }
 
     /**
-     * Get visibleStudent
+     * Get visibleStudent.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibleStudent()
     {
@@ -180,9 +182,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set visibleGuest
+     * Set visibleGuest.
      *
-     * @param boolean $visibleGuest
+     * @param bool $visibleGuest
+     *
      * @return SysAnnouncement
      */
     public function setVisibleGuest($visibleGuest)
@@ -193,9 +196,9 @@ class SysAnnouncement
     }
 
     /**
-     * Get visibleGuest
+     * Get visibleGuest.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibleGuest()
     {
@@ -203,9 +206,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return SysAnnouncement
      */
     public function setTitle($title)
@@ -216,7 +220,7 @@ class SysAnnouncement
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -226,9 +230,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return SysAnnouncement
      */
     public function setContent($content)
@@ -239,7 +244,7 @@ class SysAnnouncement
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -249,9 +254,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set lang
+     * Set lang.
      *
      * @param string $lang
+     *
      * @return SysAnnouncement
      */
     public function setLang($lang)
@@ -262,7 +268,7 @@ class SysAnnouncement
     }
 
     /**
-     * Get lang
+     * Get lang.
      *
      * @return string
      */
@@ -272,9 +278,10 @@ class SysAnnouncement
     }
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return SysAnnouncement
      */
     public function setAccessUrlId($accessUrlId)
@@ -285,9 +292,9 @@ class SysAnnouncement
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -295,9 +302,9 @@ class SysAnnouncement
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

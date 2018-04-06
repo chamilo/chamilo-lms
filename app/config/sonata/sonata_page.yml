@@ -49,6 +49,8 @@ sonata_page:
         - ^/cms/page/latest/(.*)
         - ^/cms/page/blocks
         - ^/cms/page/blocks/(.*)
+        - ^/css/themes/(.*)/(.*)/(.*)
+        - ^/assets/(.*)/(.*)/(.*)
 
     ignore_route_patterns:
         - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin

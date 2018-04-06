@@ -11,8 +11,7 @@ require_once api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php'
 
 /**
  * @return true if cas is configured
- *
- **/
+ */
 function cas_configured()
 {
     global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
@@ -24,12 +23,11 @@ function cas_configured()
     return $res;
 }
 
-
 /**
- * checks if the user already get a session
+ * checks if the user already get a session.
+ *
  * @return the user login if the user already has a session ,false otherwise
- **/
-
+ */
 function cas_is_authenticated()
 {
     global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
@@ -97,13 +95,14 @@ function cas_is_authenticated()
                             $chamilo_user["status"], '', '', '', '', 1, null, 0, null, '');
                     }
                 }
+
                 return $login;
             } // user not found
             else {
                 // if option is on we can ADD user automatically from ldap server or by modify own profil
                 $user_added = false;
                 switch (api_get_setting("cas_add_user_activate")) {
-                    case PLATFORM_AUTH_SOURCE :
+                    case PLATFORM_AUTH_SOURCE:
                         // user will have to modify firstname, lastname, email in chamilo profil edit
                         $userdata = get_lang("EditInProfil");
                         UserManager::create_user(
@@ -121,7 +120,7 @@ function cas_is_authenticated()
                         );
                         $user_added = $login;
                         break;
-                    case LDAP_AUTH_SOURCE :
+                    case LDAP_AUTH_SOURCE:
                         // user info are read from ldap connexion
                         // get user info from ldap server
                         // user has already been authenticated by CAS
@@ -138,30 +137,31 @@ function cas_is_authenticated()
                     default:
                         break;
                 }
+
                 return $user_added;
             }
         }
-//		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
-//		if (! $logout){
-//			$user_table = Database::get_main_table(TABLE_MAIN_USER);
-//			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
-//				"FROM $user_table ".
-//				"WHERE username = '$login' ";
+        //		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
+        //		if (! $logout){
+        //			$user_table = Database::get_main_table(TABLE_MAIN_USER);
+        //			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
+        //				"FROM $user_table ".
+        //				"WHERE username = '$login' ";
 //
-//			$result = Database::query($sql,__FILE__,__LINE__);
-//			if(mysql_num_rows($result) == 0) {
-//				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
-//				$rnumber=rand(0,256000);
-//				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
-//			}
-//			else {
-//				$user = mysql_fetch_assoc($result);
-//				$user_id = intval($user['user_id']);
-//				//echo "deb : $status";
-//				UserManager::update_user ($user_id, $firstname, $lastname, $login, null, null, $email, $status, '', '', '', '', 1, null, 0, null,'') ;
+        //			$result = Database::query($sql,__FILE__,__LINE__);
+        //			if(mysql_num_rows($result) == 0) {
+        //				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
+        //				$rnumber=rand(0,256000);
+        //				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
+        //			}
+        //			else {
+        //				$user = mysql_fetch_assoc($result);
+        //				$user_id = intval($user['user_id']);
+        //				//echo "deb : $status";
+        //				UserManager::update_user ($user_id, $firstname, $lastname, $login, null, null, $email, $status, '', '', '', '', 1, null, 0, null,'') ;
 //
-//			}
-//		}
+        //			}
+        //		}
         return $login;
     } else {
         return false;
@@ -170,7 +170,7 @@ function cas_is_authenticated()
 
 /**
  * Logs out the user of the cas
- * The user MUST be logged in with cas to use this function
+ * The user MUST be logged in with cas to use this function.
  *
  * @param $uinfo array user info (not needed)
  * @param $location string redirect url
@@ -207,5 +207,6 @@ function getCASLogoHTML()
     if (api_get_setting("casLogoURL") != "") {
         $out_res = "<img src='".api_get_setting("casLogoURL")."' alt='CAS Logo' />";
     }
+
     return $out_res;
 }

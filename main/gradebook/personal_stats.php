@@ -24,7 +24,7 @@ $gradebooktable = new GradebookTable(
     $allcat,
     $alleval,
     $alllink,
-    array(),
+    [],
     false
 );
 $gradebooktable->userId = $userId;

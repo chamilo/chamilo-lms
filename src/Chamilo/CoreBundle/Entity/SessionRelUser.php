@@ -7,7 +7,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SessionRelUser
+ * SessionRelUser.
  *
  * @ORM\Table(
  *    name="session_rel_user",
@@ -19,8 +19,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SessionRelUser
 {
+    public $relationTypeList = [
+        0 => 'student',
+        1 => 'drh',
+    ];
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -41,28 +45,28 @@ class SessionRelUser
     private $user;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     private $relationType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
     private $duration;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
      */
     private $movedTo;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="moved_status", type="integer", nullable=true, unique=false)
      */
@@ -81,13 +85,8 @@ class SessionRelUser
      */
     private $registeredAt;
 
-    public $relationTypeList = array(
-        0 => 'student',
-        1 => 'drh'
-    );
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -98,7 +97,7 @@ class SessionRelUser
     }
 
     /**
-     * Set Session
+     * Set Session.
      *
      * @param Session $session
      *
@@ -112,7 +111,7 @@ class SessionRelUser
     }
 
     /**
-     * Get Session
+     * Get Session.
      *
      * @return Session
      */
@@ -122,9 +121,10 @@ class SessionRelUser
     }
 
     /**
-     * Set User
+     * Set User.
      *
      * @param User $user
+     *
      * @return SessionRelUser
      */
     public function setUser($user)
@@ -135,7 +135,7 @@ class SessionRelUser
     }
 
     /**
-     * Get idUser
+     * Get idUser.
      *
      * @return User
      */
@@ -145,9 +145,10 @@ class SessionRelUser
     }
 
     /**
-     * Set relationType
+     * Set relationType.
      *
-     * @param integer $relationType
+     * @param int $relationType
+     *
      * @return SessionRelUser
      */
     public function setRelationType($relationType)
@@ -158,9 +159,10 @@ class SessionRelUser
     }
 
     /**
-     * Set relationTypeByName
+     * Set relationTypeByName.
      *
      * @param string $relationType
+     *
      * @return SessionRelUser
      */
     public function setRelationTypeByName($relationType)
@@ -173,9 +175,9 @@ class SessionRelUser
     }
 
     /**
-     * Get relationType
+     * Get relationType.
      *
-     * @return integer
+     * @return int
      */
     public function getRelationType()
     {
@@ -183,9 +185,10 @@ class SessionRelUser
     }
 
     /**
-     * Set movedTo
+     * Set movedTo.
      *
-     * @param integer $movedTo
+     * @param int $movedTo
+     *
      * @return SessionRelUser
      */
     public function setMovedTo($movedTo)
@@ -196,9 +199,9 @@ class SessionRelUser
     }
 
     /**
-     * Get movedTo
+     * Get movedTo.
      *
-     * @return integer
+     * @return int
      */
     public function getMovedTo()
     {
@@ -206,9 +209,10 @@ class SessionRelUser
     }
 
     /**
-     * Set movedStatus
+     * Set movedStatus.
      *
-     * @param integer $movedStatus
+     * @param int $movedStatus
+     *
      * @return SessionRelUser
      */
     public function setMovedStatus($movedStatus)
@@ -219,9 +223,9 @@ class SessionRelUser
     }
 
     /**
-     * Get movedStatus
+     * Get movedStatus.
      *
-     * @return integer
+     * @return int
      */
     public function getMovedStatus()
     {
@@ -229,7 +233,7 @@ class SessionRelUser
     }
 
     /**
-     * Set movedAt
+     * Set movedAt.
      *
      * @param \DateTime $movedAt
      *
@@ -243,7 +247,7 @@ class SessionRelUser
     }
 
     /**
-     * Get movedAt
+     * Get movedAt.
      *
      * @return \DateTime
      */
@@ -253,7 +257,8 @@ class SessionRelUser
     }
 
     /**
-     * Set registeredAt
+     * Set registeredAt.
+     *
      * @param \DateTime $registeredAt
      *
      * @return $this
@@ -266,7 +271,8 @@ class SessionRelUser
     }
 
     /**
-     * Get registeredAt
+     * Get registeredAt.
+     *
      * @return \DateTime
      */
     public function getRegisteredAt()
@@ -284,6 +290,7 @@ class SessionRelUser
 
     /**
      * @param int $duration
+     *
      * @return SessionRelUser
      */
     public function setDuration($duration)

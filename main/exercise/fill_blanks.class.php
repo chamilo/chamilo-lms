@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Class FillBlanks
+ *  Class FillBlanks.
  *
  * @author Eric Marguin
  * @author Julio Montoya multiple fill in blank option added
+ *
  * @package chamilo.exercise
- **/
+ */
 class FillBlanks extends Question
 {
     const FILL_THE_BLANK_STANDARD = 0;
@@ -18,7 +19,7 @@ class FillBlanks extends Question
     public static $explanationLangVar = 'FillBlanks';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -28,7 +29,7 @@ class FillBlanks extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -367,7 +368,7 @@ class FillBlanks extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -474,7 +475,7 @@ class FillBlanks extends Question
         $answer .= ":".$form->getSubmitValue('select_separator');
 
         // Allow answers order switches
-        $is_multiple = $form -> getSubmitValue('multiple_answer');
+        $is_multiple = $form->getSubmitValue('multiple_answer');
         $answer .= '@'.$is_multiple;
 
         $this->save($exercise);
@@ -484,7 +485,7 @@ class FillBlanks extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -498,14 +499,15 @@ class FillBlanks extends Question
     }
 
     /**
-     * @param int $currentQuestion
-     * @param int $questionId
+     * @param int    $currentQuestion
+     * @param int    $questionId
      * @param string $correctItem
-     * @param array $attributes
+     * @param array  $attributes
      * @param string $answer
-     * @param array $listAnswersInfo
-     * @param boolean $displayForStudent
-     * @param int $inBlankNumber
+     * @param array  $listAnswersInfo
+     * @param bool   $displayForStudent
+     * @param int    $inBlankNumber
+     *
      * @return string
      */
     public static function getFillTheBlankHtml(
@@ -554,7 +556,6 @@ class FillBlanks extends Question
                 );
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-                //no break
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
@@ -571,23 +572,11 @@ class FillBlanks extends Question
     }
 
     /**
-     * Removes double spaces between words
-     * @param string $text
-     * @return string
-     */
-    private static function trimOption($text)
-    {
-        $text = trim($text);
-        $text = preg_replace("/\s+/", " ", $text);
-
-        return $text;
-    }
-
-    /**
      * Return an array with the different choices available
-     * when the answers between bracket show as a menu
+     * when the answers between bracket show as a menu.
+     *
      * @param string $correctAnswer
-     * @param bool $displayForStudent true if we want to shuffle the choices of the menu for students
+     * @param bool   $displayForStudent true if we want to shuffle the choices of the menu for students
      *
      * @return array
      */
@@ -607,11 +596,12 @@ class FillBlanks extends Question
     }
 
     /**
-     * Return the array index of the student answer
+     * Return the array index of the student answer.
+     *
      * @param string $correctAnswer the menu Choice1|Choice2|Choice3
      * @param string $studentAnswer the student answer must be Choice1 or Choice2 or Choice3
      *
-     * @return int  in the example 0 1 or 2 depending of the choice of the student
+     * @return int in the example 0 1 or 2 depending of the choice of the student
      */
     public static function getFillTheBlankMenuAnswerNum($correctAnswer, $studentAnswer)
     {
@@ -626,9 +616,9 @@ class FillBlanks extends Question
         return -1;
     }
 
-
     /**
-     * Return the possible answer if the answer between brackets is a multiple choice menu
+     * Return the possible answer if the answer between brackets is a multiple choice menu.
+     *
      * @param string $correctAnswer
      *
      * @return array
@@ -644,10 +634,12 @@ class FillBlanks extends Question
     /**
      * Return true if student answer is right according to the correctAnswer
      * it is not as simple as equality, because of the type of Fill The Blank question
-     * eg : studentAnswer = 'Un' and correctAnswer = 'Un||1||un'
+     * eg : studentAnswer = 'Un' and correctAnswer = 'Un||1||un'.
+     *
      * @param string $studentAnswer [student_answer] of the info array of the answer field
      * @param string $correctAnswer [words] of the info array of the answer field
-     * @param bool $fromDatabase
+     * @param bool   $fromDatabase
+     *
      * @return bool
      */
     public static function isStudentAnswerGood($studentAnswer, $correctAnswer, $fromDatabase = false)
@@ -672,10 +664,11 @@ class FillBlanks extends Question
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
                 $listSeveral = array_map(
                     function ($item) {
-                        return self::trimOption($item);
+                        return self::trimOption(api_html_entity_decode($item));
                     },
                     $listSeveral
                 );
+                $studentAnswer = htmlspecialchars($studentAnswer);
                 $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
@@ -683,11 +676,8 @@ class FillBlanks extends Question
                 $correctAnswer = api_html_entity_decode($correctAnswer);
                 $studentAnswer = htmlspecialchars($studentAnswer);
                 $result = $studentAnswer == self::trimOption($correctAnswer);
-
-
                 break;
         }
-        //var_dump($result);
 
         return $result;
     }
@@ -709,8 +699,9 @@ class FillBlanks extends Question
     }
 
     /**
-     * Return information about the answer
-     * @param string $userAnswer the text of the answer of the question
+     * Return information about the answer.
+     *
+     * @param string $userAnswer      the text of the answer of the question
      * @param bool   $isStudentAnswer true if it's a student answer false the empty question model
      *
      * @return array of information about the answer
@@ -842,29 +833,30 @@ class FillBlanks extends Question
     }
 
     /**
-    * Return an array of student state answers for fill the blank questions
-    * for each students that answered the question
-    * -2  : didn't answer
-    * -1  : student answer is wrong
-    *  0  : student answer is correct
-    * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer indice is 0)
-    *
-    * @param integer $testId
-    * @param integer $questionId
-    * @param $studentsIdList
-    * @param string $startDate
-    * @param string $endDate
-    * @param bool $useLastAnsweredAttempt
-    * @return array
-    * (
-    *     [student_id] => Array
-    *         (
-    *             [first fill the blank for question] => -1
-    *             [second fill the blank for question] => 2
-    *             [third fill the blank for question] => -1
-    *         )
-    * )
-    */
+     * Return an array of student state answers for fill the blank questions
+     * for each students that answered the question
+     * -2  : didn't answer
+     * -1  : student answer is wrong
+     *  0  : student answer is correct
+     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer indice is 0).
+     *
+     * @param int $testId
+     * @param int $questionId
+     * @param $studentsIdList
+     * @param string $startDate
+     * @param string $endDate
+     * @param bool   $useLastAnsweredAttempt
+     *
+     * @return array
+     *               (
+     *               [student_id] => Array
+     *               (
+     *               [first fill the blank for question] => -1
+     *               [second fill the blank for question] => 2
+     *               [third fill the blank for question] => -1
+     *               )
+     *               )
+     */
     public static function getFillTheBlankTabResult(
         $testId,
         $questionId,
@@ -949,18 +941,20 @@ class FillBlanks extends Question
     }
 
     /**
-     * Return the number of student that give at leat an answer in the fill the blank test
+     * Return the number of student that give at leat an answer in the fill the blank test.
+     *
      * @param array $resultList
+     *
      * @return int
      */
     public static function getNbResultFillBlankAll($resultList)
     {
         $outRes = 0;
         // for each student in group
-        foreach ($resultList as $userId => $tabValue) {
+        foreach ($resultList as $list) {
             $found = false;
             // for each bracket, if student has at least one answer ( choice > -2) then he pass the question
-            foreach ($tabValue as $i => $choice) {
+            foreach ($list as $choice) {
                 if ($choice > -2 && !$found) {
                     $outRes++;
                     $found = true;
@@ -972,7 +966,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * Replace the occurrence of blank word with [correct answer][student answer][answer is correct]
+     * Replace the occurrence of blank word with [correct answer][student answer][answer is correct].
+     *
      * @param array $listWithStudentAnswer
      *
      * @return string
@@ -998,7 +993,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * This function is the same than the js one above getBlankSeparatorRegexp
+     * This function is the same than the js one above getBlankSeparatorRegexp.
+     *
      * @param string $inChar
      *
      * @return string
@@ -1035,7 +1031,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * return $text protected for use in regexp
+     * return $text protected for use in regexp.
+     *
      * @param string $text
      *
      * @return string
@@ -1073,7 +1070,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * This function must be the same than the js one getSeparatorFromNumber above
+     * This function must be the same than the js one getSeparatorFromNumber above.
+     *
      * @return array
      */
     public static function getAllowedSeparator()
@@ -1090,7 +1088,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * return the start separator for answer
+     * return the start separator for answer.
+     *
      * @param string $number
      *
      * @return string
@@ -1103,7 +1102,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * return the end separator for answer
+     * return the end separator for answer.
+     *
      * @param string $number
      *
      * @return string
@@ -1117,7 +1117,8 @@ class FillBlanks extends Question
 
     /**
      * Return as a description text, array of allowed separators for question
-     * eg: array("[...]", "(...)")
+     * eg: array("[...]", "(...)").
+     *
      * @return array
      */
     public static function getAllowedSeparatorForSelect()
@@ -1132,7 +1133,8 @@ class FillBlanks extends Question
     }
 
     /**
-     * return the code number of the separator for the question
+     * return the code number of the separator for the question.
+     *
      * @param string $startSeparator
      * @param string $endSeparator
      *
@@ -1154,11 +1156,13 @@ class FillBlanks extends Question
     }
 
     /**
-     * return the HTML display of the answer
+     * return the HTML display of the answer.
+     *
      * @param string $answer
-     * @param int $feedbackType
-     * @param bool $resultsDisabled
-     * @param bool $showTotalScoreAndUserChoices
+     * @param int    $feedbackType
+     * @param bool   $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
+     *
      * @return string
      */
     public static function getHtmlDisplayForAnswer(
@@ -1171,10 +1175,9 @@ class FillBlanks extends Question
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $resultsDisabled = true;
             if ($showTotalScoreAndUserChoices) {
                 $resultsDisabled = false;
-            } else {
-                $resultsDisabled = true;
             }
         }
 
@@ -1213,13 +1216,15 @@ class FillBlanks extends Question
     }
 
     /**
-     * return the HTML code of answer for correct and wrong answer
+     * return the HTML code of answer for correct and wrong answer.
+     *
      * @param string $answer
      * @param string $correct
      * @param string $right
-     * @param int $feedbackType
-     * @param bool $resultsDisabled
-     * @param bool $showTotalScoreAndUserChoices
+     * @param int    $feedbackType
+     * @param bool   $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
+     *
      * @return string
      */
     public static function getHtmlAnswer(
@@ -1231,15 +1236,14 @@ class FillBlanks extends Question
         $showTotalScoreAndUserChoices = false
     ) {
         $hideExpectedAnswer = false;
-        if ($feedbackType == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
+        if ($feedbackType == 0 && $resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
             $hideExpectedAnswer = true;
         }
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $hideExpectedAnswer = true;
             if ($showTotalScoreAndUserChoices) {
                 $hideExpectedAnswer = false;
-            } else {
-                $hideExpectedAnswer = true;
             }
         }
 
@@ -1265,16 +1269,16 @@ class FillBlanks extends Question
                 $correctAnswerHtml .= ")</span>";
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-                $listCorrects = explode("||", $correct);
+                $listCorrects = explode('||', $correct);
                 $firstCorrect = $correct;
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span class='feedback-red'>" . $firstCorrect . "</span>";
+                $correctAnswerHtml = "<span class='feedback-red'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span class='feedback-green'>" . $correct . "</span>";
+                $correctAnswerHtml = "<span class='feedback-green'>".$correct."</span>";
         }
 
         if ($hideExpectedAnswer) {
@@ -1282,7 +1286,7 @@ class FillBlanks extends Question
         }
 
         $result = "<span class='feedbaak-question'>";
-        $result .= $iconAnswer . "<span class='$style'>" . $answer . "</span>";
+        $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
         $result .= "<span class='feedback-separator'> / </span>";
         $result .= $correctAnswerHtml;
         $result .= "</span>";
@@ -1291,12 +1295,13 @@ class FillBlanks extends Question
     }
 
     /**
-     * return HTML code for correct answer
+     * return HTML code for correct answer.
+     *
      * @param string $answer
      * @param string $correct
      * @param string $feedbackType
-     * @param bool $resultsDisabled
-     * @param bool $showTotalScoreAndUserChoices
+     * @param bool   $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
      *
      * @return string
      */
@@ -1318,11 +1323,13 @@ class FillBlanks extends Question
     }
 
     /**
-     * return HTML code for wrong answer
+     * return HTML code for wrong answer.
+     *
      * @param string $answer
      * @param string $correct
      * @param string $feedbackType
      * @param bool   $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
      *
      * @return string
      */
@@ -1344,8 +1351,10 @@ class FillBlanks extends Question
     }
 
     /**
-     * Check if a answer is correct by its text
+     * Check if a answer is correct by its text.
+     *
      * @param string $answerText
+     *
      * @return bool
      */
     public static function isCorrect($answerText)
@@ -1364,8 +1373,10 @@ class FillBlanks extends Question
     }
 
     /**
-     * Clear the answer entered by student
+     * Clear the answer entered by student.
+     *
      * @param string $answer
+     *
      * @return string
      */
     public static function clearStudentAnswer($answer)
@@ -1376,5 +1387,20 @@ class FillBlanks extends Question
         $answer = strtr($answer, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
 
         return trim($answer);
+    }
+
+    /**
+     * Removes double spaces between words.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    private static function trimOption($text)
+    {
+        $text = trim($text);
+        $text = preg_replace("/\s+/", " ", $text);
+
+        return $text;
     }
 }

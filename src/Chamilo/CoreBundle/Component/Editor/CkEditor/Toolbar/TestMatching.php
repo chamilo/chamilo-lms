@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestFreeAnswer toolbar configuration
+ * TestFreeAnswer toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestMatching extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -25,7 +26,7 @@ class TestMatching extends Basic
 
         $config['fullPage'] = false;
         $config['extraPlugins'] = 'wordcount';
-        $config['wordcount'] = array(
+        $config['wordcount'] = [
             // Whether or not you want to show the Word Count
             'showWordCount' => true,
             // Whether or not you want to show the Char Count
@@ -33,8 +34,8 @@ class TestMatching extends Basic
             // Option to limit the characters in the Editor
             'charLimit' => 'unlimited',
             // Option to limit the words in the Editor
-            'wordLimit' => 'unlimited'
-        );
+            'wordLimit' => 'unlimited',
+        ];
 
         //$config['height'] = '200';
 
@@ -42,7 +43,8 @@ class TestMatching extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -62,12 +64,13 @@ class TestMatching extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -83,13 +86,14 @@ class TestMatching extends Basic
                 'Table',
                 'Subscript',
                 'Superscript',
-                'ShowBlocks'
-            ]
+                'ShowBlocks',
+            ],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -101,7 +105,7 @@ class TestMatching extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

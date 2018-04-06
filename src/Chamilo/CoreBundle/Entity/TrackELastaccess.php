@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackELastaccess
+ * TrackELastaccess.
  *
  * @ORM\Table(name="track_e_lastaccess", indexes={
  *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackELastaccess
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_user_id", type="integer", nullable=true)
      */
@@ -32,7 +32,7 @@ class TrackELastaccess
     private $accessDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
@@ -46,14 +46,14 @@ class TrackELastaccess
     private $accessTool;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_session_id", type="integer", nullable=true)
      */
     private $accessSessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_id", type="bigint")
      * @ORM\Id
@@ -61,12 +61,11 @@ class TrackELastaccess
      */
     private $accessId;
 
-
-
     /**
-     * Set accessUserId
+     * Set accessUserId.
      *
-     * @param integer $accessUserId
+     * @param int $accessUserId
+     *
      * @return TrackELastaccess
      */
     public function setAccessUserId($accessUserId)
@@ -77,9 +76,9 @@ class TrackELastaccess
     }
 
     /**
-     * Get accessUserId
+     * Get accessUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUserId()
     {
@@ -87,9 +86,10 @@ class TrackELastaccess
     }
 
     /**
-     * Set accessDate
+     * Set accessDate.
      *
      * @param \DateTime $accessDate
+     *
      * @return TrackELastaccess
      */
     public function setAccessDate($accessDate)
@@ -100,7 +100,7 @@ class TrackELastaccess
     }
 
     /**
-     * Get accessDate
+     * Get accessDate.
      *
      * @return \DateTime
      */
@@ -110,9 +110,10 @@ class TrackELastaccess
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackELastaccess
      */
     public function setCId($cId)
@@ -123,9 +124,9 @@ class TrackELastaccess
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -133,9 +134,10 @@ class TrackELastaccess
     }
 
     /**
-     * Set accessTool
+     * Set accessTool.
      *
      * @param string $accessTool
+     *
      * @return TrackELastaccess
      */
     public function setAccessTool($accessTool)
@@ -146,7 +148,7 @@ class TrackELastaccess
     }
 
     /**
-     * Get accessTool
+     * Get accessTool.
      *
      * @return string
      */
@@ -156,9 +158,10 @@ class TrackELastaccess
     }
 
     /**
-     * Set accessSessionId
+     * Set accessSessionId.
      *
-     * @param integer $accessSessionId
+     * @param int $accessSessionId
+     *
      * @return TrackELastaccess
      */
     public function setAccessSessionId($accessSessionId)
@@ -169,9 +172,9 @@ class TrackELastaccess
     }
 
     /**
-     * Get accessSessionId
+     * Get accessSessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessSessionId()
     {
@@ -179,9 +182,9 @@ class TrackELastaccess
     }
 
     /**
-     * Get accessId
+     * Get accessId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessId()
     {

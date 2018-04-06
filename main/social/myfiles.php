@@ -5,9 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * @author Juan Carlos Trabado herodoto@telefonica.net
+ *
  * @package chamilo.social
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -30,7 +30,7 @@ function denied_friend (element_input) {
 		beforeSend: function(objeto) {
 		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
-		url: "' . api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
+		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
 		data: "denied_friend_id="+friend_user_id,
 		success: function(datos) {
 		 $("div#"+name_div_id).hide("slow");
@@ -39,7 +39,7 @@ function denied_friend (element_input) {
 	});
 }
 function register_friend(element_input) {
-    if(confirm("' . get_lang('AddToFriends').'")) {
+    if(confirm("'.get_lang('AddToFriends').'")) {
     	name_button=$(element_input).attr("id");
     	name_div_id="id_"+name_button.substring(13);
     	user_id=name_div_id.split("_");
@@ -49,7 +49,7 @@ function register_friend(element_input) {
     		beforeSend: function(objeto) {
     		$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
     		type: "POST",
-    		url: "' . api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
+    		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
     		data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
     		success: function(datos) {  $("div#"+name_div_id).hide("slow");
     			$("form").submit()
@@ -60,8 +60,8 @@ function register_friend(element_input) {
 
 $(document).on("ready", function () {
     $("#el-finder").elfinder({
-        url: "' . api_get_path(WEB_LIBRARY_PATH).'elfinder/php/connector.php",
-        lang: "' . api_get_language_isocode().'",
+        url: "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/php/connector.php",
+        lang: "'.api_get_language_isocode().'",
         height: 600,
         resizable: false,
         rememberLastDir: false,
@@ -83,19 +83,19 @@ if (isset($_GET['cidReq'])) {
 
 if (api_get_setting('allow_social_tool') == 'true') {
     Session::write('this_section', SECTION_SOCIAL);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'profile.php',
-        'name' => get_lang('SocialNetwork')
-    );
+        'name' => get_lang('SocialNetwork'),
+    ];
 } else {
     Session::write('this_section', SECTION_COURSES);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'user_portal.php',
-        'name' => get_lang('MyCourses')
-    );
+        'name' => get_lang('MyCourses'),
+    ];
 }
 
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyFiles')];
 
 $tpl = new Template();
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');

@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -20,7 +19,7 @@ if (api_get_setting('gradebook_enable_grade_model') != 'true') {
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -28,13 +27,13 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action === 'add') {
-    $interbreadcrumb[] = array('url' => 'grade_models.php', 'name' => get_lang('GradeModel'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+    $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array('url' => 'grade_models.php', 'name' => get_lang('GradeModel'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradeModel'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GradeModel')];
 }
 
 $htmlHeadXtra[] = '<script>
@@ -74,36 +73,36 @@ Display::display_header();
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('Name'),
     get_lang('Description'),
     get_lang('Actions'),
-);
+];
 
 //Column config
-$column_model = array(
-    array(
+$column_model = [
+    [
         'name' => 'name',
         'index' => 'name',
         'width' => '80',
-        'align' => 'left'
-    ),
-    array(
+        'align' => 'left',
+    ],
+    [
         'name' => 'description',
         'index' => 'description',
         'width' => '500',
         'align' => 'left',
-        'sortable' => 'false'
-    ),
-    array(
+        'sortable' => 'false',
+    ],
+    [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '100',
         'align' => 'left',
         'formatter' => 'action_formatter',
-        'sortable' => 'false'
-    )
-);
+        'sortable' => 'false',
+    ],
+];
 
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -127,7 +126,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     );
@@ -144,13 +143,13 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $obj->return_form($url, 'add');
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $obj->save($values);
+                $res = $obj->save($values);
                 if ($res) {
                     echo Display::return_message(get_lang('ItemAdded'), 'confirm');
                 }
@@ -163,13 +162,13 @@ switch ($action) {
                 '</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $obj->return_form($url, 'edit');
 
         // The validation or display
@@ -187,7 +186,7 @@ switch ($action) {
                 '</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;

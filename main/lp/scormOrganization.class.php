@@ -2,26 +2,29 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Container for the scormOrganization class
+ * Container for the scormOrganization class.
+ *
  * @package chamilo.learnpath.scorm
- * @author	Yannick Warnier <ywarnier@beeznest.org>
+ *
+ * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 
 /**
- * Class defining the <organization> tag in an imsmanifest.xml file
+ * Class defining the <organization> tag in an imsmanifest.xml file.
  */
 class scormOrganization
 {
     public $identifier = '';
     public $structure = '';
     public $title = '';
-    public $items = array();
+    public $items = [];
     public $metadata;
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'),
      * will create a scormOrganization
-     * object from database records or from the DOM element given as parameter
+     * object from database records or from the DOM element given as parameter.
+     *
      * @param    string    Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param    mixed    Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
@@ -32,10 +35,9 @@ class scormOrganization
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.
-                    return false;
+                    break;
                 case 'manifest': // Do the same as the default.
                 default:
-                    // if ($first_item->type == XML_ELEMENT_NODE)
                     // this is already check prior to the call to this function.
                     $children = $element->childNodes;
                     foreach ($children as $child) {
@@ -90,24 +92,20 @@ class scormOrganization
                             }
                         }
                     }
-
-                    return true;
             }
-
             // End parsing using PHP5 DOMXML methods.
         }
-
-        return false;
     }
 
     /**
-     * Get a flat list of items in the organization
-     * @return    array    Array containing an ordered list of all items with
-     * their level and all information related to each item
+     * Get a flat list of items in the organization.
+     *
+     * @return array Array containing an ordered list of all items with
+     *               their level and all information related to each item
      */
     public function get_flat_items_list()
     {
-        $list = array();
+        $list = [];
         $i = 1;
         foreach ($this->items as $id => $dummy) {
             $abs_order = 0;
@@ -120,8 +118,9 @@ class scormOrganization
     }
 
     /**
-     * Name getter
-     * @return    string    Name or empty string
+     * Name getter.
+     *
+     * @return string Name or empty string
      */
     public function get_name()
     {
@@ -133,8 +132,9 @@ class scormOrganization
     }
 
     /**
-     * Reference identifier getter
-     * @return    string    Identifier or empty string
+     * Reference identifier getter.
+     *
+     * @return string Identifier or empty string
      */
     public function get_ref()
     {
@@ -146,8 +146,9 @@ class scormOrganization
     }
 
     /**
-     * Sets the title element
-     * @param    string $title New title to set
+     * Sets the title element.
+     *
+     * @param string $title New title to set
      */
     public function set_name($title)
     {

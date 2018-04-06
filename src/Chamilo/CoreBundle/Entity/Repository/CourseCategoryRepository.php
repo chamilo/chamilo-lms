@@ -7,14 +7,17 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * Class CCourseCategoryRepository
+ * Class CCourseCategoryRepository.
+ *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CourseCategoryRepository extends EntityRepository
 {
     /**
-     * Get all course categories in an access url
+     * Get all course categories in an access url.
+     *
      * @param int $accessUrl
+     *
      * @return array
      */
     public function findAllInAccessUrl($accessUrl)
@@ -36,7 +39,8 @@ class CourseCategoryRepository extends EntityRepository
     }
 
     /**
-     * Get the number of course categories in an access url
+     * Get the number of course categories in an access url.
+     *
      * @return int
      */
     public function countAllInAccessUrl($accessUrl)

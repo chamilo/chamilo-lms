@@ -4,12 +4,14 @@
 use ChamiloSession as Session;
 
 /**
- * This file generates the ActionScript variables code used by the HotSpot .swf
+ * This file generates the ActionScript variables code used by the HotSpot .swf.
+ *
  * @package chamilo.exercise
+ *
  * @author Toon Keppens
+ *
  * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
  */
-
 session_cache_limiter("none");
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -65,7 +67,7 @@ $data['lang'] = [
     'CloseDelineation' => get_lang('CloseDelineation'),
     'Oar' => get_lang('Oar'),
     'ClosePolygon' => get_lang('ClosePolygon'),
-    'DelineationStatus1' => get_lang('DelineationStatus1')
+    'DelineationStatus1' => get_lang('DelineationStatus1'),
 ];
 $data['image'] = $objQuestion->selectPicturePath();
 $data['image_width'] = $pictureWidth;

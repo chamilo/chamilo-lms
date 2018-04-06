@@ -11,6 +11,7 @@
  * @author Patrick Cool, show group comment under the group name
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
+ *
  * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -62,7 +63,7 @@ if (isset($_GET['action'])) {
 }
 
 /*	Header */
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
 if ($origin != 'learnpath') {
     // So we are not in learnpath tool
@@ -104,7 +105,6 @@ $actions .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf"
 
 $actions .= '<a href="group.php?'.api_get_cidreq().'">'.
     Display::return_icon('group.png', get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
-
 
 $actions .= '<a href="../user/user.php?'.api_get_cidreq().'">'.
 Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';

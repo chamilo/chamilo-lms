@@ -5,11 +5,10 @@ namespace Chamilo\ThemeBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class ContextListener
+ * Class ContextListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class ContextListener
@@ -25,7 +24,7 @@ class ContextListener
     public function onRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        $uri     = $request->getPathInfo();
+        $uri = $request->getPathInfo();
         if (!preg_match('!'.$this->indicator.'!', $uri)) {
             return;
         }

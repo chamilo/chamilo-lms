@@ -3,12 +3,12 @@
 
 /**
  * Class SelectLanguage
- * A dropdownlist with all languages to use with QuickForm
+ * A dropdownlist with all languages to use with QuickForm.
  */
 class SelectLanguage extends HTML_QuickForm_select
 {
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct(
         $elementName = null,
@@ -29,7 +29,7 @@ class SelectLanguage extends HTML_QuickForm_select
                 $defaultValue = api_get_setting('platformLanguage');
             }
             if ($languages['folder'][$index] == $defaultValue) {
-                $this->addOption($name, $languages['folder'][$index], array('selected'=>'selected'));
+                $this->addOption($name, $languages['folder'][$index], ['selected' => 'selected']);
             } else {
                 $this->addOption($name, $languages['folder'][$index]);
             }

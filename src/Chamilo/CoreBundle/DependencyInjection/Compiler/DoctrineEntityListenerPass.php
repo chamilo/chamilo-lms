@@ -7,7 +7,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class DoctrineEntityListenerPass
+ * Class DoctrineEntityListenerPass.
+ *
  * @package Chamilo\CoreBundle\DependencyInjection\Compiler
  */
 class DoctrineEntityListenerPass implements CompilerPassInterface
@@ -20,7 +21,7 @@ class DoctrineEntityListenerPass implements CompilerPassInterface
         foreach ($services as $service => $attributes) {
             $definition->addMethodCall(
                 'addMapping',
-                array($container->getDefinition($service)->getClass(), $service)
+                [$container->getDefinition($service)->getClass(), $service]
             );
         }
     }

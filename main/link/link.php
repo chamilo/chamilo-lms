@@ -15,9 +15,9 @@
  * @author Julio Montoya code rewritten
  * @author Patrick Cool
  * @author René Haentjens, added CSV file import (October 2004)
+ *
  * @package chamilo.link
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_LINK;
 
@@ -71,20 +71,20 @@ $condition_session = api_get_session_condition($session_id, true, true);
 
 if ($action === 'addlink') {
     $nameTools = '';
-    $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddLink'));
+    $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddLink')];
 }
 
 if ($action === 'addcategory') {
     $nameTools = '';
-    $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddCategory'));
+    $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddCategory')];
 }
 
 if ($action === 'editlink') {
     $nameTools = '';
-    $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditLink'));
+    $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditLink')];
 }
 
 // Statistics
@@ -107,7 +107,9 @@ switch ($action) {
             $form = Link::getLinkForm(null, 'addlink', $token);
             if ($form->validate() && Security::check_token('get')) {
                 // Here we add a link
-                Link::addlinkcategory("link");
+                $linkId = Link::addlinkcategory('link');
+                Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+
                 Security::clear_token();
                 header('Location: '.$linkListUrl);
                 exit;
@@ -119,6 +121,7 @@ switch ($action) {
         $form = Link::getLinkForm($id, 'editlink');
         if ($form->validate()) {
             Link::editLink($id, $form->getSubmitValues());
+            Skill::saveSkills($form, ITEM_TYPE_LINK, $id);
             header('Location: '.$linkListUrl);
             exit;
         }

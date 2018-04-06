@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Skill list for management
+ * Skill list for management.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -110,9 +111,8 @@ switch ($action) {
         exit;
         break;
     case 'list':
-        // no break
     default:
-        $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+        $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
         $toolbar = Display::url(
             Display::return_icon(

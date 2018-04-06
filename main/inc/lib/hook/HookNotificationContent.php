@@ -3,14 +3,14 @@
 
 /**
  * Class HookNotificationContent
- * Hook Event class for Content format of Notifications
- * @package chamilo.library.hook
+ * Hook Event class for Content format of Notifications.
  *
+ * @package chamilo.library.hook
  */
 class HookNotificationContent extends HookEvent implements HookNotificationContentEventInterface
 {
     /**
-     * Construct
+     * Construct.
      */
     protected function __construct()
     {

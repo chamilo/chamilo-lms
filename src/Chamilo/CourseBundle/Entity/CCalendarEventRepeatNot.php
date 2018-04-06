@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CCalendarEventRepeatNot
+ * CCalendarEventRepeatNot.
  *
  * @ORM\Table(
  *  name="c_calendar_event_repeat_not",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventRepeatNot
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,32 +28,31 @@ class CCalendarEventRepeatNot
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_id", type="integer")
      */
     private $calId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_date", type="integer")
      */
     private $calDate;
 
-
-
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CCalendarEventRepeatNot
      */
     public function setCId($cId)
@@ -64,9 +63,9 @@ class CCalendarEventRepeatNot
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -74,9 +73,10 @@ class CCalendarEventRepeatNot
     }
 
     /**
-     * Set calId
+     * Set calId.
      *
-     * @param integer $calId
+     * @param int $calId
+     *
      * @return CCalendarEventRepeatNot
      */
     public function setCalId($calId)
@@ -87,9 +87,9 @@ class CCalendarEventRepeatNot
     }
 
     /**
-     * Get calId
+     * Get calId.
      *
-     * @return integer
+     * @return int
      */
     public function getCalId()
     {
@@ -97,9 +97,10 @@ class CCalendarEventRepeatNot
     }
 
     /**
-     * Set calDate
+     * Set calDate.
      *
-     * @param integer $calDate
+     * @param int $calDate
+     *
      * @return CCalendarEventRepeatNot
      */
     public function setCalDate($calDate)
@@ -110,9 +111,9 @@ class CCalendarEventRepeatNot
     }
 
     /**
-     * Get calDate
+     * Get calDate.
      *
-     * @return integer
+     * @return int
      */
     public function getCalDate()
     {

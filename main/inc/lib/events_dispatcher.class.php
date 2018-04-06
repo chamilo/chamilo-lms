@@ -3,20 +3,21 @@
 /**
  *  Class EventsDispatcher
  * Entry point for every event in the application.
+ *
  * @deprecated to be removed in 2.x
  * Fires the functions linked to the events according to the event's conf.
  * Every function got its own filter, it's fired inside the functiones fired
  * by this class. The filter config is next to the event config, in conf/events.conf.php
- *
  */
 class EventsDispatcher
 {
     /**
      * @param string $event_name
-     * @param array $event_data
+     * @param array  $event_data
+     *
      * @return bool
      */
-    public static function events($event_name, $event_data = array())
+    public static function events($event_name, $event_data = [])
     {
         global $event_config;
         // get the config for the event passed in parameter ($event_name)

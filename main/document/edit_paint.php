@@ -7,11 +7,13 @@ use ChamiloSession as Session;
  * This file allows creating new svg and png documents with an online editor.
  *
  * @package chamilo.document
+ *
  * @todo used the document_id instead of the curdirpath
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 30/january/2011
-*/
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -81,10 +83,10 @@ if (!is_dir($filepath)) {
 
 //groups //TODO:clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace'),
-    );
+    ];
     $group_document = true;
     $noPHP_SELF = true;
 }
@@ -92,31 +94,31 @@ if (!empty($groupId)) {
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 if (!$is_certificate_mode) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
-        "name" => get_lang('Documents')
-    );
+        "name" => get_lang('Documents'),
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook')
-    );
+        'name' => get_lang('Gradebook'),
+    ];
 }
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    $interbreadcrumb[] = ['url' => '#', 'name' => $document_data['title']];
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
         if ($document_data['title'] == $document_sub_data['title']) {
             continue;
         }
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = ['url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']];
     }
 }
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $groupRights ||
-	DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
@@ -134,7 +136,7 @@ echo '</div>';
 
 ///pixlr
 $title = $file; //disk name. No sql name because pixlr return this when save
-$pixlr_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
+$pixlr_code_translation_table = ['' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn'];
 $langpixlr = api_get_language_isocode();
 $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_translation_table[$langpixlr] : $langpixlr;
 $loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
@@ -156,7 +158,7 @@ if ($_SERVER['HTTP_HOST'] == "localhost") {
                 <allow-access-from domain="cdn.pixlr.com" />
                 <site-control permitted-cross-domain-policies="master-only"/>
                 <allow-http-request-headers-from domain="cnd.pixlr.com" headers="*" secure="true"/>
-            </cross-domain-policy>';//more open domain="*"
+            </cross-domain-policy>'; //more open domain="*"
         @file_put_contents($path_and_file, $crossdomain);
     }
     $credentials = "true";
@@ -174,7 +176,7 @@ if (!file_exists($temp_folder)) {
 $htaccess = api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess';
 if (!file_exists($htaccess)) {
     $htaccess_content = "order deny,allow\r\nallow from all\r\nOptions -Indexes";
-    $fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess', 'w');
+    $fp = @fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess', 'w');
     if ($fp) {
         fwrite($fp, $htaccess_content);
         fclose($fp);
@@ -184,7 +186,7 @@ if (!file_exists($htaccess)) {
 $html_index = api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html';
 if (!file_exists($html_index)) {
     $html_index_content = "<html><head></head><body></body></html>";
-    $fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html', 'w');
+    $fp = @fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html', 'w');
     if ($fp) {
         fwrite($fp, $html_index_content);
         fclose($fp);

@@ -2,9 +2,8 @@
 /**
 * PHPMailer language file: refer to English translation for definitive list
 * Chinese Version
-* By LiuXin: www.80x86.cn/blog/
+* By LiuXin: www.80x86.cn/blog/.
 */
-
 $PHPMAILER_LANG['authenticate'] = 'SMTP 错误：身份验证失败。';
 $PHPMAILER_LANG['connect_host'] = 'SMTP 错误: 不能连接SMTP主机。';
 $PHPMAILER_LANG['data_not_accepted'] = 'SMTP 错误: 数据不可接受。';
@@ -23,4 +22,3 @@ $PHPMAILER_LANG['recipients_failed'] = 'SMTP 错误： 下面的 收件人失败
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

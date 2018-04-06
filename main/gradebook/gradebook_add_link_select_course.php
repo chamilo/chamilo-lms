@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -36,10 +36,10 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
-    'name' => get_lang('Gradebook')
-);
+    'name' => get_lang('Gradebook'),
+];
 Display :: display_header(get_lang('NewCategory'));
 $form->display();
 Display :: display_footer();

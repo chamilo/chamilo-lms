@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  * @package chamilo.tracking
  */
-
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 
 // Including the global initialization file
@@ -54,7 +53,7 @@ if (api_is_drh()) {
             null
         );
 
-        $coursesFromSessionCodeList = array();
+        $coursesFromSessionCodeList = [];
         if (!empty($coursesFromSession)) {
             foreach ($coursesFromSession as $course) {
                 $coursesFromSessionCodeList[$course['code']] = $course['code'];
@@ -91,10 +90,10 @@ if ($export_csv) {
     ob_start();
 }
 $columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
-$columnsToHide = empty($columnsToHideFromSetting) ? array(0, 8, 9, 10, 11) : $columnsToHideFromSetting;
+$columnsToHide = empty($columnsToHideFromSetting) ? [0, 8, 9, 10, 11] : $columnsToHideFromSetting;
 $columnsToHide = json_encode($columnsToHide);
 
-$csv_content = array();
+$csv_content = [];
 // Database table definitions.
 //@todo remove this calls
 $TABLETRACK_DOWNLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
@@ -108,18 +107,18 @@ $sessionId = api_get_session_id();
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => '../admin/index.php',
-        'name' => get_lang('PlatformAdmin')
-    );
-    $interbreadcrumb[] = array(
+        'name' => get_lang('PlatformAdmin'),
+    ];
+    $interbreadcrumb[] = [
         'url' => '../session/session_list.php',
-        'name' => get_lang('SessionList')
-    );
-    $interbreadcrumb[] = array(
+        'name' => get_lang('SessionList'),
+    ];
+    $interbreadcrumb[] = [
         'url' => '../session/resume_session.php?id_session='.$sessionId,
-        'name' => get_lang('SessionOverview')
-    );
+        'name' => get_lang('SessionOverview'),
+    ];
 }
 
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
@@ -150,24 +149,24 @@ Display::display_header($nameTools, 'Tracking');
 $actionsLeft = Display::return_icon(
     'user_na.png',
     get_lang('StudentsTracking'),
-    array(),
+    [],
     ICON_SIZE_MEDIUM
 );
 $actionsLeft .= Display::url(
-    Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('group.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
     'course_log_groups.php?'.api_get_cidreq()
 );
 $actionsLeft .= Display::url(
-    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('course.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
     'course_log_tools.php?'.api_get_cidreq()
 );
 
 $actionsLeft .= Display::url(
-    Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('tools.png', get_lang('ResourcesTracking'), [], ICON_SIZE_MEDIUM),
     'course_log_resources.php?'.api_get_cidreq()
 );
 $actionsLeft .= Display::url(
-    Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
 );
 
@@ -195,7 +194,7 @@ $form_search = new FormValidator(
     'GET',
     api_get_path(WEB_CODE_PATH).'tracking/total_time.php?'.api_get_cidreq(),
     '',
-    array(),
+    [],
     FormValidator::LAYOUT_INLINE
 );
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
@@ -213,20 +212,20 @@ if ($session_id) {
     $titleSession = Display::return_icon(
         'session.png',
         get_lang('Session'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.api_get_session_name($session_id);
     $titleCourse = Display::return_icon(
         'course.png',
         get_lang('Course'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.$course_name;
 } else {
     $titleSession = Display::return_icon(
         'course.png',
         get_lang('Course'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.$courseInfo['name'];
 }
@@ -289,15 +288,14 @@ $html .= Display::page_subheader2(get_lang('StudentList'));
 $is_western_name_order = api_is_western_name_order();
 
 if (count($a_students) > 0) {
-
-    $all_datas = array();
+    $all_datas = [];
     $course_code = $_course['id'];
     $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
         'users_tracking',
-        array('TrackingCourseLog', 'get_number_of_users'),
-        array('TrackingCourseLog', 'getTotalTimeReport'),
+        ['TrackingCourseLog', 'get_number_of_users'],
+        ['TrackingCourseLog', 'getTotalTimeReport'],
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );
 
@@ -306,7 +304,7 @@ if (count($a_students) > 0) {
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
-    $headers = array();
+    $headers = [];
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
     $headers['official_code'] = get_lang('OfficialCode');
@@ -325,14 +323,12 @@ if (count($a_students) > 0) {
     $headers['login'] = get_lang('Login');
 
     $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['training_time'] = get_lang('TrainingTime');
 
-
     $table->set_header(5, get_lang('TotalLPTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('TotalLPTime'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('TotalLPTime'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['total_time_lp'] = get_lang('TotalLPTime');
-
 
     $table->set_header(6, get_lang('FirstLoginInCourse'), false);
     $headers['first_login'] = get_lang('FirstLoginInCourse');

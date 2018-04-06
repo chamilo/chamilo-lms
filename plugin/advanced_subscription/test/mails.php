@@ -1,10 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * A script to render all mails templates
+ * A script to render all mails templates.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
-
 require_once __DIR__.'/../config.php';
 
 // Protect test
@@ -25,33 +25,32 @@ $data['profile_completed'] = 90.0;
 $data['sessionId'] = 1;
 $data['studentUserId'] = 4;
 
-
 // Prepare data
 // Get session data
 // Assign variables
-$fieldsArray = array(
+$fieldsArray = [
     'description',
     'target',
     'mode',
     'publication_end_date',
     'recommended_number_of_participants',
-);
+];
 $sessionArray = api_get_session_info($data['sessionId']);
 $extraSession = new ExtraFieldValue('session');
 $extraField = new ExtraField('session');
 // Get session fields
-$fieldList = $extraField->get_all(array(
-    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
-));
-$fields = array();
+$fieldList = $extraField->get_all([
+    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray,
+]);
+$fields = [];
 // Index session fields
 foreach ($fieldList as $field) {
     $fields[$field['id']] = $field['variable'];
 }
 
-$mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
+$mergedArray = array_merge([$data['sessionId']], array_keys($fields));
 $sessionFieldValueList = $extraSession->get_all(
-    array('item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray)
+    ['item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray]
 );
 foreach ($sessionFieldValueList as $sessionFieldValue) {
     // Check if session field value is set in session field list
@@ -98,7 +97,7 @@ $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED;
 $data['student']['rejectUrl'] = $plugin->getQueueUrl($data);
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('data', $data);
-$tplParams = array(
+$tplParams = [
     'user',
     'student',
     'students',
@@ -109,8 +108,8 @@ $tplParams = array(
     'signature',
     'admin_view_url',
     'acceptUrl',
-    'rejectUrl'
-);
+    'rejectUrl',
+];
 foreach ($tplParams as $tplParam) {
     $tpl->assign($tplParam, $data[$tplParam]);
 }
@@ -120,7 +119,7 @@ $files = scandir($dir);
 
 echo '<br>', '<pre>', print_r($files, 1), '</pre>';
 
-foreach ($files as $k =>&$file) {
+foreach ($files as $k => &$file) {
     if (
         is_file($dir.$file) &&
         strpos($file, '.tpl') &&

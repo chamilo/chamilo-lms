@@ -4,34 +4,36 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestQuestionDescription toolbar configuration
+ * TestQuestionDescription toolbar configuration.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestQuestionDescription extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-            array('name' => 'document', 'groups' =>array('document', 'doctools')),
-            array('name' => 'clipboard', 'groups' =>array('clipboard', 'undo')),
-            array('name' => 'editing', 'groups' =>array('clipboard', 'undo')),
+        $config['toolbarGroups'] = [
+            ['name' => 'document', 'groups' => ['document', 'doctools']],
+            ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
+            ['name' => 'editing', 'groups' => ['clipboard', 'undo']],
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
-            array('name' => 'basicstyles', 'groups' =>array('basicstyles', 'cleanup')),
-            array('name' => 'paragraph', 'groups' =>array('list', 'indent', 'blocks', 'align')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
+            ['name' => 'links'],
+            ['name' => 'insert'],
             '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')
-        );
+            ['name' => 'styles'],
+            ['name' => 'colors'],
+            ['name' => 'tools'],
+            ['name' => 'others'],
+            ['name' => 'mode'],
+        ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
@@ -41,6 +43,7 @@ class TestQuestionDescription extends Basic
 
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
+
         return $config;
     }
 
@@ -49,7 +52,7 @@ class TestQuestionDescription extends Basic
      */
     public function getConditionalPlugins()
     {
-        $plugins = array();
+        $plugins = [];
         if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             $plugins[] = 'glossary';
         }
@@ -58,7 +61,8 @@ class TestQuestionDescription extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -80,7 +84,7 @@ class TestQuestionDescription extends Basic
                 'Smiley',
                 'SpecialChar',
                 'Asciimath',
-                'Asciisvg'
+                'Asciisvg',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -95,7 +99,8 @@ class TestQuestionDescription extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -109,12 +114,13 @@ class TestQuestionDescription extends Basic
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -125,9 +131,8 @@ class TestQuestionDescription extends Basic
             ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Styles','Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Source', 'Toolbarswitch']
+            ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            ['Source', 'Toolbarswitch'],
         ];
     }
-
 }

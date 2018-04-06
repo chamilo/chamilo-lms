@@ -25,7 +25,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 </style>
 <?php
 if (api_get_setting('stylesheets') != '') {
-?>
+    ?>
 	<style type="text/css" media="screen, projection">
 	/*<![CDATA[*/
 	@import "<?php echo api_get_path(WEB_CSS_PATH), api_get_setting('stylesheets'); ?>/default.css";
@@ -46,16 +46,16 @@ $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
 
 $fullpage = intval($_GET['fullpage']) != 0;
 $tags = HTML_QuickForm_Rule_HTML :: get_allowed_tags($html_type, $fullpage);
-$table_header = array();
-$table_header[] = array('tag', true);
-$table_header[] = array('attributes', false);
-foreach ($tags as $tag => & $attributes) {
-    $row = array();
+$table_header = [];
+$table_header[] = ['tag', true];
+$table_header[] = ['attributes', false];
+foreach ($tags as $tag => &$attributes) {
+    $row = [];
     $row[] = '<kbd>'.$tag.'</kbd>';
     $row[] = '<kbd>&nbsp;'.implode(', ', array_keys($attributes)).'</kbd>';
     $table_data[] = $row;
 }
-Display::display_sortable_table($table_header, $table_data, array(), array(), array('fullpage' => intval($_GET['fullpage'])));
+Display::display_sortable_table($table_header, $table_data, [], [], ['fullpage' => intval($_GET['fullpage'])]);
 ?>
 <div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 </div>

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Room
+ * Room.
  *
  * @ORM\Table(name="room")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Room
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -62,13 +62,13 @@ class Room
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
-     **/
+     */
     private $branch;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -76,7 +76,7 @@ class Room
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -90,7 +90,7 @@ class Room
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -109,6 +109,7 @@ class Room
 
     /**
      * @param string $description
+     *
      * @return Room
      */
     public function setDescription($description)
@@ -128,6 +129,7 @@ class Room
 
     /**
      * @param string $geolocation
+     *
      * @return Room
      */
     public function setGeolocation($geolocation)

@@ -3,15 +3,16 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script retrieves a list of terms that have xapian documents
- * related with the term passed
+ * related with the term passed.
+ *
  * @package chamilo.include.search
  */
-
-$terms_list = array();
+$terms_list = [];
 
 // verify parameter and return a right value to avoid problems parsing it
-if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'], array('or', 'and'))) {
+if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'], ['or', 'and'])) {
     echo json_encode($terms_list);
+
     return;
 }
 
@@ -19,14 +20,16 @@ require_once __DIR__.'../../../global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 
 /**
- * Search with filter and build base array avoiding repeated terms
- * @param array $filter XapianQuery array
+ * Search with filter and build base array avoiding repeated terms.
+ *
+ * @param array $filter          XapianQuery array
  * @param array $specific_fields
+ *
  * @return array $sf_terms
  */
 function get_usual_sf_terms($filter, $specific_fields)
 {
-    $sf_terms = array();
+    $sf_terms = [];
     $dkterms = chamilo_query_simple_query('', 0, 1000, $filter);
 
     if (is_array($dkterms) && is_array($dkterms[1])) {
@@ -41,6 +44,7 @@ function get_usual_sf_terms($filter, $specific_fields)
             }
         }
     }
+
     return $sf_terms;
 }
 
@@ -49,7 +53,7 @@ $prefix = $_GET['prefix'];
 $operator = $_GET['operator'];
 
 $specific_fields = get_specific_field_list();
-$sf_terms = array();
+$sf_terms = [];
 
 if (($cid = api_get_course_id()) != -1) { // with cid
     // course filter
@@ -82,13 +86,13 @@ if (($cid = api_get_course_id()) != -1) { // with cid
 // build array to return
 foreach ($sf_terms as $sf_prefix => $term_group) {
     //if (count($tem_group) > 0) {
-    $first_term = array('__all__' => ($operator == 'or' ? '-- Any --' : '-- All -- '));
+    $first_term = ['__all__' => ($operator == 'or' ? '-- Any --' : '-- All -- ')];
     //}
     if ($sf_prefix != $prefix) {
-        $terms_list[] = array(
+        $terms_list[] = [
             'prefix' => $sf_prefix,
             'terms' => array_merge($first_term, $term_group),
-        );
+        ];
     }
 }
 

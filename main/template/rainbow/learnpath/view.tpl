@@ -198,27 +198,13 @@
                         parentId = $panel.data('lp-parent') || 0,
                         id = $panel.data('lp-id') || 0;
 
-
                     if (!parentId) {
                         return;
                     }
 
                     $panel.appendTo('#scorm-panel-' + parentId);
 
-                    if($('#scorm-panel-' + parentId + ' #collapse-' + id).is('.in')){
-                        $('#heading-'+parentId).addClass('on');
-                    }
-
-
                     if ($('#collapse-' + id).is('.in')) {
-                        if($('#collapse-' + id + ' .section-list li').is('.scorm_highlight')){
-                            $('#heading-'+id).addClass('on');
-                        } else {
-                            $('#collapse-' + id +' .section-list li').click(function () {
-                                $('#heading-'+id).addClass('on');
-                            });
-                        }
-
                         $('#collapse-' + parentId).collapse('toggle');
                     }
                 });
@@ -239,24 +225,24 @@
             }
 
             {% if lp_mode == 'embedframe' %}
-                //$('#learning_path_main').addClass('lp-view-collapsed');
-                $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-                    e.preventDefault();
+            //$('#learning_path_main').addClass('lp-view-collapsed');
+            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
 
-                    $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
 
-                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                });
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+            });
             {% else %}
-                $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-                    e.preventDefault();
+            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
 
-                    $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
 
-                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-                });
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+            });
             {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -280,70 +266,70 @@
             LPViewUtils.setHeightLPToc();
 
             $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').animate({opacity: 0}, 500);
+                $('.lp-view-tabs').fadeOut();
             });
 
             $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
                 $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
 
-                $('.lp-view-tabs').animate({opacity: 1}, 500);
+                $('.lp-view-tabs').fadeIn();
             });
 
             loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
             checkCurrentItemPosition({{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_availables %}
-                // Loads the glossary library.
-                (function () {
-                    {% if show_glossary_in_documents == 'ismanual' %}
-                        $.frameReady(
-                            function () {
-                                //  $("<div>I am a div courses</div>").prependTo("body");
-                            },
-                            "top.content_name",
-                            {
-                                load: [
-                                    {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
-                                    {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
-                                    {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
-                                    {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
-                                    {{ fix_link }}
-                                ]
-                            }
-                        );
-                    {% elseif show_glossary_in_documents == 'isautomatic' %}
-                        $.frameReady(
-                            function () {
-                                //  $("<div>I am a div courses</div>").prependTo("body");
-                            },
-                            "top.content_name",
-                            {
-                                load: [
-                                    {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
-                                    {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
-                                    {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
-                                    {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
-                                    {{ fix_link }}
-                                ]
-                            }
-                        );
-                    {% elseif fix_link != '' %}
-                        $.frameReady(
-                            function () {
-                                //  $("<div>I am a div courses</div>").prependTo("body");
-                            },
-                            "top.content_name",
-                            {
-                                load: [
-                                    {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
-                                    {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
-                                    {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
-                                    {{ fix_link }}
-                                ]
-                            }
-                        );
-                    {% endif %}
-                })();
+            // Loads the glossary library.
+            (function () {
+                {% if show_glossary_in_documents == 'ismanual' %}
+                $.frameReady(
+                    function () {
+                        //  $("<div>I am a div courses</div>").prependTo("body");
+                    },
+                    "top.content_name",
+                    {
+                        load: [
+                            {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
+                            {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
+                            {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
+                            {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                            {{ fix_link }}
+                        ]
+                    }
+                );
+                {% elseif show_glossary_in_documents == 'isautomatic' %}
+                $.frameReady(
+                    function () {
+                        //  $("<div>I am a div courses</div>").prependTo("body");
+                    },
+                    "top.content_name",
+                    {
+                        load: [
+                            {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
+                            {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
+                            {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
+                            {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                            {{ fix_link }}
+                        ]
+                    }
+                );
+                {% elseif fix_link != '' %}
+                $.frameReady(
+                    function () {
+                        //  $("<div>I am a div courses</div>").prependTo("body");
+                    },
+                    "top.content_name",
+                    {
+                        load: [
+                            {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
+                            {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
+                            {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
+                            {{ fix_link }}
+                        ]
+                    }
+                );
+                {% endif %}
+            })();
             {% endif %}
 
             $('iframe#content_id').on('load', function () {

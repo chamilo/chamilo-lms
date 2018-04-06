@@ -3,11 +3,11 @@
 
 namespace Chamilo\SkillBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Level
+ * Level.
  *
  * @ORM\Table(name="skill_level")
  * @ORM\Entity
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Level
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -44,11 +44,10 @@ class Level
     protected $shortName;
 
     /**
-     *
      * @Gedmo\SortableGroup
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="level")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
-     **/
+     */
     protected $profile;
 
     /**
@@ -69,6 +68,7 @@ class Level
 
     /**
      * @param int $id
+     *
      * @return Level
      */
     public function setId($id)
@@ -88,6 +88,7 @@ class Level
 
     /**
      * @param string $name
+     *
      * @return Level
      */
     public function setName($name)
@@ -107,6 +108,7 @@ class Level
 
     /**
      * @param mixed $position
+     *
      * @return Level
      */
     public function setPosition($position)
@@ -126,6 +128,7 @@ class Level
 
     /**
      * @param mixed $shortName
+     *
      * @return Level
      */
     public function setShortName($shortName)
@@ -145,6 +148,7 @@ class Level
 
     /**
      * @param mixed $profile
+     *
      * @return Level
      */
     public function setProfile($profile)

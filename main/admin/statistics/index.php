@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This tool show global Statistics on general platform events
+ * This tool show global Statistics on general platform events.
+ *
  * @package chamilo.Statistics
  */
 $cidReset = true;
@@ -10,7 +11,7 @@ $cidReset = true;
 require_once __DIR__.'/../../inc/global.inc.php';
 api_protect_admin_script();
 
-$interbreadcrumb[] = array('url' => '../index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin')];
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 
@@ -20,7 +21,7 @@ if ($report) {
         <script>
             $(document).ready(function() {
                 $.ajax({
-                    url: "'. api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
+                    url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
                     type: "POST",
                     success: function(data) {
                         Chart.defaults.global.responsive = true;
@@ -101,14 +102,14 @@ switch ($report) {
         break;
     case 'users':
         // total amount of users
-        $teachers = $students = array();
+        $teachers = $students = [];
         $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
         Statistics::printStats(
             get_lang('NumberOfUsers'),
-            array(
+            [
                 get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
-                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible)
-            )
+                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
+            ]
         );
         foreach ($course_categories as $code => $name) {
             $name = str_replace(get_lang('Department'), "", $name);
@@ -136,7 +137,7 @@ switch ($report) {
         Statistics::printUsersNotLoggedInStats();
         break;
     case 'zombies':
-        ZombieReport::create(array('report' => 'zombies'))->display();
+        ZombieReport::create(['report' => 'zombies'])->display();
         break;
     case 'activities':
         Statistics::printActivitiesStats();

@@ -1,5 +1,5 @@
 <?php
 
 /**
- * @see tablesort.class.php 
+ * @see tablesort.class.php
  */

@@ -4,9 +4,11 @@
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 
 /**
- * Show information about the issued badge
+ * Show information about the issued badge.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -46,14 +48,11 @@ if (!$user || !$skill) {
     exit;
 }
 
-Skill::isAllowed($user->getId());
+if (!Skill::isToolAvailable()) {
+    api_not_allowed(true);
+}
 
 $showLevels = api_get_configuration_value('hide_skill_levels') === false;
-
-$userInfo = [
-    'id' => $user->getId(),
-    'complete_name' => $user->getCompleteName()
-];
 
 $skillInfo = [
     'id' => $skill->getId(),
@@ -62,7 +61,7 @@ $skillInfo = [
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
     'badge_image' => $skill->getWebIconPath(),
-    'courses' => []
+    'courses' => [],
 ];
 
 // Open Graph Markup
@@ -75,8 +74,9 @@ $htmlHeadXtra[] = "
 ";
 
 $currentUserId = api_get_user_id();
-$currentUser = $entityManager->find('ChamiloUserBundle:User', $currentUserId);
-$allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
+$currentUser = api_get_user_entity($currentUserId);
+$allowExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
+
 $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
 $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
 $currentSkillLevel = get_lang('NoLevelAcquiredYet');
@@ -104,7 +104,7 @@ $skillIssueInfo = [
     'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
     'badge_assertion' => $skillIssue->getAssertionUrl(),
     'comments' => [],
-    'feedback_average' => $skillIssue->getAverage()
+    'feedback_average' => $skillIssue->getAverage(),
 ];
 
 $skillIssueComments = $skillIssue->getComments(true);
@@ -120,7 +120,7 @@ foreach ($skillIssueComments as $comment) {
         'text' => $comment->getFeedbackText(),
         'value' => $comment->getFeedbackValue(),
         'giver_complete_name' => $comment->getFeedbackGiver()->getCompleteName(),
-        'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT)
+        'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT),
     ];
 }
 
@@ -155,7 +155,7 @@ if ($profile) {
     $profileId = $profile->getId();
 
     $levels = $skillLevelRepo->findBy([
-        'profile' => $profileId
+        'profile' => $profileId,
     ]);
 
     foreach ($levels as $level) {
@@ -170,7 +170,9 @@ if ($profile) {
     }
 }
 
-if ($showLevels) {
+$allowToEdit = Skill::isAllowed($user->getId(), false);
+
+if ($showLevels && $allowToEdit) {
     $formAcquiredLevel = new FormValidator('acquired_level');
     $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
     $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
@@ -179,7 +181,6 @@ if ($showLevels) {
 
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
-
         $level = $skillLevelRepo->find(intval($values['acquired_level']));
         $skillIssue->setAcquiredLevel($level);
 
@@ -205,11 +206,11 @@ $form->addHidden('user', $skillIssue->getUser()->getId());
 $form->addHidden('issue', $skillIssue->getId());
 $form->addButtonSend(get_lang('Send'));
 
-if ($form->validate() && $allowComment) {
+if ($form->validate() && $allowComment && $allowToEdit) {
     $values = $form->exportValues();
     $skillUserComment = new SkillRelUserComment();
     $skillUserComment
-        ->setFeedbackDateTime(new DateTime)
+        ->setFeedbackDateTime(new DateTime())
         ->setFeedbackGiver($currentUser)
         ->setFeedbackText($values['comment'])
         ->setFeedbackValue($values['value'] ? $values['value'] : null)
@@ -226,7 +227,7 @@ if ($form->validate() && $allowComment) {
 
 $badgeInfoError = '';
 $personalBadge = '';
-if ($allowDownloadExport) {
+if ($allowExport) {
     $backpack = 'https://backpack.openbadges.org/';
     $configBackpack = api_get_setting('openbadges_backpack');
 
@@ -260,7 +261,7 @@ if ($allowDownloadExport) {
             file_put_contents($bakedBadge."/badge_".$skillRelUserId.".png", $bakedInfo);
         }
 
-        //Process to validate a baked badge
+        // Process to validate a baked badge
         $badgeContent = file_get_contents($bakedBadge."/badge_".$skillRelUserId.".png");
         $verifyBakedBadge = $png->extractBadgeInfo($badgeContent);
         if (!is_array($verifyBakedBadge)) {
@@ -277,19 +278,23 @@ if ($allowDownloadExport) {
 $template = new Template(get_lang('IssuedBadgeInformation'));
 $template->assign('issue_info', $skillIssueInfo);
 $template->assign('allow_comment', $allowComment);
-$template->assign('allow_download_export', $allowDownloadExport);
-$template->assign('comment_form', $form->returnForm());
-if ($showLevels) {
-    $template->assign('acquired_level_form', $formAcquiredLevel->returnForm());
+$template->assign('allow_export', $allowExport);
+
+$commentForm = '';
+if ($allowComment && $allowToEdit) {
+    $commentForm = $form->returnForm();
 }
+$template->assign('comment_form', $commentForm);
+
+$levelForm = '';
+if ($showLevels && $allowToEdit) {
+    $levelForm = $formAcquiredLevel->returnForm();
+}
+$template->assign('acquired_level_form', $levelForm);
 $template->assign('badge_error', $badgeInfoError);
 $template->assign('personal_badge', $personalBadge);
 $template->assign('show_level', $showLevels);
-
-$content = $template->fetch(
-    $template->get_template('skill/issued.tpl')
-);
-
+$content = $template->fetch($template->get_template('skill/issued.tpl'));
 $template->assign('header', get_lang('IssuedBadgeInformation'));
 $template->assign('content', $content);
 $template->display_one_col_template();

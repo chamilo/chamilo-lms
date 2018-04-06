@@ -6,10 +6,11 @@
  * as it prepares most of the variables needed here.
  *
  * @todo check if this file is deprecated ... jmontoya
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 $_course = api_get_course_info();
 $courseDir = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -31,19 +32,19 @@ if (!DocumentManager::get_document_id($_course, $path)) {
 }
 
 /**
- *	Header
+ *	Header.
  */
 $nameTools = get_lang('UplUploadDocument');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=".urlencode($path).'&'.api_get_cidreq(),
-    "name" => $langDocuments
-);
+    "name" => $langDocuments,
+];
 Display::display_header($nameTools, "Doc");
 //show the title
 api_display_tool_title($nameTools.$add_group_to_title);
 
 /**
- * Process
+ * Process.
  */
 //user has submitted a file
 if (isset($_FILES['user_upload'])) {
@@ -64,17 +65,18 @@ if (isset($_FILES['user_upload'])) {
         $new_comment = isset($_POST['comment']) ? Database::escape_string(trim($_POST['comment'])) : '';
         $new_title = isset($_POST['title']) ? Database::escape_string(trim($_POST['title'])) : '';
 
-        if ($new_path && ($new_comment || $new_title))
-        if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
-            $table_document = Database::get_course_table(TABLE_DOCUMENT);
-            $ct = '';
-            if ($new_comment) {
-                $ct .= ", comment='$new_comment'";
+        if ($new_path && ($new_comment || $new_title)) {
+            if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
+                $table_document = Database::get_course_table(TABLE_DOCUMENT);
+                $ct = '';
+                if ($new_comment) {
+                    $ct .= ", comment='$new_comment'";
+                }
+                if ($new_title) {
+                    $ct .= ", title='$new_title'";
+                }
+                Database::query("UPDATE $table_document SET".substr($ct, 1)." WHERE id = '$docid'");
             }
-            if ($new_title) {
-                $ct .= ", title='$new_title'";
-            }
-            Database::query("UPDATE $table_document SET".substr($ct, 1)." WHERE id = '$docid'");
         }
         //check for missing images in html files
         $missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
@@ -163,12 +165,11 @@ if (isset($_GET['createdir'])) {
     //show the form
     echo Display::return_message($new_folder_text, 'normal');
 } else {
-    //give them a link to create a directory
-?>
+    //give them a link to create a directory ?>
     <p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
             <?php echo Display::return_icon('new_folder.gif'); ?>
-            <?php echo(get_lang('CreateDir')); ?>
+            <?php echo get_lang('CreateDir'); ?>
         </a>
     </p>
 <?php
@@ -203,21 +204,21 @@ if (isset($_GET['createdir'])) {
 <?php echo get_lang('Options'); ?>
 </td>
 <td>
-- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo(get_lang('Uncompress')); ?><br/>
-- <?php echo (get_lang('UplWhatIfFileExists')); ?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo (get_lang('UplDoNothingLong')); ?>" checked="checked"/>  <?php echo (get_lang('UplDoNothing')); ?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo (get_lang('UplOverwriteLong')); ?>"/> <?php echo (get_lang('UplOverwrite')); ?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo (get_lang('UplRenameLong')); ?>"/> <?php echo (get_lang('UplRename')); ?>
+- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo get_lang('Uncompress'); ?><br/>
+- <?php echo get_lang('UplWhatIfFileExists'); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo get_lang('UplDoNothingLong'); ?>" checked="checked"/>  <?php echo get_lang('UplDoNothing'); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo get_lang('UplOverwriteLong'); ?>"/> <?php echo get_lang('UplOverwrite'); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo get_lang('UplRenameLong'); ?>"/> <?php echo get_lang('UplRename'); ?>
 </td>
 </tr>
 </table>
 
-<input type="submit" value="<?php echo(get_lang('Ok')); ?>">
+<input type="submit" value="<?php echo get_lang('Ok'); ?>">
 </form>
 <!-- end upload form -->
 
  <!-- so they can get back to the documents   -->
- <p><?php echo (get_lang('Back')); ?> <?php echo (get_lang('To')); ?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview')); ?></a></p>
+ <p><?php echo get_lang('Back'); ?> <?php echo get_lang('To'); ?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo get_lang('DocumentsOverview'); ?></a></p>
 <?php
 
 Display::display_footer();

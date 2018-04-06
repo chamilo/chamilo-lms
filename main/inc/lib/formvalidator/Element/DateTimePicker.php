@@ -7,7 +7,7 @@
 class DateTimePicker extends HTML_QuickForm_text
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -20,7 +20,8 @@ class DateTimePicker extends HTML_QuickForm_text
     }
 
     /**
-     * HTML code to display this datepicker
+     * HTML code to display this datepicker.
+     *
      * @return string
      */
     public function toHtml()
@@ -39,18 +40,18 @@ class DateTimePicker extends HTML_QuickForm_text
         return '
             <div class="input-group">
                 <span class="input-group-addon cursor-pointer">
-                    <input ' . $this->_getAttrString($this->_attributes).'>
+                    <input '.$this->_getAttrString($this->_attributes).'>
                 </span>
-                <p class="form-control disabled" id="' . $id.'_alt_text">'.$value.'</p>
-                <input class="form-control" type="hidden" id="' . $id.'_alt" value="'.$value.'">
+                <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
+                <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
                         <span class="fa fa-times text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">' . get_lang('Reset').'</span>
+                        <span class="sr-only">'.get_lang('Reset').'</span>
                     </button>
                 </span>
             </div>
-        ' . $this->getElementJS();
+        '.$this->getElementJS();
     }
 
     /**
@@ -60,66 +61,10 @@ class DateTimePicker extends HTML_QuickForm_text
     {
         $value = substr($value, 0, 16);
         $this->updateAttributes(
-            array(
-                'value'=>$value
-            )
+            [
+                'value' => $value,
+            ]
         );
-    }
-
-    /**
-     * Get the necessary javascript for this datepicker
-     * @return string
-     */
-    private function getElementJS()
-    {
-        $js = null;
-        $id = $this->getAttribute('id');
-        //timeFormat: 'hh:mm'
-        $js .= "<script>
-            $(function() {
-                var txtDateTime = $('#$id'),
-                    inputGroup = txtDateTime.parents('.input-group'),
-                    txtDateTimeAlt = $('#{$id}_alt'),
-                    txtDateTimeAltText = $('#{$id}_alt_text');
-
-                txtDateTime
-                    .hide()
-                    .datetimepicker({
-                        defaultDate: '".$this->getValue()."',
-                        dateFormat: 'yy-mm-dd',
-                        timeFormat: 'HH:mm',
-                        altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
-                        altTimeFormat: \"" . get_lang('TimeFormatNoSecJS')."\",
-                        altSeparator: \" " . get_lang('AtTime')." \",
-                        altFieldTimeOnly: false,
-                        showOn: 'both',
-                        buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
-                        buttonImageOnly: true,
-                        buttonText: '" . get_lang('SelectDate')."',
-                        changeMonth: true,
-                        changeYear: true
-                    })
-                    .on('change', function (e) {
-                        txtDateTimeAltText.text(txtDateTimeAlt.val());
-                    });
-                    
-                txtDateTimeAltText.on('click', function () {
-                    txtDateTime.datepicker('show');
-                });
-
-                inputGroup
-                    .find('button')
-                    .on('click', function (e) {
-                        e.preventDefault();
-
-                        $('#$id, #{$id}_alt').val('');
-                        $('#{$id}_alt_text').html('');
-                    });
-            });
-        </script>";
-
-        return $js;
     }
 
     /**
@@ -138,7 +83,7 @@ class DateTimePicker extends HTML_QuickForm_text
             if (empty($size)) {
                 $sizeTemp = 8;
             }
-            $size = array(2, $sizeTemp, 2);
+            $size = [2, $sizeTemp, 2];
         } else {
             if (is_array($size)) {
                 if (count($size) != 3) {
@@ -146,11 +91,11 @@ class DateTimePicker extends HTML_QuickForm_text
                     if (empty($size)) {
                         $sizeTemp = 8;
                     }
-                    $size = array(2, $sizeTemp, 2);
+                    $size = [2, $sizeTemp, 2];
                 }
                 // else just keep the $size array as received
             } else {
-                $size = array(2, intval($size), 2);
+                $size = [2, intval($size), 2];
             }
         }
 
@@ -201,5 +146,62 @@ class DateTimePicker extends HTML_QuickForm_text
                 return '{element}';
                 break;
         }
+    }
+
+    /**
+     * Get the necessary javascript for this datepicker.
+     *
+     * @return string
+     */
+    private function getElementJS()
+    {
+        $js = null;
+        $id = $this->getAttribute('id');
+        //timeFormat: 'hh:mm'
+        $js .= "<script>
+            $(function() {
+                var txtDateTime = $('#$id'),
+                    inputGroup = txtDateTime.parents('.input-group'),
+                    txtDateTimeAlt = $('#{$id}_alt'),
+                    txtDateTimeAltText = $('#{$id}_alt_text');
+
+                txtDateTime
+                    .hide()
+                    .datetimepicker({
+                        defaultDate: '".$this->getValue()."',
+                        dateFormat: 'yy-mm-dd',
+                        timeFormat: 'HH:mm',
+                        altField: '#{$id}_alt',
+                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
+                        altTimeFormat: \"".get_lang('TimeFormatNoSecJS')."\",
+                        altSeparator: \" ".get_lang('AtTime')." \",
+                        altFieldTimeOnly: false,
+                        showOn: 'both',
+                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImageOnly: true,
+                        buttonText: '".get_lang('SelectDate')."',
+                        changeMonth: true,
+                        changeYear: true
+                    })
+                    .on('change', function (e) {
+                        txtDateTimeAltText.text(txtDateTimeAlt.val());
+                    });
+                    
+                txtDateTimeAltText.on('click', function () {
+                    txtDateTime.datepicker('show');
+                });
+
+                inputGroup
+                    .find('button')
+                    .on('click', function (e) {
+                        e.preventDefault();
+
+                        $('#$id, #{$id}_alt').val('');
+                        $('#{$id}_alt_text').html('');
+                    });
+            });
+        </script>";
+
+        return $js;
     }
 }

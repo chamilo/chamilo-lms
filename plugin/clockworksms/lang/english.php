@@ -100,4 +100,3 @@ $strings['XMessagesSentEditedGroupXAdded'] = "%s: Messages sent or edited in gro
 $strings['XBeenInvitedCompleteSurveyXCourseX'] = "%s: You have been invited to complete survey %s in course %s";
 $strings['XReminderAssignmentXCourseXDue'] = "%s: This is a simple reminder that your assignment (%s) in course %s is still due";
 $strings['XUserDetailsModified'] = "%s: Your user details have been modified. Please check your e-mail for more information";
-

@@ -2,15 +2,14 @@
 /**
  * @package chamilo.permissions
  */
-
 $user_id = $userIdViewed;
 if ($mainUserInfo['status'] == 1) {
     $course_admin = 1;
 }
-include_once('permissions_functions.inc.php');
-include_once('all_permissions.inc.php');
-include_once (api_get_library_path()."/groupmanager.lib.php");
-include_once (api_get_library_path()."/blog.lib.php");
+include_once 'permissions_functions.inc.php';
+include_once 'all_permissions.inc.php';
+include_once api_get_library_path()."/groupmanager.lib.php";
+include_once api_get_library_path()."/blog.lib.php";
 // 			ACTIONS
 if ($_POST['StoreUserPermissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('user', $user_id);
@@ -19,12 +18,10 @@ if ($_POST['StoreUserPermissions'] and $setting_visualisation == 'checkbox') {
     }
 }
 if (isset($_GET['action'])) {
-    if (isset($_GET['permission']) AND isset($_GET['tool']) AND ($_GET['action'] == 'grant' OR $_GET['action'] == 'revoke'))
-    {
+    if (isset($_GET['permission']) and isset($_GET['tool']) and ($_GET['action'] == 'grant' or $_GET['action'] == 'revoke')) {
         $result_message = store_one_permission('user', $_GET['action'], $user_id, $_GET['tool'], $_GET['permission']);
     }
-    if (isset($_GET['role']) AND ($_GET['action'] == 'grant' OR $_GET['action'] == 'revoke'))
-    {
+    if (isset($_GET['role']) and ($_GET['action'] == 'grant' or $_GET['action'] == 'revoke')) {
         $result_message = assign_role('user', $_GET['action'], $user_id, $_GET['role'], $_GET['scope']);
     }
 }
@@ -36,22 +33,18 @@ if (isset($result_message)) {
 // ---------------------------------------------------
 // 			RETRIEVING THE PERMISSIONS OF THE USER
 // ---------------------------------------------------
-$current_user_permissions = array();
+$current_user_permissions = [];
 $current_user_permissions = get_permissions('user', $user_id);
-
 
 //   INHERITED PERMISSIONS (group permissions, user roles, group roles)
 
 // 			RETRIEVING THE PERMISSIONS OF THE GROUPS OF THE USER
-$groups_of_user = array();
+$groups_of_user = [];
 $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
-foreach ($groups_of_user as $group)
-{
+foreach ($groups_of_user as $group) {
     $this_group_permissions = get_permissions('group', $group);
-    foreach ($this_group_permissions as $tool=>$permissions)
-    {
-        foreach ($permissions as $permission)
-        {
+    foreach ($this_group_permissions as $tool => $permissions) {
+        foreach ($permissions as $permission) {
             $inherited_group_permissions[$tool][] = $permission;
         }
     }
@@ -76,11 +69,9 @@ if (api_get_setting('user_roles') == 'true') {
     $inherited_permissions = permission_array_merge($inherited_permissions, $current_user_role_permissions_of_user);
 }
 //	RETRIEVING THE PERMISSIONS OF THE ROLES OF THE GROUPS OF THE USER
-if (api_get_setting('group_roles') == 'true')
-{
+if (api_get_setting('group_roles') == 'true') {
     // NOTE: DIT MOET NOG VERDER UITGEWERKT WORDEN
-    foreach ($groups_of_user as $group)
-    {
+    foreach ($groups_of_user as $group) {
         $this_current_group_role_permissions_of_user = get_roles_permissions('user', $user_id);
         //$inherited_permissions[$tool][]=$permission;
     }
@@ -89,20 +80,17 @@ if (api_get_setting('group_roles') == 'true')
 // 			LIMITED OR FULL
 $current_user_permissions = limited_or_full($current_user_permissions);
 $inherited_permissions = limited_or_full($inherited_permissions);
-if (api_get_setting('permissions') == 'limited')
-{
+if (api_get_setting('permissions') == 'limited') {
     $header_array = $rights_limited;
 }
-if (api_get_setting('permissions') == 'full')
-{
+if (api_get_setting('permissions') == 'full') {
     $header_array = $rights_full;
 }
 
 echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."\">";
 // 		DISPLAYING THE ROLES LIST
 
-if (api_get_setting('user_roles') == 'true')
-{
+if (api_get_setting('user_roles') == 'true') {
     // the list of the roles for the user
     echo '<strong>'.get_lang('UserRoles').'</strong><br />';
     $current_user_course_roles = get_roles('user', $user_id);
@@ -120,8 +108,7 @@ echo "<table class=\"data_table\">\n";
 // the header
 echo "\t<tr>\n";
 echo "\t\t<th>".get_lang('Module')."</th>\n";
-foreach ($header_array as $header_key=>$header_value)
-{
+foreach ($header_array as $header_key => $header_value) {
     echo "\t\t<th>".get_lang($header_value)."</th>\n";
 }
 echo "\t</tr>\n";

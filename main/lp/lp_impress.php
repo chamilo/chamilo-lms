@@ -4,10 +4,8 @@
 use ChamiloSession as Session;
 
 /**
-*
-* @package chamilo.learnpath
-*/
-
+ * @package chamilo.learnpath
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -37,11 +35,11 @@ $visibility = api_get_item_visibility(
     api_get_group_id()
 );
 if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0) {
-     api_not_allowed();
+    api_not_allowed();
 }
 /** @var learnpath $lp */
 $lp = Session::read('oLP');
-if ($lp) {
+if (!$lp) {
     api_not_allowed(true);
 }
 
@@ -55,15 +53,15 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 if ($is_allowed_to_edit) {
     echo '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
     global $interbreadcrumb;
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'lp_controller.php?action=list&isStudentView=false&'.api_get_cidreq(),
         'name' => get_lang('LearningPaths'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id=".$lp->lp_id."&isStudentView=false&".api_get_cidreq(),
         'name' => $lp->get_name(),
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Preview')];
     echo return_breadcrumb($interbreadcrumb, null, null);
     echo '</div>';
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * See license terms in /license.txt
+ * See license terms in /license.txt.
+ *
  * @author Eric Marguin <eric.marguin@dokeos.com>
  */
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -8,21 +9,23 @@ require_once __DIR__.'/../../inc/global.inc.php';
 /**
  * Import users into database from a file located on the server.
  * Function registered as service.
+ *
  * @param  string The csv (only csv) file containing users tom import
  * @param  string Security key (as found in configuration file)
+ *
  * @return string Error message
  */
 function import_users_from_file($filepath, $security_key)
 {
     global $_configuration;
 
-    $errors_returned = array(
+    $errors_returned = [
         0 => 'success',
         1 => 'file import does not exist',
         2 => 'no users to import',
         3 => 'wrong datas in file',
-        4 => 'security error'
-    );
+        4 => 'security error',
+    ];
 
     // Check whether this script is launch by server and security key is ok.
     if (empty($_SERVER['REMOTE_ADDR']) || $_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'] || $security_key != $_configuration['security_key']) {

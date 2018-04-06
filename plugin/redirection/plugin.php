@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Plugin
+ * Plugin.
+ *
  * @author Enrique Alcaraz Lopez
+ *
  * @package chamilo.plugin.redirection
  */
 

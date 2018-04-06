@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * This file contains the necessary elements to implement a Single Sign On
+ * This file contains the necessary elements to implement a Single Sign On.
  *
    INSERT INTO `settings_current` (`variable`, `type`, `category`, `selected_value`, `title`, `comment`, `access_url`, access_url_changeable)
    VALUES ('sso_authentication_subclass', 'textfield', 'Security', 'TCC', 'SSOSubclass', 'SSOSubclassComment', 1, 0);
@@ -13,7 +13,7 @@ use ChamiloSession as Session;
  */
 
 /**
- * The SSO class allows for management of remote Single Sign On resources
+ * The SSO class allows for management of remote Single Sign On resources.
  */
 class ssoTCC
 {
@@ -24,27 +24,27 @@ class ssoTCC
     public $referer;    // http://my.chamilo.com/main/auth/profile.php
 
     /**
-     * Instanciates the object, initializing all relevant URL strings
+     * Instanciates the object, initializing all relevant URL strings.
      */
     public function __construct()
     {
-        $this->protocol   = api_get_setting('sso_authentication_protocol');
+        $this->protocol = api_get_setting('sso_authentication_protocol');
         // There can be multiple domains, so make sure to take only the first
         // This might be later extended with a decision process
-        $domains          = explode('/,/', api_get_setting('sso_authentication_domain'));
-        $this->domain     = trim($domains[0]);
-        $this->auth_uri   = api_get_setting('sso_authentication_auth_uri');
+        $domains = explode('/,/', api_get_setting('sso_authentication_domain'));
+        $this->domain = trim($domains[0]);
+        $this->auth_uri = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
         //cut the string to avoid recursive URL construction in case of failure
-        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'sso'));
+        $this->referer = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->referrer_uri = base64_encode($_SERVER['REQUEST_URI']);
-        $this->target     = api_get_path(WEB_PATH);
+        $this->target = api_get_path(WEB_PATH);
     }
 
     /**
-     * Unlogs the user from the remote server
+     * Unlogs the user from the remote server.
      */
     public function logout()
     {
@@ -63,7 +63,7 @@ class ssoTCC
     }
 
     /**
-     * Sends the user to the master URL for a check of active connection
+     * Sends the user to the master URL for a check of active connection.
      */
     public function ask_master()
     {
@@ -87,8 +87,9 @@ class ssoTCC
     }
 
     /**
-     * Validates the received active connection data with the database
-     * @return	null|false	Return the loginFailed variable value to local.inc.php
+     * Validates the received active connection data with the database.
+     *
+     * @return null|false Return the loginFailed variable value to local.inc.php
      */
     public function check_user()
     {
@@ -134,13 +135,13 @@ class ssoTCC
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                 $secret = substr(api_get_security_key(), 0, 5);
                 // Check if secret sent in sso is correct
-                if ((string) $ssoSecret == (string) $secret)  {
+                if ((string) $ssoSecret == (string) $secret) {
                     //Check if the account is active (not locked)
-                    if ($uData['active']=='1') {
+                    if ($uData['active'] == '1') {
                         // check if the expiration date has not been reached
                         if (empty($uData['expiration_date']) ||
                             $uData['expiration_date'] > date('Y-m-d H:i:s') ||
-                            $uData['expiration_date']=='0000-00-00 00:00:00'
+                            $uData['expiration_date'] == '0000-00-00 00:00:00'
                         ) {
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
@@ -152,7 +153,7 @@ class ssoTCC
                                 $my_url_list = api_get_access_url_from_user($uData['id']);
                             } else {
                                 $current_access_url_id = 1;
-                                $my_url_list = array(1);
+                                $my_url_list = [1];
                             }
 
                             $my_user_is_admin = UserManager::is_admin($uData['id']);
@@ -173,11 +174,11 @@ class ssoTCC
                                             // the user credentials are OK, which
                                             // should be protection enough
                                             // against evil URL spoofing...
-                                            $sso_target = api_get_path(WEB_PATH) . base64_decode($sso['ruri']);
+                                            $sso_target = api_get_path(WEB_PATH).base64_decode($sso['ruri']);
                                         } else {
-                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) . 'index.php';
+                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH).'index.php';
                                         }
-                                        header('Location: '. $sso_target);
+                                        header('Location: '.$sso_target);
                                         exit;
                                     } else {
                                         // user does not have permission for this site
@@ -262,32 +263,11 @@ class ssoTCC
     }
 
     /**
-     * Decode the cookie (this function may vary depending on the
-     * Single Sign On implementation
-     * @param	string	$value
+     * Generate the URL for profile editing for a any user or the current user.
      *
-     * @return  array   Parsed and unencoded cookie
-     */
-    private function decode_cookie($value)
-    {
-        $key = substr(api_get_security_key(), 0, 16);
-        $ivsize = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
-        $iv = mcrypt_create_iv($ivsize, MCRYPT_RAND);
-        $valuedecode = base64_decode($value);
-
-        return mcrypt_decrypt(
-            MCRYPT_RIJNDAEL_128,
-            $key,
-            $valuedecode,
-            MCRYPT_MODE_ECB,
-            $iv
-        );
-    }
-
-    /**
-     * Generate the URL for profile editing for a any user or the current user
-     * @param int $userId Optional. The user id
-     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
+     * @param int  $userId  Optional. The user id
+     * @param bool $asAdmin Optional. Whether get the URL for the platform admin
+     *
      * @return string If the URL is obtained return the drupal_user_id. Otherwise return false
      */
     public function generateProfileEditingURL($userId = 0, $asAdmin = false)
@@ -307,20 +287,43 @@ class ssoTCC
         // If this is an administrator, allow him to make some changes in
         // the Chamilo profile
         if ($asAdmin && api_is_platform_admin(true)) {
-            return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
+            return api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=$userId";
         }
         // If the user doesn't match a Drupal user, give the normal profile
         // link
-/*        if ($drupalUserIdData === false) {
-            return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
-        }
-        // In all other cases, generate a link to the Drupal profile edition
-        $drupalUserId = $drupalUserIdData['value'];
-        $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
-
-        return $url;
-*/
-        return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+        /*        if ($drupalUserIdData === false) {
+                    return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+                }
+                // In all other cases, generate a link to the Drupal profile edition
+                $drupalUserId = $drupalUserIdData['value'];
+                $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
+        
+                return $url;
+        */
+        return api_get_path(WEB_CODE_PATH).'auth/profile.php';
     }
 
+    /**
+     * Decode the cookie (this function may vary depending on the
+     * Single Sign On implementation.
+     *
+     * @param string $value
+     *
+     * @return array Parsed and unencoded cookie
+     */
+    private function decode_cookie($value)
+    {
+        $key = substr(api_get_security_key(), 0, 16);
+        $ivsize = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
+        $iv = mcrypt_create_iv($ivsize, MCRYPT_RAND);
+        $valuedecode = base64_decode($value);
+
+        return mcrypt_decrypt(
+            MCRYPT_RIJNDAEL_128,
+            $key,
+            $valuedecode,
+            MCRYPT_MODE_ECB,
+            $iv
+        );
+    }
 }

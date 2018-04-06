@@ -3,14 +3,14 @@
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
+ *
  * @package chamilo.exercise
+ *
  * @author Julio Montoya <gugli100@gmail.com> jqgrid integration
  * Modified by hubert.borderiou (question category)
  *
  * @todo fix excel export
- *
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Setting the tabs
@@ -41,8 +41,9 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = api_get_origin();
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
-/* 	Constants and variables */
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss();
+/* Constants and variables */
+
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss() || api_is_session_admin();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -187,7 +188,7 @@ if (isset($_REQUEST['comments']) &&
 
         $params = [
             'marks' => $my_marks,
-            'teacher_comment' => $my_comments
+            'teacher_comment' => $my_comments,
         ];
 
         Database::update(
@@ -202,7 +203,7 @@ if (isset($_REQUEST['comments']) &&
             'marks' => $my_marks,
             'insert_date' => api_get_utc_datetime(),
             'author' => api_get_user_id(),
-            'teacher_comment' => $my_comments
+            'teacher_comment' => $my_comments,
         ];
         Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
     }
@@ -349,7 +350,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                     'onmouseover' => 'datepicker_input_mouseover()',
                     'id' => 'datepicker_start',
                     'onchange' => 'datepicker_input_changed()',
-                    'readonly' => 'readonly'
+                    'readonly' => 'readonly',
                 ]
             ).
             Display::button(
@@ -397,20 +398,20 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 if ($is_allowedToEdit || $is_tutor) {
     $interbreadcrumb[] = [
         "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises')
+        "name" => get_lang('Exercises'),
     ];
 
     $nameTools = get_lang('StudentScore');
     if ($exerciseExists) {
         $interbreadcrumb[] = [
             "url" => "admin.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
-            "name" => $objExerciseTmp->selectTitle(true)
+            "name" => $objExerciseTmp->selectTitle(true),
         ];
     }
 } else {
     $interbreadcrumb[] = [
         "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises')
+        "name" => get_lang('Exercises'),
     ];
     if ($exerciseExists) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->selectTitle(true);
@@ -575,7 +576,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('IP'),
         get_lang('Status'),
         get_lang('ToolLearnpath'),
-        get_lang('Actions')
+        get_lang('Actions'),
     ];
 
     if ($officialCodeInList === 'true') {
@@ -591,9 +592,9 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the bottom bar
             'searchoptions' => [
                 'defaultValue' => 'group_all',
-                'value' => $group_parameters],
+                'value' => $group_parameters, ],
             //for the top bar
-            'editoptions' => ['value' => $group_parameters]],
+            'editoptions' => ['value' => $group_parameters], ],
         ['name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'],
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
@@ -603,11 +604,11 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the bottom bar
             'searchoptions' => [
                 'defaultValue' => '',
-                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated')],
+                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'), ],
             //for the top bar
-            'editoptions' => ['value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated')]],
+            'editoptions' => ['value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated')], ],
         ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false']
+        ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
     if ($officialCodeInList == 'true') {
@@ -736,7 +737,7 @@ $extra_params['height'] = 'auto';
                     if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
                         return;
                     }
-                    var url = '<?php echo api_get_path(WEB_CODE_PATH) ?>exercise/recalculate.php?<?php echo api_get_cidreq() ?>';
+                    var url = '<?php echo api_get_path(WEB_CODE_PATH); ?>exercise/recalculate.php?<?php echo api_get_cidreq(); ?>';
                     var recalculateXhr = $.post(url, $(this).data());
 
                     $.when(recalculateXhr).done(function (response) {
@@ -808,7 +809,7 @@ $extra_params['height'] = 'auto';
 <form id="export_report_form" method="post" action="exercise_report.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
-    <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id ?>" />
+    <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id; ?>" />
 </form>
 
 <?php

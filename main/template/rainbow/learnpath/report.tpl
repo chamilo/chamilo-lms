@@ -11,7 +11,9 @@
                 <th class="text-right">{{ 'Progress'|get_lang }}</th>
                 <th class="text-right">{{ 'ScormScore'|get_lang }}</th>
                 <th class="text-center">{{ 'LastConnection'|get_lang }}</th>
+                {% if not export %}
                 <th>{{ 'Actions'|get_lang }}</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -26,9 +28,11 @@
                     <td class="text-right">{{ user.lp_progress }}</td>
                     <td class="text-right">{{ user.lp_score }}</td>
                     <td class="text-center">{{ user.lp_last_connection }}</td>
+                    {% if not export %}
                     <td>
                         <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">{{ 'Details'|get_lang }}</button>
                     </td>
+                    {% endif %}
                 </tr>
                 <tr class="hide"></tr>
             {% endfor %}
@@ -40,26 +44,21 @@
 $(document).on('ready', function () {
     $('tr td button').on('click', function (e) {
         e.preventDefault();
-
         var self = $(this);
         var userId = self.data('id') || 0;
         var trHead = self.parents('tr');
         var trDetail = trHead.next();
-
         if (self.is('.active')) {
             self.removeClass('active');
-
             trDetail.html('').addClass('hide');
         } else {
             self.addClass('active');
-
             var newTD = $('<td>', {
                 colspan: 7
             });
             newTD.load('{{ _p.web_main ~ 'mySpace/lp_tracking.php?action=stats&extend_all=0&id_session=' ~ session_id ~ '&course=' ~ course_code ~ '&lp_id=' ~ lp_id ~ '&student_id=\' + userId + \'&origin=tracking_course&allow_extend=0' }} .table-responsive', function () {
                 newTD.appendTo(trDetail);
             });
-
             trDetail.removeClass('hide');
         }
     });

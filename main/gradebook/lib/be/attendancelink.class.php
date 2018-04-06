@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook link to attendance item
+ * Gradebook link to attendance item.
+ *
  * @author Christian Fasanando (christian1827@gmail.com)
+ *
  * @package chamilo.gradebook
  */
 class AttendanceLink extends AbstractLink
@@ -12,7 +14,7 @@ class AttendanceLink extends AbstractLink
     private $itemprop_table = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -38,7 +40,9 @@ class AttendanceLink extends AbstractLink
 
     /**
      * Generate an array of attendances that a teacher hasn't created a link for.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
+     *
      * @todo seems to be depracated
      */
     public function get_not_created_links()
@@ -62,12 +66,12 @@ class AttendanceLink extends AbstractLink
                 AND att.session_id='.api_get_session_id().'';
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
             if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != '') {
-                $cats[] = array($data['id'], $data['attendance_qualify_title']);
+                $cats[] = [$data['id'], $data['attendance_qualify_title']];
             } else {
-                $cats[] = array($data['id'], $data['name']);
+                $cats[] = [$data['id'], $data['name']];
             }
         }
 
@@ -76,6 +80,7 @@ class AttendanceLink extends AbstractLink
 
     /**
      * Generate an array of all attendances available.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_all_links()
@@ -96,9 +101,9 @@ class AttendanceLink extends AbstractLink
 
         while ($data = Database::fetch_array($result)) {
             if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != '') {
-                $cats[] = array($data['id'], $data['attendance_qualify_title']);
+                $cats[] = [$data['id'], $data['attendance_qualify_title']];
             } else {
-                $cats[] = array($data['id'], $data['name']);
+                $cats[] = [$data['id'], $data['name']];
             }
         }
         $my_cats = isset($cats) ? $cats : null;
@@ -126,6 +131,7 @@ class AttendanceLink extends AbstractLink
 
     /**
      * @param int $stud_id
+     *
      * @return array|null
      */
     public function calc_score($stud_id = null, $type = null)
@@ -154,17 +160,17 @@ class AttendanceLink extends AbstractLink
         // for 1 student
         if (isset($stud_id)) {
             if ($data = Database::fetch_array($scores, 'ASSOC')) {
-                return array(
+                return [
                     $data['score'],
                     $attendance['attendance_qualify_max'],
-                );
+                ];
             } else {
                 //We sent the 0/attendance_qualify_max instead of null for correct calculations
-                return array(0, $attendance['attendance_qualify_max']);
+                return [0, $attendance['attendance_qualify_max']];
             }
         } else {
             // all students -> get average
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $rescount = 0;
             $sum = 0;
@@ -191,29 +197,20 @@ class AttendanceLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, $weight);
+                        return [$bestResult, $weight];
                         break;
                     case 'average':
-                        return array($sumResult / $rescount, $weight);
+                        return [$sumResult / $rescount, $weight];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $rescount);
+                        return [$sum, $rescount];
                         break;
                 }
             }
         }
-    }
-
-    /**
-     * Lazy load function to get the database table of the student publications
-     */
-    private function get_attendance_table()
-    {
-        $this->attendance_table = Database::get_course_table(TABLE_ATTENDANCE);
-        return $this->attendance_table;
     }
 
     public function needs_name_and_description()
@@ -255,7 +252,7 @@ class AttendanceLink extends AbstractLink
     }
 
     /**
-     * Check if this still links to an exercise
+     * Check if this still links to an exercise.
      */
     public function is_valid_link()
     {
@@ -264,7 +261,8 @@ class AttendanceLink extends AbstractLink
                  WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     public function get_link()
@@ -282,6 +280,24 @@ class AttendanceLink extends AbstractLink
     }
 
     /**
+     * @return string
+     */
+    public function get_icon_name()
+    {
+        return 'attendance';
+    }
+
+    /**
+     * Lazy load function to get the database table of the student publications.
+     */
+    private function get_attendance_table()
+    {
+        $this->attendance_table = Database::get_course_table(TABLE_ATTENDANCE);
+
+        return $this->attendance_table;
+    }
+
+    /**
      * @return array|bool
      */
     private function get_attendance_data()
@@ -296,14 +312,7 @@ class AttendanceLink extends AbstractLink
             $query = Database::query($sql);
             $this->attendance_data = Database::fetch_array($query);
         }
-        return $this->attendance_data;
-    }
 
-    /**
-     * @return string
-     */
-    public function get_icon_name()
-    {
-        return 'attendance';
+        return $this->attendance_data;
     }
 }

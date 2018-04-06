@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * HOME PAGE FOR EACH COURSE
+ * HOME PAGE FOR EACH COURSE.
  *
  * This page, included in every course's index.php is the home
  * page. To make administration simple, the teacher edits his
@@ -28,7 +28,6 @@ use ChamiloSession as Session;
  *
  * @package chamilo.course_home
  */
-
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -238,15 +237,14 @@ if ($forumAutoLaunch == 1) {
     } else {
         //$forumKey = 'forum_auto_launch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
         //if (!isset($_SESSION[$forumKey])) {
-            //redirecting to the LP
-            $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
-          //  $_SESSION[$forumKey] = true;
-            header("Location: $url");
-            exit;
+        //redirecting to the LP
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
+        //  $_SESSION[$forumKey] = true;
+        header("Location: $url");
+        exit;
         //}
     }
 }
-
 
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $temps = time();
@@ -257,16 +255,16 @@ $reqdate = "&reqdate=$temps";
 /*	Introduction section (editable by course admins) */
 $content = Display::return_introduction_section(
     TOOL_COURSE_HOMEPAGE,
-    array(
+    [
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
         'CreateDocumentDir' => 'document/',
         'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/',
-    )
+    ]
 );
 
 /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
-	the setting homepage_view is adjustable through
-	the platform administration section */
+    the setting homepage_view is adjustable through
+    the platform administration section */
 
 if ($show_autolaunch_lp_warning) {
     $show_message .= Display::return_message(
@@ -332,6 +330,13 @@ if ($allow === true) {
 
 $content = '<div id="course_tools">'.$diagram.$content.'</div>';
 
+// Deleting the objects
+Session::erase('_gid');
+Session::erase('oLP');
+Session::erase('lpobject');
+api_remove_in_gradebook();
+DocumentManager::removeGeneratedAudioTempFile();
+
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
@@ -339,10 +344,3 @@ $tpl->assign('content', $content);
 // Direct login to course
 $tpl->assign('course_code', $course_code);
 $tpl->display_one_col_template();
-
-// Deleting the objects
-Session::erase('_gid');
-Session::erase('oLP');
-Session::erase('lpobject');
-api_remove_in_gradebook();
-DocumentManager::removeGeneratedAudioTempFile();

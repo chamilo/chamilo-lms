@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestFreeAnswerStrict toolbar configuration
+ * TestFreeAnswerStrict toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestFreeAnswerStrict extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -25,7 +26,7 @@ class TestFreeAnswerStrict extends Basic
 
         $config['fullPage'] = false;
         $config['extraPlugins'] = 'wordcount';
-        $config['wordcount'] = array(
+        $config['wordcount'] = [
             // Whether or not you want to show the Word Count
             'showWordCount' => true,
             // Whether or not you want to show the Char Count
@@ -33,8 +34,8 @@ class TestFreeAnswerStrict extends Basic
             // Option to limit the characters in the Editor
             'charLimit' => 'unlimited',
             // Option to limit the words in the Editor
-            'wordLimit' => 'unlimited'
-        );
+            'wordLimit' => 'unlimited',
+        ];
 
         $config['removePlugins'] = 'elementspath';
         //$config['height'] = '200';
@@ -42,12 +43,12 @@ class TestFreeAnswerStrict extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
     {
         return [];
     }
-
 }

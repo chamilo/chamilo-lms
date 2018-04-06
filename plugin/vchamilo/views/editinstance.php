@@ -52,7 +52,7 @@ if ($data = $form->get_data()) {
             unset($data->testdatapath);
             unset($data->vid);
 
-            Database::update('vchamilo', (array) $data, array('id = ?' => $id), false);
+            Database::update('vchamilo', (array) $data, ['id = ?' => $id], false);
             Display::addFlash(Display::return_message(get_lang('Updated')));
             Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
             break;
@@ -71,7 +71,7 @@ if ($id) {
 
 $content = $form->return_form();
 
-$interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+$interbreadcrumb[] = ['url' => 'manage.php', 'name' => get_lang('VChamilo')];
 
 $tpl = new Template(get_lang('Instance'), true, true, false, true, false);
 $tpl->assign('content', $content);

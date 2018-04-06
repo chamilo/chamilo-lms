@@ -16,9 +16,9 @@ $form->addElement(
     'button',
     'submit',
     get_lang('Unsubscribe'),
-    array(
+    [
         'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("UnsubscribeFromPlatformConfirm")))."')) return false;",
-    )
+    ]
 );
 $content = $form->returnForm();
 

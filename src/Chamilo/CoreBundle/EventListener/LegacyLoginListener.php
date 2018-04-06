@@ -5,20 +5,20 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
- * Class LegacyLoginListener
+ * Class LegacyLoginListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class LegacyLoginListener implements EventSubscriberInterface
@@ -29,6 +29,7 @@ class LegacyLoginListener implements EventSubscriberInterface
 
     /**
      * LegacyLoginListener constructor.
+     *
      * @param $container
      * @param TokenStorage $tokenStorage
      */
@@ -46,7 +47,6 @@ class LegacyLoginListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if (!$request->hasPreviousSession()) {
-
             return;
         }
 
@@ -115,7 +115,7 @@ class LegacyLoginListener implements EventSubscriberInterface
                             $event = new InteractiveLoginEvent($request, $token);
                             $this->container->get("event_dispatcher")->dispatch("security.interactive_login", $event);
                             $this->container->get("event_dispatcher")->addListener(
-                                KernelEvents::RESPONSE, array($this, 'redirectUser')
+                                KernelEvents::RESPONSE, [$this, 'redirectUser']
                             );
                         }
                     }
@@ -129,10 +129,10 @@ class LegacyLoginListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 15)),
-        );
+            KernelEvents::REQUEST => [['onKernelRequest', 15]],
+        ];
     }
 
     /**

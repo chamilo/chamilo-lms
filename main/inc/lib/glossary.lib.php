@@ -17,13 +17,15 @@ use ChamiloSession as Session;
 class GlossaryManager
 {
     /**
-     * Get all glossary terms
+     * Get all glossary terms.
+     *
      * @author Isaac Flores <isaac.flores@dokeos.com>
+     *
      * @return array Contain glossary terms
      */
     public static function get_glossary_terms()
     {
-        $glossary_data  = array();
+        $glossary_data = [];
         $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $sql_filter = api_get_session_condition($session_id);
@@ -41,8 +43,10 @@ class GlossaryManager
     }
 
     /**
-     * Get glossary term by glossary id
+     * Get glossary term by glossary id.
+     *
      * @author Isaac Flores <florespaz@bidsoftperu.com>
+     *
      * @param int $glossary_id
      *
      * @return string The glossary description
@@ -64,8 +68,10 @@ class GlossaryManager
     }
 
     /**
-     * Get glossary term by glossary id
+     * Get glossary term by glossary id.
+     *
      * @author Isaac Flores <florespaz_isaac@hotmail.com>
+     *
      * @param string $glossary_name The glossary term name
      *
      * @return array The glossary info
@@ -91,12 +97,11 @@ class GlossaryManager
     }
 
     /**
-     * This functions stores the glossary in the database
+     * This functions stores the glossary in the database.
      *
-     * @param array  $values  Array of title + description (name => $title, description => $comment)
+     * @param array $values Array of title + description (name => $title, description => $comment)
      *
-     * @return mixed   Term id on success, false on failure
-     *
+     * @return mixed Term id on success, false on failure
      */
     public static function save_glossary($values, $showMessage = true)
     {
@@ -121,6 +126,7 @@ class GlossaryManager
                     Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
                 );
             }
+
             return false;
         } else {
             $params = [
@@ -158,10 +164,11 @@ class GlossaryManager
     }
 
     /**
-     * update the information of a glossary term in the database
+     * update the information of a glossary term in the database.
      *
      * @param array $values an array containing all the form elements
-     * @return boolean True on success, false on failure
+     *
+     * @return bool True on success, false on failure
      */
     public static function update_glossary($values, $showMessage = true)
     {
@@ -212,8 +219,9 @@ class GlossaryManager
     }
 
     /**
-     * Get the maximum display order of the glossary item
-     * @return integer Maximum glossary display order
+     * Get the maximum display order of the glossary item.
+     *
+     * @return int Maximum glossary display order
      */
     public static function get_max_glossary_item()
     {
@@ -235,12 +243,12 @@ class GlossaryManager
     }
 
     /**
-     * check if the glossary term exists or not
+     * check if the glossary term exists or not.
      *
-     * @param string  $term Term to look for
-     * @param integer  $not_id ID to counter-check if the term exists with this ID as well (optional)
-     * @return bool    True if term exists
+     * @param string $term   Term to look for
+     * @param int    $not_id ID to counter-check if the term exists with this ID as well (optional)
      *
+     * @return bool True if term exists
      */
     public static function glossary_exists($term, $not_id = '')
     {
@@ -252,7 +260,7 @@ class GlossaryManager
                 WHERE
                     c_id = $course_id AND
                     name = '".Database::escape_string($term)."'";
-        if ($not_id <> '') {
+        if ($not_id != '') {
             $sql .= " AND glossary_id <> '".intval($not_id)."'";
         }
         $result = Database::query($sql);
@@ -265,11 +273,11 @@ class GlossaryManager
     }
 
     /**
-     * Get one specific glossary term data
+     * Get one specific glossary term data.
      *
-     * @param integer $glossary_id ID of the flossary term
-     * @return mixed   Array(glossary_id,name,description,glossary_display_order) or false on error
+     * @param int $glossary_id ID of the flossary term
      *
+     * @return mixed Array(glossary_id,name,description,glossary_display_order) or false on error
      */
     public static function get_glossary_information($glossary_id)
     {
@@ -304,12 +312,12 @@ class GlossaryManager
     }
 
     /**
-     * Delete a glossary term (and re-order all the others)
+     * Delete a glossary term (and re-order all the others).
      *
-     * @param integer $glossary_id
+     * @param int  $glossary_id
      * @param bool $showMessage
      *
-     * @return bool    True on success, false on failure
+     * @return bool True on success, false on failure
      */
     public static function delete_glossary($glossary_id, $showMessage = true)
     {
@@ -365,6 +373,7 @@ class GlossaryManager
             if (empty($defaultView)) {
                 $defaultView = 'table';
             }
+
             return $defaultView;
         } else {
             return $view;
@@ -427,10 +436,10 @@ class GlossaryManager
             'get',
             api_get_self().'?'.api_get_cidreq(),
             '',
-            array(),
+            [],
             FormValidator::LAYOUT_INLINE
         );
-        $form->addText('keyword', '', false, array('class' => 'col-md-2'));
+        $form->addText('keyword', '', false, ['class' => 'col-md-2']);
         $form->addElement('hidden', 'cidReq', api_get_course_id());
         $form->addElement('hidden', 'id_session', api_get_session_id());
         $form->addButtonSearch(get_lang('Search'));
@@ -438,7 +447,7 @@ class GlossaryManager
 
         $toolbar = Display::toolbarAction(
             'toolbar-document',
-            array($actionsLeft, $actionsRight)
+            [$actionsLeft, $actionsRight]
         );
 
         $content = $toolbar;
@@ -446,16 +455,16 @@ class GlossaryManager
         if (!$view || $view === 'table') {
             $table = new SortableTable(
                 'glossary',
-                array('GlossaryManager', 'get_number_glossary_terms'),
-                array('GlossaryManager', 'get_glossary_data'),
+                ['GlossaryManager', 'get_number_glossary_terms'],
+                ['GlossaryManager', 'get_glossary_data'],
                 0
             );
             //$table->set_header(0, '', false);
             $table->set_header(0, get_lang('TermName'), true);
             $table->set_header(1, get_lang('TermDefinition'), true);
             if (api_is_allowed_to_edit(null, true)) {
-                $table->set_header(2, get_lang('Actions'), false, 'width=90px', array('class' => 'td_actions'));
-                $table->set_column_filter(2, array('GlossaryManager', 'actions_filter'));
+                $table->set_header(2, get_lang('Actions'), false, 'width=90px', ['class' => 'td_actions']);
+                $table->set_column_filter(2, ['GlossaryManager', 'actions_filter']);
             }
             $content .= $table->return_table();
         }
@@ -468,7 +477,8 @@ class GlossaryManager
     }
 
     /**
-     * Display the glossary terms in a list
+     * Display the glossary terms in a list.
+     *
      * @return bool true
      */
     public static function displayGlossaryList()
@@ -482,14 +492,16 @@ class GlossaryManager
             }
             $content .= Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
         }
+
         return $content;
     }
 
     /**
-     * Get the number of glossary terms in the course (or course+session)
-     * @param  int     Session ID filter (optional)
-     * @return integer Count of glossary terms
+     * Get the number of glossary terms in the course (or course+session).
      *
+     * @param  int     Session ID filter (optional)
+     *
+     * @return int Count of glossary terms
      */
     public static function get_number_glossary_terms($session_id = 0)
     {
@@ -519,12 +531,12 @@ class GlossaryManager
     }
 
     /**
-     * Get all the data of a glossary
+     * Get all the data of a glossary.
      *
-     * @param int $from From which item
-     * @param int $number_of_items Number of items to collect
-     * @param string  $column Name of column on which to order
-     * @param string $direction  Whether to sort in ascending (ASC) or descending (DESC)
+     * @param int    $from            From which item
+     * @param int    $number_of_items Number of items to collect
+     * @param string $column          Name of column on which to order
+     * @param string $direction       Whether to sort in ascending (ASC) or descending (DESC)
      *
      * @return array
      */
@@ -557,7 +569,7 @@ class GlossaryManager
         );
 
         $column = intval($column);
-        if (!in_array($direction, array('DESC', 'ASC'))) {
+        if (!in_array($direction, ['DESC', 'ASC'])) {
             $direction = 'ASC';
         }
         $from = intval($from);
@@ -586,15 +598,15 @@ class GlossaryManager
 		        LIMIT $from,$number_of_items";
         $res = Database::query($sql);
 
-        $return = array();
-        $array = array();
+        $return = [];
+        $array = [];
         while ($data = Database::fetch_array($res)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
             $array[0] = $data[0].$session_img;
 
             if (!$view || $view === 'table') {
-                $array[1] = str_replace(array('<p>', '</p>'), array('', '<br />'), $data[1]);
+                $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]);
             } else {
                 $array[1] = $data[1];
             }
@@ -613,11 +625,11 @@ class GlossaryManager
     }
 
     /**
-     * Update action icons column
+     * Update action icons column.
      *
-     * @param integer $glossary_id
-     * @param array   $url_params Parameters to use to affect links
-     * @param array   $row The line of results from a query on the glossary table
+     * @param int   $glossary_id
+     * @param array $url_params  Parameters to use to affect links
+     * @param array $row         The line of results from a query on the glossary table
      *
      * @return string HTML string for the action icons columns
      */
@@ -641,10 +653,9 @@ class GlossaryManager
     }
 
     /**
-     * a little bit of javascript to display a prettier warning when deleting a term
+     * a little bit of javascript to display a prettier warning when deleting a term.
      *
-     * @return string  HTML string including JavaScript
-     *
+     * @return string HTML string including JavaScript
      */
     public static function javascript_glossary()
     {
@@ -660,7 +671,7 @@ class GlossaryManager
     }
 
     /**
-     * Re-order glossary
+     * Re-order glossary.
      */
     public static function reorder_glossary()
     {
@@ -682,7 +693,7 @@ class GlossaryManager
     }
 
     /**
-     * Move a glossary term
+     * Move a glossary term.
      *
      * @param string $direction
      * @param string $glossary_id
@@ -728,7 +739,7 @@ class GlossaryManager
     }
 
     /**
-     * Export to pdf
+     * Export to pdf.
      */
     public static function export_to_pdf()
     {
@@ -748,7 +759,7 @@ class GlossaryManager
     }
 
     /**
-     * Generate a PDF with all glossary terms and move file to documents
+     * Generate a PDF with all glossary terms and move file to documents.
      */
     public static function movePdfToDocuments()
     {
@@ -772,7 +783,7 @@ class GlossaryManager
             [
                 'filename' => $fileName,
                 'pdf_title' => $fileName,
-                'add_signatures' => $signatures
+                'add_signatures' => $signatures,
             ]
         );
         $pdf->exportFromHtmlToDocumentsArea(

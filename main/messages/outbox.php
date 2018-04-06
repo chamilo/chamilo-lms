@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.messages
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -26,19 +25,19 @@ if (isset($_GET['messages_page_nr'])) {
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
         'name' => get_lang('SocialNetwork'),
-    );
+    ];
 } else {
     $this_section = SECTION_MYPROFILE;
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile'));
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile')];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
-    'name' => get_lang('Messages')
-);
+    'name' => get_lang('Messages'),
+];
 
 $actions = '';
 if ($allowMessage) {
@@ -50,7 +49,7 @@ if ($allowMessage) {
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
-$info_delete_outbox = array();
+$info_delete_outbox = [];
 $info_delete_outbox = isset($_GET['form_delete_outbox']) ? explode(',', $_GET['form_delete_outbox']) : '';
 $count_delete_outbox = count($info_delete_outbox) - 1;
 
@@ -84,7 +83,7 @@ if ($allowSocial) {
     // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.
-        Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+        Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
 
     $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/outbox.php');
     if ($form->validate()) {
@@ -99,7 +98,7 @@ if ($allowSocial) {
 }
 //MAIN CONTENT
 if ($action == 'delete') {
-    $delete_list_id = array();
+    $delete_list_id = [];
     if (isset($_POST['out'])) {
         $delete_list_id = $_POST['out'];
     }
@@ -112,13 +111,13 @@ if ($action == 'delete') {
             $delete_list_id[$i]
         );
     }
-    $delete_list_id = array();
+    $delete_list_id = [];
     $social_right_content .= MessageManager::outbox_display($keyword);
 } elseif ($action == 'deleteone') {
-    $delete_list_id = array();
+    $delete_list_id = [];
     $id = Security::remove_XSS($_GET['id']);
     MessageManager::delete_message_by_user_sender(api_get_user_id(), $id);
-    $delete_list_id = array();
+    $delete_list_id = [];
     $social_right_content .= MessageManager::outbox_display($keyword);
 } else {
     $social_right_content .= MessageManager::outbox_display($keyword);

@@ -30,15 +30,15 @@ if (!api_is_allowed_to_edit()) {
 
 $courseInfo = api_get_course_info();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('StudentPublications'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
     'name' => $my_folder_data['title'],
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddUsers'));
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddUsers')];
 
 switch ($action) {
     case 'add':
@@ -63,7 +63,7 @@ switch ($action) {
 Display :: display_header(null);
 
 $items = getAllUserToWork($workId, api_get_course_int_id());
-$usersAdded = array();
+$usersAdded = [];
 if (!empty($items)) {
     echo Display::page_subheader(get_lang('UsersAdded'));
     echo '<ul class="list-group">';
@@ -72,12 +72,11 @@ if (!empty($items)) {
         $usersAdded[] = $myUserId;
         $userInfo = api_get_user_info($myUserId);
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=delete&id='.$workId.'&user_id='.$myUserId;
-        $link = Display::url('<em class="fa fa-trash"></em> '.get_lang('Delete'), $url, array('class' => 'btn btn-danger btn-sm'));
+        $link = Display::url('<em class="fa fa-trash"></em> '.get_lang('Delete'), $url, ['class' => 'btn btn-danger btn-sm']);
         echo '<li class="list-group-item">'.$userInfo['complete_name_with_username'].'<div class="pull-right">'.$link.'</div></li>';
     }
     echo '</ul>';
 }
-
 
 if (empty($sessionId)) {
     $status = STUDENT;
@@ -93,7 +92,7 @@ $userList = CourseManager::get_user_list_from_course_code(
     $status
 );
 
-$userToAddList = array();
+$userToAddList = [];
 foreach ($userList as $user) {
     if (!in_array($user['user_id'], $usersAdded)) {
         $userToAddList[] = $user;
@@ -106,7 +105,7 @@ if (!empty($userToAddList)) {
     foreach ($userToAddList as $user) {
         $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=add&id='.$workId.'&user_id='.$user['user_id'];
-        $link = Display::url('<em class="fa fa-plus"></em> '.get_lang('Add'), $url, array('class' => 'btn btn-primary btn-sm'));
+        $link = Display::url('<em class="fa fa-plus"></em> '.get_lang('Add'), $url, ['class' => 'btn btn-primary btn-sm']);
         echo '<li class="list-group-item">'.$userName.'<div class="pull-right"> '.$link.'</div></li>';
     }
     echo '</ul>';

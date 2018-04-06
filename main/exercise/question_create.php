@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Exercise
+ * Exercise.
+ *
  * @package chamilo.exercise
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,7 +27,7 @@ $form->addElement('header', '', get_lang('AddQuestionToExercise'));
 
 $question_list = Question::get_question_type_list();
 $question_list_options = [];
-foreach ($question_list as $key=> $value) {
+foreach ($question_list as $key => $value) {
     $question_list_options[$key] = addslashes(get_lang($value[1]));
 }
 $form->addElement(

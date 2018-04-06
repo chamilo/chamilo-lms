@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Container for the scormMetadata class, setup to hold information about the <metadata> element in imsmanifest files
+ * Container for the scormMetadata class, setup to hold information about the <metadata> element in imsmanifest files.
+ *
  * @package chamilo.learnpath.scorm
  */
 
 /**
- * scormMetadata class, handling each <metadata> element found in an imsmanifest file
+ * scormMetadata class, handling each <metadata> element found in an imsmanifest file.
  */
 class scormMetadata
 {
@@ -16,13 +17,14 @@ class scormMetadata
     public $schemaversion = '';
     public $location = '';
     public $text = '';
-    public $attribs = array();
+    public $attribs = [];
 
     /**
      * Class constructor. Works in two different ways defined by the first element, being 'db' or 'manifest'.
      * If 'db', then it is built using the information available in the Chamilo database. If 'manifest', then it
      * is built using the element given as a parameter, expecting it to be a <metadata> element pointer from the
      * DOM parser.
+     *
      * @param	string	Type of creation required. Can be 'db' or 'manifest' (default)
      * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or
      * the pointer to the <metadata> element in the imsmanifest.xml file
@@ -34,7 +36,7 @@ class scormMetadata
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.
-                    return false;
+                    break;
                     //break;
                 case 'manifest': // Do the same as the default.
                     $children = $element->childNodes;
@@ -93,11 +95,9 @@ class scormMetadata
                             }
                         }
                     }
-                    return true;
                 //break;
             }
             // End parsing using PHP5 DOMXML methods.
         }
-        return false;
     }
 }

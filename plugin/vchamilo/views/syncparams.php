@@ -13,23 +13,23 @@ $plugin = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
 if ($action) {
-    require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php');
+    require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php';
 }
 
 $settings = api_get_settings();
 
-$table = new HTML_Table(array('class' => 'data_table', 'width' => '100%'));
+$table = new HTML_Table(['class' => 'data_table', 'width' => '100%']);
 $column = 0;
 $row = 0;
-$headers = array(
+$headers = [
     '',
     $plugin->get_lang('variable').' ['.$plugin->get_lang('subkey').']',
     $plugin->get_lang('category'),
     $plugin->get_lang('accessurl'),
     $plugin->get_lang('value'),
     '',
-);
-$attrs = array('center' => 'left');
+];
+$attrs = ['center' => 'left'];
 $table->addRow($headers, $attrs, 'th');
 
 foreach ($settings as $param) {
@@ -37,11 +37,11 @@ foreach ($settings as $param) {
         continue;
     }
     $check = '';
-    $attrs = array('center' => 'left');
+    $attrs = ['center' => 'left'];
     $syncButton = '
         <input class="btn btn-default" type="button" name="syncthis" value="'.$plugin->get_lang('syncthis').'" onclick="ajax_sync_setting(\''.$param['id'].'\')" />
         <span id="res_'.$param['id'].'"></span>';
-    $data = array(
+    $data = [
         $check,
         isset($param['subkey']) && !empty($param['subkey']) ? $param['variable'].' ['.$param['subkey'].']' : $param['variable'],
         $param['category'],
@@ -49,19 +49,19 @@ foreach ($settings as $param) {
         '<input type="text" disabled name="value_'.$param['id'].'" value="'.htmlspecialchars($param['selected_value'], ENT_COMPAT, 'UTF-8').'" />'.
         '<br />Master value: '.$param['selected_value'],
         $syncButton,
-    );
+    ];
     $row = $table->addRow($data, $attrs, 'td');
-    $table->setRowAttributes($row, array('id' => 'row_'.$param['id']), true);
+    $table->setRowAttributes($row, ['id' => 'row_'.$param['id']], true);
 }
 
-$content  = '<form name="settingsform" action="'.$thisurl.'">';
+$content = '<form name="settingsform" action="'.$thisurl.'">';
 $content .= '<input type="hidden" name="what" value="" />';
 $content .= $table->toHtml();
 $content .= '</form>';
 
 Display::addFlash(Display::return_message($plugin->get_lang('Sync your master settings to all instances.')));
 
-$interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+$interbreadcrumb[] = ['url' => 'manage.php', 'name' => get_lang('VChamilo')];
 $htmlHeadXtra[] = "<script>
 function ajax_sync_setting(settingid) {
     var webUrl = '".api_get_path(WEB_PATH)."';

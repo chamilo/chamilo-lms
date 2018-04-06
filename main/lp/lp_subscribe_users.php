@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CItemProperty;
-use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -31,15 +31,15 @@ if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
 
 $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
-);
+    'name' => get_lang('LearningPaths'),
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$oLP->get_id().'&'.api_get_cidreq(),
-    'name' => $oLP->get_name()
-);
+    'name' => $oLP->get_name(),
+];
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
@@ -77,7 +77,7 @@ if (!$session) {
 }
 
 // Getting all users in a nice format.
-$choices = array();
+$choices = [];
 /** @var User $user */
 foreach ($subscribedUsers as $user) {
     $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
@@ -91,7 +91,7 @@ $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
     $session
 );
 
-$selectedChoices = array();
+$selectedChoices = [];
 foreach ($subscribedUsersInLp as $itemProperty) {
     $selectedChoices[] = $itemProperty->getToUser()->getId();
 }
@@ -108,7 +108,7 @@ $userMultiSelect = $formUsers->addElement(
 );
 $formUsers->addButtonSave(get_lang('Save'));
 
-$defaults = array();
+$defaults = [];
 
 if (!empty($selectedChoices)) {
     $defaults['users'] = $selectedChoices;
@@ -136,7 +136,7 @@ $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
     $session
 );
 
-$selectedGroupChoices = array();
+$selectedGroupChoices = [];
 /** @var CItemProperty $itemProperty */
 foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
@@ -152,15 +152,11 @@ $groupMultiSelect = $form->addElement(
 // submit button
 $form->addButtonSave(get_lang('Save'));
 
-Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
-
-$defaults = array();
+$defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
 }
 $form->setDefaults($defaults);
-
-$tpl = new Template();
 
 $currentUser = api_get_user_entity(api_get_user_id());
 
@@ -202,13 +198,13 @@ if ($form->validate()) {
     header("Location: $url");
     exit;
 } else {
+    Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
     $headers = [
         get_lang('SubscribeUsersToLp'),
-        get_lang('SubscribeGroupsToLp')
+        get_lang('SubscribeGroupsToLp'),
     ];
+    $tpl = new Template();
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('tabs', $tabs);
+    $tpl->assign('content', $tabs);
+    $tpl->display_one_col_template();
 }
-
-$layout = $tpl->get_template('learnpath/subscribe_users.tpl');
-$tpl->display($layout);

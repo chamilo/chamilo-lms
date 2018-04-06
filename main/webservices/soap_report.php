@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Configures the WSReport SOAP service
+ * Configures the WSReport SOAP service.
+ *
  * @package chamilo.webservices
  */
 require_once __DIR__.'/webservice_report.php';
@@ -14,16 +15,16 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'user_id_field_name' => array(
+    [
+        'user_id_field_name' => [
             'name' => 'user_id_field_name',
             'type' => 'xsd:string',
-        ),
-        'user_id_value' => array(
+        ],
+        'user_id_value' => [
             'name' => 'user_id_value',
             'type' => 'xsd:string',
-        ),
-    )
+        ],
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -32,16 +33,16 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'course_id_field_name' => array(
+    [
+        'course_id_field_name' => [
             'name' => 'course_id_field_name',
             'type' => 'xsd:string',
-        ),
-        'course_id_value' => array(
+        ],
+        'course_id_value' => [
             'name' => 'course_id_value',
             'type' => 'xsd:string',
-        ),
-    )
+        ],
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -50,32 +51,19 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'session_id_field_name' => array(
+    [
+        'session_id_field_name' => [
             'name' => 'session_id_field_name',
             'type' => 'xsd:string',
-        ),
-        'session_id_value' => array(
+        ],
+        'session_id_value' => [
             'name' => 'session_id_value',
             'type' => 'xsd:string',
-        ),
-    )
+        ],
+    ]
 );
 
 /*
-$s->wsdl->addComplexType(
-	'user_result',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'user_id_value' => array('name' => 'user_id_value', 'type' => 'xsd:string'),
-		'result' => array('name' => 'result', 'type' => 'tns:result')
-	)
-);*/
-
-
 $s->wsdl->addComplexType(
     'user_result',
     'complexType',
@@ -83,9 +71,21 @@ $s->wsdl->addComplexType(
     'all',
     '',
     array(
-        'id' => array('name' => 'id', 'type' => 'xsd:string'),
-        'title' => array('name' => 'title', 'type' => 'xsd:string'),
+        'user_id_value' => array('name' => 'user_id_value', 'type' => 'xsd:string'),
+        'result' => array('name' => 'result', 'type' => 'tns:result')
     )
+);*/
+
+$s->wsdl->addComplexType(
+    'user_result',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'id' => ['name' => 'id', 'type' => 'xsd:string'],
+        'title' => ['name' => 'title', 'type' => 'xsd:string'],
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -94,13 +94,13 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'progress_bar_mode' => array(
+    [
+        'progress_bar_mode' => [
             'name' => 'progress_bar_mode',
             'type' => 'xsd:string',
-        ),
-        'progress_db' => array('name' => 'progress_db', 'type' => 'xsd:string'),
-    )
+        ],
+        'progress_db' => ['name' => 'progress_db', 'type' => 'xsd:string'],
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -109,18 +109,18 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'min_score' => array('name' => 'min_score', 'type' => 'xsd:string'),
-        'max_score' => array('name' => 'max_score', 'type' => 'xsd:string'),
-        'mastery_score' => array(
+    [
+        'min_score' => ['name' => 'min_score', 'type' => 'xsd:string'],
+        'max_score' => ['name' => 'max_score', 'type' => 'xsd:string'],
+        'mastery_score' => [
             'name' => 'mastery_score',
             'type' => 'xsd:string',
-        ),
-        'current_score' => array(
+        ],
+        'current_score' => [
             'name' => 'current_score',
             'type' => 'xsd:string',
-        ),
-    )
+        ],
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -129,42 +129,41 @@ $s->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(
-        array(
+    [],
+    [
+        [
             'ref' => 'SOAP-ENC:arrayType',
             'wsdl:arrayType' => 'tns:user_result[]',
-        ),
-    ),
+        ],
+    ],
     'tns:user_result'
 );
 
-
 $s->register(
     'WSReport.GetTimeSpentOnPlatform',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string')
+    ],
+    ['return' => 'xsd:string']
 );
 
 $s->register(
     'WSReport.GetTimeSpentOnCourse',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string')
+    ],
+    ['return' => 'xsd:string']
 );
 
 $s->register(
     'WSReport.GetTimeSpentOnCourseInSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
@@ -172,64 +171,64 @@ $s->register(
         'course_id_value' => 'xsd:string',
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string')
+    ],
+    ['return' => 'xsd:string']
 );
 
 $s->register(
     'WSReport.GetTimeSpentOnLearnpathInCourse',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
         'learnpath_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string')
+    ],
+    ['return' => 'xsd:string']
 );
 
 $s->register(
     'WSReport.GetLearnpathsByCourse',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
-    ),
-    array('return' => 'tns:user_result_array')
+    ],
+    ['return' => 'tns:user_result_array']
 );
 
 $s->register(
     'WSReport.GetLearnpathProgress',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
         'learnpath_id' => 'xsd:string',
-    ),
-    array('return' => 'tns:progress_result')
+    ],
+    ['return' => 'tns:progress_result']
 );
 
 $s->register(
     'WSReport.GetLearnpathHighestLessonLocation',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
         'learnpath_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string')
+    ],
+    ['return' => 'xsd:string']
 );
 
 $s->register(
     'WSReport.GetLearnpathScoreSingleItem',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
@@ -237,13 +236,13 @@ $s->register(
         'course_id_value' => 'xsd:string',
         'learnpath_id' => 'xsd:string',
         'learnpath_item_id' => 'xsd:string',
-    ),
-    array('return' => 'tns:score_result')
+    ],
+    ['return' => 'tns:score_result']
 );
 
 $s->register(
     'WSReport.GetLearnpathStatusSingleItem',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
@@ -251,12 +250,12 @@ $s->register(
         'course_id_value' => 'xsd:string',
         'learnpath_id' => 'xsd:string',
         'learnpath_item_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string')
+    ],
+    ['return' => 'xsd:string']
 );
 
 $s->register(
     'WSReport.test',
-    array(),
-    array('return' => 'xsd:string')
+    [],
+    ['return' => 'xsd:string']
 );

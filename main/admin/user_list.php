@@ -6,9 +6,9 @@ use ChamiloSession as Session;
 /**
  * @author Bart Mollet
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
+ *
  * @package chamilo.admin
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -164,10 +164,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
     }
 }
 
@@ -197,7 +197,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
  *
- * @param boolean $is_count Whether to count, or get data
+ * @param bool $is_count Whether to count, or get data
+ *
  * @return string SQL query
  */
 function prepare_user_sql_query($is_count)
@@ -235,7 +236,7 @@ function prepare_user_sql_query($is_count)
                   ON (u.id=url_rel_user.user_id)";
     }
 
-    $keywordList = array(
+    $keywordList = [
         'keyword_firstname',
         'keyword_lastname',
         'keyword_username',
@@ -244,10 +245,10 @@ function prepare_user_sql_query($is_count)
         'keyword_status',
         'keyword_active',
         'keyword_inactive',
-        'check_easy_passwords'
-    );
+        'check_easy_passwords',
+    ];
 
-    $keywordListValues = array();
+    $keywordListValues = [];
     $atLeastOne = false;
     foreach ($keywordList as $keyword) {
         $keywordListValues[$keyword] = null;
@@ -258,7 +259,7 @@ function prepare_user_sql_query($is_count)
     }
 
     if ($atLeastOne == false) {
-        $keywordListValues = array();
+        $keywordListValues = [];
     }
 
     /*
@@ -306,9 +307,9 @@ function prepare_user_sql_query($is_count)
         $sql .= " $query_admin_table
             WHERE (
                 u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
-                u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
-                u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
-                u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
+                u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
+                u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
+                u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
                 u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."' ";
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
@@ -401,7 +402,8 @@ function prepare_user_sql_query($is_count)
 }
 
 /**
- * Get the total number of users on the platform
+ * Get the total number of users on the platform.
+ *
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users()
@@ -414,17 +416,19 @@ function get_number_of_users()
 }
 
 /**
- * Get the users to display on the current page (fill the sortable-table)
+ * Get the users to display on the current page (fill the sortable-table).
+ *
  * @param   int     offset of first user to recover
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
+ *
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
     $sql = prepare_user_sql_query(false);
-    if (!in_array($direction, array('ASC', 'DESC'))) {
+    if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
     $column = intval($column);
@@ -441,7 +445,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     $res = Database::query($sql);
 
-    $users = array();
+    $users = [];
     $t = time();
     while ($user = Database::fetch_row($res)) {
         $userPicture = UserManager::getUserPicture(
@@ -463,7 +467,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         }
 
         // forget about the expiration date field
-        $users[] = array(
+        $users[] = [
             $user[0],
             $photo,
             $user[1],
@@ -474,38 +478,44 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[6],
             $user[7],
             api_get_local_time($user[9]),
-            $user[0]
-        );
+            $user[0],
+        ];
     }
 
     return $users;
 }
 
 /**
-* Returns a mailto-link
-* @param string $email An email-address
-* @return string HTML-code with a mailto-link
-*/
+ * Returns a mailto-link.
+ *
+ * @param string $email An email-address
+ *
+ * @return string HTML-code with a mailto-link
+ */
 function email_filter($email)
 {
     return Display :: encrypted_mailto_link($email, $email);
 }
 
 /**
-* Returns a mailto-link
-* @param string $email An email-address
-* @return string HTML-code with a mailto-link
-*/
+ * Returns a mailto-link.
+ *
+ * @param string $email An email-address
+ *
+ * @return string HTML-code with a mailto-link
+ */
 function user_filter($name, $params, $row)
 {
     return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';
 }
 
 /**
- * Build the modify-column of the table
+ * Build the modify-column of the table.
+ *
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row)
@@ -524,7 +534,7 @@ function modify_filter($user_id, $url_params, $row)
         $icon = Display::return_icon(
             'course.png',
             get_lang('Courses'),
-            array('onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')')
+            ['onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')']
         );
         $result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
                     '.$icon.'
@@ -534,7 +544,7 @@ function modify_filter($user_id, $url_params, $row)
         $icon = Display::return_icon(
             'session.png',
             get_lang('Sessions'),
-            array('onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')')
+            ['onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')']
         );
         $result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
                     '.$icon.'
@@ -590,7 +600,7 @@ function modify_filter($user_id, $url_params, $row)
                 Display::return_icon(
                     'edit.png',
                     get_lang('Edit'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 ).
                 '</a>&nbsp;';
@@ -598,7 +608,7 @@ function modify_filter($user_id, $url_params, $row)
             $result .= Display::return_icon(
                 'edit_na.png',
                 get_lang('Edit'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>&nbsp;';
         }
@@ -622,7 +632,7 @@ function modify_filter($user_id, $url_params, $row)
         $result .= Display::return_icon(
             'admin_star.png',
             get_lang('IsAdministrator'),
-            array('width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL)
+            ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
         );
     } else {
         $result .= Display::return_icon(
@@ -689,7 +699,7 @@ function modify_filter($user_id, $url_params, $row)
                 Display::return_icon(
                     'delete.png',
                     get_lang('Delete'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
@@ -700,7 +710,7 @@ function modify_filter($user_id, $url_params, $row)
             Display::return_icon(
                 'calendar.png',
                 get_lang('FreeBusyCalendar'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).
             '</a>';
@@ -716,7 +726,7 @@ function modify_filter($user_id, $url_params, $row)
                 Display::return_icon(
                     'delete.png',
                     get_lang('Delete'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
@@ -724,7 +734,7 @@ function modify_filter($user_id, $url_params, $row)
                 $result .= Display::return_icon(
                     'delete_na.png',
                     get_lang('Delete'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 );
             }
@@ -736,11 +746,14 @@ function modify_filter($user_id, $url_params, $row)
 
 /**
  * Build the active-column of the table to lock or unlock a certain user
- * lock = the user can no longer use this account
+ * lock = the user can no longer use this account.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @param int $active the current state of the account
+ *
+ * @param int    $active the current state of the account
  * @param string $params
- * @param array $row
+ * @param array  $row
+ *
  * @return string Some HTML-code with the lock/unlock button
  */
 function active_filter($active, $params, $row)
@@ -764,17 +777,17 @@ function active_filter($active, $params, $row)
         $result = Display::return_icon(
             $image.'.png',
             get_lang('AccountExpired'),
-            array(),
+            [],
             16
         );
-    } elseif ($row['0'] <> $_user['user_id']) {
+    } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the
         // accounts including your own => everybody is locked out and nobody
         // can change it anymore.
         $result = Display::return_icon(
             $image.'.png',
             get_lang(ucfirst($action)),
-            array('onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']),
+            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']],
             16
         );
     }
@@ -783,26 +796,29 @@ function active_filter($active, $params, $row)
 }
 
 /**
- * Instead of displaying the integer of the status, we give a translation for the status
+ * Instead of displaying the integer of the status, we give a translation for the status.
  *
- * @param integer $status
+ * @param int $status
+ *
  * @return string translation
  *
  * @version march 2008
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
 function status_filter($status)
 {
     $statusname = api_get_status_langvars();
+
     return $statusname[$status];
 }
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
-    $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
+    $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
     $tool_name = get_lang('SearchUsers');
 } else {
-    $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
     $tool_name = get_lang('UserList');
 }
 
@@ -894,9 +910,9 @@ $form->addText(
     'keyword',
     get_lang('Search'),
     false,
-    array(
-        'aria-label' => get_lang("SearchUsers")
-    )
+    [
+        'aria-label' => get_lang("SearchUsers"),
+    ]
 );
 $form->addButtonSearch(get_lang('Search'));
 
@@ -904,12 +920,12 @@ $searchAdvanced = '
 <a id="advanced_params" href="javascript://" 
     class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
-    '. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
+    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
     </span>
 </a>';
 $actionsLeft = '';
 $actionsCenter = '';
-$actionsRight  = '';
+$actionsRight = '';
 if (api_is_platform_admin()) {
     $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -919,7 +935,7 @@ $actionsLeft .= $form->returnForm();
 $actionsCenter .= $searchAdvanced;
 
 if (isset($_GET['keyword'])) {
-    $parameters = array('keyword' => Security::remove_XSS($_GET['keyword']));
+    $parameters = ['keyword' => Security::remove_XSS($_GET['keyword'])];
 } elseif (isset($_GET['keyword_firstname'])) {
     $parameters['keyword_firstname'] = Security::remove_XSS($_GET['keyword_firstname']);
     $parameters['keyword_lastname'] = Security::remove_XSS($_GET['keyword_lastname']);
@@ -941,7 +957,7 @@ $form = new FormValidator(
     'get',
     '',
     '',
-    array(),
+    [],
     FormValidator::LAYOUT_HORIZONTAL
 );
 
@@ -953,7 +969,7 @@ $form->addText('keyword_username', get_lang('LoginName'), false);
 $form->addText('keyword_email', get_lang('Email'), false);
 $form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
 
-$status_options = array();
+$status_options = [];
 $status_options['%'] = get_lang('All');
 $status_options[STUDENT] = get_lang('Student');
 $status_options[COURSEMANAGER] = get_lang('Teacher');
@@ -968,7 +984,7 @@ $form->addElement(
     $status_options
 );
 
-$active_group = array();
+$active_group = [];
 $active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
 $active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
 $form->addGroup($active_group, '', get_lang('ActiveAccount'), null, false);
@@ -985,7 +1001,7 @@ $htmlHeadXtra[] = '
 
 $form->addButtonSearch(get_lang('SearchUsers'));
 
-$defaults = array();
+$defaults = [];
 $defaults['keyword_active'] = 1;
 $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
@@ -1029,9 +1045,9 @@ $table->set_column_filter(10, 'modify_filter');
 if (api_is_platform_admin() &&
     !api_get_configuration_value('deny_delete_users')
 ) {
-    $table->set_form_actions(array('delete' => get_lang('DeleteFromPlatform')));
+    $table->set_form_actions(['delete' => get_lang('DeleteFromPlatform')]);
 } else {
-    $table->set_form_actions(array('none' => get_lang('NoActionAvailable')));
+    $table->set_form_actions(['none' => get_lang('NoActionAvailable')]);
 }
 
 $table_result = $table->return_table();
@@ -1041,20 +1057,20 @@ $extra_search_options = '';
 if ($table->get_total_number_of_items() == 0) {
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);
-        $conditions = array('username' => $keyword);
+        $conditions = ['username' => $keyword];
         $user_list = UserManager::get_user_list(
             $conditions,
-            array(),
+            [],
             false,
             ' OR '
         );
         if (!empty($user_list)) {
             $extra_search_options = Display::page_subheader(get_lang('UsersFoundInOtherPortals'));
 
-            $table = new HTML_Table(array('class' => 'data_table'));
+            $table = new HTML_Table(['class' => 'data_table']);
             $column = 0;
             $row = 0;
-            $headers = array(get_lang('User'), 'URL', get_lang('Actions'));
+            $headers = [get_lang('User'), 'URL', get_lang('Actions')];
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
                 $column++;
@@ -1075,14 +1091,14 @@ if ($table->get_total_number_of_items() == 0) {
                     }
                 }
                 if ($add_user) {
-                    $row_table = array();
+                    $row_table = [];
                     $row_table[] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] = $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['id'].'&sec_token='.Security::getTokenFromSession();
                     $row_table[] = Display::url(
                         get_lang('AddUserToMyURL'),
                         $url,
-                        array('class' => 'btn')
+                        ['class' => 'btn']
                     );
 
                     foreach ($row_table as $cell) {

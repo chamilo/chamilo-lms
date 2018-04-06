@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLinkCategory
+ * CLinkCategory.
  *
  * @ORM\Table(
  *  name="c_link_category",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLinkCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CLinkCategory
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -57,23 +57,24 @@ class CLinkCategory
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
     private $displayOrder;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * Set categoryTitle
+     * Set categoryTitle.
      *
      * @param string $categoryTitle
+     *
      * @return CLinkCategory
      */
     public function setCategoryTitle($categoryTitle)
@@ -84,7 +85,7 @@ class CLinkCategory
     }
 
     /**
-     * Get categoryTitle
+     * Get categoryTitle.
      *
      * @return string
      */
@@ -94,9 +95,10 @@ class CLinkCategory
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CLinkCategory
      */
     public function setDescription($description)
@@ -107,7 +109,7 @@ class CLinkCategory
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -117,9 +119,10 @@ class CLinkCategory
     }
 
     /**
-     * Set displayOrder
+     * Set displayOrder.
      *
-     * @param integer $displayOrder
+     * @param int $displayOrder
+     *
      * @return CLinkCategory
      */
     public function setDisplayOrder($displayOrder)
@@ -130,9 +133,9 @@ class CLinkCategory
     }
 
     /**
-     * Get displayOrder
+     * Get displayOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getDisplayOrder()
     {
@@ -140,9 +143,10 @@ class CLinkCategory
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CLinkCategory
      */
     public function setSessionId($sessionId)
@@ -153,9 +157,9 @@ class CLinkCategory
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -163,9 +167,10 @@ class CLinkCategory
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLinkCategory
      */
     public function setId($id)
@@ -176,9 +181,9 @@ class CLinkCategory
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -186,9 +191,10 @@ class CLinkCategory
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLinkCategory
      */
     public function setCId($cId)
@@ -199,9 +205,9 @@ class CLinkCategory
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

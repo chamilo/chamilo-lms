@@ -4,14 +4,16 @@
 /**
  * Defines the OpenofficeDocument class, which is meant as a conversion
  * tool from Office text documents (.doc, .sxw, .odt, .docx) to
- * learning paths
+ * learning paths.
+ *
  * @package chamilo.learnpath
+ *
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
 
 /**
- * Defines the "OpenofficeText" child of class "learnpath"
+ * Defines the "OpenofficeText" child of class "learnpath".
  */
 require_once 'openoffice_document.class.php';
 if (api_get_setting('search_enabled') == 'true') {
@@ -26,11 +28,12 @@ class OpenofficeText extends OpenofficeDocument
     public $split_steps;
 
     /**
-     * Class constructor. Calls the parent class and initialises the local attribute split_steps
-     * @param    boolean    Whether to split steps (true) or make one large page (false)
+     * Class constructor. Calls the parent class and initialises the local attribute split_steps.
+     *
+     * @param    bool    Whether to split steps (true) or make one large page (false)
      * @param    string    Course code
-     * @param    integer    Resource ID
-     * @param    integer Creator user id
+     * @param    int    Resource ID
+     * @param    int Creator user id
      */
     public function __construct(
         $split_steps = false,
@@ -43,11 +46,13 @@ class OpenofficeText extends OpenofficeDocument
     }
 
     /**
-     * Gets html pages and compose them into a learning path
+     * Gets html pages and compose them into a learning path.
+     *
      * @param    array    The files that will compose the generated learning path. Unused so far.
-     * @return    boolean    False if file does not exit. Nothing otherwise.
+     *
+     * @return bool False if file does not exit. Nothing otherwise.
      */
-    public function make_lp($files = array())
+    public function make_lp($files = [])
     {
         $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
@@ -108,10 +113,10 @@ class OpenofficeText extends OpenofficeDocument
     }
 
     /**
-     * Manages dir/chapter splitting
+     * Manages dir/chapter splitting.
+     *
      * @param    string    Chapter header
      * @param    string    Content
-     * @return    void
      */
     public function dealPerChapter($header, $content)
     {
@@ -147,7 +152,6 @@ class OpenofficeText extends OpenofficeDocument
                 $dir_content = $content;
             }
             $items_to_create[$matches[1][$i]] = $dir_content;
-
         }
 
         $i = 0;
@@ -187,7 +191,7 @@ class OpenofficeText extends OpenofficeDocument
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = strip_tags(nl2br($item_title));
-                $slide_name = str_replace(array("\r\n", "\r", "\n"), '', $slide_name);
+                $slide_name = str_replace(["\r\n", "\r", "\n"], '', $slide_name);
                 $slide_name = html_entity_decode($slide_name);
                 $previous = learnpath::add_item(
                     0,
@@ -205,10 +209,10 @@ class OpenofficeText extends OpenofficeDocument
     }
 
     /**
-     * Manages page splitting
+     * Manages page splitting.
+     *
      * @param    string    Page header
      * @param    string    Page body
-     * @return    void
      */
     public function dealPerPage($header, $body)
     {
@@ -288,12 +292,12 @@ class OpenofficeText extends OpenofficeDocument
                         $ic_slide->addCourseId($courseid);
                         $ic_slide->addToolId(TOOL_LEARNPATH);
                         $lp_id = $this->lp_id;
-                        $xapian_data = array(
+                        $xapian_data = [
                             SE_COURSE_ID => $courseid,
                             SE_TOOL_ID => TOOL_LEARNPATH,
-                            SE_DATA => array('lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id),
-                            SE_USER => (int)api_get_user_id(),
-                        );
+                            SE_DATA => ['lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id],
+                            SE_USER => (int) api_get_user_id(),
+                        ];
                         $ic_slide->xapian_data = serialize($xapian_data);
                         $di->addChunk($ic_slide);
                         // Index and return search engine document id.
@@ -321,8 +325,9 @@ class OpenofficeText extends OpenofficeDocument
     }
 
     /**
-     * Returns additional Java command parameters
-     * @return    string    The additional parameters to be used in the Java call
+     * Returns additional Java command parameters.
+     *
+     * @return string The additional parameters to be used in the Java call
      */
     public function add_command_parameters()
     {
@@ -330,10 +335,12 @@ class OpenofficeText extends OpenofficeDocument
     }
 
     /**
-     * Formats a page content by reorganising the HTML code a little
+     * Formats a page content by reorganising the HTML code a little.
+     *
      * @param    string    Page header
      * @param    string    Page content
-     * @return    string    Formatted page content
+     *
+     * @return string Formatted page content
      */
     public function format_page_content($header, $content)
     {
@@ -368,7 +375,6 @@ class OpenofficeText extends OpenofficeDocument
                     $picture_resized = str_ireplace('<img', '<img width="'.$new_width.'" ', $images[0][$key]);
                     $content = str_replace($images[0][$key], $picture_resized, $content);
                 }
-
             } elseif ($img_width > $max_width - 10) {
                 $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width - 10).'"', $images[0][$key]);
                 $content = str_replace($images[0][$key], $picture_resized, $content);
@@ -379,7 +385,7 @@ class OpenofficeText extends OpenofficeDocument
     }
 
     /**
-     * Add documents to the visioconference (to be implemented)
+     * Add documents to the visioconference (to be implemented).
      */
     public function add_docs_to_visio()
     {

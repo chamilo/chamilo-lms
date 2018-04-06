@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 // resetting the course id
@@ -9,7 +10,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $xajax = new xajax();
-$xajax->registerFunction(array('search_users', 'AccessUrlEditUsersToUrl', 'search_users'));
+$xajax->registerFunction(['search_users', 'AccessUrlEditUsersToUrl', 'search_users']);
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -29,8 +30,8 @@ $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 
 // setting breadcrumbs
 $tool_name = get_lang('EditUsersToURL');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -57,7 +58,7 @@ function add_user_to_url(code, content) {
 function send() {
 	if (document.formulaire.access_url_id.value!=0) {
 		document.formulaire.form_sent.value=0;
-		document.formulaire.add_type.value=\'' . $add_type.'\';
+		document.formulaire.add_type.value=\''.$add_type.'\';
 		document.formulaire.submit();
 	}
 }
@@ -74,7 +75,7 @@ function remove_item(origin) {
 
 $form_sent = 0;
 $errorMsg = '';
-$UserList = array();
+$UserList = [];
 $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -82,7 +83,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $UserList = $_POST['sessionUsersList'];
 
     if (!is_array($UserList)) {
-        $UserList = array();
+        $UserList = [];
     }
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
@@ -99,7 +100,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             if (!empty($result['users_added'])) {
                 $message .= '<h4>'.get_lang('UsersAdded').':</h4>';
                 $i = 1;
-                $user_added_list = array();
+                $user_added_list = [];
                 foreach ($result['users_added'] as $user) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
@@ -114,12 +115,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
             if (!empty($result['users_deleted'])) {
                 $message .= '<br /><h4>'.get_lang('UsersDeleted').': </h4>';
-                $user_deleted_list = array();
+                $user_deleted_list = [];
                 $i = 1;
                 foreach ($result['users_deleted'] as $user) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
-                        $user_deleted_list [] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                        $user_deleted_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
                         $i++;
                     }
                 }
@@ -146,7 +147,7 @@ echo '</div>';
 
 api_display_tool_title($tool_name);
 
-$nosessionUsersList = $sessionUsersList = array();
+$nosessionUsersList = $sessionUsersList = [];
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if ($ajax_search) {
@@ -188,7 +189,7 @@ $url_list = UrlManager::get_url_data();
 ?>
 
 <div style="text-align: left;">
-<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
+<?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>
 </div>
 <br /><br />
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
@@ -196,7 +197,7 @@ $url_list = UrlManager::get_url_data();
 } ?> >
     <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
-<option value="0"> <?php echo get_lang('SelectUrl') ?></option>
+<option value="0"> <?php echo get_lang('SelectUrl'); ?></option>
         <?php
         $url_selected = '';
         foreach ($url_list as $url_obj) {
@@ -217,12 +218,12 @@ $url_list = UrlManager::get_url_data();
 </select>
 <br /><br />
 <input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
+<input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
 
 <?php
 if (!empty($errorMsg)) {
-    echo Display::return_message($errorMsg, 'normal'); //main API
-}
+            echo Display::return_message($errorMsg, 'normal'); //main API
+        }
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -237,7 +238,7 @@ if (!empty($errorMsg)) {
     </td>
 </tr>
 <tr>
-  <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> : <?php echo count($nosessionUsersList); ?></b>
+  <td align="center"><b><?php echo get_lang('UserListInPlatform'); ?> : <?php echo count($nosessionUsersList); ?></b>
   </td>
   <td></td>
   <td align="center"><b><?php echo get_lang('UserListIn').' '.$url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
@@ -245,19 +246,21 @@ if (!empty($errorMsg)) {
 <tr>
   <td align="center">
   <div id="content_source">
-    <?php if ($ajax_search) { ?>
+    <?php if ($ajax_search) {
+        ?>
     <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
     <div id="ajax_list_users"></div>
-    <?php } else { ?>
+    <?php
+    } else {
+        ?>
     <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
     <?php
         foreach ($nosessionUsersList as $enreg) {
-    ?>
+            ?>
     <option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
     <?php
-     }
-    unset($nosessionUsersList);
-    ?>
+        }
+        unset($nosessionUsersList); ?>
     </select>
         <?php
     }
@@ -265,11 +268,14 @@ if (!empty($errorMsg)) {
   </div>
   </td>
   <td width="10%" valign="middle" align="center">
-    <?php if ($ajax_search) { ?>
+    <?php if ($ajax_search) {
+        ?>
         <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))">
             <em class="fa fa-arrow-left"></em>
         </button>
-    <?php } else { ?>
+    <?php
+    } else {
+        ?>
         <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
             <em class="fa fa-arrow-right"></em>
         </button>
@@ -278,7 +284,8 @@ if (!empty($errorMsg)) {
             <em class="fa fa-arrow-left"></em>
 
         </button>
-    <?php } ?>
+    <?php
+    } ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">

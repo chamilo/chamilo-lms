@@ -3,7 +3,9 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ *
  * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
  *
  * @todo the answered column
@@ -39,14 +41,14 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
-    'name' => get_lang('SurveyList')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('SurveyList'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id,
-    'name' => $urlname
-);
+    'name' => $urlname,
+];
 
 // Displaying the header
 Display::display_header($tool_name);
@@ -59,7 +61,7 @@ if ($survey_data['anonymous'] == 1) {
             $answered_data
         ).' '.get_lang('PeopleAnswered')
     );
-    $answered_data = array();
+    $answered_data = [];
 }
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {

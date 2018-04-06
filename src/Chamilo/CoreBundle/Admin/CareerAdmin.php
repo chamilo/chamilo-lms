@@ -5,12 +5,13 @@ namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Career;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class CareerAdmin
+ * Class CareerAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class CareerAdmin extends AbstractAdmin
@@ -23,7 +24,7 @@ class CareerAdmin extends AbstractAdmin
         $formMapper
             ->add('name')
             ->add('description', 'ckeditor')
-            ->add('status', 'choice', array('choices' => Career::getStatusList()))
+            ->add('status', 'choice', ['choices' => Career::getStatusList()])
         ;
     }
 
@@ -47,5 +48,4 @@ class CareerAdmin extends AbstractAdmin
             ->addIdentifier('name')
         ;
     }
-
 }

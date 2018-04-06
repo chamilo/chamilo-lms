@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  * @package chamilo.plugin.ticket
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -45,8 +43,8 @@ $result_tareas = Database::query($sql_tasks);
 $result_forum = Database::query($sql_forum);
 
 echo '<div class="row">
-        <input type="hidden" id="rs_id" name ="rs_id" value="' . $id.'">
-        <div class="formw">' . get_lang('PleaseSelectTasks').'</div>
+        <input type="hidden" id="rs_id" name ="rs_id" value="'.$id.'">
+        <div class="formw">'.get_lang('PleaseSelectTasks').'</div>
     </div>';
 echo '<div class="row"><div class="formw"><select name ="work_id" id="work_id">';
 echo '<option value="0"'.(($row['colid'] == $rs->work_id) ? "selected" : "").'>'.get_lang('PleaseSelect').'</option>';
@@ -55,7 +53,7 @@ while ($row = Database::fetch_assoc($result_tasks)) {
 }
 echo '</select></div><div>';
 echo '<div class="row">
-        <div class="formw">' . get_lang('PleaseSelectThread').'</div>
+        <div class="formw">'.get_lang('PleaseSelectThread').'</div>
     </div>';
 echo '<div class="row"><div class="formw"><select name ="forum_id" id="forum_id">';
 echo '<option value="0"'.(($row['colid'] == $rs->work_id) ? "forum_id" : "").'>'.get_lang('PleaseSelect').'</option>';
@@ -65,7 +63,7 @@ while ($row = Database::fetch_assoc($result_forum)) {
 echo '</select></div><div>';
 echo '<div class="row">
         <div class="formw">
-        <button class="save" name="edit" type="button" value="' . get_lang('Edit').'" onClick="save('."$id".');">'.
+        <button class="save" name="edit" type="button" value="'.get_lang('Edit').'" onClick="save('."$id".');">'.
             get_lang('Edit').'</button>
         </div>
     </div>';

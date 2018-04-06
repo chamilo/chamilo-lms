@@ -9,6 +9,7 @@
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
  *             as there was no title field (the title was merged into the content field)
+ *
  * @package chamilo.announcements
  * multiple functions
  */
@@ -65,14 +66,14 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $isTutor = false;
 if (!empty($group_id)) {
     $group_properties = GroupManager:: get_group_properties($group_id);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+    ];
 
     if ($allowToEdit === false) {
         // Check if user is tutor group
@@ -109,7 +110,7 @@ switch ($action) {
         }
 
         if (!empty($sortDirection)) {
-            if (!in_array(trim(strtoupper($sortDirection)), array('ASC', 'DESC'))) {
+            if (!in_array(trim(strtoupper($sortDirection)), ['ASC', 'DESC'])) {
                 $sortDirection = 'ASC';
             }
 
@@ -154,10 +155,10 @@ switch ($action) {
         }
         break;
     case 'view':
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             "name" => $nameTools,
-        );
+        ];
 
         $nameTools = get_lang('View');
         $content = AnnouncementManager::displayAnnouncement($announcement_id);
@@ -170,13 +171,13 @@ switch ($action) {
             'post',
             api_get_self().'?'.api_get_cidreq(),
             '',
-            array(),
+            [],
             FormValidator::LAYOUT_INLINE
         );
 
         $searchForm->addElement('text', 'keyword', get_lang('Title'));
         $users = CourseManager::get_user_list_from_course_code(api_get_course_id(), $sessionId);
-        $userList = array('' => '');
+        $userList = ['' => ''];
         if (!empty($users)) {
             foreach ($users as $user) {
                 $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
@@ -186,7 +187,7 @@ switch ($action) {
         $searchForm->addElement('select', 'user_id', get_lang('Users'), $userList);
         $searchForm->addButtonSearch(get_lang('Search'));
 
-        $filterData = array();
+        $filterData = [];
         $keyword = '';
         $userIdToSearch = 0;
 
@@ -199,45 +200,45 @@ switch ($action) {
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;
         $deleteUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?a=delete_item&'.api_get_cidreq();
-        $columns = array(
+        $columns = [
             get_lang('Title'),
             get_lang('By'),
             get_lang('LastUpdateDate'),
-            get_lang('Actions')
-        );
+            get_lang('Actions'),
+        ];
 
         // Column config
-        $columnModel = array(
-            array(
+        $columnModel = [
+            [
                 'name' => 'title',
                 'index' => 'title',
                 'width' => '300',
                 'align' => 'left',
                 'sortable' => 'false',
-            ),
-            array(
+            ],
+            [
                 'name' => 'username',
                 'index' => 'username',
                 'width' => '100',
                 'align' => 'left',
                 'sortable' => 'false',
-            ),
-            array(
+            ],
+            [
                 'name' => 'lastedit_date',
                 'index' => 'lastedit_date',
                 'width' => '200',
                 'align' => 'left',
                 'sortable' => 'false',
-            ),
-            array(
+            ],
+            [
                 'name' => 'actions',
                 'index' => 'actions',
                 'width' => '150',
                 'align' => 'left',
                 //'formatter' => 'action_formatter',
-                'sortable' => 'false'
-            )
-        );
+                'sortable' => 'false',
+            ],
+        ];
 
         // Autowidth
         $extra_params['autowidth'] = 'true';
@@ -267,7 +268,7 @@ switch ($action) {
                 $columns,
                 $columnModel,
                 $extra_params,
-                array(),
+                [],
                 '',
                 true
             ).$editOptions.'
@@ -285,12 +286,12 @@ switch ($action) {
             if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
                 $html .= '<div id="no-data-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
-                $html .= Display::return_icon('valves.png', '', array(), 64);
+                $html .= Display::return_icon('valves.png', '', [], 64);
                 $html .= '<div class="controls">';
                 $html .= Display::url(
                     get_lang('AddAnnouncement'),
                     api_get_self()."?".api_get_cidreq()."&action=add",
-                    array('class' => 'btn btn-primary')
+                    ['class' => 'btn btn-primary']
                 );
                 $html .= '</div>';
                 $html .= '</div>';
@@ -322,9 +323,8 @@ switch ($action) {
             if ($allow === false) {
                 AnnouncementManager::delete_all_announcements($_course);
                 Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
-
             }
-            header('Location: ' . $homeUrl);
+            header('Location: '.$homeUrl);
             exit;
         }
         break;
@@ -378,7 +378,7 @@ switch ($action) {
             'post',
             $url,
             null,
-            array('enctype' => 'multipart/form-data')
+            ['enctype' => 'multipart/form-data']
         );
 
         if (empty($id)) {
@@ -387,10 +387,10 @@ switch ($action) {
             $form_name = get_lang('ModifyAnnouncement');
         }
 
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
             "name" => $nameTools,
-        );
+        ];
 
         $nameTools = $form_name;
         $form->addHeader($form_name);
@@ -471,14 +471,14 @@ switch ($action) {
         if (isset($announcementInfo) && !empty($announcementInfo)) {
             $to = AnnouncementManager::load_edit_users('announcement', $id);
 
-            $defaults = array(
+            $defaults = [
                 'title' => $announcementInfo['title'],
                 'content' => $announcementInfo['content'],
                 'id' => $announcementInfo['id'],
                 'users' => $to,
-            );
+            ];
         } else {
-            $defaults = array();
+            $defaults = [];
             if (!empty($to)) {
                 $defaults['users'] = $to;
             }
@@ -508,7 +508,7 @@ switch ($action) {
             'text',
             'title',
             get_lang('EmailTitle'),
-            array("onkeypress" => "return event.keyCode != 13;")
+            ["onkeypress" => "return event.keyCode != 13;"]
         );
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
@@ -527,7 +527,7 @@ switch ($action) {
             get_lang('Description'),
             true,
             false,
-            array('ToolbarSet' => 'Announcements')
+            ['ToolbarSet' => 'Announcements']
         );
 
         $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
@@ -610,7 +610,7 @@ switch ($action) {
                         $insert_id = AnnouncementManager::add_group_announcement(
                             $data['title'],
                             $data['content'],
-                            array('GROUP:'.$group_id),
+                            ['GROUP:'.$group_id],
                             $data['users'],
                             $file,
                             $file_comment,
@@ -661,7 +661,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 $show_actions = false;
 $actionsLeft = '';
 if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
-    if (in_array($action, array('add', 'modify', 'view'))) {
+    if (in_array($action, ['add', 'modify', 'view'])) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
             "</a>";
@@ -672,7 +672,7 @@ if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath'))
     }
     $show_actions = true;
 } else {
-    if (in_array($action, array('view'))) {
+    if (in_array($action, ['view'])) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     }
@@ -684,19 +684,19 @@ if ($allowToEdit && api_get_group_id() == 0) {
         if (!isset($_GET['action']) ||
             isset($_GET['action']) && $_GET['action'] == 'list'
         ) {
-            $actionsLeft .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete_all\" onclick=\"javascript:if(!confirm('" . get_lang("ConfirmYourChoice") . "')) return false;\">" .
+            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
                 Display::return_icon(
                     'delete_announce.png',
                     get_lang('AnnouncementDeleteAll'),
                     '',
                     ICON_SIZE_MEDIUM
-                ) . "</a>";
+                )."</a>";
         }
     }
 }
 
 if ($show_actions) {
-    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString));
+    echo Display::toolbarAction('toolbar', [$actionsLeft, $searchFormToString]);
 }
 
 echo $content;

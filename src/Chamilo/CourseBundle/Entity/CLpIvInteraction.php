@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLpIvInteraction
+ * CLpIvInteraction.
  *
  * @ORM\Table(
  *  name="c_lp_iv_interaction",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpIvInteraction
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,28 +29,28 @@ class CLpIvInteraction
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
     private $orderId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
@@ -113,9 +113,10 @@ class CLpIvInteraction
     private $latency;
 
     /**
-     * Set orderId
+     * Set orderId.
      *
-     * @param integer $orderId
+     * @param int $orderId
+     *
      * @return CLpIvInteraction
      */
     public function setOrderId($orderId)
@@ -126,9 +127,9 @@ class CLpIvInteraction
     }
 
     /**
-     * Get orderId
+     * Get orderId.
      *
-     * @return integer
+     * @return int
      */
     public function getOrderId()
     {
@@ -136,9 +137,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set lpIvId
+     * Set lpIvId.
      *
-     * @param integer $lpIvId
+     * @param int $lpIvId
+     *
      * @return CLpIvInteraction
      */
     public function setLpIvId($lpIvId)
@@ -149,9 +151,9 @@ class CLpIvInteraction
     }
 
     /**
-     * Get lpIvId
+     * Get lpIvId.
      *
-     * @return integer
+     * @return int
      */
     public function getLpIvId()
     {
@@ -159,9 +161,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set interactionId
+     * Set interactionId.
      *
      * @param string $interactionId
+     *
      * @return CLpIvInteraction
      */
     public function setInteractionId($interactionId)
@@ -172,7 +175,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get interactionId
+     * Get interactionId.
      *
      * @return string
      */
@@ -182,9 +185,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set interactionType
+     * Set interactionType.
      *
      * @param string $interactionType
+     *
      * @return CLpIvInteraction
      */
     public function setInteractionType($interactionType)
@@ -195,7 +199,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get interactionType
+     * Get interactionType.
      *
      * @return string
      */
@@ -205,9 +209,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set weighting
+     * Set weighting.
      *
      * @param float $weighting
+     *
      * @return CLpIvInteraction
      */
     public function setWeighting($weighting)
@@ -218,7 +223,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get weighting
+     * Get weighting.
      *
      * @return float
      */
@@ -228,9 +233,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set completionTime
+     * Set completionTime.
      *
      * @param string $completionTime
+     *
      * @return CLpIvInteraction
      */
     public function setCompletionTime($completionTime)
@@ -241,7 +247,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get completionTime
+     * Get completionTime.
      *
      * @return string
      */
@@ -251,9 +257,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set correctResponses
+     * Set correctResponses.
      *
      * @param string $correctResponses
+     *
      * @return CLpIvInteraction
      */
     public function setCorrectResponses($correctResponses)
@@ -264,7 +271,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get correctResponses
+     * Get correctResponses.
      *
      * @return string
      */
@@ -274,9 +281,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set studentResponse
+     * Set studentResponse.
      *
      * @param string $studentResponse
+     *
      * @return CLpIvInteraction
      */
     public function setStudentResponse($studentResponse)
@@ -287,7 +295,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get studentResponse
+     * Get studentResponse.
      *
      * @return string
      */
@@ -297,9 +305,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set result
+     * Set result.
      *
      * @param string $result
+     *
      * @return CLpIvInteraction
      */
     public function setResult($result)
@@ -310,7 +319,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get result
+     * Get result.
      *
      * @return string
      */
@@ -320,9 +329,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set latency
+     * Set latency.
      *
      * @param string $latency
+     *
      * @return CLpIvInteraction
      */
     public function setLatency($latency)
@@ -333,7 +343,7 @@ class CLpIvInteraction
     }
 
     /**
-     * Get latency
+     * Get latency.
      *
      * @return string
      */
@@ -343,9 +353,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLpIvInteraction
      */
     public function setId($id)
@@ -356,9 +367,9 @@ class CLpIvInteraction
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -366,9 +377,10 @@ class CLpIvInteraction
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLpIvInteraction
      */
     public function setCId($cId)
@@ -379,9 +391,9 @@ class CLpIvInteraction
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

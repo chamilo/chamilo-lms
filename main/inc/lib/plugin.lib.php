@@ -4,11 +4,11 @@
 use ChamiloSession as Session;
 
 /**
- * Class AppPlugin
+ * Class AppPlugin.
  */
 class AppPlugin
 {
-    public $plugin_regions = array(
+    public $plugin_regions = [
         'main_top',
         'main_bottom',
         'login_top',
@@ -26,28 +26,29 @@ class AppPlugin
         'footer_center',
         'footer_right',
         'menu_administrator',
-        'course_tool_plugin'
-    );
+        'course_tool_plugin',
+    ];
 
-    public $installedPluginListName = array();
-    public $installedPluginListObject = array();
+    public $installedPluginListName = [];
+    public $installedPluginListObject = [];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Read plugin from path
+     * Read plugin from path.
+     *
      * @return array
      */
     public function read_plugins_from_path()
     {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginPath = api_get_path(SYS_PLUGIN_PATH);
-        $plugins = array();
+        $plugins = [];
         $handle = @opendir($pluginPath);
         while (false !== ($file = readdir($handle))) {
             if ($file != '.' && $file != '..' && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
@@ -65,7 +66,7 @@ class AppPlugin
      */
     public function get_installed_plugins_by_region()
     {
-        $plugins = array();
+        $plugins = [];
         /* We retrieve all the active plugins. */
         $result = api_get_settings('Plugins');
         if (!empty($result)) {
@@ -101,12 +102,10 @@ class AppPlugin
         return $this->installedPluginListObject;
     }
 
-    /**
-     */
     public function setInstalledPluginListObject()
     {
         $pluginListName = $this->getInstalledPluginListName();
-        $pluginList = array();
+        $pluginList = [];
         if (!empty($pluginListName)) {
             foreach ($pluginListName as $pluginName) {
                 $pluginInfo = $this->getPluginInfo($pluginName);
@@ -123,11 +122,11 @@ class AppPlugin
      */
     public function get_installed_plugins()
     {
-        $installedPlugins = array();
+        $installedPlugins = [];
         $plugins = api_get_settings_params(
-            array(
-                "variable = ? AND selected_value = ? AND category = ? " => array('status', 'installed', 'Plugins')
-            )
+            [
+                "variable = ? AND selected_value = ? AND category = ? " => ['status', 'installed', 'Plugins'],
+            ]
         );
 
         if (!empty($plugins)) {
@@ -196,7 +195,7 @@ class AppPlugin
         }
         // Second remove all remaining global settings
         api_delete_settings_params(
-            array('category = ? AND access_url = ? AND subkey = ? ' => array('Plugins', $urlId, $pluginName))
+            ['category = ? AND access_url = ? AND subkey = ? ' => ['Plugins', $urlId, $pluginName]]
         );
     }
 
@@ -208,7 +207,7 @@ class AppPlugin
     public function get_areas_by_plugin($pluginName)
     {
         $result = api_get_settings('Plugins');
-        $areas = array();
+        $areas = [];
         foreach ($result as $row) {
             if ($pluginName == $row['selected_value']) {
                 $areas[] = $row['variable'];
@@ -255,9 +254,9 @@ class AppPlugin
     }
 
     /**
-     * @param string $region
+     * @param string   $region
      * @param Template $template
-     * @param bool   $forced
+     * @param bool     $forced
      *
      * @return null|string
      */
@@ -277,7 +276,7 @@ class AppPlugin
 
     /**
      * Loads the translation files inside a plugin if exists.
-     * It loads by default english see the hello world plugin
+     * It loads by default english see the hello world plugin.
      *
      * @param string $plugin_name
      *
@@ -335,9 +334,9 @@ class AppPlugin
     }
 
     /**
-     * @param string $region
+     * @param string   $region
      * @param Template $template
-     * @param bool $forced
+     * @param bool     $forced
      *
      * @return bool
      *
@@ -369,7 +368,7 @@ class AppPlugin
                     if (isset($_template)) {
                         $_template['plugin_info'] = $plugin_info;
                     } else {
-                        $_template = array();
+                        $_template = [];
                         $_template['plugin_info'] = $plugin_info;
                     }
 
@@ -377,7 +376,7 @@ class AppPlugin
                     $template->assign($plugin_name, $_template);
 
                     // Loading the Twig template plugin files if exists
-                    $template_list = array();
+                    $template_list = [];
                     if (isset($plugin_info) && isset($plugin_info['templates'])) {
                         $template_list = $plugin_info['templates'];
                     }
@@ -398,13 +397,15 @@ class AppPlugin
     }
 
     /**
-     * Loads plugin info
+     * Loads plugin info.
      *
      * @staticvar array $plugin_data
-     * @param string    $plugin_name
-     * @param bool      $forced load from DB or from the static array
+     *
+     * @param string $plugin_name
+     * @param bool   $forced      load from DB or from the static array
      *
      * @return array
+     *
      * @todo filter setting_form
      */
     public function getPluginInfo($plugin_name, $forced = false)
@@ -415,7 +416,7 @@ class AppPlugin
         } else {
             $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
 
-            $plugin_info = array();
+            $plugin_info = [];
             if (file_exists($plugin_file)) {
                 require $plugin_file;
             }
@@ -423,17 +424,17 @@ class AppPlugin
             // @todo check if settings are already added
             // Extra options
             $plugin_settings = api_get_settings_params(
-                array(
-                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => array(
+                [
+                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => [
                         $plugin_name,
                         'Plugins',
                         'setting',
-                        api_get_current_access_url_id()
-                    )
-                )
+                        api_get_current_access_url_id(),
+                    ],
+                ]
             );
 
-            $settings_filtered = array();
+            $settings_filtered = [];
             foreach ($plugin_settings as $item) {
                 if (!empty($item['selected_value'])) {
                     if (@unserialize($item['selected_value']) !== false) {
@@ -445,13 +446,15 @@ class AppPlugin
             $plugin_info['settings'] = $settings_filtered;
             $pluginData[$plugin_name] = $plugin_info;
             Session::write('plugin_data', $pluginData);
+
             return $plugin_info;
         }
     }
 
     /**
-     * Get the template list
-     * @param  string $pluginName
+     * Get the template list.
+     *
+     * @param string $pluginName
      *
      * @return bool
      */
@@ -466,7 +469,8 @@ class AppPlugin
     }
 
     /**
-     * Remove all regions of an specific plugin
+     * Remove all regions of an specific plugin.
+     *
      * @param string $plugin
      */
     public function remove_all_regions($plugin)
@@ -474,20 +478,21 @@ class AppPlugin
         $access_url_id = api_get_current_access_url_id();
         if (!empty($plugin)) {
             api_delete_settings_params(
-                array(
-                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => array(
+                [
+                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => [
                         'Plugins',
                         'region',
                         $access_url_id,
                         $plugin,
-                    ),
-                )
+                    ],
+                ]
             );
         }
     }
 
     /**
-     * Add a plugin to a region
+     * Add a plugin to a region.
+     *
      * @param string $plugin
      * @param string $region
      */
@@ -532,7 +537,8 @@ class AppPlugin
     }
 
     /**
-     * Add the course settings to the course settings form
+     * Add the course settings to the course settings form.
+     *
      * @param FormValidator $form
      */
     public function add_course_settings_form($form)
@@ -561,9 +567,9 @@ class AppPlugin
 
                 $form->addHtml('<div class="panel panel-default">');
                 $form->addHtml('
-                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name.'-settings">
+                    <div class="panel-heading" role="tab" id="heading-'.$plugin_name.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
                 ');
                 $form->addHtml($icon.' '.$pluginTitle);
                 $form->addHtml('
@@ -572,11 +578,11 @@ class AppPlugin
                     </div>
                 ');
                 $form->addHtml('
-                    <div id="collapse-' . $plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
+                    <div id="collapse-'.$plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
                         <div class="panel-body">
                 ');
 
-                $groups = array();
+                $groups = [];
                 foreach ($obj->course_settings as $setting) {
                     if ($obj->validateCourseSetting($setting['name']) === false) {
                         continue;
@@ -584,7 +590,7 @@ class AppPlugin
                     if ($setting['type'] != 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
-                        $element = & $form->createElement(
+                        $element = &$form->createElement(
                             $setting['type'],
                             $setting['name'],
                             '',
@@ -601,7 +607,7 @@ class AppPlugin
                     }
                 }
                 foreach ($groups as $k => $v) {
-                    $form->addGroup($groups[$k], $k, array($obj->get_lang($k)));
+                    $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
                 }
                 $form->addButtonSave(get_lang('SaveSettings'));
                 $form->addHtml('
@@ -615,13 +621,14 @@ class AppPlugin
 
     /**
      * Get all course settings from all installed plugins.
+     *
      * @return array
      */
     public function getAllPluginCourseSettings()
     {
         $pluginList = $this->getInstalledPluginListObject();
         /** @var Plugin $obj */
-        $courseSettings = array();
+        $courseSettings = [];
         if (!empty($pluginList)) {
             foreach ($pluginList as $obj) {
                 $pluginCourseSetting = $obj->getCourseSettings();
@@ -634,7 +641,8 @@ class AppPlugin
 
     /**
      * When saving the plugin values in the course settings, check whether
-     * a callback method should be called and send it the updated settings
+     * a callback method should be called and send it the updated settings.
+     *
      * @param array $values The new settings the user just saved
      */
     public function saveCourseSettingsHook($values)
@@ -645,7 +653,7 @@ class AppPlugin
         foreach ($pluginList as $obj) {
             $settings = $obj->getCourseSettings();
 
-            $subValues = array();
+            $subValues = [];
             if (!empty($settings)) {
                 foreach ($settings as $v) {
                     if (isset($values[$v])) {
@@ -661,8 +669,9 @@ class AppPlugin
     }
 
     /**
-     * Get first SMS plugin name
-     * @return string|boolean
+     * Get first SMS plugin name.
+     *
+     * @return string|bool
      */
     public function getSMSPluginName()
     {
@@ -685,7 +694,7 @@ class AppPlugin
         $className = str_replace('Plugin', '', $className);
 
         if (class_exists($className)) {
-            return new $className;
+            return new $className();
         }
 
         return false;

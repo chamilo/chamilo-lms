@@ -1,18 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Quick page to react to first login cases
+ * Quick page to react to first login cases.
+ *
  * @package chamilo.custompages
  */
-
 require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
 require_once __DIR__.'/language.php';
 
 /**
- * Security checks
+ * Security checks.
  */
-if (!isset($_SESSION['conditional_login']['uid']))
-  die("Not Authorised");
+if (!isset($_SESSION['conditional_login']['uid'])) {
+    die("Not Authorised");
+}
 
 if (isset($_POST['password'])) {
     $u = api_get_user_info($_SESSION['conditional_login']['uid']);
@@ -59,7 +60,7 @@ if ($_GET['invalid'] == 2) {
 }
 $www = api_get_path('WEB_PATH');
 /**
- * HTML output
+ * HTML output.
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -67,7 +68,7 @@ $www = api_get_path('WEB_PATH');
 <head>
     <title>Custompage - login</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <script type="text/javascript" src="<?php echo $www ?>web/assets/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $www; ?>web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             if (top.location != location)
@@ -95,8 +96,8 @@ $www = api_get_path('WEB_PATH');
         <div id="changepassword-form-box" class="form-box">
       <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword'); ?> </div>
         <?php if (isset($error_message)) {
-            echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
-        }?>
+    echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
+}?>
             <form id="changepassword-form" class="form" method="post">
                 <div>
           <label for="password">*<?php echo custompages_get_lang('Password'); ?></label>

@@ -3,9 +3,11 @@
 
 /**
  * Class LinkForm
- * Forms related to links
+ * Forms related to links.
+ *
  * @author Stijn Konings
  * @author Bert Steppé (made more generic)
+ *
  * @package chamilo.gradebook
  */
 class LinkForm extends FormValidator
@@ -18,7 +20,8 @@ class LinkForm extends FormValidator
     private $extra;
 
     /**
-     * Builds a form containing form items based on a given parameter
+     * Builds a form containing form items based on a given parameter.
+     *
      * @param int form_type 1=choose link
      * @param obj cat_obj the category object
      * @param string form name
@@ -36,7 +39,7 @@ class LinkForm extends FormValidator
     ) {
         parent::__construct($form_name, $method, $action);
 
-        if (isset ($category_object)) {
+        if (isset($category_object)) {
             $this->category_object = $category_object;
         } else {
             if (isset($link_object)) {
@@ -56,7 +59,7 @@ class LinkForm extends FormValidator
 
     protected function build_move()
     {
-        $renderer = & $this->defaultRenderer();
+        $renderer = &$this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement(
             'static',
@@ -78,7 +81,7 @@ class LinkForm extends FormValidator
     }
 
     /**
-     * Builds the form
+     * Builds the form.
      */
     protected function build_create()
     {
@@ -88,7 +91,7 @@ class LinkForm extends FormValidator
             'select_link',
             get_lang('ChooseLink'),
             null,
-            array('onchange' => 'document.create_link.submit()')
+            ['onchange' => 'document.create_link.submit()']
         );
 
         $linkTypes = LinkFactory::get_all_types();
@@ -131,13 +134,14 @@ class LinkForm extends FormValidator
         }
 
         if (isset($this->extra)) {
-            $this->setDefaults(array('select_link' => $this->extra));
+            $this->setDefaults(['select_link' => $this->extra]);
         }
     }
 
     /**
-     * @param integer $link
+     * @param int         $link
      * @param null|string $courseCode
+     *
      * @return AttendanceLink|DropboxLink|ExerciseLink|ForumThreadLink|LearnpathLink|null|StudentPublicationLink|SurveyLink
      */
     private function createLink($link, $courseCode)

@@ -6,15 +6,16 @@ namespace Chamilo\CoreBundle\Component\Editor;
 //use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class Toolbar
+ * Class Toolbar.
+ *
  * @package Chamilo\CoreBundle\Component\Editor
  */
 class Toolbar
 {
-    public $config = array();
+    public $config = [];
     public $urlGenerator;
-    public $plugins = array();
-    public $defaultPlugins = array();
+    public $plugins = [];
+    public $defaultPlugins = [];
 
     /**
      * @param string $toolbar
@@ -81,7 +82,8 @@ class Toolbar
     }
 
     /**
-     * Get plugins by default in all editors in the platform
+     * Get plugins by default in all editors in the platform.
+     *
      * @return array
      */
     public function getDefaultPlugins()
@@ -90,7 +92,8 @@ class Toolbar
     }
 
     /**
-     * Get fixed plugins depending of the toolbar
+     * Get fixed plugins depending of the toolbar.
+     *
      * @return array
      */
     public function getPlugins()
@@ -100,11 +103,12 @@ class Toolbar
 
     /**
      * Get dynamic/conditional plugins depending of platform/course settings.
+     *
      * @return array
      */
     public function getConditionalPlugins()
     {
-        return array();
+        return [];
     }
 
     /**

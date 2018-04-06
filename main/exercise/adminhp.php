@@ -3,9 +3,11 @@
 
 /**
  * HotPotatoes administration.
+ *
  * @package chamilo.exercise
+ *
  * @author Istvan Mandak
-*/
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -46,7 +48,7 @@ if (api_is_in_gradebook()) {
 
 $interbreadcrumb[] = [
     "url" => "exercise.php",
-    "name" => get_lang('Exercises')
+    "name" => get_lang('Exercises'),
 ];
 $nameTools = get_lang('adminHP');
 

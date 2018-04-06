@@ -5,21 +5,20 @@ namespace Chamilo\PageBundle\Controller;
 
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
-use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class PageController
+ * Class PageController.
+ *
  * @package Chamilo\PageBundle\Controller
  */
 class PageController extends Controller
 {
     /**
      * @Route("/cms/page/latest/{number}")
+     *
      * @param int $number
      */
     public function getLatestPages($number, Request $request)
@@ -63,6 +62,7 @@ class PageController extends Controller
 
     /**
      * @Route("/cms/page/blocks/{number}")
+     *
      * @param int $number
      */
     public function getLatestBlocks($number, Request $request)
@@ -99,7 +99,7 @@ class PageController extends Controller
 
         return $this->render(
             '@ChamiloPage/blocks.html.twig',
-            [ 'pages' => $pagesToShow ]
+            ['pages' => $pagesToShow]
         );
     }
 }

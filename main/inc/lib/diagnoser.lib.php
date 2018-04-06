@@ -3,13 +3,13 @@
 
 /**
  * Class Diagnoser
- * Class that is responsible for generating diagnostic information about the system
+ * Class that is responsible for generating diagnostic information about the system.
  *
  * @package chamilo.diagnoser
+ *
  * @author Ivan Tcholakov, 2008, initial proposal and sample code.
  * @author spou595, 2009, implementation for Chamilo 2.x
  * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
- *
  */
 class Diagnoser
 {
@@ -19,37 +19,37 @@ class Diagnoser
     const STATUS_INFORMATION = 4;
 
     /**
-     * Contructor
+     * Contructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Show html table
+     * Show html table.
      */
     public function show_html()
     {
         $sections = [
             'chamilo' => [
                 'lang' => 'Chamilo',
-                'info' => 'State of Chamilo requirements'
+                'info' => 'State of Chamilo requirements',
             ],
             'php' => [
                 'lang' => 'PHP',
-                'info' => 'State of PHP settings on the server'
+                'info' => 'State of PHP settings on the server',
             ],
             'database' => [
                 'lang' => 'Database',
-                'info' => 'Configuration settings of the database server. To check the database consistency after an upgrade, if you have access to the command line, you can use "php bin/doctrine.php orm:schema-tool:update --dump-sql". This will print a list of database changes that should be applied to your system in order to get the right structure. Index name changes can be ignored. Use "--force" instead of "--dump" to try and execute them in order.'
+                'info' => 'Configuration settings of the database server. To check the database consistency after an upgrade, if you have access to the command line, you can use "php bin/doctrine.php orm:schema-tool:update --dump-sql". This will print a list of database changes that should be applied to your system in order to get the right structure. Index name changes can be ignored. Use "--force" instead of "--dump" to try and execute them in order.',
             ],
             'webserver' => [
                 'lang' => get_lang('WebServer'),
-                'info' => 'Information about your webserver\'s configuration '
+                'info' => 'Information about your webserver\'s configuration ',
             ],
             'paths' => [
                 'lang' => 'Paths',
-                'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.'
+                'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.',
             ],
         ];
         $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
@@ -71,7 +71,7 @@ class Diagnoser
 
         $html .= '</ul><div class="tab-pane">';
 
-        $data = call_user_func(array($this, 'get_'.$currentSection.'_data'));
+        $data = call_user_func([$this, 'get_'.$currentSection.'_data']);
         echo $html;
 
         if ($currentSection != 'paths') {
@@ -93,7 +93,7 @@ class Diagnoser
 
             $headers = $data['headers'];
             $results = $data['data'];
-            $table = new HTML_Table(array('class' => 'data_table'));
+            $table = new HTML_Table(['class' => 'data_table']);
 
             $column = 0;
             foreach ($headers as $header) {
@@ -129,26 +129,28 @@ class Diagnoser
         $list = $paths[api_get_path(WEB_PATH)];
         $list['url_append'] = api_get_configuration_value('url_append');
         asort($list);
+
         return [
             'headers' => ['Path', 'constant'],
-            'data' => $list
+            'data' => $list,
         ];
     }
 
     /**
-     * Functions to get the data for the chamilo diagnostics
+     * Functions to get the data for the chamilo diagnostics.
+     *
      * @return array of data
      */
     public function get_chamilo_data()
     {
-        $array = array();
-        $writable_folders = array(
+        $array = [];
+        $writable_folders = [
             api_get_path(SYS_APP_PATH).'cache',
             api_get_path(SYS_COURSE_PATH),
             api_get_path(SYS_APP_PATH).'home',
             api_get_path(SYS_APP_PATH).'upload/users/',
             api_get_path(SYS_PATH).'main/default_course_document/images/',
-        );
+        ];
         foreach ($writable_folders as $index => $folder) {
             $writable = is_writable($folder);
             $status = $writable ? self::STATUS_OK : self::STATUS_ERROR;
@@ -222,12 +224,13 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the php diagnostics
+     * Functions to get the data for the php diagnostics.
+     *
      * @return array of data
      */
     public function get_php_data()
     {
-        $array = array();
+        $array = [];
 
         // General Functions
 
@@ -404,7 +407,7 @@ class Diagnoser
         $setting = ini_get('memory_limit');
         $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_MEMORY_LIMIT) {
+        if ((float) $setting >= REQUIRED_MIN_MEMORY_LIMIT) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -421,7 +424,7 @@ class Diagnoser
         $setting = ini_get('post_max_size');
         $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_POST_MAX_SIZE) {
+        if ((float) $setting >= REQUIRED_MIN_POST_MAX_SIZE) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -438,7 +441,7 @@ class Diagnoser
         $setting = ini_get('upload_max_filesize');
         $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE) {
+        if ((float) $setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -512,58 +515,58 @@ class Diagnoser
         );
 
         // Extensions
-        $extensions = array(
-            'gd' => array(
+        $extensions = [
+            'gd' => [
                 'link' => 'http://www.php.net/gd',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'pdo_mysql' => array(
+            ],
+            'pdo_mysql' => [
                 'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'pcre' => array(
+            ],
+            'pcre' => [
                 'link' => 'http://www.php.net/pcre',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'session' => array(
+            ],
+            'session' => [
                 'link' => 'http://www.php.net/session',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'standard' => array(
+            ],
+            'standard' => [
                 'link' => 'http://www.php.net/spl',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'zlib' => array(
+            ],
+            'zlib' => [
                 'link' => 'http://www.php.net/zlib',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'xsl' => array(
+            ],
+            'xsl' => [
                 'link' => 'http://be2.php.net/xsl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-            'curl' => array(
+            ],
+            'curl' => [
                 'link' => 'http://www.php.net/curl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-            'Zend OPcache' => array(
+            ],
+            'Zend OPcache' => [
                 'link' => 'http://www.php.net/opcache',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-            'apcu' => array(
+            ],
+            'apcu' => [
                 'link' => 'http://www.php.net/apcu',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-        );
+            ],
+        ];
 
         foreach ($extensions as $extension => $data) {
             $url = $data['link'];
@@ -588,12 +591,13 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the mysql diagnostics
+     * Functions to get the data for the mysql diagnostics.
+     *
      * @return array of data
      */
     public function get_database_data()
     {
-        $array = array();
+        $array = [];
         $em = Database::getManager();
         $connection = $em->getConnection();
         $host = $connection->getHost();
@@ -634,7 +638,6 @@ class Diagnoser
             get_lang('Port')
         );
 
-
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
             '[Database]',
@@ -650,12 +653,13 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the webserver diagnostics
+     * Functions to get the data for the webserver diagnostics.
+     *
      * @return array of data
      */
     public function get_webserver_data()
     {
-        $array = array();
+        $array = [];
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -752,7 +756,7 @@ class Diagnoser
     }
 
     /**
-     * Additional functions needed for fast integration
+     * Additional functions needed for fast integration.
      */
     public function build_setting(
         $status,
@@ -787,18 +791,20 @@ class Diagnoser
 
         if ($formatter) {
             if (method_exists($this, 'format_'.$formatter)) {
-                $formatted_current_value = call_user_func(array($this, 'format_'.$formatter), $current_value);
-                $formatted_expected_value = call_user_func(array($this, 'format_'.$formatter), $expected_value);
+                $formatted_current_value = call_user_func([$this, 'format_'.$formatter], $current_value);
+                $formatted_expected_value = call_user_func([$this, 'format_'.$formatter], $expected_value);
             }
         }
 
-        return array($image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment);
+        return [$image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment];
     }
 
     /**
-     * Create a link with a url and a title
+     * Create a link with a url and a title.
+     *
      * @param $title
      * @param $url
+     *
      * @return string the url
      */
     public function get_link($title, $url)
@@ -808,6 +814,7 @@ class Diagnoser
 
     /**
      * @param int $value
+     *
      * @return string
      */
     public function format_yes_no_optional($value)
@@ -824,11 +831,13 @@ class Diagnoser
                 $return = get_lang('Optional');
                 break;
         }
+
         return $return;
     }
 
     /**
      * @param $value
+     *
      * @return string
      */
     public function format_yes_no($value)
@@ -838,6 +847,7 @@ class Diagnoser
 
     /**
      * @param int $value
+     *
      * @return string
      */
     public function format_on_off($value)

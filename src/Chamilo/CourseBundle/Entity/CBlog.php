@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CBlog
+ * CBlog.
  *
  * @ORM\Table(
  *  name="c_blog",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlog
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CBlog
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer")
      */
@@ -64,23 +64,24 @@ class CBlog
     private $dateCreation;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=false)
      */
     private $visibility;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * Set blogName
+     * Set blogName.
      *
      * @param string $blogName
+     *
      * @return CBlog
      */
     public function setBlogName($blogName)
@@ -91,7 +92,7 @@ class CBlog
     }
 
     /**
-     * Get blogName
+     * Get blogName.
      *
      * @return string
      */
@@ -101,9 +102,10 @@ class CBlog
     }
 
     /**
-     * Set blogSubtitle
+     * Set blogSubtitle.
      *
      * @param string $blogSubtitle
+     *
      * @return CBlog
      */
     public function setBlogSubtitle($blogSubtitle)
@@ -114,7 +116,7 @@ class CBlog
     }
 
     /**
-     * Get blogSubtitle
+     * Get blogSubtitle.
      *
      * @return string
      */
@@ -124,9 +126,10 @@ class CBlog
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return CBlog
      */
     public function setDateCreation($dateCreation)
@@ -137,7 +140,7 @@ class CBlog
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime
      */
@@ -147,9 +150,10 @@ class CBlog
     }
 
     /**
-     * Set visibility
+     * Set visibility.
      *
-     * @param boolean $visibility
+     * @param bool $visibility
+     *
      * @return CBlog
      */
     public function setVisibility($visibility)
@@ -160,9 +164,9 @@ class CBlog
     }
 
     /**
-     * Get visibility
+     * Get visibility.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibility()
     {
@@ -170,9 +174,10 @@ class CBlog
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CBlog
      */
     public function setSessionId($sessionId)
@@ -183,9 +188,9 @@ class CBlog
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -193,9 +198,10 @@ class CBlog
     }
 
     /**
-     * Set blogId
+     * Set blogId.
      *
-     * @param integer $blogId
+     * @param int $blogId
+     *
      * @return CBlog
      */
     public function setBlogId($blogId)
@@ -206,9 +212,9 @@ class CBlog
     }
 
     /**
-     * Get blogId
+     * Get blogId.
      *
-     * @return integer
+     * @return int
      */
     public function getBlogId()
     {
@@ -216,9 +222,10 @@ class CBlog
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CBlog
      */
     public function setCId($cId)
@@ -229,9 +236,9 @@ class CBlog
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

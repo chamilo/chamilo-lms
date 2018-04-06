@@ -2,13 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class HookEventSkype
- * @var \SplObjectStorage $observers
+ * Class HookEventSkype.
+ *
+ * @var \SplObjectStorage
  */
 class HookEventSkype extends HookEvent implements HookSkypeEventInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     protected function __construct()
     {
@@ -16,7 +17,8 @@ class HookEventSkype extends HookEvent implements HookSkypeEventInterface
     }
 
     /**
-     * Update all the observers
+     * Update all the observers.
+     *
      * @param int $type
      *
      * @return int
@@ -28,6 +30,7 @@ class HookEventSkype extends HookEvent implements HookSkypeEventInterface
         foreach ($this->observers as $observer) {
             $observer->hookEventSkype($this);
         }
+
         return 1;
     }
 }

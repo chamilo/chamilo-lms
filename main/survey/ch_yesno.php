@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_yesno
+ * Class ch_yesno.
  */
 class ch_yesno extends survey_question
 {
@@ -14,21 +14,21 @@ class ch_yesno extends survey_question
     {
         parent::createForm($surveyData, $formData);
 
-        $options = array(
+        $options = [
             'horizontal' => get_lang('Horizontal'),
-            'vertical' => get_lang('Vertical')
-        );
+            'vertical' => get_lang('Vertical'),
+        ];
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);
 
         // The options
-        $config = array(
+        $config = [
             'ToolbarSet' => 'Survey',
             'Width' => '100%',
-            'Height' => '120'
-        );
+            'Height' => '120',
+        ];
         $this->getForm()->addHtmlEditor(
             'answers[0]',
             get_lang('AnswerOptions'),
@@ -47,10 +47,10 @@ class ch_yesno extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = null)
+    public function render(FormValidator $form, $questionData = [], $answers = null)
     {
         if (is_array($questionData['options'])) {
             if ($questionData['display'] == 'vertical') {

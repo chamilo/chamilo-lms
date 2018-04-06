@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MessageAttachment
+ * MessageAttachment.
  *
  * @ORM\Table(name="message_attachment")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class MessageAttachment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,14 +37,14 @@ class MessageAttachment
     private $comment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
     private $size;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="message_id", type="integer", nullable=false)
      */
@@ -58,9 +58,10 @@ class MessageAttachment
     private $filename;
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return MessageAttachment
      */
     public function setPath($path)
@@ -71,7 +72,7 @@ class MessageAttachment
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -81,9 +82,10 @@ class MessageAttachment
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return MessageAttachment
      */
     public function setComment($comment)
@@ -94,7 +96,7 @@ class MessageAttachment
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -104,9 +106,10 @@ class MessageAttachment
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param integer $size
+     * @param int $size
+     *
      * @return MessageAttachment
      */
     public function setSize($size)
@@ -117,9 +120,9 @@ class MessageAttachment
     }
 
     /**
-     * Get size
+     * Get size.
      *
-     * @return integer
+     * @return int
      */
     public function getSize()
     {
@@ -127,9 +130,10 @@ class MessageAttachment
     }
 
     /**
-     * Set messageId
+     * Set messageId.
      *
-     * @param integer $messageId
+     * @param int $messageId
+     *
      * @return MessageAttachment
      */
     public function setMessageId($messageId)
@@ -140,9 +144,9 @@ class MessageAttachment
     }
 
     /**
-     * Get messageId
+     * Get messageId.
      *
-     * @return integer
+     * @return int
      */
     public function getMessageId()
     {
@@ -150,9 +154,10 @@ class MessageAttachment
     }
 
     /**
-     * Set filename
+     * Set filename.
      *
      * @param string $filename
+     *
      * @return MessageAttachment
      */
     public function setFilename($filename)
@@ -163,7 +168,7 @@ class MessageAttachment
     }
 
     /**
-     * Get filename
+     * Get filename.
      *
      * @return string
      */
@@ -173,9 +178,9 @@ class MessageAttachment
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

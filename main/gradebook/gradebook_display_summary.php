@@ -4,10 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -28,10 +28,10 @@ $userList = CourseManager::get_user_list_from_course_code(
 
 switch ($action) {
     case 'export_all':
-        $params = array();
+        $params = [];
         $pdf = new PDF('A4', 'P', $params);
 
-        $pdfList = array();
+        $pdfList = [];
         $cats = Category::load($cat_id, null, null, null, null, null, false);
 
         $session_id = api_get_session_id();
@@ -52,7 +52,7 @@ switch ($action) {
         $tpl = new Template('', false, false, false);
 
         $courseInfo = api_get_course_info();
-        $params = array(
+        $params = [
             'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
@@ -61,8 +61,8 @@ switch ($action) {
             'student_info' => null,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
-            'show_teacher_as_myself' => false
-        );
+            'show_teacher_as_myself' => false,
+        ];
 
         $pdf = new PDF('A4', $params['orientation'], $params, $tpl);
 
@@ -108,14 +108,14 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('Gradebook'),
+];
+$interbreadcrumb[] = [
     'url' => '#',
-    'name' => get_lang('GradebookListOfStudentsReports')
-);
+    'name' => get_lang('GradebookListOfStudentsReports'),
+];
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
@@ -125,7 +125,7 @@ echo Display::page_header(get_lang('GradebookListOfStudentsReports'));
 echo '<div class="btn-group">';
 if (count($userList) > 0) {
     $url = api_get_self().'?action=export_all&'.api_get_cidreq().'&selectcat='.$cat_id;
-    echo Display::url(get_lang('ExportAllToPDF'), $url, array('class' => 'btn btn-default'));
+    echo Display::url(get_lang('ExportAllToPDF'), $url, ['class' => 'btn btn-default']);
 }
 echo '</div>';
 
@@ -142,7 +142,7 @@ if (count($userList) == 0) {
         $link = Display::url(
             get_lang('ExportToPDF'),
             $url,
-            array('target' => '_blank', 'class' => 'btn btn-default')
+            ['target' => '_blank', 'class' => 'btn btn-default']
         );
         echo $link;
         echo '</td></tr>';

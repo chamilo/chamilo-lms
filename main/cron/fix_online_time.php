@@ -18,10 +18,10 @@
  * Where "5" is the value of the 'STUDENT' constant.
  *
  * @package chamilo.cron
+ *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  * @author Julio Montoya
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (php_sapi_name() != 'cli') {
@@ -29,8 +29,10 @@ if (php_sapi_name() != 'cli') {
 }
 
 /**
- * Get ids of users that are inside a course right now
+ * Get ids of users that are inside a course right now.
+ *
  * @param int $status COURSEMANAGER|STUDENT constants
+ *
  * @return array user id
  */
 function getUsersInCourseIds($status)
@@ -38,25 +40,27 @@ function getUsersInCourseIds($status)
     $status = (int) $status;
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $joinStatement = ' JOIN '.Database::get_main_table(TABLE_MAIN_USER).' ON login_user_id = user_id';
+
     return Database::select(
         'login_user_id',
         $table.$joinStatement,
-        array(
-            'where' => array(
-                'c_id IS NOT NULL AND status = ?' => array(
-                    $status
-                )
-            )
-        )
+        [
+            'where' => [
+                'c_id IS NOT NULL AND status = ?' => [
+                    $status,
+                ],
+            ],
+        ]
     );
 }
 
 /**
  * If a user has been idle for $timeLimit or more then
  * the procedure adds $extraTime to his logout_course_date.
- * @param array $users user id list
- * @return int
  *
+ * @param array $users user id list
+ *
+ * @return int
  */
 function updateUsersInCourseIdleForTimeLimit($users)
 {
@@ -76,32 +80,32 @@ function updateUsersInCourseIdleForTimeLimit($users)
         $logResult = Database::select(
             'course_access_id, logout_course_date',
             $table,
-            array(
-                'where' => array(
-                    'user_id = ?' => array(
+            [
+                'where' => [
+                    'user_id = ?' => [
                         $value,
-                    )
-                ),
+                    ],
+                ],
                 'order' => 'course_access_id DESC',
-                'limit' => '1'
-            )
+                'limit' => '1',
+            ]
         );
         $currentTeacherData = array_shift($logResult);
         Database::update(
             $table,
-            array(
+            [
                 'logout_course_date' => date(
                     'Y-m-d H:i:s',
                     strtotime($currentTeacherData['logout_course_date'].' '.$extraTime)
-                )
-            ),
-            array(
-                'user_id = ? AND logout_course_date < ? AND course_access_id = ?' => array(
+                ),
+            ],
+            [
+                'user_id = ? AND logout_course_date < ? AND course_access_id = ?' => [
                     $value,
                     $maximumIdleTimeInCourse,
-                    $currentTeacherData['course_access_id']
-                )
-            )
+                    $currentTeacherData['course_access_id'],
+                ],
+            ]
         );
 
         /*

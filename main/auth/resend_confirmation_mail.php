@@ -26,4 +26,3 @@ $tpl->assign('form', $form->toHtml());
 $content = $tpl->get_template('auth/resend_confirmation_mail.tpl');
 $tpl->assign('content', $tpl->fetch($content));
 $tpl->display_one_col_template();
-

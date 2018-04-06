@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Functions and main code for the download folder feature
+ * Functions and main code for the download folder feature.
+ *
  * @todo use ids instead of the path like the document tool
+ *
  * @package chamilo.work
  */
-
 $work_id = $_GET['id'];
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -48,7 +49,7 @@ $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 // normal users get only visible files that are in visible folders
 
 //admins are allowed to download invisible files
-$files = array();
+$files = [];
 $course_id = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
@@ -93,7 +94,6 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 work.post_group_id = $groupIid
                 $sessionCondition
             ";
-
 } else {
     $courseInfo = api_get_course_info();
     protectWork($courseInfo, $work_id);
@@ -142,7 +142,7 @@ $query = Database::query($sql);
 while ($not_deleted_file = Database::fetch_assoc($query)) {
     $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
     $insert_date = api_get_local_time($not_deleted_file['sent_date']);
-    $insert_date = str_replace(array(':', '-', ' '), '_', $insert_date);
+    $insert_date = str_replace([':', '-', ' '], '_', $insert_date);
 
     $title = basename($not_deleted_file['title']);
     if (!empty($filenameCondition)) {
@@ -214,7 +214,7 @@ function my_pre_add_callback($p_event, &$p_header)
 
 /**
  * Return the difference between two arrays, as an array of those key/values
- * Use this as array_diff doesn't give the
+ * Use this as array_diff doesn't give the.
  *
  * @param array $arr1 first array
  * @param array $arr2 second array
@@ -223,7 +223,7 @@ function my_pre_add_callback($p_event, &$p_header)
  */
 function diff($arr1, $arr2)
 {
-    $res = array();
+    $res = [];
     $r = 0;
     foreach ($arr1 as $av) {
         if (!in_array($av, $arr2)) {

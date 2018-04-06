@@ -4,13 +4,14 @@
 /** @author Julio Montoya */
 
 /**
- * Class HTML_QuickForm_Rule_FileName
+ * Class HTML_QuickForm_Rule_FileName.
  */
 class HTML_QuickForm_Rule_FileName extends HTML_QuickForm_Rule
 {
     /**
      * @param $value array     Uploaded file info (from $_FILES)
      * @param null $options
+     *
      * @return bool
      */
     public function validate($value, $options = null)

@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script gives information about a course
+ * This script gives information about a course.
+ *
  * @author Bart Mollet
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -24,7 +26,8 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
 /**
  * @param array $course
- * @param int $session_id
+ * @param int   $session_id
+ *
  * @return array
  */
 function get_course_usage($course, $session_id = 0)
@@ -62,7 +65,7 @@ function get_course_usage($course, $session_id = 0)
         [
             Database::get_course_table(TABLE_ANNOUNCEMENT),
             get_lang(ucfirst(TOOL_ANNOUNCEMENT)),
-        ]
+        ],
     ];
 
     $usage = [];
@@ -80,24 +83,24 @@ function get_course_usage($course, $session_id = 0)
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
-        $usage[] = array(
+        $usage[] = [
             $title,
-            $row['count']
-        );
+            $row['count'],
+        ];
     }
 
     return $usage;
 }
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array("url" => 'course_list.php', "name" => get_lang('Courses'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'course_list.php', "name" => get_lang('Courses')];
 $courseId = $courseInfo['real_id'];
 $tool_name = $courseInfo['title'].' ('.$courseInfo['visual_code'].')';
 Display::display_header($tool_name);
 ?>
     <div class="actions">
         <a href="<?php echo $courseInfo['course_public_url']; ?>">
-            <?php Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM); ?>
+            <?php Display::display_icon('home.png', get_lang('CourseHomepage'), [], ICON_SIZE_MEDIUM); ?>
         </a>
     </div>
 <?php
@@ -110,14 +113,14 @@ $table = new SortableTableFromArray(
     20,
     'usage_table'
 );
-$table->set_additional_parameters(array('code' => $courseInfo['code']));
-$table->set_other_tables(array('user_table', 'class_table'));
+$table->set_additional_parameters(['code' => $courseInfo['code']]);
+$table->set_other_tables(['user_table', 'class_table']);
 $table->set_header(0, get_lang('Tool'), true);
 $table->set_header(1, get_lang('NumberOfItems'), true);
 $table->display();
 
 /**
- * Show all users subscribed in this course
+ * Show all users subscribed in this course.
  */
 echo Display::page_header(get_lang('Users'));
 
@@ -138,9 +141,9 @@ $sql .= " WHERE
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {
-    $users = array();
+    $users = [];
     while ($obj = Database::fetch_object($res)) {
-        $user   = array();
+        $user = [];
         $user[] = $obj->official_code;
         if ($is_western_name_order) {
             $user[] = $obj->firstname;
@@ -156,8 +159,8 @@ if (Database::num_rows($res) > 0) {
         $users[] = $user;
     }
     $table = new SortableTableFromArray($users, 0, 20, 'user_table');
-    $table->set_additional_parameters(array('code' => $courseInfo['code']));
-    $table->set_other_tables(array('usage_table', 'class_table'));
+    $table->set_additional_parameters(['code' => $courseInfo['code']]);
+    $table->set_other_tables(['usage_table', 'class_table']);
     $table->set_header(0, get_lang('OfficialCode'), true);
     if ($is_western_name_order) {
         $table->set_header(1, get_lang('FirstName'), true);

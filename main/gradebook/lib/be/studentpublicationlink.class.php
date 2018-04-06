@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook link to student publication item
+ * Gradebook link to student publication item.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class StudentPublicationLink extends AbstractLink
@@ -12,7 +14,7 @@ class StudentPublicationLink extends AbstractLink
     private $itemprop_table = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -21,11 +23,9 @@ class StudentPublicationLink extends AbstractLink
     }
 
     /**
-     *
      * Returns the URL of a document
      * This function is loaded when using a gradebook as a tab (gradebook = -1)
-     * see issue #2705
-     *
+     * see issue #2705.
      */
     public function get_view_url($stud_id)
     {
@@ -73,6 +73,7 @@ class StudentPublicationLink extends AbstractLink
 
     /**
      * Generate an array of exercises that a teacher hasn't created a link for.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_not_created_links()
@@ -92,15 +93,17 @@ class StudentPublicationLink extends AbstractLink
 
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['url']);
+            $cats[] = [$data['id'], $data['url']];
         }
+
         return $cats;
     }
 
     /**
      * Generate an array of all exercises available.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_all_links()
@@ -127,7 +130,7 @@ class StudentPublicationLink extends AbstractLink
                 'cId' => $this->course_id,
                 'active' => true,
                 'filetype' => 'folder',
-                'session' => $session
+                'session' => $session,
             ]);
 
         foreach ($links as $data) {
@@ -135,9 +138,10 @@ class StudentPublicationLink extends AbstractLink
             if (empty($work_name)) {
                 $work_name = basename($data->getUrl());
             }
-            $cats[] = array($data->getId(), $work_name);
+            $cats[] = [$data->getId(), $work_name];
         }
-        $cats = isset($cats) ? $cats : array();
+        $cats = isset($cats) ? $cats : [];
+
         return $cats;
     }
 
@@ -160,7 +164,7 @@ class StudentPublicationLink extends AbstractLink
             ->findBy([
                 'cId' => $this->course_id,
                 'parentId' => $id,
-                'session' => $session
+                'session' => $session,
             ]);
 
         return count($results) != 0;
@@ -168,6 +172,7 @@ class StudentPublicationLink extends AbstractLink
 
     /**
      * @param null $stud_id
+     *
      * @return array|null
      */
     public function calc_score($stud_id = null, $type = null)
@@ -188,7 +193,7 @@ class StudentPublicationLink extends AbstractLink
             ->findOneBy([
                 'cId' => $this->course_id,
                 'id' => $id,
-                'session' => $session
+                'session' => $session,
             ])
         ;
 
@@ -207,7 +212,7 @@ class StudentPublicationLink extends AbstractLink
             $params = [
                 'course' => $this->course_id,
                 'parent' => $parentId,
-                'active' => true
+                'active' => true,
             ];
         } else {
             $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
@@ -240,7 +245,6 @@ class StudentPublicationLink extends AbstractLink
                 $dql .= ' ORDER BY a.sentDate DESC';
                 break;
             case 'first':
-                //no break
             default:
                 // first attempt
                 $dql .= ' ORDER BY a.id';
@@ -259,11 +263,11 @@ class StudentPublicationLink extends AbstractLink
 
             return [
                 $data->getQualification(),
-                $assignment->getQualification()
+                $assignment->getQualification(),
             ];
         }
 
-        $students = array(); // user list, needed to make sure we only
+        $students = []; // user list, needed to make sure we only
         // take first attempts into account
         $rescount = 0;
         $sum = 0;
@@ -293,34 +297,18 @@ class StudentPublicationLink extends AbstractLink
 
         switch ($type) {
             case 'best':
-                return array($bestResult, $weight);
+                return [$bestResult, $weight];
                 break;
             case 'average':
-                return array($sumResult / $rescount, $weight);
+                return [$sumResult / $rescount, $weight];
                 break;
             case 'ranking':
                 return AbstractLink::getCurrentUserRanking($stud_id, $students);
                 break;
             default:
-                return array($sum, $rescount);
+                return [$sum, $rescount];
                 break;
         }
-    }
-
-    /**
-     * Lazy load function to get the database table of the student publications
-     */
-    private function get_studpub_table()
-    {
-        return $this->studpub_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    }
-
-    /**
-     * Lazy load function to get the database table of the item properties
-     */
-    private function get_itemprop_table()
-    {
-        return $this->itemprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     }
 
     public function needs_name_and_description()
@@ -332,12 +320,14 @@ class StudentPublicationLink extends AbstractLink
     {
         $this->get_exercise_data();
         $name = isset($this->exercise_data['title']) && !empty($this->exercise_data['title']) ? $this->exercise_data['title'] : get_lang('Untitled');
+
         return $name;
     }
 
     public function get_description()
     {
         $this->get_exercise_data();
+
         return isset($this->exercise_data['description']) ? $this->exercise_data['description'] : null;
     }
 
@@ -347,34 +337,6 @@ class StudentPublicationLink extends AbstractLink
         $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&id='.$this->exercise_data['id'].'&gradebook=view';
 
         return $url;
-    }
-
-    /**
-     * @return array
-     */
-    private function get_exercise_data()
-    {
-        $course_info = api_get_course_info($this->get_course_code());
-        if (!isset($this->exercise_data)) {
-            $sql = 'SELECT * FROM '.$this->get_studpub_table()."
-                    WHERE
-                        c_id ='".$course_info['real_id']."' AND
-                        id = '".$this->get_ref_id()."' ";
-            $query = Database::query($sql);
-            $this->exercise_data = Database::fetch_array($query);
-
-            // Try with iid
-            if (empty($this->exercise_data)) {
-                $sql = 'SELECT * FROM '.$this->get_studpub_table()."
-                        WHERE
-                            c_id ='".$course_info['real_id']."' AND
-                            iid = '".$this->get_ref_id()."' ";
-                $query = Database::query($sql);
-                $this->exercise_data = Database::fetch_array($query);
-            }
-        }
-
-        return $this->exercise_data;
     }
 
     public function needs_max()
@@ -401,7 +363,8 @@ class StudentPublicationLink extends AbstractLink
                     id = '.$id.'';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     public function get_icon_name()
@@ -445,5 +408,49 @@ class StudentPublicationLink extends AbstractLink
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);
         }
+    }
+
+    /**
+     * Lazy load function to get the database table of the student publications.
+     */
+    private function get_studpub_table()
+    {
+        return $this->studpub_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    }
+
+    /**
+     * Lazy load function to get the database table of the item properties.
+     */
+    private function get_itemprop_table()
+    {
+        return $this->itemprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    }
+
+    /**
+     * @return array
+     */
+    private function get_exercise_data()
+    {
+        $course_info = api_get_course_info($this->get_course_code());
+        if (!isset($this->exercise_data)) {
+            $sql = 'SELECT * FROM '.$this->get_studpub_table()."
+                    WHERE
+                        c_id ='".$course_info['real_id']."' AND
+                        id = '".$this->get_ref_id()."' ";
+            $query = Database::query($sql);
+            $this->exercise_data = Database::fetch_array($query);
+
+            // Try with iid
+            if (empty($this->exercise_data)) {
+                $sql = 'SELECT * FROM '.$this->get_studpub_table()."
+                        WHERE
+                            c_id ='".$course_info['real_id']."' AND
+                            iid = '".$this->get_ref_id()."' ";
+                $query = Database::query($sql);
+                $this->exercise_data = Database::fetch_array($query);
+            }
+        }
+
+        return $this->exercise_data;
     }
 }

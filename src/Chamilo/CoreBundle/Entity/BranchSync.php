@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * BranchSync
+ * BranchSync.
  *
  * @ORM\Table(name="branch_sync")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository")
@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class BranchSync
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -25,7 +25,7 @@ class BranchSync
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false, unique=false)
      */
@@ -74,21 +74,21 @@ class BranchSync
     private $longitude;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="dwn_speed", type="integer", nullable=true, unique=false)
      */
     private $dwnSpeed;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="up_speed", type="integer", nullable=true, unique=false)
      */
     private $upSpeed;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="delay", type="integer", nullable=true, unique=false)
      */
@@ -116,7 +116,7 @@ class BranchSync
     private $adminPhone;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="last_sync_trans_id", type="bigint", nullable=true, unique=false)
      */
@@ -136,7 +136,7 @@ class BranchSync
      */
     private $lastSyncType;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
@@ -151,35 +151,35 @@ class BranchSync
     private $branchType;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
     private $lft;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
      */
     private $rgt;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
      */
     private $lvl;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
      */
     private $root;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true, unique=false)
      */
@@ -199,7 +199,7 @@ class BranchSync
     private $children;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -209,9 +209,9 @@ class BranchSync
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -219,9 +219,10 @@ class BranchSync
     }
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return BranchSync
      */
     public function setAccessUrlId($accessUrlId)
@@ -232,9 +233,9 @@ class BranchSync
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -242,9 +243,10 @@ class BranchSync
     }
 
     /**
-     * Set branchName
+     * Set branchName.
      *
      * @param string $branchName
+     *
      * @return BranchSync
      */
     public function setBranchName($branchName)
@@ -255,7 +257,7 @@ class BranchSync
     }
 
     /**
-     * Get branchName
+     * Get branchName.
      *
      * @return string
      */
@@ -265,9 +267,10 @@ class BranchSync
     }
 
     /**
-     * Set branchIp
+     * Set branchIp.
      *
      * @param string $branchIp
+     *
      * @return BranchSync
      */
     public function setBranchIp($branchIp)
@@ -278,7 +281,7 @@ class BranchSync
     }
 
     /**
-     * Get branchIp
+     * Get branchIp.
      *
      * @return string
      */
@@ -288,9 +291,10 @@ class BranchSync
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
      * @param float $latitude
+     *
      * @return BranchSync
      */
     public function setLatitude($latitude)
@@ -301,7 +305,7 @@ class BranchSync
     }
 
     /**
-     * Get latitude
+     * Get latitude.
      *
      * @return float
      */
@@ -311,9 +315,10 @@ class BranchSync
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
      * @param float $longitude
+     *
      * @return BranchSync
      */
     public function setLongitude($longitude)
@@ -324,7 +329,7 @@ class BranchSync
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return float
      */
@@ -334,9 +339,10 @@ class BranchSync
     }
 
     /**
-     * Set dwnSpeed
+     * Set dwnSpeed.
      *
-     * @param integer $dwnSpeed
+     * @param int $dwnSpeed
+     *
      * @return BranchSync
      */
     public function setDwnSpeed($dwnSpeed)
@@ -347,9 +353,9 @@ class BranchSync
     }
 
     /**
-     * Get dwnSpeed
+     * Get dwnSpeed.
      *
-     * @return integer
+     * @return int
      */
     public function getDwnSpeed()
     {
@@ -357,9 +363,10 @@ class BranchSync
     }
 
     /**
-     * Set upSpeed
+     * Set upSpeed.
      *
-     * @param integer $upSpeed
+     * @param int $upSpeed
+     *
      * @return BranchSync
      */
     public function setUpSpeed($upSpeed)
@@ -370,9 +377,9 @@ class BranchSync
     }
 
     /**
-     * Get upSpeed
+     * Get upSpeed.
      *
-     * @return integer
+     * @return int
      */
     public function getUpSpeed()
     {
@@ -380,9 +387,10 @@ class BranchSync
     }
 
     /**
-     * Set delay
+     * Set delay.
      *
-     * @param integer $delay
+     * @param int $delay
+     *
      * @return BranchSync
      */
     public function setDelay($delay)
@@ -393,9 +401,9 @@ class BranchSync
     }
 
     /**
-     * Get delay
+     * Get delay.
      *
-     * @return integer
+     * @return int
      */
     public function getDelay()
     {
@@ -403,9 +411,10 @@ class BranchSync
     }
 
     /**
-     * Set adminMail
+     * Set adminMail.
      *
      * @param string $adminMail
+     *
      * @return BranchSync
      */
     public function setAdminMail($adminMail)
@@ -416,7 +425,7 @@ class BranchSync
     }
 
     /**
-     * Get adminMail
+     * Get adminMail.
      *
      * @return string
      */
@@ -426,9 +435,10 @@ class BranchSync
     }
 
     /**
-     * Set adminName
+     * Set adminName.
      *
      * @param string $adminName
+     *
      * @return BranchSync
      */
     public function setAdminName($adminName)
@@ -439,7 +449,7 @@ class BranchSync
     }
 
     /**
-     * Get adminName
+     * Get adminName.
      *
      * @return string
      */
@@ -449,9 +459,10 @@ class BranchSync
     }
 
     /**
-     * Set adminPhone
+     * Set adminPhone.
      *
      * @param string $adminPhone
+     *
      * @return BranchSync
      */
     public function setAdminPhone($adminPhone)
@@ -462,7 +473,7 @@ class BranchSync
     }
 
     /**
-     * Get adminPhone
+     * Get adminPhone.
      *
      * @return string
      */
@@ -472,9 +483,10 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncTransId
+     * Set lastSyncTransId.
      *
-     * @param integer $lastSyncTransId
+     * @param int $lastSyncTransId
+     *
      * @return BranchSync
      */
     public function setLastSyncTransId($lastSyncTransId)
@@ -485,9 +497,9 @@ class BranchSync
     }
 
     /**
-     * Get lastSyncTransId
+     * Get lastSyncTransId.
      *
-     * @return integer
+     * @return int
      */
     public function getLastSyncTransId()
     {
@@ -495,9 +507,10 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncTransDate
+     * Set lastSyncTransDate.
      *
      * @param \DateTime $lastSyncTransDate
+     *
      * @return BranchSync
      */
     public function setLastSyncTransDate($lastSyncTransDate)
@@ -508,9 +521,10 @@ class BranchSync
     }
 
     /**
-     * Set sslPubKey
+     * Set sslPubKey.
      *
      * @param string $sslPubKey
+     *
      * @return BranchSync
      */
     public function setSslPubKey($sslPubKey)
@@ -521,7 +535,7 @@ class BranchSync
     }
 
     /**
-     * Get sslPubKey
+     * Get sslPubKey.
      *
      * @return string
      */
@@ -530,10 +544,11 @@ class BranchSync
         return $this->sslPubKey;
     }
 
-     /**
-     * Set sslPubKey
+    /**
+     * Set sslPubKey.
      *
      * @param string $branchType
+     *
      * @return BranchSync
      */
     public function setBranchType($branchType)
@@ -544,7 +559,7 @@ class BranchSync
     }
 
     /**
-     * Get sslPubKey
+     * Get sslPubKey.
      *
      * @return string
      */
@@ -554,7 +569,7 @@ class BranchSync
     }
 
     /**
-     * Get lastSyncTransDate
+     * Get lastSyncTransDate.
      *
      * @return \DateTime
      */
@@ -564,9 +579,10 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncType
+     * Set lastSyncType.
      *
      * @param string $lastSyncType
+     *
      * @return BranchSync
      */
     public function setLastSyncType($lastSyncType)
@@ -577,7 +593,7 @@ class BranchSync
     }
 
     /**
-     * Get lastSyncType
+     * Get lastSyncType.
      *
      * @return string
      */
@@ -587,9 +603,10 @@ class BranchSync
     }
 
     /**
-     * Set lft
+     * Set lft.
      *
-     * @param integer $lft
+     * @param int $lft
+     *
      * @return BranchSync
      */
     public function setLft($lft)
@@ -600,9 +617,9 @@ class BranchSync
     }
 
     /**
-     * Get lft
+     * Get lft.
      *
-     * @return integer
+     * @return int
      */
     public function getLft()
     {
@@ -610,9 +627,10 @@ class BranchSync
     }
 
     /**
-     * Set rgt
+     * Set rgt.
      *
-     * @param integer $rgt
+     * @param int $rgt
+     *
      * @return BranchSync
      */
     public function setRgt($rgt)
@@ -623,9 +641,9 @@ class BranchSync
     }
 
     /**
-     * Get rgt
+     * Get rgt.
      *
-     * @return integer
+     * @return int
      */
     public function getRgt()
     {
@@ -633,9 +651,10 @@ class BranchSync
     }
 
     /**
-     * Set lvl
+     * Set lvl.
      *
-     * @param integer $lvl
+     * @param int $lvl
+     *
      * @return BranchSync
      */
     public function setLvl($lvl)
@@ -646,9 +665,9 @@ class BranchSync
     }
 
     /**
-     * Get lvl
+     * Get lvl.
      *
-     * @return integer
+     * @return int
      */
     public function getLvl()
     {
@@ -656,9 +675,10 @@ class BranchSync
     }
 
     /**
-     * Set root
+     * Set root.
      *
-     * @param integer $root
+     * @param int $root
+     *
      * @return BranchSync
      */
     public function setRoot($root)
@@ -669,9 +689,9 @@ class BranchSync
     }
 
     /**
-     * Get root
+     * Get root.
      *
-     * @return integer
+     * @return int
      */
     public function getRoot()
     {
@@ -679,9 +699,9 @@ class BranchSync
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
-     * @param integer $parentId
+     * @param int $parentId
      *
      * @return BranchSync
      */
@@ -693,9 +713,9 @@ class BranchSync
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {

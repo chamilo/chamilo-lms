@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Sessions list script
+ * Sessions list script.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 $tool_name = get_lang('TermsAndConditions');
 Display :: display_header($tool_name);
 
@@ -42,12 +42,12 @@ $table->display();
 // this 2 "mask" function are here just because the SortableTable
 function get_legal_data_mask($id, $params = null, $row = null)
 {
-	return LegalManager::get_legal_data($id, $params, $row);
+    return LegalManager::get_legal_data($id, $params, $row);
 }
 
 function count_mask()
 {
-	return LegalManager::count();
+    return LegalManager::count();
 }
 
 Display :: display_footer();

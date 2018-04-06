@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -19,14 +18,14 @@ api_protect_admin_script($allowCareer);
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('PlatformAdmin'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
     'name' => get_lang('CareersAndPromotions'),
-);
+];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -34,11 +33,11 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[] = array('url' => 'careers.php', 'name' => get_lang('Careers'));
+    $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $tool_name = get_lang('Add');
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array('url' => 'careers.php', 'name' => get_lang('Careers'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $tool_name = get_lang('Edit');
 } else {
     $tool_name = get_lang('Careers');
@@ -48,32 +47,32 @@ if ($action == 'add') {
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Name'), get_lang('Description'), get_lang('Actions'));
+$columns = [get_lang('Name'), get_lang('Description'), get_lang('Actions')];
 
 // Column config
-$column_model = array(
-    array(
+$column_model = [
+    [
         'name' => 'name',
         'index' => 'name',
         'width' => '200',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'description',
         'index' => 'description',
         'width' => '400',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '100',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',
-    ),
-);
+    ],
+];
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -99,7 +98,6 @@ if (api_is_platform_admin()) {
         return '".$diagramLink."';
     }";
 }
-
 
 $career = new Career();
 $content = '';
@@ -140,7 +138,7 @@ switch ($action) {
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
         }
         break;
@@ -187,7 +185,7 @@ switch ($action) {
             $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
         }
         break;
@@ -241,7 +239,7 @@ Display::display_header($tool_name);
             $columns,
             $column_model,
             $extra_params,
-            array(),
+            [],
             $actionLinks,
             true
         );

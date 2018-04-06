@@ -2,13 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class HookCreateUser
- * @var \SplObjectStorage $observers
+ * Class HookCreateUser.
+ *
+ * @var \SplObjectStorage
  */
 class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     protected function __construct()
     {
@@ -16,7 +17,8 @@ class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
     }
 
     /**
-     * Update all the observers
+     * Update all the observers.
+     *
      * @param int $type
      *
      * @return int
@@ -28,6 +30,7 @@ class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
         foreach ($this->observers as $observer) {
             $observer->hookCreateUser($this);
         }
+
         return 1;
     }
 }

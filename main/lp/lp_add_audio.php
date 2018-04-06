@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
+ * This is a learning path creation and player tool in Chamilo - previously.
+ *
  * @author Julio Montoya  - Improving the list of templates
+ *
  * @package chamilo.learnpath
  */
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -28,42 +29,42 @@ if ((!$is_allowed_to_edit) || $isStudentView) {
 $lp = Session::read('oLP');
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('LearningPaths'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => $lp->get_name()
-);
+    'name' => $lp->get_name(),
+];
 
 switch ($type) {
     case 'dir':
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
-        );
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewChapter'));
+        ];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewChapter')];
         break;
     case 'document':
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
-        );
+        ];
         break;
     default:
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewStep')];
         break;
 }
 
 if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewDocumentCreated'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
 }
 
 // Theme calls.
@@ -81,7 +82,7 @@ $form = new FormValidator(
     'post',
     api_get_self().'?action=add_audio&id='.$lp_item_id.'&'.api_get_cidreq().'&lp_id='.$learnpath_id,
     null,
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
@@ -118,7 +119,6 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRAR
 $tpl = new Template(null);
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
-$tpl->assign('php_session_id', session_id());
 $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
 $tpl->assign('enable_record_audio', api_get_setting('enable_record_audio') === 'true');
 $tpl->assign('cur_dir_path', '/audio');
@@ -132,7 +132,7 @@ $form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.
-        Display::getMediaPlayer($file, array('url' => $urlFile)).
+        Display::getMediaPlayer($file, ['url' => $urlFile]).
         "</div>";
     $form->addElement('label', get_lang('Listen'), $audioPlayer);
     $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?lp_id='.$lp->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
@@ -142,7 +142,7 @@ if (!empty($file)) {
         Display::url(
             get_lang('RemoveAudio'),
             $url,
-            array('class' => 'btn btn-danger')
+            ['class' => 'btn btn-danger']
         )
     );
 } else {

@@ -3,18 +3,17 @@
 
 namespace Chamilo\CourseBundle\Admin;
 
-use Chamilo\CoreBundle\Entity\Listener\CourseListener;
-use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\ToolChain;
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Chamilo\CourseBundle\ToolChain;
+use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class CourseAdmin
+ * Class CourseAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class CourseAdmin extends Admin
@@ -23,7 +22,7 @@ class CourseAdmin extends Admin
 
     /**
      * Setting default values
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNewInstance()
     {
@@ -35,95 +34,10 @@ class CourseAdmin extends Admin
     }
 
     /**
-     * @param FormMapper $formMapper
-     */
-    protected function configureFormFields(FormMapper $formMapper)
-    {
-        $formMapper
-            ->add('title')
-            ->add('code', 'text', array(
-                //'read_only' => true,
-            ))
-            ->add('description', 'ckeditor')
-            ->add('courseLanguage', 'language')
-            ->add('departmentName')
-            ->add(
-                'visibility',
-                'choice',
-                array(
-                    'choices' => Course::getStatusList(),
-                    'translation_domain' => 'ChamiloCoreBundle'
-                )
-            )
-            ->add('departmentUrl', 'url', array('required' => false))
-            ->add('urls', 'sonata_type_collection', array(
-                    'cascade_validation' => true,
-                ), array(
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
-                    //'btn_add' => true,
-                    //'multiple' => true
-                    //'sortable'          => 'position',
-                    //'link_parameters'   => array('content' => $users),
-                    'admin_code'        => 'sonata.admin.access_url_rel_course'
-                )
-            )
-            ->add('users', 'sonata_type_collection', array(
-                    'cascade_validation' => true,
-                ),
-                array(
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
-                    //'btn_add' => true,
-                    //'multiple' => true
-                    //'sortable'          => 'position',
-                    //'link_parameters'   => array('content' => $users),
-                    'admin_code'        => 'sonata.admin.course_rel_user'
-                )
-            )
-        ;
-    }
-
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper
-            ->add('title')
-            ->add('code')
-            ->add(
-                'visibility',
-                null,
-                array(),
-                'choice',
-                array('choices' => Course::getStatusList())
-            )
-        ;
-    }
-
-    /**
-     * @param ListMapper $listMapper
-     */
-    protected function configureListFields(ListMapper $listMapper)
-    {
-        $listMapper
-            ->addIdentifier('title')
-            ->addIdentifier('code')
-            ->add('courseLanguage')
-            ->add('visibility', 'choice', array(
-                'choices' => Course::getStatusList()
-            ))
-        ;
-    }
-
-    /**
      * Very important in order to save the related entities while updating.
+     *
      * @param \Chamilo\CoreBundle\Entity\Course $course
+     *
      * @return mixed|void
      */
     public function preUpdate($course)
@@ -135,7 +49,9 @@ class CourseAdmin extends Admin
 
     /**
      *  Very important in order to save the related entities while creation.
+     *
      * @param Course $course
+     *
      * @return mixed|void
      */
     public function prePersist($course)
@@ -145,7 +61,7 @@ class CourseAdmin extends Admin
         $this->updateTools($course);
     }
 
-    /***
+    /*
      * Generate tool inside the course
      * @param Course $course
      */
@@ -158,7 +74,7 @@ class CourseAdmin extends Admin
         // @todo use
         //$toolChain->addToolsInCourse($course);
 
-        $addedTools = array();
+        $addedTools = [];
         if (!empty($currentTools)) {
             foreach ($currentTools as $tool) {
                 $addedTools[] = $tool->getName();
@@ -197,5 +113,92 @@ class CourseAdmin extends Admin
     public function getToolChain()
     {
         return $this->toolChain;
+    }
+
+    /**
+     * @param FormMapper $formMapper
+     */
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+            ->add('title')
+            ->add('code', 'text', [
+                //'read_only' => true,
+            ])
+            ->add('description', 'ckeditor')
+            ->add('courseLanguage', 'language')
+            ->add('departmentName')
+            ->add(
+                'visibility',
+                'choice',
+                [
+                    'choices' => Course::getStatusList(),
+                    'translation_domain' => 'ChamiloCoreBundle',
+                ]
+            )
+            ->add('departmentUrl', 'url', ['required' => false])
+            ->add('urls', 'sonata_type_collection', [
+                    'cascade_validation' => true,
+                ], [
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    //'btn_add' => true,
+                    //'multiple' => true
+                    //'sortable'          => 'position',
+                    //'link_parameters'   => array('content' => $users),
+                    'admin_code' => 'sonata.admin.access_url_rel_course',
+                ]
+            )
+            ->add('users', 'sonata_type_collection', [
+                    'cascade_validation' => true,
+                ],
+                [
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    //'btn_add' => true,
+                    //'multiple' => true
+                    //'sortable'          => 'position',
+                    //'link_parameters'   => array('content' => $users),
+                    'admin_code' => 'sonata.admin.course_rel_user',
+                ]
+            )
+        ;
+    }
+
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('title')
+            ->add('code')
+            ->add(
+                'visibility',
+                null,
+                [],
+                'choice',
+                ['choices' => Course::getStatusList()]
+            )
+        ;
+    }
+
+    /**
+     * @param ListMapper $listMapper
+     */
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->addIdentifier('title')
+            ->addIdentifier('code')
+            ->add('courseLanguage')
+            ->add('visibility', 'choice', [
+                'choices' => Course::getStatusList(),
+            ])
+        ;
     }
 }

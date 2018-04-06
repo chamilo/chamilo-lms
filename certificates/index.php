@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Show specified user certificate
+ * Show specified user certificate.
+ *
  * @package chamilo.certificate
  */
-
 require_once '../main/inc/global.inc.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -20,7 +20,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $certificate->generate(array('hide_print_button' => true));
+        $certificate->generate(['hide_print_button' => true]);
 
         if ($certificate->isHtmlFileGenerated()) {
             $certificatePathList[] = $certificate->html_file;
@@ -29,7 +29,7 @@ switch ($action) {
                 'top' => 0,
                 'right' => 0,
                 'bottom' => 0,
-                'left' => 0
+                'left' => 0,
             ];
 
             $orientation = api_get_configuration_value('certificate_pdf_orientation');

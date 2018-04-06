@@ -3,24 +3,25 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
-use Chamilo\CoreBundle\Entity\Skill;
-use Doctrine\ORM\EntityRepository;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * SkillRepository class
+ * SkillRepository class.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class SkillRepository extends EntityRepository
 {
     /**
-     * Get the last acquired skill by a user on course and/or session
-     * @param User $user The user
-     * @param Course $course The course
+     * Get the last acquired skill by a user on course and/or session.
+     *
+     * @param User    $user    The user
+     * @param Course  $course  The course
      * @param Session $session The session
      *
      * @return Skill

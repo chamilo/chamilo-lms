@@ -4,10 +4,11 @@
 /**
  * Process part of the SCORM sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 $cwdir = getcwd();
 require_once '../lp/lp_upload.php';
 

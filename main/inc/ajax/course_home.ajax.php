@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CTool;
+use ChamiloSession as Session;
 
 // @todo refactor this script, create a class that manage the jqgrid requests
 /**
- * Responses to AJAX calls
-*/
+ * Responses to AJAX calls.
+ */
 $action = $_GET['a'];
 
 switch ($action) {
@@ -23,7 +23,7 @@ switch ($action) {
             $criteria = [
                 'cId' => $course_id,
                 'sessionId' => 0,
-                'iid' => (int) $_GET['id']
+                'iid' => (int) $_GET['id'],
             ];
             /** @var CTool $tool */
             $tool = $repository->findOneBy($criteria);
@@ -33,7 +33,7 @@ switch ($action) {
                 $criteria = [
                     'cId' => $course_id,
                     'sessionId' => $sessionId,
-                    'name' => $tool->getName()
+                    'name' => $tool->getName(),
                 ];
 
                 /** @var CTool $tool */
@@ -110,7 +110,7 @@ switch ($action) {
                 if ($allowEditionInSession && empty($sessionId)) {
                     $criteria = [
                         'cId' => $course_id,
-                        'name' => $tool->getName()
+                        'name' => $tool->getName(),
                     ];
 
                     /** @var CTool $toolItem */
@@ -126,12 +126,12 @@ switch ($action) {
                 }
             }
 
-            $response = array(
+            $response = [
                 'image' => $requested_image,
                 'tclass' => $requested_class,
                 'message' => $requested_message,
-                'view' => $requested_view
-            );
+                'view' => $requested_view,
+            ];
             echo json_encode($response);
         }
         break;
@@ -174,12 +174,12 @@ switch ($action) {
          */
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page  = intval($_REQUEST['page']); //page
+        $page = intval($_REQUEST['page']); //page
         $limit = intval($_REQUEST['rows']); // quantity of rows
         //index to filter
-        $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
-        $sord  = $_REQUEST['sord']; //asc or desc
-        if (!in_array($sord, array('asc', 'desc'))) {
+        $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
+        $sord = $_REQUEST['sord']; //asc or desc
+        if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
         $session_id = intval($_REQUEST['session_id']);
@@ -188,7 +188,7 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list = array();
+            $my_session_list = [];
             foreach ($new_session_list as $item) {
                 if (!empty($item['session_id'])) {
                     $my_session_list[] = $item['session_id'];
@@ -202,13 +202,13 @@ switch ($action) {
         $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
-        $temp = array();
+        $temp = [];
         foreach ($course_list as $item) {
             $list = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
-            $item['title'] = Display::url($item['title'], $course_url, array('target' => SESSION_LINK_TARGET));
+            $item['title'] = Display::url($item['title'], $course_url, ['target' => SESSION_LINK_TARGET]);
 
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id'] = $lp_id;
@@ -261,11 +261,11 @@ switch ($action) {
                     }
                 }
 
-                $temp[$count]['cell'] = array(
+                $temp[$count]['cell'] = [
                     $date,
                     $item['title'],
-                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET))
-                );
+                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, ['target' => SESSION_LINK_TARGET]),
+                ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
                 $temp[$count]['date'] = $lp_item['publicated_on'];
@@ -281,7 +281,7 @@ switch ($action) {
             if (!empty($row)) {
                 if ($key >= $start && $key < ($start + $limit)) {
                     $response->rows[$i]['id'] = $key;
-                    $response->rows[$i]['cell'] = array($row[0], $row[1], $row[2]);
+                    $response->rows[$i]['cell'] = [$row[0], $row[1], $row[2]];
                     $i++;
                 }
             }
@@ -305,9 +305,9 @@ switch ($action) {
         $page = intval($_REQUEST['page']); //page
         $limit = intval($_REQUEST['rows']); // quantity of rows
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
-        $sidx = str_replace(array('week desc,', ' '), '', $sidx);
+        $sidx = str_replace(['week desc,', ' '], '', $sidx);
         $sord = $_REQUEST['sord']; //asc or desc
-        if (!in_array($sord, array('asc', 'desc'))) {
+        if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
 
@@ -317,7 +317,7 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list = array();
+            $my_session_list = [];
             foreach ($new_session_list as $item) {
                 if (!empty($item['session_id'])) {
                     $my_session_list[] = $item['session_id'];
@@ -332,7 +332,7 @@ switch ($action) {
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
         $count = 0;
-        $temp = array();
+        $temp = [];
         foreach ($course_list as $item) {
             if (isset($course_id) && !empty($course_id)) {
                 if ($course_id != $item['id']) {
@@ -351,7 +351,7 @@ switch ($action) {
             $item['title'] = Display::url(
                 $item['title'],
                 api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,
-                array('target' => SESSION_LINK_TARGET)
+                ['target' => SESSION_LINK_TARGET]
             );
 
             foreach ($flat_list as $lp_id => $lp_item) {
@@ -401,12 +401,12 @@ switch ($action) {
                     }
                 }
 
-                $temp[$count]['cell'] = array(
+                $temp[$count]['cell'] = [
                     $week_data,
                     $date,
                     $item['title'],
-                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target' => SESSION_LINK_TARGET)),
-                );
+                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, ['target' => SESSION_LINK_TARGET]),
+                ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
                 $count++;
@@ -424,7 +424,7 @@ switch ($action) {
             if (!empty($row)) {
                 if ($key >= $start && $key < ($start + $limit)) {
                     $response->rows[$i]['id'] = $key;
-                    $response->rows[$i]['cell'] = array($row[0], $row[1], $row[2], $row[3]);
+                    $response->rows[$i]['cell'] = [$row[0], $row[1], $row[2], $row[3]];
                     $i++;
                 }
             }
@@ -445,22 +445,22 @@ switch ($action) {
     case 'session_courses_lp_by_course':
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page  = intval($_REQUEST['page']); //page
+        $page = intval($_REQUEST['page']); //page
         $limit = intval($_REQUEST['rows']); // quantity of rows
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
-        $sidx = str_replace(array('course asc,', ' '), '', $sidx);
+        $sidx = str_replace(['course asc,', ' '], '', $sidx);
 
         $sord = $_REQUEST['sord']; //asc or desc
-        if (!in_array($sord, array('asc', 'desc'))) {
+        if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
-        $session_id  = intval($_REQUEST['session_id']);
-        $course_id   = intval($_REQUEST['course_id']);
+        $session_id = intval($_REQUEST['session_id']);
+        $course_id = intval($_REQUEST['course_id']);
 
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list = array();
+            $my_session_list = [];
             foreach ($new_session_list as $item) {
                 if (!empty($item['session_id'])) {
                     $my_session_list[] = $item['session_id'];
@@ -492,7 +492,7 @@ switch ($action) {
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url(
                 $item['title'],
-                api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET)
+                api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, ['target' => SESSION_LINK_TARGET]
             );
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id'] = $lp_id;
@@ -533,11 +533,11 @@ switch ($action) {
                         continue;
                     }
                 }
-                $temp[$count]['cell'] = array(
+                $temp[$count]['cell'] = [
                     $date,
                     $item['title'],
-                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET))
-                );
+                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, ['target' => SESSION_LINK_TARGET]),
+                ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
                 $temp[$count]['date'] = $lp_item['publicated_on'];
@@ -553,7 +553,7 @@ switch ($action) {
             if (!empty($row)) {
                 if ($key >= $start && $key < ($start + $limit)) {
                     $response->rows[$i]['id'] = $key;
-                    $response->rows[$i]['cell'] = array($row[0], $row[1], $row[2]);
+                    $response->rows[$i]['cell'] = [$row[0], $row[1], $row[2]];
                     $i++;
                 }
             }
@@ -595,6 +595,5 @@ switch ($action) {
         break;
     default:
         echo '';
-
 }
 exit;

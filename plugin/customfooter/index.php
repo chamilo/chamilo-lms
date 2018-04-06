@@ -2,7 +2,6 @@
 /**
  * @package chamilo.plugin.customfooter
  */
-
 if (isset($plugin_info['current_region'])) {
     switch ($plugin_info['current_region']) {
         case 'footer_left':

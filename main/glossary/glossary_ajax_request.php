@@ -3,10 +3,10 @@
 
 /* @todo move this file in the inc/ajax/ folder */
 /**
- * Glossary ajax request code
+ * Glossary ajax request code.
+ *
  * @package chamilo.glossary
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -33,7 +33,7 @@ if (isset($_POST['glossary_id']) &&
 } elseif (isset($_POST['glossary_data']) && $_POST['glossary_data'] == 'true') {
     //get_glossary_terms
     $glossary_data = GlossaryManager::get_glossary_terms();
-    $glossary_all_data = array();
+    $glossary_all_data = [];
     if (count($glossary_data) > 0) {
         foreach ($glossary_data as $glossary_index => $glossary_value) {
             $glossary_all_data[] = $glossary_value['id'].'__|__|'.$glossary_value['name'];
@@ -61,7 +61,6 @@ if (isset($_POST['glossary_id']) &&
     } else {
         echo api_xml_http_response_encode($glossary_description);
     }
-
 } else {
     echo api_xml_http_response_encode(get_lang('NoResults'));
 }

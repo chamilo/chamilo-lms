@@ -4,9 +4,9 @@
 /**
  * BLOG HOMEPAGE
  * This file takes care of all blog navigation and displaying.
+ *
  * @package chamilo.blogs
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_BLOGS;
 
@@ -30,10 +30,10 @@ if (api_is_allowed_to_edit()) {
     // the learning path, we do not include the banner so we have to explicitly
     // include the stylesheet, which is normally done in the header
     if (empty($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => 'blog_admin.php?'.api_get_cidreq(),
             'name' => $nameTools,
-        );
+        ];
         $my_url = '';
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $current_section = get_lang('AddBlog');

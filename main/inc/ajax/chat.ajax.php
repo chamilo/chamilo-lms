@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 $_dont_save_user_course_access = true;
 
 require_once __DIR__.'/../global.inc.php';
@@ -29,11 +28,11 @@ $toUserId = isset($_REQUEST['to']) ? $_REQUEST['to'] : null;
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
 if (!isset($_SESSION['chatHistory'])) {
-    $_SESSION['chatHistory'] = array();
+    $_SESSION['chatHistory'] = [];
 }
 
 if (!isset($_SESSION['openChatBoxes'])) {
-    $_SESSION['openChatBoxes'] = array();
+    $_SESSION['openChatBoxes'] = [];
 }
 
 $chat = new Chat();

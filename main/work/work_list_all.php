@@ -60,25 +60,25 @@ if (!empty($group_id)) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups')
-    );
+        'name' => get_lang('Groups'),
+    ];
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('StudentPublications'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
-    'name' =>  $my_folder_data['title']
-);
+    'name' => $my_folder_data['title'],
+];
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $itemId = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
@@ -159,7 +159,7 @@ switch ($action) {
         break;
 }
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-upload'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-upload']);
 
 Display :: display_header(null);
 
@@ -197,7 +197,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'remove', 'danger');
 }
 
-echo Display::toolbarAction('toolbar-worklist', array($actionsLeft));
+echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
@@ -217,115 +217,115 @@ if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
     $type = 'simple';
-    $columns = array(
+    $columns = [
         get_lang('FullUserName'),
         get_lang('Title'),
         get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
         get_lang('UploadCorrection'),
-        get_lang('Actions')
-    );
+        get_lang('Actions'),
+    ];
 
-    $column_model = array(
-        array(
+    $column_model = [
+        [
             'name' => 'fullname',
             'index' => $orderName,
             'width' => '30',
             'align' => 'left',
             'search' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'title',
             'index' => 'title',
             'width' => '25',
             'align' => 'left',
             'search' => 'false',
             'wrap_cell' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'qualification',
             'index' => 'qualification',
             'width' => '15',
             'align' => 'center',
             'search' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'sent_date',
             'index' => 'sent_date',
             'width' => '25',
             'align' => 'left',
             'search' => 'true',
             'wrap_cell' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'qualificator_id',
             'index' => 'qualificator_id',
             'width' => '20',
             'align' => 'left',
             'search' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'correction',
             'index' => 'correction',
             'width' => '30',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',
-            'title' => 'false'
-        ),
-        array(
+            'title' => 'false',
+        ],
+        [
             'name' => 'actions',
             'index' => 'actions',
             'width' => '25',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',
-        ),
-    );
+        ],
+    ];
 } else {
     $type = 'complex';
-    $columns = array(
+    $columns = [
         get_lang('FullUserName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
         get_lang('UploadCorrection'),
-        get_lang('Actions')
-    );
+        get_lang('Actions'),
+    ];
 
-    $column_model = array(
-        array(
+    $column_model = [
+        [
             'name' => 'fullname',
             'index' => $orderName,
             'width' => '35',
             'align' => 'left',
             'search' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'title',
             'index' => 'title',
             'width' => '30',
             'align' => 'left',
             'search' => 'false',
             'wrap_cell' => "true",
-        ),
-        array(
+        ],
+        [
             'name' => 'qualification',
             'index' => 'qualification',
             'width' => '20',
             'align' => 'center',
             'search' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'sent_date',
             'index' => 'sent_date',
             'width' => '30',
             'align' => 'left',
             'search' => 'true',
             'wrap_cell' => 'true',
-        ),
-        array(
+        ],
+        [
             'name' => 'correction',
             'index' => 'correction',
             'width' => '40',
@@ -333,25 +333,25 @@ if (!empty($work_data['enable_qualification']) &&
             'search' => 'false',
             'sortable' => 'false',
             'title' => 'false',
-        ),
-        array(
+        ],
+        [
             'name' => 'actions',
             'index' => 'actions',
             'width' => '30',
             'align' => 'left',
             'search' => 'false',
-            'sortable' => 'false'
+            'sortable' => 'false',
             //'wrap_cell' => 'true',
-        )
-    );
+        ],
+    ];
 }
 
-$extra_params = array(
+$extra_params = [
     'autowidth' => 'true',
     'height' => 'auto',
     'sortname' => $orderName,
     'sortable' => 'false',
-);
+];
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
 ?>

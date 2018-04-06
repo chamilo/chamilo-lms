@@ -5,7 +5,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+$interbreadcrumb[] = ['url' => 'manage.php', 'name' => get_lang('VChamilo')];
 
 // Security
 api_protect_admin_script();

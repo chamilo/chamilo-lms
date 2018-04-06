@@ -4,7 +4,6 @@ exit;
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -18,7 +17,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $tool_name = null;
 
@@ -41,23 +40,21 @@ $values = $extraFieldValue->get_values_by_handler_and_field_id(
     $field_id
 );
 
-
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-$interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-$interbreadcrumb[]=array(
-    'url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
-    'name' => $extra_field_info['display_text']
-);
-$interbreadcrumb[]=array('url' => '#','name' => get_lang('Geolocalization'));
-
+$interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
+$interbreadcrumb[] = [
+    'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
+    'name' => $extra_field_info['display_text'],
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Geolocalization')];
 
 //jqgrid will use this URL to do the selects
 $params = 'field_id='.$field_id.'&type='.$extra_field->type;
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_field_options&'.$params;
 
-$htmlHeadXtra[]='<script>
+$htmlHeadXtra[] = '<script>
 $(function() {
     // grid definition see the $obj->display() function
     '.Display::grid_js(
@@ -66,7 +63,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     ).'
@@ -77,6 +74,5 @@ $(function() {
 Display::display_header($tool_name);
 
 echo Display::page_header($extra_field_info['display_text']);
-
 
 Display :: display_footer();

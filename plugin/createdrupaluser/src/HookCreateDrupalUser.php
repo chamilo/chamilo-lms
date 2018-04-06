@@ -3,15 +3,16 @@
 
 /**
  * Class HookCreateDrupalUser
- * Hook to create an user in Drupal website
+ * Hook to create an user in Drupal website.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.plugin.createDrupalUser
  */
 class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserverInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -21,7 +22,8 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
     }
 
     /**
-     * Create a Drupal user when the Chamilo user is registered
+     * Create a Drupal user when the Chamilo user is registered.
+     *
      * @param HookCreateUserEventInterface $hook The hook
      */
     public function hookCreateUser(HookCreateUserEventInterface $hook)
@@ -36,29 +38,30 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             $originalPassword = $data['originalPassword'];
 
             $userInfo = api_get_user_info($return);
-            $fields = array(
+            $fields = [
                 'name' => $userInfo['username'],
                 'pass' => $originalPassword,
                 'mail' => $userInfo['email'],
                 'status' => 1,
-                'init' => $userInfo['email']
-            );
+                'init' => $userInfo['email'],
+            ];
 
-            $extraFields = array(
+            $extraFields = [
                 'first_name' => $userInfo['firstname'],
-                'last_name' => $userInfo['lastname']
-            );
+                'last_name' => $userInfo['lastname'],
+            ];
 
-            $options = array(
+            $options = [
                 'location' => $drupalDomain.'sites/all/modules/chamilo/soap.php?wsdl',
-                'uri' => $drupalDomain
-            );
+                'uri' => $drupalDomain,
+            ];
 
             $client = new SoapClient(null, $options);
             $drupalUserId = false;
-            
+
             if (isset($_SESSION['ws_drupal_user_id'])) {
                 $drupalUserId = $_SESSION['ws_drupal_user_id'];
+
                 return true;
             }
 
@@ -71,5 +74,4 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             }
         }
     }
-
 }

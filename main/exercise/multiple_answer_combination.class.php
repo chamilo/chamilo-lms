@@ -4,32 +4,33 @@
 use ChamiloSession as Session;
 
 /**
- * Class MultipleAnswerCombination
+ * Class MultipleAnswerCombination.
  *
  *	This class allows to instantiate an object of type
  *  MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
  *
  *	@author Eric Marguin
+ *
  *	@package chamilo.exercise
- **/
+ */
 class MultipleAnswerCombination extends Question
 {
     public static $typePicture = 'mcmac.png';
     public static $explanationLangVar = 'MultipleSelectCombination';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this -> type = MULTIPLE_ANSWER_COMBINATION;
-        $this -> isContent = $this-> getIsContent();
+        $this->type = MULTIPLE_ANSWER_COMBINATION;
+        $this->isContent = $this->getIsContent();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -90,7 +91,7 @@ class MultipleAnswerCombination extends Question
                 $defaults['correct[2]'] = false;
             }
 
-            $renderer = & $form->defaultRenderer();
+            $renderer = &$form->defaultRenderer();
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
@@ -157,7 +158,7 @@ class MultipleAnswerCombination extends Question
             $buttonGroup = [
                 $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true),
                 $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true),
-                $form->addButtonSave($text, 'submitQuestion', true)
+                $form->addButtonSave($text, 'submitQuestion', true),
             ];
 
             $form->addGroup($buttonGroup);
@@ -177,7 +178,7 @@ class MultipleAnswerCombination extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -198,8 +199,8 @@ class MultipleAnswerCombination extends Question
             if ($goodAnswer) {
                 $weighting = abs($weighting);
             } else {
+                // $weighting = -$weighting;
                 $weighting = abs($weighting);
-                //	$weighting = -$weighting;
             }
             if ($weighting > 0) {
                 $questionWeighting += $weighting;
@@ -222,7 +223,7 @@ class MultipleAnswerCombination extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -230,8 +231,8 @@ class MultipleAnswerCombination extends Question
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th width="10%">'.get_lang("Choice").'</th>
-                <th width="20%">'. get_lang("ExpectedChoice").'</th>
-                <th width="30%">'. get_lang("Answer").'</i></th>';
+                <th width="20%">'.get_lang("ExpectedChoice").'</th>
+                <th width="30%">'.get_lang("Answer").'</i></th>';
         $header .= '<th width="10%">'.get_lang('Status').'</th>';
         $header .= '<th width="30%">'.get_lang("Comment").'</th>';
         $header .= '</tr>';

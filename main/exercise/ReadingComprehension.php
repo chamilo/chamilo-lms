@@ -1,16 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
- * Class ReadingComprehension
+ * Class ReadingComprehension.
  *
  * This class allows to instantiate an object of type READING_COMPREHENSION
  * extending the class question
  *
  * @package chamilo.exercise
- **/
+ */
 class ReadingComprehension extends UniqueAnswer
 {
     public static $typePicture = 'reading-comprehension.png';
@@ -19,63 +17,48 @@ class ReadingComprehension extends UniqueAnswer
     /**
      * Defines the different speeds of scrolling for the reading window,
      * in words per minute. If 300 words text in 50w/m, then the moving
-     * window will progress from top to bottom in 6 minutes
-     * @var array $speeds
+     * window will progress from top to bottom in 6 minutes.
+     *
+     * @var array
      */
     public static $speeds = [
         1 => 50,
         2 => 100,
         3 => 175,
         4 => 300,
-        5 => 600
+        5 => 600,
     ];
 
     /**
      * The number of words in the question description (which serves as the
-     * text to read)
-     * @var int $wordsCount
+     * text to read).
+     *
+     * @var int
      */
     public $wordsCount = 0;
 
     /**
-     * Number of words expected to show per refresh
+     * Number of words expected to show per refresh.
+     *
      * @var int
      */
     public $expectedWordsPerRefresh = 0;
 
     /**
-     * Refresh delay in seconds
+     * Refresh delay in seconds.
+     *
      * @var int
      */
     public $refreshTime = 3;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         parent::__construct();
         $this->type = READING_COMPREHENSION;
         $this->isContent = $this->getIsContent();
-    }
-
-    /**
-     * @param $wordsCount
-     * @param $turns
-     * @param $text
-     */
-    private function displayReading($wordsCount, $turns, $text)
-    {
-        $view = new Template('', false, false, false, true, false, false);
-
-        $template = $view->get_template('exercise/reading_comprehension.tpl');
-
-        $view->assign('id', $this->id);
-        $view->assign('text', nl2br($text));
-        $view->assign('words_count', $wordsCount);
-        $view->assign('turns', $turns);
-        $view->assign('refresh_time', $this->refreshTime);
-        $view->display($template);
     }
 
     public function processText($text)
@@ -123,18 +106,20 @@ class ReadingComprehension extends UniqueAnswer
     }
 
     /**
-     * Returns total count of words of the text to read
+     * Returns total count of words of the text to read.
+     *
      * @return int
      */
     public function getWordsCount()
     {
         $words = str_word_count($this->selectDescription(), 2, '0..9');
         $this->wordsCount = count($words);
+
         return $this->wordsCount;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createForm(&$form, $exercise)
     {
@@ -165,7 +150,6 @@ class ReadingComprehension extends UniqueAnswer
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
         $form->addElement('hidden', 'myid', $my_id);
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-
         $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
 
         // default values
@@ -190,7 +174,7 @@ class ReadingComprehension extends UniqueAnswer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function get_default_levels()
     {
@@ -199,8 +183,28 @@ class ReadingComprehension extends UniqueAnswer
             2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
             3 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[3]),
             4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
-            5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5])
+            5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5]),
         ];
+
         return $select_level;
+    }
+
+    /**
+     * @param $wordsCount
+     * @param $turns
+     * @param $text
+     */
+    private function displayReading($wordsCount, $turns, $text)
+    {
+        $view = new Template('', false, false, false, true, false, false);
+
+        $template = $view->get_template('exercise/reading_comprehension.tpl');
+
+        $view->assign('id', $this->id);
+        $view->assign('text', nl2br($text));
+        $view->assign('words_count', $wordsCount);
+        $view->assign('turns', $turns);
+        $view->assign('refresh_time', $this->refreshTime);
+        $view->display($template);
     }
 }

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CCourseDescription
+ * CCourseDescription.
  *
  * @ORM\Table(name="c_course_description", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
@@ -23,7 +23,7 @@ class CCourseDescription
     const TYPE_CUSTOM = 8;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -32,14 +32,14 @@ class CCourseDescription
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -60,31 +60,31 @@ class CCourseDescription
     private $content;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
     private $descriptionType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
     private $progress;
 
-
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CCourseDescription
      */
     public function setTitle($title)
@@ -95,7 +95,7 @@ class CCourseDescription
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -105,9 +105,10 @@ class CCourseDescription
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return CCourseDescription
      */
     public function setContent($content)
@@ -118,7 +119,7 @@ class CCourseDescription
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -128,9 +129,10 @@ class CCourseDescription
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CCourseDescription
      */
     public function setSessionId($sessionId)
@@ -141,9 +143,9 @@ class CCourseDescription
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -151,9 +153,10 @@ class CCourseDescription
     }
 
     /**
-     * Set descriptionType
+     * Set descriptionType.
      *
-     * @param integer $descriptionType
+     * @param int $descriptionType
+     *
      * @return CCourseDescription
      */
     public function setDescriptionType($descriptionType)
@@ -164,9 +167,9 @@ class CCourseDescription
     }
 
     /**
-     * Get descriptionType
+     * Get descriptionType.
      *
-     * @return integer
+     * @return int
      */
     public function getDescriptionType()
     {
@@ -174,9 +177,10 @@ class CCourseDescription
     }
 
     /**
-     * Set progress
+     * Set progress.
      *
-     * @param integer $progress
+     * @param int $progress
+     *
      * @return CCourseDescription
      */
     public function setProgress($progress)
@@ -187,9 +191,9 @@ class CCourseDescription
     }
 
     /**
-     * Get progress
+     * Get progress.
      *
-     * @return integer
+     * @return int
      */
     public function getProgress()
     {
@@ -197,9 +201,10 @@ class CCourseDescription
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CCourseDescription
      */
     public function setId($id)
@@ -210,9 +215,9 @@ class CCourseDescription
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -220,9 +225,10 @@ class CCourseDescription
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CCourseDescription
      */
     public function setCId($cId)
@@ -233,9 +239,9 @@ class CCourseDescription
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

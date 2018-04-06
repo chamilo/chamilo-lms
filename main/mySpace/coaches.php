@@ -16,10 +16,10 @@ $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Tutors');
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
 
 if (isset($_GET["id_student"])) {
-	$interbreadcrumb[] = array("url" => "student.php", "name" => get_lang('Students'));
+    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Students')];
 }
 
 Display :: display_header($nameTools);
@@ -37,9 +37,8 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 /**
- * MAIN PART
+ * MAIN PART.
  */
-
 if (isset($_POST['export'])) {
     $order_clause = api_is_western_name_order(PERSON_NAME_DATA_EXPORT) ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 } else {
@@ -197,33 +196,33 @@ if (Database::num_rows($result_coachs) > 0) {
                         '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>
                     </td>
                     </tr>';
-		}
+        }
 
-		if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-			$data[$id_coach]["firstname"] = $firstname;
-			$data[$id_coach]["lastname"] = $lastname;
-		} else {
-			$data[$id_coach]["lastname"] = $lastname;
-			$data[$id_coach]["firstname"] = $firstname;
-		}
-		$data[$id_coach]["connection_time"] = $s_connection_time;
-	}
+        if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
+            $data[$id_coach]["firstname"] = $firstname;
+            $data[$id_coach]["lastname"] = $lastname;
+        } else {
+            $data[$id_coach]["lastname"] = $lastname;
+            $data[$id_coach]["firstname"] = $firstname;
+        }
+        $data[$id_coach]["connection_time"] = $s_connection_time;
+    }
 } else {
-	// No results
-	echo '<tr><td colspan="5">'.get_lang("NoResult").'</td></tr>';
+    // No results
+    echo '<tr><td colspan="5">'.get_lang("NoResult").'</td></tr>';
 }
 echo '</table>';
 
 if (isset($_POST['export'])) {
-	export_csv($header, $data, 'coaches.csv');
+    export_csv($header, $data, 'coaches.csv');
 }
 
 echo "<br /><br />";
 echo "
     <br /><br />
     <form method='post' action='coaches.php'>
-        <button type='submit' class='save' name='export' value='" . get_lang('ExportExcel')."'>
-            " . get_lang('ExportExcel')."
+        <button type='submit' class='save' name='export' value='".get_lang('ExportExcel')."'>
+            ".get_lang('ExportExcel')."
         </button>
     <form>
 ";

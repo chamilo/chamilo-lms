@@ -3246,7 +3246,7 @@ class SessionManager
 				(SELECT COUNT(*)  FROM  c_lp WHERE session_id = s.id) as lessons,
                 (SELECT value  FROM extra_field_values WHERE field_id = 16 AND item_id = s.id) as image
                 FROM $tbl_session s
-                INNER JOIN $tbl_session_category c
+                LEFT JOIN $tbl_session_category c
                     ON s.session_category_id = c.id
                 INNER JOIN $tbl_users u
                     ON s.id_coach = u.id

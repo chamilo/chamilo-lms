@@ -18,9 +18,12 @@ The upgrade instructions are located in the documentation here:
  
 ## Dev environment install guide
 
-First, apply the procedure described here: [Managing CSS and JavaScript in Chamilo](assets/README.md)
-Then make sure your database supports large prefixes (see [this Stack Overflow thread](https://stackoverflow.com/questions/43379717/how-to-enable-large-index-in-mariadb-10/43403017#43403017) if you use MySQL < 5.7 or MariaDB < 10.2.2)
-Finally, load the (your-domain)/main/install/ URL to start the installer.
+The instructions above are meant only for stable versions. If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet), then please follow the instructions below. Please bear in mind that the development version is NOT COMPLETE at this time, and many features are just not working yet. This is because we are working on root components that require massive changes to the structure of the code, files and database. As such, to get a working version, you might need to completely uninstall and re-install from time to time. You've been warned.
+
+First, apply the procedure described here: [Managing CSS and JavaScript in Chamilo](assets/README.md) (in particular, make sure you follow the given links to install all the necessary components on your computer).
+
+Then make sure your database supports large prefixes (see [this Stack Overflow thread](https://stackoverflow.com/questions/43379717/how-to-enable-large-index-in-mariadb-10/43403017#43403017) if you use MySQL < 5.7 or MariaDB < 10.2.2).
+
 If you are installing this development version in a subdirectory, you will need to add "folder" in configuration.php:
 ```
 $_configuration['url_append'] = 'the-folder';
@@ -29,6 +32,8 @@ and in the ".env" file in the root folder:
 ```
 APP_URL_APPEND=the-folder
 ```
+
+Finally, load the (your-domain)/main/install/ URL to start the installer (which is very similar to the installer in previous versions). If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully. Go back to the beginning of this section and try again.
 
 ## Changes from 1.x
 

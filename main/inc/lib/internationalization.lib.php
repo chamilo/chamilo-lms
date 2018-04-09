@@ -414,8 +414,8 @@ function api_get_timezone()
  * @param bool  $returnObj
  *
  * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
- *                or null if the format of the argument is not supported
- *                or datetime
+ *                         or null if the format of the argument is not supported
+ *                         or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>

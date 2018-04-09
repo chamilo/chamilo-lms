@@ -98,7 +98,7 @@ class ExerciseLib
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-            $quiz_question_options = Question::readQuestionOption(
+            $quizQuestionOptions = Question::readQuestionOption(
                 $questionId,
                 $course_id
             );
@@ -248,6 +248,182 @@ class ExerciseLib
                     $header,
                     ['style' => 'text-align:left;']
                 );
+            } else if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+                echo "<script>
+                   function RadioValidator(question_id, answer_id) 
+                   {
+                        var ShowAlert = \"\";
+                        var typeRadioB = \"\";
+                        var AllFormElements = window.document.getElementById(\"exercise_form\").elements;
+
+                        for (i = 0; i < AllFormElements.length; i++) {
+                            if (AllFormElements[i].type == \"radio\") {
+                                var ThisRadio = AllFormElements[i].name;
+                               
+                                var ThisChecked = \"No\";
+                                var AllRadioOptions = document.getElementsByName(ThisRadio);
+                              
+                                for (x = 0; x < AllRadioOptions.length; x++) {
+                                     if (AllRadioOptions[x].checked && ThisChecked == \"No\") {
+                                         ThisChecked = \"Yes\";
+                                         break;
+                                     } 
+                                }  
+                              
+                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);
+                                
+                                if (ThisChecked == \"No\" && AlreadySearched == -1) { 
+                                    ShowAlert = ShowAlert + ThisRadio;
+                                }     
+                            }
+                            
+                        }
+                        if (ShowAlert != \"\") {
+           
+                        } else {
+                            $(\".question-validate-btn\").attr(\"onclick\", \"save_now (\" + question_id +\", '', \" + answer_id+\")\");                            
+                            $(\".question-validate-btn\").removeAttr('disabled');
+                        }
+                    }
+                    
+                    function handleRadioRow(event, question_id, answer_id) {
+                        var t = event.target;
+                        if (t && t.tagName == \"INPUT\")
+                            return;
+                        while (t && t.tagName != \"TD\") {
+                            t = t.parentElement;
+                        }
+                        var r = t.getElementsByTagName(\"INPUT\")[0];
+                        r.click();
+                        RadioValidator(question_id, answer_id);
+                    }
+                 
+                    $( document ).ready(function() {
+
+
+                        var ShowAlert = \"\";
+                        var typeRadioB = \"\";
+                        var question_id = $('input[name=question_id]').val()
+                        var AllFormElements = window.document.getElementById(\"exercise_form\").elements;
+
+                            for (i = 0; i < AllFormElements.length; i++) {
+                               if (AllFormElements[i].type == \"radio\") {
+                                    var ThisRadio = AllFormElements[i].name;
+
+                                    var ThisChecked = \"No\";
+                                    var AllRadioOptions = document.getElementsByName(ThisRadio);
+
+                                    for (x = 0; x < AllRadioOptions.length; x++) {
+                                        if (AllRadioOptions[x].checked && ThisChecked == \"No\") {
+                                            ThisChecked = \"Yes\";
+                                            break;
+                                        }
+                                    }
+
+                                    var AlreadySearched = ShowAlert.indexOf(ThisRadio);
+
+                                    if (ThisChecked == \"No\" && AlreadySearched == -1) { 
+                                        ShowAlert = ShowAlert + ThisRadio;
+                                    }
+                                }
+
+                                }
+                                    if (ShowAlert != \"\") {
+                                         $(\".question-validate-btn\").attr(\"onclick\", \"\");
+                                         $(\".question-validate-btn\").attr(\"disabled\", \"disabled\");
+                                    } else {
+                                        $(\".question-validate-btn\").attr(\"onclick\", \"save_now(\" + question_id +\", '', '')\");
+                                        $(\".question-validate-btn\").removeAttr('disabled');
+                                    }
+
+
+
+                                });
+                                
+                                
+                    
+                </script>";
+                $header = Display::tag('th', get_lang('Options'), array('width' => '50%'));
+
+                foreach ($objQuestionTmp->optionsTitle as $item) {
+                    if (in_array($item, $objQuestionTmp->optionsTitle)) {
+                        $properties = array();
+                        if ($item == "langAnswers") {
+                            $properties["colspan"] = 2;
+                            $properties["style"] = "background-color: #F56B2A; color: #ffffff;";
+                        } else if ($item == "DegreeOfCertainty") {
+                            $properties["colspan"] = 6;
+                            $properties["style"] = "background-color: #330066; color: #ffffff;";
+                        }
+                        $header .= Display::tag('th', get_lang($item), $properties);
+                    } else {
+                        $header .= Display::tag('th', $item);
+                    }
+                }
+                if ($show_comment) {
+                    $header .= Display::tag('th', get_lang('Feedback'));
+                }
+
+
+                $s .= '<table class="data_table">';
+                $s .= Display::tag('tr', $header, ['style' => 'text-align:left;']);
+
+                // ajout de la 2eme ligne d'entête pour true/falss et les pourcentages de certitude
+                $header1 = Display::tag('th', '&nbsp;');
+                $cpt1 = 0;
+                foreach ($objQuestionTmp->options as $item) {
+                    $colorBorder1 =($cpt1 == (count($objQuestionTmp->options)-1))?'':'border-right: solid #FFFFFF 1px;' ;
+                    if ($item == "True" || $item == "False") {
+                        $header1 .= Display::tag('th',
+                            get_lang($item),
+                            ['style' => 'background-color: #F7C9B4; color: black;'. $colorBorder1]
+                        );
+                    } else {
+
+                        $header1 .= Display::tag('th',
+                            $item,
+                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]);
+                    }
+                    $cpt1++;
+                }
+                if ($show_comment) {
+                    $header1 .= Display::tag('th', '&nbsp;');
+                }
+
+                $s .= Display::tag('tr', $header1);
+
+                // add explanation
+                $header2 = Display::tag('th', '&nbsp;');
+                $descriptionList = [
+                    get_lang('Ignorance'),
+                    get_lang('VeryUnsure'),
+                    get_lang('Unsure'),
+                    get_lang('PrettySur'),
+                    get_lang('Sur'),
+                    get_lang('VerySur')
+                ];
+                $counter2 = 0;
+
+                foreach ($objQuestionTmp->options as $item) {
+
+                    if ($item == "True" || $item == "False") {
+                        $header2 .= Display::tag('td',
+                            '&nbsp;',
+                            ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);
+                    } else {
+                        $color_border2 =($counter2 == (count($objQuestionTmp->options)-1)) ? '' : 'border-right: solid #FFFFFF 1px;font-size:11px;' ;
+                        $header2 .= Display::tag(
+                            'td',
+                            nl2br($descriptionList[$counter2]),
+                            array('style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center; vertical-align: top; padding:5px; '.$color_border2));
+                        $counter2++;
+                    }
+
+                }
+                if ($show_comment) {
+                    $header2 .= Display::tag('th', '&nbsp;');
+                }
+                $s .= Display::tag('tr', $header2);
             }
 
             if ($show_comment) {
@@ -276,10 +452,10 @@ class ExerciseLib
             }
 
             $matching_correct_answer = 0;
-            $user_choice_array = [];
+            $userChoiceList = [];
             if (!empty($user_choice)) {
                 foreach ($user_choice as $item) {
-                    $user_choice_array[] = $item['answer'];
+                    $userChoiceList[] = $item['answer'];
                 }
             }
 
@@ -384,13 +560,14 @@ class ExerciseLib
                             $s .= $answer_input;
                         }
                         break;
+                    case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                     case MULTIPLE_ANSWER:
                     case MULTIPLE_ANSWER_TRUE_FALSE:
                     case GLOBAL_MULTIPLE_ANSWER:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         $answer = Security::remove_XSS($answer, STUDENT);
 
-                        if (in_array($numAnswer, $user_choice_array)) {
+                        if (in_array($numAnswer, $userChoiceList)) {
                             $attributes = [
                                 'id' => $input_id,
                                 'checked' => 1,
@@ -432,20 +609,20 @@ class ExerciseLib
                                 $s .= $answer_input;
                             }
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-                            $my_choice = [];
-                            if (!empty($user_choice_array)) {
-                                foreach ($user_choice_array as $item) {
+                            $myChoice = [];
+                            if (!empty($userChoiceList)) {
+                                foreach ($userChoiceList as $item) {
                                     $item = explode(':', $item);
-                                    $my_choice[$item[0]] = $item[1];
+                                    $myChoice[$item[0]] = $item[1];
                                 }
                             }
 
                             $s .= '<tr>';
                             $s .= Display::tag('td', $answer);
 
-                            if (!empty($quiz_question_options)) {
-                                foreach ($quiz_question_options as $id => $item) {
-                                    if (isset($my_choice[$numAnswer]) && $id == $my_choice[$numAnswer]) {
+                            if (!empty($quizQuestionOptions)) {
+                                foreach ($quizQuestionOptions as $id => $item) {
+                                    if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
                                         $attributes = [
                                             'checked' => 1,
                                             'selected' => 1,
@@ -479,13 +656,89 @@ class ExerciseLib
                                 $s .= '</td>';
                             }
                             $s .= '</tr>';
+                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+                            $myChoice = [];
+                            if (!empty($userChoiceList)) {
+                                foreach ($userChoiceList as $item) {
+                                    $item = explode(':', $item);
+                                    $myChoice[$item[0]] = $item[1];
+                                }
+                            }
+                            $myChoiceDegreeCertainty = [];
+                            if (!empty($userChoiceList)) {
+                                foreach ($userChoiceList as $item) {
+                                    $item = explode(':', $item);
+                                    $myChoiceDegreeCertainty[$item[0]] = $item[2];
+                                }
+                            }
+                            $s .= '<tr>';
+                            $s .= Display::tag('td', $answer);
+
+                            if (!empty($quizQuestionOptions)) {
+
+                                foreach ($quizQuestionOptions as $id => $item) {
+
+                                    if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
+                                        $attributes = ['checked' => 1, 'selected' => 1];
+                                    } else {
+                                        $attributes = [];
+                                    }
+                                    $attributes['onChange'] = 'RadioValidator(' . $questionId . ', ' . $numAnswer . ')';
+                                    // gère la séletion des radio button du degré de certitude
+                                    if (isset($myChoiceDegreeCertainty[$numAnswer]) && $id == $myChoiceDegreeCertainty[$numAnswer]) {
+                                        $attributes1 = ['checked' => 1, 'selected' => 1];
+                                    } else {
+                                        $attributes1 = [];
+                                    }
+
+                                    $attributes1['onChange'] = 'RadioValidator(' . $questionId . ', ' . $numAnswer . ')';
+
+                                    if ($debug_mark_answer) {
+                                        if ($id == $answerCorrect) {
+                                            $attributes['checked'] = 1;
+                                            $attributes['selected'] = 1;
+                                        }
+                                    }
+
+                                    if ($item["name"] == "True" || $item["name"] == "False") {
+                                        $s .= Display::tag('td',
+                                            Display::input('radio',
+                                                'choice[' . $questionId . '][' . $numAnswer . ']',
+                                                $id,
+                                                $attributes
+                                            ),
+                                            ['style' => 'text-align:center; background-color:#F7E1D7;',
+                                                'onclick' => 'handleRadioRow(event, ' . $questionId . ', ' . $numAnswer . ')'
+                                            ]
+                                        );
+                                    } else {
+                                        $s .= Display::tag('td',
+                                            Display::input('radio',
+                                                'choiceDegreeCertainty[' . $questionId . '][' . $numAnswer . ']',
+                                                $id,
+                                                $attributes1
+                                            ),
+                                            ['style' => 'text-align:center; background-color:#EFEFFC;',
+                                                'onclick' => 'handleRadioRow(event, ' . $questionId . ', ' . $numAnswer . ')'
+                                            ]
+                                        );
+                                    }
+                                }
+                            }
+
+                            if ($show_comment) {
+                                $s .= '<td>';
+                                $s .= $comment;
+                                $s .= '</td>';
+                            }
+                            $s.='</tr>';
                         }
                         break;
                     case MULTIPLE_ANSWER_COMBINATION:
                         // multiple answers
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
 
-                        if (in_array($numAnswer, $user_choice_array)) {
+                        if (in_array($numAnswer, $userChoiceList)) {
                             $attributes = [
                                 'id' => $input_id,
                                 'checked' => 1,
@@ -529,12 +782,12 @@ class ExerciseLib
                         break;
                     case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                         $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                        $my_choice = [];
-                        if (!empty($user_choice_array)) {
-                            foreach ($user_choice_array as $item) {
+                        $myChoice = [];
+                        if (!empty($userChoiceList)) {
+                            foreach ($userChoiceList as $item) {
                                 $item = explode(':', $item);
                                 if (isset($item[1]) && isset($item[0])) {
-                                    $my_choice[$item[0]] = $item[1];
+                                    $myChoice[$item[0]] = $item[1];
                                 }
                             }
                         }
@@ -542,7 +795,7 @@ class ExerciseLib
                         $s .= '<tr>';
                         $s .= Display::tag('td', $answer);
                         foreach ($objQuestionTmp->options as $key => $item) {
-                            if (isset($my_choice[$numAnswer]) && $key == $my_choice[$numAnswer]) {
+                            if (isset($myChoice[$numAnswer]) && $key == $myChoice[$numAnswer]) {
                                 $attributes = [
                                     'checked' => 1,
                                     'selected' => 1,
@@ -663,16 +916,18 @@ class ExerciseLib
                             global $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                             $sql = 'SELECT answer FROM '.$trackAttempts.'
-                                    WHERE exe_id='.$exe_id.' AND question_id='.$questionId;
+                                    WHERE exe_id=' . $exe_id.' AND question_id='.$questionId;
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
                             $answer = $rowLastAttempt['answer'];
                             if (empty($answer)) {
-                                $randomValue = mt_rand(1, $nbrAnswers);
-                                $answer = $objAnswerTmp->selectAnswer($randomValue);
-                                $calculatedAnswer = Session::read('calculatedAnswerId');
-                                $calculatedAnswer[$questionId] = $randomValue;
-                                Session::write('calculatedAnswerId', $calculatedAnswer);
+                                $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
+                                    1,
+                                    $nbrAnswers
+                                );
+                                $answer = $objAnswerTmp->selectAnswer(
+                                    $_SESSION['calculatedAnswerId'][$questionId]
+                                );
                             }
                         }
 
@@ -684,8 +939,7 @@ class ExerciseLib
                             $correctAnswerList
                         );
 
-                        // get student answer to display it if student go back to
-                        // previous calculated answer question in a test
+                        // get student answer to display it if student go back to previous calculated answer question in a test
                         if (isset($user_choice[0]['answer'])) {
                             api_preg_match_all(
                                 '/\[[^]]+\]/',
@@ -695,7 +949,9 @@ class ExerciseLib
                             $studentAnswerListTobecleaned = $studentAnswerList[0];
                             $studentAnswerList = [];
 
-                            for ($i = 0; $i < count($studentAnswerListTobecleaned); $i++) {
+                            for ($i = 0; $i < count(
+                                $studentAnswerListTobecleaned
+                            ); $i++) {
                                 $answerCorrected = $studentAnswerListTobecleaned[$i];
                                 $answerCorrected = api_preg_replace(
                                     '| / <font color="green"><b>.*$|',
@@ -722,8 +978,7 @@ class ExerciseLib
                             }
                         }
 
-                        // If display preview of answer in test view for exaemple,
-                        // set the student answer to the correct answers
+                        // If display preview of answer in test view for exemple, set the student answer to the correct answers
                         if ($debug_mark_answer) {
                             // contain the rights answers surronded with brackets
                             $studentAnswerList = $correctAnswerList[0];
@@ -742,7 +997,7 @@ class ExerciseLib
                             ' '.$answer.' '
                         );
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = '';
+                            $answer = "";
                             $i = 0;
                             foreach ($studentAnswerList as $studentItem) {
                                 // remove surronding brackets
@@ -835,8 +1090,8 @@ class ExerciseLib
                             if (isset($select_items[$lines_count])) {
                                 $s .= '<div class="text-right">
                                         <p class="indent">'.
-                                            $select_items[$lines_count]['letter'].'.&nbsp; '.
-                                            $select_items[$lines_count]['answer'].'
+                                    $select_items[$lines_count]['letter'].'.&nbsp; '.
+                                    $select_items[$lines_count]['answer'].'
                                         </p>
                                         </div>';
                             } else {
@@ -854,7 +1109,7 @@ class ExerciseLib
                                       <td colspan="2"></td>
                                       <td valign="top">';
                                     $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.
-                                                $select_items[$lines_count]['answer'];
+                                        $select_items[$lines_count]['answer'];
                                     $s .= "</td>
                                 </tr>";
                                     $lines_count++;
@@ -1074,6 +1329,7 @@ HTML;
                     UNIQUE_ANSWER_NO_OPTION,
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
+                    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
                 ]
             )) {
                 $s .= '</table>';
@@ -1679,10 +1935,9 @@ HOTSPOT;
      * @param null   $extra_where_conditions
      * @param bool   $get_count
      * @param string $courseCode
-     * @param bool   $showSessionField
-     * @param bool   $showExerciseCategories
-     * @param array  $userExtraFieldsToAdd
-     * @param bool   $useCommaAsDecimalPoint
+     * @param bool $showSessionField
+     * @param bool $showExerciseCategories
+     * @param array $userExtraFieldsToAdd
      *
      * @return array
      */
@@ -1697,8 +1952,7 @@ HOTSPOT;
         $courseCode = null,
         $showSessionField = false,
         $showExerciseCategories = false,
-        $userExtraFieldsToAdd = [],
-        $useCommaAsDecimalPoint = false
+        $userExtraFieldsToAdd = []
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1711,12 +1965,7 @@ HOTSPOT;
         }
 
         $course_id = $courseInfo['real_id'];
-        $is_allowedToEdit =
-            api_is_allowed_to_edit(null, true) ||
-            api_is_allowed_to_edit(true) ||
-            api_is_drh() ||
-            api_is_student_boss() ||
-            api_is_session_admin();
+        $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
@@ -1943,21 +2192,14 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
+        $teacher_list = CourseManager::get_teacher_list_from_course_code(
+            $courseCode
+        );
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
                 $teacher_id_list[] = $teacher['user_id'];
             }
-        }
-
-        $scoreDisplay = new ScoreDisplay();
-        $decimalSeparator = '.';
-        $thousandSeparator = ',';
-
-        if ($useCommaAsDecimalPoint) {
-            $decimalSeparator = ',';
-            $thousandSeparator = '';
         }
 
         $listInfo = [];
@@ -1977,6 +2219,7 @@ HOTSPOT;
             while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
                 $results[] = $rowx;
             }
+
             $group_list = GroupManager::get_group_list(null, $courseInfo);
             $clean_group_list = [];
             if (!empty($group_list)) {
@@ -1989,7 +2232,7 @@ HOTSPOT;
             $lp_list = $lp_list_obj->get_flat_list();
             $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
 
-            if (!empty($results)) {
+            if (is_array($results)) {
                 $users_array_id = [];
                 $from_gradebook = false;
                 if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1997,7 +2240,11 @@ HOTSPOT;
                 }
                 $sizeof = count($results);
                 $user_list_id = [];
-                $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
+                $locked = api_resource_is_locked_by_gradebook(
+                    $exercise_id,
+                    LINK_EXERCISE
+                );
+
                 $timeNow = strtotime(api_get_utc_datetime());
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
@@ -2079,9 +2326,10 @@ HOTSPOT;
                     // we filter the results if we have the permission to
                     $result_disabled = 0;
                     if (isset($results[$i]['results_disabled'])) {
-                        $result_disabled = (int) $results[$i]['results_disabled'];
+                        $result_disabled = intval(
+                            $results[$i]['results_disabled']
+                        );
                     }
-
                     if ($result_disabled == 0) {
                         $my_res = $results[$i]['exe_result'];
                         $my_total = $results[$i]['exe_weighting'];
@@ -2093,19 +2341,9 @@ HOTSPOT;
                             $my_res = 0;
                         }
 
-                        $score = self::show_score(
-                            $my_res,
-                            $my_total,
-                            true,
-                            true,
-                            false,
-                            false,
-                            $decimalSeparator,
-                            $thousandSeparator
-                        );
+                        $score = self::show_score($my_res, $my_total);
 
                         $actions = '<div class="pull-right">';
-
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(
@@ -2190,7 +2428,7 @@ HOTSPOT;
                             }
 
                             // Admin can always delete the attempt
-                            if (($locked == false || (api_is_platform_admin()) && !api_is_student_boss())) {
+                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                                 $ip = Tracking::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
                                     api_get_utc_datetime(),
@@ -2221,10 +2459,10 @@ HOTSPOT;
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\''.sprintf(
-                                    get_lang('DeleteAttempt'),
-                                    $results[$i]['username'],
-                                    $dt
-                                ).'\')) return false;">';
+                                        get_lang('DeleteAttempt'),
+                                        $results[$i]['username'],
+                                        $dt
+                                    ).'\')) return false;">';
                                 $delete_link .=
                                     Display:: return_icon(
                                         'delete.png',
@@ -2234,9 +2472,6 @@ HOTSPOT;
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
-                                }
-                                if (api_is_session_admin()) {
-                                    $delete_link = '';
                                 }
                                 if ($revised == 3) {
                                     $delete_link = null;
@@ -2353,17 +2588,7 @@ HOTSPOT;
                             }
 
                             foreach ($category_list as $categoryId => $result) {
-                                $scoreToDisplay = self::show_score(
-                                    $result['score'],
-                                    $result['total'],
-                                    true,
-                                    true,
-                                    false,
-                                    false,
-                                    $decimalSeparator,
-                                    $thousandSeparator
-                                );
-
+                                $scoreToDisplay = self::show_score($result['score'], $result['total']);
                                 $results[$i]['category_'.$categoryId] = $scoreToDisplay;
                                 $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
                                     $result['score'],
@@ -2371,9 +2596,7 @@ HOTSPOT;
                                     true,
                                     true,
                                     true, // $show_only_percentage = false
-                                    true, // hide % sign
-                                    $decimalSeparator,
-                                    $thousandSeparator
+                                    true // hide % sign
                                 );
                                 $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
                                 $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
@@ -2388,23 +2611,10 @@ HOTSPOT;
                                 true,
                                 true,
                                 true,
-                                true,
-                                $decimalSeparator,
-                                $thousandSeparator
+                                true
                             );
-
-                            $results[$i]['only_score'] = $scoreDisplay->format_score(
-                                $my_res,
-                                false,
-                                $decimalSeparator,
-                                $thousandSeparator
-                            );
-                            $results[$i]['total'] = $scoreDisplay->format_score(
-                                $my_total,
-                                false,
-                                $decimalSeparator,
-                                $thousandSeparator
-                            );
+                            $results[$i]['only_score'] = $my_res;
+                            $results[$i]['total'] = $my_total;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $listInfo[] = $results[$i];
@@ -2478,14 +2688,12 @@ HOTSPOT;
      * Converts the score with the exercise_max_note and exercise_min_score
      * the platform settings + formats the results using the float_format function.
      *
-     * @param float  $score
-     * @param float  $weight
-     * @param bool   $show_percentage       show percentage or not
-     * @param bool   $use_platform_settings use or not the platform settings
-     * @param bool   $show_only_percentage
-     * @param bool   $hidePercentageSign    hide "%" sign
-     * @param string $decimalSeparator
-     * @param string $thousandSeparator
+     * @param float $score
+     * @param float $weight
+     * @param bool $show_percentage show percentage or not
+     * @param bool $use_platform_settings use or not the platform settings
+     * @param bool $show_only_percentage
+     * @param bool $hidePercetangeSign hide "%" sign
      *
      * @return string an html with the score modified
      */
@@ -2495,9 +2703,7 @@ HOTSPOT;
         $show_percentage = true,
         $use_platform_settings = true,
         $show_only_percentage = false,
-        $hidePercentageSign = false,
-        $decimalSeparator = '.',
-        $thousandSeparator = ','
+        $hidePercetangeSign = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
@@ -2519,13 +2725,14 @@ HOTSPOT;
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
 
         // Formats values
-        $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
-        $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
-        $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+        $percentage = float_format($percentage, 1);
+        $score = float_format($score, 1);
+        $weight = float_format($weight, 1);
 
+        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
-            if ($hidePercentageSign) {
+            if ($hidePercetangeSign) {
                 $percentageSign = '';
             }
             $html = $percentage."$percentageSign  ($score / $weight)";
@@ -2555,7 +2762,9 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
+        //$modelWithStyle = get_lang($model['name']);
         $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+        //$modelWithStyle .= $percentage;
 
         return $modelWithStyle;
     }
@@ -3315,7 +3524,10 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                if (!empty($result['exe_weighting']) && intval(
+                        $result['exe_weighting']
+                    ) != 0
+                ) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     $avg_score += $score;
                 }
@@ -3510,8 +3722,7 @@ EOT;
      *
      * @param int $question_id
      * @param int $exercise_id
-     *
-     * @return array
+     * @return int
      */
     public static function getNumberStudentsFillBlanksAnswerCount(
         $question_id,
@@ -3535,6 +3746,7 @@ EOT;
         );
 
         $arrayCount = [];
+
         foreach ($listFillTheBlankResult as $resultCount) {
             foreach ($resultCount as $index => $count) {
                 //this is only for declare the array index per answer
@@ -3998,6 +4210,41 @@ EOT;
     }
 
     /**
+     * @param string $in_name is the name and the id of the <select>
+     * @param string $in_default default value for option
+     * @param string $in_onchange
+     * @return string the html code of the <select>
+     */
+    public static function displayGroupMenu($in_name, $in_default, $in_onchange = "")
+    {
+        // check the default value of option
+        $tabSelected = [$in_default => " selected='selected' "];
+        $res = "";
+        $res .= "<select name='$in_name' id='$in_name' onchange='".$in_onchange."' >";
+        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang(
+                'AllGroups'
+            )." --</option>";
+        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang(
+                'NotInAGroup'
+            )." -</option>";
+        $tabGroups = GroupManager::get_group_list();
+        $currentCatId = 0;
+        for ($i = 0; $i < count($tabGroups); $i++) {
+            $tabCategory = GroupManager::get_category_from_group(
+                $tabGroups[$i]['iid']
+            );
+            if ($tabCategory["id"] != $currentCatId) {
+                $res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
+                $currentCatId = $tabCategory["id"];
+            }
+            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".
+                    $tabGroups[$i]["name"]."</option>";
+        }
+        $res .= "</select>";
+        return $res;
+    }
+
+    /**
      * @param int $exe_id
      */
     public static function create_chat_exercise_session($exe_id)
@@ -4323,17 +4570,35 @@ EOT;
             } // end foreach() block that loops over all questions
         }
 
-        $total_score_text = null;
+        $totalScoreText = null;
         if ($show_results || $show_only_score) {
-            $total_score_text .= '<div class="question_row_score">';
-            $total_score_text .= self::getTotalScoreRibbon(
-                $objExercise,
-                $total_score,
-                $total_weight,
-                true,
-                $countPendingQuestions
-            );
-            $total_score_text .= '</div>';
+            if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                echo "<h1 style='text-align : center; margin : 20px 0;'>Vos Résultats</h1><br>";
+            }
+            $totalScoreText .= '<div class="question_row_score">';
+            if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+                $totalScoreText .= self::getQuestionRibbonDiag($objExercise,
+                    $total_score,
+                    $total_weight,
+                    true
+                );
+            } else {
+                $totalScoreText .= self::getTotalScoreRibbon(
+                    $objExercise,
+                    $total_score,
+                    $total_weight,
+                    true,
+                    $countPendingQuestions
+                );
+            }
+            $totalScoreText .= '</div>';
+        }
+
+        if($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+            $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults(
+                $exeId,
+                $objExercise);
+            echo $chartMultiAnswer;
         }
 
         if (!empty($category_list) && ($show_results || $show_only_score)) {
@@ -4349,8 +4614,7 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= "<div class='normal-message'>".
-                get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
+            $exercise_content .= "<div class='normal-message'>".get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939
@@ -4360,7 +4624,7 @@ EOT;
             $exercise_content
         );
 
-        echo $total_score_text;
+        echo $totalScoreText;
 
         // Ofaj change BT#11784
         if (!empty($objExercise->description)) {
@@ -4370,7 +4634,7 @@ EOT;
         echo $exercise_content;
 
         if (!$show_only_score) {
-            echo $total_score_text;
+            echo $totalScoreText;
         }
 
         if (!empty($remainingMessage)) {
@@ -4417,6 +4681,57 @@ EOT;
             }
         }
     }
+
+    /**
+     * @param Exercise $objExercise
+     * @param float $score
+     * @param float $weight
+     * @param bool $checkPassPercentage
+     * @return string
+     */
+    public static function getQuestionRibbonDiag($objExercise, $score, $weight, $checkPassPercentage = false) {
+
+        $displayChartDegree = true;
+        $ribbon = $displayChartDegree? '<div class="ribbon">' : '';
+
+        if ($checkPassPercentage) {
+            $isSuccess = self::isSuccessExerciseResult(
+                $score, $weight, $objExercise->selectPassPercentage()
+            );
+            // Color the final test score if pass_percentage activated
+            $ribbonTotalSuccessOrError = "";
+            if (self::isPassPercentageEnabled($objExercise->selectPassPercentage())) {
+                if ($isSuccess) {
+                    $ribbonTotalSuccessOrError = ' ribbon-total-success';
+                } else {
+                    $ribbonTotalSuccessOrError = ' ribbon-total-error';
+                }
+            }
+            $ribbon .= $displayChartDegree? '<div class="rib rib-total ' . $ribbonTotalSuccessOrError . '">' : '';
+        } else {
+            $ribbon .= $displayChartDegree? '<div class="rib rib-total">' : '';
+        }
+
+        if ($displayChartDegree){
+            $ribbon .= '<h3>' . get_lang('YourTotalScore') . ":&nbsp;";
+
+
+            $ribbon .= self::show_score($score, $weight, false, true);
+            $ribbon .= '</h3>';
+            $ribbon .= '</div>';
+        }
+
+        if ($checkPassPercentage) {
+            $ribbon .= self::showSuccessMessage(
+                $score, $weight, $objExercise->selectPassPercentage()
+            );
+        }
+
+        $ribbon .= $displayChartDegree? '</div>' : '';
+
+        return $ribbon;
+    }
+
 
     /**
      * @param Exercise $objExercise

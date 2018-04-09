@@ -2846,7 +2846,7 @@ class Exercise
                     c_id = ".api_get_course_int_id()." AND
                     exe_exo_id = ".$this->id." AND
                     session_id = ".api_get_session_id()." ".
-                    $sql_where;
+            $sql_where;
 
         $result = Database::query($sql);
         $exe_list = Database::store_result($result);
@@ -3397,12 +3397,16 @@ class Exercise
         $totalScore = 0;
 
         // Extra information of the question
-        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE && !empty($extra)) {
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+            $answerType ==  MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY &&
+            !empty($extra)
+        ) {
             $extra = explode(':', $extra);
             if ($debug) {
                 error_log(print_r($extra, 1));
             }
             // Fixes problems with negatives values using intval
+
             $true_score = floatval(trim($extra[0]));
             $false_score = floatval(trim($extra[1]));
             $doubt_score = floatval(trim($extra[2]));
@@ -3415,6 +3419,12 @@ class Exercise
         if ($debug) {
             error_log('Count of answers: '.$nbrAnswers);
             error_log('$answerType: '.$answerType);
+        }
+
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $choiceTmp = $choice;
+            $choice = $choiceTmp["choice"];
+            $choiceDegreeCertainty = $choiceTmp["choiceDegreeCertainty"];
         }
 
         if ($answerType == FREE_ANSWER ||
@@ -3562,6 +3572,55 @@ class Exercise
                         // If no result then the user just hit don't know
                         $studentChoice = 3;
                         $questionScore += $doubt_score;
+                    }
+                    $totalScore = $questionScore;
+                    break;
+                case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
+                    if ($from_database) {
+                        $choice = [];
+                        $choiceDegreeCertainty = [];
+                        $sql = "SELECT answer 
+                            FROM $TBL_TRACK_ATTEMPT
+                            WHERE 
+                            exe_id = $exeId AND question_id = " . $questionId;
+
+                        $result = Database::query($sql);
+                        while ($row = Database::fetch_array($result)) {
+                            $ind = $row['answer'];
+                            $values = explode(':', $ind);
+                            $myAnswerId = $values[0];
+                            $option = $values[1];
+                            $percent = $values[2];
+                            $choice[$myAnswerId] = $option;
+                            $choiceDegreeCertainty[$myAnswerId] = $percent;
+                        }
+                    }
+
+                    $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ? $choiceDegreeCertainty[$answerAutoId] : null;
+
+                    // student score update
+                    if (!empty($studentChoice)){
+
+                        if ($studentChoice == $answerCorrect) {
+                            // correct answer and student is Unsure or PrettySur
+                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
+                                && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
+                                $questionScore += $true_score;
+                            } else {
+                                // student ignore correct answer
+                                $questionScore += $doubt_score;
+                            }
+                        } else {
+                            // false answer and student is Unsure or PrettySur
+                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
+                                && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
+                                $questionScore += $false_score;
+                            } else {
+                                // student ignore correct answer
+                                $questionScore += $doubt_score;
+                            }
+                        }
                     }
                     $totalScore = $questionScore;
                     break;
@@ -3777,12 +3836,12 @@ class Exercise
                                     $choice[$j] = null;
                                 }
                             } else {
-                                // This value is the user input, not escaped while correct answer is escaped by ckeditor
+                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 $choice[$j] = api_htmlentities(trim($choice[$j]));
                             }
 
                             $user_tags[] = $choice[$j];
-                            // Put the contents of the [] answer tag into correct_tags[]
+                            //put the contents of the [] answer tag into correct_tags[]
                             $correct_tags[] = api_substr($temp, 0, $pos);
                             $j++;
                             $temp = api_substr($temp, $pos + 1);
@@ -3790,6 +3849,7 @@ class Exercise
                         $answer = '';
                         $real_correct_tags = $correct_tags;
                         $chosen_list = [];
+
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if ($i == 0) {
                                 $answer .= $real_text[0];
@@ -3808,7 +3868,7 @@ class Exercise
                                     // else if the word entered by the student IS NOT the same as
                                     // the one defined by the professor
                                     // adds the word in red at the end of the string, and strikes it
-                                    $answer .= '<font color="red"><s>'.$user_tags[$i].'</s></font>';
+                                    $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
                                 } else {
                                     // adds a tabulation if no word has been typed by the student
                                     $answer .= ''; // remove &nbsp; that causes issue
@@ -3975,135 +4035,120 @@ class Exercise
                     }
                     break;
                 case CALCULATED_ANSWER:
-                    $calculatedAnswerList = Session::read('calculatedAnswerId');
-                    if (!empty($calculatedAnswerList)) {
-                        $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
-                        $preArray = explode('@@', $answer);
-                        $last = count($preArray) - 1;
-                        $answer = '';
-                        for ($k = 0; $k < $last; $k++) {
-                            $answer .= $preArray[$k];
+                    $answer = $objAnswerTmp->selectAnswer($_SESSION['calculatedAnswerId'][$questionId]);
+                    $preArray = explode('@@', $answer);
+                    $last = count($preArray) - 1;
+                    $answer = '';
+                    for ($k = 0; $k < $last; $k++) {
+                        $answer .= $preArray[$k];
+                    }
+                    $answerWeighting = [$answerWeighting];
+                    // we save the answer because it will be modified
+                    $temp = $answer;
+                    $answer = '';
+                    $j = 0;
+                    //initialise answer tags
+                    $userTags = $correctTags = $realText = [];
+                    // the loop will stop at the end of the text
+                    while (1) {
+                        // quits the loop if there are no more blanks (detect '[')
+                        if ($temp == false || ($pos = api_strpos($temp, '[')) === false) {
+                            // adds the end of the text
+                            $answer = $temp;
+                            $realText[] = $answer;
+                            break; //no more "blanks", quit the loop
                         }
-                        $answerWeighting = [$answerWeighting];
-                        // we save the answer because it will be modified
-                        $temp = $answer;
-                        $answer = '';
-                        $j = 0;
-                        //initialise answer tags
-                        $userTags = $correctTags = $realText = [];
-                        // the loop will stop at the end of the text
-                        while (1) {
-                            // quits the loop if there are no more blanks (detect '[')
-                            if ($temp == false || ($pos = api_strpos($temp, '[')) === false) {
-                                // adds the end of the text
-                                $answer = $temp;
-                                $realText[] = $answer;
-                                break; //no more "blanks", quit the loop
-                            }
-                            // adds the piece of text that is before the blank
-                            //and ends with '[' into a general storage array
-                            $realText[] = api_substr($temp, 0, $pos + 1);
-                            $answer .= api_substr($temp, 0, $pos + 1);
-                            //take the string remaining (after the last "[" we found)
-                            $temp = api_substr($temp, $pos + 1);
-                            // quit the loop if there are no more blanks, and update $pos to the position of next ']'
-                            if (($pos = api_strpos($temp, ']')) === false) {
-                                // adds the end of the text
-                                $answer .= $temp;
-                                break;
-                            }
+                        // adds the piece of text that is before the blank
+                        //and ends with '[' into a general storage array
+                        $realText[] = api_substr($temp, 0, $pos + 1);
+                        $answer .= api_substr($temp, 0, $pos + 1);
+                        //take the string remaining (after the last "[" we found)
+                        $temp = api_substr($temp, $pos + 1);
+                        // quit the loop if there are no more blanks, and update $pos to the position of next ']'
+                        if (($pos = api_strpos($temp, ']')) === false) {
+                            // adds the end of the text
+                            $answer .= $temp;
+                            break;
+                        }
 
-                            if ($from_database) {
-                                $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                        if ($from_database) {
+                            $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                     WHERE
                                         exe_id = '".$exeId."' AND
                                         question_id = ".intval($questionId);
-                                $result = Database::query($sql);
-                                $str = Database::result($result, 0, 'answer');
-
-                                api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
-                                $str = str_replace('\r\n', '', $str);
-                                $choice = $arr[1];
-                                if (isset($choice[$j])) {
-                                    $tmp = api_strrpos($choice[$j], ' / ');
-
-                                    if ($tmp) {
-                                        $choice[$j] = api_substr($choice[$j], 0, $tmp);
-                                    } else {
-                                        $tmp = ltrim($tmp, '[');
-                                        $tmp = rtrim($tmp, ']');
-                                    }
-
-                                    $choice[$j] = trim($choice[$j]);
-                                    // Needed to let characters ' and " to work as part of an answer
-                                    $choice[$j] = stripslashes($choice[$j]);
-                                } else {
-                                    $choice[$j] = null;
-                                }
-                            } else {
-                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
-                                $choice[$j] = api_htmlentities(trim($choice[$j]));
-                            }
-                            $userTags[] = $choice[$j];
-                            //put the contents of the [] answer tag into correct_tags[]
-                            $correctTags[] = api_substr($temp, 0, $pos);
-                            $j++;
-                            $temp = api_substr($temp, $pos + 1);
-                        }
-                        $answer = '';
-                        $realCorrectTags = $correctTags;
-                        $calculatedStatus = Display::label(get_lang('Incorrect'), 'danger');
-                        $expectedAnswer = '';
-                        $calculatedChoice = '';
-
-                        for ($i = 0; $i < count($realCorrectTags); $i++) {
-                            if ($i == 0) {
-                                $answer .= $realText[0];
-                            }
-                            // Needed to parse ' and " characters
-                            $userTags[$i] = stripslashes($userTags[$i]);
-                            if ($correctTags[$i] == $userTags[$i]) {
-                                // gives the related weighting to the student
-                                $questionScore += $answerWeighting[$i];
-                                // increments total score
-                                $totalScore += $answerWeighting[$i];
-                                // adds the word in green at the end of the string
-                                $answer .= $correctTags[$i];
-                                $calculatedChoice = $correctTags[$i];
-                            } elseif (!empty($userTags[$i])) {
-                                // else if the word entered by the student IS NOT the same as
-                                // the one defined by the professor
-                                // adds the word in red at the end of the string, and strikes it
-                                $answer .= '<font color="red"><s>'.$userTags[$i].'</s></font>';
-                                $calculatedChoice = $userTags[$i];
-                            } else {
-                                // adds a tabulation if no word has been typed by the student
-                                $answer .= ''; // remove &nbsp; that causes issue
-                            }
-                            // adds the correct word, followed by ] to close the blank
-
-                            if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                                $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
-                                $calculatedStatus = Display::label(get_lang('Correct'), 'success');
-                                $expectedAnswer = $realCorrectTags[$i];
-                            }
-                            $answer .= ']';
-
-                            if (isset($realText[$i + 1])) {
-                                $answer .= $realText[$i + 1];
-                            }
-                        }
-                    } else {
-                        if ($from_database) {
-                            $sql = "SELECT *
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id= ".intval($questionId);
                             $result = Database::query($sql);
-                            $resultData = Database::fetch_array($result, 'ASSOC');
-                            $answer = $resultData['answer'];
-                            $questionScore = $resultData['marks'];
+                            $str = Database::result($result, 0, 'answer');
+
+                            api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
+                            $str = str_replace('\r\n', '', $str);
+                            $choice = $arr[1];
+                            if (isset($choice[$j])) {
+                                $tmp = api_strrpos($choice[$j], ' / ');
+
+                                if ($tmp) {
+                                    $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                } else {
+                                    $tmp = ltrim($tmp, '[');
+                                    $tmp = rtrim($tmp, ']');
+                                }
+
+                                $choice[$j] = trim($choice[$j]);
+                                // Needed to let characters ' and " to work as part of an answer
+                                $choice[$j] = stripslashes($choice[$j]);
+                            } else {
+                                $choice[$j] = null;
+                            }
+                        } else {
+                            // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                            $choice[$j] = api_htmlentities(trim($choice[$j]));
+                        }
+                        $userTags[] = $choice[$j];
+                        //put the contents of the [] answer tag into correct_tags[]
+                        $correctTags[] = api_substr($temp, 0, $pos);
+                        $j++;
+                        $temp = api_substr($temp, $pos + 1);
+                    }
+                    $answer = '';
+                    $realCorrectTags = $correctTags;
+                    $calculatedStatus = Display::label(get_lang('Incorrect'), 'danger');
+                    $expectedAnswer = '';
+                    $calculatedChoice = '';
+
+                    for ($i = 0; $i < count($realCorrectTags); $i++) {
+                        if ($i == 0) {
+                            $answer .= $realText[0];
+                        }
+                        // Needed to parse ' and " characters
+                        $userTags[$i] = stripslashes($userTags[$i]);
+                        if ($correctTags[$i] == $userTags[$i]) {
+                            // gives the related weighting to the student
+                            $questionScore += $answerWeighting[$i];
+                            // increments total score
+                            $totalScore += $answerWeighting[$i];
+                            // adds the word in green at the end of the string
+                            $answer .= $correctTags[$i];
+                            $calculatedChoice = $correctTags[$i];
+                        } elseif (!empty($userTags[$i])) {
+                            // else if the word entered by the student IS NOT the same as
+                            // the one defined by the professor
+                            // adds the word in red at the end of the string, and strikes it
+                            $answer .= '<font color="red"><s>' . $userTags[$i] . '</s></font>';
+                            $calculatedChoice = $userTags[$i];
+                        } else {
+                            // adds a tabulation if no word has been typed by the student
+                            $answer .= ''; // remove &nbsp; that causes issue
+                        }
+                        // adds the correct word, followed by ] to close the blank
+
+                        if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                            $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
+                            $calculatedStatus = Display::label(get_lang('Correct'), 'success');
+                            $expectedAnswer = $realCorrectTags[$i];
+                        }
+                        $answer .= ']';
+
+                        if (isset($realText[$i + 1])) {
+                            $answer .= $realText[$i + 1];
                         }
                     }
                     break;
@@ -4624,6 +4669,21 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
+                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+
+                            ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                $feedback_type,
+                                $studentChoice,
+                                $studentChoiceDegree,
+                                $answer,
+                                $answerComment,
+                                $answerCorrect,
+                                0,
+                                $questionId,
+                                0,
+                                $results_disabled
+                            );
+
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false(
                                 $this,
@@ -5005,6 +5065,35 @@ class Exercise
                                 );
                             }
                             break;
+                        case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY :
+                            if ($answerId == 1) {
+                                ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                    $feedback_type,
+                                    $studentChoice,
+                                    $studentChoiceDegree,
+                                    $answer,
+                                    $answerComment,
+                                    $answerCorrect,
+                                    $exeId,
+                                    $questionId,
+                                    $answerId,
+                                    $results_disabled
+                                );
+                            } else {
+                                ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                    $feedback_type,
+                                    $studentChoice,
+                                    $studentChoiceDegree,
+                                    $answer,
+                                    $answerComment,
+                                    $answerCorrect,
+                                    $exeId,
+                                    $questionId,
+                                    "",
+                                    $results_disabled
+                                );
+                            }
+                            break;
                         case FILL_IN_BLANKS:
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $feedback_type,
@@ -5381,19 +5470,19 @@ class Exercise
                                     <td><b>'.get_lang('Overlap').'</b></td>
                                     <td>'.get_lang('Min').' '.$threadhold1.'</td>
                                     <td><div style="color:'.$overlap_color.'">'
-                                        .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
+                            .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excess').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold2.'</td>
                                     <td><div style="color:'.$excess_color.'">'
-                                        .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
+                            .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold3.'</td>
                                     <td><div style="color:'.$missing_color.'">'
-                                        .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
+                            .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
                                 </tr>
                             </table>';
                         if ($next == 0) {
@@ -5523,9 +5612,11 @@ class Exercise
                 }
             }
 
+            //if ($origin != 'learnpath') {
             if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
+            //	}
         }
         unset($objAnswerTmp);
 
@@ -5544,21 +5635,43 @@ class Exercise
             if (empty($choice)) {
                 $choice = 0;
             }
-            if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+            // with certainty degree
+            if (empty($choiceDegreeCertainty)) {
+                $choiceDegreeCertainty = 0;
+            }
+            if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+                $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ||
+                $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
+            ) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
-                        $ans = $reply[$i];
-                        Event::saveQuestionAttempt(
-                            $questionScore,
-                            $ans.':'.$choice[$ans],
-                            $quesId,
-                            $exeId,
-                            $i,
-                            $this->id
-                        );
+                        $answerChoosen = $reply[$i];
+                        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                            if ($choiceDegreeCertainty != 0) {
+                                $replyDegreeCertainty = array_keys($choiceDegreeCertainty);
+                                $answerDegreeCertainty = $replyDegreeCertainty[$i];
+                                Event::saveQuestionAttempt(
+                                    $questionScore,
+                                    $answerChoosen . ':' . $choice[$answerChoosen] . ':' . $choiceDegreeCertainty[$answerDegreeCertainty],
+                                    $quesId,
+                                    $exeId,
+                                    $i,
+                                    $this->id
+                                );
+                            }
+                        } else {
+                            Event::saveQuestionAttempt(
+                                $questionScore,
+                                $answerChoosen.':'.$choice[$answerChoosen],
+                                $quesId,
+                                $exeId,
+                                $i,
+                                $this->id
+                            );
+                        }
                         if ($debug) {
-                            error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
+                            error_log('result =>'.$questionScore.' '.$answerChoosen.':'.$choice[$answerChoosen]);
                         }
                     }
                 } else {
@@ -5645,7 +5758,7 @@ class Exercise
             ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
-            //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
+                //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
@@ -5685,14 +5798,14 @@ class Exercise
         }
 
         if ($saved_results) {
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = 'UPDATE '.$table.' SET
-                        exe_result = exe_result + '.floatval($questionScore).'
-                    WHERE exe_id = '.$exeId;
+            $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = 'UPDATE '.$stat_table.' SET
+                        exe_result = exe_result + ' . floatval($questionScore).'
+                    WHERE exe_id = ' . $exeId;
             Database::query($sql);
         }
 
-        $return = [
+        $return_array = [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
@@ -5702,7 +5815,7 @@ class Exercise
             'generated_oral_file' => $generatedFile,
         ];
 
-        return $return;
+        return $return_array;
     }
 
     /**
@@ -8040,25 +8153,25 @@ class Exercise
         $course_info = api_get_course_info($courseCode);
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
-                    .get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
+            .get_lang('AttemptDetails').' : <br /><br />'
+            .'<table>'
+            .'<tr>'
+            .'<td><em>'.get_lang('CourseName').'</em></td>'
+            .'<td>&nbsp;<b>#course#</b></td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('TestAttempted').'</td>'
+            .'<td>&nbsp;#exercise#</td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('StudentName').'</td>'
+            .'<td>&nbsp;#firstName# #lastName#</td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('StudentEmail').'</td>'
+            .'<td>&nbsp;#mail#</td>'
+            .'</tr>'
+            .'</table>';
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -8068,19 +8181,19 @@ class Exercise
             if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
                 $open_question_list .=
                     '<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
                     .'</tr>'
                     .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
                     .'</tr>';
             }
         }
 
         if (!empty($open_question_list)) {
             $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
-                    '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+                '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);
@@ -8145,12 +8258,12 @@ class Exercise
                 }
                 $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
                     .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
                     .'</tr>'
                     .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
                     .'</tr></table>';
             }
         }
@@ -8158,24 +8271,24 @@ class Exercise
         if (!empty($oral_question_list)) {
             $msg = get_lang('OralQuestionsAttempted').'<br /><br />
                     '.get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
+                .'<table>'
+                .'<tr>'
+                .'<td><em>'.get_lang('CourseName').'</em></td>'
+                .'<td>&nbsp;<b>#course#</b></td>'
+                .'</tr>'
+                .'<tr>'
+                .'<td>'.get_lang('TestAttempted').'</td>'
+                .'<td>&nbsp;#exercise#</td>'
+                .'</tr>'
+                .'<tr>'
+                .'<td>'.get_lang('StudentName').'</td>'
+                .'<td>&nbsp;#firstName# #lastName#</td>'
+                .'</tr>'
+                .'<tr>'
+                .'<td>'.get_lang('StudentEmail').'</td>'
+                .'<td>&nbsp;#mail#</td>'
+                .'</tr>'
+                .'</table>';
             $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);

@@ -786,7 +786,64 @@ if ($question_count != 0) {
                     header('Location: exercise_reminder.php?'.$params);
                     exit;
                 } else {
-                    header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                    // Question degree certainty
+                    // We send un email to the student before redirection to the result page
+                    $userInfo = api_get_user_info($user_id);
+                    $recipient_name = api_get_person_name($userInfo['firstname'],
+                        $userInfo['lastname'],
+                        null,
+                        PERSON_NAME_EMAIL_ADDRESS
+                    );
+                    $emailTo = $userInfo['email'];
+                    $senderName = api_get_person_name(api_get_setting('administratorName'),
+                        api_get_setting('administratorSurname'),
+                        null,
+                        PERSON_NAME_EMAIL_ADDRESS
+                    );
+                    $emailGenerique = api_get_setting('emailAdministrator');
+
+                    $subject = "[" . get_lang('DoNotReply') . "] "
+                        . html_entity_decode(get_lang('ResultAccomplishedTest')." \"" . $objExercise->title . "\"");
+                    // message sended to the student
+                    $message = get_lang('Dear') . ' ' . $recipient_name . ",<br><br>";
+                    //calcul du chemmin sans les script php
+                    $url = $_SERVER['SCRIPT_NAME'];
+                    $pos = strripos($url, "/");
+
+                    $path = substr($url, 0, $pos);
+
+                    $message .= get_lang('MessageQuestionCertainty');
+                    $exerciseLink = "<a href='" . api_get_path(WEB_CODE_PATH) . "/exercise/result.php?show_headers=1&"
+                        . api_get_cidreq()
+                        . "&id=$exe_id'>";
+                    $titleExercice = $objExercise->title;
+                    $message = str_replace('%exerTitle', $titleExercice, $message);
+                    $message = str_replace('%webPath', api_get_path(WEB_PATH), $message);
+                    $message = str_replace('%s', $exerciseLink, $message);
+
+                    // show histogram
+                    require_once api_get_path(SYS_CODE_PATH)
+                        . "exercise/multiple_answer_true_false_degree_certainty.class.php";
+                    $message .= MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($exe_id, $objExercise);
+                    $message .= get_lang('KindRegards');
+
+                    $message = api_preg_replace("/\\\n/", "", $message);
+                    api_mail_html($recipient_name,
+                        $emailTo,
+                        $subject,
+                        $message,
+                        $senderName,
+                        $emailGenerique,
+                        ['content-type' => 'html']
+                    );
+
+
+                    header("Location: exercise_result.php?"
+                        . api_get_cidreq()
+                        . "&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id="
+                        . $learnpath_item_id
+                        . "&learnpath_item_view_id=$learnpath_item_view_id"
+                    );
                     exit;
                 }
             }
@@ -1041,6 +1098,8 @@ if (!empty($error)) {
         $onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
 
+
+
     $saveIcon = Display::return_icon(
         'save.png',
         get_lang('Saved'),
@@ -1081,7 +1140,7 @@ if (!empty($error)) {
         }
         
         $(function() {
-            // This pre-load the save.png icon
+            //This pre-load the save.png icon
             var saveImage = new Image();
             saveImage.src = "'.$saveIcon.'";
 
@@ -1109,10 +1168,11 @@ if (!empty($error)) {
             });*/
 
             $("form#exercise_form").prepend($("#exercise-description"));
-        
+
             $(\'button[name="previous_question_and_save"]\').on("click", function (e) {
                 e.preventDefault();
-                e.stopPropagation();    
+                e.stopPropagation();
+    
                 var
                     $this = $(this),
                     previousId = parseInt($this.data(\'prev\')) || 0,
@@ -1132,7 +1192,8 @@ if (!empty($error)) {
 
             $(\'button[name="save_now"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();                
+                e.stopPropagation();
+                
                 var
                     $this = $(this),
                     questionId = parseInt($this.data(\'question\')) || 0,
@@ -1143,7 +1204,8 @@ if (!empty($error)) {
 
             $(\'button[name="validate_all"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();                
+                e.stopPropagation();
+                
                 validate_all();
             });
             
@@ -1190,6 +1252,9 @@ if (!empty($error)) {
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
 
+            //4. choice for degree of certainty
+            var myChoiceDegreeCertainty = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
+
             // Checking FCK
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1213,7 +1278,7 @@ if (!empty($error)) {
                 type:"post",
                 async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
-                data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
+                data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+myChoiceDegreeCertainty,
                 success: function(return_value) {
                     if (return_value == "ok") {
                         $("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');

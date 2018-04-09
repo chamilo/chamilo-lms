@@ -485,6 +485,7 @@ define('DRAGGABLE', 18);
 define('MATCHING_DRAGGABLE', 19);
 define('ANNOTATION', 20);
 define('READING_COMPREHENSION', 21);
+define('MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY', 22);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
@@ -536,6 +537,7 @@ define(
     UNIQUE_ANSWER_IMAGE.':'.
     DRAGGABLE.':'.
     MATCHING_DRAGGABLE.':'.
+    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY.':'.
     ANNOTATION
 );
 
@@ -742,12 +744,12 @@ function api_get_path($path = '', $configuration = [])
                     if (isset($_SERVER['SERVER_PORT']) &&
                         !strpos($server_name, ':') &&
                         (($server_protocol == 'http' && $_SERVER['SERVER_PORT'] != 80) ||
-                        ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
+                            ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
                     ) {
                         $server_name .= ":".$_SERVER['SERVER_PORT'];
                     }
                     $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                    $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
+                    $root_sys = str_replace('\\', '/', realpath(__DIR__ . '/../../ficher test degre certitudes/')).'/';
                 }
                 // Here we give up, so we don't touch anything.
             }
@@ -2024,27 +2026,13 @@ function api_get_course_info($course_code = null, $strict = false)
  *
  * @return \Chamilo\CoreBundle\Entity\Course
  */
-function api_get_course_entity($courseId = 0)
+function api_get_course_entity($courseId)
 {
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
 
     return Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($courseId);
-}
-
-/**
- * @param int $id
- *
- * @return \Chamilo\CoreBundle\Entity\Session
- */
-function api_get_session_entity($id = 0)
-{
-    if (empty($id)) {
-        $id = api_get_session_id();
-    }
-
-    return Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($id);
 }
 
 /**
@@ -2180,8 +2168,7 @@ function api_format_course_array($course_data)
             null,
             null,
             null,
-            true,
-            false
+            true
         );
     }
     $_course['course_image_large'] = $url_image;
@@ -2598,11 +2585,11 @@ function api_get_session_image($session_id, $status_id)
     if ((int) $status_id != 5) { //check whether is not a student
         if ($session_id > 0) {
             $session_img = "&nbsp;&nbsp;".Display::return_icon(
-                'star.png',
-                get_lang('SessionSpecificResource'),
-                ['align' => 'absmiddle'],
-                ICON_SIZE_SMALL
-            );
+                    'star.png',
+                    get_lang('SessionSpecificResource'),
+                    ['align' => 'absmiddle'],
+                    ICON_SIZE_SMALL
+                );
         }
     }
 
@@ -2732,11 +2719,6 @@ function api_get_settings_params($params)
     return $result;
 }
 
-/**
- * @param array $params example: [id = ? => '1']
- *
- * @return array
- */
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -2974,7 +2956,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
 
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $sessionIsCoach = [];
+    $sessionIsCoach = null;
 
     if (!empty($courseId)) {
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
@@ -3257,6 +3239,10 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
+    $sessionId = api_get_session_id();
+    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
+    $session_visibility = api_get_session_visibility($sessionId);
+
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
@@ -3267,9 +3253,6 @@ function api_is_allowed_to_edit(
         }
     }
 
-    $sessionId = api_get_session_id();
-    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($sessionId);
     $is_courseAdmin = api_is_course_admin();
 
     if (!$is_courseAdmin && $tutor) {
@@ -4895,9 +4878,9 @@ function api_get_visual_theme()
         }
 
         $course_id = api_get_course_id();
-        if (!empty($course_id)) {
+        if (!empty($course_id) && $course_id != -1) {
             if (api_get_setting('allow_course_theme') == 'true') {
-                $course_theme = api_get_course_setting('course_theme', $course_id);
+                $course_theme = api_get_course_setting('course_theme');
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
@@ -5670,10 +5653,10 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 $insert = "INSERT INTO $t_settings (variable, subkey, type,category, selected_value, title, comment, scope, subkeytext, access_url)
                         VALUES
                         ('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                        "'".$row['type']."','".$row['category']."',".
-                        "'$value','".$row['title']."',".
-                        "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                        "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
+                    "'".$row['type']."','".$row['category']."',".
+                    "'$value','".$row['title']."',".
+                    "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
+                    "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
                 Database::query($insert);
             } else {
                 // Such a setting does not exist.
@@ -5695,12 +5678,12 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 if ($row['access_url_changeable'] == 1) {
                     $insert = "INSERT INTO $t_settings (variable,subkey, type,category, selected_value,title, comment,scope, subkeytext,access_url, access_url_changeable) VALUES
                             ('".$row['variable']."',".
-                            (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                            "'".$row['type']."','".$row['category']."',".
-                            "'$value','".$row['title']."',".
-                            "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
-                            (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                            "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
+                        (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
+                        "'".$row['type']."','".$row['category']."',".
+                        "'$value','".$row['title']."',".
+                        "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
+                        (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
+                        "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
                     Database::query($insert);
                 }
             } else { // Such a setting does not exist.
@@ -6177,7 +6160,6 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
             return true;
         }
     }
-
     return false;
 }
 
@@ -9038,18 +9020,17 @@ function api_float_val($number)
  * 3.141516 => 3.14
  * 3,141516 => 3,14
  *
+ * @todo WIP
+ *
  * @param string $number            number in iso code
  * @param int    $decimals
- * @param string $decimalSeparator
- * @param string $thousandSeparator
- *
  * @return bool|string
  */
-function api_number_format($number, $decimals = 0, $decimalSeparator = '.', $thousandSeparator = ',')
+function api_number_format($number, $decimals = 0)
 {
     $number = api_float_val($number);
 
-    return number_format($number, $decimals, $decimalSeparator, $thousandSeparator);
+    return number_format($number, $decimals);
 }
 
 /**

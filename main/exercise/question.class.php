@@ -50,6 +50,10 @@ abstract class Question
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
+        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
+            'multiple_answer_true_false_degree_certainty.class.php',
+            'MultipleAnswerTrueFalseDegreeCertainty'
+        ],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
             'multiple_answer_combination_true_false.class.php',
             'MultipleAnswerCombinationTrueFalse',
@@ -1519,12 +1523,13 @@ abstract class Question
     public static function getInstance($type)
     {
         if (!is_null($type)) {
-            list($file_name, $class_name) = self::get_question_type($type);
-            if (!empty($file_name)) {
-                if (class_exists($class_name)) {
-                    return new $class_name();
+            list($fileName, $className) = self::get_question_type($type);
+            if (!empty($fileName)) {
+                include_once $fileName;
+                if (class_exists($className)) {
+                    return new $className();
                 } else {
-                    echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
+                    echo 'Can\'t instanciate class '.$className.' of type '.$type;
                 }
             }
         }
@@ -1980,7 +1985,11 @@ abstract class Question
             'missing' => $score['weight'],
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
-        $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+        // dont display score for certainty degree questions
+        if($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+        }
+
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(

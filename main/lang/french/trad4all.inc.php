@@ -6233,6 +6233,7 @@ $DisableLPAutoLaunch = "Désactiver lancement automatique du parcours";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Le paramètre d'auto-démarrage des parcours d'apprentissage est activé. Lorsque les apprenants entreront dans cet espace de cours, ils seront automatiquement redirigés vers le parcours d'apprentissage sélectionné pour l'auto-démarrage.";
 $UniqueAnswerNoOption = "Rép. unique avec ne-sais-pas";
 $MultipleAnswerTrueFalse = "Rép. multiples vrai/faux/ne-sais-pas";
+$MultipleAnswerTrueFalseDegreeCertainty = "Rép. multiples vrai/faux/degré de certitude";
 $MultipleAnswerCombinationTrueFalse = "C. exacte vrai/faux/ne-sais-pas";
 $DontKnow = "Ne sais pas";
 $ExamNotAvailableAtThisTime = "Examen non disponible pour l'instant";
@@ -6294,6 +6295,32 @@ $LatestAttempt = "Dernière tentative";
 $PDFWaterMarkHeader = "En-tête en filigrane (exports PDF)";
 $False = "Faux";
 $DoubtScore = "Ne sais pas";
+// remplacer texte "Ne sais pas" par "Degré de certitude" pour MultipleAnswerTrueFalse
+$YourDegreeOfCertainty = "Votre degré de certitude";
+$DegreeOfCertainty = "Degré de certitude que la réponse soit jugée correcte";
+// explication des degré de certitude du tableau d'exercice
+$Ignorance = "J’ignore la bonne réponse et j’ai choisi au hasard";
+$VeryUnsure = "Je suis très peu sûr";
+$Unsure = "Je suis peu sûr";
+$PrettySur = "Je suis assez sûr";
+$Sur = "Je suis quasiment sûr";
+$VerySur = "Je suis tout à fait sûr";
+// description des codes couleur
+$langVeryUnsure = "Erreur dangereuse";
+$langExplainVeryUnsure = " votre réponse a été incorrecte et vous étiez pourtant sûr à 80% ou plus";
+$langUnsure = "Erreur présumée";
+$langExplainUnsure = "votre réponse a été incorrecte, mais vous en doutiez (certitude 60% ou 70 %)";
+$langIgnorance = "Ignorance déclarée";
+$langExplainIgnorance = " vous ne connnaissiez pas la réponse - dégré de certitude 50%";
+$langPrettySur = "Savoir fragile";
+$langExplainPrettySur = "votre réponse a été correcte mais vous etiez peu sûr (certitude 60% ou 70%)";
+$langVerySure = "Savoir certain";
+$langExplainVerySure = "votre réponse a été correcte et vous etiez sûr à 80% ou plus - <b>félicitation</b>";
+$langAnswers = "Réponses";
+// description réponse sur les histogrammes
+$langCorrectsAnswers = "Réponses correctes";
+$langWrongsAnswers = "Réponses incorrectes";
+$langIgnoranceAnswers = "Ignorance";
 $RegistrationByUsersGroups = "Inscription par groupes d'utilisateurs";
 $ContactInformationHasNotBeenSent = "Vos détails de contact n'ont pas pu être envoyés. C'est probablement dû à un problème de réseau. Veuillez essayer à nouveau dans quelques secondes. Si le problème persiste, ignorez simplement ce processus d'inscription et cliquez sur l'autre bouton pour passer à l'étape suivante.";
 $FillCourses = "Générer des cours";
@@ -8046,6 +8073,27 @@ $YouWillReceivedASecondEmail = "Vous allez recevoir un autre mail avec votre mot
 $YouReceivedAnEmailWithTheUsername = "Vous avez du recevoir un autre mail avec votre identifiant.";
 $TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName = "Vous devez envoyer un fichier zip du même nom que le fichier SCORM original.";
 $YourChoice = "Votre choix";
+
+
+
+$MessageQuestionCertainty = "Voici ci dessous vos résultats du test \"<span style=\"font-family: Arial; font-size: 18px; color: green;\">"
+    . "%exerTitle" //$objExercise->title
+    . "\"</span>."
+    . "<br/>Pour consulter le détail des résultats "
+    . "<br/><br/>1. Connectez vous sur la plate forme Chamilo (identifiant/mot de passe universitaire) : "
+    . "<a href='"
+    . " %webPath " // api_get_path(WEB_PATH)
+    . "'>se connecter à Chamilo : </a>"
+    . "<br/><br/>2. Puis cliquez sur ce lien %s "
+    . "voir mes résultats détaillés </a>.<br/><br/>";
+$KindRegards = "Cordialement, <br>";
+$DoNotReply = "Ne pas répondre";
+$ResultAccomplishedTest = "Résultats du test réalisé";
+$NonCategory = "Sans catégorie";
+$ResultTest = "Votre résultat sur l'ensemble du test";
+$CompareLastResult = "Pour comparaison, votre dernier résultat à ce test";
+$ResultsbyDiscipline = "Vos résultats discipline par discipline";
+
 $YouNeedToCreateASkillProfile = "Vous devez créer un profil de compétences";
 $SkillLevel = "Niveau de compétence";
 $Portfolio = "Portfolio";

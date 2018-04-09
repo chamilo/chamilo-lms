@@ -97,7 +97,7 @@ try {
 
     // Fix chamilo URL when used inside a folder: example.com/chamilo
     $append = $kernel->getUrlAppend();
-    $appendValue = '/';
+    $appendValue = '';
     if (!empty($append)) {
         $appendValue = "/$append/";
     }

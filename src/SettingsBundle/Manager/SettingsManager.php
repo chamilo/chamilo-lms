@@ -439,6 +439,7 @@ class SettingsManager implements SettingsManagerInterface
             'ProfilingFilterAddingUsers' => 'profile',
             'donotlistcampus' => 'platform',
             'gradebook_show_percentage_in_reports' => 'gradebook',
+            'course_creation_splash_screen' => 'Course'
         ];
 
         return $oldItems;

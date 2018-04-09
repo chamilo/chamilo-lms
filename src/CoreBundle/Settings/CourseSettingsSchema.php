@@ -107,6 +107,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'show_toolshortcuts' => '',
                     'enable_record_audio' => 'false',
                     'lp_show_reduced_report' => 'false',
+                    'course_creation_splash_screen' => 'true',
                 ]
             )
             ->setTransformer(
@@ -246,7 +247,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('show_toolshortcuts', YesNoType::class)
             ->add('enable_record_audio', YesNoType::class)
             ->add('lp_show_reduced_report', YesNoType::class)
-
+            ->add('course_creation_splash_screen', YesNoType::class)
         ;
     }
 }

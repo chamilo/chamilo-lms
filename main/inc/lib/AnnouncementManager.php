@@ -38,6 +38,14 @@ class AnnouncementManager
 
         $tags[] = '((teachers))';
 
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ?' => 1]);
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extra) {
+                $tags[] = "((extra_".$extra['variable']."))";
+            }
+        }
+
         if (!empty(api_get_session_id())) {
             $tags[] = '((coaches))';
             $tags[] = '((general_coach))';
@@ -55,24 +63,21 @@ class AnnouncementManager
      *
      * @return string
      */
-    public static function parse_content(
+    public static function parseContent(
         $userId,
         $content,
         $courseCode,
         $sessionId = 0
     ) {
-        $readerInfo = api_get_user_info($userId);
+        $readerInfo = api_get_user_info($userId, false, false, true, true);
         $courseInfo = api_get_course_info($courseCode);
-        $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
-            $courseInfo['code']
-        );
+        $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
 
         $generalCoachName = '';
         $generalCoachEmail = '';
         $coaches = '';
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
-
             $coaches = CourseManager::get_coachs_from_course_to_string(
                 $sessionId,
                 $courseInfo['real_id']
@@ -100,13 +105,38 @@ class AnnouncementManager
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
 
+        if (!empty($readerInfo)) {
+            $extraField = new ExtraField('user');
+            $extraFields = $extraField->get_all(['filter = ?' => 1]);
+            if (!empty($extraFields)) {
+                foreach ($extraFields as $extra) {
+                    $data["extra_".$extra['variable']] = '';
+                }
+            }
+
+            if (!empty($readerInfo['extra'])) {
+                foreach ($readerInfo['extra'] as $extra) {
+                    if (isset($extra['value'])) {
+                        /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
+                        $value = $extra['value'];
+                        $data['extra_'.$value->getField()->getVariable()] = $value->getValue();
+                    }
+                }
+            }
+        }
+
         if (!empty(api_get_session_id())) {
             $data['coaches'] = $coaches;
             $data['general_coach'] = $generalCoachName;
             $data['general_coach_email'] = $generalCoachEmail;
         }
 
-        $content = str_replace(self::getTags(), $data, $content);
+        $tags = self::getTags();
+        foreach ($tags as $tag) {
+            $simpleTag = str_replace(['((', '))'], '', $tag);
+            $value = isset($data[$simpleTag]) ? $data[$simpleTag] : '';
+            $content = str_replace($tag, $value, $content);
+        }
 
         return $content;
     }
@@ -390,15 +420,13 @@ class AnnouncementManager
             $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$id."\">".
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
 
+            $image_visibility = 'invisible';
+            $alt_visibility = get_lang('Visible');
             if ($itemProperty->getVisibility() === 1) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
-            } else {
-                $image_visibility = 'invisible';
-                $alt_visibility = get_lang('Visible');
             }
             global $stok;
-
             $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=showhide&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
@@ -414,7 +442,7 @@ class AnnouncementManager
         //$toUserId = !empty($toUser) ? $toUser->getId() : 0;
         // The user id is always the current one.
         $toUserId = api_get_user_id();
-        $content = self::parse_content(
+        $content = self::parseContent(
             $toUserId,
             $content,
             api_get_course_id(),
@@ -449,6 +477,8 @@ class AnnouncementManager
             $html .= '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
             $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
             if (api_is_allowed_to_edit(false, true)) {
+                $url = api_get_self()."?".api_get_cidreq().
+                    "&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok;
                 $html .= Display::url(
                     Display::return_icon(
                         'delete.png',
@@ -456,7 +486,7 @@ class AnnouncementManager
                         '',
                         16
                     ),
-                    api_get_self()."?".api_get_cidreq()."&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok
+                    $url
                 );
             }
             $html .= '</td></tr>';
@@ -471,7 +501,7 @@ class AnnouncementManager
      *
      * @return int
      */
-    public static function get_last_announcement_order($courseInfo)
+    public static function getLastAnnouncementOrder($courseInfo)
     {
         if (empty($courseInfo)) {
             return 0;
@@ -534,7 +564,7 @@ class AnnouncementManager
             $end_date = api_get_utc_datetime();
         }
 
-        $order = self::get_last_announcement_order($courseInfo);
+        $order = self::getLastAnnouncementOrder($courseInfo);
 
         // store in the table announcement
         $params = [
@@ -661,8 +691,8 @@ class AnnouncementManager
         $courseInfo = api_get_course_info();
 
         // Database definitions
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $order = self::get_last_announcement_order($courseInfo);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        $order = self::getLastAnnouncementOrder($courseInfo);
 
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
@@ -677,11 +707,11 @@ class AnnouncementManager
             'session_id' => api_get_session_id(),
         ];
 
-        $last_id = Database::insert($tbl_announcement, $params);
+        $last_id = Database::insert($table, $params);
 
         // Store the attach file
         if ($last_id) {
-            $sql = "UPDATE $tbl_announcement SET id = iid 
+            $sql = "UPDATE $table SET id = iid 
                     WHERE iid = $last_id";
             Database::query($sql);
 

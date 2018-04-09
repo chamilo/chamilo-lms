@@ -186,7 +186,15 @@ $current_expired_time_key = ExerciseLib::get_time_control_key(
     $learnpath_item_id
 );
 
-$_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
+Session::write('duration_time_previous', [$current_expired_time_key => $current_timestamp]);
+$durationTime = Session::read('duration_time');
+if (!empty($durationTime) && isset($durationTime[$current_expired_time_key])) {
+    Session::write(
+        'duration_time_previous',
+        [$current_expired_time_key => $durationTime[$current_expired_time_key]]
+    );
+}
+Session::write('duration_time', [$current_expired_time_key => $current_timestamp]);
 
 if ($time_control) {
     // Get the expired time of the current exercise in track_e_exercises
@@ -412,6 +420,7 @@ if (empty($exercise_stat_info)) {
     }
 }
 
+$saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');
 
 if (!isset($questionListInSession)) {
@@ -1032,18 +1041,49 @@ if (!empty($error)) {
         $onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
 
+    $saveIcon = Display::return_icon(
+        'save.png',
+        get_lang('Saved'),
+        [],
+        ICON_SIZE_SMALL,
+        false,
+        true
+    );
+
     echo '<script>
+        function addExerciseEvent(elm, evType, fn, useCapture) {
+            if (elm.addEventListener) {
+                elm.addEventListener(evType, fn, useCapture);
+                return true;
+            } else if (elm.attachEvent) {
+                elm.attachEvent(\'on\' + evType, fn);
+            } else{
+                elm[\'on\'+evType] = fn;
+            }
+        }
+        
+        var calledUpdateDuration = false;
+        
+        function updateDuration() {
+            if (calledUpdateDuration === false) {
+                var saveDurationUrl = "'.$saveDurationUrl.'";
+                // Logout of course just in case
+                $.ajax({
+                    async: false, 
+                    url: saveDurationUrl,
+                    success: function (data) {
+                        calledUpdateDuration = true;
+                        return 1;
+                    }, 
+                });
+                return 1;
+            }
+        }
+        
         $(function() {
-            //This pre-load the save.png icon
+            // This pre-load the save.png icon
             var saveImage = new Image();
-            saveImage.src = \''.Display::return_icon(
-                'save.png',
-                get_lang('Saved'),
-                [],
-                ICON_SIZE_SMALL,
-                false,
-                true
-            ).'\';
+            saveImage.src = "'.$saveIcon.'";
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
@@ -1068,12 +1108,11 @@ if (!empty($error)) {
                 return false;
             });*/
 
-            $(\'form#exercise_form\').prepend($(\'#exercise-description\'));
-       
-            $(\'button[name="previous_question_and_save"]\').on(\'click\', function (e) {
+            $("form#exercise_form").prepend($("#exercise-description"));
+        
+            $(\'button[name="previous_question_and_save"]\').on("click", function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-    
+                e.stopPropagation();    
                 var
                     $this = $(this),
                     previousId = parseInt($this.data(\'prev\')) || 0,
@@ -1085,18 +1124,15 @@ if (!empty($error)) {
             $(\'button[name="save_question_list"]\').on(\'click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-
-                var
-                    $this = $(this),
-                    questionList = $this.data(\'list\').split(",");
+                var $this = $(this);
+                var questionList = $this.data(\'list\').split(",");
 
                 save_question_list(questionList);
             });
 
             $(\'button[name="save_now"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                
+                e.stopPropagation();                
                 var
                     $this = $(this),
                     questionId = parseInt($this.data(\'question\')) || 0,
@@ -1107,10 +1143,13 @@ if (!empty($error)) {
 
             $(\'button[name="validate_all"]\').on(\'click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                
+                e.stopPropagation();                
                 validate_all();
             });
+            
+            // Save attempt duration
+            addExerciseEvent(window, \'unload\', updateDuration , false);            
+            addExerciseEvent(window, \'beforeunload\', updateDuration , false);                                    
         });
 
         function previous_question(question_num) {

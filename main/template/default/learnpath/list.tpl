@@ -242,6 +242,7 @@
                                       {{ row.action_pdf }}
                                       {{ row.action_delete }}
                                       {{ row.action_order }}
+                                      {{ row.action_update_scorm }}
                                   </td>
                               </tr>
                           {% endfor %}
@@ -396,6 +397,7 @@
                                           {{ row.action_pdf }}
                                           {{ row.action_delete }}
                                           {{ row.action_order }}
+                                          {{ row.action_update_scorm }}
                                       </td>
                                   </tr>
                               {% endfor %}

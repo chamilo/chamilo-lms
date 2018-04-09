@@ -1,4 +1,8 @@
 msgid "test"
 msgstr "test in english"
 
+msgid "AttendanceDeletionEnableTitle"
+msgstr "Attendances: enable deletion"
 
+msgid "AttendanceDeletionEnableComment"
+msgstr "The default behaviour in Chamilo is to hide attendance sheets instead of deleting them, just in case the teacher would do it by mistake. Enable this option to allow teachers to *really* delete attendance sheets"

@@ -3257,10 +3257,6 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $sessionId = api_get_session_id();
-    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($sessionId);
-
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
@@ -3271,6 +3267,9 @@ function api_is_allowed_to_edit(
         }
     }
 
+    $sessionId = api_get_session_id();
+    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
+    $session_visibility = api_get_session_visibility($sessionId);
     $is_courseAdmin = api_is_course_admin();
 
     if (!$is_courseAdmin && $tutor) {

@@ -91,7 +91,6 @@ if (!empty($course_code_redirect)) {
 }
 
 if ($user_already_registered_show_terms === false) {
-
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         if (in_array('status', $allowedFields)) {
@@ -107,7 +106,6 @@ if ($user_already_registered_show_terms === false) {
             $form->addRule('status', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-
 
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
@@ -149,7 +147,6 @@ if ($user_already_registered_show_terms === false) {
     if (api_get_setting('openid_authentication') === 'true') {
         $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
     }
-
 
     // USERNAME
     if (api_get_setting('login_is_email') != 'true') {
@@ -197,7 +194,6 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('pass1');
 
-
     // PHONE
     if (in_array('phone', $allowedFields)) {
         $form->addElement(
@@ -225,7 +221,6 @@ if ($user_already_registered_show_terms === false) {
         }
     }
 
-
     // OFFICIAL CODE
     if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
         if (in_array('official_code', $allowedFields)) {
@@ -245,7 +240,6 @@ if ($user_already_registered_show_terms === false) {
         }
     }
 
-
     // EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
@@ -258,6 +252,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
@@ -269,6 +264,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
@@ -280,6 +276,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
     ) {
@@ -291,6 +288,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') === 'true') {
         if (api_get_setting('extendedprofile_registration', 'mycomptetences') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') === 'true'
@@ -332,8 +330,7 @@ if ($user_already_registered_show_terms === false) {
         );
     }
 
-    //CAPTCHA
-
+    // CAPTCHA
     $captcha = api_get_setting('allow_captcha');
     $allowCaptcha = $captcha === 'true';
 

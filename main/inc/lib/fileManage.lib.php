@@ -64,6 +64,7 @@ function my_delete($file)
             return true;
         }
     }
+
     return false; // no file or directory to delete
 }
 
@@ -258,6 +259,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
             return true;
         }
     }
+
     return false;
 }
 
@@ -346,8 +348,10 @@ function getextension($filename)
 
 /**
  * Get a list of all PHP (.php) files in a given directory. Includes .tpl files
- * @param string $base_path The base path in which to find the corresponding files
- * @param bool $includeStatic Include static .html, .htm and .css files
+ *
+ * @param string $base_path     The base path in which to find the corresponding files
+ * @param bool   $includeStatic Include static .html, .htm and .css files
+ *
  * @return array
  */
 function getAllPhpFiles($base_path, $includeStatic = false)

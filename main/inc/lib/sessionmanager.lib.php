@@ -3242,9 +3242,9 @@ class SessionManager
                 s.session_category_id,
                 c.name as category_name,
                 s.description,
-                (SELECT COUNT(*)  FROM  session_rel_user WHERE session_id = s.id) as users,
-				(SELECT COUNT(*)  FROM  c_lp WHERE session_id = s.id) as lessons,
-                (SELECT value  FROM extra_field_values WHERE field_id = 16 AND item_id = s.id) as image
+                (SELECT COUNT(*) FROM session_rel_user WHERE session_id = s.id) as users,
+				(SELECT COUNT(*) FROM c_lp WHERE session_id = s.id) as lessons,
+                (SELECT value FROM extra_field_values WHERE field_id = 16 AND item_id = s.id) as image
                 FROM $tbl_session s
                 LEFT JOIN $tbl_session_category c
                     ON s.session_category_id = c.id
@@ -3256,7 +3256,7 @@ class SessionManager
 
         $plugin = BuyCoursesPlugin::create();
         $checker = $plugin->isEnabled();
-
+        $sessions = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($checker) {
@@ -3267,6 +3267,7 @@ class SessionManager
                 }
                 $sessions[] = $row;
             }
+
             return $sessions;
         } else {
             return false;

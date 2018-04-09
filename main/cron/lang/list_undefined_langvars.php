@@ -72,4 +72,3 @@ foreach ($undefined_terms as $term => $file) {
     echo "</td></tr>\n";
 }
 echo "</table>\n";
-

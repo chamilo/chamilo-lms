@@ -1,6 +1,7 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
- * Script to switch all PHP files in Chamilo to a more Gettext-like syntax
+ * Script to switch all PHP files in Chamilo to a more Gettext-like syntax.
  *
  * @package chamilo.cron.lang
  */

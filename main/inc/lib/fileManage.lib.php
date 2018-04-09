@@ -347,7 +347,7 @@ function getextension($filename)
 }
 
 /**
- * Get a list of all PHP (.php) files in a given directory. Includes .tpl files
+ * Get a list of all PHP (.php) files in a given directory. Includes .tpl files.
  *
  * @param string $base_path     The base path in which to find the corresponding files
  * @param bool   $includeStatic Include static .html, .htm and .css files

@@ -377,8 +377,8 @@ if ($user_already_registered_show_terms === false) {
             $captcha_question
         );
     }
-
 }
+
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];
 } else {

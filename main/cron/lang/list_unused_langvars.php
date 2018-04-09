@@ -85,4 +85,3 @@ foreach ($defined_terms as $term => $file) {
     }
 }
 echo "</table>\n";
-

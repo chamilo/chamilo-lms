@@ -328,7 +328,6 @@ class IndexManager
     public function return_notice()
     {
         $user_selected_language = api_get_interface_language();
-        $html = '';
         // Notice
         $home_notice = @(string) file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
@@ -336,17 +335,9 @@ class IndexManager
         }
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            $html = self::show_right_block(
-                get_lang('Notice'),
-                $home_notice,
-                'notice_block',
-                null,
-                'notices',
-                'noticesCollapse'
-            );
         }
 
-        return $html;
+        return $home_notice;
     }
 
     /**
@@ -366,17 +357,7 @@ class IndexManager
         $html = '';
         $home_menu = @(string) file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
-            $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
-            $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-            $home_menu_content .= '</ul>';
-            $html .= self::show_right_block(
-                get_lang('MenuGeneral'),
-                $home_menu_content,
-                'help_block',
-                null,
-                'helps',
-                'helpsCollapse'
-            );
+            $html = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
         }
 
         return $html;

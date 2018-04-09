@@ -214,8 +214,46 @@
 
                 {{ teacher_block }}
                 {{ certificates_search_block }}
-                {{ notice_block }}
-                {{ help_block }}
+
+                {% if notice_block %}
+                <div class="panel-group" id="notice" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" id="notice_block">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#notice" href="#noticeCollapse" aria-expanded="true" aria-controls="noticeCollapse">
+                                    {{ 'Notice' | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div style="" aria-expanded="true" id="noticeCollapse" class="panel-collapse collapse in" role="tabpanel">
+                            <div class="panel-body">
+                                {{ notice_block }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if help_block %}
+                <div class="panel-group" id="help" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" id="help_block">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#help" href="#helpCollapse" aria-expanded="true" aria-controls="helpCollapse">
+                                    {{ 'MenuGeneral' | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div style="" aria-expanded="true" id="helpCollapse" class="panel-collapse collapse in" role="tabpanel">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills nav-stacked">
+                                {{ help_block }}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
 
                 <!-- block navigation -->
                 {% if navigation_course_links %}

@@ -2221,16 +2221,16 @@ HOTSPOT;
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\''.sprintf(
-                                    get_lang('DeleteAttempt'),
+                                    addslashes(get_lang('DeleteAttempt')),
                                     $results[$i]['username'],
                                     $dt
                                 ).'\')) return false;">';
-                                $delete_link .=
-                                    Display:: return_icon(
-                                        'delete.png',
-                                        get_lang('Delete')
-                                    ).'</a>';
-                                $delete_link = utf8_encode($delete_link);
+                                $delete_link .= Display:: return_icon(
+                                    'delete.png',
+                                        addslashes(get_lang('Delete'))
+                                ).'</a>';
+
+                                //$delete_link = utf8_encode($delete_link);
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;

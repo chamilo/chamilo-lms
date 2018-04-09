@@ -3200,6 +3200,81 @@ class SessionManager
     }
 
     /**
+     * Get the session image.
+     *
+     * @return image path
+     */
+    public static function getSessionImage($id)
+    {
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $sql = "SELECT value  FROM extra_field_values WHERE field_id = 16 AND item_id = ".intval($id);
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $sessionImage = $row['value'];
+                $sessionImage = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
+            }
+
+            return $sessionImage;
+        } else {
+            $sessionImage = api_get_path(WEB_IMG_PATH)."session_default.png";
+
+            return $sessionImage;
+        }
+    }
+
+    /**
+     * Get Hot Sessions (limit 8).
+     *
+     * @return array with sessions
+     */
+    public static function getHotSessions()
+    {
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT 
+                s.id,
+                s.name,
+                s.id_coach,
+                u.firstname,
+                u.lastname,
+                s.session_category_id,
+                c.name as category_name,
+                s.description,
+                (SELECT COUNT(*) FROM session_rel_user WHERE session_id = s.id) as users,
+				(SELECT COUNT(*) FROM c_lp WHERE session_id = s.id) as lessons,
+                (SELECT value FROM extra_field_values WHERE field_id = 16 AND item_id = s.id) as image
+                FROM $tbl_session s
+                LEFT JOIN $tbl_session_category c
+                    ON s.session_category_id = c.id
+                INNER JOIN $tbl_users u
+                    ON s.id_coach = u.id
+                ORDER BY 9 DESC
+                LIMIT 8";
+        $result = Database::query($sql);
+
+        $plugin = BuyCoursesPlugin::create();
+        $checker = $plugin->isEnabled();
+        $sessions = [];
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if ($checker) {
+                    $row['on_sale'] = $plugin->getItemByProduct(
+                        $row['id'],
+                        BuyCoursesPlugin::PRODUCT_TYPE_SESSION
+                    );
+                }
+                $sessions[] = $row;
+            }
+
+            return $sessions;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Get all session categories (filter by access_url_id).
      *
      * @return mixed false if the session category does not exist, array if the session category exists

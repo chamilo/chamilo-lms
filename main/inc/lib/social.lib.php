@@ -1469,7 +1469,7 @@ class SocialManager extends UserManager
      * @param int    $messageId      id parent
      * @param string $messageStatus  status type of message
      *
-     * @return bool
+     * @return int
      *
      * @author Yannick Warnier
      */
@@ -1481,9 +1481,13 @@ class SocialManager extends UserManager
         $messageStatus = ''
     ) {
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
-        $userId = intval($userId);
-        $friendId = intval($friendId);
-        $messageId = intval($messageId);
+        $userId = (int) $userId;
+        $friendId = (int) $friendId;
+        $messageId = (int) $messageId;
+
+        if (empty($userId) || empty($friendId)) {
+            return 0;
+        }
 
         // Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(["\n", "\n\r"], '<br />', $messageContent);
@@ -1662,7 +1666,7 @@ class SocialManager extends UserManager
             $start = '0000-00-00';
         }
 
-        $isOwnWall = (api_get_user_id() == $userId && $userId == $friendId);
+        $isOwnWall = api_get_user_id() == $userId && $userId == $friendId;
         $messages = self::getWallMessages(
             $userId,
             MESSAGE_STATUS_WALL,
@@ -1708,8 +1712,12 @@ class SocialManager extends UserManager
             if ($isOwnWall) {
                 $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
                 $media .= '<div class="pull-right deleted-mgs">';
-                $media .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
-                    $message['id'].'">x</a>';
+                $url = api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.$message['id'];
+                $media .= Display::url(
+                    Display::returnFontAwesomeIcon('trash'),
+                    $url,
+                    ['title' => get_lang("SocialMessageDelete")]
+                );
                 $media .= '</div>';
                 $media .= '</div>';
             }
@@ -1816,7 +1824,8 @@ class SocialManager extends UserManager
         $description = $graph->description;
         $title = $graph->title;
         $html = '<div class="thumbnail social-thumbnail">';
-        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'"><img class="img-responsive social-image" src="'.$image.'" /></a>';
+        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'">
+                <img class="img-responsive social-image" src="'.$image.'" /></a>';
         $html .= '<div class="social-description">';
         $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
         $html .= empty($description) ? '' : '<span>'.$description.'</span>';
@@ -2011,8 +2020,9 @@ class SocialManager extends UserManager
             }
             $friendHtml .= '</ul>';
         } else {
-            $friendHtml .= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
-                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
+            $friendHtml .= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />
+                <a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php">
+                <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
         }
 
         $friendHtml = Display::panel($friendHtml, get_lang('SocialFriend').' ('.$number_friends.')');
@@ -2087,8 +2097,9 @@ class SocialManager extends UserManager
             }
             $friendHtml .= '</div>';
         } else {
-            $friendHtml .= '<div class="help">'.get_lang('NoFriendsInYourContactList').' '
-                .'<a href="'.api_get_path(WEB_PATH).'whoisonline.php"><em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
+            $friendHtml .= '<div class="help">'.get_lang('NoFriendsInYourContactList').' 
+                    <a href="'.api_get_path(WEB_PATH).'whoisonline.php">
+                    <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
         }
 
         return $friendHtml;
@@ -2226,8 +2237,12 @@ class SocialManager extends UserManager
 
         $htmlDelete = '';
         if ($isOwnWall) {
-            $htmlDelete .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
-            $message['id'].'">x</a>';
+            $url = api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.$message['id'];
+            $htmlDelete .= Display::url(
+                Display::returnFontAwesomeIcon('trash'),
+                $url,
+                ['title' => get_lang('SocialMessageDelete')]
+            );
         }
 
         $html = '';
@@ -2238,7 +2253,8 @@ class SocialManager extends UserManager
             $html .= '</div>';
         }
         $html .= '<div class="user-image" >';
-        $html .= '<a href="'.$urlAuthor.'">'.'<img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
+        $html .= '<a href="'.$urlAuthor.'">
+                    <img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
         $html .= '</div>';
         $html .= '<div class="user-data">';
         $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';

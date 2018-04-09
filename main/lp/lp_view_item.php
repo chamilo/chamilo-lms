@@ -115,7 +115,6 @@ function confirmation(name) {
 </script>
 <?php
 
-Session::write('oLP', $lp);
 $id = isset($new_item_id) ? $new_item_id : $_GET['id'];
 if (is_object($lp)) {
     switch ($mode) {

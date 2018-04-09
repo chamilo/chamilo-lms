@@ -2069,9 +2069,9 @@ function _api_get_person_name_convention($language, $type)
                 ],
             ];
         }
-
         // Overwrite classic conventions
         $customConventions = api_get_configuration_value('name_order_conventions');
+
         if (!empty($customConventions)) {
             foreach ($customConventions as $key => $data) {
                 $conventions[$key] = $data;
@@ -2128,7 +2128,8 @@ function _api_validate_person_name_format($format)
 
 /**
  * Removes leading, trailing and duplicate whitespace and/or commas in a full person name.
- * Cleaning is needed for the cases when not all parts of the name are available or when the name is constructed using a "dirty" pattern.
+ * Cleaning is needed for the cases when not all parts of the name are available
+ * or when the name is constructed using a "dirty" pattern.
  *
  * @param string $person_name the input person name
  *

@@ -22,10 +22,16 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = [
+    "url" => "index.php",
+    "name" => get_lang('MySpace'),
+];
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Teachers')];
+    $interbreadcrumb[] = [
+        "url" => "teachers.php",
+        "name" => get_lang('Teachers'),
+    ];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
@@ -34,8 +40,8 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) &&
 
 function get_count_users()
 {
-    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-    $active = isset($_GET['active']) ? $_GET['active'] : 1;
+    $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
+    $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
 
@@ -58,19 +64,18 @@ function get_users($from, $limit, $column, $direction)
 {
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
+    $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
-    $column = 'u.user_id';
     $drhLoaded = false;
+
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -114,7 +119,7 @@ function get_users($from, $limit, $column, $direction)
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
         }
 
         $avg_time_spent = $avg_student_score = $avg_student_progress = 0;

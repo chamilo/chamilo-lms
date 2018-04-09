@@ -115,7 +115,7 @@ if (!$is_allowed_to_edit) {
 
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
-
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
 $htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
@@ -124,9 +124,38 @@ var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
+    
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
+        
+    $(".scorm_item_normal").qtip({
+        content: {
+            text: function(event, api) {
+                var item = $(this);                 
+                var itemId = $(this).attr("id");
+                itemId = itemId.replace("toc_", "");
+                var textToShow = "";
+                $.ajax({
+                    type: "GET",
+                    url: "'.$ajaxUrl.'&item_id="+ itemId,            
+                    async: false                 
+                })
+                .then(function(content) {                    
+                    if (content == 1) {
+                        textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
+                        api.set("style.classes", "qtip-green qtip-shadow");                        
+                    } else {
+                        textToShow = content;                        
+                        api.set("style.classes", "qtip-red qtip-shadow");
+                    }
+                    
+                    return textToShow;
+                });
+                return textToShow;                
+            }
+        }
+    }); 
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
@@ -148,6 +177,8 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
     Session::erase('exerciseResult');
     Session::erase('objExercise');
     Session::erase('questionList');
+    Session::erase('duration_time_previous');
+    Session::erase('duration_time');
 }
 
 // additional APIs
@@ -522,7 +553,11 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
-$template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
+    $template->assign('data_panel', $lp->getParentToc($get_toc_list));
+} else {
+    $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+}
 $template->assign('lp_id', $lp->lp_id);
 $template->assign('lp_current_item_id', $lp->get_current_item_id());
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));

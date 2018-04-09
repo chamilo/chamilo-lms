@@ -344,12 +344,12 @@ class PDF
     /**
      * Converts an html string to PDF.
      *
-     * @param string $document_html valid html
-     * @param string $css           CSS content of a CSS file
-     * @param string $pdf_name      pdf name
-     * @param string $course_code   course code
-     *                              (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode    the MPDF output mode can be:
+     * @param string $document_html  valid html
+     * @param string $css            CSS content of a CSS file
+     * @param string $pdf_name       pdf name
+     * @param string $course_code    course code
+     *                               (if you are using html that are located in the document tool you must provide this)
+     * @param string $outputMode     the MPDF output mode can be:
      * @param bool   $saveInFile
      * @param string $fileToSave
      * @param bool   $returnHtml

@@ -291,10 +291,8 @@ switch ($action) {
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         if ($lp) {
             $position = $lp->isFirstOrLastItem($lpItemId);
+            echo json_encode($position);
         }
-
-        echo json_encode($position);
-
         break;
     case 'get_parent_names':
         $newItemId = isset($_GET['new_item']) ? intval($_GET['new_item']) : 0;
@@ -325,9 +323,9 @@ switch ($action) {
             echo '1';
         } else {
             if (!empty($lp->error)) {
-                echo $lp->error;
+                echo addslashes($lp->error);
             } else {
-                echo get_lang('LearnpathPrereqNotCompleted');
+                echo addslashes(get_lang('LearnpathPrereqNotCompleted'));
             }
         }
         $lp->error = '';

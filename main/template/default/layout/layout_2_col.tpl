@@ -4,9 +4,7 @@
 
 {% block body %}
     {% if plugin_main_top %}
-        {% if plugin_main_top %}
-            {{ display.pluginPanel('main-top', plugin_main_top) }}
-        {% endif %}
+        {{ display.pluginPanel('main-top', plugin_main_top) }}
     {% endif %}
     <div class="row">
         <div class="col-md-9 col-md-push-3">

@@ -5,31 +5,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * Based on Bootstrap v3
 */
-
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/OpenSans-Light.woff2) format('woff2'), url(fonts/OpenSans-Light.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(fonts/OpenSans.woff2) format('woff2'), url(fonts/OpenSans.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(fonts/OpenSans-Semibold.woff2) format('woff2'), url(fonts/OpenSans-Semibold.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(fonts/OpenSans-Bold.woff2) format('woff2'), url(fonts/OpenSans-Bold.woff) format('woff');
-}
 body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;

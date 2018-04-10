@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.17.1",
+    "@symfony/webpack-encore": "^0.19",
     "babel-preset-react": "^6.24.1",
     "bootstrap-sass": "^3.3.7",
     "copy-webpack-plugin": "^4.3.1",

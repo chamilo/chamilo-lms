@@ -4,9 +4,9 @@ var copyWebpackPlugin = require('copy-webpack-plugin');
 Encore
     .setOutputPath('public/build/')
 
-    .setManifestKeyPrefix('build/public')
+    .setManifestKeyPrefix('build/')
     // If chamilo is installed in localhost/chamilo2
-    .setPublicPath('/chamilo2/public/build/')
+    .setPublicPath('./public/build/')
     // If chamilo is installed in a domain my.chamilo.net
     //.setPublicPath('/build')
     .cleanupOutputBeforeBuild()

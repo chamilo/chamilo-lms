@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@symfony/webpack-encore@^0.17.1":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@symfony/webpack-encore/-/webpack-encore-0.17.1.tgz#4889d92bd241eff48ff4b72e76fa367b4c085c9e"
+"@symfony/webpack-encore@^0.19":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@symfony/webpack-encore/-/webpack-encore-0.19.0.tgz#f0725dbbede5ff9d9fdbd7a07f84accafc83ca14"
   dependencies:
     babel-core "^6.24.0"
     babel-loader "^7.1.0"

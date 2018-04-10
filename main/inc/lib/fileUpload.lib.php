@@ -1598,7 +1598,7 @@ function search_img_from_html($html_file)
  * @param string $title                   "folder2"
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
- *
+ * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
  * @return string actual directory name if it succeeds,
  *                boolean false otherwise
  */
@@ -1612,7 +1612,8 @@ function create_unexisting_directory(
     $desired_dir_name,
     $title = '',
     $visibility = '',
-    $generateNewNameIfExists = false
+    $generateNewNameIfExists = false,
+    $sendNotification = true
 ) {
     $course_id = $_course['real_id'];
     $session_id = intval($session_id);
@@ -1697,7 +1698,8 @@ function create_unexisting_directory(
                     true,
                     $to_group_id,
                     $session_id,
-                    $user_id
+                    $user_id,
+                    $sendNotification
                 );
 
                 if ($document_id) {

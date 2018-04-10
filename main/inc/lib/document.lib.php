@@ -1992,6 +1992,7 @@ class DocumentManager
                     $dir_name,
                     $post_dir_name,
                     null,
+                    false,
                     false
                 );
 
@@ -2007,7 +2008,10 @@ class DocumentManager
                         null,
                         0,
                         true,
-                        $to_group_id
+                        $to_group_id,
+                        0,
+                        0,
+                        false
                     );
                 }
 
@@ -5749,7 +5753,9 @@ class DocumentManager
                     $documentDirectory,
                     '/shared_folder',
                     get_lang('UserFolders'),
-                    0
+                    0,
+                    false,
+                    false
                 );
             }
             // Create dynamic user shared folder
@@ -5763,7 +5769,9 @@ class DocumentManager
                     $documentDirectory,
                     '/shared_folder/sf_user_'.$userId,
                     $userInfo['complete_name'],
-                    1
+                    1,
+                    false,
+                    false
                 );
             }
 
@@ -5781,7 +5789,9 @@ class DocumentManager
                 $documentDirectory,
                 '/shared_folder_session_'.$sessionId,
                 get_lang('UserFolders').' ('.api_get_session_name($sessionId).')',
-                0
+                0,
+                false,
+                false
             );
         }
         //Create dynamic user shared folder into a shared folder session
@@ -5795,7 +5805,9 @@ class DocumentManager
                 $documentDirectory,
                 '/shared_folder_session_'.$sessionId.'/sf_user_'.$userId,
                 $userInfo['complete_name'].'('.api_get_session_name($sessionId).')',
-                1
+                1,
+                false,
+                false
             );
         }
     }

@@ -23,6 +23,12 @@
                     </article>
                 {% endif %}
 
+                {% if home_include %}
+                <article id="home-include">
+                    {{ home_include }}
+                </article>
+                {% endif %}
+
                 {% block page_body %}
                     {% include 'layout/page_body.tpl'|get_template %}
                 {% endblock %}
@@ -53,9 +59,13 @@
                     </article>
                 {% endif %}
 
-                {% include 'layout/hot_courses.tpl'|get_template %}
+                {% if section_name == 'section-campus' %}
 
-                {% include 'session/sessions_current.tpl'|get_template %}
+                    {% include 'layout/hot_courses.tpl'|get_template %}
+
+                    {% include 'session/sessions_current.tpl'|get_template %}
+
+                {% endif %}
 
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">

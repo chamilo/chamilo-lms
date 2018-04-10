@@ -10,6 +10,8 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 exit;
 
+opcache_reset();
+
 $maxSeconds = 10 * 60 * 60; // Check records higher than 7 hours
 $addSecondsToLogin = 2 * 60 * 60; // Update this abusive records with 3 hours
 $limit = 10; // Only fix first 10

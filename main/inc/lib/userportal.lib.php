@@ -2529,14 +2529,17 @@ class IndexManager
      */
     private static function filterByCategory($courseList, $categoryCode)
     {
-        return array_filter($courseList, function ($courseInfo) use ($categoryCode) {
-            if (isset($courseInfo['category_code']) &&
-                $courseInfo['category_code'] === $categoryCode
-            ) {
-                return true;
-            }
+        return array_filter(
+            $courseList,
+            function ($courseInfo) use ($categoryCode) {
+                if (isset($courseInfo['category_code']) &&
+                    $courseInfo['category_code'] === $categoryCode
+                ) {
+                    return true;
+                }
 
-            return false;
-        });
+                return false;
+            }
+        );
     }
 }

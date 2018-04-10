@@ -134,7 +134,7 @@ $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $groupId = api_get_group_id();
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
-$group_member_with_upload_rights = false;
+$groupMemberWithUploadRights = false;
 
 // If the group id is set, we show them group documents
 $group_properties = [];
@@ -142,7 +142,7 @@ $group_properties['directory'] = null;
 
 // For sessions we should check the parameters of visibility
 if (api_get_session_id() != 0) {
-    $group_member_with_upload_rights = $group_member_with_upload_rights && api_is_allowed_to_session_edit(false, true);
+    $groupMemberWithUploadRights = $groupMemberWithUploadRights && api_is_allowed_to_session_edit(false, true);
 }
 
 // Get group info
@@ -160,7 +160,7 @@ if (!empty($groupId)) {
     $groupMemberWithEditRights = $isAllowedToEdit || $isTutorGroup;
 
     // Let's assume the user cannot upload files for the group
-    $group_member_with_upload_rights = false;
+    $groupMemberWithUploadRights = false;
     if ($group_properties['doc_state'] == 2) {
         // Documents are private
         if ($isAllowedToEdit || GroupManager::is_user_in_group($userId, $group_properties)) {
@@ -174,7 +174,7 @@ if (!empty($groupId)) {
                 'name' => get_lang('GroupSpace').' '.$group_properties['name'],
             ];
             //they are allowed to upload
-            $group_member_with_upload_rights = true;
+            $groupMemberWithUploadRights = true;
         } else {
             $groupId = 0;
         }
@@ -195,10 +195,10 @@ if (!empty($groupId)) {
             GroupManager::is_tutor_of_group($userId, $group_properties, $courseId)
         ) {
             // Only course admin or group members can upload
-            $group_member_with_upload_rights = true;
+            $groupMemberWithUploadRights = true;
         }
     }
-    Session::write('group_member_with_upload_rights', $group_member_with_upload_rights);
+    Session::write('group_member_with_upload_rights', $groupMemberWithUploadRights);
 } else {
     Session::write('group_member_with_upload_rights', false);
 }
@@ -211,7 +211,7 @@ $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpat
 switch ($action) {
     case 'delete_item':
         if ($isAllowedToEdit ||
-            $group_member_with_upload_rights ||
+            $groupMemberWithUploadRights ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
         ) {
@@ -316,7 +316,7 @@ switch ($action) {
         // Launch event
         Event::event_download($document_data['url']);
         // Check visibility of document and paths
-        if (!($isAllowedToEdit || $group_member_with_upload_rights) &&
+        if (!($isAllowedToEdit || $groupMemberWithUploadRights) &&
             !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())
         ) {
             api_not_allowed(true);
@@ -874,7 +874,7 @@ $documentAndFolders = DocumentManager::getAllDocumentData(
     $curdirpath,
     $groupIid,
     null,
-    $isAllowedToEdit || $group_member_with_upload_rights,
+    $isAllowedToEdit || $groupMemberWithUploadRights,
     false
 );
 
@@ -946,7 +946,7 @@ if ($groupId != 0) { // Add group name after for group documents
 $moveForm = '';
 /* MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
-if ($isAllowedToEdit || $group_member_with_upload_rights ||
+if ($isAllowedToEdit || $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
 ) {
@@ -978,7 +978,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
             $folders = DocumentManager::get_all_document_folders(
                 $courseInfo,
                 $groupIid,
-                $isAllowedToEdit || $group_member_with_upload_rights,
+                $isAllowedToEdit || $groupMemberWithUploadRights,
                 false,
                 $curdirpath
             );
@@ -1156,7 +1156,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
 /* DELETE FILE OR DIRECTORY */
 //Only teacher and all users into their group
 if ($isAllowedToEdit ||
-    $group_member_with_upload_rights ||
+    $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     if (isset($_POST['action']) && isset($_POST['ids'])) {
@@ -1293,7 +1293,7 @@ $dirForm = '';
 /* CREATE DIRECTORY */
 //Only teacher and all users into their group and any user into his/her shared folder
 if ($isAllowedToEdit ||
-    $group_member_with_upload_rights ||
+    $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     // Create directory with $_POST data
@@ -1421,7 +1421,7 @@ $templateForm = '';
 /* TEMPLATE ACTION */
 //Only teacher and all users into their group
 if ($isAllowedToEdit ||
-    $group_member_with_upload_rights ||
+    $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
@@ -1548,7 +1548,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $curdirpath,
         $groupIid,
         null,
-        $isAllowedToEdit || $group_member_with_upload_rights,
+        $isAllowedToEdit || $groupMemberWithUploadRights,
         true
     );
 } else {
@@ -1557,7 +1557,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $curdirpath,
         $groupIid,
         null,
-        $isAllowedToEdit || $group_member_with_upload_rights,
+        $isAllowedToEdit || $groupMemberWithUploadRights,
         false
     );
 }
@@ -1572,7 +1572,7 @@ if ($groupId != 0) {
         $folders = DocumentManager::get_all_document_folders(
             $courseInfo,
             $groupIid,
-            $isAllowedToEdit || $group_member_with_upload_rights,
+            $isAllowedToEdit || $groupMemberWithUploadRights,
             false,
             $curdirpath
         );
@@ -1581,7 +1581,7 @@ if ($groupId != 0) {
     $folders = DocumentManager::get_all_document_folders(
         $courseInfo,
         0,
-        $isAllowedToEdit || $group_member_with_upload_rights,
+        $isAllowedToEdit || $groupMemberWithUploadRights,
         false,
         $curdirpath
     );
@@ -1612,7 +1612,7 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
 $column_show = [];
 
 if ($isAllowedToEdit ||
-    $group_member_with_upload_rights ||
+    $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     // TODO:check enable more options for shared folders
@@ -1812,7 +1812,7 @@ if (!empty($documentAndFolders)) {
             }
             $row['name'] = $document_name;
             // Data for checkbox
-            if (($isAllowedToEdit || $group_member_with_upload_rights) && count($documentAndFolders) > 1) {
+            if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
                 $row[] = $document_data['id'];
             }
 
@@ -2010,7 +2010,7 @@ if (!$is_certificate_mode && !isset($_GET['move'])) {
     );
 }
 
-if (($isAllowedToEdit || $group_member_with_upload_rights) && count($documentAndFolders) > 1) {
+if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
     $column_show[] = 1;
 }
 
@@ -2020,7 +2020,7 @@ $column_show[] = 1;
 $column_show[] = 1;
 
 if ($isAllowedToEdit ||
-    $group_member_with_upload_rights ||
+    $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     $column_show[] = 1;
@@ -2071,7 +2071,7 @@ $queryVars['id'] = $document_id;
 $table->set_additional_parameters($queryVars);
 $column = 0;
 
-if (($isAllowedToEdit || $group_member_with_upload_rights) &&
+if (($isAllowedToEdit || $groupMemberWithUploadRights) &&
     count($documentAndFolders) > 1
 ) {
     $table->set_header($column++, '', false, ['style' => 'width:12px;']);
@@ -2082,7 +2082,7 @@ $table->set_header($column++, get_lang('Size'), true, ['style' => 'width:50px;']
 $table->set_header($column++, get_lang('Date'), true, ['style' => 'width:150px;']);
 // Admins get an edit column
 if ($isAllowedToEdit ||
-    $group_member_with_upload_rights ||
+    $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     $table->set_header($column++, get_lang('Actions'), false, ['class' => 'td_actions']);
@@ -2124,7 +2124,7 @@ $table->display();
 $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
 
 if (count($documentAndFolders) > 1) {
-    if ($isAllowedToEdit || $group_member_with_upload_rights) {
+    if ($isAllowedToEdit || $groupMemberWithUploadRights) {
         echo '<script>
         $(document).ready(function() {
             $.ajax({

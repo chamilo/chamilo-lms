@@ -28,6 +28,7 @@ class LegacyController extends ToolBaseController
      *
      * @param string  $name
      * @param Request $request
+     * @param string  $folder
      *
      * @return Response
      */

@@ -5197,10 +5197,10 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             */
 
             $work_is_visible = $item_info['visibility'] == 1 && $row['accepted'] == 1;
-            $doc_visible_for_all = $course_info['show_score'] == 1;
+            $doc_visible_for_all = (int) $course_info['show_score'] === 0;
 
             $is_editor = api_is_allowed_to_edit(true, true, true);
-            $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
+            $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
 
             if ($is_editor ||
                 $student_is_owner_of_work ||

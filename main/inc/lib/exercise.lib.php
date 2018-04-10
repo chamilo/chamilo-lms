@@ -1344,35 +1344,35 @@ HOTSPOT;
     }
 
     /**
-     * @param int $exe_id
+     * @param int $exeId
      *
      * @return array
      */
-    public static function get_exercise_track_exercise_info($exe_id)
+    public static function get_exercise_track_exercise_info($exeId)
     {
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_TRACK_EXERCICES = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $TBL_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
-        $exe_id = intval($exe_id);
+        $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
+        $trackExerciseTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $exeId = (int) $exeId;
         $result = [];
-        if (!empty($exe_id)) {
+        if (!empty($exeId)) {
             $sql = " SELECT q.*, tee.*
-                FROM $TBL_EXERCICES as q
-                INNER JOIN $TBL_TRACK_EXERCICES as tee
+                FROM $quizTable as q
+                INNER JOIN $trackExerciseTable as tee
                 ON q.id = tee.exe_exo_id
-                INNER JOIN $TBL_COURSE c
+                INNER JOIN $courseTable c
                 ON c.id = tee.c_id
-                WHERE tee.exe_id = $exe_id
+                WHERE tee.exe_id = $exeId
                 AND q.c_id = c.id";
 
-            $res_fb_type = Database::query($sql);
-            $result = Database::fetch_array($res_fb_type, 'ASSOC');
-            $result['duration_formatted'] = '';
-            if (!empty($result['exe_duration'])) {
-                $time = api_format_time($result['exe_duration'], 'js');
-                $result['duration_formatted'] = $time;
+            $sqlResult = Database::query($sql);
+            if (Database::num_rows($sqlResult)) {
+                $result = Database::fetch_array($sqlResult, 'ASSOC');
+                $result['duration_formatted'] = '';
+                if (!empty($result['exe_duration'])) {
+                    $time = api_format_time($result['exe_duration'], 'js');
+                    $result['duration_formatted'] = $time;
+                }
             }
         }
 

@@ -131,7 +131,8 @@ class ImportCsv
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
                 if (isset($fileInfo['extension']) && $fileInfo['extension'] === 'csv') {
-                    // Checking teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
+                    // Checking teachers_yyyymmdd.csv,
+                    // courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
                     $preMethod = ucwords($parts[1]);
                     $preMethod = str_replace('-static', 'Static', $preMethod);
@@ -178,9 +179,9 @@ class ImportCsv
                     } else {
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
                         echo "Trying to call $method".PHP_EOL;
-
                         echo "The file have to has this format:".PHP_EOL;
-                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
+                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, 
+                        prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
                     }
                 }
@@ -208,14 +209,12 @@ class ImportCsv
             ];
 
             foreach ($sections as $section) {
-                $this->logger->addInfo("-- Import $section --");
-
                 if (isset($fileToProcess[$section]) && !empty($fileToProcess[$section])) {
+                    $this->logger->addInfo("-- Import $section --");
                     $files = $fileToProcess[$section];
                     foreach ($files as $fileInfo) {
                         $method = $fileInfo['method'];
                         $file = $fileInfo['file'];
-
                         echo 'File: '.$file.PHP_EOL;
                         echo 'Method : '.$method.PHP_EOL;
                         echo PHP_EOL;
@@ -249,11 +248,10 @@ class ImportCsv
             ];
 
             foreach ($sections as $section) {
-                $this->logger->addInfo("-- Import static files $section --");
-
                 if (isset($fileToProcessStatic[$section]) &&
                     !empty($fileToProcessStatic[$section])
                 ) {
+                    $this->logger->addInfo("-- Import static files $section --");
                     $files = $fileToProcessStatic[$section];
                     foreach ($files as $fileInfo) {
                         $method = $fileInfo['method'];
@@ -788,8 +786,12 @@ class ImportCsv
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
 
-            $expirationDateOnCreate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
-            $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
+            $expirationDateOnCreate = api_get_utc_datetime(
+                strtotime("+".intval($this->expirationDateInUserCreation)."years")
+            );
+            $expirationDateOnUpdate = api_get_utc_datetime(
+                strtotime("+".intval($this->expirationDateInUserUpdate)."years")
+            );
 
             $counter = 1;
             $secondsInYear = 365 * 24 * 60 * 60;
@@ -1030,7 +1032,6 @@ class ImportCsv
                     $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
                 }
                 $teacherId = null;
-
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
@@ -1106,9 +1107,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo(
-                    "No events to add"
-                );
+                $this->logger->addInfo("No events to add");
 
                 return 0;
             }
@@ -1207,6 +1206,34 @@ class ImportCsv
                             $em->flush();
                         }
                     }
+                    $this->logger->addInfo('Move from course #'.$calendarEvent->getCId().' to #'.$courseInfo['real_id']);
+
+                    // Checking if session still exists
+                    $calendarSessionId = (int) $calendarEvent->getSessionId();
+                    if (!empty($calendarSessionId)) {
+                        $calendarSessionInfo = api_get_session_info($calendarSessionId);
+                        if (empty($calendarSessionInfo)) {
+                            $calendarId = (int) $calendarEvent->getIid();
+
+                            // Delete calendar events because the session was deleted!
+                            $this->logger->addInfo(
+                                "Delete event # $calendarId because session # $calendarSessionId doesn't exist"
+                            );
+
+                            $sql = "DELETE FROM c_calendar_event 
+                                    WHERE iid = $calendarId AND session_id = $calendarSessionId";
+                            Database::query($sql);
+                            $this->logger->addInfo($sql);
+
+                            $sql = "DELETE FROM c_item_property 
+                                    WHERE 
+                                        tool = 'calendar_event' AND 
+                                        ref = $calendarSessionId AND 
+                                        session_id = $calendarSessionId";
+                            Database::query($sql);
+                            $this->logger->addInfo($sql);
+                        }
+                    }
                 } else {
                     $this->logger->addInfo('Calendar event not found '.$item['item_id']);
                 }
@@ -1235,7 +1262,7 @@ class ImportCsv
                 $item = $event['item'];
                 $update = $event['update'];
                 $externalEventId = $event['external_event_id'];
-                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
+                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'].' external event id: '.$externalEventId;
 
                 $agenda = new Agenda(
                     'course',
@@ -1284,15 +1311,19 @@ class ImportCsv
                 $days = 5;
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
+                /*
+                $timePart = date('H:i:s', api_strtotime('now'));
+                $datePart = date('Y-m-d', api_strtotime("$days weekdays"));
+                $startDatePlusDays = "$timePart $datePart";
+                */
                 $this->logger->addInfo(
                     "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
+                $sendMail = false;
                 if ($startDatePlusDays > api_strtotime($firstDate)) {
                     $sendMail = true;
-                } else {
-                    $sendMail = false;
                 }
 
                 // Send announcement to users
@@ -1317,7 +1348,6 @@ class ImportCsv
                     }
 
                     $courseTitle = $courseInfo['title'].$sessionName;
-
                     $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
                         sprintf(
                             get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
@@ -1366,19 +1396,21 @@ class ImportCsv
                         );
 
                         if ($announcementId) {
-                            $this->logger->addInfo(
-                                "Announcement added: ".(int) ($announcementId)." in $info"
-                            );
-                            $this->logger->addInfo(
-                                "<<--SENDING MAIL-->>"
-                            );
-
+                            $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
+                            $this->logger->addInfo("<<--SENDING MAIL-->>");
                             $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,
                                 $event['session_id'],
                                 $announcementId,
-                                false
+                                false,
+                                false,
+                                $this->logger,
+                                $this->defaultAdminId
+                            );
+                        } else {
+                            $this->logger->addError(
+                                "Error when trying to add announcement with title ".$subject." here: $info"
                             );
                         }
                     } else {
@@ -1388,6 +1420,9 @@ class ImportCsv
                         );
                     }
                 } else {
+                    $this->logger->addInfo(
+                        "Send Mail: ".intval($sendMail).' - Already added: '.intval($alreadyAdded)
+                    );
                     if ($sendMail == false) {
                         $report['mail_not_sent_because_date']++;
                     }
@@ -1430,7 +1465,8 @@ class ImportCsv
                                 ];
                                 $extraFieldValue->update($params);
                                 $this->logger->addInfo(
-                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' new item_id: '.$eventId.' old item_id: '.$item['item_id']
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' 
+                                    new item_id: '.$eventId.' old item_id: '.$item['item_id']
                                 );
                             }
                         } else {
@@ -2550,6 +2586,7 @@ class ImportCsv
                     $name = $row['CourseName'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
+                    $boxColumn = $row['Column'];
                     $rowValue = $row['Row'];
                     $color = isset($row['DefinedColor']) ? $row['DefinedColor'] : '';
                     $arrow = isset($row['DrawArrowFrom']) ? $row['DrawArrowFrom'] : '';
@@ -2567,12 +2604,11 @@ class ImportCsv
                         $current->setAttribute('Notes', $notes);
                         $current->setAttribute('Row', $rowValue);
                         $current->setAttribute('Group', $groupValue);
+                        $current->setAttribute('Column', $boxColumn);
                         $current->setAttribute('DrawArrowFrom', $arrow);
                         $current->setAttribute('SubGroup', $subGroup);
                         $current->setAttribute('Connections', $connections);
                         $current->setAttribute('LinkedElement', $linkedElement);
-
-                        //$current->setAttribute('graphviz.color', 'blue');
                         $current->setAttribute('graphviz.shape', 'box');
                         $current->setGroup($column);
                     }

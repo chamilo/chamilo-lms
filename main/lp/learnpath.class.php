@@ -2793,7 +2793,10 @@ class learnpath
         if (empty($prereq)) {
             return '';
         }
-        if (preg_match('/^\d+$/', $prereq) && is_object($this->items[$prereq])) {
+        if (preg_match('/^\d+$/', $prereq) &&
+            isset($this->items[$prereq]) &&
+            is_object($this->items[$prereq])
+        ) {
             // If the prerequisite is a simple integer ID and this ID exists as an item ID,
             // then simply return it (with the ITEM_ prefix).
             //return 'ITEM_' . $prereq;

@@ -69,7 +69,6 @@ class NavBuilder implements ContainerAwareInterface
                 'route' => 'legacy_index',
             ]
         );
-
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('MyCourses'),

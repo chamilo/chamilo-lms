@@ -133,7 +133,20 @@ class CourseChatUtils
         $absoluteFilePath = $chat_path.$fileTitle;
 
         if (!file_exists($absoluteFilePath)) {
-            $doc_id = add_document($courseInfo, $filePath, 'file', 0, $fileTitle);
+            $doc_id = add_document(
+                $courseInfo,
+                $filePath,
+                'file',
+                0,
+                $fileTitle,
+                null,
+                0,
+                true,
+                0,
+                0,
+                0,
+                false
+            );
             $documentLogTypes = ['DocumentAdded', 'invisible'];
 
             foreach ($documentLogTypes as $logType) {
@@ -187,10 +200,8 @@ class CourseChatUtils
 
         fputs($fp, $fileContent);
         fclose($fp);
-
-        $chat_size = filesize($absoluteFilePath);
-
-        update_existing_document($courseInfo, $doc_id, $chat_size);
+        $size = filesize($absoluteFilePath);
+        update_existing_document($courseInfo, $doc_id, $size);
         item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
 
         return true;
@@ -471,7 +482,20 @@ class CourseChatUtils
                 @mkdir($chat_path, api_get_permissions_for_new_directories());
                 // Save chat files document for group into item property
                 if ($this->groupId) {
-                    $doc_id = add_document($courseInfo, $basepath_chat, 'folder', 0, 'chat_files');
+                    $doc_id = add_document(
+                        $courseInfo,
+                        $basepath_chat,
+                        'folder',
+                        0,
+                        'chat_files',
+                        null,
+                        0,
+                        true,
+                        0,
+                        0,
+                        0,
+                        false
+                    );
                     api_item_property_update(
                         $courseInfo,
                         TOOL_DOCUMENT,
@@ -504,32 +528,47 @@ class CourseChatUtils
         if (!file_exists($chat_path.$filename_chat)) {
             @fclose(fopen($chat_path.$filename_chat, 'w'));
             if (!api_is_anonymous()) {
-                $doc_id = add_document($courseInfo, $basepath_chat.'/'.$filename_chat, 'file', 0, $filename_chat);
-                api_item_property_update(
+                $doc_id = add_document(
                     $courseInfo,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    'DocumentAdded',
-                    $this->userId,
-                    $group_info,
+                    $basepath_chat.'/'.$filename_chat,
+                    'file',
+                    0,
+                    $filename_chat,
                     null,
-                    null,
-                    null,
-                    $this->sessionId
+                    0,
+                    true,
+                    0,
+                    0,
+                    0,
+                    false
                 );
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    'invisible',
-                    $this->userId,
-                    $group_info,
-                    null,
-                    null,
-                    null,
-                    $this->sessionId
-                );
-                item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
+                if ($doc_id) {
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_DOCUMENT,
+                        $doc_id,
+                        'DocumentAdded',
+                        $this->userId,
+                        $group_info,
+                        null,
+                        null,
+                        null,
+                        $this->sessionId
+                    );
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_DOCUMENT,
+                        $doc_id,
+                        'invisible',
+                        $this->userId,
+                        $group_info,
+                        null,
+                        null,
+                        null,
+                        $this->sessionId
+                    );
+                    item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
+                }
             }
         }
 
@@ -560,7 +599,14 @@ class CourseChatUtils
                 $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html',
                 'file',
                 filesize($chat_path.$basename_chat.'-'.$i.'.log.html'),
-                $basename_chat.'-'.$i.'.log.html'
+                $basename_chat.'-'.$i.'.log.html',
+                null,
+                0,
+                true,
+                0,
+                0,
+                0,
+                false
             );
 
             api_item_property_update(
@@ -637,7 +683,7 @@ class CourseChatUtils
     /**
      * Get the number of users connected in chat.
      *
-     * @return mixed
+     * @return int
      */
     public function countUsersOnline()
     {
@@ -663,13 +709,13 @@ class CourseChatUtils
             ])
             ->getSingleScalarResult();
 
-        return intval($number);
+        return (int) $number;
     }
 
     /**
      * Get the users online data.
      *
-     * @return string
+     * @return array
      */
     public function listUsersOnline()
     {
@@ -771,6 +817,6 @@ class CourseChatUtils
             ])
             ->getSingleScalarResult();
 
-        return intval($number);
+        return (int) $number;
     }
 }

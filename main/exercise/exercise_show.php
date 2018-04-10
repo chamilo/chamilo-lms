@@ -20,7 +20,7 @@ $debug = false;
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = $origin == 'learnpath';
-$id = intval($_REQUEST['id']); //exe id
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
 
 if (empty($id)) {
     api_not_allowed(true);

@@ -133,9 +133,9 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
             $content .= 'Top 1 high lp item times'.PHP_EOL.PHP_EOL;
             foreach ($results as $item) {
                 $lpId = $item['lp_id'];
-                $link = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?cidReq='.$courseCode.'&course='.$courseCode.'&origin=&lp_id='.$lpId.'&student_id='.$userId.'&id_session='.$sessionId;
-
-                $content .= "total_time = ".api_time_to_hms($item['total_time']).PHP_EOL;
+                $link = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?cidReq='.$courseCode.
+                    '&course='.$courseCode.'&origin=&lp_id='.$lpId.'&student_id='.$userId.'&id_session='.$sessionId;
+                $content .= "total_time to be reduced = ".api_time_to_hms($item['total_time']).PHP_EOL;
                 $content .= Display::url('See report before update', $link, ['target' => '_blank']).PHP_EOL;
                 $content .= "SQL with possible fix:".PHP_EOL;
 

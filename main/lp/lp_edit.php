@@ -8,7 +8,7 @@ use ChamiloSession as Session;
  *
  * @package chamilo.learnpath
  *
- * @author Yannick Warnier <ywarnier@beeznest.org>
+ * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 

@@ -171,7 +171,10 @@ class Template
                 'name' => 'format_date',
                 'callable' => 'Template::format_date',
             ],
-            ['name' => 'get_template', 'callable' => 'Template::findTemplateFilePath'],
+            [
+                'name' => 'get_template',
+                'callable' => 'Template::findTemplateFilePath'
+            ]
         ];
 
         foreach ($filters as $filter) {

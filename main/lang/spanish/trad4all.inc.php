@@ -8150,4 +8150,6 @@ $RegistrationRoleFollowCourses = "Seguir cursos";
 $RegistrationRoleTeachCourses = "Dictar cursos";
 $EditPortfolioItem = "Editar elemento del portafolio";
 $PortfolioItemAdded = "Elemento del portafolio editado";
+$ExploreMoreCourses = "Explorar más cursos";
+$LinksOfInterest = "Enlaces de interés";
 ?>

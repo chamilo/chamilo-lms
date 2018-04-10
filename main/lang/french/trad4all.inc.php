@@ -8061,4 +8061,8 @@ $YourResultAtXBlocksThisElement = "Votre score à l'étape \"%s\" ne vous permet
 $RegistrationRoleWhatDoYouWantToDo = "Que souhaitez-vous faire?";
 $RegistrationRoleFollowCourses = "Suivre des cours";
 $RegistrationRoleTeachCourses = "Enseigner";
+$EditPortfolioItem = "Éditer élément du portfolio";
+$PortfolioItemAdded = "Élément du portfolio enregistré";
+$ExploreMoreCourses = "Explorer plus de cours";
+$LinksOfInterest = "Liens d'intérêt";
 ?>

@@ -8126,4 +8126,6 @@ $RegistrationRoleFollowCourses = "Follow courses";
 $RegistrationRoleTeachCourses = "Teach courses";
 $EditPortfolioItem = "Edit portfolio item";
 $PortfolioItemAdded = "Portfolio item added";
+$ExploreMoreCourses = "Explore more courses";
+$LinksOfInterest = "Links of interest";
 ?>

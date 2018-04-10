@@ -3,20 +3,18 @@ var copyWebpackPlugin = require('copy-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
-
-    .setManifestKeyPrefix('build/')
+    .setManifestKeyPrefix('public/build/')
     // If chamilo is installed in localhost/chamilo2
-    .setPublicPath('./public/build/')
+    .setPublicPath('../')
     // If chamilo is installed in a domain my.chamilo.net
     //.setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     // enable features!
     .enableSassLoader(function(sassOptions) {}, {
-    //     resolveUrlLoader: false
+         //resolveUrlLoader: false
      })
+    .enableLessLoader()
     .autoProvidejQuery()
-    .enableReactPreset()
-
     // read main.js     -> output as public/build/chamilo.js
     .addEntry('chamilo', './assets/js/main.js')
 
@@ -78,4 +76,17 @@ chamiloThemes.forEach(function (theme) {
     ]));
 });
 
-module.exports = Encore.getWebpackConfig();
+var config = Encore.getWebpackConfig();
+
+/*config.module.rules.push({
+    test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+    loader: 'file-loader',
+    options: {
+        name: '[path][name].[ext]',
+        useRelativePath: true,
+        cssOutputPath: 'static/css'
+    }
+});*/
+
+module.exports = config;
+

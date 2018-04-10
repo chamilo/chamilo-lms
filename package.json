@@ -5,16 +5,16 @@
     "bootstrap-sass": "^3.3.7",
     "copy-webpack-plugin": "^4.3.1",
     "node-sass": "^4.5.3",
-    "sass-loader": "^6.0.6",
-    "webpack": "^3.0.0"
+    "sass-loader": "^6.0.7",
+    "webpack": "^3.0"
   },
   "dependencies": {
     "blueimp-file-upload": "^9.19.2",
     "bootstrap-daterangepicker": "^2.1.30",
     "bootstrap-select": "^1.12.4",
-    "chosen-js": "^1.8.0",
-    "cropper": "^3.1.6",
-    "flag-icon-css": "^2.9.0",
+    "chosen-js": "^1.8.3",
+    "cropper": "^4.0",
+    "flag-icon-css": "^3.0",
     "font-awesome": "^4.7",
     "font-awesome-webpack": "^0.0.5-beta.2",
     "fs": "0.0.1-security",
@@ -27,16 +27,16 @@
     "jsplumb": "^2.6.9",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "mathjax": "^2.7.2",
-    "mediaelement": "^4.2.7",
-    "moment": "^2.18.1",
+    "mathjax": "^2.7.4",
+    "mediaelement": "^4.2.9",
+    "moment": "^2.22",
     "mxgraph": "^3.9.3",
     "pwstrength-bootstrap": "^2.1.1",
     "qtip2": "^3.0.3",
     "select2": "^4.0.6-rc.1",
     "simplewebrtc": "^3.0.1",
     "timeago": "^1.6.1",
-    "webcamjs": "^1.0.24",
+    "webcamjs": "^1.0",
     "webpack-jquery-ui": "^1.0.0"
   }
 }

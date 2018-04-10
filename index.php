@@ -20,7 +20,11 @@ if ($allow) {
 }
 
 // The section (for the tabs).
-$this_section = SECTION_CAMPUS;
+$this_section = SECTION_CAMPUS; //rewritten below if including HTML file
+$includeFile = !empty($_GET['include']);
+if ($includeFile) {
+    $this_section = SECTION_INCLUDE;
+}
 $header_title = null;
 if (!api_is_anonymous()) {
     $header_title = ' ';
@@ -143,7 +147,15 @@ if (api_get_configuration_value('show_hot_sessions') === true) {
 }
 $controller->tpl->assign('hot_courses', $hotCourses);
 $controller->tpl->assign('announcements_block', $announcements_block);
-$controller->tpl->assign('home_welcome', $controller->return_home_page());
+if ($includeFile) {
+    // If we are including a static page, then home_welcome is empty
+    $controller->tpl->assign('home_welcome', '');
+    $controller->tpl->assign('home_include', $controller->return_home_page($includeFile));
+} else {
+    // If we are including the real homepage, then home_include is empty
+    $controller->tpl->assign('home_welcome', $controller->return_home_page(false));
+    $controller->tpl->assign('home_include', '');
+}
 $controller->tpl->assign('navigation_links', $controller->return_navigation_links());
 $controller->tpl->assign('notice_block', $controller->return_notice());
 //$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());

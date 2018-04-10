@@ -267,17 +267,19 @@ class IndexManager
 
     /**
      * Includes a created page.
-     *
+     * @param bool $getIncludedFile Whether to include a file as provided in URL GET or simply the homepage
      * @return string
      */
-    public function return_home_page()
+    public function return_home_page($getIncludedFile = false)
     {
         $userId = api_get_user_id();
         // Including the page for the news
         $html = '';
-        if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string) file_get_contents($this->home.$_GET['include']);
-            $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+        if ($getIncludedFile === true) {
+            if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
+                $open = @(string)file_get_contents($this->home.$_GET['include']);
+                $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+            }
         } else {
             // Hiding home top when user not connected.
             $hideTop = api_get_setting('hide_home_top_when_connected');

@@ -1154,7 +1154,7 @@ window.HotspotQuestion = (function () {
             case 'preview':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
-                    exe_id: parseInt(config.exerciseId)
+                    exerciseId: parseInt(config.exerciseId)
                 });
                 break;
         }
@@ -1781,7 +1781,7 @@ window.DelineationQuestion = (function () {
             case 'preview':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
-                    exe_id: parseInt(config.exerciseId)
+                    exerciseId: parseInt(config.exerciseId)
                 });
                 break;
         }

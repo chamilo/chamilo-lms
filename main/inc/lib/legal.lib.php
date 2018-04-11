@@ -20,7 +20,7 @@ class LegalManager
      *
      * @param int    $language language id
      * @param string $content  content
-     * @param int    $type     term and condition type (0 or 1)
+     * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
      * @param string $changes  explain changes
      *
      * @return bool success
@@ -308,11 +308,11 @@ class LegalManager
 
     /**
      * Get type of terms and conditions.
-     *
+     * Type 0 is HTML Text
+     * Type 1 is a link to a different terms and conditions page
      * @param int $legal_id
      * @param int $language_id
-     *
-     * @return int The current type of terms and conditions
+     * @return mixed The current type of terms and conditions (int) or false on error
      */
     public static function get_type_of_terms_and_conditions($legal_id, $language_id)
     {

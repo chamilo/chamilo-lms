@@ -1,5 +1,7 @@
 {
-    "wordLength": "Vaše heslo je príliž krátke",
+    "wordMinLength": "Vaše heslo je príliž krátke",
+    "wordMaxLength": "Vaše heslo je príliš dlhé",
+    "wordInvalidChar": "Vaše heslo obsahuje neplatný znak",
     "wordNotEmail": "Nepoužívajte Váš email ako Vaše heslo",
     "wordSimilarToUsername": "Vaše heslo nesmie obsahovať prihlasovacie meno",
     "wordTwoCharacterClasses": "Použite rôzne druhy znakov",

@@ -17,11 +17,11 @@ Encore
     .autoProvidejQuery()
     // read main.js     -> output as public/build/chamilo.js
     .addEntry('chamilo', './assets/js/main.js')
-
     // read main.scss -> output as web/build/css/base.css
     .addStyleEntry('css/base', './assets/css/main.scss')
     .addStyleEntry('css/editor', './assets/css/editor.css')
     .addStyleEntry('css/print', './assets/css/print.css')
+
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({
         $: 'jquery',
@@ -62,7 +62,7 @@ var chamiloThemes = [
     'tasty_olive',
 ];
 
-// Add chamilo themes
+// Add Chamilo themes
 chamiloThemes.forEach(function (theme) {
     Encore
         .addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
@@ -77,16 +77,4 @@ chamiloThemes.forEach(function (theme) {
 });
 
 var config = Encore.getWebpackConfig();
-
-/*config.module.rules.push({
-    test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-    loader: 'file-loader',
-    options: {
-        name: '[path][name].[ext]',
-        useRelativePath: true,
-        cssOutputPath: 'static/css'
-    }
-});*/
-
 module.exports = config;
-

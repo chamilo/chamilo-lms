@@ -1050,10 +1050,6 @@ bootstrap-select@^1.12.4:
   dependencies:
     jquery ">=1.8"
 
-bootstrap@>=2.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0.tgz#ceb03842c145fcc1b9b4e15da2a05656ba68469a"
-
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
@@ -3456,7 +3452,7 @@ jquery.scrollbar@^0.2.11:
   version "0.2.11"
   resolved "https://registry.yarnpkg.com/jquery.scrollbar/-/jquery.scrollbar-0.2.11.tgz#e91bd4a97d83859463024d26e730dc36676ab59d"
 
-jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=1.8, jquery@>=2.0.0, jquery@>=3.0.0, jquery@^3.0, jquery@^3.2.1:
+jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=1.8, jquery@>=2.0.0, jquery@^3.0, jquery@^3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -4919,13 +4915,6 @@ punycode@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.0.tgz#5f863edc89b96db09074bad7947bf09056ca4e7d"
 
-pwstrength-bootstrap@^2.1.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/pwstrength-bootstrap/-/pwstrength-bootstrap-2.2.1.tgz#67e72ae87c2e3bb9663962d5dad18da33275c89a"
-  dependencies:
-    bootstrap ">=2.0.0"
-    jquery ">=3.0.0"
-
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -5996,7 +5985,7 @@ time-stamp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-2.0.0.tgz#95c6a44530e15ba8d6f4a3ecb8c3a3fac46da357"
 
-timeago@^1.6.1:
+timeago@^1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/timeago/-/timeago-1.6.3.tgz#162a1adae99356297df59339837d09f1b0f36465"
   dependencies:

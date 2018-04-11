@@ -46,15 +46,15 @@ meter to. For example, to use it on all the password fields with the default
 examples:
 
 ```javascript
-    $(':password').pwstrength();
+$(':password').pwstrength();
 ```
 
 To apply it only to one input and change the options:
 
 ```javascript
-    $('#passwd1').pwstrength({
-        ui: { showVerdictsInsideProgressBar: true }
-    });
+$('#passwd1').pwstrength({
+    ui: { showVerdictsInsideProgressBar: true }
+});
 ```
 
 ## Options
@@ -174,20 +174,25 @@ $(document).ready(function () {
 ```
 
 
-## Extra security
+## Extra restrictions
 
 The plugin comes with two validation rules deactivated by default. One checks
-for too many character repetitions, and the other checks the number of
-character classes used. An easy way to increase the security of the passwords
-is to activate this two rules:
+the length of the password and penalizes it if it's too long; and the other
+checks if the password contains a banned char, and penalizes it if it does.
+
+You can configure the max length of the password by using the option `maxChar`.
+You can also configure the invalid chars by using the option
+`invalidCharsRegExp`.
+
+If you need these restrictions you just need to activate this two rules:
 
 ```javascript
 $(document).ready(function () {
     var options = {};
     options.rules = {
         activated: {
-            wordTwoCharacterClasses: true,
-            wordRepetitions: true
+            wordMaxLength: true,
+            wordInvalidChar: true
         }
     };
     $(':password').pwstrength(options);

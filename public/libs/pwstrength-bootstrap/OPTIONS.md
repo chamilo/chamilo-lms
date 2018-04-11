@@ -21,12 +21,25 @@ Let's see the options of each section.
   Sets the minimum required of characters for a password to not be considered
   too weak.
 
+* __maxChar__:
+
+  Default: `20` (Integer)
+
+  Sets the maximum allowed characters for a password.
+
 * __usernameField__:
 
   Default: `"#username"` (String)
 
   The username field to match a password to, to ensure the user does not use
   the same value for their password.
+
+* __invalidCharsRegExp__:
+
+  Default: `new RegExp(/[\s,'"]/)` (Regular Expression)
+
+  A regular expression object to use to test for banned characters in the
+  password.
 
 * __userInputs__:
 
@@ -115,7 +128,9 @@ Let's see the options of each section.
   ```
   {
     wordNotEmail: -100,
-    wordLength: -50,
+    wordMinLength: -50,
+    wordMaxLength: -50,
+    wordInvalidChar: -100,
     wordSimilarToUsername: -100,
     wordSequences: -50,
     wordTwoCharacterClasses: 2,
@@ -142,7 +157,9 @@ Let's see the options of each section.
   ```
   {
     wordNotEmail: true,
-    wordLength: true,
+    wordMinLength: true,
+    wordMaxLength: false,
+    wordInvalidChar: true,
     wordSimilarToUsername: true,
     wordSequences: true,
     wordTwoCharacterClasses: false,
@@ -168,6 +185,13 @@ Let's see the options of each section.
 
   The value used to modify the final score, based on the password length,
   allows you to tailor your results.
+
+* __commonPasswords__:
+
+  Default: `['123456', 'password', ...]` (Array of Strings)
+
+  A list of the most common passwords. If the user inputs a password present
+  in the list, then it gets heavily penalized.
 
 ## User Interface
 
@@ -212,7 +236,7 @@ Let's see the options of each section.
   use of the extra classes provided by Bootstrap. The classes will be added to
   the proper DOM element depending of which version of Bootstrap is being
   used.
-  
+
   E.g.
   ```css
     div.progress.custom-class {

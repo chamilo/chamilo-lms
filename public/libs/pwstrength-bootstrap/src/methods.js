@@ -42,6 +42,9 @@ var methods = {};
             } else {
                 score = rulesEngine.executeRules(options, word);
             }
+            if ($.isFunction(options.common.onScore)) {
+                score = options.common.onScore(options, word, score);
+            }
         }
         ui.updateUI(options, $el, score);
         verdictText = ui.getVerdictAndCssClass(options, score);
@@ -156,8 +159,10 @@ var methods = {};
 
     methods.ruleIsMet = function (rule) {
         if ($.isFunction(rulesEngine.validation[rule])) {
-            if (rule === "wordLength") {
-                rule = "wordLengthStaticScore";
+            if (rule === "wordMinLength") {
+                rule = "wordMinLengthStaticScore";
+            } else if (rule === "wordMaxLength") {
+                rule = "wordMaxLengthStaticScore";
             }
 
             var rulesMetCnt = 0;

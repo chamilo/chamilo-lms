@@ -1,5 +1,7 @@
 {
-    "wordLength": "Tu contraseña es demasiado corta",
+    "wordMinLength": "Tu contraseña es demasiado corta",
+    "wordMaxLength": "Tu contraseña es muy larga",
+    "wordInvalidChar": "Tu contraseña contiene un carácter no válido",
     "wordNotEmail": "No uses tu email como tu contraseña",
     "wordSimilarToUsername": "Tu contraseña no puede contener tu nombre de usuario",
     "wordTwoCharacterClasses": "Mezcla diferentes clases de caracteres",

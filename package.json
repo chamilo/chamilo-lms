@@ -1,4 +1,8 @@
 {
+  "name": "chamilo",
+  "version": "2.0.0",
+  "description": "E-learning and collaboration software",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@symfony/webpack-encore": "^0.19",
     "babel-preset-react": "^6.24.1",
@@ -31,11 +35,10 @@
     "mediaelement": "^4.2.9",
     "moment": "^2.22",
     "mxgraph": "^3.9.3",
-    "pwstrength-bootstrap": "^2.1.1",
     "qtip2": "^3.0.3",
     "select2": "^4.0.6-rc.1",
     "simplewebrtc": "^3.0.1",
-    "timeago": "^1.6.1",
+    "timeago": "^1.6.3",
     "webcamjs": "^1.0",
     "webpack-jquery-ui": "^1.0.0"
   }

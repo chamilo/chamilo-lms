@@ -35,7 +35,7 @@ try {
         return 0;
     };
 
-    validation.wordLength = function (options, word, score) {
+    validation.wordMinLength = function (options, word, score) {
         var wordlen = word.length,
             lenScore = Math.pow(wordlen, options.rules.raisePower);
         if (wordlen < options.common.minChar) {
@@ -43,6 +43,31 @@ try {
         }
         return lenScore;
     };
+
+    validation.wordMaxLength = function (options, word, score) {
+        var wordlen = word.length,
+            lenScore = Math.pow(wordlen, options.rules.raisePower);
+        if (wordlen > options.common.maxChar) {
+            return score;
+        }
+        return lenScore;
+    };
+
+    validation.wordInvalidChar = function (options, word, score) {
+        if (options.common.invalidCharsRegExp.test(word)) {
+            return score;
+        }
+        return 0;
+    };
+
+    validation.wordMinLengthStaticScore = function (options, word, score) {
+        return word.length < options.common.minChar ? 0 : score;
+    };
+
+    validation.wordMaxLengthStaticScore = function (options, word, score) {
+        return word.length > options.common.maxChar ? 0 : score;
+    };
+
 
     validation.wordSimilarToUsername = function (options, word, score) {
         var username = $(options.common.usernameField).val();
@@ -122,6 +147,10 @@ try {
         return word.match(/([a-zA-Z0-9].*[!,@,#,$,%,\^,&,*,?,_,~])|([!,@,#,$,%,\^,&,*,?,_,~].*[a-zA-Z0-9])/) && score;
     };
 
+    validation.wordIsACommonPassword = function (options, word, score) {
+        return ($.inArray(word, options.rules.commonPasswords) >= 0) && score;
+    };
+
     rulesEngine.validation = validation;
 
     rulesEngine.executeRules = function (options, word) {
@@ -152,10 +181,6 @@ try {
                 }
             }
         });
-
-        if ($.isFunction(options.common.onScore)) {
-            totalScore = options.common.onScore(options, word, totalScore);
-        }
 
         return totalScore;
     };

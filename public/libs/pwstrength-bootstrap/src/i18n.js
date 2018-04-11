@@ -15,7 +15,9 @@ var i18n = {};
     'use strict';
 
     i18n.fallback = {
-        "wordLength": "Your password is too short",
+        "wordMinLength": "Your password is too short",
+        "wordMaxLength": "Your password is too long",
+        "wordInvalidChar": "Your password contains an invalid character",
         "wordNotEmail": "Do not use your email as your password",
         "wordSimilarToUsername": "Your password cannot contain your username",
         "wordTwoCharacterClasses": "Use different character classes",

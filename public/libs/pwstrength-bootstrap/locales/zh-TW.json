@@ -1,5 +1,7 @@
 {
-	"wordLength": "您的密碼太短",
+	"wordMinLength": "您的密碼太短",
+	"wordMaxLength": "您的密碼太長",
+	"wordInvalidChar": "您的密碼包含無效字符",
 	"wordNotEmail": "不要使用電子郵件作為密碼",
 	"wordSimilarToUsername": "您的密碼不能包含您的用戶名",
 	"wordTwoCharacterClasses": "使用不同的字元類型 例如: 大小寫混合",

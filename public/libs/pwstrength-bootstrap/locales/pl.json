@@ -1,5 +1,7 @@
 {
-    "wordLength": "Hasło jest zbyt krótkie",
+    "wordMinLength": "Hasło jest zbyt krótkie",
+    "wordMaxLength": "Hasło jest za długie",
+    "wordInvalidChar": "Hasło zawiera nieprawidłowy znak",
     "wordNotEmail": "Hasło nie może być Twoim emailem",
     "wordSimilarToUsername": "Hasło nie może zawierać nazwy użytkownika",
     "wordTwoCharacterClasses": "Użyj innych klas znaków",

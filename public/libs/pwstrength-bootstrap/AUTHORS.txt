@@ -1,0 +1,39 @@
+﻿Authors ordered by first contribution.
+
+Tane Piper <piper.tane@gmail.com>
+Alejandro Blanco <alejandro.b.e@gmail.com>
+Victor "Skakruk" <skakruk15@gmail.com>
+Dameon87 <https://github.com/Dameon87>
+Manuel Saelices <https://github.com/msaelices>
+Samuel Levy <https://github.com/samlev>
+Petros Kal. <https://github.com/kalpetros>
+Maximilian Meister <mmeister@suse.de>
+André Durão <andreluisdurao@gmail.com>
+Peter Goes <https://github.com/petergoes>
+Brent <https://github.com/bergerbs>
+mikemey <https://github.com/mikemey>
+saparicio <https://github.com/saparicio>
+Javier Holguera <jholguerablanco@hotmail.com>
+Rômulo Alves <romulo@romuloalves.com.br>
+Hannah "hpinkos" <https://github.com/hpinkos>
+Mike Stecker <https://github.com/mikestecker>
+Aysel Afsar <https://github.com/ayselafsar>
+Pablo Alexander <pablo@parg.com.br>
+Meiyer <https://github.com/interDist>
+toxuh <https://github.com/toxuh>
+Anton Zakharov
+Guilherme Pejon <https://github.com/guilpejon>
+bakcay <https://github.com/bakcay>
+Jason DiBianco <dibiancoj@gmail.com>
+Andreas B <https://github.com/andreasba>
+piernik <https://github.com/piernik>
+Julio Montoya <https://github.com/jmontoyaa>
+mindcreations <https://github.com/mindcreations>
+Cal West <https://github.com/Allerion>
+Grégory Pelletey <gregory.pelletey@gmail.com>
+pages-solutions <https://github.com/pages-solutions>
+fuzzfree <https://github.com/fuzzfree>
+Roland Häder <https://github.com/Quix0r>
+Tzipora Ziegler <https://github.com/tziporaziegler>
+Ishmael Doss๛ <nukboon@gmail.com>
+Pascal Gentemann <https://github.com/PascalGentemann>

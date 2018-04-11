@@ -174,6 +174,9 @@ var ui = {};
         if (cssClass > -1) {
             $verdict.addClass(options.ui.colorClasses[cssClass]);
         }
+        if (options.ui.showVerdictsInsideProgressBar) {
+            $verdict.css('white-space', 'nowrap');
+        }
         $verdict.html(text);
     };
 

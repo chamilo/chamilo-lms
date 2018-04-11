@@ -5,10 +5,10 @@
 %}
 
 {% block content %}
-
-{{ inscription_header }}
-{{ inscription_content }}
-{{ form }}
-{{ text_after_registration }}
-
+    {% autoescape false %}
+    {{ inscription_header }}
+    {{ inscription_content }}
+    {{ form }}
+    {{ text_after_registration }}
+    {% endautoescape %}
 {% endblock %}

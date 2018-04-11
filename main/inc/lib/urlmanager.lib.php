@@ -817,7 +817,12 @@ class UrlManager
             $urlId = intval($urlId);
             $sql = "INSERT INTO $table
                     SET session_id = ".intval($session_id).", access_url_id = ".$urlId;
-            $result = Database::query($sql);
+            try {
+                Database::query($sql);
+            } catch (Exception $e) {
+                return false;
+            }
+            return true;
         }
 
         return $result;

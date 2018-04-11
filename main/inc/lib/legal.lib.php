@@ -84,9 +84,9 @@ class LegalManager
     public static function get_last_condition_version($language)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = Database::escape_string($language);
+        $language = intval($language);
         $sql = "SELECT version FROM $table
-                WHERE language_id = '".$language."'
+                WHERE language_id = $language
                 ORDER BY id DESC LIMIT 1 ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -107,9 +107,9 @@ class LegalManager
     public static function get_last_condition($language)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = Database::escape_string($language);
+        $language = intval($language);
         $sql = "SELECT * FROM $table
-                WHERE language_id = '".$language."'
+                WHERE language_id = $language
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
@@ -142,8 +142,8 @@ class LegalManager
 
         $sql = "SELECT version FROM $table
                 WHERE 
-                    language_id = '$language' AND 
-                    version = '$version'                
+                    language_id = $language AND 
+                    version = $version                
                 LIMIT 1 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -188,7 +188,7 @@ class LegalManager
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $language = intval($language);
         $sql = "SELECT version FROM $table
-                WHERE language_id = '".$language."'
+                WHERE language_id = '$language'
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
@@ -319,8 +319,8 @@ class LegalManager
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $legal_id = intval($legal_id);
         $language_id = intval($language_id);
-        $sql = 'SELECT type FROM '.$table.'
-                WHERE id = "'.$legal_id.'" AND language_id="'.$language_id.'"';
+        $sql = "SELECT type FROM $table
+                WHERE id = $legal_id AND language_id = $language_id";
         $rs = Database::query($sql);
 
         return Database::result($rs, 0, 'type');

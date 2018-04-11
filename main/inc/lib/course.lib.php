@@ -1726,9 +1726,11 @@ class CourseManager
             $sql = "SELECT id_coach FROM $table WHERE id = $session_id";
             $rs = Database::query($sql);
             $session_id_coach = Database::result($rs, 0, 'id_coach');
-            $userInfo = api_get_user_info($session_id_coach);
-            if ($userInfo) {
-                $users[$session_id_coach] = $userInfo;
+            if (is_int($session_id_coach)) {
+                $userInfo = api_get_user_info($session_id_coach);
+                if ($userInfo) {
+                    $users[$session_id_coach] = $userInfo;
+                }
             }
         }
 
@@ -2408,6 +2410,9 @@ class CourseManager
             0,
             0
         );
+        if ($course_title === false) {
+            $course_title = '';
+        }
 
         $sql = "SELECT course.code as code, course.title as title, cu.sort as sort
                 FROM $TABLECOURSUSER as cu, $TABLECOURSE as course
@@ -2459,12 +2464,12 @@ class CourseManager
             if (!$course_found) {
                 $course_sort = Database::result(
                     Database::query(
-                        'SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.' WHERE user_id="'.$user_id.'" AND user_course_cat="0"'
+                        'SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.' WHERE user_id = "'.$user_id.'" AND user_course_cat="0"'
                     ),
                     0,
                     0
                 );
-                Database::query("UPDATE $TABLECOURSUSER SET sort = sort+1 WHERE user_id= $user_id AND user_course_cat = 0");
+                Database::query("UPDATE $TABLECOURSUSER SET sort = sort+1 WHERE user_id = $user_id AND user_course_cat = 0");
             }
         }
 

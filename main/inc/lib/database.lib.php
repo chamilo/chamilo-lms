@@ -387,19 +387,27 @@ class Database
         try {
             $result = $connection->executeQuery($query);
         } catch (Exception $e) {
-            $debug = api_get_setting('server_type') == 'test';
-            if ($debug) {
-                // We use Symfony exception handler for better error information
-                $handler = new ExceptionHandler();
-                $handler->handle($e);
-                exit;
-            } else {
-                error_log($e->getMessage());
-                api_not_allowed(false, get_lang('GeneralError'));
-            }
+            self::handleError($e);
         }
 
         return $result;
+    }
+
+    /**
+     * @param Exception $e
+     */
+    public static function handleError($e)
+    {
+        $debug = api_get_setting('server_type') == 'test';
+        if ($debug) {
+            // We use Symfony exception handler for better error information
+            $handler = new ExceptionHandler();
+            $handler->handle($e);
+            exit;
+        } else {
+            error_log($e->getMessage());
+            api_not_allowed(false, get_lang('GeneralError'));
+        }
     }
 
     /**

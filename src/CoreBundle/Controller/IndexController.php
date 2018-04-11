@@ -28,7 +28,7 @@ class IndexController extends BaseController
      * The Chamilo index home page.
      *
      * @Route("/", name="home")
-     * @Method({"GET"})
+     * @Method({"GET", "POST"})
      *
      * @param string $type   courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'

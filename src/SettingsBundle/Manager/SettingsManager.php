@@ -156,7 +156,7 @@ class SettingsManager implements SettingsManagerInterface
             'show_toolshortcuts' => 'Course',
             'allow_group_categories' => 'Course',
             'server_type' => 'Platform',
-            'platformLanguage' => 'language',
+            'platformLanguage' => 'Language',
             'showonline' => 'Platform',
             'profile' => 'User',
             'default_document_quotum' => 'Course',
@@ -253,7 +253,7 @@ class SettingsManager implements SettingsManagerInterface
             'students_download_folders' => 'Document',
             'users_copy_files' => 'Tools',
             'allow_students_to_create_groups_in_social' => 'Tools',
-            'allow_send_message_to_all_platform_users' => 'Tools',
+            'allow_send_message_to_all_platform_users' => 'Message',
             'message_max_upload_filesize' => 'Tools',
             'use_users_timezone' => 'profile', //'use_users_timezone' => 'Timezones',
             'timezone_value' => 'platform', //'timezone_value' => 'Timezones',
@@ -646,7 +646,7 @@ class SettingsManager implements SettingsManagerInterface
 
             // This code allows the possibility of calling
             // api_get_setting('allow_skills_tool') instead of
-            // the correct way api_get_setting('platform.allow_skills_tool')
+            // the "correct" way api_get_setting('platform.allow_skills_tool')
             $items = $this->getVariablesAndCategories();
 
             if (isset($items[$name])) {
@@ -663,8 +663,6 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         list($category, $name) = explode('.', $name);
-
-        //var_dump($category, $name);
         $settings = $this->load($category, $name);
 
         return $settings->get($name);

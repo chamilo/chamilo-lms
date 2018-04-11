@@ -51,13 +51,9 @@ try {
         'host_with_path_by_locale'
     );
 
-    //var_dump($request->getRequestUri());
     $request->setBaseUrl($request->getRequestUri());
-    //var_dump($request->getBaseUrl());
-
     $response = $kernel->handle($request);
-    //$kernel->boot();
-    //var_dump($request->getBasePath());
+
     if ($kernel->isInstalled()) {
         require_once $kernel->getConfigurationFile();
     } else {
@@ -70,11 +66,6 @@ try {
     }
 
     $append = $kernel->getUrlAppend();
-    /*$baseUrl = '..';
-    if (!empty($append)) {
-        $request->setBaseUrl("/$append/");
-    }*/
-
     $kernel->setApi($_configuration);
 
     // Ensure that _configuration is in the global scope before loading
@@ -85,10 +76,6 @@ try {
 
     // Do not over-use this variable. It is only for this script's local use.
     $libraryPath = __DIR__.'/lib/';
-
-    // Include the main Chamilo platform library file.
-    require_once $libraryPath.'api.lib.php';
-
     $container = $kernel->getContainer();
 
     // Connect Chamilo with the Symfony container
@@ -105,12 +92,10 @@ try {
     $router = $container->get('router');
     $requestStack = $container->get('request_stack');
     $context = $container->get('router.request_context');
-
     $host = $router->getContext()->getHost();
     $context->setBaseUrl($appendValue);
     $baseUrl = $router->getContext()->getBaseUrl();
     $container->set('router.request_context', $context);
-
     $packages = $container->get('assets.packages');
 
     $version = new Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy();
@@ -185,9 +170,6 @@ try {
 
     // Enables the portability layer and configures PHP for UTF-8
     \Patchwork\Utf8\Bootup::initAll();
-
-    // Start session after the internationalization library has been initialized.
-    //ChamiloSession::start($alreadyInstalled);
 
     // access_url == 1 is the default chamilo location
     if ($_configuration['access_url'] != 1) {
@@ -265,7 +247,6 @@ try {
             $_plugins[$key][$row['subkey']] = $row['selected_value'];
         }
     }
-
     // Error reporting settings.
     if (api_get_setting('server_type') == 'test') {
         ini_set('display_errors', '1');

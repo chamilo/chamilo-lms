@@ -649,28 +649,35 @@ abstract class Question
     /**
      * Get default hot spot folder in documents.
      *
+     * @param array $courseInfo
+     *
      * @return string
      */
-    public function getHotSpotFolderInCourse()
+    public function getHotSpotFolderInCourse($courseInfo = [])
     {
-        if (empty($this->course) || empty($this->course['directory'])) {
+        $courseInfo = empty($courseInfo) ? $this->course : $courseInfo;
+
+        if (empty($courseInfo) || empty($courseInfo['directory'])) {
             // Stop everything if course is not set.
             api_not_allowed();
         }
 
-        $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$this->course['directory'].'/document/images/';
+        $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/images/';
         $picturePath = basename($pictureAbsolutePath);
 
         if (!is_dir($picturePath)) {
             create_unexisting_directory(
-                $this->course,
+                $courseInfo,
                 api_get_user_id(),
                 0,
                 0,
                 0,
                 dirname($pictureAbsolutePath),
                 '/'.$picturePath,
-                $picturePath
+                $picturePath,
+                '',
+                false,
+                false
             );
         }
 
@@ -772,7 +779,7 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int   $questionId - ID of the target question
-     * @param array $courseInfo
+     * @param array $courseInfo destination course info
      *
      * @return bool - true if copied, otherwise false
      */
@@ -783,8 +790,12 @@ abstract class Question
         }
 
         $course_id = $courseInfo['real_id'];
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $destination_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/images';
+        $destination_path = $this->getHotSpotFolderInCourse($courseInfo);
+
+        if (empty($destination_path)) {
+            return false;
+        }
+
         $source_path = $this->getHotSpotFolderInCourse();
 
         // if the question has got an ID and if the picture exists
@@ -792,12 +803,13 @@ abstract class Question
             return false;
         }
 
+        $sourcePictureName = $this->getPictureFilename($course_id);
         $picture = $this->generatePictureName();
-
-        if (file_exists($source_path.'/'.$this->picture)) {
+        $result = false;
+        if (file_exists($source_path.'/'.$sourcePictureName)) {
             // for backward compatibility
-            $result = @copy(
-                $source_path.'/'.$this->picture,
+            $result = copy(
+                $source_path.'/'.$sourcePictureName,
                 $destination_path.'/'.$picture
             );
         } else {
@@ -818,7 +830,8 @@ abstract class Question
             return false;
         }
 
-        $sql = "UPDATE $TBL_QUESTIONS SET
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "UPDATE $table SET
                 picture = '".Database::escape_string($picture)."'
                 WHERE c_id = $course_id AND id='".intval($questionId)."'";
         Database::query($sql);

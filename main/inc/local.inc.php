@@ -359,6 +359,13 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 if (($validPassword || $cas_login) &&
                     (trim($login) == $uData['username'])
                 ) {
+                    // Means that the login was loaded in a different page than index.php
+                    // we force the reload of the course access using cidReset just in case
+                    if (isset($_REQUEST['redirect_after_not_allow_page']) &&
+                        $_REQUEST['redirect_after_not_allow_page'] == 1
+                    ) {
+                        $cidReset = true;
+                    }
                     $update_type = UserManager::get_extra_user_data_by_field(
                         $uData['user_id'],
                         'update_type'

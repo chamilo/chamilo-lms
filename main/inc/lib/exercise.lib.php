@@ -1187,7 +1187,6 @@ HTML;
                         </ul>
                     </div>
                 ';
-
                 if ($freeze) {
                     $relPath = api_get_path(WEB_CODE_PATH);
                     echo "
@@ -1203,6 +1202,7 @@ HTML;
                                 new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
                                     questionId: $questionId,
                                     exerciseId: $exerciseId,
+                                    exeId: 0,
                                     selector: '#hotspot-preview-$questionId',
                                     for: 'preview',
                                     relPath: '$relPath'

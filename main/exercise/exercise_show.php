@@ -82,7 +82,6 @@ if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
 
-$exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
@@ -462,7 +461,8 @@ foreach ($questionList as $questionId) {
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $id,
+                                            exerciseId: {$objExercise->id},                                            
+                                            exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -630,7 +630,8 @@ foreach ($questionList as $questionId) {
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $id,
+                                            exerciseId: {$objExercise->id},
+                                            exeId: $id,
                                             selector: '#hotspot-solution',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -1110,7 +1111,7 @@ if ($origin != 'learnpath') {
             'action' => 'view',
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,
-            'exeId' => $exeId,
+            'exeId' => $id,
             'fb_type' => $feedback_type,
         ]);
         $href = ($lp_mode == 'fullscreen')

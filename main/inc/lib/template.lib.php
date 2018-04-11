@@ -173,8 +173,8 @@ class Template
             ],
             [
                 'name' => 'get_template',
-                'callable' => 'Template::findTemplateFilePath'
-            ]
+                'callable' => 'Template::findTemplateFilePath',
+            ],
         ];
 
         foreach ($filters as $filter) {

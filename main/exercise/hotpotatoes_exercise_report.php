@@ -96,17 +96,11 @@ $nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
+    $interbreadcrumb[] = ["url" => "exercise.php".api_get_cidreq(), "name" => get_lang('Exercises')];
     $objExerciseTmp = new Exercise();
-/*if ($objExerciseTmp->read($exercise_id)) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
-}*/
 } else {
-    $interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
+    $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
     $objExerciseTmp = new Exercise();
-    /*if ($objExerciseTmp->read($exercise_id)) {
-        $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
-    }*/
 }
 
 Display :: display_header($nameTools);

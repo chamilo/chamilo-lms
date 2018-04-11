@@ -307,7 +307,7 @@ if ($skipData == false) {
         $csv_content[] = [get_lang('Students')];
         $csv_content[] = [get_lang('InactivesStudents'), $nb_inactive_students];
         $csv_content[] = [get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent];
-        $csv_content[] = [get_lang('AverageCoursePerStudent'), $avg_courses_per_student];
+        $csv_content[] = [get_lang('AverageCoursePerStudent'), round($avg_courses_per_student, 3)];
         $csv_content[] = [
             get_lang('AverageProgressInLearnpath'),
             is_null($avgTotalProgress)
@@ -349,7 +349,7 @@ if ($skipData == false) {
         );
         $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
             ? ''
-            : round($avg_courses_per_student, 2);
+            : round($avg_courses_per_student, 3);
         $report['InactivesStudents'] = $nb_inactive_students;
         $report['AverageTimeSpentOnThePlatform'] = is_null($totalTimeSpent)
             ? '00:00:00'

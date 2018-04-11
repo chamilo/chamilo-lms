@@ -1812,7 +1812,7 @@ class Event
                     question_id = '".Database::escape_string($question_id)."'
                 ORDER by question_id";
         $sqlres = Database::query($sql);
-        $comm = Database::result($sqlres, 0, 'teacher_comment');
+        $comm = strval(Database::result($sqlres, 0, 'teacher_comment'));
         $comm = trim($comm);
 
         return $comm;

@@ -15,20 +15,39 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
-if (!api_is_allowed_to_edit(null, true)) {
-    api_not_allowed(true);
-}
-
-// Set vars
 $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+$exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : 0;
+$userId = api_get_user_id();
 $courseId = api_get_course_int_id();
+$objExercise = new Exercise($courseId);
+
+// Check if student has access to the hotspot answers
+if (!api_is_allowed_to_edit(null, true)) {
+    if (empty($exeId)) {
+        api_not_allowed();
+    }
+    $trackExerciseInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+
+    if (empty($trackExerciseInfo)) {
+        api_not_allowed();
+    }
+
+    // Different exercise
+    if ($exerciseId != $trackExerciseInfo['exe_exo_id']) {
+        api_not_allowed();
+    }
+
+    // Different user
+    if ($trackExerciseInfo['exe_user_id'] != $userId) {
+        api_not_allowed();
+    }
+}
 
 $objQuestion = Question::read($questionId, $courseId);
-$objExercise = new Exercise($courseId);
 $objExercise->read($exerciseId);
 
-if (empty($objQuestion) || empty($objQuestion)) {
+if (empty($objQuestion) || empty($objExercise)) {
     exit;
 }
 
@@ -68,7 +87,6 @@ $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
 $showTotalScoreAndUserChoicesInLastAttempt = true;
-
 if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
     $showOnlyScore = true;
     $showResults = true;
@@ -76,7 +94,7 @@ if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_S
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
             $objExercise->id,
-            api_get_course_int_id(),
+            $courseId,
             api_get_session_id(),
             $trackExerciseInfo['orig_lp_id'],
             $trackExerciseInfo['orig_lp_item_id'],
@@ -111,13 +129,13 @@ if (!$hideExpectedAnswer) {
     if ($objQuestion->selectType() == HOT_SPOT_DELINEATION) {
         $qb
             ->where($qb->expr()->eq('a.cId', $courseId))
-            ->andWhere($qb->expr()->eq('a.questionId', intval($questionId)))
+            ->andWhere($qb->expr()->eq('a.questionId', $questionId))
             ->andWhere($qb->expr()->neq('a.hotspotType', 'noerror'))
             ->orderBy('a.id', 'ASC');
     } else {
         $qb
             ->where($qb->expr()->eq('a.cId', $courseId))
-            ->andWhere($qb->expr()->eq('a.questionId', intval($questionId)))
+            ->andWhere($qb->expr()->eq('a.questionId', $questionId))
             ->orderBy('a.position', 'ASC');
     }
 
@@ -146,7 +164,6 @@ if (!$hideExpectedAnswer) {
                 $hotSpot['type'] = 'delineation';
                 break;
         }
-
         $hotSpot['coord'] = $hotSpotAnswer->getHotspotCoordinates();
         $data['hotspots'][] = $hotSpot;
     }
@@ -160,7 +177,7 @@ $rs = $em
         [
             'hotspotQuestionId' => $questionId,
             'cId' => $courseId,
-            'hotspotExeId' => $exerciseId,
+            'hotspotExeId' => $exeId,
         ],
         ['hotspotAnswerId' => 'ASC']
     );

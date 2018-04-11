@@ -1154,7 +1154,8 @@ window.HotspotQuestion = (function () {
             case 'preview':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
-                    exerciseId: parseInt(config.exerciseId)
+                    exerciseId: parseInt(config.exerciseId),
+                    exeId: parseInt(config.exeId)
                 });
                 break;
         }
@@ -1164,13 +1165,11 @@ window.HotspotQuestion = (function () {
                 case 'admin':
                     startHotspotsAdmin(questionInfo);
                     break;
-
                 case 'user':
                     startHotspotsUser(questionInfo);
                     break;
-
                 case 'solution':
-                //no break
+                    // no break
                 case 'preview':
                     startHotspotsSolution(questionInfo);
                     break;
@@ -1777,11 +1776,12 @@ window.DelineationQuestion = (function () {
                 });
                 break;
             case 'solution':
-            //no break
+                // no break
             case 'preview':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
-                    exerciseId: parseInt(config.exerciseId)
+                    exerciseId: parseInt(config.exerciseId),
+                    exeId: parseInt(config.exeId)
                 });
                 break;
         }
@@ -1791,13 +1791,11 @@ window.DelineationQuestion = (function () {
                 case 'admin':
                     startAdminSvg(questionInfo);
                     break;
-
                 case 'user':
                     startUserSvg(questionInfo);
                     break;
-
                 case 'solution':
-                //no break
+                    // no break
                 case 'preview':
                     startPreviewSvg(questionInfo);
                     break;

@@ -5483,7 +5483,6 @@ class Exercise
             if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
                 // We made an extra table for the answers
                 if ($show_result) {
-                    //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "
                         <tr>
@@ -5494,7 +5493,8 @@ class Exercise
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $exeId,
+                                            exerciseId: {$this->id},
+                                            exeId: $exeId,
                                             selector: '#hotspot-solution-$questionId',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -5504,7 +5504,6 @@ class Exercise
                             </td>
                         </tr>
                     ";
-                    //	}
                 }
             } elseif ($answerType == ANNOTATION) {
                 if ($show_result) {

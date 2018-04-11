@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Debug\ExceptionHandler;
 
 /**
  * Class Database.
@@ -317,13 +318,28 @@ class Database
         try {
             $result = $connection->executeQuery($query);
         } catch (Exception $e) {
-            error_log($e->getMessage());
-            api_not_allowed(false, get_lang('GeneralError'));
-        } finally {
-            return $result;
+            self::handleError($e);
         }
 
         return $result;
+    }
+
+    /**
+     * @param Exception $e
+     */
+    public static function handleError($e)
+    {
+        $debug = api_get_setting('server_type') == 'test';
+        if ($debug) {
+            // We use Symfony exception handler for better error information
+            $handler = new ExceptionHandler();
+            $handler->handle($e);
+            exit;
+        } else {
+            error_log($e->getMessage());
+            api_not_allowed(false, get_lang('GeneralError'));
+            exit;
+        }
     }
 
     /**
@@ -383,12 +399,17 @@ class Database
             $sql = 'INSERT INTO '.$table_name.' ('.implode(',', $params).')
                     VALUES (:'.implode(', :', $params).')';
 
-            $statement = self::getManager()->getConnection()->prepare($sql);
-            $result = $statement->execute($attributes);
-
             if ($show_query) {
                 var_dump($sql);
                 error_log($sql);
+            }
+
+            $result = false;
+            try {
+                $statement = self::getConnection()->prepare($sql);
+                $result = $statement->execute($attributes);
+            } catch (Exception $e) {
+                self::handleError($e);
             }
 
             if ($result) {
@@ -433,8 +454,13 @@ class Database
                 // Parsing and cleaning the where conditions
                 $whereReturn = self::parse_where_conditions($whereConditions);
                 $sql = "UPDATE $tableName SET $updateSql $whereReturn ";
-                $statement = self::getManager()->getConnection()->prepare($sql);
-                $result = $statement->execute($attributes);
+
+                try {
+                    $statement = self::getManager()->getConnection()->prepare($sql);
+                    $result = $statement->execute($attributes);
+                } catch (Exception $e) {
+                    self::handleError($e);
+                }
 
                 if ($showQuery) {
                     var_dump($sql);
@@ -442,7 +468,7 @@ class Database
                     var_dump($whereConditions);
                 }
 
-                if ($result) {
+                if ($result && $statement) {
                     return $statement->rowCount();
                 }
             }

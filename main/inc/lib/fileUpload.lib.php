@@ -1312,9 +1312,9 @@ function filter_extension(&$filename)
  * @param string $comment
  * @param int    $readonly
  * @param bool   $saveVisibility
- * @param int    $group_id  group.id
- * @param int    $sessionId Session ID, if any
- * @param int    $userId    creator user id
+ * @param int    $group_id         group.id
+ * @param int    $sessionId        Session ID, if any
+ * @param int    $userId           creator user id
  * @param bool   $sendNotification
  *
  * @return int id if inserted document
@@ -1599,6 +1599,7 @@ function search_img_from_html($html_file)
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
  * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
+ *
  * @return string actual directory name if it succeeds,
  *                boolean false otherwise
  */

@@ -407,6 +407,7 @@ class Database
         } else {
             error_log($e->getMessage());
             api_not_allowed(false, get_lang('GeneralError'));
+            exit;
         }
     }
 

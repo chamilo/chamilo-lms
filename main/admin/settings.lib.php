@@ -521,6 +521,10 @@ function uploadStylesheet($values, $picture)
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
+    if (empty($style_name) or is_array($style_name)) {
+        // The name of the uploaded stylesheet doesn't have the expected format
+        return $result;
+    }
     $cssToUpload = CSS_UPLOAD_PATH;
 
     // Check if a virtual instance vchamilo is used

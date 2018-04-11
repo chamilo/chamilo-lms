@@ -3070,7 +3070,7 @@ class CourseManager
      */
     public static function get_session_category_id_by_session_id($sessionId)
     {
-        if (empty($session_id)) {
+        if (empty($sessionId)) {
             return [];
         }
         $sessionId = intval($sessionId);

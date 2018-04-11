@@ -1,4 +1,0 @@
-node_modules
-*.bundle.js
-socket.io.js
-latest-v2.js

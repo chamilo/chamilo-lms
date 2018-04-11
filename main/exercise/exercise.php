@@ -737,7 +737,7 @@ if (!empty($exerciseList)) {
                 $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
                         WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
                 $sqlresult = Database::query($sql);
-                $rowi = Database :: result($sqlresult, 0, 0);
+                $rowi = intval(Database :: result($sqlresult, 0, 0));
 
                 if ($session_id == $row['session_id']) {
                     // Questions list

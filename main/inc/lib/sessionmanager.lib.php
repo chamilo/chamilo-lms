@@ -267,8 +267,8 @@ class SessionManager
                     $values['session_category_id'] = $sessionCategoryId;
                 }
 
+                $values['position'] = 0;
                 $session_id = Database::insert($tbl_session, $values);
-
                 $duration = intval($duration);
 
                 if (!empty($duration)) {

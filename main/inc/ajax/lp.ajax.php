@@ -392,7 +392,6 @@ class LP_item_order_list
         }
     }
 }
-
 class LP_item_order_item
 {
     public $id = 0;

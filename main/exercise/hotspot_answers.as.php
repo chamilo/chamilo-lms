@@ -5,7 +5,7 @@ use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
- * This file generates a json answer to the question preview
+ * This file generates a json answer to the question preview.
  *
  * @package chamilo.exercise
  *

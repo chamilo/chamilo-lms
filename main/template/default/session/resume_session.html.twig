@@ -1,7 +1,7 @@
 {% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
-
+{% autoescape false %}
 {{ session_header }}
 {{ title }}
 
@@ -119,4 +119,5 @@
 
 {{ requirements }}
 {{ dependencies }}
+{% endautoescape %}
 {% endblock %}

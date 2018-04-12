@@ -3036,7 +3036,7 @@ class Exercise
             'orig_lp_item_id' => $safe_lp_item_id,
             'orig_lp_item_view_id' => $safe_lp_item_view_id,
             'exe_weighting' => $weight,
-            'user_ip' => api_get_real_ip(),
+            'user_ip' => Database::escape_string(api_get_real_ip()),
             'exe_date' => api_get_utc_datetime(),
             'exe_result' => 0,
             'steps_counter' => 0,

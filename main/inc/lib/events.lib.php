@@ -40,7 +40,7 @@ class Event
             } // don't change this
             $reallyNow = api_get_utc_datetime();
             $params = [
-                'open_remote_host' => $remhost,
+                'open_remote_host' => Database::escape_string($remhost),
                 'open_agent' => $_SERVER['HTTP_USER_AGENT'],
                 'open_referer' => $referer,
                 'open_date' => $reallyNow,
@@ -108,7 +108,7 @@ class Event
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $user_id = api_get_user_id();
-        $ip = api_get_real_ip();
+        $ip = Database::escape_string(api_get_real_ip());
 
         if ($user_id) {
             $user_id = "'".$user_id."'";
@@ -181,7 +181,7 @@ class Event
                 'access_tool' => $tool,
                 'access_date' => $reallyNow,
                 'access_session_id' => $id_session,
-                'user_ip' => api_get_real_ip()
+                'user_ip' => Database::escape_string(api_get_real_ip())
             ];
             Database::insert($TABLETRACK_ACCESS, $params);
         }
@@ -1748,7 +1748,7 @@ class Event
         $courseId = intval($courseId);
         $user_id = intval($user_id);
         $session_id = intval($session_id);
-        $ip = api_get_real_ip();
+        $ip = Database::escape_string(api_get_real_ip());
 
         $sql = "INSERT INTO $course_tracking_table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
                 VALUES('".$courseId."', '".$ip."', '".$user_id."', '$loginDate', '$logoutDate', $counter, '".$session_id."')";

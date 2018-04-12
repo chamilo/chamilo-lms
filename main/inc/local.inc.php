@@ -892,7 +892,7 @@ if (!isset($_SESSION['login_as'])) {
                                 session_id = ".api_get_session_id();
                     Database::query($sql);
                 } else {
-                    $ip = api_get_real_ip();
+                    $ip = Database::escape_string(api_get_real_ip());
                     $sql = "INSERT INTO $course_tracking_table (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
                             VALUES('".$_course['real_id']."', '".$ip."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
                     Database::query($sql);

@@ -709,7 +709,7 @@ class Event
      *
      * @param string $event_type       Type of event
      * @param string $event_value_type Type of value
-     * @param mixed $event_value      Value (string, or array in the case of user info)
+     * @param mixed  $event_value      Value (string, or array in the case of user info)
      * @param string $datetime         Datetime (UTC) (defaults to null)
      * @param int    $user_id          User ID (defaults to null)
      * @param int    $course_id        Course ID (defaults to null)

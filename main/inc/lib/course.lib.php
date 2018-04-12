@@ -6240,6 +6240,7 @@ class CourseManager
      * registration the user will be sent to the course or exercise
      *
      * @param array $form_data
+     *
      * @return array
      */
     public static function redirectToCourse($form_data)
@@ -6272,7 +6273,8 @@ class CourseManager
                         $result = $objExercise->read($exercise_redirect);
 
                         if (!empty($exercise_redirect) && !empty($result)) {
-                            $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
+                            $form_data['action'] = api_get_path(WEB_CODE_PATH).
+                                'exercise/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
                             $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
                             $form_data['button'] = Display::button(
                                 'next',
@@ -6296,8 +6298,7 @@ class CourseManager
     /**
      * Return tab of params to display a course title in the My Courses tab
      * Check visibility, right, and notification icons, and load_dirs option
-     *  // get html course params
-     *   //.
+     * get html course params
      *
      * @param $courseId
      * @param bool $loadDirs

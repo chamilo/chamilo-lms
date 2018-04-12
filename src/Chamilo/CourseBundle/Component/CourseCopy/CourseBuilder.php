@@ -222,6 +222,7 @@ class CourseBuilder
 
         $documentCondition = '';
         if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
             $documentCondition = ' d.iid IN ("'.implode('","', $idList).'") AND ';
         }
 
@@ -1344,6 +1345,7 @@ class CourseBuilder
                     true
                 );
             }
+
             //@todo check this queries are the same ...
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = 'SELECT * FROM '.$table_glossary.' g

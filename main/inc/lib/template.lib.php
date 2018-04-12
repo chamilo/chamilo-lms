@@ -627,7 +627,7 @@ class Template
     }
 
     /**
-     * Sets the "styles" menu in ckEditor
+     * Sets the "styles" menu in ckEditor.
      *
      * Reads css/themes/xxx/editor.css if exists and shows it in the menu, otherwise it
      * will take the default web/editor.css file

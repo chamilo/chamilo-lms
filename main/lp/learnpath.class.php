@@ -3,9 +3,9 @@
 
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -13100,6 +13100,7 @@ EOD;
         if (!api_is_allowed_to_edit()) {
             return false;
         }
+
         $courseBuilder = new CourseBuilder();
         $documentList = [];
         /** @var learnpathItem $item */
@@ -13125,7 +13126,6 @@ EOD;
 
         $zipFile = CourseArchiver::createBackup($courseBuilder->course);
         $zipPath = CourseArchiver::getBackupDir().$zipFile;
-
         $result = DocumentManager::file_send_for_download(
             $zipPath,
             true,

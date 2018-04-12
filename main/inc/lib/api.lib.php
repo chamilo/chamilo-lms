@@ -6241,6 +6241,7 @@ function api_get_current_access_url_id()
         }
         return $access_url_id;
     }
+
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet
     // (by default it is http://localhost/). Thus the more sensible thing we can

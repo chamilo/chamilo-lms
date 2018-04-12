@@ -521,7 +521,7 @@ function uploadStylesheet($values, $picture)
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
-    if (empty($style_name) or is_array($style_name)) {
+    if (empty($style_name) || is_array($style_name)) {
         // The name of the uploaded stylesheet doesn't have the expected format
         return $result;
     }
@@ -1010,7 +1010,7 @@ function getNumberOfTemplates()
  * @param int    $from            the start of the limit statement
  * @param int    $number_of_items the number of elements that have to be retrieved from the database
  * @param int    $column          the column that is
- * @param string $direction       the sorting direction (ASC or DESC�
+ * @param string $direction       the sorting direction (ASC or DESC)
  *
  * @return array
  *

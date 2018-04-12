@@ -360,21 +360,21 @@ class Event
      * @desc Record result of user when an exercise was done
      */
     public static function updateEventExercise(
-        $exeid,
-        $exo_id,
+        $exeId,
+        $exoId,
         $score,
         $weighting,
-        $session_id,
-        $learnpath_id = 0,
-        $learnpath_item_id = 0,
-        $learnpath_item_view_id = 0,
+        $sessionId,
+        $learnpathId = 0,
+        $learnpathItemId = 0,
+        $learnpathItemViewId = 0,
         $duration = 0,
-        $question_list = [],
+        $questionsList = [],
         $status = '',
-        $remind_list = [],
-        $end_date = null
+        $remindList = [],
+        $endDate = null
     ) {
-        if ($exeid != '') {
+        if ($exeId != '') {
             /*
              * Code commented due BT#8423 do not change the score to 0.
              *
@@ -391,37 +391,48 @@ class Event
 
             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-            if (!empty($question_list)) {
-                $question_list = array_map('intval', $question_list);
+            if (!empty($questionsList)) {
+                $questionsList = array_map('intval', $questionsList);
             }
 
-            if (!empty($remind_list)) {
-                $remind_list = array_map('intval', $remind_list);
-                $remind_list = array_filter($remind_list);
-                $remind_list = implode(",", $remind_list);
+            if (!empty($remindList)) {
+                $remindList = array_map('intval', $remindList);
+                $remindList = array_filter($remindList);
+                $remindList = implode(",", $remindList);
             } else {
-                $remind_list = '';
+                $remindList = '';
             }
 
-            if (empty($end_date)) {
-                $end_date = api_get_utc_datetime();
+            if (empty($endDate)) {
+                $endDate = api_get_utc_datetime();
             }
+            $exoId = (int) $exoId;
+            $sessionId = (int) $sessionId;
+            $learnpathId = (int) $learnpathId;
+            $learnpathItemId = (int) $learnpathItemId;
+            $learnpathItemViewId = (int) $learnpathItemViewId;
+            $duration = (int) $duration;
+            $exeId = (int) $exeId;
+            $score = Database::escape_string($score);
+            $weighting = Database::escape_string($weighting);
+            $questions = implode(',', $questionsList);
+            $userIp = Database::escape_string(api_get_real_ip());
 
             $sql = "UPDATE $table SET
-        		   exe_exo_id = '".Database::escape_string($exo_id)."',
-        		   exe_result = '".Database::escape_string($score)."',
-        		   exe_weighting = '".Database::escape_string($weighting)."',
-        		   session_id = '".Database::escape_string($session_id)."',
-        		   orig_lp_id = '".Database::escape_string($learnpath_id)."',
-        		   orig_lp_item_id = '".Database::escape_string($learnpath_item_id)."',
-                   orig_lp_item_view_id = '".Database::escape_string($learnpath_item_view_id)."',
-        		   exe_duration = '".Database::escape_string($duration)."',
-        		   exe_date = '".$end_date."',
-        		   status = '".$status."',
-        		   questions_to_check = '".$remind_list."',
-        		   data_tracking = '".implode(',', $question_list)."',
-                   user_ip = '".Database::escape_string(api_get_real_ip())."'
-        		 WHERE exe_id = '".Database::escape_string($exeid)."'";
+        		   exe_exo_id = $exoId,
+        		   exe_result = '$score',
+        		   exe_weighting = '$weighting',
+        		   session_id = $sessionId,
+        		   orig_lp_id = $learnpathId,
+        		   orig_lp_item_id = $learnpathItemId,
+                   orig_lp_item_view_id = $learnpathItemViewId,
+        		   exe_duration = $duration,
+        		   exe_date = '$endDate',
+        		   status = '$status',
+        		   questions_to_check = '$remindList',
+        		   data_tracking = '$questions',
+                   user_ip = '$userIp'
+        		 WHERE exe_id = $exeId";
             Database::query($sql);
 
             //Deleting control time session track

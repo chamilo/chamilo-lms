@@ -589,44 +589,40 @@ class Statistics
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
+        $table_url = '';
+        $where_url = '';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id='".$current_url_id."'";
-        } else {
-            $table_url = '';
-            $where_url = '';
         }
+
         $now = api_get_utc_datetime();
         $field = 'login_id';
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
 
-        $days = [
-            1,
-            7,
-            15,
-            31,
-        ];
-
+        $days = [1, 7, 15, 31];
         $sqlList = [];
         foreach ($days as $day) {
             $date = new DateTime($now);
-            if ($day > 1) {
-                $date->sub(new DateInterval('P'.$day.'D'));
-            }
             $startDate = $date->format('Y-m-d').' 00:00:00';
             $endDate = $date->format('Y-m-d').' 23:59:59';
 
-            $localDate = api_get_local_time($startDate, null, null, false, false);
-            if ($day == 1) {
-                $label = get_lang('Today');
-            } else {
-                $label = sprintf(get_lang('LastXDays'), $day);
+            if ($day > 1) {
+                $startDate = $date->sub(new DateInterval('P'.$day.'D'));
+                $startDate = $startDate->format('Y-m-d').' 23:59:59';
             }
 
-            $label .= ' <br /> ('.$localDate.')';
+            $localDate = api_get_local_time($startDate, null, null, false, false);
+            $localEndDate = api_get_local_time($endDate, null, null, false, false);
 
+            $label = sprintf(get_lang('LastXDays'), $day);
+            if ($day == 1) {
+                $label = get_lang('Today');
+            }
+
+            $label .= " <br /> $localDate - $localEndDate";
             $sql = "SELECT count($field) AS number 
                     FROM $table $table_url 
                     WHERE 
@@ -634,8 +630,8 @@ class Statistics
                         $where_url";
             $sqlList[$label] = $sql;
         }
-        $sqlList[get_lang('Total')] = "SELECT count($field) AS number FROM $table $table_url WHERE 1=1 $where_url";
 
+        $sqlList[get_lang('Total')] = "SELECT count($field) AS number FROM $table $table_url WHERE 1=1 $where_url";
         $totalLogin = [];
         foreach ($sqlList as $label => $query) {
             $res = Database::query($query);

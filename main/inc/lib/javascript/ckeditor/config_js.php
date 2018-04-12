@@ -4,13 +4,12 @@
 require_once __DIR__.'/../../../global.inc.php';
 
 $moreButtonsInMaximizedMode = false;
-
 if (api_get_setting('more_buttons_maximized_mode') === 'true') {
     $moreButtonsInMaximizedMode = true;
 }
 
 $template = new Template();
-$template->setCSSEditor();
+$template->setStyleMenuInCkEditor();
 $template->assign('moreButtonsInMaximizedMode', $moreButtonsInMaximizedMode);
 $courseId = api_get_course_int_id();
 $courseCondition = '';

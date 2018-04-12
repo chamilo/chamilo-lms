@@ -1124,8 +1124,7 @@ function addEditTemplate()
         get_lang('Text'),
         true,
         true,
-        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400'],
-        true
+        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400']
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.

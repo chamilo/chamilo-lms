@@ -925,15 +925,13 @@ EOT;
      * @param bool   $required (optional) Is the form-element required (default=true)
      * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page
      * @param array  $config   (optional) Configuration settings for the online editor
-     * @param bool   $style
      */
     public function addHtmlEditor(
         $name,
         $label,
         $required = true,
         $fullPage = false,
-        $config = [],
-        $style = false
+        $config = []
     ) {
         $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
@@ -949,12 +947,11 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-
-        if ($style) {
-            $config['style'] = true;
-        }
+        $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;
+            // Adds editor.css in ckEditor
+            $config['style'] = true;
         }
 
         if ($element->editor) {

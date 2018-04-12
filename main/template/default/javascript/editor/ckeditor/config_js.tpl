@@ -96,7 +96,6 @@ CKEDITOR.editorConfig = function (config) {
         }
     ];
 
-
     {% if moreButtonsInMaximizedMode %}
         config.toolbar = 'minToolbar';
         config.smallToolbar = 'minToolbar';
@@ -109,7 +108,8 @@ CKEDITOR.editorConfig = function (config) {
 
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
-    config.contentsCss = '{{ cssEditor }}';
+    // Option to set the "styles" menu
+    config.contentsCss = '{{ css_editor }}';
     config.customConfig = '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/config_js.php'}}';
 };
 

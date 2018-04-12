@@ -326,8 +326,7 @@ $form->addHtmlEditor(
     get_lang('Content'),
     true,
     true,
-    $editorConfig,
-    true
+    $editorConfig
 );
 
 // Comment-field

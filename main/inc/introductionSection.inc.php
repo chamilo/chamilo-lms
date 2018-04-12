@@ -59,7 +59,7 @@ $config = [
     'Height' => '300',
 ];
 
-$form->addHtmlEditor('intro_content', null, false, false, $config, true);
+$form->addHtmlEditor('intro_content', null, false, false, $config);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */

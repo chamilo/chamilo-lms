@@ -626,14 +626,19 @@ class Template
         }
     }
 
-    public function setCSSEditor()
+    /**
+     * Sets the "styles" menu in ckEditor
+     *
+     * Reads css/themes/xxx/editor.css if exists and shows it in the menu, otherwise it
+     * will take the default web/editor.css file
+     */
+    public function setStyleMenuInCkEditor()
     {
         $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
         if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
             $cssEditor = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
         }
-
-        $this->assign('cssEditor', $cssEditor);
+        $this->assign('css_editor', $cssEditor);
     }
 
     /**

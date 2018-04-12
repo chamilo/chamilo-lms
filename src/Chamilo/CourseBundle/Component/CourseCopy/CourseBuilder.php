@@ -205,13 +205,13 @@ class CourseBuilder
      * @param int   $session_id
      * @param int   $courseId
      * @param bool  $with_base_content
-     * @param array $id_list
+     * @param array $idList
      */
     public function build_documents(
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = []
+        $idList = []
     ) {
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -219,6 +219,11 @@ class CourseBuilder
         // Remove chat_files and shared_folder files
         $avoid_paths = " path NOT LIKE '/shared_folder%' AND
                          path NOT LIKE '/chat_files%' ";
+
+        $documentCondition = '';
+        if (!empty($idList)) {
+            $documentCondition = ' d.iid IN ("'.implode('","', $idList).'") AND ';
+        }
 
         if (!empty($courseId) && !empty($session_id)) {
             $session_id = intval($session_id);
@@ -247,6 +252,7 @@ class CourseBuilder
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
                             tool = '".TOOL_DOCUMENT."' AND
+                            $documentCondition
                             p.visibility != 2 AND
                             path NOT LIKE '/images/gallery%' AND
                             $avoid_paths
@@ -261,6 +267,7 @@ class CourseBuilder
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
                             tool = '".TOOL_DOCUMENT."' AND
+                            $documentCondition
                             $avoid_paths AND
                             p.visibility != 2 $session_condition
                         ORDER BY path";
@@ -288,6 +295,7 @@ class CourseBuilder
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
                             tool = '".TOOL_DOCUMENT."' AND
+                            $documentCondition
                             p.visibility != 2 AND
                             path NOT LIKE '/images/gallery%' AND
                             $avoid_paths AND
@@ -302,6 +310,7 @@ class CourseBuilder
                             d.c_id = $courseId AND
                             p.c_id = $courseId AND
                             tool = '".TOOL_DOCUMENT."' AND
+                            $documentCondition
                             p.visibility != 2 AND
                             $avoid_paths AND
                             (d.session_id = 0 OR d.session_id IS NULL)

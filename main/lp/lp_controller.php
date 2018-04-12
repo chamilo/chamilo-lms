@@ -859,6 +859,24 @@ switch ($action) {
             exit;
         }
         break;
+    case 'export_to_course_build':
+        if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
+            api_not_allowed();
+        }
+
+        if (api_is_allowed_to_edit()) {
+            if (!$lp_found) {
+                require 'lp_list.php';
+            } else {
+                $result = $_SESSION['oLP']->exportToCourseBuildFormat($_GET['lp_id']);
+                if (!$result) {
+                    require 'lp_list.php';
+                }
+                exit;
+            }
+        }
+        require 'lp_list.php';
+        break;
     case 'delete':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -16,6 +17,7 @@ use ChamiloSession as Session;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+
 
 /**
  * Class learnpath
@@ -2137,7 +2139,6 @@ class learnpath
     {
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);
-        $filename = $file_info['basename']; // Name including extension.
         $extension = $file_info['extension']; // Extension only.
         if (!empty($_POST['ppt2lp']) && !in_array(strtolower($extension), [
                 'dll',
@@ -2156,7 +2157,6 @@ class learnpath
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
         $package_type = '';
-        $at_root = false;
         $manifest = '';
         $aicc_match_crs = 0;
         $aicc_match_au = 0;
@@ -2202,9 +2202,15 @@ class learnpath
                 }
             }
         }
+
         if (empty($package_type) && 4 == ($aicc_match_crs + $aicc_match_au + $aicc_match_des + $aicc_match_cst)) {
             // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
             $package_type = 'aicc';
+        }
+
+        // Try with chamilo course builder
+        if (empty($package_type)) {
+            $package_type = 'chamilo';
         }
 
         return $package_type;
@@ -13084,5 +13090,52 @@ EOD;
         }
 
         return '';
+    }
+
+    /**
+     * Exports a LP to a courseBuilder zip file. It adds the documents related to the LP
+     */
+    public function exportToCourseBuildFormat()
+    {
+        if (!api_is_allowed_to_edit()) {
+            return false;
+        }
+        $courseBuilder = new CourseBuilder();
+        $documentList = [];
+        /** @var learnpathItem $item */
+        foreach ($this->items as $item) {
+            if ($item->get_type() == 'document') {
+                $documentList[] = $item->get_path();
+            }
+        }
+
+        $courseBuilder->build_documents(
+            api_get_session_id(),
+            $this->get_course_int_id(),
+            true,
+            $documentList
+        );
+
+        $courseBuilder->build_learnpaths(
+            api_get_session_id(),
+            $this->get_course_int_id(),
+            true,
+            [$this->get_id()]
+        );
+
+        $zipFile = CourseArchiver::createBackup($courseBuilder->course);
+        $zipPath = CourseArchiver::getBackupDir().$zipFile;
+
+        $result = DocumentManager::file_send_for_download(
+            $zipPath,
+            true,
+            $this->get_name().'.zip'
+        );
+
+        if ($result) {
+            api_not_allowed();
+        }
+
+        return true;
     }
 }

@@ -386,6 +386,7 @@ foreach ($categories as $item) {
             $lp_auto_launch_icon = null;
             $actionSeriousGame = null;
             $actionUpdateScormFile = '';
+            $actionExportToCourseBuild = '';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -778,6 +779,15 @@ foreach ($categories as $item) {
                     );
                 }
 
+                $actionExportToCourseBuild = Display::url(
+                    Display::return_icon(
+                        'backup.png',
+                        get_lang('ExportToChamiloFormat')
+                    ),
+                    api_get_self().'?'.api_get_cidreq()
+                    ."&action=export_to_course_build&lp_id=$id"
+                );
+
                 if ($is_allowed_to_edit) {
                     $start_time = $start_time;
                     $end_time = $end_time;
@@ -862,6 +872,7 @@ foreach ($categories as $item) {
                 'action_serious_game' => $actionSeriousGame,
                 'action_subscribe_users' => $subscribeUsers,
                 'action_update_scorm' => $actionUpdateScormFile,
+                'action_export_to_course_build' => $actionExportToCourseBuild,
             ];
 
             $lpIsShown = true;

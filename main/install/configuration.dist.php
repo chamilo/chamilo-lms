@@ -529,6 +529,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_free_question_score'] = false;
 // Hide user information in the quiz result's page
 //$_configuration['hide_user_info_in_quiz_result'] = false;
+// Show the username field in exercise results report
+//$_configuration['exercise_attempts_report_show_username'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label

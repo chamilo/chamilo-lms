@@ -356,6 +356,7 @@ class CourseBuilder
 
         $idCondition = '';
         if (!empty($idList)) {
+            $idList = array_unique($idList);
             $idList = array_map('intval', $idList);
             $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
         }
@@ -393,6 +394,7 @@ class CourseBuilder
 
         $idCondition = '';
         if (!empty($idList)) {
+            $idList = array_unique($idList);
             $idList = array_map('intval', $idList);
             $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
         }
@@ -414,13 +416,13 @@ class CourseBuilder
      * @param int   $session_id      Internal session ID
      * @param int   $courseId        Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param array $idList          If you want to restrict the structure to only the given IDs
      */
     public function build_forum_topics(
         $session_id = 0,
         $courseId = 0,
         $withBaseContent = false,
-        $id_list = []
+        $idList = []
     ) {
         $table = Database::get_course_table(TABLE_FORUM_THREAD);
 
@@ -430,15 +432,22 @@ class CourseBuilder
             $withBaseContent
         );
 
+        $idCondition = '';
+        if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
+            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
+        }
+
         $sql = "SELECT * FROM $table WHERE c_id = $courseId
                 $sessionCondition
+                $idCondition
                 ORDER BY thread_title ";
         $result = Database::query($sql);
 
         while ($obj = Database::fetch_object($result)) {
-            $forum_topic = new ForumTopic($obj);
-            $this->course->add_resource($forum_topic);
-            $this->build_forum_posts($courseId, $obj->thread_id, $obj->forum_id, true);
+            $forumTopic = new ForumTopic($obj);
+            $this->course->add_resource($forumTopic);
+            $this->build_forum_posts($courseId, $obj->thread_id, $obj->forum_id);
         }
     }
 
@@ -449,13 +458,13 @@ class CourseBuilder
      * @param int  $courseId        Internal course ID
      * @param int  $thread_id       Internal thread ID
      * @param int  $forum_id        Internal forum ID
-     * @param bool $only_first_post Whether to only copy the first post or not
+     * @param array $idList
      */
     public function build_forum_posts(
         $courseId = 0,
         $thread_id = null,
         $forum_id = null,
-        $only_first_post = false
+        $idList = []
     ) {
         $table = Database::get_course_table(TABLE_FORUM_POST);
         $sql = "SELECT * FROM $table WHERE c_id = $courseId ";
@@ -464,6 +473,12 @@ class CourseBuilder
             $thread_id = intval($thread_id);
             $sql .= " AND thread_id = $thread_id AND forum_id = $forum_id ";
         }
+
+        if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
+            $sql .= ' AND iid IN ("'.implode('","', $idList).'") ';
+        }
+
         $sql .= " ORDER BY post_id ASC LIMIT 1";
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {

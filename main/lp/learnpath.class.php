@@ -13144,9 +13144,56 @@ EOD;
             );
         }
 
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        /*if (!empty($itemList['thread'])) {
+            $postList = [];
+            foreach ($itemList['thread'] as $postId) {
+                $post = get_post_information($postId);
+                if ($post) {
+                    if (!isset($itemList['forum'])) {
+                        $itemList['forum'] = [];
+                    }
+                    $itemList['forum'][] = $post['forum_id'];
+                    $postList[] = $postId;
+                }
+            }
+
+            if (!empty($postList)) {
+                $courseBuilder->build_forum_posts(
+                    $this->get_course_int_id(),
+                    null,
+                    null,
+                    $postList
+                );
+            }
+        }*/
+
+        if (!empty($itemList['thread'])) {
+            $threadList = [];
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+            foreach ($itemList['thread'] as $threadId) {
+                /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                $thread = $repo->find($threadId);
+                if ($thread) {
+                    $itemList['forum'][] = $thread->getForumId();
+                    $threadList[] = $thread->getIid();
+                }
+            }
+
+            if (!empty($threadList)) {
+                $courseBuilder->build_forum_topics(
+                    api_get_session_id(),
+                    $this->get_course_int_id(),
+                    null,
+                    $threadList
+                );
+            }
+        }
+
         $forumCategoryList = [];
         if (isset($itemList['forum'])) {
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
             foreach ($itemList['forum'] as $forumId) {
                 $forumInfo = get_forums($forumId);
                 $forumCategoryList[] = $forumInfo['forum_category'];
@@ -13159,15 +13206,6 @@ EOD;
                 $this->get_course_int_id(),
                 true,
                 $forumCategoryList
-            );
-        }
-
-        if (!empty($itemList['student_publication'])) {
-            $courseBuilder->build_works(
-                api_get_session_id(),
-                $this->get_course_int_id(),
-                true,
-                $itemList['student_publication']
             );
         }
 
@@ -13186,6 +13224,15 @@ EOD;
                 $this->get_course_int_id(),
                 true,
                 $itemList['link']
+            );
+        }
+
+        if (!empty($itemList['student_publication'])) {
+            $courseBuilder->build_works(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['student_publication']
             );
         }
 

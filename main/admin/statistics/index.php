@@ -14,22 +14,23 @@ api_protect_admin_script();
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin')];
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+$sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 
 if ($report) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
     $htmlHeadXtra[] = '
-        <script>
-            $(document).ready(function() {
-                $.ajax({
-                    url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
-                    type: "POST",
-                    success: function(data) {
-                        Chart.defaults.global.responsive = true;
-                        var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
-                    }
-            });
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins&session_duration='.$sessionDuration.'",
+                type: "POST",
+                success: function(data) {
+                    Chart.defaults.global.responsive = true;
+                    var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+                }
         });
-        </script>';
+    });
+    </script>';
 }
 
 $tool_name = get_lang('Statistics');
@@ -123,9 +124,16 @@ switch ($report) {
         break;
     case 'recentlogins':
         echo '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        $form = new FormValidator('session_time', 'get', api_get_self().'?report=recentlogins&session_duration='.$sessionDuration);
+        $sessionTimeList = ['', 5 => 5, 15 => 15, 30 => 30, 60 => 60];
+        $form->addSelect('session_duration', [get_lang('SessionMinDuration'), get_lang('Minutes')], $sessionTimeList);
+        $form->addButtonSend(get_lang('Filter'));
+        $form->addHidden('report', 'recentlogins');
+        $form->display();
+
         echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
-        Statistics::printRecentLoginStats();
-        Statistics::printRecentLoginStats(true);
+        Statistics::printRecentLoginStats(false, $sessionDuration);
+        Statistics::printRecentLoginStats(true, $sessionDuration);
         break;
     case 'logins':
         Statistics::printLoginStats($_GET['type']);

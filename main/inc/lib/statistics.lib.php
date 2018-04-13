@@ -583,8 +583,9 @@ class Statistics
      * Print the number of recent logins.
      *
      * @param bool $distinct Whether to only give distinct users stats, or *all* logins
+     * @param int
      */
-    public static function printRecentLoginStats($distinct = false)
+    public static function printRecentLoginStats($distinct = false, $sessionDuration = 0)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -604,6 +605,8 @@ class Statistics
 
         $days = [1, 7, 15, 31];
         $sqlList = [];
+
+        $sessionDuration = (int) $sessionDuration;
         foreach ($days as $day) {
             $date = new DateTime($now);
             $startDate = $date->format('Y-m-d').' 00:00:00';
@@ -621,17 +624,21 @@ class Statistics
             if ($day == 1) {
                 $label = get_lang('Today');
             }
-
             $label .= " <br /> $localDate - $localEndDate";
             $sql = "SELECT count($field) AS number 
                     FROM $table $table_url 
                     WHERE 
-                        login_date BETWEEN '$startDate' AND '$endDate'
+                        UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
+                        login_date BETWEEN '$startDate' AND '$endDate'  
                         $where_url";
             $sqlList[$label] = $sql;
         }
 
-        $sqlList[get_lang('Total')] = "SELECT count($field) AS number FROM $table $table_url WHERE 1=1 $where_url";
+        $sql = "SELECT count($field) AS number 
+                FROM $table $table_url                
+                WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url
+               ";
+        $sqlList[get_lang('Total')] = $sql;
         $totalLogin = [];
         foreach ($sqlList as $label => $query) {
             $res = Database::query($query);
@@ -649,20 +656,20 @@ class Statistics
      * get the number of recent logins.
      *
      * @param bool $distinct Whether to only give distinct users stats, or *all* logins
+     * @param int $sessionDuration
      *
      * @return array
      */
-    public static function getRecentLoginStats($distinct = false)
+    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
+        $table_url = '';
+        $where_url = '';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id='".$current_url_id."'";
-        } else {
-            $table_url = '';
-            $where_url = '';
         }
 
         $now = api_get_utc_datetime();
@@ -674,9 +681,13 @@ class Statistics
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
+        $sessionDuration = (int) $sessionDuration;
+
         $sql = "SELECT count($field) AS number, date(login_date) as login_date 
                 FROM $table $table_url 
-                WHERE login_date >= '$newDate' $where_url 
+                WHERE 
+                UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
+                login_date >= '$newDate' $where_url 
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);

@@ -9,12 +9,13 @@ require_once __DIR__.'/../global.inc.php';
 api_protect_admin_script();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;
 
 switch ($action) {
     case 'recentlogins':
         header('Content-type: application/json');
         $list = [];
-        $all = Statistics::getRecentLoginStats();
+        $all = Statistics::getRecentLoginStats(false, $sessionDuration);
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }
@@ -39,7 +40,7 @@ switch ($action) {
         $list['datasets'][1]['pointHighlightFill'] = "#fff";
         $list['datasets'][1]['pointHighlightStroke'] = "rgba(0,204,0,1)";
 
-        $distinct = Statistics::getRecentLoginStats(true);
+        $distinct = Statistics::getRecentLoginStats(true, $sessionDuration);
         foreach ($distinct as $tick => $tock) {
             $list['datasets'][1]['data'][] = $tock;
         }

@@ -587,7 +587,14 @@ if ($is_allowedToEdit || $is_tutor) {
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
         ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
-        ['name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'],
+        [
+            'name' => 'login',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'hidden' => api_get_configuration_value('exercise_attempts_report_show_username') ? 'false' : 'true',
+        ],
         ['name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar
             'searchoptions' => [

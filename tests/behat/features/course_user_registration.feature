@@ -7,7 +7,7 @@ Feature: Subscribe users to the course
     Given I am on "/main/user/subscribe_user.php?keyword=amann&type=5&cidReq=TEMP"
     Then I should see "Aimee"
     Then I follow "Register"
-    Then I should see "Aimee Mann has been registered to your course"
+    Then I should see "Aimee Mann (amann) has been registered to your course"
 
   Scenario: Unsubscribe user "amann" the course "TEMP"
     Given I am on "/main/user/user.php?cidReq=TEMP"
@@ -20,4 +20,4 @@ Feature: Subscribe users to the course
     Given I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cidReq=TEMP"
     Then I should see "Andrea"
     Then I follow "Register"
-    Then I should see "Andrea Costea has been registered to your course"
+    Then I should see "Andrea Costea (acostea) has been registered to your course"

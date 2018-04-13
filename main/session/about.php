@@ -198,7 +198,7 @@ $template->assign(
 
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
-
+$sessionIsPremium = null;
 if ($checker) {
     $sessionIsPremium = $plugin->getItemByProduct(
         $sessionId,

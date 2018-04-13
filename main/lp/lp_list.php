@@ -176,8 +176,21 @@ $data = [];
 foreach ($categories as $item) {
     $categoryId = $item->getId();
 
-    if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
-        continue;
+    if ($item->getId() !== 0) { // "Without category" has id = 0
+        $categoryVisibility = api_get_item_visibility(
+            $courseInfo,
+            TOOL_LEARNPATH_CATEGORY,
+            $item->getId(),
+            $sessionId
+        );
+
+        if (!$is_allowed_to_edit && (int) $categoryVisibility !== 1) {
+            continue;
+        }
+
+        if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
+            continue;
+        }
     }
 
     $list = new LearnpathList(

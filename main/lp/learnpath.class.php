@@ -5582,7 +5582,7 @@ class learnpath
             error_log('In learnpath::start_current_item()');
             error_log('current: '.$this->current);
         }
-        if ($this->current != 0 && is_object($this->items[$this->current])) {
+        if ($this->current != 0 && isset($this->items[$this->current]) && is_object($this->items[$this->current])) {
             $type = $this->get_type();
             $item_type = $this->items[$this->current]->get_type();
             if (($type == 2 && $item_type != 'sco') ||
@@ -5629,7 +5629,9 @@ class learnpath
             error_log('In learnpath::stop_previous_item()', 0);
         }
 
-        if ($this->last != 0 && $this->last != $this->current && is_object($this->items[$this->last])) {
+        if ($this->last != 0 && $this->last != $this->current &&
+            isset($this->items[$this->last]) && is_object($this->items[$this->last])
+        ) {
             if ($debug) {
                 error_log('In learnpath::stop_previous_item() - '.$this->last.' is object');
             }
@@ -13102,20 +13104,81 @@ EOD;
         }
 
         $courseBuilder = new CourseBuilder();
-        $documentList = [];
+        $itemList = [];
         /** @var learnpathItem $item */
         foreach ($this->items as $item) {
-            if ($item->get_type() == 'document') {
-                $documentList[] = $item->get_path();
+            $itemList[$item->get_type()][] = $item->get_path();
+        }
+
+        if (empty($itemList)) {
+            return false;
+        }
+
+        if (isset($itemList['document'])) {
+            // get parents
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), true);
+                if (!empty($documentInfo['parents'])) {
+                    foreach ($documentInfo['parents'] as $parentInfo) {
+                        if (in_array($parentInfo['iid'], $itemList['document'])) {
+                            continue;
+                        }
+                        $itemList['document'][] = $parentInfo['iid'];
+                    }
+                }
+            }
+            $courseBuilder->build_documents(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['document']
+            );
+        }
+
+        if (isset($itemList['quiz'])) {
+            $courseBuilder->build_quizzes(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['quiz']
+            );
+        }
+
+        $forumCategoryList = [];
+        if (isset($itemList['forum'])) {
+            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+            foreach ($itemList['forum'] as $forumId) {
+                $forumInfo = get_forums($forumId);
+                $forumCategoryList[] = $forumInfo['forum_category'];
             }
         }
 
-        $courseBuilder->build_documents(
-            api_get_session_id(),
-            $this->get_course_int_id(),
-            true,
-            $documentList
-        );
+        if (!empty($forumCategoryList)) {
+            $courseBuilder->build_forum_category(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $forumCategoryList
+            );
+        }
+
+        if (!empty($itemList['forum'])) {
+            $courseBuilder->build_forums(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['forum']
+            );
+        }
+
+        if (isset($itemList['link'])) {
+            $courseBuilder->build_links(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['link']
+            );
+        }
 
         $courseBuilder->build_learnpaths(
             api_get_session_id(),

@@ -143,7 +143,7 @@ $linkToReplace = [
     '<link href="'.$cssEditor.'" rel="stylesheet" type="text/css" />',
     '<link href="'.$cssEditor.'" media="screen" rel="stylesheet" type="text/css" />',
 ];
-$intro_content = str_replace($linkToReplace , '', $intro_content);
+$intro_content = str_replace($linkToReplace, '', $intro_content);
 $intro_content = Security::remove_XSS($intro_content, $userStatus);
 
 /* Determines the correct display */

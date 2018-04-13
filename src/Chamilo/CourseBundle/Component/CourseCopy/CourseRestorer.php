@@ -297,7 +297,7 @@ class CourseRestorer
             $my_session_id = empty($document->item_properties[0]['id_session']) ? 0 : $session_id;
 
             if ($document->file_type == FOLDER) {
-                $visibility = $document->item_properties[0]['visibility'];
+                $visibility = isset($document->item_properties[0]['visibility']) ? $document->item_properties[0]['visibility'] : '';
                 $new = substr($document->path, 8);
 
                 $folderList = explode('/', $new);
@@ -356,7 +356,9 @@ class CourseRestorer
                             null,
                             false,
                             null,
-                            $my_session_id
+                            $my_session_id,
+                            0,
+                            false
                         );
                     } else {
                         $insertUserId = isset($document->item_properties[0]['insert_user_id']) ? $document->item_properties[0]['insert_user_id'] : api_get_user_id();
@@ -387,7 +389,6 @@ class CourseRestorer
             } elseif ($document->file_type == DOCUMENT) {
                 //Checking if folder exists in the database otherwise we created it
                 $dir_to_create = dirname($document->path);
-
                 if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
                     if (is_dir($path.dirname($document->path))) {
                         $sql = "SELECT id FROM $table
@@ -395,6 +396,7 @@ class CourseRestorer
                                     c_id = ".$this->destination_course_id." AND
                                     path = '/".self::DBUTF8escapestring(substr(dirname($document->path), 9))."'";
                         $res = Database::query($sql);
+
                         if (Database::num_rows($res) == 0) {
                             //continue;
                             $visibility = $document->item_properties[0]['visibility'];
@@ -413,6 +415,10 @@ class CourseRestorer
                                 $title,
                                 null,
                                 null,
+                                false,
+                                0,
+                                0,
+                                0,
                                 false
                             );
 
@@ -1102,6 +1108,15 @@ class CourseRestorer
                 if ($new_id) {
                     $sql = "UPDATE $table_forum SET forum_id = iid WHERE iid = $new_id";
                     Database::query($sql);
+
+                    api_item_property_update(
+                        $this->destination_course_info,
+                        TOOL_FORUM,
+                        $new_id,
+                        'ForumUpdated',
+                        api_get_user_id()
+                    );
+
                     $this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 
                     $forum_topics = 0;
@@ -1159,6 +1174,14 @@ class CourseRestorer
                     if ($new_id) {
                         $sql = "UPDATE $forum_cat_table SET cat_id = iid WHERE iid = $new_id";
                         Database::query($sql);
+
+                        api_item_property_update(
+                            $this->destination_course_info,
+                            TOOL_FORUM_CATEGORY,
+                            $new_id,
+                            'ForumCategoryUpdated',
+                            api_get_user_id()
+                        );
                     }
 
                     $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;

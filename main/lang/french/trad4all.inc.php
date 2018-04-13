@@ -8066,4 +8066,5 @@ $PortfolioItemAdded = "Élément du portfolio enregistré";
 $ExploreMoreCourses = "Explorer plus de cours";
 $LinksOfInterest = "Liens d'intérêt";
 $ExportToChamiloFormat = "Exportation du parcours";
+$CoursesComingSoon = "Cours à paraître";
 ?>

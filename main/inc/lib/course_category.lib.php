@@ -186,9 +186,17 @@ class CourseCategory
 
     /**
      * @param string $node
+     *
+     * @return bool
      */
     public static function deleteNode($node)
     {
+        $category = self::getCategory($node);
+
+        if (empty($category)) {
+            return false;
+        }
+
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $node = Database::escape_string($node);
@@ -205,12 +213,18 @@ class CourseCategory
                 Database::query("UPDATE $tbl_category SET parent_id=NULL WHERE parent_id='$node'");
             }
 
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+            $sql = "DELETE FROM $table WHERE course_category_id = ".$category['id'];
+
+            Database::query($sql);
             Database::query("UPDATE $tbl_category SET tree_pos=tree_pos-1 WHERE tree_pos > '".$row['tree_pos']."'");
             Database::query("DELETE FROM $tbl_category WHERE code='$node'");
 
             if (!empty($row['parent_id'])) {
                 self::updateParentCategoryChildrenCount($row['parent_id'], -1);
             }
+
+            return true;
         }
     }
 

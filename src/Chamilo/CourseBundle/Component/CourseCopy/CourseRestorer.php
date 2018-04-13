@@ -52,13 +52,13 @@ class CourseRestorer
         'quizzes',
         'test_category',
         'links',
-        'learnpaths',
+        'works',
         'surveys',
+        'learnpaths',
         //'scorm_documents', ??
         'tool_intro',
         'thematic',
         'wiki',
-        'works',
         'gradebook',
         'assets',
     ];
@@ -332,7 +332,6 @@ class CourseRestorer
                             $title,
                             $visibility
                         );
-
                         continue;
                     }
 
@@ -2568,8 +2567,7 @@ class CourseRestorer
      */
     public function restore_learnpaths($session_id = 0, $respect_base_content = false)
     {
-        $session_id = intval($session_id);
-
+        $session_id = (int) $session_id;
         if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
             $table_main = Database::get_course_table(TABLE_LP_MAIN);
             $table_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -2744,8 +2742,7 @@ class CourseRestorer
                         if ($item['item_type'] == 'sco') {
                             $path = $item['path'];
                         } else {
-                            $path = $item['path'];
-                            $path = $this->get_new_id($item['item_type'], $path);
+                            $path = $this->get_new_id($item['item_type'], $item['path']);
                         }
 
                         $item['item_type'] = $item['item_type'] == 'dokeos_chapter' ? 'dir' : $item['item_type'];
@@ -2772,38 +2769,38 @@ class CourseRestorer
                         ];
 
                         $new_item_id = Database::insert($table_item, $params);
+                        if ($new_item_id) {
+                            $sql = "UPDATE $table_item SET id = iid WHERE iid = $new_item_id";
+                            Database::query($sql);
 
-                        $sql = "UPDATE $table_item SET id = iid WHERE iid = $new_item_id";
-                        Database::query($sql);
+                            //save a link between old and new item IDs
+                            $new_item_ids[$item['id']] = $new_item_id;
+                            //save a reference of items that need a parent_item_id refresh
+                            $parent_item_ids[$new_item_id] = $item['parent_item_id'];
+                            //save a reference of items that need a previous_item_id refresh
+                            $previous_item_ids[$new_item_id] = $item['previous_item_id'];
+                            //save a reference of items that need a next_item_id refresh
+                            $next_item_ids[$new_item_id] = $item['next_item_id'];
 
-                        //save a link between old and new item IDs
-                        $new_item_ids[$item['id']] = $new_item_id;
-                        //save a reference of items that need a parent_item_id refresh
-                        $parent_item_ids[$new_item_id] = $item['parent_item_id'];
-                        //save a reference of items that need a previous_item_id refresh
-                        $previous_item_ids[$new_item_id] = $item['previous_item_id'];
-                        //save a reference of items that need a next_item_id refresh
-                        $next_item_ids[$new_item_id] = $item['next_item_id'];
-
-                        if (!empty($item['prerequisite'])) {
-                            if ($lp->lp_type == '2') {
-                                // if is an sco
-                                $old_prerequisite[$new_item_id] = $item['prerequisite'];
-                            } else {
-                                $old_prerequisite[$new_item_id] = $new_item_ids[$item['prerequisite']];
+                            if (!empty($item['prerequisite'])) {
+                                if ($lp->lp_type == '2') {
+                                    // if is an sco
+                                    $old_prerequisite[$new_item_id] = $item['prerequisite'];
+                                } else {
+                                    $old_prerequisite[$new_item_id] = $new_item_ids[$item['prerequisite']];
+                                }
                             }
-                        }
 
-                        if (!empty($ref)) {
-                            if ($lp->lp_type == '2') {
-                                // if is an sco
-                                $old_refs[$new_item_id] = $ref;
-                            } elseif (isset($new_item_ids[$ref])) {
-                                $old_refs[$new_item_id] = $new_item_ids[$ref];
+                            if (!empty($ref)) {
+                                if ($lp->lp_type == '2') {
+                                    // if is an sco
+                                    $old_refs[$new_item_id] = $ref;
+                                } elseif (isset($new_item_ids[$ref])) {
+                                    $old_refs[$new_item_id] = $new_item_ids[$ref];
+                                }
                             }
+                            $prerequisite_ids[$new_item_id] = $item['prerequisite'];
                         }
-
-                        $prerequisite_ids[$new_item_id] = $item['prerequisite'];
                     }
 
                     // Updating prerequisites
@@ -2833,6 +2830,7 @@ class CourseRestorer
                                 WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
+
                     foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
                         $previous_new_id = 0;
                         if ($previous_item_old_id != 0) {
@@ -2918,6 +2916,10 @@ class CourseRestorer
         // Check if the value exist in the current array.
         if ($tool === 'hotpotatoes') {
             $tool = 'document';
+        }
+
+        if ($tool === 'student_publication') {
+            $tool = RESOURCE_WORK;
         }
 
         if (isset($this->course->resources[$tool][$ref]) &&
@@ -3232,7 +3234,7 @@ class CourseRestorer
     {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         if ($this->course->has_resources(RESOURCE_WORK)) {
-            $table_work_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+            $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_WORK] as $obj) {
@@ -3267,7 +3269,7 @@ class CourseRestorer
                         break;
                     case FILE_OVERWRITE:
                         if (!empty($this->course_origin_id)) {
-                            $sql = 'SELECT * FROM '.$table_work_assignment.'
+                            $sql = 'SELECT * FROM '.$table.'
                                     WHERE
                                         c_id = '.$this->course_origin_id.' AND
                                         publication_id = '.$id_work;
@@ -3298,13 +3300,14 @@ class CourseRestorer
                 $obj->params['new_dir'] = $obj->params['title'];
 
                 if (empty($workData)) {
-                    addDir(
+                    $workId = addDir(
                         $obj->params,
                         api_get_user_id(),
                         $this->destination_course_info,
                         0,
                         $sessionId
                     );
+                    $this->course->resources[RESOURCE_WORK][$id_work]->destination_id = $workId;
                 } else {
                     $workId = $workData['iid'];
                     updateWork(
@@ -3319,6 +3322,7 @@ class CourseRestorer
                         $this->destination_course_info,
                         0
                     );
+                    $this->course->resources[RESOURCE_WORK][$id_work]->destination_id = $workId;
                 }
             }
         }

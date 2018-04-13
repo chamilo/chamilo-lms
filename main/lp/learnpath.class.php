@@ -13162,6 +13162,15 @@ EOD;
             );
         }
 
+        if (!empty($itemList['student_publication'])) {
+            $courseBuilder->build_works(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['student_publication']
+            );
+        }
+
         if (!empty($itemList['forum'])) {
             $courseBuilder->build_forums(
                 api_get_session_id(),

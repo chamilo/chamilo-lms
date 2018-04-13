@@ -1291,11 +1291,9 @@ class CourseBuilder
                             (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' AND image='scormbuilder.gif') AND
                             visibility = '1' ";
                 $db_tool = Database::query($sql);
-
+                $visibility = '0';
                 if (Database::num_rows($db_tool)) {
                     $visibility = '1';
-                } else {
-                    $visibility = '0';
                 }
 
                 $lp = new CourseCopyLearnpath(
@@ -1587,7 +1585,6 @@ class CourseBuilder
     ) {
         $table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-
         $sessionCondition = api_get_session_condition($session_id, true, $withBaseContent);
 
         $sql = 'SELECT * FROM '.$table_attendance.'
@@ -1612,13 +1609,13 @@ class CourseBuilder
      * @param int   $session_id      Internal session ID
      * @param int   $courseId        Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param array $idList          If you want to restrict the structure to only the given IDs
      */
     public function build_works(
         $session_id = 0,
         $courseId = 0,
         $withBaseContent = false,
-        $id_list = []
+        $idList = []
     ) {
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $sessionCondition = api_get_session_condition(
@@ -1627,15 +1624,23 @@ class CourseBuilder
             $withBaseContent
         );
 
+        $idCondition = '';
+        if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
+            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
+        }
+
         $sql = "SELECT * FROM $table_work
                 WHERE
-                    c_id = $courseId
-                    $sessionCondition AND
+                    c_id = $courseId                    
+                    $sessionCondition AND                    
                     filetype = 'folder' AND
                     parent_id = 0 AND
-                    active = 1";
-        $db_result = Database::query($sql);
-        while ($row = Database::fetch_array($db_result, 'ASSOC')) {
+                    active = 1
+                    $idCondition
+                ";
+        $result = Database::query($sql);
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $obj = new Work($row);
             $this->course->add_resource($obj);
         }

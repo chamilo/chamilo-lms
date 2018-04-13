@@ -1479,6 +1479,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                     $condition_session
                 ORDER BY forum_categories.cat_order ASC";
     }
+
     $result = Database::query($sql);
     $forum_categories_list = [];
     while ($row = Database::fetch_assoc($result)) {

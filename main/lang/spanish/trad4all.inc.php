@@ -2547,7 +2547,7 @@ $WarningEditingDocument = "Cuando edita un documento existente en la lección, l
 $CreateTheExercise = "Crear el ejercicio";
 $MoveTheCurrentExercise = "Mover el ejercicio actual";
 $EditCurrentExecice = "Editar el ejercicio actual";
-$UploadScorm = "Importación SCORM y AICC";
+$UploadScorm = "Importación SCORM, AICC y Lección";
 $PowerPointConvert = "Conversión PowerPoint";
 $LPCreatedToContinue = "Para continuar, añada a su lección una sección o un objeto de aprendizaje";
 $LPCreatedAddChapterStep = "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />¡ Bienvenido a la herramienta de autor de Chamilo !</big></p> <ul> <li><b>Construir</b> : Añada objetos de aprendizaje a su lección</li> <li><b>Organizar</b> : Añada comentarios de audio y ordene sus objetos de aprendizaje en la tabla de contenidos</li> <li><b>Mostrar</b> : Vea la lección como la vería un estudiante</li> <li><b>Añadir una sección</b> : Capítulo 1, Capítulo 2 o Semana 1, Semana 2...</li> <li><b>Añadir un objeto de aprendizaje</b> : construya su lección paso a paso con documentos, ejercicios y actividades, contando con la ayuda de plantillas, mascotas y galerías multimedia</li> </ul> </html></body>";
@@ -8152,4 +8152,5 @@ $EditPortfolioItem = "Editar elemento del portafolio";
 $PortfolioItemAdded = "Elemento del portafolio editado";
 $ExploreMoreCourses = "Explorar más cursos";
 $LinksOfInterest = "Enlaces de interés";
+$ExportToChamiloFormat = "Exportación de la lección";
 ?>

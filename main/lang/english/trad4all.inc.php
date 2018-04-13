@@ -2547,7 +2547,7 @@ $WarningEditingDocument = "When you edit an existing document in Courses, the ne
 $CreateTheExercise = "Adding a test to the course";
 $MoveTheCurrentExercise = "Move the current test";
 $EditCurrentExecice = "Edit the current test";
-$UploadScorm = "Import SCORM course";
+$UploadScorm = "Import AICC, SCORM and Chamilo learning path";
 $PowerPointConvert = "Chamilo RAPID";
 $LPCreatedToContinue = "To continue add a section or a learning object or activity to your course.";
 $LPCreatedAddChapterStep = "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>";
@@ -8128,4 +8128,5 @@ $EditPortfolioItem = "Edit portfolio item";
 $PortfolioItemAdded = "Portfolio item added";
 $ExploreMoreCourses = "Explore more courses";
 $LinksOfInterest = "Links of interest";
+$ExportToChamiloFormat = "Export to Chamilo format";
 ?>

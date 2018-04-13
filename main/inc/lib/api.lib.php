@@ -1837,7 +1837,7 @@ function api_get_anonymous_id()
     // Find if another anon is connected now
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $tableU = Database::get_main_table(TABLE_MAIN_USER);
-    $ip = api_get_real_ip();
+    $ip = Database::escape_string(api_get_real_ip());
     $max = api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL 
@@ -7409,6 +7409,8 @@ function api_user_is_login($user_id = null)
  * Guess the real ip for register in the database, even in reverse proxy cases.
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
  * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.
+ * Note: the result of this function is not SQL-safe. Please escape it before
+ * inserting in a database
  *
  * @return string the user's real ip (unsafe - escape it before inserting to db)
  *

@@ -5484,11 +5484,11 @@ div#chat-remote-video video {
     box-shadow: none;
 }
 
-#registration #status .radio{
+#registration #status-group .radio{
     display: inline-block;
     position: relative;
 }
-#registration #status .radio label p{
+#registration #status-group .radio label p{
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;

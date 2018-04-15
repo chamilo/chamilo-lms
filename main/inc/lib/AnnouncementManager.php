@@ -1505,7 +1505,7 @@ class AnnouncementManager
             $courseId = $courseInfo['real_id'];
         } else {
             $courseId = (int) $courseId;
-            $courseInfo = api_get_course_info($courseId);
+            $courseInfo = api_get_course_info_by_id($courseId);
         }
 
         if (empty($courseInfo)) {

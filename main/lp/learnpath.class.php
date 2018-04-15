@@ -10160,7 +10160,7 @@ class learnpath
             );
             $return .= '</a> ';
             $return .= Display::return_icon(
-                'quizz_small.gif',
+                'quiz.png',
                 '',
                 [],
                 ICON_SIZE_TINY
@@ -10274,7 +10274,7 @@ class learnpath
                         <a class="moved" href="#">'.
                             $moveEverywhereIcon.
                         '</a>
-                        '.Display::return_icon('lp_link.png').'
+                        '.Display::return_icon('links.png', '', [], ICON_SIZE_TINY).'
                         <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS($title).$sessionStar.$link.
@@ -10333,7 +10333,7 @@ class learnpath
                     );
                     $return .= '</a> ';
 
-                    $return .= Display::return_icon('works.gif');
+                    $return .= Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
                     $return .= ' <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
                     </a>';
@@ -10430,7 +10430,7 @@ class learnpath
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
                 $return .= ' </a>';
-                $return .= Display::return_icon('lp_forum.png', '', [], ICON_SIZE_TINY);
+                $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
                 $return .= '<a onclick="javascript:toggle_forum('.$forum['forum_id'].');" style="cursor:hand; vertical-align:middle">
                                 <img src="'.Display::returnIconPath('add.gif').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
                             </a>

@@ -78,7 +78,7 @@ class NotebookTeacherPlugin extends Plugin
         // Deleting course settings.
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
 
-        $tablesToBeDeleted = [TABLE_NOTEBOOKTEACHER];
+        $tablesToBeDeleted = [self::TABLE_NOTEBOOKTEACHER];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
             $sql = "DROP TABLE IF EXISTS $table";

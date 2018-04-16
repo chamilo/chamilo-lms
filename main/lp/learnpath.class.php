@@ -2472,8 +2472,12 @@ class learnpath
                 }
             }
 
+            $subscriptionSettings = learnpath::getSubscriptionSettings();
+
             // Check if the subscription users/group to a LP is ON
-            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1) {
+            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
+                $subscriptionSettings['allow_add_users_to_lp'] === true
+            ) {
                 // Try group
                 $is_visible = false;
                 // Checking only the user visibility
@@ -4688,6 +4692,11 @@ class learnpath
         CLpCategory $category,
         User $user
     ) {
+        $subscriptionSettings = learnpath::getSubscriptionSettings();
+        if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+            return true;
+        }
+
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         if ($isAllowedToEdit) {

@@ -431,13 +431,13 @@ switch ($action) {
         break;
 }
 
-$content = Display::return_introduction_section(TOOL_BLOGS);
-$content .= $tpl->fetch($blogLayout);
+$content = $tpl->fetch($blogLayout);
 
 if ($actionsLeft) {
     $tpl->assign(
         'actions',
-        Display::toolbarAction('toolbar', [$actionsLeft])
+        Display::return_introduction_section(TOOL_BLOGS)
+            .Display::toolbarAction('toolbar', [$actionsLeft])
     );
 }
 

@@ -41,7 +41,6 @@ See https://support.chamilo.org/issues/6976
 }
 #learning_path_left_zone .description-autor{
   text-align: left;
-  padding-top: 10px;
 }
 .inner_lp_toc .scorm_item a {
     font-weight: bold;
@@ -194,12 +193,7 @@ See https://support.chamilo.org/issues/6976
   margin-top: .5em;
   font-size: 12px;
 }
-#learning_path_left_zone .scorm_title{
-  font-size: 20px;
-  color: #666;
-  margin-bottom: .5em;
-  margin-top: .5em;
-}
+
 /* for section */
 .scorm_item_section{
     border-bottom: 1px solid #DDD;
@@ -208,6 +202,7 @@ See https://support.chamilo.org/issues/6976
 }
 .scorm_item_section .section{
     background:url("../../main/img/scorm/folder-item-closed.png") no-repeat 10px center;
+    padding: 10px 20px 10px 35px;
 }
 .scorm_item_section.scorm_completed .section{
   background:url("../../main/img/scorm/folder-item-open.png") no-repeat 10px center;
@@ -257,10 +252,8 @@ See https://support.chamilo.org/issues/6976
 }
 /* END SCORM CSS BASE*/
 #scorm-info{
-    padding: 10px;
-    margin-bottom: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    padding: 0;
+    background-color: #EBF3F5;
 }
 #scorm-info .description-autor p {
     font-size: 12px;
@@ -268,8 +261,10 @@ See https://support.chamilo.org/issues/6976
     color: #666666;
 }
 #scorm-info hr {
-    background-color: #DDD;
     width: 100%;
+    border-top: 1px solid #d7d7d7;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 #scorm-info #progress_bar .progress{
     margin-bottom: 5px;
@@ -284,16 +279,12 @@ See https://support.chamilo.org/issues/6976
     padding-bottom: 10px;
 }
 .scorm-title{
-    color: #333;
-    font-size: 18px;
+    padding: 20px 10px;
+}
+.scorm-title h4{
+    font-size: 20px;
     font-weight: bold;
-    line-height: 1.5em;
-    margin: 0 0 15px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #DDD;
+    color: #686f7a;
 }
 #learning_path_right_zone .lp-view-tabs li a {
     padding: 5px 10px;
@@ -326,17 +317,17 @@ See https://support.chamilo.org/issues/6976
 #learning_path_right_zone .lp-view-zone-container {
     bottom: 0;
     left: 0;
-    padding: 5px;
+    padding: 0;
     position: absolute;
     right: 0;
     top: 0;
 }
 #learning_path_toc {
-    bottom: 5px;
-    left: 5px;
+    bottom: 0;
+    left: 0;
     overflow: auto;
     position: absolute;
-    right: 5px;
+    right: 0;
     top: 100%;
     transition-property: top;
     transition-duration: 0.1s;
@@ -406,15 +397,6 @@ See https://support.chamilo.org/issues/6976
 .expand .fa:active, .expand .fa:focus{
     color: #ffffff;
 }
-#learning_path_toc {
-    bottom: 10px;
-    left: 10px;
-    right: 5px;
-    margin-top:20px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-}
 #scorm-info .progress-bar{
     line-height: 17px;
 }
@@ -431,12 +413,58 @@ See https://support.chamilo.org/issues/6976
     position: absolute;
     z-index: 9999;
 }
+/* LP VIEW COLLAPSE */
+.scorm-collapse .panel:hover{
+    box-shadow: 0 3px 1px 0 rgba(20,23,28,.1);
+}
+.scorm-collapse .panel-default .panel-heading{
+    background: url(../../../../main/img/icons/svg/arrow-down.svg)  #FFF right center no-repeat;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.scorm-collapse a.item-header{
+    padding-bottom: 4px;
+    padding-top: 10px;
+}
+.scorm-collapse .panel-default .panel-heading h4{
+    font-size: 18px;
+    font-weight: 600;
+}
+.scorm-collapse a{
+    color: #686f7a;
+}
+.scorm-collapse a.item-action,
+.scorm-collapse a.item-header{
+    width: 100%;
+    display: inline-block;
+}
+.scorm-collapse .panel-body{
+    padding: 0;
+}
+.scorm-collapse .panel-body .list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.scorm-collapse .panel-body .list li{
+    padding: 15px 30px 15px 20px;
+    border: none;
+}
+.scorm_item_normal.scorm_highlight.scorm_completed{
+    background: url(../../../../main/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
+}
+.scorm_item_normal.scorm_completed{
+    background: url(../../../../main/img/icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
+}
+.scorm_item_normal.scorm_not_attempted{
+    background: url(../../../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+}
+.sidebar-scorm{
+    border-right: 1px solid #e6e6e6;
+}
+/* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-    #scorm-info{
-        padding: 10px;
-        margin-bottom: 10px;
-    }
     #learning_path_left_zone {
         width: 250px;
     }
@@ -451,17 +479,6 @@ See https://support.chamilo.org/issues/6976
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
         top: 0;
     }
-    #learning_path_left_zone .lp-view-zone-container,
-    #learning_path_right_zone .lp-view-zone-container {
-        padding: 10px;
-    }
-    #learning_path_left_zone .lp-view-zone-container {
-        padding-right: 5px;
-    }
-    #learning_path_right_zone .lp-view-zone-container {
-        padding-left: 5px;
-    }
-    
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
         right: 10px;
@@ -488,12 +505,12 @@ See https://support.chamilo.org/issues/6976
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
     #learning_path_left_zone {
-        width: 350px;
+        width: 450px;
     }
 
     #learning_path_right_zone {
-        left: 350px;
-        width: calc(100% - 350px);
+        left: 465px;
+        width: calc(100% - 465px);
     }
 }
 @media (min-width : 480px) and (max-width: 767px) {
@@ -545,12 +562,6 @@ See https://support.chamilo.org/issues/6976
     #scorm-info {
 	padding: 30px 0 0 0;
 	margin: 0;
-    }
-    #learning_path_toc {
-        left: 0;
-        right: 0;
-	padding: 0;
-	border-radius: 5px;
     }
     #learning_path_right_zone {
         left: 100%;

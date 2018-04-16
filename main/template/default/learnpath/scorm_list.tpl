@@ -1,5 +1,8 @@
 {% if data_list is not empty %}
 <div id="learning_path_toc" class="scorm-list">
+    <div class="scorm-title">
+        <h4>{{ lp_title_scorm }}</h4>
+    </div>
     <div class="scorm-body">
         <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
             {% for item in data_list %}
@@ -24,25 +27,32 @@
 </div>
 {% endif %}
 {% if data_panel is not empty %}
-<div id="learning_path_toc" class="scorm-list">
-    <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
+<div id="learning_path_toc" class="scorm-collapse">
+    <div class="scorm-title">
+        <h4>
+             {{ lp_title_scorm }}
+        </h4>
+    </div>
+    <div class="panel-group" role="tablist" aria-multiselectable="true">
         {% for item in data_panel.are_parents %}
         <div class="panel panel-default {{ item.parent ? 'lower':'higher' }}" data-lp-id="{{ item.id }}"
              {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
             <div class="status-heading">
                 <div class="panel-heading" role="tab" id="heading-{{ item.id }}">
-                    <a role="button" data-toggle="collapse"
-                       data-parent="#scorm-panel{{ item.parent ? '-' ~ item.parent : '' }}"
-                       href="#collapse-{{ item.id }}" aria-expanded="true"
-                       aria-controls="collapse-{{ item.id }}">
-                        {{ item.title }}
-                    </a>
+                    <h4>
+                        <a class="item-header" role="button" data-toggle="collapse"
+                            data-parent="#scorm-panel{{ item.parent ? '-' ~ item.parent : '' }}"
+                            href="#collapse-{{ item.id }}" aria-expanded="true"
+                            aria-controls="collapse-{{ item.id }}">
+                            {{ item.title }}
+                        </a>
+                    </h4>
                 </div>
             </div>
             <div id="collapse-{{ item.id }}" class="panel-collapse collapse {{ item.parent_current }}"
                  role="tabpanel" aria-labelledby="heading-{{ item.id }}">
                 <div class="panel-body">
-                    <ul class="section-list">
+                    <ul class="list">
                         {% set  counter = 0 %}
                         {% set  final = item.children|length %}
                         {% for subitem in item.children %}

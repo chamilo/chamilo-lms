@@ -309,7 +309,7 @@ class LegalManager
     /**
      * Get type of terms and conditions.
      * Type 0 is HTML Text
-     * Type 1 is a link to a different terms and conditions page
+     * Type 1 is a link to a different terms and conditions page.
      *
      * @param int $legal_id
      * @param int $language_id

@@ -230,8 +230,11 @@ class Event
     /**
      * Record information for download event (when an user click to d/l a
      * document) it will be used in a redirection page.
+     *
      * @param string $documentUrl
+     *
      * @return int
+     *
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @author Evie Embrechts (bug fixed: The user id is put in single quotes)
      */
@@ -306,9 +309,12 @@ class Event
 
     /**
      * Record information for link event (when an user click on an added link)
-     * it will be used in a redirection page
+     * it will be used in a redirection page.
+     *
      * @param int $linkId (id in c_link table)
+     *
      * @return int
+     *
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      */
     public static function event_link($linkId)
@@ -1791,7 +1797,8 @@ class Event
     }
 
     /**
-     * Get a list of all the exercises in a given learning path
+     * Get a list of all the exercises in a given learning path.
+     *
      * @param int $lp_id
      * @param int $course_id This parameter is probably deprecated as lp_id now is a global iid
      *

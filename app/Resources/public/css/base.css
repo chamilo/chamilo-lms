@@ -2505,15 +2505,6 @@ div.admin_section h4 {
     font-size: 22px;
 }
 
-.question_row_answer .page-header {
-    margin: 10px 0;
-}
-
-.question_row_answer h3.page-header {
-    font-size: 22px;
-    margin: 0;
-}
-
 .question_row_answer img {
     max-width: 80%;
     height: auto !important;
@@ -2984,10 +2975,6 @@ form .formw .freeze {
     width: 100%;
     margin-top: 5px;
     margin-bottom: 5px;
-}
-
-.table {
-    font-size: 12px;
 }
 
 .table-well {

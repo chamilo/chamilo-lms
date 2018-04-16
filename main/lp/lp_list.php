@@ -176,19 +176,23 @@ $data = [];
 foreach ($categories as $item) {
     $categoryId = $item->getId();
 
-    if ($item->getId() !== 0) { // "Without category" has id = 0
+    if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
+        // "Without category" has id = 0
         $categoryVisibility = api_get_item_visibility(
             $courseInfo,
             TOOL_LEARNPATH_CATEGORY,
-            $item->getId(),
+            $categoryId,
             $sessionId
         );
 
-        if (!$is_allowed_to_edit && (int) $categoryVisibility !== 1) {
-            continue;
+        if (!$is_allowed_to_edit) {
+            if ((int) $categoryVisibility !== 1 && $categoryVisibility != -1) {
+                continue;
+            }
         }
 
         if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
+
             continue;
         }
     }

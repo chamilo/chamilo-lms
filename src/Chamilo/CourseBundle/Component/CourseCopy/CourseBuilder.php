@@ -455,9 +455,9 @@ class CourseBuilder
      * Build the forum-posts
      * TODO: All tree structure of posts should be built, attachments for example.
      *
-     * @param int  $courseId        Internal course ID
-     * @param int  $thread_id       Internal thread ID
-     * @param int  $forum_id        Internal forum ID
+     * @param int   $courseId  Internal course ID
+     * @param int   $thread_id Internal thread ID
+     * @param int   $forum_id  Internal forum ID
      * @param array $idList
      */
     public function build_forum_posts(
@@ -551,13 +551,13 @@ class CourseBuilder
      * @param int   $session_id      Internal session ID
      * @param int   $courseId        Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param array $idList          If you want to restrict the structure to only the given IDs
      */
     public function build_tool_intro(
         $session_id = 0,
         $courseId = 0,
         $withBaseContent = false,
-        $id_list = []
+        $idList = []
     ) {
         $table = Database::get_course_table(TABLE_TOOL_INTRO);
 

@@ -6239,6 +6239,7 @@ function api_get_current_access_url_id()
         if ($access_url_id === false) {
             return -1;
         }
+
         return $access_url_id;
     }
 
@@ -7410,7 +7411,7 @@ function api_user_is_login($user_id = null)
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
  * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.
  * Note: the result of this function is not SQL-safe. Please escape it before
- * inserting in a database
+ * inserting in a database.
  *
  * @return string the user's real ip (unsafe - escape it before inserting to db)
  *

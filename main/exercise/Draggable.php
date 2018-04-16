@@ -55,7 +55,7 @@ class Draggable extends Question
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0) {
+            if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {

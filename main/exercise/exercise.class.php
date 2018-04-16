@@ -869,7 +869,7 @@ class Exercise
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
                     $this->course['real_id'],
-                    'title DESC',
+                    'title ASC',
                     false,
                     true
                 );

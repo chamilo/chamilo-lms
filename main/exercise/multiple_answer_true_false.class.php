@@ -69,7 +69,7 @@ class MultipleAnswerTrueFalse extends Question
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
             }
         }

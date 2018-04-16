@@ -1057,6 +1057,8 @@ if ($cidReset) {
                 $_gid = $gpData['id'];
                 Session::write('_gid', $_gid);
             }
+        } else {
+            Session::write('_gid', 0);
         }
     }
 }

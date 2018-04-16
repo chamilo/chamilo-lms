@@ -77,7 +77,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $numberAnswers = $answer->nbrAnswers;
             }
         }

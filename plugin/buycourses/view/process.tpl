@@ -12,13 +12,13 @@
         <div class="panel panel-default panel-box-buy">
             <div class="panel-body">
                 <div class="buy-info">
-                {% if buying_course %}
+                    {% if buying_course %}
                     <div class="row">
                         <div class="col-md-3">
                             <a class="ajax" data-title="{{ course.title }}"
                                href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
-                            <img alt="{{ course.title }}" class="img-rounded img-responsive"
-                                 src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
+                                <img alt="{{ course.title }}" class="img-rounded img-responsive"
+                                     src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
@@ -43,18 +43,19 @@
                                         {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin')}} :
                                         {% for teacher in course.teachers %}
                                         <em class="fa fa-user" aria-hidden="true"></em>
-                                        <a href="{{ _p.web }}main/social/profile.php?u={{ teacher.id }}" class="teacher-item"> {{ teacher.name }}</a>,
+                                        <a href="{{ _p.web }}main/social/profile.php?u={{ teacher.id }}"
+                                           class="teacher-item"> {{ teacher.name }}</a>,
                                         {% endfor %}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% elseif buying_session %}
+                    {% elseif buying_session %}
                     <div class="row">
                         <div class="col-md-3">
                             <img alt="{{ session.name }}" class="img-rounded img-responsive""
-                                 src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                            src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
                                 {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price }}
@@ -64,34 +65,33 @@
                             <div class="buy-item">
                                 <h3 class="title">{{ session.name }}</h3>
                                 {% if session.description %}
-                                    <div class="description">
-                                        {{ session.description }}
-                                    </div>
+                                <div class="description">
+                                    {{ session.description }}
+                                </div>
                                 {% endif %}
                                 <div class="date">
                                     <em class="fa fa-calendar" aria-hidden="true"></em> {{ session.dates.display }}
                                 </div>
                                 <div class="coaches">
                                     {% for course in session.courses %}
-                                        <p class="course"><em class="fa fa-book" aria-hidden="true"></em> {{ course.title }}</p>
-                                        <p>
-                                            {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                            {% if course.coaches|length %}
-                                                {% for coach in course.coaches %}
-                                                    <em class="fa fa-user" aria-hidden="true"></em>
-                                                    <a href="{{ _p.web }}main/social/profile.php?u={{ coach.id }}" class="teacher-item"> {{ coach.name }}</a>,
-                                                {% endfor %}
-                                            {% endif %}
-                                        </p>
+                                    <p class="course"><em class="fa fa-book" aria-hidden="true"></em> {{ course.title }}
+                                    </p>
+                                    <p>
+                                        {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                        {% if course.coaches|length %}
+                                        {% for coach in course.coaches %}
+                                        <em class="fa fa-user" aria-hidden="true"></em>
+                                        <a href="{{ _p.web }}main/social/profile.php?u={{ coach.id }}"
+                                           class="teacher-item"> {{ coach.name }}</a>,
+                                        {% endfor %}
+                                        {% endif %}
+                                    </p>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% elseif buying_service %}
-
-                {% endif %}
-
+                    {% endif %}
                 </div>
                 <div class="buy-summary">
                     <h3>{{ 'PaymentMethods'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
@@ -101,69 +101,11 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-
-        <div class="thumbnail">
-
-            {% if buying_course %}
-
-
-            {% elseif buying_session %}
-
-
-            {% elseif buying_service %}
-                <a href='{{ _p.web }}service/{{ service.id }}'>
-                    <img alt="{{ service.name }}" class="img-responsive"
-                         src="{{ service.image ? _p.web ~ 'plugin/buycourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
-                </a>
-                <div class="caption">
-                    <h3>
-                        <a href='{{ _p.web }}service/{{ service.id }}'>{{ service.name }}</a>
-                    </h3>
-                    <ul class="fa-ul">
-                        {% if service.applies_to %}
-                            <li>
-                                <em class="fa-li fa fa-hand-o-right" aria-hidden="true"></em>
-                                {% if service.applies_to == 0 %}
-                                    {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') ~ ' ' ~ 'None'|get_lang }}
-                                {% elseif service.applies_to == 1 %}
-                                    {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') ~ ' ' ~ 'User'|get_lang }}
-                                {% elseif service.applies_to == 2 %}
-                                    {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') ~ ' ' ~ 'Course'|get_lang }}
-                                {% elseif service.applies_to == 3 %}
-                                    {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') ~ ' ' ~ 'Session'|get_lang }}
-                                {% elseif service.applies_to == 4 %}
-                                    {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') ~ ' ' ~ 'TemplateTitleCertificate'|get_lang }}
-                                {% endif %}
-                            </li>
-                        {% endif %}
-                        <li>
-                            <em class="fa-li fa fa-money" aria-hidden="true"></em>
-                            {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
-                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
-                            / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
-                        </li>
-                        <li><em class="fa-li fa fa-user" aria-hidden="true"></em> {{ service.owner_name }}</li>
-                        <li><em class="fa-li fa fa-align-justify" aria-hidden="true"></em> {{ service.description }}</li>
-                    </ul>
-                    <p id="n-price" class="lead text-right" style="color: white;">
-                        <span class="label label-primary">{{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</span>
-                    </p>
-                    <p id="s-price" class="lead text-right"></p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-</div>
 <script>
     $(document).ready(function () {
-
         $("label").removeClass('control-label');
         $('.form_required').remove();
         $("small").remove();
         $("label[for=submit]").remove();
-
     });
 </script>

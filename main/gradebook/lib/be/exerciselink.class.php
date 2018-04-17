@@ -30,38 +30,6 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Generate an array of exercises that a teacher hasn't created a link for.
-     *
-     * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-     */
-    public function get_not_created_links()
-    {
-        return false;
-
-        if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
-        }
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $sql = 'SELECT id, title FROM '.$this->get_exercise_table().' exe
-                WHERE id NOT IN (
-                    SELECT ref_id FROM '.$tbl_grade_links.'
-                    WHERE
-                        type = '.LINK_EXERCISE." AND
-                        course_code = '".$this->get_course_code()."'
-                ) AND
-                exe.c_id = ".$this->course_id;
-
-        $result = Database::query($sql);
-        $cats = [];
-        while ($data = Database::fetch_array($result)) {
-            $cats[] = [$data['id'], $data['title']];
-        }
-
-        return $cats;
-    }
-
-    /**
      * Generate an array of all exercises available.
      *
      * @param bool $getOnlyHotPotatoes
@@ -77,7 +45,7 @@ class ExerciseLink extends AbstractLink
 
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
+            return [];
         }
         $sessionId = api_get_session_id();
         if (empty($sessionId)) {
@@ -188,7 +156,7 @@ class ExerciseLink extends AbstractLink
                 WHERE
                     session_id = $sessionId AND
                     c_id = $course_id AND
-                    exe_exo_id   = ".$this->get_ref_id();
+                    exe_exo_id = ".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -487,14 +455,27 @@ class ExerciseLink extends AbstractLink
                             ex.path LIKE '%htm%' AND
                             ex.path LIKE '%HotPotatoes_files%' AND
                             ip.visibility = 1";
+                $result = Database::query($sql);
+                $this->exercise_data = Database::fetch_array($result);
             } else {
                 $sql = 'SELECT * FROM '.$tbl_exercise.'
                         WHERE
                             c_id = '.$this->course_id.' AND
                             id = '.$exerciseId;
+                $result = Database::query($sql);
+                $rows = Database::num_rows($result);
+                if (!empty($rows)) {
+                    $this->exercise_data = Database::fetch_array($result);
+                } else {
+                    // Try wit iid
+                    $sql = 'SELECT * FROM '.$tbl_exercise.'
+                            WHERE
+                                c_id = '.$this->course_id.' AND
+                                iid = '.$exerciseId;
+                    $result = Database::query($sql);
+                    $this->exercise_data = Database::fetch_array($result);
+                }
             }
-            $result = Database::query($sql);
-            $this->exercise_data = Database::fetch_array($result);
         }
 
         return $this->exercise_data;

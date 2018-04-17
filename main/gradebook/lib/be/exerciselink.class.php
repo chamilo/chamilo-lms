@@ -312,7 +312,7 @@ class ExerciseLink extends AbstractLink
         $data = $this->get_exercise_data();
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id().'&type='.$this->get_type();
+        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$data['id'].'&type='.$this->get_type();
         if ((!api_is_allowed_to_edit() && $this->calc_score($user_id) == null) || $status_user != 1) {
             $url .= '&doexercise='.$this->get_ref_id();
         }

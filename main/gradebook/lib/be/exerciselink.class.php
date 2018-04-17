@@ -329,6 +329,7 @@ class ExerciseLink extends AbstractLink
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
         $data = $this->get_exercise_data();
+
         if ($this->is_hp == 1) {
             if (isset($data['path'])) {
                 $title = GetQuizName($data['path'], $documentPath);
@@ -437,7 +438,7 @@ class ExerciseLink extends AbstractLink
 
         if ($tbl_exercise == '') {
             return false;
-        } elseif (!isset($this->exercise_data)) {
+        } elseif (empty($this->exercise_data)) {
             if ($this->is_hp == 1) {
                 $sql = "SELECT * FROM $tbl_exercise ex
                         INNER JOIN $tableItemProperty ip
@@ -459,6 +460,7 @@ class ExerciseLink extends AbstractLink
                             id = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
+
                 if (!empty($rows)) {
                     $this->exercise_data = Database::fetch_array($result);
                 } else {

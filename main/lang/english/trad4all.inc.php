@@ -8130,4 +8130,6 @@ $ExploreMoreCourses = "Explore more courses";
 $LinksOfInterest = "Links of interest";
 $ExportToChamiloFormat = "Export to Chamilo format";
 $CoursesComingSoon = "Courses coming soon";
+$SalePrice = "Sale price";
+$BuyNow = "Buy now";
 ?>

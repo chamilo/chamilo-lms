@@ -24,7 +24,7 @@ $serviceId = intval($_REQUEST['i']);
 if (empty($currentUserId)) {
     api_not_allowed(true);
 }
-
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>';
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');

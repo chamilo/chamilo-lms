@@ -527,6 +527,7 @@ if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registe
 
 $allowDoubleValidation = api_get_configuration_value('allow_double_validation_in_registration');
 
+$formContainsSendButton = false;
 if ($allowDoubleValidation && $showTerms == false) {
     $htmlHeadXtra[] = '<script>
         $(document).ready(function() {
@@ -552,10 +553,17 @@ if ($allowDoubleValidation && $showTerms == false) {
     );
     $form->addButton('submit', get_lang('RegisterUser'), '', 'primary');
     $form->addHtml('</div>');
+    $formContainsSendButton = true;
 } else {
     if (api_get_setting('allow_registration') === 'true' || $user_already_registered_show_terms || $showTerms) {
         $form->addButtonNext(get_lang('RegisterUser'));
+        $formContainsSendButton = true;
     }
+}
+
+// Blocks page because there's any action to do.
+if (!$formContainsSendButton) {
+    api_not_allowed(true);
 }
 
 $course_code_redirect = Session::read('course_redirect');

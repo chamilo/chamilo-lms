@@ -580,10 +580,21 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
+        $courseDescription = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
+            ->findOneBy(
+                [
+                    'cId' => $course->getId(),
+                    'sessionId' => 0,
+                ],
+                [
+                    'descriptionType' => 'ASC',
+                ]
+            );
+
         $courseInfo = [
             'id' => $course->getId(),
             'title' => $course->getTitle(),
-            'description' => $course->getDescription(),
+            'description' => $courseDescription->getContent(),
             'code' => $course->getCode(),
             'visual_code' => $course->getVisualCode(),
             'teachers' => [],
@@ -594,8 +605,11 @@ class BuyCoursesPlugin extends Plugin
 
         $courseTeachers = $course->getTeachers();
 
-        foreach ($courseTeachers as $teacher) {
-            $courseInfo['teachers'][] = $teacher->getUser()->getCompleteName();
+        foreach ($courseTeachers as $teachers) {
+            $user = $teachers->getUser();
+            $teacher['id'] = $user->getId();
+            $teacher['name'] = $user->getCompleteName();
+            $courseInfo['teachers'][] = $teacher;
         }
 
         $possiblePath = api_get_path(SYS_COURSE_PATH);
@@ -646,11 +660,14 @@ class BuyCoursesPlugin extends Plugin
         $sessionInfo = [
             'id' => $session->getId(),
             'name' => $session->getName(),
+            'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
             'price' => $item['price'],
             'currency' => $item['iso_code'],
             'image' => null,
+            'nbrCourses' => $session->getNbrCourses(),
+            'nbrUsers' => $session->getNbrUsers()
         ];
 
         $fieldValue = new ExtraFieldValue('session');
@@ -680,7 +697,9 @@ class BuyCoursesPlugin extends Plugin
 
             foreach ($userCourseSubscriptions as $userCourseSubscription) {
                 $user = $userCourseSubscription->getUser();
-                $sessionCourseData['coaches'][] = $user->getCompleteName();
+                $coaches['id'] = $user->getUserId();
+                $coaches['name'] = $user->getCompleteName();
+                $sessionCourseData['coaches'][] = $coaches;
             }
 
             $sessionInfo['courses'][] = $sessionCourseData;

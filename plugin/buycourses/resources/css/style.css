@@ -30,7 +30,42 @@
   font-size: 18px;
   line-height: 1.42857;
 }
-
+/* PROCESS BUY */
+.buy-info .price{
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  letter-spacing: -0.020em;
+}
+.buy-info .buy-item .title{
+  margin-top: 5px;
+  font-weight: bold;
+  line-height: 24px;
+  font-size: 18px;
+}
+.buy-info .buy-item .description, .buy-info .buy-item .coaches{
+  margin-bottom: 20px;
+  color: #666666;
+}
+.buy-info .buy-item .date{
+  margin-bottom: 10px;
+  color: #666666;
+}
+.buy-summary{
+  margin-top: 10px;
+  border-top: 1px solid #CCCCCC;
+}
+.panel-box-buy{
+  box-shadow: 0 15px 30px rgba(0,0,0,.1);
+  padding: 20px;
+}
+.buy-summary .alert-info {
+  color: #31708f;
+  background-color: #e8f2f8;
+  border-color: #bce8f1;
+}
 @-moz-keyframes wobblebar-loader {
   0% {
     left: 4px;
@@ -271,6 +306,18 @@
     left: 204px;
   }
 }
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  .panel-box-buy{
+    padding: 0;
+  }
+  .buy-summary .pull-right{
+    float: left !important;
+  }
+  .buy-summary .btn-success{
+    width: 100%;
+  }
+}
 /* :not(:required) hides this rule from IE9 and below */
 .wobblebar-loader:not(:required) {
   background: #2E6DA4;
@@ -300,3 +347,4 @@
   width: 21.33333px;
   height: 14.22222px;
 }
+

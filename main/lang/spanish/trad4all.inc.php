@@ -8154,4 +8154,6 @@ $ExploreMoreCourses = "Explorar más cursos";
 $LinksOfInterest = "Enlaces de interés";
 $ExportToChamiloFormat = "Exportación de la lección";
 $CoursesComingSoon = "Cursos disponibles próximamente";
+$SalePrice = "Precio de venta";
+$BuyNow = "Comprar ahora";
 ?>

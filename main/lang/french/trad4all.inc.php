@@ -8067,4 +8067,6 @@ $ExploreMoreCourses = "Explorer plus de cours";
 $LinksOfInterest = "Liens d'intérêt";
 $ExportToChamiloFormat = "Exportation du parcours";
 $CoursesComingSoon = "Cours à paraître";
+$SalePrice = "Prix de vente";
+$BuyNow = "Acheter";
 ?>

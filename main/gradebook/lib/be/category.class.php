@@ -1588,6 +1588,7 @@ class Category implements GradebookItem
                 $this->id,
                 api_is_allowed_to_edit() ? null : 1
             );
+
             /** @var Category $cat */
             foreach ($cats as $cat) {
                 if ($cat->hasEvaluationsWithStudentResults($studentId)) {
@@ -1775,7 +1776,6 @@ class Category implements GradebookItem
                     $this->id,
                     api_is_allowed_to_edit() ? null : 1
                 );
-
             }
         } else {
             // All students

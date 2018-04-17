@@ -582,7 +582,7 @@ class Statistics
     /**
      * Print the number of recent logins.
      *
-     * @param bool $distinct        Whether to only give distinct users stats, or *all* logins.
+     * @param bool $distinct        whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration
      */
     public static function printRecentLoginStats($distinct = false, $sessionDuration = 0)
@@ -655,8 +655,8 @@ class Statistics
     /**
      * get the number of recent logins.
      *
-     * @param bool $distinct Whether to only give distinct users stats, or *all* logins
-     * @param int $sessionDuration
+     * @param bool $distinct        Whether to only give distinct users stats, or *all* logins
+     * @param int  $sessionDuration
      *
      * @return array
      */

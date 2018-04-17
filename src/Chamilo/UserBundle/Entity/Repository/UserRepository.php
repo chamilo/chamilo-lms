@@ -335,7 +335,7 @@ class UserRepository extends EntityRepository
 
         $hrmList = $qb
             ->select('uru')
-            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH,'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
             ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
             ->where(
                 $qb->expr()->eq('auru.accessUrlId', $urlId)

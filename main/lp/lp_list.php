@@ -192,7 +192,6 @@ foreach ($categories as $item) {
         }
 
         if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
-
             continue;
         }
     }

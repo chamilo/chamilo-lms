@@ -18,7 +18,6 @@ use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-
 /**
  * Class learnpath
  * This class defines the parent attributes and methods for Chamilo learnpaths
@@ -12999,112 +12998,7 @@ EOD;
     }
 
     /**
-     * Get the depth level of LP item.
-     *
-     * @param array $items
-     * @param int   $currentItemId
-     *
-     * @return int
-     */
-    private static function get_level_for_item($items, $currentItemId)
-    {
-        $parentItemId = 0;
-        if (isset($items[$currentItemId])) {
-            $parentItemId = $items[$currentItemId]->parent;
-        }
-
-        if ($parentItemId == 0) {
-            return 0;
-        } else {
-            return self::get_level_for_item($items, $parentItemId) + 1;
-        }
-    }
-
-    /**
-     * Generate the link for a learnpath category as course tool.
-     *
-     * @param int $categoryId
-     *
-     * @return string
-     */
-    private static function getCategoryLinkForTool($categoryId)
-    {
-        $categoryId = (int) $categoryId;
-        $link = 'lp/lp_controller.php?'.api_get_cidreq().'&'
-            .http_build_query(
-                [
-                    'action' => 'view_category',
-                    'id' => $categoryId,
-                ]
-            );
-
-        return $link;
-    }
-
-    /**
-     * Return the scorm item type object with spaces replaced with _
-     * The return result is use to build a css classname like scorm_type_$return.
-     *
-     * @param $in_type
-     *
-     * @return mixed
-     */
-    private static function format_scorm_type_item($in_type)
-    {
-        return str_replace(' ', '_', $in_type);
-    }
-
-    /**
-     * Check and obtain the lp final item if exist.
-     *
-     * @return learnpathItem
-     */
-    private function getFinalItem()
-    {
-        if (empty($this->items)) {
-            return null;
-        }
-
-        foreach ($this->items as $item) {
-            if ($item->type !== 'final_item') {
-                continue;
-            }
-
-            return $item;
-        }
-    }
-
-    /**
-     * Get the LP Final Item Template.
-     *
-     * @return string
-     */
-    private function getFinalItemTemplate()
-    {
-        return file_get_contents(api_get_path(SYS_CODE_PATH).'lp/final_item_template/template.html');
-    }
-
-    /**
-     * Get the LP Final Item Url.
-     *
-     * @return string
-     */
-    private function getSavedFinalItem()
-    {
-        $finalItem = $this->getFinalItem();
-        $doc = DocumentManager::get_document_data_by_id(
-            $finalItem->path,
-            $this->cc
-        );
-        if ($doc && file_exists($doc['absolute_path'])) {
-            return file_get_contents($doc['absolute_path']);
-        }
-
-        return '';
-    }
-
-    /**
-     * Exports a LP to a courseBuilder zip file. It adds the documents related to the LP
+     * Exports a LP to a courseBuilder zip file. It adds the documents related to the LP.
      */
     public function exportToCourseBuildFormat()
     {
@@ -13265,5 +13159,110 @@ EOD;
         }
 
         return true;
+    }
+
+    /**
+     * Get the depth level of LP item.
+     *
+     * @param array $items
+     * @param int   $currentItemId
+     *
+     * @return int
+     */
+    private static function get_level_for_item($items, $currentItemId)
+    {
+        $parentItemId = 0;
+        if (isset($items[$currentItemId])) {
+            $parentItemId = $items[$currentItemId]->parent;
+        }
+
+        if ($parentItemId == 0) {
+            return 0;
+        } else {
+            return self::get_level_for_item($items, $parentItemId) + 1;
+        }
+    }
+
+    /**
+     * Generate the link for a learnpath category as course tool.
+     *
+     * @param int $categoryId
+     *
+     * @return string
+     */
+    private static function getCategoryLinkForTool($categoryId)
+    {
+        $categoryId = (int) $categoryId;
+        $link = 'lp/lp_controller.php?'.api_get_cidreq().'&'
+            .http_build_query(
+                [
+                    'action' => 'view_category',
+                    'id' => $categoryId,
+                ]
+            );
+
+        return $link;
+    }
+
+    /**
+     * Return the scorm item type object with spaces replaced with _
+     * The return result is use to build a css classname like scorm_type_$return.
+     *
+     * @param $in_type
+     *
+     * @return mixed
+     */
+    private static function format_scorm_type_item($in_type)
+    {
+        return str_replace(' ', '_', $in_type);
+    }
+
+    /**
+     * Check and obtain the lp final item if exist.
+     *
+     * @return learnpathItem
+     */
+    private function getFinalItem()
+    {
+        if (empty($this->items)) {
+            return null;
+        }
+
+        foreach ($this->items as $item) {
+            if ($item->type !== 'final_item') {
+                continue;
+            }
+
+            return $item;
+        }
+    }
+
+    /**
+     * Get the LP Final Item Template.
+     *
+     * @return string
+     */
+    private function getFinalItemTemplate()
+    {
+        return file_get_contents(api_get_path(SYS_CODE_PATH).'lp/final_item_template/template.html');
+    }
+
+    /**
+     * Get the LP Final Item Url.
+     *
+     * @return string
+     */
+    private function getSavedFinalItem()
+    {
+        $finalItem = $this->getFinalItem();
+        $doc = DocumentManager::get_document_data_by_id(
+            $finalItem->path,
+            $this->cc
+        );
+        if ($doc && file_exists($doc['absolute_path'])) {
+            return file_get_contents($doc['absolute_path']);
+        }
+
+        return '';
     }
 }

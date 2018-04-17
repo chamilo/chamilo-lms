@@ -320,4 +320,35 @@ class UserRepository extends EntityRepository
             ->setParameters(['search' => "%$search%"])
             ->getResult();
     }
+
+    /**
+     * Get the list of HRM who have assigned this user.
+     *
+     * @param int $userId
+     * @param int $urlId
+     *
+     * @return array
+     */
+    public function getAssignedHrmUserList($userId, $urlId)
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $hrmList = $qb
+            ->select('uru')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH,'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
+            ->where(
+                $qb->expr()->eq('auru.accessUrlId', $urlId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.userId', $userId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $hrmList;
+    }
 }

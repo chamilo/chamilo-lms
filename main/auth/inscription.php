@@ -30,20 +30,17 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
-$gMapsPlugin = GoogleMapsPlugin::create();
-$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
-if ($geolocalization) {
-    $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
+$gMapsPlugin = GoogleMapsPlugin::create();
+if ($gMapsPlugin->get('enable_api') === 'true') {
+    $key = $gMapsPlugin->get('api_key');
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting(
-        'allow_registration'
-    ) === 'false';
+$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting('allow_registration') === 'false';
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -58,13 +55,9 @@ if (!empty($_SESSION['user_language_choice'])) {
 }
 
 $form = new FormValidator('registration');
-
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
-    /*if (api_is_anonymous() === true) {
-        $user_already_registered_show_terms = false;
-    }*/
 }
 
 $sessionPremiumChecker = Session::read('SessionIsPremium');
@@ -90,7 +83,7 @@ if (!empty($course_code_redirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
-if ($user_already_registered_show_terms === false) {
+if ($user_already_registered_show_terms === false && api_get_setting('allow_registration') === 'true') {
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         if (in_array('status', $allowedFields)) {
@@ -481,9 +474,8 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $showTerms = false;
-
 // Terms and conditions
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
@@ -561,7 +553,9 @@ if ($allowDoubleValidation && $showTerms == false) {
     $form->addButton('submit', get_lang('RegisterUser'), '', 'primary');
     $form->addHtml('</div>');
 } else {
-    $form->addButtonNext(get_lang('RegisterUser'));
+    if (api_get_setting('allow_registration') === 'true' || $user_already_registered_show_terms || $showTerms) {
+        $form->addButtonNext(get_lang('RegisterUser'));
+    }
 }
 
 $course_code_redirect = Session::read('course_redirect');
@@ -668,7 +662,6 @@ if ($form->validate()) {
         if ($user_id) {
             // Storing the extended profile
             $store_extended = false;
-
             $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
 
             if (api_get_setting('extended_profile') == 'true' &&

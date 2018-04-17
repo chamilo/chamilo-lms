@@ -13,7 +13,7 @@ class ExerciseLink extends AbstractLink
 {
     private $course_info = null;
     private $exercise_table = null;
-    private $exercise_data = null;
+    private $exercise_data = [];
     private $is_hp;
 
     /**
@@ -310,11 +310,12 @@ class ExerciseLink extends AbstractLink
         $status_user = api_get_status_of_user_in_course($user_id, $courseId);
 
         $data = $this->get_exercise_data();
+        $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$data['id'].'&type='.$this->get_type();
+        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$exerciseId.'&type='.$this->get_type();
         if ((!api_is_allowed_to_edit() && $this->calc_score($user_id) == null) || $status_user != 1) {
-            $url .= '&doexercise='.$this->get_ref_id();
+            $url .= '&doexercise='.$exerciseId;
         }
 
         return $url;
@@ -357,15 +358,9 @@ class ExerciseLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(id) 
-                FROM '.$this->get_exercise_table().'
-                WHERE 
-                    c_id = '.$this->course_id.' AND 
-                    id = '.$this->get_ref_id();
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
+        $exerciseData = $this->get_exercise_data();
 
-        return $number[0] != 0;
+        return !empty($exerciseData);
     }
 
     /**

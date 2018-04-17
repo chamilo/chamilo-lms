@@ -10,15 +10,22 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
+$allowToTrack = api_is_platform_admin(true, true) ||
+    api_is_allowed_to_create_course() ||
+    api_is_student_boss();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
+
 $nameTools = get_lang('Students');
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-
-api_block_anonymous_users();
-
 $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [

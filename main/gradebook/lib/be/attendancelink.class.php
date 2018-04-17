@@ -122,7 +122,7 @@ class AttendanceLink extends AbstractLink
                 WHERE
                     session_id = $session_id AND
                     c_id = '.$this->course_id.' AND
-                    attendance_id = '".intval($this->get_ref_id())."'";
+                    attendance_id = '".$this->get_ref_id()."'";
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -144,15 +144,15 @@ class AttendanceLink extends AbstractLink
                 FROM '.$this->get_attendance_table().' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND
-                    att.id = '.intval($this->get_ref_id()).' AND
-                    att.session_id='.intval($session_id).'';
+                    att.id = '.$this->get_ref_id().' AND
+                    att.session_id='.$session_id;
         $query = Database::query($sql);
         $attendance = Database::fetch_array($query, 'ASSOC');
 
         // Get results
         $sql = 'SELECT *
                 FROM '.$tbl_attendance_result.'
-                WHERE c_id = '.$this->course_id.' AND attendance_id = '.intval($this->get_ref_id());
+                WHERE c_id = '.$this->course_id.' AND attendance_id = '.$this->get_ref_id();
         if (isset($stud_id)) {
             $sql .= ' AND user_id = '.intval($stud_id);
         }
@@ -258,7 +258,7 @@ class AttendanceLink extends AbstractLink
     {
         $session_id = api_get_session_id();
         $sql = 'SELECT count(att.id) FROM '.$this->get_attendance_table().' att
-                 WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' ';
+                 WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -270,7 +270,7 @@ class AttendanceLink extends AbstractLink
         //it was extracts the attendance id
         $session_id = api_get_session_id();
         $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' ';
+                WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         $attendance_id = $row['id'];
@@ -308,7 +308,7 @@ class AttendanceLink extends AbstractLink
             return false;
         } elseif (!isset($this->attendance_data)) {
             $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                    WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' ';
+                    WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
             $query = Database::query($sql);
             $this->attendance_data = Database::fetch_array($query);
         }

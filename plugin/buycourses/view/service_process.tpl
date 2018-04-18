@@ -17,7 +17,7 @@
                         <div class="col-md-3">
                             <a href='{{ _p.web }}service/{{ service.id }}'>
                                 <img alt="{{ service.name }}" class="img-rounded img-responsive"
-                                     src="{{ service.image ? _p.web ~ 'plugin/buycourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
+                                     src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                             </a>
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :

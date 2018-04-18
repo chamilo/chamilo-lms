@@ -9,18 +9,18 @@
                     <div class="col-md-6">
                         <div class="service-media">
                             {% if service.video_url %}
-                                <div class="service-video">
-                                    <div class="embed-responsive embed-responsive-16by9">
-                                        {{ essence.replace(service.video_url) }}
-                                    </div>
+                            <div class="service-video">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    {{ essence.replace(service.video_url) }}
                                 </div>
+                            </div>
                             {% elseif service.image %}
-                                <div class="service-image">
-                                    <a href="{{ _p.web }}service/{{ service.id }}">
-                                        <img alt="{{ service.name }}" class="img-rounded img-responsive"
-                                        src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
-                                    </a>
-                                </div>
+                            <div class="service-image">
+                                <a href="{{ _p.web }}service/{{ service.id }}">
+                                    <img alt="{{ service.name }}" class="img-rounded img-responsive"
+                                         src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
+                                </a>
+                            </div>
                             {% endif %}
                         </div>
                         <div class="share-social-media">
@@ -30,7 +30,7 @@
                                 </li>
                                 <li>
                                     <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}"
-                                   target="_blank" class="btn btn-facebook btn-inverse btn-xs">
+                                       target="_blank" class="btn btn-facebook btn-inverse btn-xs">
                                         <em class="fa fa-facebook"></em> Facebook
                                     </a>
                                 </li>
@@ -56,7 +56,8 @@
                         </div>
                         {% endif %}
                         <div class="service-details">
-                            <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
+                            <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }
+                                    }</b> :
                                 {% if service.applies_to == 1 %}
                                 {{ 'User'|get_lang }}
                                 {% elseif service.applies_to == 2 %}
@@ -74,13 +75,15 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="price">
-                                        {{ 'Total'|get_lang }} : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                        {{ 'Total'|get_lang }}
+                                        : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}"
                                        class="btn btn-success btn-lg btn-block">
-                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }
+                                        }
                                     </a>
                                 </div>
                             </div>
@@ -90,13 +93,16 @@
             </div>
         </div>
     </section>
-
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h2>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
-                    {{ service.service_information }}
+                    <div class="page-header">
+                        <h3>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+                    </div>
+                    <div class="service-information">
+                        {{ service.service_information }}
+                    </div>
                 </div>
             </div>
         </div>

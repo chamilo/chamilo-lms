@@ -28,21 +28,21 @@ $courseCode = api_get_course_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], $courseCode, true);
+$documentData = DocumentManager::get_document_data_by_id($_GET['id'], $courseCode, true);
 
-if (empty($document_data)) {
+if (empty($documentData)) {
     if (api_is_in_group()) {
-        $group_properties = GroupManager::get_group_properties($groupId);
-        $document_id = DocumentManager::get_document_id(
+        $groupProperties = GroupManager::get_group_properties($groupId);
+        $documentId = DocumentManager::get_document_id(
             api_get_course_info(),
-            $group_properties['directory']
+            $groupProperties['directory']
         );
-        $document_data = DocumentManager::get_document_data_by_id($document_id, $courseCode);
+        $documentData = DocumentManager::get_document_data_by_id($documentId, $courseCode);
     }
 }
 
-$document_id = $document_data['id'];
-$dir = $document_data['path'];
+$documentId = $documentData['id'];
+$dir = $documentData['path'];
 
 //make some vars
 $webcamdir = $dir;
@@ -50,7 +50,7 @@ if ($webcamdir == "/") {
     $webcamdir = '';
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting
 if (strstr($dir, '..')) {
@@ -90,7 +90,7 @@ if (!empty($groupId)) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "./document.php?id=".$document_id."&".api_get_cidreq(),
+    "url" => "./document.php?id=".$documentId."&".api_get_cidreq(),
     "name" => get_lang('Documents'),
 ];
 
@@ -100,25 +100,25 @@ if (!api_is_allowed_in_course()) {
 
 $isMySharedFolder = DocumentManager::is_my_shared_folder($userId, Security::remove_XSS($dir), $sessionId);
 
-if (!($is_allowed_to_edit || $groupRights || $isMySharedFolder)) {
+if (!($isAllowedToEdit || $groupRights || $isMySharedFolder)) {
     api_not_allowed(true);
 }
 
 /*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 
-$display_dir = $dir;
+$displayDir = $dir;
 if (isset($group)) {
-    $display_dir = explode('/', $dir);
-    unset($display_dir[0]);
-    unset($display_dir[1]);
-    $display_dir = implode('/', $display_dir);
+    $displayDir = explode('/', $dir);
+    unset($displayDir[0]);
+    unset($displayDir[1]);
+    $displayDir = implode('/', $displayDir);
 }
 
 // Interbreadcrumb for the current directory root path
 $counter = 0;
-if (isset($document_data['parents'])) {
-    foreach ($document_data['parents'] as $document_sub_data) {
+if (isset($documentData['parents'])) {
+    foreach ($documentData['parents'] as $documentSubData) {
         //fixing double group folder in breadcrumb
         if ($groupId) {
             if ($counter == 0) {
@@ -127,8 +127,8 @@ if (isset($document_data['parents'])) {
             }
         }
         $interbreadcrumb[] = [
-            'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title'],
+            'url' => $documentSubData['document_url'],
+            'name' => $documentSubData['title'],
         ];
         $counter++;
     }
@@ -144,7 +144,7 @@ $actions = Display::toolbarAction(
                 [],
                 ICON_SIZE_MEDIUM
             ),
-            'document.php?id='.$document_id.'&'.api_get_cidreq()
+            'document.php?id='.$documentId.'&'.api_get_cidreq()
         ),
     ]
 );

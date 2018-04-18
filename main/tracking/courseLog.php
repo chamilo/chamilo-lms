@@ -380,7 +380,6 @@ if (count($a_students) > 0) {
 
     $all_datas = [];
     $course_code = $_course['id'];
-
     $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
@@ -390,7 +389,7 @@ if (count($a_students) > 0) {
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );
 
-    $parameters['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+    $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
     $parameters['id_session'] = $session_id;
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 

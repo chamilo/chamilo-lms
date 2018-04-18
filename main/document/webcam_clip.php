@@ -18,6 +18,7 @@ $_SESSION['whereami'] = 'document/webcamclip';
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('WebCamClip');
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PATH).'web/assets/webcamjs/webcam.js');
+$htmlHeadXtra[] = api_get_js('webcam_recorder.js');
 $groupRights = Session::read('group_member_with_upload_rights');
 
 api_protect_course_script();

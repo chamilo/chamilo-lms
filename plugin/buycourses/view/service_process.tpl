@@ -29,12 +29,12 @@
                                 <h3 class="title">
                                     <a href='{{ _p.web }}service/{{ service.id }}'>{{ service.name }}</a>
                                 </h3>
-                                {% if course.description %}
+                                {% if service.description %}
                                 <div class="description">
-                                    {{ course.description }}
+                                    {{ service.description }}
                                 </div>
                                 {% endif %}
-                                <ul class="fa-ul">
+                                <ul class="fa-ul list-description">
                                     {% if service.applies_to %}
                                     <li>
                                         <em class="fa-li fa fa-hand-o-right" aria-hidden="true"></em>
@@ -58,7 +58,7 @@
                                         / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
                                     </li>
                                     <li><em class="fa-li fa fa-user" aria-hidden="true"></em> {{ service.owner_name }}</li>
-                                    <li><em class="fa-li fa fa-align-justify" aria-hidden="true"></em> {{ service.description }}</li>
+
                                 </ul>
                             </div>
                         </div>

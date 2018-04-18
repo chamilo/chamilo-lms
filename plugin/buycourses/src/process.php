@@ -11,13 +11,12 @@ use ChamiloSession as Session;
 require_once '../config.php';
 
 $currentUserId = api_get_user_id();
-
 if (empty($currentUserId)) {
     Session::write('buy_course_redirect', Security::remove_XSS($_SERVER['REQUEST_URI']));
     header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
     exit;
 }
-
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';
@@ -109,7 +108,7 @@ if ($count === 0) {
 
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
-$form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+$form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'btn-lg pull-right');
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');

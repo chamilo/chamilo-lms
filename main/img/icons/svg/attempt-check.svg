@@ -25,7 +25,7 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.359549"
+     inkscape:zoom="15.877287"
      inkscape:cx="13.668237"
      inkscape:cy="3.471884"
      inkscape:document-units="mm"
@@ -33,9 +33,9 @@
      showgrid="false"
      units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-height="1043"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
@@ -67,7 +67,7 @@
          id="rect1427"
          style="opacity:0;fill:#ececec;fill-opacity:1;stroke:none;stroke-width:1.32122481;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
       <path
-         style="fill:#808080;stroke-width:0.00273792"
+         style="fill:#33a10b;stroke-width:0.00273792;fill-opacity:1"
          inkscape:connector-curvature="0"
          d="m 5.032303,293.09843 q 0,0.10956 -0.076659,0.18619 l -1.9822566,1.98225 -0.372356,0.37236 q -0.076659,0.0767 -0.1861791,0.0767 -0.1095158,0 -0.1861792,-0.0767 l -0.3723568,-0.37236 -0.99112712,-0.99112 q -0.0766588,-0.0767 -0.0766588,-0.18619 0,-0.10956 0.0766588,-0.18618 l 0.37235592,-0.37236 q 0.076659,-0.0767 0.1861792,-0.0767 0.1095158,0 0.1861791,0.0767 l 0.8049492,0.8077 1.7960762,-1.79882 q 0.076659,-0.0767 0.1861792,-0.0767 0.1095158,0 0.186178,0.0767 l 0.3723583,0.37236 q 0.076659,0.0767 0.076659,0.18617 z"
          id="path1395" />

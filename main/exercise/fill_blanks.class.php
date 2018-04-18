@@ -1286,7 +1286,7 @@ class FillBlanks extends Question
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span class='feedback-green'>".$correct."</span>";
+                $correctAnswerHtml = "<span class='correct-answer'>".$correct."</span>";
         }
 
         if ($hideExpectedAnswer) {
@@ -1297,7 +1297,7 @@ class FillBlanks extends Question
 
         $result = "<span class='feedback-question'>";
         $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
-        $result .= "<span class='feedback-separator'> / </span>";
+        $result .= "<span class='feedback-separator'>|</span>";
         $result .= $correctAnswerHtml;
         $result .= "</span>";
 

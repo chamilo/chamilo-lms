@@ -36,12 +36,16 @@ $is_session_admin = api_is_session_admin();
 $title = '';
 $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
+
 // Access control
 api_block_anonymous_users();
-/*
-if (!$export_csv) {
-     Display :: display_header($nameTools);
-} */
+
+$allowToTrack = api_is_platform_admin(true, true) ||
+    api_is_allowed_to_create_course();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
 
 if ($is_session_admin) {
     header('location:session.php');

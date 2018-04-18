@@ -23,23 +23,21 @@ $groupRights = Session::read('group_member_with_upload_rights');
 api_protect_course_script();
 api_block_anonymous_users();
 
-$document_data = DocumentManager::get_document_data_by_id(
-    $_GET['id'],
-    api_get_course_id(),
-    true
-);
+$userId = api_get_user_id();
+$courseCode = api_get_course_id();
+$groupId = api_get_group_id();
+$sessionId = api_get_session_id();
+
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], $courseCode, true);
 
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties = GroupManager::get_group_properties(api_get_group_id());
+        $group_properties = GroupManager::get_group_properties($groupId);
         $document_id = DocumentManager::get_document_id(
             api_get_course_info(),
             $group_properties['directory']
         );
-        $document_data = DocumentManager::get_document_data_by_id(
-            $document_id,
-            api_get_course_id()
-        );
+        $document_data = DocumentManager::get_document_data_by_id($document_id, $courseCode);
     }
 }
 
@@ -78,8 +76,6 @@ if (!is_dir($filepath)) {
     $dir = '/';
 }
 
-$groupId = api_get_group_id();
-
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
@@ -102,8 +98,9 @@ if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 
-if (!($is_allowed_to_edit || $groupRights ||
-    DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
+$isMySharedFolder = DocumentManager::is_my_shared_folder($userId, Security::remove_XSS($dir), $sessionId);
+
+if (!($is_allowed_to_edit || $groupRights || $isMySharedFolder)) {
     api_not_allowed(true);
 }
 
@@ -123,7 +120,7 @@ $counter = 0;
 if (isset($document_data['parents'])) {
     foreach ($document_data['parents'] as $document_sub_data) {
         //fixing double group folder in breadcrumb
-        if (api_get_group_id()) {
+        if ($groupId) {
             if ($counter == 0) {
                 $counter++;
                 continue;
@@ -136,9 +133,6 @@ if (isset($document_data['parents'])) {
         $counter++;
     }
 }
-
-//make some vars
-$webcamuserid = api_get_user_id();
 
 $actions = Display::toolbarAction(
     'webcam_toolbar',
@@ -157,7 +151,7 @@ $actions = Display::toolbarAction(
 
 $template = new Template($nameTools);
 $template->assign('webcam_dir', $webcamdir);
-$template->assign('user_id', $webcamuserid);
+$template->assign('user_id', $userId);
 $template->assign('filename', 'video_clip.jpg');
 
 $layout = $template->get_template('document/webcam.tpl');

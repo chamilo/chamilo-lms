@@ -7,6 +7,14 @@
 require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 
+// Access restrictions.
+$is_allowedToTrack = api_is_platform_admin(true, true) ||
+    api_is_allowed_to_create_course() || api_is_course_tutor();
+
+if (!$is_allowedToTrack) {
+    exit;
+}
+
 switch ($action) {
     // At this date : 23/02/2017, a minor review can't determine where is used this case 'access_detail'
     case 'access_detail':

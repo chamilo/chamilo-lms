@@ -13,7 +13,12 @@ $nameTools = get_lang('Maintenance');
 api_protect_course_script(true);
 api_block_anonymous_users();
 
-Display :: display_header($nameTools);
+// Check access rights (only teachers are allowed here)
+if (!api_is_allowed_to_edit()) {
+    api_not_allowed(true);
+}
+
+Display::display_header($nameTools);
 echo Display::page_header($nameTools);
 
 ?>
@@ -46,5 +51,5 @@ echo Display::page_header($nameTools);
 <div class="sectioncomment"><?php echo get_lang('DescriptionDeleteCourse'); ?></div>
 
 <?php
-// Footer
+
 Display::display_footer();

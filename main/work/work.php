@@ -157,6 +157,11 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+
         $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication') == 1 ? 1 : 0;
         /*	Display of tool options */
         $content = settingsForm(

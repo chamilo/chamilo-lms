@@ -198,6 +198,11 @@ if (!empty($groupId)) {
             $groupMemberWithUploadRights = true;
         }
     }
+
+    // Group mode
+    if (!GroupManager::allowUploadEditDocument($userId, $courseId, $group_properties)) {
+        $groupMemberWithUploadRights = false;
+    }
     Session::write('group_member_with_upload_rights', $groupMemberWithUploadRights);
 } else {
     Session::write('group_member_with_upload_rights', false);

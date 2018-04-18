@@ -60,8 +60,14 @@ if (empty($exercise_id)) {
     api_not_allowed(true);
 }
 
-if (!$is_allowedToEdit && !$allowCoachFeedbackExercises) {
-    api_not_allowed(true);
+if ($is_tutor) {
+    if (!$allowCoachFeedbackExercises) {
+        api_not_allowed(true);
+    }
+} else {
+    if (!$is_allowedToEdit) {
+        api_not_allowed(true);
+    }
 }
 
 if (!empty($exercise_id)) {

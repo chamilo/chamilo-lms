@@ -103,9 +103,39 @@ $form->addGroup(
     false
 );
 
+$allowDocumentGroupAccess = api_get_configuration_value('group_document_access');
+if ($allowDocumentGroupAccess) {
+    $group = [
+        $form->createElement(
+            'radio',
+            'document_access',
+            get_lang('GroupDocument'),
+            get_lang('DocumentGroupCollaborationMode'),
+            0
+        ),
+        $form->createElement('radio', 'document_access', null, get_lang('DocumentGroupReadOnlyMode'), 1),
+    ];
+    $form->addGroup(
+        $group,
+        '',
+        Display::return_icon(
+            'folder.png',
+            get_lang('GroupDocumentAccess')
+        ).'<span>'.get_lang('GroupDocumentAccess').'</span>',
+        null,
+        false
+    );
+}
+
 // Work settings
 $group = [
-    $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement(
+        'radio',
+        'work_state',
+        get_lang('GroupWork'),
+        get_lang('NotAvailable'),
+        GroupManager::TOOL_NOT_AVAILABLE
+    ),
     $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
@@ -221,7 +251,8 @@ if ($form->validate()) {
         $values['chat_state'],
         $self_registration_allowed,
         $self_unregistration_allowed,
-        $categoryId
+        $categoryId,
+        isset($values['document_access']) ? $values['document_access'] : 0
     );
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
@@ -256,7 +287,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('settings');

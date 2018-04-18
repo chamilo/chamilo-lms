@@ -75,6 +75,13 @@ if ($description_type >= 9) {
 // course description controller object
 $course_description_controller = new CourseDescriptionController();
 
+// block access
+if (in_array($action, ['add', 'edit', 'delete']) &&
+    !api_is_allowed_to_edit(null, true)
+) {
+    api_not_allowed(true);
+}
+
 // Actions to controller
 switch ($action) {
     case 'listing':
@@ -84,19 +91,13 @@ switch ($action) {
         $course_description_controller->listing(true);
         break;
     case 'add':
-        if (api_is_allowed_to_edit(null, true)) {
-            $course_description_controller->add();
-        }
+        $course_description_controller->add();
         break;
     case 'edit':
-        if (api_is_allowed_to_edit(null, true)) {
-            $course_description_controller->edit($id, $description_type);
-        }
+        $course_description_controller->edit($id, $description_type);
         break;
     case 'delete':
-        if (api_is_allowed_to_edit(null, true)) {
-            $course_description_controller->destroy($id);
-        }
+        $course_description_controller->destroy($id);
         break;
     default:
         $course_description_controller->listing();

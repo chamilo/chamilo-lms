@@ -5567,7 +5567,8 @@ class CourseManager
             'email_to_teachers_on_new_work_feedback',
         ];
 
-        if (!empty(ExerciseLib::getScoreModels())) {
+        $courseModels = ExerciseLib::getScoreModels();
+        if (!empty($courseModels)) {
             $courseSettings[] = 'score_model_id';
         }
 

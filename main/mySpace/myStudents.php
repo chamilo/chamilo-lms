@@ -74,6 +74,10 @@ if (!$allowedToTrackUser) {
     api_not_allowed(true);
 }
 
+if (api_is_student()) {
+    api_not_allowed(true);
+}
+
 $htmlHeadXtra[] = '<script>
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
@@ -236,23 +240,29 @@ switch ($action) {
         exit;
         break;
     case 'send_legal':
-        $subject = get_lang('SendLegalSubject');
-        $content = sprintf(
-            get_lang('SendTermsDescriptionToUrlX'),
-            api_get_path(WEB_PATH)
-        );
-        MessageManager::send_message_simple($student_id, $subject, $content);
-        Display::addFlash(Display::return_message(get_lang('Sent')));
+        $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
+        if ($isBoss || api_is_platform_admin()) {
+            $subject = get_lang('SendLegalSubject');
+            $content = sprintf(
+                get_lang('SendTermsDescriptionToUrlX'),
+                api_get_path(WEB_PATH)
+            );
+            MessageManager::send_message_simple($student_id, $subject, $content);
+            Display::addFlash(Display::return_message(get_lang('Sent')));
+        }
         break;
     case 'delete_legal':
-        $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $student_id,
-            'legal_accept'
-        );
-        $result = $extraFieldValue->delete($value['id']);
-        if ($result) {
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
+        if ($isBoss || api_is_platform_admin()) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $student_id,
+                'legal_accept'
+            );
+            $result = $extraFieldValue->delete($value['id']);
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
         }
         break;
     case 'reset_lp':

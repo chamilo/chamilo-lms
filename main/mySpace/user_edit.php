@@ -17,11 +17,6 @@ if (!api_is_platform_admin()) {
     api_protect_admin_script();
 }
 
-// Database table definitions
-$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$database = Database::get_main_database();
-
 $userId = isset($_REQUEST['user_id']) ? intval($_REQUEST['user_id']) : '';
 
 $userInfo = api_get_user_info($userId);
@@ -60,7 +55,7 @@ if (api_drh_can_access_all_session_content()) {
         api_not_allowed(true);
     }
 } else {
-    if (!$userIsFollowed) {
+    if (!api_is_platform_admin() && !$userIsFollowed) {
         api_not_allowed(true);
     }
 }

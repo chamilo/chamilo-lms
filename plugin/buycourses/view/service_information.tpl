@@ -1,86 +1,102 @@
-<link rel="stylesheet" type="text/css" href="{{ _p.web_plugin ~ 'buycourses/resources/css/style.css' }}"/>
-
-<div id="service-information">
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h3 class="text-uppercase buy-courses-title-color">{{ service.name }}</h3>
-        </div>
-
-        {% if service.video_url %}
-            <div class="col-sm-6 col-md-7 col-xs-12">
-                <div class="embed-responsive embed-responsive-16by9">
-                    {{ essence.replace(service.video_url) }}
-                </div>
-            </div>
-        {% endif %}
-
-        <div class="{{ service.video_url ? 'col-sm-6 col-md-5 col-xs-12' : 'col-sm-12 col-xs-12' }}">
-            <div class="block">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4>{{ "Description"|get_lang }}</h4>
-                    </div>
-                    <div class="panel-body">
-                        <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
-                            {% if service.applies_to == 1 %}
-                                {{ 'User'|get_lang }}
-                            {% elseif service.applies_to == 2 %}
-                                {{ 'Course'|get_lang }}
-                            {% elseif service.applies_to == 3 %}
-                                {{ 'Session'|get_lang }}
-                            {% elseif service.applies_to == 4 %}
-                                {{ 'TemplateTitleCertificate'|get_lang }}
+<div id="service" class="service">
+    <div class="page-header">
+        <h2>{{ service.name }}</h2>
+    </div>
+    <section id="service-info">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="service-media">
+                            {% if service.video_url %}
+                                <div class="service-video">
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        {{ essence.replace(service.video_url) }}
+                                    </div>
+                                </div>
+                            {% elseif service.image %}
+                                <div class="service-image">
+                                    <a href="{{ _p.web }}service/{{ service.id }}">
+                                        <img alt="{{ service.name }}" class="img-rounded img-responsive"
+                                        src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
+                                    </a>
+                                </div>
                             {% endif %}
-                        </p>
-                        <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b>
-                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>
-                        <p><em class="fa fa-align-justify"></em> <b>{{ 'Details'|get_lang }}</b>
-                            : {{ service.description }}</p>
-                        <div class="text-right" style="padding-bottom: 20px;">
-                            <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}"
-                               class="btn btn-success btn-lg">
-                                <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                            </a>
+                        </div>
+                        <div class="share-social-media">
+                            <ul class="sharing-buttons">
+                                <li>
+                                    {{ "ShareWithYourFriends"|get_lang }}
+                                </li>
+                                <li>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}"
+                                   target="_blank" class="btn btn-facebook btn-inverse btn-xs">
+                                        <em class="fa fa-facebook"></em> Facebook
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}"
+                                       target="_blank" class="btn btn-twitter btn-inverse btn-xs">
+                                        <em class="fa fa-twitter"></em> Twitter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}"
+                                       target="_blank" class="btn btn-linkedin btn-inverse btn-xs">
+                                        <em class="fa fa-linkedin"></em> Linkedin
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% if service.description %}
+                        <div class="description">
+                            {{ service.description }}
+                        </div>
+                        {% endif %}
+                        <div class="service-details">
+                            <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
+                                {% if service.applies_to == 1 %}
+                                {{ 'User'|get_lang }}
+                                {% elseif service.applies_to == 2 %}
+                                {{ 'Course'|get_lang }}
+                                {% elseif service.applies_to == 3 %}
+                                {{ 'Session'|get_lang }}
+                                {% elseif service.applies_to == 4 %}
+                                {{ 'TemplateTitleCertificate'|get_lang }}
+                                {% endif %}
+                            </p>
+                            <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b>
+                                : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>
+                        </div>
+                        <div class="service-buy">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="price">
+                                        {{ 'Total'|get_lang }} : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}"
+                                       class="btn btn-success btn-lg btn-block">
+                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </br>
-    </br>
-    <div class="row info-course">
-        <div class="col-xs-12 col-md-7">
+    </section>
+
+    <div class="row">
+        <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h4>
-                </div>
                 <div class="panel-body">
+                    <h2>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
                     {{ service.service_information }}
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-md-5">
-            <div class="panel panel-default social-share">
-                <div class="panel-heading">
-                    <h4>{{ "ShareWithYourFriends"|get_lang }}</h4>
-                </div>
-                <div class="panel-body">
-                    <div class="icons-social text-center">
-                        <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}"
-                           target="_blank" class="btn bnt-link btn-lg">
-                            <em class="fa fa-facebook fa-2x"></em>
-                        </a>
-                        <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}"
-                           target="_blank" class="btn bnt-link btn-lg">
-                            <em class="fa fa-twitter fa-2x"></em>
-                        </a>
-                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}"
-                           target="_blank" class="btn bnt-link btn-lg">
-                            <em class="fa fa-linkedin fa-2x"></em>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

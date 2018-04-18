@@ -1732,7 +1732,9 @@ class BuyCoursesPlugin extends Plugin
             $services['owner_id'] = $return['owner_id'];
             $services['owner_name'] = api_get_person_name($return['firstname'], $return['lastname']);
             $services['visibility'] = $return['visibility'];
-            $services['image'] = $return['image'];
+            $services['image'] = !empty($return['image']) ? api_get_path(
+                    WEB_PLUGIN_PATH
+                ).'buycourses/uploads/services/images/'.$return['image'] : null;
             $services['video_url'] = $return['video_url'];
             $services['service_information'] = $return['service_information'];
 
@@ -1750,7 +1752,9 @@ class BuyCoursesPlugin extends Plugin
             $services[$index]['owner_id'] = $service['owner_id'];
             $services[$index]['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
             $services[$index]['visibility'] = $service['visibility'];
-            $services[$index]['image'] = $service['image'];
+            $services[$index]['image'] = !empty($service['image']) ? api_get_path(
+                    WEB_PLUGIN_PATH
+                ).'buycourses/uploads/services/images/'.$service['image'] : null;
             $services[$index]['video_url'] = $service['video_url'];
             $services[$index]['service_information'] = $service['service_information'];
         }

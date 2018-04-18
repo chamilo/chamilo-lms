@@ -357,15 +357,34 @@ switch ($action) {
     case 'add_question_to_reminder':
         /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
-        if (empty($objExercise)) {
+        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
+
+        if (empty($objExercise) || empty($exeId)) {
             echo 0;
             exit;
         } else {
-            $objExercise->editQuestionToRemind(
-                $_REQUEST['exe_id'],
-                $_REQUEST['question_id'],
-                $_REQUEST['action']
-            );
+            $option = isset($_GET['option']) ? $_GET['option'] : '';
+            switch ($option) {
+                case 'add_all':
+                    $questionListInSession = Session::read('questionList');
+                    $objExercise->addAllQuestionToRemind(
+                        $exeId,
+                        $questionListInSession
+                    );
+                    break;
+                case 'remove_all':
+                    $objExercise->removeAllQuestionToRemind(
+                        $exeId
+                    );
+                    break;
+                default:
+                    $objExercise->editQuestionToRemind(
+                        $exeId,
+                        $_REQUEST['question_id'],
+                        $_REQUEST['action']
+                    );
+                    break;
+            }
         }
         break;
     case 'save_exercise_by_now':

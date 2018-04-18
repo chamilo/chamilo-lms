@@ -140,26 +140,46 @@ echo '<script>
         //Normal inputs
         window.location = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
+    
+    function changeOptionStatus(status) 
+    {    
+        $("input[type=checkbox]").each(function () {                 
+            $(this).prop("checked", status);                                                
+        });    
+        
+        var action = ""; 
+        var extraOption = "remove_all";       
+        if (status == 1) {
+            extraOption = "add_all";
+        }     
+        $.ajax({
+            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+            data: "option="+extraOption+"&exe_id='.$exe_id.'&action="+action,
+            success: function(returnValue) {
+            }
+        });  
+    }
 
     function review_questions() {
-        var is_checked = 1;
+        var isChecked = 1;
         $("input[type=checkbox]").each(function () {
-            if ($(this).attr("checked") == "checked") {
-                is_checked = 2;
+            if ($(this).prop("checked")) {
+                isChecked = 2;
                 return false;
             }
         });
 
-        if (is_checked == 1) {
+        if (isChecked == 1) {
             $("#message").addClass("warning-message");
             $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
+        } else {
+            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
         }
-        window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
     }
 
     function save_remind_item(obj, question_id) {
         var action = "";
-        if ($(obj).is(\':checked\')) {
+        if ($(obj).prop("checked")) {
             action = "add";
         } else {
             action = "delete";
@@ -167,7 +187,7 @@ echo '<script>
         $.ajax({
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
             data: "question_id="+question_id+"&exe_id='.$exe_id.'&action="+action,
-            success: function(return_value) {
+            success: function(returnValue) {
             }
         });
     }
@@ -245,6 +265,18 @@ $exerciseActions = Display::url(
     get_lang('ReviewQuestions'),
     'javascript://',
     ['onclick' => 'review_questions();', 'class' => 'btn btn-success']
+);
+
+$exerciseActions .= '&nbsp;'.Display::url(
+    get_lang('SelectAll'),
+    'javascript://',
+    ['onclick' => 'changeOptionStatus(1);', 'class' => 'btn btn-default']
+);
+
+$exerciseActions .= '&nbsp;'.Display::url(
+    get_lang('UnSelectAll'),
+    'javascript://',
+    ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn-default']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(

@@ -6649,9 +6649,9 @@ class Exercise
      */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $exe_id = intval($exe_id);
-        $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $exe_id = (int) $exe_id;
+        $sql_track = "SELECT * FROM $table WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
         $new_array = [];
         if (Database::num_rows($result) > 0) {
@@ -6669,6 +6669,50 @@ class Exercise
     }
 
     /**
+     * @param int $exeId
+     *
+     * @return bool
+     */
+    public function removeAllQuestionToRemind($exeId)
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $exeId = (int) $exeId;
+        if (empty($exeId)) {
+            return false;
+        }
+        $sql = "UPDATE $table 
+                SET questions_to_check = '' 
+                WHERE exe_id = $exeId ";
+        Database::query($sql);
+        return true;
+    }
+
+    /**
+     * @param  int  $exeId
+     * @param array $questionList
+     *
+     * @return bool
+     */
+    public function addAllQuestionToRemind($exeId, $questionList = [])
+    {
+        $exeId = (int) $exeId;
+        if (empty($questionList)) {
+            return false;
+        }
+
+        $questionListToString = implode(',', $questionList);
+        $questionListToString = Database::escape_string($questionListToString);
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "UPDATE $table 
+                SET questions_to_check = '$questionListToString' 
+                WHERE exe_id = $exeId";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
      * @param int    $exe_id
      * @param int    $question_id
      * @param string $action
@@ -6676,8 +6720,8 @@ class Exercise
     public function editQuestionToRemind($exe_id, $question_id, $action = 'add')
     {
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
-        $question_id = intval($question_id);
-        $exe_id = intval($exe_id);
+        $question_id = (int) $question_id;
+        $exe_id = (int) $exe_id;
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
             if (empty($exercise_info['questions_to_check'])) {

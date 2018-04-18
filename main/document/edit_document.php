@@ -61,6 +61,8 @@ $sessionId = api_get_session_id();
 
 if (api_is_in_group()) {
     $group_properties = GroupManager::get_group_properties($group_id);
+
+    GroupManager::allowUploadEditDocument(api_get_user_id() , api_get_course_int_id(), $group_properties, true);
 }
 
 $dir = '/';

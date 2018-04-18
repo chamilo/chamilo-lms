@@ -155,6 +155,13 @@ class CGroupInfo
     private $sessionId;
 
     /**
+     * @var int needed for setting $_configuration['group_document_access']
+     *
+     * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
+     */
+    //private $docAccess;
+
+    /**
      * Set name.
      *
      * @param string $name

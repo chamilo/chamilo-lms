@@ -815,6 +815,10 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;
 
+// Allow sharing options for the documents inside a group
+//ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;
+//$_configuration['group_document_access'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

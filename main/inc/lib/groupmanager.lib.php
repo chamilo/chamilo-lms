@@ -531,6 +531,7 @@ class GroupManager
                 self::get_subscribed_tutors($result)
             );
             $result['count_all'] = $result['count_users'] + $result['count_tutor'];
+            $result['document_access'] = isset($db_object->document_access) ? $db_object->document_access : 0;
         }
 
         return $result;
@@ -620,6 +621,7 @@ class GroupManager
      * @param bool Whether self registration is allowed or not
      * @param bool Whether self unregistration is allowed or not
      * @param int $categoryId
+     * @param int $documentAccess
      *
      * @return bool TRUE if properties are successfully changed, false otherwise
      */
@@ -637,13 +639,21 @@ class GroupManager
         $chat_state,
         $self_registration_allowed,
         $self_unregistration_allowed,
-        $categoryId = null
+        $categoryId = null,
+        $documentAccess = 0
     ) {
         $table_group = Database::get_course_table(TABLE_GROUP);
         $table_forum = Database::get_course_table(TABLE_FORUM);
         $categoryId = intval($categoryId);
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
+
+        $allowDocumentAccess = api_get_configuration_value('group_document_access');
+        $documentCondition = '';
+        if ($allowDocumentAccess) {
+            $documentAccess = (int) $documentAccess;
+            $documentCondition = " document_access = $documentAccess, ";
+        }
 
         $sql = "UPDATE ".$table_group." SET
                     name='".Database::escape_string(trim($name))."',
@@ -658,9 +668,11 @@ class GroupManager
                     max_student = '".Database::escape_string($maximum_number_of_students)."',
                     self_registration_allowed = '".Database::escape_string($self_registration_allowed)."',
                     self_unregistration_allowed = '".Database::escape_string($self_unregistration_allowed)."',
+                    $documentCondition
                     category_id = ".intval($categoryId)."
                 WHERE c_id = $course_id AND id=".$group_id;
         $result = Database::query($sql);
+
 
         /* Here we are updating a field in the table forum_forum that perhaps
         duplicates the table group_info.forum_state cvargas*/
@@ -2954,5 +2966,33 @@ class GroupManager
     public static function setInvisible($groupId)
     {
         self::setStatus($groupId, 0);
+    }
+
+    /**
+     * @param int   $userId
+     * @param int   $courseId
+     * @param array $groupInfo
+     * @param bool  $blockPage
+     */
+    public static function allowUploadEditDocument($userId, $courseId, $groupInfo, $blockPage = false)
+    {
+        $allow = api_get_configuration_value('group_document_access');
+        if (!$allow) {
+            return true;
+        }
+
+        if (isset($groupInfo['document_access']) &&
+            $groupInfo['document_access'] == 1 &&
+            (!api_is_allowed_to_edit() ||
+            (!api_is_allowed_to_edit() && !GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId))
+            )
+        ) {
+            if ($blockPage) {
+                api_not_allowed(true);
+            }
+            return false;
+        }
+
+        return true;
     }
 }

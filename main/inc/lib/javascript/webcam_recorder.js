@@ -61,7 +61,7 @@
         init: function (params) {
             config = $.extend(true, config, params);
 
-            $(document).on('ready', function () {
+            $(document).ready(function () {
                 Webcam.set({
                     width: 320,
                     height: 240,

@@ -34,9 +34,6 @@
 <script>
     RecordWebcam.init({
         urlReceiver: '{{ _p.web_main }}document/webcam_receiver.php?webcamname='
-            + escape('{{ filename }}') + '&webcamdir={{ webcam_dir }}&webcamuserid={{ user_id }}',
-        video: {
-            maxClip: 10
-        }
+            + escape('{{ filename }}') + '&webcamdir={{ webcam_dir }}&webcamuserid={{ user_id }}'
     });
 </script>

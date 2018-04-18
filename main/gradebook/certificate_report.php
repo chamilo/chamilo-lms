@@ -22,7 +22,6 @@ if (!$is_allowedToTrack) {
     api_not_allowed(true);
 }
 
-
 $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [

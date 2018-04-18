@@ -1449,7 +1449,7 @@ class AnnouncementManager
      * @param bool  $sendToUsersInSession
      * @param bool  $sendToDrhUsers
      * @param Monolog\Handler\HandlerInterface logger
-     * @param int   $senderId
+     * @param int $senderId
      */
     public static function sendEmail(
         $courseInfo,

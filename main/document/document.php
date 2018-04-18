@@ -200,7 +200,7 @@ if (!empty($groupId)) {
     }
 
     // Group mode
-    if (!GroupManager::allowUploadEditDocument($userId , $courseId, $group_properties)) {
+    if (!GroupManager::allowUploadEditDocument($userId, $courseId, $group_properties)) {
         $groupMemberWithUploadRights = false;
     }
     Session::write('group_member_with_upload_rights', $groupMemberWithUploadRights);

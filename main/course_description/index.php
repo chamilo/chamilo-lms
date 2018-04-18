@@ -79,7 +79,7 @@ $course_description_controller = new CourseDescriptionController();
 if (in_array($action, ['add', 'edit', 'delete']) &&
     !api_is_allowed_to_edit(null, true)
 ) {
-   api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 // Actions to controller

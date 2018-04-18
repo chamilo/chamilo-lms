@@ -4,10 +4,10 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\UserBundle\Entity\Group;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\UserBundle\Entity\Group;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -18,7 +18,7 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Get users subscribed to a item LP, Document, etc (item_property).
      *
-     * @param string  $tool learnpath | document | etc
+     * @param string  $tool    learnpath | document | etc
      * @param int     $itemId
      * @param Course  $course
      * @param Session $session
@@ -48,7 +48,7 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Get Groups subscribed to a item: LP, Doc, etc.
      *
-     * @param string  $tool learnpath | document | etc
+     * @param string  $tool    learnpath | document | etc
      * @param int     $itemId
      * @param Course  $course
      * @param Session $session
@@ -77,7 +77,7 @@ class ItemPropertyRepository extends EntityRepository
      * Subscribe groups to a LP, doc (itemproperty).
      *
      * @param User    $currentUser
-     * @param string  $tool learnpath | document | etc
+     * @param string  $tool        learnpath | document | etc
      * @param Course  $course
      * @param Session $session
      * @param int     $itemId
@@ -277,11 +277,11 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Unsubscribe users to item.
      *
-     * @param string $tool
+     * @param string  $tool
      * @param Course  $course
      * @param Session $session
-     * @param int $itemId
-     * @param array $usersToDelete
+     * @param int     $itemId
+     * @param array   $usersToDelete
      */
     public function unsubcribeUsersToItem(
         $tool,

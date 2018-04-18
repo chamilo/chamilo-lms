@@ -36,7 +36,6 @@ $is_session_admin = api_is_session_admin();
 $title = '';
 $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
-
 // Access control
 api_block_anonymous_users();
 

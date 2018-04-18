@@ -278,8 +278,8 @@ class AnnouncementEmail
      * Send emails to users.
      *
      * @param bool $sendToUsersInSession
-     * @param bool $sendToDrhUsers send a copy of the message to the DRH users
-     * @param int  $senderId       related to the main user
+     * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
+     * @param int  $senderId             related to the main user
      */
     public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0)
     {

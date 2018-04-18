@@ -673,7 +673,6 @@ class GroupManager
                 WHERE c_id = $course_id AND id=".$group_id;
         $result = Database::query($sql);
 
-
         /* Here we are updating a field in the table forum_forum that perhaps
         duplicates the table group_info.forum_state cvargas*/
         $forum_state = (int) $forum_state;
@@ -2990,6 +2989,7 @@ class GroupManager
             if ($blockPage) {
                 api_not_allowed(true);
             }
+
             return false;
         }
 

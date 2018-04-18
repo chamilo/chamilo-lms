@@ -6688,7 +6688,7 @@ class Exercise
     }
 
     /**
-     * @param  int $exeId
+     * @param int   $exeId
      * @param array $questionList
      *
      * @return bool

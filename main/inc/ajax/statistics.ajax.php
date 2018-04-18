@@ -12,6 +12,14 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;
 
 switch ($action) {
+    case 'get_user_session':
+        $list = [];
+
+        $sql = "";
+
+        echo json_encode($list);
+        break;
+        break;
     case 'recentlogins':
         header('Content-type: application/json');
         $list = [];

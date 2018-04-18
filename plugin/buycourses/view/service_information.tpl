@@ -56,8 +56,7 @@
                         </div>
                         {% endif %}
                         <div class="service-details">
-                            <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }
-                                    }</b> :
+                            <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
                                 {% if service.applies_to == 1 %}
                                 {{ 'User'|get_lang }}
                                 {% elseif service.applies_to == 2 %}
@@ -82,8 +81,7 @@
                                 <div class="col-sm-6">
                                     <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}"
                                        class="btn btn-success btn-lg btn-block">
-                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }
-                                        }
+                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </a>
                                 </div>
                             </div>

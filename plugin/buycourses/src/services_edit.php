@@ -56,7 +56,7 @@ $formDefaultValues = [
 
 $form = new FormValidator('Services');
 $form->addText('name', $plugin->get_lang('ServiceName'));
-$form->addTextarea('description', $plugin->get_lang('Description'));
+$form->addHtmlEditor('description', $plugin->get_lang('Description'));
 $form->addElement(
     'number',
     'price',

@@ -5765,6 +5765,55 @@ div#chat-remote-video video {
     font-weight: bold;
 }
 
+/**** SOCIAL MEDIA ****/
+.share-social-media{
+    background-color: #FFF;
+    margin-bottom: 5px;
+    padding: 10px 5px 5px 5px;
+}
+.share-social-media .sharing-buttons{
+    list-style: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+.share-social-media .sharing-buttons li{
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.btn-facebook.btn-inverse{
+    color: #3B5998;
+    background-color: transparent;
+    border-color: rgba(59,89,152,0.3);
+}
+.btn-facebook.btn-inverse:hover{
+    color: #FFF;
+    background-color: #3B5998;
+    border-color: #3B5998;
+}
+.btn-twitter.btn-inverse{
+    color: #00ACED;
+    background-color: transparent;
+    border-color: rgba(0,172,237,0.3);
+}
+.btn-twitter.btn-inverse:hover{
+    color: #FFF;
+    background-color: #00ACED;
+    border-color: #00ACED;
+}
+.btn-linkedin.btn-inverse{
+    color: #0077b5;
+    background-color: transparent;
+    border-color: rgba(7,119,181,0.3);
+}
+.btn-linkedin.btn-inverse:hover{
+    color: #FFF;
+    background-color: #0077b5;
+    border-color: #0077b5;
+}
+/**** END SOCIAL MEDIA ****/
+
+/**** ABOUT SESSION ****/
 #about-session .description-course {
     font-size: 1.2em;
 }
@@ -5786,8 +5835,6 @@ div#chat-remote-video video {
     background: #EEF4FF;
     border-radius: 10px;
 }
-
-/**** ABOUT SESSION ****/
 
 .label-price, .label-free {
     background-color: transparent;
@@ -5835,7 +5882,6 @@ div#chat-remote-video video {
 
 #about-session .description-course {
     padding: 10px;
-    color: #666666;
 }
 
 #about-session .tags-course {
@@ -5889,7 +5935,6 @@ div#chat-remote-video video {
 
 #about-session .info-course .content-info {
     padding: 10px;
-    color: #666666;
 }
 
 #about-session .extrafield_dt {
@@ -5966,7 +6011,6 @@ div#chat-remote-video video {
     border-right: 8px solid #337AB7;
     border-bottom: 10px solid transparent;
     border-top: 10px solid transparent;
-
 }
 
 #about-session .course-tags li span::after {
@@ -5986,7 +6030,6 @@ div#chat-remote-video video {
 }
 
 #about-session .price-text {
-    color: #505763;
     font-size: 36px;
     font-weight: 700;
     line-height: 40px;

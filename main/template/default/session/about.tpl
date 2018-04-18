@@ -71,6 +71,31 @@
                 {% set course_video = extra_field.value.getValue() %}
             {% endif %}
         {% endfor %}
+        <div class="share-social-media">
+            <ul class="sharing-buttons">
+                <li>
+                    {{ "ShareWithYourFriends"|get_lang }}
+                </li>
+                <li>
+                    <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': page_url }|url_encode }}"
+                       target="_blank" class="btn btn-facebook btn-inverse btn-xs">
+                        <em class="fa fa-facebook"></em> Facebook
+                    </a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ page_url }|url_encode }}"
+                       target="_blank" class="btn btn-twitter btn-inverse btn-xs">
+                        <em class="fa fa-twitter"></em> Twitter
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getName() }|url_encode }}"
+                       target="_blank" class="btn btn-linkedin btn-inverse btn-xs">
+                        <em class="fa fa-linkedin"></em> Linkedin
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div class="panel-course">
             <div class="row">
                 {% if courses|length > 1 %}
@@ -209,31 +234,7 @@
                         </div>
                     </div>
                 {% endif %}
-
-                <div class="panel panel-default panel-social">
-                    <div class="panel-heading"><h4>{{ "ShareWithYourFriends"|get_lang }}</h4></div>
-                    <div class="panel-body">
-                        <div class="socialshare">
-                            <ul class="networks">
-                                <li>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                        <em class="fa fa-facebook"></em>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                        <em class="fa fa-twitter"></em>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                        <em class="fa fa-linkedin"></em>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                
                 {% if is_premiun == false %}
                 <div class="panel panel-default panel-subscription">
                     <div class="panel-heading">

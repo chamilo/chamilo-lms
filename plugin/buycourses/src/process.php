@@ -16,7 +16,9 @@ if (empty($currentUserId)) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
     exit;
 }
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>';
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
+        WEB_PLUGIN_PATH
+    ).'buycourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';

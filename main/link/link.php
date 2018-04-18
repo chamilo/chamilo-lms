@@ -101,21 +101,41 @@ $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'
 $content = '';
 $token = Security::get_existing_token();
 
+$protectedActions = [
+    'addlink',
+    'editlink',
+    'addcategory',
+    'editcategory',
+    'deletelink',
+    'deletecategory',
+    'visible',
+    'invisible',
+    'up',
+    'down',
+    'move_link_up',
+    'move_link_down',
+];
+
+// block access
+if (in_array($action, $protectedActions) &&
+    !api_is_allowed_to_edit(null, true)
+) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'addlink':
-        if (api_is_allowed_to_edit(null, true)) {
-            $form = Link::getLinkForm(null, 'addlink', $token);
-            if ($form->validate() && Security::check_token('get')) {
-                // Here we add a link
-                $linkId = Link::addlinkcategory('link');
-                Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+        $form = Link::getLinkForm(null, 'addlink', $token);
+        if ($form->validate() && Security::check_token('get')) {
+            // Here we add a link
+            $linkId = Link::addlinkcategory('link');
+            Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
 
-                Security::clear_token();
-                header('Location: '.$linkListUrl);
-                exit;
-            }
-            $content = $form->returnForm();
+            Security::clear_token();
+            header('Location: '.$linkListUrl);
+            exit;
         }
+        $content = $form->returnForm();
         break;
     case 'editlink':
         $form = Link::getLinkForm($id, 'editlink');
@@ -128,31 +148,28 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'addcategory':
-        if (api_is_allowed_to_edit(null, true)) {
-            $form = Link::getCategoryForm(null, 'addcategory');
+        $form = Link::getCategoryForm(null, 'addcategory');
 
-            if ($form->validate()) {
-                // Here we add a category
-                Link::addlinkcategory('category');
-                header('Location: '.$linkListUrl);
-                exit;
-            }
-            $content = $form->returnForm();
+        if ($form->validate()) {
+            // Here we add a category
+            Link::addlinkcategory('category');
+            header('Location: '.$linkListUrl);
+            exit;
         }
+        $content = $form->returnForm();
         break;
     case 'editcategory':
-        if (api_is_allowed_to_edit(null, true)) {
-            $form = Link::getCategoryForm($id, 'editcategory');
+        $form = Link::getCategoryForm($id, 'editcategory');
 
-            if ($form->validate()) {
-                // Here we edit a category
-                Link::editCategory($id, $form->getSubmitValues());
+        if ($form->validate()) {
+            // Here we edit a category
+            Link::editCategory($id, $form->getSubmitValues());
 
-                header('Location: '.$linkListUrl);
-                exit;
-            }
-            $content = $form->returnForm();
+            header('Location: '.$linkListUrl);
+            exit;
         }
+        $content = $form->returnForm();
+
         break;
     case 'deletelink':
         // Here we delete a link

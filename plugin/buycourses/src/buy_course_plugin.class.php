@@ -667,7 +667,7 @@ class BuyCoursesPlugin extends Plugin
             'currency' => $item['iso_code'],
             'image' => null,
             'nbrCourses' => $session->getNbrCourses(),
-            'nbrUsers' => $session->getNbrUsers()
+            'nbrUsers' => $session->getNbrUsers(),
         ];
 
         $fieldValue = new ExtraFieldValue('session');

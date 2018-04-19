@@ -13018,7 +13018,7 @@ EOD;
         }
 
         if (isset($itemList['document'])) {
-            // get parents
+            // Get parents
             foreach ($itemList['document'] as $documentId) {
                 $documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), true);
                 if (!empty($documentInfo['parents'])) {
@@ -13030,6 +13030,7 @@ EOD;
                     }
                 }
             }
+
             $courseBuilder->build_documents(
                 api_get_session_id(),
                 $this->get_course_int_id(),

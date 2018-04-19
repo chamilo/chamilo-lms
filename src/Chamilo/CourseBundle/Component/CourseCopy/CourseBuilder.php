@@ -467,6 +467,7 @@ class CourseBuilder
         $idList = []
     ) {
         $table = Database::get_course_table(TABLE_FORUM_POST);
+        $courseId = (int) $courseId;
         $sql = "SELECT * FROM $table WHERE c_id = $courseId ";
         if (!empty($thread_id) && !empty($forum_id)) {
             $forum_id = intval($forum_id);
@@ -567,6 +568,8 @@ class CourseBuilder
             $withBaseContent
         );
 
+        $courseId = (int) $courseId;
+
         $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId $sessionCondition";
 
@@ -620,6 +623,7 @@ class CourseBuilder
         $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
 
+        $courseId = (int) $courseId;
         $idCondition = '';
         if (!empty($idList)) {
             $idList = array_map('intval', $idList);
@@ -697,6 +701,8 @@ class CourseBuilder
         $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $table_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
+        $courseId = (int) $courseId;
 
         // Building normal tests.
         $sql = "SELECT * FROM $table_que
@@ -974,6 +980,8 @@ class CourseBuilder
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
+        $courseId = (int) $courseId;
+
         $sessionCondition = api_get_session_condition(
             $session_id,
             true,
@@ -1027,6 +1035,8 @@ class CourseBuilder
         $table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_opt = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
+        $courseId = (int) $courseId;
+
         $sql = 'SELECT * FROM '.$table_que.' WHERE c_id = '.$courseId.'  ';
         $db_result = Database::query($sql);
         $is_required = 0;
@@ -1079,6 +1089,8 @@ class CourseBuilder
             true,
             $withBaseContent
         );
+
+        $courseId = (int) $courseId;
 
         $sql = 'SELECT * FROM '.$table.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
@@ -1142,6 +1154,8 @@ class CourseBuilder
             $withBaseContent
         );
 
+        $courseId = (int) $courseId;
+
         $sql = 'SELECT * FROM '.$table.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
@@ -1193,6 +1207,7 @@ class CourseBuilder
         $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
@@ -1245,6 +1260,8 @@ class CourseBuilder
         $table_main = Database::get_course_table(TABLE_LP_MAIN);
         $table_item = Database::get_course_table(TABLE_LP_ITEM);
         $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
+
+        $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
@@ -1375,6 +1392,8 @@ class CourseBuilder
     ) {
         $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
 
+        $courseId = (int) $courseId;
+
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
             if ($withBaseContent) {
@@ -1470,6 +1489,7 @@ class CourseBuilder
         $id_list = []
     ) {
         $tbl_wiki = Database::get_course_table(TABLE_WIKI);
+        $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
@@ -1527,6 +1547,7 @@ class CourseBuilder
         $table_thematic = Database::get_course_table(TABLE_THEMATIC);
         $table_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $table_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
+        $courseId = (int) $courseId;
 
         $courseInfo = api_get_course_info_by_id($courseId);
         $session_id = intval($session_id);
@@ -1601,6 +1622,7 @@ class CourseBuilder
         $table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $sessionCondition = api_get_session_condition($session_id, true, $withBaseContent);
+        $courseId = (int) $courseId;
 
         $sql = 'SELECT * FROM '.$table_attendance.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
@@ -1638,6 +1660,7 @@ class CourseBuilder
             true,
             $withBaseContent
         );
+        $courseId = (int) $courseId;
 
         $idCondition = '';
         if (!empty($idList)) {

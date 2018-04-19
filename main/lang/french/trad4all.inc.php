@@ -8069,4 +8069,8 @@ $ExportToChamiloFormat = "Exportation du parcours";
 $CoursesComingSoon = "Cours à paraître";
 $SalePrice = "Prix de vente";
 $BuyNow = "Acheter";
+$DocumentGroupCollaborationMode = "Mode collaboratif";
+$DocumentGroupReadOnlyMode = "Mode lecture seule";
+$GroupDocumentAccess = "Type d'usage";
+$DocumentGroupShareMode = "Mode partagé";
 ?>

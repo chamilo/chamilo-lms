@@ -8132,4 +8132,8 @@ $ExportToChamiloFormat = "Export to Chamilo format";
 $CoursesComingSoon = "Courses coming soon";
 $SalePrice = "Sale price";
 $BuyNow = "Buy now";
+$DocumentGroupCollaborationMode = "Collaboration mode";
+$DocumentGroupReadOnlyMode = "Read only mode";
+$GroupDocumentAccess = "Document access";
+$DocumentGroupShareMode = "Share mode";
 ?>

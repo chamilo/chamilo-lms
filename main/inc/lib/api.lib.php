@@ -818,6 +818,13 @@ function api_get_path($path = '', $configuration = [])
     $isInitialized = [];
     $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
     $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
+    if (!empty($root_rel)) {
+        // Adds "/" to the root_rel
+        $hasSlash = substr($configuration['url_append'], 0, 1);
+        if ($hasSlash !== '/') {
+            $root_rel = '/'.$root_rel;
+        }
+    }
 
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {

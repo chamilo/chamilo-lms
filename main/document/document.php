@@ -152,12 +152,12 @@ $groupMemberWithEditRights = false;
 if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
-    $isTutorGroup = GroupManager::is_tutor_of_group(
+    $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
         $userId,
+        $courseId,
         $group_properties,
-        $courseId
+        null
     );
-    $groupMemberWithEditRights = $isAllowedToEdit || $isTutorGroup;
 
     // Let's assume the user cannot upload files for the group
     $groupMemberWithUploadRights = false;
@@ -244,6 +244,14 @@ switch ($action) {
                     $courseInfo['code'],
                     false,
                     $sessionId
+                );
+
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $documentInfo,
+                    true
                 );
 
                 // Check whether the document is in the database.
@@ -336,9 +344,9 @@ switch ($action) {
         exit;
         break;
     case 'downloadfolder':
-        if (api_get_setting('students_download_folders') == 'true'
-            || $isAllowedToEdit
-            || api_is_platform_admin()
+        if (api_get_setting('students_download_folders') == 'true' ||
+            $isAllowedToEdit ||
+            api_is_platform_admin()
         ) {
             // Get the document data from the ID
             $document_data = DocumentManager::get_document_data_by_id(
@@ -421,6 +429,15 @@ switch ($action) {
                     0
                 );
             }
+
+            GroupManager::allowUploadEditDocument(
+                $userId,
+                $courseId,
+                $group_properties,
+                $document_info,
+                true
+            );
+
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
             $user_folder = $my_path.'my_files/';
@@ -978,6 +995,14 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
             $sessionId
         );
 
+        GroupManager::allowUploadEditDocument(
+            $userId,
+            $courseId,
+            $group_properties,
+            $document_to_move,
+            true
+        );
+
         $move_path = $document_to_move['path'];
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders(
@@ -1041,6 +1066,14 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
             api_get_course_id(),
             false,
             $sessionId
+        );
+
+        GroupManager::allowUploadEditDocument(
+            $userId,
+            $courseId,
+            $group_properties,
+            $document_to_move,
+            true
         );
 
         // Security fix: make sure they can't move files that are not in the document table
@@ -1906,11 +1939,17 @@ if (!empty($documentAndFolders)) {
 
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
 
+            $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
+                $userId,
+                $courseId,
+                $group_properties,
+                $document_data
+            );
+
             // Admins get an edit column
             if ($isAllowedToEdit ||
-                $groupMemberWithEditRights ||
-                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
-                $document_data['insert_user_id'] == api_get_user_id()
+                $groupMemberWithEditRightsCheckDocument ||
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
 

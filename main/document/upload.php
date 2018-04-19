@@ -85,7 +85,6 @@ if (empty($document_data)) {
 $group_properties = [];
 
 $htmlHeadXtra[] = '<script>
-
 function check_unzip() {
     if (document.upload.unzip.checked){
         //document.upload.if_exists[0].disabled=true;
@@ -121,7 +120,7 @@ if (!empty($groupId)) {
         api_not_allowed(true);
     }
 
-    GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $group_properties, true);
+    GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $group_properties, null, true);
 } elseif ($is_allowed_to_edit ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
 } else {

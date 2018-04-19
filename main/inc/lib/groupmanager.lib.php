@@ -56,6 +56,10 @@ class GroupManager
     const GROUP_TOOL_WIKI = 5;
     const GROUP_TOOL_CHAT = 6;
 
+    const DOCUMENT_MODE_SHARE = 0; // By default
+    const DOCUMENT_MODE_READ_ONLY = 1;
+    const DOCUMENT_MODE_COLLABORATION = 2;
+
     /**
      * GroupManager constructor.
      */
@@ -531,7 +535,7 @@ class GroupManager
                 self::get_subscribed_tutors($result)
             );
             $result['count_all'] = $result['count_users'] + $result['count_tutor'];
-            $result['document_access'] = isset($db_object->document_access) ? $db_object->document_access : 0;
+            $result['document_access'] = isset($db_object->document_access) ? $db_object->document_access : self::DOCUMENT_MODE_SHARE;
         }
 
         return $result;
@@ -2971,28 +2975,114 @@ class GroupManager
      * @param int   $userId
      * @param int   $courseId
      * @param array $groupInfo
+     * @param array $documentInfoToBeCheck
      * @param bool  $blockPage
+     *
+     * @return bool
      */
-    public static function allowUploadEditDocument($userId, $courseId, $groupInfo, $blockPage = false)
-    {
-        $allow = api_get_configuration_value('group_document_access');
-        if (!$allow) {
+    public static function allowUploadEditDocument(
+        $userId,
+        $courseId,
+        $groupInfo,
+        $documentInfoToBeCheck = null,
+        $blockPage = false
+    ) {
+        // Admin and teachers can make any change no matter what
+        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             return true;
         }
 
-        if (isset($groupInfo['document_access']) &&
-            $groupInfo['document_access'] == 1 &&
-            (!api_is_allowed_to_edit() ||
-            (!api_is_allowed_to_edit() && !GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId))
-            )
-        ) {
+        if (empty($groupInfo)) {
             if ($blockPage) {
                 api_not_allowed(true);
             }
-
             return false;
         }
 
-        return true;
+        // Tutor can also make any change
+        $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+
+        if ($isTutor) {
+            return true;
+        }
+
+        // Just in case also check if document in group is available
+        if ($groupInfo['doc_state'] == 0) {
+            if ($blockPage) {
+                api_not_allowed(true);
+            }
+            return false;
+        }
+
+        // Default behaviour
+        $documentAccess = self::DOCUMENT_MODE_SHARE;
+        $allow = api_get_configuration_value('group_document_access');
+        if ($allow) {
+            if (isset($groupInfo['document_access'])) {
+                $documentAccess = (int) $groupInfo['document_access'];
+            }
+        }
+
+        // Check access for students
+        $result = false;
+        switch ($documentAccess) {
+            case self::DOCUMENT_MODE_SHARE:
+                // Default chamilo behaviour
+                // Student can upload his own content, cannot modify another content.
+                $isMember = GroupManager::is_subscribed($userId, $groupInfo);
+                if ($isMember) {
+                    // No document to check, allow access to document feature.
+                    if (empty($documentInfoToBeCheck)) {
+                        $result = true;
+                    } else {
+                        // Member can only edit his own document
+                        $authorId = isset($documentInfoToBeCheck['insert_user_id']) ? $documentInfoToBeCheck['insert_user_id'] : 0;
+                        // If "insert_user_id" is not set, check the author id from c_item_property
+                        if (empty($authorId) && isset($documentInfoToBeCheck['id'])) {
+                            $documentInfo = api_get_item_property_info(
+                                $courseId,
+                                'document',
+                                $documentInfoToBeCheck['id'],
+                                0
+                            );
+                            // Try to find this document in the session
+                            if (!empty($sessionId)) {
+                                $documentInfo = api_get_item_property_info(
+                                    $courseId,
+                                    'document',
+                                    $documentInfoToBeCheck['id'],
+                                    api_get_session_id()
+                                );
+                            }
+
+                            if (!empty($documentInfo) && isset($documentInfo['insert_user_id'])) {
+                                $authorId = $documentInfo['insert_user_id'];
+                            }
+                        }
+
+                        if ($authorId == $userId) {
+                            $result = true;
+                        }
+                    }
+                }
+                break;
+            case self::DOCUMENT_MODE_READ_ONLY:
+                // Student cannot upload content, cannot modify another content.
+                $result = false;
+                break;
+            case self::DOCUMENT_MODE_COLLABORATION:
+                // Student can upload content, can modify another content.
+                $isMember = GroupManager::is_subscribed($userId, $groupInfo);
+                if ($isMember) {
+                    $result = true;
+                }
+                break;
+        }
+
+        if ($blockPage && $result == false) {
+            api_not_allowed(true);
+        }
+
+        return $result;
     }
 }

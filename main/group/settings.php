@@ -109,11 +109,25 @@ if ($allowDocumentGroupAccess) {
         $form->createElement(
             'radio',
             'document_access',
+            null,
+            get_lang('DocumentGroupShareMode'),
+            GroupManager::DOCUMENT_MODE_SHARE
+        ),
+        $form->createElement(
+            'radio',
+            'document_access',
             get_lang('GroupDocument'),
             get_lang('DocumentGroupCollaborationMode'),
-            0
+            GroupManager::DOCUMENT_MODE_COLLABORATION
         ),
-        $form->createElement('radio', 'document_access', null, get_lang('DocumentGroupReadOnlyMode'), 1),
+        $form->createElement(
+            'radio',
+            'document_access',
+            null,
+            get_lang('DocumentGroupReadOnlyMode'),
+            GroupManager::DOCUMENT_MODE_READ_ONLY
+        ),
+
     ];
     $form->addGroup(
         $group,

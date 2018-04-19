@@ -10,6 +10,9 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
+
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $htmlHeadXtra[] = '

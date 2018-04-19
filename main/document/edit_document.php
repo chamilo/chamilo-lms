@@ -58,13 +58,6 @@ $lib_path = api_get_path(LIBRARY_PATH);
 $course_info = api_get_course_info();
 $group_id = api_get_group_id();
 $sessionId = api_get_session_id();
-
-if (api_is_in_group()) {
-    $group_properties = GroupManager::get_group_properties($group_id);
-
-    GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $group_properties, true);
-}
-
 $dir = '/';
 $currentDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 $readonly = false;
@@ -97,6 +90,10 @@ if (isset($_GET['id'])) {
 
 if (empty($document_data)) {
     api_not_allowed(true);
+}
+
+if (api_is_in_group()) {
+    $group_properties = GroupManager::get_group_properties($group_id);
 }
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
@@ -192,6 +189,35 @@ if (!api_is_allowed_to_edit()) {
     if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
         api_not_allowed();
     }
+}
+
+$document_info = api_get_item_property_info(
+    api_get_course_int_id(),
+    'document',
+    $document_id,
+    0
+);
+
+// Try to find this document in the session
+if (!empty($sessionId)) {
+    $document_info = api_get_item_property_info(
+        api_get_course_int_id(),
+        'document',
+        $document_id,
+        $sessionId
+    );
+}
+
+
+if (api_is_in_group()) {
+    $group_properties = GroupManager::get_group_properties($group_id);
+    GroupManager::allowUploadEditDocument(
+        api_get_user_id(),
+        api_get_course_int_id(),
+        $group_properties,
+        $document_info,
+        true
+    );
 }
 
 /* MAIN TOOL CODE */
@@ -328,23 +354,6 @@ if (file_exists($document_data['absolute_path'])) {
 // Display the header
 $nameTools = get_lang('EditDocument').': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
-
-$document_info = api_get_item_property_info(
-    api_get_course_int_id(),
-    'document',
-    $document_id,
-    0
-);
-
-// Try to find this document in the session
-if (!empty($sessionId)) {
-    $document_info = api_get_item_property_info(
-        api_get_course_int_id(),
-        'document',
-        $document_id,
-        $sessionId
-    );
-}
 
 $owner_id = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];

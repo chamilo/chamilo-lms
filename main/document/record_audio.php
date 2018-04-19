@@ -15,6 +15,7 @@ $nameTools = get_lang('VoiceRecord');
 
 api_protect_course_script();
 api_block_anonymous_users();
+api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
 $document_data = DocumentManager::get_document_data_by_id(
     $_GET['id'],

@@ -860,10 +860,6 @@ switch ($action) {
         }
         break;
     case 'export_to_course_build':
-        if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
-            api_not_allowed();
-        }
-
         if (api_is_allowed_to_edit()) {
             if (!$lp_found) {
                 require 'lp_list.php';

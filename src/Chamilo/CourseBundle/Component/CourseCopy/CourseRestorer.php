@@ -2799,7 +2799,7 @@ class CourseRestorer
                                     // if is an sco
                                     $old_prerequisite[$new_item_id] = $item['prerequisite'];
                                 } else {
-                                    $old_prerequisite[$new_item_id] = $new_item_ids[$item['prerequisite']];
+                                    $old_prerequisite[$new_item_id] = isset($new_item_ids[$item['prerequisite']]) ? $new_item_ids[$item['prerequisite']] : '';
                                 }
                             }
 

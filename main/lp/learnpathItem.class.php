@@ -1046,17 +1046,15 @@ class learnpathItem
         if ($recursivity > $max) {
             return [];
         }
-        if (!isset($type)) {
-            $type = $this->get_type();
-        }
+
+        $type = empty($type) ? $this->get_type() : $type;
+
         if (!isset($abs_path)) {
             $path = $this->get_file_path();
             $abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
         }
 
         $files_list = [];
-        $type = $this->get_type();
-
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:

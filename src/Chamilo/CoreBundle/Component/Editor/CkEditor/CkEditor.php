@@ -97,6 +97,8 @@ class CkEditor extends Editor
 
     /**
      * @param array $templates
+     *
+     * @return string
      */
     public function formatTemplates($templates)
     {

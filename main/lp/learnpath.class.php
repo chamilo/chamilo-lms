@@ -2423,10 +2423,10 @@ class learnpath
         }
 
         // @todo remove this query and load the row info as a parameter
-        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
+        $table = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
         $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
-                FROM $tbl_learnpath
+                FROM $table
                 WHERE iid = $lp_id";
         $rs = Database::query($sql);
         $now = time();
@@ -13027,6 +13027,42 @@ EOD;
                             continue;
                         }
                         $itemList['document'][] = $parentInfo['iid'];
+                    }
+                }
+            }
+
+            $courseInfo = api_get_course_info();
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+                $items = DocumentManager::get_resources_from_source_html(
+                    $documentInfo['absolute_path'],
+                    true,
+                    TOOL_DOCUMENT
+                );
+
+                if (!empty($items)) {
+                    foreach ($items as $item) {
+                        // Get information about source url
+                        $url = $item[0]; // url
+                        $scope = $item[1]; // scope (local, remote)
+                        $type = $item[2]; // type (rel, abs, url)
+
+                        $origParseUrl = parse_url($url);
+                        $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+
+                        if ($scope == 'local') {
+                            if ($type == 'abs' || $type == 'rel') {
+                                $documentFile = strstr($realOrigPath, 'document');
+                                if (strpos($realOrigPath, $documentFile) !== false) {
+                                    $documentFile = str_replace('document', '', $documentFile);
+                                    $itemDocumentId = DocumentManager::get_document_id($courseInfo, $documentFile);
+                                    // Document found! Add it to the list
+                                    if ($itemDocumentId) {
+                                        $itemList['document'][] = $itemDocumentId;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -12,12 +12,17 @@
         urlReceiver: '',
         video: {
             fps: 1000,
-            maxTime: 60000,
             maxClip: 25
+        },
+        callbacks: {
+            save: null,
+            auto: null
         }
     };
 
     function snap() {
+        var deferred = $.Deferred();
+
         Webcam.snap(function (dataUri) {
             Webcam.upload(dataUri, config.urlReceiver, function (code, response) {
                 $(config.selectors.results).html(
@@ -26,20 +31,23 @@
                     + '<img src="' + dataUri + '" class="webcamclip_bg">'
                     + '</div>'
                 );
+
+                deferred.resolve();
             });
         });
+
+        return deferred.promise();
     };
 
-    var videoInterval = 0;
+    var videoInterval = 0,
+        videoDeferred = $.Deferred();
 
     function startVideo() {
         var counter = 0;
+
+        videoDeferred = $.Deferred();
         videoInterval = window.setInterval(function () {
             counter++;
-
-            window.setTimeout(function () {
-                stopVideo();
-            }, config.video.maxTime);
 
             if (config.video.maxClip >= counter) {
                 snap();
@@ -47,6 +55,8 @@
                 stopVideo();
             }
         }, config.video.fps);
+
+        return videoDeferred.promise();
     }
 
     function stopVideo() {
@@ -55,6 +65,7 @@
         }
 
         window.clearTimeout(videoInterval);
+        videoDeferred.resolve();
     }
 
     window.RecordWebcam = {
@@ -87,13 +98,23 @@
                 $(config.selectors.btnSave).on('click', function (e) {
                     e.preventDefault();
 
-                    snap();
-                })
+                    snap()
+                        .always(function () {
+                            if (config.callbacks.save) {
+                                config.callbacks.save.apply(null, []);
+                            }
+                        });
+                });
 
                 $(config.selectors.btnAuto).on('click', function (e) {
                     e.preventDefault();
 
-                    startVideo();
+                    startVideo()
+                        .always(function () {
+                            if (config.callbacks.auto) {
+                                config.callbacks.auto.apply(null, []);
+                            }
+                        });
                 });
 
                 $(config.selectors.btnStop).on('click', function (e) {

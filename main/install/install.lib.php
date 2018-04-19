@@ -2870,8 +2870,8 @@ function fixLpId($connection, $debug)
                         WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
                     $connection->query($sql);
                     if ($debug) {
-                        error_log("Fix wrong c_tool links");
-                        error_log($sql);
+                        //error_log("Fix wrong c_tool links");
+                        //error_log($sql);
                     }
                 }
 
@@ -2885,7 +2885,7 @@ function fixLpId($connection, $debug)
                                     WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                             $connection->query($sql);
                             if ($debug) {
-                                error_log($sql);
+                                //error_log($sql);
                             }
                         }
                     }
@@ -2902,8 +2902,8 @@ function fixLpId($connection, $debug)
                                     WHERE iid = $itemIid AND c_id = $courseId";
                                 $connection->query($sql);
                                 if ($debug) {
-                                    error_log("Fix document: ");
-                                    error_log($sql);
+                                    //error_log("Fix document: ");
+                                    //error_log($sql);
                                 }
                             }
                         }
@@ -2957,11 +2957,11 @@ function fixLpId($connection, $debug)
                     }
 
                     $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
-                        WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
+                            WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
 
                     $sql = "UPDATE $tblCLpItem SET id = iid 
-                    WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
+                            WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
                 }
 
@@ -2983,7 +2983,7 @@ function fixLpId($connection, $debug)
     }
 
     if ($debug) {
-        error_log('----- END - fixIds');
+        error_log('END Fix lp.id lp.iids');
     }
 }
 

@@ -208,7 +208,6 @@ if (!empty($sessionId)) {
     );
 }
 
-
 if (api_is_in_group()) {
     $group_properties = GroupManager::get_group_properties($group_id);
     GroupManager::allowUploadEditDocument(

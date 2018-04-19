@@ -127,7 +127,6 @@ if ($allowDocumentGroupAccess) {
             get_lang('DocumentGroupReadOnlyMode'),
             GroupManager::DOCUMENT_MODE_READ_ONLY
         ),
-
     ];
     $form->addGroup(
         $group,

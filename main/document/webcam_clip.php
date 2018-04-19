@@ -9,6 +9,7 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author  Juan Carlos Raña Trabado herodoto@telefonica.net
+ *
  * @since   7/jun/2012
  * @Updated 04/09/2015 Upgrade to WebCamJS
  */

@@ -2996,6 +2996,7 @@ class GroupManager
             if ($blockPage) {
                 api_not_allowed(true);
             }
+
             return false;
         }
 
@@ -3011,6 +3012,7 @@ class GroupManager
             if ($blockPage) {
                 api_not_allowed(true);
             }
+
             return false;
         }
 

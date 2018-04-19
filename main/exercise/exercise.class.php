@@ -6684,7 +6684,7 @@ class Exercise
                 SET questions_to_check = '' 
                 WHERE exe_id = $exeId ";
         Database::query($sql);
-        
+
         return true;
     }
 

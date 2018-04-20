@@ -169,7 +169,6 @@ $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), null, false)
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 $form->addElement('html', '</div>');
 
-
 $form->addElement('html', '<div class="col-md-6">');
 // Self registration
 $group = [
@@ -292,9 +291,7 @@ $form->addGroup(
     false
 );
 
-
 $form->addElement('html', '</div>');
-
 
 $form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', '');
@@ -318,7 +315,6 @@ $form->addGroup(
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
-
 
 // Chat settings.
 $group = [

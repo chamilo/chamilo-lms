@@ -75,7 +75,6 @@ $group = [
 $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), null, false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
-
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
@@ -94,9 +93,6 @@ $form->addGroup(
 );
 
 $form->addElement('html', '</div>');
-
-
-
 
 $form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
@@ -177,7 +173,6 @@ $group = [
 ];
 $form->addElement('html', '</div>');
 
-
 $form->addElement('html', '<div class="col-md-12">');
 $form->addElement('html', '</div>');
 
@@ -232,11 +227,9 @@ $form->addGroup(
     false
 );
 
-
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
-
 
 // Forum settings
 $group = [
@@ -252,9 +245,7 @@ $form->addGroup(
     false
 );
 
-
 $form->addElement('html', '</div>');
-
 
 $form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', '');

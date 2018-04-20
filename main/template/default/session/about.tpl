@@ -55,7 +55,7 @@
                         <div class="date">
                             <p>
                                 {% if session.duration %}
-                                    {{ 'SessionDurationXDaysLeft'|get_lang|format(session.duration) }}
+                                    {{ 'SessionDurationXDaysTotal'|get_lang|format(session.duration) }}
                                 {% else %}
                                     {{ session_date.display }}
                                 {% endif %}

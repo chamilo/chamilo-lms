@@ -403,6 +403,7 @@ foreach ($categories as $item) {
             $actionSeriousGame = null;
             $actionUpdateScormFile = '';
             $actionExportToCourseBuild = '';
+            $allowChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -795,14 +796,16 @@ foreach ($categories as $item) {
                     );
                 }
 
-                $actionExportToCourseBuild = Display::url(
-                    Display::return_icon(
-                        'backup.png',
-                        get_lang('ExportToChamiloFormat')
-                    ),
-                    api_get_self().'?'.api_get_cidreq()
-                    ."&action=export_to_course_build&lp_id=$id"
-                );
+                if ($allowChamiloExport) {
+                    $actionExportToCourseBuild = Display::url(
+                        Display::return_icon(
+                            'backup.png',
+                            get_lang('ExportToChamiloFormat')
+                        ),
+                        api_get_self().'?'.api_get_cidreq()
+                        ."&action=export_to_course_build&lp_id=$id"
+                    );
+                }
 
                 if ($is_allowed_to_edit) {
                     $start_time = $start_time;

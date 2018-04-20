@@ -819,6 +819,9 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 //ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;
 //$_configuration['group_document_access'] = false;
 
+// Allow LP export to chamilo format (CourseBackup)
+//$_configuration['allow_lp_chamilo_export'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

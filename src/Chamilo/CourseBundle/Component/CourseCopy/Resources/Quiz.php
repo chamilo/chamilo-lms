@@ -38,11 +38,14 @@ class Quiz extends Resource
 
     /**
      * Add a question to this Quiz.
+     *
+     * @param int $id
+     * @param int $questionOrder
      */
-    public function add_question($id, $question_order)
+    public function add_question($id, $questionOrder)
     {
         $this->obj->question_ids[] = $id;
-        $this->obj->question_orders[] = $question_order;
+        $this->obj->question_orders[] = $questionOrder;
     }
 
     /**

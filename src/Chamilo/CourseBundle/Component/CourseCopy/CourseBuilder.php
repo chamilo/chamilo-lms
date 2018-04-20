@@ -222,6 +222,7 @@ class CourseBuilder
 
         $documentCondition = '';
         if (!empty($idList)) {
+            $idList = array_unique($idList);
             $idList = array_map('intval', $idList);
             $documentCondition = ' d.iid IN ("'.implode('","', $idList).'") AND ';
         }
@@ -730,6 +731,7 @@ class CourseBuilder
                 $obj->extra,
                 $question_category_id
             );
+            $question->addPicture($this);
 
             $sql = 'SELECT * FROM '.$table_ans.'
                     WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
@@ -747,9 +749,7 @@ class CourseBuilder
                     $obj2->hotspot_type
                 );
                 if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
-                    $table_options = Database::get_course_table(
-                        TABLE_QUIZ_QUESTION_OPTION
-                    );
+                    $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
                     $sql = 'SELECT * FROM '.$table_options.'
                             WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
                     $db_result3 = Database::query($sql);
@@ -768,7 +768,6 @@ class CourseBuilder
 
         // 1st union gets the orphan questions from deleted exercises
         // 2nd union gets the orphan questions from question that were deleted in a exercise.
-
         $sql = " (
                     SELECT question_id, q.* FROM $table_que q 
                     INNER JOIN $table_rel r
@@ -807,10 +806,7 @@ class CourseBuilder
                 if (!isset($this->course->resources[$obj->id])) {
                     // find the question category
                     // @todo : need to be adapted for multi category questions in 1.10
-                    $question_category_id = TestCategory::getCategoryForQuestion(
-                        $obj->id,
-                        $courseId
-                    );
+                    $question_category_id = TestCategory::getCategoryForQuestion($obj->id, $courseId);
                     $question = new QuizQuestion(
                         $obj->id,
                         $obj->question,
@@ -823,6 +819,7 @@ class CourseBuilder
                         $obj->extra,
                         $question_category_id
                     );
+                    $question->addPicture($this);
                     $sql = "SELECT * FROM $table_ans
                             WHERE c_id = $courseId AND question_id = ".$obj->id;
                     $db_result2 = Database::query($sql);
@@ -915,6 +912,8 @@ class CourseBuilder
                     $obj->level,
                     $obj->extra
                 );
+                $question->addPicture($this);
+
                 $sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
                 $db_result2 = Database::query($sql);
                 while ($obj2 = Database::fetch_object($db_result2)) {

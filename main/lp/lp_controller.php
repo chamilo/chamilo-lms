@@ -860,7 +860,8 @@ switch ($action) {
         }
         break;
     case 'export_to_course_build':
-        if (api_is_allowed_to_edit()) {
+        $allowExport = api_get_configuration_value('allow_lp_chamilo_export');
+        if (api_is_allowed_to_edit() && $allowExport) {
             if (!$lp_found) {
                 require 'lp_list.php';
             } else {

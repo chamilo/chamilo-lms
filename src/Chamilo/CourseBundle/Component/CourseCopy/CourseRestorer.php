@@ -288,6 +288,7 @@ class CourseRestorer
             return;
         }
 
+        $webEditorCss = api_get_path(WEB_CSS_PATH).'editor.css';
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $resources = $this->course->resources;
         $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
@@ -385,7 +386,7 @@ class CourseRestorer
                     }
                 }
             } elseif ($document->file_type == DOCUMENT) {
-                //Checking if folder exists in the database otherwise we created it
+                // Checking if folder exists in the database otherwise we created it
                 $dir_to_create = dirname($document->path);
                 if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
                     if (is_dir($path.dirname($document->path))) {
@@ -448,9 +449,9 @@ class CourseRestorer
                     switch ($this->file_option) {
                         case FILE_OVERWRITE:
                             $origin_path = $this->course->backup_path.'/'.$document->path;
-
                             if (file_exists($origin_path)) {
                                 copy($origin_path, $path.$document->path);
+                                $this->fixEditorHtmlContent($path.$document->path, $webEditorCss);
                                 $sql = "SELECT id FROM $table
                                         WHERE
                                             c_id = ".$this->destination_course_id." AND
@@ -685,6 +686,7 @@ class CourseRestorer
                                                 $this->course->info['path']
                                             );
                                             file_put_contents($dest_document_path, $content);
+                                            $this->fixEditorHtmlContent($dest_document_path, $webEditorCss);
                                         }
                                     }
 
@@ -703,31 +705,31 @@ class CourseRestorer
                                     if ($document_id) {
                                         $sql = "UPDATE $table SET id = iid WHERE iid = $document_id";
                                         Database::query($sql);
+
+                                        $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
+
+                                        $itemProperty = isset($document->item_properties[0]) ? $document->item_properties[0] : '';
+                                        $insertUserId = isset($itemProperty['insert_user_id']) ? $itemProperty['insert_user_id'] : api_get_user_id();
+                                        $toGroupId = isset($itemProperty['to_group_id']) ? $itemProperty['to_group_id'] : 0;
+                                        $toUserId = isset($itemProperty['to_user_id']) ? $itemProperty['to_user_id'] : null;
+
+                                        $insertUserId = $this->checkUserId($insertUserId);
+                                        $toUserId = $this->checkUserId($toUserId, true);
+                                        $groupInfo = $this->checkGroupId($toGroupId);
+
+                                        api_item_property_update(
+                                            $course_info,
+                                            TOOL_DOCUMENT,
+                                            $document_id,
+                                            'DocumentAdded',
+                                            $insertUserId,
+                                            $groupInfo,
+                                            $toUserId,
+                                            null,
+                                            null,
+                                            $my_session_id
+                                        );
                                     }
-
-                                    $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
-
-                                    $itemProperty = isset($document->item_properties[0]) ? $document->item_properties[0] : '';
-                                    $insertUserId = isset($itemProperty['insert_user_id']) ? $itemProperty['insert_user_id'] : api_get_user_id();
-                                    $toGroupId = isset($itemProperty['to_group_id']) ? $itemProperty['to_group_id'] : 0;
-                                    $toUserId = isset($itemProperty['to_user_id']) ? $itemProperty['to_user_id'] : null;
-
-                                    $insertUserId = $this->checkUserId($insertUserId);
-                                    $toUserId = $this->checkUserId($toUserId, true);
-                                    $groupInfo = $this->checkGroupId($toGroupId);
-
-                                    api_item_property_update(
-                                        $course_info,
-                                        TOOL_DOCUMENT,
-                                        $document_id,
-                                        'DocumentAdded',
-                                        $insertUserId,
-                                        $groupInfo,
-                                        $toUserId,
-                                        null,
-                                        null,
-                                        $my_session_id
-                                    );
                                 } else {
                                     if (file_exists($path.$document->path)) {
                                         copy($path.$document->path, $path.$new_file_name);
@@ -748,6 +750,7 @@ class CourseRestorer
                                                 $this->course->info['path']
                                             );
                                             file_put_contents($path.$new_file_name, $content);
+                                            $this->fixEditorHtmlContent($path.$new_file_name, $webEditorCss);
                                         }
                                     }
 
@@ -814,6 +817,7 @@ class CourseRestorer
                                             $this->course->info['path']
                                         );
                                         file_put_contents($path.$new_file_name, $content);
+                                        $this->fixEditorHtmlContent($path.$new_file_name, $webEditorCss);
                                     }
                                 }
 
@@ -888,6 +892,7 @@ class CourseRestorer
                                     $this->course->info['path']
                                 );
                                 file_put_contents($path.$document->path, $content);
+                                $this->fixEditorHtmlContent($path.$document->path, $webEditorCss);
                             }
                         }
 
@@ -3568,5 +3573,27 @@ class CourseRestorer
         }
 
         return $userId;
+    }
+
+    /**
+     * @param string $documentPath
+     * @param string $webEditorCss
+     */
+    public function fixEditorHtmlContent($documentPath, $webEditorCss = '')
+    {
+        $extension = pathinfo(basename($documentPath), PATHINFO_EXTENSION);
+
+        switch ($extension) {
+            case 'html':
+            case 'htm':
+                $contents = file_get_contents($documentPath);
+                $contents = str_replace(
+                    '{{css_editor}}',
+                    $webEditorCss,
+                    $contents
+                );
+                file_put_contents($documentPath, $contents);
+                break;
+        }
     }
 }

@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -108,12 +109,28 @@ class CourseArchiver
 
         // Copy all documents to the temp-dir
         if (isset($course->resources[RESOURCE_DOCUMENT]) && is_array($course->resources[RESOURCE_DOCUMENT])) {
+            $webEditorCss = api_get_path(WEB_CSS_PATH).'editor.css';
+            /** @var Document $document */
             foreach ($course->resources[RESOURCE_DOCUMENT] as $document) {
                 if ($document->file_type == DOCUMENT) {
                     $doc_dir = $backup_dir.$document->path;
                     @mkdir(dirname($doc_dir), $perm_dirs, true);
                     if (file_exists($course->path.$document->path)) {
                         copy($course->path.$document->path, $doc_dir);
+                        // Check if is html or htm
+                        $extension = pathinfo(basename($document->path), PATHINFO_EXTENSION);
+                        switch ($extension) {
+                            case 'html':
+                            case 'htm':
+                                $contents = file_get_contents($doc_dir);
+                                $contents = str_replace(
+                                    $webEditorCss,
+                                    '{{css_editor}}',
+                                    $contents
+                                );
+                                file_put_contents($doc_dir, $contents);
+                                break;
+                        }
                     }
                 } else {
                     @mkdir($backup_dir.$document->path, $perm_dirs, true);
@@ -171,7 +188,6 @@ class CourseArchiver
                     copyDirTo($course->path.$asset->path, $doc_dir, false);
                     continue;
                 }
-
                 copy($course->path.$asset->path, $doc_dir);
             }
         }

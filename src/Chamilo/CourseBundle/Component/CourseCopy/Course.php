@@ -59,6 +59,8 @@ class Course
 
     /**
      * Add a resource from a given type to this course.
+     *
+     * @param Resource $resource
      */
     public function add_resource(&$resource)
     {

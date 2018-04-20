@@ -3233,6 +3233,13 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_extra_fields = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+
+        $extraField = new \ExtraField('session');
+        $field = $extraField->get_handler_field_info_by_field_variable('image');
+
         $sql = "SELECT 
                 s.id,
                 s.name,
@@ -3242,10 +3249,13 @@ class SessionManager
                 s.session_category_id,
                 c.name as category_name,
                 s.description,
-                (SELECT COUNT(*) FROM session_rel_user WHERE session_id = s.id) as users,
-				(SELECT COUNT(*) FROM c_lp WHERE session_id = s.id) as lessons,
-                (SELECT value FROM extra_field_values WHERE field_id = 16 AND item_id = s.id) as image
-                FROM $tbl_session s
+                (SELECT COUNT(*) FROM $tbl_session_user WHERE session_id = s.id) as users,
+				(SELECT COUNT(*) FROM $tbl_lp WHERE session_id = s.id) as lessons ";
+        if ($field !== false) {
+            $fieldId = $field['id'];
+            $sql .= ",(SELECT value FROM $tbl_extra_fields WHERE field_id = $fieldId AND item_id = s.id) as image ";
+        }
+        $sql .= " FROM $tbl_session s
                 LEFT JOIN $tbl_session_category c
                     ON s.session_category_id = c.id
                 INNER JOIN $tbl_users u
@@ -3254,11 +3264,15 @@ class SessionManager
                 LIMIT 8";
         $result = Database::query($sql);
 
-        $plugin = BuyCoursesPlugin::create();
-        $checker = $plugin->isEnabled();
-        $sessions = [];
         if (Database::num_rows($result) > 0) {
+            $plugin = BuyCoursesPlugin::create();
+            $checker = $plugin->isEnabled();
+            $sessions = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if (!isset($row['image'])) {
+                    $row['image'] = '';
+                }
+                $row['on_sale'] = '';
                 if ($checker) {
                     $row['on_sale'] = $plugin->getItemByProduct(
                         $row['id'],

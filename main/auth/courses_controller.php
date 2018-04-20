@@ -578,7 +578,7 @@ class CoursesController
         $btnBing = false
     ) {
         if ($btnBing) {
-            $btnBing = 'btn-lg';
+            $btnBing = 'btn-lg btn-block';
         } else {
             $btnBing = 'btn-sm';
         }
@@ -595,7 +595,7 @@ class CoursesController
                 get_lang('CheckRequirements'),
                 $url,
                 'shield',
-                'default',
+                'info',
                 [
                     'class' => $btnBing.' ajax',
                     'data-title' => get_lang('CheckRequirements'),

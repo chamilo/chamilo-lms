@@ -5857,10 +5857,44 @@ div#chat-remote-video video {
 .label-free {
     color: #5cb85c;
 }
+#about-session .session-subscribe{
+
+}
+#about-session .session-title{
+    font-weight: bold;
+}
+#about-session .session-tutor{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+#about-session .share-social-media{
+    padding: 10px 0 0 0;
+}
+#about-session .share-social-media .sharing-buttons li{
+    padding-left: 0;
+}
+#about-session .session-info .date{
+    font-weight: bold;
+    text-align: center;
+}
+#about-session .panel-tags{
+    display: inline-block;
+    width: 100%;
+    padding: 0 10px;
+}
+#about-session .panel-tags .course-tags{
+    margin-bottom: 0;
+}
+#about-session .panel-tags .course-tags li{
+    margin-bottom: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 #about-session .sub-title{
     font-size: 22px;
     font-weight: 700;
-    margin: 0 0 30px;
+    margin: 0 0 20px;
 }
 #about-session .topics .title-info{
     margin: 30px 0 20px 0;
@@ -5895,8 +5929,9 @@ div#chat-remote-video video {
 #about-session .coach-information {
     width: 100%;
     display: block;
-    border-bottom: 1px solid #cdcdcd;
-    margin-bottom: 20px;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 #about-session .coach-information:last-child {
@@ -6023,9 +6058,7 @@ div#chat-remote-video video {
     line-height: 20px;
     font-size: 1.5rem !important;
     font-weight: 600 !important;
-    letter-spacing: -.03em;
-    color: #FFF !important;
-    background: #337AB7 !important;
+    background: #D7E3E6 !important;
     border-radius: 0 3px 3px 0 !important;
     -webkit-transition: none 0.15s ease-in-out;
     -o-transition: none 0.15s ease-in-out;
@@ -6040,7 +6073,7 @@ div#chat-remote-video video {
     position: absolute;
     width: 0;
     height: 0;
-    border-right: 8px solid #337AB7;
+    border-right: 8px solid #D7E3E6;
     border-bottom: 10px solid transparent;
     border-top: 10px solid transparent;
 }

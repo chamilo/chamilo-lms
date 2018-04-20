@@ -7723,7 +7723,7 @@ class SessionManager
             false,
             false,
             [
-                'ToolbarSet' => 'Minimal',
+                'ToolbarSet' => 'TrainingDescription',
             ]
         );
 

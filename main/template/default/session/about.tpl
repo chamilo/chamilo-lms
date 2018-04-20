@@ -108,13 +108,12 @@
             </div>
         </div>
     </div>
-
     {% for course_data in courses %}
         {% set course_video = '' %}
         {% for extra_field in course_data.extra_fields %}
             {% if extra_field.value.getField().getVariable() == 'video_url' %}
                 {% set course_video = extra_field.value.getValue() %}
-            {% endif %}
+        {% endif %}
         {% endfor %}
         <div class="panel panel-default panel-course">
             <div class="panel-body">
@@ -157,12 +156,12 @@
                 {% endif %}
             </div>
         </div>
-
         <section class="course">
         <div class="row">
             <div class="col-md-8">
                 <h3 class="sub-title">{{ "CourseInformation"|get_lang }}</h3>
                 <div class="course-information read-more-area">
+
                     {% if course_data.objectives %}
                     <div class="topics">
                         <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.objectives.getTitle }}</h4>
@@ -218,20 +217,22 @@
                     {% endif %}
 
                     {% if course_data.custom %}
-                    {% for custom in course_data.custom %}
-                    <div class="topics">
-                        <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.getTitle }}</h4>
-                        <div class="content-info">
-                            {{ custom.getContent }}
+                        {% for custom in course_data.custom %}
+                        <div class="topics">
+                            <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.getTitle }}</h4>
+                            <div class="content-info">
+                                {{ custom.getContent }}
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
                     {% endif %}
+
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
+
                         {% if course_data.coaches %}
                         <div class="panel-teachers">
                             <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
@@ -263,9 +264,9 @@
                             {% endfor %}
                         </div>
                         {% endif %}
+
                     </div>
                 </div>
-
             </div>
         </div>
         </section>

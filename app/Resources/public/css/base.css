@@ -16,8 +16,15 @@ html {
 
 body {
     margin-bottom: 120px;
+    color: #29303b;
+    line-height: 24px;
 }
-
+p{
+    margin: 0 0 20px;
+}
+ul li, ol li{
+    margin-bottom: 10px;
+}
 /* Sticky footer style */
 .sticky-footer {
     position: absolute;
@@ -5770,6 +5777,7 @@ div#chat-remote-video video {
     background-color: #FFF;
     margin-bottom: 5px;
     padding: 10px 5px 5px 5px;
+    font-size: 12px;
 }
 .share-social-media .sharing-buttons{
     list-style: none;
@@ -5814,28 +5822,23 @@ div#chat-remote-video video {
 /**** END SOCIAL MEDIA ****/
 
 /**** ABOUT SESSION ****/
-#about-session .description-course {
-    font-size: 1.2em;
-}
 
-#about-session .panel-information {
-    font-size: 16px;
+.read-more, .hide-content{
+    padding: 10px 0;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
-
+.read-more-area{
+    position: relative;
+    width: 100%;
+    min-height: 284px;
+}
 #about-session .panel-information ul {
     margin: 20px 0;
 }
-
-.page-header {
-    margin-top: 0px;
+#about-session .course{
+    padding-top: 50px;
 }
-
-#about-session .panel-course {
-    padding: 20px;
-    background: #EEF4FF;
-    border-radius: 10px;
-}
-
 .label-price, .label-free {
     background-color: transparent;
     font-size: 18px;
@@ -5854,21 +5857,81 @@ div#chat-remote-video video {
 .label-free {
     color: #5cb85c;
 }
-
-#about-session .panel-body {
-    background: #F7F9FD;
+#about-session .session-requirements h5{
+    font-weight: bold;
 }
-
-#about-session .coach-avatar {
-    float: right;
-    width: 100px;
+#about-session .session-title{
+    font-weight: bold;
 }
-
+#about-session .session-tutor{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+#about-session .share-social-media{
+    padding: 10px 0 0 0;
+}
+#about-session .share-social-media .sharing-buttons li{
+    padding-left: 0;
+}
+#about-session .session-info .date{
+    font-weight: bold;
+    text-align: center;
+}
+#about-session .panel-tags{
+    display: inline-block;
+    width: 100%;
+    padding: 0 10px;
+}
+#about-session .panel-tags .course-tags{
+    margin-bottom: 0;
+}
+#about-session .panel-tags .course-tags li{
+    margin-bottom: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#about-session .sub-title{
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 20px;
+}
+#about-session .topics .title-info{
+    margin: 30px 0 20px 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+#about-session .coach-header{
+    display: flex;
+    -moz-box-align: center;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-flow: row;
+}
+#about-session .coach-header .coach-avatar {
+    width: 70px;
+    margin-right: 20px;
+}
+#about-session .coach-header .coach-avatar .img-circle{
+    border: 1px solid #C0C0C0;
+}
+#about-session .coach-header .coach-title{
+    flex-flow: column;
+    align-items: flex-start;
+    display: flex;
+}
+#about-session .coach-header .coach-title p{
+    font-size: 13px;
+}
+#about-session .coach-title p{
+    margin: 0;
+}
 #about-session .coach-information {
     width: 100%;
     display: block;
-    border-bottom: 1px solid #cdcdcd;
-    margin-bottom: 20px;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 #about-session .coach-information:last-child {
@@ -5880,8 +5943,12 @@ div#chat-remote-video video {
 
 }
 
-#about-session .description-course {
-    padding: 10px;
+#about-session .course-title h3 {
+    font-size: 22px;
+    line-height: 32px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 #about-session .tags-course {
@@ -5991,9 +6058,7 @@ div#chat-remote-video video {
     line-height: 20px;
     font-size: 1.5rem !important;
     font-weight: 600 !important;
-    letter-spacing: -.03em;
-    color: #FFF !important;
-    background: #337AB7 !important;
+    background: #D7E3E6 !important;
     border-radius: 0 3px 3px 0 !important;
     -webkit-transition: none 0.15s ease-in-out;
     -o-transition: none 0.15s ease-in-out;
@@ -6008,7 +6073,7 @@ div#chat-remote-video video {
     position: absolute;
     width: 0;
     height: 0;
-    border-right: 8px solid #337AB7;
+    border-right: 8px solid #D7E3E6;
     border-bottom: 10px solid transparent;
     border-top: 10px solid transparent;
 }

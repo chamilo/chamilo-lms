@@ -385,7 +385,7 @@ class CourseRestorer
                     }
                 }
             } elseif ($document->file_type == DOCUMENT) {
-                //Checking if folder exists in the database otherwise we created it
+                // Checking if folder exists in the database otherwise we created it
                 $dir_to_create = dirname($document->path);
                 if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
                     if (is_dir($path.dirname($document->path))) {
@@ -448,7 +448,6 @@ class CourseRestorer
                     switch ($this->file_option) {
                         case FILE_OVERWRITE:
                             $origin_path = $this->course->backup_path.'/'.$document->path;
-
                             if (file_exists($origin_path)) {
                                 copy($origin_path, $path.$document->path);
                                 $sql = "SELECT id FROM $table

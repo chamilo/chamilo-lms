@@ -104,7 +104,7 @@ $MultiplicationStar = "Multiplicación:\t\t\t*";
 $SubstractionMinus = "Resta:\t\t\t\t-";
 $SummationPlus = "Suma:\t\t\t\t+";
 $NotationList = "Notación para fórmula";
-$SubscribeToSessionRequest = "Solicitud de inscripción a una sesión";
+$SubscribeToSessionRequest = "Solicitar inscripción";
 $PleaseSubscribeMeToSession = "Por favor suscribirme a la sesión";
 $SearchActiveSessions = "Buscar sesiones activas";
 $UserNameHasDash = "El nombre de usuario no puede contener el caracter '-'";
@@ -8156,4 +8156,8 @@ $ExportToChamiloFormat = "Exportación de la lección";
 $CoursesComingSoon = "Cursos disponibles próximamente";
 $SalePrice = "Precio de venta";
 $BuyNow = "Comprar ahora";
+$DocumentGroupCollaborationMode = "Modo colaboración";
+$DocumentGroupReadOnlyMode = "Modo lectura sola";
+$GroupDocumentAccess = "Acceso a documento";
+$DocumentGroupShareMode = "Modo compartido";
 ?>

@@ -8136,4 +8136,5 @@ $DocumentGroupCollaborationMode = "Collaboration mode";
 $DocumentGroupReadOnlyMode = "Read only mode";
 $GroupDocumentAccess = "Document access";
 $DocumentGroupShareMode = "Share mode";
+$SessionDurationXDaysTotal = "This session has a limited duration of %s days";
 ?>

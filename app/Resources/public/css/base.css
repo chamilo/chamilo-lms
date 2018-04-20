@@ -5857,8 +5857,8 @@ div#chat-remote-video video {
 .label-free {
     color: #5cb85c;
 }
-#about-session .session-subscribe{
-
+#about-session .session-requirements h5{
+    font-weight: bold;
 }
 #about-session .session-title{
     font-weight: bold;

@@ -53,21 +53,31 @@ $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
 
 $course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
+$sessionId = api_get_session_id();
 
 if (empty($exercise_id)) {
     api_not_allowed(true);
 }
 
-if ($is_tutor) {
-    if (!$allowCoachFeedbackExercises) {
-        api_not_allowed(true);
+$blockPage = true;
+if (empty($sessionId)) {
+    if ($is_allowedToEdit) {
+        $blockPage = false;
     }
 } else {
-    if (!$is_allowedToEdit) {
-        api_not_allowed(true);
+    if ($allowCoachFeedbackExercises && api_is_coach($sessionId, $course_id)) {
+        $blockPage = false;
+    } else {
+        if ($is_allowedToEdit) {
+            $blockPage = false;
+        }
     }
+}
+
+if ($blockPage) {
+    api_not_allowed(true);
 }
 
 if (!empty($exercise_id)) {

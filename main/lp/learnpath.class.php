@@ -12312,6 +12312,7 @@ EOD;
     public function fixBlockedLinks($src)
     {
         $urlInfo = parse_url($src);
+
         $platformProtocol = 'https';
         if (strpos(api_get_path(WEB_CODE_PATH), 'https') === false) {
             $platformProtocol = 'http';
@@ -12332,7 +12333,6 @@ EOD;
             if (strpos(api_get_path(WEB_PATH), $host) === false) {
                 // Check X-Frame-Options
                 $ch = curl_init();
-
                 $options = [
                     CURLOPT_URL => $src,
                     CURLOPT_RETURNTRANSFER => true,
@@ -12344,6 +12344,15 @@ EOD;
                     CURLOPT_TIMEOUT => 120,
                     CURLOPT_MAXREDIRS => 10,
                 ];
+
+                $proxySettings = api_get_configuration_value('proxy_settings');
+                if (!empty($proxySettings) &&
+                    isset($proxySettings['curl_setopt_array'])
+                ) {
+                    $options[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
+                    $options[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+                }
+
                 curl_setopt_array($ch, $options);
                 $response = curl_exec($ch);
                 $httpCode = curl_getinfo($ch);

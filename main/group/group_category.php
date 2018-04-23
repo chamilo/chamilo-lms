@@ -212,6 +212,46 @@ $form->addGroup(
     false
 );
 
+$allowDocumentGroupAccess = api_get_configuration_value('group_category_document_access');
+if ($allowDocumentGroupAccess) {
+    $form->addElement('html', '</div>');
+    $form->addElement('html', '<div class="col-md-6">');
+    $group = [
+        $form->createElement(
+            'radio',
+            'document_access',
+            null,
+            get_lang('DocumentGroupShareMode'),
+            GroupManager::DOCUMENT_MODE_SHARE
+        ),
+        $form->createElement(
+            'radio',
+            'document_access',
+            get_lang('GroupDocument'),
+            get_lang('DocumentGroupCollaborationMode'),
+            GroupManager::DOCUMENT_MODE_COLLABORATION
+        ),
+        $form->createElement(
+            'radio',
+            'document_access',
+            null,
+            get_lang('DocumentGroupReadOnlyMode'),
+            GroupManager::DOCUMENT_MODE_READ_ONLY
+        ),
+    ];
+    $form->addGroup(
+        $group,
+        '',
+        Display::return_icon(
+            'folder.png',
+            get_lang('GroupDocumentAccess')
+        ).'<span>'.get_lang('GroupDocumentAccess').'</span>',
+        null,
+        false
+    );
+    $form->addElement('html', '</div>');
+}
+
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-12">');
@@ -369,13 +409,14 @@ if ($form->validate()) {
                 $self_reg_allowed,
                 $self_unreg_allowed,
                 $max_member,
-                $values['groups_per_user']
+                $values['groups_per_user'],
+                isset($values['document_access']) ? $values['document_access'] : 0
             );
             Display::addFlash(Display::return_message(get_lang('GroupPropertiesModified')));
             header("Location: ".$currentUrl."&category=".$values['id']);
             exit;
         case 'add_category':
-            GroupManager :: create_category(
+            GroupManager::create_category(
                 $values['title'],
                 $values['description'],
                 $values['doc_state'],
@@ -388,7 +429,8 @@ if ($form->validate()) {
                 $self_reg_allowed,
                 $self_unreg_allowed,
                 $max_member,
-                $values['groups_per_user']
+                $values['groups_per_user'],
+                isset($values['document_access']) ? $values['document_access'] : 0
             );
             Display::addFlash(Display::return_message(get_lang('CategoryCreated')));
             header("Location: ".$currentUrl);

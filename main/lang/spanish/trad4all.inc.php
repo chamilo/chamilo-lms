@@ -8161,4 +8161,6 @@ $DocumentGroupReadOnlyMode = "Modo lectura sola";
 $GroupDocumentAccess = "Acceso a documento";
 $DocumentGroupShareMode = "Modo compartido";
 $SessionDurationXDaysTotal = "Esta sesión tiene una duración limitada a %s días";
+$LastMonth = "Mes pasado";
+$ThisMonth = "Este mes";
 ?>

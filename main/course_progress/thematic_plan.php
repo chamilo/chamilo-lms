@@ -69,7 +69,7 @@ if ($action === 'thematic_plan_list') {
             false,
             [
                 'ToolbarStartExpanded' => 'false',
-                'ToolbarSet' => 'TrainingDescription',
+                'ToolbarSet' => 'Basic',
                 'Height' => '150',
             ]
         );
@@ -138,7 +138,7 @@ if ($action === 'thematic_plan_list') {
         false,
         [
             'ToolbarStartExpanded' => 'false',
-            'ToolbarSet' => 'TrainingDescription',
+            'ToolbarSet' => 'Basic',
             'Width' => '80%',
             'Height' => '150',
         ]

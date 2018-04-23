@@ -7738,7 +7738,7 @@ class SessionManager
             false,
             false,
             [
-                'ToolbarSet' => 'TrainingDescription',
+                'ToolbarSet' => 'Minimal',
             ]
         );
 

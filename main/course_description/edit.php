@@ -98,7 +98,7 @@ $form->addHtmlEditor(
     true,
     false,
     [
-        'ToolbarSet' => 'TrainingDescription',
+        'ToolbarSet' => 'Basic',
         'Width' => '100%',
         'Height' => '200',
     ]

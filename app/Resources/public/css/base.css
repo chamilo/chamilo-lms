@@ -9346,8 +9346,8 @@ input.form-control[type="color"] {
     font-weight: bold;
 }
 .correct-answer{
-    background-color: #555555;
-    color: #ffffff;
+    background-color: #D5EDEF;
+    color: #000000;
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 5px;

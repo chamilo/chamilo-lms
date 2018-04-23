@@ -651,8 +651,8 @@ class GroupManager
         $forum_state,
         $wiki_state,
         $chat_state,
-        $self_registration_allowed,
-        $self_unregistration_allowed,
+        $selfRegistrationAllowed,
+        $selfUnRegistrationAllowed,
         $categoryId = null,
         $documentAccess = 0
     ) {
@@ -680,8 +680,8 @@ class GroupManager
                     chat_state = '".Database::escape_string($chat_state)."',
                     description ='".Database::escape_string(trim($description))."',
                     max_student = '".Database::escape_string($maximum_number_of_students)."',
-                    self_registration_allowed = '".Database::escape_string($self_registration_allowed)."',
-                    self_unregistration_allowed = '".Database::escape_string($self_unregistration_allowed)."',
+                    self_registration_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
+                    self_unregistration_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
                     $documentCondition
                     category_id = ".intval($categoryId)."
                 WHERE c_id = $courseId AND id=".$group_id;
@@ -891,8 +891,8 @@ class GroupManager
     /**
      * Create group category.
      *
-     * @param string $title       The title of the new category
-     * @param string $description The description of the new category
+     * @param string $title                     The title of the new category
+     * @param string $description               The description of the new category
      * @param int    $doc_state
      * @param int    $work_state
      * @param int    $calendar_state
@@ -900,11 +900,11 @@ class GroupManager
      * @param int    $forum_state
      * @param int    $wiki_state
      * @param int    $chat_state
-     * @param int    $self_registration_allowed
-     * @param int    $self_unregistration_allowed
+     * @param int    $selfRegistrationAllowed   allow users to self register
+     * @param int    $selfUnRegistrationAllowed allow user to self unregister
      * @param int    $maximum_number_of_students
      * @param int    $groups_per_user
-     * @param int    $documentAccess
+     * @param int    $documentAccess            document access
      *
      * @return mixed
      */
@@ -918,8 +918,8 @@ class GroupManager
         $forum_state,
         $wiki_state,
         $chat_state = 1,
-        $self_registration_allowed = 0,
-        $self_unregistration_allowed = 0,
+        $selfRegistrationAllowed = 0,
+        $selfUnRegistrationAllowed = 0,
         $maximum_number_of_students = 8,
         $groups_per_user = 0,
         $documentAccess = 0
@@ -952,8 +952,8 @@ class GroupManager
             'wiki_state' => $wiki_state,
             'chat_state' => $chat_state,
             'groups_per_user' => $groups_per_user,
-            'self_reg_allowed' => $self_registration_allowed,
-            'self_unreg_allowed' => $self_unregistration_allowed,
+            'self_reg_allowed' => $selfRegistrationAllowed,
+            'self_unreg_allowed' => $selfUnRegistrationAllowed,
             'max_student' => $maximum_number_of_students,
         ];
 
@@ -987,8 +987,8 @@ class GroupManager
      * @param $forum_state
      * @param $wiki_state
      * @param $chat_state
-     * @param $self_registration_allowed
-     * @param $self_unregistration_allowed
+     * @param $selfRegistrationAllowed
+     * @param $selfUnRegistrationAllowed
      * @param $maximum_number_of_students
      * @param $groups_per_user
      * @param $documentAccess
@@ -1004,8 +1004,8 @@ class GroupManager
         $forum_state,
         $wiki_state,
         $chat_state,
-        $self_registration_allowed,
-        $self_unregistration_allowed,
+        $selfRegistrationAllowed,
+        $selfUnRegistrationAllowed,
         $maximum_number_of_students,
         $groups_per_user,
         $documentAccess
@@ -1033,8 +1033,8 @@ class GroupManager
                     wiki_state = '".Database::escape_string($wiki_state)."',
                     chat_state = '".Database::escape_string($chat_state)."',
                     groups_per_user   = '".Database::escape_string($groups_per_user)."',
-                    self_reg_allowed = '".Database::escape_string($self_registration_allowed)."',
-                    self_unreg_allowed = '".Database::escape_string($self_unregistration_allowed)."',
+                    self_reg_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
+                    self_unreg_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
                     $documentCondition
                     max_student = ".intval($maximum_number_of_students)."
                 WHERE c_id = $courseId AND id = $id";
@@ -1058,8 +1058,8 @@ class GroupManager
                     $forum_state,
                     $wiki_state,
                     $chat_state,
-                    $self_registration_allowed,
-                    $self_unregistration_allowed,
+                    $selfRegistrationAllowed,
+                    $selfUnRegistrationAllowed,
                     $id,
                     $documentAccess
                 );

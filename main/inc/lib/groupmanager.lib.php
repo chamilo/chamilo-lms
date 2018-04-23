@@ -3020,7 +3020,7 @@ class GroupManager
             return true;
         }
 
-        if (empty($groupInfo)) {
+        if (empty($groupInfo) || !isset($groupInfo['id'])) {
             if ($blockPage) {
                 api_not_allowed(true);
             }

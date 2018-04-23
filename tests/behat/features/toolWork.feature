@@ -47,6 +47,7 @@ Feature: Work tool
     And I follow "Work 1"
     And wait for the page to be loaded
     Then I should see "Work description"
+    And wait for the page to be loaded
     Then I follow "Correct and rate"
     Then I follow "Download"
 

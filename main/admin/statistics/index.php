@@ -66,7 +66,7 @@ $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
 // system ...
 $tools[$strSystem]['report=activities'] = get_lang('ImportantActivities');
 
-if (api_is_global_platform_admin()) {
+if (api_is_global_platform_admin() && api_is_multiple_url_enabled()) {
     $tools[$strSystem]['report=user_session'] = get_lang('PortalUserSessionStats');
 }
 

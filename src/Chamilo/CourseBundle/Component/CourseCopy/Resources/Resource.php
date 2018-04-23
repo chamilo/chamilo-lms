@@ -119,7 +119,7 @@ class Resource
      * Get the constant which defines the tool of this resource. This is
      * used in the item_properties table.
      *
-     * @param bool $for_item_property_table (optional)	Added by Ivan,
+     * @param bool $for_item_property_table (optional)    Added by Ivan,
      *                                      29-AUG-2009: A parameter for resolving differencies between defined TOOL_*
      *                                      constants and hardcoded strings that are stored in the database.
      *                                      Example: The constant TOOL_THREAD is defined in the main_api.lib.php
@@ -145,12 +145,15 @@ class Resource
             case RESOURCE_ANNOUNCEMENT:
                 return TOOL_ANNOUNCEMENT;
             case RESOURCE_FORUMCATEGORY:
-                return 'forum_category'; // Ivan, 29-AUG-2009: A constant like TOOL_FORUM_CATEGORY is missing in main_api.lib.php. Such a constant has been defined in the forum tool for local needs.
+                // Ivan, 29-AUG-2009: A constant like TOOL_FORUM_CATEGORY is missing in main_api.lib.php.
+                // Such a constant has been defined in the forum tool for local needs.
+                return 'forum_category';
             case RESOURCE_FORUM:
                 return TOOL_FORUM;
             case RESOURCE_FORUMTOPIC:
                 if ($for_item_property_table) {
-                    return 'forum_thread'; // Ivan, 29-AUG-2009: A hardcoded value that the "Forums" tool stores in the item property table.
+                    // Ivan, 29-AUG-2009: A hardcoded value that the "Forums" tool stores in the item property table.
+                    return 'forum_thread';
                 }
 
                 return TOOL_THREAD;
@@ -200,9 +203,9 @@ class Resource
     }
 
     /**
-     * Check if this resource is allready restored in the destination course.
+     * Check if this resource is already restored in the destination course.
      *
-     * @return bool true if allready restored (i.e. destination_id is set).
+     * @return bool true if already restored (i.e. destination_id is set).
      */
     public function is_restored()
     {

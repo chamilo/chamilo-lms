@@ -3548,6 +3548,28 @@ class CourseRestorer
     }
 
     /**
+     * @param string $documentPath
+     * @param string $webEditorCss
+     */
+    public function fixEditorHtmlContent($documentPath, $webEditorCss = '')
+    {
+        $extension = pathinfo(basename($documentPath), PATHINFO_EXTENSION);
+
+        switch ($extension) {
+            case 'html':
+            case 'htm':
+                $contents = file_get_contents($documentPath);
+                $contents = str_replace(
+                    '{{css_editor}}',
+                    $webEditorCss,
+                    $contents
+                );
+                file_put_contents($documentPath, $contents);
+                break;
+        }
+    }
+
+    /**
      * Check if user exist otherwise use current user.
      *
      * @param int  $userId
@@ -3573,27 +3595,5 @@ class CourseRestorer
         }
 
         return $userId;
-    }
-
-    /**
-     * @param string $documentPath
-     * @param string $webEditorCss
-     */
-    public function fixEditorHtmlContent($documentPath, $webEditorCss = '')
-    {
-        $extension = pathinfo(basename($documentPath), PATHINFO_EXTENSION);
-
-        switch ($extension) {
-            case 'html':
-            case 'htm':
-                $contents = file_get_contents($documentPath);
-                $contents = str_replace(
-                    '{{css_editor}}',
-                    $webEditorCss,
-                    $contents
-                );
-                file_put_contents($documentPath, $contents);
-                break;
-        }
     }
 }

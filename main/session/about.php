@@ -49,7 +49,6 @@ $userValues = new ExtraFieldValue('user');
 $sessionValues = new ExtraFieldValue('session');
 
 foreach ($sessionCourses as $sessionCourse) {
-
     $courseTags = [];
 
     if (!is_null($tagField)) {

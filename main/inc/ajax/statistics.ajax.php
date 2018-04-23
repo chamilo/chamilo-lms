@@ -14,8 +14,40 @@ $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_durat
 switch ($action) {
     case 'get_user_session':
         $list = [];
+        $urlList = UrlManager::get_url_data();
+        $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session=';
 
-        $sql = "";
+        $start = isset($_GET['start']) ? Database::escape_string(api_get_utc_datetime($_GET['start'])) : api_get_utc_datetime();
+        $end = isset($_GET['end']) ?  Database::escape_string(api_get_utc_datetime($_GET['end'])) : api_get_utc_datetime();
+
+        foreach ($urlList as $url) {
+            $urlId = $url['id'];
+
+            $sessionList = SessionManager::get_sessions_list([], [], null, null, $urlId);
+            foreach ($sessionList as $session) {
+                $sessionId = $session['id'];
+                $row = [];
+                $row['url'] = $url['url'];
+                $row['session'] = Display::url(
+                    $session['name'],
+                    $sessionUrl.$sessionId
+                );
+
+                $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                $sql = "SELECT
+                        count(DISTINCT user_id) count
+                        FROM $table
+                        WHERE
+                            login_course_date >= '$start' AND  
+                            logout_course_date <= '$end' AND                    
+                            session_id = '$sessionId' ";
+
+                $result = Database::query($sql);
+                $result = Database::fetch_array($result);
+                $row['count'] = $result['count'];
+                $list[] = $row;
+            }
+        }
 
         echo json_encode($list);
         break;

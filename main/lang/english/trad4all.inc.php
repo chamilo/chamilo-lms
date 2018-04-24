@@ -8140,4 +8140,5 @@ $SessionDurationXDaysTotal = "This session has a limited duration of %s days";
 $LastMonth = "Last month";
 $ThisMonth = "This month";
 $PortalUserSessionStats = "Portal user session stats";
+$AddCustomToolsIntro = "You may add an introduction to this tool page as a helper text for your students. Simply click the edit icon to add some text. This short info text here is invisible to students and you can just leave this block empty, but what you will type will be visible to them.";
 ?>

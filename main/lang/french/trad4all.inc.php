@@ -8074,4 +8074,8 @@ $DocumentGroupReadOnlyMode = "Mode lecture seule";
 $GroupDocumentAccess = "Type d'usage";
 $DocumentGroupShareMode = "Mode partagé";
 $SessionDurationXDaysTotal = "Cette session a une durée limitée à %s jours";
+$LastMonth = "Mois passé";
+$ThisMonth = "Mois actuel";
+$PortalUserSessionStats = "Nombre d'apprenants par session et par portail";
+$AddCustomToolsIntro = "Ce texte est invisible pour vos apprenants tant qu'elle n'est pas modifiée, mais cette section vous permet de rajouter votre propre texte d'introduction à cet outil pour fournir une guidance localisée à vos apprenants. Pour introduire ce texte pour vos apprenants, cliquez sur l'icône d'édition.";
 ?>

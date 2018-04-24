@@ -6073,7 +6073,6 @@ class learnpath
                     $ref = isset($array[$i]['ref']) ? $array[$i]['ref'] : '';
                     $this->arrMenu[] = [
                         'id' => $array[$i]['id'],
-                        'iid' => $array[$i]['iid'],
                         'ref' => $ref,
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
@@ -6204,8 +6203,7 @@ class learnpath
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
-                'iid' => $row['iid'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => Security::remove_XSS($row['title']),
                 'path' => $row['path'],
@@ -6403,7 +6401,7 @@ class learnpath
                 }
 
                 $delete_icon .= ' <a 
-                    href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['iid'].'&lp_id='.$this->lp_id.'" 
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" 
                     onclick="return confirmation(\''.addslashes($title).'\');" 
                     class="btn btn-default">';
                 $delete_icon .= Display::return_icon(
@@ -7549,7 +7547,7 @@ class learnpath
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -8705,7 +8703,7 @@ class learnpath
 
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],

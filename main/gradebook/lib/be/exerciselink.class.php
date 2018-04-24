@@ -183,15 +183,18 @@ class ExerciseLink extends AbstractLink
         in exercise/exercise.php, look for note-query-exe-results marker*/
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
+        $exerciseData = $this->get_exercise_data();
+        $exerciseId = $exerciseData['id'];
         $exercise = new Exercise($courseId);
-        $exercise->read($this->get_ref_id());
+        $exercise->read($exerciseData['id']);
+
         $stud_id = (int) $stud_id;
 
         if (!$this->is_hp) {
             if ($exercise->exercise_was_added_in_lp == false) {
                 $sql = "SELECT * FROM $tblStats
                         WHERE
-                            exe_exo_id = ".$this->get_ref_id()." AND
+                            exe_exo_id = ".$exerciseId." AND
                             orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
                             status <> 'incomplete' AND
@@ -209,7 +212,7 @@ class ExerciseLink extends AbstractLink
                 $sql = "SELECT * 
                         FROM $tblStats
                         WHERE
-                            exe_exo_id = ".$this->get_ref_id()." AND
+                            exe_exo_id = ".$exerciseId." AND
                             orig_lp_id = $lpId AND
                             status <> 'incomplete' AND
                             session_id = $sessionId AND
@@ -226,7 +229,7 @@ class ExerciseLink extends AbstractLink
                     ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
                     WHERE
                         hp.c_id = $courseId AND                        
-                        doc.id = ".$this->get_ref_id();
+                        doc.id = ".$exerciseId;
 
             if (!empty($stud_id)) {
                 $sql .= " AND hp.exe_user_id = $stud_id ";

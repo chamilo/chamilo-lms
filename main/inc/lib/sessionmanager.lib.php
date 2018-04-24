@@ -3086,12 +3086,13 @@ class SessionManager
      *                          array('status' => STUDENT) or
      *                          array('s.name' => array('operator' => 'LIKE', value = '%$needle%'))
      * @param array $order_by   a list of fields on which sort
+     * @param int   $urlId
      *
      * @return array an array with all sessions of the platform
      *
      * @todo   optional course code parameter, optional sorting parameters...
      */
-    public static function get_sessions_list($conditions = [], $order_by = [], $from = null, $to = null)
+    public static function get_sessions_list($conditions = [], $order_by = [], $from = null, $to = null, $urlId = 0)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -3099,7 +3100,7 @@ class SessionManager
         $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $session_course_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_id = api_get_current_access_url_id();
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
         $return_array = [];
 
         $sql_query = " SELECT
@@ -3118,7 +3119,7 @@ class SessionManager
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
 				LEFT JOIN $session_course_table sco ON (sco.session_id = s.id)
 				INNER JOIN $course_table c ON sco.c_id = c.id
-				WHERE ar.access_url_id = $access_url_id ";
+				WHERE ar.access_url_id = $urlId ";
 
         $availableFields = [
             's.id',
@@ -7737,7 +7738,7 @@ class SessionManager
             false,
             false,
             [
-                'ToolbarSet' => 'TrainingDescription',
+                'ToolbarSet' => 'Minimal',
             ]
         );
 

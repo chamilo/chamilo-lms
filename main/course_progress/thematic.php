@@ -248,7 +248,7 @@ if ($action == 'thematic_list') {
         get_lang('Content'),
         false,
         false,
-        ['ToolbarSet' => 'TrainingDescription', 'Height' => '150']
+        ['ToolbarSet' => 'Basic', 'Height' => '150']
     );
     $form->addButtonSave(get_lang('Save'));
 

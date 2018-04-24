@@ -8137,4 +8137,7 @@ $DocumentGroupReadOnlyMode = "Read only mode";
 $GroupDocumentAccess = "Document access";
 $DocumentGroupShareMode = "Share mode";
 $SessionDurationXDaysTotal = "This session has a limited duration of %s days";
+$LastMonth = "Last month";
+$ThisMonth = "This month";
+$PortalUserSessionStats = "Portal user session stats";
 ?>

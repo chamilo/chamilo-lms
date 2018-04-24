@@ -25,6 +25,7 @@ class CourseCopyTestCategory extends Resource
     /**
      * Create a new TestCategory.
      *
+     * @param int    $id
      * @param string $title
      * @param string $description
      */

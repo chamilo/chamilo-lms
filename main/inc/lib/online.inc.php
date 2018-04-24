@@ -417,10 +417,9 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
         return false;
     }
 
+    $time_limit = (int) $time_limit;
     if (empty($time_limit)) {
         $time_limit = api_get_setting('time_limit_whosonline');
-    } else {
-        $time_limit = intval($time_limit);
     }
 
     $online_time = time() - $time_limit * 60;
@@ -431,16 +430,28 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $courseInfo = api_get_course_info($course_code);
     $courseId = $courseInfo['real_id'];
 
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
 
     $query = "SELECT o.login_user_id, o.login_date
-              FROM $track_online_table o INNER JOIN $tableUser u
+              FROM $track_online_table o 
+              INNER JOIN $tableUser u
               ON (o.login_user_id = u.id)
+              $urlJoin
               WHERE
                 u.status <> '".ANONYMOUS."' AND 
                 o.c_id = $courseId AND 
                 o.login_date >= '$current_date'
+                $urlCondition
               LIMIT $from, $number_of_items ";
 
     $result = Database::query($query);
@@ -470,9 +481,7 @@ function who_is_online_in_this_course_count(
     }
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-
     $time_limit = Database::escape_string($time_limit);
-
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
     $courseId = api_get_course_int_id($coursecode);
@@ -481,13 +490,26 @@ function who_is_online_in_this_course_count(
         return false;
     }
 
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
+
     $query = "SELECT count(login_user_id) as count
-              FROM $track_online_table o INNER JOIN $tableUser u 
+              FROM $track_online_table o 
+              INNER JOIN $tableUser u              
               ON (login_user_id = u.id)
+              $urlJoin
               WHERE 
                 u.status <> '".ANONYMOUS."' AND
                 c_id = $courseId AND 
-                login_date >= '$current_date' ";
+                login_date >= '$current_date'
+                $urlCondition
+                ";
     $result = Database::query($query);
     if (Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);

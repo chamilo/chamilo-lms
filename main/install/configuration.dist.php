@@ -819,6 +819,10 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 //ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;
 //$_configuration['group_document_access'] = false;
 
+// Allow sharing options for the documents inside a group category
+//ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;
+//$_configuration['group_category_document_access'] = false;
+
 // Allow LP export to chamilo format (CourseBackup)
 //$_configuration['allow_lp_chamilo_export'] = false;
 

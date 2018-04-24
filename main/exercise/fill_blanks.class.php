@@ -1266,8 +1266,8 @@ class FillBlanks extends Question
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
-                $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
-                $correctAnswerHtml .= " <span style='font-weight:normal'>(";
+                $correctAnswerHtml .= "<span class='correct-answer'><strong>".$listPossibleAnswers[0]."</strong>";
+                $correctAnswerHtml .= " (";
                 for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {

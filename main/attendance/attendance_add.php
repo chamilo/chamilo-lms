@@ -36,7 +36,7 @@ $form->addHtmlEditor(
     get_lang('Description'),
     false,
     false,
-    ['ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150']
+    ['ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '150']
 );
 
 // Advanced Parameters

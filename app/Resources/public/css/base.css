@@ -8262,6 +8262,9 @@ ul#toolnavbox-two li a.btn {
     background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
     border-radius: 10px;
 }
+#lp-accordion .panel-default .panel-heading .tools-actions{
+    padding-right: 20px;
+}
 #lp-accordion .panel{
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }

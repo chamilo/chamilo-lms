@@ -110,7 +110,6 @@
                                 {% if not is_invitee %}
                                     <th>{{ "Progress"|get_lang }}</th>
                                 {% endif %}
-
                                 <th>{{ "Actions"|get_lang }}</th>
                             {% endif %}
                         </tr>
@@ -175,6 +174,7 @@
         {% else %}
         <!-- new view block accordeon -->
         {% if lp_data.category.id == 0 %}
+            {% if is_allowed_to_edit %}
             {% if lp_data.lp_list %}
                   <div class="table-responsive">
                       <table class="table table-hover table-striped">
@@ -251,6 +251,29 @@
                       </table>
                   </div>
               {% endif %}
+            {% else %}
+                <div id="not-category" class="panel panel-default">
+                    <div class="panel-body">
+                        {% for row in lp_data.lp_list %}
+                        <div class="lp-item">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                                    <a href="{{ row.url_start }}">
+                                        {{ row.title }}
+                                        {{ row.session_image }}
+                                        {{ row.extra }}
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    {{ row.dsp_progress }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
         {% if categories|length > 1 and lp_data.category.id %}
             <div class="panel panel-default">
@@ -331,7 +354,9 @@
               <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                 <div class="panel-body">
                     {% if lp_data.lp_list %}
-                  <div class="table-responsive">
+
+                    {% if is_allowed_to_edit %}
+                    <div class="table-responsive">
                       <table class="table table-hover table-striped">
                           <thead>
                               <tr>
@@ -405,6 +430,25 @@
                           </tbody>
                       </table>
                   </div>
+                    {% else %}
+                        {% for row in lp_data.lp_list %}
+                            <div class="lp-item">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                                        <a href="{{ row.url_start }}">
+                                            {{ row.title }}
+                                            {{ row.session_image }}
+                                            {{ row.extra }}
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ row.dsp_progress }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
               {% endif %}
                 </div>
               </div>

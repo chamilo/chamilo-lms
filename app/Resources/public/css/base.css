@@ -8198,16 +8198,6 @@ ul#toolnavbox-two li a.btn {
     width: 100px;
 }
 
-.lp-accordion .panel-heading .panel-title {
-}
-
-.lp-accordion .panel-heading .panel-title a {
-    display: block;
-}
-
-.lp-accordion .panel-heading .tools-actions {
-}
-
 .panel-image:hover {
     background-color: #f5f5f5;
 }
@@ -8264,7 +8254,55 @@ ul#toolnavbox-two li a.btn {
     white-space: inherit;
 }
 
-/* CSS NEW TOP ******************************************************************************/
+/**** LP COLLAPSE CATEGORY ****/
+#lp-accordion .panel-default{
+    border-radius: 10px;
+}
+#lp-accordion .panel-default .panel-heading{
+    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    border-radius: 10px;
+}
+#lp-accordion .panel{
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+#lp-accordion .panel .panel-title{
+    font-weight: bold;
+    width: 100%;
+    display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#lp-accordion .panel .panel-title a{
+    width: 100%;
+    display: block;
+}
+#lp-accordion .lp-item{
+    border-bottom: 1px solid #dddddd;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 100%;
+}
+#lp-accordion .lp-item:last-child{
+    border-bottom: none;
+    padding-bottom: 0;
+}
+#lp-accordion .lp-item .fa{
+    color: #686f7a;
+    opacity: .5;
+    margin-right: 5px;
+}
+#lp-accordion .lp-item .progress{
+    border: none;
+    background: #D7E3E6;
+    margin-bottom: 10px;
+}
+#lp-accordion #not-category .lp-item{
+    margin-bottom: 0;
+}
+/**** END LP COLLAPSE CATEGORY ****/
+
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

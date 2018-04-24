@@ -205,15 +205,18 @@ if (!empty($session_id) &&
         ),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
-    $actionsLeft .= Display::url(
-        Display::return_icon(
-            "certificate_list.png",
-            get_lang("GradebookSeeListOfStudentsCertificates"),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
-        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
-    );
+
+    if (api_is_platform_admin(true) || api_is_student_boss()) {
+        $actionsLeft .= Display::url(
+            Display::return_icon(
+                "certificate_list.png",
+                get_lang("GradebookSeeListOfStudentsCertificates"),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
+        );
+    }
 }
 
 // Actions menu

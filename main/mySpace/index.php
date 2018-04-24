@@ -39,8 +39,7 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 // Access control
 api_block_anonymous_users();
 
-$allowToTrack = api_is_platform_admin(true, true) ||
-    api_is_allowed_to_create_course();
+$allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
 
 if (!$allowToTrack) {
     api_not_allowed(true);

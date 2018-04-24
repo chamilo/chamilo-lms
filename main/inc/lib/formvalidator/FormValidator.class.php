@@ -1771,18 +1771,7 @@ EOT;
                 );
             }).on('fileuploaddone', function (e, data) {
                 $.each(data.result.files, function (index, file) {
-                    if (file.url) {
-                        var link = $('<a>')
-                            .attr({target: '_blank', class : 'panel-image'})
-                            .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);
-                        // Update file name with new one from Chamilo
-                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                        var message = $('<div class=\"col-sm-3\">').html(
-                            $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
-                        );
-                        $(data.context.children()[index]).parent().append(message);                    
-                    } else if (file.error) {
+                    if (file.error) {
                         var link = $('<div>')
                             .attr({class : 'panel-image'})                            ;
                         $(data.context.children()[index]).parent().wrap(link);
@@ -1792,7 +1781,21 @@ EOT;
                             $('<span class=\"message-image-danger\"/>').text(file.error)
                         );
                         $(data.context.children()[index]).parent().append(message);
+
+                        return;
                     }
+                    if (file.url) {
+                        var link = $('<a>')
+                            .attr({target: '_blank', class : 'panel-image'})
+                            .prop('href', file.url);
+                        $(data.context.children()[index]).parent().wrap(link);
+                    }
+                    // Update file name with new one from Chamilo
+                    $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    var message = $('<div class=\"col-sm-3\">').html(
+                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
+                    );
+                    $(data.context.children()[index]).parent().append(message);
                 });                
                 $('#dropzone').removeClass('hover');                
                 ".$redirectCondition."

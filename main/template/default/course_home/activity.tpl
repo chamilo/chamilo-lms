@@ -1,6 +1,11 @@
 {% for block in blocks %}
     {% if block.title %}
-        <h2 class="title-tools">{{ block.title }}</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="title-tools">{{ block.title }}</h4>
+            </div>
+        </div>
+
     {% endif %}
 
     <div class="row {{ block.class }}">
@@ -17,16 +22,16 @@
 
         {% if 'homepage_view'|api_get_setting == 'activity_big' %}
             {% for item in block.content %}
-                <div class="col-xs-6 col-md-3 course-tool">
-                    <div class="big_icon">
-                        {{ item.tool.image }}
-                    </div>
-                    <div class="content">
-                        <h4>
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    <div class="course-tool">
+                        <div class="big_icon">
+                            {{ item.tool.image }}
+                        </div>
+                        <div class="content">
                             {{ item.visibility }}
                             {{ item.extra }}
                             {{ item.link }}
-                        </h4>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

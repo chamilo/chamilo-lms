@@ -6091,7 +6091,6 @@ class learnpath
                         'prerequisite_min_score' => $prerequisiteMinScore,
                         'prerequisite_max_score' => $prerequisiteMaxScore,
                     ];
-
                     $this->create_tree_array($array, $array[$i]['id'], $depth, $tmp);
                 }
             }
@@ -6204,7 +6203,7 @@ class learnpath
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => Security::remove_XSS($row['title']),
                 'path' => $row['path'],
@@ -6401,7 +6400,10 @@ class learnpath
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" onclick="return confirmation(\''.addslashes($title).'\');" class="btn btn-default">';
+                $delete_icon .= ' <a 
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" 
+                    onclick="return confirmation(\''.addslashes($title).'\');" 
+                    class="btn btn-default">';
                 $delete_icon .= Display::return_icon(
                     'delete.png',
                     get_lang('LearnpathDeleteModule'),
@@ -7272,115 +7274,119 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $return = '';
-        if (is_numeric($item_id)) {
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT * FROM $tbl_lp_item
-                    WHERE iid = ".intval($item_id);
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
-            switch ($row['item_type']) {
-                case 'dir':
-                case 'asset':
-                case 'sco':
-                    if (isset($_GET['view']) && $_GET['view'] == 'build') {
-                        $return .= $this->display_manipulate($item_id, $row['item_type']);
-                        $return .= $this->display_item_form(
-                            $row['item_type'],
-                            get_lang('EditCurrentChapter').' :',
-                            'edit',
-                            $item_id,
-                            $row
-                        );
-                    } else {
-                        $return .= $this->display_item_small_form(
-                            $row['item_type'],
-                            get_lang('EditCurrentChapter').' :',
-                            $row
-                        );
-                    }
-                    break;
-                case TOOL_DOCUMENT:
-                    $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                    $sql = "SELECT lp.*, doc.path as dir
-                            FROM $tbl_lp_item as lp
-                            LEFT JOIN $tbl_doc as doc
-                            ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
-                            WHERE
-                                doc.c_id = $course_id AND
-                                lp.iid = ".intval($item_id);
-                    $res_step = Database::query($sql);
-                    $row_step = Database::fetch_array($res_step, 'ASSOC');
-                    $return .= $this->display_manipulate(
-                        $item_id,
-                        $row['item_type']
-                    );
-                    $return .= $this->display_document_form(
+        $item_id = (int) $item_id;
+
+        if (empty($item_id)) {
+            return '';
+        }
+
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE iid = ".$item_id;
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        switch ($row['item_type']) {
+            case 'dir':
+            case 'asset':
+            case 'sco':
+                if (isset($_GET['view']) && $_GET['view'] == 'build') {
+                    $return .= $this->display_manipulate($item_id, $row['item_type']);
+                    $return .= $this->display_item_form(
+                        $row['item_type'],
+                        get_lang('EditCurrentChapter').' :',
                         'edit',
                         $item_id,
-                        $row_step
+                        $row
                     );
-                    break;
-                case TOOL_LINK:
-                    $link_id = (string) $row['path'];
-                    if (ctype_digit($link_id)) {
-                        $tbl_link = Database::get_course_table(TABLE_LINK);
-                        $sql_select = 'SELECT url FROM '.$tbl_link.'
-                                       WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
-                        $res_link = Database::query($sql_select);
-                        $row_link = Database::fetch_array($res_link);
-                        if (is_array($row_link)) {
-                            $row['url'] = $row_link['url'];
-                        }
+                } else {
+                    $return .= $this->display_item_small_form(
+                        $row['item_type'],
+                        get_lang('EditCurrentChapter').' :',
+                        $row
+                    );
+                }
+                break;
+            case TOOL_DOCUMENT:
+                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT lp.*, doc.path as dir
+                        FROM $tbl_lp_item as lp
+                        LEFT JOIN $tbl_doc as doc
+                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
+                        WHERE
+                            doc.c_id = $course_id AND
+                            lp.iid = ".$item_id;
+                $res_step = Database::query($sql);
+                $row_step = Database::fetch_array($res_step, 'ASSOC');
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->display_document_form(
+                    'edit',
+                    $item_id,
+                    $row_step
+                );
+                break;
+            case TOOL_LINK:
+                $link_id = (string) $row['path'];
+                if (ctype_digit($link_id)) {
+                    $tbl_link = Database::get_course_table(TABLE_LINK);
+                    $sql_select = 'SELECT url FROM '.$tbl_link.'
+                                   WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
+                    $res_link = Database::query($sql_select);
+                    $row_link = Database::fetch_array($res_link);
+                    if (is_array($row_link)) {
+                        $row['url'] = $row_link['url'];
                     }
-                    $return .= $this->display_manipulate(
-                        $item_id,
-                        $row['item_type']
-                    );
-                    $return .= $this->display_link_form('edit', $item_id, $row);
-                    break;
-                case TOOL_LP_FINAL_ITEM:
-                    Session::write('finalItem', true);
-                    $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                    $sql = "SELECT lp.*, doc.path as dir
-                            FROM $tbl_lp_item as lp
-                            LEFT JOIN $tbl_doc as doc
-                            ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
-                            WHERE
-                                doc.c_id = $course_id AND
-                                lp.iid = ".intval($item_id);
-                    $res_step = Database::query($sql);
-                    $row_step = Database::fetch_array($res_step, 'ASSOC');
-                    $return .= $this->display_manipulate(
-                        $item_id,
-                        $row['item_type']
-                    );
-                    $return .= $this->display_document_form(
-                        'edit',
-                        $item_id,
-                        $row_step
-                    );
-                    break;
-                case TOOL_QUIZ:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_quiz_form('edit', $item_id, $row);
-                    break;
-                case TOOL_HOTPOTATOES:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
-                    break;
-                case TOOL_STUDENTPUBLICATION:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_student_publication_form('edit', $item_id, $row);
-                    break;
-                case TOOL_FORUM:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_forum_form('edit', $item_id, $row);
-                    break;
-                case TOOL_THREAD:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_thread_form('edit', $item_id, $row);
-                    break;
-            }
+                }
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->display_link_form('edit', $item_id, $row);
+                break;
+            case TOOL_LP_FINAL_ITEM:
+                Session::write('finalItem', true);
+                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT lp.*, doc.path as dir
+                        FROM $tbl_lp_item as lp
+                        LEFT JOIN $tbl_doc as doc
+                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
+                        WHERE
+                            doc.c_id = $course_id AND
+                            lp.iid = ".$item_id;
+                $res_step = Database::query($sql);
+                $row_step = Database::fetch_array($res_step, 'ASSOC');
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->display_document_form(
+                    'edit',
+                    $item_id,
+                    $row_step
+                );
+                break;
+            case TOOL_QUIZ:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_quiz_form('edit', $item_id, $row);
+                break;
+            case TOOL_HOTPOTATOES:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
+                break;
+            case TOOL_STUDENTPUBLICATION:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_student_publication_form('edit', $item_id, $row);
+                break;
+            case TOOL_FORUM:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_forum_form('edit', $item_id, $row);
+                break;
+            case TOOL_THREAD:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_thread_form('edit', $item_id, $row);
+                break;
         }
 
         return $return;
@@ -7541,7 +7547,7 @@ class learnpath
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -8697,7 +8703,7 @@ class learnpath
 
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],

@@ -55,7 +55,6 @@ before_install:
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
-  #- java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
@@ -101,7 +100,9 @@ before_install:
 
 script:
   - whereis google-chrome-stable
+  - google-chrome-stable --version
   - whereis chromedriver
+  - chromedriver --version
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v

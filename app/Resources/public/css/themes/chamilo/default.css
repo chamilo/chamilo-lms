@@ -52,6 +52,9 @@ a:focus {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
 }
+.navbar-nav > li{
+  margin-bottom: 0;
+}
 .navbar-collapse{
   overflow: hidden !important;
 }

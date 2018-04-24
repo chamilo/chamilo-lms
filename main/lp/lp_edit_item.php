@@ -161,21 +161,23 @@ echo $learnPath->build_action_menu();
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
-$path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
-$path_item = Database::escape_string($path_item);
-$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-$sql_doc = "SELECT path FROM ".$tbl_doc."
-            WHERE c_id = $course_id AND id = '".$path_item."' ";
+$documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
+$documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+if (empty($documentInfo)) {
+    // Try with iid
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $sql = "SELECT path FROM $table
+            WHERE c_id = $course_id AND iid = $documentId";
+    $res_doc = Database::query($sql);
+    $path_file = Database::result($res_doc, 0, 0);
+} else {
+    $path_file = $documentInfo['path'];
+}
 
-$res_doc = Database::query($sql_doc);
-$path_file = Database::result($res_doc, 0, 0);
 $path_parts = pathinfo($path_file);
 
-if (Database::num_rows($res_doc) > 0 &&
-    isset($path_parts['extension']) && $path_parts['extension'] == 'html'
-) {
+if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] == 'html') {
     echo $learnPath->return_new_tree();
-
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
 } else {
@@ -191,7 +193,8 @@ if (isset($is_success) && $is_success === true) {
     $msg .= '</div>';
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
-    echo $learnPath->display_edit_item($_GET['id']);
+    $item = $learnPath->getItem($_GET['id']);
+    echo $learnPath->display_edit_item($item->getIid());
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';

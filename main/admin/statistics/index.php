@@ -116,6 +116,7 @@ switch ($report) {
         $columns = [
             'URL',
             get_lang('Session'),
+            get_lang('Course'),
             get_lang('CountUsers'),
         ];
 
@@ -129,13 +130,21 @@ switch ($report) {
             [
                 'name' => 'session',
                 'index' => 'session',
+                'width' => '180',
+                'align' => 'left',
+                'sortable' => 'false',
+            ],
+            [
+                'name' => 'course',
+                'index' => 'course',
                 'width' => '100',
                 'align' => 'left',
+                'sortable' => 'false',
             ],
             [
                 'name' => 'count',
                 'index' => 'count',
-                'width' => '500',
+                'width' => '50',
                 'align' => 'left',
                 'sortable' => 'false',
             ],
@@ -158,6 +167,22 @@ switch ($report) {
                     true
                 );
                 ?>
+
+                jQuery("#user_session_grid").jqGrid("navGrid","#user_session_grid_pager",{
+                    view:false,
+                    edit:false,
+                    add:false,
+                    del:false,
+                    search:false,
+                    excel:true
+                });
+
+                jQuery("#user_session_grid").jqGrid("navButtonAdd","#user_session_grid_pager", {
+                    caption:"",
+                    onClickButton : function () {
+                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"<?php echo $url; ?>&export_format=xls"});
+                    }
+                });
             });
         </script>
         <?php

@@ -90,7 +90,7 @@ class SurveyLink extends AbstractLink
             ];
         }
 
-        return isset($links) ? $links : null;
+        return isset($links) ? $links : [];
     }
 
     /**

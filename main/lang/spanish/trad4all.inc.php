@@ -8164,4 +8164,5 @@ $SessionDurationXDaysTotal = "Esta sesión tiene una duración limitada a %s dí
 $LastMonth = "Mes pasado";
 $ThisMonth = "Este mes";
 $PortalUserSessionStats = "Número de alumnos por sesión y portal";
+$AddCustomToolsIntro = "Esta sección es invisible para los estudiantes hasta que la modifique. Puede añadir una introducción a la herramienta, como un texto de ayuda para sus estudiantes, dando clic en el icono de edición.";
 ?>

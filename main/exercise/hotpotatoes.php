@@ -36,7 +36,8 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 // Database table definitions.
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-$course_id = api_get_course_int_id();
+$course_id = $_course['real_id'];
+$sessionId = api_get_session_id();
 
 // Setting some variables.
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -185,6 +186,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     }
                 }
 
+                // Set the HotPotatoes title in the document record's "comment" field
                 $title = @htmlspecialchars(
                     GetQuizName(
                         $filename,
@@ -193,17 +195,34 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     ENT_COMPAT,
                     api_get_system_encoding()
                 );
-                $query = "UPDATE $dbTable
+                $sessionAnd = ' AND session_id IS NULL ';
+                if ($sessionId) {
+                    $sessionAnd = " AND session_id = $sessionId ";
+                }
+                $path = $uploadPath.'/'.$fld.'/'.$filename;
+                // Find the proper record
+                $select = "SELECT iid FROM $dbTable
+                          WHERE c_id = $course_id
+                          $sessionAnd
+                          AND path = '$path'";
+                $query = Database::query($select);
+                if (Database::num_rows($query)) {
+                    $row = Database::fetch_array($query);
+                    $hotPotatoesDocumentId = $row['iid'];
+                    // Update the record with the 'comment' (HP title)
+                    $query = "UPDATE $dbTable
                           SET comment='".Database::escape_string($title)."'
-                          WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
-                Database::query($query);
-                api_item_property_update(
-                    $_course,
-                    TOOL_QUIZ,
-                    $id,
-                    'QuizAdded',
-                    api_get_user_id()
-                );
+                          WHERE iid = $hotPotatoesDocumentId";
+                    Database::query($query);
+                    // Mark the addition of the HP quiz in the item_property table
+                    api_item_property_update(
+                        $_course,
+                        TOOL_QUIZ,
+                        $hotPotatoesDocumentId,
+                        'QuizAdded',
+                        api_get_user_id()
+                    );
+                }
             } else {
                 $finish = 0;
             }

@@ -117,7 +117,7 @@ class ForumThreadLink extends AbstractLink
                 $cats[] = [$data['thread_id'], $data['thread_title']];
             }
         }
-        $my_cats = isset($cats) ? $cats : null;
+        $my_cats = isset($cats) ? $cats : [];
 
         return $my_cats;
     }

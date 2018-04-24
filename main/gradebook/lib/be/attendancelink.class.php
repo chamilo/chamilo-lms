@@ -66,7 +66,7 @@ class AttendanceLink extends AbstractLink
                 $cats[] = [$data['id'], $data['name']];
             }
         }
-        $my_cats = isset($cats) ? $cats : null;
+        $my_cats = isset($cats) ? $cats : [];
 
         return $my_cats;
     }

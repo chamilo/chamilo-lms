@@ -417,7 +417,6 @@ class FlatViewTable extends SortableTable
 
         // step 1: generate columns: evaluations and links
         $header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
-
         $userRowSpan = false;
         foreach ($header_names as $item) {
             if (is_array($item)) {

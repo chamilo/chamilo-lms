@@ -20,7 +20,7 @@ api_block_anonymous_users();
 
 // Access restrictions.
 $is_allowedToTrack = api_is_platform_admin(true, true) ||
-    api_is_allowed_to_create_course() || api_is_course_tutor();
+    api_is_teacher() || api_is_course_tutor();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);

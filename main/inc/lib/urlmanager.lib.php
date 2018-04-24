@@ -159,14 +159,19 @@ class UrlManager
      *
      * @author Julio Montoya
      *
+     * @param string $orderBy
+     *
      * @return array
      * */
-    public static function get_url_data()
+    public static function get_url_data($orderBy = '')
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $orderBy = empty($orderBy) ? ' id ' : Database::escape_string($orderBy);
+
         $sql = "SELECT id, url, description, active
                 FROM $table
-                ORDER BY id";
+                ORDER BY $orderBy";
+
         $res = Database::query($sql);
         $urls = [];
         while ($url = Database::fetch_array($res)) {

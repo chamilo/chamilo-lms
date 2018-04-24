@@ -14,6 +14,7 @@
 class learnpathItem
 {
     const DEBUG = 0; // Logging parameter.
+    public $iId;
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = []; // Contains the ids of children items.
@@ -106,7 +107,7 @@ class learnpathItem
             error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
             error_log("item_content: ".print_r($item_content, 1));
         }
-        $id = intval($id);
+        $id = (int) $id;
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
@@ -125,6 +126,7 @@ class learnpathItem
         }
 
         $this->lp_id = $row['lp_id'];
+        $this->iId = $row['iid'];
         $this->max_score = $row['max_score'];
         $this->min_score = $row['min_score'];
         $this->name = $row['title'];
@@ -4622,5 +4624,13 @@ class learnpathItem
     public function getLastScormSessionTime()
     {
         return $this->last_scorm_session_time;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iId;
     }
 }

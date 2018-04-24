@@ -33,7 +33,7 @@ class Minimal extends Basic
             ],
             [
                 'name' => 'links',
-                'items' => ['Link', 'Unlink', 'Anchor','Source'],
+                'items' => ['Link', 'Unlink', 'Anchor', 'Source'],
             ],
         ];
 

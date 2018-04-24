@@ -20,7 +20,7 @@ switch ($action) {
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session=';
 
         $start = isset($_GET['start']) ? Database::escape_string(api_get_utc_datetime($_GET['start'])) : api_get_utc_datetime();
-        $end = isset($_GET['end']) ?  Database::escape_string(api_get_utc_datetime($_GET['end'])) : api_get_utc_datetime();
+        $end = isset($_GET['end']) ? Database::escape_string(api_get_utc_datetime($_GET['end'])) : api_get_utc_datetime();
 
         if (!empty($operation)) {
             $list[] = [
@@ -84,7 +84,6 @@ switch ($action) {
                     break;
             }
         }
-
 
         echo json_encode($list);
         break;

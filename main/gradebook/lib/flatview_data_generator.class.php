@@ -298,7 +298,6 @@ class FlatViewDataGenerator
      *               1: user lastname
      *               2: user firstname
      *               3+: evaluation/link scores
-     *
      */
     public function get_data(
         $users_sorting = 0,

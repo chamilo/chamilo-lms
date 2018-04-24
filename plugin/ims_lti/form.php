@@ -85,11 +85,11 @@ $result = $oauth->sign(array(
     <body>
         <form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post" encType="application/x-www-form-urlencoded">
         <?php
-          foreach($result["parameters"] as $key => $values) //Dump parameters
-			{
+        foreach($result["parameters"] as $key => $values) //Dump parameters
+        {
                 echo("<input type='hidden' name='$key' value='$values' />");
-			}
-		?>
+        }
+    ?>
 			<input type="submit" value="Press to continue to external tool"/>
         </form>
 

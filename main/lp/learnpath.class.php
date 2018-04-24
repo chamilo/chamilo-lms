@@ -6073,6 +6073,7 @@ class learnpath
                     $ref = isset($array[$i]['ref']) ? $array[$i]['ref'] : '';
                     $this->arrMenu[] = [
                         'id' => $array[$i]['id'],
+                        'iid' => $array[$i]['iid'],
                         'ref' => $ref,
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
@@ -6091,7 +6092,6 @@ class learnpath
                         'prerequisite_min_score' => $prerequisiteMinScore,
                         'prerequisite_max_score' => $prerequisiteMaxScore,
                     ];
-
                     $this->create_tree_array($array, $array[$i]['id'], $depth, $tmp);
                 }
             }
@@ -6412,7 +6412,6 @@ class learnpath
                     [],
                     ICON_SIZE_TINY
                 );
-
                 $delete_icon .= '</a>';
 
                 $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;

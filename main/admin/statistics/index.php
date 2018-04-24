@@ -158,6 +158,22 @@ switch ($report) {
                     true
                 );
                 ?>
+
+                jQuery("#user_session_grid").jqGrid("navGrid","#user_session_grid_pager",{
+                    view:false,
+                    edit:false,
+                    add:false,
+                    del:false,
+                    search:false,
+                    excel:true
+                });
+
+                jQuery("#user_session_grid").jqGrid("navButtonAdd","#user_session_grid_pager", {
+                    caption:"",
+                    onClickButton : function () {
+                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"<?php echo $url; ?>&export_format=xls"});
+                    }
+                });
             });
         </script>
         <?php

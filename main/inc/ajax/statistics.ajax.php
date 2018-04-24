@@ -10,6 +10,8 @@ api_protect_admin_script();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;
+$exportFormat = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : 'csv';
+$operation = isset($_REQUEST['oper']) ? $_REQUEST['oper'] : false;
 
 switch ($action) {
     case 'get_user_session':
@@ -19,6 +21,14 @@ switch ($action) {
 
         $start = isset($_GET['start']) ? Database::escape_string(api_get_utc_datetime($_GET['start'])) : api_get_utc_datetime();
         $end = isset($_GET['end']) ?  Database::escape_string(api_get_utc_datetime($_GET['end'])) : api_get_utc_datetime();
+
+        if (!empty($operation)) {
+            $list[] = [
+                'URL',
+                get_lang('Session'),
+                get_lang('CountUsers'),
+            ];
+        }
 
         foreach ($urlList as $url) {
             $urlId = $url['id'];
@@ -32,6 +42,10 @@ switch ($action) {
                     $session['name'],
                     $sessionUrl.$sessionId
                 );
+
+                if (!empty($operation)) {
+                    $row['session'] = strip_tags($row['session']);
+                }
 
                 $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
                 $sql = "SELECT
@@ -48,6 +62,29 @@ switch ($action) {
                 $list[] = $row;
             }
         }
+
+        if (!empty($operation)) {
+            $fileName = !empty($action) ? get_lang('PortalUserSessionStats').'_'.api_get_local_time() : 'report';
+            switch ($exportFormat) {
+                case 'xls':
+                    Export::arrayToXls($list, $fileName);
+                    break;
+                case 'xls_html':
+                    //TODO add date if exists
+                    $browser = new Browser();
+                    if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
+                        Export::export_table_xls_html($list, $fileName, 'ISO-8859-15');
+                    } else {
+                        Export::export_table_xls_html($list, $fileName);
+                    }
+                    break;
+                case 'csv':
+                default:
+                    Export::arrayToCsv($list, $fileName);
+                    break;
+            }
+        }
+
 
         echo json_encode($list);
         break;

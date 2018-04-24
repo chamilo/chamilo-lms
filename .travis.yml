@@ -42,7 +42,7 @@ before_install:
   #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
-  - wget https://chromedriver.storage.googleapis.com/2.38/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  - wget https://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
   - sudo mv chromedriver /usr/bin
   - sudo chmod +x /usr/bin/chromedriver
   # Setup display for Selenium
@@ -50,12 +50,12 @@ before_install:
   - export DISPLAY=:99.0
   - sleep 3
   # Get Selenium
-  - wget http://selenium-release.storage.googleapis.com/3.11/selenium-server-standalone-3.11.0.jar
+  - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
-  - java -jar selenium-server-standalone-3.11.0.jar -log selenium.log  > /dev/null &
+  - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 

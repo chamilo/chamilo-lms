@@ -100,7 +100,7 @@ $form->addElement(
     'lp_author',
     get_lang('Author'),
     ['size' => 80],
-    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px']
+    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '200px']
 );
 $form->applyFilter('lp_author', 'html_filter');
 

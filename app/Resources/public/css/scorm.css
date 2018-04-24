@@ -462,6 +462,9 @@ See https://support.chamilo.org/issues/6976
 .sidebar-scorm{
     border-right: 1px solid #e6e6e6;
 }
+.scorm_item_normal.scorm_highlight a{
+    color: #FFFFFF;
+}
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {

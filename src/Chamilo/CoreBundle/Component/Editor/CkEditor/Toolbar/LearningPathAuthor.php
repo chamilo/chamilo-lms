@@ -24,7 +24,7 @@ class LearningPathAuthor extends Basic
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['fullPage'] = true;
+        $config['fullPage'] = false;
 
         return $config;
     }
@@ -37,8 +37,7 @@ class LearningPathAuthor extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch'],
+            ['PageBreak', 'ShowBlocks', 'Source']
         ];
     }
 
@@ -62,8 +61,7 @@ class LearningPathAuthor extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch'],
+            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source']
         ];
     }
 }

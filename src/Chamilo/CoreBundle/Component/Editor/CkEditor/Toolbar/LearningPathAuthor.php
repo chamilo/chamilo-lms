@@ -37,7 +37,7 @@ class LearningPathAuthor extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['PageBreak', 'ShowBlocks', 'Source']
+            ['PageBreak', 'ShowBlocks', 'Source'],
         ];
     }
 
@@ -61,7 +61,7 @@ class LearningPathAuthor extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source']
+            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
         ];
     }
 }

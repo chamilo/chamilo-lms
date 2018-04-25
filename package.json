@@ -29,7 +29,7 @@
     "jquery-ui-timepicker-addon": "^1.6.3",
     "jquery.scrollbar": "^0.2.11",
     "jsplumb": "^2.6.9",
-    "less": "^2.7.2",
+    "less": "^3.0.2",
     "less-loader": "^4.0.5",
     "mathjax": "^2.7.4",
     "mediaelement": "^4.2.9",

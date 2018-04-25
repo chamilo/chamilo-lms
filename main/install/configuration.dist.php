@@ -826,6 +826,10 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Allow LP export to chamilo format (CourseBackup)
 //$_configuration['allow_lp_chamilo_export'] = false;
 
+// Allow exercise auto launch
+//$_configuration['allow_exercise_auto_launch'] = false;
+// ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

@@ -169,13 +169,17 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
 }
 
 /*Auto launch code */
-$show_autolaunch_lp_warning = false;
-$auto_launch = api_get_course_setting('enable_lp_auto_launch');
+$autoLaunchWarning = '';
+$showAutoLaunchLpWarning = false;
+$course_id = api_get_course_int_id();
+
+$lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $session_id = api_get_session_id();
-if (!empty($auto_launch)) {
-    if ($auto_launch == 2) { //LP list
+if (!empty($lpAutoLaunch)) {
+    if ($lpAutoLaunch == 2) {
+        // LP list
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-            $show_autolaunch_lp_warning = true;
+            $showAutoLaunchLpWarning = true;
         } else {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
             if (!isset($_SESSION[$session_key])) {
@@ -188,7 +192,6 @@ if (!empty($auto_launch)) {
         }
     } else {
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $course_id = api_get_course_int_id();
         $condition = '';
         if (!empty($session_id)) {
             $condition = api_get_session_condition($session_id);
@@ -210,7 +213,7 @@ if (!empty($auto_launch)) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $show_autolaunch_lp_warning = true;
+                    $showAutoLaunchLpWarning = true;
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
@@ -227,22 +230,76 @@ if (!empty($auto_launch)) {
     }
 }
 
+if ($showAutoLaunchLpWarning) {
+    $autoLaunchWarning = get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP');
+}
+
 $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
 if ($forumAutoLaunch == 1) {
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-        Display::addFlash(Display::return_message(
-            get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool'),
-            'warning'
-        ));
+        if (empty($autoLaunchWarning)) {
+            $autoLaunchWarning = get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool');
+        }
     } else {
-        //$forumKey = 'forum_auto_launch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
-        //if (!isset($_SESSION[$forumKey])) {
-        //redirecting to the LP
         $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
-        //  $_SESSION[$forumKey] = true;
         header("Location: $url");
         exit;
-        //}
+    }
+}
+
+if (api_get_configuration_value('allow_exercise_auto_launch')) {
+    $exerciseAutoLaunch = (int)api_get_course_setting('enable_exercise_auto_launch');
+    if ($exerciseAutoLaunch == 2) {
+        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+            if (empty($autoLaunchWarning)) {
+                $autoLaunchWarning = get_lang(
+                    'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
+                );
+            }
+        } else {
+            // Redirecting to the document
+            $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&id_session='.$session_id;
+            header("Location: $url");
+            exit;
+        }
+    } elseif ($exerciseAutoLaunch == 1) {
+        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+            if (empty($autoLaunchWarning)) {
+                $autoLaunchWarning = get_lang(
+                    'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
+                );
+            }
+        } else {
+            // Redirecting to an exercise
+            $table = Database::get_course_table(TABLE_QUIZ_TEST);
+            $sessionCondition = api_get_session_condition($session_id, true);
+            $sql = "SELECT iid FROM $table
+                WHERE c_id = $course_id AND autolaunch = 1 $sessionCondition
+                LIMIT 1";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                $row = Database::fetch_array($result, 'ASSOC');
+                $exerciseId = $row['iid'];
+                $url = api_get_path(WEB_CODE_PATH).
+                    'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&id_session='.$session_id;
+                header("Location: $url");
+                exit;
+            }
+        }
+    }
+}
+
+$documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
+if ($documentAutoLaunch == 1) {
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if (empty($autoLaunchWarning)) {
+            $autoLaunchWarning = get_lang('TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool');
+        }
+    } else {
+        // Redirecting to the document
+        $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id_session='.$session_id;
+        header("Location: $url");
+        exit;
     }
 }
 
@@ -266,9 +323,9 @@ $content = Display::return_introduction_section(
     the setting homepage_view is adjustable through
     the platform administration section */
 
-if ($show_autolaunch_lp_warning) {
+if (!empty($autoLaunchWarning)) {
     $show_message .= Display::return_message(
-        get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),
+        $autoLaunchWarning,
         'warning'
     );
 }

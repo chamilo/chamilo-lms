@@ -83,6 +83,7 @@ class Exercise
     public $showPreviousButton;
     public $notifications;
     public $export = false;
+    public $autolaunch;
 
     /**
      * Constructor of the class.
@@ -192,6 +193,7 @@ class Exercise
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
+            $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
 
             $this->notifications = [];
             if (!empty($object->notifications)) {
@@ -8291,5 +8293,35 @@ class Exercise
     private function getUnformattedTitle()
     {
         return strip_tags(api_html_entity_decode($this->title));
+    }
+
+    /**
+     * @return int
+     */
+    public function getAutoLaunch()
+    {
+        return $this->autolaunch;
+    }
+
+    /**
+     * Clean auto launch settings for all exercise in course/course-session
+     */
+    public function enableAutoLaunch()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET autolaunch = 1
+                WHERE iid = ".$this->iId;
+        Database::query($sql);
+    }
+
+    /**
+     * Clean auto launch settings for all exercise in course/course-session
+     */
+    public function cleanCourseLaunchSettings()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET autolaunch = 0  
+                WHERE c_id = ".$this->course_id." AND session_id = ".$this->sessionId;
+        Database::query($sql);
     }
 }

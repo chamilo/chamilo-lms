@@ -652,6 +652,8 @@ class AddCourse
             'display_info_advance_inside_homecourse' => ['default' => 1, 'category' => 'thematic_advance'],
             'email_alert_students_on_new_homework' => ['default' => 0, 'category' => 'work'],
             'enable_lp_auto_launch' => ['default' => 0, 'category' => 'learning_path'],
+            'enable_exercise_auto_launch' => ['default' => 0, 'category' => 'exercise'],
+            'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
             'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
                 'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',

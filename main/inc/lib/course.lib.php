@@ -5559,6 +5559,8 @@ class CourseManager
             // Get send_mail_setting (auth)from table
             'email_alert_to_teacher_on_new_user_in_course',
             'enable_lp_auto_launch',
+            'enable_exercise_auto_launch',
+            'enable_document_auto_launch',
             'pdf_export_watermark_text',
             'show_system_folders',
             'exercise_invisible_in_session',

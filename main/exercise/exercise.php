@@ -79,11 +79,9 @@ Session::erase('duration_time');
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
 $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
-
 $hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
-
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : null;
@@ -97,6 +95,13 @@ if (api_is_in_gradebook()) {
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
     ];
+}
+
+$autoLaunchAvailable = false;
+if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
+    api_get_configuration_value('allow_exercise_auto_launch')
+) {
+    $autoLaunchAvailable = true;
 }
 
 $nameTools = get_lang('Exercises');
@@ -205,6 +210,14 @@ if ($is_allowedToEdit) {
         if ($objExerciseTmp->read($exerciseId)) {
             if ($check) {
                 switch ($choice) {
+                    case 'enable_launch':
+                        $objExerciseTmp->cleanCourseLaunchSettings();
+                        $objExerciseTmp->enableAutoLaunch();
+                        Display::addFlash(Display::return_message(get_lang('Updated')));
+                        break;
+                    case 'disable_launch':
+                        $objExerciseTmp->cleanCourseLaunchSettings();
+                        break;
                     case 'delete':
                         // deletes an exercise
                         if ($exercise_action_locked == false) {
@@ -755,6 +768,32 @@ if (!empty($exerciseList)) {
                     // Exercise results
                     $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+
+                    // Auto launch
+                    if ($autoLaunchAvailable) {
+                        $autoLaunch = $exercise->getAutoLaunch();
+                        if (empty($autoLaunch)) {
+                            $actions .= Display::url(
+                                Display::return_icon(
+                                    'launch_na.png',
+                                    get_lang('Enable'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ),
+                                'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
+                        } else {
+                            $actions .= Display::url(
+                                Display::return_icon(
+                                    'launch.png',
+                                    get_lang('Disable'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ),
+                                'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
+                        }
+                    }
 
                     // Export
                     $actions .= Display::url(

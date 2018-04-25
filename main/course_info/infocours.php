@@ -283,7 +283,6 @@ $group = [
 ];
 $form->addGroup($group, '', [get_lang('ShowSystemFolders')]);
 
-
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -294,7 +293,6 @@ $group[] = $form->createElement(
 );
 $group[] = $form->createElement('radio', 'enable_document_auto_launch', null, get_lang('Deactivate'), 0);
 $form->addGroup($group, '', [get_lang('DocumentAutoLaunch')]);
-
 
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('

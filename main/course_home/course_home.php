@@ -248,7 +248,7 @@ if ($forumAutoLaunch == 1) {
 }
 
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
-    $exerciseAutoLaunch = (int)api_get_course_setting('enable_exercise_auto_launch');
+    $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
     if ($exerciseAutoLaunch == 2) {
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             if (empty($autoLaunchWarning)) {

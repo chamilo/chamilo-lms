@@ -7921,6 +7921,36 @@ class Exercise
     }
 
     /**
+     * @return int
+     */
+    public function getAutoLaunch()
+    {
+        return $this->autolaunch;
+    }
+
+    /**
+     * Clean auto launch settings for all exercise in course/course-session.
+     */
+    public function enableAutoLaunch()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET autolaunch = 1
+                WHERE iid = ".$this->iId;
+        Database::query($sql);
+    }
+
+    /**
+     * Clean auto launch settings for all exercise in course/course-session.
+     */
+    public function cleanCourseLaunchSettings()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET autolaunch = 0  
+                WHERE c_id = ".$this->course_id." AND session_id = ".$this->sessionId;
+        Database::query($sql);
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
      * @return array
@@ -8293,35 +8323,5 @@ class Exercise
     private function getUnformattedTitle()
     {
         return strip_tags(api_html_entity_decode($this->title));
-    }
-
-    /**
-     * @return int
-     */
-    public function getAutoLaunch()
-    {
-        return $this->autolaunch;
-    }
-
-    /**
-     * Clean auto launch settings for all exercise in course/course-session
-     */
-    public function enableAutoLaunch()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 1
-                WHERE iid = ".$this->iId;
-        Database::query($sql);
-    }
-
-    /**
-     * Clean auto launch settings for all exercise in course/course-session
-     */
-    public function cleanCourseLaunchSettings()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 0  
-                WHERE c_id = ".$this->course_id." AND session_id = ".$this->sessionId;
-        Database::query($sql);
     }
 }

@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
 
-
 /**
  * Class CoursesController.
  *
@@ -828,6 +827,21 @@ class CoursesController
     }
 
     /**
+     * @return array
+     */
+    public static function getLimitArray()
+    {
+        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
+
+        return [
+            'start' => ($pageCurrent - 1) * $pageLength,
+            'current' => $pageCurrent,
+            'length' => $pageLength,
+        ];
+    }
+
+    /**
      * Get the formatted data for sessions block to be displayed on Session Catalog page.
      *
      * @param array $sessions The session list
@@ -959,20 +973,5 @@ class CoursesController
         }
 
         return $sessionsBlocks;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getLimitArray()
-    {
-        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
-        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
-
-        return [
-            'start' => ($pageCurrent - 1) * $pageLength,
-            'current' => $pageCurrent,
-            'length' => $pageLength,
-        ];
     }
 }

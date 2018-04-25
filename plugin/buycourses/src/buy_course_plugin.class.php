@@ -2382,7 +2382,6 @@ class BuyCoursesPlugin extends Plugin
     private function filterSessionList($name = null, $min = 0, $max = 0)
     {
         if (empty($name) && empty($min) && empty($max)) {
-
             return CoursesAndSessionsCatalog::browseSessions();
         }
 

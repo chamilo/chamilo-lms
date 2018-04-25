@@ -1249,7 +1249,7 @@ class CourseBuilder
      * @param int   $courseId        Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
      * @param array $id_list         If you want to restrict the structure to only the given IDs
-     * @param bool $addScormFolder
+     * @param bool  $addScormFolder
      */
     public function build_learnpaths(
         $session_id = 0,

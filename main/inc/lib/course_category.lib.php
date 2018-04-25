@@ -573,7 +573,6 @@ class CourseCategory
         return $categories;
     }
 
-
     /**
      * @param string $category_code
      * @param string $searchTerm
@@ -627,8 +626,6 @@ class CourseCategory
 
         return Database::num_rows(Database::query($sql));
     }
-
-
 
     /**
      * create recursively all categories as option of the select passed in parameter.

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Collections\Criteria;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -204,7 +204,6 @@ class CoursesAndSessionsCatalog
 
         return $categories;
     }
-
 
     /**
      * Return LIMIT to filter SQL query.

@@ -558,10 +558,26 @@ class Version20 extends AbstractMigrationChamilo
                 'ALTER TABLE sys_announcement ADD COLUMN visible_session_admin TINYINT(1) NOT NULL'
             );
         }
+
         if ($table->hasColumn('visible_boss')) {
             $this->addSql('ALTER TABLE sys_announcement CHANGE visible_boss visible_boss TINYINT(1) NOT NULL');
         } else {
             $this->addSql('ALTER TABLE sys_announcement ADD COLUMN visible_boss TINYINT(1) NOT NULL');
+        }
+
+        $table = $schema->getTable('c_group_info');
+        if (!$table->hasColumn('document_access')) {
+            $this->addSql('ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;');
+        }
+
+        $table = $schema->getTable('c_group_category');
+        if (!$table->hasColumn('document_access')) {
+            $this->addSql('ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;');
+        }
+
+        $table = $schema->getTable('c_quiz');
+        if (!$table->hasColumn('autolaunch')) {
+            $this->addSql('ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0 NOT NULL');
         }
     }
 

@@ -224,6 +224,13 @@ class CQuiz
     private $notifications;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="auto_launch", type="boolean", nullable=true, options={"default":0})
+     */
+    private $autoLaunch;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()
@@ -231,6 +238,7 @@ class CQuiz
         $this->hideQuestionTitle = false;
         $this->showPreviousButton = true;
         $this->notifications = '';
+        $this->autoLaunch = 0;
     }
 
     /**

@@ -140,6 +140,13 @@ class CGroupCategory
     private $displayOrder;
 
     /**
+     * @var int
+     *
+     * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
+     */
+    private $docAccess;
+
+    /**
      * Set title.
      *
      * @param string $title

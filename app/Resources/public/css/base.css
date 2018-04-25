@@ -24,9 +24,11 @@ p{
 }
 
 ul li, ol li{
-    /*margin-bottom: 10px;*/
+    margin-bottom: 10px;
 }
-
+.navbar-nav li{
+    margin-bottom: 0;
+}
 /* Sticky footer style */
 .sticky-footer {
     position: absolute;

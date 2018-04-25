@@ -2613,35 +2613,39 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database::fetch_row($rs_lp);
-                                            $my_lp_id = $lp_id[0];
+                                            if (Database::num_rows($rs_lp)) {
+                                                $lp_id = Database::fetch_row($rs_lp);
+                                                $my_lp_id = $lp_id[0];
 
-                                            $sql = 'SELECT status FROM '.$lp_item_view.'
-                                                   WHERE
-                                                        c_id = '.$course_id.' AND
-                                                        lp_view_id = '.$my_lp_id.' AND
-                                                        lp_item_id = '.$refs_list[$prereqs_string].'
-                                                    LIMIT 0, 1';
-                                            $rs_lp = Database::query($sql);
-                                            $status_array = Database::fetch_row($rs_lp);
-                                            $status = $status_array[0];
+                                                $sql = 'SELECT status FROM '.$lp_item_view.'
+                                                        WHERE
+                                                            c_id = '.$course_id.' AND
+                                                            lp_view_id = '.$my_lp_id.' AND
+                                                            lp_item_id = '.$refs_list[$prereqs_string].'
+                                                        LIMIT 0, 1';
+                                                $rs_lp = Database::query($sql);
+                                                $status_array = Database::fetch_row($rs_lp);
+                                                $status = $status_array[0];
 
-                                            $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
-                                            if (!$returnstatus && empty($this->prereq_alert)) {
-                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-                                            }
-                                            if (!$returnstatus) {
-                                                if (self::DEBUG > 1) {
-                                                    error_log('New LP - Prerequisite '.$prereqs_string.' not complete');
+                                                $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                                                if (!$returnstatus && empty($this->prereq_alert)) {
+                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 }
-                                            } else {
-                                                if (self::DEBUG > 1) {
-                                                    error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                if (!$returnstatus) {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log(
+                                                            'New LP - Prerequisite '.$prereqs_string.' not complete'
+                                                        );
+                                                    }
+                                                } else {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                    }
                                                 }
+
+                                                return $returnstatus;
                                             }
                                         }
-
-                                        return $returnstatus;
                                     }
                                 } else {
                                     if (self::DEBUG > 1) {

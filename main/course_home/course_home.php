@@ -39,17 +39,15 @@ $(document).ready(function(){
         $(".btn-show-thematic").show(); //show using class
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
+    
     $("#thematic-hide").click(function(){
         $(".btn-show-thematic").hide(); //show using class
         $(".btn-hide-thematic").show();
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
-});
-
-$(document).ready(function() {
+    
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
-
 		make_visible = "visible.gif";
 		make_invisible = "invisible.gif";
 		path_name = $(this).attr("src");
@@ -172,7 +170,6 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
 $autoLaunchWarning = '';
 $showAutoLaunchLpWarning = false;
 $course_id = api_get_course_int_id();
-
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $session_id = api_get_session_id();
 if (!empty($lpAutoLaunch)) {
@@ -274,8 +271,8 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
             $table = Database::get_course_table(TABLE_QUIZ_TEST);
             $sessionCondition = api_get_session_condition($session_id, true);
             $sql = "SELECT iid FROM $table
-                WHERE c_id = $course_id AND autolaunch = 1 $sessionCondition
-                LIMIT 1";
+                    WHERE c_id = $course_id AND autolaunch = 1 $sessionCondition
+                    LIMIT 1";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result, 'ASSOC');
@@ -307,8 +304,6 @@ $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $temps = time();
 $reqdate = "&reqdate=$temps";
 
-/*	MAIN CODE */
-
 /*	Introduction section (editable by course admins) */
 $content = Display::return_introduction_section(
     TOOL_COURSE_HOMEPAGE,
@@ -322,7 +317,6 @@ $content = Display::return_introduction_section(
 /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
     the setting homepage_view is adjustable through
     the platform administration section */
-
 if (!empty($autoLaunchWarning)) {
     $show_message .= Display::return_message(
         $autoLaunchWarning,

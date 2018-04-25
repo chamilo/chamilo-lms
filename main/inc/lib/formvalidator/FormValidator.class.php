@@ -1688,7 +1688,6 @@ EOT;
         return $this->addElement('UserAvatar', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
     }
 
-
     /**
      * @param string $url           page that will handle the upload
      * @param string $inputName

@@ -58,7 +58,11 @@ if (api_is_allowed_to_edit(null, true)) {
         $sql = "SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id";
         $result = Database::query($sql);
         $tool = Database::fetch_array($result);
-        $tool_name = @htmlspecialchars($tool['name'] != '' ? $tool['name'] : $tool['link'], ENT_QUOTES, api_get_system_encoding());
+        $tool_name = @htmlspecialchars(
+            $tool['name'] != '' ? $tool['name'] : $tool['link'],
+            ENT_QUOTES,
+            api_get_system_encoding()
+        );
         if ($tool['img'] != 'external.gif') {
             $tool['link'] = api_get_path(WEB_CODE_PATH).$tool['link'];
         }

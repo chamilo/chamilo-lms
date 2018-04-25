@@ -111,7 +111,13 @@ function display_form()
 
     // origin
     $html .= '<label class="col-sm-2 control-label">'.get_lang('OriginCoursesFromSession').': </label>';
-    $html .= '<div class="col-sm-5">'.make_select_session_list('sessions_list_origin', $sessions, ['onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');']).'</div>';
+    $html .= '<div class="col-sm-5">';
+    $html .= make_select_session_list(
+        'sessions_list_origin',
+        $sessions,
+        ['onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');']
+    );
+    $html .= '</div>';
     $html .= '<div class="col-sm-5" id="ajax_list_courses_origin">';
     $html .= '<select id="origin" class="form-control" name="SessionCoursesListOrigin[]" ></select>';
     $html .= '</div></div>';
@@ -179,7 +185,6 @@ function search_courses($id_session, $type)
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
                 $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
-
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
                 foreach ($sessions as $session) {

@@ -124,7 +124,7 @@ switch ($report) {
             [
                 'name' => 'url',
                 'index' => 'url',
-                'width' => '180',
+                'width' => '120',
                 'align' => 'left',
             ],
             [

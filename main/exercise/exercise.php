@@ -135,7 +135,7 @@ if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
         rmdir($temp_zip_dir);
         exit; //otherwise following clicks may become buggy
     } else {
-        $errorXmlExport = Display :: return_message(get_lang('ErrorWritingXMLFile'), 'error');
+        $errorXmlExport = Display::return_message(get_lang('ErrorWritingXMLFile'), 'error');
     }
 }
 

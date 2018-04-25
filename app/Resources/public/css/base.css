@@ -1619,7 +1619,10 @@ a.unread {
     text-align: right;
 }
 
-/* Big icons course home page styles */
+/* BIG TOOLS COURSE */
+.title-tools{
+    font-weight: bold;
+}
 #course_tools .big_icon {
     padding: 10px;
     text-align: center;
@@ -6168,7 +6171,6 @@ div#chat-remote-video video {
 }
 
 .toolbar-edit {
-    padding: 5px;
     display: inline-block;
     width: 100%;
 }
@@ -6868,12 +6870,8 @@ div#chat-remote-video video {
     color: #666;
     border: 1px dashed #B0B0B0;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     padding: 1em;
     margin-bottom: 1em;
-    margin-right: 5%;
-    margin-left: 5%;
     text-align: center;
 }
 

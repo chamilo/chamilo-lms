@@ -344,6 +344,11 @@ if ($intro_dispCommand) {
     }
 }
 
+$nameSection = get_lang('AddCustomCourseIntro');
+if($moduleId != 'course_homepage'){
+    $nameSection = get_lang('AddCustomToolsIntro');
+}
+
 $introduction_section .= '<div class="col-md-12">';
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
@@ -353,7 +358,7 @@ if ($intro_dispDefault) {
     } else {
         if (api_is_allowed_to_edit()) {
             $introduction_section .= '<div class="help-course">';
-            $introduction_section .= get_lang('AddCustomCourseIntro').' '.$textIntro;
+            $introduction_section .= $nameSection.' '.$textIntro;
             $introduction_section .= '</div>';
         }
     }

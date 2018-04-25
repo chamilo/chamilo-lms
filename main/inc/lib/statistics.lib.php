@@ -165,32 +165,6 @@ class Statistics
     }
 
     /**
-     * Count sessions.
-     *
-     * @return int Number of sessions counted
-     */
-    public static function countSessions()
-    {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        if (api_is_multiple_url_enabled()) {
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT COUNT(id) AS number
-                    FROM $session_table as s, $access_url_rel_session_table as u
-                    WHERE 
-                        u.session_id = s.id AND 
-                        access_url_id = '".$urlId."'";
-        } else {
-            $sql = "SELECT COUNT(id) AS number
-                    FROM $session_table";
-        }
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj->number;
-    }
-
-    /**
      * Count activities from track_e_default_table.
      *
      * @return int Number of activities counted

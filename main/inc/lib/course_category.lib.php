@@ -573,53 +573,6 @@ class CourseCategory
         return $categories;
     }
 
-    /**
-     * @return array
-     */
-    public static function browseCourseCategories()
-    {
-        $url_access_id = 1;
-        if (api_is_multiple_url_enabled()) {
-            $url_access_id = api_get_current_access_url_id();
-        }
-
-        $countCourses = CourseManager::countAvailableCourses($url_access_id);
-
-        $categories = [];
-        $categories[0][0] = [
-            'id' => 0,
-            'name' => get_lang('DisplayAll'),
-            'code' => 'ALL',
-            'parent_id' => null,
-            'tree_pos' => 0,
-            'count_courses' => $countCourses,
-        ];
-
-        $categoriesFromDatabase = self::getCategories();
-        foreach ($categoriesFromDatabase as $row) {
-            $count_courses = self::countCoursesInCategory($row['code']);
-            $row['count_courses'] = $count_courses;
-            if (empty($row['parent_id'])) {
-                $categories[0][$row['tree_pos']] = $row;
-            } else {
-                $categories[$row['parent_id']][$row['tree_pos']] = $row;
-            }
-        }
-        $count_courses = self::countCoursesInCategory();
-        $categories[0][count($categories[0]) + 1] = [
-            'id' => 0,
-            'name' => get_lang('None'),
-            'code' => 'NONE',
-            'parent_id' => null,
-            'tree_pos' => $row['tree_pos'] + 1,
-            'children_count' => 0,
-            'auth_course_child' => true,
-            'auth_cat_child' => true,
-            'count_courses' => $count_courses,
-        ];
-
-        return $categories;
-    }
 
     /**
      * @param string $category_code
@@ -632,13 +585,7 @@ class CourseCategory
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
-
-        $specialCourseList = CourseManager::get_special_course_list();
-        $without_special_courses = '';
-        if (!empty($specialCourseList)) {
-            $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
-        }
-
+        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
             'course',
             true
@@ -674,171 +621,14 @@ class CourseCategory
                     course.visibility != '4'
                     $categoryFilter
                     $searchFilter
-                    $without_special_courses
+                    $avoidCoursesCondition
                     $visibilityCondition
             ";
 
         return Database::num_rows(Database::query($sql));
     }
 
-    /**
-     * @param string $category_code
-     * @param int    $random_value
-     * @param array  $limit         will be used if $random_value is not set.
-     *                              This array should contains 'start' and 'length' keys
-     *
-     * @return array
-     */
-    public static function browseCoursesInCategory($category_code, $random_value = null, $limit = [])
-    {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $specialCourseList = CourseManager::get_special_course_list();
-        $without_special_courses = '';
-        if (!empty($specialCourseList)) {
-            $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
-        }
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
-            'course',
-            true
-        );
 
-        if (!empty($random_value)) {
-            $random_value = intval($random_value);
-
-            $sql = "SELECT COUNT(*) FROM $tbl_course";
-            $result = Database::query($sql);
-            list($num_records) = Database::fetch_row($result);
-
-            if (api_is_multiple_url_enabled()) {
-                $url_access_id = api_get_current_access_url_id();
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-                $sql = "SELECT COUNT(*) FROM $tbl_course course
-                        INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.c_id = course.id)
-                        WHERE access_url_id = $url_access_id ";
-                $result = Database::query($sql);
-                list($num_records) = Database::fetch_row($result);
-
-                $sql = "SELECT course.id, course.id as real_id 
-                        FROM $tbl_course course
-                        INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.c_id = course.id)
-                        WHERE
-                            access_url_id = $url_access_id AND
-                            RAND()*$num_records< $random_value
-                            $without_special_courses 
-                            $visibilityCondition
-                        ORDER BY RAND()
-                        LIMIT 0, $random_value";
-            } else {
-                $sql = "SELECT id, id as real_id FROM $tbl_course course
-                        WHERE 
-                            RAND()*$num_records< $random_value 
-                            $without_special_courses 
-                            $visibilityCondition
-                        ORDER BY RAND()
-                        LIMIT 0, $random_value";
-            }
-
-            $result = Database::query($sql);
-            $id_in = null;
-            while (list($id) = Database::fetch_row($result)) {
-                if ($id_in) {
-                    $id_in .= ",$id";
-                } else {
-                    $id_in = "$id";
-                }
-            }
-            if ($id_in === null) {
-                return [];
-            }
-            $sql = "SELECT *, id as real_id FROM $tbl_course WHERE id IN($id_in)";
-        } else {
-            $limitFilter = self::getLimitFilterFromArray($limit);
-            $category_code = Database::escape_string($category_code);
-            if (empty($category_code) || $category_code == "ALL") {
-                $sql = "SELECT *, id as real_id FROM $tbl_course
-                    WHERE
-                        1=1
-                        $without_special_courses
-                        $visibilityCondition
-                    ORDER BY title $limitFilter ";
-            } else {
-                if ($category_code == 'NONE') {
-                    $category_code = '';
-                }
-                $sql = "SELECT *, id as real_id FROM $tbl_course
-                        WHERE
-                            category_code='$category_code'
-                            $without_special_courses
-                            $visibilityCondition
-                        ORDER BY title $limitFilter ";
-            }
-
-            // Showing only the courses of the current Chamilo access_url_id
-            if (api_is_multiple_url_enabled()) {
-                $url_access_id = api_get_current_access_url_id();
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                if ($category_code != "ALL") {
-                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
-                            INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.c_id = course.id)
-                            WHERE
-                                access_url_id = $url_access_id AND
-                                category_code='$category_code'
-                                $without_special_courses
-                                $visibilityCondition
-                            ORDER BY title $limitFilter";
-                } else {
-                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
-                            INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.c_id = course.id)
-                            WHERE
-                                access_url_id = $url_access_id
-                                $without_special_courses
-                                $visibilityCondition
-                            ORDER BY title $limitFilter";
-                }
-            }
-        }
-
-        $result = Database::query($sql);
-        $courses = [];
-        while ($row = Database::fetch_array($result)) {
-            $row['registration_code'] = !empty($row['registration_code']);
-            $count_users = CourseManager::get_users_count_in_course($row['code']);
-            $count_connections_last_month = Tracking::get_course_connections_count(
-                $row['id'],
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
-
-            if ($row['tutor_name'] == '0') {
-                $row['tutor_name'] = get_lang('NoManager');
-            }
-            $point_info = CourseManager::get_course_ranking($row['id'], 0);
-            $courses[] = [
-                'real_id' => $row['real_id'],
-                'point_info' => $point_info,
-                'code' => $row['code'],
-                'directory' => $row['directory'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
-                'registration_code' => $row['registration_code'],
-                'creation_date' => $row['creation_date'],
-                'visibility' => $row['visibility'],
-                'category' => $row['category_code'],
-                'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month,
-            ];
-        }
-
-        return $courses;
-    }
 
     /**
      * create recursively all categories as option of the select passed in parameter.
@@ -967,40 +757,6 @@ class CourseCategory
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
-    }
-
-    /**
-     * @return array
-     */
-    public static function getLimitArray()
-    {
-        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
-        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
-
-        return [
-            'start' => ($pageCurrent - 1) * $pageLength,
-            'current' => $pageCurrent,
-            'length' => $pageLength,
-        ];
-    }
-
-    /**
-     * Return LIMIT to filter SQL query.
-     *
-     * @param array $limit
-     *
-     * @return string
-     */
-    public static function getLimitFilterFromArray($limit)
-    {
-        $limitFilter = '';
-        if (!empty($limit) && is_array($limit)) {
-            $limitStart = isset($limit['start']) ? $limit['start'] : 0;
-            $limitLength = isset($limit['length']) ? $limit['length'] : 12;
-            $limitFilter = 'LIMIT '.$limitStart.', '.$limitLength;
-        }
-
-        return $limitFilter;
     }
 
     /**

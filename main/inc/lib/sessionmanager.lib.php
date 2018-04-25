@@ -4519,6 +4519,42 @@ class SessionManager
     }
 
     /**
+     * Return a COUNT from Session table.
+     *
+     * @param string $date in Y-m-d format
+     *
+     * @return int
+     */
+    public static function countSessionsByEndDate($date = null)
+    {
+        $count = 0;
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $date = Database::escape_string($date);
+        $urlId = api_get_current_access_url_id();
+        $dateFilter = '';
+        if (!empty($date)) {
+            $dateFilter = <<<SQL
+                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
+                OR (s.access_end_date IS NULL)
+                OR (s.access_start_date IS NULL AND
+                s.access_end_date IS NOT NULL AND s.access_end_date > '$date')
+SQL;
+        }
+        $sql = "SELECT COUNT(*) 
+                FROM $sessionTable s
+                INNER JOIN $url u
+                ON (s.id = u.session_id)
+                WHERE u.access_url_id = $urlId $dateFilter";
+        $res = Database::query($sql);
+        if ($res !== false && Database::num_rows($res) > 0) {
+            $count = current(Database::fetch_row($res));
+        }
+
+        return $count;
+    }
+
+    /**
      * Protect a session to be edited.
      *
      * @param int  $id

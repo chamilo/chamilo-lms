@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Query\Expr\Join;
-
 /**
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
@@ -35,31 +31,7 @@ class Auth
     {
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
-        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
-        // get course list auto-register
-        $sql = "SELECT item_id FROM $TABLE_COURSE_FIELD_VALUE tcfv
-                INNER JOIN $TABLE_COURSE_FIELD tcf
-                ON tcfv.field_id =  tcf.id
-                WHERE
-                    tcf.extra_field_type = $extraFieldType AND
-                    tcf.variable = 'special_course' AND
-                    tcfv.value = 1
-                ";
-
-        $result = Database::query($sql);
-        $special_course_list = [];
-        if (Database::num_rows($result) > 0) {
-            while ($result_row = Database::fetch_array($result)) {
-                $special_course_list[] = '"'.$result_row['item_id'].'"';
-            }
-        }
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.id NOT IN ('.implode(',', $special_course_list).')';
-        }
+        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and
         // sort these according to the sort of the category
@@ -80,7 +52,8 @@ class Auth
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                    course_rel_user.user_id = '".$user_id."' $without_special_courses
+                    course_rel_user.user_id = '".$user_id."' 
+                    $avoidCoursesCondition
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
         $courses = [];
@@ -105,16 +78,6 @@ class Auth
     }
 
     /**
-     * retrieves the user defined course categories.
-     *
-     * @return array containing all the IDs of the user defined courses categories, sorted by the "sort" field
-     */
-    public function get_user_course_categories()
-    {
-        return CourseManager::get_user_course_categories(api_get_user_id());
-    }
-
-    /**
      * This function get all the courses in the particular user category;.
      *
      * @return string The name of the user defined course category
@@ -126,32 +89,7 @@ class Auth
         // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
-
-        // get course list auto-register
-        $sql = "SELECT item_id
-                FROM $TABLE_COURSE_FIELD_VALUE tcfv
-                INNER JOIN $TABLE_COURSE_FIELD tcf
-                ON tcfv.field_id =  tcf.id
-                WHERE
-                    tcf.extra_field_type = $extraFieldType AND
-                    tcf.variable = 'special_course' AND
-                    tcfv.value = 1 ";
-
-        $result = Database::query($sql);
-        $special_course_list = [];
-        if (Database::num_rows($result) > 0) {
-            while ($result_row = Database::fetch_array($result)) {
-                $special_course_list[] = '"'.$result_row['item_id'].'"';
-            }
-        }
-
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.id NOT IN ('.implode(',', $special_course_list).')';
-        }
+        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
 
         $sql = "SELECT
                     course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
@@ -163,7 +101,7 @@ class Auth
                     course.id = course_rel_user.c_id AND
                     course_rel_user.user_id = '".$user_id."' AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                    $without_special_courses
+                    $avoidCoursesCondition
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
         $data = [];
@@ -292,7 +230,7 @@ class Auth
     public function move_category($direction, $category2move)
     {
         $userId = api_get_user_id();
-        $userCategories = $this->get_user_course_categories();
+        $userCategories = CourseManager::get_user_course_categories(api_get_user_id());
         $categories = array_values($userCategories);
 
         $previous = null;
@@ -394,114 +332,6 @@ class Auth
     }
 
     /**
-     * Search the courses database for a course that matches the search term.
-     * The search is done on the code, title and tutor field of the course table.
-     *
-     * @param string $search_term The string that the user submitted, what we are looking for
-     * @param array  $limit
-     * @param bool   $justVisible search only on visible courses in the catalogue
-     *
-     * @return array an array containing a list of all the courses matching the the search term
-     */
-    public function search_courses($search_term, $limit, $justVisible = false)
-    {
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
-        $limitFilter = CourseCategory::getLimitFilterFromArray($limit);
-
-        // get course list auto-register
-        $sql = "SELECT item_id
-                FROM $extraFieldValuesTable tcfv
-                INNER JOIN $extraFieldTable tcf ON tcfv.field_id =  tcf.id
-                WHERE
-                    tcf.variable = 'special_course' AND
-                    tcfv.value = 1 ";
-
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = [];
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"'.$result_row['item_id'].'"';
-            }
-        }
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN ('.implode(',', $special_course_list).')';
-        }
-
-        $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('course', true) : '';
-
-        $search_term_safe = Database::escape_string($search_term);
-        $sql_find = "SELECT * FROM $courseTable
-                    WHERE (
-                            code LIKE '%".$search_term_safe."%' OR
-                            title LIKE '%".$search_term_safe."%' OR
-                            tutor_name LIKE '%".$search_term_safe."%'
-                        )
-                        $without_special_courses
-                        $visibilityCondition
-                    ORDER BY title, visual_code ASC
-                    $limitFilter
-                    ";
-
-        if (api_is_multiple_url_enabled()) {
-            $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_find = "SELECT *
-                            FROM $courseTable as course
-                            INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.c_id = course.id)
-                            WHERE
-                                access_url_id = $url_access_id AND (
-                                    code LIKE '%".$search_term_safe."%' OR
-                                    title LIKE '%".$search_term_safe."%' OR
-                                    tutor_name LIKE '%".$search_term_safe."%'
-                                )
-                                $without_special_courses
-                                $visibilityCondition
-                            ORDER BY title, visual_code ASC
-                            $limitFilter
-                            ";
-            }
-        }
-        $result_find = Database::query($sql_find);
-        $courses = [];
-        while ($row = Database::fetch_array($result_find)) {
-            $row['registration_code'] = !empty($row['registration_code']);
-            $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count(
-                $row['id'],
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
-
-            $point_info = CourseManager::get_course_ranking($row['id'], 0);
-
-            $courses[] = [
-                'real_id' => $row['id'],
-                'point_info' => $point_info,
-                'code' => $row['code'],
-                'directory' => $row['directory'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
-                'registration_code' => $row['registration_code'],
-                'creation_date' => $row['creation_date'],
-                'visibility' => $row['visibility'],
-                'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month,
-            ];
-        }
-
-        return $courses;
-    }
-
-    /**
      * unsubscribe the user from a given course.
      *
      * @param string $course_code
@@ -586,44 +416,6 @@ class Auth
     }
 
     /**
-     * Counts the number of courses in a given course category.
-     *
-     * @param string $categoryCode Category code
-     * @param $searchTerm
-     *
-     * @return int Count of courses
-     */
-    public function count_courses_in_category($categoryCode, $searchTerm = '')
-    {
-        return CourseCategory::countCoursesInCategory($categoryCode, $searchTerm);
-    }
-
-    /**
-     * get the browsing of the course categories (faculties).
-     *
-     * @return array array containing a list with all the categories and subcategories(if needed)
-     */
-    public function browse_course_categories()
-    {
-        return CourseCategory::browseCourseCategories();
-    }
-
-    /**
-     * Display all the courses in the given course category. I could have used a parameter here.
-     *
-     * @param string $categoryCode Category code
-     * @param int    $randomValue
-     * @param array  $limit        will be used if $random_value is not set.
-     *                             This array should contains 'start' and 'length' keys
-     *
-     * @return array Courses data
-     */
-    public function browse_courses_in_category($categoryCode, $randomValue = null, $limit = [])
-    {
-        return CourseCategory::browseCoursesInCategory($categoryCode, $randomValue, $limit);
-    }
-
-    /**
      * Subscribe the user to a given course.
      *
      * @param string $course_code Course code
@@ -691,190 +483,5 @@ class Auth
 
             return ['message' => $message, 'content' => $content];
         }
-    }
-
-    /**
-     * List the sessions.
-     *
-     * @param string $date  (optional) The date of sessions
-     * @param array  $limit
-     *
-     * @return array The session list
-     */
-    public function browseSessions($date = null, $limit = [])
-    {
-        $em = Database::getManager();
-        $qb = $em->createQueryBuilder();
-        $urlId = api_get_current_access_url_id();
-
-        $sql = "SELECT s.id FROM session s ";
-        $sql .= "
-            INNER JOIN access_url_rel_session ars
-            ON s.id = ars.session_id
-        ";
-
-        $sql .= "
-            WHERE s.nbr_courses > 0
-                AND ars.access_url_id = $urlId
-        ";
-
-        if (!is_null($date)) {
-            $sql .= "
-                AND (
-                    ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))
-                    OR (s.access_end_date IS NULL)
-                    OR (
-                        s.access_start_date IS NULL
-                        AND s.access_end_date IS NOT NULL
-                        AND DATE(s.access_end_date) >= '$date'
-                    )
-                )
-            ";
-        }
-
-        if (!empty($limit)) {
-            $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
-        }
-
-        $ids = Database::store_result(Database::query($sql));
-        $sessions = [];
-        foreach ($ids as $id) {
-            $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
-        }
-
-        return $sessions;
-    }
-
-    /**
-     * Return a COUNT from Session table.
-     *
-     * @param string $date in Y-m-d format
-     *
-     * @return int
-     */
-    public function countSessions($date = null)
-    {
-        $count = 0;
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $date = Database::escape_string($date);
-        $urlId = api_get_current_access_url_id();
-        $dateFilter = '';
-        if (!empty($date)) {
-            $dateFilter = <<<SQL
-                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
-                OR (s.access_end_date IS NULL)
-                OR (s.access_start_date IS NULL AND
-                s.access_end_date IS NOT NULL AND s.access_end_date > '$date')
-SQL;
-        }
-        $sql = "SELECT COUNT(*) 
-                FROM $sessionTable s
-                INNER JOIN $url u
-                ON (s.id = u.session_id)
-                WHERE u.access_url_id = $urlId $dateFilter";
-        $res = Database::query($sql);
-        if ($res !== false && Database::num_rows($res) > 0) {
-            $count = current(Database::fetch_row($res));
-        }
-
-        return $count;
-    }
-
-    /**
-     * Search sessions by the tags in their courses.
-     *
-     * @param string $termTag Term for search in tags
-     * @param array  $limit   Limit info
-     *
-     * @return array The sessions
-     */
-    public function browseSessionsByTags($termTag, array $limit)
-    {
-        $em = Database::getManager();
-        $qb = $em->createQueryBuilder();
-
-        $sessions = $qb->select('s')
-            ->distinct(true)
-            ->from('ChamiloCoreBundle:Session', 's')
-            ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
-                'src',
-                Join::WITH,
-                's.id = src.session'
-            )
-            ->innerJoin(
-                'ChamiloCoreBundle:ExtraFieldRelTag',
-                'frt',
-                Join::WITH,
-                'src.course = frt.itemId'
-            )
-            ->innerJoin(
-                'ChamiloCoreBundle:Tag',
-                't',
-                Join::WITH,
-                'frt.tagId = t.id'
-            )
-            ->innerJoin(
-                'ChamiloCoreBundle:ExtraField',
-                'f',
-                Join::WITH,
-                'frt.fieldId = f.id'
-            )
-            ->where(
-                $qb->expr()->like('t.tag', ":tag")
-            )
-            ->andWhere(
-                $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length'])
-            ->setParameter('tag', "$termTag%")
-            ->getQuery()
-            ->getResult();
-
-        $sessionsToBrowse = [];
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-            $sessionsToBrowse[] = $session;
-        }
-
-        return $sessionsToBrowse;
-    }
-
-    /**
-     * Search sessions by searched term by session name.
-     *
-     * @param string $queryTerm Term for search
-     * @param array  $limit     Limit info
-     *
-     * @return array The sessions
-     */
-    public function browseSessionsBySearch($queryTerm, array $limit)
-    {
-        $sessionsToBrowse = [];
-
-        $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->contains('name', $queryTerm)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length']);
-
-        $sessions = Database::getManager()
-                ->getRepository('ChamiloCoreBundle:Session')
-                ->matching($criteria);
-
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-
-            $sessionsToBrowse[] = $session;
-        }
-
-        return $sessionsToBrowse;
     }
 }

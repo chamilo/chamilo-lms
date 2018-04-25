@@ -419,8 +419,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSessionsForConfiguration()
     {
-        $auth = new Auth();
-        $sessions = $auth->browseSessions();
+        $sessions = CoursesAndSessionsCatalog::browseSessions();
         $currency = $this->getSelectedCurrency();
         $items = [];
         foreach ($sessions as $session) {
@@ -2383,9 +2382,8 @@ class BuyCoursesPlugin extends Plugin
     private function filterSessionList($name = null, $min = 0, $max = 0)
     {
         if (empty($name) && empty($min) && empty($max)) {
-            $auth = new Auth();
 
-            return $auth->browseSessions();
+            return CoursesAndSessionsCatalog::browseSessions();
         }
 
         $itemTable = Database::get_main_table(self::TABLE_ITEM);

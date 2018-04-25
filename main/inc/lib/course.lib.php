@@ -5246,49 +5246,6 @@ class CourseManager
     }
 
     /**
-     * Get available le courses count.
-     *
-     * @param int $accessUrlId (optional)
-     *
-     * @return int Number of courses
-     */
-    public static function countAvailableCourses($accessUrlId = 1)
-    {
-        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $specialCourseList = self::get_special_course_list();
-
-        $withoutSpecialCourses = '';
-        if (!empty($specialCourseList)) {
-            $withoutSpecialCourses = ' AND c.id NOT IN ("'.implode('","', $specialCourseList).'")';
-        }
-
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
-
-        $accessUrlId = (int) $accessUrlId;
-        if (empty($accessUrlId)) {
-            $accessUrlId = 1;
-        }
-
-        $sql = "SELECT count(c.id) 
-                FROM $tableCourse c 
-                INNER JOIN $tableCourseRelAccessUrl u
-                ON (c.id = u.c_id)
-                WHERE
-                    u.access_url_id = $accessUrlId AND
-                    c.visibility != 0 AND
-                    c.visibility != 4
-                    $withoutSpecialCourses
-                    $visibilityCondition
-                ";
-
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
-
-        return $row[0];
-    }
-
-    /**
      * Return a link to go to the course, validating the visibility of the
      * course and the user status.
      *

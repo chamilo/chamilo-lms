@@ -184,7 +184,11 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-        $exerciseId = $exerciseData['id'];
+        $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
+
+        if (empty($exerciseId)) {
+            return null;
+        }
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseData['id']);
 

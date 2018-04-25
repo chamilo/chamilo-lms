@@ -1249,12 +1249,14 @@ class CourseBuilder
      * @param int   $courseId        Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
      * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param bool $addScormFolder
      */
     public function build_learnpaths(
         $session_id = 0,
         $courseId = 0,
         $withBaseContent = false,
-        $id_list = []
+        $id_list = [],
+        $addScormFolder = true
     ) {
         $table_main = Database::get_course_table(TABLE_LP_MAIN);
         $table_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1361,17 +1363,19 @@ class CourseBuilder
         }
 
         // Save scorm directory (previously build_scorm_documents())
-        $i = 1;
-        if ($dir = @opendir($this->course->backup_path.'/scorm')) {
-            while ($file = readdir($dir)) {
-                if (is_dir($this->course->backup_path.'/scorm/'.$file) &&
-                    !in_array($file, ['.', '..'])
-                ) {
-                    $doc = new ScormDocument($i++, '/'.$file, $file);
-                    $this->course->add_resource($doc);
+        if ($addScormFolder) {
+            $i = 1;
+            if ($dir = @opendir($this->course->backup_path.'/scorm')) {
+                while ($file = readdir($dir)) {
+                    if (is_dir($this->course->backup_path.'/scorm/'.$file) &&
+                        !in_array($file, ['.', '..'])
+                    ) {
+                        $doc = new ScormDocument($i++, '/'.$file, $file);
+                        $this->course->add_resource($doc);
+                    }
                 }
+                closedir($dir);
             }
-            closedir($dir);
         }
     }
 

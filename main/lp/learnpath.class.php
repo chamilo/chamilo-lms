@@ -13195,7 +13195,8 @@ EOD;
             api_get_session_id(),
             $this->get_course_int_id(),
             true,
-            [$this->get_id()]
+            [$this->get_id()],
+            false
         );
 
         $zipFile = CourseArchiver::createBackup($courseBuilder->course);

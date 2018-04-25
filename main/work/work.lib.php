@@ -753,16 +753,20 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
  *
  * @return string actual directory name if it succeeds, boolean false otherwise
  */
-function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
+function create_unexisting_work_directory($base_work_dir, $desiredDirName)
 {
-    $nb = '';
+    $nb = 0;
     $base_work_dir = (substr($base_work_dir, -1, 1) == '/' ? $base_work_dir : $base_work_dir.'/');
-    while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
+    while (file_exists($base_work_dir.$desiredDirName.$nb)) {
         $nb += 1;
     }
 
-    if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
-        return $desired_dir_name.$nb;
+    if (empty($nb)) {
+        $nb = '';
+    }
+
+    if (@mkdir($base_work_dir.$desiredDirName.$nb, api_get_permissions_for_new_directories())) {
+        return $desiredDirName.$nb;
     } else {
         return false;
     }

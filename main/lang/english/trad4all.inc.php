@@ -8141,4 +8141,8 @@ $LastMonth = "Last month";
 $ThisMonth = "This month";
 $PortalUserSessionStats = "Portal user session stats";
 $AddCustomToolsIntro = "You may add an introduction to this tool page as a helper text for your students. Simply click the edit icon to add some text. This short info text here is invisible to students and you can just leave this block empty, but what you will type will be visible to them.";
+$TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool = "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.";
+$DocumentAutoLaunch = "Auto-launch for documents";
+$RedirectToTheDocumentList = "Redirect to the document list";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to exercise list.";
 ?>

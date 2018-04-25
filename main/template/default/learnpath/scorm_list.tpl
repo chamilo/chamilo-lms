@@ -34,6 +34,23 @@
         </h4>
     </div>
     <div class="panel-group" role="tablist" aria-multiselectable="true">
+        {% if data_panel.not_parents %}
+            <ul class="scorm-collapse-list">
+                {% for item in data_panel.not_parents %}
+                <li id="toc_{{ item.id }}" class="{{ item.class }}">
+                    <div class="sub-item type-{{ item.type }}">
+                        <a name="atoc_{{ item.id }}"></a>
+                        <a class="item-action" href="#"
+                           onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;">
+                            <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                            {{ item.title }}
+                        </a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         {% for item in data_panel.are_parents %}
         <div class="panel panel-default {{ item.parent ? 'lower':'higher' }}" data-lp-id="{{ item.id }}"
              {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
@@ -63,6 +80,7 @@
                                 <a name="atoc_{{ subitem.id }}"></a>
                                 <a class="item-action" href="#"
                                    onclick="switch_item('{{ subitem.current_id }}','{{ subitem.id }}'); return false;">
+                                    <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
                                     {{ subitem.title }}
                                 </a>
                             </div>
@@ -74,19 +92,7 @@
             </div>
         </div>
         {% endfor %}
-        <ul class="section-list" style="margin-top: 5px;">
-            {% for item in data_panel.not_parents %}
-            <li id="toc_{{ item.id }}" class="{{ item.class }}">
-                <div class="sub-item type-{{ item.type }}">
-                    <a name="atoc_{{ item.id }}"></a>
-                    <a class="item-action" href="#"
-                       onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;">
-                        {{ item.title }}
-                    </a>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
+
     </div>
 </div>
 {% endif %}

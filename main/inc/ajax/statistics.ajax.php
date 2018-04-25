@@ -11,7 +11,7 @@ api_protect_admin_script();
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;
 $exportFormat = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : 'csv';
-$exportFormat = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : 'csv';
+$operation = isset($_REQUEST['oper']) ? $_REQUEST['oper'] : false;
 $order = isset($_REQUEST['sord']) && in_array($_REQUEST['sord'], ['asc', 'desc']) ? $_REQUEST['sord'] : 'asc';
 
 switch ($action) {

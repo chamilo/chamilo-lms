@@ -883,14 +883,6 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateDir')];
 }
 
-$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path
-    .'jquery-jplayer/skin/chamilo/jplayer.blue.monday.css" type="text/css">';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path
-    .'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
-$mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
-
 $documentAndFolders = DocumentManager::getAllDocumentData(
     $courseInfo,
     $curdirpath,
@@ -942,7 +934,7 @@ if (!empty($documentAndFolders)) {
                     'extension' => $extension,
                     'count' => $count,
                 ];
-                $jquery .= DocumentManager::generate_jplayer_jquery($params);
+                $jquery .= DocumentManager::generateAudioJavascript($params);
                 $count++;
             }
         }
@@ -1821,6 +1813,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
 );
 
 $getSizeURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dir_size&'.api_get_cidreq();
+
 if (!empty($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
         $count = 1;
@@ -1883,8 +1876,8 @@ if (!empty($documentAndFolders)) {
 
             // Icons (clickable)
             $row[] = DocumentManager::create_document_link(
+                $http_www,
                 $document_data,
-                $courseInfo,
                 true,
                 $count,
                 $is_visible,
@@ -1904,8 +1897,8 @@ if (!empty($documentAndFolders)) {
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             $link = DocumentManager::create_document_link(
+                $http_www,
                 $document_data,
-                $courseInfo,
                 false,
                 null,
                 $is_visible,

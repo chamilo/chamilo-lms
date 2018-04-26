@@ -315,7 +315,7 @@ var FacebookRenderer = {
 		fbContainer.id = fb.id;
 		fbContainer.className = 'fb-video';
 		fbContainer.setAttribute('data-href', src);
-		fbContainer.setAttribute('data-allowfullscreen', true);
+		fbContainer.setAttribute('data-allowfullscreen', 'true');
 		fbContainer.setAttribute('data-controls', !!mediaElement.originalNode.controls);
 		mediaElement.originalNode.parentNode.insertBefore(fbContainer, mediaElement.originalNode);
 		mediaElement.originalNode.style.display = 'none';

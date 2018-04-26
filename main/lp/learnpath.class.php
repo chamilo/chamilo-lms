@@ -2296,7 +2296,7 @@ class learnpath
             $type_quiz = false;
 
             foreach ($list as $toc) {
-                if ($toc['id'] == $_SESSION['oLP']->current && ($toc['type'] == 'quiz')) {
+                if ($toc['id'] == $_SESSION['oLP']->current && $toc['type'] == 'quiz') {
                     $type_quiz = true;
                 }
             }
@@ -3189,7 +3189,7 @@ class learnpath
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         } else {
-            $course_id = intval($course_id);
+            $course_id = (int) $course_id;
         }
         $list = [];
 
@@ -3197,8 +3197,8 @@ class learnpath
             return $list;
         }
 
-        $lp = intval($lp);
-        $parent = intval($parent);
+        $lp = (int) $lp;
+        $parent = (int) $parent;
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT iid FROM $tbl_lp_item
@@ -12788,7 +12788,8 @@ EOD;
                     .'&lp_view_id='.$lpViewId.'&'.$extraParams;
             case TOOL_FORUM:
                 return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
-            case TOOL_THREAD:  //forum post
+            case TOOL_THREAD:
+                // forum post
                 $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
                 if (empty($id)) {
                     return '';
@@ -12811,8 +12812,15 @@ EOD;
                     ->getRepository('ChamiloCourseBundle:CDocument')
                     ->findOneBy(['cId' => $course_id, 'iid' => $id]);
 
-                if (!$document) {
-                    return '';
+                if (empty($document)) {
+                    // Try with normal id
+                    $document = $em
+                        ->getRepository('ChamiloCourseBundle:CDocument')
+                        ->findOneBy(['cId' => $course_id, 'id' => $id]);
+
+                    if (empty($document)) {
+                        return '';
+                    }
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());

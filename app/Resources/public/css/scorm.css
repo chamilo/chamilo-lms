@@ -304,6 +304,10 @@ See https://support.chamilo.org/issues/6976
     background-color: #00829C;
 }
 
+.scorm_item_normal.scorm_highlight a {
+    /* color: #FFFFFF; once again this make links invisible!! */
+}
+
 /* END SCORM CSS BASE*/
 #scorm-info {
     padding: 0;
@@ -564,10 +568,6 @@ See https://support.chamilo.org/issues/6976
 
 .sidebar-scorm {
     border-right: 1px solid #e6e6e6;
-}
-
-.scorm_item_normal.scorm_highlight a {
-    color: #FFFFFF;
 }
 
 .scorm-collapse-list {

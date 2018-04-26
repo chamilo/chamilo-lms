@@ -9423,3 +9423,19 @@ div.dropdown-menu.open {
 ul.dropdown-menu.inner > li > a {
     white-space: initial;
 }
+
+/* start document mp3 preview */
+.preview .mejs__container {
+    background: #aaa;
+}
+
+.preview .mejs__controls {
+    padding: 0 0 0 0;
+    background: none;
+}
+
+.preview  .mejs__button>button {
+    margin: 16px 6px;
+}
+
+/* end document mp3 preview */

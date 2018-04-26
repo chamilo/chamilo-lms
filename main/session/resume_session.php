@@ -265,7 +265,8 @@ if (!empty($userList)) {
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));
-    $table->setHeaderContents(0, 2, get_lang('Actions'));
+    $table->setHeaderContents(0, 2, get_lang('Registered'));
+    $table->setHeaderContents(0, 3, get_lang('Actions'));
 
     $row = 1;
     foreach ($userList as $user) {
@@ -334,8 +335,11 @@ if (!empty($userList)) {
                 $status = get_lang('Student');
         }
 
+        $registered = !empty($user['registered_at']) ? Display::dateToStringAgoAndLongDate($user['registered_at']) : '';
+
         $table->setCellContents($row, 1, $status);
-        $table->setCellContents($row, 2, $link);
+        $table->setCellContents($row, 2, $registered);
+        $table->setCellContents($row, 3, $link);
         $row++;
     }
     $userListToShow .= $table->toHtml();

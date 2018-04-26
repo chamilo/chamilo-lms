@@ -2892,9 +2892,7 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
         return true;
     }
 
-    if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
-        api_not_allowed(true);
-    }
+    return userIsSubscribedToWork($userId, $workId, $courseId);
 }
 
 /**
@@ -5120,16 +5118,16 @@ function getFile($id, $course_info, $download = true, $isCorrection = false)
  * Get the file contents for an assigment.
  *
  * @param int   $id
- * @param array $course_info
- * @param int Session ID
- * @param $correction
+ * @param array $courseInfo
+ * @param int   $sessionId
+ * @param bool  $correction
  *
  * @return array|bool
  */
-function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
+function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
 {
-    $id = intval($id);
-    if (empty($course_info) || empty($id)) {
+    $id = (int) $id;
+    if (empty($courseInfo) || empty($id)) {
         return false;
     }
     if (empty($sessionId)) {
@@ -5137,10 +5135,11 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
     }
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    if (!empty($course_info['real_id'])) {
-        $sql = 'SELECT *
-                FROM '.$table.'
-                WHERE c_id = '.$course_info['real_id'].' AND id = "'.$id.'"';
+    if (!empty($courseInfo['real_id'])) {
+        $sql = "SELECT *
+                FROM $table
+                WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
+
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -5166,11 +5165,15 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 return false;
             }
 
-            allowOnlySubscribedUser(
+            $isAllow = allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
-                $course_info['real_id']
+                $courseInfo['real_id']
             );
+
+            if (empty($isAllow)) {
+                return false;
+            }
 
             /*
             field show_score in table course :
@@ -5201,7 +5204,7 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             */
 
             $work_is_visible = $item_info['visibility'] == 1 && $row['accepted'] == 1;
-            $doc_visible_for_all = (int) $course_info['show_score'] === 0;
+            $doc_visible_for_all = (int) $courseInfo['show_score'] === 0;
 
             $is_editor = api_is_allowed_to_edit(true, true, true);
             $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
@@ -5582,7 +5585,11 @@ function protectWork($courseInfo, $workId)
         api_not_allowed(true);
     }
 
-    allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    $isAllow = allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    if (empty($isAllow)) {
+        api_not_allowed(true);
+    }
+
     $groupInfo = GroupManager::get_group_properties($groupId);
 
     if (!empty($groupId)) {

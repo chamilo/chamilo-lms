@@ -313,3 +313,11 @@ Feature: Exercise tool
     Given I am on "/main/exercise/tests_category.php?cidReq=TEMP"
     And I follow "Delete"
     Then I should see "Category deleted"
+
+  Scenario: Import exercise from excel
+    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    Then I should see "Import quiz from Excel"
+    Then I attach the file "/main/exercise/quiz_template.xls" to "user_upload_quiz"
+    And I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Definition of oligarchy"

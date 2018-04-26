@@ -6,7 +6,7 @@
     <div class="scorm-body">
         <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
             {% for item in data_list %}
-            <div id="toc_{{ item.id }}" class="{{ item.class }}">
+            <div id="toc_{{ item.id }}" class="{{ item.class }} {{ item.type }}">
                 {% if item.type == 'dir' %}
                 <div class="section {{ item.css_level }}" title="{{ item.description }}">
                     {{ item.title }}
@@ -52,6 +52,7 @@
         {% endif %}
 
         {% for item in data_panel.are_parents %}
+
         <div class="panel panel-default {{ item.parent ? 'lower':'higher' }}" data-lp-id="{{ item.id }}"
              {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
             <div class="status-heading">
@@ -75,7 +76,7 @@
                         {% for subitem in item.children %}
                         {% set  counter = counter + 1 %}
                         <li id="toc_{{ subitem.id }}"
-                            class="{{ subitem.class }} {{ counter == final ? 'final':'' }}">
+                            class="{{ subitem.class }} {{ subitem.type }} {{ counter == final ? 'final':'' }}">
                             <div class="sub-item type-{{ subitem.type }}">
                                 <a name="atoc_{{ subitem.id }}"></a>
                                 <a class="item-action" href="#"

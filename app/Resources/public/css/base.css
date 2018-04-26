@@ -23,7 +23,7 @@ p{
     margin: 0 0 20px;
 }
 
-ul li, ol li{
+.course ul li, .course ol li{
     margin-bottom: 10px;
 }
 .navbar-nav li{

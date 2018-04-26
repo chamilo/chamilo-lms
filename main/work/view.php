@@ -177,15 +177,20 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     ),
                     api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
                 );
-                $actions .= Display::url(
-                    Display::return_icon(
-                        'save.png',
-                        get_lang('Download'),
-                        null,
-                        ICON_SIZE_MEDIUM
-                    ),
-                    $work['download_url']
-                );
+
+                // Check if file can be downloaded
+                $file = getFileContents($work['id'], $courseInfo, api_get_session_id(), false);
+                if (!empty($file)) {
+                    $actions .= Display::url(
+                        Display::return_icon(
+                            'save.png',
+                            get_lang('Download'),
+                            null,
+                            ICON_SIZE_MEDIUM
+                        ),
+                        $work['download_url']
+                    );
+                }
             }
         }
 

@@ -5139,7 +5139,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
         $sql = "SELECT *
                 FROM $table
                 WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
-        
+
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');

@@ -345,7 +345,7 @@ if ($intro_dispCommand) {
 }
 
 $nameSection = get_lang('AddCustomCourseIntro');
-if($moduleId != 'course_homepage'){
+if ($moduleId != 'course_homepage') {
     $nameSection = get_lang('AddCustomToolsIntro');
 }
 

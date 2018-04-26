@@ -48,8 +48,6 @@ Feature: Work tool
     And wait for the page to be loaded
     Then I should see "Work description"
     And wait for the page to be loaded
-    Then I follow "Correct and rate"
-    And wait for the page to be loaded
     Then I should see "base.css"
 
 #  Scenario: Add a comment and a attachment to the work previously uploaded by student

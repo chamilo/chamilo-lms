@@ -4101,7 +4101,7 @@ class SessionManager
 
         $selectedField = '
             u.user_id, u.lastname, u.firstname, u.username, su.relation_type, au.access_url_id,
-            su.moved_to, su.moved_status, su.moved_at
+            su.moved_to, su.moved_status, su.moved_at, su.registered_at
         ';
 
         if ($getCount) {

@@ -2531,10 +2531,10 @@ class learnpath
      */
     public static function getProgress($lpId, $userId, $courseId, $sessionId = 0)
     {
-        $lpId = intval($lpId);
-        $userId = intval($userId);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $lpId = (int) $lpId;
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
         $progress = 0;
 
         $sessionCondition = api_get_session_condition($sessionId);

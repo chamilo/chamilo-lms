@@ -667,17 +667,6 @@ if (isset($_GET['studentoverview'])) {
     // then Category::load() will create a new 'root' category with empty
     // course and session fields in memory (Category::create_root_category())
     if ($_in_course === true) {
-        // When *inside* a course, we want to make sure there is one (and only
-        // one) category for this course or for this session.
-
-        //hack for delete a gradebook from inside course
-        /*
-        $clean_deletecat = isset($_GET['deletecat']) ? intval($_GET['deletecat']) : null;
-        if (!empty($clean_deletecat)) {
-            exit;
-        }
-        //end hack*/
-
         $cats = Category:: load(
             null,
             null,
@@ -785,38 +774,38 @@ if (!api_is_allowed_to_edit(null, true)) {
     );
 }
 
-if (!empty($actionsLeft)) {
-    echo $toolbar = Display::toolbarAction(
-        'gradebook-student-actions',
-        [$actionsLeft]
-    );
-}
-
-if (api_is_allowed_to_edit(null, true)) {
-    // Tool introduction
-    Display::display_introduction_section(
-        TOOL_GRADEBOOK,
-        ['ToolbarSet' => 'AssessmentsIntroduction']
-    );
-
-    if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
-        (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
-    ) {
-        $cats = Category:: load(
-            null,
-            null,
-            $course_code,
-            null,
-            null,
-            $session_id,
-            false
-        );
-    }
-}
-
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
+    if (!empty($actionsLeft)) {
+        echo $toolbar = Display::toolbarAction(
+            'gradebook-student-actions',
+            [$actionsLeft]
+        );
+    }
+
+    if (api_is_allowed_to_edit(null, true)) {
+        // Tool introduction
+        Display::display_introduction_section(
+            TOOL_GRADEBOOK,
+            ['ToolbarSet' => 'AssessmentsIntroduction']
+        );
+
+        if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
+            (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
+        ) {
+            $cats = Category:: load(
+                null,
+                null,
+                $course_code,
+                null,
+                null,
+                $session_id,
+                false
+            );
+        }
+    }
+
     $cats = Category::load(
         null,
         null,
@@ -892,6 +881,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
         $i = 0;
         $allcat = [];
+        $model = ExerciseLib::getCourseScoreModel();
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -951,8 +941,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     [],
                     $loadStats
                 );
-
-                $model = ExerciseLib::getCourseScoreModel();
 
                 if (api_is_allowed_to_edit()) {
                     $gradebookTable->td_attributes = [

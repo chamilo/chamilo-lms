@@ -4902,8 +4902,8 @@ class DocumentManager
      *
      * @param string $documentWebPath
      * @param array  $document_data
-     * @param bool   $show_as_icon - if it is true, only a clickable icon will be shown
-     * @param int    $visibility   (1/0)
+     * @param bool   $show_as_icon      - if it is true, only a clickable icon will be shown
+     * @param int    $visibility        (1/0)
      * @param int    $counter
      * @param int    $size
      * @param bool   $isAllowedToEdit

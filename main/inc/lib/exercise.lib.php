@@ -2071,7 +2071,6 @@ HOTSPOT;
                     }
 
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-
                     $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
                     $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
@@ -2528,9 +2527,9 @@ HOTSPOT;
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
-            $html = $percentage."$percentageSign  ($score / $weight)";
+            $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
-                $html = $percentage."$percentageSign ";
+                $html = $percentage.$percentageSign;
             }
         } else {
             $html = $score.' / '.$weight;
@@ -2555,7 +2554,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+        $modelWithStyle = '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 
         return $modelWithStyle;
     }

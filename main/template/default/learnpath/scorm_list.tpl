@@ -6,7 +6,7 @@
     <div class="scorm-body">
         <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
             {% for item in data_list %}
-            <div id="toc_{{ item.id }}" class="{{ item.class }} {{ item.type }}">
+            <div id="toc_{{ item.id }}" class="{{ item.class }} item-{{ item.type }}">
                 {% if item.type == 'dir' %}
                 <div class="section {{ item.css_level }}" title="{{ item.description }}">
                     {{ item.title }}
@@ -37,7 +37,7 @@
         {% if data_panel.not_parents %}
             <ul class="scorm-collapse-list">
                 {% for item in data_panel.not_parents %}
-                <li id="toc_{{ item.id }}" class="{{ item.class }}">
+                <li id="toc_{{ item.id }}" class="{{ item.class }} item-{{ item.type }}">
                     <div class="sub-item type-{{ item.type }}">
                         <a name="atoc_{{ item.id }}"></a>
                         <a class="item-action" href="#"
@@ -77,7 +77,7 @@
                         {% set  counter = counter + 1 %}
                         <li id="toc_{{ subitem.id }}"
                             class="{{ subitem.class }} {{ subitem.type }} {{ counter == final ? 'final':'' }}">
-                            <div class="sub-item type-{{ subitem.type }}">
+                            <div class="sub-item item-{{ subitem.type }}">
                                 <a name="atoc_{{ subitem.id }}"></a>
                                 <a class="item-action" href="#"
                                    onclick="switch_item('{{ subitem.current_id }}','{{ subitem.id }}'); return false;">

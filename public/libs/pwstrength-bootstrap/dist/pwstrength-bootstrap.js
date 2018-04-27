@@ -1,6 +1,6 @@
 /*!
 * jQuery Password Strength plugin for Twitter Bootstrap
-* Version: 2.2.0
+* Version: 2.2.1
 *
 * Copyright (c) 2008-2013 Tane Piper
 * Copyright (c) 2013 Alejandro Blanco
@@ -195,7 +195,10 @@ try {
     };
 
     validation.wordIsACommonPassword = function (options, word, score) {
-        return ($.inArray(word, options.rules.commonPasswords) >= 0) && score;
+        if ($.inArray(word, options.rules.commonPasswords) >= 0) {
+            return score;
+        }
+        return 0;
     };
 
     rulesEngine.validation = validation;

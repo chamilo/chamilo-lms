@@ -148,7 +148,10 @@ try {
     };
 
     validation.wordIsACommonPassword = function (options, word, score) {
-        return ($.inArray(word, options.rules.commonPasswords) >= 0) && score;
+        if ($.inArray(word, options.rules.commonPasswords) >= 0) {
+            return score;
+        }
+        return 0;
     };
 
     rulesEngine.validation = validation;

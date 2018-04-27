@@ -213,6 +213,7 @@ foreach ($categories as $item) {
     }
 
     $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+    $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
     $listData = [];
 
     if (!empty($flat_list)) {
@@ -220,7 +221,6 @@ foreach ($categories as $item) {
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
-
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
             // Validation when belongs to a session.
@@ -403,7 +403,8 @@ foreach ($categories as $item) {
             $actionSeriousGame = null;
             $actionUpdateScormFile = '';
             $actionExportToCourseBuild = '';
-            $allowChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
+            // Only for "Chamilo" packages
+            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] == 'Chamilo';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -796,7 +797,7 @@ foreach ($categories as $item) {
                     );
                 }
 
-                if ($allowChamiloExport) {
+                if ($allowExportCourseFormat) {
                     $actionExportToCourseBuild = Display::url(
                         Display::return_icon(
                             'backup.png',

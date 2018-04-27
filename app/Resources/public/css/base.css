@@ -9373,11 +9373,13 @@ input.form-control[type="color"] {
 
 .feedback-green {
     color: #33a10b;
+    font-weight: bold;
 }
 
 .feedback-red {
     color: #ff3019;
     text-decoration: line-through;
+    font-weight: bold;
 }
 
 .feedback-question {
@@ -9388,7 +9390,7 @@ input.form-control[type="color"] {
     font-weight: bold;
 }
 .correct-answer{
-    background-color: #DDDDDD;
+    background-color: #D7E3E6;
     color: #000000;
     padding-left: 5px;
     padding-right: 5px;

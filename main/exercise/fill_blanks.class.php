@@ -1282,7 +1282,7 @@ class FillBlanks extends Question
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span class='feedback-green'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span class='correct-answer'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:

@@ -748,25 +748,23 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
  * @author Bert Vanderkimpen
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
  *
- * @param string $base_work_dir  Base work dir (.../work)
+ * @param string $workDir        Base work dir (.../work)
  * @param string $desiredDirName complete path of the desired name
  *
  * @return string actual directory name if it succeeds, boolean false otherwise
  */
-function create_unexisting_work_directory($base_work_dir, $desiredDirName)
+function create_unexisting_work_directory($workDir, $desiredDirName)
 {
-    $nb = 0;
-    $base_work_dir = (substr($base_work_dir, -1, 1) == '/' ? $base_work_dir : $base_work_dir.'/');
-    while (file_exists($base_work_dir.$desiredDirName.$nb)) {
-        $nb += 1;
+    $counter = 0;
+    $workDir = (substr($workDir, -1, 1) == '/' ? $workDir : $workDir.'/');
+    $checkDirName = $desiredDirName;
+    while (file_exists($workDir.$checkDirName)) {
+        $counter += 1;
+        $checkDirName = $desiredDirName.$counter;
     }
 
-    if (empty($nb)) {
-        $nb = '';
-    }
-
-    if (@mkdir($base_work_dir.$desiredDirName.$nb, api_get_permissions_for_new_directories())) {
-        return $desiredDirName.$nb;
+    if (@mkdir($workDir.$checkDirName, api_get_permissions_for_new_directories())) {
+        return $checkDirName;
     } else {
         return false;
     }
@@ -4073,8 +4071,9 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 {
     $em = Database::getManager();
 
-    $user_id = intval($user_id);
-    $groupId = intval($groupId);
+    $user_id = (int) $user_id;
+    $groupId = (int) $groupId;
+    $sessionId = (int) $sessionId;
 
     $groupIid = 0;
     $groupInfo = [];
@@ -4082,7 +4081,6 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
     }
-    $sessionId = (int) $sessionId;
     $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
@@ -4090,8 +4088,9 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $directory = api_replace_dangerous_char($formValues['new_dir']);
     $directory = disable_dangerous_file($directory);
-    $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
+    $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
+    var_dump($created_dir);
     if (empty($created_dir)) {
         return false;
     }

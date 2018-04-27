@@ -17,13 +17,10 @@ class LearnpathList
 {
     // Holds a flat list of learnpaths data from the database.
     public $list = [];
-    // Holds a list of references to the learnpaths objects (only filled by get_refs()).
-    public $ref_list = [];
     // Holds a flat list of learnpaths sorted by alphabetical name order.
     public $alpha_list = [];
     public $course_code;
     public $user_id;
-    public $refs_active = false;
 
     /**
      * This method is the constructor for the learnpathList. It gets a list of available learning paths from
@@ -193,22 +190,6 @@ class LearnpathList
         }
         asort($names);
         $this->alpha_list = $names;
-    }
-
-    /**
-     * Gets references to learnpaths for all learnpaths IDs kept in the local list.
-     * This applies a transformation internally on list and ref_list and returns a copy of the refs list.
-     *
-     * @return array List of references to learnpath objects
-     */
-    public function get_refs()
-    {
-        foreach ($this->list as $id => $dummy) {
-            $this->ref_list[$id] = new learnpath($this->course_code, $id, $this->user_id);
-        }
-        $this->refs_active = true;
-
-        return $this->ref_list;
     }
 
     /**

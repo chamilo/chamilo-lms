@@ -3274,6 +3274,7 @@ class CourseRestorer
                 $path = '/'.str_replace('/', '', substr($path, 1));
 
                 $workData = [];
+
                 switch ($this->file_option) {
                     case FILE_SKIP:
                         $workData = get_work_data_by_path(
@@ -3290,7 +3291,6 @@ class CourseRestorer
                                     WHERE
                                         c_id = '.$this->course_origin_id.' AND
                                         publication_id = '.$id_work;
-
                             $result = Database::query($sql);
                             $cant = Database::num_rows($result);
                             if ($cant > 0) {
@@ -3470,7 +3470,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
-            foreach ($resources[RESOURCE_ASSET] as $id => $asset) {
+            foreach ($resources[RESOURCE_ASSET] as $asset) {
                 if (is_file($this->course->backup_path.'/'.$asset->path) &&
                     is_readable($this->course->backup_path.'/'.$asset->path) &&
                     is_dir(dirname($path.$asset->path)) &&

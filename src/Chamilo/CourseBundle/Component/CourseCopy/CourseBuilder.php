@@ -1290,9 +1290,9 @@ class CourseBuilder
             $sql .= " AND id IN (".implode(', ', $id_list).") ";
         }
 
-        $db_result = Database::query($sql);
-        if ($db_result) {
-            while ($obj = Database::fetch_object($db_result)) {
+        $result = Database::query($sql);
+        if ($result) {
+            while ($obj = Database::fetch_object($result)) {
                 $items = [];
                 $sql = "SELECT * FROM ".$table_item."
                         WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
@@ -1358,7 +1358,18 @@ class CourseBuilder
                     $obj->session_id,
                     $items
                 );
+
                 $this->course->add_resource($lp);
+
+                if (!empty($obj->preview_image)) {
+                    // Add LP teacher image
+                    $asset = new Asset(
+                        $obj->preview_image,
+                        '/upload/learning_path/images/'.$obj->preview_image,
+                        '/upload/learning_path/images/'.$obj->preview_image
+                    );
+                    $this->course->add_resource($asset);
+                }
             }
         }
 

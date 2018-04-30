@@ -1,11 +1,13 @@
 <?php
-/*
-==============================================================================
+/* For licensing terms, see /license.txt */
 
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+require_once '../inc/global.inc.php';
+
+$allow = api_get_configuration_value('extra');
+if (empty($allow)) {
+    exit;
+}
+
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // name of the language file that needs to be included
 

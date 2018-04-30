@@ -1,4 +1,14 @@
 <?php
+/* For licensing terms, see /license.txt */
+
+require_once '../inc/global.inc.php';
+
+$allow = api_get_configuration_value('extra');
+if (empty($allow)) {
+    exit;
+}
+
+
 /*
 ==============================================================================
 	

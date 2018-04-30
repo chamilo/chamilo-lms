@@ -1,4 +1,12 @@
 <?php
+
+require_once '../inc/global.inc.php';
+
+$allow = api_get_configuration_value('extra');
+if (empty($allow)) {
+    exit;
+}
+
 // name of the language file that needs to be included
 //$language_file = array('registration', 'tracking');
 $language_file = array('registration','tracking','exercice', 'admin');

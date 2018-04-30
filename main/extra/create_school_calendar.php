@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+
+require_once '../inc/global.inc.php';
+
+$allow = api_get_configuration_value('extra');
+if (empty($allow)) {
+    exit;
+}
 
 /*
 
@@ -26,7 +34,7 @@ $language_file[] = 'scorm';
 
 
 
-include('../inc/global.inc.php');
+
 
 
 
@@ -150,7 +158,7 @@ $start_time =  "$y-$m-$j";
 
 $end_time =  "$ye-$me-$je";
 
- // On vérifie si les champs sont vides
+ // On vï¿½rifie si les champs sont vides
 
 if(empty($title))
 

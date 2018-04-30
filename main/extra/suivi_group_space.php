@@ -1,6 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+require_once '../inc/global.inc.php';
+
+$allow = api_get_configuration_value('extra');
+if (empty($allow)) {
+    exit;
+}
+
 
 // Name of the language file that needs to be included
 $language_file = array ('group','registration', 'index', 'tracking', 'exercice','admin');
@@ -188,8 +195,8 @@ $current_group = Database::fetch_assoc($current_group_result)['iid'];
     $result =  api_sql_query($sql,__FILE__,__LINE__);
 
 // Francois Belisle Kezber
-//  Le TableDisplay contient une fonction qui set les headers... les headers sont placés dans la Row 0... Ce qui ecrase le contenue
-// le la vrai row 0... Il faut donc ajouter un empty record a la row 0 qui se fera ecrasé par lesh headers plutot que le premier record
+//  Le TableDisplay contient une fonction qui set les headers... les headers sont placï¿½s dans la Row 0... Ce qui ecrase le contenue
+// le la vrai row 0... Il faut donc ajouter un empty record a la row 0 qui se fera ecrasï¿½ par lesh headers plutot que le premier record
 // en ajoutant un empty record, ca fonctionne, mais il faut trouver pourquoi les headers ecrasent le premier record
  $row = array();
 

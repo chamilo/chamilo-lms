@@ -2941,6 +2941,20 @@ class UserManager
             $order = "ORDER BY s.position";
         }
 
+        $orderBySettings = api_get_configuration_value('my_courses_session_order');
+        if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
+            $field = $orderBySettings['field'];
+            $order = $orderBySettings['order'];
+            switch ($field) {
+                case 'start_date':
+                    $order = " ORDER BY s.accessEndDate $order";
+                    break;
+                case 'end_date':
+                    $order = " ORDER BY s.accessStartDate $order";
+                    break;
+            }
+        }
+
         $dql .= $order;
 
         $dql = Database::getManager()

@@ -833,6 +833,9 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Enable speed controller in video player
 // $_configuration['video_features'] = ['features' => ['speed']];
 
+// My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
+// $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

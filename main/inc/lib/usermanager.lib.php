@@ -2968,8 +2968,7 @@ class UserManager
                 ['user' => $user_id, 'url' => api_get_current_access_url_id()]
             )
         ;
-        var_dump("s");
-        echo($dql->getSQL());
+
         $sessionData = $dql->getResult();
         $categories = [];
 

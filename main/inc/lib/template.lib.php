@@ -607,6 +607,16 @@ class Template
             'flag-icon-css/css/flag-icon.min.css',
         ];
 
+        $features = api_get_configuration_value('video_features');
+        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'];
+
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $defaultFeatures[] = $feature;
+            }
+        }
+
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
         }
@@ -624,6 +634,9 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_static_file_to_string', $css_file_to_string);
         }
+
+        $defaultFeatures = implode("','", $defaultFeatures);
+        $this->assign('video_features', $defaultFeatures);
     }
 
     /**
@@ -757,6 +770,14 @@ class Template
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
         ];
+
+        $features = api_get_configuration_value('video_features');
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+            }
+        }
+
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }

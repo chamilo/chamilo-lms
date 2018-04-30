@@ -3081,7 +3081,7 @@ class DocumentManager
     public static function generateAudioJavascript($params = [])
     {
         $js = '
-            $(\'video:not(.skip), audio.audio_preview\').mediaelementplayer({
+            $(\'audio.audio_preview\').mediaelementplayer({
                 features: [\'playpause\'],
                 audioWidth: 30,
                 audioHeight: 30,

@@ -2931,16 +2931,21 @@ class UserManager
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
                 WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
 
+        // Default order
         $order = "ORDER BY sc.name, s.name";
+
+        // Order by date if showing all sessions
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
         if ($showAllSessions) {
             $order = "ORDER BY s.accessStartDate";
         }
 
+        // Order by position
         if ($allowOrder) {
             $order = "ORDER BY s.position";
         }
 
+        // Order by dates according to settings
         $orderBySettings = api_get_configuration_value('my_courses_session_order');
         if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
             $field = $orderBySettings['field'];
@@ -3076,7 +3081,7 @@ class UserManager
                     }
             }
 
-            $categories[$row['session_category_id']]['sessions'][$row['id']] = [
+            $categories[$row['session_category_id']]['sessions'][] = [
                 'session_name' => $row['name'],
                 'session_id' => $row['id'],
                 'access_start_date' => $row['access_start_date'] ? $row['access_start_date']->format('Y-m-d H:i:s') : null,

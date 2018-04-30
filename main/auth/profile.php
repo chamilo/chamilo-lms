@@ -316,10 +316,6 @@ if (is_platform_authentication() &&
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
     $form->addElement('password', 'password1', get_lang('NewPass'), ['id' => 'password1', 'size' => 40]);
 
-    $checkPass = api_get_setting('allow_strength_pass_checker');
-    if ($checkPass == 'true') {
-        $form->addElement('label', null, '<div id="password_progress"></div>');
-    }
     $form->addElement('password', 'password2', get_lang('Confirmation'), ['size' => 40]);
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');

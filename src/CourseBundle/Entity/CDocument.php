@@ -91,6 +91,13 @@ class CDocument
     private $sessionId;
 
     /**
+     * CDocument constructor.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * Set path.
      *
      * @param string $path

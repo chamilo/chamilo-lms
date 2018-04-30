@@ -2683,6 +2683,7 @@ function api_get_setting($variable)
         return '';
     }
     $variable = trim($variable);
+
     switch ($variable) {
         case 'header_extra_content':
             $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
@@ -2743,6 +2744,7 @@ function api_get_setting($variable)
             break;
         default:
             return $settingsManager->getSetting($variable);
+            break;
     }
 
     // Old code

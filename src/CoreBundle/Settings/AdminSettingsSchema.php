@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -44,7 +45,9 @@ class AdminSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('administrator_name')
+            ->add('administrator_name',
+                TextType::class,
+                ['label' => 'emailAdministratorTitle', 'help_block' => 'emailAdministratorComment'])
             ->add('administrator_surname')
             ->add('administrator_email', 'email')
             ->add('administrator_phone')

@@ -521,6 +521,10 @@ function uploadStylesheet($values, $picture)
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
+    if (empty($style_name) || is_array($style_name)) {
+        // The name of the uploaded stylesheet doesn't have the expected format
+        return $result;
+    }
     $cssToUpload = CSS_UPLOAD_PATH;
 
     // Check if a virtual instance vchamilo is used
@@ -1006,7 +1010,7 @@ function getNumberOfTemplates()
  * @param int    $from            the start of the limit statement
  * @param int    $number_of_items the number of elements that have to be retrieved from the database
  * @param int    $column          the column that is
- * @param string $direction       the sorting direction (ASC or DESC�
+ * @param string $direction       the sorting direction (ASC or DESC)
  *
  * @return array
  *
@@ -1120,8 +1124,7 @@ function addEditTemplate()
         get_lang('Text'),
         true,
         true,
-        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400'],
-        true
+        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400']
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.

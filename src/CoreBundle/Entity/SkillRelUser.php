@@ -38,6 +38,7 @@ class SkillRelUser
      * @ORM\Column(name="validation_status", type="integer")
      */
     protected $validationStatus;
+
     /**
      * @var int
      *

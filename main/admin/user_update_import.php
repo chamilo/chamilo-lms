@@ -337,7 +337,7 @@ function parse_xml_data($file)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true, null, 'login');
+api_protect_admin_script(true, null);
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 

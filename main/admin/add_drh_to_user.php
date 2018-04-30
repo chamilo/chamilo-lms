@@ -15,7 +15,7 @@ if (!isset($_REQUEST['u'])) {
 }
 
 $em = Database::getManager();
-$relationsRepo = $em->getRepository('ChamiloCoreBundle:UserRelUser');
+$userRepository = $em->getRepository('ChamiloUserBundle:User');
 /** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 
@@ -23,10 +23,12 @@ if (!$user) {
     api_not_allowed(true);
 }
 
-$subscribedUsers = $user->getHrm();
+$subscribedUsers = $userRepository->getAssignedHrmUserList(
+    $user->getId(),
+    api_get_current_access_url_id()
+);
 
 $hrmOptions = [];
-
 /** @var UserRelUser $subscribedUser */
 foreach ($subscribedUsers as $subscribedUser) {
     /** @var UserEntity $hrm */
@@ -58,7 +60,6 @@ if ($form->validate()) {
     foreach ($subscribedUsers as $subscribedUser) {
         $em->remove($subscribedUser);
     }
-
     $em->flush();
 
     $values = $form->exportValues();

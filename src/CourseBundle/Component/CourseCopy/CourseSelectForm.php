@@ -242,8 +242,12 @@ class CourseSelectForm
 
                         echo '<div class="well">';
                         echo '<div class="btn-group">';
-                        echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
-                        echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
+                        echo "<a class=\"btn btn-default\" 
+                                    href=\"javascript: void(0);\" 
+                                    onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
+                        echo "<a class=\"btn btn-default\" 
+                                    href=\"javascript: void(0);\" 
+                                    onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
                         echo '</div>';
                         echo '<ul class="list-backups-options">';
                         foreach ($resources as $id => $resource) {
@@ -252,7 +256,9 @@ class CourseSelectForm
                                 // Event obj in 1.9.x in 1.10.x the class is CalendarEvent
                                 Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
-                                echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
+                                echo '<input 
+                                    type="checkbox" 
+                                    name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
                                 $resource->show();
                                 echo '</label>';
                                 echo '</li>';
@@ -339,14 +345,22 @@ class CourseSelectForm
             echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
         } else {
             if (!empty($hidden_fields['destination_session'])) {
-                echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                echo '<br />
+                        <button 
+                            class="save" 
+                            type="submit" 
+                            onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
                     get_lang('Ok').'</button>';
             } else {
                 if ($recycleOption) {
                     echo '<br /><button class="save" type="submit">'.
                         get_lang('Ok').'</button>';
                 } else {
-                    echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
+                    echo '<br />
+                          <button 
+                                class="save" 
+                                type="submit" 
+                                onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
                     get_lang('Ok').'</button>';
                 }
             }

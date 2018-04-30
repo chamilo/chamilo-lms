@@ -9103,7 +9103,7 @@ SQL;
         if (empty($result)) {
             $result = get_lang('NoTimeLimits');
         }
-        $result .= '->'.$endDateToLocal;
+
         return $result;
     }
 

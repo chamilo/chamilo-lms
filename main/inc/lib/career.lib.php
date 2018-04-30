@@ -641,7 +641,6 @@ class Career extends Model
             $tpl->assign('group_list', $groupList);
         }
 
-
         // Create subgroups
         $subGroupList = [];
         $subGroupListData = [];

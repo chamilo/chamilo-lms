@@ -1399,6 +1399,7 @@ class IndexManager
                 );
                 $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
             }
+
             if ($courses['in_category'] || $courses['not_category']) {
                 foreach ($courses['in_category'] as $courseData) {
                     if (!empty($courseData['courses'])) {
@@ -1527,7 +1528,6 @@ class IndexManager
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
                                     // Read only and accessible.
                                     $atLeastOneCourseIsVisible = true;
-
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $courseUserHtml = CourseManager::get_logged_user_course_html(
                                             $course,
@@ -1605,10 +1605,9 @@ class IndexManager
                                 $params = [
                                     'id' => $session_id,
                                 ];
-                                $session_box = Display::get_session_title_box($session_id);
-                                $actions = api_get_path(
-                                        WEB_CODE_PATH
-                                    ).'session/resume_session.php?id_session='.$session_id;
+                                $session_box = Display::getSessionTitleBox($session_id);
+                                $actions = api_get_path(WEB_CODE_PATH).
+                                    'session/resume_session.php?id_session='.$session_id;
                                 $coachId = $session_box['id_coach'];
                                 $extraFieldValue = new ExtraFieldValue('session');
                                 $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -1654,14 +1653,18 @@ class IndexManager
                                 }
 
                                 if ($gameModeIsActive) {
-                                    $params['stars'] =
-                                        GamificationUtils::getSessionStars($params['id'], $this->user_id);
+                                    $params['stars'] = GamificationUtils::getSessionStars(
+                                        $params['id'],
+                                        $this->user_id
+                                    );
                                     $params['progress'] = GamificationUtils::getSessionProgress(
                                         $params['id'],
                                         $this->user_id
                                     );
-                                    $params['points'] =
-                                        GamificationUtils::getSessionPoints($params['id'], $this->user_id);
+                                    $params['points'] = GamificationUtils::getSessionPoints(
+                                        $params['id'],
+                                        $this->user_id
+                                    );
                                 }
                                 $listSession[] = $params;
                                 $sessionCount++;
@@ -1754,7 +1757,7 @@ class IndexManager
                                 $sessionParams = [];
                                 // Category
                                 if ($count > 0) {
-                                    $session_box = Display::get_session_title_box($session_id);
+                                    $session_box = Display::getSessionTitleBox($session_id);
                                     $sessionParams[0]['id'] = $session_id;
                                     $sessionParams[0]['date'] = $session_box['dates'];
                                     $sessionParams[0]['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
@@ -1980,6 +1983,7 @@ class IndexManager
             usort($listCoursesInfo, 'self::compareByCourse');
         }
 
+        $listCoursesInSession = [];
         if (is_array($session_categories)) {
             // all courses that are in a session
             $listCoursesInSession = SessionManager::getNamedSessionCourseForCoach($user_id);
@@ -2023,7 +2027,7 @@ class IndexManager
                     );
                     // list of session category
                     $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$coursesInfo['real_id'].'">';
-                    foreach ($listCourse['sessionCatList'] as $j => $listCategorySession) {
+                    foreach ($listCourse['sessionCatList'] as $listCategorySession) {
                         // add session category
                         $htmlSessionCategory .= self::getHtmlSessionCategory(
                             $listCategorySession['catSessionId'],
@@ -2031,7 +2035,7 @@ class IndexManager
                         );
                         // list of session
                         $htmlSession = ''; // start
-                        foreach ($listCategorySession['sessionList'] as $k => $listSession) {
+                        foreach ($listCategorySession['sessionList'] as $listSession) {
                             // add session
                             $htmlSession .= '<div class="session-view-row">';
                             $htmlSession .= self::getHtmlForSession(
@@ -2057,7 +2061,9 @@ class IndexManager
             // if course not already added
             $htmlCategory = '';
             foreach ($listCoursesInfo as $i => $listCourse) {
-                if ($listCourse['userCatId'] == $userCategoryId && !isset($listCoursesAlreadyDisplayed[$listCourse['id']])) {
+                if ($listCourse['userCatId'] == $userCategoryId &&
+                    !isset($listCoursesAlreadyDisplayed[$listCourse['id']])
+                ) {
                     if ($userCategoryId != 0) {
                         $htmlCategory .= '<div class="panel panel-default">';
                     } else {

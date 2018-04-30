@@ -7583,8 +7583,7 @@ SQL;
     /**
      * Returns a human readable string.
      *
-     * @params array $sessionInfo An array with all the session dates
-     *
+     * @param array $sessionInfo An array with all the session dates
      * @param bool $showTime
      *
      * @return array
@@ -9104,7 +9103,7 @@ SQL;
         if (empty($result)) {
             $result = get_lang('NoTimeLimits');
         }
-
+        $result .= '->'.$endDateToLocal;
         return $result;
     }
 

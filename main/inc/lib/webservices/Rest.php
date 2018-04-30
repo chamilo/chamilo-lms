@@ -916,7 +916,7 @@ class Rest extends WebService
                     ];
                 }
 
-                $sessionBox = Display::get_session_title_box($sessions['session_id']);
+                $sessionBox = Display::getSessionTitleBox($sessions['session_id']);
 
                 $categorySessions[] = [
                     'name' => $sessionBox['title'],

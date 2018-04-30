@@ -2952,10 +2952,10 @@ class UserManager
             $order = $orderBySettings['order'];
             switch ($field) {
                 case 'start_date':
-                    $order = " ORDER BY s.accessEndDate $order";
+                    $order = " ORDER BY s.accessStartDate $order";
                     break;
                 case 'end_date':
-                    $order = " ORDER BY s.accessStartDate $order";
+                    $order = " ORDER BY s.accessEndDate $order";
                     break;
             }
         }
@@ -2968,6 +2968,8 @@ class UserManager
                 ['user' => $user_id, 'url' => api_get_current_access_url_id()]
             )
         ;
+        var_dump("s");
+        echo($dql->getSQL());
         $sessionData = $dql->getResult();
         $categories = [];
 

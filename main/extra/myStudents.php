@@ -11,6 +11,7 @@ if (empty($allow)) {
 api_block_anonymous_users();
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $course_code = isset($_GET['course']) ? Security:: remove_XSS($_GET['course']) : null;
+$_course = api_get_course_info();
 $coment = '';
 
 if (!api_is_allowed_to_create_course() &&
@@ -52,7 +53,7 @@ $courseInfo = api_get_course_info($course_code);
 if ($export) {
     ob_start();
 }
-$csv_content = array();
+$csv_content = [];
 $from_myspace = false;
 
 if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
@@ -243,7 +244,7 @@ switch ($action) {
 
 // user info
 $user_info = api_get_user_info($student_id);
-$courses_in_session = array();
+$courses_in_session = [];
 
 //See #4676
 $drh_can_access_all_courses = false;
@@ -253,7 +254,7 @@ if (api_is_drh() || api_is_platform_admin() || api_is_student_boss()) {
 }
 
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
-$courses_in_session_by_coach = array();
+$courses_in_session_by_coach = [];
 $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
 
 // RRHH or session admin
@@ -301,7 +302,7 @@ $sql = 'SELECT session_id, c_id
         FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
         WHERE user_id='.intval($user_info['user_id']);
 $rs = Database::query($sql);
-$tmp_sessions = array();
+$tmp_sessions = [];
 while ($row = Database:: fetch_array($rs, 'ASSOC')) {
     $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
@@ -327,7 +328,7 @@ if (api_is_drh() && !api_is_platform_admin()) {
         if (api_drh_can_access_all_session_content()) {
             //@todo securize drh with student id
             /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-            $userList = array();
+            $userList = [];
             foreach ($users as $user) {
                 $userList[] = $user['user_id'];
             }
@@ -346,7 +347,7 @@ if (api_is_drh() && !api_is_platform_admin()) {
     }
 }
 
-Display:: display_header($nameTools);
+Display::display_header($nameTools);
 
 if (isset($message)) {
     echo $message;
@@ -406,7 +407,7 @@ if (!empty($student_id)) {
         $avg_student_progress = Tracking::get_avg_student_progress(
             $user_info['user_id'],
             $course_code,
-            array(),
+            [],
             $sessionId
         );
 
@@ -420,7 +421,6 @@ if (!empty($student_id)) {
     }
 
     $avg_student_progress = round($avg_student_progress, 2);
-
     $time_spent_on_the_course = 0;
     if (!empty($courseInfo)) {
         $time_spent_on_the_course = api_time_to_hms(
@@ -459,7 +459,7 @@ if (!empty($student_id)) {
         $user_info['phone'],
     );
 
-    $csv_content[] = array();
+    $csv_content[] = [];
 
     // csv tracking
     $csv_content[] = array(
@@ -485,7 +485,7 @@ if (!empty($student_id)) {
     $table_title = Display::return_icon(
             'user.png',
             get_lang('User'),
-            array(),
+            [],
             ICON_SIZE_SMALL
         ).$user_info['complete_name'];
 
@@ -619,7 +619,6 @@ if (!empty($student_id)) {
 
                 if (api_get_setting('allow_terms_conditions') === 'true') {
                     $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
-
                     if ($isBoss || api_is_platform_admin()) {
                         $extraFieldValue = new ExtraFieldValue('user');
                         $value = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -672,7 +671,7 @@ if (!empty($student_id)) {
     <?php
 
     if (empty($_GET['details'])) {
-        $csv_content[] = array();
+        $csv_content[] = [];
         $csv_content[] = array(
             get_lang('Session'),
             get_lang('Course'),
@@ -689,9 +688,7 @@ if (!empty($student_id)) {
             $access_start_date = '';
             $access_end_date = '';
             $date_session = '';
-            $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang(
-                    'Courses'
-                );
+            $title = Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_SMALL).' '.get_lang('Courses');
 
             $session_info = api_get_session_info($sId);
             if ($session_info) {
@@ -710,7 +707,7 @@ if (!empty($student_id)) {
                 $title = Display::return_icon(
                         'session.png',
                         get_lang('Session'),
-                        array(),
+                        [],
                         ICON_SIZE_SMALL
                     ).' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
             }
@@ -749,6 +746,7 @@ if (!empty($student_id)) {
                             $courseCodeItem,
                             $sId
                         );
+
                         if (!empty($results_faults_avg['total'])) {
                             if (api_is_drh()) {
                                 $attendances_faults_avg =
@@ -768,8 +766,7 @@ if (!empty($student_id)) {
 
                         // Get evaluations by student
                         $cats = Category::load(null, null, $courseCodeItem, null, null, $sId);
-
-                        $scoretotal = array();
+                        $scoretotal = [];
                         if (isset($cats) && isset($cats[0])) {
                             if (!empty($sId)) {
                                 $scoretotal = $cats[0]->calc_score($student_id, null, $courseCodeItem, $sId);
@@ -792,6 +789,7 @@ if (!empty($student_id)) {
                             null,
                             $sId
                         );
+
                         $score = Tracking:: get_avg_student_score($user_info['user_id'], $courseCodeItem, [], $sId);
                         $progress = empty($progress) ? '0%' : $progress.'%';
                         $score = empty($score) ? '0%' : $score.'%';
@@ -838,12 +836,12 @@ if (!empty($student_id)) {
         }
     } else {
         if ($user_info['status'] != INVITEE) {
-            $csv_content[] = array();
+            $csv_content[] = [];
             $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
             $t_lp = Database:: get_course_table(TABLE_LP_MAIN);
 
             // csv export headers
-            $csv_content[] = array();
+            $csv_content[] = [];
             $csv_content[] = array(
                 get_lang('Learnpath'),
                 get_lang('Time'),
@@ -1019,7 +1017,6 @@ if (!empty($student_id)) {
                             } else {
                                 $css_class = "row_odd";
                             }
-
                             $i++;
 
                             // csv export content
@@ -1033,7 +1030,6 @@ if (!empty($student_id)) {
                             );
 
                             echo '<tr class="'.$css_class.'">';
-
                             echo Display::tag('td', stripslashes($lp_name));
                             echo Display::tag('td', api_time_to_hms($total_time));
 
@@ -1044,7 +1040,6 @@ if (!empty($student_id)) {
                             }
 
                             echo Display::tag('td', $score);
-
                             if (!is_null($score_latest)) {
                                 if (is_numeric($score_latest)) {
                                     $score_latest = $score_latest.'%';
@@ -1059,8 +1054,9 @@ if (!empty($student_id)) {
                             }
 
                             echo Display::tag('td', $progress);
-                            //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table
-                            //which implies several other changes not a priority right now
+                            // Do not change with api_convert_and_format_date, because
+                            // this value came from the lp_item_view table
+                            // which implies several other changes not a priority right now
                             echo Display::tag('td', $start_time);
 
                             if ($any_result === true) {
@@ -1124,8 +1120,7 @@ if (!empty($student_id)) {
                     </thead>
                     <tbody>
                     <?php
-
-                    $csv_content[] = array();
+                    $csv_content[] = [];
                     $csv_content[] = array(
                         get_lang('Exercises'),
                         get_lang('LearningPath'),
@@ -1137,11 +1132,11 @@ if (!empty($student_id)) {
                     $sessionCondition = api_get_session_condition($sessionId, true, true, 'quiz.session_id');
 
                     $sql = "SELECT quiz.title, id FROM ".$t_quiz." AS quiz
-                WHERE
-                    quiz.c_id = ".$courseInfo['real_id']." AND
-                    active IN (0, 1)
-                    $sessionCondition                    
-                ORDER BY quiz.title ASC ";
+                            WHERE
+                                quiz.c_id = ".$courseInfo['real_id']." AND
+                                active IN (0, 1)
+                                $sessionCondition                    
+                            ORDER BY quiz.title ASC ";
 
                     $result_exercices = Database::query($sql);
                     $i = 0;
@@ -1212,32 +1207,31 @@ if (!empty($student_id)) {
                             echo '<td>';
 
                             $sql = 'SELECT exe_id FROM '.$tbl_stats_exercices.'
-                         WHERE
-                            exe_exo_id = "'.$exercise_id.'" AND
-                            exe_user_id ="'.$student_id.'" AND
-                            c_id = '.$courseInfo['real_id'].' AND
-                            session_id = "'.$sessionId.'" AND
-                            status = ""
-                        ORDER BY exe_date DESC
-                        LIMIT 1';
+                                     WHERE
+                                        exe_exo_id = "'.$exercise_id.'" AND
+                                        exe_user_id ="'.$student_id.'" AND
+                                        c_id = '.$courseInfo['real_id'].' AND
+                                        session_id = "'.$sessionId.'" AND
+                                        status = ""
+                                    ORDER BY exe_date DESC
+                                    LIMIT 1';
                             $result_last_attempt = Database::query($sql);
                             if (Database:: num_rows($result_last_attempt) > 0) {
                                 $id_last_attempt = Database:: result($result_last_attempt, 0, 0);
                                 if ($count_attempts > 0) {
-                                    echo '<a href="../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin) ? 'tracking' : $origin).'">
-                        '.Display::return_icon('quiz.gif').'
-                     </a>';
+                                    echo '<a href="../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin) ? 'tracking' : $origin).'">';
+                                    echo Display::return_icon('quiz.gif');
+                                    echo '</a>';
                                 }
                             }
                             echo '</td>';
-
                             echo '<td>';
                             $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
                             echo Display::url(
                                 Display::return_icon(
                                     'test_results.png',
                                     get_lang('AllAttempts'),
-                                    array(),
+                                    [],
                                     ICON_SIZE_SMALL
                                 ),
                                 $all_attempt_url
@@ -1247,16 +1241,13 @@ if (!empty($student_id)) {
                             $data_exercices[$i][] = $exercices['title'];
                             $data_exercices[$i][] = $score_percentage.'%';
                             $data_exercices[$i][] = $count_attempts;
-
                             $csv_content[] = array(
                                 $exercices['title'],
                                 $lp_name,
                                 $score_percentage,
                                 $count_attempts,
                             );
-
                             $i++;
-
                         }
                     } else {
                         echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
@@ -1271,17 +1262,16 @@ if (!empty($student_id)) {
         // @when using sessions we do not show the survey list
         if (empty($sessionId)) {
             $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
-
-            $survey_data = array();
+            $survey_data = [];
             foreach ($survey_list as $survey) {
                 $user_list = SurveyManager::get_people_who_filled_survey(
                     $survey['survey_id'],
                     false,
                     $courseInfo['real_id']
                 );
-                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), ICON_SIZE_SMALL);
+                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), [], ICON_SIZE_SMALL);
                 if (in_array($student_id, $user_list)) {
-                    $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), ICON_SIZE_SMALL);
+                    $survey_done = Display::return_icon("accept.png", get_lang('Answered'), [], ICON_SIZE_SMALL);
                 }
                 $data = array('title' => $survey['title'], 'done' => $survey_done);
                 $survey_data[] = $data;
@@ -1325,7 +1315,7 @@ if (!empty($student_id)) {
                 </thead>
                 <tbody>
                 <?php
-                $csv_content[] = array();
+                $csv_content[] = [];
                 $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
                 $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
                 $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
@@ -1336,7 +1326,6 @@ if (!empty($student_id)) {
                     $sessionId
                 );
                 $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
-
                 $csv_content[] = array(
                     get_lang('OtherTools'),
                 );
@@ -1419,7 +1408,7 @@ if ($export) {
 $TABLECALHORAIRE = 'c_cal_horaire';
 
 $user_c_id = $_GET['student'];
-$Courses = array();
+$Courses = [];
 //On cherche le calendrier pour ce user dans ce cours, groupe
 $sql = "SELECT * 
         FROM user
@@ -1431,8 +1420,9 @@ $nom_hor = $horaire_id ['official_code'];
 $course_code_real = $_course['real_id'];
 //avec le nom d'horaire= official code, on trouve le nombre de jour a faire
 $sql = "SELECT * FROM $TABLECALHORAIRE
-            where name = '$nom_hor'
-             and c_id = '$course_code_real' ";
+        where 
+          name = '$nom_hor' and 
+          c_id = '$course_code_real' ";
 
 $res = Database::query($sql);
 $resulta = Database::fetch_array($res);
@@ -1452,18 +1442,15 @@ if (!empty($num_minute)) {
 //on recherche les cours où sont inscrit les user
 $user_c_id = $_GET['student'];
 $sql2 = "SELECT  c_id, user_id
-        FROM course_rel_user
-        WHERE user_id = '$user_c_id'
+         FROM course_rel_user
+         WHERE user_id = '$user_c_id'
         ";
 
 $result2 = Database::query($sql2);
 $Total = 0;
 while ($a_courses = Database::fetch_array($result2)) {
-
-//         $Courses_code = $a_courses ['course_code'] ;
     $Courses_code = $a_courses ['c_id'];
-
-//on sort le c_id avec le code du cours
+    //on sort le c_id avec le code du cours
     $sql8 = "SELECT * 
         FROM course
         WHERE code = '$Courses_code'
@@ -1471,17 +1458,12 @@ while ($a_courses = Database::fetch_array($result2)) {
     $result8 = Database::query($sql8);
     $course_code_id = Database::fetch_array($result8);
     $c_id = $Courses_code;
-
     //pours chaque cours dans lequel il est inscrit, on cherche les jours complétés
-
     ?><p></p>
     <?php
 
-    $Req1 = "SELECT *
-    FROM c_lp_view
-  WHERE user_id  =  '$user_c_id'
-   AND c_id = '$c_id'
-    ";
+    $Req1 = "SELECT * FROM c_lp_view
+            WHERE user_id  =  '$user_c_id' AND c_id = '$c_id'";
     $res = Database::query($Req1);
 
     while ($result = Database::fetch_array($res)) {
@@ -1490,7 +1472,7 @@ while ($a_courses = Database::fetch_array($result2)) {
         $c_id_view = $result['c_id'];
 
         $Req2 = "SELECT id, lp_id ,title ,item_type
-                    FROM  c_lp_item
+                 FROM  c_lp_item
                  WHERE lp_id =  '$lp_id'
                  AND title LIKE '(+)%'
                  AND c_id = '$c_id_view'
@@ -1500,28 +1482,24 @@ while ($a_courses = Database::fetch_array($result2)) {
 
         while ($resulta = Database::fetch_array($res2)) {
             $lp_item_id = $resulta['id'];
-
             $Req3 = " SELECT Max(id)
-                FROM  c_lp_item_view
-                       WHERE  lp_item_id =  '$lp_item_id'
-                       AND lp_view_id =  '$lp_id_view'
-                        AND c_id = '$c_id_view'
-                         AND status =  'completed'
+                      FROM c_lp_item_view
+                      WHERE  
+                        lp_item_id =  '$lp_item_id' AND 
+                        lp_view_id =  '$lp_id_view' AND 
+                        c_id = '$c_id_view' AND 
+                        status =  'completed'
                          ";
             $res3 = Database::query($Req3);
-
             while ($resul = Database::fetch_array($res3)) {
                 $max = $resul['0'];
-
                 $Req4 = "SELECT COUNT( id )
-                                      FROM  c_lp_item_view
-                                 WHERE  id = '$max'
-                            AND c_id = '$c_id_view'    
-                                ";
+                         FROM  c_lp_item_view
+                         WHERE  
+                            id = '$max' AND 
+                            c_id = '$c_id_view' ";
                 $res4 = Database::query($Req4);
-
                 while ($resultat = Database::fetch_array($res4)) {
-
                     $Total = $Total + $resultat[0];
                 }
             }
@@ -1534,11 +1512,9 @@ $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
 $now = date('Y-m-d');
 //on compte le nombre de m% dans l'agenda pour chaque module
 $sqljtot = "SELECT COUNT( * ) AS TOT
-                                 FROM $tbl_personal_agenda
-                                 WHERE user = ".$_GET['student']."
-                                 And title like 'm%'
-                                
-                                 ";
+             FROM $tbl_personal_agenda
+             WHERE user = ".$_GET['student']."
+             And title like 'm%'";
 $resultjt = Database::query($sqljtot);
 $jour_realise = 0;
 while ($jtot = Database::fetch_array($resultjt)) {
@@ -1546,30 +1522,25 @@ while ($jtot = Database::fetch_array($resultjt)) {
 
 }
 //fin des jour de l'agenda
-
 //recherche du jour inséré dans agenda par le calendrier
 $jour_agenda = '';
 $tour = -1;
 while ($jour_agenda == '') {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
-
     $sql4 = "SELECT *  FROM $tbl_personal_agenda
-                                 WHERE user = ".$_GET['student']." 
-                 AND  text='Pour le calendrier, ne pas effacer'
-                  AND date like '".$date." %:%' 
-                                  ";
-
+             WHERE 
+              user = ".$_GET['student']." AND  
+                text='Pour le calendrier, ne pas effacer' AND 
+                date like '".$date." %:%' ";
     $result4 = Database::query($sql4);
-
     $res4 = Database::fetch_array($result4);
     $jour_agenda = $res4['title'];
-
     if ($tour > 300) {
         break;
-
     }
 }
+
 $diff = $jour_agenda - $Total;
 if ($diff > 0) {
     $sing = get_lang('retard');
@@ -1587,9 +1558,7 @@ $sqlgo = "SELECT *  FROM $tbl_personal_agenda
          WHERE user = ".$_GET['student']."
                  AND title = '".$goto."'  
                      ";
-
 $result7 = Database::query($sqlgo);
-
 $res7 = Database::fetch_array($result7);
 $end_dates = $res7['date'];
 $end_date = date("Y-m-d", strtotime($end_dates));
@@ -1599,10 +1568,8 @@ If ($end_date < '2010-01-01') {
 }
 
 ?>
-    <html>
 <table class="data_table">
     <th rowspan="6">
-
         <?php
         //on récupere les points de controle de l'élève
         /*$pt[] = '0';
@@ -1656,63 +1623,51 @@ If ($end_date < '2010-01-01') {
         $rand = rand();
         print '<img src="../garbage/'.$x.'-image.png?rand='.$rand.'">';
         */
-
         ?>
-
         <tr>
             <th align="left" width="412">
                 <?php echo get_lang('Cumulatif_agenda'); ?>: <b><font
                             color=#CC0000> <?php echo $jour_realise_tot ?></font></b></p>
+            </th>
+        </tr>
+        <tr>
+            <th align="left">
+                <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total ?></font></b></p>
+            </th>
+        </tr>
+        <tr>
+            <th align="left">
+                <?php echo get_lang('jours_selon_horaire'); ?>: <b><font
+                            color=#CC0000> <?php echo $jour_agenda ?><?php echo $Days ?></font></b></p>
+            </th>
+        </tr>
+        <tr>
+            <th align="left">
+                <?php echo get_lang('dif2'); ?>: <b><font
+                            color=#CC0000> <?php echo $diff ?><?php echo $Days, $sing ?></font></b></p>
+            </th>
+        </tr>
+        <tr>
+            <th align="left">
+                <?php echo get_lang('date_fin'); ?>: <b><font color=#CC0000> <?php echo $end_date ?></font></b></p>
+            </th>
         </tr>
     </th>
-    <tr>
-        <th align="left">
-            <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total ?></font></b></p>
-    </tr>
-    </th>
-    <tr>
-        <th align="left">
-            <?php echo get_lang('jours_selon_horaire'); ?>: <b><font
-                        color=#CC0000> <?php echo $jour_agenda ?><?php echo $Days ?></font></b></p>
-    </tr>
-    </th>
-    <tr>
-        <th align="left">
-            <?php echo get_lang('dif2'); ?>: <b><font
-                        color=#CC0000> <?php echo $diff ?><?php echo $Days, $sing ?></font></b></p>
-    </tr>
-    </th>
-    <tr>
-        <th align="left">
-            <?php echo get_lang('date_fin'); ?>: <b><font color=#CC0000> <?php echo $end_date ?></font></b></p>
-    </tr>
-    </th>
-
 </table>
-</th>
 <hr>
 <br>
 <form action="create_intervention.php" method="post" name="create_intervention">
     <table class='data_table'>
-
         <tr>
             <th colspan="6">
                 <?php echo get_lang('create_interventions_commentaires');
                 echo $user_info['complete_name']; ?>
             </th>
         <tr>
-            <th>
-                <?php echo get_lang('level') ?>
-            </th>
-            <th>
-                <?php echo get_lang('lang_date') ?>
-            </th>
-            <th>
-                <?php echo get_lang('consignes_interventions') ?>
-            </th>
-            <th>
-                <?php echo get_lang('Actions') ?>
-            </th>
+            <th><?php echo get_lang('level') ?></th>
+            <th><?php echo get_lang('lang_date') ?></th>
+            <th><?php echo get_lang('consignes_interventions') ?></th>
+            <th><?php echo get_lang('Actions') ?></th>
         </tr>
         <tr>
             <td>
@@ -1720,10 +1675,10 @@ If ($end_date < '2010-01-01') {
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
+                </select>
             </td>
-            </select></td>
             <td>
-                <input type="text" style="width:50%;" name="date" value="<?php echo date("Y-m-d") ?>"
+                <input type="text" name="date" value="<?php echo date("Y-m-d") ?>">
             </td>
             <td><textarea name="inter_coment" style="width:90%;" rows="2"> </textarea></td>
             <INPUT type=hidden name=ex_user_id value= <?php echo $student_id ?>>
@@ -1731,72 +1686,68 @@ If ($end_date < '2010-01-01') {
         </tr>
     </table>
 </form>
-<?
+<?php
 
 // formulaire d'édition des commentaires
 ?>
-
 <form>
-    <center>
-        <table class='data_table'>
-            <tr>
-                <th><?php echo get_lang('level') ?> </th>
-                <th>
-                    <?php echo get_lang('lang_date') ?>
-                </th>
-                <th>
-                    <?php echo get_lang('interventions_commentaires') ?>
-                </th>
-                <th>
-                    <?php echo get_lang('Actions') ?>
-                </th>
-            </tr>
+    <table class='data_table'>
+        <tr>
+            <th><?php echo get_lang('level') ?> </th>
+            <th>
+                <?php echo get_lang('lang_date') ?>
+            </th>
+            <th>
+                <?php echo get_lang('interventions_commentaires') ?>
+            </th>
+            <th>
+                <?php echo get_lang('Actions') ?>
+            </th>
+        </tr>
 
-            <?php
-            $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-            $sqlinter = "SELECT *
-                                 FROM $tbl_stats_exercices
-                                 WHERE exe_user_id = ".$_GET['student']."
-                                 And level != 0 
-                 Order by  exe_date ASC, LEVEL ASC 
-                                 ";
-            $resultinter = Database::query($sqlinter);
-            $mod_no = null;
-            while ($a_inter = Database::fetch_array($resultinter)) {
-                $level = $a_inter['level'];
-                $mod_no = $a_inter['mod_no'];
-                $inter_coment = stripslashes($a_inter['inter_coment']);
-                $inter_date = substr($a_inter['exe_date'], 0, 11);
-                echo "
-                    <tr><center>
-                        <td> ".$a_inter['level']."
-                        </td>
-                    <td>
-                         $inter_date
-                        </td>
-                    
-                        <td>$inter_coment 
+        <?php
+        $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sqlinter = "SELECT *
+                     FROM $tbl_stats_exercices
+                     WHERE 
+                        exe_user_id = ".$_GET['student']." AND 
+                        level != 0
+                     ORDER BY exe_date ASC, level ASC 
+                             ";
+        $resultinter = Database::query($sqlinter);
+        $mod_no = null;
+        while ($a_inter = Database::fetch_array($resultinter)) {
+            $level = $a_inter['level'];
+            $mod_no = $a_inter['mod_no'];
+            $inter_coment = stripslashes($a_inter['inter_coment']);
+            $inter_date = substr($a_inter['exe_date'], 0, 11);
+            echo "
+                <tr><center>
+                    <td> ".$a_inter['level']."
                     </td>
-                    ";
-                $exe_id = $a_inter['exe_id'];
-                $student_id = $_GET['student'];
-
+                <td>
+                     $inter_date
+                    </td>
+                
+                    <td>$inter_coment 
+                </td>
+                ";
+            $exe_id = $a_inter['exe_id'];
+            $student_id = $_GET['student'];
+        ?>
+        <td class="highlight">
+            <a href="edit_intervention.php?num=<?php echo $exe_id ?>&student_id=<?php echo $student_id ?> ">
+               <?php echo Display::return_icon('edit.png', get_lang('Edit')); ?></a>
+        &nbsp;&nbsp;  <a
+                href="delete_exam.php?num=<?php echo $exe_id ?>&student_id=<?php echo $student_id ?>">
+                <img
+                src="../img/delete.gif" border="0"
+                onClick='return confirmDelete2()'>
+            </a>
+            <?php
+            }
             ?>
-
-            <td class="highlight">
-                <a href="edit_intervention.php?num=<?php echo $exe_id ?>&student_id=<?php echo $student_id ?> ">
-                   <?php echo Display::return_icon('edit.png', get_lang('Edit')); ?></a>
-            &nbsp;&nbsp;  <a
-                    href="delete_exam.php?num=<?php echo $exe_id ?>&student_id=<?php echo $student_id ?>">
-                    <img
-                    src="../img/delete.gif" border="0"
-                    onClick='return confirmDelete2()'>
-                </a>
-                <?php
-                }
-                ?>
-            </td>
+        </td>
 </form>
 <?php
 
@@ -1806,7 +1757,7 @@ if (!empty($session_id)) {
     $table_title = ($session_name ? Display::return_icon(
             'session.png',
             get_lang('Session'),
-            array(),
+            [],
             ICON_SIZE_SMALL
         ).' '.$session_name.' ' : '');
 }
@@ -1814,7 +1765,7 @@ if (!empty($info_course['title'])) {
     $table_title .= ($info_course ? Display::return_icon(
             'course.png',
             get_lang('Course'),
-            array(),
+            [],
             ICON_SIZE_SMALL
         ).' '.$info_course['title'].'  ' : '');
 }
@@ -1822,7 +1773,7 @@ if (!empty($info_course['title'])) {
 echo Display::page_subheader($table_title);
 
 if (empty($_GET['details'])) {
-    $csv_content[] = array();
+    $csv_content[] = [];
     $csv_content[] = array(
         get_lang('Session', ''),
         get_lang('Course', ''),
@@ -1834,7 +1785,6 @@ if (empty($_GET['details'])) {
     );
 
     $attendance = new Attendance();
-
     foreach ($courses_in_session as $key => $courses) {
         $session_id = $key;
         $session_info = api_get_session_info($session_id);
@@ -1857,20 +1807,19 @@ if (empty($_GET['details'])) {
         }
         $title = '';
         if (empty($session_id)) {
-            $title = Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.get_lang(
+            $title = Display::return_icon('course.png', get_lang('Course'), [], ICON_SIZE_SMALL).' '.get_lang(
                     'Course'
                 );
         } else {
             $title = Display::return_icon(
                     'session.png',
                     get_lang('Session'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 ).' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
         }
 
         // Courses
-
         echo '<table class="data_table">';
         echo '<h3>'.$title.'</h3>';
         echo '<tr>
@@ -1878,99 +1827,76 @@ if (empty($_GET['details'])) {
                 <th>'.get_lang('Time').'</th>
                 <th>'.get_lang('Score').'</th>
                 <th>'.get_lang('FirstConnexion').'</th>
-        <th>'.get_lang('Progress').'</th>
+                <th>'.get_lang('Progress').'</th>
                 <th>'.get_lang('fin_mod_prevue').'</th>
                 <th>'.get_lang('Details').'</th>
             </tr>';
 
         if (!empty($courses)) {
             foreach ($courses as $course_code) {
-
                 if (CourseManager:: is_user_subscribed_in_course($student_id, $course_code, true)) {
                     $course_info = CourseManager:: get_course_information($course_code);
-
                     $time_spent_on_course = api_time_to_hms(
                         Tracking:: get_time_spent_on_the_course($user_info['user_id'], $course_code, $session_id)
                     );
-//on sort le c_id avec le code du cours     
-                    $sql8 = "SELECT * 
-        FROM course
-        WHERE code = '$course_code'
-        ";
+                    //on sort le c_id avec le code du cours
+                    $sql8 = "SELECT *
+                      FROM course
+                      WHERE code = '  $course_code'
+                    ";
                     $result8 = Database::query($sql8);
                     $course_code_id = Database::fetch_array($result8);
                     $c_id = $course_code_id ['id'];
 
                     //  firts connection date
                     $sql2 = 'SELECT STR_TO_DATE(access_date,"%Y-%m-%d")
-                                FROM '.$tbl_stats_access.' 
-                WHERE access_user_id = '.$student_id.'
-        AND c_id = '.$c_id.'
-                ORDER BY access_id ASC LIMIT 0,1
-                ';
+                              FROM '.$tbl_stats_access.' 
+                                WHERE access_user_id = '.$student_id.'
+                                AND c_id = '.$c_id.'
+                                    ORDER BY access_id ASC LIMIT 0,1
+                    ';
                     $rs2 = Database::query($sql2);
                     $first_connection_date_to_module = Database::result($rs2, 0, 0);
-
-//pour trouver la date de fin prévue du module
+                    //pour trouver la date de fin prévue du module
                     $end_date_module = get_lang('hors_cal');
-
-
-//avec le nom d'horaire= official code, on trouve la date de début de chaque module nombre de jour a faire
+                    //avec le nom d'horaire= official code, on trouve la date de
+                    // début de chaque module nombre de jour a faire
                     $sql = "SELECT * FROM c_cal_dates
-            where horaire_name = '$nom_hor'
-             and c_id = '$c_id'
-             AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
-             ";
-
+                            where horaire_name = '$nom_hor'
+                             and c_id = '$c_id'
+                             AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
+                             ";
                     $res = Database::query($sql);
                     $resulta = Database::fetch_array($res);
                     $date_debut = $resulta['date'];
-
-
-//on trouve le nombre de jour pour ce module
-                    $sql = "SELECT * FROM c_cal_set_module
-            where c_id = '$c_id'
-             
-             ";
-
+                    //on trouve le nombre de jour pour ce module
+                    $sql = "SELECT * FROM c_cal_set_module where c_id = '$c_id'";
                     $res = Database::query($sql);
                     $resulta = Database::fetch_array($res);
                     $nombre_heure = $resulta['minutes'];
-
-// on trouve le nombre de minute par jour
+                    // on trouve le nombre de minute par jour
                     // Julio
                     /*$sql = "SELECT * FROM c_cal_horaire where c_id = '$course_code_real'";
                     $res = Database::query($sql);
                     $resulta = Database::fetch_array($res);
                     $nombre_minutes = $resulta['num_minute'];*/
                     $nombre_minutes = 0;
-
-//on calcule le nombre de jour par module
+                    //on calcule le nombre de jour par module
                     $nombre_jours_module = $nombre_heure * '60' / $nombre_minutes;
-//on arrondi
+                    //on arrondi
                     $nombre_jours_module = number_format($nombre_jours_module, 0);
-
-
-//on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
-
+                    //on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
                     $sql = "SELECT * FROM `c_cal_dates`
-          WHERE horaire_name = '$nom_hor'
-          AND c_id = '$course_code_real'
-          AND STR_TO_DATE(date,'%Y-%m-%d')  >=  STR_TO_DATE('$first_connection_date_to_module','%Y-%m-%d')
-          ORDER BY STR_TO_DATE(date, '%Y-%m-%d') asc
-                    
-             ";
-
+                            WHERE 
+                                horaire_name = '$nom_hor' AND 
+                                c_id = '$course_code_real' AND 
+                                STR_TO_DATE(date,'%Y-%m-%d') >= STR_TO_DATE('$first_connection_date_to_module','%Y-%m-%d')
+                            ORDER BY STR_TO_DATE(date, '%Y-%m-%d') ASC ";
                     $res = Database::query($sql);
-
                     mysql_data_seek($res, $nombre_jours_module);
                     $row = mysql_fetch_row($res);
-
                     $end_date_module = $row[1];
-
-
-//fin de trouver la date de fin prévue du module
-
+                    //fin de trouver la date de fin prévue du module
                     // get average of faults in attendances by student
                     $results_faults_avg = $attendance->get_faults_average_by_course(
                         $student_id,
@@ -1992,7 +1918,7 @@ if (empty($_GET['details'])) {
                     // Get evaluations by student
                     $cats = Category::load(null, null, $course_code, null, null, $session_id);
 
-                    $scoretotal = array();
+                    $scoretotal = [];
                     if (isset($cats) && isset($cats[0])) {
                         if (!empty($session_id)) {
                             $scoretotal = $cats[0]->calc_score($student_id, $course_code, $session_id);
@@ -2042,9 +1968,8 @@ if (empty($_GET['details'])) {
                     <td >'.$time_spent_on_course.'</td>
                     <td >'.$score.'</td>
                     <td >'.$first_connection_date_to_module.'</td>
-            <td >'.$progress.'</td>
-            <td >'.$end_date_module.'</td>';
-
+                    <td >'.$progress.'</td>
+                    <td >'.$end_date_module.'</td>';
                     if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
                         echo '<td width="10">
                         <a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS(
@@ -2067,12 +1992,12 @@ if (empty($_GET['details'])) {
         echo '</table>';
     }
 } else {
-    $csv_content[] = array();
+    $csv_content[] = [];
     $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
     $t_lp = Database:: get_course_table(TABLE_LP_MAIN);
 
     // csv export headers
-    $csv_content[] = array();
+    $csv_content[] = [];
     $csv_content[] = array(
         get_lang('Learnpath'),
         get_lang('Time'),
@@ -2081,10 +2006,8 @@ if (empty($_GET['details'])) {
         get_lang('Progress'),
         get_lang('LastConnexion'),
     );
-    $sql8 = "SELECT *
-                FROM course
-                WHERE code = '$course_code'
-                ";
+
+    $sql8 = "SELECT * FROM course WHERE code = '$course_code'";
     $result8 = Database::query($sql8);
     $course_code_id = Database::fetch_array($result8);
     $c_id = $course_code_id ['id'];
@@ -2097,7 +2020,7 @@ if (empty($_GET['details'])) {
                     WHERE c_id =  $c_id
                     ORDER BY lp.display_order";
     }
-//echo($sql_lp);
+
     $rs_lp = Database::query($sql_lp);
     if (Database:: num_rows($rs_lp) > 0) {
         ?>
@@ -2147,17 +2070,16 @@ if (empty($_GET['details'])) {
 
         //  firts connection date
         $sql2 = 'SELECT access_date
-        FROM '.$tbl_stats_access.' 
+                FROM '.$tbl_stats_access.' 
                 WHERE access_user_id = '.$_GET['student'].'
                 AND c_id = '.$c_id.'
                 ORDER BY access_id ASC LIMIT 0,1
                 ';
-//echo($sql2);
+
         $rs2 = Database::query($sql2);
         $first_connection_date_to_module = Database::result($rs2, 0, 0);
         $i = 0;
         while ($learnpath = Database:: fetch_array($rs_lp)) {
-
             $lp_id = intval($learnpath['id']);
             $lp_name = $learnpath['name'];
             $any_result = false;
@@ -2231,7 +2153,6 @@ if (empty($_GET['details'])) {
             }
 
             $i++;
-
             // csv export content
             $csv_content[] = array(
                 api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
@@ -2331,7 +2252,7 @@ if (empty($_GET['details'])) {
         </tr>
         <?php
 
-        $csv_content[] = array();
+        $csv_content[] = [];
         $csv_content[] = array(
             get_lang('Exercices'),
             get_lang('LearningPath'),
@@ -2346,7 +2267,6 @@ if (empty($_GET['details'])) {
                     (quiz.session_id = $session_id OR quiz.session_id = 0) AND
                     active IN (0, 1)
                 ORDER BY quiz.title ASC ";
-        //echo($sql);
         $result_exercices = Database::query($sql);
         $i = 0;
         if (Database:: num_rows($result_exercices) > 0) {
@@ -2436,7 +2356,7 @@ if (empty($_GET['details'])) {
                 echo '<td>';
                 $all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
                 echo Display::url(
-                    Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL),
+                    Display::return_icon('test_results.png', get_lang('AllAttempts'), [], ICON_SIZE_SMALL),
                     $all_attempt_url
                 );
 
@@ -2451,7 +2371,6 @@ if (empty($_GET['details'])) {
                     $score_percentage,
                     $count_attempts,
                 );
-
                 $i++;
 
             }
@@ -2463,17 +2382,16 @@ if (empty($_GET['details'])) {
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {
             $survey_list = SurveyManager::get_surveys($course_code, $session_id);
-
-            $survey_data = array();
+            $survey_data = [];
             foreach ($survey_list as $survey) {
                 $user_list = SurveyManager::get_people_who_filled_survey(
                     $survey['survey_id'],
                     false,
                     $info_course['real_id']
                 );
-                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), ICON_SIZE_SMALL);
+                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), [], ICON_SIZE_SMALL);
                 if (in_array($student_id, $user_list)) {
-                    $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), ICON_SIZE_SMALL);
+                    $survey_done = Display::return_icon("accept.png", get_lang('Answered'), [], ICON_SIZE_SMALL);
                 }
                 $data = array('title' => $survey['title'], 'done' => $survey_done);
                 $survey_data[] = $data;
@@ -2509,7 +2427,7 @@ if (empty($_GET['details'])) {
         // line about other tools
         echo '<table class="data_table">';
 
-        $csv_content[] = array();
+        $csv_content[] = [];
         $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $session_id);
         $messages = Tracking::count_student_messages($student_id, $course_code, $session_id);
         $links = Tracking::count_student_visited_links($student_id, $course_code, $session_id);
@@ -2614,10 +2532,8 @@ if ($export_csv) {
             </th>
             <th style="width: 60px">
                 <?php echo get_lang('Actions') ?>
-
             </th>
         </tr>
-
         <tr>
             <td><input type="text" style="width:90%;" NAME="mod_no" size="1" <?php echo "$mod_no " ?></textarea></td>
             <td>
@@ -2625,121 +2541,108 @@ if ($export_csv) {
                     <option value="-">-</option>
                     <option value="SU">SU</option>
                     <option value="EC">EC</option>
+                </select>
             </td>
-            </select></td>
             <td>
                 <select name="score_rep1">
                     <option value="-">-</option>
                     <option value="SU">SU</option>
                     <option value="EC">EC</option>
+                </select>
             </td>
-            </select></td>
             <td>
                 <select name="score_rep2">
                     <option value="-">-</option>
                     <option value="SU">SU</option>
                     <option value="EC">EC</option>
+                </select>
             </td>
-            </select></td>
-
             <td><textarea name="coment" style="width:70%; rows=" 2"><?php echo "$coment" ?></textarea></td>
             <INPUT type=hidden name=ex_user_id value= <?php echo $student_id ?>>
-
             <td><input type="SUBMIT" value="Sauvegarder" name="create_exam"></td>
         </tr>
     </table>
 </form>
 
 <form name="save_exam">
-    <center>
-        <table class='data_table'>
-
-            <tr>
-                <th colspan="6">
-                    <?php echo get_lang('result_exam_title');
-                    echo $user_info['complete_name']; ?>
-
-                </th>
-
-            <tr>
-                <th><?php echo get_lang('module_no') ?> </th>
-                <th>
-                    <?php echo get_lang('result_exam') ?>
-                </th>
-                <th>
-                    <?php echo get_lang('result_rep_1') ?>
-                </th>
-                <th>
-                    <?php echo get_lang('result_rep_2') ?>
-                </th>
-                <th>
-                    <?php echo get_lang('comment') ?>
-                </th>
-                <th>
-                    <?php echo get_lang('Actions') ?>
-                </th>
-
-            </tr>
-
-            <?php
-
-
-            $sqlexam = "SELECT *
-                                 FROM $tbl_stats_exercices
-                                 WHERE exe_user_id = ".$_GET['student']."
-                                 AND c_id = '0' AND mod_no != '0'
-                                 ORDER BY mod_no ASC
-                                 ";
-            $resultexam = Database::query($sqlexam);
-            $coment = '';
-
-            while ($a_exam = Database::fetch_array($resultexam)) {
-                //$ex_id = $a_exam['ex_id'];
-                $mod_no = $a_exam['mod_no'];
-                $score_ex = $a_exam['score_ex'];
-                $score_rep1 = $a_exam['score_rep1'];
-                $score_rep2 = $a_exam['score_rep2'];
-                $coment = stripslashes($a_exam['coment']);
-                echo "
-                <tr><center>
-                    <td> ".$a_exam['mod_no']."
-                    </td>
-                <td><center>
-                        ".$a_exam['score_ex']."
-                    </td>
-                <td><center>
-                        ".$a_exam['score_rep1']."
-                    </td>
-                    <td><center>
-                        ".$a_exam['score_rep2']."
-                    </td>
-                    <td>$coment
-
-                ";
-                $exe_idd = $a_exam['exe_id'];
-                $student_id = $_GET['student'];
-                ?>
-                <INPUT type=hidden name=ex_idd value= <?php echo "$exe_idd" ?>>
-                <td class="highlight">&nbsp;
-                    <a href="edit_exam.php?num=<?php echo $exe_idd ?>&student_id=<?php echo $student_id ?>">
-                        <?php echo Display::return_icon('edit.png', get_lang('Edit')); ?>
-                    </a>
-                    &nbsp;&nbsp;<a href="delete_exam.php?num=<?php echo $exe_idd ?>&student_id=<?php echo $student_id ?>">
-                        <img
-                         src="../img/delete.gif" border="0"
-                        onClick='return confirmDelete2()'></a>
+    <table class='data_table'>
+        <tr>
+            <th colspan="6">
+                <?php echo get_lang('result_exam_title');
+                echo $user_info['complete_name']; ?>
+            </th>
+        <tr>
+            <th><?php echo get_lang('module_no') ?> </th>
+            <th>
+                <?php echo get_lang('result_exam') ?>
+            </th>
+            <th>
+                <?php echo get_lang('result_rep_1') ?>
+            </th>
+            <th>
+                <?php echo get_lang('result_rep_2') ?>
+            </th>
+            <th>
+                <?php echo get_lang('comment') ?>
+            </th>
+            <th>
+                <?php echo get_lang('Actions') ?>
+            </th>
+        </tr>
+        <?php
+        $sqlexam = "SELECT *
+                     FROM $tbl_stats_exercices
+                     WHERE exe_user_id = ".$_GET['student']."
+                     AND c_id = '0' AND mod_no != '0'
+                     ORDER BY mod_no ASC";
+        $resultexam = Database::query($sqlexam);
+        $coment = '';
+        while ($a_exam = Database::fetch_array($resultexam)) {
+            //$ex_id = $a_exam['ex_id'];
+            $mod_no = $a_exam['mod_no'];
+            $score_ex = $a_exam['score_ex'];
+            $score_rep1 = $a_exam['score_rep1'];
+            $score_rep2 = $a_exam['score_rep2'];
+            $coment = stripslashes($a_exam['coment']);
+            echo "
+            <tr><center>
+                <td> ".$a_exam['mod_no']."
                 </td>
-                </tr>
-                <?php
-            }
+            <td><center>
+                    ".$a_exam['score_ex']."
+                </td>
+            <td><center>
+                    ".$a_exam['score_rep1']."
+                </td>
+                <td><center>
+                    ".$a_exam['score_rep2']."
+                </td>
+                <td>$coment
+
+            ";
+            $exe_idd = $a_exam['exe_id'];
+            $student_id = $_GET['student'];
             ?>
-        </table>
+            <INPUT type=hidden name=ex_idd value= <?php echo "$exe_idd" ?>>
+            <td class="highlight">&nbsp;
+                <a href="edit_exam.php?num=<?php echo $exe_idd ?>&student_id=<?php echo $student_id ?>">
+                    <?php echo Display::return_icon('edit.png', get_lang('Edit')); ?>
+                </a>
+                &nbsp;&nbsp;<a href="delete_exam.php?num=<?php echo $exe_idd ?>&student_id=<?php echo $student_id ?>">
+                    <img
+                     src="../img/delete.gif" border="0"
+                    onClick='return confirmDelete2()'></a>
+            </td>
+            </tr>
+            <?php
+        }
+        ?>
+    </table>
 </form>
 <strong><?php echo get_lang('imprime_sommaire'); ?> </strong>
 <?php
-echo '<a 
-target="_blank" 
-href="print_myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course">
+echo '<a target="_blank" 
+    href="print_myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course">
 <img src="'.api_get_path(WEB_IMG_PATH).'printmgr.gif" border="0" /></a>';
 // tableau pour date de fin prévue pour chaque module
 ?>
@@ -2749,7 +2652,6 @@ href="print_myStudents.php?student='.$student_id.'&details=true&course='.$course
             <?php echo get_lang('fin_mod_prevue');
             echo $user_info['complete_name']; ?>
         </th>
-
     <tr>
         <th style="width: 17%">
             <?php echo get_lang('module_no') ?>

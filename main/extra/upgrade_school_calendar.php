@@ -23,17 +23,11 @@ foreach ($_POST as $index => $valeur) {
 }
 
 ?>
-    <th colspan="6">
 <?php echo get_lang('edit_save'); ?>
-
 <?php
 $sql4 = "UPDATE set_module SET cal_day_num='$d_number' WHERE id = '$d_id' ";
 Database::query($sql4);
 print_r(unserialize($_POST['aaa']));
-?>
-    </form>
-    </table>
-<?php
 
 Display::display_footer();
 

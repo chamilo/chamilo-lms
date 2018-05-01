@@ -7,8 +7,6 @@ require_once '../inc/global.inc.php';
 
 exit;
 
-
-
 $sql = "ALTER TABLE track_e_exercises ADD COLUMN coment VARCHAR(255);";
 Database::query($sql);
 
@@ -33,7 +31,6 @@ Database::query($sql);
 $sql = "ALTER TABLE track_e_exercises ADD COLUMN level VARCHAR(255);";
 Database::query($sql);
 
-
 $sql = "CREATE TABLE IF NOT EXISTS set_module   (
 `id` int(4) NOT NULL AUTO_INCREMENT,
   `cours` varchar(40) NOT NULL,
@@ -47,7 +44,6 @@ $sql = "CREATE TABLE IF NOT EXISTS set_module   (
 
 Database::query($sql);
 
-
 /*$sql = "CREATE TABLE IF NOT EXISTS  `kezprerequisites` (
 `c_id` int(11) NOT NULL,
   `lp_id` int(11) NOT NULL,
@@ -56,7 +52,6 @@ Database::query($sql);
   `disporder` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`c_id`,`lp_id`,`id`)
 )";*/
-
 
 $sql = "CREATE TABLE IF NOT EXISTS `c_cal_dates` (
 `c_id` int(11) NOT NULL,
@@ -70,7 +65,6 @@ $sql = "CREATE TABLE IF NOT EXISTS `c_cal_dates` (
 
 Database::query($sql);
 
-
 $sql = "CREATE TABLE IF NOT EXISTS `c_cal_horaire` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
   `c_id` int(11) NOT NULL,
@@ -82,7 +76,6 @@ $sql = "CREATE TABLE IF NOT EXISTS `c_cal_horaire` (
   UNIQUE KEY `c_id` (`c_id`,`name`),
   KEY `idx` (`c_id`)
 )";
-
 Database::query($sql);
 
 $sql = "CREATE TABLE IF NOT EXISTS `c_cal_set_module` (
@@ -101,5 +94,4 @@ $sql = "CREATE TABLE IF NOT EXISTS `c_cal_temp` (
   `user` varchar(250) NOT NULL,
   KEY `idx` (`c_id`)
 )";
-
 Database::query($sql);

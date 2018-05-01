@@ -8,9 +8,11 @@ if (empty($allow)) {
     exit;
 }
 
+api_block_anonymous_users();
+
 $nameTools = get_lang('MyProgress');
 $this_section = 'session_my_progress_ind';
-api_block_anonymous_users();
+$_user = api_get_user_info();
 
 $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $tbl_stats_access = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -24,8 +26,7 @@ $result = Database::query(
     $_user['user_id']." ORDER BY date_start, date_end, name");
 
 $Sessions = Database::store_result($result);
-
-$Courses = array();
+$Courses = [];
 
 foreach ($Sessions as $enreg) {
     $id_session_temp = $enreg['id'];
@@ -47,14 +48,11 @@ foreach ($Sessions as $enreg) {
             WHERE $tbl_session_course.c_id=$c_id
             AND $tbl_session_course.id_session='$id_session_temp'
             ORDER BY title";
-
     $result = Database::query($sql);
-
     while ($a_session_courses = Database::fetch_array($result)) {
         $a_session_courses['id_session'] = $id_session_temp;
         $Courses[$a_session_courses['code']] = $a_session_courses;
     }
-
 }
 
 // affichage des jours complétés dans les parcours l'élève
@@ -64,33 +62,25 @@ $sql2 = "SELECT  c_id, user_id
         FROM course_rel_user
         WHERE user_id = '$user_c_id'
         ";
-
 $result2 = Database::query($sql2);
 $Total = 0;
 while ($a_courses = Database::fetch_array($result2)) {
     $courses_code = $a_courses ['c_id'];
-
-//on sort le c_id avec le code du cours     
+//on sort le c_id avec le code du cours
 //$sql8 = "SELECT * 
 //      FROM course
 //      WHERE code = '$courses_code'
 //      ";
 //        $result8 = Database::query($sql8);
 //        $course_code_id = Database::fetch_array($result8) ;
-    $c_id = $courses_code
-
+    $c_id = $courses_code;
     //pours chaque cours dans lequel il est inscrit, on cherche les jours complétés
-
-    ?><p></p>
-    <?php
-
     $Req1 = "SELECT *
     FROM c_lp_view
   WHERE user_id  =  '$user_c_id'
    AND c_id = '$c_id'
     ";
     $res = Database::query($Req1);
-
     while ($result = Database::fetch_array($res)) {
         $lp_id = $result['lp_id'];
         $lp_id_view = $result['id'];
@@ -154,25 +144,19 @@ while ($jtot = Database::fetch_array($resultjt)) {
 
 //fin des jour de l'agenda
 //on trouve le nombre dans l'agenda selon la date d'aujourdhui
-//si rien n'est inscrit cette journée dans l'agenda, recule de -1 
-
+//si rien n'est inscrit cette journée dans l'agenda, recule de -1
 $jour_agenda = '';
 $tour = -1;
 while ($jour_agenda == '') {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
-
     $sql4 = "SELECT title  FROM $tbl_personal_agenda
-                                 WHERE user = '".$_user['user_id']."'  
-                 AND  text='Pour le calendrier, ne pas effacer'
-                  AND date like '".$date." %:%' 
-                                  ";
-
+             WHERE user = '".$_user['user_id']."' AND  
+             text='Pour le calendrier, ne pas effacer' AND 
+             date like '".$date." %:%' ";
     $result4 = Database::query($sql4);
-
     $res4 = Database::fetch_array($result4);
     $jour_agenda = $res4['title'];
-
     if ($tour > 300) {
         break;
     }
@@ -185,90 +169,84 @@ if ($diff > 0) {
 }
 $diff = abs($diff);
 ?>
+<table class="data_table">
+    <th rowspan="5">
+        <?php
+        //on récupere les points de controle de l'élève
+        $pt[] = '0';
+        $pt[] = '0';
+        $sqlcontrole = "SELECT diff
+                             FROM $tbl_stats_exercices
+                             WHERE exe_user_id =  ".$_user['user_id']."
+                             AND diff  != ''
+                             ORDER BY exe_date ASC
+                             ";
+        $result = Database::query($sqlcontrole);
+        while ($ptctl = Database::fetch_array($result)) {
+            $pt[] = $ptctl ['diff'];
+        }
 
-    <html>
-    <table class="data_table">
-        <th rowspan="5">
+        //graphique de suivi
 
-            <?php
-            //on récupere les points de controle de l'élève
-            $pt[] = '0';
-            $pt[] = '0';
-            $sqlcontrole = "SELECT diff
-                                 FROM $tbl_stats_exercices
-                                 WHERE exe_user_id =  ".$_user['user_id']."
-                                 AND diff  != ''
-                                 ORDER BY exe_date ASC
-                                 ";
-            $result = Database::query($sqlcontrole);
-            while ($ptctl = Database::fetch_array($result)) {
-                $pt[] = $ptctl ['diff'];
-            }
+        /*include "../inc/teechartphp/sources/TChart.php";
+        $chart = new TChart(500, 300);
+        $chart->getAspect()->setView3D(false);
+        $chart->getHeader()->setText("Graphique de suivi");
+        $chart->getAxes()->getLeft()->setMinimumOffset(10);
+        $chart->getAxes()->getLeft()->setMaximumOffset(10);
+        $chart->getAxes()->getBottom()->setMinimumOffset(10);
+        $chart->getAxes()->getBottom()->setMaximumOffset(10);
+        $line1 = new Line($chart->getChart());
+        $data = $pt;
+        $line1->addArray($data);
+        foreach ($chart->getSeries() as $serie) {
+            $pointer = $serie->getPointer();
+            $pointer->setVisible(true);
+            $pointer->getPen()->setVisible(false);
+            $pointer->setHorizSize(2);
+            $pointer->setVertSize(2);
 
-            //graphique de suivi
+            $marks = $serie->getMarks();
+            $marks->setVisible(true);
+            $marks->setArrowLength(5);
+            $marks->getArrow()->setVisible(false);
+            $marks->setTransparent(true);
+        }
 
-            /*include "../inc/teechartphp/sources/TChart.php";
-            $chart = new TChart(500, 300);
-            $chart->getAspect()->setView3D(false);
-            $chart->getHeader()->setText("Graphique de suivi");
-            $chart->getAxes()->getLeft()->setMinimumOffset(10);
-            $chart->getAxes()->getLeft()->setMaximumOffset(10);
-            $chart->getAxes()->getBottom()->setMinimumOffset(10);
-            $chart->getAxes()->getBottom()->setMaximumOffset(10);
-            $line1 = new Line($chart->getChart());
-            $data = $pt;
-            $line1->addArray($data);
-            foreach ($chart->getSeries() as $serie) {
-                $pointer = $serie->getPointer();
-                $pointer->setVisible(true);
-                $pointer->getPen()->setVisible(false);
-                $pointer->setHorizSize(2);
-                $pointer->setVertSize(2);
-
-                $marks = $serie->getMarks();
-                $marks->setVisible(true);
-                $marks->setArrowLength(5);
-                $marks->getArrow()->setVisible(false);
-                $marks->setTransparent(true);
-            }
-
-            $x = $_user['user_id'];
-            $line1->getPointer()->setStyle(PointerStyle::$CIRCLE);
-            $chart->getLegend()->setVisible(false);
-            $chart->render("../garbage/$x-image.png");
-            $rand = rand();
-            print '<img src="../garbage/'.$x.'-image.png?rand='.$rand.'">';
-            */
-            ?>
-            <tr>
-                <th align="left" width="412">
-                    <?php echo get_lang('Cumulatif_agenda'); ?>: <b><font
-                                color=#CC0000> <?php echo $jour_realise_tot ?></font></b></p>
-            </tr>
-        </th>
+        $x = $_user['user_id'];
+        $line1->getPointer()->setStyle(PointerStyle::$CIRCLE);
+        $chart->getLegend()->setVisible(false);
+        $chart->render("../garbage/$x-image.png");
+        $rand = rand();
+        print '<img src="../garbage/'.$x.'-image.png?rand='.$rand.'">';
+        */
+        ?>
+        <tr>
+            <th align="left" width="412">
+                <?php echo get_lang('Cumulatif_agenda'); ?>: <b><font
+                            color=#CC0000> <?php echo $jour_realise_tot ?></font></b></p>
+            </th>
+        </tr>
         <tr>
             <th align="left">
                 <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total ?></font></b></p>
+            </th>
         </tr>
-        </th>
         <tr>
             <th align="left">
                 <?php echo get_lang('jours_selon_horaire'); ?>: <b><font
                             color=#CC0000> <?php echo $jour_agenda ?><?php echo $Days ?></font></b></p>
+            </th>
         </tr>
-        </th>
         <tr>
             <th align="left">
                 <?php echo get_lang('diff2'); ?>: <b><font
                             color=#CC0000> <?php echo $diff ?><?php echo $Days, $sing ?></font></b></p>
-
+            </th>
         </tr>
-
     </table>
     <hr>
-<center>
     <table class='data_table'>
-
         <tr>
             <th><?php echo get_lang('level') ?> </th>
             <th>
@@ -277,26 +255,21 @@ $diff = abs($diff);
             <th>
                 <?php echo get_lang('interventions_commentaires') ?>
             </th>
-
         </tr>
         <?php
-
 
         $sqlinter = "SELECT *
                      FROM $tbl_stats_exercices
                      WHERE exe_user_id = ".$_user['user_id']."
                      And level != 0
-                 Order by LEVEL ASC 
-                                 ";
+                     Order by LEVEL ASC";
         $resultinter = Database::query($sqlinter);
         $level = '';
         while ($a_inter = Database::fetch_array($resultinter)) {
             $level = $a_inter['level'];
             $mod_no = $a_inter['mod_no'];
-            $inter_coment = stripslashes($a_inter['inter_coment']);
-
+            $inter_coment = Security::remove_XSS($a_inter['inter_coment']);
             $inter_date = substr($a_inter['exe_date'], 0, 11);
-
             echo "
                 <tr><center>
                     <td> ".$a_inter['level']."
@@ -309,18 +282,17 @@ $diff = abs($diff);
                 </td>
                 ";
             $exe_id = $a_inter['exe_id'];
-
         }
         if ($level == 3) {
-            echo ' <span style="color: red; font-weight: bold;"><img src="../img/anim/pointeranim.gif"align="middle"  > ', $limit, '</span>';
+            echo '<span style="color: red; font-weight: bold;"><img src="../img/anim/pointeranim.gif"align="middle"  > ';
+            echo $limit;
+            echo '</span>';
         }
         ?>
-
         <p>
     </table><br>
 <?php
 //début de fin des cours prevu
-
 $user_info = api_get_user_info();
 $user_id = api_get_user_id();
 //On cherche le calendrier pour ce user et le c_id de ce calendrier 
@@ -331,54 +303,40 @@ $sql = "SELECT *
 $result = Database::query($sql);
 $horaire_id = Database::fetch_array($result);
 $nom_hor = $horaire_id ['official_code'];
-
 $c_id_horaire = strstr($nom_hor, '.');
 $c_id_horaire = str_replace(".", "", "$c_id_horaire");
-
 // Courses
-
 echo '<h3>'.get_lang('Course').'</h3>';
-
 echo '<table class="data_table">';
 echo '<tr>
-                <th>'.get_lang('Course').'</th>
-                <th>'.get_lang('Time').'</th>
-              <th>'.get_lang('FirstConnexion').'</th>
+        <th>'.get_lang('Course').'</th>
+        <th>'.get_lang('Time').'</th>
+        <th>'.get_lang('FirstConnexion').'</th>
         <th>'.get_lang('Progress').'</th>
-                <th>'.get_lang('fin_mod_prevue').'</th>
-            
-            </tr>';
+        <th>'.get_lang('fin_mod_prevue').'</th>            
+    </tr>';
 //on recherche les cours où sont inscrit les user
 $user_c_id = $_user['user_id'];
 $sql2 = "SELECT  c_id, user_id
-                      FROM course_rel_user
-                      WHERE user_id = '$user_id'
-                      ";
+         FROM course_rel_user
+         WHERE user_id = '$user_id'";
 
 $result2 = Database::query($sql2);
-
 while ($a_courses = Database::fetch_array($result2)) {
     $courses_code = $a_courses ['c_id'];
-
     //on sort le c_id avec le code du cours
     $sql8 = "SELECT title, code
-                FROM course
-                  WHERE id = '$courses_code'
-                    ";
+             FROM course
+             WHERE id = '$courses_code'";
     $result8 = Database::query($sql8);
     $course_code_id = Database::fetch_array($result8);
     $c_id = $courses_code;
-
-    $c_title = $course_code_id ['title'];
-
-
+    $c_title = $course_code_id['title'];
     // Francois Belisle Kezber
     // The Tracking Class still uses the course code rather then the course id.
     $tracking_c_code = $course_code_id['code'];
-
     // time spent on the course
     $time_spent_on_course = api_time_to_hms(Tracking:: get_time_spent_on_the_course($user_id, $c_id, $session_id));
-
     //  firts connection date
     $sql2 = "SELECT STR_TO_DATE(access_date,'%Y-%m-%d')
             FROM $tbl_stats_access 
@@ -400,15 +358,12 @@ while ($a_courses = Database::fetch_array($result2)) {
 
     //pour trouver la date de fin prévue du module
     $end_date_module = get_lang('hors_cal');
-
     //on trouve le nombre de jour pour ce module
     $sql = "SELECT * FROM c_cal_set_module
             where c_id = '$c_id'";
-
     $res = Database::query($sql);
     $resulta = Database::fetch_array($res);
     $nombre_heure = $resulta['minutes'];
-
     // on trouve le nombre de minute par jour
     $sql = "SELECT * FROM c_cal_horaire
             where c_id = '$c_id_horaire'
@@ -418,7 +373,6 @@ while ($a_courses = Database::fetch_array($result2)) {
     $res = Database::query($sql);
     $resulta = Database::fetch_array($res);
     $nombre_minutes = (int) $resulta['num_minute'];
-
     //on calcule le nombre de jour par module
     $nombre_jours_module = 0;
     if (!empty($nombre_minutes)) {
@@ -428,7 +382,6 @@ while ($a_courses = Database::fetch_array($result2)) {
     $nombre_jours_module = (int) $nombre_jours_module;
 
     //on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
-
     $sql = "SELECT * FROM c_cal_dates
               WHERE 
               horaire_name = '$nom_hor' AND 
@@ -438,30 +391,20 @@ while ($a_courses = Database::fetch_array($result2)) {
               LIMIT $nombre_jours_module, 18446744073709551615          
           ";
     $res = Database::query($sql);
-
     //Database::data_seek($res,$nombre_jours_module);
     $row = Database::fetch_row($res);
-
     $end_date_module = $row[1];
-
-
-//fin de trouver la date de fin prévue du module
-
-//progression en %
+    //fin de trouver la date de fin prévue du module
+    //progression en %
     $t_lp = Database:: get_course_table(TABLE_LP_MAIN);
     $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = '$c_id'  ORDER BY lp.display_order";
     $rs_lp = Database::query($sql_lp);
-
-
     $i = 0;
     while ($learnpath = Database:: fetch_array($rs_lp)) {
-
         $lp_id = intval($learnpath['id']);
         $lp_name = $learnpath['name'];
         $any_result = false;
-
         // Get progress in lp
-
         // Francois Belisle Kezber
         // Course Code passed rather then course_id
         $progress = Tracking::get_avg_student_progress(
@@ -489,7 +432,6 @@ while ($a_courses = Database::fetch_array($result2)) {
             $any_result = true;
         }
 
-
         if ($i % 2 == 0) {
             $css_class = "row_even";
         } else {
@@ -503,33 +445,26 @@ while ($a_courses = Database::fetch_array($result2)) {
         } else {
             $progress = '-';
         }
-
         $data_learnpath[/*$i*/
         $lp_id][] = $progress.'%';
     }
-
     $warming = '';
     $today = date('Y-m-d');
-
     if (isset($end_date_module) && $end_date_module <= $today AND $progress != '100%') {
         $warming = '<b><font color=#CC0000>  '.get_lang('limite_atteinte').'</font></b>';
     }
-
     $end_date_module = $end_date_module.$warming;
     echo '<tr>
-                    <td >'.$c_title.'</td>
-                    <td >'.$time_spent_on_course.'</td>
-                    <td >'.$first_connection_date_to_module.'</td>
+            <td >'.$c_title.'</td>
+            <td >'.$time_spent_on_course.'</td>
+            <td >'.$first_connection_date_to_module.'</td>
             <td >'.$progress.'</td>
             <td >'.$end_date_module.'</td>';
     echo '</tr>';
 }
 echo '</table>';
-
-
 ?>   </table>
     <br/><br/>
-    <center>
     <table class='data_table'>
         <tr>
             <th colspan="6">
@@ -540,18 +475,10 @@ echo '</table>';
             </th>
         <tr>
             <th><?php echo get_lang('module'); ?></th>
-            <th>
-                <?php echo get_lang('result_exam'); ?>
-            </th>
-            <th>
-                <?php echo get_lang('result_rep_1'); ?>
-            </th>
-            <th>
-                <?php echo get_lang('result_rep_2'); ?>
-            </th>
-            <th>
-                <?php echo get_lang('comment'); ?>
-            </th>
+            <th><?php echo get_lang('result_exam'); ?></th>
+            <th><?php echo get_lang('result_rep_1'); ?></th>
+            <th><?php echo get_lang('result_rep_2'); ?></th>
+            <th><?php echo get_lang('comment'); ?></th>
         </tr>
         <?php
 

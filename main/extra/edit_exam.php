@@ -13,65 +13,59 @@ api_block_anonymous_users();
 Display::display_header();
 
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-$num = isset($_GET['num']) ? $_GET['num'] : '';
-$student_idd = isset($_GET['student_id']) ? $_GET['student_id'] : '';
-
-foreach ($_POST as $index => $valeur) {
-    $$index = Database::escape_string(trim($valeur));
-}
+$num = isset($_GET['num']) ? (int) $_GET['num'] : '';
+$student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : '';
 
 ?>
 <form action="update_exam.php" method="post" name="save_exam">
-    <center>
-        <table class='data_table'>
+    <table class='data_table'>
+        <tr>
+            <th colspan="6">
+                <?php echo get_lang('edit_save'); ?>
+            </th>
+        <tr>
+            <th><?php echo get_lang('module_no') ?></th>
+            <th><?php echo get_lang('result_exam') ?></th>
+            <th><?php echo get_lang('result_rep_1') ?></th>
+            <th><?php echo get_lang('result_rep_2') ?></th>
+            <th><?php echo get_lang('comment') ?></th>
+            <th><?php echo get_lang('action') ?></th>
+        </tr>
+        <?php
+
+        $sqlexam = "SELECT * FROM $tbl_stats_exercices WHERE exe_id =  $num";
+        $resultexam = Database::query($sqlexam);
+        while ($a_exam = Database::fetch_array($resultexam)) {
+            $exe_id = $a_exam['exe_id'];
+            $mod_no = $a_exam['mod_no'];
+            $score_ex = $a_exam['score_ex'];
+            $score_rep1 = $a_exam['score_rep1'];
+            $score_rep2 = $a_exam['score_rep2'];
+            $coment = $a_exam['coment'];
+            echo "
             <tr>
-                <th colspan="6">
-                    <?php echo get_lang('edit_save'); ?>
-                </th>
-            <tr>
-                <th><?php echo get_lang('module_no') ?></th>
-                <th><?php echo get_lang('result_exam') ?></th>
-                <th><?php echo get_lang('result_rep_1') ?></th>
-                <th><?php echo get_lang('result_rep_2') ?></th>
-                <th><?php echo get_lang('comment') ?></th>
-                <th><?php echo get_lang('action') ?></th>
+                <td>
+                    <input type=text name=mod_no size=1 value= ".$a_exam['mod_no'].">
+                </td>
+                <td>
+                    <input type=text name=score_ex size=1 value=".$a_exam['score_ex'].">
+                </td>
+                <td><input type=text name=score_rep1 size=1 value=".$a_exam['score_rep1']."></td>
+                <td><input type=text name=score_rep2 size=1 value=".$a_exam['score_rep2']."></td>
+            ";
+
+            ?>
+            <td><textarea class="span5" name="coment" cols="65" rows="2"><?php echo $coment; ?></textarea><br></td>
+            <INPUT type=hidden name=ex_idd value= <?php echo "$exe_id" ?>>
+            <INPUT type=hidden name=student_id value= <?php echo "$student_idd" ?>>
+            <td>
+                <input type="submit" value="Sauvegarder" name="B1">
+            </td>
             </tr>
             <?php
-
-            $sqlexam = "SELECT * FROM $tbl_stats_exercices WHERE exe_id =  $num";
-            $resultexam = Database::query($sqlexam);
-            while ($a_exam = Database::fetch_array($resultexam)) {
-                $exe_id = $a_exam['exe_id'];
-                $mod_no = $a_exam['mod_no'];
-                $score_ex = $a_exam['score_ex'];
-                $score_rep1 = $a_exam['score_rep1'];
-                $score_rep2 = $a_exam['score_rep2'];
-                $coment = $a_exam['coment'];
-                echo "
-				<tr>
-					<td>
-					    <input type=text style=width:20% name=mod_no size=1 value= ".$a_exam['mod_no'].">
-					</td>
-				    <td>
-				        <input type=text style=width:20%  name=score_ex size=1 value=".$a_exam['score_ex'].">
-				    </td>
-				    <td><input type=text style=width:20%  name=score_rep1 size=1 value=".$a_exam['score_rep1']."></td>
-					<td><input type=text style=width:20%  name=score_rep2 size=1 value=".$a_exam['score_rep2']."></td>
-				";
-
-                ?>
-                <td><textarea class="span5" name="coment" cols="65" rows="2"><?php echo $coment; ?></textarea><br></td>
-                <INPUT type=hidden name=ex_idd value= <?php echo "$exe_id" ?>>
-                <INPUT type=hidden name=student_id value= <?php echo "$student_idd" ?>>
-                <td>
-                    <input type="submit" value="Sauvegarder" name="B1">
-                </td>
-                </tr>
-                <?php
-            }
-            ?>
-            </table>
+        }
+        ?>
+    </table>
 </form>
 <?php
 

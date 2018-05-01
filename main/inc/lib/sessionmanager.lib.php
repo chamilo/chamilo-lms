@@ -7584,7 +7584,7 @@ SQL;
      * Returns a human readable string.
      *
      * @param array $sessionInfo An array with all the session dates
-     * @param bool $showTime
+     * @param bool  $showTime
      *
      * @return array
      */

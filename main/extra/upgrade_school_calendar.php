@@ -30,4 +30,3 @@ Database::query($sql4);
 print_r(unserialize($_POST['aaa']));
 
 Display::display_footer();
-

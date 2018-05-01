@@ -106,7 +106,6 @@ if (!empty($tutor_info)) {
  */
 echo '<div class="actions">';
 $now = date('Y-m-d');
-
 echo '&nbsp;Le '.$now.' <a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang(
         'Print'
     ).'</a>';
@@ -123,7 +122,6 @@ $table = new SortableTable(
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
 );
 //$table -> display();  
-//echo("Test");
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $my_origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
@@ -142,8 +140,6 @@ if (api_is_western_name_order()) {
 //the order of these calls is important
 $table->set_column_filter(2, 'user_name_filter');
 $table->set_column_filter(3, 'user_name_filter');
-
-
 $table->set_header(4, get_lang('Examen'), false);
 //the order of these calls is important
 $table->set_column_filter(2, 'user_name_filter');
@@ -171,7 +167,8 @@ $tbl_group_course_info = Database:: get_course_table(TABLE_GROUP);
 $course_id = api_get_course_int_id();
 
 //on trouve le vrai groupID
-$sql = "SELECT iid FROM ".$tbl_group_course_info."  where c_id=".$course_id." and id=".$current_group['id'];
+$sql = "SELECT iid FROM ".$tbl_group_course_info."  
+        WHERE c_id=".$course_id." and id=".$current_group['id'];
 $current_group_result = Database::query($sql);
 $current_group = Database::fetch_assoc($current_group_result)['iid'];
 //on trouve les user dans le groupe
@@ -180,9 +177,7 @@ $sql = "SELECT *
         WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id 
         AND group_rel_user.group_id = ".$current_group." order by lastname
   ";
-
 $result = Database::query($sql);
-
 // Francois Belisle Kezber
 //  Le TableDisplay contient une fonction qui set les headers... les headers sont plac�s dans la Row 0... Ce qui ecrase le contenue
 // le la vrai row 0... Il faut donc ajouter un empty record a la row 0 qui se fera ecras� par lesh headers plutot que le premier record
@@ -213,7 +208,7 @@ foreach ($all_datas as $row) {
 }
 
 while ($resulta = Database::fetch_array($result)) {
-    $user_in_groupe = $resulta ['user_id'];
+    $user_in_groupe = $resulta['user_id'];
     unset($all_datas);
     //on cherche les examens
     $sqlexam = "SELECT  mod_no
@@ -228,7 +223,7 @@ while ($resulta = Database::fetch_array($result)) {
     Database::query(
         "INSERT INTO $tbl_stats_exercices_temp (id, exe_user_id, mod_passed) VALUES('', '$user_in_groupe',  '$exam') "
     );
-//fin de exam   
+    //fin de exam
     //on compte le nombre de m% dans l'agenda pour chaque module
     /*
        $sqljtot =  "SELECT COUNT( * ) AS TOT
@@ -259,37 +254,32 @@ while ($resulta = Database::fetch_array($result)) {
     while ($a_courses = Database::fetch_array($result2)) {
         $Courses_code = $a_courses ['c_id'];
         $Courses_rel_user_id = $a_courses ['user_id'];
-//on sort le temps passé dans chaque cours
+        //on sort le temps passé dans chaque cours
         $sql = "SELECT  SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM track_e_course_access
                 WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND c_id = $course_id AND user_id = '$user_in_groupe' 
                 ";
-//echo($sql);
+        //echo($sql);
         $rs = Database::query($sql);
         $row2 = Database::fetch_array($rs);
-
         $nb_secondes = $row2['nb_seconds'];
         $time_tot1 += $nb_secondes;
         //convertion secondes en temps
         $time_tot = api_time_to_hms($time_tot1);
-
-
-//on sort le c_id avec le code du cours        
-//$sql8 = "SELECT * 
-//      FROM course
-//      WHERE id = '$Courses_code'
-//      ";
-//        $result8 = Database::query($sql8);
-//        $course_code_id = Database::fetch_array($result8) ;
+        //on sort le c_id avec le code du cours
+        //$sql8 = "SELECT *
+        //      FROM course
+        //      WHERE id = '$Courses_code'
+        //      ";
+        //        $result8 = Database::query($sql8);
+        //        $course_code_id = Database::fetch_array($result8) ;
         $c_id = $Courses_code;
-
-//echo($sql8);
-//pours chaque cours dans lequel il est inscrit, on cherche les jours complétés
+        //pours chaque cours dans lequel il est inscrit, on cherche les jours complétés
         $Req3 = "SELECT *
-    FROM c_lp_view
-  WHERE user_id  = '$Courses_rel_user_id'
-  AND c_id = '$c_id'
-    ";
+                    FROM c_lp_view
+                  WHERE user_id  = '$Courses_rel_user_id'
+                  AND c_id = '$c_id'
+                    ";
         $res3 = Database::query($Req3);
         while ($result3 = Database::fetch_array($res3)) {
             $lp_id = $result3['lp_id'];
@@ -307,7 +297,6 @@ while ($resulta = Database::fetch_array($result)) {
 
             while ($resulta4 = Database::fetch_array($res4)) {
                 $lp_item_id = $resulta4['id'];
-
                 $Req5 = " SELECT Max(id)
                 FROM  c_lp_item_view
                        WHERE  lp_item_id =  '$lp_item_id'
@@ -332,13 +321,12 @@ while ($resulta = Database::fetch_array($result)) {
             }
         }
     }
-    // fin affichage des jours complétés dans les parcours par chaque élève
 
+    // fin affichage des jours complétés dans les parcours par chaque élève
     // on recherche les exam sauvegardé dans la table temp
     $sqlexamtot = "SELECT  mod_passed
                  FROM $tbl_stats_exercices_temp
-                 WHERE exe_user_id = '$user_in_groupe'
-                                                                 ";
+                 WHERE exe_user_id = '$user_in_groupe'";
     $resultexamtot = Database::query($sqlexamtot);
     $a_examtot = Database::fetch_array($resultexamtot);
     $exampass = $a_examtot['mod_passed'];
@@ -349,7 +337,6 @@ while ($resulta = Database::fetch_array($result)) {
     while ($jour_agenda == '') {
         $tour++;
         $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
-
         $sql4 = "SELECT *  FROM $tbl_personal_agenda
                  WHERE user = '$user_in_groupe' AND 
                  text='Pour le calendrier, ne pas effacer'
@@ -362,8 +349,8 @@ while ($resulta = Database::fetch_array($result)) {
             break;
         }
     }
-    //on affiche la différence
 
+    //on affiche la différence
     $diff = $jour_agenda - $Total;
     if ($diff > 0) {
         $sing = '<b><font color=#CC0000>';
@@ -382,14 +369,12 @@ while ($resulta = Database::fetch_array($result)) {
     }
 
     $diff = abs($diff);
-
     $last_connection_date = Tracking:: get_last_connection_date($user_in_groupe, true);
     if ($last_connection_date == '') {
         $last_connection_date = get_lang('NoConnexion');
     }
     // on présente tous les résultats
     $row = [];
-
     $row[] = $student_datas['official_code'];
     $row[] = $student_datas['lastname'];
     $row[] = $student_datas['firstname'];

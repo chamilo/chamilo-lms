@@ -56,7 +56,7 @@ if ($export) {
 $csv_content = [];
 $from_myspace = false;
 
-if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -369,7 +369,7 @@ if (!empty($student_id)) {
     echo '<a href="'.api_get_self().'?'.Security:: remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-    if (!empty ($user_info['email'])) {
+    if (!empty($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
             Display:: return_icon('mail_send.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -528,7 +528,7 @@ if (!empty($student_id)) {
                     </td>
                 </tr>
                 <tr>
-                    <td> <?php echo get_lang('OfficialCode').' : ';
+                    <td><?php echo get_lang('OfficialCode').' : ';
                         if (!empty ($user_info['official_code'])) {
                             echo $user_info['official_code'];
                         } else {

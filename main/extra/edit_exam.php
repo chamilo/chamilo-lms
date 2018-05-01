@@ -24,12 +24,12 @@ $student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : '';
                 <?php echo get_lang('edit_save'); ?>
             </th>
         <tr>
-            <th><?php echo get_lang('module_no') ?></th>
-            <th><?php echo get_lang('result_exam') ?></th>
-            <th><?php echo get_lang('result_rep_1') ?></th>
-            <th><?php echo get_lang('result_rep_2') ?></th>
-            <th><?php echo get_lang('comment') ?></th>
-            <th><?php echo get_lang('action') ?></th>
+            <th><?php echo get_lang('module_no'); ?></th>
+            <th><?php echo get_lang('result_exam'); ?></th>
+            <th><?php echo get_lang('result_rep_1'); ?></th>
+            <th><?php echo get_lang('result_rep_2'); ?></th>
+            <th><?php echo get_lang('comment'); ?></th>
+            <th><?php echo get_lang('action'); ?></th>
         </tr>
         <?php
 
@@ -55,9 +55,9 @@ $student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : '';
             ";
 
             ?>
-            <td><textarea class="span5" name="coment" cols="65" rows="2"><?php echo $coment; ?></textarea><br></td>
-            <INPUT type=hidden name=ex_idd value= <?php echo "$exe_id" ?>>
-            <INPUT type=hidden name=student_id value= <?php echo "$student_idd" ?>>
+            <td><textarea name="coment" cols="65" rows="2"><?php echo $coment; ?></textarea><br></td>
+            <INPUT type=hidden name=ex_idd value= <?php echo "$exe_id" ?>/>
+            <INPUT type=hidden name=student_id value= <?php echo "$student_idd" ?>/>
             <td>
                 <input type="submit" value="Sauvegarder" name="B1">
             </td>

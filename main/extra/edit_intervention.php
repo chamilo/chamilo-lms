@@ -21,10 +21,10 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
         <tr>
             <th colspan="4"><?php echo get_lang('edit_save'); ?>
         <tr>
-            <th><?php echo get_lang('level') ?></th>
-            <th><?php echo get_lang('lang_date') ?></th>
-            <th><?php echo get_lang('interventions_commentaires') ?></th>
-            <th><?php echo get_lang('action') ?></th>
+            <th><?php echo get_lang('level'); ?></th>
+            <th><?php echo get_lang('lang_date'); ?></th>
+            <th><?php echo get_lang('interventions_commentaires'); ?></th>
+            <th><?php echo get_lang('action'); ?></th>
         </tr>
         <?php
         $sqlinter = "SELECT * FROM $tbl_stats_exercices WHERE exe_id = $num";
@@ -40,9 +40,7 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
                 </td>
             <td><center>
                     ".$a_inter['exe_date']."
-                </td>
-                                
-            ";
+                </td>";
             $exe_id = $a_inter['exe_id'];
             ?>
             <td>

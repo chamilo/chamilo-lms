@@ -315,9 +315,23 @@ if ($showReporting) {
         );
 
         $html .= '<ul class="session-list">';
+        $urlWebCode = api_get_path(WEB_CODE_PATH);
+        $isAdmin = api_is_platform_admin();
         foreach ($sessionList as $session) {
-            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='
-                .$session['id'].'&cidReq='.$courseInfo['code'];
+            if (!$isAdmin) {
+                // Check session visibility
+                $visibility = api_get_session_visibility($session['id'], api_get_course_int_id());
+                if ($visibility == SESSION_INVISIBLE) {
+                    continue;
+                }
+
+                // Check if is coach
+                $isCoach = api_is_coach($session['id'], api_get_course_int_id());
+                if (!$isCoach) {
+                    continue;
+                }
+            }
+            $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
             $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
         }
         $html .= '</ul>';

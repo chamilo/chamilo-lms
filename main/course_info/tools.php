@@ -56,9 +56,14 @@ switch ($action) {
         $form->addHtml('<div class="col-md-7">');
         $form->addText('name', get_lang('Name'));
         $form->addText('link', get_lang('Links'));
-        $allowed_picture_types = ['jpg', 'jpeg', 'png'];
+        $allowedPictureTypes = ['jpg', 'jpeg', 'png'];
         $form->addFile('icon', get_lang('CustomIcon'));
-        $form->addRule('icon', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+        $form->addRule(
+            'icon',
+            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowedPictureTypes).')',
+            'filetype',
+            $allowedPictureTypes
+        );
         $form->addSelect(
             'target',
             get_lang('LinkTarget'),

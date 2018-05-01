@@ -174,10 +174,10 @@ if (api_get_setting('allow_course_theme') == 'true') {
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
 
-if (!empty(ExerciseLib::getScoreModels())) {
-    $models = ExerciseLib::getScoreModels();
+$scoreModels = ExerciseLib::getScoreModels();
+if (!empty($scoreModels)) {
     $options = ['' => get_lang('None')];
-    foreach ($models['models'] as $item) {
+    foreach ($scoreModels['models'] as $item) {
         $options[$item['id']] = get_lang($item['name']);
     }
     $form->addSelect('score_model_id', get_lang('ScoreModel'), $options);

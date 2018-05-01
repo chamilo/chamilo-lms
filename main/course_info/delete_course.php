@@ -40,7 +40,8 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
     $message .= '<p>'.get_lang('ByDel').'</p>';
-    $message .= '<p><a class="btn btn-primary" href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
+    $message .= '<p><a class="btn btn-primary" 
+        href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
         get_lang('No').'</a>&nbsp;<a class="btn btn-danger" href="'.api_get_self().'?delete=yes&'.api_get_cidreq().'">'.
         get_lang('Yes').'</a></p>';
     $interbreadcrumb[] = [

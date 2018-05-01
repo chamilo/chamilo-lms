@@ -85,13 +85,13 @@ class ThematicController
                     }
                     break;
                 case 'thematic_copy':
-                    //Copy a thematic to a session
+                    // Copy a thematic to a session
                     $thematic->copy($thematic_id);
                     $thematic_id = null;
                     $action = 'thematic_details';
                     break;
                 case 'thematic_delete_select':
-                    //Delete many thematics
+                    // Delete many thematics
                     if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic_ids = $_POST['id'];

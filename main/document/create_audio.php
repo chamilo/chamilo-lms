@@ -223,7 +223,6 @@ while ($row = Database::fetch_array($result_select)) {
 
 if ($service == 'google') {
     $selected_language = api_get_language_isocode(); //lang default is the course language
-
     $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', ['id' => 'form1']);
     $form->addHeader(get_lang('HelpText2Audio'));
     $form->addElement('hidden', 'text2voice_mode', 'google');
@@ -255,7 +254,9 @@ function downloadAudioGoogle($filepath, $dir)
     $location = 'create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&service=google';
 
     //security
-    if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
+    if (!isset($_POST['lang']) && !isset($_POST['text']) &&
+        !isset($_POST['title']) && !isset($filepath) && !isset($dir)
+    ) {
         echo '<script>window.location.href="'.$location.'"</script>';
 
         return;

@@ -161,7 +161,7 @@ function display_form()
  */
 function search_courses($id_session, $type)
 {
-    global $tbl_course, $tbl_session_rel_course, $course_list;
+    global $tbl_course, $tbl_session_rel_course;
     $xajax_response = new xajaxResponse();
     $select_destination = '';
     $return = null;

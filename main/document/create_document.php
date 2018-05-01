@@ -633,7 +633,6 @@ if ($form->validate()) {
 
     Display :: display_header($nameTools, "Doc");
     // actions
-
     // link back to the documents overview
     if ($is_certificate_mode) {
         $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.

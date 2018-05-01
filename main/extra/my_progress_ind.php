@@ -22,8 +22,8 @@ Display::display_header($nameTools);
 $result = Database::query(
     "SELECT DISTINCT session.id as id, name, access_start_date date_start, access_end_date date_end 
     FROM session_rel_course_rel_user,session 
-    WHERE session_id=session.id AND user_id=".
-    $_user['user_id']." ORDER BY date_start, date_end, name");
+    WHERE session_id=session.id AND user_id=".$_user['user_id']." 
+    ORDER BY date_start, date_end, name");
 
 $Sessions = Database::store_result($result);
 $Courses = [];
@@ -76,9 +76,8 @@ while ($a_courses = Database::fetch_array($result2)) {
     $c_id = $courses_code;
     //pours chaque cours dans lequel il est inscrit, on cherche les jours complétés
     $Req1 = "SELECT *
-    FROM c_lp_view
-  WHERE user_id  =  '$user_c_id'
-   AND c_id = '$c_id'
+             FROM c_lp_view
+             WHERE user_id  =  '$user_c_id' AND c_id = '$c_id'
     ";
     $res = Database::query($Req1);
     while ($result = Database::fetch_array($res)) {
@@ -96,21 +95,21 @@ while ($a_courses = Database::fetch_array($result2)) {
         while ($resulta = Database::fetch_array($res2)) {
             $lp_item_id = $resulta['id'];
             $Req3 = " SELECT Max(id)
-                FROM  c_lp_item_view
-                       WHERE  lp_item_id =  '$lp_item_id'
-                       AND lp_view_id =  '$lp_id_view'
-                        AND c_id = '$c_id_view'
-                         AND status =  'completed'
-                         ";
+                      FROM  c_lp_item_view
+                      WHERE  
+                        lp_item_id =  '$lp_item_id' AND 
+                        lp_view_id =  '$lp_id_view' AND 
+                        c_id = '$c_id_view' AND 
+                        status =  'completed'
+                      ";
             $res3 = Database::query($Req3);
-
             while ($resul = Database::fetch_array($res3)) {
                 $max = $resul['0'];
-
                 $Req4 = "SELECT COUNT( id )
-                                      FROM  c_lp_item_view
-                                 WHERE  id = '$max'
-                            AND c_id = '$c_id_view'    
+                          FROM  c_lp_item_view
+                          WHERE  
+                            id = '$max' AND 
+                            c_id = '$c_id_view'    
                                 ";
                 $res4 = Database::query($Req4);
                 while ($resultat = Database::fetch_array($res4)) {
@@ -176,11 +175,11 @@ $diff = abs($diff);
         $pt[] = '0';
         $pt[] = '0';
         $sqlcontrole = "SELECT diff
-                             FROM $tbl_stats_exercices
-                             WHERE exe_user_id =  ".$_user['user_id']."
-                             AND diff  != ''
-                             ORDER BY exe_date ASC
-                             ";
+                         FROM $tbl_stats_exercices
+                         WHERE exe_user_id =  ".$_user['user_id']."
+                         AND diff  != ''
+                         ORDER BY exe_date ASC
+                         ";
         $result = Database::query($sqlcontrole);
         while ($ptctl = Database::fetch_array($result)) {
             $pt[] = $ptctl ['diff'];
@@ -223,25 +222,25 @@ $diff = abs($diff);
         ?>
         <tr>
             <th align="left" width="412">
-                <?php echo get_lang('Cumulatif_agenda'); ?>: <b><font
-                            color=#CC0000> <?php echo $jour_realise_tot ?></font></b></p>
+                <?php echo get_lang('Cumulatif_agenda'); ?>:
+                <b><font color=#CC0000> <?php echo $jour_realise_tot ?></font></b>
             </th>
         </tr>
         <tr>
             <th align="left">
-                <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total ?></font></b></p>
+                <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total ?></font></b>
             </th>
         </tr>
         <tr>
             <th align="left">
-                <?php echo get_lang('jours_selon_horaire'); ?>: <b><font
-                            color=#CC0000> <?php echo $jour_agenda ?><?php echo $Days ?></font></b></p>
+                <?php echo get_lang('jours_selon_horaire'); ?>:
+                <b><font color=#CC0000> <?php echo $jour_agenda ?><?php echo $Days ?></font></b>
             </th>
         </tr>
         <tr>
             <th align="left">
-                <?php echo get_lang('diff2'); ?>: <b><font
-                            color=#CC0000> <?php echo $diff ?><?php echo $Days, $sing ?></font></b></p>
+                <?php echo get_lang('diff2'); ?>:
+                <b><font color=#CC0000> <?php echo $diff ?><?php echo $Days, $sing ?></font></b>
             </th>
         </tr>
     </table>
@@ -271,16 +270,10 @@ $diff = abs($diff);
             $inter_coment = Security::remove_XSS($a_inter['inter_coment']);
             $inter_date = substr($a_inter['exe_date'], 0, 11);
             echo "
-                <tr><center>
-                    <td> ".$a_inter['level']."
-                    </td>
-                <td><center>
-                     $inter_date
-                    </td>
-                
-                    <td>$inter_coment 
-                </td>
-                ";
+                <tr>
+                    <td> ".$a_inter['level']."</td>
+                    <td> $inter_date </td>                
+                    <td>$inter_coment</td>";
             $exe_id = $a_inter['exe_id'];
         }
         if ($level == 3) {
@@ -302,7 +295,7 @@ $sql = "SELECT *
         ";
 $result = Database::query($sql);
 $horaire_id = Database::fetch_array($result);
-$nom_hor = $horaire_id ['official_code'];
+$nom_hor = $horaire_id['official_code'];
 $c_id_horaire = strstr($nom_hor, '.');
 $c_id_horaire = str_replace(".", "", "$c_id_horaire");
 // Courses
@@ -380,7 +373,6 @@ while ($a_courses = Database::fetch_array($result2)) {
     }
     //on arrondi
     $nombre_jours_module = (int) $nombre_jours_module;
-
     //on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
     $sql = "SELECT * FROM c_cal_dates
               WHERE 

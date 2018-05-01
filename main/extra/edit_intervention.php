@@ -19,12 +19,12 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
 <form action="update_intervention.php" method="post" name="save_intercention">
     <table class='data_table'>
         <tr>
-            <th colspan="4"><?php echo get_lang('edit_save'); ?>
+            <th colspan="4"><?php echo get_lang('Edit'); ?>
         <tr>
-            <th><?php echo get_lang('level'); ?></th>
-            <th><?php echo get_lang('lang_date'); ?></th>
+            <th><?php echo get_lang('Level'); ?></th>
+            <th><?php echo get_lang('Date'); ?></th>
             <th><?php echo get_lang('interventions_commentaires'); ?></th>
-            <th><?php echo get_lang('action'); ?></th>
+            <th><?php echo get_lang('Action'); ?></th>
         </tr>
         <?php
         $sqlinter = "SELECT * FROM $tbl_stats_exercices WHERE exe_id = $num";
@@ -35,10 +35,10 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
             $score_ex = $a_inter['score_ex'];
             $inter_coment = stripslashes($a_inter['inter_coment']);
             echo "
-            <tr><center>
+                <tr>
                 <td> ".$a_inter['level']."
                 </td>
-            <td><center>
+                <td>
                     ".$a_inter['exe_date']."
                 </td>";
             $exe_id = $a_inter['exe_id'];
@@ -47,12 +47,10 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
                 <textarea name="inter_coment" cols="65" rows="2">
                     <?php echo $inter_coment; ?>
                 </textarea>
-                <br>
             </td>
-            <INPUT type=hidden name=exe_id value= <?php echo "$exe_id" ?>>
-            <INPUT type=hidden name=student_id value= <?php echo "$student_idd" ?>>
+            <INPUT type=hidden name=exe_id value= <?php echo "$exe_id"; ?>/>
+            <INPUT type=hidden name=student_id value= <?php echo "$student_idd"; ?>/>
             <td><input type="submit" value="Sauvegarder" name="B1"></td>
-            </td>
             </tr>
             <?php
         }

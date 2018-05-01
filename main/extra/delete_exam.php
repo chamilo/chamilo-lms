@@ -8,10 +8,9 @@ if (empty($allow)) {
     exit;
 }
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
 api_block_anonymous_users();
 
-$ex_user_id = isset($_GET['student_id']) ? $_GET['student_id'] : "";
+$ex_user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
 $num = isset($_GET['num']) ? (int) $_GET['num'] : 0;
 
 $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

@@ -33,7 +33,7 @@ $student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : '';
         </tr>
         <?php
 
-        $sqlexam = "SELECT * FROM $tbl_stats_exercices WHERE exe_id =  $num";
+        $sqlexam = "SELECT * FROM $tbl_stats_exercices WHERE exe_id = $num";
         $resultexam = Database::query($sqlexam);
         while ($a_exam = Database::fetch_array($resultexam)) {
             $exe_id = $a_exam['exe_id'];

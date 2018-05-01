@@ -65,8 +65,8 @@ if (empty($title)) {
                 echo '</td>';
                 echo "<td><input type='text' NAME='day_number' size='4' value=".$number."/></td>";
                 echo "<td><input type='text' NAME='d_title' size='4' value=".$title."/></td>";
-                $sql4 = "INSERT INTO set_module "."(cal_name,cal_day_num,cal_date) 
-                         VALUES "."('$title','$number','".date('Y-m-d', $date1)."')";
+                $sql4 = "INSERT INTO set_module (cal_name,cal_day_num,cal_date) 
+                         VALUES ('$title','$number','".date('Y-m-d', $date1)."') ";
                 Database::query($sql4);
                 if ($i % $nbcol == ($nbcol - 1)) {
                     echo "</tr>";

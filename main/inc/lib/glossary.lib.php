@@ -276,7 +276,7 @@ class GlossaryManager
     /**
      * Get one specific glossary term data.
      *
-     * @param int $glossary_id ID of the flossary term
+     * @param int $glossary_id ID of the glossary term
      *
      * @return mixed Array(glossary_id,name,description,glossary_display_order) or false on error
      */
@@ -296,9 +296,10 @@ class GlossaryManager
                     ip.insert_date      as insert_date,
                     ip.lastedit_date    as update_date,
                     g.session_id
-                FROM $t_glossary g, $t_item_propery ip
-                WHERE
-                    g.glossary_id = ip.ref AND
+                FROM $t_glossary g 
+                INNER JOIN $t_item_propery ip
+                ON (g.glossary_id = ip.ref AND g.c_id = ip.c_id)
+                WHERE                    
                     tool = '".TOOL_GLOSSARY."' AND
                     g.glossary_id = '".intval($glossary_id)."' AND
                     g.c_id = ".api_get_course_int_id()." AND

@@ -131,7 +131,6 @@ class CoursesAndSessionsCatalog
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $courseToAvoidCondition = self::getAvoidCourseCondition();
-
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $accessUrlId = (int) $accessUrlId;
@@ -396,7 +395,6 @@ class CoursesAndSessionsCatalog
         $limitFilter = self::getLimitFilterFromArray($limit);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
         $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('course', true) : '';
-
         $search_term_safe = Database::escape_string($search_term);
         $sql_find = "SELECT * FROM $courseTable course
                       WHERE (
@@ -477,7 +475,6 @@ class CoursesAndSessionsCatalog
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
-
         $sql = "SELECT s.id FROM session s ";
         $sql .= "
             INNER JOIN access_url_rel_session ars

@@ -15,15 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ToolResourceRights
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
@@ -42,6 +33,14 @@ class ToolResourceRights
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
     protected $tool;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
 
     /**
      * @return string

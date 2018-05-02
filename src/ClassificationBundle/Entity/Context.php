@@ -6,7 +6,7 @@ namespace Chamilo\ClassificationBundle\Entity;
 use Sonata\ClassificationBundle\Entity\BaseContext as BaseContext;
 
 /**
- * Class Context
+ * Class Context.
  *
  * @package Chamilo\ClassificationBundle\Entity
  */

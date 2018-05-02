@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * HookEvent.
  *
  * @ORM\Table(
- *     name="hook_event",   
+ *     name="hook_event",
  *     options={"row_format":"DYNAMIC"},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})}
  * )

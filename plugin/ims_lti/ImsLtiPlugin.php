@@ -99,8 +99,8 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Creates the plugin tables on database
+     *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function createPluginTables()
     {
@@ -108,35 +108,37 @@ class ImsLtiPlugin extends Plugin
         $connection = $entityManager->getConnection();
         $pluginSchema = new Schema();
         $platform = $connection->getDatabasePlatform();
+        if (!$connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
+            $toolTable = $pluginSchema->createTable(self::TABLE_TOOL);
+            $toolTable->addColumn(
+                'id',
+                \Doctrine\DBAL\Types\Type::INTEGER,
+                ['autoincrement' => true, 'unsigned' => true]
+            );
+            $toolTable->addColumn('name', Type::STRING);
+            $toolTable->addColumn('description', Type::TEXT)->setNotnull(false);
+            $toolTable->addColumn('launch_url', Type::TEXT);
+            $toolTable->addColumn('consumer_key', Type::STRING);
+            $toolTable->addColumn('shared_secret', Type::STRING);
+            $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
+            $toolTable->addColumn('is_global', Type::BOOLEAN);
+            $toolTable->setPrimaryKey(['id']);
 
-        $toolTable = $pluginSchema->createTable(self::TABLE_TOOL);
-        $toolTable->addColumn(
-            'id',
-            \Doctrine\DBAL\Types\Type::INTEGER,
-            ['autoincrement' => true, 'unsigned' => true]
-        );
-        $toolTable->addColumn('name', Type::STRING);
-        $toolTable->addColumn('description', Type::TEXT)->setNotnull(false);
-        $toolTable->addColumn('launch_url', Type::TEXT);
-        $toolTable->addColumn('consumer_key', Type::STRING);
-        $toolTable->addColumn('shared_secret', Type::STRING);
-        $toolTable->addColumn('custom_params', Type::TEXT)->setNotnull(false);
-        $toolTable->addColumn('is_global', Type::BOOLEAN);
-        $toolTable->setPrimaryKey(['id']);
+            $queries = $pluginSchema->toSql($platform);
 
-        $queries = $pluginSchema->toSql($platform);
-
-        foreach ($queries as $query) {
-            Database::query($query);
+            foreach ($queries as $query) {
+                Database::query($query);
+            }
         }
+
 
         return true;
     }
 
     /**
      * Drops the plugin tables on database
+     *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function dropPluginTables()
     {
@@ -155,7 +157,7 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     *
      */
     private function removeTools()
     {

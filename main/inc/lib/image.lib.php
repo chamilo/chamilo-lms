@@ -164,15 +164,10 @@ abstract class ImageWrapper
     }
 
     abstract public function set_image_wrapper();
-
     abstract public function fill_image_info();
-
     abstract public function get_image_size();
-
     abstract public function resize($thumbw, $thumbh, $border, $specific_size = false);
-
     abstract public function crop($x, $y, $width, $height, $src_width, $src_height);
-
     abstract public function send_image($file = '', $compress = -1, $convert_file_to = null);
 
     /**

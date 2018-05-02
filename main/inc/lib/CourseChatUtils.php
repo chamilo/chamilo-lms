@@ -273,7 +273,6 @@ class CourseChatUtils
 
     /**
      * Keep registered to a user as connected.
-     *
      */
     public function keepUserAsConnected()
     {

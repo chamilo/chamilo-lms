@@ -899,7 +899,7 @@ function WSCreateUsersPasswordCrypted($params)
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save the external system's id into user_field_value table.
-                        $res = UserManager::update_extra_field_value(
+                        UserManager::update_extra_field_value(
                             $r_check_user[0],
                             $extra_field_name,
                             $extra_field_value

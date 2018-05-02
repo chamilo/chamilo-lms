@@ -2789,7 +2789,7 @@ class Agenda
      * @param int   $attachmentId
      * @param array $courseInfo
      *
-     * @return strings
+     * @return string
      */
     public function deleteAttachmentFile($attachmentId, $courseInfo)
     {
@@ -2825,8 +2825,8 @@ class Agenda
     /**
      * Adds x weeks to a UNIX timestamp.
      *
-     * @param   int $timestamp The timestamp
-     * @param   int $num       The number of weeks to add
+     * @param int $timestamp The timestamp
+     * @param int $num       The number of weeks to add
      *
      * @return int The new timestamp
      */
@@ -2838,8 +2838,8 @@ class Agenda
     /**
      * Adds x months to a UNIX timestamp.
      *
-     * @param   int $timestamp The timestamp
-     * @param   int $num       The number of years to add
+     * @param int $timestamp The timestamp
+     * @param int $num       The number of years to add
      *
      * @return int The new timestamp
      */
@@ -2862,8 +2862,8 @@ class Agenda
     /**
      * Adds x years to a UNIX timestamp.
      *
-     * @param   int $timestamp The timestamp
-     * @param   int $num       The number of years to add
+     * @param int $timestamp The timestamp
+     * @param int $num       The number of years to add
      *
      * @return int The new timestamp
      */

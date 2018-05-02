@@ -688,9 +688,9 @@ class SystemAnnouncementManager
      */
     public static function get_announcement($id)
     {
-        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $id = intval($id);
-        $sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
+        $sql = "SELECT * FROM ".$table." WHERE id = ".$id;
         $announcement = Database::fetch_object(Database::query($sql));
 
         return $announcement;

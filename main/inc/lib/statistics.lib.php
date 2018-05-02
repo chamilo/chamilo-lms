@@ -102,8 +102,8 @@ class Statistics
     /**
      * Count users.
      *
-     * @param int    $status                optional user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users
-     * @param string $categoryCode          Optional, code of a course category. Default: count only users without filtering category
+     * @param int    $status                user status (COURSEMANAGER or STUDENT) if not setted it'll count all users
+     * @param string $categoryCode          course category code. Default: count only users without filtering category
      * @param bool   $countInvisibleCourses Count invisible courses (todo)
      * @param bool   $onlyActive            Count only active users (false to only return currently active users)
      *

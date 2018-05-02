@@ -4090,7 +4090,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     $directory = disable_dangerous_file($directory);
 
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
-    var_dump($created_dir);
+
     if (empty($created_dir)) {
         return false;
     }

@@ -883,9 +883,7 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             $_SESSION['oLP']->delete(null, $_GET['lp_id'], 'remove');
-
             Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
-
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
             require 'lp_list.php';
@@ -897,7 +895,7 @@ switch ($action) {
         }
 
         learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
-
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: '.api_get_self().'?'.api_get_cidreq());
         exit;
     case 'toggle_visible':
@@ -910,6 +908,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             require 'lp_list.php';
         }
         break;
@@ -919,6 +918,7 @@ switch ($action) {
         }
 
         learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         require 'lp_list.php';
         break;
     case 'toggle_publish':
@@ -930,6 +930,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             require 'lp_list.php';
         }
         break;

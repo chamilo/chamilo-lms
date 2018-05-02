@@ -1701,7 +1701,7 @@ if ($allowMessages === true) {
 }
 
 $allow = api_get_configuration_value('allow_user_message_tracking');
-if ($allow && api_is_drh() || api_is_platform_admin()) {
+if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
 
     echo Display::page_subheader2(get_lang('MessageTracking'));

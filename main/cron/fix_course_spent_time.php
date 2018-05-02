@@ -44,7 +44,7 @@ while ($row = Database::fetch_array($result)) {
         $newLogout = api_get_utc_datetime($login);
         $sql = "UPDATE track_e_course_access 
                 SET logout_course_date = '$newLogout'
-                WHERE course_access_id = $id
+                WHERE course_access_id = $id ;
         ";
 
         // Uncomment to fix

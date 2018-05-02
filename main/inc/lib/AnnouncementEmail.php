@@ -30,9 +30,8 @@ class AnnouncementEmail
         $this->session_id = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
 
         if (is_numeric($announcementId)) {
-            $announcementId = AnnouncementManager::get_by_id($courseInfo['real_id'], $announcementId);
+            $this->announcement = AnnouncementManager::get_by_id($courseInfo['real_id'], $announcementId);
         }
-        $this->announcement = $announcementId;
         $this->logger = $logger;
     }
 
@@ -280,8 +279,7 @@ class AnnouncementEmail
      *
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
-     * @param int  $senderId
-     *                                   related to the main user
+     * @param int  $senderId             related to the main user
      */
     public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0)
     {

@@ -859,6 +859,21 @@ switch ($action) {
             exit;
         }
         break;
+    case 'export_to_course_build':
+        $allowExport = api_get_configuration_value('allow_lp_chamilo_export');
+        if (api_is_allowed_to_edit() && $allowExport) {
+            if (!$lp_found) {
+                require 'lp_list.php';
+            } else {
+                $result = $_SESSION['oLP']->exportToCourseBuildFormat($_GET['lp_id']);
+                if (!$result) {
+                    require 'lp_list.php';
+                }
+                exit;
+            }
+        }
+        require 'lp_list.php';
+        break;
     case 'delete':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

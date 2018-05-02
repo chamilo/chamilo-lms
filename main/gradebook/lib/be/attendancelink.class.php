@@ -39,46 +39,6 @@ class AttendanceLink extends AbstractLink
     }
 
     /**
-     * Generate an array of attendances that a teacher hasn't created a link for.
-     *
-     * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-     *
-     * @todo seems to be depracated
-     */
-    public function get_not_created_links()
-    {
-        return false;
-        if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
-        }
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $sql = 'SELECT att.id, att.name, att.attendance_qualify_title
-                FROM '.$this->get_attendance_table().' att
-                WHERE
-                    att.c_id = '.$this->course_id.' AND
-                    att.id NOT IN (
-                        SELECT ref_id FROM '.$tbl_grade_links.'
-                        WHERE
-                            type = '.LINK_ATTENDANCE.' AND
-                            course_code = "'.Database::escape_string($this->get_course_code()).'"
-                    )
-                AND att.session_id='.api_get_session_id().'';
-        $result = Database::query($sql);
-
-        $cats = [];
-        while ($data = Database::fetch_array($result)) {
-            if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != '') {
-                $cats[] = [$data['id'], $data['attendance_qualify_title']];
-            } else {
-                $cats[] = [$data['id'], $data['name']];
-            }
-        }
-
-        return $cats;
-    }
-
-    /**
      * Generate an array of all attendances available.
      *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
@@ -86,7 +46,7 @@ class AttendanceLink extends AbstractLink
     public function get_all_links()
     {
         if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
+            return [];
         }
         $tbl_attendance = $this->get_attendance_table();
         $session_id = api_get_session_id();
@@ -106,7 +66,7 @@ class AttendanceLink extends AbstractLink
                 $cats[] = [$data['id'], $data['name']];
             }
         }
-        $my_cats = isset($cats) ? $cats : null;
+        $my_cats = isset($cats) ? $cats : [];
 
         return $my_cats;
     }

@@ -323,9 +323,9 @@ switch ($action) {
             echo '1';
         } else {
             if (!empty($lp->error)) {
-                echo addslashes($lp->error);
+                echo $lp->error;
             } else {
-                echo addslashes(get_lang('LearnpathPrereqNotCompleted'));
+                echo get_lang('LearnpathPrereqNotCompleted');
             }
         }
         $lp->error = '';
@@ -392,7 +392,6 @@ class LP_item_order_list
         }
     }
 }
-
 class LP_item_order_item
 {
     public $id = 0;

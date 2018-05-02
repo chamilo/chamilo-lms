@@ -1075,7 +1075,7 @@ class GradebookTable extends SortableTable
                 if (api_is_allowed_to_edit() && $show_message === false) {
                     if ($item->get_type() == 'presence') {
                         return '&nbsp;'
-                            .'<a href="gradebook_view_result.php?cidReq='.$item->get_course_code().'&amp;selecteval='.$item->get_id().'">'
+                            .'<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval='.$item->get_id().'">'
                             .$item->get_name()
                             .'</a>';
                     } else {

@@ -19,7 +19,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $ctok = Security::get_existing_token();
 
 // Get Limit data
-$limit = CourseCategory::getLimitArray();
+$limit = CoursesController::getLimitArray();
 
 // Section for the tabs.
 $this_section = SECTION_CATALOG;
@@ -187,6 +187,7 @@ if (isset($_POST['unsubscribe'])) {
         $courseController->unsubscribe_user_from_course($_POST['unsubscribe']);
     }
 }
+
 switch ($action) {
     case 'subscribe_user_with_password':
         $courseController->subscribe_user(

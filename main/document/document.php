@@ -152,12 +152,12 @@ $groupMemberWithEditRights = false;
 if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
-    $isTutorGroup = GroupManager::is_tutor_of_group(
+    $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
         $userId,
+        $courseId,
         $group_properties,
-        $courseId
+        null
     );
-    $groupMemberWithEditRights = $isAllowedToEdit || $isTutorGroup;
 
     // Let's assume the user cannot upload files for the group
     $groupMemberWithUploadRights = false;
@@ -197,6 +197,11 @@ if (!empty($groupId)) {
             // Only course admin or group members can upload
             $groupMemberWithUploadRights = true;
         }
+    }
+
+    // Group mode
+    if (!GroupManager::allowUploadEditDocument($userId, $courseId, $group_properties)) {
+        $groupMemberWithUploadRights = false;
     }
     Session::write('group_member_with_upload_rights', $groupMemberWithUploadRights);
 } else {
@@ -239,6 +244,14 @@ switch ($action) {
                     $courseInfo['code'],
                     false,
                     $sessionId
+                );
+
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $documentInfo,
+                    true
                 );
 
                 // Check whether the document is in the database.
@@ -331,9 +344,9 @@ switch ($action) {
         exit;
         break;
     case 'downloadfolder':
-        if (api_get_setting('students_download_folders') == 'true'
-            || $isAllowedToEdit
-            || api_is_platform_admin()
+        if (api_get_setting('students_download_folders') == 'true' ||
+            $isAllowedToEdit ||
+            api_is_platform_admin()
         ) {
             // Get the document data from the ID
             $document_data = DocumentManager::get_document_data_by_id(
@@ -416,6 +429,15 @@ switch ($action) {
                     0
                 );
             }
+
+            GroupManager::allowUploadEditDocument(
+                $userId,
+                $courseId,
+                $group_properties,
+                $document_info,
+                true
+            );
+
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
             $user_folder = $my_path.'my_files/';
@@ -861,14 +883,6 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateDir')];
 }
 
-$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path
-    .'jquery-jplayer/skin/chamilo/jplayer.blue.monday.css" type="text/css">';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path
-    .'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
-$mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
-
 $documentAndFolders = DocumentManager::getAllDocumentData(
     $courseInfo,
     $curdirpath,
@@ -920,7 +934,7 @@ if (!empty($documentAndFolders)) {
                     'extension' => $extension,
                     'count' => $count,
                 ];
-                $jquery .= DocumentManager::generate_jplayer_jquery($params);
+                $jquery .= DocumentManager::generateAudioJavascript($params);
                 $count++;
             }
         }
@@ -971,6 +985,14 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
             api_get_course_id(),
             false,
             $sessionId
+        );
+
+        GroupManager::allowUploadEditDocument(
+            $userId,
+            $courseId,
+            $group_properties,
+            $document_to_move,
+            true
         );
 
         $move_path = $document_to_move['path'];
@@ -1036,6 +1058,14 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
             api_get_course_id(),
             false,
             $sessionId
+        );
+
+        GroupManager::allowUploadEditDocument(
+            $userId,
+            $courseId,
+            $group_properties,
+            $document_to_move,
+            true
         );
 
         // Security fix: make sure they can't move files that are not in the document table
@@ -1783,6 +1813,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
 );
 
 $getSizeURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dir_size&'.api_get_cidreq();
+
 if (!empty($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
         $count = 1;
@@ -1845,8 +1876,8 @@ if (!empty($documentAndFolders)) {
 
             // Icons (clickable)
             $row[] = DocumentManager::create_document_link(
+                $http_www,
                 $document_data,
-                $courseInfo,
                 true,
                 $count,
                 $is_visible,
@@ -1866,8 +1897,8 @@ if (!empty($documentAndFolders)) {
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             $link = DocumentManager::create_document_link(
+                $http_www,
                 $document_data,
-                $courseInfo,
                 false,
                 null,
                 $is_visible,
@@ -1901,11 +1932,17 @@ if (!empty($documentAndFolders)) {
 
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
 
+            $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
+                $userId,
+                $courseId,
+                $group_properties,
+                $document_data
+            );
+
             // Admins get an edit column
             if ($isAllowedToEdit ||
-                $groupMemberWithEditRights ||
-                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
-                $document_data['insert_user_id'] == api_get_user_id()
+                $groupMemberWithEditRightsCheckDocument ||
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
 

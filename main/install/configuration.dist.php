@@ -402,6 +402,9 @@ $_configuration['agenda_colors'] = [
 // Show view accordion lp_category
 //$_configuration['lp_category_accordion'] = false;
 //
+// Show view accordion lp_item_view
+// $_configuration['lp_view_accordion'] = false;
+//
 // ------ HTTP headers security
 // This section relates to options to increase the security of your Chamilo
 // portal against attacks specifically focused on HTTP headers vulnerabilities
@@ -487,6 +490,8 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //$_configuration['allow_career_diagram'] = false;
 // Allow scheduled emails to session users.
 //CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// sudo mkdir app/upload/scheduled_announcement
+// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*
@@ -524,6 +529,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_free_question_score'] = false;
 // Hide user information in the quiz result's page
 //$_configuration['hide_user_info_in_quiz_result'] = false;
+// Show the username field in exercise results report
+//$_configuration['exercise_attempts_report_show_username'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label
@@ -631,7 +638,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Default glossary view "table" or "list"
 //$_configuration['default_glossary_view'] = 'table';
 
-// Allow or block user subcriptions to a lp/lp category
+// Allow or block user subscriptions to a lp/lp category
 /*$_configuration['lp_subscription_settings'] = [
     'options' => [
         'allow_add_users_to_lp' => true,
@@ -655,6 +662,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Send email notification to admin when a user is created
 //$_configuration['send_notification_when_user_added'] = ['admins' => [1] ];
+
+// Send email notification to course members when document is added BT#13964
+//$_configuration['send_notification_when_document_added'] = false;
 
 // Hide email content forcing using to click in a link to visit the portal to check the message
 //$_configuration['messages_hide_mail_content'] = false;
@@ -688,6 +698,9 @@ $_configuration['gradebook_badge_sidebar'] = [
     ]
 ];*/
 
+// Show popular sessions on homepage
+//$_configuration['show_hot_sessions'] = false;
+
 // Hide skill levels options
 //$_configuration['hide_skill_levels'] = false;
 
@@ -720,7 +733,110 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Requires edit Entity Session: src/Chamilo/CoreBundle/Entity/Session.php uncomment "position" variable.
 //$_configuration['session_list_order'] = false;
 
-// ------ Custom DB changes
+// Show skills as a hierarchical table
+//$_configuration['table_of_hierarchical_skill_presentation'] = false;
+
+// Restrict course chat only for course coach in sessions
+// Course coaches will can chat with students only. And students will can chat with all course coaches
+//$_configuration['course_chat_restrict_to_coach'] = false;
+
+// Allow teachers, drhs and admins to access blocked LP's because a prerequisite.
+//$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
+
+// Allow connect skills with course tools (exercises, forum threads, works, etc)
+// 1. Add "@ORM\Entity" in these Entities:
+//SkillRelItemRelUser/SkillRelItem
+// 2. Add "@ORM\OneToMany" in the "Skill.items" variable definition
+// 3. Run DB changes:
+/*
+CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, item_type INT NOT NULL, item_id INT NOT NULL, obtain_conditions VARCHAR(255) DEFAULT NULL, requires_validation TINYINT(1) NOT NULL, is_real TINYINT(1) NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_EB5B2A0D5585C142 (skill_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DFD4B12DC FOREIGN KEY (skill_rel_item_id) REFERENCES skill_rel_item (id);
+ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
+ALTER TABLE skill_rel_item ADD CONSTRAINT FK_EB5B2A0D5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);
+ALTER TABLE skill_rel_item_rel_user ADD result_id INT DEFAULT NULL;
+
+CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E7CEC7FA5585C142 (skill_id), INDEX IDX_E7CEC7FA91D79BD3 (c_id), INDEX IDX_E7CEC7FA613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);
+ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
+ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
+*/
+// 4. Set "allow_skill_rel_items" to true
+//$_configuration['allow_skill_rel_items'] = false;
+
+// Generate random login when importing users
+//$_configuration['generate_random_login'] = false;
+
+// Remove html tags when exporting glossary definitions in a CSV file
+//$_configuration['allow_remove_tags_in_glossary_export'] = false;
+
+// Show base course categories in portal children
+//$_configuration['allow_base_course_category'] = false;
+
+// Send two emails when creating a user. One with the username other with the password.
+//$_configuration['send_two_inscription_confirmation_mail'] = false;
+
+// LP view custom settings
+// $_configuration['lp_view_settings'] = ['display' => ['show_reporting_icon' => true]];
+
+// Force to hide the invisible course documents in sessions
+//$_configuration['hide_invisible_course_documents_in_sessions'] = false;
+
+// Show more expected choice and status in exercise results BT#13950
+//$_configuration['show_exercise_expected_choice'] = false;
+
+// Hide exercise question label (ribbon) BT#13950
+//$_configuration['exercise_hide_label'] = false;
+
+// Send welcome message by email and to the chamilo inbox BT#14034
+//$_configuration['send_inscription_msg_to_inbox'] = false;
+
+// Allow administrators to see personal messages between a teacher and a student.
+// Please make sure you include a note in your terms and conditions as this might
+// affect privacy protection.
+//$_configuration['allow_user_message_tracking'] = false;
+
+// Add a portfolio tool (duplicating the Notebook tool). Requires DB changes:
+/*
+CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id);
+ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
+INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
+*/
+//$_configuration['allow_portfolio_tool'] = false;
+
+// Disable average and best columns in gradebook see BT#14126
+//$_configuration['disable_gradebook_stats'] = false;
+
+// Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
+//$_configuration['allow_teacher_access_student_skills'] = false;
+
+// Allow sharing options for the documents inside a group
+//ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;
+//$_configuration['group_document_access'] = false;
+
+// Allow sharing options for the documents inside a group category
+//ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;
+//$_configuration['group_category_document_access'] = false;
+
+// Allow LP export to chamilo format (CourseBackup)
+//$_configuration['allow_lp_chamilo_export'] = false;
+
+// Allow exercise auto launch
+//$_configuration['allow_exercise_auto_launch'] = false;
+// ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0;
+
+// Enable speed controller in video player
+// $_configuration['video_features'] = ['features' => ['speed']];
+
+// My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
+// $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
+
+// ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings

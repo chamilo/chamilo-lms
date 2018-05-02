@@ -178,10 +178,10 @@ EOT;
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $label      The label for the form-element
-     * @param string $name       The element name
-     * @param bool   $required   (optional)    Is the form-element required (default=true)
-     * @param array  $attributes (optional)    List of attributes for the form-element
+     * @param string|array $label      The label for the form-element
+     * @param string       $name       The element name
+     * @param bool         $required   (optional)    Is the form-element required (default=true)
+     * @param array        $attributes (optional)    List of attributes for the form-element
      *
      * @return HTML_QuickForm_text
      */
@@ -925,15 +925,13 @@ EOT;
      * @param bool   $required (optional) Is the form-element required (default=true)
      * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page
      * @param array  $config   (optional) Configuration settings for the online editor
-     * @param bool   $style
      */
     public function addHtmlEditor(
         $name,
         $label,
         $required = true,
         $fullPage = false,
-        $config = [],
-        $style = false
+        $config = []
     ) {
         $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
@@ -949,12 +947,11 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-
-        if ($style) {
-            $config['style'] = true;
-        }
+        $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;
+            // Adds editor.css in ckEditor
+            $config['style'] = true;
         }
 
         if ($element->editor) {
@@ -1774,18 +1771,7 @@ EOT;
                 );
             }).on('fileuploaddone', function (e, data) {
                 $.each(data.result.files, function (index, file) {
-                    if (file.url) {
-                        var link = $('<a>')
-                            .attr({target: '_blank', class : 'panel-image'})
-                            .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);
-                        // Update file name with new one from Chamilo
-                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                        var message = $('<div class=\"col-sm-3\">').html(
-                            $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
-                        );
-                        $(data.context.children()[index]).parent().append(message);                    
-                    } else if (file.error) {
+                    if (file.error) {
                         var link = $('<div>')
                             .attr({class : 'panel-image'})                            ;
                         $(data.context.children()[index]).parent().wrap(link);
@@ -1795,7 +1781,21 @@ EOT;
                             $('<span class=\"message-image-danger\"/>').text(file.error)
                         );
                         $(data.context.children()[index]).parent().append(message);
+
+                        return;
                     }
+                    if (file.url) {
+                        var link = $('<a>')
+                            .attr({target: '_blank', class : 'panel-image'})
+                            .prop('href', file.url);
+                        $(data.context.children()[index]).parent().wrap(link);
+                    }
+                    // Update file name with new one from Chamilo
+                    $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    var message = $('<div class=\"col-sm-3\">').html(
+                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
+                    );
+                    $(data.context.children()[index]).parent().append(message);
                 });                
                 $('#dropzone').removeClass('hover');                
                 ".$redirectCondition."

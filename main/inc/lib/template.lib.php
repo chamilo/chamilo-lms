@@ -94,6 +94,7 @@ class Template
         ];
 
         $urlId = api_get_current_access_url_id();
+
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
 
         if (!is_dir($cache_folder)) {
@@ -101,6 +102,7 @@ class Template
         }
 
         $loader = new Twig_Loader_Filesystem($template_paths);
+
         $isTestMode = api_get_setting('server_type') === 'test';
 
         //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
@@ -130,7 +132,6 @@ class Template
         }
 
         $this->twig = new Twig_Environment($loader, $options);
-        //$this->twig = \Chamilo\CoreBundle\Framework\Container::getTemplating();
 
         if ($isTestMode) {
             $this->twig->addExtension(new Twig_Extension_Debug());
@@ -170,6 +171,10 @@ class Template
             [
                 'name' => 'format_date',
                 'callable' => 'Template::format_date',
+            ],
+            [
+                'name' => 'get_template',
+                'callable' => 'Template::findTemplateFilePath',
             ],
         ];
 
@@ -635,6 +640,16 @@ class Template
             'flag-icon-css/css/flag-icon.min.css',
         ];
 
+        $features = api_get_configuration_value('video_features');
+        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'];
+
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $defaultFeatures[] = $feature;
+            }
+        }
+
         foreach ($bowerCSSFiles as $file) {
             //$css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
         }
@@ -652,16 +667,24 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_static_file_to_string', $css_file_to_string);
         }
+
+        $defaultFeatures = implode("','", $defaultFeatures);
+        $this->assign('video_features', $defaultFeatures);
     }
 
-    public function setCSSEditor()
+    /**
+     * Sets the "styles" menu in ckEditor.
+     *
+     * Reads css/themes/xxx/editor.css if exists and shows it in the menu, otherwise it
+     * will take the default web/editor.css file
+     */
+    public function setStyleMenuInCkEditor()
     {
         $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
         if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
             $cssEditor = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
         }
-
-        $this->assign('cssEditor', $cssEditor);
+        $this->assign('css_editor', $cssEditor);
     }
 
     /**
@@ -783,6 +806,14 @@ class Template
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
         ];
+
+        $features = api_get_configuration_value('video_features');
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+            }
+        }
+
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }
@@ -799,11 +830,6 @@ class Template
         foreach ($bowerJsFiles as $file) {
             //$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
-
-        /*$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/chamilo.js"></script>'."\n";
-        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/ckeditor/ckeditor.js"></script>'."\n";
-        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/readmore-js/readmore.js"></script>'."\n";
-        */
 
         foreach ($js_files as $file) {
             //$js_file_to_string .= api_get_js($file);
@@ -1125,7 +1151,7 @@ class Template
     public function displayLoginForm()
     {
         $form = new FormValidator(
-            'formLogin',
+            'form-login',
             'POST',
             api_get_path(WEB_PUBLIC_PATH).'login_check',
             null,

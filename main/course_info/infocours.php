@@ -7,7 +7,6 @@
  *
  * See ./inc/conf/course_info.conf.php for settings
  *
- * @todo Move $canBeEmpty from course_info.conf.php to config-settings
  * @todo Take those config settings into account in this script
  *
  * @author Patrick Cool <patrick.cool@UGent.be>
@@ -175,10 +174,10 @@ if (api_get_setting('allow_course_theme') == 'true') {
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
 
-if (!empty(ExerciseLib::getScoreModels())) {
-    $models = ExerciseLib::getScoreModels();
+$scoreModels = ExerciseLib::getScoreModels();
+if (!empty($scoreModels)) {
     $options = ['' => get_lang('None')];
-    foreach ($models['models'] as $item) {
+    foreach ($scoreModels['models'] as $item) {
         $options[$item['id']] = get_lang($item['name']);
     }
     $form->addSelect('score_model_id', get_lang('ScoreModel'), $options);
@@ -283,6 +282,17 @@ $group = [
     $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
 ];
 $form->addGroup($group, '', [get_lang('ShowSystemFolders')]);
+
+$group = [];
+$group[] = $form->createElement(
+    'radio',
+    'enable_document_auto_launch',
+    get_lang('DocumentAutoLaunch'),
+    get_lang('RedirectToTheDocumentList'),
+    1
+);
+$group[] = $form->createElement('radio', 'enable_document_auto_launch', null, get_lang('Deactivate'), 0);
+$form->addGroup($group, '', [get_lang('DocumentAutoLaunch')]);
 
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('
@@ -477,7 +487,7 @@ $group = [];
 $group[] = $form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToALearningPath'), 1);
 $group[] = $form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToTheLearningPathList'), 2);
 $group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
-$form->addGroup($group, '', [get_lang("LPAutoLaunch")]);
+$form->addGroup($group, '', [get_lang('LPAutoLaunch')]);
 
 if (api_get_setting('allow_course_theme') == 'true') {
     // Allow theme into Learning path
@@ -555,6 +565,73 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
+// Exercise
+if (api_get_configuration_value('allow_exercise_auto_launch')) {
+    $form->addHtml('<div class="panel panel-default">');
+    $form->addHtml(
+        '
+        <div class="panel-heading" role="tab" id="heading-exercise">
+            <h4 class="panel-title">
+                <a class="collapsed" 
+                role="button" data-toggle="collapse" 
+                data-parent="#accordion" 
+                href="#collapse-exercise" aria-expanded="false" aria-controls="collapse-exercise">
+    '
+    );
+    $form->addHtml(
+        Display::return_icon('quiz.png', get_lang('Exercise')).' '.get_lang('Exercise')
+    );
+    $form->addHtml(
+        '
+                </a>
+            </h4>
+        </div>
+    '
+    );
+    $form->addHtml(
+        '
+        <div id="collapse-exercise" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-exercise">
+            <div class="panel-body">
+    '
+    );
+
+    // Auto launch exercise
+    $group = [];
+    $group[] = $form->createElement(
+        'radio',
+        'enable_exercise_auto_launch',
+        get_lang('ExerciseAutoLaunch'),
+        get_lang('RedirectToExercise'),
+        1
+    );
+    $group[] = $form->createElement(
+        'radio',
+        'enable_exercise_auto_launch',
+        get_lang('ExerciseAutoLaunch'),
+        get_lang('RedirectToTheExerciseList'),
+        2
+    );
+    $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
+    $form->addGroup($group, '', [get_lang('ExerciseAutoLaunch')]);
+
+    if (is_settings_editable()) {
+        $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+    } else {
+        // Is it allowed to edit the course settings?
+        if (!is_settings_editable()) {
+            $disabled_output = "disabled";
+        }
+        $form->freeze();
+    }
+    $form->addHtml(
+        '
+            </div>
+        </div>
+    '
+    );
+    $form->addHtml('</div>');
+}
+
 // THEMATIC ADVANCE SETTINGS
 $form->addHtml('<div class="panel panel-default">');
 $form->addHtml('
@@ -579,10 +656,34 @@ $form->addHtml('
 ');
 
 $group = [];
-$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
-$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
-$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
-$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
+$group[] = $form->createElement(
+    'radio',
+    'display_info_advance_inside_homecourse',
+    get_lang('InfoAboutAdvanceInsideHomeCourse'),
+    get_lang('DisplayAboutLastDoneAdvance'),
+    1
+);
+$group[] = $form->createElement(
+    'radio',
+    'display_info_advance_inside_homecourse',
+    null,
+    get_lang('DisplayAboutNextAdvanceNotDone'),
+    2
+);
+$group[] = $form->createElement(
+    'radio',
+    'display_info_advance_inside_homecourse',
+    null,
+    get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'),
+    3
+);
+$group[] = $form->createElement(
+    'radio',
+    'display_info_advance_inside_homecourse',
+    null,
+    get_lang('DoNotDisplayAnyAdvance'),
+    0
+);
 $form->addGroup($group, '', [get_lang("InfoAboutAdvanceInsideHomeCourse")]);
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('

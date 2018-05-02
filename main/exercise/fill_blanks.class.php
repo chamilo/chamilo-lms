@@ -1266,8 +1266,8 @@ class FillBlanks extends Question
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
-                $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
-                $correctAnswerHtml .= " <span style='font-weight:normal'>(";
+                $correctAnswerHtml .= "<span class='correct-answer'><strong>".$listPossibleAnswers[0]."</strong>";
+                $correctAnswerHtml .= " (";
                 for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {
@@ -1282,11 +1282,11 @@ class FillBlanks extends Question
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span class='feedback-green'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span class='correct-answer'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span class='feedback-green'>".$correct."</span>";
+                $correctAnswerHtml = "<span class='correct-answer'>".$correct."</span>";
         }
 
         if ($hideExpectedAnswer) {
@@ -1297,7 +1297,7 @@ class FillBlanks extends Question
 
         $result = "<span class='feedback-question'>";
         $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
-        $result .= "<span class='feedback-separator'> / </span>";
+        $result .= "<span class='feedback-separator'>|</span>";
         $result .= $correctAnswerHtml;
         $result .= "</span>";
 

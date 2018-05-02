@@ -83,6 +83,7 @@ class Exercise
     public $showPreviousButton;
     public $notifications;
     public $export = false;
+    public $autolaunch;
 
     /**
      * Constructor of the class.
@@ -192,6 +193,7 @@ class Exercise
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
+            $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
 
             $this->notifications = [];
             if (!empty($object->notifications)) {
@@ -869,7 +871,7 @@ class Exercise
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
                     $this->course['real_id'],
-                    'title DESC',
+                    'title ASC',
                     false,
                     true
                 );
@@ -3036,7 +3038,7 @@ class Exercise
             'orig_lp_item_id' => $safe_lp_item_id,
             'orig_lp_item_view_id' => $safe_lp_item_view_id,
             'exe_weighting' => $weight,
-            'user_ip' => api_get_real_ip(),
+            'user_ip' => Database::escape_string(api_get_real_ip()),
             'exe_date' => api_get_utc_datetime(),
             'exe_result' => 0,
             'steps_counter' => 0,
@@ -5483,7 +5485,6 @@ class Exercise
             if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
                 // We made an extra table for the answers
                 if ($show_result) {
-                    //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "
                         <tr>
@@ -5494,7 +5495,8 @@ class Exercise
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $exeId,
+                                            exerciseId: {$this->id},
+                                            exeId: $exeId,
                                             selector: '#hotspot-solution-$questionId',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -5504,7 +5506,6 @@ class Exercise
                             </td>
                         </tr>
                     ";
-                    //	}
                 }
             } elseif ($answerType == ANNOTATION) {
                 if ($show_result) {
@@ -5971,88 +5972,6 @@ class Exercise
         $html .= "</div>";
 
         return $html;
-    }
-
-    /**
-     * Create a quiz from quiz data.
-     *
-     * @param string  Title
-     * @param int     Time before it expires (in minutes)
-     * @param int     Type of exercise
-     * @param int     Whether it's randomly picked questions (1) or not (0)
-     * @param int     Whether the exercise is visible to the user (1) or not (0)
-     * @param int     Whether the results are show to the user (0) or not (1)
-     * @param int     Maximum number of attempts (0 if no limit)
-     * @param int     Feedback type
-     * @param int $propagateNegative
-     *
-     * @todo this was function was added due the import exercise via CSV
-     *
-     * @return int New exercise ID
-     */
-    public function createExercise(
-        $title,
-        $expired_time = 0,
-        $type = 2,
-        $random = 0,
-        $active = 1,
-        $results_disabled = 0,
-        $max_attempt = 0,
-        $feedback = 3,
-        $propagateNegative = 0
-    ) {
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $type = intval($type);
-        $random = intval($random);
-        $active = intval($active);
-        $results_disabled = intval($results_disabled);
-        $max_attempt = intval($max_attempt);
-        $feedback = intval($feedback);
-        $expired_time = intval($expired_time);
-        $title = Database::escape_string($title);
-        $propagateNegative = intval($propagateNegative);
-        $sessionId = api_get_session_id();
-        $course_id = api_get_course_int_id();
-        // Save a new quiz
-        $sql = "INSERT INTO $tbl_quiz (
-                c_id,
-                title,
-                type,
-                random,
-                active,
-                results_disabled,
-                max_attempt,
-                start_time,
-                end_time,
-                feedback_type,
-                expired_time,
-                session_id,
-                propagate_neg
-            )
-            VALUES (
-                '$course_id',
-                '$title',
-                $type,
-                $random,
-                $active,
-                $results_disabled,
-                $max_attempt,
-                '',
-                '',
-                $feedback,
-                $expired_time,
-                $sessionId,
-                $propagateNegative
-            )";
-        Database::query($sql);
-        $quiz_id = Database::insert_id();
-
-        if ($quiz_id) {
-            $sql = "UPDATE $tbl_quiz SET id = iid WHERE iid = {$quiz_id} ";
-            Database::query($sql);
-        }
-
-        return $quiz_id;
     }
 
     /**
@@ -6650,9 +6569,9 @@ class Exercise
      */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $exe_id = intval($exe_id);
-        $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $exe_id = (int) $exe_id;
+        $sql_track = "SELECT * FROM $table WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
         $new_array = [];
         if (Database::num_rows($result) > 0) {
@@ -6670,6 +6589,51 @@ class Exercise
     }
 
     /**
+     * @param int $exeId
+     *
+     * @return bool
+     */
+    public function removeAllQuestionToRemind($exeId)
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $exeId = (int) $exeId;
+        if (empty($exeId)) {
+            return false;
+        }
+        $sql = "UPDATE $table 
+                SET questions_to_check = '' 
+                WHERE exe_id = $exeId ";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * @param int   $exeId
+     * @param array $questionList
+     *
+     * @return bool
+     */
+    public function addAllQuestionToRemind($exeId, $questionList = [])
+    {
+        $exeId = (int) $exeId;
+        if (empty($questionList)) {
+            return false;
+        }
+
+        $questionListToString = implode(',', $questionList);
+        $questionListToString = Database::escape_string($questionListToString);
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "UPDATE $table 
+                SET questions_to_check = '$questionListToString' 
+                WHERE exe_id = $exeId";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
      * @param int    $exe_id
      * @param int    $question_id
      * @param string $action
@@ -6677,8 +6641,8 @@ class Exercise
     public function editQuestionToRemind($exe_id, $question_id, $action = 'add')
     {
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
-        $question_id = intval($question_id);
-        $exe_id = intval($exe_id);
+        $question_id = (int) $question_id;
+        $exe_id = (int) $exe_id;
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
             if (empty($exercise_info['questions_to_check'])) {
@@ -7872,6 +7836,36 @@ class Exercise
                     </div>'
                 ;
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function getAutoLaunch()
+    {
+        return $this->autolaunch;
+    }
+
+    /**
+     * Clean auto launch settings for all exercise in course/course-session.
+     */
+    public function enableAutoLaunch()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET autolaunch = 1
+                WHERE iid = ".$this->iId;
+        Database::query($sql);
+    }
+
+    /**
+     * Clean auto launch settings for all exercise in course/course-session.
+     */
+    public function cleanCourseLaunchSettings()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET autolaunch = 0  
+                WHERE c_id = ".$this->course_id." AND session_id = ".$this->sessionId;
+        Database::query($sql);
     }
 
     /**

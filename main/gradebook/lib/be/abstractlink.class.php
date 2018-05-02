@@ -563,15 +563,9 @@ abstract class AbstractLink implements GradebookItem
         return 'link';
     }
 
-    /* Seems to be not used anywhere */
-    public function get_not_created_links()
-    {
-        return null;
-    }
-
     public function get_all_links()
     {
-        return null;
+        return [];
     }
 
     public function add_linked_data()

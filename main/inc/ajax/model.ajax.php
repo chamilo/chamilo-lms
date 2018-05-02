@@ -1229,7 +1229,7 @@ switch ($action) {
         break;
     case 'get_exercise_results_report':
         // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $sessionId = api_get_session_id();
 
         $columns = [
@@ -1277,7 +1277,6 @@ switch ($action) {
 
             $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
             $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
-
             $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score').' - '.get_lang('Percentage');
             $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
             $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
@@ -2171,7 +2170,6 @@ if (in_array($action, $allowed_actions)) {
 
     if ($operation && $operation == 'excel') {
         $j = 1;
-
         $array = [];
         if (empty($column_names)) {
             $column_names = $columns;
@@ -2179,7 +2177,7 @@ if (in_array($action, $allowed_actions)) {
 
         // Headers
         foreach ($column_names as $col) {
-            // Ovewrite titles
+            // Overwrite titles
             if (isset($overwriteColumnHeaderExport[$col])) {
                 $col = $overwriteColumnHeaderExport[$col];
             }

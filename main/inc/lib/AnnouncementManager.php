@@ -45,8 +45,8 @@ class AnnouncementManager
                 $tags[] = "((extra_".$extra['variable']."))";
             }
         }
-
-        if (!empty(api_get_session_id())) {
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId)) {
             $tags[] = '((coaches))';
             $tags[] = '((general_coach))';
             $tags[] = '((general_coach_email))';
@@ -798,7 +798,7 @@ class AnnouncementManager
         $courseInfo = api_get_course_info();
         $courseId = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $id = intval($id);
 
         $params = [
@@ -807,7 +807,7 @@ class AnnouncementManager
         ];
 
         Database::update(
-            $tbl_announcement,
+            $table,
             $params,
             ['c_id = ? AND id = ?' => [$courseId, $id]]
         );
@@ -846,7 +846,7 @@ class AnnouncementManager
         }
 
         // store in item_property (first the groups, then the users
-        if (!is_null($to)) {
+        if (!empty($to)) {
             // !is_null($to): when no user is selected we send it to everyone
             $send_to = CourseManager::separateUsersGroups($to);
 
@@ -954,14 +954,14 @@ class AnnouncementManager
      */
     public static function update_mail_sent($insert_id)
     {
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         if ($insert_id != strval(intval($insert_id))) {
             return false;
         }
         $insert_id = intval($insert_id);
         $courseId = api_get_course_int_id();
         // store the modifications in the table tbl_annoucement
-        $sql = "UPDATE $tbl_announcement SET email_sent='1'
+        $sql = "UPDATE $table SET email_sent='1'
                 WHERE c_id = $courseId AND id = $insert_id";
         Database::query($sql);
     }
@@ -1445,7 +1445,7 @@ class AnnouncementManager
     /**
      * @param array $courseInfo
      * @param int   $sessionId
-     * @param int   $id
+     * @param int   $announcementId
      * @param bool  $sendToUsersInSession
      * @param bool  $sendToDrhUsers
      * @param Monolog\Handler\HandlerInterface logger
@@ -1454,13 +1454,13 @@ class AnnouncementManager
     public static function sendEmail(
         $courseInfo,
         $sessionId,
-        $id,
+        $announcementId,
         $sendToUsersInSession = false,
         $sendToDrhUsers = false,
         $logger = null,
         $senderId = 0
     ) {
-        $email = new AnnouncementEmail($courseInfo, $sessionId, $id, $logger);
+        $email = new AnnouncementEmail($courseInfo, $sessionId, $announcementId, $logger);
         $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId);
     }
 
@@ -1505,7 +1505,7 @@ class AnnouncementManager
             $courseId = $courseInfo['real_id'];
         } else {
             $courseId = (int) $courseId;
-            $courseInfo = api_get_course_info($courseId);
+            $courseInfo = api_get_course_info_by_id($courseId);
         }
 
         if (empty($courseInfo)) {

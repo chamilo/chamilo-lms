@@ -56,15 +56,12 @@ if ($dir) {
         case 1:
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
-
             if ($prerequisiteCheck === true) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
-
                 break;
             }
-
             $src = 'blank.php?error=prerequisites&prerequisite_message='.$learnPath->error;
             break;
         case 2:

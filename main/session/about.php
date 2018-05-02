@@ -65,6 +65,8 @@ foreach ($sessionCourses as $sessionCourse) {
                 $courseCoach->getId(),
                 USER_IMAGE_SIZE_ORIGINAL
             ),
+            'diploma' => $courseCoach->getDiplomas(),
+            'openarea' => $courseCoach->getOpenarea(),
             'extra_fields' => $userValues->getAllValuesForAnItem(
                 $courseCoach->getId(),
                 null,
@@ -121,6 +123,7 @@ foreach ($sessionCourses as $sessionCourse) {
     $courses[] = [
         'course' => $sessionCourse,
         'description' => $courseDescription,
+        'image' => $sessionCourse->getPicturePath(true),
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
@@ -198,7 +201,7 @@ $template->assign(
 
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
-
+$sessionIsPremium = null;
 if ($checker) {
     $sessionIsPremium = $plugin->getItemByProduct(
         $sessionId,

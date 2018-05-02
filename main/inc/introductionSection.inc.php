@@ -30,7 +30,6 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
  * @package chamilo.include
  */
 $em = Database::getManager();
-$TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
 
@@ -59,7 +58,7 @@ $config = [
     'Height' => '300',
 ];
 
-$form->addHtmlEditor('intro_content', null, false, false, $config, true);
+$form->addHtmlEditor('intro_content', null, false, false, $config);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
@@ -119,7 +118,6 @@ $toolIntro = $em
     ->findOneBy(['cId' => $course_id, 'id' => $moduleId, 'sessionId' => 0]);
 
 $intro_content = $toolIntro ? $toolIntro->getIntroText() : '';
-
 if ($session_id) {
     /** @var CToolIntro $toolIntro */
     $toolIntro = $em
@@ -127,7 +125,6 @@ if ($session_id) {
         ->findOneBy(['cId' => $course_id, 'id' => $moduleId, 'sessionId' => $session_id]);
 
     $introSessionContent = $toolIntro && $toolIntro->getIntroText() ? $toolIntro->getIntroText() : '';
-
     $intro_content = $introSessionContent ?: $intro_content;
 }
 
@@ -140,6 +137,13 @@ if (api_get_configuration_value('course_introduction_html_strict_filtering')) {
     $userStatus = COURSEMANAGER;
 }
 
+// Ignore editor.css
+$cssEditor = api_get_path(WEB_CSS_PATH).'editor.css';
+$linkToReplace = [
+    '<link href="'.$cssEditor.'" rel="stylesheet" type="text/css" />',
+    '<link href="'.$cssEditor.'" media="screen" rel="stylesheet" type="text/css" />',
+];
+$intro_content = str_replace($linkToReplace, '', $intro_content);
 $intro_content = Security::remove_XSS($intro_content, $userStatus);
 
 /* Determines the correct display */
@@ -340,8 +344,12 @@ if ($intro_dispCommand) {
     }
 }
 
-$introduction_section .= '<div class="col-md-12">';
+$nameSection = get_lang('AddCustomCourseIntro');
+if ($moduleId != 'course_homepage') {
+    $nameSection = get_lang('AddCustomToolsIntro');
+}
 
+$introduction_section .= '<div class="col-md-12">';
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
         $introduction_section .= '<div class="page-course">';
@@ -350,7 +358,7 @@ if ($intro_dispDefault) {
     } else {
         if (api_is_allowed_to_edit()) {
             $introduction_section .= '<div class="help-course">';
-            $introduction_section .= get_lang('AddCustomCourseIntro').' '.$textIntro;
+            $introduction_section .= $nameSection.' '.$textIntro;
             $introduction_section .= '</div>';
         }
     }

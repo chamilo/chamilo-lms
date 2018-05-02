@@ -158,7 +158,7 @@ class TestCategory
         $id = intval($this->id);
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
-        $cat = $this->getCategory($id);
+        $cat = $this->getCategory($id, $courseId);
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $courseInfo = api_get_course_info_by_id($courseId);
         if (empty($courseInfo)) {
@@ -219,7 +219,6 @@ class TestCategory
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $field = Database::escape_string($field);
         $categories = [];
         if (empty($field)) {
             $sql = "SELECT id FROM $table
@@ -228,9 +227,10 @@ class TestCategory
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $category = new TestCategory();
-                $categories[] = $category->getCategory($row['id']);
+                $categories[] = $category->getCategory($row['id'], $courseId);
             }
         } else {
+            $field = Database::escape_string($field);
             $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
                     ORDER BY $field ASC";

@@ -1682,7 +1682,7 @@ class Display
      * @return array Empty array or session array
      *               ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
      */
-    public static function get_session_title_box($session_id)
+    public static function getSessionTitleBox($session_id)
     {
         global $nosession;
 
@@ -1690,7 +1690,6 @@ class Display
             global $now, $date_start, $date_end;
         }
         $output = [];
-        $active = false;
         if (!$nosession) {
             $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);

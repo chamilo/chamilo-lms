@@ -5,6 +5,8 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
 $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 
@@ -15,9 +17,11 @@ $this_section = SECTION_TRACKING;
 $csv_content = [];
 $nameTools = get_lang('MySpace');
 
-$is_platform_admin = api_is_platform_admin();
-$is_drh = api_is_drh();
-$is_session_admin = api_is_session_admin();
+$allowToTrack = api_is_platform_admin(true, true);
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
 
 if ($exportCSV) {
     if ($display == 'user') {
@@ -32,7 +36,7 @@ if ($exportCSV) {
     }
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 echo '<div class="actions">';
 echo MySpace::getTopMenu();
 echo '</div>';

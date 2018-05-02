@@ -100,13 +100,14 @@ $form->addElement(
     'lp_author',
     get_lang('Author'),
     ['size' => 80],
-    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px']
+    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '200px']
 );
 $form->applyFilter('lp_author', 'html_filter');
 
 // LP image
 if (strlen($learnPath->get_preview_image()) > 0) {
-    $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$learnPath->get_preview_image().'>';
+    $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path()
+        .'/upload/learning_path/images/'.$learnPath->get_preview_image().'>';
     $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
@@ -241,8 +242,12 @@ if ($enableLpExtraFields) {
     </script>';
 }
 
-$defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00' ? api_get_local_time($publicated_on) : null;
-$defaults['expired_on'] = (!empty($expired_on)) ? api_get_local_time($expired_on) : date('Y-m-d 12:00:00', time() + 84600);
+$defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00'
+    ? api_get_local_time($publicated_on)
+    : null;
+$defaults['expired_on'] = (!empty($expired_on))
+    ? api_get_local_time($expired_on)
+    : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
 $defaults['skills'] = array_keys($skillList);
 $form->setDefaults($defaults);

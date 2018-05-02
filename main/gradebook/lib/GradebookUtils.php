@@ -801,7 +801,7 @@ class GradebookUtils
             $userListCondition = implode("','", $userList);
             $sql .= " AND u.user_id IN ('$userListCondition')";
         }
-        $sql .= ' ORDER BY u.firstname';
+        $sql .= ' ORDER BY '.(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
         $rs = Database::query($sql);
 
         $list_users = [];

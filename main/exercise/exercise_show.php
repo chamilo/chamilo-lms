@@ -82,7 +82,6 @@ if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
 
-$exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
@@ -92,7 +91,6 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_session_admin() ||
     api_is_drh() ||
     api_is_student_boss();
-
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
         $currentUserId,
@@ -462,7 +460,8 @@ foreach ($questionList as $questionId) {
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $id,
+                                            exerciseId: {$objExercise->id},                                            
+                                            exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -630,7 +629,8 @@ foreach ($questionList as $questionId) {
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $id,
+                                            exerciseId: {$objExercise->id},
+                                            exeId: $id,
                                             selector: '#hotspot-solution',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -1110,7 +1110,7 @@ if ($origin != 'learnpath') {
             'action' => 'view',
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,
-            'exeId' => $exeId,
+            'exeId' => $id,
             'fb_type' => $feedback_type,
         ]);
         $href = ($lp_mode == 'fullscreen')

@@ -2197,9 +2197,7 @@ class Wiki
 
             //Who is the author?
             $userinfo = api_get_user_info($row['user_id']);
-            $email_user_author = get_lang(
-                    'AddedBy'
-                ).': '.$userinfo['complete_name'];
+            $email_user_author = get_lang('AddedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($row['dtime'], 0, 4);
@@ -2213,9 +2211,7 @@ class Wiki
             if ($row['assignment'] == 0) {
                 $allow_send_mail = true;
             } elseif ($row['assignment'] == 1) {
-                $email_assignment = get_lang(
-                        'AssignmentDescExtra'
-                    ).' ('.get_lang('AssignmentMode').')';
+                $email_assignment = get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';
                 $allow_send_mail = true;
             } elseif ($row['assignment'] == 2) {
                 $allow_send_mail = false; //Mode tasks: avoids notifications to all users about all users
@@ -2231,12 +2227,8 @@ class Wiki
 
             //type: P=page, D=discuss, F=full
             $result = Database::query($sql);
-
-            $emailtext = get_lang(
-                    'EmailWikiPageAdded'
-                ).' <strong>'.$email_page_name.'</strong> '.get_lang(
-                    'In'
-                ).' '.get_lang('Wiki');
+            $emailtext = get_lang('EmailWikiPageAdded').' <strong>'.
+                $email_page_name.'</strong> '.get_lang('In').' '.get_lang('Wiki');
         } elseif ($type == 'E') {
             $id = 0;
             $allow_send_mail = true;
@@ -2341,9 +2333,7 @@ class Wiki
             </body>
             </html>';
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting(
-                'stylesheets'
-            ).'/default.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/default.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {

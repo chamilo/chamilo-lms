@@ -53,14 +53,30 @@ $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
 
 $course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
+$sessionId = api_get_session_id();
 
 if (empty($exercise_id)) {
     api_not_allowed(true);
 }
 
-if (!$is_allowedToEdit && !$allowCoachFeedbackExercises) {
+$blockPage = true;
+if (empty($sessionId)) {
+    if ($is_allowedToEdit) {
+        $blockPage = false;
+    }
+} else {
+    if ($allowCoachFeedbackExercises && api_is_coach($sessionId, $course_id)) {
+        $blockPage = false;
+    } else {
+        if ($is_allowedToEdit) {
+            $blockPage = false;
+        }
+    }
+}
+
+if ($blockPage) {
     api_not_allowed(true);
 }
 
@@ -587,7 +603,14 @@ if ($is_allowedToEdit || $is_tutor) {
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
         ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
-        ['name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'],
+        [
+            'name' => 'login',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'hidden' => api_get_configuration_value('exercise_attempts_report_show_username') ? 'false' : 'true',
+        ],
         ['name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar
             'searchoptions' => [

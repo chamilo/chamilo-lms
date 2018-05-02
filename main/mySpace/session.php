@@ -15,9 +15,6 @@ api_block_anonymous_users();
 $this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
-$htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
-Display::display_header(get_lang('Sessions'));
 
 $export_csv = false;
 
@@ -25,15 +22,23 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     $export_csv = true;
 }
 
-/*	MAIN CODE */
-
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
     $id_coach = intval($_GET['id_coach']);
 } else {
     $id_coach = api_get_user_id();
 }
 
-if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
+$allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
+
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+Display::display_header(get_lang('Sessions'));
+
+if (api_is_platform_admin(true, true)) {
     $a_sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 
     if (!api_is_session_admin()) {

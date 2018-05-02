@@ -56,6 +56,10 @@ class GroupManager
     const GROUP_TOOL_WIKI = 5;
     const GROUP_TOOL_CHAT = 6;
 
+    const DOCUMENT_MODE_SHARE = 0; // By default
+    const DOCUMENT_MODE_READ_ONLY = 1;
+    const DOCUMENT_MODE_COLLABORATION = 2;
+
     /**
      * GroupManager constructor.
      */
@@ -189,6 +193,18 @@ class GroupManager
         $category = self::get_category($category_id);
         $places = intval($places);
 
+        // Default values
+        $docState = self::TOOL_PRIVATE;
+        $calendarState = self::TOOL_PRIVATE;
+        $workState = self::TOOL_PRIVATE;
+        $anonuncementState = self::TOOL_PRIVATE;
+        $forumState = self::TOOL_PRIVATE;
+        $wikiState = self::TOOL_PRIVATE;
+        $chatState = self::TOOL_PRIVATE;
+        $selfRegAllowed = 0;
+        $selfUnregAllwoed = 0;
+        $documentAccess = 0;
+
         if ($category) {
             if ($places == 0) {
                 //if the amount of users per group is not filled in, use the setting from the category
@@ -207,16 +223,14 @@ class GroupManager
             $chatState = $category['chat_state'];
             $selfRegAllowed = $category['self_reg_allowed'];
             $selfUnregAllwoed = $category['self_unreg_allowed'];
-        } else {
-            $docState = self::TOOL_PRIVATE;
-            $calendarState = self::TOOL_PRIVATE;
-            $workState = self::TOOL_PRIVATE;
-            $anonuncementState = self::TOOL_PRIVATE;
-            $forumState = self::TOOL_PRIVATE;
-            $wikiState = self::TOOL_PRIVATE;
-            $chatState = self::TOOL_PRIVATE;
-            $selfRegAllowed = 0;
-            $selfUnregAllwoed = 0;
+            $documentAccess = isset($category['document_access']) ? $category['document_access'] : 0;
+        }
+
+        $allowDocumentAccess = api_get_configuration_value('group_document_access');
+        $documentCondition = '';
+        if ($allowDocumentAccess) {
+            $documentAccess = (int) $documentAccess;
+            $documentCondition = " document_access = $documentAccess, ";
         }
 
         $table_group = Database::get_course_table(TABLE_GROUP);
@@ -234,6 +248,7 @@ class GroupManager
                 chat_state = '".$chatState."',
                 self_registration_allowed = '".$selfRegAllowed."',
                 self_unregistration_allowed = '".$selfUnregAllwoed."',
+                $documentCondition
                 session_id='".intval($session_id)."'";
 
         Database::query($sql);
@@ -279,7 +294,6 @@ class GroupManager
                         'forum_category_title' => get_lang('GroupForums'),
                     ];
                     store_forumcategory($categoryParam);
-
                     $forum_categories = get_forum_categories();
                 }
 
@@ -331,7 +345,7 @@ class GroupManager
      */
     public static function create_subgroups($group_id, $number_of_groups)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $table_group = Database::get_course_table(TABLE_GROUP);
         $category_id = self::create_category(
             get_lang('Subgroups'),
@@ -368,7 +382,7 @@ class GroupManager
 
         foreach ($members as $group_id => $places) {
             $sql = "UPDATE $table_group SET max_student = $places
-                    WHERE c_id = $course_id  AND id = $group_id";
+                    WHERE c_id = $courseId  AND id = $group_id";
             Database::query($sql);
         }
     }
@@ -531,6 +545,7 @@ class GroupManager
                 self::get_subscribed_tutors($result)
             );
             $result['count_all'] = $result['count_users'] + $result['count_tutor'];
+            $result['document_access'] = isset($db_object->document_access) ? $db_object->document_access : self::DOCUMENT_MODE_SHARE;
         }
 
         return $result;
@@ -620,6 +635,7 @@ class GroupManager
      * @param bool Whether self registration is allowed or not
      * @param bool Whether self unregistration is allowed or not
      * @param int $categoryId
+     * @param int $documentAccess
      *
      * @return bool TRUE if properties are successfully changed, false otherwise
      */
@@ -635,15 +651,23 @@ class GroupManager
         $forum_state,
         $wiki_state,
         $chat_state,
-        $self_registration_allowed,
-        $self_unregistration_allowed,
-        $categoryId = null
+        $selfRegistrationAllowed,
+        $selfUnRegistrationAllowed,
+        $categoryId = null,
+        $documentAccess = 0
     ) {
         $table_group = Database::get_course_table(TABLE_GROUP);
         $table_forum = Database::get_course_table(TABLE_FORUM);
         $categoryId = intval($categoryId);
         $group_id = intval($group_id);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
+
+        $allowDocumentAccess = api_get_configuration_value('group_document_access');
+        $documentCondition = '';
+        if ($allowDocumentAccess) {
+            $documentAccess = (int) $documentAccess;
+            $documentCondition = " document_access = $documentAccess, ";
+        }
 
         $sql = "UPDATE ".$table_group." SET
                     name='".Database::escape_string(trim($name))."',
@@ -656,10 +680,11 @@ class GroupManager
                     chat_state = '".Database::escape_string($chat_state)."',
                     description ='".Database::escape_string(trim($description))."',
                     max_student = '".Database::escape_string($maximum_number_of_students)."',
-                    self_registration_allowed = '".Database::escape_string($self_registration_allowed)."',
-                    self_unregistration_allowed = '".Database::escape_string($self_unregistration_allowed)."',
+                    self_registration_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
+                    self_unregistration_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
+                    $documentCondition
                     category_id = ".intval($categoryId)."
-                WHERE c_id = $course_id AND id=".$group_id;
+                WHERE c_id = $courseId AND id=".$group_id;
         $result = Database::query($sql);
 
         /* Here we are updating a field in the table forum_forum that perhaps
@@ -673,7 +698,7 @@ class GroupManager
         } elseif ($forum_state === 0) {
             $sql2 .= " forum_group_public_private='unavailable' ";
         }
-        $sql2 .= " WHERE c_id = $course_id AND forum_of_group=".$group_id;
+        $sql2 .= " WHERE c_id = $courseId AND forum_of_group=".$group_id;
         Database::query($sql2);
 
         return $result;
@@ -686,11 +711,11 @@ class GroupManager
      */
     public static function get_number_of_groups()
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT COUNT(id) AS number_of_groups
                 FROM $table
-                WHERE c_id = $course_id ";
+                WHERE c_id = $courseId ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -707,10 +732,10 @@ class GroupManager
     public static function get_categories($course_code = null)
     {
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
+        $courseId = $course_info['real_id'];
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id
+                WHERE c_id = $courseId
                 ORDER BY display_order";
         $res = Database::query($sql);
         $cats = [];
@@ -735,12 +760,12 @@ class GroupManager
             return [];
         }
 
-        $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
         $id = intval($id);
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND id = $id
+                WHERE c_id = $courseId AND id = $id
                 LIMIT 1";
         $res = Database::query($sql);
 
@@ -764,11 +789,11 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
+        $courseId = $course_info['real_id'];
         $title = Database::escape_string($title);
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND title = '$title'
+                WHERE c_id = $courseId AND title = '$title'
                 LIMIT 1";
         $res = Database::query($sql);
         $category = [];
@@ -805,11 +830,11 @@ class GroupManager
             return false;
         }
 
-        $course_id = $course_info['real_id'];
+        $courseId = $course_info['real_id'];
         $sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g
                 WHERE
-                    gc.c_id = $course_id AND
-                    g.c_id = $course_id AND
+                    gc.c_id = $courseId AND
+                    g.c_id = $courseId AND
                     gc.id = g.category_id AND 
                     g.iid = $group_id
                 LIMIT 1";
@@ -866,8 +891,8 @@ class GroupManager
     /**
      * Create group category.
      *
-     * @param string $title                       The title of the new category
-     * @param string $description                 The description of the new category
+     * @param string $title                      The title of the new category
+     * @param string $description                The description of the new category
      * @param int    $doc_state
      * @param int    $work_state
      * @param int    $calendar_state
@@ -875,10 +900,11 @@ class GroupManager
      * @param int    $forum_state
      * @param int    $wiki_state
      * @param int    $chat_state
-     * @param int    $self_registration_allowed
-     * @param int    $self_unregistration_allowed
+     * @param int    $selfRegistrationAllowed    allow users to self register
+     * @param int    $selfUnRegistrationAllowed  allow user to self unregister
      * @param int    $maximum_number_of_students
      * @param int    $groups_per_user
+     * @param int    $documentAccess             document access
      *
      * @return mixed
      */
@@ -892,10 +918,11 @@ class GroupManager
         $forum_state,
         $wiki_state,
         $chat_state = 1,
-        $self_registration_allowed = 0,
-        $self_unregistration_allowed = 0,
+        $selfRegistrationAllowed = 0,
+        $selfUnRegistrationAllowed = 0,
         $maximum_number_of_students = 8,
-        $groups_per_user = 0
+        $groups_per_user = 0,
+        $documentAccess = 0
     ) {
         if (empty($title)) {
             return false;
@@ -925,10 +952,15 @@ class GroupManager
             'wiki_state' => $wiki_state,
             'chat_state' => $chat_state,
             'groups_per_user' => $groups_per_user,
-            'self_reg_allowed' => $self_registration_allowed,
-            'self_unreg_allowed' => $self_unregistration_allowed,
+            'self_reg_allowed' => $selfRegistrationAllowed,
+            'self_unreg_allowed' => $selfUnRegistrationAllowed,
             'max_student' => $maximum_number_of_students,
         ];
+
+        $allowDocumentAccess = api_get_configuration_value('group_category_document_access');
+        if ($allowDocumentAccess) {
+            $params['document_access'] = $documentAccess;
+        }
 
         $categoryId = Database::insert($table, $params);
         if ($categoryId) {
@@ -955,10 +987,11 @@ class GroupManager
      * @param $forum_state
      * @param $wiki_state
      * @param $chat_state
-     * @param $self_registration_allowed
-     * @param $self_unregistration_allowed
+     * @param $selfRegistrationAllowed
+     * @param $selfUnRegistrationAllowed
      * @param $maximum_number_of_students
      * @param $groups_per_user
+     * @param $documentAccess
      */
     public static function update_category(
         $id,
@@ -971,15 +1004,23 @@ class GroupManager
         $forum_state,
         $wiki_state,
         $chat_state,
-        $self_registration_allowed,
-        $self_unregistration_allowed,
+        $selfRegistrationAllowed,
+        $selfUnRegistrationAllowed,
         $maximum_number_of_students,
-        $groups_per_user
+        $groups_per_user,
+        $documentAccess
     ) {
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = intval($id);
 
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
+
+        $allowDocumentAccess = api_get_configuration_value('group_category_document_access');
+        $documentCondition = '';
+        if ($allowDocumentAccess) {
+            $documentAccess = (int) $documentAccess;
+            $documentCondition = " document_access = $documentAccess, ";
+        }
 
         $sql = "UPDATE ".$table." SET
                     title='".Database::escape_string($title)."',
@@ -992,10 +1033,11 @@ class GroupManager
                     wiki_state = '".Database::escape_string($wiki_state)."',
                     chat_state = '".Database::escape_string($chat_state)."',
                     groups_per_user   = '".Database::escape_string($groups_per_user)."',
-                    self_reg_allowed = '".Database::escape_string($self_registration_allowed)."',
-                    self_unreg_allowed = '".Database::escape_string($self_unregistration_allowed)."',
+                    self_reg_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
+                    self_unreg_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
+                    $documentCondition
                     max_student = ".intval($maximum_number_of_students)."
-                WHERE c_id = $course_id AND id = $id";
+                WHERE c_id = $courseId AND id = $id";
 
         Database::query($sql);
 
@@ -1016,9 +1058,10 @@ class GroupManager
                     $forum_state,
                     $wiki_state,
                     $chat_state,
-                    $self_registration_allowed,
-                    $self_unregistration_allowed,
-                    $id
+                    $selfRegistrationAllowed,
+                    $selfUnRegistrationAllowed,
+                    $id,
+                    $documentAccess
                 );
             }
         }
@@ -2252,6 +2295,10 @@ class GroupManager
 
                 $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
+
+                $group_name2 = '<a href="suivi_group_space.php?cidReq='.api_get_course_id().'&gidReq='.$this_group['id'].'">
+                                '.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
+
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
                 } elseif ($isMember) {
@@ -2262,7 +2309,7 @@ class GroupManager
                     $group_name .= ' ('.$this_group['session_name'].')';
                 }
                 $group_name .= $session_img;
-                $row[] = $group_name.'<br />'.stripslashes(trim($this_group['description']));
+                $row[] = $group_name.$group_name2.'<br />'.stripslashes(trim($this_group['description']));
             } else {
                 if ($hideGroup === 'true') {
                     continue;
@@ -2954,5 +3001,133 @@ class GroupManager
     public static function setInvisible($groupId)
     {
         self::setStatus($groupId, 0);
+    }
+
+    /**
+     * @param int   $userId
+     * @param int   $courseId
+     * @param array $groupInfo
+     * @param array $documentInfoToBeCheck
+     * @param bool  $blockPage
+     *
+     * @return bool
+     */
+    public static function allowUploadEditDocument(
+        $userId,
+        $courseId,
+        $groupInfo,
+        $documentInfoToBeCheck = null,
+        $blockPage = false
+    ) {
+        // Admin and teachers can make any change no matter what
+        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+            return true;
+        }
+
+        if (empty($groupInfo) || !isset($groupInfo['id'])) {
+            if ($blockPage) {
+                api_not_allowed(true);
+            }
+
+            return false;
+        }
+
+        // Tutor can also make any change
+        $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+
+        if ($isTutor) {
+            return true;
+        }
+
+        // Just in case also check if document in group is available
+        if ($groupInfo['doc_state'] == 0) {
+            if ($blockPage) {
+                api_not_allowed(true);
+            }
+
+            return false;
+        }
+
+        // Default behaviour
+        $documentAccess = self::DOCUMENT_MODE_SHARE;
+
+        // Check category document access
+        /*$allowCategoryGroupDocumentAccess = api_get_configuration_value('group_category_document_access');
+        if ($allowCategoryGroupDocumentAccess) {
+            $category = GroupManager::get_category_from_group($groupInfo['iid']);
+            if (!empty($category) && isset($category['document_access'])) {
+                $documentAccess = (int) $category['document_access'];
+            }
+        }*/
+
+        // Check group document access
+        $allow = api_get_configuration_value('group_document_access');
+        if ($allow) {
+            if (isset($groupInfo['document_access'])) {
+                $documentAccess = (int) $groupInfo['document_access'];
+            }
+        }
+
+        // Check access for students
+        $result = false;
+        switch ($documentAccess) {
+            case self::DOCUMENT_MODE_SHARE:
+                // Default chamilo behaviour
+                // Student can upload his own content, cannot modify another content.
+                $isMember = GroupManager::is_subscribed($userId, $groupInfo);
+                if ($isMember) {
+                    // No document to check, allow access to document feature.
+                    if (empty($documentInfoToBeCheck)) {
+                        $result = true;
+                    } else {
+                        // Member can only edit his own document
+                        $authorId = isset($documentInfoToBeCheck['insert_user_id']) ? $documentInfoToBeCheck['insert_user_id'] : 0;
+                        // If "insert_user_id" is not set, check the author id from c_item_property
+                        if (empty($authorId) && isset($documentInfoToBeCheck['id'])) {
+                            $documentInfo = api_get_item_property_info(
+                                $courseId,
+                                'document',
+                                $documentInfoToBeCheck['id'],
+                                0
+                            );
+                            // Try to find this document in the session
+                            if (!empty($sessionId)) {
+                                $documentInfo = api_get_item_property_info(
+                                    $courseId,
+                                    'document',
+                                    $documentInfoToBeCheck['id'],
+                                    api_get_session_id()
+                                );
+                            }
+
+                            if (!empty($documentInfo) && isset($documentInfo['insert_user_id'])) {
+                                $authorId = $documentInfo['insert_user_id'];
+                            }
+                        }
+
+                        if ($authorId == $userId) {
+                            $result = true;
+                        }
+                    }
+                }
+                break;
+            case self::DOCUMENT_MODE_READ_ONLY:
+                // Student cannot upload content, cannot modify another content.
+                $result = false;
+                break;
+            case self::DOCUMENT_MODE_COLLABORATION:
+                // Student can upload content, can modify another content.
+                $isMember = GroupManager::is_subscribed($userId, $groupInfo);
+                if ($isMember) {
+                    $result = true;
+                }
+                break;
+        }
+
+        if ($blockPage && $result == false) {
+            api_not_allowed(true);
+        }
+
+        return $result;
     }
 }

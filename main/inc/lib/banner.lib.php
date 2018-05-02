@@ -229,7 +229,7 @@ function returnNotificationMenu()
             (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
             (api_get_setting('showonline', 'users') == 'true' && $user_id)
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
+            $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
                 .get_lang('UsersOnline').'" >'
                 .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
                 .' '.$number.'</a></li>';
@@ -242,7 +242,7 @@ function returnNotificationMenu()
                 api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
             )
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
+            $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
                 .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
@@ -251,7 +251,7 @@ function returnNotificationMenu()
         if (isset($user_id) && $sessionId != 0) {
             $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
 
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
+            $html .= '<li class="user-online-session"><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
                 .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
                 .' '.$numberOnlineInSession
                 .'</a></li>';

@@ -52,6 +52,18 @@ if (api_get_setting('allow_group_categories') == 'true') {
 } else {
     $form->addHidden('category_id', 0);
 }
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
+$form->addElement('textarea', 'description', get_lang('Description'));
+
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-12">');
+$form->addElement('header', '');
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
 
 // Members per group
 $group = [
@@ -63,15 +75,6 @@ $group = [
 $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), null, false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
-$form->addElement('html', '</div>');
-
-$form->addElement('html', '<div class="col-md-6">');
-// Description
-$form->addElement('textarea', 'description', get_lang('Description'));
-$form->addElement('html', '</div>');
-
-$form->addElement('html', '<div class="col-md-12">');
-$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
@@ -89,6 +92,13 @@ $form->addGroup(
     false
 );
 
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-12">');
+$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
 // Documents settings
 $group = [
     $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
@@ -103,12 +113,71 @@ $form->addGroup(
     false
 );
 
+$allowDocumentGroupAccess = api_get_configuration_value('group_document_access');
+if ($allowDocumentGroupAccess) {
+    $form->addElement('html', '</div>');
+    $form->addElement('html', '<div class="col-md-6">');
+    $group = [
+        $form->createElement(
+            'radio',
+            'document_access',
+            null,
+            get_lang('DocumentGroupShareMode'),
+            GroupManager::DOCUMENT_MODE_SHARE
+        ),
+        $form->createElement(
+            'radio',
+            'document_access',
+            get_lang('GroupDocument'),
+            get_lang('DocumentGroupCollaborationMode'),
+            GroupManager::DOCUMENT_MODE_COLLABORATION
+        ),
+        $form->createElement(
+            'radio',
+            'document_access',
+            null,
+            get_lang('DocumentGroupReadOnlyMode'),
+            GroupManager::DOCUMENT_MODE_READ_ONLY
+        ),
+    ];
+    $form->addGroup(
+        $group,
+        '',
+        Display::return_icon(
+            'folder.png',
+            get_lang('GroupDocumentAccess')
+        ).'<span>'.get_lang('GroupDocumentAccess').'</span>',
+        null,
+        false
+    );
+    $form->addElement('html', '</div>');
+
+    $form->addElement('html', '<div class="col-md-12">');
+    $form->addElement('header', '');
+    $form->addElement('html', '</div>');
+
+    $form->addElement('html', '<div class="col-md-6">');
+}
+
 // Work settings
 $group = [
-    $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement(
+        'radio',
+        'work_state',
+        get_lang('GroupWork'),
+        get_lang('NotAvailable'),
+        GroupManager::TOOL_NOT_AVAILABLE
+    ),
     $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-12">');
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
+
 $form->addGroup(
     $group,
     '',
@@ -123,6 +192,10 @@ $group = [
     $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
+
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
 $form->addGroup(
     $group,
     '',
@@ -132,6 +205,11 @@ $form->addGroup(
 );
 
 $form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-12">');
+$form->addElement('header', '');
+$form->addElement('html', '</div>');
+
 $form->addElement('html', '<div class="col-md-6">');
 
 // Announcements settings
@@ -140,6 +218,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
+
 $form->addGroup(
     $group,
     '',
@@ -147,6 +226,10 @@ $form->addGroup(
     null,
     false
 );
+
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
 
 // Forum settings
 $group = [
@@ -162,6 +245,14 @@ $form->addGroup(
     false
 );
 
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-12">');
+$form->addElement('header', '');
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="col-md-6">');
+
 // Wiki settings
 $group = [
     $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
@@ -175,6 +266,9 @@ $form->addGroup(
     '',
     false
 );
+
+$form->addElement('html', '</div>');
+$form->addElement('html', '<div class="col-md-6">');
 
 // Chat settings
 $group = [
@@ -221,7 +315,8 @@ if ($form->validate()) {
         $values['chat_state'],
         $self_registration_allowed,
         $self_unregistration_allowed,
-        $categoryId
+        $categoryId,
+        isset($values['document_access']) ? $values['document_access'] : 0
     );
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
@@ -231,7 +326,7 @@ if ($form->validate()) {
         header('Location: group.php?'.api_get_cidreq(true, false));
     } else {
         Display::addFlash(Display::return_message(get_lang('GroupSettingsModified'), 'success'));
-        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
     }
     exit;
 }
@@ -256,7 +351,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('settings');

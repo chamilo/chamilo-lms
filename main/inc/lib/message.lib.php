@@ -1607,7 +1607,9 @@ class MessageManager
                 if (empty($topic['id'])) {
                     continue;
                 }
-                $items_page_nr = isset($_GET['items_'.$topic['id'].'_page_nr']) ? intval($_GET['items_'.$topic['id'].'_page_nr']) : null;
+                $items_page_nr = isset($_GET['items_'.$topic['id'].'_page_nr']) ? intval(
+                    $_GET['items_'.$topic['id'].'_page_nr']
+                ) : null;
                 $links = '';
                 $links .= '<div class="pull-right">';
                 $html_items = '';
@@ -1619,16 +1621,27 @@ class MessageManager
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
                     $topic['user_sender_id'] == $current_user_id
                 ) {
-                    $links .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Edit').'" title="'.get_lang('Edit').'">'.
+                    $links .= '<a href="'.api_get_path(
+                            WEB_CODE_PATH
+                        ).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang(
+                            'Edit'
+                        ).'" title="'.get_lang('Edit').'">'.
                         Display::returnFontAwesomeIcon('pencil').'</a>';
                 }
-                $links .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Reply').'" title="'.get_lang('Reply').'">';
+                $links .= '<a href="'.api_get_path(
+                        WEB_CODE_PATH
+                    ).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.api_get_user_id(
+                    ).'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang(
+                        'Reply'
+                    ).'" title="'.get_lang('Reply').'">';
                 $links .= Display::returnFontAwesomeIcon('commenting').'</a>';
                 $links .= '</div>';
                 $links .= '</div>';
 
                 $userPicture = $user_sender_info['avatar'];
-                $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp</a>';
+                $user_link = '<a href="'.api_get_path(
+                        WEB_PATH
+                    ).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp</a>';
                 $html_items .= '<div class="row">';
                 $html_items .= '<div class="col-md-2">';
                 $html_items .= '<div class="avatar-author">';
@@ -1641,15 +1654,18 @@ class MessageManager
                         $date = '<div class="date"> '.
                             Display::returnFontAwesomeIcon('calendar').' '.
                             get_lang('LastUpdate').' '.Display::dateToStringAgoAndLongDate($topic['update_date']).
-                        '</div>';
+                            '</div>';
                     }
                 } else {
                     $date = '<div class="date"> '.
                         Display::returnFontAwesomeIcon('calendar').
                         get_lang('Created').' '.Display::dateToStringAgoAndLongDate($topic['send_date']).
-                    '</div>';
+                        '</div>';
                 }
-                $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
+                $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode(
+                        '<br />',
+                        $files_attachments
+                    ) : '').'</div>';
                 $html_items .= '<div class="col-md-10">';
                 $html_items .= '<div class="message-content">';
                 $html_items .= $links;

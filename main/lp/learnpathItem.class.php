@@ -14,6 +14,7 @@
 class learnpathItem
 {
     const DEBUG = 0; // Logging parameter.
+    public $iId;
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = []; // Contains the ids of children items.
@@ -106,7 +107,7 @@ class learnpathItem
             error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
             error_log("item_content: ".print_r($item_content, 1));
         }
-        $id = intval($id);
+        $id = (int) $id;
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
@@ -125,6 +126,7 @@ class learnpathItem
         }
 
         $this->lp_id = $row['lp_id'];
+        $this->iId = $row['iid'];
         $this->max_score = $row['max_score'];
         $this->min_score = $row['min_score'];
         $this->name = $row['title'];
@@ -1046,17 +1048,15 @@ class learnpathItem
         if ($recursivity > $max) {
             return [];
         }
-        if (!isset($type)) {
-            $type = $this->get_type();
-        }
+
+        $type = empty($type) ? $this->get_type() : $type;
+
         if (!isset($abs_path)) {
             $path = $this->get_file_path();
             $abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
         }
 
         $files_list = [];
-        $type = $this->get_type();
-
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
@@ -2613,35 +2613,39 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database::fetch_row($rs_lp);
-                                            $my_lp_id = $lp_id[0];
+                                            if (Database::num_rows($rs_lp)) {
+                                                $lp_id = Database::fetch_row($rs_lp);
+                                                $my_lp_id = $lp_id[0];
 
-                                            $sql = 'SELECT status FROM '.$lp_item_view.'
-                                                   WHERE
-                                                        c_id = '.$course_id.' AND
-                                                        lp_view_id = '.$my_lp_id.' AND
-                                                        lp_item_id = '.$refs_list[$prereqs_string].'
-                                                    LIMIT 0, 1';
-                                            $rs_lp = Database::query($sql);
-                                            $status_array = Database::fetch_row($rs_lp);
-                                            $status = $status_array[0];
+                                                $sql = 'SELECT status FROM '.$lp_item_view.'
+                                                        WHERE
+                                                            c_id = '.$course_id.' AND
+                                                            lp_view_id = '.$my_lp_id.' AND
+                                                            lp_item_id = '.$refs_list[$prereqs_string].'
+                                                        LIMIT 0, 1';
+                                                $rs_lp = Database::query($sql);
+                                                $status_array = Database::fetch_row($rs_lp);
+                                                $status = $status_array[0];
 
-                                            $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
-                                            if (!$returnstatus && empty($this->prereq_alert)) {
-                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-                                            }
-                                            if (!$returnstatus) {
-                                                if (self::DEBUG > 1) {
-                                                    error_log('New LP - Prerequisite '.$prereqs_string.' not complete');
+                                                $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                                                if (!$returnstatus && empty($this->prereq_alert)) {
+                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 }
-                                            } else {
-                                                if (self::DEBUG > 1) {
-                                                    error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                if (!$returnstatus) {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log(
+                                                            'New LP - Prerequisite '.$prereqs_string.' not complete'
+                                                        );
+                                                    }
+                                                } else {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                    }
                                                 }
+
+                                                return $returnstatus;
                                             }
                                         }
-
-                                        return $returnstatus;
                                     }
                                 } else {
                                     if (self::DEBUG > 1) {
@@ -4624,5 +4628,13 @@ class learnpathItem
     public function getLastScormSessionTime()
     {
         return $this->last_scorm_session_time;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iId;
     }
 }

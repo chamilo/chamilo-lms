@@ -3086,12 +3086,13 @@ class SessionManager
      *                          array('status' => STUDENT) or
      *                          array('s.name' => array('operator' => 'LIKE', value = '%$needle%'))
      * @param array $order_by   a list of fields on which sort
+     * @param int   $urlId
      *
      * @return array an array with all sessions of the platform
      *
      * @todo   optional course code parameter, optional sorting parameters...
      */
-    public static function get_sessions_list($conditions = [], $order_by = [], $from = null, $to = null)
+    public static function get_sessions_list($conditions = [], $order_by = [], $from = null, $to = null, $urlId = 0)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -3099,7 +3100,7 @@ class SessionManager
         $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $session_course_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_id = api_get_current_access_url_id();
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
         $return_array = [];
 
         $sql_query = " SELECT
@@ -3118,7 +3119,7 @@ class SessionManager
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
 				LEFT JOIN $session_course_table sco ON (sco.session_id = s.id)
 				INNER JOIN $course_table c ON sco.c_id = c.id
-				WHERE ar.access_url_id = $access_url_id ";
+				WHERE ar.access_url_id = $urlId ";
 
         $availableFields = [
             's.id',
@@ -3233,6 +3234,13 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_extra_fields = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+
+        $extraField = new \ExtraField('session');
+        $field = $extraField->get_handler_field_info_by_field_variable('image');
+
         $sql = "SELECT 
                 s.id,
                 s.name,
@@ -3242,10 +3250,13 @@ class SessionManager
                 s.session_category_id,
                 c.name as category_name,
                 s.description,
-                (SELECT COUNT(*) FROM session_rel_user WHERE session_id = s.id) as users,
-				(SELECT COUNT(*) FROM c_lp WHERE session_id = s.id) as lessons,
-                (SELECT value FROM extra_field_values WHERE field_id = 16 AND item_id = s.id) as image
-                FROM $tbl_session s
+                (SELECT COUNT(*) FROM $tbl_session_user WHERE session_id = s.id) as users,
+				(SELECT COUNT(*) FROM $tbl_lp WHERE session_id = s.id) as lessons ";
+        if ($field !== false) {
+            $fieldId = $field['id'];
+            $sql .= ",(SELECT value FROM $tbl_extra_fields WHERE field_id = $fieldId AND item_id = s.id) as image ";
+        }
+        $sql .= " FROM $tbl_session s
                 LEFT JOIN $tbl_session_category c
                     ON s.session_category_id = c.id
                 INNER JOIN $tbl_users u
@@ -3254,11 +3265,15 @@ class SessionManager
                 LIMIT 8";
         $result = Database::query($sql);
 
-        $plugin = BuyCoursesPlugin::create();
-        $checker = $plugin->isEnabled();
-        $sessions = [];
         if (Database::num_rows($result) > 0) {
+            $plugin = BuyCoursesPlugin::create();
+            $checker = $plugin->isEnabled();
+            $sessions = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if (!isset($row['image'])) {
+                    $row['image'] = '';
+                }
+                $row['on_sale'] = '';
                 if ($checker) {
                     $row['on_sale'] = $plugin->getItemByProduct(
                         $row['id'],
@@ -4086,7 +4101,7 @@ class SessionManager
 
         $selectedField = '
             u.user_id, u.lastname, u.firstname, u.username, su.relation_type, au.access_url_id,
-            su.moved_to, su.moved_status, su.moved_at
+            su.moved_to, su.moved_status, su.moved_at, su.registered_at
         ';
 
         if ($getCount) {
@@ -4501,6 +4516,42 @@ class SessionManager
         $row = Database::fetch_row($res);
 
         return $row[0];
+    }
+
+    /**
+     * Return a COUNT from Session table.
+     *
+     * @param string $date in Y-m-d format
+     *
+     * @return int
+     */
+    public static function countSessionsByEndDate($date = null)
+    {
+        $count = 0;
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $date = Database::escape_string($date);
+        $urlId = api_get_current_access_url_id();
+        $dateFilter = '';
+        if (!empty($date)) {
+            $dateFilter = <<<SQL
+                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
+                OR (s.access_end_date IS NULL)
+                OR (s.access_start_date IS NULL AND
+                s.access_end_date IS NOT NULL AND s.access_end_date > '$date')
+SQL;
+        }
+        $sql = "SELECT COUNT(*) 
+                FROM $sessionTable s
+                INNER JOIN $url u
+                ON (s.id = u.session_id)
+                WHERE u.access_url_id = $urlId $dateFilter";
+        $res = Database::query($sql);
+        if ($res !== false && Database::num_rows($res) > 0) {
+            $count = current(Database::fetch_row($res));
+        }
+
+        return $count;
     }
 
     /**
@@ -7532,9 +7583,8 @@ class SessionManager
     /**
      * Returns a human readable string.
      *
-     * @params array $sessionInfo An array with all the session dates
-     *
-     * @param bool $showTime
+     * @param array $sessionInfo An array with all the session dates
+     * @param bool  $showTime
      *
      * @return array
      */

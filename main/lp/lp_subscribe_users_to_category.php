@@ -48,7 +48,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getName())];
 
 $url = api_get_self().'?'.api_get_cidreq().'&action=add_users_to_category&id='.$categoryId;
 
-Display::addFlash(Display::return_message(get_lang('UserLpCategorySubscriptionDescription')));
+$message = Display::return_message(get_lang('UserLpCategorySubscriptionDescription'));
 
 // Building the form for Groups
 $form = new FormValidator('lp_edit', 'post', $url);

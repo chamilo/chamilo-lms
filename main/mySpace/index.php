@@ -38,10 +38,12 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 // Access control
 api_block_anonymous_users();
-/*
-if (!$export_csv) {
-     Display :: display_header($nameTools);
-} */
+
+$allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
 
 if ($is_session_admin) {
     header('location:session.php');
@@ -203,15 +205,18 @@ if (!empty($session_id) &&
         ),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
-    $actionsLeft .= Display::url(
-        Display::return_icon(
-            "certificate_list.png",
-            get_lang("GradebookSeeListOfStudentsCertificates"),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
-        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
-    );
+
+    if (api_is_platform_admin(true) || api_is_student_boss()) {
+        $actionsLeft .= Display::url(
+            Display::return_icon(
+                "certificate_list.png",
+                get_lang("GradebookSeeListOfStudentsCertificates"),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
+        );
+    }
 }
 
 // Actions menu
@@ -307,7 +312,7 @@ if ($skipData == false) {
         $csv_content[] = [get_lang('Students')];
         $csv_content[] = [get_lang('InactivesStudents'), $nb_inactive_students];
         $csv_content[] = [get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent];
-        $csv_content[] = [get_lang('AverageCoursePerStudent'), $avg_courses_per_student];
+        $csv_content[] = [get_lang('AverageCoursePerStudent'), round($avg_courses_per_student, 3)];
         $csv_content[] = [
             get_lang('AverageProgressInLearnpath'),
             is_null($avgTotalProgress)
@@ -349,7 +354,7 @@ if ($skipData == false) {
         );
         $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
             ? ''
-            : round($avg_courses_per_student, 2);
+            : round($avg_courses_per_student, 3);
         $report['InactivesStudents'] = $nb_inactive_students;
         $report['AverageTimeSpentOnThePlatform'] = is_null($totalTimeSpent)
             ? '00:00:00'

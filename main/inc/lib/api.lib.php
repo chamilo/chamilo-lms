@@ -165,6 +165,7 @@ define('SECTION_SOCIAL', 'social-network');
 define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
+define('SECTION_INCLUDE', 'include');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -1853,7 +1854,7 @@ function api_get_anonymous_id()
     // Find if another anon is connected now
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $tableU = Database::get_main_table(TABLE_MAIN_USER);
-    $ip = api_get_real_ip();
+    $ip = Database::escape_string(api_get_real_ip());
     $max = api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL 
@@ -3379,10 +3380,6 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $sessionId = api_get_session_id();
-    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($sessionId);
-
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
@@ -3393,6 +3390,9 @@ function api_is_allowed_to_edit(
         }
     }
 
+    $sessionId = api_get_session_id();
+    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
+    $session_visibility = api_get_session_visibility($sessionId);
     $is_courseAdmin = api_is_course_admin();
 
     if (!$is_courseAdmin && $tutor) {
@@ -5016,9 +5016,9 @@ function api_get_visual_theme()
         }
 
         $course_id = api_get_course_id();
-        if (!empty($course_id) && $course_id != -1) {
+        if (!empty($course_id)) {
             if (api_get_setting('allow_course_theme') == 'true') {
-                $course_theme = api_get_course_setting('course_theme');
+                $course_theme = api_get_course_setting('course_theme', $course_id);
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
@@ -6356,9 +6356,13 @@ function api_get_current_access_url_id()
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $access_url_id = Database::result($result, 0, 0);
+        if ($access_url_id === false) {
+            return -1;
+        }
 
         return $access_url_id;
     }
+
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet
     // (by default it is http://localhost/). Thus the more sensible thing we can
@@ -7525,6 +7529,8 @@ function api_user_is_login($user_id = null)
  * Guess the real ip for register in the database, even in reverse proxy cases.
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
  * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.
+ * Note: the result of this function is not SQL-safe. Please escape it before
+ * inserting in a database.
  *
  * @return string the user's real ip (unsafe - escape it before inserting to db)
  *

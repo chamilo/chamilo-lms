@@ -126,7 +126,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         false,
         [
             'ToolbarStartExpanded' => 'false',
-            'ToolbarSet' => 'TrainingDescription',
+            'ToolbarSet' => 'Basic',
             'Height' => '150',
         ]
     );

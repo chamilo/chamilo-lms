@@ -102,11 +102,10 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
-$jplayer_supported = false;
-
-if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
-    $jplayer_supported = true;
+$playerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupported = false;
+if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
+    $playerSupported = true;
 }
 
 $group_id = api_get_group_id();
@@ -195,21 +194,6 @@ $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 $web_odf_supported_files[] = 'pdf';
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf = true;
-    /*
-    $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
-    $htmlHeadXtra[] = '
-    <script charset="utf-8">
-        function init() {
-                var odfelement = document.getElementById("odf"),
-                odfcanvas = new odf.OdfCanvas(odfelement);
-                odfcanvas.load("'.$file_url_web.'");
-        }
-        $(document).ready(function() {
-            window.setTimeout(init, 0);
-        });
-  </script>';
-    */
     $htmlHeadXtra[] = '
     <script>
         resizeIframe = function() {
@@ -246,45 +230,8 @@ if ($isChatFolder) {
 }
 
 $execute_iframe = true;
-if ($jplayer_supported) {
+if ($playerSupported) {
     $extension = api_strtolower($pathinfo['extension']);
-    if ($extension == 'mp4') {
-        $extension = 'm4v';
-    }
-    if ($extension == 'webm') {
-        $extension = 'webmv';
-    }
-    $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-    $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/blue.monday/css/jplayer.blue.monday.css" type="text/css">';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
-
-    $jquery = '
-        $("#jquery_jplayer_1").jPlayer({
-            ready: function() {
-                $(this).jPlayer("setMedia", {
-                    '.$extension.' : "'.$document_data['direct_url'].'"
-                });
-            },
-            cssSelectorAncestor: "#jp_container_1",
-            swfPath: "'.$js_path.'jquery-jplayer/jplayer/",
-            supplied: "'.$extension.'",
-            useStateClassSkin: true,
-            autoBlur: false,
-            keyEnabled: false,
-            remainingDuration: true,
-            toggleDuration: true,
-            solution: "html, flash",
-            errorAlerts: false,
-            warningAlerts: false
-        });
-    ';
-
-    $htmlHeadXtra[] = '<script>
-        $(document).ready( function() {
-            //Experimental changes to preview mp3, ogg files
-        '.$jquery.'
-        });
-    </script>';
     $execute_iframe = false;
 }
 
@@ -297,7 +244,7 @@ if ($is_freemind_available) {
     $execute_iframe = false;
 }
 
-if (!$jplayer_supported && $execute_iframe) {
+if (!$playerSupported && $execute_iframe) {
     $htmlHeadXtra[] = '<script>
     <!--
         var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
@@ -349,11 +296,8 @@ if ($show_web_odf) {
 
 echo '</div>';
 
-if ($jplayer_supported) {
-    echo DocumentManager::generate_video_preview($document_data);
-
-    // media_element blocks jplayer disable it
-    Display::$global_template->assign('show_media_element', 0);
+if ($playerSupported) {
+    echo DocumentManager::generateVideoPreview($file_url_web, $extension);
 }
 
 if ($is_freemind_available) {

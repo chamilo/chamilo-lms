@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CItemProperty;
@@ -2137,7 +2138,6 @@ class learnpath
     {
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);
-        $filename = $file_info['basename']; // Name including extension.
         $extension = $file_info['extension']; // Extension only.
         if (!empty($_POST['ppt2lp']) && !in_array(strtolower($extension), [
                 'dll',
@@ -2156,7 +2156,6 @@ class learnpath
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
         $package_type = '';
-        $at_root = false;
         $manifest = '';
         $aicc_match_crs = 0;
         $aicc_match_au = 0;
@@ -2202,9 +2201,15 @@ class learnpath
                 }
             }
         }
+
         if (empty($package_type) && 4 == ($aicc_match_crs + $aicc_match_au + $aicc_match_des + $aicc_match_cst)) {
             // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
             $package_type = 'aicc';
+        }
+
+        // Try with chamilo course builder
+        if (empty($package_type)) {
+            $package_type = 'chamilo';
         }
 
         return $package_type;
@@ -2291,7 +2296,7 @@ class learnpath
             $type_quiz = false;
 
             foreach ($list as $toc) {
-                if ($toc['id'] == $_SESSION['oLP']->current && ($toc['type'] == 'quiz')) {
+                if ($toc['id'] == $_SESSION['oLP']->current && $toc['type'] == 'quiz') {
                     $type_quiz = true;
                 }
             }
@@ -2353,7 +2358,11 @@ class learnpath
     ) {
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
-            if (api_is_allowed_to_edit() || api_is_platform_admin() || api_is_drh()) {
+            if (api_is_allowed_to_edit() ||
+                api_is_platform_admin() ||
+                api_is_drh() ||
+                api_is_coach($sessionId, $courseInfo['real_id'])
+            ) {
                 return false;
             }
         }
@@ -2418,10 +2427,10 @@ class learnpath
         }
 
         // @todo remove this query and load the row info as a parameter
-        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
+        $table = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
         $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
-                FROM $tbl_learnpath
+                FROM $table
                 WHERE iid = $lp_id";
         $rs = Database::query($sql);
         $now = time();
@@ -2466,8 +2475,12 @@ class learnpath
                 }
             }
 
+            $subscriptionSettings = learnpath::getSubscriptionSettings();
+
             // Check if the subscription users/group to a LP is ON
-            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1) {
+            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
+                $subscriptionSettings['allow_add_users_to_lp'] === true
+            ) {
                 // Try group
                 $is_visible = false;
                 // Checking only the user visibility
@@ -2522,10 +2535,10 @@ class learnpath
      */
     public static function getProgress($lpId, $userId, $courseId, $sessionId = 0)
     {
-        $lpId = intval($lpId);
-        $userId = intval($userId);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $lpId = (int) $lpId;
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
         $progress = 0;
 
         $sessionCondition = api_get_session_condition($sessionId);
@@ -3180,7 +3193,7 @@ class learnpath
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         } else {
-            $course_id = intval($course_id);
+            $course_id = (int) $course_id;
         }
         $list = [];
 
@@ -3188,8 +3201,8 @@ class learnpath
             return $list;
         }
 
-        $lp = intval($lp);
-        $parent = intval($parent);
+        $lp = (int) $lp;
+        $parent = (int) $parent;
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT iid FROM $tbl_lp_item
@@ -4323,7 +4336,11 @@ class learnpath
     {
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
-            if (api_is_allowed_to_edit() || api_is_platform_admin() || api_is_drh()) {
+            if (api_is_allowed_to_edit() ||
+                api_is_platform_admin() ||
+                api_is_drh() ||
+                api_is_coach(api_get_session_id(), api_get_course_int_id())
+            ) {
                 return true;
             }
         }
@@ -4682,6 +4699,11 @@ class learnpath
         CLpCategory $category,
         User $user
     ) {
+        $subscriptionSettings = learnpath::getSubscriptionSettings();
+        if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+            return true;
+        }
+
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         if ($isAllowedToEdit) {
@@ -5576,7 +5598,7 @@ class learnpath
             error_log('In learnpath::start_current_item()');
             error_log('current: '.$this->current);
         }
-        if ($this->current != 0 && is_object($this->items[$this->current])) {
+        if ($this->current != 0 && isset($this->items[$this->current]) && is_object($this->items[$this->current])) {
             $type = $this->get_type();
             $item_type = $this->items[$this->current]->get_type();
             if (($type == 2 && $item_type != 'sco') ||
@@ -5623,7 +5645,9 @@ class learnpath
             error_log('In learnpath::stop_previous_item()', 0);
         }
 
-        if ($this->last != 0 && $this->last != $this->current && is_object($this->items[$this->last])) {
+        if ($this->last != 0 && $this->last != $this->current &&
+            isset($this->items[$this->last]) && is_object($this->items[$this->last])
+        ) {
             if ($debug) {
                 error_log('In learnpath::stop_previous_item() - '.$this->last.' is object');
             }
@@ -6075,7 +6099,6 @@ class learnpath
                         'prerequisite_min_score' => $prerequisiteMinScore,
                         'prerequisite_max_score' => $prerequisiteMaxScore,
                     ];
-
                     $this->create_tree_array($array, $array[$i]['id'], $depth, $tmp);
                 }
             }
@@ -6188,7 +6211,7 @@ class learnpath
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => Security::remove_XSS($row['title']),
                 'path' => $row['path'],
@@ -6385,7 +6408,10 @@ class learnpath
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" onclick="return confirmation(\''.addslashes($title).'\');" class="btn btn-default">';
+                $delete_icon .= ' <a 
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" 
+                    onclick="return confirmation(\''.addslashes($title).'\');" 
+                    class="btn btn-default">';
                 $delete_icon .= Display::return_icon(
                     'delete.png',
                     get_lang('LearnpathDeleteModule'),
@@ -7256,115 +7282,119 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $return = '';
-        if (is_numeric($item_id)) {
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT * FROM $tbl_lp_item
-                    WHERE iid = ".intval($item_id);
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
-            switch ($row['item_type']) {
-                case 'dir':
-                case 'asset':
-                case 'sco':
-                    if (isset($_GET['view']) && $_GET['view'] == 'build') {
-                        $return .= $this->display_manipulate($item_id, $row['item_type']);
-                        $return .= $this->display_item_form(
-                            $row['item_type'],
-                            get_lang('EditCurrentChapter').' :',
-                            'edit',
-                            $item_id,
-                            $row
-                        );
-                    } else {
-                        $return .= $this->display_item_small_form(
-                            $row['item_type'],
-                            get_lang('EditCurrentChapter').' :',
-                            $row
-                        );
-                    }
-                    break;
-                case TOOL_DOCUMENT:
-                    $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                    $sql = "SELECT lp.*, doc.path as dir
-                            FROM $tbl_lp_item as lp
-                            LEFT JOIN $tbl_doc as doc
-                            ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
-                            WHERE
-                                doc.c_id = $course_id AND
-                                lp.iid = ".intval($item_id);
-                    $res_step = Database::query($sql);
-                    $row_step = Database::fetch_array($res_step, 'ASSOC');
-                    $return .= $this->display_manipulate(
-                        $item_id,
-                        $row['item_type']
-                    );
-                    $return .= $this->display_document_form(
+        $item_id = (int) $item_id;
+
+        if (empty($item_id)) {
+            return '';
+        }
+
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE iid = ".$item_id;
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        switch ($row['item_type']) {
+            case 'dir':
+            case 'asset':
+            case 'sco':
+                if (isset($_GET['view']) && $_GET['view'] == 'build') {
+                    $return .= $this->display_manipulate($item_id, $row['item_type']);
+                    $return .= $this->display_item_form(
+                        $row['item_type'],
+                        get_lang('EditCurrentChapter').' :',
                         'edit',
                         $item_id,
-                        $row_step
+                        $row
                     );
-                    break;
-                case TOOL_LINK:
-                    $link_id = (string) $row['path'];
-                    if (ctype_digit($link_id)) {
-                        $tbl_link = Database::get_course_table(TABLE_LINK);
-                        $sql_select = 'SELECT url FROM '.$tbl_link.'
-                                       WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
-                        $res_link = Database::query($sql_select);
-                        $row_link = Database::fetch_array($res_link);
-                        if (is_array($row_link)) {
-                            $row['url'] = $row_link['url'];
-                        }
+                } else {
+                    $return .= $this->display_item_small_form(
+                        $row['item_type'],
+                        get_lang('EditCurrentChapter').' :',
+                        $row
+                    );
+                }
+                break;
+            case TOOL_DOCUMENT:
+                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT lp.*, doc.path as dir
+                        FROM $tbl_lp_item as lp
+                        LEFT JOIN $tbl_doc as doc
+                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
+                        WHERE
+                            doc.c_id = $course_id AND
+                            lp.iid = ".$item_id;
+                $res_step = Database::query($sql);
+                $row_step = Database::fetch_array($res_step, 'ASSOC');
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->display_document_form(
+                    'edit',
+                    $item_id,
+                    $row_step
+                );
+                break;
+            case TOOL_LINK:
+                $link_id = (string) $row['path'];
+                if (ctype_digit($link_id)) {
+                    $tbl_link = Database::get_course_table(TABLE_LINK);
+                    $sql_select = 'SELECT url FROM '.$tbl_link.'
+                                   WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
+                    $res_link = Database::query($sql_select);
+                    $row_link = Database::fetch_array($res_link);
+                    if (is_array($row_link)) {
+                        $row['url'] = $row_link['url'];
                     }
-                    $return .= $this->display_manipulate(
-                        $item_id,
-                        $row['item_type']
-                    );
-                    $return .= $this->display_link_form('edit', $item_id, $row);
-                    break;
-                case TOOL_LP_FINAL_ITEM:
-                    Session::write('finalItem', true);
-                    $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                    $sql = "SELECT lp.*, doc.path as dir
-                            FROM $tbl_lp_item as lp
-                            LEFT JOIN $tbl_doc as doc
-                            ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
-                            WHERE
-                                doc.c_id = $course_id AND
-                                lp.iid = ".intval($item_id);
-                    $res_step = Database::query($sql);
-                    $row_step = Database::fetch_array($res_step, 'ASSOC');
-                    $return .= $this->display_manipulate(
-                        $item_id,
-                        $row['item_type']
-                    );
-                    $return .= $this->display_document_form(
-                        'edit',
-                        $item_id,
-                        $row_step
-                    );
-                    break;
-                case TOOL_QUIZ:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_quiz_form('edit', $item_id, $row);
-                    break;
-                case TOOL_HOTPOTATOES:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
-                    break;
-                case TOOL_STUDENTPUBLICATION:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_student_publication_form('edit', $item_id, $row);
-                    break;
-                case TOOL_FORUM:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_forum_form('edit', $item_id, $row);
-                    break;
-                case TOOL_THREAD:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_thread_form('edit', $item_id, $row);
-                    break;
-            }
+                }
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->display_link_form('edit', $item_id, $row);
+                break;
+            case TOOL_LP_FINAL_ITEM:
+                Session::write('finalItem', true);
+                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT lp.*, doc.path as dir
+                        FROM $tbl_lp_item as lp
+                        LEFT JOIN $tbl_doc as doc
+                        ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
+                        WHERE
+                            doc.c_id = $course_id AND
+                            lp.iid = ".$item_id;
+                $res_step = Database::query($sql);
+                $row_step = Database::fetch_array($res_step, 'ASSOC');
+                $return .= $this->display_manipulate(
+                    $item_id,
+                    $row['item_type']
+                );
+                $return .= $this->display_document_form(
+                    'edit',
+                    $item_id,
+                    $row_step
+                );
+                break;
+            case TOOL_QUIZ:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_quiz_form('edit', $item_id, $row);
+                break;
+            case TOOL_HOTPOTATOES:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
+                break;
+            case TOOL_STUDENTPUBLICATION:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_student_publication_form('edit', $item_id, $row);
+                break;
+            case TOOL_FORUM:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_forum_form('edit', $item_id, $row);
+                break;
+            case TOOL_THREAD:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_thread_form('edit', $item_id, $row);
+                break;
         }
 
         return $return;
@@ -7525,7 +7555,7 @@ class learnpath
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -8681,7 +8711,7 @@ class learnpath
 
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -10152,7 +10182,7 @@ class learnpath
             );
             $return .= '</a> ';
             $return .= Display::return_icon(
-                'quizz_small.gif',
+                'quiz.png',
                 '',
                 [],
                 ICON_SIZE_TINY
@@ -10266,7 +10296,7 @@ class learnpath
                         <a class="moved" href="#">'.
                             $moveEverywhereIcon.
                         '</a>
-                        '.Display::return_icon('lp_link.png').'
+                        '.Display::return_icon('links.png', '', [], ICON_SIZE_TINY).'
                         <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS($title).$sessionStar.$link.
@@ -10325,7 +10355,7 @@ class learnpath
                     );
                     $return .= '</a> ';
 
-                    $return .= Display::return_icon('works.gif');
+                    $return .= Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
                     $return .= ' <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
                     </a>';
@@ -10422,7 +10452,7 @@ class learnpath
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
                 $return .= ' </a>';
-                $return .= Display::return_icon('lp_forum.png', '', [], ICON_SIZE_TINY);
+                $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
                 $return .= '<a onclick="javascript:toggle_forum('.$forum['forum_id'].');" style="cursor:hand; vertical-align:middle">
                                 <img src="'.Display::returnIconPath('add.gif').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
                             </a>
@@ -12296,6 +12326,7 @@ EOD;
     public function fixBlockedLinks($src)
     {
         $urlInfo = parse_url($src);
+
         $platformProtocol = 'https';
         if (strpos(api_get_path(WEB_CODE_PATH), 'https') === false) {
             $platformProtocol = 'http';
@@ -12316,7 +12347,6 @@ EOD;
             if (strpos(api_get_path(WEB_PATH), $host) === false) {
                 // Check X-Frame-Options
                 $ch = curl_init();
-
                 $options = [
                     CURLOPT_URL => $src,
                     CURLOPT_RETURNTRANSFER => true,
@@ -12328,6 +12358,15 @@ EOD;
                     CURLOPT_TIMEOUT => 120,
                     CURLOPT_MAXREDIRS => 10,
                 ];
+
+                $proxySettings = api_get_configuration_value('proxy_settings');
+                if (!empty($proxySettings) &&
+                    isset($proxySettings['curl_setopt_array'])
+                ) {
+                    $options[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
+                    $options[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+                }
+
                 curl_setopt_array($ch, $options);
                 $response = curl_exec($ch);
                 $httpCode = curl_getinfo($ch);
@@ -12757,7 +12796,8 @@ EOD;
                     .'&lp_view_id='.$lpViewId.'&'.$extraParams;
             case TOOL_FORUM:
                 return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
-            case TOOL_THREAD:  //forum post
+            case TOOL_THREAD:
+                // forum post
                 $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
                 if (empty($id)) {
                     return '';
@@ -12780,8 +12820,15 @@ EOD;
                     ->getRepository('ChamiloCourseBundle:CDocument')
                     ->findOneBy(['cId' => $course_id, 'iid' => $id]);
 
-                if (!$document) {
-                    return '';
+                if (empty($document)) {
+                    // Try with normal id
+                    $document = $em
+                        ->getRepository('ChamiloCourseBundle:CDocument')
+                        ->findOneBy(['cId' => $course_id, 'id' => $id]);
+
+                    if (empty($document)) {
+                        return '';
+                    }
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
@@ -12979,6 +13026,208 @@ EOD;
         }
 
         return $subscriptionSettings;
+    }
+
+    /**
+     * Exports a LP to a courseBuilder zip file. It adds the documents related to the LP.
+     */
+    public function exportToCourseBuildFormat()
+    {
+        if (!api_is_allowed_to_edit()) {
+            return false;
+        }
+
+        $courseBuilder = new CourseBuilder();
+        $itemList = [];
+        /** @var learnpathItem $item */
+        foreach ($this->items as $item) {
+            $itemList[$item->get_type()][] = $item->get_path();
+        }
+
+        if (empty($itemList)) {
+            return false;
+        }
+
+        if (isset($itemList['document'])) {
+            // Get parents
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), true);
+                if (!empty($documentInfo['parents'])) {
+                    foreach ($documentInfo['parents'] as $parentInfo) {
+                        if (in_array($parentInfo['iid'], $itemList['document'])) {
+                            continue;
+                        }
+                        $itemList['document'][] = $parentInfo['iid'];
+                    }
+                }
+            }
+
+            $courseInfo = api_get_course_info();
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+                $items = DocumentManager::get_resources_from_source_html(
+                    $documentInfo['absolute_path'],
+                    true,
+                    TOOL_DOCUMENT
+                );
+
+                if (!empty($items)) {
+                    foreach ($items as $item) {
+                        // Get information about source url
+                        $url = $item[0]; // url
+                        $scope = $item[1]; // scope (local, remote)
+                        $type = $item[2]; // type (rel, abs, url)
+
+                        $origParseUrl = parse_url($url);
+                        $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+
+                        if ($scope == 'local') {
+                            if ($type == 'abs' || $type == 'rel') {
+                                $documentFile = strstr($realOrigPath, 'document');
+                                if (strpos($realOrigPath, $documentFile) !== false) {
+                                    $documentFile = str_replace('document', '', $documentFile);
+                                    $itemDocumentId = DocumentManager::get_document_id($courseInfo, $documentFile);
+                                    // Document found! Add it to the list
+                                    if ($itemDocumentId) {
+                                        $itemList['document'][] = $itemDocumentId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $courseBuilder->build_documents(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['document']
+            );
+        }
+
+        if (isset($itemList['quiz'])) {
+            $courseBuilder->build_quizzes(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['quiz']
+            );
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        /*if (!empty($itemList['thread'])) {
+            $postList = [];
+            foreach ($itemList['thread'] as $postId) {
+                $post = get_post_information($postId);
+                if ($post) {
+                    if (!isset($itemList['forum'])) {
+                        $itemList['forum'] = [];
+                    }
+                    $itemList['forum'][] = $post['forum_id'];
+                    $postList[] = $postId;
+                }
+            }
+
+            if (!empty($postList)) {
+                $courseBuilder->build_forum_posts(
+                    $this->get_course_int_id(),
+                    null,
+                    null,
+                    $postList
+                );
+            }
+        }*/
+
+        if (!empty($itemList['thread'])) {
+            $threadList = [];
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+            foreach ($itemList['thread'] as $threadId) {
+                /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                $thread = $repo->find($threadId);
+                if ($thread) {
+                    $itemList['forum'][] = $thread->getForumId();
+                    $threadList[] = $thread->getIid();
+                }
+            }
+
+            if (!empty($threadList)) {
+                $courseBuilder->build_forum_topics(
+                    api_get_session_id(),
+                    $this->get_course_int_id(),
+                    null,
+                    $threadList
+                );
+            }
+        }
+
+        $forumCategoryList = [];
+        if (isset($itemList['forum'])) {
+            foreach ($itemList['forum'] as $forumId) {
+                $forumInfo = get_forums($forumId);
+                $forumCategoryList[] = $forumInfo['forum_category'];
+            }
+        }
+
+        if (!empty($forumCategoryList)) {
+            $courseBuilder->build_forum_category(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $forumCategoryList
+            );
+        }
+
+        if (!empty($itemList['forum'])) {
+            $courseBuilder->build_forums(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['forum']
+            );
+        }
+
+        if (isset($itemList['link'])) {
+            $courseBuilder->build_links(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['link']
+            );
+        }
+
+        if (!empty($itemList['student_publication'])) {
+            $courseBuilder->build_works(
+                api_get_session_id(),
+                $this->get_course_int_id(),
+                true,
+                $itemList['student_publication']
+            );
+        }
+
+        $courseBuilder->build_learnpaths(
+            api_get_session_id(),
+            $this->get_course_int_id(),
+            true,
+            [$this->get_id()],
+            false
+        );
+
+        $zipFile = CourseArchiver::createBackup($courseBuilder->course);
+        $zipPath = CourseArchiver::getBackupDir().$zipFile;
+        $result = DocumentManager::file_send_for_download(
+            $zipPath,
+            true,
+            $this->get_name().'.zip'
+        );
+
+        if ($result) {
+            api_not_allowed();
+        }
+
+        return true;
     }
 
     /**

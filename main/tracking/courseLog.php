@@ -315,9 +315,23 @@ if ($showReporting) {
         );
 
         $html .= '<ul class="session-list">';
+        $urlWebCode = api_get_path(WEB_CODE_PATH);
+        $isAdmin = api_is_platform_admin();
         foreach ($sessionList as $session) {
-            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='
-                .$session['id'].'&cidReq='.$courseInfo['code'];
+            if (!$isAdmin) {
+                // Check session visibility
+                $visibility = api_get_session_visibility($session['id'], api_get_course_int_id());
+                if ($visibility == SESSION_INVISIBLE) {
+                    continue;
+                }
+
+                // Check if is coach
+                $isCoach = api_is_coach($session['id'], api_get_course_int_id());
+                if (!$isCoach) {
+                    continue;
+                }
+            }
+            $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
             $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
         }
         $html .= '</ul>';
@@ -380,7 +394,6 @@ if (count($a_students) > 0) {
 
     $all_datas = [];
     $course_code = $_course['id'];
-
     $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
@@ -390,7 +403,7 @@ if (count($a_students) > 0) {
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );
 
-    $parameters['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+    $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
     $parameters['id_session'] = $session_id;
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 

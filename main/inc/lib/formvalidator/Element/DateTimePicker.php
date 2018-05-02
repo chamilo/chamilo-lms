@@ -68,11 +68,7 @@ class DateTimePicker extends HTML_QuickForm_text
     public function setValue($value)
     {
         $value = substr($value, 0, 16);
-        $this->updateAttributes(
-            [
-                'value' => $value,
-            ]
-        );
+        $this->updateAttributes(['value' => $value]);
     }
 
     /**

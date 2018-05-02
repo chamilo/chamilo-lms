@@ -1187,7 +1187,6 @@ HTML;
                         </ul>
                     </div>
                 ';
-
                 if ($freeze) {
                     $relPath = api_get_path(WEB_CODE_PATH);
                     echo "
@@ -1203,6 +1202,7 @@ HTML;
                                 new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
                                     questionId: $questionId,
                                     exerciseId: $exerciseId,
+                                    exeId: 0,
                                     selector: '#hotspot-preview-$questionId',
                                     for: 'preview',
                                     relPath: '$relPath'
@@ -2071,7 +2071,6 @@ HOTSPOT;
                     }
 
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-
                     $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
                     $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
@@ -2221,16 +2220,16 @@ HOTSPOT;
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\''.sprintf(
-                                    get_lang('DeleteAttempt'),
+                                    addslashes(get_lang('DeleteAttempt')),
                                     $results[$i]['username'],
                                     $dt
                                 ).'\')) return false;">';
-                                $delete_link .=
-                                    Display:: return_icon(
-                                        'delete.png',
-                                        get_lang('Delete')
-                                    ).'</a>';
-                                $delete_link = utf8_encode($delete_link);
+                                $delete_link .= Display:: return_icon(
+                                    'delete.png',
+                                        addslashes(get_lang('Delete'))
+                                ).'</a>';
+
+                                //$delete_link = utf8_encode($delete_link);
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
@@ -2528,9 +2527,9 @@ HOTSPOT;
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
-            $html = $percentage."$percentageSign  ($score / $weight)";
+            $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
-                $html = $percentage."$percentageSign ";
+                $html = $percentage.$percentageSign;
             }
         } else {
             $html = $score.' / '.$weight;
@@ -2555,7 +2554,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+        $modelWithStyle = '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 
         return $modelWithStyle;
     }

@@ -19,4 +19,3 @@ Database::query($sql);
 
 header("location: myStudents.php?student=$ex_user_id");
 exit;
-	

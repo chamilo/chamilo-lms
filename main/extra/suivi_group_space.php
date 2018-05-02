@@ -34,7 +34,7 @@ if (empty($current_group)) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('suivi_de');
-$interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = ['url' => 'group.php', 'name' => get_lang('Groups')];
 $forums_of_groups = get_forums_of_group($current_group['id']);
 $forum_state_public = 0;
 if (is_array($forums_of_groups)) {
@@ -114,18 +114,17 @@ echo '&nbsp; <a target="_blank" href="save_diff_all.php"><img src="'.api_get_pat
     ).'addd.gif" border="0" />'.get_lang('save_diff_all').'</a>';
 echo '</div>';
 
-
 $table = new SortableTable(
     'group_users',
     'get_number_of_group_users',
     'get_group_user_data',
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
 );
-//$table -> display();  
+//$table -> display();
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $my_origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
-$parameters = array('cidReq' => $my_cidreq, 'origin' => $my_origin, 'gidReq' => $my_gidreq);
+$parameters = ['cidReq' => $my_cidreq, 'origin' => $my_origin, 'gidReq' => $my_gidreq];
 $table->set_additional_parameters($parameters);
 
 $table->set_header(1, get_lang('OfficialCode'), false, 'align="center"');
@@ -135,7 +134,6 @@ if (api_is_western_name_order()) {
 } else {
     $table->set_header(2, get_lang('LastName'));
     $table->set_header(3, get_lang('FirstName'));
-
 }
 //the order of these calls is important
 $table->set_column_filter(2, 'user_name_filter');
@@ -252,8 +250,8 @@ while ($resulta = Database::fetch_array($result)) {
     $result2 = Database::query($sql2);
     $Total = 0;
     while ($a_courses = Database::fetch_array($result2)) {
-        $Courses_code = $a_courses ['c_id'];
-        $Courses_rel_user_id = $a_courses ['user_id'];
+        $Courses_code = $a_courses['c_id'];
+        $Courses_rel_user_id = $a_courses['user_id'];
         //on sort le temps passé dans chaque cours
         $sql = "SELECT  SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM track_e_course_access
@@ -412,7 +410,7 @@ echo $precision_time;
  * @param   array   Row of the "sortable table" as it is at the time of function call - we extract the user ID from
  *                      there
  *
- * @return  string  HTML link
+ * @return string HTML link
  */
 function user_name_filter($name, $url_params, $row)
 {

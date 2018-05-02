@@ -11,7 +11,6 @@ if (empty($allow)) {
     exit;
 }
 
-
 Display::display_header($nameTools, "Tracking");
 
 foreach ($_POST as $x) {

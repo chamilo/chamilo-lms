@@ -36,7 +36,7 @@ foreach ($Sessions as $enreg) {
                 ";
     $result8 = Database::query($sql8);
     $course_code_id = Database::fetch_array($result8);
-    $c_id = $course_code_id ['id'];
+    $c_id = $course_code_id['id'];
     $sql = "SELECT DISTINCT c_id,title, CONCAT(lastname, ' ',firstname) coach, username, date_start, date_end, db_name
             FROM $tbl_course , $tbl_session_course
             LEFT JOIN $tbl_user
@@ -65,9 +65,9 @@ $sql2 = "SELECT  c_id, user_id
 $result2 = Database::query($sql2);
 $Total = 0;
 while ($a_courses = Database::fetch_array($result2)) {
-    $courses_code = $a_courses ['c_id'];
-//on sort le c_id avec le code du cours
-//$sql8 = "SELECT * 
+    $courses_code = $a_courses['c_id'];
+    //on sort le c_id avec le code du cours
+    //$sql8 = "SELECT *
 //      FROM course
 //      WHERE code = '$courses_code'
 //      ";
@@ -182,7 +182,7 @@ $diff = abs($diff);
                          ";
         $result = Database::query($sqlcontrole);
         while ($ptctl = Database::fetch_array($result)) {
-            $pt[] = $ptctl ['diff'];
+            $pt[] = $ptctl['diff'];
         }
 
         //graphique de suivi
@@ -223,36 +223,36 @@ $diff = abs($diff);
         <tr>
             <th align="left" width="412">
                 <?php echo get_lang('Cumulatif_agenda'); ?>:
-                <b><font color=#CC0000> <?php echo $jour_realise_tot ?></font></b>
+                <b><font color=#CC0000> <?php echo $jour_realise_tot; ?></font></b>
             </th>
         </tr>
         <tr>
             <th align="left">
-                <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total ?></font></b>
+                <?php echo get_lang('Cumulatif'); ?> <b><font color=#CC0000> <?php echo $Total; ?></font></b>
             </th>
         </tr>
         <tr>
             <th align="left">
                 <?php echo get_lang('jours_selon_horaire'); ?>:
-                <b><font color=#CC0000> <?php echo $jour_agenda ?><?php echo $Days ?></font></b>
+                <b><font color=#CC0000> <?php echo $jour_agenda; ?><?php echo $Days; ?></font></b>
             </th>
         </tr>
         <tr>
             <th align="left">
                 <?php echo get_lang('diff2'); ?>:
-                <b><font color=#CC0000> <?php echo $diff ?><?php echo $Days, $sing ?></font></b>
+                <b><font color=#CC0000> <?php echo $diff; ?><?php echo $Days, $sing; ?></font></b>
             </th>
         </tr>
     </table>
     <hr>
     <table class='data_table'>
         <tr>
-            <th><?php echo get_lang('level') ?> </th>
+            <th><?php echo get_lang('level'); ?> </th>
             <th>
-                <?php echo get_lang('lang_date') ?>
+                <?php echo get_lang('lang_date'); ?>
             </th>
             <th>
-                <?php echo get_lang('interventions_commentaires') ?>
+                <?php echo get_lang('interventions_commentaires'); ?>
             </th>
         </tr>
         <?php
@@ -288,7 +288,7 @@ $diff = abs($diff);
 //début de fin des cours prevu
 $user_info = api_get_user_info();
 $user_id = api_get_user_id();
-//On cherche le calendrier pour ce user et le c_id de ce calendrier 
+//On cherche le calendrier pour ce user et le c_id de ce calendrier
 $sql = "SELECT * 
         FROM user
         WHERE user_id = '$user_id'
@@ -316,7 +316,7 @@ $sql2 = "SELECT  c_id, user_id
 
 $result2 = Database::query($sql2);
 while ($a_courses = Database::fetch_array($result2)) {
-    $courses_code = $a_courses ['c_id'];
+    $courses_code = $a_courses['c_id'];
     //on sort le c_id avec le code du cours
     $sql8 = "SELECT title, code
              FROM course
@@ -402,7 +402,7 @@ while ($a_courses = Database::fetch_array($result2)) {
         $progress = Tracking::get_avg_student_progress(
             $user_c_id, /*$c_id*/
             $tracking_c_code,
-            array($lp_id),
+            [$lp_id],
             $session_id
         );
         if ($progress === null) {
@@ -417,7 +417,7 @@ while ($a_courses = Database::fetch_array($result2)) {
         $total_time = Tracking::get_time_spent_in_lp(
             $user_c_id, /*$c_id*/
             $tracking_c_code,
-            array($lp_id),
+            [$lp_id],
             $session_id
         );
         if (!empty($total_time)) {
@@ -442,7 +442,7 @@ while ($a_courses = Database::fetch_array($result2)) {
     }
     $warming = '';
     $today = date('Y-m-d');
-    if (isset($end_date_module) && $end_date_module <= $today AND $progress != '100%') {
+    if (isset($end_date_module) && $end_date_module <= $today and $progress != '100%') {
         $warming = '<b><font color=#CC0000>  '.get_lang('limite_atteinte').'</font></b>';
     }
     $end_date_module = $end_date_module.$warming;
@@ -503,8 +503,7 @@ echo '</table>';
                     <td>$coment
 
                 ";
-            $exe_idd = $a_exam['exe_id'];
-            ?>
+            $exe_idd = $a_exam['exe_id']; ?>
             </tr>
             <?php
         }

@@ -38,22 +38,22 @@ if (empty($title)) {
                 <?php echo get_lang('edit_save'); ?>
             </th>
         <tr>
-            <th><?php echo get_lang('title_calendar') ?></th>
-            <th><?php echo get_lang('period') ?></th>
-            <th><?php echo get_lang('action') ?></th>
+            <th><?php echo get_lang('title_calendar'); ?></th>
+            <th><?php echo get_lang('period'); ?></th>
+            <th><?php echo get_lang('action'); ?></th>
         </tr>
         <td>
-            <input type=texte name=title value=<?php echo "$title" ?>/>
+            <input type=texte name=title value=<?php echo "$title"; ?>/>
         </td>
         <td>
             <input SIZE=25 NAME=period
-                   value=<?php echo "$langFrom", ":", "$start_time", "$langTo", "$end_time" ?>/>
+                   value=<?php echo "$langFrom", ":", "$start_time", "$langTo", "$end_time"; ?>/>
         </td>
         <?php
 
         $date1 = strtotime($start_time); //Premiere date
         $date2 = strtotime($end_time); //Deuxieme date
-        $nbjour = ($date2 - $date1) / 60 / 60 / 24;//Nombre de jours entre les deux
+        $nbjour = ($date2 - $date1) / 60 / 60 / 24; //Nombre de jours entre les deux
         $nbcol = 2;
 
         echo "<table border='1'><tr>";

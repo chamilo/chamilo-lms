@@ -41,8 +41,7 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
                 <td>
                     ".$a_inter['exe_date']."
                 </td>";
-            $exe_id = $a_inter['exe_id'];
-            ?>
+            $exe_id = $a_inter['exe_id']; ?>
             <td>
                 <textarea name="inter_coment" cols="65" rows="2">
                     <?php echo $inter_coment; ?>

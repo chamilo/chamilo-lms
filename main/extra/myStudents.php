@@ -1292,7 +1292,8 @@ if (!empty($student_id)) {
             }
         }
 
-        // line about other tools ?>
+        // line about other tools
+        ?>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
@@ -1444,8 +1445,7 @@ while ($a_courses = Database::fetch_array($result2)) {
     $result8 = Database::query($sql8);
     $course_code_id = Database::fetch_array($result8);
     $c_id = $Courses_code;
-    //pours chaque cours dans lequel il est inscrit, on cherche les jours complétés ?><p></p>
-    <?php
+    // pours chaque cours dans lequel il est inscrit, on cherche les jours complétés
 
     $Req1 = "SELECT * FROM c_lp_view
             WHERE user_id  =  '$user_c_id' AND c_id = '$c_id'";

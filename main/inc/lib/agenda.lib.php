@@ -324,12 +324,7 @@ class Agenda
                                 foreach ($sendTo['groups'] as $group) {
                                     $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfoItem = GroupManager::get_group_properties(
-                                            $group
-                                        );
-                                        if ($groupInfoItem) {
-                                            $groupIidItem = $groupInfoItem['iid'];
-                                        }
+                                        $groupInfoItem = GroupManager::get_group_properties($group);
                                     }
 
                                     api_item_property_update(
@@ -1330,7 +1325,7 @@ class Agenda
     public function resizeEvent($id, $minute_delta)
     {
         $id = (int) $id;
-        $delta = intval($minute_delta);
+        $delta = (int) $minute_delta;
         $event = $this->get_event($id);
         if (!empty($event)) {
             switch ($this->type) {
@@ -1377,8 +1372,8 @@ class Agenda
         }
 
         // we convert the hour delta into minutes and add the minute delta
-        $delta = intval($minute_delta);
-        $allDay = intval($allDay);
+        $delta = (int) $minute_delta;
+        $allDay = (int) $allDay;
 
         if (!empty($event)) {
             switch ($this->type) {
@@ -1423,7 +1418,7 @@ class Agenda
     public function get_event($id)
     {
         // make sure events of the personal agenda can only be seen by the user himself
-        $id = intval($id);
+        $id = (int) $id;
         $event = null;
         switch ($this->type) {
             case 'personal':
@@ -1571,9 +1566,9 @@ class Agenda
         $courseId,
         $sessionId
     ) {
-        $eventId = intval($eventId);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $eventId = (int) $eventId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $sessionCondition = "ip.session_id = $sessionId";
         if (empty($sessionId)) {
@@ -1664,7 +1659,7 @@ class Agenda
      * @param int    $end
      * @param array  $courseInfo
      * @param int    $groupId
-     * @param int    $session_id
+     * @param int    $sessionId
      * @param int    $user_id
      * @param string $color
      *
@@ -1691,8 +1686,8 @@ class Agenda
             return [];
         }
 
-        $sessionId = intval($sessionId);
-        $user_id = intval($user_id);
+        $sessionId = (int) $sessionId;
+        $user_id = (int) $user_id;
 
         $groupList = GroupManager::get_group_list(
             null,
@@ -2506,7 +2501,6 @@ class Agenda
         }
 
         $form->setDefaults($params);
-
         $form->addRule(
             'date_range',
             get_lang('ThisFieldIsRequired'),
@@ -2633,8 +2627,8 @@ class Agenda
     public function getAttachmentList($eventId, $courseInfo)
     {
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $courseId = intval($courseInfo['real_id']);
-        $eventId = intval($eventId);
+        $courseId = (int) $courseInfo['real_id'];
+        $eventId = (int) $eventId;
 
         $sql = "SELECT id, path, filename, comment
                 FROM $tableAttachment
@@ -2698,9 +2692,7 @@ class Agenda
         $comment,
         $courseInfo
     ) {
-        $agenda_table_attachment = Database::get_course_table(
-            TABLE_AGENDA_ATTACHMENT
-        );
+        $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
         $eventId = intval($eventId);
 
         // Storing the attachments
@@ -2797,21 +2789,19 @@ class Agenda
      * @param int   $attachmentId
      * @param array $courseInfo
      *
-     * @return string
+     * @return strings
      */
     public function deleteAttachmentFile($attachmentId, $courseInfo)
     {
-        $agenda_table_attachment = Database::get_course_table(
-            TABLE_AGENDA_ATTACHMENT
-        );
-        $attachmentId = intval($attachmentId);
+        $table = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+        $attachmentId = (int) $attachmentId;
         $courseId = $courseInfo['real_id'];
 
         if (empty($courseId) || empty($attachmentId)) {
             return false;
         }
 
-        $sql = "DELETE FROM $agenda_table_attachment
+        $sql = "DELETE FROM $table
                 WHERE c_id = $courseId AND id = ".$attachmentId;
         $result = Database::query($sql);
 
@@ -2835,9 +2825,8 @@ class Agenda
     /**
      * Adds x weeks to a UNIX timestamp.
      *
-     * @param   int     The timestamp
-     * @param   int     The number of weeks to add
-     * @param int $timestamp
+     * @param   int $timestamp The timestamp
+     * @param   int $num       The number of weeks to add
      *
      * @return int The new timestamp
      */
@@ -2849,9 +2838,8 @@ class Agenda
     /**
      * Adds x months to a UNIX timestamp.
      *
-     * @param   int     The timestamp
-     * @param   int     The number of years to add
-     * @param int $timestamp
+     * @param   int $timestamp The timestamp
+     * @param   int $num       The number of years to add
      *
      * @return int The new timestamp
      */
@@ -2874,9 +2862,8 @@ class Agenda
     /**
      * Adds x years to a UNIX timestamp.
      *
-     * @param   int     The timestamp
-     * @param   int     The number of years to add
-     * @param int $timestamp
+     * @param   int $timestamp The timestamp
+     * @param   int $num       The number of years to add
      *
      * @return int The new timestamp
      */
@@ -2928,8 +2915,8 @@ class Agenda
      */
     public function hasChildren($eventId, $courseId)
     {
-        $eventId = intval($eventId);
-        $courseId = intval($courseId);
+        $eventId = (int) $eventId;
+        $courseId = (int) $courseId;
 
         $sql = "SELECT count(DISTINCT(id)) as count
                 FROM ".$this->tbl_course_agenda."

@@ -5091,7 +5091,6 @@ class learnpath
             error_log('In learnpath::set_jslib()', 0);
         }
         $lp = $this->get_id();
-        $course_id = api_get_course_int_id();
 
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -5791,7 +5790,8 @@ class learnpath
         $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $table 
-                WHERE c_id = $course_id ORDER BY display_order";
+                WHERE c_id = $course_id 
+                ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
             return false;
@@ -5823,7 +5823,6 @@ class learnpath
      */
     public function update_reinit()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('In learnpath::update_reinit()', 0);
         }
@@ -6694,6 +6693,7 @@ class learnpath
                 'isStudentView' => 'true',
             ])
         );
+
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'upload_audio.png',
@@ -6854,7 +6854,6 @@ class learnpath
 
         // Creating LP folder
         $documentId = null;
-
         if ($folder) {
             $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
             if (!is_dir($filepath.'/'.$dir)) {

@@ -2359,7 +2359,7 @@ class learnpath
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
             if (api_is_allowed_to_edit() ||
-                api_is_platform_admin() ||
+                api_is_platform_admin(true) ||
                 api_is_drh() ||
                 api_is_coach($sessionId, $courseInfo['real_id'])
             ) {
@@ -4337,7 +4337,7 @@ class learnpath
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
             if (api_is_allowed_to_edit() ||
-                api_is_platform_admin() ||
+                api_is_platform_admin(true) ||
                 api_is_drh() ||
                 api_is_coach(api_get_session_id(), api_get_course_int_id())
             ) {

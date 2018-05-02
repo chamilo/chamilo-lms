@@ -506,11 +506,11 @@ class AnnouncementManager
         if (empty($courseInfo)) {
             return 0;
         }
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $courseId = $courseInfo['real_id'];
         $sql = "SELECT MAX(display_order)
-                FROM $tbl_announcement
+                FROM $table
                 WHERE c_id = $courseId ";
         $res_max = Database::query($sql);
 

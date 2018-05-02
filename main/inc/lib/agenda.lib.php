@@ -4144,32 +4144,6 @@ class Agenda
     }
 
     /**
-     * @param int   $userId
-     * @param array $event
-     *
-     * @return bool
-     */
-    public function sendEmail($userId, $event)
-    {
-        $userInfo = api_get_user_info($userId);
-
-        if (!empty($this->sessionInfo)) {
-            $courseTitle = $this->course['name'].' ('.$this->sessionInfo['title'].')';
-        } else {
-            $courseTitle = $this->course['name'];
-        }
-
-        api_mail_html(
-            $userInfo['complete_name'],
-            $userInfo['mail'],
-            $subject,
-            $emailBody
-        );
-
-        return true;
-    }
-
-    /**
      * Format needed for the Fullcalendar js lib.
      *
      * @param string $utcTime

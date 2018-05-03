@@ -12,16 +12,19 @@
 // protect a course script
 api_protect_course_script(true);
 
+
 // display actions menu
 if (api_is_allowed_to_edit(null, true)) {
     $categories = [];
+
     foreach ($default_description_titles as $id => $title) {
         $categories[$id] = $title;
     }
     $categories[ADD_BLOCK] = get_lang('NewBloc');
 
     $i = 1;
-    echo '<div class="actions" style="margin-bottom:30px">';
+
+    echo '<div class="actions">';
     ksort($categories);
     foreach ($categories as $id => $title) {
         if ($i == ADD_BLOCK) {
@@ -47,6 +50,7 @@ if (api_is_allowed_to_edit(null, true)) {
         }
     }
     echo '</div>';
+
 }
 $history = isset($history) ? $history : null;
 
@@ -116,3 +120,4 @@ if (isset($descriptions) && count($descriptions) > 0) {
 } else {
     echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
 }
+

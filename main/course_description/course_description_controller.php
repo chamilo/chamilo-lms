@@ -36,10 +36,9 @@ class CourseDescriptionController
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $course_description = new CourseDescription();
         $session_id = api_get_session_id();
-        $course_description->set_session_id($session_id);
-
         $data = [];
         $course_description_data = $course_description->get_description_data();
+        $course_description->set_session_id($session_id);
         $data['descriptions'] = isset($course_description_data['descriptions']) ? $course_description_data['descriptions'] : '';
         $data['default_description_titles'] = $course_description->get_default_description_title();
         $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();

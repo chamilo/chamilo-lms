@@ -60,7 +60,7 @@ class CourseDescriptionController
                 header("X-XSS-Protection: 0");
             }
         }
-
+        $actions = null;
         $actionLeft = null;
         // display actions menu
         if ($is_allowed_to_edit) {
@@ -95,11 +95,9 @@ class CourseDescriptionController
                     $i++;
                 }
             }
-
-
+            $actions = Display::toolbarAction('toolbar',[0 => $actionLeft]);
         }
 
-        $actions = Display::toolbarAction('toolbar',[0 => $actionLeft]);
         $tpl = new Template(get_lang('CourseProgram'));
         $tpl->assign('listing', $data);
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
@@ -109,13 +107,6 @@ class CourseDescriptionController
         $content = $tpl->fetch($templateName);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
-
-        //return $data;
-        // render to the view
-        /*$this->view->set_data($data);
-        $this->view->set_layout('layout');
-        $this->view->set_template('listing');
-        $this->view->render();*/
     }
 
     /**

@@ -95,14 +95,14 @@ class CourseDescriptionController
                     $i++;
                 }
             }
-            $actions = Display::toolbarAction('toolbar',[0 => $actionLeft]);
+            $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
         }
 
         $tpl = new Template(get_lang('CourseProgram'));
         $tpl->assign('listing', $data);
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
         $tpl->assign('actions', $actions);
-        $tpl->assign('session_id',$session_id);
+        $tpl->assign('session_id', $session_id);
         $templateName = $tpl->get_template('course_description/index.tpl');
         $content = $tpl->fetch($templateName);
         $tpl->assign('content', $content);

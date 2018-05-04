@@ -335,17 +335,22 @@
                                             </a>
                                         {% endif %}
 
-                                        {% if lp_data.category_is_published == 0 %}
-                                            <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                                               title="{{ 'LearnpathPublish'|get_lang }}">
-                                                <img src="{{ 'lp_publish_na.png'|icon }}"
-                                                     alt="{{ 'LearnpathPublish'|get_lang }}">
-                                            </a>
+                                        {% if lp_data.category_visibility == 1 %}
+                                            {% if lp_data.category_is_published == 0 %}
+                                                <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                                   title="{{ 'LearnpathPublish'|get_lang }}">
+                                                    <img src="{{ 'lp_publish_na.png'|icon }}"
+                                                         alt="{{ 'LearnpathPublish'|get_lang }}">
+                                                </a>
+                                            {% else %}
+                                                <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                                   title="{{ 'LearnpathDoNotPublish'|get_lang }}">
+                                                    <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
+                                                </a>
+                                            {% endif %}
                                         {% else %}
-                                            <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                                               title="{{ 'LearnpathDoNotPublish'|get_lang }}">
-                                                <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
-                                            </a>
+                                            <img src="{{ 'lp_publish_na.png'|icon }}"
+                                                 alt="{{ 'LearnpathPublish'|get_lang }}">
                                         {% endif %}
 
                                         {% if not _c.session_id %}

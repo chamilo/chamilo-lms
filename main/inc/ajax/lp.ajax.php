@@ -12,7 +12,7 @@ api_protect_course_script(true);
 $debug = false;
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 
-$course_id = api_get_course_int_id();
+$courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 if ($debug) {
@@ -75,53 +75,52 @@ switch ($action) {
             $new_array = [];
 
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
-            $LP_item_list = new LP_item_order_list();
+            $itemList = new LpItemOrderList();
             foreach ($sections as $items) {
                 if (!empty($items)) {
                     list($id, $parent_id) = explode('|', $items);
-                    $item = new LP_item_order_item($id, $parent_id);
-                    $LP_item_list->add($item);
+                    $item = new LpOrderItem($id, $parent_id);
+                    $itemList->add($item);
                 }
             }
 
-            $tab_parents_id = $LP_item_list->get_list_of_parents();
-
-            foreach ($tab_parents_id as $parent_id) {
-                $Same_parent_LP_item_list = $LP_item_list->get_item_with_same_parent($parent_id);
+            $parents = $itemList->getListOfParents();
+            foreach ($parents as $parentId) {
+                $sameParentLpItemList = $itemList->getItemWithSameParent($parentId);
                 $previous_item_id = 0;
-                for ($i = 0; $i < count($Same_parent_LP_item_list->list); $i++) {
-                    $item_id = $Same_parent_LP_item_list->list[$i]->id;
+                for ($i = 0; $i < count($sameParentLpItemList->list); $i++) {
+                    $item_id = $sameParentLpItemList->list[$i]->id;
                     // display_order
                     $display_order = $i + 1;
-                    $LP_item_list->set_parameters_for_id($item_id, $display_order, 'display_order');
+                    $itemList->setParametersForId($item_id, $display_order, 'display_order');
                     // previous_item_id
-                    $LP_item_list->set_parameters_for_id($item_id, $previous_item_id, 'previous_item_id');
+                    $itemList->setParametersForId($item_id, $previous_item_id, 'previous_item_id');
                     $previous_item_id = $item_id;
                     // next_item_id
                     $next_item_id = 0;
-                    if ($i < count($Same_parent_LP_item_list->list) - 1) {
-                        $next_item_id = $Same_parent_LP_item_list->list[$i + 1]->id;
+                    if ($i < count($sameParentLpItemList->list) - 1) {
+                        $next_item_id = $sameParentLpItemList->list[$i + 1]->id;
                     }
-                    $LP_item_list->set_parameters_for_id($item_id, $next_item_id, 'next_item_id');
+                    $itemList->setParametersForId($item_id, $next_item_id, 'next_item_id');
                 }
             }
 
             $table = Database::get_course_table(TABLE_LP_ITEM);
 
-            foreach ($LP_item_list->list as $LP_item) {
+            foreach ($itemList->list as $item) {
                 $params = [];
-                $params['display_order'] = $LP_item->display_order;
-                $params['previous_item_id'] = $LP_item->previous_item_id;
-                $params['next_item_id'] = $LP_item->next_item_id;
-                $params['parent_item_id'] = $LP_item->parent_item_id;
+                $params['display_order'] = $item->display_order;
+                $params['previous_item_id'] = $item->previous_item_id;
+                $params['next_item_id'] = $item->next_item_id;
+                $params['parent_item_id'] = $item->parent_item_id;
 
                 Database::update(
                     $table,
                     $params,
                     [
                         'id = ? AND c_id = ? ' => [
-                            intval($LP_item->id),
-                            $course_id,
+                            intval($item->id),
+                            $courseId,
                         ],
                     ]
                 );
@@ -148,7 +147,6 @@ switch ($action) {
                 $fileName = $_POST["${type}-filename"];
                 //$file = $_FILES["${type}-blob"]["tmp_name"];
                 $file = $_FILES["${type}-blob"];
-
                 $fileInfo = pathinfo($fileName);
 
                 $file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
@@ -223,7 +221,7 @@ switch ($action) {
             require_once '../../forum/forumfunction.inc.php';
             $forumCategory = getForumCategoryByTitle(
                 get_lang('LearningPaths'),
-                $course_id,
+                $courseId,
                 $sessionId
             );
 
@@ -246,7 +244,7 @@ switch ($action) {
             $forumId = $forum['forum_id'];
         }
 
-        $lpItemHasThread = $lpItem->lpItemHasThread($course_id);
+        $lpItemHasThread = $lpItem->lpItemHasThread($courseId);
 
         if (!$lpItemHasThread) {
             echo json_encode([
@@ -255,10 +253,10 @@ switch ($action) {
             break;
         }
 
-        $forumThread = $lpItem->getForumThread($course_id, $sessionId);
+        $forumThread = $lpItem->getForumThread($courseId, $sessionId);
         if (empty($forumThread)) {
             $lpItem->createForumThread($forumId);
-            $forumThread = $lpItem->getForumThread($course_id, $sessionId);
+            $forumThread = $lpItem->getForumThread($courseId, $sessionId);
         }
 
         $forumThreadId = $forumThread['thread_id'];
@@ -279,7 +277,6 @@ switch ($action) {
 
         if ($lp) {
             $score = $lp->getCalculateScore($sessionId);
-
             $jsonGamification['stars'] = $lp->getCalculateStars($sessionId);
             $jsonGamification['score'] = sprintf(get_lang('XPoints'), $score);
         }
@@ -337,14 +334,16 @@ switch ($action) {
 }
 exit;
 
-/*
+/**
+ * Class LpItemOrderList
  * Classes to create a special data structure to manipulate LP Items
  * used only in this file
+ *
  * @todo move in a file
  * @todo use PSR
+ *
  */
-
-class LP_item_order_list
+class LpItemOrderList
 {
     public $list = [];
 
@@ -353,46 +352,66 @@ class LP_item_order_list
         $this->list = [];
     }
 
-    public function add($in_LP_item_order_item)
+    /**
+     * @param array $list
+     */
+    public function add($list)
     {
-        $this->list[] = $in_LP_item_order_item;
+        $this->list[] = $list;
     }
 
-    public function get_item_with_same_parent($in_parent_id)
+    /**
+     * @param int $parentId
+     *
+     * @return LpItemOrderList
+     */
+    public function getItemWithSameParent($parentId)
     {
-        $out_res = new LP_item_order_list();
+        $list = new LpItemOrderList();
         for ($i = 0; $i < count($this->list); $i++) {
-            if ($this->list[$i]->parent_item_id == $in_parent_id) {
-                $out_res->add($this->list[$i]);
+            if ($this->list[$i]->parent_item_id == $parentId) {
+                $list->add($this->list[$i]);
             }
         }
 
-        return $out_res;
+        return $list;
     }
 
-    public function get_list_of_parents()
+    /**
+     * @return array
+     */
+    public function getListOfParents()
     {
-        $tab_out_res = [];
-        foreach ($this->list as $LP_item) {
-            if (!in_array($LP_item->parent_item_id, $tab_out_res)) {
-                $tab_out_res[] = $LP_item->parent_item_id;
+        $result = [];
+        foreach ($this->list as $item) {
+            if (!in_array($item->parent_item_id, $result)) {
+                $result[] = $item->parent_item_id;
             }
         }
 
-        return $tab_out_res;
+        return $result;
     }
 
-    public function set_parameters_for_id($in_id, $in_value, $in_parameters)
+    /**
+     * @param int    $id
+     * @param int    $value
+     * @param string $parameter
+     */
+    public function setParametersForId($id, $value, $parameter)
     {
         for ($i = 0; $i < count($this->list); $i++) {
-            if ($this->list[$i]->id == $in_id) {
-                $this->list[$i]->$in_parameters = $in_value;
+            if ($this->list[$i]->id == $id) {
+                $this->list[$i]->$parameter = $value;
                 break;
             }
         }
     }
 }
-class LP_item_order_item
+
+/**
+ * Class LpOrderItem
+ */
+class LpOrderItem
 {
     public $id = 0;
     public $parent_item_id = 0;
@@ -400,9 +419,15 @@ class LP_item_order_item
     public $next_item_id = 0;
     public $display_order = 0;
 
-    public function __construct($in_id = 0, $in_parent_id = 0)
+    /**
+     * LpOrderItem constructor.
+     *
+     * @param int $id
+     * @param int $parentId
+     */
+    public function __construct($id = 0, $parentId = 0)
     {
-        $this->id = $in_id;
-        $this->parent_item_id = $in_parent_id;
+        $this->id = $id;
+        $this->parent_item_id = $parentId;
     }
 }

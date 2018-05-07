@@ -6522,11 +6522,22 @@ class learnpath
                     Display::span($title_cut).
                     Display::tag(
                         'div',
-                        "<div class=\"btn-group btn-group-xs\">$previewIcon $audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon</div>",
+                        "<div class=\"btn-group btn-group-xs\">
+                                    $previewIcon 
+                                    $audio 
+                                    $edit_icon 
+                                    $forumIcon 
+                                    $prerequisities_icon 
+                                    $move_item_icon 
+                                    $audio_icon 
+                                    $delete_icon
+                                </div>",
                         ['class' => 'btn-toolbar button_actions']
                     );
             } else {
-                $row = Display::span($title.$icon).Display::span($audio, ['class' => 'button_actions']);
+                $row =
+                    Display::span($title.$icon).
+                    Display::span($audio, ['class' => 'button_actions']);
             }
 
             $parent_id = $arrLP[$i]['parent_item_id'];

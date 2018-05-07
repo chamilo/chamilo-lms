@@ -192,7 +192,7 @@ $(document).ready(function() {
 });
 
 // document template for new document tab handler
-$(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
     var id = e.target.id;
     if (id == 'subtab2') {
         $('#frmModel').show();

@@ -112,14 +112,13 @@ $htmlHeadXtra[] = '
         return in_parent_integer_id;
     }
 
-    $(function() {
+    $(function() {        
         $(".lp_resource").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"
             cursor: "move",
             connectWith: "#lp_item_list",
             placeholder: "ui-state-highlight", //defines the yellow highlight
-
             start: function(event, ui) {
                 $(ui.item).css("width", "160px");
                 $(ui.item).find(".item_data").attr("style", "");
@@ -141,7 +140,7 @@ $htmlHeadXtra[] = '
                 $.post(
                     "'.$ajax_url.'",
                     order,
-                    function(reponse){
+                    function(reponse) {
                         $("#message").html(reponse);
                         order = "";
                         newOrderData = "";
@@ -187,8 +186,8 @@ $htmlHeadXtra[] = '
                             }
                         });
                     }
-                }//
-            }//end receive
+                }
+            } // End receive
         });
         processReceive = false;
     });

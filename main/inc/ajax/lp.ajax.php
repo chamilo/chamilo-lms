@@ -57,7 +57,7 @@ switch ($action) {
                 $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
                 $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
 
-                echo $learningPath->add_item(
+                $itemId = $learningPath->add_item(
                     $parentId,
                     $previousId,
                     $_REQUEST['type'],
@@ -65,6 +65,7 @@ switch ($action) {
                     $title,
                     null
                 );
+                echo $itemId;
             }
         }
         break;

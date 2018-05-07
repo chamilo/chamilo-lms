@@ -118,7 +118,7 @@ switch ($action) {
                     $table,
                     $params,
                     [
-                        'id = ? AND c_id = ? ' => [
+                        'iid = ? AND c_id = ? ' => [
                             intval($item->id),
                             $courseId,
                         ],

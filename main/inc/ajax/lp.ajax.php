@@ -65,7 +65,12 @@ switch ($action) {
                     $title,
                     null
                 );
-                echo $itemId;
+
+                /** @var learnpath $learningPath */
+                $learningPath = Session::read('oLP');
+                if ($learningPath) {
+                    echo $learningPath->returnLpItemList(null);
+                }
             }
         }
         break;

@@ -136,7 +136,6 @@ $htmlHeadXtra[] = '
             update: function(event, ui) {
                 buildLPtree($("#lp_item_list"), 0);
                 var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-
                 $.post(
                     "'.$ajax_url.'",
                     order,
@@ -167,24 +166,16 @@ $htmlHeadXtra[] = '
                             "type": type,
                             "title" : title
                         };
+                        
                         $.ajax({
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
                             async: false,
                             success: function(data) {
-                                if (data == -1) {
-                                } else {
-                                    $(".normal-message").hide();
-                                    $(ui.item).attr("id", data);
-                                    $(ui.item).addClass("lp_resource_element_new");
-                                    $(ui.item).find(".item_data").attr("style", "");
-                                    $(ui.item).addClass("record li_container");
-                                    $(ui.item).removeClass("lp_resource_element");
-                                    $(ui.item).removeClass("doc_resource");
-                                }
+                                $("#lp_item_list").html(data);
                             }
-                        });
+                        });                        
                     }
                 }
             } // End receive

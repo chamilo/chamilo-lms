@@ -2958,9 +2958,9 @@ function fixLpId($connection, $debug)
 
                             /*$sql = "UPDATE c_lp_item_view
                                     SET lp_view_id = $newItemView
-                                    WHERE 
-                                      lp_view_id = $oldItemViewId AND 
-                                      c_id = $courseId                                                                        
+                                    WHERE
+                                      lp_view_id = $oldItemViewId AND
+                                      c_id = $courseId
                                   ";
                             $connection->query($sql);*/
                         }

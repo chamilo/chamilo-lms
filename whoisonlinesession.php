@@ -82,7 +82,6 @@ if (empty($time_limit)) {
     $time_limit = 60;
 }
 
-
 $urlCondition = '';
 $urlJoin = '';
 if (api_is_multiple_url_enabled()) {

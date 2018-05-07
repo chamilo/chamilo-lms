@@ -333,7 +333,7 @@ class ExerciseLink extends AbstractLink
      */
     public function get_name()
     {
-        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
+        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
         $data = $this->get_exercise_data();
 
@@ -436,18 +436,18 @@ class ExerciseLink extends AbstractLink
     {
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         if ($this->is_hp == 1) {
-            $tbl_exercise = Database::get_course_table(TABLE_DOCUMENT);
+            $table = Database::get_course_table(TABLE_DOCUMENT);
         } else {
-            $tbl_exercise = $this->get_exercise_table();
+            $table = $this->get_exercise_table();
         }
 
         $exerciseId = $this->get_ref_id();
 
-        if ($tbl_exercise == '') {
+        if ($table == '') {
             return false;
         } elseif (empty($this->exercise_data)) {
             if ($this->is_hp == 1) {
-                $sql = "SELECT * FROM $tbl_exercise ex
+                $sql = "SELECT * FROM $table ex
                         INNER JOIN $tableItemProperty ip
                         ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
                         WHERE
@@ -461,7 +461,7 @@ class ExerciseLink extends AbstractLink
                 $result = Database::query($sql);
                 $this->exercise_data = Database::fetch_array($result);
             } else {
-                $sql = 'SELECT * FROM '.$tbl_exercise.'
+                $sql = 'SELECT * FROM '.$table.'
                         WHERE
                             c_id = '.$this->course_id.' AND
                             id = '.$exerciseId;
@@ -472,7 +472,7 @@ class ExerciseLink extends AbstractLink
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
                     // Try wit iid
-                    $sql = 'SELECT * FROM '.$tbl_exercise.'
+                    $sql = 'SELECT * FROM '.$table.'
                             WHERE
                                 c_id = '.$this->course_id.' AND
                                 iid = '.$exerciseId;

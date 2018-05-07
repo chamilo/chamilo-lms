@@ -348,7 +348,7 @@ abstract class AbstractLink implements GradebookItem
             }
             $sql .= ' visible = '.intval($visible);
         }
-
+        
         $result = Database::query($sql);
         $links = self::create_objects_from_sql_result($result);
 

@@ -11810,6 +11810,14 @@ EOD;
         $item->setCId($params['c_id']);
         $em->persist($item);
         $em->flush();
+
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_LEARNPATH_CATEGORY,
+            $item->getId(),
+            'visible',
+            api_get_user_id()
+        );
     }
 
     /**

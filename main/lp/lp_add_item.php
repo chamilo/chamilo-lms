@@ -159,15 +159,12 @@ function confirmation(name) {
     }
 }
 
-jQuery(document).ready(function(){
+$(document).ready(function() {
     jQuery('.scrollbar-inner').scrollbar();
 
     $('#subtab ').on('click', 'a:first', function() {
         window.location.reload();
     });
-});
-
-$(document).ready(function() {
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {

@@ -93,16 +93,16 @@ switch ($action) {
                     $item_id = $Same_parent_LP_item_list->list[$i]->id;
                     // display_order
                     $display_order = $i + 1;
-                    $LP_item_list->set_parameters_for_id($item_id, $display_order, "display_order");
+                    $LP_item_list->set_parameters_for_id($item_id, $display_order, 'display_order');
                     // previous_item_id
-                    $LP_item_list->set_parameters_for_id($item_id, $previous_item_id, "previous_item_id");
+                    $LP_item_list->set_parameters_for_id($item_id, $previous_item_id, 'previous_item_id');
                     $previous_item_id = $item_id;
                     // next_item_id
                     $next_item_id = 0;
                     if ($i < count($Same_parent_LP_item_list->list) - 1) {
                         $next_item_id = $Same_parent_LP_item_list->list[$i + 1]->id;
                     }
-                    $LP_item_list->set_parameters_for_id($item_id, $next_item_id, "next_item_id");
+                    $LP_item_list->set_parameters_for_id($item_id, $next_item_id, 'next_item_id');
                 }
             }
 

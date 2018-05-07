@@ -337,11 +337,10 @@ exit;
 /**
  * Class LpItemOrderList
  * Classes to create a special data structure to manipulate LP Items
- * used only in this file
+ * used only in this file.
  *
  * @todo move in a file
  * @todo use PSR
- *
  */
 class LpItemOrderList
 {
@@ -409,7 +408,7 @@ class LpItemOrderList
 }
 
 /**
- * Class LpOrderItem
+ * Class LpOrderItem.
  */
 class LpOrderItem
 {

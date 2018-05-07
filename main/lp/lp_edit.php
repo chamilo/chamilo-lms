@@ -82,13 +82,13 @@ $hide_toc_frame = $form->addElement(
     null,
     get_lang('HideTocFrame')
 );
+
 if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
         //LP theme picker
         $theme_select = $form->addElement('SelectTheme', 'lp_theme', get_lang('Theme'));
         $form->applyFilter('lp_theme', 'trim');
-
         $s_theme = $learnPath->get_theme();
         $theme_select->setSelected($s_theme); //default
     }
@@ -113,7 +113,6 @@ if (strlen($learnPath->get_preview_image()) > 0) {
 }
 $label = ($learnPath->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
 $form->addElement('file', 'lp_preview_image', [$label, get_lang('ImageWillResizeMsg')]);
-
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
 
 // Search terms (only if search is activated).

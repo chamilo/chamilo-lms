@@ -58,7 +58,6 @@ $(document).on("ready", function() {
 </script>';
 
 /* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 
@@ -66,9 +65,7 @@ $isStudentView = isset($_REQUEST['isStudentView']) ? intval($_REQUEST['isStudent
 $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
-/* MAIN CODE */
-
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if (!$is_allowed_to_edit || $isStudentView) {
     error_log('New LP - User not authorized in lp_edit_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -127,11 +124,9 @@ function confirmation(name) {
         return false;
     }
 }
-jQuery(document).ready(function(){
-    jQuery('.scrollbar-inner').scrollbar();
-});
 
 $(document).ready(function() {
+    jQuery('.scrollbar-inner').scrollbar();
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {

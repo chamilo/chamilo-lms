@@ -508,7 +508,7 @@ class Certificate extends Model
      */
     public function generateQRImage($text, $path)
     {
-        //Make sure HTML certificate is generated
+        // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             //L low, M - Medium, L large error correction
             return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
@@ -692,7 +692,6 @@ class Certificate extends Model
         }
 
         $userInfo = api_get_user_info($this->user_id);
-
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
         $termsValidationDate = '';

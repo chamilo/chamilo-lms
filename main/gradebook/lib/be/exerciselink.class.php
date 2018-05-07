@@ -461,21 +461,22 @@ class ExerciseLink extends AbstractLink
                 $result = Database::query($sql);
                 $this->exercise_data = Database::fetch_array($result);
             } else {
+                // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
                         WHERE
                             c_id = '.$this->course_id.' AND
-                            id = '.$exerciseId;
+                            iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
                 if (!empty($rows)) {
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
-                    // Try wit iid
+                    // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
                             WHERE
                                 c_id = '.$this->course_id.' AND
-                                iid = '.$exerciseId;
+                                id = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

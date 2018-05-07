@@ -700,7 +700,7 @@ class Certificate extends Model
             list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
         }
 
-        $sessions = SessionManager::get_sessions_by_user($this->user_id);
+        $sessions = SessionManager::get_sessions_by_user($this->user_id, false, true);
         $sessionsApproved = [];
         if ($sessions) {
             foreach ($sessions as $session) {

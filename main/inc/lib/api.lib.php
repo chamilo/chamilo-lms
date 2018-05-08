@@ -1275,7 +1275,9 @@ function api_block_anonymous_users($printHeaders = true)
 }
 
 /**
- * @return array with the navigator name and version
+ * Returns a rough evaluation of the browser's name and version based on very
+ * simple regexp.
+ * @return array with the navigator name and version ['name' => '...', 'version' => '...']
  */
 function api_get_navigator()
 {
@@ -1289,29 +1291,58 @@ function api_get_navigator()
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list(, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
+
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Edge') !== false) {
+        $navigator = 'Edge';
+        list(, $version) = explode('Edge', $_SERVER['HTTP_USER_AGENT']);
+
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
         $navigator = 'Internet Explorer';
-        list(, $version) = explode('MSIE', $_SERVER['HTTP_USER_AGENT']);
+        list(, $version) = explode('MSIE ', $_SERVER['HTTP_USER_AGENT']);
+
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false) {
         $navigator = 'Chrome';
         list(, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
-    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false) {
+
+    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Safari') !== false) {
         $navigator = 'Safari';
-        list(, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
-    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
-        $navigator = 'Mozilla';
-        list(, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
+        if (stripos($_SERVER['HTTP_USER_AGENT'], 'Version/') !== false) {
+            // If this Safari does have the "Version/" string in its user agent
+            // then use that as a version indicator rather than what's after
+            // "Safari/" which is rather a "build number" or something
+            list(, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
+        } else {
+            list(, $version) = explode('Safari/', $_SERVER['HTTP_USER_AGENT']);
+        }
+
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false) {
+        $navigator = 'Firefox';
+        list(, $version) = explode('Firefox', $_SERVER['HTTP_USER_AGENT']);
+
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape') !== false) {
         $navigator = 'Netscape';
-        list(, $version) = explode('Netscape', $_SERVER['HTTP_USER_AGENT']);
+        if (stripos($_SERVER['HTTP_USER_AGENT'], 'Netscape/') !== false) {
+            list(, $version) = explode('Netscape', $_SERVER['HTTP_USER_AGENT']);
+        } else {
+            list(, $version) = explode('Navigator', $_SERVER['HTTP_USER_AGENT']);
+        }
+
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Konqueror') !== false) {
         $navigator = 'Konqueror';
         list(, $version) = explode('Konqueror', $_SERVER['HTTP_USER_AGENT']);
+
     } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'applewebkit') !== false) {
         $navigator = 'AppleWebKit';
         list(, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
+
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
+        $navigator = 'Mozilla';
+        list(, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
     }
-    $version = str_replace('/', '', $version);
+
+    // Now cut extra stuff around (mostly *after*) the version number
+    $version = preg_replace('/^([\/\s])?([\d\.]+)?.*/', '\2', $version);
+
     if (strpos($version, '.') === false) {
         $version = number_format(doubleval($version), 1);
     }
@@ -4842,6 +4873,7 @@ function api_get_language_from_type($lang_type)
  * @param int $languageId
  *
  * @return array
+ * @throws Exception
  */
 function api_get_language_info($languageId)
 {
@@ -5239,6 +5271,7 @@ function copyr($source, $dest, $exclude = [], $copied_files = [])
  * @param string $pathname
  * @param string $base_path_document
  * @param int    $session_id
+ * @return null
  */
 function copy_folder_course_session(
     $pathname,

@@ -137,14 +137,12 @@ function save_item(
         // set_score function used to save the status, but this is not the case anymore
         if (isset($score) && $score != -1) {
             if ($debug > 1) {
-                error_log('Calling set_score('.$score.')', 0);
-                error_log('set_score changes the status to failed/passed if mastery score is provided', 0);
+                error_log('Calling set_score('.$score.')');
+                error_log('set_score changes the status to failed/passed if mastery score is provided');
             }
-
             $myLPI->set_score($score);
-
             if ($debug > 1) {
-                error_log('Done calling set_score '.$myLPI->get_score(), 0);
+                error_log('Done calling set_score '.$myLPI->get_score());
             }
         } else {
             if ($debug > 1) {
@@ -156,13 +154,13 @@ function save_item(
         // Default behaviour.
         if (isset($status) && $status != '' && $status != 'undefined') {
             if ($debug > 1) {
-                error_log('Calling set_status('.$status.')', 0);
+                error_log('Calling set_status('.$status.')');
             }
 
             $myLPI->set_status($status);
             $statusIsSet = true;
             if ($debug > 1) {
-                error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false), 0);
+                error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
             }
         } else {
             if ($debug > 1) {
@@ -177,23 +175,23 @@ function save_item(
                 if (($score / $max) > 0.8) {
                     $myStatus = 'completed';
                     if ($debug > 1) {
-                        error_log('Calling set_status('.$myStatus.') for hotpotatoes', 0);
+                        error_log('Calling set_status('.$myStatus.') for hotpotatoes');
                     }
                     $myLPI->set_status($myStatus);
                     $statusIsSet = true;
                     if ($debug > 1) {
-                        error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false), 0);
+                        error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false));
                     }
                 }
             } elseif ($status == 'completed' && $max > 0 && ($score / $max) < 0.8) {
                 $myStatus = 'failed';
                 if ($debug > 1) {
-                    error_log('Calling set_status('.$myStatus.') for hotpotatoes', 0);
+                    error_log('Calling set_status('.$myStatus.') for hotpotatoes');
                 }
                 $myLPI->set_status($myStatus);
                 $statusIsSet = true;
                 if ($debug > 1) {
-                    error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false), 0);
+                    error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false));
                 }
             }
         } elseif ($my_type == 'sco') {
@@ -334,13 +332,13 @@ function save_item(
             // Default behaviour
             if (isset($status) && $status != '' && $status != 'undefined') {
                 if ($debug > 1) {
-                    error_log('Calling set_status('.$status.')', 0);
+                    error_log('Calling set_status('.$status.')');
                 }
 
                 $myLPI->set_status($status);
 
                 if ($debug > 1) {
-                    error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false), 0);
+                    error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
                 }
             } else {
                 if ($debug > 1) {
@@ -352,7 +350,7 @@ function save_item(
         if (isset($time) && $time != '' && $time != 'undefined') {
             // If big integer, then it's a timestamp, otherwise it's normal scorm time.
             if ($debug > 1) {
-                error_log('Calling set_time('.$time.') ', 0);
+                error_log('Calling set_time('.$time.') ');
             }
             if ($time == intval(strval($time)) && $time > 1000000) {
                 if ($debug > 1) {
@@ -360,7 +358,7 @@ function save_item(
                 }
                 $real_time = time() - $time;
                 if ($debug > 1) {
-                    error_log('Calling $real_time '.$real_time.' ', 0);
+                    error_log('Calling $real_time '.$real_time.' ');
                 }
                 $myLPI->set_time($real_time, 'int');
             } else {
@@ -368,7 +366,7 @@ function save_item(
                     error_log("Time is in SCORM format");
                 }
                 if ($debug > 1) {
-                    error_log('Calling $time '.$time.' ', 0);
+                    error_log('Calling $time '.$time.' ');
                 }
                 $myLPI->set_time($time, 'scorm');
             }
@@ -427,9 +425,9 @@ function save_item(
     $myProgressMode = $myProgressMode == '' ? '%' : $myProgressMode;
 
     if ($debug > 1) {
-        error_log("mystatus: $myStatus", 0);
-        error_log("myprogress_mode: $myProgressMode", 0);
-        error_log("progress: $myComplete / $myTotal", 0);
+        error_log("mystatus: $myStatus");
+        error_log("myprogress_mode: $myProgressMode");
+        error_log("progress: $myComplete / $myTotal");
     }
 
     if ($myLPI->get_type() != 'sco') {

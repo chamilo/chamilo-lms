@@ -237,6 +237,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
     $html = '';
     if ($form->validate()) {
         $check = Security::check_token('post');
+        $disabled = api_get_configuration_value('disable_token_in_new_message');
+        if ($disabled) {
+            $check = true;
+        }
+
         if ($check) {
             $user_list = $default['users'];
             $file_comments = $_POST['legend'];
@@ -289,7 +294,6 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
     return $html;
 }
 
-/* MAIN SECTION */
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
@@ -309,7 +313,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Messages'),
 ];
 
-$group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
+$group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : 0;
 $social_right_content = null;
 if ($group_id != 0) {
     $social_right_content .= '<div class=actions>';

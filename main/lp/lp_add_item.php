@@ -159,15 +159,12 @@ function confirmation(name) {
     }
 }
 
-jQuery(document).ready(function(){
+$(document).ready(function() {
     jQuery('.scrollbar-inner').scrollbar();
 
     $('#subtab ').on('click', 'a:first', function() {
         window.location.reload();
     });
-});
-
-$(document).ready(function() {
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {
@@ -195,7 +192,7 @@ $(document).ready(function() {
 });
 
 // document template for new document tab handler
-$(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
     var id = e.target.id;
     if (id == 'subtab2') {
         $('#frmModel').show();

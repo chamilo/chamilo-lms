@@ -47,29 +47,7 @@ $(document).ready(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
-/*
-  var s1 = [["a",25]];
-  var s2 = [["a", 0], ["a", 10], ["a", 10], ["a", 5]];
-
-  var plot3 = $.jqplot("chart3", [s1, s2], {
-  colors: ["#000", "#fff"],
-    seriesDefaults: {
-      // make this a donut chart.
-      renderer:$.jqplot.DonutRenderer,
-      rendererOptions:{
-        // Donuts can be cut into slices like pies.
-        sliceMargin: 3 ,
-        // Pies and donuts can start at any arbitrary angle.
-        startAngle: -90,
-        showDataLabels: true,
-        // By default, data labels show the percentage of the donut/pie.
-        // You can show the data "value" or data "label" instead.
-        dataLabels: "value"
-
-      }
-    }
-  });*/
-
+    
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null || $(".actions:eq("+i+")").html().split("<TBODY></TBODY>").length==2) {
 			$(".actions:eq("+i+")").hide();

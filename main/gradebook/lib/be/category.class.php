@@ -1876,7 +1876,7 @@ class Category implements GradebookItem
                 null,
                 null,
                 null,
-                empty($this->course_code) ? null : $course_code,
+                $course_code,
                 $this->id,
                 api_is_allowed_to_edit() ? null : 1
             );
@@ -1887,7 +1887,7 @@ class Category implements GradebookItem
                 null,
                 null,
                 null,
-                empty($this->course_code) ? null : $this->course_code,
+                $course_code,
                 $this->id,
                 null
             );

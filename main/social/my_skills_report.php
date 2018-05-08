@@ -86,8 +86,16 @@ if ($isStudent) {
             $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
 
             if (file_exists($imageSysPath)) {
-                $thumbSysPath = sprintf("%s%s/course-pic32.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
-                $thumbWebPath = sprintf("%s%s/course-pic32.png", api_get_path(WEB_COURSE_PATH), $resultData['directory']);
+                $thumbSysPath = sprintf(
+                    "%s%s/course-pic32.png",
+                    api_get_path(SYS_COURSE_PATH),
+                    $resultData['directory']
+                );
+                $thumbWebPath = sprintf(
+                    "%s%s/course-pic32.png",
+                    api_get_path(WEB_COURSE_PATH),
+                    $resultData['directory']
+                );
 
                 if (!file_exists($thumbSysPath)) {
                     $courseImageThumb = new Image($imageSysPath);

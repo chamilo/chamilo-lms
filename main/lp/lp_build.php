@@ -125,6 +125,4 @@ function show_block($link, $title, $subtitle, $icon)
     return $html;
 }
 
-/* FOOTER */
-
 Display::display_footer();

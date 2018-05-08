@@ -2477,6 +2477,7 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseCode = $item['course_code'];
+        $categoryId = (int) $item['category_id'];
 
         $sql = "SELECT * FROM course WHERE code = '$courseCode'";
         $courseInfo = $connection->fetchAssoc($sql);
@@ -2513,7 +2514,7 @@ function fixIds(EntityManager $em)
             if (isset($data) && isset($data['iid'])) {
                 $newId = $data['iid'];
                 $sql = "UPDATE gradebook_link SET ref_id = $newId
-                        WHERE id = $iid";
+                        WHERE id = $iid AND course_code = '$courseCode' AND category_id = $categoryId ";
                 $connection->executeQuery($sql);
             }
         }
@@ -2939,6 +2940,7 @@ function fixLpId($connection, $debug)
                             $userId = $itemView['user_id'];
                             $oldItemViewId = $itemView['id'];
                             $newItemView = $itemView['iid'];
+
                             if (empty($oldItemViewId)) {
                                 continue;
                             }
@@ -2953,6 +2955,14 @@ function fixLpId($connection, $debug)
                                   exe_user_id = $userId                                       
                                   ";
                             $connection->query($sql);
+
+                            /*$sql = "UPDATE c_lp_item_view
+                                    SET lp_view_id = $newItemView
+                                    WHERE
+                                      lp_view_id = $oldItemViewId AND
+                                      c_id = $courseId
+                                  ";
+                            $connection->query($sql);*/
                         }
                     }
 

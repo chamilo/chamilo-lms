@@ -16,15 +16,14 @@ if (empty($userId)) {
 }
 
 $sessionId = api_get_session_id();
-$courseId = api_get_course_int_id();
 
 if (empty($sessionId)) {
     api_not_allowed(true);
 }
 
 $allow = api_is_platform_admin(true) ||
-    api_is_coach($sessionId, $courseId, false) ||
-    SessionManager::get_user_status_in_course_session(api_get_user_id(), $courseId, $sessionId) == 2;
+    api_is_coach($sessionId, null, false) ||
+    SessionManager::isUserSubscribedAsStudent($sessionId, api_get_user_id());
 
 if (!$allow) {
     api_not_allowed(true);

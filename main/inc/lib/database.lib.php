@@ -551,7 +551,7 @@ class Database
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
      *
-     * @param array  $columns
+     * @param mixed  $columns array (or string if only one column)
      * @param string $table_name
      * @param array  $conditions
      * @param string $type_result

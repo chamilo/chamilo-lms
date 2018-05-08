@@ -1239,10 +1239,10 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 /**
  * Function used to protect a teacher script.
  * The function blocks access when the user has no teacher rights.
- *
+ * @return bool True if the current user can access the script, false otherwise
  * @author Yoselyn Castillo
  */
-function api_protect_teacher_script($allow_sessions_admins = false)
+function api_protect_teacher_script()
 {
     if (!api_is_allowed_to_edit()) {
         api_not_allowed(true);
@@ -1387,10 +1387,10 @@ function api_get_user_id()
  *
  * @deprecated use CourseManager::get_courses_list_by_user_id()
  */
-function api_get_user_courses($userid, $fetch_session = true)
+function api_get_user_courses($userId, $fetch_session = true)
 {
     // Get out if not integer
-    if ($userid != strval(intval($userid))) {
+    if ($userId != strval(intval($userId))) {
         return [];
     }
 
@@ -1398,12 +1398,11 @@ function api_get_user_courses($userid, $fetch_session = true)
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $sql = "SELECT cc.id as real_id, cc.code code, cc.directory dir, cu.status status
-            FROM    $t_course       cc,
-                    $t_course_user   cu
+            FROM $t_course cc, $t_course_user cu
             WHERE
                 cc.id = cu.c_id AND
-                cu.user_id = '".$userid."' AND
-                cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                cu.user_id = $userId AND
+                cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
     $result = Database::query($sql);
     if ($result === false) {
         return [];
@@ -1599,7 +1598,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
  * @param bool $loadAvatars              turn off to improve performance and if avatars are not needed
  * @param bool $updateCache              update apc cache if exists
  *
- * @return array $user_info user_id, lastname, firstname, username, email, etc
+ * @return mixed $user_info user_id, lastname, firstname, username, email, etc or false on error
  *
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -1725,7 +1724,7 @@ function api_get_user_entity($userId)
  *
  * @param string $username
  *
- * @return array $user_info array user_id, lastname, firstname, username, email
+ * @return mixed $user_info array user_id, lastname, firstname, username, email or false on error
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
@@ -1995,7 +1994,7 @@ function api_is_in_gradebook()
 /**
  * Set that we are in a page inside a gradebook.
  *
- * @return bool
+ * @return null
  */
 function api_set_in_gradebook()
 {

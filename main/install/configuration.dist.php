@@ -833,6 +833,9 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Enable speed controller in video player
 // $_configuration['video_features'] = ['features' => ['speed']];
 
+// Disable token verification when sending a message
+// $_configuration['disable_token_in_new_message'] = false;
+
 // My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
 // $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
 

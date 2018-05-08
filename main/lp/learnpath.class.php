@@ -6600,7 +6600,7 @@ class learnpath
     }
 
     /**
-     * @param $updateAudio
+     * @param string $updateAudio true/false strings
      *
      * @return string
      */
@@ -6615,8 +6615,9 @@ class learnpath
         );
 
         if (!empty($html)) {
-            $html .= Display::return_message(get_lang("DragAndDropAnElementHere"));
+            $html .= Display::return_message(get_lang('DragAndDropAnElementHere'));
         }
+
         return $html;
     }
 
@@ -6642,7 +6643,7 @@ class learnpath
             $list .= $tree;
         } else {
             if ($drop_element_here) {
-                $list .= Display::return_message(get_lang("DragAndDropAnElementHere"));
+                $list .= Display::return_message(get_lang('DragAndDropAnElementHere'));
             }
         }
         $list .= '</ul>';
@@ -6696,6 +6697,7 @@ class learnpath
                 );
             } else {
                 // Sections
+                $data = '';
                 if (isset($item['children'])) {
                     $data = self::print_recursive($item['children'], $default_data, $default_content);
                 }
@@ -6729,7 +6731,6 @@ class learnpath
     ) {
         $actionsLeft = '';
         $actionsRight = '';
-
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'preview_view.png',

@@ -3277,11 +3277,11 @@ function api_is_allowed_to_edit(
 
     $sessionId = api_get_session_id();
 
-    if ($sessionId && api_get_configuration_value('lock_course_in_session')) {
+    if ($sessionId && api_get_configuration_value('session_courses_read_only_mode')) {
         $efv = new ExtraFieldValue('course');
         $lockExrafieldField = $efv->get_values_by_handler_and_field_variable(
             api_get_course_int_id(),
-            'lock_course_in_session'
+            'session_courses_read_only_mode'
         );
 
         if (!empty($lockExrafieldField['value'])) {

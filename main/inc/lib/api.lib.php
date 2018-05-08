@@ -5280,10 +5280,11 @@ function copyr($source, $dest, $exclude = [], $copied_files = [])
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
 /**
+ *
  * @param string $pathname
  * @param string $base_path_document
  * @param int    $session_id
- * @return null
+ * @return mixed True if directory already exists, false if a file already exists at the destination and null if everything goes according to plan
  */
 function copy_folder_course_session(
     $pathname,

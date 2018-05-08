@@ -1857,24 +1857,24 @@ class SessionManager
      * @author Carlos Vargas from existing code
      * @author Julio Montoya. Cleaning code.
      *
-     * @param int   $id_session
-     * @param array $user_list
+     * @param int   $sessionId
+     * @param array $userList
      * @param int   $session_visibility
      * @param bool  $empty_users
      *
      * @return bool
      */
-    public static function subscribe_users_to_session(
-        $id_session,
-        $user_list,
+    public static function subscribeUsersToSession(
+        $sessionId,
+        $userList,
         $session_visibility = SESSION_VISIBLE_READ_ONLY,
         $empty_users = true
     ) {
-        if ($id_session != strval(intval($id_session))) {
+        if ($sessionId != strval(intval($sessionId))) {
             return false;
         }
 
-        foreach ($user_list as $intUser) {
+        foreach ($userList as $intUser) {
             if ($intUser != strval(intval($intUser))) {
                 return false;
             }
@@ -1885,8 +1885,7 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $entityManager = Database::getManager();
-        $session = $entityManager->find('ChamiloCoreBundle:Session', $id_session);
+        $session = api_get_session_entity($sessionId);
 
         // from function parameter
         if (empty($session_visibility)) {
@@ -1903,7 +1902,7 @@ class SessionManager
         }
 
         $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
-                WHERE session_id = $id_session AND status = 0";
+                WHERE session_id = $sessionId AND status = 0";
         $result = Database::query($sql);
         $existingUsers = [];
         while ($row = Database::fetch_array($result)) {
@@ -1911,7 +1910,7 @@ class SessionManager
         }
 
         $sql = "SELECT c_id FROM $tbl_session_rel_course
-                WHERE session_id = $id_session";
+                WHERE session_id = $sessionId";
         $result = Database::query($sql);
         $course_list = [];
         while ($row = Database::fetch_array($result)) {
@@ -1919,10 +1918,10 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() &&
-            is_array($user_list)
+            is_array($userList)
         ) {
             // Sending emails only
-            foreach ($user_list as $user_id) {
+            foreach ($userList as $user_id) {
                 if (in_array($user_id, $existingUsers)) {
                     continue;
                 }
@@ -1981,12 +1980,12 @@ class SessionManager
         foreach ($course_list as $courseId) {
             // for each course in the session
             $nbr_users = 0;
-            $courseId = intval($courseId);
+            $courseId = (int) $courseId;
 
             $sql = "SELECT DISTINCT user_id
                     FROM $tbl_session_rel_course_rel_user
                     WHERE
-                        session_id = $id_session AND
+                        session_id = $sessionId AND
                         c_id = $courseId AND
                         status = 0
                     ";
@@ -1999,10 +1998,10 @@ class SessionManager
             // Delete existing users
             if ($empty_users) {
                 foreach ($existingUsers as $existing_user) {
-                    if (!in_array($existing_user, $user_list)) {
+                    if (!in_array($existing_user, $userList)) {
                         $sql = "DELETE FROM $tbl_session_rel_course_rel_user
                                 WHERE
-                                    session_id = $id_session AND
+                                    session_id = $sessionId AND
                                     c_id = $courseId AND
                                     user_id = $existing_user AND
                                     status = 0 ";
@@ -2015,7 +2014,7 @@ class SessionManager
                             api_get_utc_datetime(),
                             api_get_user_id(),
                             $courseId,
-                            $id_session
+                            $sessionId
                         );
 
                         if (Database::affected_rows($result)) {
@@ -2027,18 +2026,19 @@ class SessionManager
 
             // Replace with this new function
             // insert new users into session_rel_course_rel_user and ignore if they already exist
-            foreach ($user_list as $enreg_user) {
+            foreach ($userList as $enreg_user) {
                 if (!in_array($enreg_user, $existingUsers)) {
                     $status = self::get_user_status_in_course_session(
                         $enreg_user,
                         $courseId,
-                        $id_session
+                        $sessionId
                     );
+
                     // Avoid duplicate entries.
                     if ($status === false || ($status !== false && $status != 0)) {
                         $enreg_user = (int) $enreg_user;
                         $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility, status)
-                                VALUES($id_session, $courseId, $enreg_user, $session_visibility, 0)";
+                                VALUES($sessionId, $courseId, $enreg_user, $session_visibility, 0)";
                         $result = Database::query($sql);
                         if (Database::affected_rows($result)) {
                             $nbr_users++;
@@ -2051,7 +2051,7 @@ class SessionManager
                             api_get_utc_datetime(),
                             api_get_user_id(),
                             $courseId,
-                            $id_session
+                            $sessionId
                         );
                     }
                 }
@@ -2060,45 +2060,50 @@ class SessionManager
             // Count users in this session-course relation
             $sql = "SELECT COUNT(user_id) as nbUsers
                     FROM $tbl_session_rel_course_rel_user
-                    WHERE session_id = $id_session AND c_id = $courseId AND status<>2";
+                    WHERE session_id = $sessionId AND c_id = $courseId AND status<>2";
             $rs = Database::query($sql);
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
             $sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users
-                    WHERE session_id = $id_session AND c_id = $courseId";
+                    WHERE session_id = $sessionId AND c_id = $courseId";
             Database::query($sql);
         }
 
         // Delete users from the session
         if ($empty_users === true) {
             $sql = "DELETE FROM $tbl_session_rel_user
-                    WHERE session_id = $id_session AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+                    WHERE 
+                      session_id = $sessionId AND 
+                      relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+            // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
+            if (!empty($userList)) {
+                $avoidDeleteThisUsers = " AND user_id NOT IN ('".implode("','", $userList)."')";
+                $sql .= $avoidDeleteThisUsers;
+            }
             Database::query($sql);
         }
 
         // Insert missing users into session
-        $nbr_users = 0;
-        foreach ($user_list as $enreg_user) {
-            $isUserSubscribed = self::isUserSubscribedAsStudent($id_session, $enreg_user);
+        foreach ($userList as $enreg_user) {
+            $isUserSubscribed = self::isUserSubscribedAsStudent($sessionId, $enreg_user);
             if ($isUserSubscribed === false) {
                 $enreg_user = (int) $enreg_user;
-                $nbr_users++;
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
-                        VALUES (0, $id_session, $enreg_user, '".api_get_utc_datetime()."')";
+                        VALUES (0, $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
                 Database::query($sql);
             }
         }
 
         // update number of users in the session
-        $nbr_users = count($user_list);
+        $nbr_users = count($userList);
         if ($empty_users) {
             // update number of users in the session
             $sql = "UPDATE $tbl_session SET nbr_users= $nbr_users
-                    WHERE id = $id_session ";
+                    WHERE id = $sessionId ";
             Database::query($sql);
         } else {
             $sql = "UPDATE $tbl_session SET nbr_users = nbr_users + $nbr_users
-                    WHERE id = $id_session";
+                    WHERE id = $sessionId";
             Database::query($sql);
         }
     }
@@ -4462,7 +4467,7 @@ class SessionManager
             }
             $users = null;
             //Subscribing in read only mode
-            self::subscribe_users_to_session(
+            self::subscribeUsersToSession(
                 $sid,
                 $short_users,
                 SESSION_VISIBLE_READ_ONLY,
@@ -6069,7 +6074,7 @@ SQL;
                                 continue;
                             }
                             $messages[] = Display::return_message(get_lang('StudentList').'<br />'.$userToString, 'info', false);
-                            self::subscribe_users_to_session(
+                            self::subscribeUsersToSession(
                                 $sessionDestinationId,
                                 $newUserList,
                                 SESSION_VISIBLE_READ_ONLY,

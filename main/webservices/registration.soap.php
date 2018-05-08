@@ -5364,7 +5364,7 @@ function WSSuscribeUsersToSession($params)
                     continue; // user_id is not active.
                 }
 
-                SessionManager::subscribe_users_to_session(
+                SessionManager::subscribeUsersToSession(
                     $sessionId,
                     [$user_id],
                     SESSION_VISIBLE_READ_ONLY,
@@ -5461,7 +5461,7 @@ function WSSubscribeUserToSessionSimple($params)
                 error_log($result);
             }
         } else {
-            SessionManager::subscribe_users_to_session(
+            SessionManager::subscribeUsersToSession(
                 $session_id,
                 [$user_id],
                 SESSION_VISIBLE_READ_ONLY,

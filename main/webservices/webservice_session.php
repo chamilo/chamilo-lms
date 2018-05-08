@@ -616,7 +616,7 @@ class WSSession extends WS
                 return $user_id;
             } else {
                 if ($state == 1) {
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $session_id,
                         [$user_id]
                     );

@@ -302,7 +302,7 @@ switch ($action) {
                 }
             }
 
-            SessionManager::subscribe_users_to_session(
+            SessionManager::subscribeUsersToSession(
                 $_GET['session_id'],
                 [$userId],
                 SESSION_VISIBLE_READ_ONLY,

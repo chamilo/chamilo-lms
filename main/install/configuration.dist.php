@@ -845,3 +845,10 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+
+// Allow to lock edition for courses in session. Require DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, filter, created_at)
+VALUES (2, 13, 'lock_course_in_session', 'Lock Course In Session', 1, 1, 1, NOW());
+*/
+//$_configuration['lock_course_in_session'] = false;

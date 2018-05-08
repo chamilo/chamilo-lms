@@ -2361,7 +2361,7 @@ class learnpath
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
                 api_is_drh() ||
-                api_is_coach($sessionId, $courseInfo['real_id'])
+                api_is_coach($sessionId, $courseInfo['real_id'], false)
             ) {
                 return false;
             }

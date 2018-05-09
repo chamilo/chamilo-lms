@@ -76,6 +76,7 @@ function getUsers(
             $urlCondition";
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
+
         return $result['count'];
     }
 
@@ -98,6 +99,7 @@ function getUsers(
     while ($user_list = Database::fetch_array($result)) {
         $studentsOnline[$user_list['login_user_id']] = $user_list;
     }
+
     return $studentsOnline;
 }
 
@@ -131,6 +133,7 @@ function course_filter($courseId, $urlParams, $row)
 {
     $sessionId = api_get_session_id();
     $courseInfo = api_get_course_info_by_id($courseId);
+
     return Display::url(
         $courseInfo['title'],
         $courseInfo['course_public_url'].'?id_session='.$sessionId,

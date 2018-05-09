@@ -1239,7 +1239,9 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 /**
  * Function used to protect a teacher script.
  * The function blocks access when the user has no teacher rights.
+ *
  * @return bool True if the current user can access the script, false otherwise
+ *
  * @author Yoselyn Castillo
  */
 function api_protect_teacher_script()
@@ -1277,6 +1279,7 @@ function api_block_anonymous_users($printHeaders = true)
 /**
  * Returns a rough evaluation of the browser's name and version based on very
  * simple regexp.
+ *
  * @return array with the navigator name and version ['name' => '...', 'version' => '...']
  */
 function api_get_navigator()
@@ -1291,19 +1294,15 @@ function api_get_navigator()
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list(, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Edge') !== false) {
         $navigator = 'Edge';
         list(, $version) = explode('Edge', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
         $navigator = 'Internet Explorer';
         list(, $version) = explode('MSIE ', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false) {
         $navigator = 'Chrome';
         list(, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Safari') !== false) {
         $navigator = 'Safari';
         if (stripos($_SERVER['HTTP_USER_AGENT'], 'Version/') !== false) {
@@ -1314,11 +1313,9 @@ function api_get_navigator()
         } else {
             list(, $version) = explode('Safari/', $_SERVER['HTTP_USER_AGENT']);
         }
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false) {
         $navigator = 'Firefox';
         list(, $version) = explode('Firefox', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape') !== false) {
         $navigator = 'Netscape';
         if (stripos($_SERVER['HTTP_USER_AGENT'], 'Netscape/') !== false) {
@@ -1326,15 +1323,12 @@ function api_get_navigator()
         } else {
             list(, $version) = explode('Navigator', $_SERVER['HTTP_USER_AGENT']);
         }
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Konqueror') !== false) {
         $navigator = 'Konqueror';
         list(, $version) = explode('Konqueror', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'applewebkit') !== false) {
         $navigator = 'AppleWebKit';
         list(, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
         $navigator = 'Mozilla';
         list(, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
@@ -1993,8 +1987,6 @@ function api_is_in_gradebook()
 
 /**
  * Set that we are in a page inside a gradebook.
- *
- * @return null
  */
 function api_set_in_gradebook()
 {
@@ -4884,8 +4876,9 @@ function api_get_language_from_type($lang_type)
  *
  * @param int $languageId
  *
- * @return array
  * @throws Exception
+ *
+ * @return array
  */
 function api_get_language_info($languageId)
 {
@@ -5278,13 +5271,17 @@ function copyr($source, $dest, $exclude = [], $copied_files = [])
     return true;
 }
 
-// TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
 /**
+ *
+ * @todo: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach.
+ * Documentation header to be added here.
  *
  * @param string $pathname
  * @param string $base_path_document
  * @param int    $session_id
- * @return mixed True if directory already exists, false if a file already exists at the destination and null if everything goes according to plan
+ *
+ * @return mixed True if directory already exists, false if a file already exists at
+ * the destination and null if everything goes according to plan
  */
 function copy_folder_course_session(
     $pathname,

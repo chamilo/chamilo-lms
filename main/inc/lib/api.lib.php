@@ -2574,6 +2574,7 @@ function api_get_session_visibility(
 
         return SESSION_AVAILABLE;
     }
+
     // If start date was set.
     if (!empty($row['access_start_date'])) {
         $visibility = $now > api_strtotime($row['access_start_date'], 'UTC') ? SESSION_AVAILABLE : SESSION_INVISIBLE;
@@ -2589,8 +2590,7 @@ function api_get_session_visibility(
         }
     }
 
-    /* If I'm a coach the visibility can change in my favor depending in
-     the coach dates */
+    // If I'm a coach the visibility can change in my favor depending in the coach dates.
     $isCoach = api_is_coach($session_id, $courseId);
 
     if ($isCoach) {

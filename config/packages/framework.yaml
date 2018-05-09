@@ -4,12 +4,6 @@ framework:
     translator:
         fallbacks: ['en']
     csrf_protection: ~
-
-    # uncomment this entire section to enable sessions
-    #session:
-    #    # With this config, PHP's native session handling is used
-    #    handler_id: ~
-
     #esi: ~
     #fragments: ~
     php_errors:

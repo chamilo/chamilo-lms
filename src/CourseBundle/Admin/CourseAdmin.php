@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\ToolChain;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -16,7 +16,7 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @package Chamilo\CoreBundle\Admin
  */
-class CourseAdmin extends Admin
+class CourseAdmin extends AbstractAdmin
 {
     protected $toolChain;
 

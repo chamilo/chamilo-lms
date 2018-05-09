@@ -3,7 +3,7 @@
 
 namespace Chamilo\CourseBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -14,7 +14,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
  *
  * @package Chamilo\CoreBundle\Admin
  */
-class CourseRequestAdmin extends Admin
+class CourseRequestAdmin extends AbstractAdmin
 {
     /**
      * @param FormMapper $formMapper

@@ -62,7 +62,7 @@ class LegacyLoginListener implements EventSubscriberInterface
                         $username = $_SESSION['_user']['username'];
                         $criteria = ['username' => $username];
                         /** @var User $user */
-                        $user = $container->get('sonata.user.user_manager')->findOneBy($criteria);
+                        $user = $container->get('fos_user.user_manager')->findOneBy($criteria);
                         if ($user) {
                             $em = $container->get('doctrine');
                             /** @var User $completeUser */

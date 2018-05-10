@@ -14,11 +14,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
-use FOS\UserBundle\Model\UserInterface;
-//use Symfony\Component\Security\Core\User\UserInterface;
+
+use Symfony\Component\Security\Core\User\UserInterface;
 use Sonata\UserBundle\Entity\BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -79,7 +80,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *     )
  * })
  */
-class User extends BaseUser implements ThemeUser //implements ParticipantInterface, ThemeUser
+class User extends BaseUser implements ThemeUser, EquatableInterface //implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -333,27 +334,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
-     */
-    //protected $lastname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
-     */
-    //protected $firstname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
-     */
-    //protected $password;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="auth_source", type="string", length=50, nullable=true, unique=false)
      */
     private $authSource;
@@ -377,13 +357,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
     private $pictureUri;
-
-    /**
-     * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} ).
-     *
-     * @ORM\JoinColumn(name="picture_uri", referencedColumnName="id")
-     */
-    //protected $pictureUri;
 
     /**
      * @var int
@@ -481,8 +454,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      */
     public function __construct()
     {
-        $this->status = self::STUDENT;
         parent::__construct();
+        $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
         $this->registrationDate = new \DateTime();
@@ -517,17 +490,14 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     /**
      * Updates the id with the user_id.
      *
-     *  @ORM\PostPersist()
+     * @ORM\PostPersist()
+     *
+     * @param LifecycleEventArgs $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        //parent::postPersist();
-        // Updates the user_id field
         $user = $args->getEntity();
         $this->setUserId($user->getId());
-        /*$em = $args->getEntityManager();
-        $em->persist($user);
-        $em->flush();*/
     }
 
     /**
@@ -554,14 +524,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEncoderName()
-    {
-        return "legacy_encoder";
     }
 
     /**
@@ -644,30 +606,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
                 'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
             ))
         );*/
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEqualTo(UserInterface $user)
-    {
-        if (!$user instanceof User) {
-            return false;
-        }
-
-        /*if ($this->password !== $user->getPassword()) {
-            return false;
-        }*/
-
-        /*if ($this->getSalt() !== $user->getSalt()) {
-            return false;
-        }*/
-
-        /*if ($this->username !== $user->getUsername()) {
-            return false;
-        }*/
-
-        return true;
     }
 
     /**
@@ -1637,49 +1575,15 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      *
      * @return bool
      */
-    public function isPasswordRequestNonExpired($ttl)
+    /*public function isPasswordRequestNonExpired($ttl)
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
             $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
-    }
+    }*/
 
     public function getUsername()
     {
         return $this->username;
-    }
-
-    /**
-     * Returns the creation date.
-     *
-     * @return \DateTime|null
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Sets the last update date.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return User
-     */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Returns the last update date.
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**
@@ -1733,425 +1637,11 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Sets the two-step verification code.
-     *
-     * @param string $twoStepVerificationCode
-     *
-     * @return User
-     */
-    public function setTwoStepVerificationCode($twoStepVerificationCode)
-    {
-        $this->twoStepVerificationCode = $twoStepVerificationCode;
-
-        return $this;
-    }
-
-    /**
-     * Returns the two-step verification code.
-     *
-     * @return string
-     */
-    public function getTwoStepVerificationCode()
-    {
-        return $this->twoStepVerificationCode;
-    }
-
-    /**
-     * @param string $biography
-     *
-     * @return User
-     */
-    public function setBiography($biography)
-    {
-        $this->biography = $biography;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBiography()
-    {
-        return $this->biography;
-    }
-
-    /**
-     * @param \DateTime $dateOfBirth
-     *
-     * @return User
-     */
-    public function setDateOfBirth($dateOfBirth)
-    {
-        $this->dateOfBirth = $dateOfBirth;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDateOfBirth()
-    {
-        return $this->dateOfBirth;
-    }
-
-    /**
-     * @param string $facebookData
-     *
-     * @return User
-     */
-    public function setFacebookData($facebookData)
-    {
-        $this->facebookData = $facebookData;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFacebookData()
-    {
-        return $this->facebookData;
-    }
-
-    /**
-     * @param string $facebookName
-     *
-     * @return User
-     */
-    public function setFacebookName($facebookName)
-    {
-        $this->facebookName = $facebookName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFacebookName()
-    {
-        return $this->facebookName;
-    }
-
-    /**
-     * @param string $facebookUid
-     *
-     * @return User
-     */
-    public function setFacebookUid($facebookUid)
-    {
-        $this->facebookUid = $facebookUid;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFacebookUid()
-    {
-        return $this->facebookUid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * @param string $gender
-     *
-     * @return User
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @param string $gplusData
-     *
-     * @return User
-     */
-    public function setGplusData($gplusData)
-    {
-        $this->gplusData = $gplusData;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGplusData()
-    {
-        return $this->gplusData;
-    }
-
-    /**
-     * @param string $gplusName
-     *
-     * @return User
-     */
-    public function setGplusName($gplusName)
-    {
-        $this->gplusName = $gplusName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGplusName()
-    {
-        return $this->gplusName;
-    }
-
-    /**
-     * @param string $gplusUid
-     *
-     * @return User
-     */
-    public function setGplusUid($gplusUid)
-    {
-        $this->gplusUid = $gplusUid;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGplusUid()
-    {
-        return $this->gplusUid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return User
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $timezone
-     *
-     * @return User
-     */
-    public function setTimezone($timezone)
-    {
-        $this->timezone = $timezone;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTimezone()
-    {
-        return $this->timezone;
-    }
-
-    /**
-     * @param string $twitterData
-     *
-     * @return User
-     */
-    public function setTwitterData($twitterData)
-    {
-        $this->twitterData = $twitterData;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTwitterData()
-    {
-        return $this->twitterData;
-    }
-
-    /**
-     * @param string $twitterName
-     *
-     * @return User
-     */
-    public function setTwitterName($twitterName)
-    {
-        $this->twitterName = $twitterName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTwitterName()
-    {
-        return $this->twitterName;
-    }
-
-    /**
-     * @param string $twitterUid
-     *
-     * @return User
-     */
-    public function setTwitterUid($twitterUid)
-    {
-        $this->twitterUid = $twitterUid;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTwitterUid()
-    {
-        return $this->twitterUid;
-    }
-
-    /**
-     * @param string $website
-     *
-     * @return User
-     */
-    public function setWebsite($website)
-    {
-        $this->website = $website;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebsite()
-    {
-        return $this->website;
-    }
-
-    /**
-     * @param string $token
-     *
-     * @return User
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
      * @return string
      */
     public function getFullname()
     {
         return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
-    }
-
-    /**
-     * @return array
-     */
-    public function getRealRoles()
-    {
-        return $this->roles;
-    }
-
-    /**
-     * @param array $roles
-     *
-     * @return User
-     */
-    public function setRealRoles(array $roles)
-    {
-        $this->setRoles($roles);
-
-        return $this;
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     */
-    public function eraseCredentials()
-    {
-        $this->plainPassword = null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsernameCanonical()
-    {
-        return $this->usernameCanonical;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmailCanonical()
-    {
-        return $this->emailCanonical;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword()
-    {
-        if (isset($this->plainPassword)) {
-            return $this->plainPassword;
-        }
     }
 
     /**
@@ -2173,87 +1663,36 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return array_unique($roles);
     }
 
-    /**
-     * Never use this to check if this user has access to anything!
-     *
-     * Use the SecurityContext, or an implementation of AccessDecisionManager
-     * instead, e.g.
-     *
-     *         $securityContext->isGranted('ROLE_USER');
-     *
-     * @param string $role
-     *
-     * @return bool
-     */
-    public function hasRole($role)
-    {
-        return in_array(strtoupper($role), $this->getRoles(), true);
-    }
-
     public function isAccountNonExpired()
     {
-        if (true === $this->expired) {
+        /*if (true === $this->expired) {
             return false;
         }
 
         if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
             return false;
-        }
+        }*/
 
         return true;
     }
 
     public function isAccountNonLocked()
     {
-        return !$this->locked;
+        return true;
+        //return !$this->locked;
     }
 
     public function isCredentialsNonExpired()
     {
-        if (true === $this->credentialsExpired) {
+        /*if (true === $this->credentialsExpired) {
             return false;
         }
 
         if (null !== $this->credentialsExpireAt && $this->credentialsExpireAt->getTimestamp() < time()) {
             return false;
-        }
+        }*/
 
         return true;
-    }
-
-    public function isCredentialsExpired()
-    {
-        return !$this->isCredentialsNonExpired();
-    }
-
-    public function isExpired()
-    {
-        return !$this->isAccountNonExpired();
-    }
-
-    public function isLocked()
-    {
-        return !$this->isAccountNonLocked();
-    }
-
-    public function isSuperAdmin()
-    {
-        return $this->hasRole(static::ROLE_SUPER_ADMIN);
-    }
-
-    public function isUser(UserInterface $user = null)
-    {
-        return null !== $user && $this->getId() === $user->getId();
-    }
-
-    public function removeRole($role)
-    {
-        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
-
-        return $this;
     }
 
     /**
@@ -2301,34 +1740,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return $this;
     }
 
-    public function setSuperAdmin($boolean)
-    {
-        if (true === $boolean) {
-            $this->addRole(static::ROLE_SUPER_ADMIN);
-        } else {
-            $this->removeRole(static::ROLE_SUPER_ADMIN);
-        }
-
-        return $this;
-    }
-
-    public function setPlainPassword($password)
-    {
-        $this->plainPassword = $password;
-
-        return $this;
-    }
-
     public function setLocked($boolean)
     {
         $this->locked = $boolean;
-
-        return $this;
-    }
-
-    public function setPasswordRequestedAt(\DateTime $date = null)
-    {
-        $this->passwordRequestedAt = $date;
 
         return $this;
     }
@@ -2342,110 +1756,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         }
 
         return $this;
-    }
-
-    /**
-     * Gets the groups granted to the user.
-     *
-     * @return Collection
-     */
-    public function getGroups()
-    {
-        return $this->groups ?: $this->groups = new ArrayCollection();
-    }
-
-    public function getGroupNames()
-    {
-        $names = [];
-        foreach ($this->getGroups() as $group) {
-            $names[] = $group->getName();
-        }
-
-        return $names;
-    }
-
-    public function hasGroup($name)
-    {
-        return in_array($name, $this->getGroupNames());
-    }
-
-    public function addGroup(GroupInterface $group)
-    {
-        if (!$this->getGroups()->contains($group)) {
-            $this->getGroups()->add($group);
-        }
-
-        return $this;
-    }
-
-    public function removeGroup(GroupInterface $group)
-    {
-        if ($this->getGroups()->contains($group)) {
-            $this->getGroups()->removeElement($group);
-        }
-
-        return $this;
-    }
-
-    public function addRole($role)
-    {
-        $role = strtoupper($role);
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Serializes the user.
-     *
-     * The serialized data have to contain the fields used by the equals method and the username.
-     *
-     * @return string
-     */
-    public function serialize()
-    {
-        return serialize([
-            $this->password,
-            $this->salt,
-            $this->usernameCanonical,
-            $this->username,
-            $this->expired,
-            $this->locked,
-            $this->credentialsExpired,
-            $this->enabled,
-            $this->id,
-        ]);
-    }
-
-    /**
-     * Unserializes the user.
-     *
-     * @param string $serialized
-     */
-    public function unserialize($serialized)
-    {
-        $data = unserialize($serialized);
-        // add a few extra elements in the array to ensure that we have enough keys when unserializing
-        // older data which does not include all properties.
-        $data = array_merge($data, array_fill(0, 2, null));
-
-        list(
-            $this->password,
-            $this->salt,
-            $this->usernameCanonical,
-            $this->username,
-            $this->expired,
-            $this->locked,
-            $this->credentialsExpired,
-            $this->enabled,
-            $this->id
-            ) = $data;
     }
 
     /**
@@ -2538,31 +1848,25 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get the list of HRM who have assigned this user.
+     * @param UserInterface $user
      *
-     * @return array
+     * @return bool
      */
-    public function getHrm()
+    public function isEqualTo(UserInterface $user)
     {
-        $em = \Database::getManager();
-        $qb = $em->createQueryBuilder();
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
 
-        $hrmList = $qb
-            ->select('uru')
-            ->from('ChamiloCoreBundle:UserRelUser', 'uru')
-            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
-            ->where(
-                $qb->expr()->eq('auru.accessUrlId', api_get_current_access_url_id())
-            )
-            ->andWhere(
-                $qb->expr()->eq('uru.userId', $this->id)
-            )
-            ->andWhere(
-                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
-            )
-            ->getQuery()
-            ->getResult();
+        if ($this->salt !== $user->getSalt()) {
+            return false;
+        }
 
-        return $hrmList;
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
     }
+
 }

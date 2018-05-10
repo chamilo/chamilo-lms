@@ -68,7 +68,6 @@ sonata_doctrine_orm_admin:
 sylius_settings:
     driver: doctrine/orm
 
-
 # Course settings
 chamilo_course:
     driver: doctrine/orm

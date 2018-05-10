@@ -48,12 +48,10 @@ class CourseListener
             return;
         }
 
-        var_dump(get_class($request));
-
         $sessionHandler = $event->getRequest()->getSession();
 
         $container = $this->container;
-        $translator = $container->get('translator.default');
+        $translator = $container->get('translator');
         $courseCode = $request->get('course');
 
         // Detect if the course was set with a cidReq:

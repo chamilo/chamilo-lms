@@ -187,7 +187,7 @@ class Container
      */
     public static function getUrlGenerator()
     {
-        return self::$container->get('router');
+        return self::$container->get('router.default');
     }
 
     /**
@@ -199,7 +199,7 @@ class Container
             return self::$request;
         }
 
-        return self::$container->get('request');
+        return self::$container->get('request_stack');
     }
 
     public static function setRequest($request)
@@ -400,7 +400,7 @@ class Container
         \CourseManager::setEntityManager($em);
 
         Container::setSettingsManager($container->get('chamilo.settings.manager'));
-        Container::setUserManager($container->get('sonata.user.user_manager'));
+        Container::setUserManager($container->get('fos_user.user_manager'));
         Container::setSiteManager($container->get('sonata.page.manager.site'));
 
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));

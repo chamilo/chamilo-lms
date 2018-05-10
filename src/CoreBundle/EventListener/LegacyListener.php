@@ -31,22 +31,6 @@ class LegacyListener
         }
 
         $request = $event->getRequest();
-        $controller = $request->get('_controller');
-        // Only process legacy listener when loading legacy controller
-        /*if ($controller != 'Chamilo\CoreBundle\Controller\LegacyController::classicAction') {
-            return;
-        }*/
-
-        /*$skipControllers = [
-            'web_profiler.controller.profiler:toolbarAction', //
-            'fos_js_routing.controller:indexAction'//
-        ];
-
-        // Skip legacy listener
-        if (in_array($controller, $skipControllers)) {
-            return;
-        }*/
-
         $session = $request->getSession();
 
         /** @var ContainerInterface $container */
@@ -58,7 +42,7 @@ class LegacyListener
         Container::setRequest($request);
 
         // Legacy way of detect current access_url
-        $installed = $this->container->getParameter('installed');
+        $installed = $container->getParameter('installed');
         $urlId = 1;
 
         if (!empty($installed)) {

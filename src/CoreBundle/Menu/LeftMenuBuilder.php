@@ -401,7 +401,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
     public function loginMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('main');
-        $translator = $this->container->get('translator.default');
+        $translator = $this->container->get('translator');
         $settingManager = $this->container->get('chamilo.settings.manager');
 
         if ($settingManager->getSetting('allow_registration') == 'true') {
@@ -446,7 +446,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
      */
     public function helpMenu(FactoryInterface $factory, array $options)
     {
-        $translator = $this->container->get('translator.default');
+        $translator = $this->container->get('translator');
         $menu = $factory->createItem('main');
         $menu->addChild(
             $translator->trans('Forum'),

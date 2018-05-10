@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Menu;
 
+use Chamilo\FaqBundle\Entity\Category;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Site;
 use Knp\Menu\FactoryInterface;
@@ -133,7 +134,8 @@ class NavBuilder implements ContainerAwareInterface
             }
         }
 
-        $categories = $this->container->get('Chamilo\FaqBundle\Repository\CategoryRepository')->retrieveActive();
+        $categories = $this->container->get('doctrine')->getRepository('ChamiloFaqBundle:Category')->retrieveActive();
+        //$categories = $this->container->get('Chamilo\FaqBundle\Repository\CategoryRepository')->retrieveActive();
         if ($categories) {
             $faq = $menu->addChild(
                 'FAQ',

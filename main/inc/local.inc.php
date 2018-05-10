@@ -354,7 +354,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $password,
                     $uData['salt']
                 );
-
                 // Check the user's password
                 if (($validPassword || $cas_login) &&
                     (trim($login) == $uData['username'])

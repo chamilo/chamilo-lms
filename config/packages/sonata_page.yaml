@@ -1,13 +1,15 @@
 # more information can be found here http://sonata-project.org/bundles/page
 sonata_page:
+    slugify_service:   sonata.core.slugify.cocur
+    multisite: host_with_path_by_locale # host
+    use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
+
     class:
         page: Chamilo\PageBundle\Entity\Page
         site: Chamilo\PageBundle\Entity\Site
         block: Chamilo\PageBundle\Entity\Block
         snapshot: Chamilo\PageBundle\Entity\Snapshot
 
-    multisite: host_with_path_by_locale # host
-    use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
     ignore_uri_patterns:
         - ^/administration(.*) # sonata admin
         - ^/admin(.*) # chamilo admin

@@ -28,8 +28,8 @@ class FrontController extends Controller
     public function editorTemplates()
     {
         $editor = new CkEditor(
-            $this->container->get('translator.default'),
-            $this->container->get('router')
+            $this->get('translator.default'),
+            $this->get('router')
         );
         $templates = $editor->simpleFormatTemplates();
 
@@ -78,7 +78,7 @@ class FrontController extends Controller
         $connector = new Connector(
             $this->container->get('doctrine')->getManager(),
             [],
-            $this->container->get('router'),
+            $this->get('router'),
             $this->container->get('translator.default'),
             $this->container->get('security.authorization_checker'),
             $this->getUser(),

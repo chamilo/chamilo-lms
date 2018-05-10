@@ -4,23 +4,23 @@
 
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     {{ macro.panel(
-    'Profile' | trans,
-    mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:profileMenu', {'automenu': 'pills', 'stacked':true})
+        'Profile' | trans,
+        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:profileMenu', {'automenu': 'pills', 'stacked':true})
     ) }}
 
     {{ macro.panel(
-    'Courses' | trans,
-    mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:courseMenu', {'automenu': 'pills', 'stacked':true})
+        'Courses' | trans,
+        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:courseMenu', {'automenu': 'pills', 'stacked':true})
     ) }}
 
     {{ macro.panel(
-    'Sessions' | trans,
-    mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:sessionMenu', {'automenu': 'pills', 'stacked':true})
+        'Sessions' | trans,
+        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:sessionMenu', {'automenu': 'pills', 'stacked':true})
     ) }}
 
     {{ macro.panel(
-    'Skills' | trans,
-    mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:skillsMenu', {'automenu': 'pills', 'stacked':true})
+        'Skills' | trans,
+        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:skillsMenu', {'automenu': 'pills', 'stacked':true})
     ) }}
 {% else %}
     {# Plugin login before/after tpls #}

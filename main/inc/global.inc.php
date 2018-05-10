@@ -595,4 +595,5 @@ try {
     var_dump($e->getCode());
     var_dump($e->getLine());
     var_dump($e->getTraceAsString());
+    exit;
 }

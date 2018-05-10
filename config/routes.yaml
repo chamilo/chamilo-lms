@@ -10,7 +10,7 @@
 logout:
     path: /logout
 sonata_user_admin_security_logout:
-    path: /logout
+    path: /administration/logout
 _admin:
     resource: routes/sonata_admin.yaml
     prefix: /administration

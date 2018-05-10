@@ -42,6 +42,25 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
+
+        $url = $this->router->generate('home');
+
+        if (!empty($url)) {
+            $response = new RedirectResponse($url);
+        }
+
+        // Redirect the user to where they were before the login process begun.
+        if (empty($response)) {
+            $url = $request->headers->get('referer');
+            /*// if the referer is the login use the home.
+            if (strpos($url, 'login') !== false) {
+                $url = $this->router->generate('home');
+            }*/
+            $response = new RedirectResponse($url);
+        }
+
+        return $response;
+
         /** @var User $user */
         $user = $token->getUser();
         $userId = $user->getId();
@@ -64,6 +83,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         if ($this->checker->isGranted('ROLE_TEACHER')) {
             $session->set('is_allowedCreateCourse', true);
         }
+
+        error_log('siccesss');
 
         // Setting last login datetime
         $session->set('user_last_login_datetime', api_get_utc_datetime());
@@ -128,6 +149,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session=0';
             }
         }
+
+        $url = $this->router->generate('home');
 
         if (!empty($url)) {
             $response = new RedirectResponse($url);

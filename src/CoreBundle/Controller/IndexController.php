@@ -41,34 +41,9 @@ class IndexController extends BaseController
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
         $pageController = new PageController();
-        /*
-                if (api_get_setting('display_categories_on_homepage') == 'true') {
-                    //$template->assign('course_category_block', $pageController->return_courses_in_categories());
-                }
 
-                if (!api_is_anonymous()) {
-                    if (api_is_platform_admin()) {
-                        $pageController->setCourseBlock();
-                    } else {
-                        $pageController->return_teacher_link();
-                    }
-                }
-
-                // Hot courses & announcements
-                $hotCourses         = null;
-                $announcementsBlock = null;
-
-                // Navigation links
-                //$pageController->returnNavigationLinks($template->getNavigationLinks());
-                $pageController->returnNotice();
-                $pageController->returnHelp();
-
-                if (api_is_platform_admin() || api_is_drh()) {
-                    $pageController->returnSkillsLinks();
-                }*/
-
-        $sessionHandler = $request->getSession();
-        $sessionHandler->remove('coursesAlreadyVisited');
+        //$sessionHandler = $request->getSession();
+        //$sessionHandler->remove('coursesAlreadyVisited');
 
         $user = $this->getUser();
         $userId = 0;
@@ -114,7 +89,7 @@ class IndexController extends BaseController
                 $user->addAttribute($smallSize);
                 $userManager->updateUser($user);
         */
-        $this->get('session')->remove('id_session');
+        //$this->get('session')->remove('id_session');
 
         return $this->render(
             '@ChamiloCore/Index/index.html.twig',

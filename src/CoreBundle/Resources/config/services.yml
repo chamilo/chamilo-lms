@@ -100,7 +100,7 @@ services:
     # html editor
     chamilo_core.html_editor:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
-        arguments: ['@translator.default', '@router']
+        arguments: ['@translator', '@router']
         public: true
     # Listeners
 #    chamilo.doctrine.entity_listener_resolver:

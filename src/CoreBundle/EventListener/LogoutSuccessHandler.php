@@ -23,7 +23,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     /**
      * @param UrlGeneratorInterface $urlGenerator
      * @param AuthorizationChecker  $checker
-     * @param Storage               $storage
+     * @param TokenStorage          $storage
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
@@ -76,7 +76,6 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         }
 
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-
         $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
         Database::query($query);
 

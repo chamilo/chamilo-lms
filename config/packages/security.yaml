@@ -1,15 +1,20 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface:
+            id: chamilo_user.security.encoder
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
     access_control:
         - {path: ^/administrator, role: ROLE_ADMIN}
         - {path: ^/efconnect, role: ROLE_USER}
         - {path: ^/elfinder, role: ROLE_USER}
         - {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-
-    encoders:
-        FOS\UserBundle\Model\UserInterface:
-            id: chamilo_user.security.encoder
 
     role_hierarchy:
         ROLE_SONATA_ADMIN: ROLE_USER
@@ -37,14 +42,10 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT
         ROLE_ANONYMOUS: [ROLE_ANONYMOUS]
 
-    access_decision_manager:
+    #access_decision_manager:
         # strategy can be: affirmative, unanimous or consensus
-        strategy: unanimous
-
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-    providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
+        # only grant access if none of the voters has denied access
+        #strategy: unanimous
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -52,24 +53,24 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         admin:
-            pattern: .*
-            context: user
+            pattern: ^/
+            context: admin
+            anonymous: true
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
                 login_path: /login
                 use_forward: false
                 check_path: /login_check
-                success_handler: chamilo_core.listener.login_success_handler
-                failure_path: null
-            remember_me:
-                secret: '%secret%'
-                lifetime: 604800 # 1 week in seconds
-                path: /
+#                success_handler: chamilo_core.listener.login_success_handler
+                failure_path:   null
+#            remember_me:
+#                secret: '%secret%'
+#                lifetime: 604800 # 1 week in seconds
+#                path: /
             logout:
                 path: /logout
                 target: /
-            anonymous: ~
             switch_user: false
             oauth:
                 resource_owners:

@@ -62,12 +62,12 @@ security:
                 login_path: /login
                 use_forward: false
                 check_path: /login_check
-#                success_handler: chamilo_core.listener.login_success_handler
+                success_handler: chamilo_core.listener.login_success_handler
                 failure_path:   null
-#            remember_me:
-#                secret: '%secret%'
-#                lifetime: 604800 # 1 week in seconds
-#                path: /
+            remember_me:
+                secret: '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
             logout:
                 path: /logout
                 target: /

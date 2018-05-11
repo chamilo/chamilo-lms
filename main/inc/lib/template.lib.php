@@ -4,6 +4,8 @@
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * Class Template.
@@ -358,13 +360,45 @@ class Template
         $this->assign('actions', $actions);
     }
 
+
+    /**
+     * Render the template.
+     *
+     * @param string $template           The template path
+     * @param bool   $clearFlashMessages Clear the $_SESSION variables for flash messages
+     */
+    public function display($template, $clearFlashMessages = true)
+    {
+        //$this->assign('flash_messages', Display::getFlashToString());
+        if ($clearFlashMessages) {
+            //Display::cleanFlashMessages();
+        }
+        $template = str_replace('tpl', 'html.twig', $template);
+        $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
+
+        if (!file_exists($templateFile)) {
+            $e = new \Gaufrette\Exception\FileNotFound($templateFile);
+            echo $e->getMessage();
+            exit;
+        }
+        //echo Container::getTemplating()->render($template, $this->params);
+        $response = new Response();
+        $content = Container::getTemplating()->render($template, $this->params);
+        $response->setContent($content);
+        $response->send();
+    }
+
     /**
      * Shortcut to display a 1 col layout (index.php).
      * */
     public function display_one_col_template()
     {
-        $tpl = $this->get_template('layout/layout_1_col.html.twig');
-        echo Container::getTemplating()->render($tpl, $this->params);
+        $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        $response = new Response();
+        $content = Container::getTemplating()->render($tpl, $this->params);
+        $response->setContent($content);
+        $response->send();
+
     }
 
     /**
@@ -372,8 +406,11 @@ class Template
      */
     public function display_two_col_template()
     {
-        $tpl = $this->get_template('layout/layout_2_col.html.twig');
-        echo Container::getTemplating()->render($tpl, $this->params);
+        $tpl = '@ChamiloTheme/Layout/layout_two_col.html.twig';
+        $response = new Response();
+        $content = Container::getTemplating()->render($tpl, $this->params);
+        $response->setContent($content);
+        $response->send();
     }
 
     /**
@@ -600,8 +637,10 @@ class Template
             'system_version' => api_get_configuration_value('system_version'),
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution'),
-            'date' => api_format_date('now', DATE_FORMAT_LONG),
-            'timezone' => api_get_timezone(),
+            //'date' => api_format_date('now', DATE_FORMAT_LONG),
+            'date' => '',
+            'timezone' => '',
+            //'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode'),
         ];
 
@@ -1018,29 +1057,6 @@ class Template
         $this->params[$variable] = $value;
     }
 
-    /**
-     * Render the template.
-     *
-     * @param string $template           The template path
-     * @param bool   $clearFlashMessages Clear the $_SESSION variables for flash messages
-     */
-    public function display($template, $clearFlashMessages = true)
-    {
-        $this->assign('flash_messages', Display::getFlashToString());
-
-        if ($clearFlashMessages) {
-            Display::cleanFlashMessages();
-        }
-        $template = str_replace('tpl', 'html.twig', $template);
-        $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
-
-        if (!file_exists($templateFile)) {
-            $e = new \Gaufrette\Exception\FileNotFound($templateFile);
-            echo $e->getMessage();
-            exit;
-        }
-        echo Container::getTemplating()->render($template, $this->params);
-    }
 
     /**
      * Adds a body class for login pages.
@@ -1438,7 +1454,7 @@ class Template
 
         if (isset($httpHeadXtra) && $httpHeadXtra) {
             foreach ($httpHeadXtra as &$thisHttpHead) {
-                header($thisHttpHead);
+                //header($thisHttpHead);
             }
         }
 
@@ -1629,11 +1645,11 @@ class Template
         $this->assign('header_extra_content', $extra_header);
 
         if ($sendHeaders) {
-            header('Content-Type: text/html; charset='.api_get_system_encoding());
+            /*header('Content-Type: text/html; charset='.api_get_system_encoding());
             header(
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
-            self::addHTTPSecurityHeaders();
+            self::addHTTPSecurityHeaders();*/
 
             $responseCode = $this->getResponseCode();
             if (!empty($responseCode)) {

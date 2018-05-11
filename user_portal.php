@@ -300,9 +300,10 @@ if ($myCourseListAsCategory) {
 }
 
 $controller->setGradeBookDependencyBar($userId);
-$controller->tpl->display_two_col_template();
 
 // Deleting the session_id.
 Session::erase('session_id');
 Session::erase('studentview');
 api_remove_in_gradebook();
+
+$controller->tpl->display_two_col_template();

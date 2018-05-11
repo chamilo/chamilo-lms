@@ -45,8 +45,8 @@ try {
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
+    $env = 'test';
     $kernel = new Chamilo\Kernel($env, true);
-
     $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
         'host_with_path_by_locale'
     );
@@ -81,6 +81,8 @@ try {
     // Connect Chamilo with the Symfony container
     Container::setContainer($container);
     Container::setLegacyServices($container);
+    // Symfony uses request_stack now
+    $container->get('request_stack')->push($request);
 
     // Fix chamilo URL when used inside a folder: example.com/chamilo
     $append = $kernel->getUrlAppend();
@@ -90,7 +92,6 @@ try {
     }
 
     $router = $container->get('router');
-    $requestStack = $container->get('request_stack');
     $context = $container->get('router.request_context');
     $host = $router->getContext()->getHost();
     $context->setBaseUrl($appendValue);
@@ -103,11 +104,12 @@ try {
     $packages = $container->get('assets.packages');
     $packages->setDefaultPackage($newDefault);
     $container->get('chamilo_core.menu.nav_builder')->setContainer($container);
-    $checker = $container->get('security.authorization_checker');
 
     if (!is_dir(_MPDF_TEMP_PATH)) {
         mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
     }
+
+    $session = $request->getSession();$session->set('a', 1);
 
     /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
     if (!empty($_configuration['multiple_access_urls'])) {
@@ -247,6 +249,7 @@ try {
             $_plugins[$key][$row['subkey']] = $row['selected_value'];
         }
     }
+
     // Error reporting settings.
     if (api_get_setting('server_type') == 'test') {
         ini_set('display_errors', '1');
@@ -261,6 +264,8 @@ try {
     }
 
     ini_set('log_errors', '1');
+
+
 
     // Load allowed tag definitions for kses and/or HTMLPurifier.
     require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
@@ -509,8 +514,10 @@ try {
         }
     }
 
+
     // include the local (contextual) parameters of this course or section
     require __DIR__.'/local.inc.php';
+    $_user = api_get_user_info();
 
     // The global variable $text_dir has been defined in the language file trad4all.inc.php.
     // For determining text direction correspondent to the current language
@@ -581,6 +588,7 @@ try {
         $langstats = new langstats();
     }
 
+
     //Default quota for the course documents folder
     $default_quota = api_get_setting('default_document_quotum');
     //Just in case the setting is not correctly set
@@ -594,6 +602,6 @@ try {
     var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());
-    var_dump($e->getTraceAsString());
+    echo ($e->getTraceAsString());
     exit;
 }

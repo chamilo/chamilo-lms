@@ -828,7 +828,7 @@ if (isset($use_anonymous) && $use_anonymous) {
 } else {
     //if anonymous mode is not set, then check if this user is anonymous. If it
     //is, clean it from being anonymous (make him a nobody :-))
-    api_clear_anonymous();
+    //api_clear_anonymous();
 }
 
 // if the requested course is different from the course in session
@@ -1535,8 +1535,9 @@ Event::eventCourseLoginUpdate(
     api_get_user_id(),
     api_get_session_id()
 );
-Redirect::session_request_uri($logging_in, $user_id);
 
-if (!ChamiloApi::isAjaxRequest() && api_get_configuration_value('allow_mandatory_survey')) {
+//Redirect::session_request_uri($logging_in, $user_id);
+
+/*if (!ChamiloApi::isAjaxRequest() && api_get_configuration_value('allow_mandatory_survey')) {
     SurveyManager::protectByMandatory();
-}
+}*/

@@ -2117,7 +2117,7 @@ class IndexManager
      */
     public static function setDefaultMyCourseView($view, $userId)
     {
-        setcookie('defaultMyCourseView'.$userId, $view);
+        //setcookie('defaultMyCourseView'.$userId, $view);
     }
 
     /**

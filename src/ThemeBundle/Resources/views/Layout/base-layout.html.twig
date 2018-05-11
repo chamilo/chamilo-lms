@@ -172,7 +172,6 @@
                         <div class="container">
                             <div class="collapse navbar-collapse">
                             {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
-
                             {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <div class="navbar-custom-menu">
                                     <ul class="nav navbar-nav navbar-right">

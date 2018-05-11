@@ -2403,6 +2403,8 @@ function get_status_from_code($status_code)
  */
 function api_set_anonymous()
 {
+    return false;
+
     global $_user;
 
     if (!empty($_user['user_id'])) {
@@ -3660,12 +3662,13 @@ function api_is_anonymous($user_id = null, $db_check = false)
         }
 
         $info = api_get_user_info($user_id);
+
         if ($info['status'] == 6 || $user_id == 0 || empty($info)) {
             return true;
         }
     }
 
-    return Session::read('IS_AUTHENTICATED_FULLY', false);
+    return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
 }
 
 /**
@@ -3680,6 +3683,8 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
+    echo 'api_not_allowed';
+    return false;
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -7520,9 +7525,7 @@ function api_get_locked_settings()
  */
 function api_user_is_login($user_id = null)
 {
-    $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
-
-    return $user_id && !api_is_anonymous();
+    return Session::read('IS_AUTHENTICATED_FULLY', false) === true;
 }
 
 /**
@@ -8330,7 +8333,7 @@ function api_is_allowed_in_course()
  */
 function api_set_firstpage_parameter($in_firstpage)
 {
-    setcookie('GotoCourse', $in_firstpage);
+    //setcookie('GotoCourse', $in_firstpage);
 }
 
 /**

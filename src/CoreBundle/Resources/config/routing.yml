@@ -7,6 +7,10 @@ userportal:
     type: annotation
     prefix: /userportal
 
+sidebar_controller:
+    resource: '@ChamiloThemeBundle/Controller/SidebarController.php'
+    type: annotation
+
 front:
     resource: '@ChamiloCoreBundle/Controller/FrontController.php'
     type: annotation

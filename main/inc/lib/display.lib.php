@@ -2372,7 +2372,7 @@ class Display
      */
     public static function getFlashToString()
     {
-        $messages = Session::read('flash_messages');
+        /*$messages = Session::read('flash_messages');
         $messageToString = '';
         if (!empty($messages)) {
             foreach ($messages as $message) {
@@ -2380,7 +2380,7 @@ class Display
             }
         }
 
-        return $messageToString;
+        return $messageToString;*/
     }
 
     /**

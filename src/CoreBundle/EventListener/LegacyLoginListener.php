@@ -55,8 +55,10 @@ class LegacyLoginListener implements EventSubscriberInterface
             $isGranted = $container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
             if ($isGranted) {
                 $session->set('IS_AUTHENTICATED_FULLY', true);
+                $session->set('IS_AUTHENTICATED_ANONYMOUSLY', false);
             } else {
                 $session->set('IS_AUTHENTICATED_FULLY', false);
+                $session->set('IS_AUTHENTICATED_ANONYMOUSLY', true);
                 if (isset($_SESSION) && isset($_SESSION['_user'])) {
                     if ($_SESSION['_user']['active'] == 1) {
                         $username = $_SESSION['_user']['username'];
@@ -77,8 +79,6 @@ class LegacyLoginListener implements EventSubscriberInterface
                             $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
                             $locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
                             if ($user && !empty($locale)) {
-                                error_log('legacyloginlistener');
-                                error_log($locale);
                                 $user->setLocale($locale);
 
                                 //$request->getSession()->set('_locale_user', $locale);
@@ -88,8 +88,7 @@ class LegacyLoginListener implements EventSubscriberInterface
                                 $request->setLocale($locale);
                             }
 
-                            $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
-
+                            $token = new UsernamePasswordToken($user, null, 'admin', $user->getRoles());
                             $this->tokenStorage->setToken($token); //now the user is logged in
 
                             //now dispatch the login event

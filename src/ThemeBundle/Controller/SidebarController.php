@@ -1,9 +1,5 @@
 <?php
-/**
- * SidebarController.php
- * avanzu-admin
- * Date: 23.02.14.
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
 
@@ -21,11 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SidebarController extends Controller
 {
-    /**
-     * Avatar user panel.
-     *
-     * @return Response
-     */
     public function userPanelAction()
     {
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_SIDEBAR_USER)) {

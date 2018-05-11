@@ -1,6 +1,6 @@
 # more information can be found here http://sonata-project.org/bundles/page
 sonata_page:
-    slugify_service:   sonata.core.slugify.cocur
+    slugify_service: sonata.core.slugify.cocur
     multisite: host_with_path_by_locale # host
     use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
 

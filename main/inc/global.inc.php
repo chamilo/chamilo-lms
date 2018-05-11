@@ -109,8 +109,6 @@ try {
         mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
     }
 
-    $session = $request->getSession();$session->set('a', 1);
-
     /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
     if (!empty($_configuration['multiple_access_urls'])) {
         $_configuration['access_url'] = 1;
@@ -602,6 +600,6 @@ try {
     var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());
-    echo ($e->getTraceAsString());
+    echo $e->getTraceAsString();
     exit;
 }

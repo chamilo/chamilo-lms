@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class SecurityController
+ * Class SecurityController.
  * @package Chamilo\ThemeBundle\Controller
  */
 class SecurityController extends Controller

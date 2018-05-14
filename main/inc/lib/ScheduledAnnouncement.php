@@ -289,10 +289,11 @@ class ScheduledAnnouncement extends Model
 
     /**
      * @param int $urlId
+     * @param int $senderId
      *
      * @return int
      */
-    public function sendPendingMessages($urlId = 0)
+    public function sendPendingMessages($urlId = 0, $senderId = 0)
     {
         if (!$this->allowed()) {
             return 0;
@@ -321,13 +322,11 @@ class ScheduledAnnouncement extends Model
                         continue;
                     }
 
-                    $attachments = $this->getAttachmentToString($result['id']);
-
-                    self::update(['id' => $result['id'], 'sent' => 1]);
-
-                    $subject = $result['subject'];
-
                     if ($users) {
+                        self::update(['id' => $result['id'], 'sent' => 1]);
+                        $attachments = $this->getAttachmentToString($result['id']);
+                        $subject = $result['subject'];
+
                         foreach ($users as $user) {
                             // Take original message
                             $message = $result['message'];
@@ -393,10 +392,11 @@ class ScheduledAnnouncement extends Model
                             $message = str_replace(array_keys($tags), $tags, $message);
                             $message .= $attachments;
 
-                            MessageManager::send_message(
+                            MessageManager::send_message_simple(
                                 $userInfo['user_id'],
                                 $subject,
-                                $message
+                                $message,
+                                $senderId
                             );
                         }
                     }

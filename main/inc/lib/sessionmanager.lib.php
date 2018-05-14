@@ -4512,7 +4512,7 @@ class SessionManager
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "SELECT count(id) FROM $session_table s";
+        $sql = "SELECT count(s.id) FROM $session_table s";
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
             $sql .= ", $access_url_rel_session_table u ".
                 " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";

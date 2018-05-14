@@ -289,11 +289,10 @@ class ScheduledAnnouncement extends Model
 
     /**
      * @param int $urlId
-     * @param int $senderId
      *
      * @return int
      */
-    public function sendPendingMessages($urlId = 0, $senderId = 0)
+    public function sendPendingMessages($urlId = 0)
     {
         if (!$this->allowed()) {
             return 0;
@@ -318,7 +317,9 @@ class ScheduledAnnouncement extends Model
                         $urlId
                     );
 
-                    if (empty($users)) {
+                    $coachId = $sessionInfo['id_coach'];
+
+                    if (empty($users) || empty($coachId)) {
                         continue;
                     }
 
@@ -396,7 +397,7 @@ class ScheduledAnnouncement extends Model
                                 $userInfo['user_id'],
                                 $subject,
                                 $message,
-                                $senderId
+                                $coachId
                             );
                         }
                     }

@@ -88,6 +88,11 @@ class CourseRestorer
         $this->file_option = FILE_RENAME;
         $this->set_tools_invisible_by_default = false;
         $this->skip_content = [];
+
+        $forceImport = api_get_configuration_value('allow_import_scorm_package_in_course_builder');
+        if ($forceImport) {
+            $this->tools_to_restore[] = 'scorm_documents';
+        }
     }
 
     /**
@@ -999,20 +1004,18 @@ class CourseRestorer
     public function restore_scorm_documents()
     {
         $perm = api_get_permissions_for_new_directories();
-
         if ($this->course->has_resources(RESOURCE_SCORM)) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_SCORM] as $document) {
                 $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
                 @mkdir(dirname($path.$document->path), $perm, true);
-
                 if (file_exists($path.$document->path)) {
                     switch ($this->file_option) {
                         case FILE_OVERWRITE:
                             rmdirr($path.$document->path);
                             copyDirTo(
                                 $this->course->backup_path.'/'.$document->path,
-                                $path.dirname($document->path),
+                                $path.$document->path,
                                 false
                             );
                             break;
@@ -1058,7 +1061,7 @@ class CourseRestorer
                     // end if file exists
                     copyDirTo(
                         $this->course->backup_path.'/'.$document->path,
-                        $path.dirname($document->path),
+                        $path.$document->path,
                         false
                     );
                 }

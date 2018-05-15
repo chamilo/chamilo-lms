@@ -57,7 +57,7 @@ $sql = "CREATE TABLE IF NOT EXISTS `c_cal_dates` (
 `c_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `status` varchar(1) NOT NULL,
-  `horaire_name` varchar(250) DEFAULT NULL,
+  `horaire_name` varchar(190) DEFAULT NULL,
   UNIQUE KEY `temp` (`c_id`,`date`,`horaire_name`),
   UNIQUE KEY `indexunique` (`c_id`,`date`,`horaire_name`),
   KEY `idx` (`c_id`)
@@ -68,7 +68,7 @@ Database::query($sql);
 $sql = "CREATE TABLE IF NOT EXISTS `c_cal_horaire` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
   `c_id` int(11) NOT NULL,
-  `name` varchar(250) NOT NULL,
+  `name` varchar(190) NOT NULL,
   `num_minute` int(11) NOT NULL,
   `num_hours` int(11) NOT NULL,
   `learnpath_dw` varchar(256) NOT NULL,

@@ -2854,10 +2854,10 @@ class CourseRestorer
                     foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
                         $previous_new_id = 0;
                         if ($previous_item_old_id != 0) {
-                            $previous_new_id = $new_item_ids[$previous_item_old_id];
+                            $previous_new_id = isset($new_item_ids[$previous_item_old_id]) ? $new_item_ids[$previous_item_old_id] : '';
                         }
                         $sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."'
-                                WHERE  c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
+                                WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
 

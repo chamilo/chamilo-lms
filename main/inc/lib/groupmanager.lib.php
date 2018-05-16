@@ -496,6 +496,45 @@ class GroupManager
     }
 
     /**
+     * Function needed only when deleting a course, in order to be sure that all group ids are deleted.
+     *
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public static function deleteAllGroupsFromCourse($courseId)
+    {
+        $courseId = (int) $courseId;
+
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
+        $sql = "SELECT iid FROM $table
+                WHERE c_id = $courseId ";
+        Database::query($sql);
+
+        // Database table definitions
+        $table = Database::get_course_table(TABLE_GROUP_USER);
+        $sql = "DELETE FROM $table
+                WHERE c_id = $courseId";
+        Database::query($sql);
+
+        $table = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $sql = "DELETE FROM $table
+                WHERE c_id = $courseId";
+        Database::query($sql);
+
+        $groupTable = Database::get_course_table(TABLE_GROUP);
+        $sql = "DELETE FROM $groupTable
+                WHERE c_id = $courseId";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
      * Get group properties.
      *
      * @param int  $group_id the group from which properties are requested

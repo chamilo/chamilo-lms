@@ -409,6 +409,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         CourseManager::delete_course($_GET['delete_course']);
         $obj_cat = new Category();
         $obj_cat->update_category_delete($_GET['delete_course']);
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
     }
     // Create a search-box
     $form = new FormValidator(

@@ -508,11 +508,14 @@ class CourseHome
             't.session_id'
         );
 
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+
+        $orderBy = ' ORDER BY id ';
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
                 $conditions = ' WHERE visibility = 1 AND 
                                 (category = "authoring" OR category = "interaction" OR category = "plugin") AND 
-                                name <> "notebookteacher" ';
+                                t.name <> "notebookteacher" ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
                     $conditions = ' WHERE (
                         visibility = 1 AND (
@@ -522,16 +525,32 @@ class CourseHome
                         ) OR (name = "'.TOOL_TRACKING.'") 
                     )';
                 }
-                $sql = "SELECT *
+
+                /*$sql = "SELECT *
                         FROM $course_tool_table t
                         $conditions AND
                         c_id = $course_id $condition_session
-                        ";
+                        ";*/
+                // Add order if there are LPs
+                $sql = "SELECT t.* FROM $course_tool_table t
+                        LEFT JOIN $lpTable l 
+                        ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
+                        $conditions AND
+                        t.c_id = $course_id $condition_session 
+                        ORDER BY CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END, l.display_order, t.id";
+                $orderBy = '';
                 break;
             case TOOL_AUTHORING:
-                $sql = "SELECT * FROM $course_tool_table t
+                /*$sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'authoring' AND c_id = $course_id $condition_session
-                        ";
+                        ";*/
+                $sql = "SELECT t.* FROM $course_tool_table t
+                        LEFT JOIN $lpTable l 
+                        ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
+                        WHERE 
+                            category = 'authoring' AND t.c_id = $course_id $condition_session
+                        ORDER BY CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END, l.display_order, t.id";
+                $orderBy = '';
                 break;
             case TOOL_INTERACTION:
                 $sql = "SELECT * FROM $course_tool_table t
@@ -561,7 +580,7 @@ class CourseHome
                         ";
                 break;
         }
-        $sql .= " ORDER BY id ";
+        $sql .= $orderBy;
         $result = Database::query($sql);
         $tools = [];
         while ($row = Database::fetch_assoc($result)) {

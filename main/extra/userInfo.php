@@ -9,7 +9,7 @@ if (empty($allow)) {
     exit;
 }
 
-$TABLECALHORAIRE  = Database :: get_course_table(cal_horaire);
+$TABLECALHORAIRE = Database :: get_course_table(cal_horaire);
 $htmlHeadXtra[] = '<script>
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
@@ -34,15 +34,15 @@ if (api_is_anonymous()) {
 $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
 $TBL_USERINFO_CONTENT = Database:: get_course_table(userinfo_content);
 
-if ($tool_info['visibility'] == 1 ) {
-    $interbreadcrumb[] = array ('url' => 'user.php', 'name' => get_lang('Users'));
+if ($tool_info['visibility'] == 1) {
+    $interbreadcrumb[] = ['url' => 'user.php', 'name' => get_lang('Users')];
 }
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_header($nameTools, "User");
     $origin = Security::remove_XSS($_GET['origin']);
 } else {
-    ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH);?>css/default.css" /> <?php
+    ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" /> <?php
 }
 
 $currentCourse = api_get_course_id();
@@ -59,9 +59,8 @@ $current_session_id = api_get_session_id();
 $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
 
 /**
- * Connection layer between Chamilo and the current script
+ * Connection layer between Chamilo and the current script.
  */
-
 $courseCode = api_get_course_id();
 $tbl_coursUser = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $userIdViewer = api_get_user_id(); // id fo the user currently online
@@ -166,8 +165,8 @@ if (api_is_allowed_to_edit(null, true)) {
                 ).get_lang('ViewUser').'</a>';
         }
     }
-	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('stats.png',get_lang('UserStatistics'),'',ICON_SIZE_MEDIUM).get_lang('UserStatistics').'</a>';
-	echo '</div>';
+    echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('stats.png', get_lang('UserStatistics'), '', ICON_SIZE_MEDIUM).get_lang('UserStatistics').'</a>';
+    echo '</div>';
 } else {
     if ($tool_info['visibility'] == 1) {
         echo '<div class="actions">';
@@ -205,7 +204,7 @@ if ($displayMode == "viewDefEdit") {
     $edit_heading_form = new FormValidator('edit_heading_form');
     $edit_heading_form->addElement('hidden', 'id');
     $edit_heading_form->add_textfield('title', get_lang('Title'));
-    $edit_heading_form->addElement('textarea', 'comment', get_lang('Comment'), array('cols' => 60, 'rows' => 4));
+    $edit_heading_form->addElement('textarea', 'comment', get_lang('Comment'), ['cols' => 60, 'rows' => 4]);
     $possible_line_nrs[1] = '1 '.get_lang('Line');
     $possible_line_nrs[3] = '3 '.get_lang('Lines');
     $possible_line_nrs[5] = '5 '.get_lang('Lines');
@@ -215,7 +214,6 @@ if ($displayMode == "viewDefEdit") {
     $edit_heading_form->addElement('submit', 'submitDef', get_lang('Ok'));
     $edit_heading_form->setDefaults($catToEdit);
     $edit_heading_form->display();
-
 } elseif ($displayMode == "viewDefList") {
     $catList = get_cat_def_list();
     if ($catList) {
@@ -224,12 +222,12 @@ if ($displayMode == "viewDefEdit") {
             echo "<p>", "<b>".htmlize($thisCat['title'])."</b><br>\n", "<i>".htmlize($thisCat['comment'])."</i>\n", "</p>";
             // displays lines
             echo "<blockquote>\n", "<font color=\"gray\">\n";
-            for ($i = 1; $i <= $thisCat['nbline']; $i ++) {
+            for ($i = 1; $i <= $thisCat['nbline']; $i++) {
                 echo "<br>__________________________________________\n";
             }
             echo "</font>\n", "</blockquote>\n";
             // displays commands
-            echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
+            echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
         } // end for each
     } // end if ($catList)
 
@@ -247,13 +245,13 @@ if ($displayMode == "viewDefEdit") {
     $content_heading_form->addElement('hidden', 'uInfo');
     $content_heading_form->addElement('static', null, $catToEdit['title'], htmlize($catToEdit['comment']));
     if ($catToEdit['nbline'] == 1) {
-        $content_heading_form->addElement('text', 'content', null, array ('size' => 80));
+        $content_heading_form->addElement('text', 'content', null, ['size' => 80]);
     } else {
         $content_heading_form->addElement(
             'textarea',
             'content',
             null,
-            array('cols' => 60, 'rows' => $catToEdit['nbline'])
+            ['cols' => 60, 'rows' => $catToEdit['nbline']]
         );
     }
     $content_heading_form->addElement('submit', 'submitContent', get_lang('Ok'));
@@ -270,41 +268,39 @@ if ($displayMode == "viewDefEdit") {
         // get the path,width and height from original picture
         $big_image = $image_array['dir'].'big_'.$image_array['file'];
         $big_image_size = api_getimagesize($big_image);
-        $big_image_width= $big_image_size['width'];
-        $big_image_height= $big_image_size['height'];
+        $big_image_width = $big_image_size['width'];
+        $big_image_height = $big_image_size['height'];
         $url_big_image = $big_image.'?rnd='.time();
 
-        if ($image_array['file']=='unknown.jpg') {
+        if ($image_array['file'] == 'unknown.jpg') {
             echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
         } else {
             echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
         }
 
-         echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
-			"<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
-			"<table width=\"80%\" border=\"0\">",
-			"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
-			"<td align=\"left\">", get_lang('Name'), "</td>\n",
-			"<td width=\"100px\" align=\"left\">", get_lang('Horaire'), "</td>\n";
-			echo "</tr>\n",
-			"<tr align=\"center\">",
-			"<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
-         "<td align=\"left\"><b>", $mainUserInfo['official_code'], "</td>" ;
+        echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
+            "<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
+            "<table width=\"80%\" border=\"0\">",
+            "<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
+            "<td align=\"left\">", get_lang('Name'), "</td>\n",
+            "<td width=\"100px\" align=\"left\">", get_lang('Horaire'), "</td>\n";
+        echo "</tr>\n",
+            "<tr align=\"center\">",
+            "<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
+         "<td align=\"left\"><b>", $mainUserInfo['official_code'], "</td>";
         $course_id = $_course['real_id'];
-        //récupérer horaire de l'élève
-        ?>
+        //récupérer horaire de l'élève ?>
         <SELECT NAME='hor_name'>
-            <OPTION VALUE='<?php echo $mainUserInfo['official_code'] ?>'><?php echo get_lang('select_calendar_student'); ?></OPTION>
+            <OPTION VALUE='<?php echo $mainUserInfo['official_code']; ?>'><?php echo get_lang('select_calendar_student'); ?></OPTION>
             <?php
             $sql = "SELECT distinct name FROM $TABLECALHORAIRE
             where c_id = $course_id ";
-            $result2 = Database::query($sql);
-            while ($row = Database::fetch_array( $result2)) {
-                    $horaire_name = $row["name"]; ?>
+        $result2 = Database::query($sql);
+        while ($row = Database::fetch_array($result2)) {
+            $horaire_name = $row["name"]; ?>
                     <OPTION VALUE='<?php echo $horaire_name; ?>'><?php echo "$horaire_name "; ?></OPTION>
             <?php
-            }
-              ?>
+        } ?>
         </SELECT>
          <?php
          echo'<p></p>  ';
@@ -318,16 +314,21 @@ if ($displayMode == "viewDefEdit") {
         }
 
         if (api_get_setting('extended_profile') == 'true') {
-            if (!empty($mainUserInfo['competences']))
+            if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-            if (!empty($mainUserInfo['diplomas']))
+            }
+            if (!empty($mainUserInfo['diplomas'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-            if (!empty($mainUserInfo['teach']))
+            }
+            if (!empty($mainUserInfo['teach'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-            if (!empty($mainUserInfo['openarea']))
+            }
+            if (!empty($mainUserInfo['openarea'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
-            if (!empty($mainUserInfo['competences']))
+            }
+            if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+            }
         }
     } else {
         Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
@@ -335,30 +336,30 @@ if ($displayMode == "viewDefEdit") {
 } elseif ($displayMode == "viewContentList") {
     // default display
     $virtual_course_code = $_GET["virtual_course"];
-    if (isset ($virtual_course_code)) {
+    if (isset($virtual_course_code)) {
         $courseCode = $virtual_course_code;
         $allowedToEditDef = false;
     }
-	$mainUserInfo = api_get_user_info($userIdViewed);
+    $mainUserInfo = api_get_user_info($userIdViewed);
     if ($mainUserInfo) {
         $image_array = UserManager::get_user_picture_path_by_id($userIdViewed, 'web', false, true);
         // get the path,width and height from original picture
         $big_image = $image_array['dir'].'big_'.$image_array['file'];
         $big_image_size = api_getimagesize($big_image);
-        $big_image_width= $big_image_size['width'];
-        $big_image_height= $big_image_size['height'];
+        $big_image_width = $big_image_size['width'];
+        $big_image_height = $big_image_size['height'];
         $url_big_image = $big_image.'?rnd='.time();
 
-        if ($image_array['file']=='unknown.jpg') {
+        if ($image_array['file'] == 'unknown.jpg') {
             echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
         } else {
             echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
         }
 
         // is the user online?
-        $online ='';
+        $online = '';
         if (user_is_online($userIdViewed)) {
-            $online = Display::return_icon('online.gif', get_lang('OnLine'), array('style' => 'with="8"; height="8"'));
+            $online = Display::return_icon('online.gif', get_lang('OnLine'), ['style' => 'with="8"; height="8"']);
         }
 
         // DISPLAY TABLE HEADING
@@ -370,7 +371,7 @@ if ($displayMode == "viewDefEdit") {
         echo "<table width=\"80%\" border=\"0\">",
         "<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
             "<td align=\"left\">".get_lang('Name')."</td>\n",
-				"<td width=\"20%\" align=\"left\">".get_lang('Description')."</td>\n",
+                "<td width=\"20%\" align=\"left\">".get_lang('Description')."</td>\n",
          "<td width=\"100px\" align=\"left\">", get_lang('OfficialCode'), "</td>\n";
 
         echo "</tr>\n",
@@ -396,16 +397,21 @@ if ($displayMode == "viewDefEdit") {
         }
 
         if (api_get_setting('extended_profile') == 'true') {
-            if (!empty($mainUserInfo['competences']))
+            if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-            if (!empty($mainUserInfo['diplomas']))
+            }
+            if (!empty($mainUserInfo['diplomas'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-            if (!empty($mainUserInfo['teach']))
+            }
+            if (!empty($mainUserInfo['teach'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-            if (!empty($mainUserInfo['openarea']))
+            }
+            if (!empty($mainUserInfo['openarea'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
-            if (!empty($mainUserInfo['competences']))
+            }
+            if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+            }
         }
     } else {
         Display::display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));

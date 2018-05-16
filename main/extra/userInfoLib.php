@@ -2,16 +2,16 @@
 /* For licensing terms, see /license.txt*/
 
 /**
- * create a new category definition for the user information
+ * create a new category definition for the user information.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesch� <gesche@ipm.ucl.ac.be>
  *
- * @param  string $title   - category title
- * @param  string $comment - title comment
- * @param  int    $nbline  - lines number for the field the user will fill.
+ * @param string $title   - category title
+ * @param string $comment - title comment
+ * @param int    $nbline  - lines number for the field the user will fill
  *
- * @return boolean true if succeed, else bolean false
+ * @return bool true if succeed, else bolean false
  */
 function create_cat_def($title = "", $comment = "", $nbline = "5")
 {
@@ -21,7 +21,7 @@ function create_cat_def($title = "", $comment = "", $nbline = "5")
     $comment = Database::escape_string(trim($comment));
     $nbline = strval(intval($nbline));
 
-    if (0 == (int)$nbline || empty($title)) {
+    if (0 == (int) $nbline || empty($title)) {
         return false;
     }
 
@@ -46,19 +46,18 @@ function create_cat_def($title = "", $comment = "", $nbline = "5")
 }
 
 /**
- * modify the definition of a user information category
+ * modify the definition of a user information category.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesch� <gesche@ipm.ucl.ac.be>
  *
- * @param  int    $id      - id of the category
- * @param  string $title   - category title
- * @param  string $comment - title comment
- * @param  int    $nbline  - lines number for the field the user will fill.
+ * @param int    $id      - id of the category
+ * @param string $title   - category title
+ * @param string $comment - title comment
+ * @param int    $nbline  - lines number for the field the user will fill
  *
  * @return - boolean true if succeed, else otherwise
  */
-
 function edit_cat_def($id, $title, $comment, $nbline)
 {
     global $TBL_USERINFO_DEF;
@@ -82,21 +81,20 @@ function edit_cat_def($id, $title, $comment, $nbline)
 }
 
 /**
- * remove a category from the category list
+ * remove a category from the category list.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param  int     $id        - id of the category
- *                            or "ALL" for all category
- * @param  boolean $force     - FALSE (default) : prevents removal if users have
- *                            already fill this category
- *                            TRUE : bypass user content existence check
- * @param  int     $nbline    - lines number for the field the user will fill.
+ * @param int  $id     - id of the category
+ *                     or "ALL" for all category
+ * @param bool $force  - FALSE (default) : prevents removal if users have
+ *                     already fill this category
+ *                     TRUE : bypass user content existence check
+ * @param int  $nbline - lines number for the field the user will fill
  *
- * @return boolean  - TRUE if succeed, ELSE otherwise
+ * @return bool - TRUE if succeed, ELSE otherwise
  */
-
 function remove_cat_def($id, $force = false)
 {
     $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
@@ -104,7 +102,7 @@ function remove_cat_def($id, $force = false)
 
     $id = strval(intval($id));
 
-    if ((0 == (int)$id || $id == "ALL") || !is_bool($force)) {
+    if ((0 == (int) $id || $id == "ALL") || !is_bool($force)) {
         return false;
     }
     $sqlCondition = " WHERE id = '$id'";
@@ -121,24 +119,24 @@ function remove_cat_def($id, $force = false)
 }
 
 /**
- * move a category in the category list
+ * move a category in the category list.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesch� <gesche@ipm.ucl.ac.be>
  *
- * @param  int    $id         - id of the category
- * @param  string $direction  "up" or "down" :
- *                            "up"    decrease the rank of gived $id by switching rank with the just lower
- *                            "down"  increase the rank of gived $id by switching rank with the just upper
+ * @param int    $id        - id of the category
+ * @param string $direction "up" or "down" :
+ *                          "up"    decrease the rank of gived $id by switching rank with the just lower
+ *                          "down"  increase the rank of gived $id by switching rank with the just upper
  *
- * @return boolean true if succeed, else boolean false
+ * @return bool true if succeed, else boolean false
  */
 function move_cat_rank($id, $direction) // up & down.
 {
     $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
     $id = strval(intval($id));
 
-    if (0 == (int)$id || !($direction == "up" || $direction == "down")) {
+    if (0 == (int) $id || !($direction == "up" || $direction == "down")) {
         return false;
     }
 
@@ -151,27 +149,28 @@ function move_cat_rank($id, $direction) // up & down.
 
     $cat = Database::fetch_array($result);
     $rank = (int) $cat['rank'];
+
     return move_cat_rank_by_rank($rank, $direction);
 }
 
 /**
- * move a category in the category list
+ * move a category in the category list.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param  int    $rank      - actual rank of the category
- * @param  string $direction "up" or "down" :
- *                           "up"    decrease the rank of gived $rank by switching rank with the just lower
- *                           "down"  increase the rank of gived $rank by switching rank with the just upper
+ * @param int    $rank      - actual rank of the category
+ * @param string $direction "up" or "down" :
+ *                          "up"    decrease the rank of gived $rank by switching rank with the just lower
+ *                          "down"  increase the rank of gived $rank by switching rank with the just upper
  *
- * @return boolean true if succeed, else boolean false
+ * @return bool true if succeed, else boolean false
  */
 function move_cat_rank_by_rank($rank, $direction) // up & down.
 {
     $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
 
-    if (0 == (int)$rank || !($direction == "up" || $direction == "down")) {
+    if (0 == (int) $rank || !($direction == "up" || $direction == "down")) {
         return false;
     }
 
@@ -213,17 +212,17 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
 /**
  * @author Hugues Peeters - peeters@ipm.ucl.ac.be
  *
- * @param  int    $user_id
- * @param  string $course_code
- * @param  array  $properties - should contain 'role', 'status', 'tutor_id'
+ * @param int    $user_id
+ * @param string $course_code
+ * @param array  $properties  - should contain 'role', 'status', 'tutor_id'
  *
- * @return boolean true if succeed false otherwise
+ * @return bool true if succeed false otherwise
  */
 function update_user_course_properties($user_id, $course_code, $properties, $horaire_name, $course_id)
 {
     global $tbl_coursUser,$_user;
     $sqlChangeStatus = "";
-    $user_id = strval(intval($user_id));//filter integer
+    $user_id = strval(intval($user_id)); //filter integer
     $course_code = Database::escape_string($course_code);
     if ($user_id != $_user['user_id']) {
         $sqlChangeStatus = "status     = '".Database::escape_string($properties['status'])."',";
@@ -258,7 +257,7 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
         return false;
     }
 
-     //on efface ce qui est déjà inscrit
+    //on efface ce qui est déjà inscrit
     $sql4 = "DELETE FROM ".$tbl_personal_agenda."
          WHERE user = '".$user_id."' 
          AND text = 'Pour le calendrier, ne pas effacer'";
@@ -297,7 +296,7 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
 }
 
 /**
- * fill a bloc for information category
+ * fill a bloc for information category.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
@@ -307,7 +306,7 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
  * @param   $user_ip
  * @param   $content
  *
- * @return  boolean true if succeed, else boolean false
+ * @return bool true if succeed, else boolean false
  */
 function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip = "")
 {
@@ -346,21 +345,22 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
             edition_time    = now()";
 
     Database::query($sql);
+
     return true;
 }
 
 /**
- * Edit a bloc for information category
+ * Edit a bloc for information category.
  *
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
  * @param   $definition_id
  * @param   $user_id
- * @param   $user_ip        DEFAULT $REMOTE_ADDR
- * @param   $content        if empty call delete the bloc
+ * @param   $user_ip       DEFAULT $REMOTE_ADDR
+ * @param   $content       if empty call delete the bloc
  *
- * @return  boolean true if succeed, else boolean false
+ * @return bool true if succeed, else boolean false
  */
 function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = "")
 {
@@ -393,7 +393,7 @@ function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = ""
 }
 
 /**
- * clean the content of a bloc for information category
+ * clean the content of a bloc for information category.
  *
  * @author Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
@@ -401,7 +401,7 @@ function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = ""
  * @param   $definition_id
  * @param   $user_id
  *
- * @return boolean true if succeed, else boolean false
+ * @return bool true if succeed, else boolean false
  */
 function cleanout_cat_content($user_id, $definition_id)
 {
@@ -422,14 +422,15 @@ function cleanout_cat_content($user_id, $definition_id)
 }
 
 /**
- * get the user info from the user id
+ * get the user info from the user id.
+ *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param  int $user_id user id as stored in the Dokeos main db
+ * @param int $user_id user id as stored in the Dokeos main db
  *
  * @return array containg user info sort by categories rank
- *           each rank contains 'title', 'comment', 'content', 'cat_id'
+ *               each rank contains 'title', 'comment', 'content', 'cat_id'
  */
 function get_course_user_info($user_id)
 {
@@ -456,11 +457,12 @@ function get_course_user_info($user_id)
 }
 
 /**
- * get the main user information
+ * get the main user information.
+ *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param  int $user_id user id as stored in the Dokeos main db
+ * @param int $user_id user id as stored in the Dokeos main db
  *
  * @return array containing user info as 'lastName', 'firstName', 'email', 'role'
  */
@@ -495,7 +497,8 @@ function get_main_user_info($user_id, $courseCode)
 }
 
 /**
- * get the user content of a categories plus the categories definition
+ * get the user content of a categories plus the categories definition.
+ *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
@@ -531,12 +534,12 @@ function get_cat_content($userId, $catId)
 }
 
 /**
- * get the definition of a category
+ * get the definition of a category.
  *
  * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
  *
- * @param  int $catId - id of the categories
+ * @param int $catId - id of the categories
  *
  * @return array containing 'id', 'title', 'comment', and 'nbline',
  */
@@ -560,13 +563,14 @@ function get_cat_def($catId)
 }
 
 /**
- * get list of all this course categories
+ * get list of all this course categories.
  *
  * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ *
  * @return array containing a list of arrays.
- *           And each of these arrays contains
- *           'catId', 'title', 'comment', and 'nbline',
+ *               And each of these arrays contains
+ *               'catId', 'title', 'comment', and 'nbline',
  */
 function get_cat_def_list()
 {
@@ -590,7 +594,8 @@ function get_cat_def_list()
 }
 
 /**
- * transform content in a html display
+ * transform content in a html display.
+ *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
  *
  * @param string $string string to htmlize

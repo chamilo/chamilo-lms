@@ -1026,6 +1026,14 @@ function modify_filter($user_id, $row, $data)
                 $disabled = '';
             }
 
+            $allow = api_get_configuration_value('extra');
+            if ($allow) {
+                $result .= '<a href="'.
+                    api_get_path(WEB_CODE_PATH).'extra/userInfo.php?'.api_get_cidreq().'&editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.
+                    Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).
+                    '</a>&nbsp;';
+            }
+
             if ($data['user_status_in_course'] == STUDENT) {
                 $result .= Display::url(
                     $text,

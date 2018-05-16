@@ -2598,6 +2598,13 @@ class CourseRestorer
             $origin_path = $this->course->backup_path.'/upload/learning_path/images/';
             $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
+            // Choose default visibility
+            $toolVisibility = api_get_setting('tool_visible_by_default_at_creation');
+            $defaultLpVisibility = 'invisible';
+            if (isset($toolVisibility['learning_path']) && $toolVisibility['learning_path'] == 'true') {
+                $defaultLpVisibility = 'visible';
+            }
+
             foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
                 $condition_session = '';
                 if (!empty($session_id)) {
@@ -2735,7 +2742,7 @@ class CourseRestorer
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
                         $new_lp_id,
-                        'invisible',
+                        $defaultLpVisibility,
                         api_get_user_id(),
                         0,
                         0,

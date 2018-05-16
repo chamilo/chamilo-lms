@@ -2228,7 +2228,7 @@ class CourseManager
             $groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
                 foreach ($groups as $group) {
-                    GroupManager::delete_groups($group, $course['code']);
+                    GroupManager::deleteGroup($group, $course['code']);
                 }
             }
 

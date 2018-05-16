@@ -105,7 +105,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
-                        GroupManager::delete_groups($groupInfo);
+                        GroupManager::deleteGroup($groupInfo);
                     }
 
                     Display::addFlash(Display::return_message(get_lang('SelectedGroupsDeleted')));
@@ -150,7 +150,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 break;
             case 'delete_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
-                GroupManager::delete_groups($groupInfo);
+                GroupManager::deleteGroup($groupInfo);
                 Display::addFlash(Display::return_message(get_lang('GroupDel')));
                 header("Location: $currentUrl");
                 exit;

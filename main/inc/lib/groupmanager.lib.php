@@ -428,12 +428,16 @@ class GroupManager
      *
      * @return int - number of groups deleted
      */
-    public static function delete_groups($groupInfo, $course_code = null)
+    public static function deleteGroup($groupInfo, $course_code = null)
     {
         if (empty($groupInfo['iid'])) {
             return false;
         }
         $course_info = api_get_course_info($course_code);
+        if (empty($course_info)) {
+            return false;
+        }
+
         $course_id = $course_info['real_id'];
 
         // Database table definitions
@@ -874,7 +878,7 @@ class GroupManager
             while ($group = Database::fetch_object($res)) {
                 // Delete all groups in category
                 /*$groupInfo = self::get_group_properties($group->iid, true);
-                self::delete_groups($groupInfo, $course_code);
+                self::deleteGroup($groupInfo, $course_code);
                 */
                 // Set the category to NULL to avoid losing groups in sessions.
                 $sql = "UPDATE $table_group SET category_id = NULL WHERE iid = ".$group->iid;
@@ -2689,7 +2693,7 @@ class GroupManager
             $groups = self::get_groups();
             foreach ($groups as $group) {
                 if (!in_array($group['iid'], $elementsFound['groups'])) {
-                    self::delete_groups($group);
+                    self::deleteGroup($group);
                     $group['group'] = $group['name'];
                     $result['deleted']['group'][] = $group;
                 }

@@ -4841,6 +4841,13 @@ SQL;
                 }
 
                 $session_name = $enreg['SessionName'];
+
+                if ($debug) {
+                    $logger->addInfo(
+                        "Sessions - Start process of session: $session_name ---------------------"
+                    );
+                }
+
                 // Default visibility
                 $visibilityAfterExpirationPerSession = $sessionVisibility;
 
@@ -5011,11 +5018,10 @@ SQL;
                     if ($my_session_result === false) {
                         // One more check
                         $sessionExistsWithName = self::get_session_by_name($session_name);
-
                         if ($sessionExistsWithName) {
                             if ($debug) {
                                 $logger->addError(
-                                    "Sessions - Trying to update a session, but name already exists: $session_name"
+                                    "Sessions - Skip Session - Trying to update a session, but name already exists: $session_name"
                                 );
                             }
                             continue;

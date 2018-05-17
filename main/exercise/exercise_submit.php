@@ -790,11 +790,6 @@ if ($question_count != 0) {
                     exit;
                 }
             }
-        } else {
-            if ($debug) {
-                error_log('Redirecting to exercise_submit.php');
-            }
-            exit;
         }
     }
 } else {
@@ -1428,18 +1423,20 @@ if (!empty($error)) {
                 );
                 break;
             case ALL_ON_ONE_PAGE:
-                $button = [
-                    Display::button(
-                        'save_now',
-                        get_lang('SaveForNow'),
-                        ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
-                    ),
-                    '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
-                ];
-                $exerciseActions .= Display::div(
-                    implode(PHP_EOL, $button),
-                    ['class' => 'exercise_save_now_button']
-                );
+                if (api_is_allowed_to_session_edit()) {
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
+                    ];
+                    $exerciseActions .= Display::div(
+                        implode(PHP_EOL, $button),
+                        ['class' => 'exercise_save_now_button']
+                    );
+                }
                 break;
         }
 

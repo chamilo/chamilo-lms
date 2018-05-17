@@ -325,7 +325,9 @@ class MessageManager
 
         $totalFileSize = 0;
         if (is_array($file_attachments)) {
-            foreach ($file_attachments as $file_attach) {
+            $counter = 0;
+            foreach ($file_attachments as &$file_attach) {
+                $file_attach['comment'] = isset($file_comments[$counter]) ? $file_comments[$counter] : '';
                 $fileSize = isset($file_attach['size']) ? $file_attach['size'] : 0;
                 if (is_array($fileSize)) {
                     foreach ($fileSize as $size) {
@@ -334,6 +336,7 @@ class MessageManager
                 } else {
                     $totalFileSize += $fileSize;
                 }
+                $counter++;
             }
         }
 
@@ -386,21 +389,39 @@ class MessageManager
                 $messageId = Database::insert($table, $params);
             }
 
+            // Forward also message attachments
+            if (!empty($forwardId)) {
+                $attachments = MessageManager::getAttachmentList($forwardId);
+                foreach ($attachments as $attachment) {
+                    if (!empty($attachment['file_source'])) {
+                        $file = [
+                            'name' => $attachment['filename'],
+                            'tmp_name' => $attachment['file_source'],
+                            'size' => $attachment['size'],
+                            'error' => 0,
+                            'comment' => $attachment['comment']
+                        ];
+
+                        // Inject this array so files can be added when sending and email with the mailer
+                        $file_attachments[] = $file;
+                    }
+                }
+            }
+
             // Save attachment file for inbox messages
             if (is_array($file_attachments)) {
-                $i = 0;
-                foreach ($file_attachments as $file_attach) {
+                foreach ($file_attachments as &$file_attach) {
                     if ($file_attach['error'] == 0) {
+                        $comment = $file_attach['comment'];
                         self::saveMessageAttachmentFile(
                             $file_attach,
-                            isset($file_comments[$i]) ? $file_comments[$i] : null,
+                            $comment,
                             $messageId,
                             null,
                             $receiver_user_id,
                             $group_id
                         );
                     }
-                    $i++;
                 }
             }
 
@@ -421,10 +442,10 @@ class MessageManager
 
                 // save attachment file for outbox messages
                 if (is_array($file_attachments)) {
-                    $o = 0;
-                    foreach ($file_attachments as $file_attach) {
+                    foreach ($file_attachments as &$file_attach) {
                         if ($file_attach['error'] == 0) {
-                            $comment = isset($file_comments[$o]) ? $file_comments[$o] : '';
+                            $comment = $file_attach['comment'];
+
                             self::saveMessageAttachmentFile(
                                 $file_attach,
                                 $comment,
@@ -432,7 +453,6 @@ class MessageManager
                                 $user_sender_id
                             );
                         }
-                        $o++;
                     }
                 }
             }
@@ -710,7 +730,7 @@ class MessageManager
         $sender_user_id = 0,
         $group_id = 0
     ) {
-        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // Try to add an extension to the file if it hasn't one
         $type = isset($file_attach['type']) ? $file_attach['type'] : '';
@@ -750,25 +770,31 @@ class MessageManager
             }
 
             $new_path = $path_message_attach.$new_file_name;
-
-            if (is_uploaded_file($file_attach['tmp_name'])) {
-                @copy($file_attach['tmp_name'], $new_path);
-            } else {
-                // 'tmp_name' can be set by the ticket
-                if (file_exists($file_attach['tmp_name'])) {
+            $fileCopied = false;
+            if (isset($file_attach['tmp_name']) && !empty($file_attach['tmp_name'])) {
+                if (is_uploaded_file($file_attach['tmp_name'])) {
                     @copy($file_attach['tmp_name'], $new_path);
+                    $fileCopied = true;
+                } else {
+                    // 'tmp_name' can be set by the ticket or when forwarding a message
+                    if (file_exists($file_attach['tmp_name'])) {
+                        @copy($file_attach['tmp_name'], $new_path);
+                        $fileCopied = true;
+                    }
                 }
             }
 
-            // Storing the attachments if any
-            $params = [
-                'filename' => $file_name,
-                'comment' => $file_comment,
-                'path' => $new_file_name,
-                'message_id' => $message_id,
-                'size' => $file_attach['size'],
-            ];
-            Database::insert($tbl_message_attach, $params);
+            if ($fileCopied) {
+                // Storing the attachments if any
+                $params = [
+                    'filename' => $file_name,
+                    'comment' => $file_comment,
+                    'path' => $new_file_name,
+                    'message_id' => $message_id,
+                    'size' => $file_attach['size'],
+                ];
+                Database::insert($table, $params);
+            }
         }
     }
 
@@ -1183,7 +1209,7 @@ class MessageManager
         $user_sender_id = $row['user_sender_id'];
 
         // get file attachments by message id
-        $files_attachments = self::get_links_message_attachment_files(
+        $files_attachments = self::getAttachmentLinkList(
             $messageId,
             $source
         );
@@ -1474,7 +1500,7 @@ class MessageManager
         $items_page_nr = null;
 
         $user_sender_info = api_get_user_info($main_message['user_sender_id']);
-        $files_attachments = self::get_links_message_attachment_files($main_message['id']);
+        $files_attachments = self::getAttachmentLinkList($main_message['id']);
         $name = $user_sender_info['complete_name'];
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
@@ -1614,7 +1640,7 @@ class MessageManager
                 $links .= '<div class="pull-right">';
                 $html_items = '';
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
-                $files_attachments = self::get_links_message_attachment_files($topic['id']);
+                $files_attachments = self::getAttachmentLinkList($topic['id']);
                 $name = $user_sender_info['complete_name'];
 
                 $links .= '<div class="btn-group btn-group-sm">';
@@ -1779,6 +1805,44 @@ class MessageManager
     }
 
     /**
+     * @param int $messageId
+     *
+     * @return array
+     */
+    public static function getAttachmentList($messageId)
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+        $messageId = (int) $messageId;
+
+        if (empty($messageId)) {
+            return [];
+        }
+
+        $messageInfo = MessageManager::get_message_by_id($messageId);
+
+        if (empty($messageInfo)) {
+            return [];
+        }
+
+        $attachmentDir = UserManager::getUserPathById($messageInfo['user_receiver_id'], 'system');
+        $attachmentDir .= 'message_attachments/';
+
+        $sql = "SELECT * FROM $table
+                WHERE message_id = '$messageId'";
+        $result = Database::query($sql);
+        $files = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $row['file_source'] = '';
+            if (file_exists($attachmentDir.$row['path'])) {
+                $row['file_source'] = $attachmentDir.$row['path'];
+            }
+            $files[] = $row;
+        }
+
+        return $files;
+    }
+
+    /**
      * Get array of links (download) for message attachment files.
      *
      * @param int    $messageId
@@ -1786,34 +1850,27 @@ class MessageManager
      *
      * @return array
      */
-    public static function get_links_message_attachment_files($messageId, $type = '')
+    public static function getAttachmentLinkList($messageId, $type = '')
     {
-        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-        $messageId = intval($messageId);
-
+        $files = self::getAttachmentList($messageId);
         // get file attachments by message id
-        $links_attach_file = [];
-        if (!empty($messageId)) {
-            $sql = "SELECT * FROM $table
-                    WHERE message_id = '$messageId'";
-
-            $rs_file = Database::query($sql);
-            if (Database::num_rows($rs_file) > 0) {
-                $attach_icon = Display::return_icon('attachment.gif', '');
-                $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
-                while ($row_file = Database::fetch_array($rs_file)) {
-                    $archiveFile = $row_file['path'];
-                    $filename = $row_file['filename'];
-                    $filesize = format_file_size($row_file['size']);
-                    $filecomment = Security::remove_XSS($row_file['comment']);
-                    $filename = Security::remove_XSS($filename);
-                    $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>
-                        &nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
-                }
+        $list = [];
+        if ($files) {
+            $attach_icon = Display::return_icon('attachment.gif', '');
+            $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
+            foreach ($files as $row_file) {
+                $archiveFile = $row_file['path'];
+                $filename = $row_file['filename'];
+                $filesize = format_file_size($row_file['size']);
+                $filecomment = Security::remove_XSS($row_file['comment']);
+                $filename = Security::remove_XSS($filename);
+                $list[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>
+                    &nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
             }
         }
 
-        return $links_attach_file;
+
+        return $list;
     }
 
     /**

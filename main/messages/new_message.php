@@ -186,6 +186,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
     if (isset($_GET['forward_id'])) {
         $forwardId = (int) $_GET['forward_id'];
         $message_reply_info = MessageManager::get_message_by_id($forwardId);
+        $attachments = MessageManager::getAttachmentLinkList($forwardId);
+        if (!empty($attachments)) {
+            $fileListToString = !empty($attachments) ? implode('<br />', $attachments) : '';
+            $form->addLabel('', $fileListToString);
+        }
         $default['title'] = '['.get_lang('MailSubjectForwardShort').": ".$message_reply_info['title'].']';
         $form->addHidden('forward_id', $forwardId);
         $form->addHidden('save_form', 'save_form');
@@ -222,7 +227,12 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
 
         $form->addLabel(
             '',
-            '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')'
+            '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.
+            get_lang('AddOneMoreFile').'</a></span>&nbsp;('.
+            sprintf(
+                get_lang('MaximunFileSizeX'),
+                format_file_size(api_get_setting('message_max_upload_filesize'))
+            ).')'
         );
     }
 
@@ -268,6 +278,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
                         false,
                         $forwardId
                     );
+
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
                         Display::addFlash(Display::return_message(

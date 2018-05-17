@@ -289,8 +289,7 @@ if ($displayMode == "viewDefEdit") {
             "<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
          "<td align=\"left\"><b>", $mainUserInfo['official_code'], "</td>";
         //récupérer horaire de l'élève
-        $course_id = $_course['real_id'];
-        ?>
+        $course_id = $_course['real_id']; ?>
         <SELECT NAME='hor_name'>
             <OPTION VALUE='<?php echo $mainUserInfo['official_code']; ?>'><?php echo get_lang('select_calendar_student'); ?></OPTION>
             <?php

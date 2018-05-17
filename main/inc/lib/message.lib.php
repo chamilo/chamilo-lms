@@ -272,12 +272,12 @@ class MessageManager
      * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array  $attachments     files array($_FILES) (optional)
-     * @param array  $fileCommentList about attachment files (optional)
-     * @param int    $group_id        (optional)
-     * @param int    $parent_id       (optional)
-     * @param int    $editMessageId   id for updating the message (optional)
-     * @param int    $topic_id        (optional) the default value is the current user_id
+     * @param array  $attachments      files array($_FILES) (optional)
+     * @param array  $fileCommentList  about attachment files (optional)
+     * @param int    $group_id         (optional)
+     * @param int    $parent_id        (optional)
+     * @param int    $editMessageId    id for updating the message (optional)
+     * @param int    $topic_id         (optional) the default value is the current user_id
      * @param int    $sender_id
      * @param bool   $directMessage
      * @param int    $forwardId
@@ -401,7 +401,7 @@ class MessageManager
                             'tmp_name' => $attachment['file_source'],
                             'size' => $attachment['size'],
                             'error' => 0,
-                            'comment' => $attachment['comment']
+                            'comment' => $attachment['comment'],
                         ];
 
                         // Inject this array so files can be added when sending and email with the mailer
@@ -1872,7 +1872,6 @@ class MessageManager
                     &nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
             }
         }
-
 
         return $list;
     }

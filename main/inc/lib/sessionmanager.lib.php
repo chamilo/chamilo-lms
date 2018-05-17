@@ -5058,8 +5058,6 @@ SQL;
                             'id_coach' => $coach_id,
                             'access_start_date' => $dateStart,
                             'access_end_date' => $dateEnd,
-                            'display_start_date' => $dateStart,
-                            'display_end_date' => $dateEnd,
                             'display_start_date' => $displayAccessStartDate,
                             'display_end_date' => $displayAccessEndDate,
                             'coach_access_start_date' => $coachAccessStartDate,

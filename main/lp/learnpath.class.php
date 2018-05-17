@@ -10376,7 +10376,6 @@ class learnpath
      */
     public function get_student_publications()
     {
-        $sessionId = api_get_session_id();
         $return = '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('works_new.gif');

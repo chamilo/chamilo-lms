@@ -6108,11 +6108,10 @@ class Exercise
             }
         }
 
-        //3. We check if the time limits are on
+        // 3. We check if the time limits are on
+        $limitTimeExists = false;
         if (!empty($this->start_time) || !empty($this->end_time)) {
             $limitTimeExists = true;
-        } else {
-            $limitTimeExists = false;
         }
 
         if ($limitTimeExists) {
@@ -7276,36 +7275,40 @@ class Exercise
                     );
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button = [
-                        Display::button(
-                            'save_now',
-                            get_lang('SaveForNow'),
-                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
-                        ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
-                    ];
-                    $exercise_actions .= Display::div(
-                        implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
-                    );
+                    if (api_is_allowed_to_session_edit()) {
+                        $button = [
+                            Display::button(
+                                'save_now',
+                                get_lang('SaveForNow'),
+                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                            ),
+                            '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
+                        ];
+                        $exercise_actions .= Display::div(
+                            implode(PHP_EOL, $button),
+                            ['class' => 'exercise_save_now_button']
+                        );
+                    }
                     break;
             }
 
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
                 if ($count_of_questions_inside_media > 1) {
-                    $button = [
-                        Display::button(
-                            'save_now',
-                            get_lang('SaveForNow'),
-                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
-                        ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
-                    ];
-                    $exercise_actions = Display::div(
-                        implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
-                    );
+                    if (api_is_allowed_to_session_edit()) {
+                        $button = [
+                            Display::button(
+                                'save_now',
+                                get_lang('SaveForNow'),
+                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                            ),
+                            '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
+                        ];
+                        $exercise_actions = Display::div(
+                            implode(PHP_EOL, $button),
+                            ['class' => 'exercise_save_now_button']
+                        );
+                    }
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {

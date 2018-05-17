@@ -756,7 +756,7 @@ if ($question_count != 0) {
                     error_log('12. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php');
                 }
 
-                //We check if the user attempts before sending to the exercise_result.php
+                // We check if the user attempts before sending to the exercise_result.php
                 if ($objExercise->selectAttempts() > 0) {
                     $attempt_count = Event::get_attempt_count(
                         api_get_user_id(),
@@ -774,7 +774,7 @@ if ($question_count != 0) {
                         if ($origin != 'learnpath') {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
-                            Display :: display_footer();
+                            Display::display_footer();
                         } else {
                             echo '</body></html>';
                         }
@@ -790,11 +790,6 @@ if ($question_count != 0) {
                     exit;
                 }
             }
-        } else {
-            if ($debug) {
-                error_log('Redirecting to exercise_submit.php');
-            }
-            exit;
         }
     }
 } else {
@@ -1428,18 +1423,20 @@ if (!empty($error)) {
                 );
                 break;
             case ALL_ON_ONE_PAGE:
-                $button = [
-                    Display::button(
-                        'save_now',
-                        get_lang('SaveForNow'),
-                        ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
-                    ),
-                    '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
-                ];
-                $exerciseActions .= Display::div(
-                    implode(PHP_EOL, $button),
-                    ['class' => 'exercise_save_now_button']
-                );
+                if (api_is_allowed_to_session_edit()) {
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
+                    ];
+                    $exerciseActions .= Display::div(
+                        implode(PHP_EOL, $button),
+                        ['class' => 'exercise_save_now_button']
+                    );
+                }
                 break;
         }
 

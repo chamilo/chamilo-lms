@@ -342,6 +342,8 @@ if (isset($_POST['action'])) {
                     $obj_cat->update_category_delete($course_code);
                 }
             }
+
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
             break;
     }
 }

@@ -2314,8 +2314,14 @@ class CourseManager
             // Skills
             $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
             $argumentation = Database::escape_string(sprintf(get_lang('SkillFromCourseXDeletedSinceThen'), $course['code']));
-            $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' WHERE course_id = $courseId";
+            $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' 
+                    WHERE course_id = $courseId";
             Database::query($sql);
+
+            if (api_get_configuration_value('allow_skill_rel_items')) {
+                $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
+                Database::query($sql);
+            }
 
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables

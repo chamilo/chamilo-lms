@@ -4843,9 +4843,9 @@ SQL;
                 $session_name = $enreg['SessionName'];
 
                 if ($debug) {
-                    $logger->addInfo(
-                        "Sessions - Start process of session: $session_name ---------------------"
-                    );
+                    $logger->addInfo('---------------------------------------');
+                    $logger->addInfo("Sessions - Start process of session: $session_name");
+                    $logger->addInfo('---------------------------------------');
                 }
 
                 // Default visibility

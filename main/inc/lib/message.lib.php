@@ -272,8 +272,8 @@ class MessageManager
      * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array  $file_attachments files array($_FILES) (optional)
-     * @param array  $file_comments    about attachment files (optional)
+     * @param array  $attachments files array($_FILES) (optional)
+     * @param array  $fileCommentList    about attachment files (optional)
      * @param int    $group_id         (optional)
      * @param int    $parent_id        (optional)
      * @param int    $editMessageId    id for updating the message (optional)
@@ -289,8 +289,8 @@ class MessageManager
         $receiver_user_id,
         $subject,
         $content,
-        array $file_attachments = [],
-        array $file_comments = [],
+        array $attachments = [],
+        array $fileCommentList = [],
         $group_id = 0,
         $parent_id = 0,
         $editMessageId = 0,
@@ -324,11 +324,12 @@ class MessageManager
         }
 
         $totalFileSize = 0;
-        if (is_array($file_attachments)) {
+        $attachmentList = [];
+        if (is_array($attachments)) {
             $counter = 0;
-            foreach ($file_attachments as &$file_attach) {
-                $file_attach['comment'] = isset($file_comments[$counter]) ? $file_comments[$counter] : '';
-                $fileSize = isset($file_attach['size']) ? $file_attach['size'] : 0;
+            foreach ($attachments as $attachment) {
+                $attachment['comment'] = isset($fileCommentList[$counter]) ? $fileCommentList[$counter] : '';
+                $fileSize = isset($attachment['size']) ? $attachment['size'] : 0;
                 if (is_array($fileSize)) {
                     foreach ($fileSize as $size) {
                         $totalFileSize += $size;
@@ -336,6 +337,7 @@ class MessageManager
                 } else {
                     $totalFileSize += $fileSize;
                 }
+                $attachmentList[] = $attachment;
                 $counter++;
             }
         }
@@ -403,18 +405,18 @@ class MessageManager
                         ];
 
                         // Inject this array so files can be added when sending and email with the mailer
-                        $file_attachments[] = $file;
+                        $attachmentList[] = $file;
                     }
                 }
             }
 
             // Save attachment file for inbox messages
-            if (is_array($file_attachments)) {
-                foreach ($file_attachments as &$file_attach) {
-                    if ($file_attach['error'] == 0) {
-                        $comment = $file_attach['comment'];
+            if (is_array($attachmentList)) {
+                foreach ($attachmentList as $attachment) {
+                    if ($attachment['error'] == 0) {
+                        $comment = $attachment['comment'];
                         self::saveMessageAttachmentFile(
-                            $file_attach,
+                            $attachment,
                             $comment,
                             $messageId,
                             null,
@@ -441,13 +443,12 @@ class MessageManager
                 $outbox_last_id = Database::insert($table, $params);
 
                 // save attachment file for outbox messages
-                if (is_array($file_attachments)) {
-                    foreach ($file_attachments as &$file_attach) {
-                        if ($file_attach['error'] == 0) {
-                            $comment = $file_attach['comment'];
-
+                if (is_array($attachmentList)) {
+                    foreach ($attachmentList as $attachment) {
+                        if ($attachment['error'] == 0) {
+                            $comment = $attachment['comment'];
                             self::saveMessageAttachmentFile(
-                                $file_attach,
+                                $attachment,
                                 $comment,
                                 $outbox_last_id,
                                 $user_sender_id
@@ -462,9 +463,12 @@ class MessageManager
             $sender_info = api_get_user_info($user_sender_id);
 
             // add file attachment additional attributes
-            foreach ($file_attachments as $index => $file_attach) {
-                $file_attachments[$index]['path'] = $file_attach['tmp_name'];
-                $file_attachments[$index]['filename'] = $file_attach['name'];
+            $attachmentAddedByMail = [];
+            foreach ($attachmentList as $attachment) {
+                $attachmentAddedByMail[] = [
+                    'path' => $attachment['tmp_name'],
+                    'filename' => $attachment['name'],
+                ];
             }
 
             if (empty($group_id)) {
@@ -479,7 +483,7 @@ class MessageManager
                     $subject,
                     $content,
                     $sender_info,
-                    $file_attachments,
+                    $attachmentAddedByMail,
                     $smsParameters
                 );
             } else {
@@ -513,7 +517,7 @@ class MessageManager
                     $subject,
                     $content,
                     $group_info,
-                    $file_attachments,
+                    $attachmentAddedByMail,
                     $smsParameters
                 );
             }

@@ -4736,27 +4736,27 @@ SQL;
     }
 
     /**
-     * @param string $file
-     * @param bool   $updateSession                                   options:
+     * @param string         $file
+     * @param bool           $updateSession                           options:
      *                                                                true: if the session exists it will be updated.
      *                                                                false: if session exists a new session will be created adding a counter session1, session2, etc
-     * @param int    $defaultUserId
-     * @param mixed  $logger
-     * @param array  $extraFields                                     convert a file row to an extra field. Example in CSV file there's a SessionID
+     * @param int            $defaultUserId
+     * @param Monolog\Logger $logger
+     * @param array          $extraFields                             convert a file row to an extra field. Example in CSV file there's a SessionID
      *                                                                then it will converted to extra_external_session_id if you set: array('SessionId' => 'extra_external_session_id')
-     * @param string $extraFieldId
-     * @param int    $daysCoachAccessBeforeBeginning
-     * @param int    $daysCoachAccessAfterBeginning
-     * @param int    $sessionVisibility
-     * @param array  $fieldsToAvoidUpdate
-     * @param bool   $deleteUsersNotInList
-     * @param bool   $updateCourseCoaches
-     * @param bool   $sessionWithCoursesModifier
-     * @param bool   $addOriginalCourseTeachersAsCourseSessionCoaches
-     * @param bool   $removeAllTeachersFromCourse
-     * @param int    $showDescription
-     * @param array  $teacherBackupList
-     * @param array  $groupBackup
+     * @param string         $extraFieldId
+     * @param int            $daysCoachAccessBeforeBeginning
+     * @param int            $daysCoachAccessAfterBeginning
+     * @param int            $sessionVisibility
+     * @param array          $fieldsToAvoidUpdate
+     * @param bool           $deleteUsersNotInList
+     * @param bool           $updateCourseCoaches
+     * @param bool           $sessionWithCoursesModifier
+     * @param bool           $addOriginalCourseTeachersAsCourseSessionCoaches
+     * @param bool           $removeAllTeachersFromCourse
+     * @param int            $showDescription
+     * @param array          $teacherBackupList
+     * @param array          $groupBackup
      *
      * @return array
      */
@@ -5123,12 +5123,16 @@ SQL;
                                     );
                                     if ($sessionExistsBesidesMe === true) {
                                         if ($debug) {
-                                            $report[] = "Error when update session Session #$session_id Name: '$session_name'. Other session has the same name. External id: ".$enreg['extra_'.$extraFieldId];
+                                            $message = "Skip Session. Error when update session Session #$session_id Name: '$session_name'. Other session has the same name. External id: ".$enreg['extra_'.$extraFieldId];
+                                            $logger->addError($message);
+                                            $report[] = $message;
                                         }
                                         continue;
                                     } else {
                                         if ($debug) {
-                                            $report[] = "Session #$session_id name is not updated because it didn't change (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                            $logger->addInfo(
+                                                "Session #$session_id name is not updated because it didn't change (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
+                                            );
                                         }
                                     }
                                 }
@@ -5139,12 +5143,12 @@ SQL;
                         }
 
                         if ($debug) {
-                            $logger->addError("Sessions - Session #$session_id to be updated: '$session_name'");
+                            $logger->addInfo("Session #$session_id to be updated: '$session_name'");
                         }
 
                         if ($session_id) {
                             if ($debug) {
-                                $logger->addError("Sessions - Session to be updated #$session_id");
+                                $logger->addInfo("Session to be updated #$session_id");
                             }
 
                             $sessionInfo = api_get_session_info($session_id);
@@ -5167,7 +5171,6 @@ SQL;
                             }
 
                             Database::update($tbl_session, $params, ['id = ?' => $session_id]);
-
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);

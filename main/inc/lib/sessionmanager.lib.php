@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\UserBundle\Entity\User;
 use ExtraField as ExtraFieldModel;
+use Monolog\Logger;
 
 /**
  * Class SessionManager.
@@ -2849,7 +2850,7 @@ class SessionManager
      * @param string $name
      *
      * @return mixed false if the session does not exist, array if the session exist
-     **/
+     */
     public static function get_session_by_name($name)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4736,27 +4737,26 @@ SQL;
     }
 
     /**
-     * @param string         $file
-     * @param bool           $updateSession                           options:
-     *                                                                true: if the session exists it will be updated.
+     * @param string $file
+     * @param bool   $updateSession                                   true: if the session exists it will be updated.
      *                                                                false: if session exists a new session will be created adding a counter session1, session2, etc
-     * @param int            $defaultUserId
-     * @param Monolog\Logger $logger
-     * @param array          $extraFields                             convert a file row to an extra field. Example in CSV file there's a SessionID
+     * @param int    $defaultUserId
+     * @param Logger $logger
+     * @param array  $extraFields                                     convert a file row to an extra field. Example in CSV file there's a SessionID
      *                                                                then it will converted to extra_external_session_id if you set: array('SessionId' => 'extra_external_session_id')
-     * @param string         $extraFieldId
-     * @param int            $daysCoachAccessBeforeBeginning
-     * @param int            $daysCoachAccessAfterBeginning
-     * @param int            $sessionVisibility
-     * @param array          $fieldsToAvoidUpdate
-     * @param bool           $deleteUsersNotInList
-     * @param bool           $updateCourseCoaches
-     * @param bool           $sessionWithCoursesModifier
-     * @param bool           $addOriginalCourseTeachersAsCourseSessionCoaches
-     * @param bool           $removeAllTeachersFromCourse
-     * @param int            $showDescription
-     * @param array          $teacherBackupList
-     * @param array          $groupBackup
+     * @param string $extraFieldId
+     * @param int    $daysCoachAccessBeforeBeginning
+     * @param int    $daysCoachAccessAfterBeginning
+     * @param int    $sessionVisibility
+     * @param array  $fieldsToAvoidUpdate
+     * @param bool   $deleteUsersNotInList
+     * @param bool   $updateCourseCoaches
+     * @param bool   $sessionWithCoursesModifier
+     * @param bool   $addOriginalCourseTeachersAsCourseSessionCoaches
+     * @param bool   $removeAllTeachersFromCourse
+     * @param int    $showDescription
+     * @param array  $teacherBackupList
+     * @param array  $groupBackup
      *
      * @return array
      */

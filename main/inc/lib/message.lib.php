@@ -272,12 +272,12 @@ class MessageManager
      * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array  $attachments files array($_FILES) (optional)
-     * @param array  $fileCommentList    about attachment files (optional)
-     * @param int    $group_id         (optional)
-     * @param int    $parent_id        (optional)
-     * @param int    $editMessageId    id for updating the message (optional)
-     * @param int    $topic_id         (optional) the default value is the current user_id
+     * @param array  $attachments     files array($_FILES) (optional)
+     * @param array  $fileCommentList about attachment files (optional)
+     * @param int    $group_id        (optional)
+     * @param int    $parent_id       (optional)
+     * @param int    $editMessageId   id for updating the message (optional)
+     * @param int    $topic_id        (optional) the default value is the current user_id
      * @param int    $sender_id
      * @param bool   $directMessage
      * @param int    $forwardId

@@ -7208,24 +7208,26 @@ class Exercise
                     );
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button = [
-                        Display::button(
-                            'save_now',
-                            get_lang('SaveForNow'),
-                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
-                        ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
-                    ];
-                    $exercise_actions .= Display::div(
-                        implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
-                    );
+                    if (api_is_allowed_to_session_edit()) {
+                        $button = [
+                            Display::button(
+                                'save_now',
+                                get_lang('SaveForNow'),
+                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                            ),
+                            '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
+                        ];
+                        $exercise_actions .= Display::div(
+                            implode(PHP_EOL, $button),
+                            ['class' => 'exercise_save_now_button']
+                        );
+                    }
                     break;
             }
 
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
-                if ($count_of_questions_inside_media > 1) {
+                if ($count_of_questions_inside_media > 1 && api_is_allowed_to_session_edit()) {
                     $button = [
                         Display::button(
                             'save_now',

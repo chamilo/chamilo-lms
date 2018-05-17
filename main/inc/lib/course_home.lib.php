@@ -522,7 +522,7 @@ class CourseHome
                             category = "authoring" OR 
                             category = "interaction" OR 
                             category = "plugin"
-                        ) OR (name = "'.TOOL_TRACKING.'") 
+                        ) OR (t.name = "'.TOOL_TRACKING.'") 
                     )';
                 }
 
@@ -569,7 +569,7 @@ class CourseHome
                 break;
             case TOOL_DRH:
                 $sql = "SELECT * FROM $course_tool_table t
-                        WHERE name IN ('tracking') AND c_id = $course_id $condition_session
+                        WHERE t.name IN ('tracking') AND c_id = $course_id $condition_session
                         ";
                 break;
             case TOOL_COURSE_PLUGIN:

@@ -4996,9 +4996,11 @@ SQL;
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
                             }
-                            $logger->addInfo("Sessions - Session created: #$session_id - $session_name");
+                            $logger->addInfo("Session created: #$session_id - $session_name");
                         } else {
-                            $logger->addError("Sessions - Session NOT created: $session_name");
+                            $message = "Sessions - Session NOT created: $session_name";
+                            $logger->addError($message);
+                            $report[] = $message;
                         }
                     }
                     $session_counter++;
@@ -5020,9 +5022,9 @@ SQL;
                         $sessionExistsWithName = self::get_session_by_name($session_name);
                         if ($sessionExistsWithName) {
                             if ($debug) {
-                                $logger->addError(
-                                    "Sessions - Skip Session - Trying to update a session, but name already exists: $session_name"
-                                );
+                                $message = "Skip Session - Trying to update a session, but name already exists: $session_name";
+                                $logger->addError($message);
+                                $report[] = $message;
                             }
                             continue;
                         }
@@ -5116,6 +5118,9 @@ SQL;
                                     $sessionName = Database::escape_string($enreg['SessionName']);
                                     $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                     Database::query($sql);
+                                    $logger->addInfo(
+                                        "Session #$session_id name IS updated with: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
+                                    );
                                 } else {
                                     $sessionExistsBesidesMe = self::sessionNameExistBesidesMySession(
                                         $session_id,

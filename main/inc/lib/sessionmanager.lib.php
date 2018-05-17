@@ -5147,10 +5147,6 @@ SQL;
                         }
 
                         if ($session_id) {
-                            if ($debug) {
-                                $logger->addInfo("Session to be updated #$session_id");
-                            }
-
                             $sessionInfo = api_get_session_info($session_id);
                             $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
 
@@ -5175,6 +5171,10 @@ SQL;
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
+                            }
+
+                            if ($debug) {
+                                $logger->addInfo("Session updated #$session_id");
                             }
 
                             // Delete session-user relation only for students
@@ -5229,7 +5229,7 @@ SQL;
                                     registered_at = '".api_get_utc_datetime()."'";
                             Database::query($sql);
                             if ($debug) {
-                                $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");
+                                $logger->addInfo("Adding User #$user_id ($user) to session #$session_id");
                             }
                             $user_counter++;
                         }
@@ -5281,7 +5281,7 @@ SQL;
                         self::installCourse($session_id, $courseInfo['real_id']);
 
                         if ($debug) {
-                            $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
+                            $logger->addInfo("Adding course '$course_code' to session #$session_id");
                         }
 
                         $course_counter++;
@@ -5306,7 +5306,7 @@ SQL;
                                     $course_code
                                 );
                                 if ($debug) {
-                                    $msg = "Sessions - Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
+                                    $msg = "Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
                                     $logger->addInfo($msg);
                                 }
                             }
@@ -5347,7 +5347,7 @@ SQL;
                                         );
 
                                         if ($debug) {
-                                            $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            $logger->addInfo("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
@@ -5655,7 +5655,7 @@ SQL;
                                         $course_code
                                     );
                                     if ($debug) {
-                                        $logger->addInfo("Sessions - Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
+                                        $logger->addInfo("Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                     }
                                 } else {
                                     $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
@@ -5663,6 +5663,9 @@ SQL;
                             }
                         }
                         $inserted_in_course[$course_code] = $courseInfo['title'];
+                    }
+                    if ($debug) {
+                        $logger->addInfo("End process session #$session_id -------------------- ");
                     }
                 }
                 $access_url_id = api_get_current_access_url_id();

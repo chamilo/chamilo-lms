@@ -2849,7 +2849,7 @@ class SessionManager
      * @param string $name
      *
      * @return mixed false if the session does not exist, array if the session exist
-     * */
+     **/
     public static function get_session_by_name($name)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2868,6 +2868,32 @@ class SessionManager
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param int $sessionId
+     * @param int $name
+     *
+     * @return bool
+     */
+    public static function sessionNameExistBesidesMySession($sessionId, $name)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $name = Database::escape_string(trim($name));
+        if (empty($name)) {
+            return false;
+        }
+
+        $sql = "SELECT *
+		        FROM $table
+		        WHERE name = '$name' AND id <> $sessionId ";
+        $result = Database::query($sql);
+        $num = Database::num_rows($result);
+        if ($num > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -5085,10 +5111,17 @@ SQL;
                                     $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                     Database::query($sql);
                                 } else {
-                                    if ($debug) {
-                                        $report[] = "Error when update session: Name already exists: Session #$session_id Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                    $sessionExistsBesidesMe = self::sessionNameExistBesidesMySession($session_name);
+                                    if ($sessionExistsBesidesMe === true) {
+                                        if ($debug) {
+                                            $report[] = "Error when update session: Name already exists: Session #$session_id Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                        }
+                                        continue;
+                                    } else {
+                                        if ($debug) {
+                                            $report[] = "Session #$session_id name is not updated (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                        }
                                     }
-                                    continue;
                                 }
                             }
                         } else {

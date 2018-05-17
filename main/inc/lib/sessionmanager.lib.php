@@ -5664,9 +5664,6 @@ SQL;
                         }
                         $inserted_in_course[$course_code] = $courseInfo['title'];
                     }
-                    if ($debug) {
-                        $logger->addInfo("End process session #$session_id -------------------- ");
-                    }
                 }
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id, $access_url_id);
@@ -5675,6 +5672,10 @@ SQL;
                 Database::query($sql);
 
                 self::addClassesByName($session_id, $classes, false);
+
+                if ($debug) {
+                    $logger->addInfo("End process session #$session_id -------------------- ");
+                }
             }
 
             if (!empty($report)) {

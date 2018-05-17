@@ -5111,15 +5111,18 @@ SQL;
                                     $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                     Database::query($sql);
                                 } else {
-                                    $sessionExistsBesidesMe = self::sessionNameExistBesidesMySession($session_name);
+                                    $sessionExistsBesidesMe = self::sessionNameExistBesidesMySession(
+                                        $session_id,
+                                        $session_name
+                                    );
                                     if ($sessionExistsBesidesMe === true) {
                                         if ($debug) {
-                                            $report[] = "Error when update session: Name already exists: Session #$session_id Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                            $report[] = "Error when update session Session #$session_id Name: '$session_name'. Other session has the same name. External id: ".$enreg['extra_'.$extraFieldId];
                                         }
                                         continue;
                                     } else {
                                         if ($debug) {
-                                            $report[] = "Session #$session_id name is not updated (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                            $report[] = "Session #$session_id name is not updated because it didn't change (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
                                         }
                                     }
                                 }

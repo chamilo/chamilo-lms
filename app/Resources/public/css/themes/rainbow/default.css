@@ -1087,21 +1087,28 @@ ul.exercise-draggable-answer .touch-items:hover{
 .question_options .droppable-item{
     background-color: #84bd00;
     color: #FFF;
-    padding: 10px;
+    /* padding: 10px;*/
+    padding: 3px 0px 3px 5px;
 }
 .question_options .droppable-item .number{
     font-size: 16px;
     font-weight: bold;
-    width: 30px;
+    /* width: 30px; */
     display: inline-block;
 }
 .question_options .droppable{
     background: none;
-    border: 2px solid #96BD0D;
+    border: none;
     border-radius: 0;
     margin-bottom: 10px;
     min-height: 40px;
+
+    /* Extra */
+    display: inline-block;
+    width: 85%;
+    margin-bottom: 0px;
 }
+
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     background: #FFF;
     border: 1px solid #162a83;

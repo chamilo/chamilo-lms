@@ -8782,8 +8782,6 @@ function api_mail_html(
         }
     }
 
-    var_dump($mail->GetAttachments);
-
     // Only valid addresses are accepted.
     if (is_array($recipient_email)) {
         foreach ($recipient_email as $dest) {

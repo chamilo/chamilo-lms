@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+header('Location: public/index.php');
+exit;
+
 use ChamiloSession as Session;
 
 /**

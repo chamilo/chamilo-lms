@@ -720,12 +720,9 @@ function api_get_path($path = '', $configuration = [])
     $course_folder = 'courses/';
     static $root_web = '';
 
-    //var_dump(Container::getRouter()->generate('legacy_index'));exit;
+    //var_dump(Container::getRouter()->generate('legacy_index'));
 
     $root_sys = Container::getRootDir();
-
-    //$root_web = Container::$container->get('templating.helper.assets')->getUrl('legacy_index');
-
     $root_web = '';
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
@@ -769,7 +766,7 @@ function api_get_path($path = '', $configuration = [])
             \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
         );
         $root_web = urldecode($root_web);
-        $root_web = str_replace('/../', '', $root_web);
+        //$root_web = str_replace('/../', '', $root_web);
     }
 
     if (isset($configuration['multiple_access_urls']) &&
@@ -1938,8 +1935,8 @@ function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
 function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 {
     $courseCode = api_get_course_id();
-    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
-    $origin = empty($origin) ? api_get_origin() : Security::remove_XSS($origin);
+    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode, ENT_QUOTES);
+    $origin = empty($origin) ? api_get_origin() : htmlspecialchars($origin, ENT_QUOTES);
 
     if ($addSessionId) {
         if (!empty($url)) {
@@ -2749,9 +2746,6 @@ function api_get_setting($variable)
             return $settingsManager->getSetting($variable);
             break;
     }
-
-    // Old code
-    var_dump($variable);
 
     global $_setting;
     if ($variable == 'header_extra_content') {
@@ -3667,7 +3661,6 @@ function api_is_anonymous($user_id = null, $db_check = false)
             return true;
         }
     }
-
     return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
 }
 
@@ -3683,8 +3676,11 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
+    throw new Exception('api_not_allowed');
     echo 'api_not_allowed';
+
     return false;
+
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -7525,7 +7521,7 @@ function api_get_locked_settings()
  */
 function api_user_is_login($user_id = null)
 {
-    return Session::read('IS_AUTHENTICATED_FULLY', false) === true;
+    return Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
 }
 
 /**
@@ -8421,7 +8417,7 @@ function convert_double_quote_to_single($in_text)
  */
 function api_get_origin()
 {
-    $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+    $origin = isset($_REQUEST['origin']) ? htmlspecialchars($_REQUEST['origin'], ENT_QUOTES) : '';
 
     return $origin;
 }

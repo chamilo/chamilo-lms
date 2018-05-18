@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class NavbarController extends Controller
 {
     /**
+     * @deprecated
      * @param int $max
      *
      * @return Response
@@ -42,6 +43,7 @@ class NavbarController extends Controller
     }
 
     /**
+     * @deprecated
      * @param int $max
      *
      * @return Response
@@ -64,6 +66,7 @@ class NavbarController extends Controller
     }
 
     /**
+     * @deprecated
      * @param int $max
      *
      * @return Response
@@ -85,6 +88,7 @@ class NavbarController extends Controller
     }
 
     /**
+     * @deprecated
      * @return Response
      */
     public function userAction()
@@ -103,7 +107,7 @@ class NavbarController extends Controller
     }
 
     /**
-     * @return EventDispatcher
+     * @return object|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
      */
     protected function getDispatcher()
     {

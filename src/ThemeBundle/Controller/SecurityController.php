@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class SecurityController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class SecurityController extends Controller

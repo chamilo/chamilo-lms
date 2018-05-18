@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
-
 /**
  * Class Template.
  *
@@ -360,7 +359,6 @@ class Template
         $this->assign('actions', $actions);
     }
 
-
     /**
      * Render the template.
      *
@@ -369,21 +367,32 @@ class Template
      */
     public function display($template, $clearFlashMessages = true)
     {
-        //$this->assign('flash_messages', Display::getFlashToString());
-        if ($clearFlashMessages) {
-            //Display::cleanFlashMessages();
-        }
         $template = str_replace('tpl', 'html.twig', $template);
         $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
+
+        // Set legacy breadcrumb
+        global $interbreadcrumb;
+        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
 
         if (!file_exists($templateFile)) {
             $e = new \Gaufrette\Exception\FileNotFound($templateFile);
             echo $e->getMessage();
             exit;
         }
-        //echo Container::getTemplating()->render($template, $this->params);
+
+        $this->returnResponse($this->params, $template);
+    }
+
+    /**
+     * @param array $params
+     * @param string $template
+     *
+     * @throws \Twig\Error\Error
+     */
+    public function returnResponse($params, $template)
+    {
         $response = new Response();
-        $content = Container::getTemplating()->render($template, $this->params);
+        $content = Container::getTemplating()->render($template, $params);
         $response->setContent($content);
         $response->send();
     }
@@ -393,12 +402,8 @@ class Template
      * */
     public function display_one_col_template()
     {
-        $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
-        $response = new Response();
-        $content = Container::getTemplating()->render($tpl, $this->params);
-        $response->setContent($content);
-        $response->send();
-
+        $template = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        $this->returnResponse($this->params, $template);
     }
 
     /**
@@ -406,11 +411,8 @@ class Template
      */
     public function display_two_col_template()
     {
-        $tpl = '@ChamiloTheme/Layout/layout_two_col.html.twig';
-        $response = new Response();
-        $content = Container::getTemplating()->render($tpl, $this->params);
-        $response->setContent($content);
-        $response->send();
+        $template = '@ChamiloTheme/Layout/layout_two_col.html.twig';
+        $this->returnResponse($this->params, $template);
     }
 
     /**
@@ -839,7 +841,7 @@ class Template
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js',
-            'readmore-js/readmore.min.js',
+            //'readmore-js/readmore.min.js',
             'bootstrap-select/dist/js/bootstrap-select.min.js',
             $selectLink,
             'select2/dist/js/select2.min.js',
@@ -960,7 +962,7 @@ class Template
             }
         }
 
-        //var_dump(Container::$container->get('router')->generate('legacy_index'));
+        //var_dump(Container::$container->get('router')->generate('main', ['name' => '1']));
         //var_dump(api_get_path(WEB_PATH));
 
         return $favico;
@@ -1056,7 +1058,6 @@ class Template
     {
         $this->params[$variable] = $value;
     }
-
 
     /**
      * Adds a body class for login pages.

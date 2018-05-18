@@ -45,11 +45,14 @@ try {
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
-    $env = 'test';
     $kernel = new Chamilo\Kernel($env, true);
     $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
         'host_with_path_by_locale'
     );
+
+    // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
+    // and not called from a symfony controller from public/
+    $request->request->set('load_legacy', true);
 
     $request->setBaseUrl($request->getRequestUri());
     $response = $kernel->handle($request);
@@ -78,11 +81,16 @@ try {
     $libraryPath = __DIR__.'/lib/';
     $container = $kernel->getContainer();
 
-    // Connect Chamilo with the Symfony container
-    Container::setContainer($container);
-    Container::setLegacyServices($container);
     // Symfony uses request_stack now
     $container->get('request_stack')->push($request);
+
+    // Connect Chamilo with the Symfony container
+    // Container::setContainer($container);
+    // Container::setLegacyServices($container);
+
+    // The code below is not needed. The connections is now made in the file:
+    // src/CoreBundle/EventListener/LegacyListener.php
+    // This is called when when doing the $kernel->handle
 
     // Fix chamilo URL when used inside a folder: example.com/chamilo
     $append = $kernel->getUrlAppend();
@@ -90,12 +98,11 @@ try {
     if (!empty($append)) {
         $appendValue = "/$append/";
     }
-
     $router = $container->get('router');
     $context = $container->get('router.request_context');
     $host = $router->getContext()->getHost();
     $context->setBaseUrl($appendValue);
-    $baseUrl = $router->getContext()->getBaseUrl();
+
     $container->set('router.request_context', $context);
     $packages = $container->get('assets.packages');
 
@@ -262,8 +269,6 @@ try {
     }
 
     ini_set('log_errors', '1');
-
-
 
     // Load allowed tag definitions for kses and/or HTMLPurifier.
     require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
@@ -512,7 +517,6 @@ try {
         }
     }
 
-
     // include the local (contextual) parameters of this course or section
     require __DIR__.'/local.inc.php';
     $_user = api_get_user_info();
@@ -585,7 +589,6 @@ try {
         require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
         $langstats = new langstats();
     }
-
 
     //Default quota for the course documents folder
     $default_quota = api_get_setting('default_document_quotum');

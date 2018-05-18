@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Routing\Route;
 
 /**
  * Class LegacyListener
@@ -36,6 +37,17 @@ class LegacyListener
         /** @var ContainerInterface $container */
         $container = $this->container;
 
+        if ($request->get('load_legacy') === true) {
+            /*$container->get('router.default')->getRouteCollection()->remove('legacy_index');
+            $route = new Route('/aaa/');
+            $container->get('router')->getRouteCollection()->add('legacy_index', $route);*/
+        }
+
+        $context = $container->get('router.request_context');
+        $context->setBaseUrl('/');
+        $container->get('router.default')->setContext($context);
+
+        //var_dump($container->get('router.default')->generate('home'));
         // Setting container
         Container::setContainer($container);
         Container::setLegacyServices($container);

@@ -34,7 +34,6 @@ require("fullcalendar");
 require("pwstrength-bootstrap");
 require ("readmore-js");
 require("js-cookie");
-require("js-cookie");
 require("jquery-ui-timepicker-addon");
 //require("bootstrap-daterangepicker");
 require("ckeditor");

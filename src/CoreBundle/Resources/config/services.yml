@@ -146,11 +146,11 @@ services:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 11}
 
-    chamilo_core.listener.legacy_login_listener:
-        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
-        arguments: ["@service_container", '@security.token_storage']
-        tags:
-            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+#    chamilo_core.listener.legacy_login_listener:
+#        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
+#        arguments: ["@service_container", '@security.token_storage']
+#        tags:
+#            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
 
     # Locale listener
     chamilo_core.listener.locale:

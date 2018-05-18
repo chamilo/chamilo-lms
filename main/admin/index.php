@@ -305,6 +305,7 @@ if (file_exists($sessionsBlockExtraFile)) {
 if (api_is_platform_admin()) {
     $blocks['sessions']['editable'] = true;
 }
+
 $sessionPath = api_get_path(WEB_CODE_PATH).'session/';
 
 $search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'session_list.php">

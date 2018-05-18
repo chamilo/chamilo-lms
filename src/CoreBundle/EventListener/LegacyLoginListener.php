@@ -16,6 +16,8 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * Class LegacyLoginListener.
+ * File not needed the real listener is LegacyListener
+ * @deprecated
  *
  * @package Chamilo\CoreBundle\EventListener
  */
@@ -54,11 +56,7 @@ class LegacyLoginListener implements EventSubscriberInterface
         if ($token) {
             $isGranted = $container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
             if ($isGranted) {
-                $session->set('IS_AUTHENTICATED_FULLY', true);
-                $session->set('IS_AUTHENTICATED_ANONYMOUSLY', false);
             } else {
-                $session->set('IS_AUTHENTICATED_FULLY', false);
-                $session->set('IS_AUTHENTICATED_ANONYMOUSLY', true);
                 if (isset($_SESSION) && isset($_SESSION['_user'])) {
                     if ($_SESSION['_user']['active'] == 1) {
                         $username = $_SESSION['_user']['username'];

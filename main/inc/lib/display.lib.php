@@ -3,6 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Display
@@ -61,6 +65,9 @@ class Display
         $help = null,
         $page_header = null
     ) {
+        ob_start();
+        return true;
+
         $origin = api_get_origin();
         $showHeader = true;
         if (isset($origin) && $origin == 'learnpath') {
@@ -136,7 +143,7 @@ class Display
     /**
      * Displays the reduced page header (without banner).
      */
-    public static function set_header()
+    private static function set_header()
     {
         global $show_learnpath, $tool_name;
         self::$global_template = new Template(
@@ -152,7 +159,17 @@ class Display
      */
     public static function display_footer()
     {
-        echo self::$global_template->show_footer_template();
+        $contents = ob_get_contents();
+        ob_end_clean();
+        $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        $response = new Response();
+        $params['content'] = $contents;
+        global $interbreadcrumb;
+        $params['legacy_breadcrumb'] = $interbreadcrumb;
+        $content = Container::getTemplating()->render($tpl, $params);
+        $response->setContent($content);
+        $response->send();
+        exit;
     }
 
     /**

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class WidgetController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class WidgetController extends Controller

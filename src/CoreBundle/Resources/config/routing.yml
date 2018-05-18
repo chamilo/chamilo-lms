@@ -1,3 +1,14 @@
+# Legacy routes
+
+legacy_index:
+    path: ../
+
+legacy_main:
+    path: ../main/{name}
+    defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
+    requirements:
+        name: .+
+
 core_controller:
     resource: '@ChamiloCoreBundle/Controller/IndexController.php'
     type: annotation
@@ -31,15 +42,6 @@ legacy_javascript:
     type: annotation
     prefix: /js
 
-legacy_index:
-    path: ../
-
-# Legacy routes
-main:
-    path: ../main/{name}
-    defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
-    requirements:
-        name: .+
 
 legacy_plugin:
     path: /plugin/{name}

@@ -75,7 +75,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('MyCourses'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => '../user_portal.php',
                     ],
@@ -85,7 +85,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Calendar'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'calendar/agenda_js.php',
                     ],
@@ -95,7 +95,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Reporting'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'mySpace/index.php',
                     ],
@@ -105,7 +105,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Social'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/home.php',
                     ],
@@ -116,7 +116,7 @@ class NavBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('Dashboard'),
                     [
-                        'route' => 'main',
+                        'route' => 'legacy_main',
                         'routeParameters' => [
                             'name' => 'dashboard/index.php',
                         ],
@@ -125,7 +125,7 @@ class NavBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('Administration'),
                     [
-                        'route' => 'main',
+                        'route' => 'legacy_main',
                         'routeParameters' => [
                             'name' => 'admin/index.php',
                         ],

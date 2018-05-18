@@ -72,19 +72,21 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = api_get_setting('page_after_login');
 
-        $url = 'index.php';
+        $legacyIndex = $this->router->generate('legacy_index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        // Default redirect:
+        $url = $legacyIndex;
+
         if ($this->checker->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
             switch ($pageAfterLogin) {
                 case 'index.php':
-                    //$url = $this->router->generate('home');
-                    $url = $this->router->generate('home').'/../../index.php';
+                    $url = $legacyIndex;
                     break;
                 case 'user_portal.php':
-                    //$url = $this->router->generate('userportal');
-                    $url = $this->router->generate('home').'/../../user_portal.php';
+                    $url = $legacyIndex.'user_portal.php';
                     break;
                 case 'main/auth/courses.php':
-                    $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
+                    $url = $legacyIndex.'/'.$pageAfterLogin;
                     break;
             }
         }
@@ -94,12 +96,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Session::write('is_platformAdmin', (bool) \UserManager::is_admin($userId));
         Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
 
-        //$url = $this->router->generate('userportal');
         // Redirecting to a course or a session.
         if (api_get_setting('course.go_to_course_after_login') == 'true') {
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
-
             $my_session_list = [];
             $count_of_courses_no_sessions = 0;
             $count_of_courses_with_sessions = 0;
@@ -136,10 +136,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         // Redirect the user to where they were before the login process begun.
         if (empty($response)) {
             $url = $request->headers->get('referer');
-            /*// if the referer is the login use the home.
-            if (strpos($url, 'login') !== false) {
-                $url = $this->router->generate('home');
-            }*/
             $response = new RedirectResponse($url);
         }
 

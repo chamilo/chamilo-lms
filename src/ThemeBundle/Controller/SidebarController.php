@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SidebarController extends Controller
 {
+    /**
+     * @return Response
+     */
     public function userPanelAction()
     {
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_SIDEBAR_USER)) {
@@ -99,7 +102,7 @@ class SidebarController extends Controller
     }
 
     /**
-     * @return object|\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
+     * @return object|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
      */
     protected function getDispatcher()
     {

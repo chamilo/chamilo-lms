@@ -133,7 +133,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('AddSession'),
                     [
-                        'route' => 'main',
+                        'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'session/session_add.php'],
                     ]
                 );
@@ -161,7 +161,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Inbox'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'messages/inbox.php',
                     ],
@@ -171,7 +171,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Compose'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'messages/new_message.php',
                     ],
@@ -181,7 +181,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('PendingInvitations'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/invitations.php',
                     ],
@@ -191,7 +191,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('MyFiles'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/myfiles.php',
                     ],
@@ -201,7 +201,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('EditProfile'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'messages/inbox.php',
                     ],
@@ -211,7 +211,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Inbox'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'messages/inbox.php',
                     ],
@@ -242,7 +242,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Home'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/home.php',
                     ],
@@ -252,7 +252,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Messages'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'messages/inbox.php',
                     ],
@@ -262,7 +262,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Invitations'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/invitations.php',
                     ],
@@ -272,7 +272,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('ViewMySharedProfile'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/profile.php',
                     ],
@@ -282,7 +282,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Friends'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/friends.php',
                     ],
@@ -292,7 +292,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('SocialGroups'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/groups.php',
                     ],
@@ -302,7 +302,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('Search'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/search.php',
                     ],
@@ -312,7 +312,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans('MyFiles'),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => [
                         'name' => 'social/myfiles.php',
                     ],
@@ -347,7 +347,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('MyCertificates'),
                     [
-                        'route' => 'main',
+                        'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'gradebook/my_certificates.php'],
                     ]
                 );
@@ -360,7 +360,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('Search'),
                     [
-                        'route' => 'main',
+                        'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'gradebook/search.php'],
                     ]
                 );
@@ -370,7 +370,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('MySkills'),
                     [
-                        'route' => 'main',
+                        'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'social/my_skills_report.php'],
                     ]
                 );
@@ -379,7 +379,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     $menu->addChild(
                         $translator->trans('ManageSkills'),
                         [
-                            'route' => 'main',
+                            'route' => 'legacy_main',
                             'routeParameters' => ['name' => 'admin/skills_wheel.php'],
                         ]
                     );
@@ -400,7 +400,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
      */
     public function loginMenu(FactoryInterface $factory, array $options)
     {
-        $menu = $factory->createItem('main');
+        $menu = $factory->createItem('legacy_main');
         $translator = $this->container->get('translator');
         $settingManager = $this->container->get('chamilo.settings.manager');
 
@@ -412,7 +412,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     'FOSUserBundle'
                 ),
                 [
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => ['name' => 'auth/inscription.php'],
                     ["attributes" => ["id" => 'nav']],
                 ]
@@ -428,7 +428,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 ),
                 [
                     //'route' => 'fos_user_resetting_request',
-                    'route' => 'main',
+                    'route' => 'legacy_main',
                     'routeParameters' => ['name' => 'auth/lostPassword.php'],
                     ["attributes" => ["id" => 'nav']],
                 ]
@@ -447,7 +447,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
     public function helpMenu(FactoryInterface $factory, array $options)
     {
         $translator = $this->container->get('translator');
-        $menu = $factory->createItem('main');
+        $menu = $factory->createItem('legacy_main');
         $menu->addChild(
             $translator->trans('Forum'),
             [

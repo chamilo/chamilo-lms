@@ -12,7 +12,7 @@
             <div class="text-center">
             <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(64)) }}" alt="{{ user.completeName }}" />
             <p class="name">
-                <a href="{{ url('main', { 'name' : 'social/home.php' })}}">
+                <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
                     {{ user.completeName }}
                 </a>
             </p>
@@ -21,13 +21,16 @@
         </li>
         <li role="separator" class="divider"></li>
         <li class="user-body">
-            <a title="{{ "Inbox"|trans }}" href="{{ url('main', { 'name' : 'messages/inbox.php' }) }}">
+
+            {{ url('home') }}
+
+            <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
                 <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
             </a>
-            <a title="{{ "MyCertificates"|trans }}" href="{{ url('main', { 'name' : 'gradebook/my_certificates.php' })  }}">
+            <a title="{{ "MyCertificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
                 <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
             </a>
-            <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('logout') }}" >
+            <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}" >
                 <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
             </a>
         </li>

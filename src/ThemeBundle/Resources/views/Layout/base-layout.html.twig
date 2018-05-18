@@ -60,6 +60,7 @@
     <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
     <link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
 
+    {# chamilo.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
     <script src="{{ asset('build/chamilo.js') }}"></script>
     <script src="{{ asset('libs/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('libs/readmore-js/readmore.min.js') }}"></script>
@@ -78,6 +79,12 @@
     {#<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>#}
 
     {% block chamilo_header_js %}
+        {# Loading legacy js using the $htmlHeadXtra array #}
+        {% autoescape false %}
+        {% for js in legacy_javascript %}
+            {{ js }}
+        {% endfor %}
+        {% endautoescape %}
     {% include '@ChamiloTheme/Layout/header.js.twig' %}
     {% endblock %}
 

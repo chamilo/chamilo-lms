@@ -1093,7 +1093,10 @@ HTML;
                         $s .= $isVertical ? '<div class="row">' : '';
                         $s .= '
                             <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
-                                <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                <div class="droppable-item">
+                                    <span class="number">'.$counterAnswer.'.</span>
+                                    <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                 </div>
                             </div>
                         ';
                         $s .= $isVertical ? '</div>' : '';

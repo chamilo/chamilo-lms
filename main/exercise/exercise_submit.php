@@ -1049,12 +1049,13 @@ if (!empty($error)) {
         function addExerciseEvent(elm, evType, fn, useCapture) {
             if (elm.addEventListener) {
                 elm.addEventListener(evType, fn, useCapture);
-                return true;
+                return;
             } else if (elm.attachEvent) {
                 elm.attachEvent(\'on\' + evType, fn);
             } else{
                 elm[\'on\'+evType] = fn;
-            }
+            }            
+            return;
         }
         
         var calledUpdateDuration = false;
@@ -1068,10 +1069,10 @@ if (!empty($error)) {
                     url: saveDurationUrl,
                     success: function (data) {
                         calledUpdateDuration = true;
-                        return 1;
+                        return;
                     }, 
                 });
-                return 1;
+                return;
             }
         }
         

@@ -1097,7 +1097,7 @@ ul.exercise-draggable-answer .touch-items:hover{
 }
 .question_options .droppable{
     background: none;
-    border: 2px solid #96BD0D;
+    border: none;
     border-radius: 0;
     margin-bottom: 10px;
     min-height: 40px;

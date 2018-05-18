@@ -7294,21 +7294,20 @@ class Exercise
 
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
-                if ($count_of_questions_inside_media > 1) {
-                    if (api_is_allowed_to_session_edit()) {
-                        $button = [
-                            Display::button(
-                                'save_now',
-                                get_lang('SaveForNow'),
-                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
-                            ),
-                            '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
-                        ];
-                        $exercise_actions = Display::div(
-                            implode(PHP_EOL, $button),
-                            ['class' => 'exercise_save_now_button']
-                        );
-                    }
+                if ($count_of_questions_inside_media > 1 && api_is_allowed_to_session_edit()) {
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
+                    ];
+                    $exercise_actions = Display::div(
+                        implode(PHP_EOL, $button),
+                        ['class' => 'exercise_save_now_button']
+                    );
+
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {

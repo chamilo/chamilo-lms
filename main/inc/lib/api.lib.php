@@ -3464,10 +3464,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
             // Get the session visibility
             $session_visibility = api_get_session_visibility($sessionId);
             // if 5 the session is still available
-            //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
-            //echo api_get_user_id();
-            //echo api_get_course_id();
-
             switch ($session_visibility) {
                 case SESSION_VISIBLE_READ_ONLY: // 1
                     return false;

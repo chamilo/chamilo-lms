@@ -3063,7 +3063,7 @@ class GroupManager
         $blockPage = false
     ) {
         // Admin and teachers can make any change no matter what
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if (api_is_platform_admin() || api_is_allowed_to_edit(false, true)) {
             return true;
         }
 

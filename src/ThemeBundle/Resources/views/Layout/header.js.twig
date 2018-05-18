@@ -23,7 +23,7 @@ var plugins = [
 ];
 
 plugins.forEach(function (plugin) {
-    CKEDITOR.plugins.addExternal(plugin, '{{ asset('js/ckeditor/plugins/') }}' + plugin + '/');
+    CKEDITOR.plugins.addExternal(plugin, '{{ asset('../main/inc/lib/javascript/ckeditor/plugins/') }}' + plugin + '/');
 });
 
 // basic plugins
@@ -44,7 +44,7 @@ plugins = [
 ];
 
 plugins.forEach(function (plugin) {
-    CKEDITOR.plugins.addExternal(plugin, '{{ asset('assets/ckeditor/plugins/') }}' + plugin + '/');
+    CKEDITOR.plugins.addExternal(plugin, '{{ asset('libs/ckeditor/plugins/') }}' + plugin + '/');
 });
 
 /* Global chat variables */

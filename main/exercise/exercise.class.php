@@ -7307,7 +7307,6 @@ class Exercise
                         implode(PHP_EOL, $button),
                         ['class' => 'exercise_save_now_button']
                     );
-
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {

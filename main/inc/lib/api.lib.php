@@ -3676,10 +3676,22 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    throw new Exception('api_not_allowed');
-    echo 'api_not_allowed';
+    // Default code is 403 forbidden
+    $responseCode = empty($responseCode) ? 403 : $responseCode;
+    $message = empty($message) ? get_lang('NotAuthorized') : $message;
 
-    return false;
+    // Create new exception rendered by template:
+    // src/ThemeBundle/Resources/views/Exception/error.html.twig
+
+    // if error is 404 then the template is:
+    // src/ThemeBundle/Resources/views/Exception/error404.html.twig
+    $exception = new Exception($message);
+    $request = Container::getRequest();
+    $exception  = \Symfony\Component\Debug\Exception\FlattenException::create($exception, $responseCode);
+    $controller = new \Chamilo\ThemeBundle\Controller\ExceptionController(Container::getTwig(), false);
+    $response = $controller->showAction($request, $exception);
+    $response->send();
+    exit;
 
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
@@ -3687,6 +3699,7 @@ function api_not_allowed(
             $osso->logout();
         }
     }
+
     $home_url = api_get_path(WEB_PATH);
     $user_id = api_get_user_id();
     $course = api_get_course_id();

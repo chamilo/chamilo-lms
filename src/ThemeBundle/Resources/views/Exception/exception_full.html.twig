@@ -6,6 +6,7 @@
         <h2 class="headline">{{ status_code }}</h2>
         <div class="error-content">
             <h3>{{ 'Something seems to have gone wrong'|trans() }}</h3>
+            {{ exception.message }}
         </div>
     </div>
 {% endblock %}

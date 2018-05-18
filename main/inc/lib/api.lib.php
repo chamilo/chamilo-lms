@@ -3676,6 +3676,8 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
+    $debug = api_get_setting('server_type') == 'test';
+
     // Default code is 403 forbidden
     $responseCode = empty($responseCode) ? 403 : $responseCode;
     $message = empty($message) ? get_lang('NotAuthorized') : $message;
@@ -3688,7 +3690,7 @@ function api_not_allowed(
     $exception = new Exception($message);
     $request = Container::getRequest();
     $exception  = \Symfony\Component\Debug\Exception\FlattenException::create($exception, $responseCode);
-    $controller = new \Chamilo\ThemeBundle\Controller\ExceptionController(Container::getTwig(), false);
+    $controller = new \Chamilo\ThemeBundle\Controller\ExceptionController(Container::getTwig(), $debug);
     $response = $controller->showAction($request, $exception);
     $response->send();
     exit;

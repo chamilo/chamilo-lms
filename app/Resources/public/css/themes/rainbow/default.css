@@ -1092,7 +1092,7 @@ ul.exercise-draggable-answer .touch-items:hover{
 .question_options .droppable-item .number{
     font-size: 16px;
     font-weight: bold;
-    width: 30px;
+    /*width: 30px;*/
     display: inline-block;
 }
 .question_options .droppable{
@@ -1101,6 +1101,11 @@ ul.exercise-draggable-answer .touch-items:hover{
     border-radius: 0;
     margin-bottom: 10px;
     min-height: 40px;
+
+    /* Extra */
+    display: inline-block;
+    width: 85%;
+    margin-bottom: 0px;
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     background: #FFF;

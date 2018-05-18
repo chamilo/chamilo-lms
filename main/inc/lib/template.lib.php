@@ -438,8 +438,8 @@ class Template
      */
     public function display_no_layout_template()
     {
-        $tpl = $this->get_template('layout/no_layout.tpl');
-        $this->display($tpl);
+        $template = '@ChamiloTheme/Layout/no_layout.html.twig';
+        $this->returnResponse($this->params, $template);
     }
 
     /**

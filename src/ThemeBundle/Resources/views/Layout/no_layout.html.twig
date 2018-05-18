@@ -2,7 +2,10 @@
 {# overrides everything inside body no-footer no-header #}
 {% block chamilo_wrap %}
     {% autoescape false %}
-    {{ content }}
+        <link rel="stylesheet" href="{{ asset('build/css/scorm.css') }}"/>
+        <section id="content-scorm">
+        {{ content }}
+        </section>
     {% endautoescape %}
 {% endblock %}
 

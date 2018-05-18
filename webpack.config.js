@@ -21,6 +21,7 @@ Encore
     .addStyleEntry('css/base', './assets/css/main.scss')
     .addStyleEntry('css/editor', './assets/css/editor.css')
     .addStyleEntry('css/print', './assets/css/print.css')
+    .addStyleEntry('css/scorm', './assets/css/scorm.css')
 
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({

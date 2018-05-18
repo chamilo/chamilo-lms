@@ -91,7 +91,7 @@
     {#{% endjavascripts %}#}
     {% endblock %}
 </head>
-<body>
+<body class="{{section_name}}">
 
 {#{{ url('legacy_index') }}#}
 {#<br />#}
@@ -181,7 +181,6 @@
                             {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <div class="navbar-custom-menu">
                                     <ul class="nav navbar-nav navbar-right">
-
                                         <li class="dropdown user user-menu">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                                 <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(32)) }}"

@@ -5,13 +5,37 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * Based on Bootstrap v3
 */
+/*@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/OpenSans-Light.woff2) format('woff2'), url(fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(fonts/OpenSans.woff2) format('woff2'), url(fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(fonts/OpenSans-Semibold.woff2) format('woff2'), url(fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(fonts/OpenSans-Bold.woff2) format('woff2'), url(fonts/OpenSans-Bold.woff) format('woff');
+}*/
 body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
 }
 
 a {
-  color: #0099FF;
+  color: #337AB7;
   text-decoration: none;
 }
 a:hover,
@@ -27,6 +51,9 @@ a:focus {
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
+}
+.navbar-nav > li{
+  margin-bottom: 0;
 }
 .navbar-collapse{
   overflow: hidden !important;
@@ -69,7 +96,7 @@ a:focus {
   padding: 6px 9px;
 }
 .nav > li > a:hover, .nav > li > a:focus{
-   background-color: transparent;
+  background-color: transparent;
 }
 .navbar-form .form-control{
   height: 25px;

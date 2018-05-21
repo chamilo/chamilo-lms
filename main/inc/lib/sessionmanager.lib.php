@@ -6546,7 +6546,8 @@ SQL;
                         }
                     }
 
-                    $message .= '<strong>'.get_lang('User').'</strong>: '.$userInfo['complete_name'].' <br />';
+                    $message .= '<strong>'.get_lang('User').'</strong>: ';
+                    $message .= $userInfo['complete_name_with_username'].' <br />';
 
                     if (!in_array($userInfo['status'], [DRH]) && !api_is_platform_admin_by_id($userInfo['user_id'])) {
                         $message .= get_lang('UserMustHaveTheDrhRole').'<br />';

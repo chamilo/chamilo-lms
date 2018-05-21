@@ -4,7 +4,9 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use CourseManager;
 use Database;
@@ -54,6 +56,7 @@ class CourseRestorer
         'links',
         'works',
         'surveys',
+        'learnpath_category',
         'learnpaths',
         //'scorm_documents', ??
         'tool_intro',
@@ -2156,7 +2159,7 @@ class CourseRestorer
 
                         foreach ($correctAnswers as $answer_id => $correct_answer) {
                             $params = [];
-                            $params['correct'] = $new_options[$correct_answer];
+                            $params['correct'] = isset($new_options[$correct_answer]) ? $new_options[$correct_answer] : '';
                             Database::update(
                                 $table_ans,
                                 $params,
@@ -2580,6 +2583,30 @@ class CourseRestorer
     }
 
     /**
+     * @param int  $sessionId
+     * @param bool $baseContent
+     */
+    public function restore_learnpath_category($sessionId = 0, $baseContent = false)
+    {
+        if ($this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
+            $resources = $this->course->resources;
+            /** @var LearnPathCategory $item */
+            foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
+                /** @var CLpCategory $lpCategory */
+                $lpCategory = $item->object;
+                $values = [
+                    'c_id' => $this->destination_course_id,
+                    'name' => $lpCategory->getName(),
+                ];
+                $categoryId = \learnpath::createCategory($values);
+                if ($categoryId) {
+                    $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+                }
+            }
+        }
+    }
+
+    /**
      * Restoring learning paths.
      *
      * @param int        $session_id
@@ -2594,7 +2621,6 @@ class CourseRestorer
             $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
             $resources = $this->course->resources;
-
             $origin_path = $this->course->backup_path.'/upload/learning_path/images/';
             $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
@@ -2658,7 +2684,14 @@ class CourseRestorer
 
                 $lp->expired_on = isset($lp->expired_on) && $lp->expired_on === '0000-00-00 00:00:00' ? null : $lp->expired_on;
                 $lp->publicated_on = isset($lp->publicated_on) && $lp->publicated_on === '0000-00-00 00:00:00' ? null : $lp->publicated_on;
+                $lp->categoryId = (int) $lp->categoryId;
 
+                $categoryId = 0;
+                if (!empty($lp->categoryId)) {
+                    if (isset($resources[RESOURCE_LEARNPATH_CATEGORY][$lp->categoryId])) {
+                        $categoryId = $resources[RESOURCE_LEARNPATH_CATEGORY][$lp->categoryId]->destination_id;
+                    }
+                }
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'lp_type' => $lp->lp_type,
@@ -2689,7 +2722,7 @@ class CourseRestorer
                     'prerequisite' => 0,
                     'hide_toc_frame' => 0,
                     'seriousgame_mode' => 0,
-                    'category_id' => 0,
+                    'category_id' => $categoryId,
                     'max_attempts' => 0,
                     'subscribe_users' => 0,
                 ];

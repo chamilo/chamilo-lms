@@ -19,6 +19,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz;
@@ -31,6 +32,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use CourseManager;
 use Database;
 use Link as LinkManager;
@@ -63,6 +65,7 @@ class CourseBuilder
         'glossary',
         'quizzes',
         'test_category',
+        'learnpath_category',
         'learnpaths',
         'links',
         'surveys',
@@ -1243,6 +1246,29 @@ class CourseBuilder
     }
 
     /**
+     * @param int   $session_id
+     * @param int   $courseId
+     * @param bool  $withBaseContent
+     * @param array $idList
+     */
+    public function build_learnpath_category($session_id = 0, $courseId = 0, $withBaseContent = false, $idList = [])
+    {
+        $categories = \learnpath::getCategories($courseId);
+
+        /** @var CLpCategory $item */
+        foreach ($categories as $item) {
+            $categoryId = $item->getId();
+            if (!empty($idList)) {
+                if (!in_array($categoryId, $idList)) {
+                    continue;
+                }
+            }
+            $category = new LearnPathCategory($categoryId, $item);
+            $this->course->add_resource($category);
+        }
+    }
+
+    /**
      * Build the learnpaths.
      *
      * @param int   $session_id      Internal session ID
@@ -1296,8 +1322,8 @@ class CourseBuilder
                 $items = [];
                 $sql = "SELECT * FROM ".$table_item."
                         WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
-                $db_items = Database::query($sql);
-                while ($obj_item = Database::fetch_object($db_items)) {
+                $resultItem = Database::query($sql);
+                while ($obj_item = Database::fetch_object($resultItem)) {
                     $item['id'] = $obj_item->id;
                     $item['item_type'] = $obj_item->item_type;
                     $item['ref'] = $obj_item->ref;
@@ -1356,6 +1382,7 @@ class CourseBuilder
                     $obj->publicated_on,
                     $obj->expired_on,
                     $obj->session_id,
+                    $obj->category_id,
                     $items
                 );
 

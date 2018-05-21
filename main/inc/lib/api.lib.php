@@ -619,6 +619,7 @@ define('RESOURCE_EVENT', 'calendar_event');
 define('RESOURCE_LINK', 'link');
 define('RESOURCE_COURSEDESCRIPTION', 'course_description');
 define('RESOURCE_LEARNPATH', 'learnpath');
+define('RESOURCE_LEARNPATH_CATEGORY', 'learnpath_category');
 define('RESOURCE_ANNOUNCEMENT', 'announcement');
 define('RESOURCE_FORUM', 'forum');
 define('RESOURCE_FORUMTOPIC', 'thread');

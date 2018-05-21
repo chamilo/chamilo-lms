@@ -32,6 +32,7 @@ class CourseSelectForm
         $avoid_serialize = false
     ) {
         global $charset;
+        $resource_titles[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
         $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
         $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
         $resource_titles[RESOURCE_EVENT] = get_lang('Events');
@@ -184,7 +185,7 @@ class CourseSelectForm
         foreach ($course->resources as $type => $resources) {
             if (count($resources) > 0) {
                 switch ($type) {
-                    //Resources to avoid
+                    // Resources to avoid
                     case RESOURCE_FORUMCATEGORY:
                         foreach ($resources as $id => $resource) {
                             $forum_categories[$id] = $resource;

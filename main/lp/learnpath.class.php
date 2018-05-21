@@ -11848,6 +11848,8 @@ EOD;
     /**
      * @param array $params
      *
+     * @return int
+     *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public static function createCategory($params)
@@ -11866,6 +11868,8 @@ EOD;
             'visible',
             api_get_user_id()
         );
+
+        return $item->getId();
     }
 
     /**

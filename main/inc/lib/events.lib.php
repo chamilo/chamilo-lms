@@ -535,6 +535,11 @@ class Event
             if (is_null($answer)) {
                 $answer = '';
             }
+
+            if (is_null($score)) {
+                $score = 0;
+            }
+
             $attempt = [
                 'user_id' => $user_id,
                 'question_id' => $question_id,

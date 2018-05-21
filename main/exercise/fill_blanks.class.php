@@ -675,13 +675,13 @@ class FillBlanks extends Question
                     },
                     $listSeveral
                 );
-                $studentAnswer = htmlspecialchars($studentAnswer);
+                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $correctAnswer = api_html_entity_decode($correctAnswer);
-                $studentAnswer = htmlspecialchars($studentAnswer);
+                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = $studentAnswer == self::trimOption($correctAnswer);
                 break;
         }

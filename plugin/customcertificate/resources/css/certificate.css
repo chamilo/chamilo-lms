@@ -1,17 +1,17 @@
-body {background-repeat:no-repeat !important; margin:0; padding: 0;}
+body {background-repeat:no-repeat; margin:0; padding: 0;}
 td { font-family:arial, sans-serif; font-size:18px; }
-td.logo { height: 150px; vertical-align: middle; }
-td.content-table { height: 480px; padding: 10px 25px; vertical-align:middle;}
-td.content-student { text-align:center; /*padding: 10px 0;*/ }
-td.course { text-align:center; /*height: 200px;*/ vertical-align: middle; padding-top: 10px;}
-td.modality { text-align:center; }
-td.course-date { text-align:center; }
-td.expediction { text-align:right; font-size: 18px; padding: 20px 0;}
-td.seals { text-align:center; font-size: 16px;}
-td.logo-seals { text-align:center; height: 100px; vertical-align: middle;}
-@page caraA { margin:0; padding:0; page-break-before:always; height: 210mm;} 
+.logo { height: 150px; vertical-align: middle; }
+.content-table { height: 480px; padding: 10px 25px; vertical-align:middle;}
+.content-student { text-align:center;}
+.course { padding-top: 10px; text-align:center; vertical-align: middle;}
+.modality { text-align:center; }
+.course-date { text-align:center; }
+.expediction { font-size: 18px; padding: 20px 0; text-align:right;}
+.seals { font-size: 16px; text-align:center;}
+.logo-seals { height: 100px; text-align:center; vertical-align: middle;}
+@page caraA { height: 210mm; margin:0; padding:0; page-break-before:always;} 
 .caraA {box-decoration-break: slice; page: caraA}
 @page caraB { background:#FFFFFF; }
 .caraB {box-decoration-break: slice; page: caraB}
-.contents-learnpath td {font-size: 12px; background: #FFFFFF; padding: 10px; height: 160mm; vertical-align: top;}
+.contents-learnpath td {background: #FFFFFF; font-size: 12px; height: 160mm; padding: 10px; vertical-align: top;}
 ol {margin: 0; padding:0;}

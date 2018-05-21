@@ -1,70 +1,66 @@
-function date_certificate_switch_radio_button_2(){
-    var input_date_start = document.getElementById("date_start");
-    var input_date_end = document.getElementById("date_end");
-    input_date_start.value = "";
-    input_date_end.value = "";
-    input_date_start.setAttribute("disabled","disabled");
-    input_date_end.setAttribute("disabled","disabled");
+function dateCertificateSwitchRadioButton2(){
+    var inputDateStart = document.getElementById("date_start");
+    var inputDateEnd = document.getElementById("date_end");
+    inputDateStart.value = "";
+    inputDateEnd.value = "";
+    inputDateStart.setAttribute("disabled","disabled");
+    inputDateEnd.setAttribute("disabled","disabled");
 }
 
-function date_certificate_switch_radio_button_1(){
-    var input_date_start = document.getElementById("date_start");
-    var input_date_end = document.getElementById("date_end");
-    input_date_start.removeAttribute("disabled");
-    input_date_end.removeAttribute("disabled");
+function dateCertificateSwitchRadioButton1(){
+    var inputDateStart = document.getElementById("date_start");
+    var inputDateEnd = document.getElementById("date_end");
+    inputDateStart.removeAttribute("disabled");
+    inputDateEnd.removeAttribute("disabled");
 }
 
-function date_certificate_switch_radio_button_0(){
-    var input_date_start = document.getElementById("date_start");
-    var input_date_end = document.getElementById("date_end");
-    input_date_start.value = "";
-    input_date_end.value = "";
-    input_date_start.setAttribute("disabled","disabled");
-    input_date_end.setAttribute("disabled","disabled");
+function dateCertificateSwitchRadioButton0(){
+    var inputDateStart = document.getElementById("date_start");
+    var inputDateEnd = document.getElementById("date_end");
+    inputDateStart.value = "";
+    inputDateEnd.value = "";
+    inputDateStart.setAttribute("disabled","disabled");
+    inputDateEnd.setAttribute("disabled","disabled");
 }
 
-function type_date_expediction_switch_radio_button(){
-    var input_type = document.getElementsByName("type_date_expediction");
+function typeDateExpedictionSwitchRadioButton(){
+    var inputType = document.getElementsByName("type_date_expediction");
     var type;
-    for (var i=0;i<input_type.length;i++){
-        if ( input_type[i].checked ) {
-            type = input_type[i].value;
+    for (var i=0;i<inputType.length;i++){
+        if ( inputType[i].checked ) {
+            type = parseInt(inputType[i].value);
         }
     }
-    var input_day = document.getElementById("day");
-    var input_month = document.getElementById("month");
-    var input_year = document.getElementById("year");
-    if (type == 2) {
-        input_day.removeAttribute("disabled");
-        input_month.removeAttribute("disabled");
-        input_year.removeAttribute("disabled");
+    var inputDay = document.getElementById("day");
+    var inputMonth = document.getElementById("month");
+    var inputYear = document.getElementById("year");
+    if (type === 2) {
+        inputDay.removeAttribute("disabled");
+        inputMonth.removeAttribute("disabled");
+        inputYear.removeAttribute("disabled");
     } else {
-        input_day.setAttribute("disabled","disabled");
-        input_month.setAttribute("disabled","disabled");
-        input_year.setAttribute("disabled","disabled");
+        inputDay.setAttribute("disabled","disabled");
+        inputMonth.setAttribute("disabled","disabled");
+        inputYear.setAttribute("disabled","disabled");
     }
 }
 
-function contents_type_switch_radio_button(){
-    var input_type = document.getElementsByName("contents_type");
+function contentsTypeSwitchRadioButton(){
+    var inputType = document.getElementsByName("contents_type");
     var type;
-    for (var i=0;i<input_type.length;i++){
-        if ( input_type[i].checked ) {
-          type = input_type[i].value;
+    for (var i=0;i<inputType.length;i++){
+        if ( inputType[i].checked ) {
+          type = parseInt(inputType[i].value);
         }
     }
-    var input_contents = document.getElementById("contents");
-    if (type == 2) {
-        input_contents.removeAttribute("disabled");
+    var inputContents = document.getElementById("contents");
+    if (type === 2) {
+        inputContents.removeAttribute("disabled");
     } else {
-        input_contents.setAttribute("disabled","disabled");
+        inputContents.setAttribute("disabled","disabled");
     }
 }
 
 $(document).ready(function() {
-    CKEDITOR.on("instanceReady", function (e) {
-        showTemplates();
-    });
-                
     $( ".datepicker" ).datepicker();
 });

@@ -22,7 +22,7 @@ class CustomCertificatePlugin extends Plugin
             [
                     'name' => 'use_certificate_default',
                     'type' => 'checkbox',
-            ]
+            ],
     ];
     
     protected function __construct()
@@ -145,14 +145,14 @@ class CustomCertificatePlugin extends Plugin
 
                 Database::insert(self::TABLE_CUSTOMCERTIFICATE, $params);
                 $certificateId = Database::insert_id();
-                
+
                 //Image manager
                 $pathDestiny = $base.'certificates/'.$certificateId.'/';
-                
+
                 if (!file_exists($pathDestiny)) {
                     mkdir($pathDestiny, api_get_permissions_for_new_directories(), true);
                 }
-                
+
                 $imgList = [
                     'logo_left',
                     'logo_center',
@@ -172,7 +172,7 @@ class CustomCertificatePlugin extends Plugin
                         );
                     }
                 }
-                
+
                 if ($row['certificate_default'] == 1) {
                     $params['c_id'] = 0;
                     $params['session_id'] = 0;
@@ -191,11 +191,11 @@ class CustomCertificatePlugin extends Plugin
                     }
                 }
             }
-            
+
             $sql = "DROP TABLE IF EXISTS $oldCertificateTable";
             Database::query($sql);
-            
-            echo $this->get_lang('MessageUpdate');
+
+            echo get_lang('MessageUpdate');
         }
     }
     
@@ -212,7 +212,7 @@ class CustomCertificatePlugin extends Plugin
             return false;
         }
 
-        $certificateTable =  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = "SELECT cer.user_id AS user_id, cat.session_id AS session_id, cat.course_code AS course_code
                 FROM $certificateTable cer
@@ -233,6 +233,7 @@ class CustomCertificatePlugin extends Plugin
                 ];
             }
         }
+        
         return [];
     }
 }

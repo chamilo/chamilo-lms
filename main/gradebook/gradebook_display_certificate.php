@@ -130,8 +130,8 @@ switch ($action) {
     case 'export_all_certificates':
         $courseCode = api_get_course_id();
         if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
-                api_get_course_setting('customcertificate_course_enable', $courseCode) == 1 )
-        {
+            api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
+        ) {
             $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1';
         } else {
             if (api_is_student_boss()) {
@@ -143,7 +143,7 @@ switch ($action) {
                     $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
                 }
             }
-            
+
             Category::exportAllCertificates($categoryId, $userList);
         }
         header('Location: '.$url);

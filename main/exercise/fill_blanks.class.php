@@ -559,7 +559,7 @@ class FillBlanks extends Question
                     [
                         'class' => 'selectpicker',
                         'data-width' => $width,
-                        'id' => $labelId
+                        'id' => $labelId,
                     ],
                     false
                 );

@@ -28,7 +28,7 @@ if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate
                 $extraFieldValue->saveFieldValues($params);
             }
         }
-        
+
         $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php'.
                 '?student_id='.$infoCertificate['user_id'].
                 '&course_code='.$infoCertificate['course_code'].

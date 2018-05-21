@@ -48,9 +48,11 @@ $strings['OtherOptions'] = "Otras opciones";
 $strings['MarginRight'] = "Margen derecho";
 $strings['MarginLeft'] = "Margen izquierdo";
 $strings['SetDefaultTemplate'] = "Establecer plantilla por defecto";
-$strings['MessageDefaultTemplate'] = "Guardar esta personalización por defecto para cursos y sesiones sin certificados definidos";
+$strings['MessageDefaultTemplate'] = "Guardar esta personalización por defecto para cursos y 
+    sesiones sin certificados definidos";
 $strings['None'] = "Ninguno";
-$strings['ErrorTemplateCertificate'] = "No hay una plantilla definida para el certificado. No existe plantilla por defecto.";
+$strings['ErrorTemplateCertificate'] = "No hay una plantilla definida para el certificado. 
+    No existe plantilla por defecto.";
 $strings['DateStartEnd'] = "Con Fecha de inicio y Fecha fin: ";
 $strings['ExpedictionIn'] = "Expedido en";
 $strings['Signatures'] = "Firmas";
@@ -60,7 +62,8 @@ $strings['CertificateSetting'] = "Configuración Certificado";
 $strings['ToolDisabledCourse'] = "Herramienta desabilitada en el curso";
 $strings['ToolUseDefaultSettingCourse'] = "Herramienta configurada para usar el certificado por defecto.<br>
     Podrá editarlo desde la pantalla de Administración -> Plugins -> Certificado personalizado.<br>
-    O si lo desea puede desactivar la opción de usar certificado por defecto en la configuración del plugin en el curso";
+    O si lo desea puede desactivar la opción de usar certificado por defecto en la configuración del
+     plugin en el curso";
 $strings['CertificateSettingDefault'] = "Configuración del certificado por defecto";
 $strings['InfoFromDefaultCertificate'] = "El contenido del certificado está basado en el certificado por defecto. 
     Las modificaciones que realice no afectará al certificado por defecto.";

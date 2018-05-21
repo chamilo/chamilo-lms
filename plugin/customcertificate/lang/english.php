@@ -48,9 +48,11 @@ $strings['OtherOptions'] = "Others options";
 $strings['MarginRight'] = "Margin right";
 $strings['MarginLeft'] = "Margin left";
 $strings['SetDefaultTemplate'] = "Set template by default";
-$strings['MessageDefaultTemplate'] = "Save this default customization for courses and sessions without defined certificates";
+$strings['MessageDefaultTemplate'] = "Save this default customization for courses and sessions without
+     defined certificates";
 $strings['None'] = "None";
-$strings['ErrorTemplateCertificate'] = "There is no template defined for the certificate. There is no template by default.";
+$strings['ErrorTemplateCertificate'] = "There is no template defined for the certificate.
+     There is no template by default.";
 $strings['DateStartEnd'] = "With Start date and End date: ";
 $strings['ExpedictionIn'] = "Expediction in";
 $strings['Signatures'] = "Signatures";

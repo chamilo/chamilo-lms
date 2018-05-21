@@ -491,7 +491,10 @@ if ($time_control) {
     if ($debug) {
         error_log('7.1. Time control is enabled');
         error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-        error_log('7.3. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]);
+        error_log(
+            '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+            $_SESSION['expired_time'][$current_expired_time_key]
+        );
     }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
@@ -510,7 +513,9 @@ if ($time_control) {
                the track_et_attempt see #2069 */
             if (empty($last_attempt_date)) {
                 $diff = $current_timestamp - api_strtotime($exercise_stat_info['start_date'], 'UTC');
-                $last_attempt_date = api_get_utc_datetime(api_strtotime($exercise_stat_info['start_date'], 'UTC') + $diff);
+                $last_attempt_date = api_get_utc_datetime(
+                    api_strtotime($exercise_stat_info['start_date'], 'UTC') + $diff
+                );
             } else {
                 //Recalculate the time control due #2069
                 $diff = $current_timestamp - api_strtotime($last_attempt_date, 'UTC');

@@ -520,11 +520,12 @@ class Exercise
      *
      * @author Olivier Brouckaert
      *
-     * @return int - 0 if not random, otherwise the draws
+     * @return bool
      */
     public function isRandom()
     {
         $isRandom = false;
+        // "-1" means all questions will be random
         if ($this->random > 0 || $this->random == -1) {
             $isRandom = true;
         }
@@ -1047,7 +1048,7 @@ class Exercise
                     if ($this->random == 0 || $nbQuestions < 2) {
                         $questionList = $this->getQuestionOrderedList();
                     } else {
-                        $questionList = $this->selectRandomList($adminView);
+                        $questionList = $this->getRandomList($adminView);
                     }
                     break;
                 default:
@@ -1107,22 +1108,29 @@ class Exercise
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *               without randomizing, otherwise, returns the list with questions selected randomly
      */
-    public function selectRandomList($adminView = false)
+    public function getRandomList($adminView = false)
     {
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
+        // Random with limit
         $randomLimit = "ORDER BY RAND() LIMIT $random";
-        // Random all questions so no limit
-        if ($random == -1 || $adminView === true) {
+
+        // Random with no limit
+        if ($random == -1) {
+            $randomLimit = "ORDER BY RAND() ";
+        }
+
+        // Admin see the list in default order
+        if ($adminView === true) {
             // If viewing it as admin for edition, don't show it randomly, use title + id
             $randomLimit = 'ORDER BY e.question_order';
         }
 
         $sql = "SELECT e.question_id
-                FROM $TBL_EXERCISE_QUESTION e 
-                INNER JOIN $TBL_QUESTIONS q
+                FROM $quizRelQuestion e 
+                INNER JOIN $question q
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
@@ -6452,7 +6460,7 @@ class Exercise
         $isRandomByCategory = $this->isRandomByCat();
         if ($isRandomByCategory == 0) {
             if ($this->isRandom()) {
-                $result = $this->selectRandomList();
+                $result = $this->getRandomList();
             } else {
                 $result = $this->selectQuestionList();
             }

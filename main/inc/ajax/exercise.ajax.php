@@ -425,7 +425,7 @@ switch ($action) {
             $objExercise = Session::read('objExercise');
 
             // Question info.
-            $question_id = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
+            $question_id = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
             $question_list = Session::read('questionList');
 
             // If exercise or question is not set then exit.
@@ -460,7 +460,6 @@ switch ($action) {
             // Updating Reminder algorithm.
             if ($objExercise->type == ONE_PER_PAGE) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
-
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
                     $new_list = [];
@@ -494,7 +493,6 @@ switch ($action) {
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
-
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
                     $objQuestionTmp = Question::read($my_question_id, $course_id);

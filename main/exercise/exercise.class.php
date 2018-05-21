@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  *
  * @package chamilo.exercise
  *
- * @todo use doctrine object, use getters and setters correctly
+ * @todo use getters and setters correctly
  *
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
@@ -124,12 +124,12 @@ class Exercise
         $this->notifications = [];
 
         if (!empty($courseId)) {
-            $course_info = api_get_course_info_by_id($courseId);
+            $courseInfo = api_get_course_info_by_id($courseId);
         } else {
-            $course_info = api_get_course_info();
+            $courseInfo = api_get_course_info();
         }
-        $this->course_id = $course_info['real_id'];
-        $this->course = $course_info;
+        $this->course_id = $courseInfo['real_id'];
+        $this->course = $courseInfo;
         $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
@@ -2879,7 +2879,7 @@ class Exercise
                 WHERE c_id = ".api_get_course_int_id()."
                 AND exe_exo_id = ".$this->id."
                 $sql_where
-                AND session_id = ".$session_id."";
+                AND session_id = ".$session_id;
         Database::query($sql);
 
         Event::addEvent(
@@ -2920,7 +2920,6 @@ class Exercise
                     $newQuestionObj = Question::read($newQuestionId);
                     if (isset($newQuestionObj) && $newQuestionObj) {
                         $newQuestionObj->addToList($newId);
-
                         if (!empty($oldQuestionObj->category)) {
                             $newQuestionObj->saveCategory($oldQuestionObj->category);
                         }
@@ -8040,7 +8039,7 @@ class Exercise
     ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
-        $course_info = api_get_course_info($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
                     .get_lang('AttemptDetails').' : <br /><br />'
@@ -8090,7 +8089,7 @@ class Exercise
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
             $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $course_info['name'], $msg1);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
@@ -8131,8 +8130,7 @@ class Exercise
     ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
-        $course_info = api_get_course_info($courseCode);
-
+        $courseInfo = api_get_course_info($courseCode);
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -8146,45 +8144,46 @@ class Exercise
                 if (!empty($file)) {
                     $file = Display::url($file, $file);
                 }
-                $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
-                    .'</tr></table>';
+                $oral_question_list .= '<br />
+                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                        <td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>
+                    </tr></table>';
             }
         }
 
         if (!empty($oral_question_list)) {
             $msg = get_lang('OralQuestionsAttempted').'<br /><br />
-                    '.get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
+                    '.get_lang('AttemptDetails').' : <br /><br />
+                    <table>
+                        <tr>
+                            <td><em>'.get_lang('CourseName').'</em></td>
+                            <td>&nbsp;<b>#course#</b></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</td>
+                            <td>&nbsp;#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>&nbsp;#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>&nbsp;#mail#</td>
+                        </tr>
+                    </table>';
             $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
             $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $course_info['name'], $msg1);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
@@ -8229,12 +8228,11 @@ class Exercise
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId, $this->course_id);
-
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
-                    //Always the last item
+                    // Always the last item
                     $mediaList[999][] = $objQuestionTmp->id;
                 }
             }

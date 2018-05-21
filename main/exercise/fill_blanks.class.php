@@ -523,6 +523,7 @@ class FillBlanks extends Question
         $inTabTeacherSolution = $listAnswersInfo['words'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
 
+        $labelId = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
             case self::FILL_THE_BLANK_MENU:
                 $selected = '';
@@ -558,6 +559,7 @@ class FillBlanks extends Question
                     [
                         'class' => 'selectpicker',
                         'data-width' => $width,
+                        'id' => $labelId
                     ],
                     false
                 );
@@ -565,7 +567,7 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
+                $attributes['id'] = $labelId;
                 $result = Display::input(
                     'text',
                     "choice[$questionId][]",

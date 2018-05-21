@@ -363,6 +363,22 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @When /^(?:|I )fill in select bootstrap static by text "(?P<field>(?:[^"]|\\")*)" select "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectStaticBootstrapInputWithAndSelectByText($field, $value)
+    {
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+           $('$field > option').each(function(index, option) {
+                if (option.text == '$value') {
+                    $('$field').selectpicker('val', option.value);
+                }                
+            });
+        ");
+    }
+
+
+    /**
      * @When /^wait for the page to be loaded$/
      */
     public function waitForThePageToBeLoaded()

@@ -1115,7 +1115,7 @@ class Exercise
 
         $randomLimit = "ORDER BY RAND() LIMIT $random";
         // Random all questions so no limit
-        if ($random == -1 or $adminView === true) {
+        if ($random == -1 || $adminView === true) {
             // If viewing it as admin for edition, don't show it randomly, use title + id
             $randomLimit = 'ORDER BY e.question_order';
         }

@@ -710,7 +710,7 @@ if ($form->validate()) {
             if (!empty($sessionToRedirect) && !$sessionPremiumChecker) {
                 $sessionInfo = api_get_session_info($sessionToRedirect);
                 if (!empty($sessionInfo)) {
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $sessionToRedirect,
                         [$user_id],
                         SESSION_VISIBLE_READ_ONLY,

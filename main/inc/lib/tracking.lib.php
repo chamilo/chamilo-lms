@@ -7497,10 +7497,9 @@ class TrackingCourseLog
         $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$course_code.
             '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
 
+        $sortByFirstName = api_sort_by_first_name();
         while ($user = Database::fetch_array($res, 'ASSOC')) {
             $user['official_code'] = $user['col0'];
-            $user['lastname'] = $user['col1'];
-            $user['firstname'] = $user['col2'];
             $user['username'] = $user['col3'];
 
             $user['time'] = api_time_to_hms(
@@ -7587,15 +7586,14 @@ class TrackingCourseLog
                              </a></center>';
 
             // store columns in array $users
-            $is_western_name_order = api_is_western_name_order();
             $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
-            if ($is_western_name_order) {
-                $user_row['firstname'] = $user['firstname'];
-                $user_row['lastname'] = $user['lastname'];
+            if ($sortByFirstName) {
+                $user_row['firstname'] = $user['col2'];
+                $user_row['lastname'] = $user['col1'];
             } else {
-                $user_row['lastname'] = $user['lastname'];
-                $user_row['firstname'] = $user['firstname'];
+                $user_row['lastname'] = $user['col1'];
+                $user_row['firstname'] = $user['col2'];
             }
             $user_row['username'] = $user['username'];
             $user_row['time'] = $user['time'];
@@ -7649,7 +7647,6 @@ class TrackingCourseLog
 
                 $csv_content[] = $user_row;
             }
-
             $users[] = array_values($user_row);
         }
 
@@ -7728,7 +7725,7 @@ class TrackingCourseLog
         $users = [];
 
         $course_info = api_get_course_info($course_code);
-
+        $sortByFirstName = api_sort_by_first_name();
         while ($user = Database::fetch_array($res, 'ASSOC')) {
             $courseInfo = api_get_course_info($course_code);
             $courseId = $courseInfo['real_id'];
@@ -7779,10 +7776,9 @@ class TrackingCourseLog
                          </center>';
 
             // store columns in array $users
-            $is_western_name_order = api_is_western_name_order();
             $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
-            if ($is_western_name_order) {
+            if ($sortByFirstName) {
                 $user_row['firstname'] = $user['firstname'];
                 $user_row['lastname'] = $user['lastname'];
             } else {

@@ -286,8 +286,8 @@ class Auth
         $title = Database::escape_string($title);
         $category_id = intval($category_id);
         $result = false;
-        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "UPDATE $tucc
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $sql = "UPDATE $table
                 SET title='".api_htmlentities($title, ENT_QUOTES, api_get_system_encoding())."'
                 WHERE id='".$category_id."'";
         $resultQuery = Database::query($sql);

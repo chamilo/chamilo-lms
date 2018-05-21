@@ -43,7 +43,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         }
 
         if (!empty($user_list)) {
-            SessionManager::subscribe_users_to_session(
+            SessionManager::subscribeUsersToSession(
                 $session_id,
                 $user_list,
                 null,

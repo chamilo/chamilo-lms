@@ -2487,7 +2487,8 @@ class learnpathItem
                                                             exe_user_id = '.$user_id.' AND
                                                             orig_lp_id = '.$this->lp_id.' AND
                                                             orig_lp_item_id = '.$prereqs_string.' AND
-                                                            status <> "incomplete"
+                                                            status <> "incomplete" AND
+                                                            c_id = '.$course_id.'
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
@@ -2530,11 +2531,12 @@ class learnpathItem
                                                 }
                                             }
                                         } else {
-                                            // 3. for multiple attempts we check that there are minimum 1 item completed.
+                                            // 3. For multiple attempts we check that there are minimum 1 item completed
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
                                                     FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
+                                                        c_id = '.$course_id.' AND 
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
@@ -2560,7 +2562,9 @@ class learnpathItem
                                                             $returnstatus = false;
                                                         }
                                                     } else {
-                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                        if ($quiz['exe_result'] >=
+                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                        ) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {

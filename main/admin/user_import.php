@@ -223,7 +223,7 @@ function save_data($users)
                 foreach ($user['Sessions'] as $sessionId) {
                     $sessionInfo = api_get_session_info($sessionId);
                     if (!empty($sessionInfo)) {
-                        SessionManager::subscribe_users_to_session(
+                        SessionManager::subscribeUsersToSession(
                             $sessionId,
                             [$user_id],
                             SESSION_VISIBLE_READ_ONLY,

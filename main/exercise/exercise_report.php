@@ -456,7 +456,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     if ($check) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
-            $count = $objExerciseTmp->clean_results(
+            $count = $objExerciseTmp->cleanResults(
                 true,
                 $_GET['delete_before_date'].' 23:59:59'
             );
@@ -812,7 +812,7 @@ $extra_params['height'] = 'auto';
                 // Format the date for confirm box
                 var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
                 var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
-                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')); ?>" + selectedDate)) {
+                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>" + selectedDate)) {
                     self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
                 }
             }

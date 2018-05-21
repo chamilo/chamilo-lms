@@ -269,9 +269,21 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
         } else {
             // Redirecting to an exercise
             $table = Database::get_course_table(TABLE_QUIZ_TEST);
-            $sessionCondition = api_get_session_condition($session_id, true);
+            $condition = '';
+            if (!empty($session_id)) {
+                $condition = api_get_session_condition($session_id);
+                $sql = "SELECT iid FROM $table
+                        WHERE c_id = $course_id AND autolaunch = 1 $condition
+                        LIMIT 1";
+                $result = Database::query($sql);
+                // If we found nothing in the session we just called the session_id = 0 autolaunch
+                if (Database::num_rows($result) == 0) {
+                    $condition = '';
+                }
+            }
+
             $sql = "SELECT iid FROM $table
-                    WHERE c_id = $course_id AND autolaunch = 1 $sessionCondition
+                    WHERE c_id = $course_id AND autolaunch = 1 $condition
                     LIMIT 1";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {

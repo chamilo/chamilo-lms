@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CChatConnected;
 use Doctrine\Common\Collections\Criteria;
@@ -77,12 +78,8 @@ class CourseChatUtils
     /**
      * Save a chat message in a HTML file.
      *
-     * @param string$message
-     * @param int $friendId
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @param string $message
+     * @param int    $friendId
      *
      * @return bool
      */
@@ -210,7 +207,7 @@ class CourseChatUtils
     /**
      * Disconnect a user from course chats.
      *
-     * @param $userId
+     * @param int $userId
      */
     public static function exitChat($userId)
     {
@@ -236,7 +233,6 @@ class CourseChatUtils
     {
         $em = Database::getManager();
         $extraCondition = "AND ccc.toGroupId = {$this->groupId}";
-
         if (empty($this->groupId)) {
             $extraCondition = "AND ccc.sessionId = {$this->sessionId}";
         }
@@ -251,10 +247,9 @@ class CourseChatUtils
 
         $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
         $cd_count_time_seconds = $now->getTimestamp();
-
+        /** @var CChatConnected $connection */
         foreach ($connectedUsers as $connection) {
             $date_count_time_seconds = $connection->getLastConnection()->getTimestamp();
-
             if (strcmp($now->format('Y-m-d'), $connection->getLastConnection()->format('Y-m-d')) !== 0) {
                 continue;
             }
@@ -439,7 +434,6 @@ class CourseChatUtils
 
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-
         $chatPath = $document_path.'/chat_files/';
 
         if ($this->groupId) {
@@ -690,8 +684,6 @@ class CourseChatUtils
         $date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
         $date->modify('-5 seconds');
 
-        $extraCondition = null;
-
         if ($this->groupId) {
             $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
         } else {
@@ -721,10 +713,9 @@ class CourseChatUtils
     {
         $subscriptions = $this->getUsersSubscriptions();
         $usersInfo = [];
-
+        /** @var CourseRelUser $subscription */
         foreach ($subscriptions as $subscription) {
             $user = $subscription->getUser();
-
             $usersInfo[] = [
                 'id' => $user->getId(),
                 'firstname' => $user->getFirstname(),
@@ -796,8 +787,6 @@ class CourseChatUtils
     {
         $date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
         $date->modify('-5 seconds');
-
-        $extraCondition = null;
 
         if ($this->groupId) {
             $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);

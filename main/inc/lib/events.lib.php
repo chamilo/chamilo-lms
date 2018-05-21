@@ -41,7 +41,7 @@ class Event
             } // don't change this
             $reallyNow = api_get_utc_datetime();
             $params = [
-                'open_remote_host' => $remhost,
+                'open_remote_host' => Database::escape_string($remhost),
                 'open_agent' => $_SERVER['HTTP_USER_AGENT'],
                 'open_referer' => $referer,
                 'open_date' => $reallyNow,

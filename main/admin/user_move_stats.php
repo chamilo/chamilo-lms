@@ -115,7 +115,7 @@ if (isset($_REQUEST['load_ajax'])) {
                         echo 'User added to the session';
                     }
                     //Registering user to the new session
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $new_session_id,
                         [$user_id],
                         false

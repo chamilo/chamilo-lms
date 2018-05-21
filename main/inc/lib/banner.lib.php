@@ -248,13 +248,17 @@ function returnNotificationMenu()
                 .' '.$number_online_in_course.' </a></li>';
         }
 
-        if (isset($user_id) && $sessionId != 0) {
-            $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
-
-            $html .= '<li class="user-online-session"><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
-                .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
-                .' '.$numberOnlineInSession
-                .'</a></li>';
+        if (!empty($sessionId)) {
+            $allow = api_is_platform_admin(true) ||
+                api_is_coach($sessionId, null, false) ||
+                SessionManager::isUserSubscribedAsStudent($sessionId, api_get_user_id());
+            if ($allow) {
+                $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
+                $html .= '<li class="user-online-session">
+                            <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php" target="_self">'
+                            .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
+                            .' '.$numberOnlineInSession.'</a></li>';
+            }
         }
     }
 

@@ -328,6 +328,7 @@ switch ($action) {
         }
         // Launch event
         Event::event_download($document_data['url']);
+
         // Check visibility of document and paths
         if (!($isAllowedToEdit || $groupMemberWithUploadRights) &&
             !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())
@@ -393,7 +394,6 @@ switch ($action) {
                 : 'landscape';
 
             $showHeaderAndFooter = true;
-
             if ($is_certificate_mode) {
                 $certificateOrientation = api_get_configuration_value('certificate_pdf_orientation');
                 $orientation = in_array($certificateOrientation, ['landscape', 'portrait'])
@@ -529,7 +529,8 @@ switch ($action) {
                 get_lang('ConversionToSameFileFormat'),
                 'warning'
             ));
-        } elseif (!(in_array($fileInfo['extension'], DocumentManager::getJodconverterExtensionList('from', $formatType))) ||
+        } elseif (
+            !(in_array($fileInfo['extension'], DocumentManager::getJodconverterExtensionList('from', $formatType))) ||
             !(in_array($formatTarget, DocumentManager::getJodconverterExtensionList('to', $formatType)))
         ) {
             Display::addFlash(Display::return_message(

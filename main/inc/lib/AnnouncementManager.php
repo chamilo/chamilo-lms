@@ -506,18 +506,22 @@ class AnnouncementManager
         if (empty($courseInfo)) {
             return 0;
         }
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+
+        if (!isset($courseInfo['real_id'])) {
+            return false;
+        }
 
         $courseId = $courseInfo['real_id'];
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $sql = "SELECT MAX(display_order)
-                FROM $tbl_announcement
+                FROM $table
                 WHERE c_id = $courseId ";
-        $res_max = Database::query($sql);
+        $result = Database::query($sql);
 
         $order = 0;
-        if (Database::num_rows($res_max)) {
-            $row_max = Database::fetch_array($res_max);
-            $order = intval($row_max[0]) + 1;
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            $order = (int) $row[0] + 1;
         }
 
         return $order;
@@ -552,6 +556,10 @@ class AnnouncementManager
         $authorId = 0
     ) {
         if (empty($courseInfo)) {
+            return false;
+        }
+
+        if (!isset($courseInfo['real_id'])) {
             return false;
         }
 

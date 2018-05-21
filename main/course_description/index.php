@@ -73,7 +73,7 @@ if ($description_type >= 9) {
 }
 
 // course description controller object
-$course_description_controller = new CourseDescriptionController();
+$descriptionController = new CourseDescriptionController();
 
 // block access
 if (in_array($action, ['add', 'edit', 'delete']) &&
@@ -85,20 +85,20 @@ if (in_array($action, ['add', 'edit', 'delete']) &&
 // Actions to controller
 switch ($action) {
     case 'listing':
-        $course_description_controller->listing();
+        $descriptionController->listing();
         break;
     case 'history':
-        $course_description_controller->listing(true);
+        $descriptionController->listing(true);
         break;
     case 'add':
-        $course_description_controller->add();
+        $descriptionController->add();
         break;
     case 'edit':
-        $course_description_controller->edit($id, $description_type);
+        $descriptionController->edit($id, $description_type);
         break;
     case 'delete':
-        $course_description_controller->destroy($id);
+        $descriptionController->destroy($id);
         break;
     default:
-        $course_description_controller->listing();
+        $descriptionController->listing();
 }

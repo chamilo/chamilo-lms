@@ -74,19 +74,38 @@ if ($title == '') {
     $title = basename($my_file);
 }
 $nameTools = $title;
-$htmlHeadXtra[] = /** @lang HTML */<<<HTML
+$htmlHeadXtra[] = <<<HTML
     <script>
+        function setHeight()
+        {
+            var iframe = document.getElementById('hotpotatoe');
+            iframe.height = 800;
+            var maxheight = $(iframe.contentDocument.body).outerHeight(true);
+            iframe.height = maxheight
+            $(iframe.contentDocument.body).children().each(function() {
+                // If this elements height is bigger than the biggestHeight
+                var tempheight = $(this)["0"].offsetHeight + $(this)["0"].offsetTop;
+                if (tempheight > maxheight) {
+                    // Set the maxheight to this Height
+                    maxheight = tempheight;
+                }
+            });
+            iframe.height = maxheight;
+        }
+        
         $(document).on('ready', function () {
             var iframe = document.getElementById('hotpotatoe');
-
             iframe.onload = function () {
-                this.height = $(this.contentDocument.body).outerHeight(true)
+                // this.height = $(this.contentDocument.body).outerHeight(true)
+                setTimeout(function(){
+                   setHeight();
+                }, 1750);
             };
         });
     </script>
 HTML;
 
-$interbreadcrumb[] = ["url" => "./exercise.php", "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => './exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 if ($origin == 'learnpath') {
     Display::display_reduced_header($nameTools, "Exercise");
 } else {

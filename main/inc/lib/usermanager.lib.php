@@ -2940,13 +2940,18 @@ class UserManager
         $orderBySettings = api_get_configuration_value('my_courses_session_order');
         if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
             $field = $orderBySettings['field'];
-            $order = $orderBySettings['order'];
+            $orderSetting = $orderBySettings['order'];
             switch ($field) {
                 case 'start_date':
-                    $order = " ORDER BY s.accessStartDate $order";
+                    $order = " ORDER BY s.accessStartDate $orderSetting";
                     break;
                 case 'end_date':
-                    $order = " ORDER BY s.accessEndDate $order";
+                    $order = " ORDER BY s.accessEndDate $orderSetting ";
+                    if ($orderSetting == 'asc') {
+                        // Put null values at the end
+                        // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
+                        $order = " ORDER BY _isFieldNull asc, s.accessEndDate asc";
+                    }
                     break;
             }
         }

@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  *
  * @package chamilo.exercise
  *
- * @todo use doctrine object, use getters and setters correctly
+ * @todo use getters and setters correctly
  *
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
@@ -124,12 +124,12 @@ class Exercise
         $this->notifications = [];
 
         if (!empty($courseId)) {
-            $course_info = api_get_course_info_by_id($courseId);
+            $courseInfo = api_get_course_info_by_id($courseId);
         } else {
-            $course_info = api_get_course_info();
+            $courseInfo = api_get_course_info();
         }
-        $this->course_id = $course_info['real_id'];
-        $this->course = $course_info;
+        $this->course_id = $courseInfo['real_id'];
+        $this->course = $courseInfo;
         $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
@@ -454,7 +454,7 @@ class Exercise
      *
      * @return int - quiz random by category
      */
-    public function selectRandomByCat()
+    public function getRandomByCategory()
     {
         return $this->randomByCat;
     }
@@ -520,11 +520,12 @@ class Exercise
      *
      * @author Olivier Brouckaert
      *
-     * @return int - 0 if not random, otherwise the draws
+     * @return bool
      */
     public function isRandom()
     {
         $isRandom = false;
+        // "-1" means all questions will be random
         if ($this->random > 0 || $this->random == -1) {
             $isRandom = true;
         }
@@ -537,7 +538,7 @@ class Exercise
      *
      * @author Juan Carlos Rana
      */
-    public function selectRandomAnswers()
+    public function getRandomAnswers()
     {
         return $this->random_answers;
     }
@@ -1047,7 +1048,7 @@ class Exercise
                     if ($this->random == 0 || $nbQuestions < 2) {
                         $questionList = $this->getQuestionOrderedList();
                     } else {
-                        $questionList = $this->selectRandomList($adminView);
+                        $questionList = $this->getRandomList($adminView);
                     }
                     break;
                 default:
@@ -1107,22 +1108,29 @@ class Exercise
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *               without randomizing, otherwise, returns the list with questions selected randomly
      */
-    public function selectRandomList($adminView = false)
+    public function getRandomList($adminView = false)
     {
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
+        // Random with limit
         $randomLimit = "ORDER BY RAND() LIMIT $random";
-        // Random all questions so no limit
-        if ($random == -1 or $adminView === true) {
+
+        // Random with no limit
+        if ($random == -1) {
+            $randomLimit = "ORDER BY RAND() ";
+        }
+
+        // Admin see the list in default order
+        if ($adminView === true) {
             // If viewing it as admin for edition, don't show it randomly, use title + id
             $randomLimit = 'ORDER BY e.question_order';
         }
 
         $sql = "SELECT e.question_id
-                FROM $TBL_EXERCISE_QUESTION e 
-                INNER JOIN $TBL_QUESTIONS q
+                FROM $quizRelQuestion e 
+                INNER JOIN $question q
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
@@ -2441,7 +2449,7 @@ class Exercise
                     $defaults['randomQuestions'] = $this->random;
                 }
 
-                $defaults['randomAnswers'] = $this->selectRandomAnswers();
+                $defaults['randomAnswers'] = $this->getRandomAnswers();
                 $defaults['exerciseType'] = $this->selectType();
                 $defaults['exerciseTitle'] = $this->get_formated_title();
                 $defaults['exerciseDescription'] = $this->selectDescription();
@@ -2451,7 +2459,7 @@ class Exercise
                 $defaults['propagate_neg'] = $this->selectPropagateNeg();
                 $defaults['save_correct_answers'] = $this->selectSaveCorrectAnswers();
                 $defaults['review_answers'] = $this->review_answers;
-                $defaults['randomByCat'] = $this->selectRandomByCat();
+                $defaults['randomByCat'] = $this->getRandomByCategory();
                 $defaults['text_when_finished'] = $this->selectTextWhenFinished();
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
@@ -2816,7 +2824,7 @@ class Exercise
      *
      * @return int quantity of user's exercises deleted
      */
-    public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
+    public function cleanResults($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
         $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -2871,7 +2879,7 @@ class Exercise
                 WHERE c_id = ".api_get_course_int_id()."
                 AND exe_exo_id = ".$this->id."
                 $sql_where
-                AND session_id = ".$session_id."";
+                AND session_id = ".$session_id;
         Database::query($sql);
 
         Event::addEvent(
@@ -2912,7 +2920,6 @@ class Exercise
                     $newQuestionObj = Question::read($newQuestionId);
                     if (isset($newQuestionObj) && $newQuestionObj) {
                         $newQuestionObj->addToList($newId);
-
                         if (!empty($oldQuestionObj->category)) {
                             $newQuestionObj->saveCategory($oldQuestionObj->category);
                         }
@@ -5798,7 +5805,7 @@ class Exercise
         }
 
         if ($sendEndOpenQuestion) {
-            $this->send_notification_for_open_questions(
+            $this->sendNotificationForOpenQuestions(
                 $question_list_answers,
                 $origin,
                 $exe_id,
@@ -5809,7 +5816,7 @@ class Exercise
         }
 
         if ($sendEndOralQuestion) {
-            $this->send_notification_for_oral_questions(
+            $this->sendNotificationForOralQuestions(
                 $question_list_answers,
                 $origin,
                 $exe_id,
@@ -6108,11 +6115,10 @@ class Exercise
             }
         }
 
-        //3. We check if the time limits are on
+        // 3. We check if the time limits are on
+        $limitTimeExists = false;
         if (!empty($this->start_time) || !empty($this->end_time)) {
             $limitTimeExists = true;
-        } else {
-            $limitTimeExists = false;
         }
 
         if ($limitTimeExists) {
@@ -6453,7 +6459,7 @@ class Exercise
         $isRandomByCategory = $this->isRandomByCat();
         if ($isRandomByCategory == 0) {
             if ($this->isRandom()) {
-                $result = $this->selectRandomList();
+                $result = $this->getRandomList();
             } else {
                 $result = $this->selectQuestionList();
             }
@@ -6466,7 +6472,7 @@ class Exercise
                 // value is the array of question id of this category
                 $questionList = [];
                 $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
-                $isRandomByCategory = $this->selectRandomByCat();
+                $isRandomByCategory = $this->getRandomByCategory();
                 // We sort categories based on the term between [] in the head
                 // of the category's description
                 /* examples of categories :
@@ -7276,24 +7282,26 @@ class Exercise
                     );
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button = [
-                        Display::button(
-                            'save_now',
-                            get_lang('SaveForNow'),
-                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
-                        ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
-                    ];
-                    $exercise_actions .= Display::div(
-                        implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
-                    );
+                    if (api_is_allowed_to_session_edit()) {
+                        $button = [
+                            Display::button(
+                                'save_now',
+                                get_lang('SaveForNow'),
+                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                            ),
+                            '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
+                        ];
+                        $exercise_actions .= Display::div(
+                            implode(PHP_EOL, $button),
+                            ['class' => 'exercise_save_now_button']
+                        );
+                    }
                     break;
             }
 
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
-                if ($count_of_questions_inside_media > 1) {
+                if ($count_of_questions_inside_media > 1 && api_is_allowed_to_session_edit()) {
                     $button = [
                         Display::button(
                             'save_now',
@@ -8021,7 +8029,7 @@ class Exercise
      * @param string $origin
      * @param int    $exe_id
      */
-    private function send_notification_for_open_questions(
+    private function sendNotificationForOpenQuestions(
         $question_list_answers,
         $origin,
         $exe_id,
@@ -8031,7 +8039,7 @@ class Exercise
     ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
-        $course_info = api_get_course_info($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
                     .get_lang('AttemptDetails').' : <br /><br />'
@@ -8081,7 +8089,7 @@ class Exercise
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
             $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $course_info['name'], $msg1);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
@@ -8112,7 +8120,7 @@ class Exercise
      * @param string $url_email
      * @param array  $teachers
      */
-    private function send_notification_for_oral_questions(
+    private function sendNotificationForOralQuestions(
         $question_list_answers,
         $origin,
         $exe_id,
@@ -8122,8 +8130,7 @@ class Exercise
     ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
-        $course_info = api_get_course_info($courseCode);
-
+        $courseInfo = api_get_course_info($courseCode);
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -8137,45 +8144,46 @@ class Exercise
                 if (!empty($file)) {
                     $file = Display::url($file, $file);
                 }
-                $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
-                    .'</tr></table>';
+                $oral_question_list .= '<br />
+                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                        <td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>
+                    </tr></table>';
             }
         }
 
         if (!empty($oral_question_list)) {
             $msg = get_lang('OralQuestionsAttempted').'<br /><br />
-                    '.get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
+                    '.get_lang('AttemptDetails').' : <br /><br />
+                    <table>
+                        <tr>
+                            <td><em>'.get_lang('CourseName').'</em></td>
+                            <td>&nbsp;<b>#course#</b></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</td>
+                            <td>&nbsp;#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>&nbsp;#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>&nbsp;#mail#</td>
+                        </tr>
+                    </table>';
             $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
             $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $course_info['name'], $msg1);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
@@ -8225,7 +8233,7 @@ class Exercise
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
-                    //Always the last item
+                    // Always the last item
                     $mediaList[999][] = $objQuestionTmp->id;
                 }
             }

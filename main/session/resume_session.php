@@ -265,7 +265,7 @@ if (!empty($userList)) {
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));
-    $table->setHeaderContents(0, 2, get_lang('Registered'));
+    $table->setHeaderContents(0, 2, get_lang('RegistrationDate'));
     $table->setHeaderContents(0, 3, get_lang('Actions'));
 
     $row = 1;

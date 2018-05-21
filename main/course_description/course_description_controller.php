@@ -33,10 +33,11 @@ class CourseDescriptionController
      */
     public function listing($history = false, $messages = [])
     {
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $course_description = new CourseDescription();
         $session_id = api_get_session_id();
-        $course_description->set_session_id($session_id);
         $data = [];
+        $course_description->set_session_id($session_id);
         $course_description_data = $course_description->get_description_data();
         $data['descriptions'] = isset($course_description_data['descriptions']) ? $course_description_data['descriptions'] : '';
         $data['default_description_titles'] = $course_description->get_default_description_title();
@@ -44,6 +45,8 @@ class CourseDescriptionController
         $data['default_description_icon'] = $course_description->get_default_description_icon();
         $data['messages'] = $messages;
         $browser = api_get_navigator();
+
+        api_protect_course_script(true);
 
         if (!is_array($data['descriptions'])) {
             $data['descriptions'] = [$data['descriptions']];
@@ -57,12 +60,53 @@ class CourseDescriptionController
                 header("X-XSS-Protection: 0");
             }
         }
+        $actions = null;
+        $actionLeft = null;
+        // display actions menu
+        if ($is_allowed_to_edit) {
+            $categories = [];
+            foreach ($data['default_description_titles'] as $id => $title) {
+                $categories[$id] = $title;
+            }
+            $categories[ADD_BLOCK] = get_lang('NewBloc');
+            $i = 1;
 
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('layout');
-        $this->view->set_template('listing');
-        $this->view->render();
+            ksort($categories);
+            foreach ($categories as $id => $title) {
+                if ($i == ADD_BLOCK) {
+                    $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=add">'.
+                        Display::return_icon(
+                            $data['default_description_icon'][$id],
+                            $title,
+                            '',
+                            ICON_SIZE_MEDIUM
+                        ).
+                        '</a>';
+                    break;
+                } else {
+                    $actionLeft .= '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
+                        Display::return_icon(
+                            $data['default_description_icon'][$id],
+                            $title,
+                            '',
+                            ICON_SIZE_MEDIUM
+                        ).
+                        '</a>';
+                    $i++;
+                }
+            }
+            $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
+        }
+
+        $tpl = new Template(get_lang('CourseProgram'));
+        $tpl->assign('listing', $data);
+        $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
+        $tpl->assign('actions', $actions);
+        $tpl->assign('session_id', $session_id);
+        $templateName = $tpl->get_template('course_description/index.tpl');
+        $content = $tpl->fetch($templateName);
+        $tpl->assign('content', $content);
+        $tpl->display_one_col_template();
     }
 
     /**

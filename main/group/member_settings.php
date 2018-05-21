@@ -197,17 +197,18 @@ $form->addButtonSave(get_lang('SaveSettings'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
+
     // Storing the users (we first remove all users and then add only those who were selected)
-    GroupManager:: unsubscribe_all_users($current_group);
+    GroupManager::unsubscribe_all_users($current_group);
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
-        GroupManager:: subscribe_users(
+        GroupManager::subscribe_users(
             $values['group_members'],
             $current_group
         );
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
-    $cat = GroupManager :: get_category_from_group($current_group['iid']);
+    $cat = GroupManager::get_category_from_group($current_group['iid']);
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
         $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT

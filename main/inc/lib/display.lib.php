@@ -164,7 +164,8 @@ class Display
         $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
         $response = new Response();
         $params['content'] = $contents;
-        global $interbreadcrumb;
+        global $interbreadcrumb, $htmlHeadXtra;
+        $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
         $content = Container::getTemplating()->render($tpl, $params);
         $response->setContent($content);

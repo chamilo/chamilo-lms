@@ -428,12 +428,16 @@ class GroupManager
      *
      * @return int - number of groups deleted
      */
-    public static function delete_groups($groupInfo, $course_code = null)
+    public static function deleteGroup($groupInfo, $course_code = null)
     {
         if (empty($groupInfo['iid'])) {
             return false;
         }
         $course_info = api_get_course_info($course_code);
+        if (empty($course_info)) {
+            return false;
+        }
+
         $course_id = $course_info['real_id'];
 
         // Database table definitions
@@ -487,6 +491,45 @@ class GroupManager
                     WHERE c_id = $course_id AND iid = $groupIid ";
             Database::query($sql);
         }
+
+        return true;
+    }
+
+    /**
+     * Function needed only when deleting a course, in order to be sure that all group ids are deleted.
+     *
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public static function deleteAllGroupsFromCourse($courseId)
+    {
+        $courseId = (int) $courseId;
+
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
+        $sql = "SELECT iid FROM $table
+                WHERE c_id = $courseId ";
+        Database::query($sql);
+
+        // Database table definitions
+        $table = Database::get_course_table(TABLE_GROUP_USER);
+        $sql = "DELETE FROM $table
+                WHERE c_id = $courseId";
+        Database::query($sql);
+
+        $table = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $sql = "DELETE FROM $table
+                WHERE c_id = $courseId";
+        Database::query($sql);
+
+        $groupTable = Database::get_course_table(TABLE_GROUP);
+        $sql = "DELETE FROM $groupTable
+                WHERE c_id = $courseId";
+        Database::query($sql);
 
         return true;
     }
@@ -874,7 +917,7 @@ class GroupManager
             while ($group = Database::fetch_object($res)) {
                 // Delete all groups in category
                 /*$groupInfo = self::get_group_properties($group->iid, true);
-                self::delete_groups($groupInfo, $course_code);
+                self::deleteGroup($groupInfo, $course_code);
                 */
                 // Set the category to NULL to avoid losing groups in sessions.
                 $sql = "UPDATE $table_group SET category_id = NULL WHERE iid = ".$group->iid;
@@ -2689,7 +2732,7 @@ class GroupManager
             $groups = self::get_groups();
             foreach ($groups as $group) {
                 if (!in_array($group['iid'], $elementsFound['groups'])) {
-                    self::delete_groups($group);
+                    self::deleteGroup($group);
                     $group['group'] = $group['name'];
                     $result['deleted']['group'][] = $group;
                 }
@@ -3020,7 +3063,7 @@ class GroupManager
         $blockPage = false
     ) {
         // Admin and teachers can make any change no matter what
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if (api_is_platform_admin() || api_is_allowed_to_edit(false, true)) {
             return true;
         }
 

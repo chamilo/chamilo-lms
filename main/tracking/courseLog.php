@@ -97,10 +97,10 @@ $csv_content = [];
 // Scripts for reporting array hide/show columns
 $js = "<script>
     // hide column and display the button to unhide it
-    function foldup(in_id) {
-        $('#reporting_table .data_table tr td:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-        $('#reporting_table .data_table tr th:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-        $('div#unhideButtons a:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+    function foldup(id) {
+        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggleClass('hide');
+        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggleClass('hide');
+        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggleClass('hide');
     }
 
     // add the red cross on top of each column
@@ -341,7 +341,7 @@ if ($showReporting) {
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
 // PERSON_NAME_DATA_EXPORT is buggy
-$is_western_name_order = api_is_western_name_order();
+$sortByFirstName = api_sort_by_first_name();
 
 if (count($a_students) > 0) {
     $getLangXDays = get_lang('XDays');
@@ -400,7 +400,7 @@ if (count($a_students) > 0) {
         'users_tracking',
         ['TrackingCourseLog', 'get_number_of_users'],
         ['TrackingCourseLog', 'get_user_data'],
-        (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
+        1
     );
 
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
@@ -412,15 +412,15 @@ if (count($a_students) > 0) {
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
     $headers['official_code'] = get_lang('OfficialCode');
-    if ($is_western_name_order) {
+    if ($sortByFirstName) {
         $table->set_header(1, get_lang('FirstName'), true);
-        $headers['firstname'] = get_lang('FirstName');
         $table->set_header(2, get_lang('LastName'), true);
+        $headers['firstname'] = get_lang('FirstName');
         $headers['lastname'] = get_lang('LastName');
     } else {
         $table->set_header(1, get_lang('LastName'), true);
-        $headers['lastname'] = get_lang('LastName');
         $table->set_header(2, get_lang('FirstName'), true);
+        $headers['lastname'] = get_lang('LastName');
         $headers['firstname'] = get_lang('FirstName');
     }
     $table->set_header(3, get_lang('Login'), false);
@@ -504,7 +504,6 @@ if (count($a_students) > 0) {
                 'onclick' => "foldup($index); return false;",
             ]
         );
-
         $index++;
     }
     $html .= "</div>";
@@ -522,7 +521,7 @@ echo Display::panel($html, $titleSession);
 if ($export_csv) {
     $csv_headers = [];
     $csv_headers[] = get_lang('OfficialCode');
-    if ($is_western_name_order) {
+    if ($sortByFirstName) {
         $csv_headers[] = get_lang('FirstName');
         $csv_headers[] = get_lang('LastName');
     } else {

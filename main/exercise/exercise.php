@@ -184,7 +184,7 @@ if ($is_allowedToEdit) {
                     if ($exercise_action_locked == false) {
                         $objExerciseTmp = new Exercise();
                         if ($objExerciseTmp->read($exeItem['id'])) {
-                            $quantity_results_deleted += $objExerciseTmp->clean_results(true);
+                            $quantity_results_deleted += $objExerciseTmp->cleanResults(true);
                         }
                     }
                 }
@@ -302,7 +302,7 @@ if ($is_allowedToEdit) {
                     case 'clean_results':
                         //clean student results
                         if ($exercise_action_locked == false) {
-                            $quantity_results_deleted = $objExerciseTmp->clean_results(true);
+                            $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
                             echo Display::return_message(
                                 $title.': '.sprintf(

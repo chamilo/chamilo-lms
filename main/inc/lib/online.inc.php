@@ -536,17 +536,29 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
     $timeLimit = Database::escape_string($timeLimit);
-
     $online_time = time() - $timeLimit * 60;
     $current_date = api_get_utc_datetime($online_time);
 
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
+
     $query = "SELECT count(login_user_id) as count
-              FROM $tblTrackOnline o INNER JOIN $tableUser u 
+              FROM $tblTrackOnline o 
+              INNER JOIN $tableUser u 
               ON (login_user_id = u.id)
+              $urlJoin
               WHERE 
                     u.status <> '".ANONYMOUS."' AND 
                     session_id = $sessionId AND 
-                    login_date >= '$current_date' ";
+                    login_date >= '$current_date' 
+                    $urlCondition
+            ";
     $result = Database::query($query);
 
     if (Database::num_rows($result) > 0) {

@@ -208,17 +208,17 @@ function trimVariables()
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
  *
- * @param bool $is_count Whether to count, or get data
+ * @param bool $getCount Whether to count, or get data
  *
  * @return string SQL query
  */
-function prepare_user_sql_query($is_count)
+function prepare_user_sql_query($getCount)
 {
     $sql = '';
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-    if ($is_count) {
+    if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
         $sql .= "SELECT u.id AS col0, u.official_code AS col2, ";
@@ -325,6 +325,7 @@ function prepare_user_sql_query($is_count)
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
         }
+
         $sql .= "
             $keyword_admin
             $keyword_extra_value
@@ -340,6 +341,11 @@ function prepare_user_sql_query($is_count)
             $sql .= " AND u.active = 0";
         }
         $sql .= " ) ";
+    }
+
+    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
+    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
+        $sql .= " AND u.creator_id = ".api_get_user_id();
     }
 
     $variables = Session::read('variables_to_show', []);

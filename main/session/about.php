@@ -233,6 +233,6 @@ $template->assign('sequences', $sessionRequirements);
 $template->assign('is_premiun', $sessionIsPremium);
 $layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);
-$template->assign('header', $session->getName());
+//$template->assign('header', $session->getName());
 $template->assign('content', $content);
 $template->display_one_col_template();

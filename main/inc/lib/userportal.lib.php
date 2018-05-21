@@ -87,7 +87,9 @@ class IndexManager
                 $my_exercise = $exercise_list[0];
                 $url = Display::url(
                     $my_exercise['title'],
-                    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
+                    api_get_path(
+                        WEB_CODE_PATH
+                    ).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
                 );
                 $this->tpl->assign('exercise_url', $url);
                 $this->tpl->assign(
@@ -228,7 +230,9 @@ class IndexManager
             if ($show_create_link) {
                 $html .= '<li class="add-course"><a href="'.api_get_path(WEB_CODE_PATH).'create_course/add_course.php">'
                     .Display::return_icon('new-course.png', get_lang('CourseCreate'))
-                    .(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate'))
+                    .(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang(
+                        'CourseCreate'
+                    ))
                     .'</a></li>';
             }
 
@@ -239,7 +243,9 @@ class IndexManager
                         .get_lang('CourseCatalog')
                         .'</a></li>';
                 } else {
-                    $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+                    $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'dashboard/index.php">'.get_lang(
+                            'Dashboard'
+                        ).'</a></li>';
                 }
             }
             $html .= '</ul>';

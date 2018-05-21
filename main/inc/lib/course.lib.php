@@ -375,7 +375,7 @@ class CourseManager
     }
 
     /**
-     * @param int $user_id
+     * @param int $userId
      * @param int $courseId
      *
      * @return mixed
@@ -2240,19 +2240,21 @@ class CourseManager
         $table_stats_links = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $table_stats_uploads = Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
+        if (empty($code)) {
+            return false;
+        }
+
         $codeFiltered = Database::escape_string($code);
-        $sql = "SELECT * FROM $table_course WHERE code='".$codeFiltered."'";
+        $sql = "SELECT * FROM $table_course
+                WHERE code = '$codeFiltered'";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {
             return;
         }
 
-        $sql = "SELECT * FROM $table_course
-                WHERE code = '$codeFiltered'";
-        $res = Database::query($sql);
         $course = Database::fetch_array($res);
-        $courseId = $course['id']; //int
+        $courseId = $course['id']; // int
 
         $count = 0;
         if (api_is_multiple_url_enabled()) {
@@ -2271,7 +2273,6 @@ class CourseManager
 
             // Cleaning group categories
             $groupCategories = GroupManager::get_categories($course['code']);
-
             if (!empty($groupCategories)) {
                 foreach ($groupCategories as $category) {
                     GroupManager::delete_category($category['id'], $course['code']);
@@ -2282,7 +2283,7 @@ class CourseManager
             $groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
                 foreach ($groups as $group) {
-                    GroupManager::delete_groups($group, $course['code']);
+                    GroupManager::deleteGroup($group, $course['code']);
                 }
             }
 
@@ -2367,11 +2368,19 @@ class CourseManager
             // Skills
             $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
             $argumentation = Database::escape_string(sprintf(get_lang('SkillFromCourseXDeletedSinceThen'), $course['code']));
-            $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' WHERE course_id = $courseId";
+            $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' 
+                    WHERE course_id = $courseId";
             Database::query($sql);
 
+            $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
+            Database::query($sql);
+            
+            // Deletes all groups, group-users, group-tutors information
+            // To prevent fK mix up on some tables
+            GroupManager::deleteAllGroupsFromCourse($courseId);
+
             // Delete the course from the database
-            $sql = "DELETE FROM $table_course WHERE code = '$codeFiltered'";
+            $sql = "DELETE FROM $table_course WHERE id = $courseId";
             Database::query($sql);
 
             // delete extra course fields

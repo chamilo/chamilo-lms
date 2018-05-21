@@ -456,7 +456,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     if ($check) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
-            $count = $objExerciseTmp->clean_results(
+            $count = $objExerciseTmp->cleanResults(
                 true,
                 $_GET['delete_before_date'].' 23:59:59'
             );

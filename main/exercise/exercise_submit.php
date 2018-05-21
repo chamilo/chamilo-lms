@@ -434,7 +434,7 @@ if (!isset($questionListInSession)) {
     if ($media_is_activated == false &&
         (
             $objExercise->isRandom() ||
-            !empty($objExercise->selectRandomByCat()) ||
+            !empty($objExercise->getRandomByCategory()) ||
             $objExercise->getQuestionSelectionType() > 2
         ) &&
         isset($exercise_stat_info) &&
@@ -800,7 +800,7 @@ if ($question_count != 0) {
 } else {
     $error = get_lang('ThereAreNoQuestionsForThisExercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
-    if ($objExercise->selectRandomByCat() > 0 && $objExercise->random <= 0) {
+    if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
         $error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
     }
 }

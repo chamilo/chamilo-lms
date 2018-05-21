@@ -454,7 +454,7 @@ class Exercise
      *
      * @return int - quiz random by category
      */
-    public function selectRandomByCat()
+    public function getRandomByCategory()
     {
         return $this->randomByCat;
     }
@@ -538,7 +538,7 @@ class Exercise
      *
      * @author Juan Carlos Rana
      */
-    public function selectRandomAnswers()
+    public function getRandomAnswers()
     {
         return $this->random_answers;
     }
@@ -2449,7 +2449,7 @@ class Exercise
                     $defaults['randomQuestions'] = $this->random;
                 }
 
-                $defaults['randomAnswers'] = $this->selectRandomAnswers();
+                $defaults['randomAnswers'] = $this->getRandomAnswers();
                 $defaults['exerciseType'] = $this->selectType();
                 $defaults['exerciseTitle'] = $this->get_formated_title();
                 $defaults['exerciseDescription'] = $this->selectDescription();
@@ -2459,7 +2459,7 @@ class Exercise
                 $defaults['propagate_neg'] = $this->selectPropagateNeg();
                 $defaults['save_correct_answers'] = $this->selectSaveCorrectAnswers();
                 $defaults['review_answers'] = $this->review_answers;
-                $defaults['randomByCat'] = $this->selectRandomByCat();
+                $defaults['randomByCat'] = $this->getRandomByCategory();
                 $defaults['text_when_finished'] = $this->selectTextWhenFinished();
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
@@ -2824,7 +2824,7 @@ class Exercise
      *
      * @return int quantity of user's exercises deleted
      */
-    public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
+    public function cleanResults($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
         $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -5806,7 +5806,7 @@ class Exercise
         }
 
         if ($sendEndOpenQuestion) {
-            $this->send_notification_for_open_questions(
+            $this->sendNotificationForOpenQuestions(
                 $question_list_answers,
                 $origin,
                 $exe_id,
@@ -5817,7 +5817,7 @@ class Exercise
         }
 
         if ($sendEndOralQuestion) {
-            $this->send_notification_for_oral_questions(
+            $this->sendNotificationForOralQuestions(
                 $question_list_answers,
                 $origin,
                 $exe_id,
@@ -6473,7 +6473,7 @@ class Exercise
                 // value is the array of question id of this category
                 $questionList = [];
                 $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
-                $isRandomByCategory = $this->selectRandomByCat();
+                $isRandomByCategory = $this->getRandomByCategory();
                 // We sort categories based on the term between [] in the head
                 // of the category's description
                 /* examples of categories :
@@ -8030,7 +8030,7 @@ class Exercise
      * @param string $origin
      * @param int    $exe_id
      */
-    private function send_notification_for_open_questions(
+    private function sendNotificationForOpenQuestions(
         $question_list_answers,
         $origin,
         $exe_id,
@@ -8121,7 +8121,7 @@ class Exercise
      * @param string $url_email
      * @param array  $teachers
      */
-    private function send_notification_for_oral_questions(
+    private function sendNotificationForOralQuestions(
         $question_list_answers,
         $origin,
         $exe_id,

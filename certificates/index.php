@@ -10,6 +10,34 @@ require_once '../main/inc/global.inc.php';
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $certificate = new Certificate($_GET['id']);
 
+if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true') {
+    $infoCertificate = CustomCertificatePlugin::getCertificateData(intval($_GET['id']));
+    if (!empty($infoCertificate)) {
+        if ($certificate->user_id == api_get_user_id() && !empty($certificate->certificate_data)) {
+            $certificateId = $certificate->certificate_data['id'];
+            $extraFieldValue = new ExtraFieldValue('user_certificate');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $certificateId,
+                'downloaded_at'
+            );
+            if (empty($value)) {
+                $params = [
+                        'item_id' => $certificate->certificate_data['id'],
+                        'extra_downloaded_at' => api_get_utc_datetime(),
+                ];
+                $extraFieldValue->saveFieldValues($params);
+            }
+        }
+        
+        $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php'.
+                '?student_id='.$infoCertificate['user_id'].
+                '&course_code='.$infoCertificate['course_code'].
+                '&session_id='.$infoCertificate['session_id'];
+        header('Location: '.$url);
+        exit;
+    }
+}
+
 switch ($action) {
     case 'export':
         $hideExportLink = api_get_setting('hide_certificate_export_link');

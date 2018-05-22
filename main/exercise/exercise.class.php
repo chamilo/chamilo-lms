@@ -3554,7 +3554,6 @@ class Exercise
                     }
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-
                     if (!empty($studentChoice)) {
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
@@ -8228,7 +8227,6 @@ class Exercise
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId, $this->course_id);
-
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;

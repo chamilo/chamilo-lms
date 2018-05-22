@@ -34,23 +34,21 @@ class FillBlanks extends Question
     public function createAnswersForm($form)
     {
         $defaults = [];
+        $defaults['answer'] = get_lang('DefaultTextInBlanks');
+        $defaults['select_separator'] = 0;
+        $blankSeparatorNumber = 0;
         if (!empty($this->id)) {
             $objectAnswer = new Answer($this->id);
             $answer = $objectAnswer->selectAnswer(1);
             $listAnswersInfo = self::getAnswerInfo($answer);
+            $defaults['multiple_answer'] = 0;
             if ($listAnswersInfo['switchable']) {
                 $defaults['multiple_answer'] = 1;
-            } else {
-                $defaults['multiple_answer'] = 0;
             }
             // Take the complete string except after the last '::'
             $defaults['answer'] = $listAnswersInfo['text'];
             $defaults['select_separator'] = $listAnswersInfo['blank_separator_number'];
             $blankSeparatorNumber = $listAnswersInfo['blank_separator_number'];
-        } else {
-            $defaults['answer'] = get_lang('DefaultTextInBlanks');
-            $defaults['select_separator'] = 0;
-            $blankSeparatorNumber = 0;
         }
 
         $blankSeparatorStart = self::getStartSeparator($blankSeparatorNumber);
@@ -523,6 +521,7 @@ class FillBlanks extends Question
         $inTabTeacherSolution = $listAnswersInfo['words'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
 
+        $labelId = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
             case self::FILL_THE_BLANK_MENU:
                 $selected = '';
@@ -558,6 +557,7 @@ class FillBlanks extends Question
                     [
                         'class' => 'selectpicker',
                         'data-width' => $width,
+                        'id' => $labelId,
                     ],
                     false
                 );
@@ -565,7 +565,7 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
+                $attributes['id'] = $labelId;
                 $result = Display::input(
                     'text',
                     "choice[$questionId][]",
@@ -675,13 +675,13 @@ class FillBlanks extends Question
                     },
                     $listSeveral
                 );
-                $studentAnswer = htmlspecialchars($studentAnswer);
+                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $correctAnswer = api_html_entity_decode($correctAnswer);
-                $studentAnswer = htmlspecialchars($studentAnswer);
+                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = $studentAnswer == self::trimOption($correctAnswer);
                 break;
         }
@@ -696,13 +696,14 @@ class FillBlanks extends Question
      */
     public static function getFillTheBlankAnswerType($correctAnswer)
     {
+        $type = self::FILL_THE_BLANK_STANDARD;
         if (api_strpos($correctAnswer, '|') && !api_strpos($correctAnswer, '||')) {
-            return self::FILL_THE_BLANK_MENU;
+            $type = self::FILL_THE_BLANK_MENU;
         } elseif (api_strpos($correctAnswer, '||')) {
-            return self::FILL_THE_BLANK_SEVERAL_ANSWER;
-        } else {
-            return self::FILL_THE_BLANK_STANDARD;
+            $type = self::FILL_THE_BLANK_SEVERAL_ANSWER;
         }
+
+        return $type;
     }
 
     /**
@@ -833,7 +834,6 @@ class FillBlanks extends Question
             // if we are in student view, we've got 3 times :::::: for common words
             $commonWords = api_preg_replace("/::::::/", "::", $commonWords);
         }
-
         $listAnswerResults['common_words'] = explode("::", $commonWords);
 
         return $listAnswerResults;
@@ -845,7 +845,7 @@ class FillBlanks extends Question
      * -2  : didn't answer
      * -1  : student answer is wrong
      *  0  : student answer is correct
-     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer indice is 0).
+     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer index is 0)
      *
      * @param int $testId
      * @param int $questionId

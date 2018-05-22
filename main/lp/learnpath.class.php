@@ -11851,7 +11851,6 @@ EOD;
      * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return int
-     *
      */
     public static function createCategory($params)
     {

@@ -1551,7 +1551,7 @@ function get_forums_in_category($cat_id, $courseId = 0)
  * Since it does not take the forum category into account there probably
  * will be two or more forums that have forum_order=1, ...
  *
- * @param int    $id forum id
+ * @param int    $id                 forum id
  * @param string $course_code
  * @param bool   $includeGroupsForum
  * @param int    $sessionId
@@ -1796,13 +1796,13 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
 /**
  * This function gets all the last post information of a certain forum.
  *
- * @param int  $forum_id  the id of the forum we want to know the last post information of
+ * @param int  $forum_id        the id of the forum we want to know the last post information of
  * @param bool $show_invisibles
  * @param string course db name
- * @param int  $sessionId Optional. The session id
+ * @param int $sessionId Optional. The session id
  *
  * @return array containing all the information about the last post
- *  (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
+ *               (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *

@@ -18,7 +18,6 @@ class LearnPathCategory extends Resource
     public $object;
 
     /**
-     *
      * @param int    $id
      * @param string $object
      */

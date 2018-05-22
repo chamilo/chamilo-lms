@@ -1091,7 +1091,7 @@ ul.exercise-draggable-answer .touch-items:hover{
     padding: 3px 0px 3px 5px;
 }
 .question_options .droppable-item .number{
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
     /* width: 30px; */
     display: inline-block;

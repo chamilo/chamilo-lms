@@ -1,6 +1,7 @@
-{% extends template ~ "/layout/layout_1_col.html.twig" %}
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
+    {% autoescape false %}
     {{ form }}
 
     {% if gradebook_list %}
@@ -32,7 +33,7 @@
             </tr>
         {% endfor %}
         </table>
-
        {{ gradebook_list }}
     {% endif %}
+    {% endautoescape %}
 {% endblock %}

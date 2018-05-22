@@ -1,8 +1,9 @@
-{% extends template ~ "/layout/layout_1_col.html.twig" %}
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
 {% block content %}
+{% autoescape false %}
 
 {{ introduction_section }}
-
 {{ form_content }}
 
 {% if data is not empty %}
@@ -85,4 +86,5 @@
             {{ 'NoForumInThisCategory'|get_lang }}
         </div>
     {% endif %}
+{% endautoescape %}
 {% endblock %}

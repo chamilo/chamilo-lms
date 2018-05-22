@@ -1,17 +1,43 @@
 <script>
     /* Makes row highlighting possible */
     $(document).ready( function() {
+        $("[data-toggle=popover]").each(function(i, obj) {
+            $(this).popover({
+                html: true,
+                content: function() {
+                    var id = $(this).attr('id')
+                    return $('#popover-content-' + id).html();
+                }
+            });
+        });
+
+        $('.scrollbar-inner').scrollbar();
+
         // Date time settings.
-        moment.locale('{{ app.request.locale }}');
-        $.datepicker.setDefaults($.datepicker.regional["{{ app.request.locale }}"]);
-        $.datepicker.regional["local"] = $.datepicker.regional["{{ app.request.locale }}"];
+        moment.locale('{{ locale }}');
+        $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);
+        $.datepicker.regional["local"] = $.datepicker.regional["{{ locale }}"];
+
+        // Fix old calls of "inc/lib/mediaplayer/player.swf" and convert to <audio> tag, then rendered by media element js
+        // see BT#13405
+        $('embed').each( function () {
+            var flashVars = $(this).attr('flashvars');
+            if (flashVars && flashVars.indexOf("file") == -1) {
+                var audioId = Math.floor( Math.random()*99999 );
+                flashVars = flashVars.replace('&autostart=false', '');
+                flashVars = flashVars.replace('&autostart=true', '');
+                var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
+                $(this).hide();
+                $(this).after(audioDiv);
+            }
+        });
 
         // Chosen select
         $(".chzn-select").chosen({
             disable_search_threshold: 10,
-            no_results_text: '{{ 'SearchNoResultsFound' | trans | escape('js') }}',
-            placeholder_text_multiple: '{{ 'SelectSomeOptions' | trans | escape('js') }}',
-            placeholder_text_single: '{{ 'SelectAnOption' | trans | escape('js') }}',
+            no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js') }}',
+            placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js') }}',
+            placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js') }}',
             width: "100%"
         });
 
@@ -38,7 +64,6 @@
             event.preventDefault();
             var id = $(this).attr('id') + '_options';
             var button = $(this);
-            button.toggleClass('active');
             $("#" + id).toggle();
         });
 
@@ -66,11 +91,15 @@
             $("#" + inputId).filterByText($("#" + inputId + "-filter"));
         });
 
-        $(".jp-jplayer audio").addClass('skip');
-
         // Mediaelement
         if ( {{ show_media_element }} == 1) {
-            jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+            $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+                pluginPath: '{{ _p.web }}web/assets/mediaelement/build/',
+                renderers: ['html5', 'flash_video', 'native_flv'],
+                features: ['{{ video_features }}'],
+                success: function(mediaElement, originalNode, instance) {
+                }
+            });
         }
 
         // Table highlight.

@@ -1,6 +1,7 @@
-{% extends template ~ "/layout/layout_1_col.html.twig" %}
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
+    {% autoescape false %}
     <h3>
         {{ gradebook_category.name }}
         {% if gradebook_category.courseCode is not empty %}
@@ -65,4 +66,5 @@
         </tr>
     {% endfor %}
     </table>
+    {% endautoescape %}
 {% endblock %}

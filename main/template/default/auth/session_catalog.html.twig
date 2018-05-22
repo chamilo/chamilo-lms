@@ -1,6 +1,7 @@
-{% extends template ~ "/layout/page.html.twig" %}
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
-{% block body %}
+{% block content %}
+{% autoescape false %}
     <script>
         $(document).ready(function () {
             $('#date').datepicker({
@@ -220,4 +221,5 @@
     </div>
     <!-- end view session grib -->
     {{ catalog_pagination }}
+{% endautoescape %}
 {% endblock %}

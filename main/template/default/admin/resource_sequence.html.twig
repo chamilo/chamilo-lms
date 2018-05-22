@@ -1,6 +1,7 @@
-{% extends template ~ "/layout/layout_1_col.html.twig" %}
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
+    {% autoescape false %}
     <script>
         var url = '{{ _p.web_ajax }}sequence.ajax.php';
         var parentList = [];
@@ -313,4 +314,5 @@
             {{ save_sequence }}
         </div>
     </div>
+    {% endautoescape %}
 {% endblock %}

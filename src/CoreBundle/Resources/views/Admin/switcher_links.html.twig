@@ -6,11 +6,14 @@
                 class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
     {% for locale in locales %}
+        {{ locale }}julio
         <li>
         <a href="{{ locale.link }}"
            title="{{ locale.locale_target_language }}">
-            <span class="lang-sm lang-lbl-full" lang="{{ locale.locale }}"></span>
+            {#<span class="lang-sm lang-lbl-full" lang="{{ locale.locale }}"></span>#}
+            <span class="flag-icon flag-icon-{{ locale.locale }}"></span>
             {{ locale.locale_target_language }}
         </a>
         </li>

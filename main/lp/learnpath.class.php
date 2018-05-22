@@ -11848,9 +11848,10 @@ EOD;
     /**
      * @param array $params
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return int
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public static function createCategory($params)
     {
@@ -12142,7 +12143,7 @@ EOD;
      */
     public function setCategoryId($categoryId)
     {
-        $this->categoryId = intval($categoryId);
+        $this->categoryId = (int) $categoryId;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $table SET category_id = ".$this->categoryId."

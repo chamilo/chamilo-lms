@@ -845,7 +845,7 @@ class FillBlanks extends Question
      * -2  : didn't answer
      * -1  : student answer is wrong
      *  0  : student answer is correct
-     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer index is 0)
+     * >0  : fill the blank question with choice menu, is the index of the student answer (right answer index is 0).
      *
      * @param int $testId
      * @param int $questionId
@@ -899,52 +899,52 @@ class FillBlanks extends Question
         ';
 
         $res = Database::query($sql);
-        $tabUserResult = [];
+        $userResult = [];
         // foreach attempts for all students starting with his older attempt
         while ($data = Database::fetch_array($res)) {
-            $tabAnswer = self::getAnswerInfo($data['answer'], true);
+            $answer = self::getAnswerInfo($data['answer'], true);
 
             // for each bracket to find in this question
-            foreach ($tabAnswer['student_answer'] as $bracketNumber => $studentAnswer) {
-                if ($tabAnswer['student_answer'][$bracketNumber] != '') {
+            foreach ($answer['student_answer'] as $bracketNumber => $studentAnswer) {
+                if ($answer['student_answer'][$bracketNumber] != '') {
                     // student has answered this bracket, cool
-                    switch (self::getFillTheBlankAnswerType($tabAnswer['words'][$bracketNumber])) {
+                    switch (self::getFillTheBlankAnswerType($answer['words'][$bracketNumber])) {
                         case self::FILL_THE_BLANK_MENU:
                             // get the indice of the choosen answer in the menu
                             // we know that the right answer is the first entry of the menu, ie 0
                             // (remember, menu entries are shuffled when taking the test)
-                            $tabUserResult[$data['user_id']][$bracketNumber] = self::getFillTheBlankMenuAnswerNum(
-                                $tabAnswer['words'][$bracketNumber],
-                                $tabAnswer['student_answer'][$bracketNumber]
+                            $userResult[$data['user_id']][$bracketNumber] = self::getFillTheBlankMenuAnswerNum(
+                                $answer['words'][$bracketNumber],
+                                $answer['student_answer'][$bracketNumber]
                             );
                             break;
                         default:
                             if (self::isStudentAnswerGood(
-                                $tabAnswer['student_answer'][$bracketNumber],
-                                $tabAnswer['words'][$bracketNumber]
+                                $answer['student_answer'][$bracketNumber],
+                                $answer['words'][$bracketNumber]
                             )
                             ) {
-                                $tabUserResult[$data['user_id']][$bracketNumber] = 0; //  right answer
+                                $userResult[$data['user_id']][$bracketNumber] = 0; //  right answer
                             } else {
-                                $tabUserResult[$data['user_id']][$bracketNumber] = -1; // wrong answer
+                                $userResult[$data['user_id']][$bracketNumber] = -1; // wrong answer
                             }
                     }
                 } else {
                     // student didn't answer this bracket
                     if ($useLastAnsweredAttempt) {
                         // if we take into account the last answered attempt
-                        if (!isset($tabUserResult[$data['user_id']][$bracketNumber])) {
-                            $tabUserResult[$data['user_id']][$bracketNumber] = -2; // not answered
+                        if (!isset($userResult[$data['user_id']][$bracketNumber])) {
+                            $userResult[$data['user_id']][$bracketNumber] = -2; // not answered
                         }
                     } else {
                         // we take the last attempt, even if the student answer the question before
-                        $tabUserResult[$data['user_id']][$bracketNumber] = -2; // not answered
+                        $userResult[$data['user_id']][$bracketNumber] = -2; // not answered
                     }
                 }
             }
         }
 
-        return $tabUserResult;
+        return $userResult;
     }
 
     /**

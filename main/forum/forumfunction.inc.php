@@ -958,8 +958,10 @@ function deleteForumCategoryThread($content, $id)
 }
 
 /**
- * This function deletes a forum post. This separate function is needed because forum posts do not appear in the item_property table (yet)
- * and because deleting a post also has consequence on the posts that have this post as parent_id (they are also deleted).
+ * This function deletes a forum post. This separate function is needed because forum posts do not appear
+ * in the item_property table (yet)
+ * and because deleting a post also has consequence on the posts that have this post as parent_id
+ * (they are also deleted).
  * an alternative would be to store the posts also in item_property and mark this post as deleted (visibility = 2).
  * We also have to decrease the number of replies in the thread table.
  *
@@ -1066,7 +1068,7 @@ function check_if_last_post_of_thread($thread_id)
 }
 
 /**
- * @param string $content                   what is it that we want to make (in)visible: forum category, forum, thread, post
+ * @param string $content                   Type of content forum category, forum, thread, post
  * @param int    $id                        the id of the content we want to make invisible
  * @param int    $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
  * @param array  $additional_url_parameters
@@ -1161,9 +1163,9 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
  *
  * @param string $content what is it that we want to make (in)visible: forum category, forum, thread, post
  * @param int    $id      is the id of the item we want to display the icons for
- * @param $list is an array of all the items. All items in this list should have
- * an up and down icon except for the first (no up icon) and the last (no down icon)
- *          The key of this $list array is the id of the item.
+ * @param array  $list    is an array of all the items. All items in this list should have
+ *                        an up and down icon except for the first (no up icon) and the last (no down icon)
+ *                        The key of this $list array is the id of the item.
  *
  * @return string HTML
  */
@@ -1377,7 +1379,6 @@ function move_up_down($content, $direction, $id)
     $result = Database::query($sql);
     $found = false;
     while ($row = Database::fetch_array($result)) {
-        //echo $row[$id_column].'-';
         if ($found) {
             $next_id = $row[$id_column];
             $next_sort = $row[$sort_column];
@@ -1550,7 +1551,7 @@ function get_forums_in_category($cat_id, $courseId = 0)
  * Since it does not take the forum category into account there probably
  * will be two or more forums that have forum_order=1, ...
  *
- * @param int    $id                 forum id
+ * @param int    $id forum id
  * @param string $course_code
  * @param bool   $includeGroupsForum
  * @param int    $sessionId
@@ -1795,13 +1796,13 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
 /**
  * This function gets all the last post information of a certain forum.
  *
- * @param int  $forum_id        the id of the forum we want to know the last post information of
+ * @param int  $forum_id  the id of the forum we want to know the last post information of
  * @param bool $show_invisibles
  * @param string course db name
- * @param int $sessionId Optional. The session id
+ * @param int  $sessionId Optional. The session id
  *
  * @return array containing all the information about the last post
- *               (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
+ *  (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *

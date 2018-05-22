@@ -849,6 +849,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Allow SCORM packages when importing a course
 // $_configuration['allow_import_scorm_package_in_course_builder'] = false;
 
+// Hide announcement "sent to" label
+// $_configuration['hide_announcement_sent_to_users_info'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

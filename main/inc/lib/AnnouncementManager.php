@@ -438,8 +438,6 @@ class AnnouncementManager
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
-        //$toUser = $itemProperty->getToUser();
-        //$toUserId = !empty($toUser) ? $toUser->getId() : 0;
         // The user id is always the current one.
         $toUserId = api_get_user_id();
         $content = self::parseContent(
@@ -456,7 +454,8 @@ class AnnouncementManager
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
 
-        if (api_is_allowed_to_edit(false, true)) {
+        $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
+        if (api_is_allowed_to_edit(false, true) && $allow) {
             $sent_to = self::sent_to('announcement', $id);
             $sent_to_form = self::sent_to_form($sent_to);
             $html .= Display::tag(

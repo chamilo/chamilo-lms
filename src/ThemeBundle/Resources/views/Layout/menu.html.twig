@@ -1,0 +1,93 @@
+{% autoescape false %}
+<nav id="menubar" class="navbar navbar-default">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menuone"
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ _p.web }}">{{ _s.site_name }}</a>
+        </div>
+        <div class="collapse navbar-collapse" id="menuone">
+            {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
+
+            {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                <script>
+                    $(document).ready(function () {
+                        $.get(
+                            '{{ url('legacy_main', { name : 'inc/ajax/message.ajax.php'}) }}', {'a': 'get_count_message'}, function(data) {
+                            if (data === '0') {
+                                $("#count_message_li").addClass('hidden');
+                            } else {
+                                $("#count_message_li").removeClass('hidden');
+                                $("#count_message").append(data);
+                            }
+                        });
+                    });
+                </script>
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="count_message_li" class="hidden">
+                        <a href="{{ message_url }}">
+                            <span id="count_message" class="badge badge-warning"></span>
+                        </a>
+                    </li>
+                    {% if language_form %}
+                        <li class="dropdown language">
+                            {{ language_form }}
+                        </li>
+                    {% endif %}
+
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(32)) }}"
+                                         alt="{{ app.user.completeName }}" />
+                                    <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="user-header">
+                                        <div class="text-center">
+                                            <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(64)) }}" alt="{{ app.user.completeName }}" />
+                                            <p class="name">
+                                                <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
+                                                    {{ app.user.completeName }}
+                                                </a>
+                                            </p>
+                                            <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ app.user.email }}</p>
+                                        </div>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li class="user-body">
+                                        <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
+                                            <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                                        </a>
+
+                                        <a href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }} ">
+                                            <em class="fa fa-pie-chart"></em> {{ 'PendingSurveys'|get_lang }}
+                                        </a>
+
+                                        <a title="{{ "MyCertificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
+                                            <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
+                                        </a>
+
+                                        <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}" >
+                                            <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% endautoescape %}

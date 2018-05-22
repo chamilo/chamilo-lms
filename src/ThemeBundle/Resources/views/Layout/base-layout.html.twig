@@ -100,32 +100,27 @@
 </head>
 <body class="{{section_name}}">
 
-{#{{ url('legacy_index') }}#}
-{#<br />#}
-{#{{ url('main', { 'name' : 'messages/inbox.php' }) }}#}
-
-{#{{ url('main', {'name': ' '}) }}#}
 <noscript>{{ "NoJavascript" | trans }}</noscript>
 {#{% if show_header == true %}#}
 {% block chamilo_wrap %}
     {% autoescape false %}
     <div id="page-wrap">
-        <!-- page section -->
-        {# Bug and help notifications #}
-        {#{% block help_notifications %}#}
-        {#<ul id="navigation" class="notification-panel">#}
-        {#{{ help_content }}#}
-        {#{{ bug_notification_link }}#}
-        {#</ul>#}
-        {#{% endblock %}#}
+
+        <div id="navigation" class="notification-panel">
+            {{ help_content }}
+            {{ bug_notification }}
+        </div>
 
         {# topbar #}
         {% block topbar %}
-            {#{% include "@template_style/layout/topbar.html.twig" %}#}
+            {% include "@ChamiloTheme/Layout/topbar.html.twig" %}
             {#{% if show_toolbar == 1 %}#}
                 {#<div class="clear-header"></div>#}
             {#{% endif %}#}
         {% endblock %}
+
+        <div class="extra-header">{{ header_extra_content }}</div>
+
         <header>
             <div class="extra-header">
                 {{ header_extra_content }}
@@ -142,9 +137,9 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="logo">
-                            {#<a href="{{ url('index') }}">#}
+                            <a href="{{ url('legacy_index') }}">
                             <img src="{{ asset('build/css/themes/'~ theme ~'/images/header-logo.png') }}"/>
-                            {#</a>#}
+                            </a>
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -178,65 +173,19 @@
                     </div>
                 </div>
             </section>
+
             <section id="menu-bar">
             {# menu #}
             {% block menu %}
-                <nav class="navbar navbar-default">
-                    <div class="container">
-                        <div class="collapse navbar-collapse">
-                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
-
-                        {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <div class="navbar-custom-menu">
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li class="dropdown user user-menu">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                            <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(32)) }}"
-                                                 alt="{{ app.user.completeName }}" />
-                                            <span class="caret"></span>
-                                        </a>
-
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li class="user-header">
-                                                <div class="text-center">
-                                                    <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(64)) }}" alt="{{ app.user.completeName }}" />
-                                                    <p class="name">
-                                                        <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
-                                                            {{ app.user.completeName }}
-                                                        </a>
-                                                    </p>
-                                                    <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ app.user.email }}</p>
-                                                </div>
-                                            </li>
-                                            <li role="separator" class="divider"></li>
-                                            <li class="user-body">
-                                                <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
-                                                    <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
-                                                </a>
-                                                <a title="{{ "MyCertificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
-                                                    <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
-                                                </a>
-                                                <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}" >
-                                                    <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        {% endif %}
-                        </div>
-                    </div>
-                </nav>
-                {#{% include "@template_style/layout/menu.html.twig" %}#}
-                {% endblock %}
+                {# course navigation links/shortcuts need to be activated by the admin #}
+                {% include "@ChamiloTheme/Layout/menu.html.twig" %}
+            {% endblock %}
             </section>
         </header>
 
         <div id="top_main_content" class="container">
         {# course navigation links/shortcuts need to be activated by the admin #}
-            {#{% include "@template_style/layout/course_navigation.html.twig" %}#}
-        {#{% endif %}#}
+        {% include "@ChamiloTheme/Layout/course_navigation.html.twig" %}
 
         {% block chamilo_header %}
             {#<header class="header">#}
@@ -293,7 +242,6 @@
 
         </div> {# end top_main_content #}
     </div> {# End page-wrap div #}
-
     {% block chamilo_footer %}
         {% include '@ChamiloTheme/Layout/footer.html.twig' %}
     {% endblock %}

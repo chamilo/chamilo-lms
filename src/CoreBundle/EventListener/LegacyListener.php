@@ -92,10 +92,12 @@ class LegacyListener
                 }
             }
 
+            $twig = $container->get('twig');
+
             // Set legacy twig globals _p, _u, _s
             $globals = \Template::getGlobals();
             foreach ($globals as $index => $value) {
-                $container->get('twig')->addGlobal($index, $value);
+                $twig->addGlobal($index, $value);
             }
 
             $_admin = [
@@ -105,16 +107,16 @@ class LegacyListener
                 'telephone' => api_get_setting('administratorTelephone'),
             ];
 
-            $container->get('twig')->addGlobal('_admin', $_admin);
+            $twig->addGlobal('_admin', $_admin);
 
             $theme = api_get_visual_theme();
-            $container->get('twig')->addGlobal('favico', \Template::getPortalIcon($theme));
+            $twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
             $extraFooter = trim(api_get_setting('footer_extra_content'));
-            $container->get('twig')->addGlobal('footer_extra_content', $extraFooter);
+            $twig->addGlobal('footer_extra_content', $extraFooter);
 
             $extraHeader = trim(api_get_setting('header_extra_content'));
-            $container->get('twig')->addGlobal('header_extra_content', $extraHeader);
+            $twig->addGlobal('header_extra_content', $extraHeader);
 
             $languages = api_get_languages();
             $languageList = [];
@@ -122,8 +124,66 @@ class LegacyListener
                 $languageList[languageToCountryIsoCode($isoCode)] = $language;
             }
 
-            $container->get('twig')->addGlobal('current_locale_iso',languageToCountryIsoCode($request->getLocale()));
-            $container->get('twig')->addGlobal('available_locales', $languages);
+            $twig->addGlobal('current_locale_iso',languageToCountryIsoCode($request->getLocale()));
+            $twig->addGlobal('available_locales', $languages);
+            $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
+
+            // Extra content
+            $extraHeader = '';
+            if (!api_is_platform_admin()) {
+                $extraHeader = trim(api_get_setting('header_extra_content'));
+            }
+            $twig->addGlobal('header_extra_content', $extraHeader);
+
+
+            $user = api_get_user_info();
+
+            $rightFloatMenu = '';
+            $iconBug = \Display::return_icon(
+                'bug.png',
+                get_lang('ReportABug'),
+                [],
+                ICON_SIZE_LARGE
+            );
+
+            $allow = $user['status'] != ANONYMOUS;
+            if (api_get_setting('show_link_bug_notification') == 'true' && $allow) {
+                $rightFloatMenu = '<div class="report">
+		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
+                    '.$iconBug.'
+                </a>
+		        </div>';
+            }
+
+            if (api_get_setting('show_link_ticket_notification') == 'true' &&
+                $allow
+            ) {
+                // by default is project_id = 1
+                $defaultProjectId = 1;
+                $allow = \TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+                if ($allow) {
+                    $iconTicket = \Display::return_icon(
+                        'help.png',
+                        get_lang('Ticket'),
+                        [],
+                        ICON_SIZE_LARGE
+                    );
+                    $courseInfo = api_get_course_info();
+                    $courseParams = '';
+                    if (!empty($courseInfo)) {
+                        $courseParams = api_get_cidreq();
+                    }
+                    $url = api_get_path(WEB_CODE_PATH).
+                        'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+                    $rightFloatMenu .= '<div class="help">
+                        <a href="'.$url.'" target="_blank">
+                            '.$iconTicket.'
+                        </a>
+                    </div>';
+                }
+            }
+
+            $twig->addGlobal('bug_notification', $rightFloatMenu);
         }
 
         // We set cid_reset = true if we enter inside a main/admin url

@@ -1,4 +1,167 @@
-{% extends "@ChamiloTheme/Layout/base-layout.html.twig" %}
+{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
 
-{#{% extends 'SonataPageBundle::base_layout.html.twig' %}#}
+{%- block sonata_page_html_tag -%}
+{#<!DOCTYPE html>#}
+{#<html {{ sonata_seo_html_attributes() }}>#}
+{% endblock %}
+{% block sonata_page_head %}
+    <head {{ sonata_seo_head_attributes() }}>
 
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+        {{ sonata_seo_title() }}
+        {{ sonata_seo_metadatas() }}
+
+        {% block sonata_page_stylesheets %}
+            {% block page_stylesheets %} {# Deprecated block #}
+                {% for stylesheet in sonata_page.assets.stylesheets %}
+                    <link rel="stylesheet" href="{{ asset(stylesheet) }}" media="all">
+                {% endfor %}
+            {% endblock %}
+        {% endblock %}
+
+        {% block sonata_page_javascripts %}
+            {% block page_javascripts %} {# Deprecated block #}
+                <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+                <!--[if lt IE 9]>
+                <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+                <![endif]-->
+
+                {% for js in sonata_page.assets.javascripts %}
+                    <script src="{{ asset(js) }}"></script>
+                {% endfor %}
+            {% endblock %}
+
+        {% endblock %}
+    </head>
+{% endblock %}
+
+{% block sonata_page_body_tag %}
+<body class="sonata-bc">
+{% endblock %}
+
+{% block sonata_page_top_bar %}
+    {% block page_top_bar %} {# Deprecated block #}
+        {% if sonata_page.isEditor or ( app.user and is_granted('ROLE_PREVIOUS_ADMIN') ) %}
+
+        {% if sonata_page.isEditor and sonata_page.isInlineEditionOn %}
+            <!-- CMS specific variables -->
+            <script>
+                jQuery(document).ready(function() {
+                    Sonata.Page.init({
+                        url: {
+                            block_save_position: '{{ sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page) }}',
+                            block_edit:          '{{ sonata_admin.url('sonata.page.admin.page|sonata.page.admin.block', 'edit', {'id': 'BLOCK_ID'}) }}'
+                        }
+                    });
+                });
+            </script>
+        {% endif %}
+
+            <header class="sonata-bc sonata-page-top-bar navbar navbar-inverse navbar-fixed-top" role="banner"
+                    {% if sonata_page.isEditor and sonata_page.isInlineEditionOn %}
+                data-page-editor='{{ {
+                    url: {
+                        block_save_position: sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page),
+                        block_edit:          sonata_admin.url('sonata.page.admin.page|sonata.page.admin.block', 'edit', {'id': 'BLOCK_ID'})
+                    }
+                }|json_encode()|raw }}'
+                    {% endif %}>
+                <div class="container">
+                    <ul class="nav navbar-nav">
+                        {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
+                            <li><a href="{{ path('sonata_admin_dashboard') }}">{{ "header.sonata_admin_dashboard"|trans({}, 'SonataPageBundle') }}</a></li>
+                        {% endif %}
+
+                        {% if sonata_page.isEditor %}
+                            {% set sites = sonata_page.siteavailables %}
+
+                            {% if sites|length > 1 and site is defined %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {% for site in sites %}
+                                            <li><a href="{{ site.url }}">{{ site.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    {% if page is defined %}
+                                        <li><a href="{{ sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page) }}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a></li>
+                                        <li><a href="{{ sonata_admin.objectUrl('sonata.page.admin.page|sonata.page.admin.snapshot', 'list', page) }}" target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a></li>
+                                        <li class="divider"></li>
+                                    {% endif %}
+
+                                    <li><a href="{{ sonata_admin.url('sonata.page.admin.page', 'list') }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a></li>
+
+                                    {% if error_codes is defined and error_codes|length %}
+                                        <li class="divider"></li>
+                                        <li><a href="{{ path('sonata_page_exceptions_list') }}" target="_new">{{ "header.view_all_exceptions"|trans({}, 'SonataPageBundle') }}</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+
+                            {% if page is defined %}
+                                <li>
+                                    <a href="{{ sonata_admin.url('sonata.page.admin.page', 'compose', {'id': page.id}) }}">
+                                        <i class="fa fa-magic"></i>
+                                        {{ 'header.compose_page'|trans({}, 'SonataPageBundle')}}
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if page is defined and not page.enabled %}
+                                <li><span style="padding-left: 20px; background: red;"><strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em></strong></span></li>
+                            {% endif %}
+
+                            {% if sonata_page.isInlineEditionOn and page is defined %}
+                                <li>
+                                    <form class="form-inline" style="margin: 0px">
+                                        <label class="checkbox inline" for="page-action-enabled-edit"><input type="checkbox" id="page-action-enabled-edit">{{ 'header.show_zone'|trans({}, 'SonataPageBundle') }}</label>
+                                        <input type="submit" class="btn" value="{{ 'btn_save_position'|trans({}, 'SonataPageBundle') }}" id="page-action-save-position">
+                                    </form>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if app.user and is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <li><a href="{{ url('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle')}}</a></li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </header>
+
+        {% endif %}
+    {% endblock %}
+{% endblock %}
+
+{% block sonata_page_container %}
+    {% block page_container %}{% endblock %} {# Deprecated block #}
+{% endblock %}
+
+{% block sonata_page_asset_footer %}
+    {% block page_asset_footer %} {# Deprecated block #}
+        {% if page is defined %}
+        {% if page.javascript is not empty %}
+            <script>
+                {{ page.javascript|raw }}
+            </script>
+        {% endif %}
+        {% if page.stylesheet is not empty %}
+            <style>
+                {{ page.stylesheet|raw }}
+            </style>
+        {% endif %}
+        {% endif %}
+        {#
+            These includes can be done only at this point as all blocks are loaded,
+            Limition : this does not work if a global page is loaded from an ESI tag inside a container block
+        #}
+        {{ sonata_block_include_stylesheets('screen', app.request.basePath) }}
+        {{ sonata_block_include_javascripts('screen', app.request.basePath) }}
+    {% endblock %}
+{% endblock %}

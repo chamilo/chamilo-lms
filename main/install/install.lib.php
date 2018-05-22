@@ -2919,6 +2919,23 @@ function finishInstallationWithContainer(
     $site->setIsDefault(true);
     $siteManager->save($site);
 
+    /** @var \Sonata\PageBundle\Entity\PageManager $pageManager */
+    $pageManager = $container->get('sonata.page.manager.page');
+
+    $page = $pageManager->create();
+    $page->setSlug('homepage');
+    $page->setUrl('/homepage');
+    $page->setName('homepage');
+    $page->setTitle('home');
+    $page->setEnabled(true);
+    $page->setDecorate(1);
+    $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
+    $page->setTemplateCode('default');
+    $page->setRouteName('homepage');
+    //$page->setParent($this->getReference('page-homepage'));
+    $page->setSite($site);
+    $pageManager->save($page);
+
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.

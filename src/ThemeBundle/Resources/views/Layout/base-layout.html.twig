@@ -16,6 +16,7 @@
 <html lang="{{ app.request.locale }}" class="no-js"> <!--<![endif]-->
 {# Chamilo theme #}
 {% set theme = 'chamilo' %}
+{% block chamilo_header %}
 <head>
     <meta charset="utf-8">
     {# Check settings to add more metadata in app/config/sonata/sonata_seo.yml #}
@@ -98,7 +99,8 @@
     {#{% endjavascripts %}#}
     {% endblock %}
 </head>
-<body class="{{section_name}}">
+{% endblock %}
+<body class="{{section_name}}" {{ sonata_seo_html_attributes() }} >
 
 <noscript>{{ "NoJavascript" | trans }}</noscript>
 {#{% if show_header == true %}#}
@@ -187,7 +189,7 @@
         {# course navigation links/shortcuts need to be activated by the admin #}
         {% include "@ChamiloTheme/Layout/course_navigation.html.twig" %}
 
-        {% block chamilo_header %}
+
             {#<header class="header">#}
                 {#{% block chamilo_logo %}#}
                 {#<a href="#" class="logo">#}
@@ -199,7 +201,7 @@
                 {#<!-- Header Navbar: style can be found in header.less -->#}
                 {#{% endblock %}#}
             {#</header>#}
-        {% endblock %}
+
 
         {% block chamilo_content %}
             {#Check sonata_block.yml settings#}

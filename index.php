@@ -65,7 +65,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     Session::erase('term_and_condition');
 }
 //If we are not logged in and customapages activated
-if (!api_get_user_id() && CustomPages::enabled()) {
+if (!api_user_is_login() && CustomPages::enabled()) {
     if (Request::get('loggedout')) {
         CustomPages::display(CustomPages::LOGGED_OUT);
     } else {

@@ -157,7 +157,7 @@ services:
         class: Chamilo\CoreBundle\EventListener\LocaleListener
         arguments: ['%kernel.default_locale%', '@service_container']
         tags:
-            - {name: kernel.event_subscriber}
+            - {name: kernel.event_subscriber, priority: 9}
 
     # User locale listener
     chamilo_core.listener.user_locale_listener:

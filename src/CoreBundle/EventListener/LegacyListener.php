@@ -43,11 +43,10 @@ class LegacyListener
             $container->get('router')->getRouteCollection()->add('legacy_index', $route);*/
         }
 
-        $context = $container->get('router.request_context');
+        /*$context = $container->get('router.request_context');
         $context->setBaseUrl('/');
-        $container->get('router.default')->setContext($context);
+        $container->get('router.default')->setContext($context);*/
 
-        //var_dump($container->get('router.default')->generate('home'));
         // Setting container
         Container::setContainer($container);
         Container::setLegacyServices($container);
@@ -116,6 +115,15 @@ class LegacyListener
 
             $extraHeader = trim(api_get_setting('header_extra_content'));
             $container->get('twig')->addGlobal('header_extra_content', $extraHeader);
+
+            $languages = api_get_languages();
+            $languageList = [];
+            foreach ($languages as $isoCode => $language) {
+                $languageList[languageToCountryIsoCode($isoCode)] = $language;
+            }
+
+            $container->get('twig')->addGlobal('current_locale_iso',languageToCountryIsoCode($request->getLocale()));
+            $container->get('twig')->addGlobal('available_locales', $languages);
         }
 
         // We set cid_reset = true if we enter inside a main/admin url
@@ -125,7 +133,6 @@ class LegacyListener
         } else {
             $session->set('cid_reset', false);
         }
-
         $session->set('access_url_id', $urlId);
     }
 

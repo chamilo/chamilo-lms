@@ -4,7 +4,6 @@ parameters:
     password_encryption: '%env(APP_ENCRYPT_METHOD)%'
     secret: '%env(APP_SECRET)%'
     locale: '%env(APP_LOCALE)%'
-    locales: ['%env(APP_LOCALE)%']
     url_append: '%env(APP_URL_APPEND)%'
     installed: '%env(APP_INSTALLED)%'
     twig:

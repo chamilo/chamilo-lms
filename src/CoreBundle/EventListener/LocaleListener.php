@@ -47,13 +47,14 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        $request = $event->getRequest();
         $container = $this->container;
         $installed = $container->get('kernel')->isInstalled();
+
         if (!$installed) {
             return;
         }
 
+        $request = $event->getRequest();
         $courseCode = $request->get('course');
 
         // Detect if the course was set with a cidReq:
@@ -74,8 +75,6 @@ class LocaleListener implements EventSubscriberInterface
         if ($locale = $request->attributes->get('_locale')) {
             $request->getSession()->set('_locale', $locale);
         } else {
-            $locale = $this->defaultLocale;
-
             // 1. Check platform locale
             /** @var SettingsManager $settings */
             $settings = $this->container->get('chamilo.settings.manager');
@@ -99,6 +98,12 @@ class LocaleListener implements EventSubscriberInterface
                 if (!empty($courseLocale)) {
                     $locale = $courseLocale;
                 }
+            }
+
+            // 4. force locale if it was selected from the URL
+            $localeFromUrl = $request->get('_locale');
+            if (!empty($localeFromUrl)) {
+                $locale = $localeFromUrl;
             }
 
             // if no explicit locale has been set on this request, use one from the session

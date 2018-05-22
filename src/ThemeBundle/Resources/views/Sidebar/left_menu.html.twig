@@ -38,10 +38,8 @@
         </div>
     {% endif %}
 {% endif %}
-
     {{ macro.panel(
     'Help' | trans,
     mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true})
     ) }}
-
 {% endautoescape %}

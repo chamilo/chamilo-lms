@@ -52,7 +52,6 @@ class LegacyLoginListener implements EventSubscriberInterface
 
         $container = $this->container;
         $token = $this->tokenStorage->getToken();
-        $session = $request->getSession();
         if ($token) {
             $isGranted = $container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
             if ($isGranted) {
@@ -78,9 +77,7 @@ class LegacyLoginListener implements EventSubscriberInterface
                             $locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
                             if ($user && !empty($locale)) {
                                 $user->setLocale($locale);
-
                                 //$request->getSession()->set('_locale_user', $locale);
-
                                 // if no explicit locale has been set on this request, use one from the session
                                 $request->getSession()->set('_locale', $locale);
                                 $request->setLocale($locale);

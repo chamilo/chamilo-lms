@@ -179,62 +179,61 @@
                 </div>
             </section>
             <section id="menu-bar">
-                {# menu #}
-                {% block menu %}
-                    <nav class="navbar navbar-default">
-                        <div class="container">
-                            <div class="collapse navbar-collapse">
-                            {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
-                            {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
-                                <div class="navbar-custom-menu">
-                                    <ul class="nav navbar-nav navbar-right">
-                                        <li class="dropdown user user-menu">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(32)) }}"
-                                                     alt="{{ app.user.completeName }}" />
-                                                <span class="caret"></span>
-                                            </a>
+            {# menu #}
+            {% block menu %}
+                <nav class="navbar navbar-default">
+                    <div class="container">
+                        <div class="collapse navbar-collapse">
+                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
 
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li class="user-header">
-                                                    <div class="text-center">
-                                                        <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(64)) }}" alt="{{ app.user.completeName }}" />
-                                                        <p class="name">
-                                                            <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
-                                                                {{ app.user.completeName }}
-                                                            </a>
-                                                        </p>
-                                                        <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ app.user.email }}</p>
-                                                    </div>
-                                                </li>
-                                                <li role="separator" class="divider"></li>
-                                                <li class="user-body">
-                                                    <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
-                                                        <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
-                                                    </a>
-                                                    <a title="{{ "MyCertificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
-                                                        <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
-                                                    </a>
-                                                    <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}" >
-                                                        <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            {% endif %}
+                        {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <div class="navbar-custom-menu">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li class="dropdown user user-menu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(32)) }}"
+                                                 alt="{{ app.user.completeName }}" />
+                                            <span class="caret"></span>
+                                        </a>
+
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li class="user-header">
+                                                <div class="text-center">
+                                                    <img class="img-circle" src="{{ asset(app.user.avatarOrAnonymous(64)) }}" alt="{{ app.user.completeName }}" />
+                                                    <p class="name">
+                                                        <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
+                                                            {{ app.user.completeName }}
+                                                        </a>
+                                                    </p>
+                                                    <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ app.user.email }}</p>
+                                                </div>
+                                            </li>
+                                            <li role="separator" class="divider"></li>
+                                            <li class="user-body">
+                                                <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
+                                                    <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                                                </a>
+                                                <a title="{{ "MyCertificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
+                                                    <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
+                                                </a>
+                                                <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}" >
+                                                    <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </div>
+                        {% endif %}
                         </div>
-                    </nav>
-                    {#{% include "@template_style/layout/menu.html.twig" %}#}
+                    </div>
+                </nav>
+                {#{% include "@template_style/layout/menu.html.twig" %}#}
                 {% endblock %}
             </section>
         </header>
 
         <div id="top_main_content" class="container">
-            {#{{ locale_switcher() }}#}
-
         {# course navigation links/shortcuts need to be activated by the admin #}
             {#{% include "@template_style/layout/course_navigation.html.twig" %}#}
         {#{% endif %}#}

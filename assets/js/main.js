@@ -27,6 +27,7 @@ require("timeago");
 require("select2/dist/css/select2.css");
 require('bootstrap-select/dist/js/bootstrap-select.js');
 require('bootstrap-select/dist/css/bootstrap-select.css');
+require('flag-icon-css/css/flag-icon.css');
 
 // doesn't work with webpack added directly in /public/libs folder
 /*

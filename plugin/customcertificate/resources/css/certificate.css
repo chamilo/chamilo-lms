@@ -1,7 +1,7 @@
 body {background-repeat:no-repeat; margin:0; padding: 0;}
 td { font-family:arial, sans-serif; font-size:18px; }
-.logo { height: 150px; vertical-align: middle; }
-.content-table { height: 480px; padding: 10px 25px; vertical-align:middle;}
+.logo {height: 150px; vertical-align: middle; }
+.content-table {height: 480px;  vertical-align:middle;}
 .content-student { text-align:center;}
 .course { padding-top: 10px; text-align:center; vertical-align: middle;}
 .modality { text-align:center; }
@@ -13,5 +13,5 @@ td { font-family:arial, sans-serif; font-size:18px; }
 .caraA {box-decoration-break: slice; page: caraA}
 @page caraB { background:#FFFFFF; }
 .caraB {box-decoration-break: slice; page: caraB}
-.contents-learnpath td {background: #FFFFFF; font-size: 12px; height: 160mm; padding: 10px; vertical-align: top;}
+.contents-learnpath td {background: #FFFFFF; font-size: 12px; height: 160mm; vertical-align: top;}
 ol {margin: 0; padding:0;}

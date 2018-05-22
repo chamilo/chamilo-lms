@@ -1176,16 +1176,16 @@ function uploadImageCertificate(
     if (empty($certId)) {
         return false;
     }
-    
+
     $delete = empty($file);
-    
+
     if (empty($sourceFile)) {
         $sourceFile = $file;
     }
 
     $base = api_get_path(SYS_UPLOAD_PATH);
     $path = $base.'certificates/'.$certId.'/';
-    
+
     if ($default) {
         $path = $base.'certificates/default/';
     }
@@ -1194,17 +1194,17 @@ function uploadImageCertificate(
     if (!file_exists($path)) {
         mkdir($path, api_get_permissions_for_new_directories(), true);
     }
-    
+
     // Exit if only deletion has been requested. Return an empty picture name.
     if ($delete) {
         return '';
     }
-    
+
     $allowedTypes = api_get_supported_image_extensions();
     $file = str_replace('\\', '/', $file);
     $filename = (($pos = strrpos($file, '/')) !== false) ? substr($file, $pos + 1) : $file;
     $extension = strtolower(substr(strrchr($filename, '.'), 1));
-    
+
     if (!in_array($extension, $allowedTypes)) {
         return false;
     }

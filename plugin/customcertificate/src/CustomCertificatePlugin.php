@@ -24,7 +24,7 @@ class CustomCertificatePlugin extends Plugin
                     'type' => 'checkbox',
             ],
     ];
-    
+
     protected function __construct()
     {
         parent::__construct(
@@ -198,7 +198,7 @@ class CustomCertificatePlugin extends Plugin
             echo get_lang('MessageUpdate');
         }
     }
-    
+
     /**
      * Get certificate data.
      *
@@ -233,7 +233,7 @@ class CustomCertificatePlugin extends Plugin
                 ];
             }
         }
-        
+
         return [];
     }
 }

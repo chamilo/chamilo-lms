@@ -27,7 +27,7 @@ function typeDateExpedictionSwitchRadioButton(){
     var inputType = document.getElementsByName("type_date_expediction");
     var type;
     for (var i=0;i<inputType.length;i++){
-        if ( inputType[i].checked == true) {
+        if ( inputType[i].checked === true) {
             type = parseInt(inputType[i].value);
         }
     }
@@ -49,7 +49,7 @@ function contentsTypeSwitchRadioButton(){
     var inputType = document.getElementsByName("contents_type");
     var type;
     for (var i=0;i<inputType.length;i++){
-        if ( inputType[i].checked ) {
+        if ( inputType[i].checked === true) {
           type = parseInt(inputType[i].value);
         }
     }

@@ -475,7 +475,7 @@ class DisplayGradebook
                             $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
                     }
-                    
+
                     if (empty($categories)) {
                         $actionsRight .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('percentage.png', get_lang('EditAllWeights'), '', ICON_SIZE_MEDIUM).'</a>';

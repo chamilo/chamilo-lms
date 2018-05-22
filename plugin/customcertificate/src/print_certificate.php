@@ -6,7 +6,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 if (intval($_GET['default']) == 1) {
     $cidReset = true;
 }
-
+    
 $course_plugin = 'customcertificate';
 require_once __DIR__.'/../config.php';
 
@@ -105,14 +105,14 @@ if (empty($infoCertificate)) {
 $workSpace = intval(297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
 $widthCell = intval($workSpace / 6);
 $htmlText = '';
-$htmlText .= '<link rel="stylesheet"
-                    type="text/css"
-                    href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css"
-                >';
-$htmlText .= '<link rel="stylesheet"
-                    type="text/css"
-                    href="'.api_get_path(WEB_CSS_PATH).'editor.css"
-                >';
+$htmlText .= '
+    <link rel="stylesheet"
+        type="text/css"
+        href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
+$htmlText .= '
+    <link rel="stylesheet"
+        type="text/css"
+        href="'.api_get_path(WEB_CSS_PATH).'editor.css">';
 $htmlText .= '<body>';
 foreach ($userList as $userInfo) {
     $studentId = $userInfo['user_id'];
@@ -121,48 +121,47 @@ foreach ($userList as $userInfo) {
         $htmlText .= '<div class="caraA" style="padding:0; page-break-before:always;" margin:0; padding:0;>';
     } else {
         $urlBackground = $path.$infoCertificate['background'];
-        $htmlText .= '<div class="caraA"
-                        style="background-image:url('.$urlBackground.') no-repeat; background-image-resize:6;"
-                        margin:0;
-                        padding:0;
-                      >';
+        $htmlText .= '
+            <div class="caraA"
+                style="background-image:url('.$urlBackground.') no-repeat; background-image-resize:6;"
+                margin:0;
+                padding:0;>';
     }
 
     if (!empty($infoCertificate['logo_left'])) {
-        $logoLeft = '<img 
-                        style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
-                        src="'.$path.$infoCertificate['logo_left'].'"
-                     />';
+        $logoLeft = '
+            <img 
+                style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
+                src="'.$path.$infoCertificate['logo_left'].'" />';
     } else {
         $logoLeft = '';
     }
 
     if (!empty($infoCertificate['logo_center'])) {
-        $logoCenter = '<img 
-                        style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
-                        src="'.$path.$infoCertificate['logo_center'].'"
-                        />';
+        $logoCenter = '
+            <img 
+                style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
+                src="'.$path.$infoCertificate['logo_center'].'" />';
     } else {
         $logoCenter = '';
     }
 
     if (!empty($infoCertificate['logo_right'])) {
-        $logoRight = '<img
-                        style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
-                        src="'.$path.$infoCertificate['logo_right'].'"
-                        />';
+        $logoRight = '
+            <img
+                style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
+                src="'.$path.$infoCertificate['logo_right'].'" />';
     } else {
         $logoRight = '';
     }
 
     $htmlText .= '<table 
-                    width="'.$workSpace.'mm"
-                    style="
-                        margin-left:'.$infoCertificate['margin_left'].'mm;
-                        margin-right:'.$infoCertificate['margin_right'].'mm;
-                    "
-                    border="0"
-                    >';
+        width="'.$workSpace.'mm"
+        style="
+            margin-left:'.$infoCertificate['margin_left'].'mm;
+            margin-right:'.$infoCertificate['margin_right'].'mm;
+        "
+        border="0">';
     $htmlText .= '<tr>';
     $htmlText .= '<td colspan="4" class="logo">'.$logoLeft.'</td>';
     $htmlText .= '<td colspan="4" class="logo" style="text-align:center;">'.$logoCenter.'</td>';
@@ -268,57 +267,52 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</tr>';
 
     $htmlText .= '<tr>';
-    $htmlText .= '<td colspan="2" class="seals" style="width:'.$widthCell.'mm">
-                '.((!empty($infoCertificate['signature_text1'])) ? $infoCertificate['signature_text1'] : '').
+    $htmlText .= '<td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature_text1'])) ? $infoCertificate['signature_text1'] : '').
                 '</td>
-                <td colspan="2" class="seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature_text2'])) ? $infoCertificate['signature_text2'] : '').
+                <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature_text2'])) ? $infoCertificate['signature_text2'] : '').
                 '</td>
-                <td colspan="2" class="seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature_text3'])) ? $infoCertificate['signature_text3'] : '').
+                <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature_text3'])) ? $infoCertificate['signature_text3'] : '').
                 '</td>
-                <td colspan="2" class="seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature_text4'])) ? $infoCertificate['signature_text4'] : '').
+                <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature_text4'])) ? $infoCertificate['signature_text4'] : '').
                 '</td>
                 <td colspan="4" class="seals" style="width:'.(2 * $widthCell).'mm">
                     '.((!empty($infoCertificate['seal'])) ? $plugin->get_lang('Seal') : '').
                 '</td>';
     $htmlText .= '</tr>';
     $htmlText .= '<tr>';
-    $htmlText .= '<td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature1']))
-                    ? '<img style="max-height: 100px; max-width: '.$widthCell.'mm;"
-                        src="'.$path.$infoCertificate['signature1'].'"
-                        />'
-                    : '').
+    $htmlText .= '<td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature1']))
+                ? '<img style="max-height: 100px; max-width: '.$widthCell.'mm;"
+                    src="'.$path.$infoCertificate['signature1'].'" />'
+                : '').
                 '</td>
-                <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature2']))
-                    ? '<img style="max-height: 100px; '.$widthCell.'mm;"
-                            src="'.$path.$infoCertificate['signature2'].'"
-                        />'
-                    : '').
+                <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature2']))
+                ? '<img style="max-height: 100px; '.$widthCell.'mm;"
+                    src="'.$path.$infoCertificate['signature2'].'" />'
+                : '').
                 '</td>
-                <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature3']))
-                    ? '<img style="max-height: 100px; '.$widthCell.'mm;"
-                            src="'.$path.$infoCertificate['signature3'].'"
-                        />'
-                    : '').
+                <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature3']))
+                ? '<img style="max-height: 100px; '.$widthCell.'mm;"
+                    src="'.$path.$infoCertificate['signature3'].'" />'
+                : '').
                 '</td>
-                <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">
-                    '.((!empty($infoCertificate['signature4']))
-                    ? '<img style="max-height: 100px; '.$widthCell.'mm;"
-                            src="'.$path.$infoCertificate['signature4'].'"
-                        />'
-                    : '').
+                <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
+                ((!empty($infoCertificate['signature4']))
+                ? '<img style="max-height: 100px; '.$widthCell.'mm;"
+                    src="'.$path.$infoCertificate['signature4'].'" />'
+                : '').
                 '</td>
-                <td colspan="4" class="logo-seals" style="width:'.(2 * $widthCell).'mm">
-                    '.((!empty($infoCertificate['seal']))
-                    ? '<img style="max-height: 100px; '.(2 * $widthCell).'mm;"
-                            src="'.$path.$infoCertificate['seal'].'"
-                        />'
-                    : '').
+                <td colspan="4" class="logo-seals" style="width:'.(2 * $widthCell).'mm">'.
+                ((!empty($infoCertificate['seal']))
+                ? '<img style="max-height: 100px; '.(2 * $widthCell).'mm;"
+                    src="'.$path.$infoCertificate['seal'].'" />'
+                : '').
                 '</td>';
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
@@ -329,12 +323,10 @@ foreach ($userList as $userInfo) {
 
     if ($infoCertificate['contents_type'] == 0) {
         $contentsDescription = CourseDescription::get_data_by_description_type(3, $courseId, 0);
-
         $domd = new DOMDocument();
         libxml_use_internal_errors(true);
         $domd->loadHTML($contentsDescription['description_content']);
         libxml_use_internal_errors(false);
-
         $domx = new DOMXPath($domd);
         $items = $domx->query("//li[@style]");
         foreach ($items as $item) {
@@ -347,7 +339,6 @@ foreach ($userList as $userInfo) {
         }
 
         $output = $domd->saveHTML();
-
         $htmlText .= getIndexFiltered($output);
     }
 
@@ -358,9 +349,8 @@ foreach ($userList as $userInfo) {
         $categoryTest->setId(0);
         $categoryTest->setName($plugin->get_lang('WithOutCategory'));
         $categoryTest->setPosition(0);
-        $categories = [
-            $categoryTest
-        ];
+        $categories = [$categoryTest];
+
         if (!empty($categoriesTempList)) {
             $categories = array_merge($categories, $categoriesTempList);
         }

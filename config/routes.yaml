@@ -40,9 +40,10 @@ _admin:
 #_api:
 #    resource: routing_api.yml
 #    prefix:   /api
-#liip_theme:
-#    resource: "@LiipThemeBundle/Resources/config/routing.xml"
-#    prefix: /theme
+
+liip_theme:
+    resource: "@LiipThemeBundle/Resources/config/routing.xml"
+    prefix: /theme
 
 #app_settings:
 #    resource: |

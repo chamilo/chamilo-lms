@@ -1,0 +1,6 @@
+liip_theme:
+    themes: ['default', 'my_theme']
+    active_theme: 'default'
+    path_patterns:
+        bundle_resource:
+            - '%kernel.root_dir%/../templates/themes/%%current_theme%%/%%bundle_name%%/%%template%%'

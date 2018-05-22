@@ -420,8 +420,8 @@ class Template
      */
     public function display_blank_template()
     {
-        $tpl = $this->get_template('layout/blank.tpl');
-        $this->display($tpl);
+        $template = '@ChamiloTheme/Layout/blank.html.twig';
+        $this->returnResponse($this->params, $template);
     }
 
     /**
@@ -429,8 +429,8 @@ class Template
      */
     public function displayBlankTemplateNoHeader()
     {
-        $tpl = $this->get_template('layout/blank_no_header.tpl');
-        $this->display($tpl);
+        $template = '@ChamiloTheme/Layout/blank_no_header.html.twig';
+        $this->returnResponse($this->params, $template);
     }
 
     /**

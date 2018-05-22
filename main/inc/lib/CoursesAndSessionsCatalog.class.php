@@ -504,9 +504,10 @@ class CoursesAndSessionsCatalog
             $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
         }
 
-        $ids = Database::store_result(Database::query($sql));
+        $list = Database::store_result(Database::query($sql), 'ASSOC');
         $sessions = [];
-        foreach ($ids as $id) {
+        foreach ($list as $sessionData) {
+            $id = $sessionData['id'];
             $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
         }
 

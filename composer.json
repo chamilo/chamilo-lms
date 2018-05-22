@@ -160,7 +160,8 @@
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/httplug-bundle": "^1.8",
         "knplabs/knp-menu-bundle": "^2.0",
-        "symfony/requirements-checker": "^1.1"
+        "symfony/requirements-checker": "^1.1",
+        "liip/theme-bundle": "^1.5"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",

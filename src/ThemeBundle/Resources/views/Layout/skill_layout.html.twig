@@ -1,0 +1,16 @@
+{% extends "@ChamiloTheme/Layout/base-layout.html.twig" %}
+{# overrides everything inside body no-footer no-header #}
+{% block chamilo_wrap %}
+    {# topbar #}
+    {% include "@ChamiloTheme/Layout/topbar.html.twig" %}
+    {% include 'default/skill/skill_wheel.js.html.twig' %}
+    {% include 'default/skill/skill_wheel.html.twig' %}
+    {% autoescape false %}
+        <section id="content-scorm">
+        {{ content }}
+        </section>
+    {% endautoescape %}
+{% endblock %}
+
+{% block chamilo_footer %}
+{% endblock %}

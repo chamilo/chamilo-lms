@@ -443,6 +443,15 @@ class Template
     }
 
     /**
+     * Displays an empty template.
+     */
+    public function displaySkillLayout()
+    {
+        $template = '@ChamiloTheme/Layout/skill_layout.html.twig';
+        $this->returnResponse($this->params, $template);
+    }
+
+    /**
      * Sets the footer visibility.
      *
      * @param bool true if we show the footer

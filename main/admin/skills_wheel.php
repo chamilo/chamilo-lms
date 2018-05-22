@@ -90,4 +90,4 @@ $templateName = $tpl->get_template('skill/skill_wheel.tpl');
 $content = $tpl->fetch($templateName);
 
 $tpl->assign('content', $content);
-$tpl->display_no_layout_template();
+$tpl->displaySkillLayout();

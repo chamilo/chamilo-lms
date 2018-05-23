@@ -60,7 +60,9 @@ if ($enable) {
         $infoCertificate = Database::select(
             '*',
             $table,
-            ['where' => ['access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId]]],
+            ['where' => [
+                'access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId]]
+            ],
             'first'
         );
         if (!is_array($infoCertificate)) {
@@ -81,7 +83,6 @@ if ($enable) {
             } else {
                 $contents = $formValues['contents'];
             }
-
             $check = Security::check_token('post');
             if ($check) {
                 $date_start = str_replace('/', '-', $formValues['date_start']);
@@ -125,198 +126,48 @@ if ($enable) {
 
                 // Image manager
                 $base = api_get_path(SYS_UPLOAD_PATH);
-                $pathCertificates = $base.'certificates/'.$certificateId.'/';
-
-                if (!empty($formValues['remove_logo_left']) || $_FILES['logo_left']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['logo_left']);
-                    $sql = "UPDATE $table SET logo_left = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_logo_center']) || $_FILES['logo_center']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['logo_center']);
-                    $sql = "UPDATE $table SET logo_center = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_logo_right']) || $_FILES['logo_right']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['logo_right']);
-                    $sql = "UPDATE $table SET logo_right = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_seal']) || $_FILES['seal']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['seal']);
-                    $sql = "UPDATE $table SET seal = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_signature1']) || $_FILES['signature1']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['signature1']);
-                    $sql = "UPDATE $table SET signature1 = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_signature2']) || $_FILES['signature2']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['signature2']);
-                    $sql = "UPDATE $table SET signature2 = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_signature3']) || $_FILES['signature3']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['signature3']);
-                    $sql = "UPDATE $table SET signature3 = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_signature4']) || $_FILES['signature4']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['signature4']);
-                    $sql = "UPDATE $table SET signature4 = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                if (!empty($formValues['remove_background']) || $_FILES['background']['size']) {
-                    @unlink($pathCertificates.$infoCertificate['background']);
-                    $sql = "UPDATE $table SET background = '' WHERE id = $certificateId";
-                    $rs = Database::query($sql);
-                }
-
-                $logoLeft = false;
-                $logoCenter = false;
-                $logoRight = false;
-                $seal = false;
-                $signature1 = false;
-                $signature2 = false;
-                $signature3 = false;
-                $signature4 = false;
-                $background = false;
-
-                if ($_FILES['logo_left']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['logo_left']['name'],
-                        $_FILES['logo_left']['tmp_name'],
-                        $formValues['logo_left_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET logo_left = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $logoLeft = true;
+                $pathCertificates = $base.'certificates';
+                
+                $fieldList = [
+                    'logo_left',
+                    'logo_center',
+                    'logo_right',
+                    'seal',
+                    'signature1',
+                    'signature2',
+                    'signature3',
+                    'signature4',
+                    'background',
+                ];
+                
+                foreach ($fieldList as $field) {
+                    $checkLogo[$field] = false;
+                    if (!empty($formValues['remove_'.$field]) || $_FILES[$field]['size']) {
+                        checkInstanceImage(
+                            $certificateId,
+                            $infoCertificate[$field],
+                            $field,
+                            $pathCertificates
+                        );
+                    }
+                    
+                    if ($_FILES[$field]['size']) {
+                        $newPicture = api_upload_file(
+                            'certificates',
+                            $_FILES[$field],
+                            $certificateId,
+                            $formValues[$field.'_crop_result']
+                        );
+                        if ($newPicture) {
+                            $sql = "UPDATE $table
+                                    SET $field = '".$newPicture['path_to_save']."'
+                                    WHERE id = $certificateId";
+                            Database::query($sql);
+                            $checkLogo[$field] = true;
+                        }
                     }
                 }
-
-                if ($_FILES['logo_center']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['logo_center']['name'],
-                        $_FILES['logo_center']['tmp_name'],
-                        $formValues['logo_center_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET logo_center = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $logoCenter = true;
-                    }
-                }
-
-                if ($_FILES['logo_right']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['logo_right']['name'],
-                        $_FILES['logo_right']['tmp_name'],
-                        $formValues['logo_right_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET logo_right = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $logoRight = true;
-                    }
-                }
-
-                if ($_FILES['seal']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['seal']['name'],
-                        $_FILES['seal']['tmp_name'],
-                        $formValues['seal_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET seal = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $seal = true;
-                    }
-                }
-
-                if ($_FILES['signature1']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['signature1']['name'],
-                        $_FILES['signature1']['tmp_name'],
-                        $formValues['signature1_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET signature1 = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $signature1 = true;
-                    }
-                }
-
-                if ($_FILES['signature2']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['signature2']['name'],
-                        $_FILES['signature2']['tmp_name'],
-                        $formValues['signature2_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET signature2 = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $signature2 = true;
-                    }
-                }
-
-                if ($_FILES['signature3']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['signature3']['name'],
-                        $_FILES['signature3']['tmp_name'],
-                        $formValues['signature3_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET signature3 = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $signature3 = true;
-                    }
-                }
-
-                if ($_FILES['signature4']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['signature4']['name'],
-                        $_FILES['signature4']['tmp_name'],
-                        $formValues['signature4_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET signature4 = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $signature4 = true;
-                    }
-                }
-
-                if ($_FILES['background']['size']) {
-                    $newPicture = uploadImageCertificate(
-                        $certificateId,
-                        $_FILES['background']['name'],
-                        $_FILES['background']['tmp_name'],
-                        $formValues['background_crop_result']
-                    );
-                    if ($newPicture) {
-                        $sql = "UPDATE $table SET background = '".$newPicture."' WHERE id = $certificateId";
-                        Database::query($sql);
-                        $background = true;
-                    }
-                }
-
+                
                 // Certificate Default
                 if (intval($formValues['use_default'] == 1)) {
                     $base = api_get_path(SYS_UPLOAD_PATH);
@@ -329,109 +180,13 @@ if ($enable) {
                     );
 
                     if (!empty($infoCertificateDefault)) {
-                        $pathCertificatesDefault = $base.'certificates/'.$infoCertificateDefault['id'].'/';
-
-                        if (!file_exists($pathCertificates)) {
-                            mkdir($pathCertificates, api_get_permissions_for_new_directories(), true);
-                        }
-
-                        if (!empty($infoCertificateDefault['logo_left']) && !$logoLeft) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['logo_left'],
-                                $pathCertificates.$infoCertificateDefault['logo_left']
-                            );
-                            $sql = "UPDATE $table
-                                    SET logo_left = '".$infoCertificateDefault['logo_left']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['logo_center']) && !$logoCenter) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['logo_center'],
-                                $pathCertificates.$infoCertificateDefault['logo_center']
-                            );
-                            $sql = "UPDATE $table
-                                    SET logo_center = '".$infoCertificateDefault['logo_center']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['logo_right']) && !$logoRight) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['logo_right'],
-                                $pathCertificates.$infoCertificateDefault['logo_right']
-                            );
-                            $sql = "UPDATE $table
-                                    SET logo_right = '".$infoCertificateDefault['logo_right']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['seal']) && !$seal) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['seal'],
-                                $pathCertificates.$infoCertificateDefault['seal']
-                            );
-                            $sql = "UPDATE $table
-                                    SET seal = '".$infoCertificateDefault['seal']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['signature1']) && !$signature1) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['signature1'],
-                                $pathCertificates.$infoCertificateDefault['signature1']
-                            );
-                            $sql = "UPDATE $table
-                                    SET signature1 = '".$infoCertificateDefault['signature1']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['signature2']) && !$signature2) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['signature2'],
-                                $pathCertificates.$infoCertificateDefault['signature2']
-                            );
-                            $sql = "UPDATE $table
-                                    SET signature2 = '".$infoCertificateDefault['signature2']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['signature3']) && !$signature3) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['signature3'],
-                                $pathCertificates.$infoCertificateDefault['signature3']
-                            );
-                            $sql = "UPDATE $table
-                                    SET signature3 = '".$infoCertificateDefault['signature3']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['signature4']) && !$signature4) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['signature4'],
-                                $pathCertificates.$infoCertificateDefault['signature4']
-                            );
-                            $sql = "UPDATE $table
-                                    SET signature4 = '".$infoCertificateDefault['signature4']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
-                        }
-
-                        if (!empty($infoCertificateDefault['background']) && !$background) {
-                            copy(
-                                $pathCertificatesDefault.$infoCertificateDefault['background'],
-                                $pathCertificates.$infoCertificateDefault['background']
-                            );
-                            $sql = "UPDATE $table
-                                    SET background = '".$infoCertificateDefault['background']."'
-                                    WHERE id = $certificateId";
-                            Database::query($sql);
+                        foreach ($fieldList as $field) {
+                            if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
+                                $sql = "UPDATE $table
+                                        SET $field = '".$infoCertificateDefault[$field]."'
+                                        WHERE id = $certificateId";
+                                Database::query($sql);
+                            }
                         }
                     }
                 }
@@ -499,8 +254,8 @@ if ($enable) {
         );
         $form->addElement('html', '</div>');
         $form->addElement('html', '<div class="col-sm-4">');
-
-        $strInfo = '((user_lastname))<br />';
+        $strInfo = '((user_firstname))<br />';
+        $strInfo .= '((user_lastname))<br />';
         $strInfo .= '((gradebook_institution))<br />';
         $strInfo .= '((gradebook_sitename))<br />';
         $strInfo .= '((teacher_firstname))<br />';
@@ -519,7 +274,7 @@ if ($enable) {
         $createCertificate = get_lang('CreateCertificateWithTags');
         $form->addElement(
             'html',
-            Display::return_message($createCertificate.': <br /><br/>'.$strInfo, 'normal', false)
+            Display::return_message($createCertificate.': <br />'.$strInfo, 'normal', false)
         );
         $form->addElement('html', '</div>');
         $form->addElement('html', '</fieldset>');
@@ -785,7 +540,7 @@ if ($enable) {
 
         // Signature section
         $base = api_get_path(WEB_UPLOAD_PATH);
-        $path = $base.'certificates/'.$infoCertificate['id'].'/';
+        $path = $base.'certificates/'; //.$infoCertificate['id'].'/';
 
         $form->addElement('html', '<fieldset><legend>'.strtoupper(get_lang('LogosSeal')).'</legend>');
         // Logo 1
@@ -1166,61 +921,13 @@ if ($enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-function uploadImageCertificate(
-    $certId,
-    $file = null,
-    $sourceFile = null,
-    $cropParameters = '',
-    $default = false
-) {
-    if (empty($certId)) {
-        return false;
+function checkInstanceImage($certificateId, $imagePath, $field, $path) {
+    $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
+    $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
+    $res = Database::query($sql);
+    if (Database::num_rows($res) == 1) {
+        @unlink($path.$imagePath);
     }
-
-    $delete = empty($file);
-
-    if (empty($sourceFile)) {
-        $sourceFile = $file;
-    }
-
-    $base = api_get_path(SYS_UPLOAD_PATH);
-    $path = $base.'certificates/'.$certId.'/';
-
-    if ($default) {
-        $path = $base.'certificates/default/';
-    }
-
-    // If this directory does not exist - we create it.
-    if (!file_exists($path)) {
-        mkdir($path, api_get_permissions_for_new_directories(), true);
-    }
-
-    // Exit if only deletion has been requested. Return an empty picture name.
-    if ($delete) {
-        return '';
-    }
-
-    $allowedTypes = api_get_supported_image_extensions();
-    $file = str_replace('\\', '/', $file);
-    $filename = (($pos = strrpos($file, '/')) !== false) ? substr($file, $pos + 1) : $file;
-    $extension = strtolower(substr(strrchr($filename, '.'), 1));
-
-    if (!in_array($extension, $allowedTypes)) {
-        return false;
-    }
-
-    $filename = api_replace_dangerous_char($filename);
-    $filename = uniqid('').'_'.$filename;
-    $filename = $certId.'_'.$filename;
-
-    //Crop the image to adjust 1:1 ratio
-    $image = new Image($sourceFile);
-    $image->crop($cropParameters);
-
-    $origin = new Image($sourceFile); // This is the original picture.
-    $origin->send_image($path.$filename);
-
-    $result = $origin;
-
-    return $result ? $filename : false;
-}
+    $sql = "UPDATE $table SET $field = '' WHERE id = $certificateId";
+    $rs = Database::query($sql);
+ }

@@ -63,7 +63,7 @@ if ($sessionId > 0) {
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $useDefault = false;
-$base = api_get_path(WEB_UPLOAD_PATH).'certificates/';
+$path = api_get_path(WEB_UPLOAD_PATH).'certificates/';
 
 // Get info certificate
 $infoCertificate = Database::select(
@@ -96,10 +96,7 @@ if (empty($infoCertificate)) {
         exit;
     } else {
         $useDefault = true;
-        $path = $base.$infoCertificate['id'].'/';
     }
-} else {
-    $path = $base.$infoCertificate['id'].'/';
 }
 
 $workSpace = intval(297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
@@ -396,7 +393,6 @@ foreach ($userList as $userInfo) {
 
             foreach ($flat_list as $learnpath) {
                 $lpId = $learnpath['lp_old_id'];
-                //echo $lpId."<br>";
                 $sql = "SELECT 1
                         FROM $tblProperty
                         WHERE tool = 'learnpath'
@@ -463,8 +459,8 @@ $params = [
 $pdf = new PDF($params['format'], $params['orientation'], $params);
 $pdf->content_to_pdf($htmlText, '', $fileName, null, 'I', false, null, false, true, false);
 
-function getIndexFiltered($indice) {
-    $txt = strip_tags($indice, "<b><strong><i>");
+function getIndexFiltered($index) {
+    $txt = strip_tags($index, "<b><strong><i>");
     $txt = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $txt);
     $lines = explode(chr(13).chr(10), $txt);
 

@@ -169,6 +169,13 @@ class NavBuilder implements ContainerAwareInterface
             'enabled' => true,
         ]);
 
+        $isLegacy = $container->get('request_stack')->getCurrentRequest()->get('load_legacy');
+        $urlAppend = $container->getParameter('url_append');
+        $legacyIndex = '';
+        if ($isLegacy) {
+            $legacyIndex = $urlAppend.'/public';
+        }
+
         if ($site) {
             $pageManager = $container->get('sonata.page.manager.page');
             // Parents only of homepage
@@ -191,24 +198,27 @@ class NavBuilder implements ContainerAwareInterface
                     continue;
                 }
 
+                $url = $legacyIndex.$page->getUrl();
+
                 $subMenu = $menu->addChild(
                     $page->getName(),
                     [
                         'route' => $page->getRouteName(),
                         'routeParameters' => [
-                            'path' => $page->getUrl(),
+                            'path' => $url,
                         ],
                     ]
                 );
 
                 /** @var Page $child */
                 foreach ($page->getChildren() as $child) {
+                    $url = $legacyIndex.$child->getUrl();
                     $subMenu->addChild(
                         $child->getName(),
                         [
                             'route' => $page->getRouteName(),
                             'routeParameters' => [
-                                'path' => $child->getUrl(),
+                                'path' => $url,
                             ],
                         ]
                     )->setAttribute('divider_append', true);

@@ -384,7 +384,7 @@ class Template
     }
 
     /**
-     * @param array $params
+     * @param array  $params
      * @param string $template
      *
      * @throws \Twig\Error\Error

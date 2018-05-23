@@ -2374,7 +2374,7 @@ class CourseManager
 
             $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
             Database::query($sql);
-            
+
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables
             GroupManager::deleteAllGroupsFromCourse($courseId);

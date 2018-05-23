@@ -135,7 +135,6 @@ class LegacyListener
             }
             $twig->addGlobal('header_extra_content', $extraHeader);
 
-
             $user = api_get_user_info();
 
             $rightFloatMenu = '';

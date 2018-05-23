@@ -64,6 +64,7 @@ class Display
         $page_header = null
     ) {
         ob_start();
+
         return true;
 
         $origin = api_get_origin();
@@ -130,20 +131,6 @@ class Display
     {
         global $tool_name, $show_learnpath;
         $disable_js_and_css_files = true;
-        self::$global_template = new Template(
-            $tool_name,
-            false,
-            false,
-            $show_learnpath
-        );
-    }
-
-    /**
-     * Displays the reduced page header (without banner).
-     */
-    private static function set_header()
-    {
-        global $show_learnpath, $tool_name;
         self::$global_template = new Template(
             $tool_name,
             false,
@@ -2769,5 +2756,19 @@ HTML;
                     </div>
                     <hr />
               </div>';
+    }
+
+    /**
+     * Displays the reduced page header (without banner).
+     */
+    private static function set_header()
+    {
+        global $show_learnpath, $tool_name;
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 }

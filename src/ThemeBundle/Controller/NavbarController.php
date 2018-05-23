@@ -91,6 +91,7 @@ class NavbarController extends Controller
 
     /**
      * @deprecated
+     *
      * @return Response
      */
     public function userAction()

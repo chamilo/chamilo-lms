@@ -15,15 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Tool
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="tool", cascade={"persist", "remove"})
      */
     protected $resourceNodes;
@@ -32,6 +23,14 @@ class Tool
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ToolResourceRights", mappedBy="tool", cascade={"persist", "remove"})
      */
     protected $toolResourceRights;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
 
     /**
      * @var string

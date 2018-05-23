@@ -845,7 +845,7 @@ class FillBlanks extends Question
      * -2  : didn't answer
      * -1  : student answer is wrong
      *  0  : student answer is correct
-     * >0  : choice menu, is the index of the student answer (right answer index is 0)
+     * >0  : choice menu, is the index of the student answer (right answer index is 0).
      *
      * @param int $testId
      * @param int $questionId

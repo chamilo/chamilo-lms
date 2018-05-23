@@ -925,11 +925,11 @@ foreach ($questionList as $questionId) {
 
 $total_score_text = '';
 
-//Total score
+// Total score
+$my_total_score_temp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
         $total_score_text .= '<div class="question_row">';
-        $my_total_score_temp = $totalScore;
         if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
             $my_total_score_temp = 0;
         }

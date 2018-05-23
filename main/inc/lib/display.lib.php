@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -3683,6 +3683,7 @@ function api_is_anonymous($user_id = null, $db_check = false)
             return true;
         }
     }
+
     return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
 }
 
@@ -3711,7 +3712,7 @@ function api_not_allowed(
     // src/ThemeBundle/Resources/views/Exception/error404.html.twig
     $exception = new Exception($message);
     $request = Container::getRequest();
-    $exception  = \Symfony\Component\Debug\Exception\FlattenException::create($exception, $responseCode);
+    $exception = \Symfony\Component\Debug\Exception\FlattenException::create($exception, $responseCode);
     $controller = new \Chamilo\ThemeBundle\Controller\ExceptionController(Container::getTwig(), $debug);
     $response = $controller->showAction($request, $exception);
     $response->send();

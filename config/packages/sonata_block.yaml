@@ -9,9 +9,9 @@ sonata_block:
 
     blocks:
         # Chamilo blocks
-#        chamilo_core.block.breadcrumb: ~
-#        chamilo_core.block.course: ~
-#        chamilo_core.block.skill: ~
+        chamilo_core.block.breadcrumb: ~
+        chamilo_core.block.course: ~
+        chamilo_core.block.skill: ~
         sonata.admin.block.stats:
             contexts: [admin]
         sonata.admin.block.admin_list:

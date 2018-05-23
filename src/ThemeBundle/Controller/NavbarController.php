@@ -9,7 +9,6 @@ use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Chamilo\ThemeBundle\Event\TaskListEvent;
 use Chamilo\ThemeBundle\Event\ThemeEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,6 +20,7 @@ class NavbarController extends Controller
 {
     /**
      * @deprecated
+     *
      * @param int $max
      *
      * @return Response
@@ -44,6 +44,7 @@ class NavbarController extends Controller
 
     /**
      * @deprecated
+     *
      * @param int $max
      *
      * @return Response
@@ -67,6 +68,7 @@ class NavbarController extends Controller
 
     /**
      * @deprecated
+     *
      * @param int $max
      *
      * @return Response

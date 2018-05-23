@@ -1867,5 +1867,4 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
         return true;
     }
-
 }

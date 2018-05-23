@@ -1,0 +1,80 @@
+<meta charset="utf-8">
+{# Check settings to add more metadata in app/config/sonata/sonata_seo.yml #}
+{{ sonata_seo_metadatas() }}
+<link href="https://chamilo.org/chamilo-lms/" rel="help"/>
+<link href="https://chamilo.org/the-association/" rel="author"/>
+<link href="https://chamilo.org/the-association/" rel="copyright"/>
+<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}"/>
+{% autoescape false %}
+    {{ favico }}
+{% endautoescape %}
+<title>
+{% block title %}
+    {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
+{% endblock %}
+</title>
+
+{# Check chamilo_css key in assetic.yml #}
+{#{%- stylesheets '@chamilo_css' -%}#}
+{#<link rel="stylesheet" href="{{ asset_url }}"/>#}
+{#{% endstylesheets %}#}
+{#{% stylesheets#}
+{#'@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'#}
+{#'@MopaBootstrapBundle/Resources/public/less/eyecon-datepicker.less'#}
+{#%}#}
+{#<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />#}
+{#{% endstylesheets %}#}
+{% set bug_notification_link = '' %}
+{% set help_content = '' %}
+{% set header_extra_content = '' %}
+{% set template = 'default' %}
+{% set notification_menu = '' %}
+{% set accessibility = '' %}
+{% set containerClass = '' %}
+{% set breadcrumb = '' %}
+{% set user_notifications = '' %}
+{% set message_url = '' %}
+{% set profile_link = '' %}
+{% set message_link = '' %}
+
+<link rel="stylesheet" href="{{ asset('build/chamilo.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/base.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
+<link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
+
+{# chamilo.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
+<script src="{{ asset('build/chamilo.js') }}"></script>
+<script src="{{ asset('libs/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('libs/readmore-js/readmore.min.js') }}"></script>
+<script src="{{ asset('libs/js-cookie/src/js.cookie.js') }}"></script>
+{#<script src="{{ asset('assets/modernizr/modernizr.js') }}"></script>#}
+
+{# Check chamilo_js key in assetic.yml #}
+{% block javascripts %}
+    {#{%- javascripts '@chamilo_js' -%}#}
+    {#<script src="{{ asset_url }} "></script>#}
+    {#{% endjavascripts %}#}
+
+    {#<script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}" type="text/javascript"></script>#}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    {#<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>#}
+
+    {% block chamilo_header_js %}
+        {# Loading legacy js using the $htmlHeadXtra array #}
+        {% autoescape false %}
+            {% for js in legacy_javascript %}
+                {{ js }}
+            {% endfor %}
+        {% endautoescape %}
+        {% include '@ChamiloTheme/Layout/header.js.twig' %}
+    {% endblock %}
+
+    {#'@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'#}
+
+    {#{% javascripts#}
+    {#'bundles/mopabootstrap/js/mopabootstrap-collection.js'#}
+    {#'bundles/mopabootstrap/js/mopabootstrap-subnav.js'#}
+    {#%}#}
+    {#<script type="text/javascript" src="{{ asset_url | replace({'/app_dev.php': ''}) }}"></script>#}
+    {#{% endjavascripts %}#}
+{% endblock %}

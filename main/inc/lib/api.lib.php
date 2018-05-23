@@ -821,7 +821,7 @@ function api_get_path($path = '', $configuration = [])
             SYS_TEST_PATH => 'tests/',
             WEB_TEMPLATE_PATH => 'template/',
             SYS_TEMPLATE_PATH => 'template/',
-            WEB_UPLOAD_PATH => 'app/upload/',
+            WEB_UPLOAD_PATH => 'var/upload/',
             WEB_PUBLIC_PATH => 'public/',
             SYS_PUBLIC_PATH => 'public/',
             WEB_FONTS_PATH => 'fonts/',

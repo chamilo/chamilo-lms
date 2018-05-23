@@ -132,6 +132,11 @@ sonata_admin:
 #                  items:
 #                      - sonata.admin.access_url
     assets:
+        extra_javascripts:
+            - bundles/sonatapage/sonata-page.back.min.js
+        extra_stylesheets:
+            - bundles/sonatapage/sonata-page.back.min.css
+
         stylesheets:
             # The sandbox includes default pre-optimized version of some css and js
             # So you can either use them, and add your custom assets here

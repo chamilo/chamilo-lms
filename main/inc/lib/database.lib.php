@@ -83,7 +83,7 @@ class Database
     /**
      * @return Connection
      */
-    public function getConnection()
+    public static function getConnection()
     {
         return self::$connection;
     }

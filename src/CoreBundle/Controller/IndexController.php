@@ -94,8 +94,7 @@ class IndexController extends BaseController
         return $this->render(
             '@ChamiloCore/Index/index.html.twig',
             [
-                'content' =>
-                    api_get_path(WEB_CODE_PATH).'messages/inbox.php',
+                'content' => '',
                 'announcements_block' => $announcementsBlock,
                 //'home_page_block' => $pageController->returnHomePage()
             ]

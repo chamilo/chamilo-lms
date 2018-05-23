@@ -225,7 +225,15 @@ class CustomCertificatePlugin extends Plugin
 
         return [];
     }
-    
+
+    /**
+     * Check if it redirects.
+     *
+     * @param certificate $certificate
+     * @param int         $id
+     *
+     * @return array
+     */
     public function redirectCheck($certificate, $certId)
     {
         $certId = (int) $certId;
@@ -247,13 +255,12 @@ class CustomCertificatePlugin extends Plugin
                         $extraFieldValue->saveFieldValues($params);
                     }
                 }
-                
+
                 $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php'.
                     '?student_id='.$infoCertificate['user_id'].
                     '&course_code='.$infoCertificate['course_code'].
                     '&session_id='.$infoCertificate['session_id'];
                 header('Location: '.$url);
-                exit;
             }
         }
     }

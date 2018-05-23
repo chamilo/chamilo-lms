@@ -471,7 +471,8 @@ class DisplayGradebook
                             $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
                     } else {
-                        $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath=/certificates&'.
+                        $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).
+                            'document/document.php?curdirpath=/certificates&'.
                             $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
                     }

@@ -929,5 +929,5 @@ function checkInstanceImage($certificateId, $imagePath, $field, $path) {
         @unlink($path.$imagePath);
     }
     $sql = "UPDATE $table SET $field = '' WHERE id = $certificateId";
-    $rs = Database::query($sql);
- }
+    Database::query($sql);
+}

@@ -6,7 +6,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 if (intval($_GET['default']) == 1) {
     $cidReset = true;
 }
-    
+
 $course_plugin = 'customcertificate';
 require_once __DIR__.'/../config.php';
 

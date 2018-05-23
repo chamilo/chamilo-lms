@@ -3383,8 +3383,12 @@ class Exercise
         $threadhold3 = 0;
         $arrques = null;
         $arrans = null;
-        $questionId = intval($questionId);
-        $exeId = intval($exeId);
+        $studentChoice = null;
+        $expectedAnswer = '';
+        $calculatedChoice = '';
+        $calculatedStatus = '';
+        $questionId = (int) $questionId;
+        $exeId =  (int) $exeId;
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -3446,7 +3450,7 @@ class Exercise
                 isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
             );
 
-            //probably this attempt came in an exercise all question by page
+            // Probably this attempt came in an exercise all question by page
             if ($feedback_type == 0) {
                 $objQuestionTmp->replaceWithRealExe($exeId);
             }
@@ -3509,7 +3513,6 @@ class Exercise
             $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
 
             switch ($answerType) {
-                // for unique answer
                 case UNIQUE_ANSWER:
                 case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
@@ -3535,7 +3538,6 @@ class Exercise
                         }
                     }
                     break;
-                // for multiple answers
                 case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = [];
@@ -3920,7 +3922,6 @@ class Exercise
                                         }
                                     }
                                 }
-
                                 $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
                                 $listCorrectAnswers['student_score'][$i] = $isAnswerCorrect;
                             }
@@ -3997,7 +3998,7 @@ class Exercise
                         $temp = $answer;
                         $answer = '';
                         $j = 0;
-                        //initialise answer tags
+                        // initialise answer tags
                         $userTags = $correctTags = $realText = [];
                         // the loop will stop at the end of the text
                         while (1) {
@@ -4009,10 +4010,10 @@ class Exercise
                                 break; //no more "blanks", quit the loop
                             }
                             // adds the piece of text that is before the blank
-                            //and ends with '[' into a general storage array
+                            // and ends with '[' into a general storage array
                             $realText[] = api_substr($temp, 0, $pos + 1);
                             $answer .= api_substr($temp, 0, $pos + 1);
-                            //take the string remaining (after the last "[" we found)
+                            // take the string remaining (after the last "[" we found)
                             $temp = api_substr($temp, $pos + 1);
                             // quit the loop if there are no more blanks, and update $pos to the position of next ']'
                             if (($pos = api_strpos($temp, ']')) === false) {
@@ -4028,7 +4029,6 @@ class Exercise
                                         question_id = ".intval($questionId);
                                 $result = Database::query($sql);
                                 $str = Database::result($result, 0, 'answer');
-
                                 api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                                 $str = str_replace('\r\n', '', $str);
                                 $choice = $arr[1];
@@ -4049,11 +4049,11 @@ class Exercise
                                     $choice[$j] = null;
                                 }
                             } else {
-                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                // This value is the user input not escaped while correct answer is escaped by ckeditor
                                 $choice[$j] = api_htmlentities(trim($choice[$j]));
                             }
                             $userTags[] = $choice[$j];
-                            //put the contents of the [] answer tag into correct_tags[]
+                            // put the contents of the [] answer tag into correct_tags[]
                             $correctTags[] = api_substr($temp, 0, $pos);
                             $j++;
                             $temp = api_substr($temp, $pos + 1);
@@ -4500,9 +4500,9 @@ class Exercise
                         }
                     }
                     break;
-                // @todo never added to chamilo
-                //for hotspot with fixed order
                 case HOT_SPOT_ORDER:
+                    // @todo never added to chamilo
+                    // for hotspot with fixed order
                     $studentChoice = $choice['order'][$answerId];
                     if ($studentChoice == $answerId) {
                         $questionScore += $answerWeighting;
@@ -4512,8 +4512,8 @@ class Exercise
                         $studentChoice = false;
                     }
                     break;
-                // for hotspot with delineation
                 case HOT_SPOT_DELINEATION:
+                    // for hotspot with delineation
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -4559,9 +4559,9 @@ class Exercise
                 case ANNOTATION:
                     if ($from_database) {
                         $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
-                                 WHERE 
-                                    exe_id = $exeId AND 
-                                    question_id= ".$questionId;
+                                WHERE 
+                                  exe_id = $exeId AND 
+                                  question_id= ".$questionId;
                         $resq = Database::query($sql);
                         $data = Database::fetch_array($resq);
 
@@ -4571,9 +4571,7 @@ class Exercise
                         $arrques = $questionName;
                         break;
                     }
-
                     $studentChoice = $choice;
-
                     if ($studentChoice) {
                         $questionScore = 0;
                         $totalScore += 0;

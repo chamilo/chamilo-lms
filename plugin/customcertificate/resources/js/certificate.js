@@ -9,8 +9,8 @@ function dateCertificateSwitchRadioButton1(){
 }
 
 function dateCertificateSwitchRadioButton0(){
-    $("#date_start").prop("disabled", true).val('');
-    $("#date_end").prop("disabled", true).val('');
+    $("#date_start").prop("disabled", true).val("");
+    $("#date_end").prop("disabled", true).val("");
 }
 
 function typeDateExpedictionSwitchRadioButton(){
@@ -25,7 +25,7 @@ function typeDateExpedictionSwitchRadioButton(){
 
 function contentsTypeSwitchRadioButton(){
     $("[name=\"contents_type\"]").each(function( index ) {
-        if ( $(this).is(':checked') && $(this).val() === "2") {
+        if ( $(this).is(":checked") && $(this).val() === "2") {
             $("#contents").prop("disabled", false);
         } else {
             $("#contents").prop("disabled", true);

@@ -1106,7 +1106,7 @@ if ($origin != 'learnpath') {
     if (!isset($_GET['fb_type'])) {
         $lp_mode = Session::read('lp_mode');
         $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
-        $url .= http_build_url([
+        $url .= http_build_query([
             'action' => 'view',
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,

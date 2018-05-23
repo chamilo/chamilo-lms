@@ -5874,12 +5874,13 @@ class Exercise
             '#student_complete_name#' => $user_info['complete_name'],
             '#course#' => $courseInfo['title'],
         ];
-        if ($origin != 'learnpath' && $sendEnd) {
+
+        if ($sendEnd) {
             $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             $variables['#url#'] = $url;
         }
 
-        $mail_content = str_replace(array_keys($variables), array_values($variables), $msg);
+        $content = str_replace(array_keys($variables), array_values($variables), $msg);
 
         if ($sendEnd) {
             $subject = get_lang('ExerciseAttempted');
@@ -5892,7 +5893,7 @@ class Exercise
                 MessageManager::send_message_simple(
                     $user_id,
                     $subject,
-                    $mail_content
+                    $content
                 );
             }
         }

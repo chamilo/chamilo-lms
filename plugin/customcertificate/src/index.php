@@ -61,7 +61,7 @@ if ($enable) {
             '*',
             $table,
             ['where' => [
-                'access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId]]
+                'access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId], ],
             ],
             'first'
         );
@@ -127,7 +127,7 @@ if ($enable) {
                 // Image manager
                 $base = api_get_path(SYS_UPLOAD_PATH);
                 $pathCertificates = $base.'certificates';
-                
+
                 $fieldList = [
                     'logo_left',
                     'logo_center',
@@ -139,7 +139,7 @@ if ($enable) {
                     'signature4',
                     'background',
                 ];
-                
+
                 foreach ($fieldList as $field) {
                     $checkLogo[$field] = false;
                     if (!empty($formValues['remove_'.$field]) || $_FILES[$field]['size']) {
@@ -150,7 +150,7 @@ if ($enable) {
                             $pathCertificates
                         );
                     }
-                    
+
                     if ($_FILES[$field]['size']) {
                         $newPicture = api_upload_file(
                             'certificates',
@@ -167,7 +167,7 @@ if ($enable) {
                         }
                     }
                 }
-                
+
                 // Certificate Default
                 if (intval($formValues['use_default'] == 1)) {
                     $base = api_get_path(SYS_UPLOAD_PATH);
@@ -921,7 +921,8 @@ if ($enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-function checkInstanceImage($certificateId, $imagePath, $field, $path) {
+function checkInstanceImage($certificateId, $imagePath, $field, $path)
+{
     $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);

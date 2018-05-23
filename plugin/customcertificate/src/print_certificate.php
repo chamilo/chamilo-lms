@@ -459,7 +459,8 @@ $params = [
 $pdf = new PDF($params['format'], $params['orientation'], $params);
 $pdf->content_to_pdf($htmlText, '', $fileName, null, 'I', false, null, false, true, false);
 
-function getIndexFiltered($index) {
+function getIndexFiltered($index)
+{
     $txt = strip_tags($index, "<b><strong><i>");
     $txt = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $txt);
     $lines = explode(chr(13).chr(10), $txt);

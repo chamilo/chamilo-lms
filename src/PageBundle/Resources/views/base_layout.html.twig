@@ -1,7 +1,6 @@
 {% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
 
 {% block page_content %}
-
     {% block sonata_page_top_bar %}
         {% block page_top_bar %} {# Deprecated block #}
             {% if sonata_page.isEditor or ( app.user and is_granted('ROLE_PREVIOUS_ADMIN') ) %}
@@ -149,6 +148,7 @@
                     </div>
                 {% endif %}
 
+                {% block sonata_page_content %}
                 <div class="row">
                     {% if content is defined %}
                         {{ content|raw }}
@@ -161,6 +161,8 @@
                         {% endif %}
                     {% endif %}
                 </div>
+                {% endblock %}
+
 
                 {% if page is defined %}
                     <div class="row">
@@ -172,13 +174,13 @@
                 {% endif %}
             </div>
 
-             <div class="row">
-                 {{ sonata_page_render_container('footer', 'global') }}
-                 {% if page.name != 'global' %}
-                     {{ sonata_page_render_container('footer', page) }}
-                 {% endif %}
-             </div>
-         </div>
+            <div class="row">
+                {{ sonata_page_render_container('footer', 'global') }}
+                {% if page.name != 'global' %}
+                    {{ sonata_page_render_container('footer', page) }}
+                {% endif %}
+            </div>
+        </div>
     {% endblock %}
 {% endblock %}
 

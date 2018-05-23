@@ -18,6 +18,7 @@ sonata_media:
                 - sonata.media.provider.vimeo
             formats:
                 small: {width: 100, quality: 100}
+                medium: {width: 300, quality: 100}
                 big: {width: 970, quality: 100}
         course:
             providers:
@@ -34,7 +35,6 @@ sonata_media:
                 - sonata.media.provider.dailymotion
                 - sonata.media.provider.youtube
                 - sonata.media.provider.image
-
             formats:
                 abstract: {width: 100, quality: 100}
                 wide: {width: 820, quality: 100}
@@ -55,14 +55,13 @@ sonata_media:
         user:
             providers:
                 - sonata.media.provider.image
-
             formats:
                 small: {width: 100, quality: 100}
                 big: {width: 970, quality: 100}
     cdn:
         # define the public base url for the uploaded media
         server:
-            path: '%url_append%%sonata_media.cdn.host%'
+            path: '%sonata_media.cdn.host%'
     filesystem:
         # define where the uploaded file will be stored
         local:
@@ -74,6 +73,7 @@ sonata_media:
             # the resizer must be set to false, otherwhise this can delete icon files from the fs
             resizer: false
         image:
+#            resizer: sonata.media.resizer.square
             thumbnail: sonata.media.thumbnail.format          # default value
 #           thumbnail: sonata.media.thumbnail.consumer.format # can be used to dispatch the resize action to async task
 #            thumbnail: sonata.media.thumbnail.liip_imagine    # use the LiipImagineBundle to resize the image

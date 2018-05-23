@@ -65,23 +65,21 @@ file that was distributed with this source code.
         {% endfor %}
     {% endblock %}
 
-        {% set locale = app.request.locale %}
         {# localize moment #}
-        {% if locale[:2] != 'en' %}
+        {% set localeForMoment = canonicalize_locale_for_moment() %}
+        {% if localeForMoment %}
         <script src="{{ asset(
             'bundles/sonatacore/vendor/moment/locale/' ~
-            locale|lower|replace({'_':'-'}) ~
+            localeForMoment ~
             '.js'
         ) }}"></script>
         {% endif %}
 
         {# localize select2 #}
         {% if sonata_admin.adminPool.getOption('use_select2') %}
-        {% if locale == 'pt' %}{% set locale = 'pt_PT' %}{% endif %}
-
-        {# omit default EN locale #}
-        {% if locale[:2] != 'en' %}
-        <script src="{{ asset('bundles/sonatacore/vendor/select2/select2_locale_' ~ locale|replace({'_':'-'}) ~ '.js') }}"></script>
+        {% set localeForSelect2 = canonicalize_locale_for_select2() %}
+        {% if localeForSelect2 %}
+        <script src="{{ asset('bundles/sonatacore/vendor/select2/select2_locale_' ~ localeForSelect2 ~ '.js') }}"></script>
         {% endif %}
         {% endif %}
     {% endblock %}
@@ -150,7 +148,7 @@ file that was distributed with this source code.
             {% block sonata_nav %}
                 <nav class="navbar navbar-static-top" role="navigation">
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only">{{ 'toggle_navigation'|trans({}, 'SonataAdminBundle') }}</span>
                     </a>
 
                     <div class="navbar-left">
@@ -204,7 +202,7 @@ file that was distributed with this source code.
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                                 <i class="fa fa-plus-square fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             </a>
-                                            {% include sonata_admin.adminPool.getTemplate('add_block') %}
+                                            {% include get_global_template('add_block') %}
                                         </li>
                                     {% endblock %}
                                     {% block sonata_top_nav_menu_user_block %}
@@ -213,7 +211,7 @@ file that was distributed with this source code.
                                                 <i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             </a>
                                             <ul class="dropdown-menu dropdown-user">
-                                                {% include sonata_admin.adminPool.getTemplate('user_block') %}
+                                                {% include get_global_template('user_block') %}
                                             </ul>
                                         </li>
                                     {% endblock %}
@@ -232,26 +230,27 @@ file that was distributed with this source code.
                 <section class="sidebar">
                     {% block sonata_side_nav %}
                         {% block sonata_sidebar_search %}
-                            <form action="{{ path('sonata_admin_search') }}" method="GET" class="sidebar-form" role="search">
-                                <div class="input-group custom-search-form">
-                                    <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
-                                    <span class="input-group-btn">
-                                            <button class="btn btn-flat" type="submit">
-                                                <i class="fa fa-search" aria-hidden="true"></i>
-                                            </button>
-                                        </span>
-                                </div>
-                            </form>
+                            {% if sonata_admin.adminPool.getOption('search') %}
+                                <form action="{{ path('sonata_admin_search') }}" method="GET" class="sidebar-form" role="search">
+                                    <div class="input-group custom-search-form">
+                                        <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
+                                        <span class="input-group-btn">
+                                                <button class="btn btn-flat" type="submit">
+                                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                                </button>
+                                            </span>
+                                    </div>
+                                </form>
+                            {% endif %}
                         {% endblock sonata_sidebar_search %}
 
                         {% block side_bar_before_nav %} {% endblock %}
                         {% block side_bar_nav %}
-                            {{ knp_menu_render('sonata_admin_sidebar', {template: sonata_admin.adminPool.getTemplate('knp_menu_template')}) }}
+                            {{ knp_menu_render('sonata_admin_sidebar', {template: get_global_template('knp_menu_template')}) }}
                         {% endblock side_bar_nav %}
                         {% block side_bar_after_nav %}
                             <p class="text-center small" style="border-top: 1px solid #444444; padding-top: 10px">
                                 {% block side_bar_after_nav_content %}
-                                    <a href="https://sonata-project.org" rel="noreferrer" target="_blank">sonata project</a>
                                 {% endblock %}
                             </p>
                         {% endblock %}

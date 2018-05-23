@@ -1,7 +1,6 @@
 sonata_block:
     context_manager: sonata.page.block.context_manager
     default_contexts: [sonata_page_bundle]
-
     http_cache:
         listener: true
 #    menus:
@@ -10,16 +9,15 @@ sonata_block:
 
     blocks:
         # Chamilo blocks
-        chamilo_core.block.breadcrumb: ~
-        chamilo_core.block.course: ~
-        chamilo_core.block.skill: ~
+#        chamilo_core.block.breadcrumb: ~
+#        chamilo_core.block.course: ~
+#        chamilo_core.block.skill: ~
         sonata.admin.block.stats:
             contexts: [admin]
         sonata.admin.block.admin_list:
             contexts: [admin]
         sonata.admin.block.search_result:
             contexts: [admin]
-
         sonata.admin_doctrine_orm.block.audit:
             contexts: [admin]
 

@@ -1,0 +1,62 @@
+{% extends '@SonataBlock/Block/block_base.html.twig' %}
+
+{% block block %}
+    {% if settings.format %}
+        <div class="{{ settings.class }}">
+            {% if settings.title %}
+                <h3>
+                    {% if settings.icon %}
+                        <i class="{{ settings.icon }}" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if settings.translation_domain %}
+                        {{ settings.title|trans({}, settings.translation_domain) }}
+                    {% else %}
+                        {{ settings.title }}
+                    {% endif %}
+                </h3>
+            {% endif %}
+
+            <div id="carousel-{{ block.id }}" class="carousel slide"
+                 data-interval="{{ settings.pauseTime }}"
+                 {% if settings.startPaused != 1 %}data-ride="carousel"{% endif %}
+            >
+
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    {% for element in elements %}
+                        {{ block('element_indicator') }}
+                    {% endfor %}
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    {% for element in elements %}
+                        {{ block('element_display') }}
+                    {% endfor %}
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-{{ block.id }}" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-{{ block.id }}" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block element_indicator %}
+    <li data-target="#carousel-{{ block.id }}" data-slide-to="{{ loop.index0 }}"{% if loop.first %} class="active"{% endif %}></li>
+{% endblock element_indicator %}
+
+{% block element_display %}
+    <div class="item{% if loop.first %} active{% endif %}">
+        {% media element.media, settings.format %}
+        <div class="carousel-caption">
+            <h4>{{ element.title }}</h4>
+            <p>{{ element.caption }}</p>
+        </div>
+    </div>
+{% endblock element_display %}

@@ -59,8 +59,9 @@ class NavBuilder implements ContainerAwareInterface
      */
     public function leftMenu(FactoryInterface $factory, array $options)
     {
-        $checker = $this->container->get('security.authorization_checker');
-        $translator = $this->container->get('translator');
+        $container = $this->container;
+        $checker = $container->get('security.authorization_checker');
+        $translator = $container->get('translator');
 
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
@@ -134,8 +135,8 @@ class NavBuilder implements ContainerAwareInterface
             }
         }
 
-        $categories = $this->container->get('doctrine')->getRepository('ChamiloFaqBundle:Category')->retrieveActive();
-        //$categories = $this->container->get('Chamilo\FaqBundle\Repository\CategoryRepository')->retrieveActive();
+        $categories = $container->get('doctrine')->getRepository('ChamiloFaqBundle:Category')->retrieveActive();
+        //$categories = $container->get('Chamilo\FaqBundle\Repository\CategoryRepository')->retrieveActive();
         if ($categories) {
             $faq = $menu->addChild(
                 'FAQ',
@@ -159,9 +160,9 @@ class NavBuilder implements ContainerAwareInterface
         }
 
         // Getting site information
-        $site = $this->container->get('sonata.page.site.selector');
+        $site = $container->get('sonata.page.site.selector');
         $host = $site->getRequestContext()->getHost();
-        $siteManager = $this->container->get('sonata.page.manager.site');
+        $siteManager = $container->get('sonata.page.manager.site');
         /** @var Site $site */
         $site = $siteManager->findOneBy([
             'host' => [$host, 'localhost'],
@@ -169,8 +170,7 @@ class NavBuilder implements ContainerAwareInterface
         ]);
 
         if ($site) {
-            $pageManager = $this->container->get('sonata.page.manager.page');
-
+            $pageManager = $container->get('sonata.page.manager.page');
             // Parents only of homepage
             $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1];
             $pages = $pageManager->findBy($criteria);

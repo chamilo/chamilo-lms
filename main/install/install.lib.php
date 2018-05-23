@@ -2924,7 +2924,7 @@ function finishInstallationWithContainer(
 
     $page = $pageManager->create();
     $page->setSlug('homepage');
-    $page->setUrl('/homepage');
+    $page->setUrl('/');
     $page->setName('homepage');
     $page->setTitle('home');
     $page->setEnabled(true);

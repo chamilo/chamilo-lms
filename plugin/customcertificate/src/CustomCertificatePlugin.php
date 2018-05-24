@@ -236,7 +236,6 @@ class CustomCertificatePlugin extends Plugin
      *
      * @param certificate $certificate
      * @param int         $certId
-     *
      */
     public static function redirectCheck($certificate, $certId)
     {

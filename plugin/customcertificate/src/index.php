@@ -53,7 +53,6 @@ if (!$allow) {
     api_not_allowed(true);
 }
 
-
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $htmlHeadXtra[] = api_get_js_simple(
     api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/js/certificate.js'

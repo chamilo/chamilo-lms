@@ -267,6 +267,35 @@ class MessageManager
     }
 
     /**
+     * @param int    $senderId
+     * @param int    $receiverId
+     * @param string $subject
+     * @param string $message
+     *
+     * @return bool
+     */
+    public static function messageWasAlreadySent($senderId, $receiverId, $subject, $message)
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $senderId = (int) $senderId;
+        $receiverId = (int) $receiverId;
+        $subject = Database::escape_string($subject);
+        $message = Database::escape_string($message);
+
+        $sql = "SELECT * FROM $table
+                WHERE 
+                    user_sender_id = $senderId AND
+                    user_receiver_id = $receiverId AND 
+                    title = '$subject' AND 
+                    content = '$message' AND
+                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.") 
+                    
+                ";
+        $result = Database::query($sql);
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
      * Sends a message to a user/group.
      *
      * @param int    $receiver_user_id

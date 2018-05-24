@@ -7,12 +7,17 @@
  * @package chamilo.plugin.notebookteacher
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
+ * @author Julio Montoya
+ *
  */
 class NotebookTeacherPlugin extends Plugin
 {
     const TABLE_NOTEBOOKTEACHER = 'plugin_notebook_teacher';
     public $isCoursePlugin = true;
 
+    /**
+     * NotebookTeacherPlugin constructor.
+     */
     protected function __construct()
     {
         parent::__construct(
@@ -41,7 +46,7 @@ class NotebookTeacherPlugin extends Plugin
      */
     public function install()
     {
-        //Installing course settings
+        // Installing course settings
         $this->install_course_fields_in_all_courses();
 
         $tablesToBeCompared = [self::TABLE_NOTEBOOKTEACHER];
@@ -87,6 +92,9 @@ class NotebookTeacherPlugin extends Plugin
         $this->manageTab(false);
     }
 
+    /**
+     * Update.
+     */
     public function update()
     {
         $tableNotebookTeacher = self::TABLE_NOTEBOOKTEACHER;

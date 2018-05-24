@@ -199,7 +199,7 @@ class CustomCertificatePlugin extends Plugin
      *
      * @return array
      */
-    public function getCertificateData($id)
+    public static function getCertificateData($id)
     {
         $id = (int) $id;
         if (empty($id)) {
@@ -238,7 +238,7 @@ class CustomCertificatePlugin extends Plugin
      * @param int         $certId
      *
      */
-    public function redirectCheck($certificate, $certId)
+    public static function redirectCheck($certificate, $certId)
     {
         $certId = (int) $certId;
         if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true') {

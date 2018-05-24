@@ -32,7 +32,7 @@ class CustomCertificatePlugin extends Plugin
     {
         parent::__construct(
             '1.0',
-            'Jose Angel Ruiz - NoSoloRed (original author)',
+            'Jose Angel Ruiz - NoSoloRed (original author), Julio Montoya',
             [
                 'enable_plugin_customcertificate' => 'boolean',
             ]
@@ -82,7 +82,7 @@ class CustomCertificatePlugin extends Plugin
     public function uninstall()
     {
         // Deleting course settings.
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
+        $this->uninstall_course_fields_in_all_courses();
 
         $tablesToBeDeleted = [self::TABLE_CUSTOMCERTIFICATE];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -138,10 +138,9 @@ class CustomCertificatePlugin extends Plugin
                     'certificate_default' => 0,
                 ];
 
-                Database::insert(self::TABLE_CUSTOMCERTIFICATE, $params);
-                $certificateId = Database::insert_id();
+                $certificateId = Database::insert(self::TABLE_CUSTOMCERTIFICATE, $params);
 
-                //Image manager
+                // Image manager
                 $pathDestiny = $base.'certificates/'.$certificateId.'/';
 
                 if (!file_exists($pathDestiny)) {
@@ -172,8 +171,7 @@ class CustomCertificatePlugin extends Plugin
                     $params['c_id'] = 0;
                     $params['session_id'] = 0;
                     $params['certificate_default'] = 1;
-                    Database::insert(self::TABLE_CUSTOMCERTIFICATE, $params);
-                    $certificateId = Database::insert_id();
+                    $certificateId = Database::insert(self::TABLE_CUSTOMCERTIFICATE, $params);
                     $pathOrigin = $base.'certificates/default/';
                     $pathDestiny = $base.'certificates/'.$certificateId.'/';
                     foreach ($imgList as $value) {
@@ -205,7 +203,7 @@ class CustomCertificatePlugin extends Plugin
     {
         $id = (int) $id;
         if (empty($id)) {
-            return false;
+            return [];
         }
 
         $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
@@ -237,9 +235,8 @@ class CustomCertificatePlugin extends Plugin
      * Check if it redirects.
      *
      * @param certificate $certificate
-     * @param int         $id
+     * @param int         $certId
      *
-     * @return array
      */
     public function redirectCheck($certificate, $certId)
     {
@@ -268,6 +265,7 @@ class CustomCertificatePlugin extends Plugin
                     '&course_code='.$infoCertificate['course_code'].
                     '&session_id='.$infoCertificate['session_id'];
                 header('Location: '.$url);
+                exit;
             }
         }
     }

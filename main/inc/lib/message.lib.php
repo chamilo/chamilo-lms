@@ -292,6 +292,7 @@ class MessageManager
                     
                 ";
         $result = Database::query($sql);
+
         return Database::num_rows($result) > 0;
     }
 

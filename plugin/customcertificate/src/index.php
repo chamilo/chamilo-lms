@@ -125,9 +125,6 @@ if ($enable) {
                 }
 
                 // Image manager
-                $base = api_get_path(SYS_UPLOAD_PATH);
-                $pathCertificates = $base.'certificates';
-
                 $fieldList = [
                     'logo_left',
                     'logo_center',
@@ -146,8 +143,7 @@ if ($enable) {
                         checkInstanceImage(
                             $certificateId,
                             $infoCertificate[$field],
-                            $field,
-                            $pathCertificates
+                            $field
                         );
                     }
 
@@ -170,8 +166,6 @@ if ($enable) {
 
                 // Certificate Default
                 if (intval($formValues['use_default'] == 1)) {
-                    $base = api_get_path(SYS_UPLOAD_PATH);
-
                     $infoCertificateDefault = Database::select(
                         '*',
                         $table,
@@ -921,14 +915,25 @@ if ($enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-function checkInstanceImage($certificateId, $imagePath, $field, $path)
+/**
+ * Delete the file if there is only one instance.
+ *
+ * @param int    $certificateId
+ * @param string $imagePath
+ * @param string $field
+ * @param string $type
+ */
+function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certificates')
 {
     $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
+    $imagePath = Database::escape_string($imagePath);
+
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);
     if (Database::num_rows($res) == 1) {
-        @unlink($path.$imagePath);
+        api_remove_uploaded_file($type, $imagePath);
     }
+
     $sql = "UPDATE $table SET $field = '' WHERE id = $certificateId";
     Database::query($sql);
 }

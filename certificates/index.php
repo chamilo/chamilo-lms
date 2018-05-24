@@ -10,7 +10,7 @@ require_once '../main/inc/global.inc.php';
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $certificate = new Certificate($_GET['id']);
 
-CustomCertificatePlugin::redirectCheck($certificate, intval($_GET['id']));
+CustomCertificatePlugin::redirectCheck($certificate, $_GET['id']);
 
 switch ($action) {
     case 'export':

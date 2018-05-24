@@ -15,16 +15,19 @@ class CustomCertificatePlugin extends Plugin
 
     // When creating a new course this settings are added to the course
     public $course_settings = [
-            [
-                    'name' => 'customcertificate_course_enable',
-                    'type' => 'checkbox',
-            ],
-            [
-                    'name' => 'use_certificate_default',
-                    'type' => 'checkbox',
-            ],
+        [
+            'name' => 'customcertificate_course_enable',
+            'type' => 'checkbox',
+        ],
+        [
+            'name' => 'use_certificate_default',
+            'type' => 'checkbox',
+        ],
     ];
 
+    /**
+     * Constructor.
+     */
     protected function __construct()
     {
         parent::__construct(
@@ -39,6 +42,10 @@ class CustomCertificatePlugin extends Plugin
     }
 
     /**
+     * Instance the plugin.
+     *
+     * @staticvar null $result
+     *
      * @return CustomCertificatePlugin
      */
     public static function create()
@@ -190,7 +197,7 @@ class CustomCertificatePlugin extends Plugin
     /**
      * Get certificate data.
      *
-     * @param Certificate $id The certificate
+     * @param int $id The certificate
      *
      * @return array
      */

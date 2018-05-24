@@ -257,8 +257,6 @@ if (isset($_REQUEST['comments']) &&
             Display::addFlash(
                 Display::return_message(get_lang('MessageSent'))
             );
-            header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId);
-            exit;
         }
     }
 

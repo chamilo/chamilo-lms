@@ -2082,3 +2082,7 @@ blockquote p {
     font-size: 13px;
     font-weight: bold;
 }
+
+.toolbar-cookie {
+    bottom:50px;
+}

@@ -3388,7 +3388,7 @@ class Exercise
         $calculatedChoice = '';
         $calculatedStatus = '';
         $questionId = (int) $questionId;
-        $exeId =  (int) $exeId;
+        $exeId = (int) $exeId;
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 

@@ -8,7 +8,6 @@
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  * @author Julio Montoya
- *
  */
 class NotebookTeacherPlugin extends Plugin
 {
@@ -81,7 +80,7 @@ class NotebookTeacherPlugin extends Plugin
     public function uninstall()
     {
         // Deleting course settings.
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
+        $this->uninstall_course_fields_in_all_courses();
 
         $tablesToBeDeleted = [self::TABLE_NOTEBOOKTEACHER];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {

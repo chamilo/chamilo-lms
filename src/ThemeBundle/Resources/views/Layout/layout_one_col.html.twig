@@ -46,6 +46,7 @@
 
                     {% block chamilo_messages %}
                     {% autoescape false %}
+                    {{ flash_messages }}
                     {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
                     {% endautoescape %}
                     {% endblock %}

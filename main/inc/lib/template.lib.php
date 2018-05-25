@@ -391,7 +391,10 @@ class Template
      */
     public function returnResponse($params, $template)
     {
+        $flash = Display::getFlashToString();
+        Display::cleanFlashMessages();
         $response = new Response();
+        $params['flash_messages'] = $flash;
         $content = Container::getTemplating()->render($template, $params);
         $response->setContent($content);
         $response->send();

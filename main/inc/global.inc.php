@@ -53,9 +53,9 @@ try {
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
     $request->request->set('load_legacy', true);
-
     $request->setBaseUrl($request->getRequestUri());
     $response = $kernel->handle($request);
+    $container = $kernel->getContainer();
 
     if ($kernel->isInstalled()) {
         require_once $kernel->getConfigurationFile();
@@ -102,7 +102,6 @@ try {
     $context = $container->get('router.request_context');
     $host = $router->getContext()->getHost();
     $context->setBaseUrl($appendValue);
-
     $container->set('router.request_context', $context);
     $packages = $container->get('assets.packages');
 

@@ -66,4 +66,6 @@ return [
     HWI\Bundle\OAuthBundle\HWIOAuthBundle::class => ['all' => true],
     Liip\ThemeBundle\LiipThemeBundle::class => ['all' => true],
     Ivory\CKEditorBundle\IvoryCKEditorBundle::class => ['all' => true],
+    A2lix\AutoFormBundle\A2lixAutoFormBundle::class => ['all' => true],
+    A2lix\TranslationFormBundle\A2lixTranslationFormBundle::class => ['all' => true],
 ];

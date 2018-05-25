@@ -102,8 +102,6 @@
         "sonata-project/user-bundle": "~4.0",
         "sonata-project/formatter-bundle": "~3.0",
 
-        "egeloen/ckeditor-bundle": "~5.0|~6.0",
-
         "stephpy/timeline-bundle": "~3.0",
         "stof/doctrine-extensions-bundle": "~1.0",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
@@ -115,7 +113,6 @@
         "gedmo/doctrine-extensions": "~2.4",
         "gregwar/captcha-bundle": "^2.0",
         "helios-ag/fm-elfinder-bundle": "~8.0",
-
 
         "knplabs/gaufrette": "~0.5",
         "knplabs/doctrine-behaviors": "~1.5",
@@ -161,7 +158,8 @@
         "php-http/httplug-bundle": "^1.8",
         "knplabs/knp-menu-bundle": "^2.0",
         "symfony/requirements-checker": "^1.1",
-        "liip/theme-bundle": "^1.5"
+        "liip/theme-bundle": "^1.5",
+        "a2lix/translation-form-bundle": "^3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",

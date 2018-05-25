@@ -1,0 +1,10 @@
+#sonata_translation:
+#    locales: [en, fr]
+#    default_locale: en
+#    # here enable the types you need
+#    gedmo:
+#        enabled: true
+#    knplabs:
+#        enabled: true
+
+

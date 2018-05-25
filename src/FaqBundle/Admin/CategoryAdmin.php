@@ -3,6 +3,7 @@
 
 namespace Chamilo\FaqBundle\Admin;
 
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -64,7 +65,7 @@ class CategoryAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('translations', 'a2lix_translations', [])
+            ->add('translations', TranslationsType::class, [])
             ->add('rank', null, ['required' => false])
 //            ->add('slug')
             ->add('isActive')

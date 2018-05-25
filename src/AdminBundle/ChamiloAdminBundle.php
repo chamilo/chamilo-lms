@@ -12,11 +12,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloAdminBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return 'SonataAdminBundle';
-    }
 }

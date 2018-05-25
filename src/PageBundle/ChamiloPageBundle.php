@@ -12,11 +12,5 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloPageBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return 'SonataPageBundle';
-    }
+
 }

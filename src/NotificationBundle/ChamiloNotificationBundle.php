@@ -10,11 +10,5 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloNotificationBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return 'SonataNotificationBundle';
-    }
+
 }

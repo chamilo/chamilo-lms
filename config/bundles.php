@@ -61,9 +61,9 @@ return [
     Http\HttplugBundle\HttplugBundle::class => ['all' => true],
     Oneup\FlysystemBundle\OneupFlysystemBundle::class => ['all' => true],
     Sonata\CacheBundle\SonataCacheBundle::class => ['all' => true],
-    Ivory\CKEditorBundle\IvoryCKEditorBundle::class => ['all' => true],
     Knp\Bundle\MarkdownBundle\KnpMarkdownBundle::class => ['all' => true],
     Sonata\FormatterBundle\SonataFormatterBundle::class => ['all' => true],
     HWI\Bundle\OAuthBundle\HWIOAuthBundle::class => ['all' => true],
     Liip\ThemeBundle\LiipThemeBundle::class => ['all' => true],
+    Ivory\CKEditorBundle\IvoryCKEditorBundle::class => ['all' => true],
 ];

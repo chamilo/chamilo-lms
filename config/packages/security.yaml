@@ -41,12 +41,10 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT # if you are not using acl then this line must be uncommented
             - ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT
         ROLE_ANONYMOUS: [ROLE_ANONYMOUS]
-
     #access_decision_manager:
         # strategy can be: affirmative, unanimous or consensus
         # only grant access if none of the voters has denied access
         #strategy: unanimous
-
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:

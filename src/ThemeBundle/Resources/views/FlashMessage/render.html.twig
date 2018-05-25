@@ -1,4 +1,9 @@
+{% autoescape false %}
 
+{# Legacy chamilo messages #}
+{{ flash_messages }}
+
+{# new flash messages when using controller #}
 {% for type in sonata_flashmessages_types() %}
     {% set domain = domain is defined ? domain : null %}
     {% for message in sonata_flashmessages_get(type, domain) %}
@@ -12,3 +17,5 @@
         {% endif %}
     {% endfor %}
 {% endfor %}
+
+{% endautoescape %}

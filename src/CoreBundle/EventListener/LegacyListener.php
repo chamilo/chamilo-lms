@@ -48,9 +48,10 @@ class LegacyListener
         $container->get('router.default')->setContext($context);*/
 
         // Setting container
+        Container::setRequest($request);
         Container::setContainer($container);
         Container::setLegacyServices($container);
-        Container::setRequest($request);
+
 
         // Legacy way of detect current access_url
         $installed = $container->getParameter('installed');

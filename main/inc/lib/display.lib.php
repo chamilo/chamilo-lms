@@ -152,6 +152,11 @@ class Display
         global $interbreadcrumb, $htmlHeadXtra;
         $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
+
+        $flash = Display::getFlashToString();
+        Display::cleanFlashMessages();
+        $params['flash_messages'] = $flash;
+
         $content = Container::getTemplating()->render($tpl, $params);
         $response->setContent($content);
         $response->send();

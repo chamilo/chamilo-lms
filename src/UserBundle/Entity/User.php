@@ -277,7 +277,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     //protected $jurySubscriptions;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group")
+     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group", inversedBy="users")
      * @ORM\JoinTable(name="fos_user_user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}

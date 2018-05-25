@@ -45,4 +45,3 @@ sonata_user_admin_security_logout:
 liip_theme:
     resource: "@LiipThemeBundle/Resources/config/routing.xml"
     prefix: /theme
-

@@ -718,13 +718,8 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $course_folder = 'courses/';
-    static $root_web = '';
-
-    //var_dump(Container::getRouter()->generate('legacy_index'));
-
     $root_sys = Container::getRootDir();
     $root_web = '';
-
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
     if (empty($root_web) || $emptyConfigurationParam === false || empty($configuration)) {
@@ -766,7 +761,6 @@ function api_get_path($path = '', $configuration = [])
             \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
         );
         $root_web = urldecode($root_web);
-        //$root_web = str_replace('/../', '', $root_web);
     }
 
     if (isset($configuration['multiple_access_urls']) &&
@@ -843,8 +837,9 @@ function api_get_path($path = '', $configuration = [])
         }
 
         // Support for the installation process.
-        // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
-        // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
+        // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced),
+        // at the moment when configuration has not been created yet. This is why this function should be
+        // upgraded to return correct results in this case.
 
         // Dealing with trailing slashes.
         $slashed_root_web = api_add_trailing_slash($root_web);
@@ -919,7 +914,6 @@ function api_get_path($path = '', $configuration = [])
             //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
             //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
         }
-
         $isInitialized[$root_web] = true;
     }
 
@@ -931,7 +925,6 @@ function api_get_path($path = '', $configuration = [])
     }
 
     // Second purification.
-
     // Replacing Windows back slashes.
     $path = str_replace('\\', '/', $path);
     // Query strings sometimes mighth wrongly appear in non-URLs.
@@ -941,7 +934,6 @@ function api_get_path($path = '', $configuration = [])
     }
 
     // Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
-
     if (preg_match(VALID_WEB_PATH, $path)) {
         // A special case: When a URL points to the document download script directly, without
         // mod-rewrite translation, we have to translate it into an "ordinary" web path.

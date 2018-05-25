@@ -15,3 +15,4 @@ sonata_user_admin_resetting:
 sonata_media_pixlr:
     resource: '@SonataMediaBundle/Resources/config/routing/pixlr.xml'
     prefix: /media
+

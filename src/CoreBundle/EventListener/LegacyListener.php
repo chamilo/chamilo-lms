@@ -52,7 +52,6 @@ class LegacyListener
         Container::setContainer($container);
         Container::setLegacyServices($container);
 
-
         // Legacy way of detect current access_url
         $installed = $container->getParameter('installed');
         $urlId = 1;

@@ -33,7 +33,10 @@
         </div>
         {# topbar #}
         {% block chamilo_topbar %}
+            {# creatable variable is set by the sonata page #}
+            {% if not creatable %} }}
             {% include "@ChamiloTheme/Layout/topbar.html.twig" %}
+            {% endif %}
         {% endblock %}
 
         <div class="extra-header">{{ header_extra_content }}</div>
@@ -95,8 +98,11 @@
             <section id="menu-bar">
             {# menu #}
             {% block chamilo_menu %}
-                {# course navigation links/shortcuts need to be activated by the admin #}
-                {% include "@ChamiloTheme/Layout/menu.html.twig" %}
+                {# creatable variable is set by the sonata page #}
+                {% if not creatable %} }}
+                    {# course navigation links/shortcuts need to be activated by the admin #}
+                    {% include "@ChamiloTheme/Layout/menu.html.twig" %}
+                {% endif %}
             {% endblock %}
             </section>
         </header>

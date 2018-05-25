@@ -80,6 +80,8 @@ sonata_page:
 
         javascripts:
             - assetic/sonata_front_js.js
+    page_defaults:
+        homepage: {decorate: false, enabled: true}
     default_template: default
     templates:
         default:
@@ -139,9 +141,6 @@ sonata_page:
                     R: right_col
                     B: content_bottom
                     F: footer
-    page_defaults:
-        homepage: {decorate: false, enabled: true}
-        home: {decorate: false, enabled: true}
     caches:
         esi:
             token: add an unique token here # default is a random value
@@ -150,9 +149,9 @@ sonata_page:
                 - '%sonata_page.varnish.command%' # you need to adapt this line to work with your configuration
         ssi:
             token: add an unique token here # default is a random value
-#    catch_exceptions:
-#        not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
-#        fatal: [500]    # so you can use the same page for different http errors or specify specific page for each error
+    catch_exceptions:
+        not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
+        fatal: [500]    # so you can use the same page for different http errors or specify specific page for each error
 # Enable Doctrine to map the provided entities
 doctrine:
     orm:

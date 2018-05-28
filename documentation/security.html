@@ -108,33 +108,32 @@ This will prevent direct access to your settings and make it seem totally the sa
         your VirtualHost definition in Apache (you'll have to translate it for
         Nginx configurations), where "/var/www/URL/" is the path of your VirtualHost web root:<br />
         <pre>
-  <Directory /var/www/URL/app/cache>
+  &lt;Directory /var/www/URL/app/cache&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/app/courses>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/app/courses&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/app/home>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/app/home&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/app/logs>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/app/logs&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/app/upload>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/app/upload&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/main/default_course_document/images>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/main/default_course_document/images&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/main/lang>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/main/lang&gt;
     php_admin_value engine Off
-  </Directory>
-  <Directory /var/www/URL/web/css>
+  &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/web/css&gt;
     php_admin_value engine Off
-  </Directory>
+  &lt;/Directory&gt;
         </pre>
-
-
+    <br />
 <hr />
 <h2><a name="6.HSTS">HTTP Headers Security</a></h2>
     <p>A relatively recent development in web security, HTTP headers can be modified either

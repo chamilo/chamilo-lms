@@ -48,6 +48,7 @@ sonata_page:
         - sylius_flow(.*)
     ignore_routes:
         - home
+        - edit_welcome
         - elfinder
         - login
         - logout

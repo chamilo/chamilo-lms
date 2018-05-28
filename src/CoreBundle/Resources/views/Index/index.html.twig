@@ -2,6 +2,8 @@
 
 {% block chamilo_right_column %}
     {% autoescape false %}
+        {{ render(controller('ChamiloCoreBundle:Index:welcome')) }}
+
         {{ announcements_block }}
         {{ content }}
         {% if chamilo_settings_get('display.show_hot_courses') == 'true' %}

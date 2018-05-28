@@ -1,0 +1,11 @@
+{% extends "@ChamiloTheme/Layout/layout_two_col.html.twig" %}
+
+{% block chamilo_right_column %}
+
+Edit welcome!
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+{% endblock %}

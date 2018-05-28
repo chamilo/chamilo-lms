@@ -7,12 +7,16 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\PageController;
+use Chamilo\PageBundle\Entity\Block;
 use Chamilo\UserBundle\Entity\User;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sonata\PageBundle\Model\Page;
 use Sylius\Component\Attribute\AttributeType\TextAttributeType;
 use Sylius\Component\Attribute\Model\AttributeValueInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,6 +28,114 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class IndexController extends BaseController
 {
+    /**
+     * The Chamilo index home page.
+     *
+     * @Route("/edit_welcome", name="edit_welcome")
+     * @Method({"GET|POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @return Response
+     */
+    public function editWelcomeAction(Request $request)
+    {
+        $siteSelector = $this->get('sonata.page.site.selector');
+        $site = $siteSelector->retrieve();
+        $em = $this->getDoctrine()->getManager();
+        $page = null;
+
+        $form = $this->createFormBuilder()
+            ->add('content', CKEditorType::class)
+            ->add('save', SubmitType::class, array('label' => 'Update'))
+            ->getForm();
+
+        $blockToEdit = null;
+        if ($site) {
+            $pageManager = $this->get('sonata.page.manager.page');
+            // Parents only of homepage
+            $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => 'welcome'];
+            /** @var Page $page */
+            $page = $pageManager->findOneBy($criteria);
+            if ($page) {
+                $blocks = $page->getBlocks();
+                /** @var Block $block */
+                foreach ($blocks as $block) {
+                    if ($block->getName() == 'Main content') {
+                        $code = $block->getSetting('code');
+                        if ($code == 'content') {
+                            $children = $block->getChildren();
+                            /** @var Block $child */
+                            foreach ($children as $child) {
+                                if ($child->getType() == 'sonata.formatter.block.formatter') {
+                                    $blockToEdit = $child;
+                                    break (2);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($blockToEdit) {
+            $form->setData(['content' => $blockToEdit->getSetting('content')]);
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && $blockToEdit) {
+            $data = $form->getData();
+            $content = $data['content'];
+            /** @var Block $blockToEdit */
+            $blockToEdit->setSetting('rawContent', $content);
+            $blockToEdit->setSetting('content', $content);
+            $em->merge($blockToEdit);
+            $em->flush();
+
+            $this->addFlash('success', $this->trans('Updated'));
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render(
+            '@ChamiloCore/Index/edit_welcome.html.twig',
+            [
+                'page' => $page,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * The Chamilo index home page.
+     *
+     * @Route("/welcome", name="welcome")
+     * @Method({"GET"})
+     *
+     * @return Response
+     */
+    public function welcomeAction()
+    {
+        $siteSelector = $this->get('sonata.page.site.selector');
+        $site = $siteSelector->retrieve();
+        $page = null;
+        if ($site) {
+            $pageManager = $this->get('sonata.page.manager.page');
+            // Parents only of homepage
+            $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => 'welcome'];
+            /** @var Page $page */
+            $page = $pageManager->findOneBy($criteria);
+        }
+
+        return $this->render(
+            '@ChamiloCore/Index/welcome.html.twig',
+            [
+                'page' => $page,
+                'content' => 'welcome',
+            ]
+        );
+    }
+
     /**
      * The Chamilo index home page.
      *

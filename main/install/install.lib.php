@@ -8,6 +8,7 @@ use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Doctrine\ORM\EntityManager;
+use Sonata\PageBundle\Entity\PageManager;
 
 /**
  * Chamilo LMS
@@ -2908,6 +2909,8 @@ function finishInstallationWithContainer(
     $result->execute();
     $result->closeCursor();
 
+    // Create site
+
     /** @var Chamilo\PageBundle\Entity\Site $site */
     $site = $siteManager->create();
     $site->setHost('localhost');
@@ -2919,9 +2922,10 @@ function finishInstallationWithContainer(
     $site->setIsDefault(true);
     $siteManager->save($site);
 
-    /** @var \Sonata\PageBundle\Entity\PageManager $pageManager */
+    // Create home page
+    /** @var PageManager $pageManager */
     $pageManager = $container->get('sonata.page.manager.page');
-
+    /** @var \Sonata\PageBundle\Model\Page $page */
     $page = $pageManager->create();
     $page->setSlug('homepage');
     $page->setUrl('/');
@@ -2935,6 +2939,66 @@ function finishInstallationWithContainer(
     //$page->setParent($this->getReference('page-homepage'));
     $page->setSite($site);
     $pageManager->save($page);
+
+    // Create welcome page
+    $pageWelcome = $pageManager->create();
+    $pageWelcome->setSlug('welcome');
+    $pageWelcome->setUrl('/welcome');
+    $pageWelcome->setName('welcome');
+    $pageWelcome->setTitle('welcome');
+    $pageWelcome->setEnabled(true);
+    $pageWelcome->setDecorate(1);
+    $pageWelcome->setRequestMethod('GET');
+    $pageWelcome->setTemplateCode('default');
+    $pageWelcome->setRouteName('welcome');
+    $pageWelcome->setParent($page);
+    $pageWelcome->setSite($site);
+
+    $pageManager->save($pageWelcome);
+
+    $templateManager = $container->get('sonata.page.template_manager');
+    $template = $templateManager->get('default');
+    $templateContainers = $template->getContainers();
+
+    $containers = [];
+    foreach ($templateContainers as $id => $area) {
+        $containers[$id] = [
+            'area' => $area,
+            'block' => false,
+        ];
+    }
+
+    // Create blocks for this page
+    $blockInteractor = $container->get('sonata.page.block_interactor');
+    $parentBlock = null;
+    foreach ($containers as $id => $area) {
+        if (false === $area['block'] && $templateContainers[$id]['shared'] === false) {
+            $block = $blockInteractor->createNewContainer(
+                [
+                    'page' => $pageWelcome,
+                    'name' => $templateContainers[$id]['name'],
+                    'code' => $id,
+                ]
+            );
+
+            if ($id === 'content' && $templateContainers[$id]['name'] == 'Main content') {
+                $parentBlock = $block;
+            }
+        }
+    }
+
+    // Create block in main content
+    $block = $container->get('sonata.page.manager.block');
+    /** @var \Sonata\BlockBundle\Model\Block $myBlock */
+    $myBlock = $block->create();
+    $myBlock->setType('sonata.formatter.block.formatter');
+    $myBlock->setSetting('format', 'richhtml');
+    $myBlock->setSetting('content', '');
+    $myBlock->setSetting('rawContent', '');
+    $myBlock->setSetting('template', '@SonataFormatter/Block/block_formatter.html.twig');
+    $myBlock->setParent($parentBlock);
+    $pageWelcome->addBlocks($myBlock);
+    $pageManager->save($pageWelcome);
 
     UserManager::setPasswordEncryption($encryptPassForm);
 

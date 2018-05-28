@@ -21,6 +21,11 @@ $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : 0;
 $userId = api_get_user_id();
 $courseId = api_get_course_int_id();
 $objExercise = new Exercise($courseId);
+$debug = false;
+
+if ($debug) {
+    error_log("Call to hotspot_answers.as.php");
+}
 
 // Check if student has access to the hotspot answers
 if (!api_is_allowed_to_edit(null, true)) {
@@ -191,3 +196,7 @@ $data['done'] = 'done';
 header('Content-Type: application/json');
 
 echo json_encode($data);
+
+if ($debug) {
+    error_log("---------- End call to hotspot_answers.as.php------------");
+}

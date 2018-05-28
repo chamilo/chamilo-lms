@@ -1,6 +1,8 @@
 twig:
-    paths: ['%kernel.project_dir%/templates', '%kernel.project_dir%/main/template/']
     debug: '%kernel.debug%'
+    paths: ['%kernel.project_dir%/templates', '%kernel.project_dir%/main/template/']
+    form_themes:
+        - '@SonataFormatter/Form/formatter.html.twig'
     exception_controller: 'Chamilo\ThemeBundle\Controller\ExceptionController::showAction'
     globals:
         show_toolbar: true

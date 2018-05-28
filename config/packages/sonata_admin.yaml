@@ -15,10 +15,6 @@ sonata_admin:
         # the layout template include javascript/stylesheet to the formatter bundle,
         # if you don't need it use the default one: SonataAdminBundle::standard_layout.html.
         layout: ChamiloAdminBundle::layout.html.twig
-#        layout:  ApplicationSonataAdminBundle::standard_layout.html.twig
-        #layout:  ApplicationSonataAdminBundle::demo_layout.html.twig
-
-#        layout: SonataAdminBundle::standard_layout.html.twig
         ajax: SonataAdminBundle::ajax_layout.html.twig
         # default value if done set, actions templates, should extends a global templates
         list: SonataAdminBundle:CRUD:list.html.twig
@@ -132,21 +128,8 @@ sonata_admin:
 #                  items:
 #                      - sonata.admin.access_url
     assets:
-        extra_javascripts:
-            - bundles/sonatapage/sonata-page.back.min.js
-        extra_stylesheets:
-            - bundles/sonatapage/sonata-page.back.min.css
-
         stylesheets:
-            # The sandbox includes default pre-optimized version of some css and js
-            # So you can either use them, and add your custom assets here
-            #   ~ or ~
-            # tweak the assetic.yml and the following lines
-#            - assetic/sonata_admin_css.css
-#            - assetic/sonata_formatter_css.css
-#            - assetic/sonata_jqueryui_css.css
-#            - bundles/sonataadmin/vendor/admin-lte/dist/css/skins/skin-black.min.css
-           # The default stylesheet list:
+            # The default stylesheet list:
             - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
             - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
             - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
@@ -163,23 +146,7 @@ sonata_admin:
             - bundles/sonataadmin/css/tree.css
             - bundles/sonataadmin/css/colors.css
 
-            # Formatter assets
-  #            - bundles/sonataformatter/markitup/skins/sonata/style.css
-  #            - bundles/sonataformatter/markitup/sets/markdown/style.css
-  #            - bundles/sonataformatter/markitup/sets/html/style.css
-  #            - bundles/sonataformatter/markitup/sets/textile/style.css
-
-            # Page assets
-  #            - bundles/sonatapage/sonata-page.back.min.css
         javascripts:
-#            - assetic/sonata_admin_js.js
-#  #            - bundles/sonataadmin/Admin.js
-#  #            - bundles/sonataadmin/treeview.js
-#            - assetic/sonata_jqueryui_js.js
-#            - assetic/sonata_formatter_js.js
-#            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js
-            # Default admin assets
-            # The default javascript list:
             - bundles/sonatacore/vendor/jquery/dist/jquery.min.js
             - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
             - bundles/sonatacore/vendor/moment/min/moment.min.js
@@ -200,10 +167,17 @@ sonata_admin:
             - bundles/sonataadmin/treeview.js
             - bundles/sonataadmin/sidebar.js
 
-            # Formatter assets
-  #            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
-  #            - bundles/sonataformatter/markitup/sets/markdown/set.js
-  #            - bundles/sonataformatter/markitup/sets/html/set.js
-  #            - bundles/sonataformatter/markitup/sets/textile/set.js
-            # Page assets
-  #            - bundles/sonatapage/sonata-page.back.js
+        extra_javascripts:
+            - bundles/sonatapage/sonata-page.back.min.js
+            - bundles/ivoryckeditor/ckeditor.js
+            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
+            - bundles/sonataformatter/markitup/sets/markdown/set.js
+            - bundles/sonataformatter/markitup/sets/html/set.js
+            - bundles/sonataformatter/markitup/sets/textile/set.js
+
+        extra_stylesheets:
+            - bundles/sonatapage/sonata-page.back.min.css
+            - bundles/sonataformatter/markitup/skins/sonata/style.css
+            - bundles/sonataformatter/markitup/sets/markdown/style.css
+            - bundles/sonataformatter/markitup/sets/html/style.css
+            - bundles/sonataformatter/markitup/sets/textile/style.css

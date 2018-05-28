@@ -25,7 +25,8 @@ ivory_ck_editor:
             filebrowserImageUploadRoute: admin_chamilo_media_media_ckeditor_upload
             filebrowserImageUploadRouteParameters:
                 provider: sonata.media.provider.image
-                context: my-context # Optional, to upload in a custom context
+                context: default # Optional, to upload in a custom context, see sonata_media.yaml
+                format: medium
     plugins:
         wordcount:
             path: "/bundles/chamilocore/ckeditor/plugins/wordcount"

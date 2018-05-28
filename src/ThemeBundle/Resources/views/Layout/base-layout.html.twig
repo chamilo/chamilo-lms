@@ -34,7 +34,7 @@
         {# topbar #}
         {% block chamilo_topbar %}
             {# creatable variable is set by the sonata page #}
-            {% if not creatable %} }}
+            {% if not creatable %}
             {% include "@ChamiloTheme/Layout/topbar.html.twig" %}
             {% endif %}
         {% endblock %}
@@ -99,7 +99,7 @@
             {# menu #}
             {% block chamilo_menu %}
                 {# creatable variable is set by the sonata page #}
-                {% if not creatable %} }}
+                {% if not creatable %}
                     {# course navigation links/shortcuts need to be activated by the admin #}
                     {% include "@ChamiloTheme/Layout/menu.html.twig" %}
                 {% endif %}

@@ -68,7 +68,6 @@ sonata_media:
             directory: '%kernel.root_dir%/../public/uploads/media'
             create: true
     providers:
-        # ...
         file:
             # the resizer must be set to false, otherwhise this can delete icon files from the fs
             resizer: false

@@ -934,7 +934,8 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 // Timer control
 if ($time_control) {
     echo $objExercise->return_time_left_div();
-    echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciseExpiredTimeMessage').'</div>';
+    echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
+        get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
 if ($origin != 'learnpath') {
@@ -1038,7 +1039,7 @@ if (!empty($error)) {
     }
 
     if ($number_of_hotspot_questions > 0) {
-        $onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
+        //$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
 
     $saveIcon = Display::return_icon(
@@ -1103,7 +1104,8 @@ if (!empty($error)) {
 
             $(".no_remind_highlight").hide();
 
-            // if the users validates the form using return key, prevent form action and simulates click on validation button
+            // if the users validates the form using return key, 
+            // prevent form action and simulates click on validation button
             /*$("#exercise_form").submit(function(){
                 $(".question-validate-btn").first().trigger("click");
                 return false;
@@ -1190,7 +1192,7 @@ if (!empty($error)) {
 
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
-
+            
             // Checking FCK
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1208,7 +1210,6 @@ if (!empty($error)) {
             }
 
             // Only for the first time
-
             $("#save_for_now_"+question_id).html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
             $.ajax({
                 type:"post",
@@ -1254,12 +1255,10 @@ if (!empty($error)) {
 
             // 3. Hotspots.
             var hotspot = $(\'*[name*="hotspot"]\').serialize();
-
+            
             // Question list.
             var question_list = ['.implode(',', $questionList).'];
-
             var free_answers = {};
-
             $.each(question_list, function(index, my_question_id) {
                 // Checking FCK
                 if (my_question_id) {

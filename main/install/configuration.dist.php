@@ -839,16 +839,22 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
 // $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
 
+// Allow set courses in session in read-only mode. Require DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, filter, created_at)
+VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1, 1, NOW());
+*/
+// $_configuration['session_courses_read_only_mode'] = false;
+
+// Allow SCORM packages when importing a course
+// $_configuration['allow_import_scorm_package_in_course_builder'] = false;
+
+// Hide announcement "sent to" label
+// $_configuration['hide_announcement_sent_to_users_info'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-
-// Allow set courses in session in read-only mode. Require DB changes:
-/*
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, filter, created_at)
-VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1, 1, NOW());
-*/
-//$_configuration['session_courses_read_only_mode'] = false;

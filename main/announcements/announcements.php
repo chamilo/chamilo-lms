@@ -83,12 +83,11 @@ if (!empty($group_id)) {
     }
 }
 
-/*	Tracking	*/
+/* Tracking */
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 $announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'list';
-
 $announcement_number = AnnouncementManager::getNumberAnnouncements();
 
 $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
@@ -97,7 +96,6 @@ $searchFormToString = '';
 
 switch ($action) {
     case 'move':
-
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
@@ -119,7 +117,6 @@ switch ($action) {
             }
 
             $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
-
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
                     FROM $tbl_announcement announcement,
                     $tbl_item_property itemproperty
@@ -143,7 +140,6 @@ switch ($action) {
                     Database::query($sql);
                     $sql = "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder'
                             WHERE c_id = $courseId AND id =  $nextAnnouncementId";
-
                     Database::query($sql);
                     break;
                 }
@@ -479,7 +475,6 @@ switch ($action) {
         }
 
         $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
-
         if (isset($announcementInfo) && !empty($announcementInfo)) {
             $to = AnnouncementManager::load_edit_users('announcement', $id);
 

@@ -271,8 +271,11 @@
                                                     {{ row.extra }}
                                                 </a>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 {{ row.dsp_progress }}
+                                            </div>
+                                            <div class="col-md-1">
+                                                {{ row.action_pdf }}
                                             </div>
                                         </div>
                                     </div>
@@ -281,6 +284,7 @@
                         </div>
                     {% endif %}
                 {% endif %}
+
                 {% if categories|length > 1 and lp_data.category.id %}
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading-{{ lp_data.category.getId() }}">
@@ -370,7 +374,8 @@
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse "
+
+                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
                              role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                             <div class="panel-body">
                                 {% if lp_data.lp_list %}
@@ -462,8 +467,11 @@
                                                             {{ row.extra }}
                                                         </a>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         {{ row.dsp_progress }}
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        {{ row.action_pdf }}
                                                     </div>
                                                 </div>
                                             </div>

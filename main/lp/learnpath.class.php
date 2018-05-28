@@ -10376,7 +10376,6 @@ class learnpath
      */
     public function get_student_publications()
     {
-        $sessionId = api_get_session_id();
         $return = '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('works_new.gif');
@@ -10384,34 +10383,32 @@ class learnpath
             get_lang('AddAssignmentPage').'</a>';
         $return .= '</li>';
 
-        if (empty($sessionId)) {
-            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-            $works = getWorkListTeacher(0, 100, null, null, null);
-            if (!empty($works)) {
-                foreach ($works as $work) {
-                    $link = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview')),
-                        api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work['iid'],
-                        ['target' => '_blank']
-                    );
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $works = getWorkListTeacher(0, 100, null, null, null);
+        if (!empty($works)) {
+            foreach ($works as $work) {
+                $link = Display::url(
+                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work['iid'],
+                    ['target' => '_blank']
+                );
 
-                    $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security::remove_XSS(cut(strip_tags($work['title']), 80)).'">';
-                    $return .= '<a class="moved" href="#">';
-                    $return .= Display::return_icon(
-                        'move_everywhere.png',
-                        get_lang('Move'),
-                        [],
-                        ICON_SIZE_TINY
-                    );
-                    $return .= '</a> ';
+                $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security::remove_XSS(cut(strip_tags($work['title']), 80)).'">';
+                $return .= '<a class="moved" href="#">';
+                $return .= Display::return_icon(
+                    'move_everywhere.png',
+                    get_lang('Move'),
+                    [],
+                    ICON_SIZE_TINY
+                );
+                $return .= '</a> ';
 
-                    $return .= Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
-                    $return .= ' <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
-                    </a>';
+                $return .= Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
+                $return .= ' <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id.'">'.
+                    Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
+                </a>';
 
-                    $return .= '</li>';
-                }
+                $return .= '</li>';
             }
         }
 
@@ -11852,6 +11849,8 @@ EOD;
      * @param array $params
      *
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return int
      */
     public static function createCategory($params)
     {
@@ -11869,6 +11868,8 @@ EOD;
             'visible',
             api_get_user_id()
         );
+
+        return $item->getId();
     }
 
     /**
@@ -12141,7 +12142,7 @@ EOD;
      */
     public function setCategoryId($categoryId)
     {
-        $this->categoryId = intval($categoryId);
+        $this->categoryId = (int) $categoryId;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $table SET category_id = ".$this->categoryId."

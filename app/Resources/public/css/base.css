@@ -5267,6 +5267,24 @@ ul.exercise-draggable-answer .touch-items:hover {
     border: dotted #dddddd 2px;
     border-radius: 4px;
     color: #666666;
+
+    /* Extra */
+    display: inline-block;
+    width: 85%;
+    margin-bottom: 0px;
+}
+
+.question_options .droppable-item{
+    background-color: #84bd00;
+    color: #FFF;
+    /* padding: 10px;*/
+    padding: 3px 0px 3px 5px;
+}
+.question_options .droppable-item .number{
+    font-size: 16px;
+    font-weight: bold;
+    /*width: 30px;*/
+    display: inline-block;
 }
 
 .question_options .ui-helper-reset {

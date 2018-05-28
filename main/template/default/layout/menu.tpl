@@ -65,11 +65,13 @@
                                     </div>
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <li class="user-body">
-                                    <a title="{{ "Inbox"|get_lang }}" href="{{ message_url }}">
-                                        <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
-                                    </a>
-                                </li>
+                                {% if message_url %}
+                                    <li class="user-body">
+                                        <a title="{{ "Inbox"|get_lang }}" href="{{ message_url }}">
+                                            <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li class="user-body">
                                     <a href="{{ _p.web_main ~ 'survey/pending.php' }}">
                                         <em class="fa fa-pie-chart"></em> {{ 'PendingSurveys'|get_lang }}

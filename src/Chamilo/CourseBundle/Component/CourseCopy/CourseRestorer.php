@@ -4,7 +4,9 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use CourseManager;
 use Database;
@@ -54,6 +56,7 @@ class CourseRestorer
         'links',
         'works',
         'surveys',
+        'learnpath_category',
         'learnpaths',
         //'scorm_documents', ??
         'tool_intro',
@@ -88,6 +91,11 @@ class CourseRestorer
         $this->file_option = FILE_RENAME;
         $this->set_tools_invisible_by_default = false;
         $this->skip_content = [];
+
+        $forceImport = api_get_configuration_value('allow_import_scorm_package_in_course_builder');
+        if ($forceImport) {
+            $this->tools_to_restore[] = 'scorm_documents';
+        }
     }
 
     /**
@@ -999,20 +1007,18 @@ class CourseRestorer
     public function restore_scorm_documents()
     {
         $perm = api_get_permissions_for_new_directories();
-
         if ($this->course->has_resources(RESOURCE_SCORM)) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_SCORM] as $document) {
                 $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
                 @mkdir(dirname($path.$document->path), $perm, true);
-
                 if (file_exists($path.$document->path)) {
                     switch ($this->file_option) {
                         case FILE_OVERWRITE:
                             rmdirr($path.$document->path);
                             copyDirTo(
                                 $this->course->backup_path.'/'.$document->path,
-                                $path.dirname($document->path),
+                                $path.$document->path,
                                 false
                             );
                             break;
@@ -1058,7 +1064,7 @@ class CourseRestorer
                     // end if file exists
                     copyDirTo(
                         $this->course->backup_path.'/'.$document->path,
-                        $path.dirname($document->path),
+                        $path.$document->path,
                         false
                     );
                 }
@@ -2153,7 +2159,7 @@ class CourseRestorer
 
                         foreach ($correctAnswers as $answer_id => $correct_answer) {
                             $params = [];
-                            $params['correct'] = $new_options[$correct_answer];
+                            $params['correct'] = isset($new_options[$correct_answer]) ? $new_options[$correct_answer] : '';
                             Database::update(
                                 $table_ans,
                                 $params,
@@ -2577,6 +2583,30 @@ class CourseRestorer
     }
 
     /**
+     * @param int  $sessionId
+     * @param bool $baseContent
+     */
+    public function restore_learnpath_category($sessionId = 0, $baseContent = false)
+    {
+        if ($this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
+            $resources = $this->course->resources;
+            /** @var LearnPathCategory $item */
+            foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
+                /** @var CLpCategory $lpCategory */
+                $lpCategory = $item->object;
+                $values = [
+                    'c_id' => $this->destination_course_id,
+                    'name' => $lpCategory->getName(),
+                ];
+                $categoryId = \learnpath::createCategory($values);
+                if ($categoryId) {
+                    $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+                }
+            }
+        }
+    }
+
+    /**
      * Restoring learning paths.
      *
      * @param int        $session_id
@@ -2591,9 +2621,15 @@ class CourseRestorer
             $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
             $resources = $this->course->resources;
-
             $origin_path = $this->course->backup_path.'/upload/learning_path/images/';
             $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
+
+            // Choose default visibility
+            $toolVisibility = api_get_setting('tool_visible_by_default_at_creation');
+            $defaultLpVisibility = 'invisible';
+            if (isset($toolVisibility['learning_path']) && $toolVisibility['learning_path'] == 'true') {
+                $defaultLpVisibility = 'visible';
+            }
 
             foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
                 $condition_session = '';
@@ -2648,7 +2684,14 @@ class CourseRestorer
 
                 $lp->expired_on = isset($lp->expired_on) && $lp->expired_on === '0000-00-00 00:00:00' ? null : $lp->expired_on;
                 $lp->publicated_on = isset($lp->publicated_on) && $lp->publicated_on === '0000-00-00 00:00:00' ? null : $lp->publicated_on;
+                $lp->categoryId = (int) $lp->categoryId;
 
+                $categoryId = 0;
+                if (!empty($lp->categoryId)) {
+                    if (isset($resources[RESOURCE_LEARNPATH_CATEGORY][$lp->categoryId])) {
+                        $categoryId = $resources[RESOURCE_LEARNPATH_CATEGORY][$lp->categoryId]->destination_id;
+                    }
+                }
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'lp_type' => $lp->lp_type,
@@ -2679,7 +2722,7 @@ class CourseRestorer
                     'prerequisite' => 0,
                     'hide_toc_frame' => 0,
                     'seriousgame_mode' => 0,
-                    'category_id' => 0,
+                    'category_id' => $categoryId,
                     'max_attempts' => 0,
                     'subscribe_users' => 0,
                 ];
@@ -2732,7 +2775,7 @@ class CourseRestorer
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
                         $new_lp_id,
-                        'invisible',
+                        $defaultLpVisibility,
                         api_get_user_id(),
                         0,
                         0,
@@ -2851,10 +2894,10 @@ class CourseRestorer
                     foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
                         $previous_new_id = 0;
                         if ($previous_item_old_id != 0) {
-                            $previous_new_id = $new_item_ids[$previous_item_old_id];
+                            $previous_new_id = isset($new_item_ids[$previous_item_old_id]) ? $new_item_ids[$previous_item_old_id] : '';
                         }
                         $sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."'
-                                WHERE  c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
+                                WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
 

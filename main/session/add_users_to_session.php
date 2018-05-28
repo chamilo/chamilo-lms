@@ -320,7 +320,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : '';
     $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : '';
-    $UserList = $_POST['sessionUsersList'];
+    $UserList = isset($_POST['sessionUsersList']) ? $_POST['sessionUsersList'] : [];
 
     if (!is_array($UserList)) {
         $UserList = [];

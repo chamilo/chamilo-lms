@@ -434,7 +434,7 @@ if (!isset($questionListInSession)) {
     if ($media_is_activated == false &&
         (
             $objExercise->isRandom() ||
-            !empty($objExercise->selectRandomByCat()) ||
+            !empty($objExercise->getRandomByCategory()) ||
             $objExercise->getQuestionSelectionType() > 2
         ) &&
         isset($exercise_stat_info) &&
@@ -491,7 +491,10 @@ if ($time_control) {
     if ($debug) {
         error_log('7.1. Time control is enabled');
         error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-        error_log('7.3. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]);
+        error_log(
+            '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+            $_SESSION['expired_time'][$current_expired_time_key]
+        );
     }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
@@ -510,7 +513,9 @@ if ($time_control) {
                the track_et_attempt see #2069 */
             if (empty($last_attempt_date)) {
                 $diff = $current_timestamp - api_strtotime($exercise_stat_info['start_date'], 'UTC');
-                $last_attempt_date = api_get_utc_datetime(api_strtotime($exercise_stat_info['start_date'], 'UTC') + $diff);
+                $last_attempt_date = api_get_utc_datetime(
+                    api_strtotime($exercise_stat_info['start_date'], 'UTC') + $diff
+                );
             } else {
                 //Recalculate the time control due #2069
                 $diff = $current_timestamp - api_strtotime($last_attempt_date, 'UTC');
@@ -756,7 +761,7 @@ if ($question_count != 0) {
                     error_log('12. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php');
                 }
 
-                //We check if the user attempts before sending to the exercise_result.php
+                // We check if the user attempts before sending to the exercise_result.php
                 if ($objExercise->selectAttempts() > 0) {
                     $attempt_count = Event::get_attempt_count(
                         api_get_user_id(),
@@ -774,7 +779,7 @@ if ($question_count != 0) {
                         if ($origin != 'learnpath') {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
-                            Display :: display_footer();
+                            Display::display_footer();
                         } else {
                             echo '</body></html>';
                         }
@@ -790,17 +795,12 @@ if ($question_count != 0) {
                     exit;
                 }
             }
-        } else {
-            if ($debug) {
-                error_log('Redirecting to exercise_submit.php');
-            }
-            exit;
         }
     }
 } else {
     $error = get_lang('ThereAreNoQuestionsForThisExercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
-    if ($objExercise->selectRandomByCat() > 0 && $objExercise->random <= 0) {
+    if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
         $error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
     }
 }
@@ -934,7 +934,8 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 // Timer control
 if ($time_control) {
     echo $objExercise->return_time_left_div();
-    echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciseExpiredTimeMessage').'</div>';
+    echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
+        get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
 if ($origin != 'learnpath') {
@@ -1038,7 +1039,7 @@ if (!empty($error)) {
     }
 
     if ($number_of_hotspot_questions > 0) {
-        $onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
+        //$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
 
     $saveIcon = Display::return_icon(
@@ -1054,12 +1055,13 @@ if (!empty($error)) {
         function addExerciseEvent(elm, evType, fn, useCapture) {
             if (elm.addEventListener) {
                 elm.addEventListener(evType, fn, useCapture);
-                return true;
+                return;
             } else if (elm.attachEvent) {
                 elm.attachEvent(\'on\' + evType, fn);
             } else{
                 elm[\'on\'+evType] = fn;
-            }
+            }            
+            return;
         }
         
         var calledUpdateDuration = false;
@@ -1073,10 +1075,10 @@ if (!empty($error)) {
                     url: saveDurationUrl,
                     success: function (data) {
                         calledUpdateDuration = true;
-                        return 1;
+                        return;
                     }, 
                 });
-                return 1;
+                return;
             }
         }
         
@@ -1102,7 +1104,8 @@ if (!empty($error)) {
 
             $(".no_remind_highlight").hide();
 
-            // if the users validates the form using return key, prevent form action and simulates click on validation button
+            // if the users validates the form using return key, 
+            // prevent form action and simulates click on validation button
             /*$("#exercise_form").submit(function(){
                 $(".question-validate-btn").first().trigger("click");
                 return false;
@@ -1189,7 +1192,7 @@ if (!empty($error)) {
 
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
-
+            
             // Checking FCK
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1207,7 +1210,6 @@ if (!empty($error)) {
             }
 
             // Only for the first time
-
             $("#save_for_now_"+question_id).html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
             $.ajax({
                 type:"post",
@@ -1253,12 +1255,10 @@ if (!empty($error)) {
 
             // 3. Hotspots.
             var hotspot = $(\'*[name*="hotspot"]\').serialize();
-
+            
             // Question list.
             var question_list = ['.implode(',', $questionList).'];
-
             var free_answers = {};
-
             $.each(question_list, function(index, my_question_id) {
                 // Checking FCK
                 if (my_question_id) {
@@ -1428,18 +1428,20 @@ if (!empty($error)) {
                 );
                 break;
             case ALL_ON_ONE_PAGE:
-                $button = [
-                    Display::button(
-                        'save_now',
-                        get_lang('SaveForNow'),
-                        ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
-                    ),
-                    '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
-                ];
-                $exerciseActions .= Display::div(
-                    implode(PHP_EOL, $button),
-                    ['class' => 'exercise_save_now_button']
-                );
+                if (api_is_allowed_to_session_edit()) {
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
+                    ];
+                    $exerciseActions .= Display::div(
+                        implode(PHP_EOL, $button),
+                        ['class' => 'exercise_save_now_button']
+                    );
+                }
                 break;
         }
 

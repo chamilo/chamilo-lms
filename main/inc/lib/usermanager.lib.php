@@ -2923,7 +2923,8 @@ class UserManager
                     sc.dateStart AS session_category_date_start,
                     sc.dateEnd AS session_category_date_end,
                     s.coachAccessStartDate AS coach_access_start_date,
-                    s.coachAccessEndDate AS coach_access_end_date
+                    s.coachAccessEndDate AS coach_access_end_date,
+                    CASE WHEN s.accessEndDate IS NULL THEN 1 ELSE 0 END HIDDEN _isFieldNull
                     $position
                 FROM ChamiloCoreBundle:Session AS s
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
@@ -2949,13 +2950,18 @@ class UserManager
         $orderBySettings = api_get_configuration_value('my_courses_session_order');
         if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
             $field = $orderBySettings['field'];
-            $order = $orderBySettings['order'];
+            $orderSetting = $orderBySettings['order'];
             switch ($field) {
                 case 'start_date':
-                    $order = " ORDER BY s.accessStartDate $order";
+                    $order = " ORDER BY s.accessStartDate $orderSetting";
                     break;
                 case 'end_date':
-                    $order = " ORDER BY s.accessEndDate $order";
+                    $order = " ORDER BY s.accessEndDate $orderSetting ";
+                    if ($orderSetting == 'asc') {
+                        // Put null values at the end
+                        // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
+                        $order = " ORDER BY _isFieldNull asc, s.accessEndDate asc";
+                    }
                     break;
             }
         }

@@ -438,8 +438,6 @@ class AnnouncementManager
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
-        //$toUser = $itemProperty->getToUser();
-        //$toUserId = !empty($toUser) ? $toUser->getId() : 0;
         // The user id is always the current one.
         $toUserId = api_get_user_id();
         $content = self::parseContent(
@@ -456,7 +454,8 @@ class AnnouncementManager
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
 
-        if (api_is_allowed_to_edit(false, true)) {
+        $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
+        if (api_is_allowed_to_edit(false, true) && $allow) {
             $sent_to = self::sent_to('announcement', $id);
             $sent_to_form = self::sent_to_form($sent_to);
             $html .= Display::tag(
@@ -507,17 +506,21 @@ class AnnouncementManager
             return 0;
         }
 
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        if (!isset($courseInfo['real_id'])) {
+            return false;
+        }
+
         $courseId = $courseInfo['real_id'];
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $sql = "SELECT MAX(display_order)
                 FROM $table
                 WHERE c_id = $courseId ";
-        $res_max = Database::query($sql);
+        $result = Database::query($sql);
 
         $order = 0;
-        if (Database::num_rows($res_max)) {
-            $row_max = Database::fetch_array($res_max);
-            $order = intval($row_max[0]) + 1;
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            $order = (int) $row[0] + 1;
         }
 
         return $order;
@@ -552,6 +555,10 @@ class AnnouncementManager
         $authorId = 0
     ) {
         if (empty($courseInfo)) {
+            return false;
+        }
+
+        if (!isset($courseInfo['real_id'])) {
             return false;
         }
 

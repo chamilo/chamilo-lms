@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\UserBundle\Entity\User;
 use ExtraField as ExtraFieldModel;
+use Monolog\Logger;
 
 /**
  * Class SessionManager.
@@ -2849,7 +2850,7 @@ class SessionManager
      * @param string $name
      *
      * @return mixed false if the session does not exist, array if the session exist
-     * */
+     */
     public static function get_session_by_name($name)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2868,6 +2869,32 @@ class SessionManager
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param int $sessionId
+     * @param int $name
+     *
+     * @return bool
+     */
+    public static function sessionNameExistBesidesMySession($sessionId, $name)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $name = Database::escape_string(trim($name));
+        if (empty($name)) {
+            return false;
+        }
+
+        $sql = "SELECT *
+		        FROM $table
+		        WHERE name = '$name' AND id <> $sessionId ";
+        $result = Database::query($sql);
+        $num = Database::num_rows($result);
+        if ($num > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -4512,7 +4539,7 @@ class SessionManager
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "SELECT count(id) FROM $session_table s";
+        $sql = "SELECT count(s.id) FROM $session_table s";
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
             $sql .= ", $access_url_rel_session_table u ".
                 " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
@@ -4711,11 +4738,10 @@ SQL;
 
     /**
      * @param string $file
-     * @param bool   $updateSession                                   options:
-     *                                                                true: if the session exists it will be updated.
+     * @param bool   $updateSession                                   true: if the session exists it will be updated.
      *                                                                false: if session exists a new session will be created adding a counter session1, session2, etc
      * @param int    $defaultUserId
-     * @param mixed  $logger
+     * @param Logger $logger
      * @param array  $extraFields                                     convert a file row to an extra field. Example in CSV file there's a SessionID
      *                                                                then it will converted to extra_external_session_id if you set: array('SessionId' => 'extra_external_session_id')
      * @param string $extraFieldId
@@ -4815,6 +4841,13 @@ SQL;
                 }
 
                 $session_name = $enreg['SessionName'];
+
+                if ($debug) {
+                    $logger->addInfo('---------------------------------------');
+                    $logger->addInfo("Sessions - Start process of session: $session_name");
+                    $logger->addInfo('---------------------------------------');
+                }
+
                 // Default visibility
                 $visibilityAfterExpirationPerSession = $sessionVisibility;
 
@@ -4963,9 +4996,11 @@ SQL;
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
                             }
-                            $logger->addInfo("Sessions - Session created: #$session_id - $session_name");
+                            $logger->addInfo("Session created: #$session_id - $session_name");
                         } else {
-                            $logger->addError("Sessions - Session NOT created: $session_name");
+                            $message = "Sessions - Session NOT created: $session_name";
+                            $logger->addError($message);
+                            $report[] = $message;
                         }
                     }
                     $session_counter++;
@@ -4985,12 +5020,11 @@ SQL;
                     if ($my_session_result === false) {
                         // One more check
                         $sessionExistsWithName = self::get_session_by_name($session_name);
-
                         if ($sessionExistsWithName) {
                             if ($debug) {
-                                $logger->addError(
-                                    "Sessions - Trying to update a session, but name already exists: $session_name"
-                                );
+                                $message = "Skip Session - Trying to update a session, but name already exists: $session_name";
+                                $logger->addError($message);
+                                $report[] = $message;
                             }
                             continue;
                         }
@@ -5058,8 +5092,6 @@ SQL;
                             'id_coach' => $coach_id,
                             'access_start_date' => $dateStart,
                             'access_end_date' => $dateEnd,
-                            'display_start_date' => $dateStart,
-                            'display_end_date' => $dateEnd,
                             'display_start_date' => $displayAccessStartDate,
                             'display_end_date' => $displayAccessEndDate,
                             'coach_access_start_date' => $coachAccessStartDate,
@@ -5086,11 +5118,28 @@ SQL;
                                     $sessionName = Database::escape_string($enreg['SessionName']);
                                     $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                     Database::query($sql);
+                                    $logger->addInfo(
+                                        "Session #$session_id name IS updated with: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
+                                    );
                                 } else {
-                                    if ($debug) {
-                                        $report[] = "Error when update session: Name already exists: Session #$session_id Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                    $sessionExistsBesidesMe = self::sessionNameExistBesidesMySession(
+                                        $session_id,
+                                        $session_name
+                                    );
+                                    if ($sessionExistsBesidesMe === true) {
+                                        if ($debug) {
+                                            $message = "Skip Session. Error when update session Session #$session_id Name: '$session_name'. Other session has the same name. External id: ".$enreg['extra_'.$extraFieldId];
+                                            $logger->addError($message);
+                                            $report[] = $message;
+                                        }
+                                        continue;
+                                    } else {
+                                        if ($debug) {
+                                            $logger->addInfo(
+                                                "Session #$session_id name is not updated because it didn't change (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
+                                            );
+                                        }
                                     }
-                                    continue;
                                 }
                             }
                         } else {
@@ -5099,14 +5148,10 @@ SQL;
                         }
 
                         if ($debug) {
-                            $logger->addError("Sessions - Session #$session_id to be updated: '$session_name'");
+                            $logger->addInfo("Session #$session_id to be updated: '$session_name'");
                         }
 
                         if ($session_id) {
-                            if ($debug) {
-                                $logger->addError("Sessions - Session to be updated #$session_id");
-                            }
-
                             $sessionInfo = api_get_session_info($session_id);
                             $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
 
@@ -5127,11 +5172,14 @@ SQL;
                             }
 
                             Database::update($tbl_session, $params, ['id = ?' => $session_id]);
-
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
+                            }
+
+                            if ($debug) {
+                                $logger->addInfo("Session updated #$session_id");
                             }
 
                             // Delete session-user relation only for students
@@ -5186,7 +5234,7 @@ SQL;
                                     registered_at = '".api_get_utc_datetime()."'";
                             Database::query($sql);
                             if ($debug) {
-                                $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");
+                                $logger->addInfo("Adding User #$user_id ($user) to session #$session_id");
                             }
                             $user_counter++;
                         }
@@ -5238,7 +5286,7 @@ SQL;
                         self::installCourse($session_id, $courseInfo['real_id']);
 
                         if ($debug) {
-                            $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
+                            $logger->addInfo("Adding course '$course_code' to session #$session_id");
                         }
 
                         $course_counter++;
@@ -5263,7 +5311,7 @@ SQL;
                                     $course_code
                                 );
                                 if ($debug) {
-                                    $msg = "Sessions - Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
+                                    $msg = "Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
                                     $logger->addInfo($msg);
                                 }
                             }
@@ -5304,7 +5352,7 @@ SQL;
                                         );
 
                                         if ($debug) {
-                                            $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            $logger->addInfo("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
@@ -5612,7 +5660,7 @@ SQL;
                                         $course_code
                                     );
                                     if ($debug) {
-                                        $logger->addInfo("Sessions - Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
+                                        $logger->addInfo("Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                     }
                                 } else {
                                     $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
@@ -5629,6 +5677,10 @@ SQL;
                 Database::query($sql);
 
                 self::addClassesByName($session_id, $classes, false);
+
+                if ($debug) {
+                    $logger->addInfo("End process session #$session_id -------------------- ");
+                }
             }
 
             if (!empty($report)) {
@@ -6494,7 +6546,8 @@ SQL;
                         }
                     }
 
-                    $message .= '<strong>'.get_lang('User').'</strong>: '.$userInfo['complete_name'].' <br />';
+                    $message .= '<strong>'.get_lang('User').'</strong>: ';
+                    $message .= $userInfo['complete_name_with_username'].' <br />';
 
                     if (!in_array($userInfo['status'], [DRH]) && !api_is_platform_admin_by_id($userInfo['user_id'])) {
                         $message .= get_lang('UserMustHaveTheDrhRole').'<br />';

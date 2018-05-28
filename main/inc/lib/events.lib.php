@@ -376,73 +376,74 @@ class Event
         $remindList = [],
         $endDate = null
     ) {
-        if ($exeId != '') {
-            /*
-             * Code commented due BT#8423 do not change the score to 0.
-             *
-             * Validation in case of fraud with actived control time
-            if (!ExerciseLib::exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
-                $score = 0;
-            }
-            */
-            if (!isset($status) || empty($status)) {
-                $status = '';
-            } else {
-                $status = Database::escape_string($status);
-            }
+        if (empty($exeId)) {
 
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-            if (!empty($questionsList)) {
-                $questionsList = array_map('intval', $questionsList);
-            }
-
-            if (!empty($remindList)) {
-                $remindList = array_map('intval', $remindList);
-                $remindList = array_filter($remindList);
-                $remindList = implode(",", $remindList);
-            } else {
-                $remindList = '';
-            }
-
-            if (empty($endDate)) {
-                $endDate = api_get_utc_datetime();
-            }
-            $exoId = (int) $exoId;
-            $sessionId = (int) $sessionId;
-            $learnpathId = (int) $learnpathId;
-            $learnpathItemId = (int) $learnpathItemId;
-            $learnpathItemViewId = (int) $learnpathItemViewId;
-            $duration = (int) $duration;
-            $exeId = (int) $exeId;
-            $score = Database::escape_string($score);
-            $weighting = Database::escape_string($weighting);
-            $questions = implode(',', $questionsList);
-            $userIp = Database::escape_string(api_get_real_ip());
-
-            $sql = "UPDATE $table SET
-        		   exe_exo_id = $exoId,
-        		   exe_result = '$score',
-        		   exe_weighting = '$weighting',
-        		   session_id = $sessionId,
-        		   orig_lp_id = $learnpathId,
-        		   orig_lp_item_id = $learnpathItemId,
-                   orig_lp_item_view_id = $learnpathItemViewId,
-        		   exe_duration = $duration,
-        		   exe_date = '$endDate',
-        		   status = '$status',
-        		   questions_to_check = '$remindList',
-        		   data_tracking = '$questions',
-                   user_ip = '$userIp'
-        		 WHERE exe_id = $exeId";
-            Database::query($sql);
-
-            //Deleting control time session track
-            //ExerciseLib::exercise_time_control_delete($exo_id);
-            return true;
-        } else {
             return false;
         }
+
+        /*
+         * Code commented due BT#8423 do not change the score to 0.
+         *
+         * Validation in case of fraud with actived control time
+        if (!ExerciseLib::exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
+            $score = 0;
+        }
+        */
+        if (!isset($status) || empty($status)) {
+            $status = '';
+        } else {
+            $status = Database::escape_string($status);
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        if (!empty($questionsList)) {
+            $questionsList = array_map('intval', $questionsList);
+        }
+
+        if (!empty($remindList)) {
+            $remindList = array_map('intval', $remindList);
+            $remindList = array_filter($remindList);
+            $remindList = implode(",", $remindList);
+        } else {
+            $remindList = '';
+        }
+
+        if (empty($endDate)) {
+            $endDate = api_get_utc_datetime();
+        }
+        $exoId = (int) $exoId;
+        $sessionId = (int) $sessionId;
+        $learnpathId = (int) $learnpathId;
+        $learnpathItemId = (int) $learnpathItemId;
+        $learnpathItemViewId = (int) $learnpathItemViewId;
+        $duration = (int) $duration;
+        $exeId = (int) $exeId;
+        $score = Database::escape_string($score);
+        $weighting = Database::escape_string($weighting);
+        $questions = implode(',', $questionsList);
+        $userIp = Database::escape_string(api_get_real_ip());
+
+        $sql = "UPDATE $table SET
+               exe_exo_id = $exoId,
+               exe_result = '$score',
+               exe_weighting = '$weighting',
+               session_id = $sessionId,
+               orig_lp_id = $learnpathId,
+               orig_lp_item_id = $learnpathItemId,
+               orig_lp_item_view_id = $learnpathItemViewId,
+               exe_duration = $duration,
+               exe_date = '$endDate',
+               status = '$status',
+               questions_to_check = '$remindList',
+               data_tracking = '$questions',
+               user_ip = '$userIp'
+             WHERE exe_id = $exeId";
+        Database::query($sql);
+
+        //Deleting control time session track
+        //ExerciseLib::exercise_time_control_delete($exo_id);
+        return true;
     }
 
     /**
@@ -535,6 +536,11 @@ class Event
             if (is_null($answer)) {
                 $answer = '';
             }
+
+            if (is_null($score)) {
+                $score = 0;
+            }
+
             $attempt = [
                 'user_id' => $user_id,
                 'question_id' => $question_id,
@@ -667,21 +673,31 @@ class Event
         $updateResults = false,
         $exerciseId = 0
     ) {
+        $debug = false;
         global $safe_lp_id, $safe_lp_item_id;
 
         if ($updateResults == false) {
             // Validation in case of fraud with activated control time
             if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+                if ($debug) {
+                    error_log('Attempt is fraud');
+                }
                 $correct = 0;
             }
         }
 
         if (empty($exeId)) {
+            if ($debug) {
+                error_log('exe id is empty');
+            }
             return false;
         }
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
+            if ($debug) {
+                error_log("Insert hotspot results: exeId: $exeId correct: $correct");
+            }
             $params = [
                 'hotspot_correct' => $correct,
                 'hotspot_coordinate' => $coords,
@@ -699,6 +715,9 @@ class Event
                 ]
             );
         } else {
+            if ($debug) {
+                error_log("Insert hotspot results: exeId: $exeId correct: $correct");
+            }
             return Database::insert(
                 $table,
                 [

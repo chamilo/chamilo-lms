@@ -925,11 +925,11 @@ foreach ($questionList as $questionId) {
 
 $total_score_text = '';
 
-//Total score
+// Total score
+$my_total_score_temp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
         $total_score_text .= '<div class="question_row">';
-        $my_total_score_temp = $totalScore;
         if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
             $my_total_score_temp = 0;
         }
@@ -1106,7 +1106,7 @@ if ($origin != 'learnpath') {
     if (!isset($_GET['fb_type'])) {
         $lp_mode = Session::read('lp_mode');
         $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
-        $url .= http_build_url([
+        $url .= http_build_query([
             'action' => 'view',
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,

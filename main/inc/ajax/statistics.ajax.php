@@ -51,29 +51,32 @@ switch ($action) {
                 }
 
                 $courseList = SessionManager::getCoursesInSession($sessionId);
+                $courseTitleList = [];
+                $courseListInString = '';
                 foreach ($courseList as $courseId) {
                     if (!isset($courseListInfo[$courseId])) {
                         $courseListInfo[$courseId] = $courseInfo = api_get_course_info_by_id($courseId);
                     } else {
                         $courseInfo = $courseListInfo[$courseId];
                     }
+                    $courseTitleList[] = $courseInfo['title'];
+                }
+                $courseListInString = implode(', ', $courseTitleList);
 
-                    $row['course'] = $courseInfo['title'];
-
-                    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-                    $sql = "SELECT
+                $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                $sql = "SELECT
                             count(DISTINCT user_id) count
                             FROM $table
                             WHERE
-                                login_course_date >= '$start' AND  
-                                logout_course_date <= '$end' AND     
-                                c_id = $courseId AND
+                                relation_type = 0 AND
+                                registered_at >= '$start' AND  
+                                registered_at <= '$end' AND
                                 session_id = '$sessionId' ";
+                $result = Database::query($sql);
+                $result = Database::fetch_array($result);
 
-                    $result = Database::query($sql);
-                    $result = Database::fetch_array($result);
-                    $row['count'] = $result['count'];
-                }
+                $row['course'] = $courseListInString;
+                $row['count'] = $result['count'];
                 $list[] = $row;
             }
         }

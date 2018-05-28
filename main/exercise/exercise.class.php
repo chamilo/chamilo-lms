@@ -3233,26 +3233,7 @@ class Exercise
         $time_left = intval($time_left);
 
         return "<script>
-
-            function get_expired_date_string(expired_time) {
-                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                var day, month, year, hours, minutes, seconds, date_string;
-                var obj_date = new Date(expired_time);
-                day     = obj_date.getDate();
-                if (day < 10) day = '0' + day;
-                    month   = obj_date.getMonth();
-                    year    = obj_date.getFullYear();
-                    hours   = obj_date.getHours();
-                if (hours < 10) hours = '0' + hours;
-                minutes = obj_date.getMinutes();
-                if (minutes < 10) minutes = '0' + minutes;
-                seconds = obj_date.getSeconds();
-                if (seconds < 10) seconds = '0' + seconds;
-                date_string = months[month] +' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
-                return date_string;
-            }
-
-            function open_clock_warning() {
+            function openClockWarning() {
                 $('#clock_warning').dialog({
                     modal:true,
                     height:250,
@@ -3268,7 +3249,6 @@ class Exercise
                     }
                 });
                 $('#clock_warning').dialog('open');
-
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: 5},
@@ -3280,7 +3260,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    $('#exercise_form').submit();
+                    save_now_all('validate');
                 } else {
                     // In exercise_reminder.php
                     final_submit();
@@ -3289,21 +3269,15 @@ class Exercise
 
             function onExpiredTimeExercise() {
                 $('#wrapper-clock').hide();
-                //$('#exercise_form').hide();
                 $('#expired-message-id').show();
-
-                //Fixes bug #5263
+                // Fixes bug #5263
                 $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
-                open_clock_warning();
+                openClockWarning();
             }
 
 			$(document).ready(function() {
-				var current_time = new Date().getTime();
 				// time in seconds when using minutes there are some seconds lost
-                var time_left    = parseInt(".$time_left."); 
-				var expired_time = current_time + (time_left*1000);
-				var expired_date = get_expired_date_string(expired_time);
-
+                var time_left = parseInt(".$time_left.");
                 $('#exercise_clock_warning').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: time_left},
@@ -5541,8 +5515,7 @@ class Exercise
         if ($saved_results) {
             if ($debug) {
                 error_log("Save question results $saved_results");
-            }
-            if ($debug) {
+                error_log('choice: ');
                 error_log(print_r($choice, 1));
             }
 
@@ -5650,10 +5623,12 @@ class Exercise
             ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
-            //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
+                    if ($debug) {
+                        error_log('Checking result coordinates');
+                    }
                     Database::delete(
                         Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
                         [
@@ -5668,6 +5643,9 @@ class Exercise
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
                         $answer[] = $val;
                         $hotspotValue = (int) $choice[$idx] === 1 ? 1 : 0;
+                        if ($debug) {
+                            error_log('Hotspot value: '.$hotspotValue);
+                        }
                         Event::saveExerciseAttemptHotspot(
                             $exeId,
                             $quesId,
@@ -5677,6 +5655,10 @@ class Exercise
                             false,
                             $this->id
                         );
+                    }
+                } else {
+                    if ($debug) {
+                        error_log("Empty: exerciseResultCoordinates");
                     }
                 }
                 Event::saveQuestionAttempt($questionScore, implode('|', $answer), $quesId, $exeId, 0, $this->id);
@@ -5695,6 +5677,9 @@ class Exercise
                         exe_result = exe_result + '.floatval($questionScore).'
                     WHERE exe_id = '.$exeId;
             Database::query($sql);
+            if ($debug) {
+                error_log($sql);
+            }
         }
 
         $return = [

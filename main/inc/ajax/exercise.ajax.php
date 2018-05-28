@@ -13,9 +13,9 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 if ($debug) {
-    error_log("-----------------");
+    error_log("-----------------------------------------------------");
     error_log("$action ajax call");
-    error_log("-----------------");
+    error_log("-----------------------------------------------------");
 }
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
@@ -105,10 +105,6 @@ switch ($action) {
             ) {
                 $sessionTime = $previousTime[$key];
                 $duration = $sessionTime = $now - $sessionTime;
-                /*if ($debug) {
-                    error_log("Now in UTC: ".$nowObject->format('Y-m-d H:i:s'));
-                    error_log("Session time in UTC: ".api_get_utc_datetime($sessionTime));
-                }*/
                 if (!empty($durationFromObject)) {
                     $duration += $durationFromObject;
                 }
@@ -410,7 +406,7 @@ switch ($action) {
             $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
             // Attempt id.
-            $exeId = $_REQUEST['exe_id'];
+            $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
             if ($debug) {
                 error_log("exe_id = $exeId");
@@ -418,6 +414,7 @@ switch ($action) {
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
                 error_log("remind_list = ".print_r($remind_list, 1));
+                error_log("--------------------------------");
             }
 
             // Exercise information.
@@ -560,7 +557,7 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
-                        error_log("delete_attempt  exe_id : $exeId, my_question_id: $my_question_id");
+                        error_log("delete_attempt exe_id : $exeId, my_question_id: $my_question_id");
                     }
                     Event::delete_attempt(
                         $exeId,
@@ -610,7 +607,6 @@ switch ($action) {
 
                 $duration = 0;
                 $now = time();
-
                 if ($type == 'all') {
                     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                 }
@@ -661,17 +657,27 @@ switch ($action) {
                 // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
-                    error_log(" -- end question -- ");
+                    error_log("---------- end question ------------");
                 }
-            }
-            if ($debug) {
-                error_log(" ------ end ajax call ------- ");
             }
         }
 
+        if ($type == 'all') {
+            echo 'ok';
+            exit;
+        }
+
         if ($objExercise->type == ONE_PER_PAGE) {
+            if ($debug) {
+                error_log("result: one_per_page");
+                error_log(" ------ end ajax call ------- ");
+            }
             echo 'one_per_page';
             exit;
+        }
+        if ($debug) {
+            error_log("result: ok");
+            error_log(" ------ end ajax call ------- ");
         }
         echo 'ok';
         break;

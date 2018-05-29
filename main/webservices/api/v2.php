@@ -6,9 +6,10 @@ $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {
     $hashParams = Rest::decodeParams($hash);
-
-    foreach ($hashParams as $key => $value) {
-        $_REQUEST[$key] = $value;
+    if (!empty($hashParams)) {
+        foreach ($hashParams as $key => $value) {
+            $_REQUEST[$key] = Security::remove_XSS($value);
+        }
     }
 }
 

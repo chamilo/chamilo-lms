@@ -341,16 +341,16 @@ class Rest extends WebService
                     'title' => $document['title'],
                     'path' => $document['path'],
                     'url' => $webPath.http_build_query([
-                        'username' => $this->user->getUsername(),
-                        'api_key' => $this->apiKey,
-                        'cidReq' => $this->course->getCode(),
-                        'id_session' => $sessionId,
-                        'gidReq' => 0,
-                        'gradebook' => 0,
-                        'origin' => '',
-                        'action' => 'download',
-                        'id' => $document['id'],
-                    ]),
+                            'username' => $this->user->getUsername(),
+                            'api_key' => $this->apiKey,
+                            'cidReq' => $this->course->getCode(),
+                            'id_session' => $sessionId,
+                            'gidReq' => 0,
+                            'gradebook' => 0,
+                            'origin' => '',
+                            'action' => 'download',
+                            'id' => $document['id'],
+                        ]),
                     'icon' => $icon,
                     'size' => format_file_size($document['size']),
                 ];
@@ -792,13 +792,13 @@ class Rest extends WebService
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
                     'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
-                        'hash' => $this->encodeParams([
-                            'action' => 'course_learnpath',
-                            'lp_id' => $lpId,
-                            'course' => $this->course->getId(),
-                            'session' => $sessionId,
+                            'hash' => $this->encodeParams([
+                                'action' => 'course_learnpath',
+                                'lp_id' => $lpId,
+                                'course' => $this->course->getId(),
+                                'session' => $sessionId,
+                            ]),
                         ]),
-                    ]),
                 ];
             }
 
@@ -823,16 +823,9 @@ class Rest extends WebService
      */
     public static function decodeParams($encoded)
     {
-        $decoded = str_replace(['-', '_', '.'], ['+', '/', '='], $encoded);
-        $mod4 = strlen($decoded) % 4;
+        $decoded = json_decode($encoded);
 
-        if ($mod4) {
-            $decoded .= substr('====', $mod4);
-        }
-
-        $b64Decoded = base64_decode($decoded);
-
-        return unserialize($b64Decoded);
+        return $decoded;
     }
 
     /**
@@ -851,15 +844,15 @@ class Rest extends WebService
         Login::init_user($this->user->getId(), true);
 
         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query([
-            'cidReq' => $this->course->getCode(),
-            'id_session' => $sessionId,
-            'gidReq' => 0,
-            'gradebook' => 0,
-            'origin' => '',
-            'action' => 'view',
-            'lp_id' => intval($lpId),
-            'isStudentView' => 'true',
-        ]);
+                'cidReq' => $this->course->getCode(),
+                'id_session' => $sessionId,
+                'gidReq' => 0,
+                'gradebook' => 0,
+                'origin' => '',
+                'action' => 'view',
+                'lp_id' => intval($lpId),
+                'isStudentView' => 'true',
+            ]);
 
         header("Location: $url");
         exit;
@@ -1319,10 +1312,8 @@ class Rest extends WebService
             'api_key' => $this->apiKey,
             'username' => $this->user->getUsername(),
         ]);
+        $encoded = json_encode($params);
 
-        $strParams = serialize($params);
-        $b64Encoded = base64_encode($strParams);
-
-        return str_replace(['+', '/', '='], ['-', '_', '.'], $b64Encoded);
+        return $encoded;
     }
 }

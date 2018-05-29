@@ -580,7 +580,8 @@
 					}
 
 					// Finally set display for figure.
-					if ( !alignClasses && el.is( 'figure' ) ) {
+					// if ( !alignClasses && el.is( 'figure' ) ) {
+					if ( el.is( 'figure' ) ) { // Force set display inline-block for figure regardless class
 						if ( newValue == 'center' )
 							el.setStyle( 'display', 'inline-block' );
 						else

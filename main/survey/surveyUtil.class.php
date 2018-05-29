@@ -2638,12 +2638,10 @@ class SurveyUtil
     /**
      * This function displays the form for searching a survey.
      *
-     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version January 2007
      *
-     * @todo use quickforms
      * @todo consider moving this to surveymanager.inc.lib.php
      */
     public static function display_survey_search_form()
@@ -2894,10 +2892,10 @@ class SurveyUtil
                     .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
             );
 
-            $warning = addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES));
+            $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('clean.png', get_lang('EmptySurvey')),
-                $codePath.'survey/survey_list.php'
+                $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
                 [
                     'onclick' => "javascript: if (!confirm('".$warning."')) return false;",

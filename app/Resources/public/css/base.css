@@ -9459,3 +9459,29 @@ ul.dropdown-menu.inner > li > a {
 }
 
 /* end document mp3 preview */
+
+/* Fix grid with one row and multiples columns. Works for .col-sm-6.col-md-4.col-lg-3 */
+.row.clear-rows-6-4-3 {
+}
+@media (min-width: 768px) {
+    .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
+        clear: left;
+    }
+}
+@media (min-width: 992px) {
+    .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
+        clear: none;
+    }
+    .clear-rows-6-4-3 .col-sm-6:nth-child(3n+1) {
+        clear: left;
+    }
+}
+@media (min-width: 1200px) {
+    .clear-rows-6-4-3 .col-sm-6:nth-child(3n+1) {
+        clear: none;
+    }
+    .clear-rows-6-4-3 .col-sm-6:nth-child(4n+1) {
+        clear: left;
+    }
+}
+/*-------------------------------------------------------------------------------------*/

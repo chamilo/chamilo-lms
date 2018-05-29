@@ -1,6 +1,5 @@
 <?php
-
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 /**
  * Integrate svg-edit with Chamilo
@@ -8,14 +7,10 @@ use ChamiloSession as Session;
  * @since 25/september/2010
  */
 
-require_once '../../../../inc/global.inc.php';//hack for Chamilo
+require_once '../../../../inc/global.inc.php';
 
 api_protect_course_script();
 api_block_anonymous_users();
-$drawDir = Session::read('draw_dir');
-if (empty($drawDir)) {
-    die();
-}
 $svgEditPath = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/';
 ?>
 <!DOCTYPE html>

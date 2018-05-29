@@ -177,7 +177,7 @@ class Template
             ],
             [
                 'name' => 'date_to_time_ago',
-                'callable' => 'Display::dateToStringAgoAndLongDate'
+                'callable' => 'Display::dateToStringAgoAndLongDate',
             ],
         ];
 

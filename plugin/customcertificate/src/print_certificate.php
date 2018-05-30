@@ -109,7 +109,7 @@ $htmlText .= '
 $htmlText .= '
     <link rel="stylesheet"
         type="text/css"
-        href="'.api_get_path(WEB_CSS_PATH).'editor.css">';
+        href="'.api_get_path(WEB_CSS_PATH).'document.css">';
 $htmlText .= '<body>';
 foreach ($userList as $userInfo) {
     $studentId = $userInfo['user_id'];

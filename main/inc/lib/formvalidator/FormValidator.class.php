@@ -950,7 +950,7 @@ EOT;
         $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;
-            // Adds editor.css in ckEditor
+            // Adds editor_content.css in ckEditor
             $config['style'] = true;
         }
 

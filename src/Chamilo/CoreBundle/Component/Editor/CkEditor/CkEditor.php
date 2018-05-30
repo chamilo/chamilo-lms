@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 //use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -55,13 +56,9 @@ class CkEditor extends Editor
     {
         $style = '';
         if (trim($this->value) == '<html><head><title></title></head><body></body></html>' || $this->value == '') {
-            $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
-            if (!is_file($cssFile)) {
-                $cssFile = api_get_path(WEB_CSS_PATH).'editor.css';
-            } else {
-                $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
-            }
-            $style = '<link href="'.$cssFile.'" rel="stylesheet" type="text/css" />';
+            $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css')
+                .api_get_css_asset('fontawesome/css/font-awesome.min.css')
+                .api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">

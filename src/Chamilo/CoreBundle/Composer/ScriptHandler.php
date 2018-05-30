@@ -203,7 +203,16 @@ class ScriptHandler
     {
         $appCss = __DIR__.'/../../../../app/Resources/public/css/';
         $newPath = __DIR__.'/../../../../web/css/';
-        $cssFiles = ['base.css', 'chat.css', 'editor.css', 'markdown.css', 'print.css', 'responsive.css', 'scorm.css'];
+        $cssFiles = [
+            'base.css',
+            'chat.css',
+            'document.css',
+            'editor_content.css',
+            'markdown.css',
+            'print.css',
+            'responsive.css',
+            'scorm.css',
+        ];
 
         $fs = new Filesystem();
 

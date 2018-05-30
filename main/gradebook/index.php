@@ -14,15 +14,17 @@ $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
-ob_start();
-
+api_block_anonymous_users();
 api_protect_course_script(true);
+
+ob_start();
 
 $course_code = api_get_course_id();
 $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
+$course_id = api_get_course_int_id();
 
-//make sure the destination for scripts is index.php instead of gradebook.php
+// Make sure the destination for scripts is index.php instead of gradebook.php
 Category::setUrl('index.php');
 
 $this_section = SECTION_COURSES;
@@ -30,6 +32,14 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '<script>
 var show_icon = "'.Display::returnIconPath('view_more_stats.gif').'";
 var hide_icon = "'.Display::returnIconPath('view_less_stats.gif').'";
+
+function confirmation() {
+	if (confirm("'.get_lang('DeleteAll').'?")) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 $(document).ready(function() {
     $("body").on("click", ".view_children", function() {
@@ -54,16 +64,6 @@ $(document).ready(function() {
 		}
 	}
 });
-</script>';
-api_block_anonymous_users();
-$htmlHeadXtra[] = '<script type="text/javascript">
-function confirmation() {
-	if (confirm("'.get_lang('DeleteAll').'?")) {
-		return true;
-	} else {
-		return false;
-	}
-}
 </script>';
 
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -220,13 +220,12 @@ if (isset($_GET['movelink'])) {
     if ($move_form->validate()) {
         $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
-        unset($link);
         header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat.'&'.api_get_cidreq());
         exit;
     }
 }
 
-//parameters for categories
+// Parameters for categories.
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
 
@@ -248,6 +247,7 @@ if (isset($_GET['visiblecat'])) {
         $filter_confirm_msg = false;
     }
 }
+
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
@@ -264,7 +264,7 @@ if (isset($_GET['deletecat'])) {
     $filter_confirm_msg = false;
 }
 
-//parameters for evaluations
+// Parameters for evaluations.
 if (isset($_GET['visibleeval'])) {
     GradebookUtils::block_students();
     if (isset($_GET['set_visible'])) {
@@ -285,7 +285,7 @@ if (isset($_GET['visibleeval'])) {
     }
 }
 
-//parameters for evaluations
+// Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
     $locked = Security::remove_XSS($_GET['lockedeval']);
@@ -314,7 +314,7 @@ if (isset($_GET['deleteeval'])) {
     $filter_confirm_msg = false;
 }
 
-//parameters for links
+// Parameters for links.
 if (isset($_GET['visiblelink'])) {
     GradebookUtils::block_students();
     if (isset($_GET['set_visible'])) {
@@ -336,8 +336,6 @@ if (isset($_GET['visiblelink'])) {
         $filter_confirm_msg = false;
     }
 }
-
-$course_id = api_get_course_int_id();
 
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
@@ -380,7 +378,7 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.intval($_GET['movecat'])
-            : '&moveeval='.Security::remove_XSS($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.Security::remove_XSS($_GET['targetcat']).'">
+            : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'">
 			   <input type="submit" value="'.get_lang('Ok').'">
 			   </form>';
     $warning_message = get_lang('MoveWarning').'<br><br>'.$button;
@@ -408,7 +406,7 @@ switch ($action) {
         break;
 }
 
-//actions on the sortabletable
+// Actions on the sortabletable.
 if (isset($_POST['action'])) {
     GradebookUtils::block_students();
     $number_of_selected_items = count($_POST['id']);
@@ -450,7 +448,12 @@ if (isset($_POST['action'])) {
                         }
                     }
                 }
-                $confirmation_message = get_lang('DeletedCategories').' : <b>'.$number_of_deleted_categories.'</b><br />'.get_lang('DeletedEvaluations').' : <b>'.$number_of_deleted_evaluations.'</b><br />'.get_lang('DeletedLinks').' : <b>'.$number_of_deleted_links.'</b><br /><br />'.get_lang('TotalItems').' : <b>'.$number_of_selected_items.'</b>';
+
+                $confirmation_message =
+                    get_lang('DeletedCategories').' : <b>'.$number_of_deleted_categories.'</b><br />'.
+                    get_lang('DeletedEvaluations').' : <b>'.$number_of_deleted_evaluations.'</b><br />'.
+                    get_lang('DeletedLinks').' : <b>'.$number_of_deleted_links.'</b><br /><br />'.
+                    get_lang('TotalItems').' : <b>'.$number_of_selected_items.'</b>';
                 $filter_confirm_msg = false;
                 break;
             case 'setvisible':
@@ -576,7 +579,6 @@ if (!isset($_GET['exportpdf'])) {
 }
 
 // LOAD DATA & DISPLAY TABLE
-
 $is_platform_admin = api_is_platform_admin();
 $is_course_admin = api_is_allowed_to_edit(null, true);
 $simple_search_form = '';
@@ -611,7 +613,14 @@ if (isset($_GET['studentoverview'])) {
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
-        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, ['justification' => 'center']);
+        $pdf->ezText(
+            get_lang('FlatView').' ('.api_convert_and_format_date(
+                null,
+                DATE_FORMAT_SHORT
+            ).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')',
+            12,
+            ['justification' => 'center']
+        );
         $pdf->line(50, 790, 550, 790);
         $pdf->line(50, 40, 550, 40);
         $pdf->ezSetY(750);
@@ -631,7 +640,7 @@ if (isset($_GET['studentoverview'])) {
         exit;
     }
 } else {
-    //Student view
+    // Student view
 
     //in any other case (no search, no pdf), print the available gradebooks
     // Important note: loading a category will actually load the *contents* of

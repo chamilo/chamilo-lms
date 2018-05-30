@@ -377,7 +377,6 @@ class Event
         $endDate = null
     ) {
         if (empty($exeId)) {
-
             return false;
         }
 
@@ -690,6 +689,7 @@ class Event
             if ($debug) {
                 error_log('exe id is empty');
             }
+
             return false;
         }
 
@@ -718,6 +718,7 @@ class Event
             if ($debug) {
                 error_log("Insert hotspot results: exeId: $exeId correct: $correct");
             }
+
             return Database::insert(
                 $table,
                 [

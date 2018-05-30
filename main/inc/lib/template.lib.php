@@ -1541,8 +1541,14 @@ class Template
         $this->assign('message_link', $message_link);
         $this->assign('message_url', $message_url);
 
-        // Certificate Link
+        $pendingSurveyLink = '';
+        $show = api_get_configuration_value('show_pending_survey_in_menu');
+        if ($show) {
+            $pendingSurveyLink = api_get_path(WEB_CODE_PATH).'survey/pending.php';
+        }
+        $this->assign('pending_survey_url', $pendingSurveyLink);
 
+        // Certificate Link
         $allow = api_get_configuration_value('hide_my_certificate_link');
         if ($allow === false) {
             $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';

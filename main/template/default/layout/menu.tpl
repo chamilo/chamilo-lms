@@ -72,11 +72,15 @@
                                         </a>
                                     </li>
                                 {% endif %}
+
+                                {% if pending_survey_url %}
                                 <li class="user-body">
-                                    <a href="{{ _p.web_main ~ 'survey/pending.php' }}">
+                                    <a href="{{ pending_survey_url }}">
                                         <em class="fa fa-pie-chart"></em> {{ 'PendingSurveys'|get_lang }}
                                     </a>
                                 </li>
+                                {% endif %}
+
                                 {% if certificate_url %}
                                     <li class="user-body">
                                         <a title="{{ "MyCertificates"|get_lang }}" href="{{ certificate_url }}">

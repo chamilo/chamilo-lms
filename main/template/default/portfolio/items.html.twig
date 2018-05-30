@@ -55,10 +55,10 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|api_convert_and_format_date(6) }}
+                    {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
                     {% if item.creationDate != item.updateDate %}
                         &centerdot;
-                        {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|api_convert_and_format_date(6) }}
+                        {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
                     {% endif %}
                 </div>
             </div>

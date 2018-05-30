@@ -263,6 +263,11 @@ blockquote p {
     vertical-align: text-bottom;
 }
 
+.text-center .img-responsive {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 @media (max-width: 767px) {
     .img-responsive {
         display: block;

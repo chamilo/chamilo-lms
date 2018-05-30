@@ -181,7 +181,7 @@ class Basic extends Toolbar
 
         $config['image2_chamilo_alignClasses'] = [
             'pull-left',
-            'block-center',
+            'text-center',
             'pull-right',
             'img-va-baseline',
             'img-va-top',

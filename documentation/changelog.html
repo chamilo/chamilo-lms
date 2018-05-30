@@ -57,24 +57,19 @@
                 date = city;
                 city = '';
             }
-
-
             var link = $("<a/>", {
                 text: title,
                 "title": title,
                 "href": "#"+version
             });
-
             $("#index").append(
                 $('<tr>').append($('<td>').append(link), $('<td>').append(city), $('<td>').append(date))
             );
         });
-
     });
 </script>
 
 <div class="container"><div class="row"><div class="col-md-12">
-
 <ul class="breadcrumb">
     <li>
         <a href="index.html">Documentation</a>
@@ -120,6 +115,9 @@
     <h3>Release name</h3>
         <p>?????????????</p>
         <h3>Security fixes</h3>
+        <ul aria-role="log" aria-live="off">
+            <li>[2018-05-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/0de84700648f098c1fbf6b807dee28ec640efe62">4ffe5edb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2532">#2532</a>) Security: Add Security::remove_XSS to clean variables from $_REQUEST</li>
+        </ul>
         <h3>Possibly breaking changes</h3>
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
@@ -131,6 +129,7 @@
         <h3>Improvements (minor features) and debug</h3>
         <h3>Stylesheets and theming</h3>
         <h3>Web services</h3>
+            <li>Parameters encode change from bas64 to json in file main/webservices/api/v2.php <a href="https://github.com/chamilo/chamilo-lms/commit/0de84700648f098c1fbf6b807dee28ec640efe62">4ffe5edb</a></li>
         <h3>Removals</h3>
         <h3>Known issues</h3>
     </div>

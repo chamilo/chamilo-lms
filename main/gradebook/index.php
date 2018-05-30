@@ -401,6 +401,11 @@ switch ($action) {
         }
         break;
     case 'export_table':
+        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
+        if ($hidePdfReport) {
+            api_not_allowed(true);
+        }
+
         //table will be export below
         ob_start();
         break;
@@ -754,11 +759,14 @@ if (!empty($selectCat)) {
 }
 
 if (!api_is_allowed_to_edit(null, true)) {
-    $actionsLeft .= Display::url(
-        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
-        api_get_self().'?action=export_table',
-        ['class' => 'btn btn-default']
-    );
+    $allowButton = api_get_configuration_value('gradebook_hide_pdf_report_button') === false;
+    if ($allowButton) {
+        $actionsLeft .= Display::url(
+            Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
+            api_get_self().'?action=export_table&'.api_get_cidreq(),
+            ['class' => 'btn btn-default']
+        );
+    }
 }
 
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)) {
@@ -965,7 +973,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $table = $gradebookTable->return_table();
-                $graph = $gradebookTable->getGraph();
+
+                $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
+                $graph = '';
+                if ($allowGraph) {
+                    $graph = $gradebookTable->getGraph();
+                }
 
                 if ($action == 'export_table') {
                     ob_clean();

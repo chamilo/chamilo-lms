@@ -852,6 +852,12 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide announcement "sent to" label
 // $_configuration['hide_announcement_sent_to_users_info'] = false;
 
+// Hide gradebook graph
+// $_configuration['gradebook_hide_graph'] = false;
+
+// Hide gradebook "download report in PDF" button
+// $_configuration['gradebook_hide_pdf_report_button'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

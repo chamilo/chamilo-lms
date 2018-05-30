@@ -114,13 +114,11 @@ if ($allowToEdit) {
 
                 $sendEmail = isset($values['add_announcement']) ? true : false;
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-
                 $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
                 $attachmentList = $sendAttachment ? $_FILES : null;
                 $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
                 $comment = isset($values['comment']) ? $values['comment'] : null;
                 $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
-
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 

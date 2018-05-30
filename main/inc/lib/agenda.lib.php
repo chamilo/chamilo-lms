@@ -473,7 +473,7 @@ class Agenda
         }
 
         $course_id = $this->course['real_id'];
-        $eventId = intval($eventId);
+        $eventId = (int) $eventId;
 
         $sql = "SELECT title, content, start_date, end_date, all_day
                 FROM $t_agenda
@@ -499,7 +499,7 @@ class Agenda
 
         if (1 <= $end && $end <= 500) {
             // We assume that, with this type of value, the user actually gives a count of repetitions
-            //and that he wants us to calculate the end date with that (particularly in case of imports from ical)
+            // and that he wants us to calculate the end date with that (particularly in case of imports from ical)
             switch ($type) {
                 case 'daily':
                     $end = $origStartDate + (86400 * $end);
@@ -2294,18 +2294,14 @@ class Agenda
             ['enctype' => 'multipart/form-data']
         );
 
-        $idAttach = isset($params['id_attach']) ? intval(
-            $params['id_attach']
-        ) : null;
+        $idAttach = isset($params['id_attach']) ? (int) $params['id_attach'] : null;
         $groupId = api_get_group_id();
-
+        $form_title = get_lang('AddCalendarItem');
         if ($id) {
             $form_title = get_lang('ModifyCalendarItem');
-        } else {
-            $form_title = get_lang('AddCalendarItem');
         }
 
-        $form->addElement('header', $form_title);
+        $form->addHeader($form_title);
         $form->addElement('hidden', 'id', $id);
         $form->addElement('hidden', 'action', $action);
         $form->addElement('hidden', 'id_attach', $idAttach);
@@ -2418,10 +2414,9 @@ class Agenda
                 substr(api_get_local_time($params['end_date']), 0, 16);
         }
 
+        $toolbar = 'Agenda';
         if (!api_is_allowed_to_edit(null, true)) {
             $toolbar = 'AgendaStudent';
-        } else {
-            $toolbar = 'Agenda';
         }
 
         $form->addElement(
@@ -2845,7 +2840,7 @@ class Agenda
      */
     public function addMonth($timestamp, $num = 1)
     {
-        list($y, $m, $d, $h, $n, $s) = split(
+        list($y, $m, $d, $h, $n, $s) = explode(
             '/',
             date('Y/m/d/h/i/s', $timestamp)
         );
@@ -2869,7 +2864,7 @@ class Agenda
      */
     public function addYear($timestamp, $num = 1)
     {
-        list($y, $m, $d, $h, $n, $s) = split(
+        list($y, $m, $d, $h, $n, $s) = explode(
             '/',
             date('Y/m/d/h/i/s', $timestamp)
         );
@@ -4039,12 +4034,12 @@ class Agenda
                     )."main/calendar/agenda.php?cidReq=".urlencode(
                         $course["code"]
                     )."&day=$agendaday&month=$month&year=$year#$agendaday";
-                list($year, $month, $day, $hour, $min, $sec) = split(
+                list($year, $month, $day, $hour, $min, $sec) = explode(
                     '[-: ]',
                     $item['start_date']
                 );
                 $start_date = $year.$month.$day.$hour.$min;
-                list($year, $month, $day, $hour, $min, $sec) = split(
+                list($year, $month, $day, $hour, $min, $sec) = explode(
                     '[-: ]',
                     $item['end_date']
                 );

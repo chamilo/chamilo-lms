@@ -2577,7 +2577,7 @@ class Tracking
                 if (!empty($lpList)) {
                     /** @var $lp */
                     foreach ($lpList as $lpId => $lp) {
-                        $lpIdList[] = $lpId;
+                        $lpIdList[] = $lp['lp_old_id'];
                     }
                 }
             }
@@ -2609,29 +2609,30 @@ class Tracking
         }
 
         // Fill with lp ids
+        $newProgress = [];
         if (!empty($lpIdList)) {
             foreach ($lpIdList as $lpId) {
-                if (!isset($progress[$lpId])) {
-                    $progress[$lpId] = 0;
+                if (isset($progress[$lpId])) {
+                    $newProgress[] = $progress[$lpId];
                 }
             }
+            $total = count($lpIdList);
+        } else {
+            $newProgress = $progress;
+            $total = count($newProgress);
         }
 
-        if (!empty($progress)) {
-            $sum = array_sum($progress);
-            $average = 0;
-            if (!empty($lpIdList)) {
-                $average = $sum / count($lpIdList);
-            }
-        } else {
-            $average = 0;
-            $sum = 0;
+        $average = 0;
+        $sum = 0;
+        if (!empty($newProgress)) {
+            $sum = array_sum($newProgress);
+            $average = $sum / $total;
         }
 
         if ($returnArray) {
             return [
                 $sum,
-                count($lpIdList),
+                $total,
             ];
         }
 

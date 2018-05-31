@@ -255,7 +255,7 @@ class ChamiloApi
     }
 
     /**
-     * Get the stylesheet path for HTML documents created with CKEditor
+     * Get the stylesheet path for HTML documents created with CKEditor.
      *
      * @return string
      */
@@ -273,7 +273,7 @@ class ChamiloApi
     }
 
     /**
-     * Get the stylesheet path for HTML blocks created with CKEditor
+     * Get the stylesheet path for HTML blocks created with CKEditor.
      *
      * @return string
      */

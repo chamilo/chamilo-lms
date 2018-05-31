@@ -6,28 +6,40 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 300;
-    src: local('Open Sans Light'), local('OpenSans-Light'), url(themes/chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Light.woff) format('woff');
+    src: local('Open Sans Light'),
+         local('OpenSans-Light'),
+         url(themes/chamilo/fonts/OpenSans-Light.woff2) format('woff2'),
+         url(themes/chamilo/fonts/OpenSans-Light.woff) format('woff');
 }
 
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
-    src: local('Open Sans'), local('OpenSans'), url(themes/chamilo/fonts/OpenSans.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans.woff) format('woff');
+    src: local('Open Sans'),
+         local('OpenSans'),
+         url(themes/chamilo/fonts/OpenSans.woff2) format('woff2'),
+         url(themes/chamilo/fonts/OpenSans.woff) format('woff');
 }
 
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 600;
-    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(themes/chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+    src: local('Open Sans Semibold'),
+         local('OpenSans-Semibold'),
+         url(themes/chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'),
+         url(themes/chamilo/fonts/OpenSans-Semibold.woff) format('woff');
 }
 
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 700;
-    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(themes/chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Bold.woff) format('woff');
+    src: local('Open Sans Bold'),
+         local('OpenSans-Bold'),
+         url(themes/chamilo/fonts/OpenSans-Bold.woff2) format('woff2'),
+         url(themes/chamilo/fonts/OpenSans-Bold.woff) format('woff');
 }
 
 body {
@@ -35,68 +47,67 @@ body {
 }
 
 /* Hack for show Bootstrap alerts in CKEditor' style select */
-.cke_panel_listItem a > * {
+.cke_panel_listItem a > :first-child {
     margin-bottom: 0;
 }
 
 .ck {
     display: block;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 1;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
     font-size-adjust: none;
     font-stretch: normal;
-    font-feature-settings: normal;
-    font-language-override: normal;
-    font-kerning: auto;
+    font-style: normal;
     font-synthesis: weight style;
     font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
 }
 
 .ck-article {
-    text-transform: uppercase;
     color: #E95839;
-    font-weight: bold;
     background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
-    padding-bottom: 2%;
+    font-weight: bold;
     margin-bottom: 10px;
+    padding-bottom: 2%;
+    text-transform: uppercase;
 }
 
 .ck-article:before {
     content: "\f15c";
-    margin-right: 5px;
     font-family: FontAwesome;
     font-weight: normal;
+    margin-right: 5px;
 }
 
 .ck-paragraph-box {
     background-color: #F5EEE2;
-    padding: 2% 3%;
     line-height: 20px;
+    padding: 2% 3%;
 }
 
 .ck-title {
+    color: #000;
     display: block;
     font-weight: bold;
-    color: #000;
 }
 
 .ck-title2 {
-    padding-top: 0;
-    margin-top: 0;
-    font-weight: 500;
-    position: relative;
     color: #000;
+    font-weight: 500;
+    margin-top: 0;
+    padding-top: 0;
+    position: relative;
 }
 
 .ck-title2:after {
     background-color: #E95839;
-    margin: 10px 0px 0px;
-    width: 50px;
-    height: 2px;
-    display: block;
     content: "";
-
+    display: block;
+    height: 2px;
+    margin: 10px 0 0;
+    width: 50px;
 }
 
 .ck-stand-out {
@@ -104,15 +115,15 @@ body {
 }
 
 .ck-style1 {
-    height: 6px;
     background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
     border: 0;
+    height: 6px;
 }
 
 .ck-style2 {
-    height: 6px;
     background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
+    height: 6px;
 }
 
 .ck-style3 {
@@ -120,15 +131,15 @@ body {
 }
 
 .ck-style3:after {
-    content: '\002702';
-    display: inline-block;
-    position: relative;
-    top: -12px;
-    left: 40px;
-    padding: 0 3px;
     background: #FFF;
     color: #8c8b8b;
+    content: '\002702';
+    display: inline-block;
     font-size: 18px;
+    left: 40px;
+    padding: 0 3px;
+    position: relative;
+    top: -12px;
 }
 
 .img-va-baseline {
@@ -196,10 +207,10 @@ figure.image.pull-right {
 }
 
 figure.image figcaption {
-    text-align: left;
     background-color: #f3f3f3;
-    padding-top: 0px;
-    margin: 0px;
-    border-radius: 0px;
+    border-radius: 0;
+    margin: 0;
     padding-left: 5px;
+    padding-top: 0;
+    text-align: left;
 }

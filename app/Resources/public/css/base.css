@@ -6,7 +6,7 @@
         alex.aragon@beeznest.com
         angel.quiroz@beeznest.com
         julio.montoya@beeznest.com
-        yannik.warnier@beeznest.com
+        yannick.warnier@beeznest.com
     Version: 1.0
 */
 html {
@@ -6677,7 +6677,7 @@ div#chat-remote-video video {
     cursor: pointer;
 }
 
-#registration input[value='5']:after {
+#registration input.register-profile[value='5']:after {
     position: relative;
     top: 0;
     display: block;
@@ -6693,7 +6693,7 @@ div#chat-remote-video video {
     border: 4px solid #FFFFFF;
 }
 
-#registration input[value='5']:checked:after {
+#registration input.register-profile[value='5']:checked:after {
     -webkit-box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     background: url(../../main/img/icons/svg/coursestudent.svg);
@@ -6703,7 +6703,7 @@ div#chat-remote-video video {
     top: 5px;
 }
 
-#registration input[value='1']:after {
+#registration input.register-profile[value='1']:after {
     position: relative;
     top: 0;
     display: block;
@@ -6719,7 +6719,7 @@ div#chat-remote-video video {
     border: 4px solid #FFFFFF;
 }
 
-#registration input[value='1']:checked:after {
+#registration input.register-profile[value='1']:checked:after {
     -webkit-box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     background: url(../../main/img/icons/svg/coursemanager.svg);

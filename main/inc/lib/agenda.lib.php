@@ -84,10 +84,9 @@ class Agenda
                     );
 
                     $isGroupAccess = $userHasAccess || $isTutor;
+                    $isAllowToEdit = false;
                     if ($isGroupAccess) {
                         $isAllowToEdit = true;
-                    } else {
-                        $isAllowToEdit = false;
                     }
                 }
 
@@ -111,7 +110,6 @@ class Agenda
 
         $this->setIsAllowedToEdit($isAllowToEdit);
         $this->events = [];
-
         $agendaColors = array_merge(
             [
                 'platform' => 'red', //red
@@ -205,8 +203,8 @@ class Agenda
     /**
      * Adds an event to the calendar.
      *
-     * @param string $start                 datetime format: 2012-06-14 09:00:00
-     * @param string $end                   datetime format: 2012-06-14 09:00:00
+     * @param string $start                 datetime format: 2012-06-14 09:00:00 in local time
+     * @param string $end                   datetime format: 2012-06-14 09:00:00 in local time
      * @param string $allDay                (true, false)
      * @param string $title
      * @param string $content
@@ -442,8 +440,8 @@ class Agenda
     public function getRepeatedInfoByEvent($eventId, $courseId)
     {
         $repeatTable = Database::get_course_table(TABLE_AGENDA_REPEAT);
-        $eventId = intval($eventId);
-        $courseId = intval($courseId);
+        $eventId = (int) $eventId;
+        $courseId = (int) $courseId;
         $sql = "SELECT * FROM $repeatTable
                 WHERE c_id = $courseId AND cal_id = $eventId";
         $res = Database::query($sql);
@@ -456,9 +454,81 @@ class Agenda
     }
 
     /**
+     * @param string $type
+     * @param string $startEvent      in UTC
+     * @param string $endEvent        in UTC
+     * @param string $repeatUntilDate in UTC
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function generateDatesByType($type, $startEvent, $endEvent, $repeatUntilDate)
+    {
+        $continue = true;
+        $repeatUntilDate = new DateTime($repeatUntilDate, new DateTimeZone('UTC'));
+        $loopMax = 365;
+        $counter = 0;
+        $list = [];
+
+        switch ($type) {
+            case 'daily':
+                $interval = 'P1D';
+                break;
+            case 'weekly':
+                $interval = 'P1W';
+                break;
+            case 'monthlyByDate':
+                $interval = 'P1M';
+                break;
+            case 'monthlyByDay':
+                //not yet implemented
+                break;
+            case 'monthlyByDayR':
+                //not yet implemented
+                break;
+            case 'yearly':
+                $interval = 'P1Y';
+                break;
+        }
+
+        if (empty($interval)) {
+            return [];
+        }
+
+        while ($continue) {
+            $startDate = new DateTime($startEvent, new DateTimeZone('UTC'));
+            $endDate = new DateTime($endEvent, new DateTimeZone('UTC'));
+
+            $startDate->add(new DateInterval($interval));
+            $endDate->add(new DateInterval($interval));
+
+            $newStartDate = $startDate->format('Y-m-d H:i:s');
+            $newEndDate = $endDate->format('Y-m-d H:i:s');
+
+            if ($endDate > $repeatUntilDate) {
+                break;
+            }
+
+            $list[] = ['start' => $newStartDate, 'end' => $newEndDate];
+
+            $startEvent = $newStartDate;
+            $endEvent = $newEndDate;
+
+            $counter++;
+
+            // just in case stop if more than $loopMax
+            if ($counter > $loopMax) {
+                break;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
      * @param int    $eventId
      * @param string $type
-     * @param string $end     in local time
+     * @param string $end     in UTC
      * @param array  $sentTo
      *
      * @return bool
@@ -484,44 +554,6 @@ class Agenda
             return false;
         }
 
-        $row = Database::fetch_array($res);
-        $origStartDate = api_strtotime($row['start_date'], 'UTC');
-        $origEndDate = api_strtotime($row['end_date'], 'UTC');
-        $diff = $origEndDate - $origStartDate;
-
-        $title = $row['title'];
-        $content = $row['content'];
-        $allDay = $row['all_day'];
-
-        $now = time();
-        $type = Database::escape_string($type);
-        $end = api_strtotime($end);
-
-        if (1 <= $end && $end <= 500) {
-            // We assume that, with this type of value, the user actually gives a count of repetitions
-            // and that he wants us to calculate the end date with that (particularly in case of imports from ical)
-            switch ($type) {
-                case 'daily':
-                    $end = $origStartDate + (86400 * $end);
-                    break;
-                case 'weekly':
-                    $end = $this->addWeek($origStartDate, $end);
-                    break;
-                case 'monthlyByDate':
-                    $end = $this->addMonth($origStartDate, $end);
-                    break;
-                case 'monthlyByDay':
-                    //TODO
-                    break;
-                case 'monthlyByDayR':
-                    //TODO
-                    break;
-                case 'yearly':
-                    $end = $this->addYear($origStartDate, $end);
-                    break;
-            }
-        }
-
         $typeList = [
             'daily',
             'weekly',
@@ -531,90 +563,50 @@ class Agenda
             'yearly',
         ];
 
+        if (!in_array($type, $typeList)) {
+            return false;
+        }
+
+        $now = time();
+
         // The event has to repeat *in the future*. We don't allow repeated
         // events in the past
-        if ($end > $now && in_array($type, $typeList)) {
-            $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
-                    VALUES ($course_id, '$eventId', '$type', '$end')";
-            Database::query($sql);
+        if ($end > $now) {
+            return false;
+        }
 
-            switch ($type) {
-                // @todo improve loop.
-                case 'daily':
-                    for ($i = $origStartDate + 86400; $i <= $end; $i += 86400) {
-                        $start = date('Y-m-d H:i:s', $i);
-                        $repeatEnd = date('Y-m-d H:i:s', $i + $diff);
-                        $this->addEvent(
-                            $start,
-                            $repeatEnd,
-                            $allDay,
-                            $title,
-                            $content,
-                            $sentTo,
-                            false,
-                            $eventId
-                        );
-                    }
-                    break;
-                case 'weekly':
-                    for ($i = $origStartDate + 604800; $i <= $end; $i += 604800) {
-                        $start = date('Y-m-d H:i:s', $i);
-                        $repeatEnd = date('Y-m-d H:i:s', $i + $diff);
-                        $this->addEvent(
-                            $start,
-                            $repeatEnd,
-                            $allDay,
-                            $title,
-                            $content,
-                            $sentTo,
-                            false,
-                            $eventId
-                        );
-                    }
-                    break;
-                case 'monthlyByDate':
-                    $next_start = $this->addMonth($origStartDate);
-                    while ($next_start <= $end) {
-                        $start = date('Y-m-d H:i:s', $next_start);
-                        $repeatEnd = date('Y-m-d H:i:s', $next_start + $diff);
-                        $this->addEvent(
-                            $start,
-                            $repeatEnd,
-                            $allDay,
-                            $title,
-                            $content,
-                            $sentTo,
-                            false,
-                            $eventId
-                        );
-                        $next_start = $this->addMonth($next_start);
-                    }
-                    break;
-                case 'monthlyByDay':
-                    //not yet implemented
-                    break;
-                case 'monthlyByDayR':
-                    //not yet implemented
-                    break;
-                case 'yearly':
-                    $next_start = $this->addYear($origStartDate);
-                    while ($next_start <= $end) {
-                        $start = date('Y-m-d H:i:s', $next_start);
-                        $repeatEnd = date('Y-m-d H:i:s', $next_start + $diff);
-                        $this->addEvent(
-                            $start,
-                            $repeatEnd,
-                            $allDay,
-                            $title,
-                            $content,
-                            $sentTo,
-                            false,
-                            $eventId
-                        );
-                        $next_start = $this->addYear($next_start);
-                    }
-                    break;
-            }
+        $row = Database::fetch_array($res);
+
+        $title = $row['title'];
+        $content = $row['content'];
+        $allDay = $row['all_day'];
+
+        $type = Database::escape_string($type);
+        $end = Database::escape_string($end);
+
+        $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
+                VALUES ($course_id, '$eventId', '$type', '$end')";
+        Database::query($sql);
+
+        $generatedDates = $this->generateDatesByType($type, $row['start_date'], $row['end_date'], $end);
+
+        if (empty($generatedDates)) {
+            return false;
+        }
+
+        foreach ($generatedDates as $dateInfo) {
+            $start = api_get_local_time($dateInfo['start']);
+            $end = api_get_local_time($dateInfo['end']);
+            $this->addEvent(
+                $start,
+                $end,
+                $allDay,
+                $title,
+                $content,
+                $sentTo,
+                false,
+                $eventId
+            );
         }
 
         return true;
@@ -2818,61 +2810,6 @@ class Agenda
     }
 
     /**
-     * Adds x weeks to a UNIX timestamp.
-     *
-     * @param int $timestamp The timestamp
-     * @param int $num       The number of weeks to add
-     *
-     * @return int The new timestamp
-     */
-    public function addWeek($timestamp, $num = 1)
-    {
-        return $timestamp + $num * 604800;
-    }
-
-    /**
-     * Adds x months to a UNIX timestamp.
-     *
-     * @param int $timestamp The timestamp
-     * @param int $num       The number of years to add
-     *
-     * @return int The new timestamp
-     */
-    public function addMonth($timestamp, $num = 1)
-    {
-        list($y, $m, $d, $h, $n, $s) = explode(
-            '/',
-            date('Y/m/d/h/i/s', $timestamp)
-        );
-        if ($m + $num > 12) {
-            $y += floor($num / 12);
-            $m += $num % 12;
-        } else {
-            $m += $num;
-        }
-
-        return mktime($h, $n, $s, $m, $d, $y);
-    }
-
-    /**
-     * Adds x years to a UNIX timestamp.
-     *
-     * @param int $timestamp The timestamp
-     * @param int $num       The number of years to add
-     *
-     * @return int The new timestamp
-     */
-    public function addYear($timestamp, $num = 1)
-    {
-        list($y, $m, $d, $h, $n, $s) = explode(
-            '/',
-            date('Y/m/d/h/i/s', $timestamp)
-        );
-
-        return mktime($h, $n, $s, $m, $d, $y + $num);
-    }
-
-    /**
      * @param int $eventId
      *
      * @return array
@@ -3193,7 +3130,6 @@ class Agenda
                             new DateTimeZone($currentTimeZone)
                         );
                         $until = $until->format('Y-m-d H:i');
-                        //$res = agenda_add_repeat_item($courseInfo, $id, $freq, $until, $attendee);
                         $this->addRepeatedItem(
                             $id,
                             $freq,
@@ -4067,11 +4003,11 @@ class Agenda
      */
     public static function get_personal_agenda_item($id)
     {
-        $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
+        $table = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $id = intval($id);
         // make sure events of the personal agenda can only be seen by the user himself
         $user = api_get_user_id();
-        $sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
+        $sql = " SELECT * FROM ".$table." WHERE id=".$id." AND user = ".$user;
         $result = Database::query($sql);
         if (Database::num_rows($result) == 1) {
             $item = Database::fetch_array($result);

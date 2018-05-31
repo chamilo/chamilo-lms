@@ -346,7 +346,7 @@ function who_is_online_count($time_limit = null, $friends = false)
     $current_date = api_get_utc_datetime($online_time);
 
     if ($friends) {
-        // 	who friends from social network is online
+        // who friends from social network is online
         $query = "SELECT DISTINCT count(login_user_id) as count
 				  FROM $track_online_table INNER JOIN $friend_user_table
                   ON (friend_user_id = login_user_id)
@@ -367,7 +367,7 @@ function who_is_online_count($time_limit = null, $friends = false)
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             if ($friends) {
-                // 	friends from social network is online
+                // friends from social network is online
                 $query = "SELECT DISTINCT count(login_user_id) as count
 							FROM $track_online_table track
 							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)

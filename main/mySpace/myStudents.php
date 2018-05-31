@@ -1013,8 +1013,11 @@ if (empty($details)) {
             }
 
             $totalAttendanceFormatted = $scoreDisplay->display_score($totalAttendance);
-            $totalScoreFormatted = $scoreDisplay->display_score([$totalScore/$totalCourses, 100], SCORE_AVERAGE);
-            $totalProgressFormatted = $scoreDisplay->display_score([$totalProgress/$totalCourses, 100], SCORE_AVERAGE);
+            $totalScoreFormatted = $scoreDisplay->display_score([$totalScore / $totalCourses, 100], SCORE_AVERAGE);
+            $totalProgressFormatted = $scoreDisplay->display_score(
+                [$totalProgress / $totalCourses, 100],
+                SCORE_AVERAGE
+            );
             $totalEvaluations = $scoreDisplay->display_score($gradeBookTotal);
             $totalTimeFormatted = api_time_to_hms($totalCourseTime);
             echo '<tr>
@@ -1035,7 +1038,7 @@ if (empty($details)) {
                 $totalScoreFormatted,
                 $totalAttendanceFormatted,
                 $totalEvaluations,
-                ''
+                '',
             ];
 
             $csv_content[] = $csvRow;

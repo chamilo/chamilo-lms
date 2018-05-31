@@ -82,7 +82,6 @@ class DatePicker extends HTML_QuickForm_text
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
-        $id = $this->getAttribute('id');
         $value = $this->getValue();
 
         if (empty($size)) {

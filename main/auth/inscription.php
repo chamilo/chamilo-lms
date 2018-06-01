@@ -37,6 +37,7 @@ if ($gMapsPlugin->get('enable_api') === 'true') {
     $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
 }
 
+$extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
@@ -349,6 +350,7 @@ if ($user_already_registered_show_terms === false &&
             false,
             $extraFieldList
         );
+        $extraFieldsLoaded = true;
     }
 
     // CAPTCHA
@@ -597,7 +599,7 @@ if (!$formContainsSendButton) {
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
 
-if ($extraConditions) {
+if ($extraConditions && $extraFieldsLoaded) {
     // Set conditions as "required" and also change the labels
     foreach ($extraConditions as $condition) {
         /** @var HTML_QuickForm_group $element */

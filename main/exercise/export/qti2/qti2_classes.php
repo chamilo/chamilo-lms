@@ -17,6 +17,7 @@ class Ims2Question extends Question
      */
     public function setAnswer()
     {
+        $answer = null;
         switch ($this->type) {
             case MCUA:
             case MCMA:
@@ -41,9 +42,11 @@ class Ims2Question extends Question
                 $answer = new ImsAnswerHotspot($this->id);
 
                 return $answer;
+            default:
+                break;
         }
 
-        return null;
+        return $answer;
     }
 
     public function createAnswersForm($form)

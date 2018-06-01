@@ -19,13 +19,7 @@ class Ims2Question extends Question
     {
         switch ($this->type) {
             case MCUA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
-
-                return $answer;
             case MCMA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
-
-                return $answer;
             case TF:
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
@@ -47,12 +41,9 @@ class Ims2Question extends Question
                 $answer = new ImsAnswerHotspot($this->id);
 
                 return $answer;
-            default:
-                $answer = null;
-                break;
         }
 
-        return $answer;
+        return null;
     }
 
     public function createAnswersForm($form)

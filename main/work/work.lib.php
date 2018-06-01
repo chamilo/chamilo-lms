@@ -5347,7 +5347,7 @@ function exportAllStudentWorkFromPublication(
     $expiresOn = null;
 
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>'.get_lang('ExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>'.get_lang('PostedExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 

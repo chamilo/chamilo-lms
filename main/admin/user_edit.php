@@ -340,7 +340,8 @@ $(document).ready(function(){
 // Freeze user conditions, admin cannot updated them
 $extraConditions = api_get_configuration_value('show_conditions_to_user');
 
-if ($extraConditions) {
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
     foreach ($extraConditions as $condition) {
         /** @var HTML_QuickForm_group $element */
         $element = $form->getElement('extra_'.$condition['variable']);

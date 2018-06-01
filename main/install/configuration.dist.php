@@ -861,15 +861,22 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Show pending survey link in user menu
 // $_configuration['show_pending_survey_in_menu'] = false;
 
-// Show multiple conditions to user during the inscription
+// Show multiple conditions to user during sign up process
 // Example with a GDPR condition
-$_configuration['show_conditions_to_user'] = [
+/*$_configuration['show_conditions_to_user'] = [
     'conditions' => [
-        'variable' => 'gdpr', // internal extra field name
-        'display_text' => 'GDPRTitle', // checkbox title will be translated with get_lang('GDPRTitle')
-        'text_area' => 'GDPRTextArea', // this will be translated using get_lang('GDPRTextArea')
+        [
+            'variable' => 'gdpr', // internal extra field name
+            'display_text' => 'GDPRTitle', // checkbox title will be translated with get_lang('GDPRTitle')
+            'text_area' => 'GDPRTextArea', // this will be translated using get_lang('GDPRTextArea')
+        ],
+        [
+            'variable' => 'my_terms',
+            'display_text' => 'My test conditions',
+            'text_area' => 'This is a long text area, with lot of terms and conditions ... ',
+        ],
     ],
-];
+];*/
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

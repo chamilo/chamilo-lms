@@ -57,9 +57,10 @@ if (!empty($_SESSION['user_language_choice'])) {
 
 $extraConditions = api_get_configuration_value('show_conditions_to_user');
 
-if ($extraConditions) {
+if ($extraConditions && isset($extraConditions['conditions'])) {
     // Create user extra fields for the conditions
     $userExtraField = new ExtraField('user');
+    $extraConditions = $extraConditions['conditions'];
     foreach ($extraConditions as $condition) {
         $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
         if ($exists == false) {

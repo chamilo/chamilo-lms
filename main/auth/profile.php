@@ -364,7 +364,8 @@ if (is_profile_editable()) {
 
 // Student cannot modified their user conditions
 $extraConditions = api_get_configuration_value('show_conditions_to_user');
-if ($extraConditions) {
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
     foreach ($extraConditions as $condition) {
         $element = $form->getElement('extra_'.$condition['variable']);
         if ($element) {

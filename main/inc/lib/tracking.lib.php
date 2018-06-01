@@ -3307,10 +3307,10 @@ class Tracking
         $session_id = 0
     ) {
         $course = api_get_course_info($course_code);
-        $student_id = intval($student_id);
-        $lp_id = intval($lp_id);
-        $last_time = 0;
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $lp_id = (int) $lp_id;
+        $session_id = (int) $session_id;
+        $lastTime = 0;
 
         if (!empty($course)) {
             $course_id = $course['real_id'];
@@ -3322,11 +3322,11 @@ class Tracking
             // database (and if no list was given, get them all)
             $sql = "SELECT id FROM $lp_table 
                     WHERE c_id = $course_id AND id = $lp_id ";
-            $res_row_lp = Database::query($sql);
-            $count_row_lp = Database::num_rows($res_row_lp);
+            $row = Database::query($sql);
+            $count = Database::num_rows($row);
 
             // calculates last connection time
-            if ($count_row_lp > 0) {
+            if ($count > 0) {
                 $sql = 'SELECT MAX(start_time)
                         FROM '.$t_lpiv.' AS item_view
                         INNER JOIN '.$t_lpv.' AS view
@@ -3340,12 +3340,12 @@ class Tracking
                             view.session_id = '.$session_id;
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
-                    $last_time = Database::result($rs, 0, 0);
+                    $lastTime = Database::result($rs, 0, 0);
                 }
             }
         }
 
-        return $last_time;
+        return $lastTime;
     }
 
     /**
@@ -3395,7 +3395,7 @@ class Tracking
                     INNER JOIN $tbl_session_user sru
                     ON (srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id)
                     WHERE
-                        sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+                        sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
                         srcru.c_id = '$courseId' AND
                         srcru.session_id = '$id_session'";
 
@@ -3405,7 +3405,7 @@ class Tracking
             }
         }
 
-        // Then, courses where $coach_id is coach of the session    //
+        // Then, courses where $coach_id is coach of the session
         $sql = 'SELECT session_course_user.user_id
                 FROM '.$tbl_session_course_user.' as session_course_user
                 INNER JOIN '.$tbl_session_user.' sru
@@ -3462,7 +3462,7 @@ class Tracking
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $students = [];
-        // At first, courses where $coach_id is coach of the course //
+        // At first, courses where $coach_id is coach of the course
         $sql = 'SELECT c_id FROM '.$tbl_session_course_user.'
                 WHERE session_id="'.$id_session.'" AND user_id='.$coach_id.' AND status=2';
         $result = Database::query($sql);
@@ -3516,8 +3516,7 @@ class Tracking
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        // At first, courses where $coach_id is coach of the course //
-
+        // At first, courses where $coach_id is coach of the course
         $sql = 'SELECT 1 FROM '.$tbl_session_course_user.'
                 WHERE user_id='.$coach_id.' AND status=2';
         $result = Database::query($sql);
@@ -3564,7 +3563,6 @@ class Tracking
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         // At first, courses where $coach_id is coach of the course.
-
         $sql = 'SELECT DISTINCT c.code
                 FROM '.$tbl_session_course_user.' sc
                 INNER JOIN '.$tbl_course.' c
@@ -3904,7 +3902,6 @@ class Tracking
 
         $conditions[] = ' pub.active <> 2 ';
         $conditionToString = implode(' AND ', $conditions);
-
         $sessionCondition = api_get_session_condition($session_id, true, false, 'pub.session_id');
         $conditionToString .= $sessionCondition;
 
@@ -3924,10 +3921,9 @@ class Tracking
     /**
      * Count messages per student inside forum tool.
      *
-     * @param    int|array        Student id
-     * @param    string    Course code
-     * @param int        Session id (optional), if param $session_id is
-     *                                                               null(default) return count of messages including sessions, 0 = session is not filtered
+     * @param int|array  Student id
+     * @param string     Course code
+     * @param int        Session id if null(default) return count of messages including sessions, 0 = session is not filtered
      *
      * @return int Count of messages
      */
@@ -3998,11 +3994,10 @@ class Tracking
     /**
      * This function counts the number of post by course.
      *
-     * @param      string     Course code
-     * @param int        Session id (optional), if param $session_id is
-     *                                                               null(default) it'll return results including sessions,
+     * @param   string     Course code
+     * @param   int        Session id (optional), if is null(default) it'll return results including sessions,
      *                                                               0 = session is not filtered
-     * @param int                                        $groupId
+     * @param   int         $groupId
      *
      * @return int The number of post by course
      */
@@ -5440,7 +5435,7 @@ class Tracking
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
 
-            //Course details
+            // Course details
             $html .= '
                 <thead>
                 <tr>
@@ -5991,7 +5986,7 @@ class Tracking
             }
         }
 
-        //Getting best result
+        // Getting best result
         rsort($my_exercise_result_array);
         $my_exercise_result = 0;
         if (isset($my_exercise_result_array[0])) {
@@ -6032,7 +6027,7 @@ class Tracking
             }
         }
 
-        //Fix to remove the data of the user with my data
+        // Fix to remove the data of the user with my data
         for ($i = 0; $i <= count($my_final_array); $i++) {
             if (!empty($my_final_array[$i])) {
                 $my_final_array[$i] = $final_array[$i] + 1; //Add my result
@@ -6086,7 +6081,6 @@ class Tracking
             );
 
             /* Do not write the chart title */
-
             /* Define the chart area */
             $myPicture->setGraphArea(5, 5, $widthSize - 5, $heightSize - 5);
 

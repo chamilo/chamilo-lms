@@ -134,22 +134,20 @@ foreach ($userList as $userInfo) {
         $logoLeft = '';
     }
 
+    $logoCenter = '';
     if (!empty($infoCertificate['logo_center'])) {
         $logoCenter = '
             <img 
                 style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
                 src="'.$path.$infoCertificate['logo_center'].'" />';
-    } else {
-        $logoCenter = '';
     }
 
+    $logoRight = '';
     if (!empty($infoCertificate['logo_right'])) {
         $logoRight = '
             <img
                 style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
                 src="'.$path.$infoCertificate['logo_right'].'" />';
-    } else {
-        $logoRight = '';
     }
 
     $htmlText .= '<table 
@@ -319,10 +317,13 @@ foreach ($userList as $userInfo) {
     $htmlText .= '<div class="caraB" style="page-break-before:always;" margin:0; padding:0;>';
 
     if ($infoCertificate['contents_type'] == 0) {
-        $contentsDescription = CourseDescription::get_data_by_description_type(3, $courseId, 0);
+        $courseDescription = new CourseDescription();
+        $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
         $domd = new DOMDocument();
         libxml_use_internal_errors(true);
-        $domd->loadHTML($contentsDescription['description_content']);
+        if (isset($contentDescription['description_content'])) {
+            $domd->loadHTML($contentDescription['description_content']);
+        }
         libxml_use_internal_errors(false);
         $domx = new DOMXPath($domd);
         $items = $domx->query("//li[@style]");

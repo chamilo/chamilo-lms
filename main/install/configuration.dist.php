@@ -861,6 +861,16 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Show pending survey link in user menu
 // $_configuration['show_pending_survey_in_menu'] = false;
 
+// Show multiple conditions to user during the inscription
+// Example with a GDPR condition
+$_configuration['show_conditions_to_user'] = [
+    'conditions' => [
+        'variable' => 'gdpr', // internal extra field name
+        'display_text' => 'GDPRTitle', // checkbox title will be translated with get_lang('GDPRTitle')
+        'text_area' => 'GDPRTextArea', // this will be translated using get_lang('GDPRTextArea')
+    ],
+];
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

@@ -40,7 +40,8 @@ if ($gMapsPlugin->get('enable_api') === 'true') {
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting('allow_registration') === 'false';
+$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
+    api_get_setting('allow_registration') === 'false';
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -52,6 +53,29 @@ if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['_user']['language'];
 } else {
     $user_selected_language = api_get_setting('platformLanguage');
+}
+
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+
+if ($extraConditions) {
+    // Create user extra fields for the conditions
+    $userExtraField = new ExtraField('user');
+    foreach ($extraConditions as $condition) {
+        $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
+        if ($exists == false) {
+            $params = [
+                'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'variable' => $condition['variable'],
+                'display_text' => $condition['display_text'],
+                'default_value' => '',
+                'visible_to_self' => true,
+                'visible_to_others' => false,
+                'changeable' => true,
+                'filter' => false,
+            ];
+            $userExtraField->save($params);
+        }
+    }
 }
 
 $form = new FormValidator('registration');
@@ -568,6 +592,30 @@ if (!$formContainsSendButton) {
 
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
+
+if ($extraConditions) {
+    // Set conditions as "required" and also change the labels
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $children = $element->getElements();
+            /** @var HTML_QuickForm_checkbox $child */
+            foreach ($children as $child) {
+                $child->setText(get_lang($condition['display_text']));
+            }
+            $form->setRequired($element);
+            if (!empty($condition['text_area'])) {
+                $element->setLabel(
+                    [
+                        '',
+                        '<textarea rows="5" disabled cols="100%">'.get_lang($condition['text_area']).'</textarea>'
+                    ]
+                );
+            }
+        }
+    }
+}
 
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);

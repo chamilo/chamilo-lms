@@ -389,9 +389,7 @@ class PDF
 
         // Formatting the pdf
         $course_data = api_get_course_info($course_code);
-
         self::format_pdf($course_data, $completeHeader);
-
         $document_html = preg_replace($clean_search, '', $document_html);
 
         //absolute path for frames.css //TODO: necessary?
@@ -419,7 +417,9 @@ class PDF
                     $old_src = $item->getAttribute('src');
                     if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
-                            if (strpos($old_src, '/main/inc/lib/') === false) {
+                            if (strpos($old_src, '/main/inc/lib/') === false &&
+                                strpos($old_src, '/app/upload/') === false
+                            ) {
                                 $old_src_fixed = str_replace(
                                     api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/',
                                     '',

@@ -17,15 +17,10 @@ class Ims2Question extends Question
      */
     public function setAnswer()
     {
+        $answer = null;
         switch ($this->type) {
             case MCUA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
-
-                return $answer;
             case MCMA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
-
-                return $answer;
             case TF:
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
@@ -48,7 +43,6 @@ class Ims2Question extends Question
 
                 return $answer;
             default:
-                $answer = null;
                 break;
         }
 

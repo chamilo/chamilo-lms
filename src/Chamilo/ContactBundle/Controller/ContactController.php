@@ -44,14 +44,14 @@ class ContactController extends Controller
                 'email' => $user->getEmail(),
             ];
         }
+        // Ofaj
+        $data['gdpr_textarea'] = $translator->trans('Accept GDPR conditions text');
 
         $form = $this->createForm($type, $data);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
-
             $em = $this->getDoctrine()->getManager();
-
             $category = $form->get('category')->getData();
             /** @var Category $category */
             $category = $em->getRepository('ChamiloContactBundle:Category')->find($category);

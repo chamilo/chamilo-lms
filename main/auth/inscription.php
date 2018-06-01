@@ -108,7 +108,9 @@ if (!empty($course_code_redirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
-if ($user_already_registered_show_terms === false && api_get_setting('allow_registration') === 'true') {
+if ($user_already_registered_show_terms === false &&
+    api_get_setting('allow_registration') !== 'false'
+) {
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         if (in_array('status', $allowedFields)) {
@@ -335,9 +337,10 @@ if ($user_already_registered_show_terms === false && api_get_setting('allow_regi
         in_array('extra_fields', $allowedFields)
     ) {
         $extraField = new ExtraField('user');
-        $extraFieldList = isset($allowedFields['extra_fields']) && is_array(
-            $allowedFields['extra_fields']
-        ) ? $allowedFields['extra_fields'] : [];
+        $extraFieldList = [];
+        if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
+            $extraFieldList = $allowedFields['extra_fields'];
+        }
         $returnParams = $extraField->addElements(
             $form,
             0,

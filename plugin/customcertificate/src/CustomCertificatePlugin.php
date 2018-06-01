@@ -193,6 +193,15 @@ class CustomCertificatePlugin extends Plugin
     }
 
     /**
+     * By default new icon is invisible
+     * @return bool
+     */
+    public function isIconVisibleByDefault()
+    {
+        return false;
+    }
+
+    /**
      * Get certificate data.
      *
      * @param int $id The certificate

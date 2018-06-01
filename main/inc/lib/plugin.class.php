@@ -877,10 +877,21 @@ class Plugin
      *
      * @return string
      */
-    public function getToolIconVisibility()
+    public function getToolIconVisibilityPerUserStatus()
     {
         return '';
     }
+
+    /**
+     * Default tool icon visibility
+     *
+     * @return bool
+     */
+    public function isIconVisibleByDefault()
+    {
+        return true;
+    }
+
 
     /**
      * Get the admin URL for the plugin if Plugin::isAdminPlugin is true.
@@ -928,7 +939,8 @@ class Plugin
             return null;
         }
 
-        $visibility = $this->getToolIconVisibility();
+        $visibilityPerStatus = $this->getToolIconVisibilityPerUserStatus();
+        $visibility = $this->isIconVisibleByDefault();
 
         $em = Database::getManager();
 
@@ -948,10 +960,10 @@ class Plugin
             $tool
                 ->setId($cToolId)
                 ->setCId($courseId)
-                ->setName($name.$visibility)
+                ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
-                ->setVisibility(true)
+                ->setVisibility($visibility)
                 ->setAdmin(0)
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)

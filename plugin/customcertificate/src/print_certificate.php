@@ -455,7 +455,8 @@ $params = [
 ];
 
 $pdf = new PDF($params['format'], $params['orientation'], $params);
-$pdf->content_to_pdf($htmlText, '', $fileName, null, 'I', false, null, false, true, false);
+$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
+exit;
 
 function getIndexFiltered($index)
 {

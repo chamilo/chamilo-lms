@@ -101,7 +101,7 @@ if (empty($infoCertificate)) {
 
 $workSpace = intval(297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
 $widthCell = intval($workSpace / 6);
-$htmlText = '';
+$htmlText = '<html>';
 $htmlText .= '
     <link rel="stylesheet"
         type="text/css"
@@ -115,14 +115,12 @@ foreach ($userList as $userInfo) {
     $studentId = $userInfo['user_id'];
 
     if (empty($infoCertificate['background'])) {
-        $htmlText .= '<div class="caraA" style="padding:0; page-break-before:always;" margin:0; padding:0;>';
+        $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px;">';
     } else {
         $urlBackground = $path.$infoCertificate['background'];
-        $htmlText .= '
-            <div class="caraA"
-                style="background-image:url('.$urlBackground.') no-repeat; background-image-resize:6;"
-                margin:0;
-                padding:0;>';
+        $htmlText .= ' <div 
+        class = "caraA"
+        style = "background-image:url('.$urlBackground.') no-repeat; background-image-resize:6; margin:0px; padding:0px;">';
     }
 
     if (!empty($infoCertificate['logo_left'])) {
@@ -314,7 +312,7 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</div>';
 
     // Rear certificate
-    $htmlText .= '<div class="caraB" style="page-break-before:always;" margin:0; padding:0;>';
+    $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0px; padding:0px;">';
     if ($infoCertificate['contents_type'] == 0) {
         $courseDescription = new CourseDescription();
         $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
@@ -443,7 +441,7 @@ foreach ($userList as $userInfo) {
     }
     $htmlText .= '</div>';
 }
-$htmlText .= '</body>';
+$htmlText .= '</body></html>';
 $fileName = 'certificate_'.date("Ymd_His");
 $params = [
     'filename' => $fileName,

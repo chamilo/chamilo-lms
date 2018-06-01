@@ -63,7 +63,7 @@ if ($sessionId > 0) {
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $useDefault = false;
-$path = api_get_path(WEB_UPLOAD_PATH).'certificates/';
+$path = api_get_path(SYS_UPLOAD_PATH).'certificates/';
 
 // Get info certificate
 $infoCertificate = Database::select(
@@ -315,7 +315,6 @@ foreach ($userList as $userInfo) {
 
     // Rear certificate
     $htmlText .= '<div class="caraB" style="page-break-before:always;" margin:0; padding:0;>';
-
     if ($infoCertificate['contents_type'] == 0) {
         $courseDescription = new CourseDescription();
         $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);

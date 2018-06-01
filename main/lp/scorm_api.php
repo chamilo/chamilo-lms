@@ -863,7 +863,6 @@ function savedata(item_id) {
     logit_lms('function savedata(' + item_id + ')', 3);
 
     // Status is NOT modified here see the lp_ajax_save_item.php file
-
     if (olms.lesson_status != '') {
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
     }
@@ -1244,7 +1243,7 @@ function log_in_log(message, priority) {
  */
 function logit_lms(message, priority){
     if (scorm_logs) {
-        log_in_log("LMS: " + message + ' (# lms_item_id = '+olms.lms_item_id+')', priority);
+        log_in_log("LMS: " + message + ' (#lms_item_id = '+olms.lms_item_id+')', priority);
     }
     return false;
 }
@@ -1894,9 +1893,7 @@ function xajax_save_item_scorm(
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
     var my_scorm_values = new Array();
-
     my_scorm_values = process_scorm_values();
-
     for (k=0; k < my_scorm_values.length; k++) {
         if (my_scorm_values[k]=='cmi.core.session_time') {
             params += '&t='+olms.session_time;
@@ -1928,7 +1925,6 @@ function xajax_save_item_scorm(
     if (is_interactions == 'true')  {
         interact_string = '';
         temp = '';
-
         for (i in olms.interactions) {
             interact_string += '&interact['+i+']=';
             interact_temp = '[';

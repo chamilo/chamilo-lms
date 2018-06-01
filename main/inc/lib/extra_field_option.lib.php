@@ -647,7 +647,7 @@ class ExtraFieldOption extends Model
                     $html = ExtraField::extra_field_double_select_convert_array_to_string($options);
                     break;
                 case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
-                    $html = ExtraField::extrafieldSelectWithTextConvertArrayToString($options);
+                    $html = ExtraField::extraFieldSelectWithTextConvertArrayToString($options);
                     break;
                 case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
                     $html = ExtraField::tripleSelectConvertArrayToString($options);

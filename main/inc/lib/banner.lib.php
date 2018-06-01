@@ -201,7 +201,8 @@ function return_logo($theme = '')
 }
 
 /**
- * Check if user have access to "who is online" page
+ * Check if user have access to "who is online" page.
+ *
  * @return bool
  */
 function accessToWhoIsOnline()

@@ -892,7 +892,6 @@ class Plugin
         return true;
     }
 
-
     /**
      * Get the admin URL for the plugin if Plugin::isAdminPlugin is true.
      *

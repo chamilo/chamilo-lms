@@ -3995,8 +3995,8 @@ class Tracking
      * This function counts the number of post by course.
      *
      * @param string $course_code
-     * @param int    $session_id (optional), if is null(default) it'll return results including sessions,
-     *                           0 = session is not filtered
+     * @param int    $session_id  (optional), if is null(default) it'll return results including sessions,
+     *                            0 = session is not filtered
      * @param int    $groupId
      *
      * @return int The number of post by course

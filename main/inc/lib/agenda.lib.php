@@ -612,9 +612,9 @@ class Agenda
 
         $type = Database::escape_string($type);
         $end = Database::escape_string($end);
-
+        $endTimeStamp = api_strtotime($end, 'UTC');
         $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
-                VALUES ($courseId, '$eventId', '$type', '$end')";
+                VALUES ($courseId, '$eventId', '$type', '$endTimeStamp')";
         Database::query($sql);
 
         $generatedDates = $this->generateDatesByType($type, $row['start_date'], $row['end_date'], $end);
@@ -2299,7 +2299,7 @@ class Agenda
     public function getForm($params = [])
     {
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
-        $id = isset($params['id']) ? intval($params['id']) : null;
+        $id = isset($params['id']) ? (int) $params['id'] : 0;
 
         if ($this->type == 'course') {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
@@ -2317,12 +2317,12 @@ class Agenda
 
         $idAttach = isset($params['id_attach']) ? (int) $params['id_attach'] : null;
         $groupId = api_get_group_id();
-        $form_title = get_lang('AddCalendarItem');
-        if ($id) {
-            $form_title = get_lang('ModifyCalendarItem');
+        $form_Title = get_lang('AddCalendarItem');
+        if (!empty($id)) {
+            $form_Title = get_lang('ModifyCalendarItem');
         }
 
-        $form->addHeader($form_title);
+        $form->addHeader($form_Title);
         $form->addElement('hidden', 'id', $id);
         $form->addElement('hidden', 'action', $action);
         $form->addElement('hidden', 'id_attach', $idAttach);
@@ -2405,11 +2405,10 @@ class Agenda
             );
 
             if ($isSubEventEdition || $isParentFromSerie) {
+                $repeatInfo = $params['repeat_info'];
                 if ($isSubEventEdition) {
                     $parentEvent = $params['parent_info'];
                     $repeatInfo = $parentEvent['repeat_info'];
-                } else {
-                    $repeatInfo = $params['repeat_info'];
                 }
                 $params['repeat'] = 1;
                 $params['repeat_type'] = $repeatInfo['cal_type'];
@@ -3158,7 +3157,7 @@ class Agenda
                             $repeat['UNTIL'],
                             new DateTimeZone($currentTimeZone)
                         );
-                        $until = $until->format('Y-m-d H:i');
+                        $until = $until->format('Y-m-d H:i:s');
                         $this->addRepeatedItem(
                             $id,
                             $freq,

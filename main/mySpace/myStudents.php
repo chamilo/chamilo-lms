@@ -1161,10 +1161,12 @@ if (empty($details)) {
                 $categories = array_merge($categories, $categoriesTempList);
             }
 
+            $userEntity = api_get_user_entity(api_get_user_id());
+
             /** @var CLpCategory $item */
             foreach ($categories as $item) {
                 $categoryId = $item->getId();
-                if (!learnpath::categoryIsVisibleForStudent($item, api_get_user_entity(api_get_user_id()))) {
+                if (!learnpath::categoryIsVisibleForStudent($item, $userEntity)) {
                     continue;
                 }
 

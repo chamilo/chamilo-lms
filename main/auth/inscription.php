@@ -615,7 +615,7 @@ if ($extraConditions && $extraFieldsLoaded) {
                 $element->setLabel(
                     [
                         '',
-                        '<textarea rows="5" disabled cols="100%">'.get_lang($condition['text_area']).'</textarea>'
+                        '<textarea rows="5" disabled cols="100%">'.get_lang($condition['text_area']).'</textarea>',
                     ]
                 );
             }

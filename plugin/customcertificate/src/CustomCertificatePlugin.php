@@ -193,7 +193,7 @@ class CustomCertificatePlugin extends Plugin
     }
 
     /**
-     * By default new icon is invisible
+     * By default new icon is invisible.
      * @return bool
      */
     public function isIconVisibleByDefault()

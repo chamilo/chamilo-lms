@@ -883,7 +883,7 @@ class Plugin
     }
 
     /**
-     * Default tool icon visibility
+     * Default tool icon visibility.
      *
      * @return bool
      */

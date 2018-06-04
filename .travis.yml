@@ -66,9 +66,10 @@ before_install:
   - mysqld --version
   - apache2 -v
   - php -v
+  - php -ini | grep memory_limit
   - sudo cat /etc/hosts
-
   - phpenv config-add tests/travis/php-config.ini
+  - php -ini | grep memory_limit
 
   # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash

@@ -29,7 +29,7 @@ class Agenda
      *
      * @param string $type
      * @param int    $senderId  Optional The user sender ID
-     * @param int    $courseId  Opitonal. The course ID
+     * @param int    $courseId  Optional. The course ID
      * @param int    $sessionId Optional The session ID
      */
     public function __construct(
@@ -459,8 +459,9 @@ class Agenda
      * @param string $endEvent        in UTC
      * @param string $repeatUntilDate in UTC
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function generateDatesByType($type, $startEvent, $endEvent, $repeatUntilDate)
     {
@@ -481,10 +482,10 @@ class Agenda
                 $interval = 'P1M';
                 break;
             case 'monthlyByDay':
-                //not yet implemented
+                // not yet implemented
                 break;
             case 'monthlyByDayR':
-                //not yet implemented
+                // not yet implemented
                 break;
             case 'yearly':
                 $interval = 'P1Y';
@@ -494,6 +495,7 @@ class Agenda
         if (empty($interval)) {
             return [];
         }
+        $timeZone = api_get_timezone();
 
         while ($continue) {
             $startDate = new DateTime($startEvent, new DateTimeZone('UTC'));
@@ -505,15 +507,42 @@ class Agenda
             $newStartDate = $startDate->format('Y-m-d H:i:s');
             $newEndDate = $endDate->format('Y-m-d H:i:s');
 
+            $startEvent = $newStartDate;
+            $endEvent = $newEndDate;
+
             if ($endDate > $repeatUntilDate) {
                 break;
             }
 
-            $list[] = ['start' => $newStartDate, 'end' => $newEndDate];
+            // @todo remove comment code
+            $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
+            //$originalOffset = $startDate->getOffset();
+            if ($startDateInLocal->format('I') == 0) {
+                // Is saving time? Then fix UTC time to add time
+                $seconds = $startDateInLocal->getOffset();
+                $startDate->add(new DateInterval("PT".$seconds."S"));
+                $startDateFixed = $startDate->format('Y-m-d H:i:s');
+                $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
+                $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');
+            } else {
+                /*$seconds = $startDateInLocal->getOffset();
+                $startDate->add(new DateInterval("PT".$seconds."S"));
+                $startDateFixed = $startDate->format('Y-m-d H:i:s');
+                $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
+                $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');*/
+            }
+            //var_dump($newStartDate.' - '.$startDateInLocal->format('I'));
+            $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
 
-            $startEvent = $newStartDate;
-            $endEvent = $newEndDate;
-
+            if ($endDateInLocal->format('I') == 0) {
+                // Is saving time? Then fix UTC time to add time
+                $seconds = $endDateInLocal->getOffset();
+                $endDate->add(new DateInterval("PT".$seconds."S"));
+                $endDateFixed = $endDate->format('Y-m-d H:i:s');
+                $endDateInLocalFixed = new DateTime($endDateFixed, new DateTimeZone($timeZone));
+                $newEndDate = $endDateInLocalFixed->format('Y-m-d H:i:s');
+            }
+            $list[] = ['start' => $newStartDate, 'end' => $newEndDate, 'i' =>  $startDateInLocal->format('I')];
             $counter++;
 
             // just in case stop if more than $loopMax
@@ -542,12 +571,12 @@ class Agenda
             return false;
         }
 
-        $course_id = $this->course['real_id'];
+        $courseId = $this->course['real_id'];
         $eventId = (int) $eventId;
 
         $sql = "SELECT title, content, start_date, end_date, all_day
                 FROM $t_agenda
-                WHERE c_id = $course_id AND id = $eventId";
+                WHERE c_id = $courseId AND id = $eventId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) !== 1) {
@@ -585,7 +614,7 @@ class Agenda
         $end = Database::escape_string($end);
 
         $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
-                VALUES ($course_id, '$eventId', '$type', '$end')";
+                VALUES ($courseId, '$eventId', '$type', '$end')";
         Database::query($sql);
 
         $generatedDates = $this->generateDatesByType($type, $row['start_date'], $row['end_date'], $end);
@@ -621,7 +650,7 @@ class Agenda
     public function storeAgendaEventAsAnnouncement($item_id, $sentTo = [])
     {
         $table_agenda = Database::get_course_table(TABLE_AGENDA);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         // Check params
         if (empty($item_id) || $item_id != strval(intval($item_id))) {
@@ -631,7 +660,7 @@ class Agenda
         // Get the agenda item.
         $item_id = intval($item_id);
         $sql = "SELECT * FROM $table_agenda
-                WHERE c_id = $course_id AND id = ".$item_id;
+                WHERE c_id = $courseId AND id = ".$item_id;
         $res = Database::query($sql);
 
         if (Database::num_rows($res) > 0) {
@@ -748,9 +777,9 @@ class Agenda
                     }
                 }
 
-                $course_id = $this->course['real_id'];
+                $courseId = $this->course['real_id'];
 
-                if (empty($course_id)) {
+                if (empty($courseId)) {
                     return false;
                 }
 
@@ -777,7 +806,7 @@ class Agenda
                         [
                             'id = ? AND c_id = ? AND session_id = ? ' => [
                                 $id,
-                                $course_id,
+                                $courseId,
                                 $this->sessionId,
                             ],
                         ]
@@ -1023,7 +1052,7 @@ class Agenda
                 }
                 break;
             case 'course':
-                $course_id = api_get_course_int_id();
+                $courseId = api_get_course_int_id();
                 $sessionId = api_get_session_id();
                 $isAllowToEdit = api_is_allowed_to_edit(null, true);
 
@@ -1040,7 +1069,7 @@ class Agenda
                     }
                 }
 
-                if (!empty($course_id) && $isAllowToEdit) {
+                if (!empty($courseId) && $isAllowToEdit) {
                     // Delete
                     $eventInfo = $this->get_event($id);
                     if ($deleteAllItemsFromSerie) {
@@ -1072,7 +1101,7 @@ class Agenda
                     // Removing from events.
                     Database::delete(
                         $this->tbl_course_agenda,
-                        ['id = ? AND c_id = ?' => [$id, $course_id]]
+                        ['id = ? AND c_id = ?' => [$id, $courseId]]
                     );
 
                     api_item_property_update(
@@ -1089,7 +1118,7 @@ class Agenda
                         [
                             'cal_id = ? AND c_id = ?' => [
                                 $id,
-                                $course_id,
+                                $courseId,
                             ],
                         ]
                     );
@@ -1120,7 +1149,7 @@ class Agenda
      *
      * @param int    $start
      * @param int    $end
-     * @param int    $course_id
+     * @param int    $courseId
      * @param int    $groupId
      * @param int    $user_id
      * @param string $format
@@ -1130,7 +1159,7 @@ class Agenda
     public function getEvents(
         $start,
         $end,
-        $course_id = null,
+        $courseId = null,
         $groupId = null,
         $user_id = 0,
         $format = 'json'
@@ -1140,7 +1169,7 @@ class Agenda
                 $this->getPlatformEvents($start, $end);
                 break;
             case 'course':
-                $courseInfo = api_get_course_info_by_id($course_id);
+                $courseInfo = api_get_course_info_by_id($courseId);
 
                 // Session coach can see all events inside a session.
                 if (api_is_coach()) {
@@ -1264,8 +1293,8 @@ class Agenda
                         $courseInfo = api_get_course_info_by_id(
                             $courseInfoItem['real_id']
                         );
-                        if (isset($course_id) && !empty($course_id)) {
-                            if ($courseInfo['real_id'] == $course_id) {
+                        if (isset($courseId) && !empty($courseId)) {
+                            if ($courseInfo['real_id'] == $courseId) {
                                 $this->getCourseEvents(
                                     $start,
                                     $end,
@@ -2714,12 +2743,12 @@ class Agenda
                     $fileUserUpload['tmp_name'],
                     $new_path
                 );
-                $course_id = api_get_course_int_id();
+                $courseId = api_get_course_int_id();
                 $size = intval($fileUserUpload['size']);
                 // Storing the attachments if any
                 if ($result) {
                     $params = [
-                        'c_id' => $course_id,
+                        'c_id' => $courseId,
                         'filename' => $file_name,
                         'comment' => $comment,
                         'path' => $new_file_name,

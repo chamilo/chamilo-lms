@@ -3,15 +3,14 @@
 
 namespace Chamilo\MediaBundle\Entity;
 
-use Sonata\MediaBundle\Entity\BaseMedia;
+use Sonata\MediaBundle\Entity\BaseGalleryItem;
 
 /**
- * Class Media.
+ * Class GalleryItem.
  *
  * @package Chamilo\MediaBundle\Entity
- *
  */
-class Media extends BaseMedia
+class GalleryItem extends BaseGalleryItem
 {
     /**
      * @var int

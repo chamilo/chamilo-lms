@@ -7,7 +7,7 @@ services:
         autoconfigure: true
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
-        public: false
+        public: true
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -71,11 +71,11 @@ sylius_settings:
 # Course settings
 chamilo_course:
     driver: doctrine/orm
-    resources:
-        parameter:
-            classes:
-                model: Chamilo\CourseBundle\Entity\CCourseSetting
-                repository: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+#    resources:
+#        parameter:
+#            classes:
+#                model: Chamilo\CourseBundle\Entity\CCourseSetting
+#                repository: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
 
 doctrine_cache:
     providers:

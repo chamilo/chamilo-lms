@@ -6,7 +6,7 @@
         @author <yourname> <youremail>
     -->
 
-    <class name="Chamilo\MediaBundle\Document\GalleryHasMedia"
+    <class name="Chamilo\MediaBundle\Entity\GalleryItem"
            exclusion-policy="all" xml-root-name="_gallery_has_media">
 
         <property xml-attribute-map="true" name="id" type="integer"

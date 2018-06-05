@@ -1,6 +1,3 @@
-sonata_notification:
-    class:
-        message: Chamilo\NotificationBundle\Entity\Message
 sonata_admin:
     # default value, change it to sonata.admin.security.handler.acl to use ACL
     security:

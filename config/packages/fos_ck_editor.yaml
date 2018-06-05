@@ -1,4 +1,4 @@
-ivory_ck_editor:
+fos_ck_editor:
     autoload: false
     base_path: "bundles/ivoryckeditor"
     js_path: "bundles/ivoryckeditor/ckeditor.js"

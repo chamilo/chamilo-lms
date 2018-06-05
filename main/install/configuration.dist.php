@@ -383,6 +383,10 @@ ALTER TABLE c_quiz CHANGE title title LONGTEXT NOT NULL;
 ALTER TABLE c_lp_category CHANGE name name LONGTEXT NOT NULL;
 ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL;
 ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL;
+-- Only with allow_portfolio_tool enabled
+ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
+--
 */
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor

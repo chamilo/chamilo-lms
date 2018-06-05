@@ -19,7 +19,6 @@ cache:
     - $HOME/.composer/cache/files
 
 php:
-  #- 5.4 // Removed because of Chash dependencies on PHP 5.5
   - 5.5
   - 5.6
   - 7.0
@@ -69,6 +68,8 @@ before_install:
   - php -ini | grep memory_limit
   - sudo cat /etc/hosts
   - phpenv config-add tests/travis/php-config.ini
+  - echo "memory_limit = -1" >> $INI_FILE
+
   - php -ini | grep memory_limit
 
   # Install Chash, a database, and then install Chamilo
@@ -98,9 +99,6 @@ before_install:
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   - curl $VHOST_URL
-
-before_script:
-  - phpenv config-rm xdebug.ini
 
 script:
   - whereis google-chrome-stable

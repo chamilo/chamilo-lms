@@ -1,12 +1,6 @@
 body {background-repeat:no-repeat; margin:0; padding: 0;}
 td { font-family:arial, sans-serif; font-size:18px; }
 .logo {height: 150px; vertical-align: middle; }
-.content-table {height: 480px;  vertical-align:middle;}
-.content-student { text-align:center;}
-.course { padding-top: 10px; text-align:center; vertical-align: middle;}
-.modality { text-align:center; }
-.course-date { text-align:center; }
-.expediction { font-size: 18px; padding: 20px 0; text-align:right;}
 .seals { font-size: 16px; text-align:center;}
 .logo-seals { height: 100px; text-align:center; vertical-align: middle;}
 @page caraA { height: 210mm; margin:0; padding:0; page-break-before:always;} 

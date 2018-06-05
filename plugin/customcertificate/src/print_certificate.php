@@ -156,10 +156,11 @@ foreach ($userList as $userInfo) {
         "
         border="0">';
     $htmlText .= '<tr>';
-    $htmlText .= '<td colspan="4" class="logo">'.$logoLeft.'</td>';
-    $htmlText .= '<td colspan="4" class="logo" style="text-align:center;">'.$logoCenter.'</td>';
-    $htmlText .= '<td colspan="4" class="logo" style="text-align:right;">'.$logoRight.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace/3).'mm" class="logo">'.$logoLeft.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace/3).'mm; text-align:center;" class="logo">'.$logoCenter.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace/3).'mm; text-align:right;" class="logo">'.$logoRight.'</td>';
     $htmlText .= '</tr>';
+    $htmlText .= '</table>';
 
     $all_user_info = DocumentManager::get_all_info_to_certificate(
         $studentId,
@@ -248,17 +249,23 @@ foreach ($userList as $userInfo) {
         '<p><b><strong><table><tr><td><th><tbody><span><i><li><ol><ul>
         <dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
     );
-    $htmlText .= '<tr>';
-    $htmlText .= '<td colspan="12" class="content-table">';
-    $htmlText .= '<table width="100%">';
-    $htmlText .= '<tr>';
-    $htmlText .= '<td colspan="12" class="content-student">';
+
+    $htmlText .= '<div style="
+            height: 480px;
+            width:'.$workSpace.'mm;
+            margin-left:'.$infoCertificate['margin_left'].'mm;
+            margin-right:'.$infoCertificate['margin_right'].'mm;
+        ">';
     $htmlText .= $myContentHtml;
-    $htmlText .= '</td>';
-    $htmlText .= '</tr>';
-    $htmlText .= '</table>';
-    $htmlText .= '</td>';
-    $htmlText .= '</tr>';
+    $htmlText .= '</div>';
+
+    $htmlText .= '<table
+        width="'.$workSpace.'mm"
+        style="
+            margin-left:'.$infoCertificate['margin_left'].'mm;
+            margin-right:'.$infoCertificate['margin_right'].'mm;
+        "
+        border="0">';
 
     $htmlText .= '<tr>';
     $htmlText .= '<td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
@@ -443,6 +450,7 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</div>';
 }
 $htmlText .= '</body></html>';
+
 $fileName = 'certificate_'.date("Ymd_His");
 $params = [
     'filename' => $fileName,

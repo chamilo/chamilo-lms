@@ -1,3 +1,5 @@
+dist: trusty
+sudo: required
 language: php
 
 addons:
@@ -12,12 +14,9 @@ addons:
 services:
     - mysql
 
-sudo: required
-dist: trusty
 cache:
   directories:
     - $HOME/.composer/cache/files
-
 php:
   - 5.5
   - 5.6
@@ -68,9 +67,10 @@ before_install:
   - php -ini | grep memory_limit
   - sudo cat /etc/hosts
   - phpenv config-add tests/travis/php-config.ini
-  - echo "memory_limit = -1" >> $INI_FILE
-
+  # Remove xdebug
+  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
   - php -ini | grep memory_limit
+  - php -v
 
   # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash

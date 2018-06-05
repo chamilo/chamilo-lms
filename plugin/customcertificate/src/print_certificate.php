@@ -156,9 +156,9 @@ foreach ($userList as $userInfo) {
         "
         border="0">';
     $htmlText .= '<tr>';
-    $htmlText .= '<td style="width:'.intval($workSpace/3).'mm" class="logo">'.$logoLeft.'</td>';
-    $htmlText .= '<td style="width:'.intval($workSpace/3).'mm; text-align:center;" class="logo">'.$logoCenter.'</td>';
-    $htmlText .= '<td style="width:'.intval($workSpace/3).'mm; text-align:right;" class="logo">'.$logoRight.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm" class="logo">'.$logoLeft.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:center;" class="logo">'.$logoCenter.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:right;" class="logo">'.$logoRight.'</td>';
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
 

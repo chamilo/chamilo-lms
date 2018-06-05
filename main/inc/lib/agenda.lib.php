@@ -542,7 +542,7 @@ class Agenda
                 $endDateInLocalFixed = new DateTime($endDateFixed, new DateTimeZone($timeZone));
                 $newEndDate = $endDateInLocalFixed->format('Y-m-d H:i:s');
             }
-            $list[] = ['start' => $newStartDate, 'end' => $newEndDate, 'i' =>  $startDateInLocal->format('I')];
+            $list[] = ['start' => $newStartDate, 'end' => $newEndDate, 'i' => $startDateInLocal->format('I')];
             $counter++;
 
             // just in case stop if more than $loopMax

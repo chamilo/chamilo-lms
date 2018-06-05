@@ -245,7 +245,8 @@ foreach ($userList as $userInfo) {
 
     $myContentHtml = strip_tags(
         $myContentHtml,
-        '<p><b><strong><table><tr><td><th><tbody><span><i><li><ol><ul><dd><dt><dl><br><hr><img><a><div>'
+        '<p><b><strong><table><tr><td><th><tbody><span><i><li><ol><ul>
+        <dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
     );
     $htmlText .= '<tr>';
     $htmlText .= '<td colspan="12" class="content-table">';

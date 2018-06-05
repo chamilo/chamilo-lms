@@ -66,11 +66,6 @@ before_install:
   - php -v
   - php -ini | grep memory_limit
   - sudo cat /etc/hosts
-  - phpenv config-add tests/travis/php-config.ini
-  # Remove xdebug
-  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
-  - php -ini | grep memory_limit
-  - php -v
 
   # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
@@ -98,7 +93,7 @@ before_install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
-  - curl $VHOST_URL
+  #- curl $VHOST_URL
 
 script:
   - whereis google-chrome-stable

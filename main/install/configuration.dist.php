@@ -374,7 +374,16 @@ $_configuration['agenda_colors'] = [
 */
 // ------
 //
-// Save some tool titles with HTML editor
+// Save some tool titles with HTML editor. Require DB changes:
+/*
+ALTER TABLE course_category CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_course_description CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_thematic CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_quiz CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_lp_category CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL;
+*/
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;

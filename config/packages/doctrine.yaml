@@ -7,6 +7,10 @@ doctrine:
         host: '%env(DATABASE_HOST)%'
         driver: 'pdo_mysql'
         charset: utf8mb4
+        default_table_options:
+            charset: utf8mb4
+            collate: utf8mb4_unicode_ci
+            row_format: DYNAMIC
         types:
             json: Sonata\Doctrine\Types\JsonType
     orm:

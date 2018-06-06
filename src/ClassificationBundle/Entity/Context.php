@@ -3,7 +3,7 @@
 
 namespace Chamilo\ClassificationBundle\Entity;
 
-use Sonata\ClassificationBundle\Entity\BaseContext as BaseContext;
+use Sonata\ClassificationBundle\Entity\BaseContext;
 
 /**
  * Class Context.

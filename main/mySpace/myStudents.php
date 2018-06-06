@@ -967,7 +967,7 @@ if (empty($details)) {
 
                     $totalProgress += $progress;
 
-                    $score = Tracking:: get_avg_student_score(
+                    $score = Tracking::get_avg_student_score(
                         $user_info['user_id'],
                         $courseCodeItem,
                         [],

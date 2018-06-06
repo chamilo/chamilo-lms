@@ -157,11 +157,10 @@ class Tracking
         }
 
         $hideTime = api_get_configuration_value('hide_lp_time');
-
-        $lp_id = intval($lp_id);
-        $lp_item_id = intval($lp_item_id);
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $lp_id = (int) $lp_id;
+        $lp_item_id = (int) $lp_item_id;
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $origin = Security::remove_XSS($origin);
         $list = learnpath::get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -1845,10 +1844,9 @@ class Tracking
         $convert_date = true
     ) {
         // protect data
-        $student_id = intval($student_id);
+        $student_id = (int) $student_id;
+        $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
-        $session_id = intval($session_id);
-
         $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $sql = 'SELECT access_date
                 FROM '.$tbl_track_e_access.'
@@ -7401,7 +7399,6 @@ class TrackingCourseLog
         $course_code = Database::escape_string($course_code);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
         $access_url_id = api_get_current_access_url_id();
 
         // get all users data from a course for sortable with limit

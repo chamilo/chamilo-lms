@@ -516,11 +516,7 @@ function menuArray()
         );
     }
     if (!empty($open) || !empty($openMenuTabsLoggedIn)) {
-        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
-            if (api_is_anonymous()) {
-                $mainNavigation['navigation'][SECTION_CAMPUS] = null;
-            }
-        } else {
+        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') !== false) {
             $list = explode("\n", api_get_user_id() && !api_is_anonymous() ? $openMenuTabsLoggedIn : $open);
 
             foreach ($list as $link) {

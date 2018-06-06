@@ -248,6 +248,10 @@ class Event
      */
     public static function event_download($documentUrl)
     {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $documentUrl = Database::escape_string($documentUrl);
 
@@ -287,6 +291,10 @@ class Event
      */
     public static function event_upload($documentId)
     {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
         $courseId = api_get_course_int_id();
         $reallyNow = api_get_utc_datetime();
@@ -327,6 +335,10 @@ class Event
      */
     public static function event_link($linkId)
     {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $reallyNow = api_get_utc_datetime();
         $userId = api_get_user_id();

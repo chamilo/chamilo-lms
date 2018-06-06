@@ -380,11 +380,11 @@ if (!empty($action)) {
             case 'edit_tabs':
             case 'insert_link':
             case 'edit_link':
-                $link_index = intval($_POST['link_index']);
-                $insert_where = intval($_POST['insert_where']);
+                $link_index = (isset($_POST['link_index']) ? intval($_POST['link_index']) : 0);
+                $insert_where = (isset($_POST['insert_where']) ? intval($_POST['insert_where']) : 0);
                 $link_name = trim(stripslashes($_POST['link_name']));
                 $link_url = trim(stripslashes($_POST['link_url']));
-                $add_in_tab = intval($_POST['add_in_tab']);
+                $add_in_tab = (isset($_POST['add_in_tab']) ? intval($_POST['add_in_tab']) : 0);
                 $link_html = trim(stripslashes($_POST['link_html']));
                 $filename = trim(stripslashes($_POST['filename']));
                 $target_blank = isset($_POST['target_blank']);

@@ -103,6 +103,10 @@ class Event
      */
     public static function accessCourse()
     {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         //for "what's new" notification
         $TABLETRACK_LASTACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -142,7 +146,7 @@ class Event
     }
 
     /**
-     * @param string $tool name of the tool (name in mainDb.accueil table)
+     * @param string $tool name of the tool
      *
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for access event for tools
@@ -160,6 +164,10 @@ class Event
      */
     public static function event_access_tool($tool)
     {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
         $tool = Database::escape_string($tool);
 
         if (empty($tool)) {

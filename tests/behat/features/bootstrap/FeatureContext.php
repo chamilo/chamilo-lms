@@ -206,7 +206,7 @@ class FeatureContext extends MinkContext
     /**
      * @When /^I invite to a friend with id "([^"]*)" to a social group with id "([^"]*)"$/
      */
-    public function iInviteAFrienToASocialGroup($friendId, $groupId)
+    public function iInviteAFriendToASocialGroup($friendId, $groupId)
     {
         $this->visit('/main/social/group_invitation.php?id=' . $groupId);
         $this->fillField('invitation[]', $friendId);

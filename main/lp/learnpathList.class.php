@@ -28,13 +28,13 @@ class LearnpathList
      * (only displays) items if he has enough permissions to view them.
      *
      * @param int    $user_id
-     * @param string $course_code        Optional course code (otherwise we use api_get_course_id())
-     * @param int    $session_id         Optional session id (otherwise we use api_get_session_id())
+     * @param string $course_code             Optional course code (otherwise we use api_get_course_id())
+     * @param int    $session_id              Optional session id (otherwise we use api_get_session_id())
      * @param string $order_by
      * @param bool   $check_publication_dates
      * @param int    $categoryId
      * @param bool   $ignoreCategoryFilter
-     * @param bool   $ignoreLpVisibility get the list of LPs for reports
+     * @param bool   $ignoreLpVisibility      get the list of LPs for reports
      */
     public function __construct(
         $user_id,

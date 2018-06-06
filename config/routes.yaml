@@ -18,6 +18,7 @@ sonata_admin_my_dashboard:
 sonata_user_admin_security_logout:
     path: /logout
 
+
 #admin_dashboard:
 #    pattern: /administration/
 #    defaults:

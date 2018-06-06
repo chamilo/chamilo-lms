@@ -1,0 +1,16 @@
+chamilo_course:
+    resource: "@ChamiloCourseBundle/Resources/config/routing.yml"
+    prefix: /
+chamilo_contact:
+    resource: "@ChamiloContactBundle/Resources/config/routing.yml"
+    prefix: /contact
+#chamilo_installer:
+#    resource: "@ChamiloInstallerBundle/Resources/config/routing.yml"
+
+# Always at the end
+core_bundle:
+    resource: "@ChamiloCoreBundle/Resources/config/routing.yml"
+page_bundle:
+    resource: "@ChamiloPageBundle/Resources/config/routing.yml"
+faq:
+    resource: "@ChamiloFaqBundle/Resources/config/routing.yml"

@@ -75,7 +75,6 @@ if ($geolocalization) {
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-$noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
 $interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];
@@ -284,7 +283,12 @@ if (!$user_data['platform_admin']) {
     $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
     $group = [];
     $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement('DateTimePicker', 'expiration_date', null, ['onchange' => 'javascript: enable_expiration_date();']);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        ['onchange' => 'javascript: enable_expiration_date();']
+    );
     $form->addGroup($group, 'max_member_group', null, null, false);
 
     // Active account or inactive account
@@ -324,15 +328,29 @@ $returnParams = $extraField->addElements(
     [], // order fields
     [] // extra data
 );
+$jqueryReadyContent = $returnParams['jquery_ready_content'];
 
-$jquery_ready_content = $returnParams['jquery_ready_content'];
-
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+// the $jqueryReadyContent variable collects all functions that will be load in the
+// $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
-    '.$jquery_ready_content.'
+    '.$jqueryReadyContent.'
 });
 </script>';
+
+// Freeze user conditions, admin cannot updated them
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $element->freeze();
+        }
+    }
+}
 
 // Submit button
 $form->addButtonSave(get_lang('Save'));

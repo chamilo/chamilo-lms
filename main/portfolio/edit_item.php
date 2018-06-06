@@ -8,7 +8,12 @@ $categories = $em
     ]);
 
 $form = new FormValidator('edit_portfolio', 'post', $baseUrl."action=edit_item&id={$item->getId()}");
-$form->addText('title', get_lang('Title'));
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'NotebookStudent']);
+} else {
+    $form->addText('title', get_lang('Title'));
+    $form->applyFilter('title', 'trim');
+}
 $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
 $form->addSelectFromCollection('category', get_lang('Category'), $categories, [], true, '__toString');
 $form->addButtonUpdate(get_lang('Update'));

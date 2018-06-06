@@ -1176,7 +1176,9 @@ if (empty($details)) {
                     $sessionId,
                     null,
                     false,
-                    $categoryId
+                    $categoryId,
+                    false,
+                    true
                 );
 
                 $flat_list = $list->get_flat_list();

@@ -30,11 +30,9 @@ class Gallery extends BaseGallery
 
     public function addGalleryHasMedia(GalleryHasMediaInterface $galleryHasMedia)
     {
-
     }
 
     public function removeGalleryHasMedia(GalleryHasMediaInterface $galleryHasMedia)
     {
-
     }
 }

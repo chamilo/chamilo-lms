@@ -9,7 +9,6 @@ use Sonata\MediaBundle\Entity\BaseMedia;
  * Class Media.
  *
  * @package Chamilo\MediaBundle\Entity
- *
  */
 class Media extends BaseMedia
 {

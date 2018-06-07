@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle;
 
-use Chamilo\CoreBundle\DependencyInjection\Compiler\DoctrineEntityListenerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

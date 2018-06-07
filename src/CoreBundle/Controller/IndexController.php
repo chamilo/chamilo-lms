@@ -46,7 +46,7 @@ class IndexController extends BaseController
 
         $form = $this->createFormBuilder()
             ->add('content', CKEditorType::class)
-            ->add('save', SubmitType::class, array('label' => 'Update'))
+            ->add('save', SubmitType::class, ['label' => 'Update'])
             ->getForm();
 
         $blockToEdit = null;
@@ -68,7 +68,7 @@ class IndexController extends BaseController
                             foreach ($children as $child) {
                                 if ($child->getType() == 'sonata.formatter.block.formatter') {
                                     $blockToEdit = $child;
-                                    break (2);
+                                    break 2;
                                 }
                             }
                         }

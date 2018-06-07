@@ -948,6 +948,48 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
+// Student publication
+$form->addHtml('<div class="panel panel-default">');
+$form->addHtml('
+    <div class="panel-heading" role="tab" id="heading-student-publication-settings">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+               href="#collapse-student-publication-settings" aria-expanded="false" aria-controls="collapse-student-publication-settings">
+');
+$form->addHtml(
+    Display::return_icon('work.png', get_lang('StudentPublications')).' '.get_lang('StudentPublications')
+);
+$form->addHtml('
+            </a>
+        </h4>
+    </div>
+');
+$form->addHtml('
+    <div id="collapse-student-publication-settings" class="panel-collapse collapse" role="tabpanel"
+         aria-labelledby="heading-student-publication-settings">
+        <div class="panel-body">
+');
+
+$group = [
+    $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
+    $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),
+];
+$form->addGroup($group, '', get_lang('DefaultUpload'));
+
+
+$group = [
+    $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
+];
+$form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
+
+$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+$form->addHtml('
+        </div>
+    </div>
+');
+$form->addHtml('</div>');
+
 // Plugin course settings
 $appPlugin = new AppPlugin();
 $appPlugin->add_course_settings_form($form);
@@ -970,6 +1012,7 @@ $values['unsubscribe'] = $_course['unsubscribe'];
 $values['course_registration_password'] = $all_course_information['registration_code'];
 $values['legal'] = $all_course_information['legal'];
 $values['activate_legal'] = $all_course_information['activate_legal'];
+$values['show_score'] = $all_course_information['show_score'];
 
 $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 
@@ -1043,22 +1086,6 @@ if ($form->validate() && is_settings_editable()) {
         unset($updateValues['pdf_export_watermark_path']);
     }
 
-    // Variables that will be saved in the TABLE_MAIN_COURSE table
-    $update_in_course_table = [
-        'title',
-        'course_language',
-        'category_code',
-        'department_name',
-        'department_url',
-        'visibility',
-        'subscribe',
-        'unsubscribe',
-        'tutor_name',
-        'course_registration_password',
-        'legal',
-        'activate_legal',
-    ];
-
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
     $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -1074,6 +1101,7 @@ if ($form->validate() && is_settings_editable()) {
         'legal' => $updateValues['legal'],
         'activate_legal' => $activeLegal,
         'registration_code' => $updateValues['course_registration_password'],
+        'show_score' => $updateValues['show_score'],
     ];
     Database::update($table_course, $params, ['id = ?' => $courseId]);
 

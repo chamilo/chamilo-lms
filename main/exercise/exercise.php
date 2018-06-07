@@ -1184,9 +1184,9 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
 $nbrActiveTests = 0;
 if (isset($attribute['path']) && is_array($attribute['path'])) {
     $hotpotatoes_exist = true;
-    while (list($key, $path) = each($attribute['path'])) {
+    foreach ($attribute['path'] as $key => $path) {
         $item = '';
-        list($a, $vis) = each($attribute['visibility']);
+        $vis = $attribute['visibility'][$key];
         $active = !empty($vis);
         $title = GetQuizName($path, $documentPath);
         if ($title == '') {

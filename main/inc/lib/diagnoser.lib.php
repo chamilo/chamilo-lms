@@ -203,7 +203,12 @@ class Diagnoser
                     $dir = api_get_path(SYS_PATH);
                     $du = exec('du -sh '.$dir, $err);
                     list($size, $none) = explode("\t", $du);
-                    $limit = $_configuration[$access_url_id]['hosting_limit_disk_space'];
+                    $limit = 0;
+                    if (isset($_configuration[$access_url_id])) {
+                        if (isset($_configuration[$access_url_id]['hosting_limit_disk_space'])) {
+                            $limit = $_configuration[$access_url_id]['hosting_limit_disk_space'];
+                        }
+                    }
                     $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
                 }
             }

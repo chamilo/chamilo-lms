@@ -2734,14 +2734,19 @@ class MySpace
         return $users;
     }
 
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $studentId
+     *
+     */
     public static function displayTrackingAccessOverView($courseId, $sessionId, $studentId)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
-        $studentId = intval($studentId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $studentId = (int) $studentId;
 
         $em = Database::getManager();
-        $sessionRepo = $em->getRepository('ChamiloCoreBundle:Session');
 
         $courseList = [];
         $sessionList = [];

@@ -528,6 +528,9 @@ class learnpath
         $row = Database::fetch_array($res_count);
         $num = $row['num'];
 
+        $tmp_previous = 0;
+        $display_order = 0;
+        $next = 0;
         if ($num > 0) {
             if (empty($previous)) {
                 $sql = "SELECT iid, next_item_id, display_order
@@ -540,9 +543,9 @@ class learnpath
                             previous_item_id = $parent";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
-                $tmp_previous = 0;
-                $next = $row['iid'];
-                $display_order = 0;
+                if ($row) {
+                    $next = $row['iid'];
+                }
             } else {
                 $previous = (int) $previous;
                 $sql = "SELECT iid, previous_item_id, next_item_id, display_order
@@ -552,18 +555,16 @@ class learnpath
                             lp_id = ".$this->get_id()." AND
                             id = $previous";
                 $result = Database::query($sql);
-                $row = Database:: fetch_array($result);
-                $tmp_previous = $row['iid'];
-                $next = $row['next_item_id'];
-                $display_order = $row['display_order'];
+                $row = Database::fetch_array($result);
+                if ($row) {
+                    $tmp_previous = $row['iid'];
+                    $next = $row['next_item_id'];
+                    $display_order = $row['display_order'];
+                }
             }
-        } else {
-            $tmp_previous = 0;
-            $next = 0;
-            $display_order = 0;
         }
 
-        $id = intval($id);
+        $id = (int) $id;
         $typeCleaned = Database::escape_string($type);
         $max_score = 100;
         if ($type == 'quiz') {
@@ -588,20 +589,20 @@ class learnpath
         }
 
         $params = [
-            "c_id" => $course_id,
-            "lp_id" => $this->get_id(),
-            "item_type" => $typeCleaned,
-            "ref" => '',
-            "title" => $title,
-            "description" => $description,
-            "path" => $id,
-            "max_score" => $max_score,
-            "parent_item_id" => $parent,
-            "previous_item_id" => $previous,
-            "next_item_id" => intval($next),
-            "display_order" => $display_order + 1,
-            "prerequisite" => $prerequisites,
-            "max_time_allowed" => $max_time_allowed,
+            'c_id' => $course_id,
+            'lp_id' => $this->get_id(),
+            'item_type' => $typeCleaned,
+            'ref' => '',
+            'title' => $title,
+            'description' => $description,
+            'path' => $id,
+            'max_score' => $max_score,
+            'parent_item_id' => $parent,
+            'previous_item_id' => $previous,
+            'next_item_id' => intval($next),
+            'display_order' => $display_order + 1,
+            'prerequisite' => $prerequisites,
+            'max_time_allowed' => $max_time_allowed,
             'min_score' => 0,
             'launch_data' => '',
         ];
@@ -611,25 +612,27 @@ class learnpath
         }
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
-
-        if ($this->debug > 2) {
-            error_log('Inserting dir/chapter: '.$new_item_id, 0);
-        }
-
         if ($new_item_id) {
+            if ($this->debug > 2) {
+                error_log('Inserting dir/chapter: '.$new_item_id, 0);
+            }
             $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
             Database::query($sql);
 
-            $sql = "UPDATE $tbl_lp_item
-                    SET previous_item_id = $new_item_id 
-                    WHERE c_id = $course_id AND id = $next";
-            Database::query($sql);
+            if (!empty($next)) {
+                $sql = "UPDATE $tbl_lp_item
+                        SET previous_item_id = $new_item_id 
+                        WHERE c_id = $course_id AND id = $next";
+                Database::query($sql);
+            }
 
             // Update the item that should be before the new item.
-            $sql = "UPDATE $tbl_lp_item
-                    SET next_item_id = $new_item_id
-                    WHERE c_id = $course_id AND id = $tmp_previous";
-            Database::query($sql);
+            if (!empty($tmp_previous)) {
+                $sql = "UPDATE $tbl_lp_item
+                        SET next_item_id = $new_item_id
+                        WHERE c_id = $course_id AND id = $tmp_previous";
+                Database::query($sql);
+            }
 
             // Update all the items after the new item.
             $sql = "UPDATE $tbl_lp_item
@@ -1411,7 +1414,7 @@ class learnpath
                 Database::query($sql);
             }
 
-            if ($old_next != 0) {
+            if (!empty($old_next)) {
                 // Previous
                 $sql = "UPDATE $tbl_lp_item
                         SET previous_item_id = $old_previous
@@ -1485,7 +1488,7 @@ class learnpath
                 Database::query($sql);
             }
 
-            if ($new_next != 0) {
+            if (!empty($new_next)) {
                 // Update the next item's previous_item_id.
                 $sql = "UPDATE $tbl_lp_item
                         SET previous_item_id = $id
@@ -4074,7 +4077,7 @@ class learnpath
                         Database::query($sql_upd2);
                     }
                     // Update next item (new previous item).
-                    if ($next != 0) {
+                    if (!empty($next)) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous
                                      WHERE iid = $next";
                         if ($this->debug > 2) {

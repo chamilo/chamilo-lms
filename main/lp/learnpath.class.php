@@ -770,7 +770,7 @@ class learnpath
         // Check lp_name doesn't exist, otherwise append something.
         $i = 0;
         $name = Database::escape_string($name);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
 
         // Session id.
         $session_id = api_get_session_id();
@@ -7734,25 +7734,9 @@ class learnpath
         }
 
         if ($action != 'move') {
-            $id_prerequisite = 0;
-            if (is_array($arrLP)) {
-                foreach ($arrLP as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $id_prerequisite = $value['prerequisite'];
-                        break;
-                    }
-                }
-            }
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
-                    if (is_array($extra_info)) {
-                        if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
-                            $s_selected_position = $arrLP[$i]['id'];
-                        }
-                    } elseif ($action == 'add') {
-                        $s_selected_position = 0;
-                    }
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }
@@ -7944,11 +7928,6 @@ class learnpath
                 $arrHide = [];
                 for ($i = 0; $i < count($arrLP); $i++) {
                     if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
-                        if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
-                            $s_selected_position = $arrLP[$i]['id'];
-                        } elseif ($action == 'add') {
-                            $s_selected_position = 0;
-                        }
                         $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     }
                 }
@@ -7956,7 +7935,8 @@ class learnpath
         }
 
         $return .= '<tr>';
-        $return .= '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">'.get_lang('SaveHotpotatoes').'</button></td>';
+        $return .= '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">'.
+            get_lang('SaveHotpotatoes').'</button></td>';
         $return .= '</tr>';
         $return .= '</table>';
 
@@ -8509,7 +8489,7 @@ class learnpath
         );
         $defaults['description'] = $item_description;
 
-        $form->addElement('header', $title);
+        $form->addHeader($title);
 
         //$arrHide = array($id);
         $arrHide[0]['value'] = Security::remove_XSS($this->name);
@@ -8546,7 +8526,7 @@ class learnpath
             $form->addElement('hidden', 'title');
         }
 
-        $parent_select = $form->addElement(
+        $parentSelect = $form->addElement(
             'select',
             'parent',
             get_lang('Parent'),
@@ -8558,14 +8538,14 @@ class learnpath
         );
 
         foreach ($arrHide as $key => $value) {
-            $parent_select->addOption(
+            $parentSelect->addOption(
                 $value['value'],
                 $key,
                 'style="padding-left:'.$value['padding'].'px;"'
             );
         }
         if (!empty($s_selected_parent)) {
-            $parent_select->setSelected($s_selected_parent);
+            $parentSelect->setSelected($s_selected_parent);
         }
 
         if (is_array($arrLP)) {
@@ -8873,7 +8853,7 @@ class learnpath
             }
         }
 
-        $parent_select = $form->addSelect(
+        $parentSelect = $form->addSelect(
             'parent',
             get_lang('Parent'),
             [],
@@ -8888,14 +8868,14 @@ class learnpath
             if ($my_count != 0) {
                 // The LP name is also the first section and is not in the same charset like the other sections.
                 $value['value'] = Security::remove_XSS($value['value']);
-                $parent_select->addOption(
+                $parentSelect->addOption(
                     $value['value'],
                     $key,
                     'style="padding-left:'.$value['padding'].'px;"'
                 );
             } else {
                 $value['value'] = Security::remove_XSS($value['value']);
-                $parent_select->addOption(
+                $parentSelect->addOption(
                     $value['value'],
                     $key,
                     'style="padding-left:'.$value['padding'].'px;"'
@@ -8905,10 +8885,10 @@ class learnpath
         }
 
         if (!empty($id)) {
-            $parent_select->setSelected($parent);
+            $parentSelect->setSelected($parent);
         } else {
             $parent_item_id = Session::read('parent_item_id', 0);
-            $parent_select->setSelected($parent_item_id);
+            $parentSelect->setSelected($parent_item_id);
         }
 
         if (is_array($arrLP)) {
@@ -8916,11 +8896,10 @@ class learnpath
         }
 
         $arrHide = [];
-        $s_selected_position = null;
+        $selectedPosition = 0;
 
         // POSITION
-        $lastPosition = null;
-
+        //$lastPosition = null;
         for ($i = 0; $i < count($arrLP); $i++) {
             if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
                 $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
@@ -8928,16 +8907,15 @@ class learnpath
                 if ((isset($extra_info['previous_item_id']) &&
                     $extra_info['previous_item_id'] == $arrLP[$i]['id']) || $action == 'add'
                 ) {
-                    $s_selected_position = $arrLP[$i]['id'];
+                    //$selectedPosition = $arrLP[$i]['id'];
                 }
+
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
-            $lastPosition = $arrLP[$i]['id'];
+            //$lastPosition = $arrLP[$i]['id'];
         }
 
-        if (empty($s_selected_position)) {
-            $s_selected_position = $lastPosition;
-        }
+        $selectedPosition = isset($extra_info['previous_item_id']) ? $extra_info['previous_item_id'] : 0;
 
         $position = $form->addSelect(
             'previous',
@@ -8945,8 +8923,8 @@ class learnpath
             [],
             ['id' => 'previous']
         );
-        $position->addOption(get_lang('FirstPosition'), 0);
 
+        $position->addOption(get_lang('FirstPosition'), 0);
         foreach ($arrHide as $key => $value) {
             $padding = isset($value['padding']) ? $value['padding'] : 20;
             $position->addOption(
@@ -8955,35 +8933,19 @@ class learnpath
                 'style="padding-left:'.$padding.'px;"'
             );
         }
-        $position->setSelected($s_selected_position);
+
+        $position->setSelected($selectedPosition);
 
         if (is_array($arrLP)) {
             reset($arrLP);
         }
 
         if ($action != 'move') {
-            $id_prerequisite = 0;
-            if (is_array($arrLP)) {
-                foreach ($arrLP as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $id_prerequisite = $value['prerequisite'];
-                        break;
-                    }
-                }
-            }
-
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' &&
                     $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM
                 ) {
-                    if (isset($extra_info['previous_item_id']) &&
-                        $extra_info['previous_item_id'] == $arrLP[$i]['id']
-                    ) {
-                        $s_selected_position = $arrLP[$i]['id'];
-                    } elseif ($action == 'add') {
-                        $s_selected_position = $arrLP[$i]['id'];
-                    }
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }
@@ -9083,7 +9045,7 @@ class learnpath
         if (isset($extra_info['item_type']) &&
             $extra_info['item_type'] == TOOL_LP_FINAL_ITEM
         ) {
-            $parent_select->freeze();
+            $parentSelect->freeze();
             $position->freeze();
         }
 
@@ -9279,25 +9241,9 @@ class learnpath
 
             $form->addElement('url', 'url', get_lang('Url'), $urlAttributes);
             $defaults['url'] = $item_url;
-
-            $id_prerequisite = 0;
-            if (is_array($arrLP)) {
-                foreach ($arrLP as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $id_prerequisite = $value['prerequisite'];
-                        break;
-                    }
-                }
-            }
-
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
-                    if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
-                        $s_selected_position = $arrLP[$i]['id'];
-                    } elseif ($action == 'add') {
-                        $s_selected_position = 0;
-                    }
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }
@@ -9346,27 +9292,26 @@ class learnpath
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
+        $item_title = get_lang('Student_publication');
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = intval($extra_info);
+            $extra_info = (int) $extra_info;
             $sql = "SELECT title, description
                     FROM $tbl_publication
                     WHERE c_id = $course_id AND id = ".$extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
-
-            $item_title = $row['title'];
-        } else {
-            $item_title = get_lang('Student_publication');
+            if ($row) {
+                $item_title = $row['title'];
+            }
         }
 
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
         $sql = "SELECT * FROM $tbl_lp_item 
@@ -9487,29 +9432,6 @@ class learnpath
             }
         }
 
-        if ($action != 'move') {
-            $id_prerequisite = 0;
-            if (is_array($arrLP)) {
-                foreach ($arrLP as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $id_prerequisite = $value['prerequisite'];
-                        break;
-                    }
-                }
-            }
-            $arrHide = [];
-            for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
-                    if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
-                        $s_selected_position = $arrLP[$i]['id'];
-                    } elseif ($action == 'add') {
-                        $s_selected_position = 0;
-                    }
-                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                }
-            }
-        }
-
         if ($action == 'add') {
             $form->addButtonCreate(get_lang('AddAssignmentToCourse'), 'submit_button');
         } else {
@@ -9577,7 +9499,7 @@ class learnpath
         }
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $item_id = intval($item_id);
+        $item_id = (int) $item_id;
         $sql = "SELECT * FROM $tbl_lp_item 
                 WHERE iid = ".$item_id;
         $result = Database::query($sql);

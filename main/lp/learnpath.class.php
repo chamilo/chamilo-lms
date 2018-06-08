@@ -9509,16 +9509,11 @@ class learnpath
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($row['audio'])) {
-            $audio_player .= '<div class="lp_mediaplayer" id="container">
-                              <a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.
-                              </div>';
-            $audio_player .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-            $audio_player .= '<script>
-                var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                s1.addParam("allowscriptaccess","always");
-                s1.addParam("flashvars","file=../..'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'].'&autostart=true");
-                s1.write("container");
-            </script>';
+            $webAudioPath = '../..'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'];
+
+            $audio_player .= '<div class="lp_mediaplayer" id="container">'
+                .'<audio src="'.$webAudioPath.'" controls>'
+                .'</div><br>';
         }
 
         $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$item_id.'&lp_id='.$this->lp_id;
@@ -9580,7 +9575,7 @@ class learnpath
         $return .= '</div>';
 
         if (!empty($audio_player)) {
-            $return .= '<br />'.$audio_player;
+            $return .= $audio_player;
         }
 
         return $return;

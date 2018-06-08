@@ -278,7 +278,7 @@ $elements = [
     $text,
     $checkBoxActiveLegal,
     $textAreaLegal,
-    $myButton
+    $myButton,
 ];
 
 $form->addPanelOption(
@@ -541,7 +541,7 @@ $globalGroup = [
     get_lang('AllowUserEditAnnouncement') => $group2,
     get_lang('AllowUserImageForum') => $group3,
     get_lang('AllowUserViewUserList') => $group4,
-    '' => $myButton
+    '' => $myButton,
 ];
 
 $form->addPanelOption(
@@ -564,7 +564,7 @@ $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
 $globalGroup = [
     get_lang('AllowOpenchatWindow') => $group,
-    '' => $myButton
+    '' => $myButton,
 ];
 
 $form->addPanelOption(
@@ -795,7 +795,7 @@ $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
 $globalGroup = [
     get_lang('InfoAboutAdvanceInsideHomeCourse') => $group,
-    '' => $myButton
+    '' => $myButton,
 ];
 
 $form->addPanelOption(
@@ -824,7 +824,7 @@ if (api_get_setting('allow_public_certificates') === 'true') {
 
     $globalGroup = [
         get_lang('AllowPublicCertificates') => $group,
-        '' => $myButton
+        '' => $myButton,
     ];
 
     $form->addPanelOption(
@@ -843,7 +843,7 @@ $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
 $globalGroup = [
     get_lang('EnableForumAutoLaunch') => $group,
-    '' => $myButton
+    '' => $myButton,
 ];
 
 $form->addPanelOption(
@@ -859,14 +859,14 @@ $group = [
 ];
 $group2 = [
     $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
-    $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0)
+    $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
 ];
 $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
 $globalGroup = [
     get_lang('DefaultUpload') => $group,
     get_lang('StudentAllowedToDeleteOwnPublication') => $group2,
-    '' => $myButton
+    '' => $myButton,
 ];
 
 $form->addPanelOption(

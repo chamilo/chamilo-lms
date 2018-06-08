@@ -932,11 +932,11 @@ EOT;
     }
 
     /**
-     * Draws a panel of options see the course_info/infocours.php page
+     * Draws a panel of options see the course_info/infocours.php page.
      *
-     * @param string $name internal name
-     * @param string $title visible title
-     * @param array $groupList list of group or elements
+     * @param string $name      internal name
+     * @param string $title     visible title
+     * @param array  $groupList list of group or elements
      */
     public function addPanelOption($name, $title, $groupList)
     {

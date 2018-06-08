@@ -674,13 +674,22 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    public function &addGroup($elements, $name=null, $groupLabel='', $separator=null, $appendName = true)
-    {
+    public function &addGroup(
+        $elements,
+        $name = null,
+        $groupLabel = '',
+        $separator = null,
+        $appendName = true,
+        $createElement = false
+    ) {
         static $anonGroups = 1;
 
         if (0 == strlen($name)) {
-            $name       = 'qf_group_' . $anonGroups++;
+            $name = 'qf_group_'.$anonGroups++;
             $appendName = false;
+        }
+        if ($createElement) {
+            return $this->createElement('group', $name, $groupLabel, $elements, $separator, $appendName);
         }
         $group = & $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
         return $group;

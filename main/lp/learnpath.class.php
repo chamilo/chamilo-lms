@@ -1063,9 +1063,9 @@ class learnpath
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
-        foreach ($this->items as $id => $dummy) {
+        foreach ($this->items as $lpItemId => $dummy) {
             $sql = "DELETE FROM $lp_item_view
-                    WHERE c_id = $course_id AND lp_item_id = '".$id."'";
+                    WHERE c_id = $course_id AND lp_item_id = '".$lpItemId."'";
             Database::query($sql);
         }
 
@@ -1102,7 +1102,8 @@ class learnpath
                 } else {
                     // No other LP uses that directory, delete it.
                     $course_rel_dir = api_get_course_path().'/scorm/'; // scorm dir web path starting from /courses
-                    $course_scorm_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path for this course.
+                    // The absolute system path for this course.
+                    $course_scorm_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir;
                     if ($delete == 'remove' && is_dir($course_scorm_dir.$path) && !empty($course_scorm_dir)) {
                         if ($this->debug > 2) {
                             error_log('In learnpath::delete(), found SCORM, deleting directory: '.$course_scorm_dir.$path, 0);

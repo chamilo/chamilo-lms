@@ -672,7 +672,7 @@ if (!empty($exerciseList)) {
             $cut_title = $exercise->getCutTitle();
             $alt_title = '';
             if ($cut_title != $row['title']) {
-                $alt_title = ' title = "'.$row['title'].'" ';
+                $alt_title = ' title = "'.$exercise->getUnformattedTitle().'" ';
             }
 
             // Teacher only

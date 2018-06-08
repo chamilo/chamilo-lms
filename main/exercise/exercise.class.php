@@ -8229,7 +8229,7 @@ class Exercise
      *
      * @return string
      */
-    private function getUnformattedTitle()
+    public function getUnformattedTitle()
     {
         return strip_tags(api_html_entity_decode($this->title));
     }

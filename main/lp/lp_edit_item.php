@@ -21,35 +21,7 @@ api_protect_course_script();
 $learnPath = Session::read('oLP');
 
 /* Header and action code */
-$htmlHeadXtra[] = '
-<script>'.$learnPath->get_js_dropdown_array().
-"
-    function load_cbo(id) {
-        if (!id) {
-            return false;
-        }
-
-        var cbo = document.getElementById('previous');
-
-        for(var i = cbo.length - 1; i > 0; i--) {
-            cbo.options[i] = null;
-        }
-
-        var k=0;
-
-        for(var i = 1; i <= child_name[id].length; i++){
-            var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-            option.style.paddingLeft = '20px';
-
-            cbo.options[i] = option;
-            k = i;
-        }
-
-        cbo.options[k].selected = true;
-        $('#previous').selectpicker('refresh');
-    }
-".
-'
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'
 $(document).on("ready", function() {
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates("content_lp");
@@ -67,7 +39,7 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 if (!$is_allowed_to_edit || $isStudentView) {
     error_log('New LP - User not authorized in lp_edit_item.php');
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.

@@ -1382,8 +1382,8 @@ class learnpath
             }
         }
 
-        $same_parent = ($row_select['parent_item_id'] == $parent) ? true : false;
-        $same_previous = ($row_select['previous_item_id'] == $previous) ? true : false;
+        $same_parent = $row_select['parent_item_id'] == $parent ? true : false;
+        $same_previous = $row_select['previous_item_id'] == $previous ? true : false;
 
         // TODO: htmlspecialchars to be checked for encoding related problems.
         if ($same_parent && $same_previous) {
@@ -7360,9 +7360,11 @@ class learnpath
                         $row
                     );
                 } else {
-                    $return .= $this->display_item_small_form(
+                    $return .= $this->display_item_form(
                         $row['item_type'],
                         get_lang('EditCurrentChapter').' :',
+                        'edit_item',
+                        $item_id,
                         $row
                     );
                 }
@@ -8448,25 +8450,22 @@ class learnpath
         global $charset;
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $item_title = '';
+        $item_description = '';
+        $item_path_fck = '';
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = $extra_info['title'];
             $item_description = $extra_info['description'];
             $item_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
             $item_path_fck = '/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
-        } else {
-            $item_title = '';
-            $item_description = '';
-            $item_path_fck = '';
         }
-
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE
                     lp_id = ".$this->lp_id." AND
@@ -8653,6 +8652,10 @@ class learnpath
             $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
             $content_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck;
             $defaults['content_lp'] = file_get_contents($content_path);
+        }
+
+        if (!empty($id)) {
+            $form->addHidden('id', $id);
         }
 
         $form->addElement('hidden', 'type', $item_type);
@@ -9715,6 +9718,29 @@ class learnpath
             $return .= "\n";
         }
 
+        $return .= "
+            function load_cbo(id) {
+                if (!id) {
+                    return false;
+                }
+            
+                var cbo = document.getElementById('previous');
+                for(var i = cbo.length - 1; i > 0; i--) {
+                    cbo.options[i] = null;
+                }
+            
+                var k=0;
+                for(var i = 1; i <= child_name[id].length; i++){
+                    var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
+                    option.style.paddingLeft = '40px';
+                    cbo.options[i] = option;
+                    k = i;
+                }
+            
+                cbo.options[k].selected = true;
+                $('#previous').selectpicker('refresh');
+            }";
+
         return $return;
     }
 
@@ -9783,33 +9809,6 @@ class learnpath
         }
 
         return $return;
-    }
-
-    /**
-     * Displays a basic form on the overview page for changing the item title and the item description.
-     *
-     * @param string $item_type
-     * @param string $title
-     * @param array  $data
-     *
-     * @throws Exception
-     * @throws HTML_QuickForm_Error
-     *
-     * @return string
-     */
-    public function display_item_small_form($item_type, $title = '', $data = [])
-    {
-        $url = api_get_self().'?'.api_get_cidreq().'&action=edit_item&lp_id='.$this->lp_id;
-        $form = new FormValidator('small_form', 'post', $url);
-        $form->addElement('header', $title);
-        $form->addElement('text', 'title', get_lang('Title'));
-        $form->addButtonSave(get_lang('Save'), 'submit_button');
-        $form->addElement('hidden', 'id', $data['id']);
-        $form->addElement('hidden', 'parent', $data['parent_item_id']);
-        $form->addElement('hidden', 'previous', $data['previous_item_id']);
-        $form->setDefaults(['title' => $data['title']]);
-
-        return $form->toHtml();
     }
 
     /**
@@ -12135,7 +12134,7 @@ EOD;
      */
     public function getCategoryId()
     {
-        return $this->categoryId;
+        return (int) $this->categoryId;
     }
 
     /**

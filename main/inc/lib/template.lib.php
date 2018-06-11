@@ -58,7 +58,7 @@ class Template
      * @param bool   $hide_global_chat
      * @param bool   $load_plugins
      * @param int    $responseCode
-     * @param bool   $sendHeaders      send http headers or not
+     * @param bool   $sendHeaders send http headers or not
      */
     public function __construct(
         $title = '',
@@ -947,7 +947,7 @@ class Template
     /**
      * Render the template.
      *
-     * @param string $template           The template path
+     * @param string $template The template path
      * @param bool   $clearFlashMessages Clear the $_SESSION variables for flash messages
      */
     public function display($template, $clearFlashMessages = true)
@@ -1421,96 +1421,12 @@ class Template
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
 
-        // Default root chamilo favicon
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
-
-        //Added to verify if in the current Chamilo Theme exist a favicon
-        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
-
-        //If exist pick the current chamilo theme favicon
-        if (is_file($favicoThemeUrl.'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
-        }
-
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
-                $url = api_remove_trailing_slash(
-                    preg_replace('/https?:\/\//i', '', $url_info['url'])
-                );
-                $clean_url = api_replace_dangerous_char($url);
-                $clean_url = str_replace('/', '-', $clean_url);
-                $clean_url .= '/';
-                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
-                //we create the new dir for the new sites
-                if (is_file($icon_real_homep.'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
-                }
-            }
-        }
-
-        $this->assign('favico', $favico);
+        $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
 
-        //@todo move this in the template
-        $rightFloatMenu = '';
-        $iconBug = Display::return_icon(
-            'bug.png',
-            get_lang('ReportABug'),
-            [],
-            ICON_SIZE_LARGE
-        );
-        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $rightFloatMenu = '<div class="report">
-		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
-                    '.$iconBug.'
-                </a>
-		        </div>';
-        }
+        $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
 
-        if (api_get_setting('show_link_ticket_notification') == 'true' &&
-            $this->user_is_logged_in
-        ) {
-            // by default is project_id = 1
-            $defaultProjectId = 1;
-            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
-            if ($allow) {
-                $iconTicket = Display::return_icon(
-                    'help.png',
-                    get_lang('Ticket'),
-                    [],
-                    ICON_SIZE_LARGE
-                );
-                $courseInfo = api_get_course_info();
-                $courseParams = '';
-                if (!empty($courseInfo)) {
-                    $courseParams = api_get_cidreq();
-                }
-                $url = api_get_path(WEB_CODE_PATH).
-                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-                $rightFloatMenu .= '<div class="help">
-                    <a href="'.$url.'" target="_blank">
-                        '.$iconTicket.'
-                    </a>
-                </div>';
-            }
-        }
-
-        $this->assign('bug_notification', $rightFloatMenu);
-
-        $resize = '';
-        if (api_get_setting('accessibility_font_resize') == 'true') {
-            $resize .= '<div class="resize_font">';
-            $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '</div>';
-            $resize .= '</div>';
-        }
-        $this->assign('accessibility', $resize);
+        $this->assignAccessibilityBlock(); //Prepare the 'accessibility' var for the template
 
         // Preparing values for the menu
 
@@ -1604,46 +1520,7 @@ class Template
             }
         }
 
-        $socialMeta = '';
-        $metaTitle = api_get_setting('meta_title');
-        if (!empty($metaTitle)) {
-            $socialMeta .= '<meta name="twitter:card" content="summary" />'."\n";
-            $metaSite = api_get_setting('meta_twitter_site');
-            if (!empty($metaSite)) {
-                $socialMeta .= '<meta name="twitter:site" content="'.$metaSite.'" />'."\n";
-                $metaCreator = api_get_setting('meta_twitter_creator');
-                if (!empty($metaCreator)) {
-                    $socialMeta .= '<meta name="twitter:creator" content="'.$metaCreator.'" />'."\n";
-                }
-            }
-
-            // The user badge page emits its own meta tags, so if this is
-            // enabled, ignore the global ones
-            $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
-            $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
-
-            if (!$userId && !$skillId) {
-                // no combination of user and skill ID has been defined,
-                // so print the normal OpenGraph meta tags
-                $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
-                $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
-
-                $metaDescription = api_get_setting('meta_description');
-                if (!empty($metaDescription)) {
-                    $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
-                }
-
-                $metaImage = api_get_setting('meta_image_path');
-                if (!empty($metaImage)) {
-                    if (is_file(api_get_path(SYS_PATH).$metaImage)) {
-                        $path = api_get_path(WEB_PATH).$metaImage;
-                        $socialMeta .= '<meta property="og:image" content="'.$path.'" />'."\n";
-                    }
-                }
-            }
-        }
-
-        $this->assign('social_meta', $socialMeta);
+        $this->assignSocialMeta();
     }
 
     /**
@@ -1805,5 +1682,168 @@ class Template
             header('Referrer-Policy: '.$setting);
         }
         // end of HTTP headers security block
+    }
+
+    /**
+     * Assign favicon to the 'favico' template variable
+     * @return  bool    Always return true because there is always at least one correct favicon.ico
+     */
+    private function assignFavIcon()
+    {
+        // Default root chamilo favicon
+        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+
+        //Added to verify if in the current Chamilo Theme exist a favicon
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
+
+        //If exist pick the current chamilo theme favicon
+        if (is_file($favicoThemeUrl.'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $url_info = api_get_access_url($access_url_id);
+                $url = api_remove_trailing_slash(
+                    preg_replace('/https?:\/\//i', '', $url_info['url'])
+                );
+                $clean_url = api_replace_dangerous_char($url);
+                $clean_url = str_replace('/', '-', $clean_url);
+                $clean_url .= '/';
+                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+                //we create the new dir for the new sites
+                if (is_file($icon_real_homep.'favicon.ico')) {
+                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+                }
+            }
+        }
+
+        $this->assign('favico', $favico);
+        return true;
+    }
+
+    /**
+     * Assign HTML code to the 'bug_notification' template variable for the side tabs to report issues
+     * @return  bool    Always return true because there is always a string, even if empty
+     */
+    function assignBugNotification()
+    {
+        //@todo move this in the template
+        $rightFloatMenu = '';
+        $iconBug = Display::return_icon(
+            'bug.png',
+            get_lang('ReportABug'),
+            [],
+            ICON_SIZE_LARGE
+        );
+        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
+            $rightFloatMenu = '<div class="report">
+		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
+                    '.$iconBug.'
+                </a>
+		        </div>';
+        }
+
+        if (api_get_setting('show_link_ticket_notification') == 'true' &&
+            $this->user_is_logged_in
+        ) {
+            // by default is project_id = 1
+            $defaultProjectId = 1;
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+            if ($allow) {
+                $iconTicket = Display::return_icon(
+                    'help.png',
+                    get_lang('Ticket'),
+                    [],
+                    ICON_SIZE_LARGE
+                );
+                $courseInfo = api_get_course_info();
+                $courseParams = '';
+                if (!empty($courseInfo)) {
+                    $courseParams = api_get_cidreq();
+                }
+                $url = api_get_path(WEB_CODE_PATH).
+                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
+            }
+        }
+
+        $this->assign('bug_notification', $rightFloatMenu);
+        return true;
+    }
+
+    /**
+     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu)
+     * @return  bool    Always return true (even if empty string)
+     */
+    private function assignAccessibilityBlock()
+    {
+        $resize = '';
+        if (api_get_setting('accessibility_font_resize') == 'true') {
+            $resize .= '<div class="resize_font">';
+            $resize .= '<div class="btn-group">';
+            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '</div>';
+            $resize .= '</div>';
+        }
+        $this->assign('accessibility', $resize);
+        return true;
+    }
+
+    /**
+     * Assign HTML code to the 'social_meta' template variable (usually shown above top menu)
+     * @return  bool    Always return true (even if empty string)
+     */
+    private function assignSocialMeta()
+    {
+        $socialMeta = '';
+        $metaTitle = api_get_setting('meta_title');
+        if (!empty($metaTitle)) {
+            $socialMeta .= '<meta name="twitter:card" content="summary" />'."\n";
+            $metaSite = api_get_setting('meta_twitter_site');
+            if (!empty($metaSite)) {
+                $socialMeta .= '<meta name="twitter:site" content="'.$metaSite.'" />'."\n";
+                $metaCreator = api_get_setting('meta_twitter_creator');
+                if (!empty($metaCreator)) {
+                    $socialMeta .= '<meta name="twitter:creator" content="'.$metaCreator.'" />'."\n";
+                }
+            }
+
+            // The user badge page emits its own meta tags, so if this is
+            // enabled, ignore the global ones
+            $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
+            $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
+
+            if (!$userId && !$skillId) {
+                // no combination of user and skill ID has been defined,
+                // so print the normal OpenGraph meta tags
+                $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
+                $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
+
+                $metaDescription = api_get_setting('meta_description');
+                if (!empty($metaDescription)) {
+                    $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
+                }
+
+                $metaImage = api_get_setting('meta_image_path');
+                if (!empty($metaImage)) {
+                    if (is_file(api_get_path(SYS_PATH).$metaImage)) {
+                        $path = api_get_path(WEB_PATH).$metaImage;
+                        $socialMeta .= '<meta property="og:image" content="'.$path.'" />'."\n";
+                    }
+                }
+            }
+        }
+
+        $this->assign('social_meta', $socialMeta);
+        return true;
     }
 }

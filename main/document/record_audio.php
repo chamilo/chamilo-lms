@@ -153,6 +153,7 @@ $actions = Display::toolbarButton(
 $template = new Template($nameTools);
 $template->assign('directory', $wamidir);
 $template->assign('user_id', api_get_user_id());
+$template->assign('reload_page', 1);
 
 $layout = $template->get_template('document/record_audio.tpl');
 $content = $template->fetch($layout);

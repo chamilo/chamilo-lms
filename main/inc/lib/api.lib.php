@@ -8979,8 +8979,8 @@ function api_upload_file($type, $file, $itemId, $cropParameters = '')
         }
 
         $pathToSave = $path.$name;
+        $result = moveUploadedFile($file, $pathToSave);
 
-        $result = move_uploaded_file($file['tmp_name'], $pathToSave);
         if ($result) {
             if (!empty($cropParameters)) {
                 $image = new Image($pathToSave);
@@ -9061,6 +9061,26 @@ function api_remove_uploaded_file($type, $file)
     if (Security::check_abs_path($path, $typePath) && file_exists($path) && is_file($path)) {
         unlink($path);
     }
+}
+
+/**
+ * @param string $type
+ * @param int    $itemId
+ * @param string $file
+ *
+ * @return bool
+ */
+function api_remove_uploaded_file_by_id($type, $itemId, $file)
+{
+    $file = api_get_uploaded_file($type, $itemId, $file,  false);
+    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
+    if (Security::check_abs_path($file, $typePath) && file_exists($file) && is_file($file)) {
+        unlink($file);
+
+        return true;
+    }
+
+    return false;
 }
 
 /**

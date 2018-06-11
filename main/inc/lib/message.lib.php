@@ -302,16 +302,17 @@ class MessageManager
      * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array  $attachments      files array($_FILES) (optional)
-     * @param array  $fileCommentList  about attachment files (optional)
-     * @param int    $group_id         (optional)
-     * @param int    $parent_id        (optional)
-     * @param int    $editMessageId    id for updating the message (optional)
-     * @param int    $topic_id         (optional) the default value is the current user_id
+     * @param array  $attachments     files array($_FILES) (optional)
+     * @param array  $fileCommentList about attachment files (optional)
+     * @param int    $group_id        (optional)
+     * @param int    $parent_id       (optional)
+     * @param int    $editMessageId   id for updating the message (optional)
+     * @param int    $topic_id        (optional) the default value is the current user_id
      * @param int    $sender_id
      * @param bool   $directMessage
      * @param int    $forwardId
      * @param array  $smsParameters
+     * @param bool   $checkCurrentAudioId
      *
      * @return bool
      */
@@ -328,7 +329,8 @@ class MessageManager
         $sender_id = 0,
         $directMessage = false,
         $forwardId = 0,
-        $smsParameters = []
+        $smsParameters = [],
+        $checkCurrentAudioId = false
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $group_id = (int) $group_id;
@@ -369,6 +371,27 @@ class MessageManager
                 }
                 $attachmentList[] = $attachment;
                 $counter++;
+            }
+        }
+
+        if ($checkCurrentAudioId) {
+            // Add the audio file as an attachment
+            $audioId = Session::read('current_audio_id');
+            if (!empty($audioId)) {
+                $file = api_get_uploaded_file('audio_message', api_get_user_id(), $audioId);
+                if (!empty($file)) {
+                    $audioAttachment = [
+                        'name' => basename($file),
+                        'comment' => 'audio_message',
+                        'size' => filesize($file),
+                        'tmp_name' => $file,
+                        'error' => 0,
+                        'type' => DocumentManager::file_get_mime_type(basename($file)),
+
+                    ];
+                    // create attachment from audio message
+                    $attachmentList[] = $audioAttachment;
+                }
             }
         }
 
@@ -423,7 +446,7 @@ class MessageManager
 
             // Forward also message attachments
             if (!empty($forwardId)) {
-                $attachments = MessageManager::getAttachmentList($forwardId);
+                $attachments = self::getAttachmentList($forwardId);
                 foreach ($attachments as $attachment) {
                     if (!empty($attachment['file_source'])) {
                         $file = [
@@ -1211,14 +1234,14 @@ class MessageManager
     public static function showMessageBox($messageId, $source = 'inbox')
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $messageId = intval($messageId);
+        $messageId = (int) $messageId;
 
         if ($source == 'outbox') {
             if (isset($messageId) && is_numeric($messageId)) {
                 $query = "SELECT * FROM $table
                           WHERE
                             user_sender_id = ".api_get_user_id()." AND
-                            id = ".$messageId." AND
+                            id = $messageId AND
                             msg_status = ".MESSAGE_STATUS_OUTBOX;
                 $result = Database::query($query);
             }
@@ -1890,16 +1913,23 @@ class MessageManager
         // get file attachments by message id
         $list = [];
         if ($files) {
-            $attach_icon = Display::return_icon('attachment.gif', '');
+            $attachIcon = Display::return_icon('attachment.gif', '');
             $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
             foreach ($files as $row_file) {
                 $archiveFile = $row_file['path'];
                 $filename = $row_file['filename'];
-                $filesize = format_file_size($row_file['size']);
-                $filecomment = Security::remove_XSS($row_file['comment']);
+                $size = format_file_size($row_file['size']);
+                $comment = Security::remove_XSS($row_file['comment']);
                 $filename = Security::remove_XSS($filename);
-                $list[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>
-                    &nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
+                $link = Display::url($filename, $archiveURL.$archiveFile);
+                $comment = !empty($comment) ? '&nbsp;-&nbsp;<i>'.$comment.'</i>' : '';
+
+                $attachmentLine = $attachIcon.'&nbsp;'.$link.'&nbsp;('.$size.')'.$comment;
+                if ($row_file['comment'] == 'audio_message') {
+                    $attachmentLine = '<audio src="'.$archiveURL.$archiveFile.'"/>';
+                }
+
+                $list[] = $attachmentLine;
             }
         }
 
@@ -2521,5 +2551,17 @@ class MessageManager
         $row = Database::fetch_assoc($result);
 
         return $row['count'];
+    }
+
+    /**
+     * Clean audio messages already added in the message tool
+     */
+    public static function cleanAudioMessage()
+    {
+        $audioId = Session::read('current_audio_id');
+        if (!empty($audioId)) {
+            api_remove_uploaded_file_by_id('audio_message', api_get_user_id(), $audioId);
+            Session::erase('current_audio_id');
+        }
     }
 }

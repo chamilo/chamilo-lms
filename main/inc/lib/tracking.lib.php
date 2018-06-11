@@ -3225,9 +3225,9 @@ class Tracking
                             $viewCondition
                         ORDER BY iv.view_count DESC ";
 
-                        $result = Database::query($sql);
-                        if (Database::num_rows($result)) {
-                            $row = Database::fetch_array($result);
+                        $resultRow = Database::query($sql);
+                        if (Database::num_rows($resultRow)) {
+                            $row = Database::fetch_array($resultRow);
                             $totalTimeInLpItemView = $row['mytime'];
                             $lpItemViewId = $row['iid'];
 

@@ -672,7 +672,7 @@ if (!empty($exerciseList)) {
             $cut_title = $exercise->getCutTitle();
             $alt_title = '';
             if ($cut_title != $row['title']) {
-                $alt_title = ' title = "'.$row['title'].'" ';
+                $alt_title = ' title = "'.$exercise->getUnformattedTitle().'" ';
             }
 
             // Teacher only
@@ -936,7 +936,7 @@ if (!empty($exerciseList)) {
                             ),
                             '',
                             [
-                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
+                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
                             ]
                         );

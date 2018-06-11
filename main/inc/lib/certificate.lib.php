@@ -700,16 +700,19 @@ class Certificate extends Model
         }
 
         $sessions = SessionManager::get_sessions_by_user($this->user_id, false, true);
+        $totalTimeInLearningPaths = 0;
         $sessionsApproved = [];
+        $coursesApproved = [];
         if ($sessions) {
             foreach ($sessions as $session) {
                 $allCoursesApproved = [];
                 foreach ($session['courses'] as $course) {
                     $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $courseCode = $courseInfo['code'];
                     $gradebookCategories = Category::load(
                         null,
                         null,
-                        $courseInfo['code'],
+                        $courseCode,
                         null,
                         false,
                         $session['session_id']
@@ -725,6 +728,16 @@ class Certificate extends Model
                         );
 
                         if ($result) {
+                            $coursesApproved[$course['real_id']] = $courseInfo['title'];
+
+                            // Find time spent in LP
+                            $totalTimeInLearningPaths += Tracking::get_time_spent_in_lp(
+                                $this->user_id,
+                                $courseCode,
+                                [],
+                                $session['session_id']
+                            );
+
                             $allCoursesApproved[] = true;
                         }
                     }
@@ -780,7 +793,8 @@ class Certificate extends Model
         );
         $tplContent->assign('skills', $skills);
         $tplContent->assign('sessions', $sessionsApproved);
-
+        $tplContent->assign('courses', $coursesApproved);
+        $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 

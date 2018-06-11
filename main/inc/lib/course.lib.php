@@ -5535,6 +5535,7 @@ class CourseManager
             'enable_forum_auto_launch',
             'show_course_in_user_language',
             'email_to_teachers_on_new_work_feedback',
+            'student_delete_own_publication',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

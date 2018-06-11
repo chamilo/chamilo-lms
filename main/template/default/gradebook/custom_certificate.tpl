@@ -11,7 +11,7 @@
     </tr>
     <tr>
         <td>
-            <table border="0" cellspacing="0" cellpadding="0" width="100%"> 
+            <table border="0" cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                     <td bgcolor="#92c647" width=58 height=91>
                         <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">
@@ -40,14 +40,26 @@
                         </p>
                         <br />
                         <p style="font-size: 16px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform_in_hours)}}</p><br />
+                        <p style="font-size: 16px;">
+                            {{ 'TimeSpentInLearningPaths' | get_lang }} : {{ time_spent_in_lps }}
+                        </p>
+                        <br />
                         <p style="font-size: 16px;">{{ 'TheContentsAreValidated' | get_lang }}:</p>
-                            {% if sessions %}
+                            {#{% if sessions %}#}
+                                {#<ul style="color: #672290; font-size: 16px;">#}
+                                    {#{% for session in sessions %}#}
+                                        {#<li>  {{ session.session_name }}</li>#}
+                                    {#{% endfor %}#}
+                                {#</ul>#}
+                            {#{% endif %}#}
+                            {% if courses %}
                                 <ul style="color: #672290; font-size: 16px;">
-                                    {% for session in sessions %}
-                                        <li>  {{ session.session_name }}</li>
+                                    {% for course in courses %}
+                                        <li>{{ course }}</li>
                                     {% endfor %}
                                 </ul>
-                            {% endif %}<br />
+                            {% endif %}
+                            <br />
                         <h4 style="color: #672290; font-size: 16px;">{{ complete_name }}</h4>
                         <p style="color:#40ad49; font-size: 16px;">{{ 'SkillsValidated' | get_lang }}:</p>
                             {% if skills %}

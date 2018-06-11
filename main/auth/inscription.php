@@ -585,7 +585,12 @@ if ($allowDoubleValidation && $showTerms == false) {
     $form->addHtml('</div>');
     $formContainsSendButton = true;
 } else {
-    if (api_get_setting('allow_registration') === 'true' || $user_already_registered_show_terms || $showTerms) {
+    if ((
+            api_get_setting('allow_registration') === 'approval' ||
+            api_get_setting('allow_registration') === 'true'
+        ) ||
+        $user_already_registered_show_terms || $showTerms
+    ) {
         $form->addButtonNext(get_lang('RegisterUser'));
         $formContainsSendButton = true;
     }

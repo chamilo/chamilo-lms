@@ -5648,7 +5648,7 @@ class UserManager
     /**
      * Get the boss user ID from a followed user id.
      *
-     * @param $userId
+     * @param int $userId student id
      *
      * @return array
      */

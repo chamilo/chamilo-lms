@@ -76,7 +76,7 @@ $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), tru
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
 
 // Hide toc frame
-$hide_toc_frame = $form->addElement(
+$form->addElement(
     'checkbox',
     'hide_toc_frame',
     null,
@@ -142,7 +142,7 @@ $defaults['lp_encoding'] = Security::remove_XSS($learnPath->encoding);
 $defaults['lp_name'] = Security::remove_XSS($learnPath->get_name());
 $defaults['lp_author'] = Security::remove_XSS($learnPath->get_author());
 $defaults['hide_toc_frame'] = $hideTableOfContents;
-$defaults['category_id'] = intval($learnPath->getCategoryId());
+$defaults['category_id'] = $learnPath->getCategoryId();
 $defaults['accumulate_scorm_time'] = $learnPath->getAccumulateScormTime();
 
 $expired_on = $learnPath->expired_on;
@@ -240,6 +240,8 @@ if ($enableLpExtraFields) {
     });
     </script>';
 }
+
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."</sript>";
 
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00'
     ? api_get_local_time($publicated_on)

@@ -7861,6 +7861,16 @@ class Exercise
     }
 
     /**
+     * Get the title without HTML tags.
+     *
+     * @return string
+     */
+    public function getUnformattedTitle()
+    {
+        return strip_tags(api_html_entity_decode($this->title));
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
      * @return array
@@ -8222,15 +8232,5 @@ class Exercise
             }
         }
         $this->mediaList = $mediaList;
-    }
-
-    /**
-     * Get the title without HTML tags.
-     *
-     * @return string
-     */
-    private function getUnformattedTitle()
-    {
-        return strip_tags(api_html_entity_decode($this->title));
     }
 }

@@ -1,7 +1,3 @@
-<div class="alert alert-warning">
-    <span class="fa fa-warning fa-fw" aria-hidden="true"></span> {{ 'WamiNeedFilename'|get_lang }}
-</div>
-
 <div id="record-audio-recordrtc" class="row text-center">
     <form>
         <div class="row">
@@ -10,22 +6,16 @@
                     <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
                     <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
                 </div>
-                <div class="form-group">
-                    <input type="text" name="audio_title" id="audio-title-rtc" class="form-control" placeholder="{{ 'InputNameHere'|get_lang }}">
-                </div>
+                <input type="hidden" name="audio_title" id="audio-title-rtc" value="{{ audio_title }}">
             </div>
         </div>
         <div class="text-center">
             <div class="form-group">
-                <button class="btn btn-primary" type="button" id="btn-start-record">
+                <button class="btn btn-default" type="button" id="btn-start-record">
                     <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
                 </button>
                 <button class="btn btn-danger hidden" type="button" id="btn-stop-record" disabled>
                     <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
-                </button>
-                <button class="btn btn-success hidden" type="button" id="btn-save-record"
-                    data-loadingtext="{{ 'Uploading'|get_lang }}" disabled>
-                    <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
                 </button>
             </div>
             <div class="form-group">
@@ -40,10 +30,10 @@
         <br>
         <form>
             <div class="form-group">
-                <input type="text" name="audio_title" id="audio-title-wami" class="form-control" placeholder="{{ 'InputNameHere'|get_lang }}">
+                <input type="hidden" name="audio_title" id="audio-title-wami" value="{{ audio_title }}">
             </div>
             <div class="form-group text-center">
-                <button class="btn btn-primary" type="button" id="btn-activate-wami">
+                <button class="btn btn-default" type="button" id="btn-activate-wami">
                     <span class="fa fa-check fa-fw" aria-hidden=""></span> {{ 'Activate'|get_lang }}
                 </button>
             </div>
@@ -63,17 +53,18 @@
                 btnPauseId: '#btn-pause-record',
                 btnPlayId: '#btn-play-record',
                 btnStopId: '#btn-stop-record',
-                btnSaveId: '#btn-save-record',
+                btnSaveId: '',
                 plyrPreviewId: '#record-preview',
                 directory: '{{ directory }}',
-                reload_page: 1,
-                type : 'document'
+                reload_page: '{{ reload_page }}',
+                type: 'message',
             },
             {
                 blockId: '#record-audio-wami',
                 containerId: 'record-audio-wami-container',
                 directory: '{{ directory }}',
-                userId: {{ user_id }}
+                userId: {{ user_id }},
+                type: 'message'
             },
             null
         );

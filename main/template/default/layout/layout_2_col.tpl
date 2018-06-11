@@ -59,13 +59,13 @@
                     </article>
                 {% endif %}
 
-                {% if section_name == 'section-campus' %}
+                
 
                     {% include 'layout/hot_courses.tpl'|get_template %}
 
                     {% include 'session/sessions_current.tpl'|get_template %}
 
-                {% endif %}
+                
 
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">

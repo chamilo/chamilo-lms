@@ -26,5 +26,21 @@ CKEDITOR.plugins.setLang( 'image2_chamilo', 'en', {
 	alignSuper: 'Super',
 	alignSub: 'Sub',
 	alignTextTop: 'Text-top',
-	alignTextBottom: 'Text-bottom'
+	alignTextBottom: 'Text-bottom',
+    advanced: 'Advanced',
+	borderWidth: 'Border width',
+    borderColor: 'Border color',
+    borderStyle: 'Border style',
+    borderRadius: 'Border radius',
+    backgroundColor: 'Background color',
+	color: 'Color',
+    borderStyleNone: 'None',
+    borderStyleDotted: 'Dotted',
+    borderStyleDashed: 'Dashed',
+    borderStyleSolid: 'Solid',
+    borderStyleDouble: 'Double',
+    borderStyleGroove: 'Groove',
+    borderStyleRidge: 'Ridge',
+    borderStyleInset: 'Inset',
+    borderStyleOutset: 'Outset'
 } );

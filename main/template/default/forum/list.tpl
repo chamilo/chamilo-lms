@@ -1,8 +1,6 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 {% block content %}
 
-{{ introduction_section }}
-
 {{ form_content }}
 
 {% if data is not empty %}

@@ -2738,7 +2738,6 @@ class MySpace
      * @param int $courseId
      * @param int $sessionId
      * @param int $studentId
-     *
      */
     public static function displayTrackingAccessOverView($courseId, $sessionId, $studentId)
     {

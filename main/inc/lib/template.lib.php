@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class Template.
@@ -1824,26 +1825,92 @@ class Template
 
             if (!$userId && !$skillId) {
                 // no combination of user and skill ID has been defined,
-                // so print the normal OpenGraph meta tags
-                $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
-                $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
+                // so print the normal or course-specific OpenGraph meta tags
+                // Check for a course ID
+                $courseId = api_get_course_int_id();
+                // Check session ID from session/id/about (see .htaccess)
+                $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
-                $metaDescription = api_get_setting('meta_description');
-                if (!empty($metaDescription)) {
-                    $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
-                }
+                if ($courseId != false) {
+                    // If we are inside a course (even if within a session), publish info about the course
+                    $course = api_get_course_entity($courseId);
+                    // @TODO: support right-to-left in title
+                    $socialMeta .= '<meta property="og:title" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_course_url($course->getCode()).'" />'."\n";
 
-                $metaImage = api_get_setting('meta_image_path');
-                if (!empty($metaImage)) {
-                    if (is_file(api_get_path(SYS_PATH).$metaImage)) {
-                        $path = api_get_path(WEB_PATH).$metaImage;
-                        $socialMeta .= '<meta property="og:image" content="'.$path.'" />'."\n";
+                    $metaDescription = api_get_setting('meta_description');
+                    if (!empty($course->getDescription())) {
+                        $socialMeta .= '<meta property="og:description" content="'.$course->getDescription().'" />'."\n";
+                    } elseif (!empty($metaDescription)) {
+                        $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
                     }
+
+                    if (!empty($course->getPicturePath(true))) {
+                        $socialMeta .= '<meta property="og:image" content="'.$course->getPicturePath(true).'" />'."\n";
+                    } else {
+                        $socialMeta .= $this->getMetaPortalImagePath();
+                    }
+
+                } elseif ($sessionId !== 0) {
+                    // If we are on a session "about" screen, publish info about the session
+                    $em = Database::getManager();
+                    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+
+                    $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."session/{$session->getId()}/about/".'" />'."\n";
+
+                    $sessionValues = new ExtraFieldValue('session');
+                    $sessionImage = $sessionValues->get_values_by_handler_and_field_variable($session->getId(), 'image')['value'];
+                    $sessionImageSysPath = api_get_path(SYS_UPLOAD_PATH).$sessionImage;
+
+                    if (!empty($sessionImage) && is_file($sessionImageSysPath)) {
+                        $sessionImagePath = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
+                        $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
+                    } else {
+                        $socialMeta .= $this->getMetaPortalImagePath();
+                    }
+
+
+                } else {
+                    // Otherwise (not a course nor a session, nor a user, nor a badge), publish portal info
+                    $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
+
+                    $metaDescription = api_get_setting('meta_description');
+                    if (!empty($metaDescription)) {
+                        $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
+                    }
+                    $socialMeta .= $this->getMetaPortalImagePath();
                 }
             }
         }
 
         $this->assign('social_meta', $socialMeta);
         return true;
+    }
+
+    /**
+     * Get platform meta image tag (check meta_image_path setting, then use the logo)
+     * @return string The meta image HTML tag, or empty
+     */
+    private function getMetaPortalImagePath()
+    {
+        // Load portal meta image if defined
+        $metaImage = api_get_setting('meta_image_path');
+        $metaImageSysPath = api_get_path(SYS_PATH).$metaImage;
+        $metaImageWebPath = api_get_path(WEB_PATH).$metaImage;
+        $portalImageMeta = '';
+        if (!empty($metaImage)) {
+            if (is_file($metaImageSysPath)) {
+                $portalImageMeta = '<meta property="og:image" content="'.$metaImageWebPath.'" />'."\n";
+            }
+        } else {
+            $logo = ChamiloApi::getPlatformLogoPath($this->theme);
+            if (!empty($logo)) {
+                $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
+            }
+        }
+        return $portalImageMeta;
+
     }
 }

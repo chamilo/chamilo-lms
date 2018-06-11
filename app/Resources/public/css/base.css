@@ -255,7 +255,7 @@ a.thumbnail:hover {
 }
 
 .carousel-indicators {
-    bottom: 0 !important;
+    bottom: 0;
 }
 
 .form-group .freeze {
@@ -3006,7 +3006,7 @@ table#skill_holder {
     height: 4em;
     opacity: 0.8;
     padding-top: 0.9em;
-/ text-align: center;
+    text-align: center;
     width: 120px;
     z-index: 40;
     float: left;
@@ -6161,24 +6161,24 @@ div#chat-remote-video video {
 
 .scroll-wrapper {
     overflow: hidden !important;
-    padding: 0 !important;
+    padding: 0;
     position: relative;
     height: 300px;
 }
 
 .scroll-wrapper > .scroll-content {
     border: none !important;
-    box-sizing: content-box !important;
+    box-sizing: content-box;
     height: auto;
     left: 0;
     margin: 0;
     max-height: none;
-    max-width: none !important;
+    max-width: none;
     overflow: scroll !important;
     padding: 0;
     position: relative !important;
     top: 0;
-    width: auto !important;
+    width: auto;
 
 }
 

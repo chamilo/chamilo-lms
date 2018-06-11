@@ -88,7 +88,7 @@ body{
 }
 .ck-title2:after{
     background-color:#E95839;
-    margin: 10px 0px 0px;
+    margin: 10px 0 0;
     width: 50px;
     height: 2px;
     display: block;
@@ -100,17 +100,17 @@ figure .image.alignleft{
     margin: 0 20px 20px 0;
 }
 figure .image.alignright{
-    margin: 0 20px 0px 20px;
+    margin: 0 20px 0 20px;
 }
 figure .image{
-    margin: 0 20px 0px 20px;
+    margin: 0 20px 0 20px;
 }
 figure figcaption{
     text-align: left;
     background-color: #f3f3f3;
-    padding-top: 0px;
-    margin: 0px;
-    border-radius: 0px;
+    padding-top: 0;
+    margin: 0;
+    border-radius: 0;
     padding-left: 5px;
 }
 figure{

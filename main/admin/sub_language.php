@@ -27,7 +27,7 @@ $htmlHeadXtra[] = '<script>
         if (is_new_language.length>0 && is_new_language!="_" && file_id!="" && button_name!="") {
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
-                beforeSend: function(objeto) {
+                beforeSend: function(myObject) {
                     $("#div_message_information_id").html("<div class=\"alert alert-info\"><img src=\'../inc/lib/javascript/indicator.gif\' /></div>");
                 },
                 type: "POST",

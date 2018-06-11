@@ -907,6 +907,10 @@ foreach ($courseSettings as $setting) {
         $values[$setting] = $result;
     }
 }
+// make sure new settings have a clear default value
+if (!isset($values['student_delete_own_publication'])) {
+    $values['student_delete_own_publication'] = 0;
+}
 $form->setDefaults($values);
 
 // Validate form

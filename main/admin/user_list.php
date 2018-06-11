@@ -76,7 +76,7 @@ $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(myObject) {
             $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.$url.'",
@@ -92,7 +92,7 @@ function load_course_list (div_course,my_user_id) {
 function load_session_list(div_session, my_user_id) {
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(myObject) {
             $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.$urlSession.'",
@@ -119,7 +119,7 @@ function active_user(element_div) {
     if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
+            beforeSend: function(myObject) {
                 $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",

@@ -379,7 +379,7 @@ if ($encryptPassForm == '1') {
 
                 $.ajax({
                     contentType: "application/x-www-form-urlencoded",
-                    beforeSend: function(objeto) {},
+                    beforeSend: function(myObject) {},
                     type: "POST",
                     url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>install.ajax.php?a=send_contact_information",
                     beforeSend : function() {

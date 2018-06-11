@@ -60,7 +60,7 @@ $(document).ready(function(){
 
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
+			beforeSend: function(myObject) {
 				$(".normal-message").show();
 				$("#id_confirmation_message").hide();
 			},

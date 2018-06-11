@@ -27,7 +27,7 @@ function denied_friend (element_input) {
 
 	$.ajax({
 	    contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
+		beforeSend: function(myObject) {
 		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
@@ -48,7 +48,7 @@ function register_friend(element_input) {
     	
         $.ajax({
     		contentType: "application/x-www-form-urlencoded",
-    		beforeSend: function(objeto) {
+    		beforeSend: function(myObject) {
     		$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
     		type: "POST",
     		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",

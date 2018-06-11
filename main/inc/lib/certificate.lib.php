@@ -727,7 +727,7 @@ class Certificate extends Model
                             $coursesApproved[$course['real_id']] = $courseInfo['title'];
 
                             // Find time spent in LP
-                            $totalTimeInLearningPaths = Tracking::get_time_spent_in_lp(
+                            $totalTimeInLearningPaths += Tracking::get_time_spent_in_lp(
                                 $this->user_id,
                                 $courseCode,
                                 [],

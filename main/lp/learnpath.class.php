@@ -8491,12 +8491,9 @@ class learnpath
         $defaults['description'] = $item_description;
 
         $form->addHeader($title);
-
-        //$arrHide = array($id);
         $arrHide[0]['value'] = Security::remove_XSS($this->name);
         $arrHide[0]['padding'] = 20;
         $charset = api_get_system_encoding();
-
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) &&
@@ -8544,10 +8541,13 @@ class learnpath
                 $key,
                 'style="padding-left:'.$value['padding'].'px;"'
             );
+            $lastPosition = $key;
         }
+
         if (!empty($s_selected_parent)) {
             $parentSelect->setSelected($s_selected_parent);
         }
+
 
         if (is_array($arrLP)) {
             reset($arrLP);
@@ -8579,12 +8579,19 @@ class learnpath
         $padding = isset($value['padding']) ? $value['padding'] : 0;
         $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:'.$padding.'px;"');
 
+        $lastPosition = null;
         foreach ($arrHide as $key => $value) {
-            $position->addOption($value['value'].'"', $key, 'style="padding-left:'.$padding.'px;"');
+            $position->addOption($value['value'], $key, 'style="padding-left:'.$padding.'px;"');
+            $lastPosition = $key;
         }
 
         if (!empty($s_selected_position)) {
             $position->setSelected($s_selected_position);
+        }
+
+        // When new chapter add at the end
+        if ($action == 'add_item') {
+            $position->setSelected($lastPosition);
         }
 
         if (is_array($arrLP)) {
@@ -8711,7 +8718,6 @@ class learnpath
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
-            $item_terms = stripslashes($extra_info['terms']);
             if (empty($item_title)) {
                 $path_parts = pathinfo($extra_info['path']);
                 $item_title = stripslashes($path_parts['filename']);
@@ -8734,11 +8740,9 @@ class learnpath
             $item_description = '';
         }
         $return = '<legend>';
-
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
         $sql = "SELECT * FROM $tbl_lp_item
@@ -8839,17 +8843,11 @@ class learnpath
                 ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-                    if ($parent == $arrLP[$i]['id']) {
-                        $s_selected_parent = $arrHide[$arrLP[$i]['id']];
-                    }
                 }
             } else {
                 if ($arrLP[$i]['item_type'] == 'dir') {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-                    if ($parent == $arrLP[$i]['id']) {
-                        $s_selected_parent = $arrHide[$arrLP[$i]['id']];
-                    }
                 }
             }
         }
@@ -8897,23 +8895,14 @@ class learnpath
         }
 
         $arrHide = [];
-        $selectedPosition = 0;
-
         // POSITION
-        //$lastPosition = null;
         for ($i = 0; $i < count($arrLP); $i++) {
             if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
                 $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
             ) {
-                if ((isset($extra_info['previous_item_id']) &&
-                    $extra_info['previous_item_id'] == $arrLP[$i]['id']) || $action == 'add'
-                ) {
-                    //$selectedPosition = $arrLP[$i]['id'];
-                }
 
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
-            //$lastPosition = $arrLP[$i]['id'];
         }
 
         $selectedPosition = isset($extra_info['previous_item_id']) ? $extra_info['previous_item_id'] : 0;

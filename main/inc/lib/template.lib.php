@@ -1421,37 +1421,7 @@ class Template
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
 
-        // Default root chamilo favicon
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
-
-        //Added to verify if in the current Chamilo Theme exist a favicon
-        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
-
-        //If exist pick the current chamilo theme favicon
-        if (is_file($favicoThemeUrl.'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
-        }
-
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
-                $url = api_remove_trailing_slash(
-                    preg_replace('/https?:\/\//i', '', $url_info['url'])
-                );
-                $clean_url = api_replace_dangerous_char($url);
-                $clean_url = str_replace('/', '-', $clean_url);
-                $clean_url .= '/';
-                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
-                //we create the new dir for the new sites
-                if (is_file($icon_real_homep.'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
-                }
-            }
-        }
-
-        $this->assign('favico', $favico);
+        $this->assignFavIcon(); //Set a 'favico' var depending on CSS and stuff
         $this->setHelp();
 
         //@todo move this in the template
@@ -1805,5 +1775,44 @@ class Template
             header('Referrer-Policy: '.$setting);
         }
         // end of HTTP headers security block
+    }
+    /**
+     * Assign favicon to the 'favico' template variable
+     * @return  bool    Always return true because there is always at least one correct favicon.ico
+     */
+    private function assignFavIcon()
+    {
+        // Default root chamilo favicon
+        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+
+        //Added to verify if in the current Chamilo Theme exist a favicon
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
+
+        //If exist pick the current chamilo theme favicon
+        if (is_file($favicoThemeUrl.'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $url_info = api_get_access_url($access_url_id);
+                $url = api_remove_trailing_slash(
+                    preg_replace('/https?:\/\//i', '', $url_info['url'])
+                );
+                $clean_url = api_replace_dangerous_char($url);
+                $clean_url = str_replace('/', '-', $clean_url);
+                $clean_url .= '/';
+                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+                //we create the new dir for the new sites
+                if (is_file($icon_real_homep.'favicon.ico')) {
+                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+                }
+            }
+        }
+
+        $this->assign('favico', $favico);
+        return true;
     }
 }

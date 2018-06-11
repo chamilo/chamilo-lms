@@ -1,6 +1,11 @@
+{% if introduction != '' %}
+    {{ introduction }}
+{% endif %}
+
 {% if actions != '' %}
     {{ actions }}
 {% endif %}
+
 {{ flash_messages }}
 {% if header != '' %}
     <div class="section-page">

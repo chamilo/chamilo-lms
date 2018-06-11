@@ -7,9 +7,6 @@
         }
     }
 </script>
-
-{{ introduction_section }}
-
 {% set configuration = 'lp_category_accordion'|api_get_configuration_value %}
 <div class="lp-accordion panel-group" id="lp-accordion" role="tablist" aria-multiselectable="true">
     {% for lp_data in data %}

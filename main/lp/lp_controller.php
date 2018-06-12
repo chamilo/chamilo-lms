@@ -342,7 +342,8 @@ if (isset($_SESSION['oLP'])) {
     // Reinitialises array used by javascript to update items in the TOC.
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+$studentView = api_is_student_view_active();
+if ($studentView) {
     if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';

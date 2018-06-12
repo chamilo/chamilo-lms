@@ -9072,7 +9072,7 @@ function api_remove_uploaded_file($type, $file)
  */
 function api_remove_uploaded_file_by_id($type, $itemId, $file)
 {
-    $file = api_get_uploaded_file($type, $itemId, $file,  false);
+    $file = api_get_uploaded_file($type, $itemId, $file, false);
     $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
     if (Security::check_abs_path($file, $typePath) && file_exists($file) && is_file($file)) {
         unlink($file);

@@ -1440,8 +1440,7 @@ class HTML_QuickForm extends HTML_Common
      */
     public function validate()
     {
-        if (count($this->_rules) == 0 && count($this->_formRules) == 0 &&
-            $this->isSubmitted()) {
+        if (count($this->_rules) == 0 && count($this->_formRules) == 0 && $this->isSubmitted()) {
             return (0 == count($this->_errors));
         } elseif (!$this->isSubmitted()) {
 

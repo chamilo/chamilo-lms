@@ -302,12 +302,12 @@ class MessageManager
      * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array  $attachments     files array($_FILES) (optional)
-     * @param array  $fileCommentList about attachment files (optional)
-     * @param int    $group_id        (optional)
-     * @param int    $parent_id       (optional)
-     * @param int    $editMessageId   id for updating the message (optional)
-     * @param int    $topic_id        (optional) the default value is the current user_id
+     * @param array  $attachments         files array($_FILES) (optional)
+     * @param array  $fileCommentList     about attachment files (optional)
+     * @param int    $group_id            (optional)
+     * @param int    $parent_id           (optional)
+     * @param int    $editMessageId       id for updating the message (optional)
+     * @param int    $topic_id            (optional) the default value is the current user_id
      * @param int    $sender_id
      * @param bool   $directMessage
      * @param int    $forwardId
@@ -387,7 +387,6 @@ class MessageManager
                         'tmp_name' => $file,
                         'error' => 0,
                         'type' => DocumentManager::file_get_mime_type(basename($file)),
-
                     ];
                     // create attachment from audio message
                     $attachmentList[] = $audioAttachment;
@@ -2530,6 +2529,18 @@ class MessageManager
     }
 
     /**
+     * Clean audio messages already added in the message tool.
+     */
+    public static function cleanAudioMessage()
+    {
+        $audioId = Session::read('current_audio_id');
+        if (!empty($audioId)) {
+            api_remove_uploaded_file_by_id('audio_message', api_get_user_id(), $audioId);
+            Session::erase('current_audio_id');
+        }
+    }
+
+    /**
      * Execute the SQL necessary to know the number of messages in the database.
      *
      * @param int $userId The user for which we need the unread messages count
@@ -2551,17 +2562,5 @@ class MessageManager
         $row = Database::fetch_assoc($result);
 
         return $row['count'];
-    }
-
-    /**
-     * Clean audio messages already added in the message tool
-     */
-    public static function cleanAudioMessage()
-    {
-        $audioId = Session::read('current_audio_id');
-        if (!empty($audioId)) {
-            api_remove_uploaded_file_by_id('audio_message', api_get_user_id(), $audioId);
-            Session::erase('current_audio_id');
-        }
     }
 }

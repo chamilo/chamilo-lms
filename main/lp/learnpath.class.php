@@ -8548,7 +8548,6 @@ class learnpath
             $parentSelect->setSelected($s_selected_parent);
         }
 
-
         if (is_array($arrLP)) {
             reset($arrLP);
         }
@@ -8900,7 +8899,6 @@ class learnpath
             if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
                 $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
             ) {
-
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
         }

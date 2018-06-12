@@ -8083,4 +8083,10 @@ $DocumentAutoLaunch = "Auto-démarrage vers l'outil documents";
 $RedirectToTheDocumentList = "Rediriger vers la liste des documents";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "La fonctionnalité d'auto-démarrage des exercices est activée. Les apprenants seront automatiquement redirigés vers la liste des exercices.";
 $PostedExpirationDate = "Date limite affichée d'envoi du travail (visible par l'apprenant)";
+$BossAlertMsgSentToUserXTitle = "Message de suivi concernant l'apprenant %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Bonjour,
+
+L'utilisateur %s a envoyé un message de suivi concernant l'apprenant %s.
+
+Le message est visible sur %s";
 ?>

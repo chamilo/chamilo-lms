@@ -790,7 +790,9 @@ class Certificate extends Model
         $tplContent->assign('skills', $skills);
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
-        $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
+	$tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
+	$tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
+
 
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);

@@ -1437,11 +1437,11 @@ switch ($action) {
                 );
                 $session_date = [];
                 if (!empty($session['access_start_date'])) {
-                    $session_date[] = get_lang('From').' '.api_format_date($session['access_start_date'], DATE_FORMAT_SHORT);
+                    $session_date[] = get_lang('From').' '.api_get_local_time($session['access_start_date']);
                 }
 
                 if (!empty($session['access_end_date'])) {
-                    $session_date[] = get_lang('Until').' '.api_format_date($session['access_end_date'], DATE_FORMAT_SHORT);
+                    $session_date[] = get_lang('Until').' '.api_get_local_time($session['access_end_date']);
                 }
 
                 if (empty($session_date)) {

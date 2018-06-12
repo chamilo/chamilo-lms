@@ -4151,8 +4151,8 @@ class SessionManager
 
         $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
 
-        if ($status != '') {
-            $status = intval($status);
+        if (is_numeric($status)) {
+            $status = (int) $status;
             $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
         } else {
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";

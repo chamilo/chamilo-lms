@@ -28,7 +28,6 @@ if (api_is_platform_admin()) {
 }
 $global = true;
 
-
 if (empty($session_id)) {
     $session_id = 1;
 }

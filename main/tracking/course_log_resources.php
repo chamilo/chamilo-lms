@@ -9,26 +9,23 @@ $current_course_tool = TOOL_TRACKING;
 
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
-
-if ($from == 'myspace') {
-    $from_myspace = true;
-    $this_section = "session_my_space";
-} else {
-    $this_section = SECTION_COURSES;
-}
-
-// Access restrictions.
-$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() ||
-    api_is_session_admin() || api_is_drh() || api_is_course_tutor();
-
-if (!$is_allowedToTrack) {
-    api_not_allowed(true);
-}
-
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
+
+$this_section = SECTION_COURSES;
+if ($from == 'myspace') {
+    $from_myspace = true;
+    $this_section = 'session_my_space';
+}
+
+// Access restrictions.
+$is_allowedToTrack = Tracking::isAllowToTrack($session_id);
+
+if (!$is_allowedToTrack) {
+    api_not_allowed(true);
+}
 
 if ($export_csv || $exportXls) {
     $csvData = TrackingCourseLog::get_item_resources_data(0, 0, '', '');

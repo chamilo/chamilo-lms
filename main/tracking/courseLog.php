@@ -16,24 +16,16 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
+$session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
 
+$this_section = SECTION_COURSES;
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";
-} else {
-    $this_section = SECTION_COURSES;
+    $this_section = 'session_my_space';
 }
 
 // Access restrictions.
-$is_allowedToTrack =
-    api_is_platform_admin() ||
-    SessionManager::user_is_general_coach(api_get_user_id(), $session_id) ||
-    api_is_allowed_to_create_course() ||
-    api_is_session_admin() ||
-    api_is_drh() ||
-    api_is_course_tutor() ||
-    api_is_course_admin();
+$is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);

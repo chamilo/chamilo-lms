@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = 'session_my_space';
 
-$allow = api_is_platform_admin(true) || api_is_course_admin() || $is_session_general_coach;
+$allow = Tracking::isAllowToTrack(api_get_session_id());
 
 if (!$allow) {
     api_not_allowed(true);

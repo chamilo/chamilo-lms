@@ -6804,6 +6804,23 @@ class Tracking
             'html' => $courseToolInformationTotal,
         ];
     }
+
+    /**
+     * @param int $sessionId
+     *
+     * @return bool
+     */
+    public static function isAllowToTrack($sessionId)
+    {
+        $allow =
+            api_is_platform_admin(true, true) ||
+            SessionManager::user_is_general_coach(api_get_user_id(), $sessionId) ||
+            api_is_allowed_to_create_course() ||
+            api_is_course_tutor() ||
+            api_is_course_admin();
+
+        return $allow;
+    }
 }
 
 /**

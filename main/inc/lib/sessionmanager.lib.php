@@ -4514,12 +4514,12 @@ class SessionManager
      */
     public static function user_is_general_coach($user_id, $session_id)
     {
-        $session_id = intval($session_id);
-        $user_id = intval($user_id);
+        $session_id = (int) $session_id;
+        $user_id = (int) $user_id;
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
         $sql = "SELECT DISTINCT id
 	         	FROM $table
-	         	WHERE session.id_coach =  '".$user_id."' AND id = '$session_id'";
+	         	WHERE session.id_coach = '".$user_id."' AND id = '$session_id'";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
             return true;

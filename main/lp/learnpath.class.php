@@ -7168,7 +7168,6 @@ class learnpath
         }
 
         $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
         if (!is_dir($filepath)) {
             $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         }
@@ -7176,13 +7175,29 @@ class learnpath
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         if (isset($_POST['path']) && !empty($_POST['path'])) {
-            $document_id = intval($_POST['path']);
-            $sql = "SELECT path FROM ".$table_doc."
-                    WHERE c_id = $course_id AND id = ".$document_id;
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
+            $document_id = (int) $_POST['path'];
+            $documentInfo = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+            if (empty($documentInfo)) {
+                // Try with iid
+                $table = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT id, path FROM $table 
+                        WHERE c_id = $course_id AND iid = $document_id";
+                $res_doc = Database::query($sql);
+                $row = Database::fetch_array($res_doc);
+                if ($row) {
+                    $document_id = $row['id'];
+                    $documentPath = $row['path'];
+                }
+            } else {
+                $documentPath = $documentInfo['path'];
+            }
+
             $content = stripslashes($_POST['content_lp']);
-            $file = $filepath.$row['path'];
+            $file = $filepath.$documentPath;
+
+            if (!file_exists($file)) {
+                return false;
+            }
 
             if ($fp = @fopen($file, 'w')) {
                 $content = str_replace(
@@ -7206,9 +7221,9 @@ class learnpath
                 fputs($fp, $content);
                 fclose($fp);
 
-                $sql = "UPDATE ".$table_doc." SET
+                $sql = "UPDATE $table_doc SET
                             title='".Database::escape_string($_POST['title'])."'
-                        WHERE c_id = ".$course_id." AND id = ".$document_id;
+                        WHERE c_id = $course_id AND id = ".$document_id;
                 Database::query($sql);
             }
         }

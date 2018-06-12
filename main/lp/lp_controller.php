@@ -763,6 +763,7 @@ switch ($action) {
                 $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
+                exit;
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
@@ -1318,12 +1319,14 @@ switch ($action) {
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
+        exit;
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
+        exit;
         break;
     case 'toggle_seriousgame':
         // activate/deactive seriousgame_mode
@@ -1403,6 +1406,7 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
+        exit;
 
         break;
     case 'report':
@@ -1443,6 +1447,7 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
+        exit;
         break;
     case 'add_final_item':
         if (!$lp_found) {

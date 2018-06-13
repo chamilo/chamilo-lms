@@ -7184,7 +7184,7 @@ class learnpath
                 // Try with iid
                 $table = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT id, path FROM $table 
-                        WHERE c_id = $course_id AND iid = $document_id";
+                        WHERE c_id = $course_id AND iid = $document_id AND path NOT LIKE '%_DELETED_%' ";
                 $res_doc = Database::query($sql);
                 $row = Database::fetch_array($res_doc);
                 if ($row) {

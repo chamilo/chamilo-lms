@@ -274,7 +274,7 @@ class CourseSelectForm
             }
         }
 
-        //Fixes forum order
+        // Fixes forum order
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
             echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
@@ -333,7 +333,10 @@ class CourseSelectForm
             $course->resources['document'] = null;
         }
 
-        echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
+        /** @var Course $course */
+        $courseSerialized = base64_encode(Course::serialize($course));
+
+        echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
         if (is_array($hidden_fields)) {
             foreach ($hidden_fields as $key => $value) {
                 echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';

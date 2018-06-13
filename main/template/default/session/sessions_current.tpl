@@ -13,8 +13,10 @@
                     <a href="{{ _p.web }}session/{{ session.id }}/about/" title="title-session">
                         <img class="img-responsive"  src="{{ session.image ? _p.web_upload ~ session.image : 'session_default.png'|icon() }}">
                     </a>
+                    {% if session.category_name %}
                     <span class="category">{{ session.category_name }}</span>
                     <div class="cribbon"></div>
+                    {% endif %}
                 </div>
                 <div class="description">
                     <div class="block-title">

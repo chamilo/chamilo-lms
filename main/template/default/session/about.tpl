@@ -1,4 +1,4 @@
-<section id="about-session">
+<section id="about-course">
     {% if is_subscribed and user_session_time != -0 and user_session_time >= 1 %}
     <div class="alert alert-info">
         {{ 'AlreadyRegisteredToSession'|get_lang }}
@@ -277,6 +277,7 @@
         </section>
     {% endfor %}
 </div>
+</section>
 
 <script type="text/javascript">
     $(document).ready(function() {

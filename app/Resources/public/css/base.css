@@ -5530,15 +5530,6 @@ div#chat-remote-video video {
     min-height: 284px;
 }
 
-#about-session .panel-information ul {
-    margin: 20px 0;
-}
-
-#about-session .course, #about-session .session {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
 .label-price, .label-free {
     background-color: transparent;
     font-size: 18px;
@@ -5558,63 +5549,72 @@ div#chat-remote-video video {
     color: #5cb85c;
 }
 
-#about-session .session-requirements h5 {
+#about-course .panel-information ul {
+    margin: 20px 0;
+}
+
+#about-course .course, #about-course .session {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#about-course .session-requirements h5 {
     font-weight: bold;
 }
 
-#about-session .session-title {
+#about-course .session-title {
     font-weight: bold;
 }
 
-#about-session .session-tutor {
+#about-course .session-tutor {
     margin-top: 20px;
     margin-bottom: 20px;
     font-size: 12px;
 }
 
-#about-session .share-social-media {
+#about-course .share-social-media {
     padding: 10px 0 0 0;
 }
 
-#about-session .share-social-media .sharing-buttons li {
+#about-course .share-social-media .sharing-buttons li {
     padding-left: 0;
 }
 
-#about-session .session-info .date {
+#about-course .session-info .date {
     font-weight: bold;
     text-align: center;
 }
 
-#about-session .panel-tags {
+#about-course .panel-tags {
     display: inline-block;
     width: 100%;
     padding: 0 10px;
     margin-top: 10px;
 }
 
-#about-session .panel-tags .course-tags {
+#about-course .panel-tags .course-tags {
     margin-bottom: 0;
 }
 
-#about-session .panel-tags .course-tags li {
+#about-course .panel-tags .course-tags li {
     margin-bottom: 0;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-#about-session .sub-title {
+#about-course .sub-title {
     font-size: 22px;
     font-weight: 700;
     margin: 0 0 20px;
 }
 
-#about-session .topics .title-info {
+#about-course .topics .title-info {
     margin: 30px 0 20px 0;
     border-bottom: 1px solid #ddd;
     padding-bottom: 15px;
 }
 
-#about-session .coach-header {
+#about-course .coach-header {
     display: flex;
     -moz-box-align: center;
     -webkit-box-align: center;
@@ -5622,30 +5622,30 @@ div#chat-remote-video video {
     flex-flow: row;
 }
 
-#about-session .coach-header .coach-avatar {
+#about-course .coach-header .coach-avatar {
     width: 70px;
     margin-right: 20px;
 }
 
-#about-session .coach-header .coach-avatar .img-circle {
+#about-course .coach-header .coach-avatar .img-circle {
     border: 1px solid #C0C0C0;
 }
 
-#about-session .coach-header .coach-title {
+#about-course .coach-header .coach-title {
     flex-flow: column;
     align-items: flex-start;
     display: flex;
 }
 
-#about-session .coach-header .coach-title p {
+#about-course .coach-header .coach-title p {
     font-size: 13px;
 }
 
-#about-session .coach-title p {
+#about-course .coach-title p {
     margin: 0;
 }
 
-#about-session .coach-information {
+#about-course .coach-information {
     width: 100%;
     display: block;
     border-bottom: 1px solid #dddddd;
@@ -5653,15 +5653,15 @@ div#chat-remote-video video {
     padding-bottom: 10px;
 }
 
-#about-session .coach-information:last-child {
+#about-course .coach-information:last-child {
     border-bottom: none;
 }
 
-#about-session .coach-information h4 {
+#about-course .coach-information h4 {
     font-weight: bold;
 }
 
-#about-session .course-title h3 {
+#about-course .course-title h3 {
     font-size: 22px;
     line-height: 32px;
     font-weight: bold;
@@ -5669,7 +5669,7 @@ div#chat-remote-video video {
     margin-bottom: 15px;
 }
 
-#about-session .tags-course {
+#about-course .tags-course {
     padding: 10px;
     background-color: #ECF0F1;
     margin-bottom: 10px;
@@ -5678,11 +5678,11 @@ div#chat-remote-video video {
     -webkit-border-radius: 5px;
 }
 
-#about-session .tags-course .fa-tags {
+#about-course .tags-course .fa-tags {
     color: #D94D38;
 }
 
-#about-session .tags-course a {
+#about-course .tags-course a {
     display: inline-block;
     margin-left: 5px;
     margin-right: 5px;
@@ -5694,7 +5694,7 @@ div#chat-remote-video video {
     -webkit-border-radius: 10%;
 }
 
-#about-session .subscribe {
+#about-course .subscribe {
     padding: 5px;
     text-align: center;
     border-radius: 5px;
@@ -5702,51 +5702,51 @@ div#chat-remote-video video {
     -webkit-border-radius: 5px;
 }
 
-#about-session .info-course {
+#about-course .info-course {
     margin-top: 20px;
     padding-top: 20px;
 }
 
-#about-session .info-course .panel-heading h4 {
+#about-course .info-course .panel-heading h4 {
     margin: 0;
 }
 
-#about-session .info-course .title-info {
+#about-course .info-course .title-info {
     color: #00829C;
     border-bottom: 1px dotted #eeeeee;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
-#about-session .info-course .content-info {
+#about-course .info-course .content-info {
     padding: 10px;
 }
 
-#about-session .extrafield_dt {
+#about-course .extrafield_dt {
     margin-bottom: 10px;
 }
 
-#about-session .extrafield_dd {
+#about-course .extrafield_dd {
     color: #666666;
 }
 
-#about-session .socialshare {
+#about-course .socialshare {
     text-align: center;
 }
 
-#about-session .socialshare .networks {
+#about-course .socialshare .networks {
     padding-left: 0;
     list-style: none;
 }
 
-#about-session .socialshare .networks li {
+#about-course .socialshare .networks li {
     padding-right: 2px;
     padding-left: 2px;
     margin-bottom: 10px;
     display: inline-block;
 }
 
-#about-session .socialshare .networks li a {
+#about-course .socialshare .networks li a {
     display: block;
     width: 48px;
     height: 48px;
@@ -5759,16 +5759,16 @@ div#chat-remote-video video {
     padding: 10px;
 }
 
-#about-session .socialshare .networks li a:hover {
+#about-course .socialshare .networks li a:hover {
     background-color: #286090;
 }
 
-#about-session .course-tags .tag-value {
+#about-course .course-tags .tag-value {
     display: inline-block;
     margin-bottom: 15px;
 }
 
-#about-session .course-tags li span {
+#about-course .course-tags li span {
     position: relative;
     display: inline-block;
     padding: 0 3px;
@@ -5783,7 +5783,7 @@ div#chat-remote-video video {
     transition: none 0.15s ease-in-out;
 }
 
-#about-session .course-tags li span::before {
+#about-course .course-tags li span::before {
     display: inline-block;
     content: "";
     top: 0;
@@ -5796,7 +5796,7 @@ div#chat-remote-video video {
     border-top: 10px solid transparent;
 }
 
-#about-session .course-tags li span::after {
+#about-course .course-tags li span::after {
     z-index: 1;
     content: "";
     top: 8px;
@@ -5808,11 +5808,11 @@ div#chat-remote-video video {
     border-radius: 10px;
 }
 
-#about-session .panel-tags .panel-body {
+#about-course .panel-tags .panel-body {
     text-align: center;
 }
 
-#about-session .price-text {
+#about-course .price-text {
     font-size: 36px;
     font-weight: 700;
     line-height: 40px;
@@ -5821,7 +5821,7 @@ div#chat-remote-video video {
     margin-top: 10px;
 }
 
-#about-session .buy-box .btn-primary {
+#about-course .buy-box .btn-primary {
     color: #fff;
     background-color: #ec5252;
     border: 1px solid transparent;
@@ -5829,7 +5829,27 @@ div#chat-remote-video video {
     line-height: 1.35135;
     border-radius: 2px;
 }
-
+#about-course .course-short{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#about-course .course-short ul{
+    display: inline-block;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#about-course .course-short ul li{
+    display: inline-block;
+}
+#about-course .course-short ul li.author{
+    font-weight: bold;
+    margin-right: 5px;
+}
+#about-course #course-info-top .session-title{
+    margin-top: 10px;
+}
 /* list courses classic*/
 .classic-courses .list-teachers {
     font-size: 12px;

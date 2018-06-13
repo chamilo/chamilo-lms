@@ -18,7 +18,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : 0;
-
+$token = Security::get_existing_token();
 $em = Database::getManager();
 //userID
 $user_id = api_get_user_id();
@@ -163,6 +163,7 @@ $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
+$template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $layout = $template->get_template('course_home/about.tpl');
 $content = $template->fetch($layout);

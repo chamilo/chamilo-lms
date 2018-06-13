@@ -110,11 +110,20 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         {% if is_premium == false %}
-                            {% if course.subscription %}
-                                <div class="buy-box">
-                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0" class="btn btn-lg btn-success btn-block">{{ 'SignInCourse'|get_lang }}</a>
-                                </div>
-                            {% endif %}
+                            <h5>{{ 'CourseSubscription'|get_lang }}</h5>
+                            <div class="session-subscribe">
+                                {% if _u.logged == 0 %}
+                                    {% if 'allow_registration'|api_get_setting != 'false' %}
+                                        <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
+                                        </a>
+                                    {% endif %}
+                                {% elseif course.subscription %}
+                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0" class="btn btn-lg btn-success btn-block">{{ 'CourseHomepage'|get_lang }}</a>
+                                {% else %}
+                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn-success btn-block">{{ 'Subscribe'|get_lang }}</a>
+                                {% endif %}
+                            </div>
                         {% else %}
                             <div class="session-price">
                                 <div class="sale-price">

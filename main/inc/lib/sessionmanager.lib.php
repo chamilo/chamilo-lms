@@ -4422,11 +4422,7 @@ class SessionManager
             // We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {
-                    //Just in case
-                    if (function_exists('ini_set')) {
-                        api_set_memory_limit('256M');
-                        ini_set('max_execution_time', 0);
-                    }
+                    api_set_more_memory_and_time_limits();
                     $params = [];
                     $params['skip_lp_dates'] = true;
 

@@ -16,7 +16,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true);
-
 api_check_archive_dir();
 
 // Check access rights (only teachers are allowed here)
@@ -24,11 +23,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-}
+api_set_more_memory_and_time_limits();
 
 // Section for the tabs
 $this_section = SECTION_COURSES;

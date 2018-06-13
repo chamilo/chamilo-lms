@@ -20,12 +20,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-    //ini_set('post_max_size', "512M");
-}
+api_set_more_memory_and_time_limits();
 
 // Breadcrumbs
 $interbreadcrumb[] = [

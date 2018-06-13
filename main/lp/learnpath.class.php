@@ -10482,12 +10482,7 @@ class learnpath
     {
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
-
-        // Remove memory and time limits as much as possible as this might be a long process...
-        if (function_exists('ini_set')) {
-            api_set_memory_limit('256M');
-            ini_set('max_execution_time', 600);
-        }
+        api_set_more_memory_and_time_limits();
 
         // Create the zip handler (this will remain available throughout the method).
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);

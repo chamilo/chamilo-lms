@@ -7867,6 +7867,18 @@ function api_set_settings_and_plugins()
 }
 
 /**
+ * Modify default memory_limit and max_execution_time limits
+ * Needed when processing long tasks
+ */
+function api_set_more_memory_and_time_limits()
+{
+    if (function_exists('ini_set')) {
+        api_set_memory_limit('256M');
+        ini_set('max_execution_time', 1800);
+    }
+}
+
+/**
  * Tries to set memory limit, if authorized and new limit is higher than current.
  *
  * @param string $mem New memory limit

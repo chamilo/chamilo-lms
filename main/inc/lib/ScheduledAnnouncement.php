@@ -312,7 +312,7 @@ class ScheduledAnnouncement extends Model
                     }
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
-                        '0',
+                        0,
                         false,
                         $urlId
                     );

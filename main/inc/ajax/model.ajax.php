@@ -1435,20 +1435,13 @@ switch ($action) {
                     0,
                     true
                 );
-                $session_date = [];
-                if (!empty($session['access_start_date'])) {
-                    $session_date[] = get_lang('From').' '.api_format_date($session['access_start_date'], DATE_FORMAT_SHORT);
-                }
 
-                if (!empty($session['access_end_date'])) {
-                    $session_date[] = get_lang('Until').' '.api_format_date($session['access_end_date'], DATE_FORMAT_SHORT);
-                }
-
-                if (empty($session_date)) {
-                    $session_date_string = '-';
-                } else {
-                    $session_date_string = implode(' ', $session_date);
-                }
+                $session['display_start_date'] = '';
+                $session['display_end_date'] = '';
+                $session['coach_access_start_date'] = '';
+                $session['coach_access_end_date'] = '';
+                $dateData = SessionManager::parseSessionDates($session, true);
+                $dateToString = $dateData['access'];
 
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
@@ -1465,7 +1458,7 @@ switch ($action) {
                         $session['name'],
                         api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
                     ),
-                    'date' => $session_date_string,
+                    'date' => $dateToString,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
                     'details' => implode(' ', $detailButtons),

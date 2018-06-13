@@ -129,12 +129,12 @@ echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 $documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
-$documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+$documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), false, null, true);
 if (empty($documentInfo)) {
     // Try with iid
     $table = Database::get_course_table(TABLE_DOCUMENT);
     $sql = "SELECT path FROM $table
-            WHERE c_id = $course_id AND iid = $documentId";
+            WHERE c_id = $course_id AND iid = $documentId AND path NOT LIKE '%_DELETED_%'";
     $res_doc = Database::query($sql);
     $path_file = Database::result($res_doc, 0, 0);
 } else {

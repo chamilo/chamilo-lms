@@ -13,8 +13,7 @@ if (!api_is_student_boss()) {
     api_protect_course_script(true);
 }
 
-set_time_limit(0);
-ini_set('max_execution_time', 0);
+api_set_more_memory_and_time_limits();
 
 //extra javascript functions for in html head:
 $htmlHeadXtra[] = "<script>

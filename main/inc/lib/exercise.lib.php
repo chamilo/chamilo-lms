@@ -4556,8 +4556,6 @@ EOT;
      */
     public static function getFeedbackText($message)
     {
-        // Old style
-        //return '<div id="question_feedback">'.$message.'</div>';
         return Display::return_message($message, 'warning', false);
     }
 

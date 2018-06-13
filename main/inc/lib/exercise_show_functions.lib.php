@@ -389,7 +389,8 @@ class ExerciseShowFunctions
                 if ($hide_expected_answer) {
                     $color = '';
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.strip_tags($answerComment).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.
+                    Security::remove_XSS($answerComment).'</span>';
             }
             echo '</td>';
             if ($ans == 1) {

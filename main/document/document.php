@@ -2162,31 +2162,30 @@ $table->display();
 $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
 
 if (count($documentAndFolders) > 1) {
-    if ($isAllowedToEdit || $groupMemberWithUploadRights) {
-        echo '<script>
-        $(document).ready(function() {
-            $.ajax({
-                url:"'.$ajaxURL.'",
-                success:function(data){
-                    $("#course_quota").html(data);
-                }
-            });
-            
-            $(".document_size").each(function(i, obj) {
-                var path = obj.getAttribute("data-path");
-                                
-                $.ajax({
-                    url:"'.$getSizeURL.'&path="+path,
-                    success:function(data){
-                        $(obj).html(data);
-                    }
-                });            
-            });    
+    echo '<script>
+    $(document).ready(function() {
+        $.ajax({
+            url:"'.$ajaxURL.'",
+            success:function(data){
+                $("#course_quota").html(data);
+            }
         });
-        </script>';
-        echo '<span id="course_quota"></span>';
-    }
+        
+        $(".document_size").each(function(i, obj) {
+            var path = obj.getAttribute("data-path");
+                            
+            $.ajax({
+                url:"'.$getSizeURL.'&path="+path,
+                success:function(data){
+                    $(obj).html(data);
+                }
+            });            
+        });    
+    });
+    </script>';
+    echo '<span id="course_quota"></span>';
 }
+
 if (!empty($table_footer)) {
     echo Display::return_message($table_footer, 'warning');
 }
@@ -2232,5 +2231,4 @@ echo '
     </div>
 ';
 
-// Footer
 Display::display_footer();

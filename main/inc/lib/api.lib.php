@@ -7867,6 +7867,18 @@ function api_set_settings_and_plugins()
 }
 
 /**
+ * Modify default memory_limit and max_execution_time limits
+ * Needed when processing long tasks
+ */
+function api_set_more_memory_and_time_limits()
+{
+    if (function_exists('ini_set')) {
+        api_set_memory_limit('256M');
+        ini_set('max_execution_time', 1800);
+    }
+}
+
+/**
  * Tries to set memory limit, if authorized and new limit is higher than current.
  *
  * @param string $mem New memory limit
@@ -9072,7 +9084,7 @@ function api_remove_uploaded_file($type, $file)
  */
 function api_remove_uploaded_file_by_id($type, $itemId, $file)
 {
-    $file = api_get_uploaded_file($type, $itemId, $file,  false);
+    $file = api_get_uploaded_file($type, $itemId, $file, false);
     $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
     if (Security::check_abs_path($file, $typePath) && file_exists($file) && is_file($file)) {
         unlink($file);

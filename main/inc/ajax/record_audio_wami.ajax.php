@@ -153,5 +153,3 @@ switch ($type) {
         api_upload_file('audio_message', $file, api_get_user_id());
         break;
 }
-
-

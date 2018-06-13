@@ -7,9 +7,12 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+$course_id = api_get_course_int_id();
+$course_code = api_get_course_id();
+$sessionId = api_get_session_id();
+
 // Access restrictions.
-$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() ||
-    api_is_session_admin() || api_is_drh() || api_is_course_tutor();
+$is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -18,11 +21,6 @@ if (!$is_allowedToTrack) {
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
-
-$course_id = api_get_course_int_id();
-$course_code = api_get_course_id();
-$sessionId = api_get_session_id();
-
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
 
 // jqgrid will use this URL to do the selects

@@ -340,10 +340,20 @@ class Course
     public static function serialize($course)
     {
         if (extension_loaded('igbinary')) {
-            return igbinary_serialize($course);
+            $serialized = igbinary_serialize($course);
         } else {
-            return serialize($course);
+            $serialized = serialize($course);
         }
+
+        // Compress
+        if (function_exists('gzdeflate')) {
+            $deflated = gzdeflate($serialized, 9);
+            if ($deflated !== false) {
+                $deflated = $serialized;
+            }
+        }
+
+        return $serialized;
     }
 
     /**
@@ -355,10 +365,20 @@ class Course
      */
     public static function unserialize($course)
     {
-        if (extension_loaded('igbinary')) {
-            return igbinary_unserialize($course);
-        } else {
-            return unserialize($course);
+        // Uncompress
+        if (function_exists('gzdeflate')) {
+            $inflated = @gzinflate($course);
+            if ($inflated !== false) {
+                $course = $inflated;
+            }
         }
+
+        if (extension_loaded('igbinary')) {
+            $unserialized = igbinary_unserialize($course);
+        } else {
+            $unserialized = unserialize($course);
+        }
+
+        return $unserialized;
     }
 }

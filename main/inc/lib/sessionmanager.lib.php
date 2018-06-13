@@ -4151,8 +4151,8 @@ class SessionManager
 
         $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
 
-        if ($status != '') {
-            $status = intval($status);
+        if (is_numeric($status)) {
+            $status = (int) $status;
             $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
         } else {
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
@@ -4422,11 +4422,7 @@ class SessionManager
             // We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {
-                    //Just in case
-                    if (function_exists('ini_set')) {
-                        api_set_memory_limit('256M');
-                        ini_set('max_execution_time', 0);
-                    }
+                    api_set_more_memory_and_time_limits();
                     $params = [];
                     $params['skip_lp_dates'] = true;
 
@@ -4514,12 +4510,12 @@ class SessionManager
      */
     public static function user_is_general_coach($user_id, $session_id)
     {
-        $session_id = intval($session_id);
-        $user_id = intval($user_id);
+        $session_id = (int) $session_id;
+        $user_id = (int) $user_id;
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
         $sql = "SELECT DISTINCT id
 	         	FROM $table
-	         	WHERE session.id_coach =  '".$user_id."' AND id = '$session_id'";
+	         	WHERE session.id_coach = '".$user_id."' AND id = '$session_id'";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
             return true;

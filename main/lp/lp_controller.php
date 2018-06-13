@@ -199,6 +199,7 @@ if ($refresh == 1) {
 }
 
 if ($debug > 0) {
+    error_log(' $refresh: '.$refresh);
     error_log(' $myrefresh: '.$myrefresh);
 }
 
@@ -245,6 +246,7 @@ if (!empty($lpObject)) {
 }
 if ($debug) {
     error_log('$lp_found: '.$lp_found);
+    error_log('$myrefresh_id: '.$myrefresh_id);
 }
 
 $course_id = api_get_course_int_id();
@@ -342,7 +344,8 @@ if (isset($_SESSION['oLP'])) {
     // Reinitialises array used by javascript to update items in the TOC.
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+/*$studentView = api_is_student_view_active();
+if ($studentView) {
     if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
@@ -358,7 +361,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
             $_REQUEST['action'] = 'build';
         }
     }
-}
+}*/
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
@@ -763,6 +766,7 @@ switch ($action) {
                 $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
+                exit;
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
@@ -1318,12 +1322,14 @@ switch ($action) {
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
+        exit;
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
+        exit;
         break;
     case 'toggle_seriousgame':
         // activate/deactive seriousgame_mode
@@ -1403,6 +1409,7 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
+        exit;
 
         break;
     case 'report':
@@ -1443,6 +1450,7 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
+        exit;
         break;
     case 'add_final_item':
         if (!$lp_found) {

@@ -1830,7 +1830,10 @@ class learnpath
             //&& !$this->items[$this->last_item_seen]->is_done()
         ) {
             if ($this->debug > 2) {
-                error_log('In learnpath::first() - Last item seen is '.$this->last_item_seen.' of type '.$this->items[$this->last_item_seen]->get_type(), 0);
+                error_log(
+                    'In learnpath::first() - Last item seen is '.$this->last_item_seen.' of type '.
+                    $this->items[$this->last_item_seen]->get_type()
+                );
             }
             $index = -1;
             foreach ($this->ordered_items as $myindex => $item_id) {
@@ -3576,7 +3579,7 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $item_id = intval($item_id);
+        $item_id = (int) $item_id;
 
         $sql = "SELECT
                     l.lp_type as ltype,
@@ -7168,7 +7171,6 @@ class learnpath
         }
 
         $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
         if (!is_dir($filepath)) {
             $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         }
@@ -7176,13 +7178,29 @@ class learnpath
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         if (isset($_POST['path']) && !empty($_POST['path'])) {
-            $document_id = intval($_POST['path']);
-            $sql = "SELECT path FROM ".$table_doc."
-                    WHERE c_id = $course_id AND id = ".$document_id;
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
+            $document_id = (int) $_POST['path'];
+            $documentInfo = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), false, null, true);
+            if (empty($documentInfo)) {
+                // Try with iid
+                $table = Database::get_course_table(TABLE_DOCUMENT);
+                $sql = "SELECT id, path FROM $table 
+                        WHERE c_id = $course_id AND iid = $document_id AND path NOT LIKE '%_DELETED_%' ";
+                $res_doc = Database::query($sql);
+                $row = Database::fetch_array($res_doc);
+                if ($row) {
+                    $document_id = $row['id'];
+                    $documentPath = $row['path'];
+                }
+            } else {
+                $documentPath = $documentInfo['path'];
+            }
+
             $content = stripslashes($_POST['content_lp']);
-            $file = $filepath.$row['path'];
+            $file = $filepath.$documentPath;
+
+            if (!file_exists($file)) {
+                return false;
+            }
 
             if ($fp = @fopen($file, 'w')) {
                 $content = str_replace(
@@ -7206,9 +7224,9 @@ class learnpath
                 fputs($fp, $content);
                 fclose($fp);
 
-                $sql = "UPDATE ".$table_doc." SET
+                $sql = "UPDATE $table_doc SET
                             title='".Database::escape_string($_POST['title'])."'
-                        WHERE c_id = ".$course_id." AND id = ".$document_id;
+                        WHERE c_id = $course_id AND id = ".$document_id;
                 Database::query($sql);
             }
         }
@@ -8548,7 +8566,6 @@ class learnpath
             $parentSelect->setSelected($s_selected_parent);
         }
 
-
         if (is_array($arrLP)) {
             reset($arrLP);
         }
@@ -8705,8 +8722,9 @@ class learnpath
         // We don't display the document form if it's not an editable document (html or txt file).
         if ($action == 'add') {
             if (is_numeric($extra_info)) {
+                $extra_info = (int) $extra_info;
                 $sql_doc = "SELECT path FROM $tbl_doc 
-                            WHERE c_id = $course_id AND iid = ".intval($extra_info);
+                            WHERE c_id = $course_id AND iid = ".$extra_info;
                 $result = Database::query($sql_doc);
                 $path_file = Database::result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
@@ -8900,7 +8918,6 @@ class learnpath
             if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
                 $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
             ) {
-
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
         }
@@ -10466,12 +10483,7 @@ class learnpath
     {
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
-
-        // Remove memory and time limits as much as possible as this might be a long process...
-        if (function_exists('ini_set')) {
-            api_set_memory_limit('256M');
-            ini_set('max_execution_time', 600);
-        }
+        api_set_more_memory_and_time_limits();
 
         // Create the zip handler (this will remain available throughout the method).
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);
@@ -12679,9 +12691,9 @@ EOD;
         $session_id = api_get_session_id();
         $course_info = api_get_course_info_by_id($course_id);
 
-        $learningPathId = intval($learningPathId);
-        $id_in_path = intval($id_in_path);
-        $lpViewId = intval($lpViewId);
+        $learningPathId = (int) $learningPathId;
+        $id_in_path = (int) $id_in_path;
+        $lpViewId = (int) $lpViewId;
 
         $em = Database::getManager();
         $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');

@@ -723,11 +723,11 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->display_one_col_template();
 }
 
-
 // Helper functions defined below this point
 
 /**
  * Is user auth_source is platform ?
+ *
  * @return bool Whether auth_source is 'platform' or not
  */
 function is_platform_authentication()
@@ -739,6 +739,7 @@ function is_platform_authentication()
 
 /**
  * Can a user edit his/her profile?
+ *
  * @return bool Whether the profile can be edited by the user or not
  */
 function is_profile_editable()
@@ -752,8 +753,10 @@ function is_profile_editable()
 
 /**
  * Upload a submitted user production.
- * @param  int      $userId    User id
- * @return mixed    The filename of the new production or FALSE if the upload has failed
+ *
+ * @param int $userId User id
+ *
+ * @return mixed The filename of the new production or FALSE if the upload has failed
  */
 function upload_user_production($userId)
 {
@@ -776,8 +779,10 @@ function upload_user_production($userId)
 
 /**
  * Check current user's current password.
- * @param   string  $email E-mail
- * @return  bool    Whether this e-mail is already in use or not
+ *
+ * @param string $email E-mail
+ *
+ * @return bool Whether this e-mail is already in use or not
  */
 function check_user_email($email)
 {

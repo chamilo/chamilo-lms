@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class Template.
@@ -59,7 +59,7 @@ class Template
      * @param bool   $hide_global_chat
      * @param bool   $load_plugins
      * @param int    $responseCode
-     * @param bool   $sendHeaders send http headers or not
+     * @param bool   $sendHeaders      send http headers or not
      */
     public function __construct(
         $title = '',
@@ -948,7 +948,7 @@ class Template
     /**
      * Render the template.
      *
-     * @param string $template The template path
+     * @param string $template           The template path
      * @param bool   $clearFlashMessages Clear the $_SESSION variables for flash messages
      */
     public function display($template, $clearFlashMessages = true)
@@ -1252,6 +1252,62 @@ class Template
     public function getResponseCode()
     {
         return $this->responseCode;
+    }
+
+    /**
+     * Assign HTML code to the 'bug_notification' template variable for the side tabs to report issues.
+     *
+     * @return bool Always return true because there is always a string, even if empty
+     */
+    public function assignBugNotification()
+    {
+        //@todo move this in the template
+        $rightFloatMenu = '';
+        $iconBug = Display::return_icon(
+            'bug.png',
+            get_lang('ReportABug'),
+            [],
+            ICON_SIZE_LARGE
+        );
+        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
+            $rightFloatMenu = '<div class="report">
+		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
+                    '.$iconBug.'
+                </a>
+		        </div>';
+        }
+
+        if (api_get_setting('show_link_ticket_notification') == 'true' &&
+            $this->user_is_logged_in
+        ) {
+            // by default is project_id = 1
+            $defaultProjectId = 1;
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+            if ($allow) {
+                $iconTicket = Display::return_icon(
+                    'help.png',
+                    get_lang('Ticket'),
+                    [],
+                    ICON_SIZE_LARGE
+                );
+                $courseInfo = api_get_course_info();
+                $courseParams = '';
+                if (!empty($courseInfo)) {
+                    $courseParams = api_get_cidreq();
+                }
+                $url = api_get_path(WEB_CODE_PATH).
+                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
+            }
+        }
+
+        $this->assign('bug_notification', $rightFloatMenu);
+
+        return true;
     }
 
     /**
@@ -1686,8 +1742,9 @@ class Template
     }
 
     /**
-     * Assign favicon to the 'favico' template variable
-     * @return  bool    Always return true because there is always at least one correct favicon.ico
+     * Assign favicon to the 'favico' template variable.
+     *
+     * @return bool Always return true because there is always at least one correct favicon.ico
      */
     private function assignFavIcon()
     {
@@ -1722,66 +1779,14 @@ class Template
         }
 
         $this->assign('favico', $favico);
+
         return true;
     }
 
     /**
-     * Assign HTML code to the 'bug_notification' template variable for the side tabs to report issues
-     * @return  bool    Always return true because there is always a string, even if empty
-     */
-    function assignBugNotification()
-    {
-        //@todo move this in the template
-        $rightFloatMenu = '';
-        $iconBug = Display::return_icon(
-            'bug.png',
-            get_lang('ReportABug'),
-            [],
-            ICON_SIZE_LARGE
-        );
-        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $rightFloatMenu = '<div class="report">
-		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
-                    '.$iconBug.'
-                </a>
-		        </div>';
-        }
-
-        if (api_get_setting('show_link_ticket_notification') == 'true' &&
-            $this->user_is_logged_in
-        ) {
-            // by default is project_id = 1
-            $defaultProjectId = 1;
-            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
-            if ($allow) {
-                $iconTicket = Display::return_icon(
-                    'help.png',
-                    get_lang('Ticket'),
-                    [],
-                    ICON_SIZE_LARGE
-                );
-                $courseInfo = api_get_course_info();
-                $courseParams = '';
-                if (!empty($courseInfo)) {
-                    $courseParams = api_get_cidreq();
-                }
-                $url = api_get_path(WEB_CODE_PATH).
-                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-                $rightFloatMenu .= '<div class="help">
-                    <a href="'.$url.'" target="_blank">
-                        '.$iconTicket.'
-                    </a>
-                </div>';
-            }
-        }
-
-        $this->assign('bug_notification', $rightFloatMenu);
-        return true;
-    }
-
-    /**
-     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu)
-     * @return  bool    Always return true (even if empty string)
+     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu).
+     *
+     * @return bool Always return true (even if empty string)
      */
     private function assignAccessibilityBlock()
     {
@@ -1796,12 +1801,14 @@ class Template
             $resize .= '</div>';
         }
         $this->assign('accessibility', $resize);
+
         return true;
     }
 
     /**
-     * Assign HTML code to the 'social_meta' template variable (usually shown above top menu)
-     * @return  bool    Always return true (even if empty string)
+     * Assign HTML code to the 'social_meta' template variable (usually shown above top menu).
+     *
+     * @return bool Always return true (even if empty string)
      */
     private function assignSocialMeta()
     {
@@ -1850,7 +1857,6 @@ class Template
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath();
                     }
-
                 } elseif ($sessionId !== 0) {
                     // If we are on a session "about" screen, publish info about the session
                     $em = Database::getManager();
@@ -1869,8 +1875,6 @@ class Template
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath();
                     }
-
-
                 } else {
                     // Otherwise (not a course nor a session, nor a user, nor a badge), publish portal info
                     $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
@@ -1886,11 +1890,13 @@ class Template
         }
 
         $this->assign('social_meta', $socialMeta);
+
         return true;
     }
 
     /**
-     * Get platform meta image tag (check meta_image_path setting, then use the logo)
+     * Get platform meta image tag (check meta_image_path setting, then use the logo).
+     *
      * @return string The meta image HTML tag, or empty
      */
     private function getMetaPortalImagePath()
@@ -1910,7 +1916,7 @@ class Template
                 $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
             }
         }
-        return $portalImageMeta;
 
+        return $portalImageMeta;
     }
 }

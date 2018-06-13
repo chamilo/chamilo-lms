@@ -32,6 +32,7 @@ $is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 
+
 function is_settings_editable()
 {
     return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
@@ -95,7 +96,6 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
                     <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addHtml($image);
-
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
@@ -125,6 +125,28 @@ $form->applyFilter('department_name', 'trim');
 
 $form->addText('department_url', get_lang('DepartmentUrl'), false);
 $form->applyFilter('department_url', 'html_filter');
+
+// Extra fields
+$extra_field = new ExtraField('course');
+$extra = $extra_field->addElements(
+    $form,
+    $courseId,
+    [],
+    false,
+    false,
+    [],
+    [],
+    true
+);
+
+//Tags ExtraField
+
+$htmlHeadXtra[] = '
+<script>
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
 
 // Picture
 $form->addFile(
@@ -1004,6 +1026,9 @@ if ($form->validate() && is_settings_editable()) {
             api_get_course_int_id()
         );
     }
+    // update the extra fields
+    $courseFieldValue = new ExtraFieldValue('course');
+    $courseFieldValue->saveFieldValues($updateValues);
 
     $appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();

@@ -143,8 +143,6 @@
                 </div>
 
                 {% endif %}
-
-                {{ teacher_block }}
                 {{ certificates_search_block }}
 
                 <!-- BLOCK NOTICE -->

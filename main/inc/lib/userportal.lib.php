@@ -189,83 +189,6 @@ class IndexManager
     }
 
     /**
-     * @return null|string
-     */
-    public function return_teacher_link()
-    {
-        $html = '';
-        $show_menu = false;
-        if (!empty($this->user_id)) {
-            // tabs that are deactivated are added here
-
-            $show_menu = false;
-            $show_create_link = false;
-            $show_course_link = false;
-
-            if (api_is_allowed_to_create_course()) {
-                $show_menu = true;
-                $show_course_link = true;
-                $show_create_link = true;
-            } else {
-                if (api_get_setting('allow_students_to_browse_courses') === 'true') {
-                    $show_menu = true;
-                    $show_course_link = true;
-                }
-
-                if (api_is_allowed_to_create_course()) {
-                    $show_create_link = true;
-                }
-            }
-
-            if ($show_menu && ($show_create_link || $show_course_link)) {
-                $show_menu = true;
-            } else {
-                $show_menu = false;
-            }
-        }
-
-        // My Account section
-        if ($show_menu) {
-            $html .= '<ul class="nav nav-pills nav-stacked">';
-            if ($show_create_link) {
-                $html .= '<li class="add-course"><a href="'.api_get_path(WEB_CODE_PATH).'create_course/add_course.php">'
-                    .Display::return_icon('new-course.png', get_lang('CourseCreate'))
-                    .(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang(
-                        'CourseCreate'
-                    ))
-                    .'</a></li>';
-            }
-
-            if ($show_course_link) {
-                if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .= '<li class="list-course"><a href="'.api_get_path(WEB_CODE_PATH).'auth/courses.php">'
-                        .Display::return_icon('catalog-course.png', get_lang('CourseCatalog'))
-                        .get_lang('CourseCatalog')
-                        .'</a></li>';
-                } else {
-                    $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'dashboard/index.php">'.get_lang(
-                            'Dashboard'
-                        ).'</a></li>';
-                }
-            }
-            $html .= '</ul>';
-        }
-
-        if (!empty($html)) {
-            $html = self::show_right_block(
-                get_lang('Courses'),
-                $html,
-                'teacher_block',
-                null,
-                'teachers',
-                'teachersCollapse'
-            );
-        }
-
-        return $html;
-    }
-
-    /**
      * Includes a created page.
      *
      * @param bool $getIncludedFile Whether to include a file as provided in URL GET or simply the homepage
@@ -1086,7 +1009,7 @@ class IndexManager
 
             if (SessionManager::allowToManageSessions()) {
                 $items[] = [
-                    'class' => 'add-course',
+                    'class' => 'add-session',
                     'icon' => Display::return_icon('session.png', get_lang('AddSession')),
                     'link' => 'main/session/session_add.php',
                     'title' => get_lang('AddSession'),

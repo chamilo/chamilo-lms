@@ -27,6 +27,10 @@ $user_id = api_get_user_id();
 
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+
+if(!$course){
+    api_not_allowed(true);
+}
 /** @var User $userRepo */
 $userRepo = $em->getRepository('ChamiloUserBundle:User');
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');

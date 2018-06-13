@@ -1327,7 +1327,7 @@ class DocumentManager
                 WHERE c_id = $course_id $sessionCondition AND id = $id";
 
         if ($ignoreDeleted) {
-            $sql .= " AND path NOT LIKE = '%_DELETED_%' ";
+            $sql .= " AND path NOT LIKE '%_DELETED_%' ";
         }
 
         $result = Database::query($sql);

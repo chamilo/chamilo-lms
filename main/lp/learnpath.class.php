@@ -3579,7 +3579,7 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $item_id = intval($item_id);
+        $item_id = (int) $item_id;
 
         $sql = "SELECT
                     l.lp_type as ltype,
@@ -8722,8 +8722,9 @@ class learnpath
         // We don't display the document form if it's not an editable document (html or txt file).
         if ($action == 'add') {
             if (is_numeric($extra_info)) {
+                $extra_info = (int) $extra_info;
                 $sql_doc = "SELECT path FROM $tbl_doc 
-                            WHERE c_id = $course_id AND iid = ".intval($extra_info);
+                            WHERE c_id = $course_id AND iid = ".$extra_info;
                 $result = Database::query($sql_doc);
                 $path_file = Database::result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
@@ -12690,9 +12691,9 @@ EOD;
         $session_id = api_get_session_id();
         $course_info = api_get_course_info_by_id($course_id);
 
-        $learningPathId = intval($learningPathId);
-        $id_in_path = intval($id_in_path);
-        $lpViewId = intval($lpViewId);
+        $learningPathId = (int) $learningPathId;
+        $id_in_path = (int) $id_in_path;
+        $lpViewId = (int) $lpViewId;
 
         $em = Database::getManager();
         $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');

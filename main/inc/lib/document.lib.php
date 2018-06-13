@@ -1299,6 +1299,7 @@ class DocumentManager
      * @param bool   $load_parents load folder parents
      * @param int    $session_id   The session ID,
      *                             0 if requires context *out of* session, and null to use global context
+     * @param bool   $ignoreDeleted
      *
      * @return array document content
      */
@@ -1306,7 +1307,8 @@ class DocumentManager
         $id,
         $course_code,
         $load_parents = false,
-        $session_id = null
+        $session_id = null,
+        $ignoreDeleted = false
     ) {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -1323,6 +1325,10 @@ class DocumentManager
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
                 WHERE c_id = $course_id $sessionCondition AND id = $id";
+
+        if ($ignoreDeleted) {
+            $sql .= " AND path NOT LIKE = '%_DELETED_%' ";
+        }
 
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {

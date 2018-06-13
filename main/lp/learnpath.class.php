@@ -7179,7 +7179,7 @@ class learnpath
 
         if (isset($_POST['path']) && !empty($_POST['path'])) {
             $document_id = (int) $_POST['path'];
-            $documentInfo = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+            $documentInfo = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), false, null, true);
             if (empty($documentInfo)) {
                 // Try with iid
                 $table = Database::get_course_table(TABLE_DOCUMENT);

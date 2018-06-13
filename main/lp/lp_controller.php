@@ -199,6 +199,7 @@ if ($refresh == 1) {
 }
 
 if ($debug > 0) {
+    error_log(' $refresh: '.$refresh);
     error_log(' $myrefresh: '.$myrefresh);
 }
 
@@ -245,6 +246,7 @@ if (!empty($lpObject)) {
 }
 if ($debug) {
     error_log('$lp_found: '.$lp_found);
+    error_log('$myrefresh_id: '.$myrefresh_id);
 }
 
 $course_id = api_get_course_int_id();
@@ -342,7 +344,7 @@ if (isset($_SESSION['oLP'])) {
     // Reinitialises array used by javascript to update items in the TOC.
 }
 
-$studentView = api_is_student_view_active();
+/*$studentView = api_is_student_view_active();
 if ($studentView) {
     if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
@@ -359,7 +361,7 @@ if ($studentView) {
             $_REQUEST['action'] = 'build';
         }
     }
-}
+}*/
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 

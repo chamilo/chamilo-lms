@@ -2684,7 +2684,10 @@ class CourseRestorer
 
                 $lp->expired_on = isset($lp->expired_on) && $lp->expired_on === '0000-00-00 00:00:00' ? null : $lp->expired_on;
                 $lp->publicated_on = isset($lp->publicated_on) && $lp->publicated_on === '0000-00-00 00:00:00' ? null : $lp->publicated_on;
-                $lp->categoryId = (int) $lp->categoryId;
+
+                if (isset($lp->categoryId)) {
+                    $lp->categoryId = (int) $lp->categoryId;
+                }
 
                 $categoryId = 0;
                 if (!empty($lp->categoryId)) {

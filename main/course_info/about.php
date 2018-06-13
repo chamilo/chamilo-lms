@@ -77,7 +77,7 @@ $tagField = $fieldsRepo->findOneBy([
 $courseTags = [];
 
 if (!is_null($tagField)) {
-    $courseTags = $fieldTagsRepo->getTags($tagField, $course->getId());
+    $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
 }
 
 $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssessment = '';
@@ -123,6 +123,15 @@ $topics = [
 
 $subscriptionUser = CourseManager::is_user_subscribed_in_course($user_id,$course->getCode());
 
+$plugin = BuyCoursesPlugin::create();
+$checker = $plugin->isEnabled();
+$courseIsPremium = null;
+if ($checker) {
+    $courseIsPremium = $plugin->getItemByProduct(
+        $courseId,
+        BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+    );
+}
 
 $courseItem = [
     'code' => $course->getCode(),
@@ -153,6 +162,7 @@ $template = new Template($course->getTitle(), true, true, false, true, false);
 $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
+$template->assign('is_premium', $courseIsPremium);
 $template->assign('url', $urlCourse);
 $layout = $template->get_template('course_home/about.tpl');
 $content = $template->fetch($layout);

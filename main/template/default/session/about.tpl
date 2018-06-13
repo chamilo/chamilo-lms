@@ -61,7 +61,7 @@
                                 {% endif %}
                             </p>
                         </div>
-                        {% if is_premiun == false %}
+                        {% if is_premium == false %}
                             <h5>{{ 'CourseSubscription'|get_lang }}</h5>
                             <div class="session-subscribe">
                                 {% if _u.logged and not is_subscribed %}
@@ -80,10 +80,10 @@
                                 {{ 'SalePrice'|get_lang }}
                             </div>
                             <div class="price-text">
-                                {{ is_premiun.iso_code }} {{ is_premiun.price }}
+                                {{ is_premium.iso_code }} {{ is_premium.price }}
                             </div>
                             <div class="buy-box">
-                                <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premiun.product_id }}&t={{ is_premiun.product_type }}" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
+                                <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
                             </div>
                         </div>
                         {% endif %}

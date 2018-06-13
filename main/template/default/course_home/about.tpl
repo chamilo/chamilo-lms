@@ -109,23 +109,25 @@
             <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <div class="session-price">
+                        {% if is_premium == false %}
                             {% if course.subscription %}
-                            <div class="buy-box">
-                                <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0" class="btn btn-lg btn-success btn-block">{{ 'SignInCourse'|get_lang }}</a>
-                            </div>
-                            {% else %}
-                            <div class="sale-price">
-                                {{ 'SalePrice'|get_lang }}
-                            </div>
-                            <div class="price-text">
-                                S/. 100.00
-                            </div>
-                            <div class="buy-box">
-                                <a href="#" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
-                            </div>
+                                <div class="buy-box">
+                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0" class="btn btn-lg btn-success btn-block">{{ 'SignInCourse'|get_lang }}</a>
+                                </div>
                             {% endif %}
-                        </div>
+                        {% else %}
+                            <div class="session-price">
+                                <div class="sale-price">
+                                    {{ 'SalePrice'|get_lang }}
+                                </div>
+                                <div class="price-text">
+                                    {{ is_premium.iso_code }} {{ is_premium.price }}
+                                </div>
+                                <div class="buy-box">
+                                    <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="panel panel-default">

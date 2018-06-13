@@ -230,7 +230,7 @@ $template->assign(
 );
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
-$template->assign('is_premiun', $sessionIsPremium);
+$template->assign('is_premium', $sessionIsPremium);
 $layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);
 //$template->assign('header', $session->getName());

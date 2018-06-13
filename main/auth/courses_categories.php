@@ -308,8 +308,8 @@ function returnThumbnail($course, $registeredUser)
 {
     $html = '';
     $title = cut($course['title'], 70);
-    $linkCourse = api_get_course_url($course['code']);
-
+    //$linkCourse = api_get_course_url($course['code']);
+    $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
@@ -329,15 +329,9 @@ function returnThumbnail($course, $registeredUser)
     }
 
     $html .= '<div class="image">';
-    if (!$registeredUser) {
-        $html .= '<img class="img-responsive"'
-                .' src="'.$courseMediumImage.'" '
-                .' alt="'.api_htmlentities($title).'"/>';
-    } else {
-        $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'">'
-                .'<img class="img-responsive" src="'.$courseMediumImage.'" '
-                .'alt="'.api_htmlentities($title).'"/></a>';
-    }
+    $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'">'
+            .'<img class="img-responsive" src="'.$courseMediumImage.'" '
+            .'alt="'.api_htmlentities($title).'"/></a>';
 
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
@@ -421,14 +415,10 @@ function return_teacher($courseInfo)
  */
 function return_title($course, $registeredUser)
 {
-    $linkCourse = api_get_course_url($course['code']);
+    //$linkCourse = api_get_course_url($course['code']);
+    $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
     $html = '<div class="block-title"><h4 class="title">';
-    if (!$registeredUser) {
-        $html .= $course['title'];
-    } else {
-        $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
-    }
-
+    $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
     $html .= '</h4></div>';
 
     if (api_get_configuration_value('hide_course_rating') === false) {

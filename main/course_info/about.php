@@ -1,9 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: aragonc
- * Date: 30/05/18
- * Time: 12:33 AM
+ * Course about page
+ * Show information about a course.
+ *
+ * @author Alex Aragon Calixto <alex.aragon@beeznest.com>
+ *
+ * @package chamilo.course
  */
 
 

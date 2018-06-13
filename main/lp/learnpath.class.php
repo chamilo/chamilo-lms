@@ -1830,7 +1830,10 @@ class learnpath
             //&& !$this->items[$this->last_item_seen]->is_done()
         ) {
             if ($this->debug > 2) {
-                error_log('In learnpath::first() - Last item seen is '.$this->last_item_seen.' of type '.$this->items[$this->last_item_seen]->get_type(), 0);
+                error_log(
+                    'In learnpath::first() - Last item seen is '.$this->last_item_seen.' of type '.
+                    $this->items[$this->last_item_seen]->get_type()
+                );
             }
             $index = -1;
             foreach ($this->ordered_items as $myindex => $item_id) {

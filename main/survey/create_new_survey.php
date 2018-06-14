@@ -74,6 +74,13 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
 
+    if ($allowSurveyAvailabilityDatetime) {
+        $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
+        $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
+        $defaults['start_date'] = $defaults['avail_from'];
+        $defaults['end_date'] = $defaults['avail_till'];
+    }
+
     $link_info = GradebookUtils::isResourceInCourseGradebook(
         $course_id,
         $gradebook_link_type,

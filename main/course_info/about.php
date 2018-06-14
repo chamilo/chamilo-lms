@@ -21,7 +21,7 @@ $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : 0;
 $token = Security::get_existing_token();
 $em = Database::getManager();
 //userID
-$user_id = api_get_user_id();
+$userId = api_get_user_id();
 
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', $courseId);
@@ -124,7 +124,7 @@ $topics = [
     'custom' => array_reverse($courseCustom),
 ];
 
-$subscriptionUser = CourseManager::is_user_subscribed_in_course($user_id, $course->getCode());
+$subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();

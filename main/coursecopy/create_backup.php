@@ -53,13 +53,11 @@ if (Security::check_token('post') && (
 ) {
     // Clear token
     Security::clear_token();
+    $cb = new CourseBuilder();
+    $course = $cb->build();
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-        $course = CourseSelectForm::get_posted_course();
-    } else {
-        $cb = new CourseBuilder();
-        $course = $cb->build();
+        $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
     }
-
     $zipFile = CourseArchiver::createBackup($course);
     echo Display::return_message(get_lang('BackupCreated'), 'confirm');
     echo '<br />';
@@ -80,7 +78,7 @@ if (Security::check_token('post') && (
     if ($course->has_resources()) {
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
-        CourseSelectForm::display_form($course, $hiddenFields);
+        CourseSelectForm::display_form($course, $hiddenFields, false, true);
     } else {
         echo Display::return_message(get_lang('NoResourcesToBackup'), 'warning');
     }

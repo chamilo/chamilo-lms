@@ -23,13 +23,15 @@ class CourseSelectForm
      *
      * @param array $course
      * @param array $hidden_fields   hidden fields to add to the form
-     * @param bool  $avoid_serialize the document array will be serialize.
+     * @param bool  $avoidSerialize  the document array will be serialize.
      *                               This is used in the course_copy.php file
+     * @param bool  $avoidCourseInForm
      */
     public static function display_form(
         $course,
         $hidden_fields = null,
-        $avoid_serialize = false
+        $avoidSerialize = false,
+        $avoidCourseInForm = false
     ) {
         global $charset;
         $resource_titles[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
@@ -179,7 +181,6 @@ class CourseSelectForm
         echo '<p>';
         echo get_lang('SelectResources');
         echo '</p>';
-
         echo Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
 
         foreach ($course->resources as $type => $resources) {
@@ -326,17 +327,19 @@ class CourseSelectForm
             echo '<script language="javascript">exp('."'$type'".')</script>';
         }
 
-        if ($avoid_serialize) {
+        if ($avoidSerialize) {
             /*Documents are avoided due the huge amount of memory that the serialize php function "eats"
             (when there are directories with hundred/thousand of files) */
             // this is a known issue of serialize
             $course->resources['document'] = null;
         }
 
-        /** @var Course $course */
-        $courseSerialized = base64_encode(Course::serialize($course));
+        if ($avoidCourseInForm === false) {
+            /** @var Course $course */
+            $courseSerialized = base64_encode(Course::serialize($course));
+            echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
+        }
 
-        echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
         if (is_array($hidden_fields)) {
             foreach ($hidden_fields as $key => $value) {
                 echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
@@ -430,16 +433,23 @@ class CourseSelectForm
      *                            It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
+     * @param Course $postedCourse
      *
-     * @return course The course-object with all resources selected by the user
+     * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)
      */
-    public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
+    public static function get_posted_course($from = '', $session_id = 0, $course_code = '', $postedCourse = null)
     {
         $course = null;
         if (isset($_POST['course'])) {
             $course = Course::unserialize(base64_decode($_POST['course']));
-        } else {
+        }
+
+        if ($postedCourse) {
+            $course = $postedCourse;
+        }
+
+        if (empty($course)) {
             return false;
         }
 
@@ -453,7 +463,7 @@ class CourseSelectForm
         $course_id = $course_info['real_id'];
 
         /* Searching the documents resource that have been set to null because
-        $avoid_serialize is true in the display_form() function*/
+        $avoidSerialize is true in the display_form() function*/
         if ($from === 'copy_course') {
             if (is_array($resource)) {
                 $resource = array_keys($resource);
@@ -536,7 +546,6 @@ class CourseSelectForm
                                         $forum_id == $post->obj->forum_id &&
                                         $title == $post->obj->post_title
                                     ) {
-                                        //unset($course->resources[RESOURCE_FORUMPOST][$post_id]);
                                         $posts_to_save[] = $post_id;
                                     }
                                 }
@@ -630,13 +639,13 @@ class CourseSelectForm
      * Display the form session export.
      *
      * @param array $list_course
-     * @param array $hidden_fields   hidden fields to add to the form
-     * @param bool  $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
+     * @param array $hidden_fields  hidden fields to add to the form
+     * @param bool  $avoidSerialize the document array will be serialize. This is used in the course_copy.php file
      */
     public static function display_form_session_export(
         $list_course,
         $hidden_fields = null,
-        $avoid_serialize = false
+        $avoidSerialize = false
     ) {
         ?>
         <script>
@@ -725,7 +734,7 @@ class CourseSelectForm
                 }
             }
         }
-        if ($avoid_serialize) {
+        if ($avoidSerialize) {
             // Documents are avoided due the huge amount of memory that the serialize php
             // function "eats" (when there are directories with hundred/thousand of files)
             // this is a known issue of serialize

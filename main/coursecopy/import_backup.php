@@ -95,7 +95,8 @@ if (Security::check_token('post') && (
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
         echo Display::return_message(get_lang('ImportFinished'));
-        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang('CourseHomepage').'</a>';
+        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.
+            get_lang('CourseHomepage').'</a>';
     } else {
         if (!$error) {
             echo Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning');

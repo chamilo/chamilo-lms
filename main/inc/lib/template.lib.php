@@ -645,21 +645,6 @@ class Template
     }
 
     /**
-     * Sets the "styles" menu in ckEditor.
-     *
-     * Reads css/themes/xxx/editor.css if exists and shows it in the menu, otherwise it
-     * will take the default web/editor.css file
-     */
-    public function setStyleMenuInCkEditor()
-    {
-        $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
-        if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
-            $cssEditor = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
-        }
-        $this->assign('css_editor', $cssEditor);
-    }
-
-    /**
      * Prepare custom CSS to be added at the very end of the <head> section.
      *
      * @see setCssFiles() for the mainstream CSS files
@@ -678,6 +663,7 @@ class Template
         }
 
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
+        $css[] = api_get_cdn_path(ChamiloApi::getEditorBlockStylePath());
 
         $css_file_to_string = null;
         foreach ($css as $file) {

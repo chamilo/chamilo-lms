@@ -744,8 +744,8 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
 
         // Remove media=screen to be available when printing a document
         $new_content_html = str_replace(
-            api_get_path(WEB_CSS_PATH).'editor.css" media="screen"',
-            api_get_path(WEB_CSS_PATH).'editor.css" ',
+            ' media="screen"',
+            '',
             $new_content_html
         );
 

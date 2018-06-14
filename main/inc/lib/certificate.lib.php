@@ -645,8 +645,8 @@ class Certificate extends Model
 
             // Remove media=screen to be available when printing a document
             $certificateContent = str_replace(
-                api_get_path(WEB_CSS_PATH).'editor.css" media="screen"',
-                api_get_path(WEB_CSS_PATH).'editor.css" ',
+                ' media="screen"',
+                '',
                 $certificateContent
             );
 

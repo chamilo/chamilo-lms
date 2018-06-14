@@ -60,12 +60,12 @@ class CourseSelectForm
                 el = document.getElementById('div_'+item);
                 if (el.style.display == 'none') {
                     el.style.display = '';
-                    if (document.getElementById('img_'+item).length)
-                    document.getElementById('img_'+item).className = 'fa fa-minus-square-o fa-lg';
+                    $('#img_'+item).removeClass();
+                    $('#img_'+item).addClass('fa fa-minus-square-o fa-lg');
                 } else {
-                    el.style.display='none';
-                    if (document.getElementById('img_'+item).length)
-                    document.getElementById('img_'+item).className ='fa fa-plus-square-o fa-lg';
+                    el.style.display = 'none';
+                    $('#img_'+item).removeClass();
+                    $('#img_'+item).addClass('fa fa-plus-square-o fa-lg');
                 }
             }
 
@@ -214,7 +214,7 @@ class CourseSelectForm
                         break;
                     default:
                         echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
-                        echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" ></em>';
+                        echo '<em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg" ></em>';
                         echo '<span class="title">'.$resource_titles[$type].'</span></div>';
                         echo '<div class="item-content" id="div_'.$type.'">';
                         if ($type == RESOURCE_LEARNPATH) {
@@ -365,7 +365,7 @@ class CourseSelectForm
                 } else {
                     echo '<br />
                           <button 
-                                class="save" 
+                                class="save btn btn-primary" 
                                 type="submit" 
                                 onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
                     get_lang('Ok').'</button>';
@@ -655,13 +655,13 @@ class CourseSelectForm
                     el.style.display = '';
                     if (document.getElementById('img_'+item).length)
                     document.getElementById('img_'+item).className('fa fa-minus-square-o fa-lg');
-                }
-                else{
+                } else {
                     el.style.display = 'none';
                     if (document.getElementById('img_'+item).length)
                     document.getElementById('img_'+item).className('fa fa-plus-square-o fa-lg');
                 }
             }
+
             function setCheckbox(type,value) {
                 d = document.course_select_form;
                 for (i = 0; i < d.elements.length; i++) {

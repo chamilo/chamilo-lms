@@ -260,7 +260,8 @@ class CourseSelectForm
                                 echo '<label class="checkbox">';
                                 echo '<input 
                                     type="checkbox" 
-                                    name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
+                                    name="resource['.$type.']['.$id.']"  
+                                    id="resource['.$type.']['.$id.']" />';
                                 $resource->show();
                                 echo '</label>';
                                 echo '</li>';
@@ -282,12 +283,15 @@ class CourseSelectForm
             echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg"></em>';
             echo '<span class="title">'.$resource_titles[RESOURCE_FORUM].'</span></div>';
             echo '<div class="item-content" id="div_'.$type.'">';
-
             echo '<ul class="list-backups-options">';
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
-                echo '<input type="checkbox" id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" my_rel="'.$forum_category_id.'" onclick="javascript:check_category(this);"  name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']"  /> ';
+                echo '<input type="checkbox" 
+                    id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" 
+                    my_rel="'.$forum_category_id.'" 
+                    onclick="javascript:check_category(this);" 
+                    name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']" /> ';
                 $forum_category->show();
                 echo '</label>';
                 echo '</li>';
@@ -298,7 +302,13 @@ class CourseSelectForm
                     foreach ($my_forums as $forum_id => $forum) {
                         echo '<li>';
                         echo '<label class="checkbox">';
-                        echo '<input type="checkbox" class="resource_forum" id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'" onclick="javascript:check_forum(this);" my_rel="'.$forum_id.'" rel="'.$forum_category_id.'" name="resource['.RESOURCE_FORUM.']['.$forum_id.']"  />';
+                        echo '<input type="checkbox" 
+                            class="resource_forum" 
+                            id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'" 
+                            onclick="javascript:check_forum(this);" 
+                            my_rel="'.$forum_id.'" 
+                            rel="'.$forum_category_id.'" 
+                            name="resource['.RESOURCE_FORUM.']['.$forum_id.']" />';
                         $forum->show();
                         echo '</label>';
                         echo '</li>';
@@ -309,7 +319,14 @@ class CourseSelectForm
                                 foreach ($my_forum_topics as $topic_id => $topic) {
                                     echo '<li>';
                                     echo '<label class="checkbox">';
-                                    echo '<input type="checkbox"  id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'" onclick="javascript:check_topic(this);" class="resource_topic" forum_id="'.$forum_id.'"  rel="'.$forum_id.'" cat_id="'.$forum_category_id.'" name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']"  />';
+                                    echo '<input 
+                                        type="checkbox" 
+                                        id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'" 
+                                        onclick="javascript:check_topic(this);" class="resource_topic" 
+                                        forum_id="'.$forum_id.'"  
+                                        rel="'.$forum_id.'" 
+                                        cat_id="'.$forum_category_id.'" 
+                                        name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']" />';
                                     $topic->show();
                                     echo '</label>';
                                     echo '</li>';
@@ -347,21 +364,19 @@ class CourseSelectForm
         }
 
         $recycleOption = isset($_POST['recycle_option']) ? true : false;
-
         if (empty($element_count)) {
             echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
         } else {
             if (!empty($hidden_fields['destination_session'])) {
                 echo '<br />
-                        <button 
-                            class="save" 
-                            type="submit" 
-                            onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                      <button 
+                        class="save" 
+                        type="submit" 
+                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
                     get_lang('Ok').'</button>';
             } else {
                 if ($recycleOption) {
-                    echo '<br /><button class="save" type="submit">'.
-                        get_lang('Ok').'</button>';
+                    echo '<br /><button class="save" type="submit">'.get_lang('Ok').'</button>';
                 } else {
                     echo '<br />
                           <button 

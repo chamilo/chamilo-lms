@@ -144,14 +144,12 @@ class CourseBuilder
         $courseCode = '',
         $withBaseContent = false
     ) {
-        $table_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course = api_get_course_info($courseCode);
         $courseId = $course['real_id'];
 
         foreach ($this->tools_to_build as $tool) {
             $function_build = 'build_'.$tool;
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
-
             $this->$function_build(
                 $session_id,
                 $courseId,
@@ -179,22 +177,23 @@ class CourseBuilder
         }
 
         // Once we've built the resources array a bit more, try to get items
-        //  from the item_property table and order them in the "resources" array
+        // from the item_property table and order them in the "resources" array
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
                 $tool = $resource->get_tool();
                 if ($tool != null) {
-                    $sql = "SELECT * FROM $table_properties
+                    $sql = "SELECT * FROM $table
                             WHERE
                                 c_id = $courseId AND
                                 tool = '".$tool."' AND
                                 ref = '".$resource->get_id()."'";
                     $res = Database::query($sql);
-                    $all_properties = [];
-                    while ($item_property = Database::fetch_array($res)) {
-                        $all_properties[] = $item_property;
+                    $properties = [];
+                    while ($property = Database::fetch_array($res)) {
+                        $properties[] = $property;
                     }
-                    $this->course->resources[$type][$id]->item_properties = $all_properties;
+                    $this->course->resources[$type][$id]->item_properties = $properties;
                 }
             }
         }
@@ -637,13 +636,13 @@ class CourseBuilder
         if (!empty($courseId) && !empty($session_id)) {
             $session_id = intval($session_id);
             if ($withBaseContent) {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true,
                     true
                 );
             } else {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true
                 );
@@ -655,7 +654,7 @@ class CourseBuilder
                       c_id = $courseId AND 
                       $idCondition
                       active >=0 
-                      $session_condition ";
+                      $sessionCondition ";
         } else {
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
@@ -666,7 +665,7 @@ class CourseBuilder
                       (session_id = 0 OR session_id IS NULL)";
         }
 
-        $sql .= 'ORDER BY title';
+        $sql .= ' ORDER BY title';
 
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -776,7 +775,7 @@ class CourseBuilder
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.id = r.question_id)
                     INNER JOIN $table_qui ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id )
+                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
                     WHERE ex.c_id = $courseId AND ex.active = '-1'
                  )
                  UNION
@@ -1214,19 +1213,19 @@ class CourseBuilder
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
             if ($withBaseContent) {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true,
                     true
                 );
             } else {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true
                 );
             }
             $sql = 'SELECT * FROM '.$table.'
-                    WHERE c_id = '.$courseId.' '.$session_condition;
+                    WHERE c_id = '.$courseId.' '.$sessionCondition;
         } else {
             $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
             $sql = 'SELECT * FROM '.$table.'
@@ -1293,19 +1292,19 @@ class CourseBuilder
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
             if ($withBaseContent) {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true,
                     true
                 );
             } else {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true
                 );
             }
             $sql = 'SELECT * FROM '.$table_main.'
-                    WHERE c_id = '.$courseId.'  '.$session_condition;
+                    WHERE c_id = '.$courseId.'  '.$sessionCondition;
         } else {
             $sql = 'SELECT * FROM '.$table_main.'
                     WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
@@ -1438,13 +1437,13 @@ class CourseBuilder
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
             if ($withBaseContent) {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true,
                     true
                 );
             } else {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true
                 );
@@ -1453,10 +1452,10 @@ class CourseBuilder
             //@todo check this queries are the same ...
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' '.$session_condition;
+                        WHERE g.c_id = '.$courseId.' '.$sessionCondition;
             } else {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' '.$session_condition;
+                        WHERE g.c_id = '.$courseId.' '.$sessionCondition;
             }
         } else {
             $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
@@ -1535,19 +1534,19 @@ class CourseBuilder
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
             if ($withBaseContent) {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true,
                     true
                 );
             } else {
-                $session_condition = api_get_session_condition(
+                $sessionCondition = api_get_session_condition(
                     $session_id,
                     true
                 );
             }
             $sql = 'SELECT * FROM '.$tbl_wiki.'
-                    WHERE c_id = '.$courseId.' '.$session_condition;
+                    WHERE c_id = '.$courseId.' '.$sessionCondition;
         } else {
             $tbl_wiki = Database::get_course_table(TABLE_WIKI);
             $sql = 'SELECT * FROM '.$tbl_wiki.'
@@ -1593,17 +1592,17 @@ class CourseBuilder
         $courseInfo = api_get_course_info_by_id($courseId);
         $session_id = intval($session_id);
         if ($withBaseContent) {
-            $session_condition = api_get_session_condition(
+            $sessionCondition = api_get_session_condition(
                 $session_id,
                 true,
                 true
             );
         } else {
-            $session_condition = api_get_session_condition($session_id, true);
+            $sessionCondition = api_get_session_condition($session_id, true);
         }
 
         $sql = "SELECT * FROM $table_thematic
-                WHERE c_id = $courseId $session_condition ";
+                WHERE c_id = $courseId $sessionCondition ";
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result, 'ASSOC')) {
             $thematic = new Thematic($row);

@@ -7,13 +7,11 @@
  *
  * @package chamilo.course
  */
-
-
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\ExtraField;
 
 $cidReset = true;
 
@@ -28,7 +26,7 @@ $user_id = api_get_user_id();
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', $courseId);
 
-if(!$course){
+if (!$course) {
     api_not_allowed(true);
 }
 /** @var User $userRepo */
@@ -52,7 +50,7 @@ $courseDescriptionTools = $em->getRepository('ChamiloCourseBundle:CCourseDescrip
 $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 
-$urlCourse = api_get_path(WEB_PATH). 'main/course/about.php?course_id='.$courseId;
+$urlCourse = api_get_path(WEB_PATH).'main/course/about.php?course_id='.$courseId;
 
 $courseTeachers = $course->getTeachers();
 
@@ -68,11 +66,10 @@ foreach ($courseTeachers as $teacherSubscription) {
             USER_IMAGE_SIZE_ORIGINAL
         ),
         'diploma' => $teacher->getDiplomas(),
-        'openarea' => $teacher->getOpenarea()
+        'openarea' => $teacher->getOpenarea(),
     ];
 
     $teachersData[] = $userData;
-
 }
 
 $tagField = $fieldsRepo->findOneBy([
@@ -124,10 +121,10 @@ $topics = [
     'material' => $courseMaterial,
     'resources' => $courseResources,
     'assessment' => $courseAssessment,
-    'custom' => array_reverse($courseCustom)
+    'custom' => array_reverse($courseCustom),
 ];
 
-$subscriptionUser = CourseManager::is_user_subscribed_in_course($user_id,$course->getCode());
+$subscriptionUser = CourseManager::is_user_subscribed_in_course($user_id, $course->getCode());
 
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
@@ -152,10 +149,10 @@ $courseItem = [
         null,
         true
     ),
-    'subscription' => $subscriptionUser
+    'subscription' => $subscriptionUser,
 ];
 
-$metaInfo =  '<meta property="og:url" content="'.$urlCourse.'" />';
+$metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
 $metaInfo .= '<meta property="og:type" content="website" />';
 $metaInfo .= '<meta property="og:title" content="'.$courseItem['title'].'" />';
 $metaInfo .= '<meta property="og:description" content="'.$courseDescription.'" />';

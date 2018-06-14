@@ -1294,11 +1294,11 @@ class DocumentManager
     /**
      * Gets the document data with a given id.
      *
-     * @param int    $id           Document Id (id field in c_document table)
-     * @param string $course_code  Course code
-     * @param bool   $load_parents load folder parents
-     * @param int    $session_id   The session ID,
-     *                             0 if requires context *out of* session, and null to use global context
+     * @param int    $id            Document Id (id field in c_document table)
+     * @param string $course_code   Course code
+     * @param bool   $load_parents  load folder parents
+     * @param int    $session_id    The session ID,
+     *                              0 if requires context *out of* session, and null to use global context
      * @param bool   $ignoreDeleted
      *
      * @return array document content

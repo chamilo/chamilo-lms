@@ -32,7 +32,6 @@ $is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 
-
 function is_settings_editable()
 {
     return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];

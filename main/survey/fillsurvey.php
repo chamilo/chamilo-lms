@@ -1364,11 +1364,14 @@ Display::display_footer();
  */
 function check_time_availability($surveyData)
 {
+    $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
     $utcZone = new DateTimeZone('UTC');
     $startDate = new DateTime($surveyData['start_date'], $utcZone);
     $endDate = new DateTime($surveyData['end_date'], $utcZone);
     $currentDate = new DateTime('now', $utcZone);
-    $currentDate->modify('today');
+    if (!$allowSurveyAvailabilityDatetime) {
+        $currentDate->modify('today');
+    }
     if ($currentDate < $startDate) {
         api_not_allowed(
             true,

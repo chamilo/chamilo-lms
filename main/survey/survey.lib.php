@@ -331,6 +331,8 @@ class SurveyManager
                 }
             }
 
+            $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+
             $params = [
                 'c_id' => $course_id,
                 'code' => self::generateSurveyCode($values['survey_code']),
@@ -338,8 +340,12 @@ class SurveyManager
                 'subtitle' => $values['survey_subtitle'],
                 'author' => $_user['user_id'],
                 'lang' => $values['survey_language'],
-                'avail_from' => $values['start_date'],
-                'avail_till' => $values['end_date'],
+                'avail_from' => $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['start_date'])
+                    : $values['start_date'],
+                'avail_till' => $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['end_date'])
+                    : $values['end_date'],
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],

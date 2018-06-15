@@ -13,8 +13,8 @@ $user_id = api_get_user_id();
 
 switch ($action) {
     case 'add_course_vote':
-        $course_id = intval($_REQUEST['course_id']);
-        $star = intval($_REQUEST['star']);
+        $course_id = (int) $_REQUEST['course_id'];
+        $star = (int) $_REQUEST['star'];
 
         if (!api_is_anonymous()) {
             CourseManager::add_course_vote($user_id, $star, $course_id, 0);
@@ -40,7 +40,7 @@ switch ($action) {
     case 'get_user_courses':
         // Only search my courses
         if (api_is_platform_admin() || api_is_session_admin()) {
-            $userId = intval($_REQUEST['user_id']);
+            $userId = (int) $_REQUEST['user_id'];
             $list = CourseManager::get_courses_list_by_user_id(
                 $userId,
                 false
@@ -126,7 +126,7 @@ switch ($action) {
         break;
     case 'search_course':
         if (api_is_teacher()) {
-            if (!empty($_GET['session_id']) && intval($_GET['session_id'])) {
+            if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
                 //if session is defined, lets find only courses of this session
                 $courseList = SessionManager::get_course_list_by_session_id(
                     $_GET['session_id'],

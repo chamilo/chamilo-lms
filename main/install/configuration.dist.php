@@ -494,6 +494,10 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // Hide survey edition tools for all or some surveys.
 //Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked
 //$_configuration['hide_survey_edition'] = ['codes' => []];
+// Allows to set the date and time of availability for surveys. Requires DB changes:
+// ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL, CHANGE avail_till avail_till DATETIME DEFAULT NULL;
+// Requires change the Doctrine type from date to datime in CSurvey::$availFrom and CSurvey::$availTill
+//$_configuration['allow_survey_availability_datetime'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:

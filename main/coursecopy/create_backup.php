@@ -48,11 +48,13 @@ if (Security::check_token('post') &&
 ) {
     // Clear token
     Security::clear_token();
-    $cb = new CourseBuilder();
+
     if ($action === 'course_select_form') {
+        $cb = new CourseBuilder('partial');
         $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
     } else {
+        $cb = new CourseBuilder('complete');
         $course = $cb->build();
     }
     $zipFile = CourseArchiver::createBackup($course);

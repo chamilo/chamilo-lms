@@ -180,10 +180,16 @@ class CourseBuilder
             $function_build = 'build_'.$tool;
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
             $buildOrphanQuestions = true;
-            if ($tool == 'quizzes') {
-                if (!isset($toolsFromPost['quiz'][-1])) {
+            if ($tool === 'quizzes') {
+                if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
                     $buildOrphanQuestions = false;
                 }
+
+                // Force orphan load
+                if ($this->course->type === 'complete') {
+                    $buildOrphanQuestions = true;
+                }
+
                 $this->build_quizzes(
                     $session_id,
                     $courseId,

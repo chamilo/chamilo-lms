@@ -19,6 +19,36 @@ use Display;
 class CourseSelectForm
 {
     /**
+     * @return array
+     */
+    public static function getResourceTitleList()
+    {
+        $list = [];
+        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
+        $list[RESOURCE_ASSET] = get_lang('Assets');
+        $list[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
+        $list[RESOURCE_EVENT] = get_lang('Events');
+        $list[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
+        $list[RESOURCE_DOCUMENT] = get_lang('Documents');
+        $list[RESOURCE_LINK] = get_lang('Links');
+        $list[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
+        $list[RESOURCE_FORUM] = get_lang('Forums');
+        $list[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
+        $list[RESOURCE_QUIZ] = get_lang('Tests');
+        $list[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
+        $list[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
+        $list[RESOURCE_SCORM] = 'SCORM';
+        $list[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
+        $list[RESOURCE_SURVEY] = get_lang('Survey');
+        $list[RESOURCE_GLOSSARY] = get_lang('Glossary');
+        $list[RESOURCE_WIKI] = get_lang('Wiki');
+        $list[RESOURCE_THEMATIC] = get_lang('Thematic');
+        $list[RESOURCE_ATTENDANCE] = get_lang('Attendance');
+        $list[RESOURCE_WORK] = get_lang('ToolStudentPublication');
+
+        return $list;
+    }
+    /**
      * Display the form.
      *
      * @param array $course
@@ -34,27 +64,7 @@ class CourseSelectForm
         $avoidCourseInForm = false
     ) {
         global $charset;
-        $resource_titles[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
-        $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
-        $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
-        $resource_titles[RESOURCE_EVENT] = get_lang('Events');
-        $resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
-        $resource_titles[RESOURCE_DOCUMENT] = get_lang('Documents');
-        $resource_titles[RESOURCE_LINK] = get_lang('Links');
-        $resource_titles[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
-        $resource_titles[RESOURCE_FORUM] = get_lang('Forums');
-        $resource_titles[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
-        $resource_titles[RESOURCE_QUIZ] = get_lang('Tests');
-        $resource_titles[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
-        $resource_titles[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
-        $resource_titles[RESOURCE_SCORM] = 'SCORM';
-        $resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
-        $resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
-        $resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
-        $resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
-        $resource_titles[RESOURCE_THEMATIC] = get_lang('Thematic');
-        $resource_titles[RESOURCE_ATTENDANCE] = get_lang('Attendance');
-        $resource_titles[RESOURCE_WORK] = get_lang('ToolStudentPublication'); ?>
+        ?>
         <script>
             function exp(item) {
                 el = document.getElementById('div_'+item);
@@ -62,6 +72,7 @@ class CourseSelectForm
                     el.style.display = '';
                     $('#img_'+item).removeClass();
                     $('#img_'+item).addClass('fa fa-minus-square-o fa-lg');
+
                 } else {
                     el.style.display = 'none';
                     $('#img_'+item).removeClass();
@@ -157,6 +168,7 @@ class CourseSelectForm
             echo get_lang('DestinationCourse').' : '.$courseInfo['title'].' ('.$courseInfo['code'].') '.$sessionTitle;
             echo '</h3>';
         }
+
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
         echo '<div class="tool-backups-options">';
         echo '<form method="post" id="upload_form" name="course_select_form">';
@@ -173,7 +185,6 @@ class CourseSelectForm
             echo '<input type="hidden" name="origin_session" value="'.$hidden_fields['origin_session'].'"/>';
         }
 
-        $element_count = 0;
         $forum_categories = [];
         $forums = [];
         $forum_topics = [];
@@ -183,98 +194,8 @@ class CourseSelectForm
         echo '</p>';
         echo Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
 
-        foreach ($course->resources as $type => $resources) {
-            if (count($resources) > 0) {
-                switch ($type) {
-                    // Resources to avoid
-                    case RESOURCE_FORUMCATEGORY:
-                        foreach ($resources as $id => $resource) {
-                            $forum_categories[$id] = $resource;
-                        }
-                        $element_count++;
-                        break;
-                    case RESOURCE_FORUM:
-                        foreach ($resources as $id => $resource) {
-                            $forums[$resource->obj->forum_category][$id] = $resource;
-                        }
-                        $element_count++;
-                        break;
-                    case RESOURCE_FORUMTOPIC:
-                        foreach ($resources as $id => $resource) {
-                            $forum_topics[$resource->obj->forum_id][$id] = $resource;
-                        }
-                        $element_count++;
-                        break;
-                    case RESOURCE_LINKCATEGORY:
-                    case RESOURCE_FORUMPOST:
-                    case RESOURCE_QUIZQUESTION:
-                    case RESOURCE_SURVEYQUESTION:
-                    case RESOURCE_SURVEYINVITATION:
-                    case RESOURCE_SCORM:
-                        break;
-                    default:
-                        echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
-                        echo '<em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg" ></em>';
-                        echo '<span class="title">'.$resource_titles[$type].'</span></div>';
-                        echo '<div class="item-content" id="div_'.$type.'">';
-                        if ($type == RESOURCE_LEARNPATH) {
-                            echo Display::return_message(
-                                get_lang(
-                                    'ToExportLearnpathWithQuizYouHaveToSelectQuiz'
-                                ),
-                                'warning'
-                            );
-                            echo Display::return_message(
-                                get_lang(
-                                    'IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'
-                                ),
-                                'warning'
-                            );
-                        }
-                        if ($type == RESOURCE_DOCUMENT) {
-                            if (api_get_setting('show_glossary_in_documents') != 'none') {
-                                echo Display::return_message(
-                                    get_lang(
-                                        'ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'
-                                    ),
-                                    'warning'
-                                );
-                            }
-                        }
-
-                        echo '<div class="well">';
-                        echo '<div class="btn-group">';
-                        echo "<a class=\"btn btn-default\" 
-                                    href=\"javascript: void(0);\" 
-                                    onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
-                        echo "<a class=\"btn btn-default\" 
-                                    href=\"javascript: void(0);\" 
-                                    onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
-                        echo '</div>';
-                        echo '<ul class="list-backups-options">';
-                        foreach ($resources as $id => $resource) {
-                            if ($resource) {
-                                echo '<li>';
-                                // Event obj in 1.9.x in 1.10.x the class is CalendarEvent
-                                Resource::setClassType($resource);
-                                echo '<label class="checkbox">';
-                                echo '<input 
-                                    type="checkbox" 
-                                    name="resource['.$type.']['.$id.']"  
-                                    id="resource['.$type.']['.$id.']" />';
-                                $resource->show();
-                                echo '</label>';
-                                echo '</li>';
-                            }
-                        }
-                        echo '</ul>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '<script language="javascript">exp('."'$type'".')</script>';
-                        $element_count++;
-                }
-            }
-        }
+        $resource_titles = self::getResourceTitleList();
+        $element_count = self::parseResources($resource_titles, $course->resources, true, true);
 
         // Fixes forum order
         if (!empty($forum_categories)) {
@@ -393,6 +314,127 @@ class CourseSelectForm
         echo '</form>';
         echo '</div>';
         echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
+    }
+
+    /**
+     * @param array $resource_titles
+     * @param array $resourceList
+     * @param bool  $showHeader
+     * @param bool  $showItems
+     *
+     * @return int
+     */
+    public static function parseResources(
+        $resource_titles,
+        $resourceList,
+        $showHeader = true,
+        $showItems = true
+    ) {
+        $element_count = 0;
+        foreach ($resourceList as $type => $resources) {
+            if (count($resources) > 0) {
+                switch ($type) {
+                    // Resources to avoid
+                    case RESOURCE_FORUMCATEGORY:
+                        foreach ($resources as $id => $resource) {
+                            $forum_categories[$id] = $resource;
+                        }
+                        $element_count++;
+                        break;
+                    case RESOURCE_FORUM:
+                        foreach ($resources as $id => $resource) {
+                            $forums[$resource->obj->forum_category][$id] = $resource;
+                        }
+                        $element_count++;
+                        break;
+                    case RESOURCE_FORUMTOPIC:
+                        foreach ($resources as $id => $resource) {
+                            $forum_topics[$resource->obj->forum_id][$id] = $resource;
+                        }
+                        $element_count++;
+                        break;
+                    case RESOURCE_LINKCATEGORY:
+                    case RESOURCE_FORUMPOST:
+                    case RESOURCE_QUIZQUESTION:
+                    case RESOURCE_SURVEYQUESTION:
+                    case RESOURCE_SURVEYINVITATION:
+                    case RESOURCE_SCORM:
+                        break;
+                    default:
+                        if ($showHeader) {
+                            echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
+                            echo '<em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg"></em>';
+                            echo '<span class="title">'.$resource_titles[$type].'</span>';
+                            echo '</div>';
+                            echo '<div class="item-content" id="div_'.$type.'">';
+                        }
+
+                        if ($type == RESOURCE_LEARNPATH) {
+                            echo Display::return_message(
+                                get_lang(
+                                    'ToExportLearnpathWithQuizYouHaveToSelectQuiz'
+                                ),
+                                'warning'
+                            );
+                            echo Display::return_message(
+                                get_lang(
+                                    'IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'
+                                ),
+                                'warning'
+                            );
+                        }
+
+                        if ($type == RESOURCE_DOCUMENT) {
+                            if (api_get_setting('show_glossary_in_documents') != 'none') {
+                                echo Display::return_message(
+                                    get_lang(
+                                        'ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'
+                                    ),
+                                    'warning'
+                                );
+                            }
+                        }
+
+                        if ($showItems) {
+                            echo '<div class="well">';
+                            echo '<div class="btn-group">';
+                            echo "<a class=\"btn btn-default\" 
+                                        href=\"javascript: void(0);\" 
+                                        onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
+                            echo "<a class=\"btn btn-default\" 
+                                        href=\"javascript: void(0);\" 
+                                        onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
+                            echo '</div>';
+                            echo '<ul class="list-backups-options">';
+                            foreach ($resources as $id => $resource) {
+                                if ($resource) {
+                                    echo '<li>';
+                                    // Event obj in 1.9.x in 1.10.x the class is CalendarEvent
+                                    Resource::setClassType($resource);
+                                    echo '<label class="checkbox">';
+                                    echo '<input 
+                                        type="checkbox" 
+                                        name="resource['.$type.']['.$id.']"  
+                                        id="resource['.$type.']['.$id.']" />';
+                                    $resource->show();
+                                    echo '</label>';
+                                    echo '</li>';
+                                }
+                            }
+                            echo '</ul>';
+                            echo '</div>';
+                        }
+
+                        if ($showHeader) {
+                            echo '</div>';
+                            echo '<script language="javascript">exp('."'$type'".')</script>';
+                        }
+                        $element_count++;
+                }
+            }
+        }
+
+        return $element_count;
     }
 
     /**
@@ -638,8 +680,11 @@ class CourseSelectForm
                                         }
                                     }
                                 }
-                                if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
-                                    unset($course->resources[$type][$id]);
+                                // quiz question can be, not attached to an exercise
+                                if ($type != RESOURCE_QUIZQUESTION) {
+                                    if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
+                                        unset($course->resources[$type][$id]);
+                                    }
                                 }
                             }
                         }

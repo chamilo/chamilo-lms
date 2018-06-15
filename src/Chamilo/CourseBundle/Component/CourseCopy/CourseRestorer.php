@@ -152,7 +152,7 @@ class CourseRestorer
         }
         $this->destination_course_id = $course_info['real_id'];
 
-        //Getting first teacher (for the forums)
+        // Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code(
             $course_info['code']
         );
@@ -207,7 +207,6 @@ class CourseRestorer
 
         // Restore the item properties
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
         foreach ($this->course->resources as $type => $resources) {
             if (is_array($resources)) {
                 foreach ($resources as $id => $resource) {
@@ -222,7 +221,7 @@ class CourseRestorer
 
                             $params = [];
                             if (!empty($session_id)) {
-                                $params['session_id'] = intval($session_id);
+                                $params['session_id'] = (int) $session_id;
                             }
 
                             $res = Database::query($sql);
@@ -1080,7 +1079,7 @@ class CourseRestorer
     public function restore_forums($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_FORUM)) {
-            $sessionId = intval($sessionId);
+            $sessionId = (int) $sessionId;
             $table_forum = Database::get_course_table(TABLE_FORUM);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
@@ -1458,7 +1457,7 @@ class CourseRestorer
     public function restore_tool_intro($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
-            $sessionId = intval($sessionId);
+            $sessionId = (int) $sessionId;
             $tool_intro_table = Database::get_course_table(TABLE_TOOL_INTRO);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
@@ -1503,7 +1502,7 @@ class CourseRestorer
     public function restore_events($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_EVENT)) {
-            $sessionId = intval($sessionId);
+            $sessionId = (int) $sessionId;
             $table = Database::get_course_table(TABLE_AGENDA);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_EVENT] as $id => $event) {
@@ -1638,7 +1637,7 @@ class CourseRestorer
                 );
 
                 $params = [];
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $params['session_id'] = $session_id;
                 $params['c_id'] = $this->destination_course_id;
                 $params['description_type'] = self::DBUTF8($descriptionType);
@@ -1668,7 +1667,7 @@ class CourseRestorer
     public function restore_announcements($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
-            $sessionId = intval($sessionId);
+            $sessionId = (int) $sessionId;
             $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
@@ -1880,7 +1879,7 @@ class CourseRestorer
                         $params['session_id'] = $my_session_id;
                     } else {
                         if (!empty($session_id)) {
-                            $session_id = intval($session_id);
+                            $session_id = (int) $session_id;
                             $params['session_id'] = $session_id;
                         }
                     }
@@ -1897,7 +1896,6 @@ class CourseRestorer
                 }
 
                 $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
-
                 $order = 0;
                 if (!empty($quiz->question_ids)) {
                     foreach ($quiz->question_ids as $index => $question_id) {
@@ -1911,6 +1909,7 @@ class CourseRestorer
                         Database::query($sql);
                     }
                 }
+
             }
         }
     }
@@ -2030,7 +2029,6 @@ class CourseRestorer
                         $quizAnswer
                             ->setId($answerId)
                             ->setIdAuto($answerId);
-
                         $em->merge($quizAnswer);
                         $em->flush();
 
@@ -2299,7 +2297,7 @@ class CourseRestorer
      */
     public function restore_surveys($sessionId = 0)
     {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
             $table_sur = Database::get_course_table(TABLE_SURVEY);
             $table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -2405,7 +2403,6 @@ class CourseRestorer
                             // Delete the existing survey with the same code and language and
                             // import the one of the source course
                             // getting the information of the survey (used for when the survey is shared)
-
                             $sql = "SELECT * FROM $table_sur
                                     WHERE
                                         c_id = ".$this->destination_course_id." AND
@@ -2641,7 +2638,7 @@ class CourseRestorer
                         }
                         $condition_session = $my_session_id;
                     } else {
-                        $session_id = intval($session_id);
+                        $session_id = (int) $session_id;
                         $condition_session = $session_id;
                     }
                 }
@@ -3011,7 +3008,7 @@ class CourseRestorer
             foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
                 $params = [];
                 if (!empty($session_id)) {
-                    $session_id = intval($session_id);
+                    $session_id = (int) $session_id;
                     $params['session_id'] = $session_id;
                 }
 

@@ -18,6 +18,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
+$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+
 // Database table definitions
 $table_survey = Database::get_course_table(TABLE_SURVEY);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -72,6 +74,13 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
 
+    if ($allowSurveyAvailabilityDatetime) {
+        $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
+        $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
+        $defaults['start_date'] = $defaults['avail_from'];
+        $defaults['end_date'] = $defaults['avail_till'];
+    }
+
     $link_info = GradebookUtils::isResourceInCourseGradebook(
         $course_id,
         $gradebook_link_type,
@@ -93,9 +102,15 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     }
 } else {
     $defaults['survey_language'] = $_course['language'];
-    $defaults['start_date'] = date('Y-m-d', api_strtotime(api_get_local_time()));
+    $defaults['start_date'] = date(
+        $allowSurveyAvailabilityDatetime ? 'Y-m-d 00:00:00' : 'Y-m-d',
+        api_strtotime(api_get_local_time())
+    );
     $startdateandxdays = time() + 864000; // today + 10 days
-    $defaults['end_date'] = date('Y-m-d', $startdateandxdays);
+    $defaults['end_date'] = date(
+        $allowSurveyAvailabilityDatetime ? 'Y-m-d 23:59:59' : 'Y-m-d',
+        $startdateandxdays
+    );
     //$defaults['survey_share']['survey_share'] = 0;
     //$form_share_value = 1;
     $defaults['anonymous'] = 0;
@@ -149,8 +164,14 @@ $form->addElement(
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
-$form->addElement('date_picker', 'start_date', get_lang('StartDate'));
-$form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+
+if ($allowSurveyAvailabilityDatetime) {
+    $form->addDateTimePicker('start_date', get_lang('StartDate'));
+    $form->addDateTimePicker('end_date', get_lang('EndDate'));
+} else {
+    $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+    $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+}
 
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = [
@@ -298,8 +319,8 @@ if ($_GET['action'] == 'add') {
     $form->addRule('survey_code', '', 'maxlength', 20);
 }
 $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('start_date', get_lang('InvalidDate'), 'date');
-$form->addRule('end_date', get_lang('InvalidDate'), 'date');
+$form->addRule('start_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime': 'date');
+$form->addRule('end_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime': 'date');
 $form->addRule(
     ['start_date', 'end_date'],
     get_lang('StartDateShouldBeBeforeEndDate'),

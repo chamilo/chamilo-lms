@@ -112,7 +112,7 @@ class learnpathItem
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
             } else {
-                $course_id = intval($course_id);
+                $course_id = (int) $course_id;
             }
             $sql = "SELECT * FROM $items_table
                     WHERE iid = $id";
@@ -365,7 +365,7 @@ class learnpathItem
         }
         $res = 1;
         if (!empty($this->attempt_id)) {
-            $res = intval($this->attempt_id);
+            $res = (int) $this->attempt_id;
         }
         if (self::DEBUG > 0) {
             error_log(
@@ -3587,7 +3587,7 @@ class learnpathItem
         }
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = intval($this->lp_id);
+        $lp_id = (int) $this->lp_id;
         $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
@@ -4501,7 +4501,7 @@ class learnpathItem
      */
     public function getForumThread($lpCourseId, $lpSessionId = 0)
     {
-        $lpSessionId = intval($lpSessionId);
+        $lpSessionId = (int) $lpSessionId;
         $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -4565,7 +4565,7 @@ class learnpathItem
         $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
         $forumThread = $threadRepo->findOneBy([
             'threadTitle' => "{$this->title} - {$this->db_id}",
-            'forumId' => intval($currentForumId),
+            'forumId' => (int) $currentForumId,
         ]);
 
         if (!$forumThread) {

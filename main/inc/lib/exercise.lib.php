@@ -2923,7 +2923,7 @@ EOT;
             } else {
                 $conditions = [
                     'where' => [
-                        $active_sql.' (session_id = 0 OR session_id = ? ) AND c_id = ? '.$needle_where.$time_conditions => [
+                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$time_conditions => [
                             $session_id,
                             $course_id,
                             $needle,
@@ -3012,7 +3012,7 @@ EOT;
         } else {
             // All exercises
             $conditions = [
-                'where' => ["$sql_active_exercises (session_id = 0 OR session_id = ? ) AND c_id=?" => $params],
+                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id=?" => $params],
                 'order' => 'title',
             ];
         }

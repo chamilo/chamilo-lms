@@ -218,6 +218,7 @@ class SurveyManager
      */
     public static function store_survey($values)
     {
+        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
         $_user = api_get_user_info();
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
@@ -338,8 +339,12 @@ class SurveyManager
                 'subtitle' => $values['survey_subtitle'],
                 'author' => $_user['user_id'],
                 'lang' => $values['survey_language'],
-                'avail_from' => $values['start_date'],
-                'avail_till' => $values['end_date'],
+                'avail_from' => $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['start_date'])
+                    : $values['start_date'],
+                'avail_till' => $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['end_date'])
+                    : $values['end_date'],
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],
@@ -444,8 +449,12 @@ class SurveyManager
                 'subtitle' => $values['survey_subtitle'],
                 'author' => $_user['user_id'],
                 'lang' => $values['survey_language'],
-                'avail_from' => $values['start_date'],
-                'avail_till' => $values['end_date'],
+                'avail_from' => $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['start_date'])
+                    : $values['start_date'],
+                'avail_till' => $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['end_date'])
+                    : $values['end_date'],
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],

@@ -40,23 +40,22 @@ Display::display_header($nameTools);
 
 // Display the tool title
 echo Display::page_header($nameTools);
+$action = isset($_POST['action']) ? $_POST['action'] : '';
+$backupOption = isset($_POST['backup_option']) ? $_POST['backup_option'] : '';
 
-if (Security::check_token('post') && (
-        (
-            isset($_POST['action']) &&
-            $_POST['action'] == 'course_select_form'
-        ) || (
-            isset($_POST['backup_option']) &&
-            $_POST['backup_option'] == 'full_backup'
-        )
-    )
+if (Security::check_token('post') &&
+    ($action === 'course_select_form' || $backupOption === 'full_backup')
 ) {
     // Clear token
     Security::clear_token();
-    $cb = new CourseBuilder();
-    $course = $cb->build();
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+
+    if ($action === 'course_select_form') {
+        $cb = new CourseBuilder('partial');
+        $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
+    } else {
+        $cb = new CourseBuilder('complete');
+        $course = $cb->build();
     }
     $zipFile = CourseArchiver::createBackup($course);
     echo Display::return_message(get_lang('BackupCreated'), 'confirm');
@@ -66,11 +65,7 @@ if (Security::check_token('post') && (
         api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zipFile.'&'.api_get_cidreq(),
         ['class' => 'btn btn-primary btn-large']
     );
-} elseif (Security::check_token('post') && (
-        isset($_POST['backup_option']) &&
-        $_POST['backup_option'] == 'select_items'
-    )
-) {
+} elseif (Security::check_token('post') && $backupOption === 'select_items') {
     // Clear token
     Security::clear_token();
     $cb = new CourseBuilder('partial');
@@ -120,3 +115,4 @@ if (Security::check_token('post') && (
 }
 
 Display::display_footer();
+

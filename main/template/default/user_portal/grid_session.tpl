@@ -132,7 +132,6 @@
                             {# Linkt to first course #}
                             {% set session_link = row.courses.0.link %}
                         {% endif %}
-
                         <a href="{{ session_link }}">
                             {{ session_image }} {{ row.title }}
                         </a>
@@ -144,8 +143,8 @@
                        aria-expanded="false">
                         {{ session_image }} {{ row.title }}
                     </a>
+                    {% set collapsable = 'collapse' %}
                 {% endif %}
-
                 {% if row.edit_actions != '' %}
                     <div class="pull-right">
                         <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">

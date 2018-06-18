@@ -310,6 +310,8 @@ See https://support.chamilo.org/issues/6976
 #scorm-info {
     padding: 0;
     background-color: #EBF3F5;
+    display: inline-block;
+    width: 100%;
 }
 
 #scorm-info .description-autor p {
@@ -342,6 +344,13 @@ See https://support.chamilo.org/issues/6976
 
 .scorm-title {
     padding: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+.scorm-body{
+    display: inline-block;
+    width: 100%;
 }
 
 .scorm-title h4 {

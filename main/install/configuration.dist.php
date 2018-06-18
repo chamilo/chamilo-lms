@@ -898,6 +898,13 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide LP item prerequisite label in the LP view
 //$_configuration['hide_accessibility_label_on_lp_item'] = true;
 
+// Round score in exercise category export
+//$_configuration['exercise_category_round_score_in_export'] = false;
+
+// Redirect index to url for logged in users
+// In this example the index.php will be redirected to user_portal.php for logged in users
+//$_configuration['redirect_index_to_url_for_logged_users'] = 'user_portal.php';
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

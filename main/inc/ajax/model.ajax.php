@@ -1239,6 +1239,8 @@ switch ($action) {
         ];
         $extraFieldsToAdd = [];
         $extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+        $roundValues = api_get_configuration_value('exercise_category_round_score_in_export');
+
         if (!empty($extraFields) && isset($extraFields['fields'])) {
             $extraField = new ExtraField('user');
             foreach ($extraFields['fields'] as $variable) {
@@ -1257,7 +1259,7 @@ switch ($action) {
         $columns[] = 'exe_date';
         $columns[] = 'score';
 
-        if ($operation == 'excel') {
+        if ($operation === 'excel') {
             $columns = [
                 'firstname',
                 'lastname',
@@ -1320,7 +1322,8 @@ switch ($action) {
             true,
             true,
             $extraFieldsToAdd,
-            true
+            true,
+            $roundValues
         );
         break;
     case 'get_hotpotatoes_exercise_results':

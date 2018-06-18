@@ -1686,6 +1686,7 @@ HOTSPOT;
      * @param bool   $showExerciseCategories
      * @param array  $userExtraFieldsToAdd
      * @param bool   $useCommaAsDecimalPoint
+     * @param bool   $roundValues
      *
      * @return array
      */
@@ -1701,7 +1702,8 @@ HOTSPOT;
         $showSessionField = false,
         $showExerciseCategories = false,
         $userExtraFieldsToAdd = [],
-        $useCommaAsDecimalPoint = false
+        $useCommaAsDecimalPoint = false,
+        $roundValues = false
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1734,7 +1736,7 @@ HOTSPOT;
             $session_id_and = " AND te.session_id = $sessionId ";
             $sessionCondition = " AND ttte.session_id = $sessionId";
         }
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
         $exercise_where = '';
         if (!empty($exercise_id)) {
             $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
@@ -1967,8 +1969,8 @@ HOTSPOT;
         // Simple exercises
         if (empty($hotpotatoe_where)) {
             $column = !empty($column) ? Database::escape_string($column) : null;
-            $from = intval($from);
-            $number_of_items = intval($number_of_items);
+            $from = (int) $from;
+            $number_of_items = (int) $number_of_items;
 
             if (!empty($column)) {
                 $sql .= " ORDER BY $column $direction ";
@@ -2103,11 +2105,11 @@ HOTSPOT;
                             false,
                             false,
                             $decimalSeparator,
-                            $thousandSeparator
+                            $thousandSeparator,
+                            $roundValues
                         );
 
                         $actions = '<div class="pull-right">';
-
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(
@@ -2363,7 +2365,8 @@ HOTSPOT;
                                     false,
                                     false,
                                     $decimalSeparator,
-                                    $thousandSeparator
+                                    $thousandSeparator,
+                                    $roundValues
                                 );
 
                                 $results[$i]['category_'.$categoryId] = $scoreToDisplay;
@@ -2375,7 +2378,8 @@ HOTSPOT;
                                     true, // $show_only_percentage = false
                                     true, // hide % sign
                                     $decimalSeparator,
-                                    $thousandSeparator
+                                    $thousandSeparator,
+                                    $roundValues
                                 );
                                 $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
                                 $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
@@ -2392,7 +2396,8 @@ HOTSPOT;
                                 true,
                                 true,
                                 $decimalSeparator,
-                                $thousandSeparator
+                                $thousandSeparator,
+                                $roundValues
                             );
 
                             $results[$i]['only_score'] = $scoreDisplay->format_score(
@@ -2488,6 +2493,7 @@ HOTSPOT;
      * @param bool   $hidePercentageSign    hide "%" sign
      * @param string $decimalSeparator
      * @param string $thousandSeparator
+     * @param bool   $roundValues This option rounds the float values into a int using ceil()
      *
      * @return string an html with the score modified
      */
@@ -2499,7 +2505,8 @@ HOTSPOT;
         $show_only_percentage = false,
         $hidePercentageSign = false,
         $decimalSeparator = '.',
-        $thousandSeparator = ','
+        $thousandSeparator = ',',
+        $roundValues = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
@@ -2522,8 +2529,14 @@ HOTSPOT;
 
         // Formats values
         $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
-        $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
-        $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+
+        if ($roundValues) {
+            $score = ceil($score);
+            $weight = ceil($weight);
+        } else {
+            $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
+            $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+        }
 
         if ($show_percentage) {
             $percentageSign = '%';

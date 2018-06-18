@@ -50,17 +50,16 @@ if ($myLP) {
     $progress_bar = $myLP->getProgressBar();
     $navigation_bar = $myLP->get_navigation_bar();
     $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
+
+    if ($mediaplayer) {
+        echo $mediaplayer;
+        ?>
+        <script>
+            $(function() {
+                jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+            });
+        </script>
+        <?php
+    }
 }
 session_write_close();
-?>
-<script>
-    $(document).ready(function() {
-        jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            success: function(player, node) {
-            }
-        });
-    });
-</script>
-<span>
-    <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;'; ?>
-</span>

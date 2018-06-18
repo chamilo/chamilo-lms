@@ -104,6 +104,7 @@ define('SURVEY_VISIBLE_PUBLIC', 2);
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
 define('TOOL_DOCUMENT', 'document');
 define('TOOL_LP_FINAL_ITEM', 'final_item');
+define('TOOL_HIGHLIGHTED_DOCUMENT', 'highlighted_document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');

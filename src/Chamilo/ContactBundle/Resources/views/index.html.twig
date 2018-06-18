@@ -6,7 +6,30 @@
     <div class="page-contact">
     <h2 class="title">{{ 'Contact' | trans  }}</h2>
     {{ form_start(form) }}
-    {{ form_widget(form, {'attr': {'class': ''}}) }}
+
+
+    {#{{ form_widget(form, {'attr': {'class': ''}}) }}#}
+
+    {{ form_row(form.category) }}
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.lastname) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.message) }}
+    {{ form_row(form.gdpr_checkbox) }}
+
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <div class="form-control" disabled=disabled style="height: 150px; overflow: auto;">
+                {% autoescape false %}
+                {{ 'Accept GDPR conditions text' | trans }}
+                {% endautoescape %}
+            </div>
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
 
     <div class="form-group">
         <div class="col-sm-2"></div>

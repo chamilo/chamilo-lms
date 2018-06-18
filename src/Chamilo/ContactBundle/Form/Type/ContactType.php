@@ -40,7 +40,7 @@ class ContactType extends AbstractType
             ->add('message', 'textarea')
             // Ofaj
             ->add('gdpr_checkbox', CheckboxType::class, ['mapped' => false])
-            ->add(
+            /*->add(
                 'gdpr_textarea',
                 'textarea',
                 [
@@ -49,7 +49,7 @@ class ContactType extends AbstractType
                     'attr' => ['rows' => 5],
                     //'label_attr' => ['style' => 'display:none'],
                 ]
-            )
+            )*/
             ->add(
                 'send',
                 SubmitType::class,

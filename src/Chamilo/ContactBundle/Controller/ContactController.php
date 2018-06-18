@@ -44,8 +44,6 @@ class ContactController extends Controller
                 'email' => $user->getEmail(),
             ];
         }
-        // Ofaj
-        $data['gdpr_textarea'] = $translator->trans('Accept GDPR conditions text');
 
         $form = $this->createForm($type, $data);
 

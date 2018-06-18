@@ -451,6 +451,27 @@ switch ($action) {
                             $description,
                             $prerequisites
                         );
+                    } elseif ($_POST['type'] == TOOL_HIGHLIGHTED_DOCUMENT) {
+                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
+                            $document_id = $_POST['path'];
+                        } else {
+                            $document_id = $_SESSION['oLP']->createHighlightedDocument(
+                                $_course,
+                                $_POST['content_lp'],
+                                $_POST['title'],
+                                $directoryParentId
+                            );
+                        }
+
+                        $new_item_id = $_SESSION['oLP']->add_item(
+                            $parent,
+                            $previous,
+                            TOOL_HIGHLIGHTED_DOCUMENT,
+                            $document_id,
+                            $post_title,
+                            $description,
+                            $prerequisites
+                        );
                     } else {
                         // For all other item types than documents,
                         // load the item using the item type and path rather than its ID.

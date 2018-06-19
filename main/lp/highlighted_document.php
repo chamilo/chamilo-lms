@@ -57,12 +57,12 @@ $documentPath = '/document'.$document->getPath();
 $documentText = file_get_contents($coursePath.$documentPath);
 $documentText = api_remove_tags_with_space($documentText);
 
-$words = array_map(
-    function ($word) {
-        return nl2br($word);
-    },
-    str_word_count($documentText, 2, '0..9'."\n")
-);
+$wordsInfo = preg_split('/ |\n/', $documentText, -1, PREG_SPLIT_OFFSET_CAPTURE);
+$words = [];
+
+foreach ($wordsInfo as $wordInfo) {
+    $words[$wordInfo[1]] = nl2br($wordInfo[0]);
+}
 
 $htmlHeadXtra[] = '<script>
     var words = '.json_encode($words, JSON_OBJECT_AS_ARRAY).',

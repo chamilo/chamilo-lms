@@ -9,7 +9,7 @@
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>
                 {% endif %}
-                {% if course.edit_actions != '' %}
+                {% if course.edit_actions %}
                     <div class="admin-actions">
                         {% if course.document == '' %}
                             <a class="btn btn-default btn-sm" href="{{ course.edit_actions }}">
@@ -145,10 +145,11 @@
                     </a>
                     {% set collapsable = 'collapse' %}
                 {% endif %}
-                {% if row.edit_actions != '' %}
+                {% if row.show_actions %}
                     <div class="pull-right">
-                        <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        <a href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ row.id }}">
+                            <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
+                                 title="{{ "Edit"|get_lang }}">
                         </a>
                     </div>
                 {% endif %}

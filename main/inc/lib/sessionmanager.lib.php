@@ -4583,6 +4583,33 @@ SQL;
     }
 
     /**
+     * @param int  $id
+     * @param bool $checkSession
+     *
+     * @return bool
+     */
+    public static function cantEditSession($id, $checkSession = true)
+    {
+        if (!self::allowToManageSessions()) {
+            return false;
+        }
+
+        if (api_is_platform_admin() && self::allowed($id)) {
+            return true;
+        }
+
+        if ($checkSession) {
+            if (self::allowed($id)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Protect a session to be edited.
      *
      * @param int  $id
@@ -4592,19 +4619,7 @@ SQL;
      */
     public static function protectSession($id, $checkSession = true)
     {
-        if (self::allowToManageSessions()) {
-            if (api_is_platform_admin() && self::allowed($id)) {
-                return true;
-            }
-
-            if ($checkSession) {
-                if (self::allowed($id)) {
-                    return true;
-                } else {
-                    api_not_allowed(true);
-                }
-            }
-        } else {
+        if (!self::cantEditSession($id, $checkSession)) {
             api_not_allowed(true);
         }
     }

@@ -49,9 +49,7 @@ class ContactController extends Controller
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
-
             $em = $this->getDoctrine()->getManager();
-
             $category = $form->get('category')->getData();
             /** @var Category $category */
             $category = $em->getRepository('ChamiloContactBundle:Category')->find($category);

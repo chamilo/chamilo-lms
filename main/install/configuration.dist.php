@@ -709,6 +709,25 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;
 
+// Show multiple conditions to user during sign up process
+// Example with a GDPR condition
+/*$_configuration['show_conditions_to_user'] = [
+    'conditions' => [
+        [
+            'variable' => 'gdpr', // internal extra field name
+            'display_text' => 'GDPRTitle', // checkbox title will be translated with get_lang('GDPRTitle')
+            'text_area' => 'GDPRTextArea', // this will be translated using get_lang('GDPRTextArea')
+        ],
+        [
+            'variable' => 'my_terms',
+            'display_text' => 'My test conditions',
+            'text_area' => 'This is a long text area, with lot of terms and conditions ... ',
+        ],
+    ],
+];*/
+
+
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

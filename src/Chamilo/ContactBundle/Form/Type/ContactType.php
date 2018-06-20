@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * Class ContactType.
@@ -37,14 +38,25 @@ class ContactType extends AbstractType
             ->add('email')
             ->add('subject', 'text')
             ->add('message', 'textarea')
+            // Ofaj
+            ->add('gdpr_checkbox', CheckboxType::class, ['mapped' => false])
+            /*->add(
+                'gdpr_textarea',
+                'textarea',
+                [
+                    'disabled' => 'disabled',
+                    'label' => false,
+                    'attr' => ['rows' => 5],
+                    //'label_attr' => ['style' => 'display:none'],
+                ]
+            )*/
             ->add(
                 'send',
                 SubmitType::class,
                 [
                     'attr' => ['class' => 'btn btn-primary'],
                 ]
-            )
-        ;
+            );
     }
 
     /**

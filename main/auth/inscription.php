@@ -4,9 +4,9 @@
 use ChamiloSession as Session;
 
 /**
- *  This script displays a form for registering new users.
+ * This script displays a form for registering new users.
  *
- *  @package    chamilo.auth
+ * @package    chamilo.auth
  */
 
 //quick hack to adapt the registration form result to the selected registration language
@@ -26,18 +26,15 @@ $allowedFields = [
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
-
 if ($allowedFieldsConfiguration !== false) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
 
 $gMapsPlugin = GoogleMapsPlugin::create();
-$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($geolocalization) {
-    $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
+if ($gMapsPlugin->get('enable_api') === 'true') {
+    $key = $gMapsPlugin->get('api_key');
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
 }
 
 $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
@@ -107,11 +104,13 @@ $(document).ready(function() {
 });
 </script>';
 
+$extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting('allow_registration') === 'false';
+$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
+    api_get_setting('allow_registration') === 'false';
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -123,6 +122,30 @@ if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['_user']['language'];
 } else {
     $user_selected_language = api_get_setting('platformLanguage');
+}
+
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    // Create user extra fields for the conditions
+    $userExtraField = new ExtraField('user');
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
+        if ($exists == false) {
+            $params = [
+                'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'variable' => $condition['variable'],
+                'display_text' => $condition['display_text'],
+                'default_value' => '',
+                'visible_to_self' => true,
+                'visible_to_others' => false,
+                'changeable' => true,
+                'filter' => false,
+            ];
+            $userExtraField->save($params);
+        }
+    }
 }
 
 $form = new FormValidator('registration');
@@ -228,7 +251,15 @@ if ($user_already_registered_show_terms === false) {
         );
         $form->applyFilter('username', 'trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule(
+            'username',
+            sprintf(
+                get_lang('UsernameMaxXCharacters'),
+                (string) USERNAME_MAX_LENGTH
+            ),
+            'maxlength',
+            USERNAME_MAX_LENGTH
+        );
         $form->addRule('username', get_lang('UsernameWrong'), 'username');
         $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
@@ -362,6 +393,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
@@ -373,6 +405,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
@@ -384,6 +417,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
     ) {
@@ -395,6 +429,7 @@ if ($user_already_registered_show_terms === false) {
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
+
     if (api_get_setting('extended_profile') === 'true') {
         if (api_get_setting('extendedprofile_registration', 'mycomptetences') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') === 'true'
@@ -433,10 +468,22 @@ if ($user_already_registered_show_terms === false) {
         in_array('extra_fields', $allowedFields)
     ) {
         $extraField = new ExtraField('user');
-        $extraFieldList = isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
-        $returnParams = $extraField->addElements($form, 0, [], false, false, $extraFieldList);
+        $extraFieldList = [];
+        if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
+            $extraFieldList = $allowedFields['extra_fields'];
+        }
+        $returnParams = $extraField->addElements(
+            $form,
+            0,
+            [],
+            false,
+            false,
+            $extraFieldList
+        );
+        $extraFieldsLoaded = true;
     }
 }
+
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];
 } else {
@@ -719,6 +766,31 @@ if ($blockButton) {
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
 
+if ($extraConditions && $extraFieldsLoaded) {
+    // Set conditions as "required" and also change the labels
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $children = $element->getElements();
+            /** @var HTML_QuickForm_checkbox $child */
+            foreach ($children as $child) {
+                $child->setText(get_lang($condition['display_text']));
+            }
+            $form->setRequired($element);
+            if (!empty($condition['text_area'])) {
+                $element->setLabel(
+                    [
+                        '',
+                        //'<textarea rows="5" disabled cols="100%">'.get_lang($condition['text_area']).'</textarea>',
+                        '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.get_lang($condition['text_area']).'</div>',
+                    ]
+                );
+            }
+        }
+    }
+}
+
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
     // Make *sure* the login isn't too long
@@ -800,7 +872,7 @@ if ($form->validate()) {
             $form
         );
 
-        //update the extra fields
+        // Update the extra fields
         $count_extra_field = count($extras);
         if ($count_extra_field > 0 && is_integer($user_id)) {
             foreach ($extras as $key => $value) {
@@ -827,7 +899,6 @@ if ($form->validate()) {
         if ($user_id) {
             // Storing the extended profile
             $store_extended = false;
-
             $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
 
             if (api_get_setting('extended_profile') == 'true' &&

@@ -592,6 +592,7 @@ switch ($action) {
                             'success'
                         )
                     );
+                    Security::clear_token();
                     header('Location: '.$homeUrl);
                     exit;
                 }
@@ -641,6 +642,7 @@ switch ($action) {
                                 $sendToUsersInSession
                             );
                         }
+                        Security::clear_token();
                         header('Location: '.$homeUrl);
                         exit;
                     }

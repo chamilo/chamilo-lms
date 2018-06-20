@@ -32,7 +32,7 @@ msgid "Required field"
 msgstr "Eingabe erforderlich"
 
 msgid "Gdpr checkbox"
-msgstr "Durch Anklicken dieses Feldes bestätige ich, stimme ich der Bearbeitung meiner Daten durch das DFJW zu"
+msgstr "Ich stimme der Bearbeitung meiner Daten durch das DFJW zu."
 
 msgid "Accept GDPR conditions text"
 msgstr ""

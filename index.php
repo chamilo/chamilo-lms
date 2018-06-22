@@ -14,17 +14,15 @@ define('CHAMILO_LOAD_WYSIWYG', false);
 $cidReset = true;
 require_once 'main/inc/global.inc.php';
 
-$allow = api_get_configuration_value('plugin_redirection_enabled');
-if ($allow) {
-    RedirectionPlugin::redirectUser(api_get_user_id());
-}
-
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS; //rewritten below if including HTML file
 $includeFile = !empty($_GET['include']);
 if ($includeFile) {
     $this_section = SECTION_INCLUDE;
+} elseif (api_get_configuration_value('plugin_redirection_enabled')) {
+    RedirectionPlugin::redirectUser(api_get_user_id());
 }
+
 $header_title = null;
 if (!api_is_anonymous()) {
     $header_title = ' ';

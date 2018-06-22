@@ -1529,8 +1529,6 @@ class IndexManager
                                     'id' => $session_id,
                                 ];
                                 $session_box = Display::getSessionTitleBox($session_id);
-                                $actions = api_get_path(WEB_CODE_PATH).
-                                    'session/resume_session.php?id_session='.$session_id;
                                 $coachId = $session_box['id_coach'];
                                 $extraFieldValue = new ExtraFieldValue('session');
                                 $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -1552,7 +1550,7 @@ class IndexManager
                                 $params['date'] = $session_box['dates'];
                                 $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                                 $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
-                                $params['edit_actions'] = $actions;
+                                $params['show_actions'] = SessionManager::cantEditSession($session_id);
                                 $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
                                 $params['description'] = $session_box['description'];
                                 $params['visibility'] = $session_box['visibility'];
@@ -1687,7 +1685,7 @@ class IndexManager
                                     $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
                                     $sessionParams[0]['title'] = $session_box['title'];
                                     $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
-                                    $sessionParams[0]['show_actions'] = api_is_platform_admin();
+                                    $sessionParams[0]['show_actions'] = SessionManager::cantEditSession($session_id);
                                     $sessionParams[0]['courses'] = $html_courses_session;
                                     $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
                                     $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;

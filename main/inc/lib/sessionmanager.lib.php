@@ -2468,6 +2468,8 @@ class SessionManager
      * @param bool  $removeExistingCoursesWithUsers Whether to unsubscribe
      *                                              existing courses and users (true, default) or not (false)
      * @param bool  $copyEvaluation                 from base course to session course
+     * @return  bool False on failure, true otherwise
+     * @throws Exception
      * */
     public static function add_courses_to_session(
         $sessionId,
@@ -2723,6 +2725,7 @@ class SessionManager
                 SET nbr_courses = $nbr_courses
                 WHERE id = $sessionId";
         Database::query($sql);
+        return true;
     }
 
     /**

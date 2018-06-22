@@ -2081,6 +2081,15 @@ class SessionManager
                 $avoidDeleteThisUsers = " AND user_id NOT IN ('".implode("','", $userList)."')";
                 $sql .= $avoidDeleteThisUsers;
             }
+            Event::addEvent(
+                LOG_SESSION_DELETE_USER,
+                LOG_USER_ID,
+                'all',
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                null,
+                $sessionId
+            );
             Database::query($sql);
         }
 
@@ -2092,6 +2101,15 @@ class SessionManager
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
                         VALUES (0, $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
                 Database::query($sql);
+                Event::addEvent(
+                    LOG_SESSION_ADD_USER,
+                    LOG_USER_ID,
+                    $enreg_user,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    null,
+                    $sessionId
+                );
             }
         }
 

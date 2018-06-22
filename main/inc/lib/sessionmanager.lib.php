@@ -2481,6 +2481,17 @@ class SessionManager
             return false;
         }
 
+        $em = Database::getManager();
+
+        /** @var Session $session */
+        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+
+        if (!$session) {
+            return false;
+        }
+        $sessionVisibility = $session->getVisibility();
+
+
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -2575,7 +2586,7 @@ class SessionManager
                         if (empty($sessionCategory)) {
                             // There is no category for this course+session, so create one
                             $cat = new Category();
-                            $sessionName = api_get_session_name($sessionId);
+                            $sessionName = $session->getName();
                             $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
                             $cat->set_session_id($sessionId);
                             $cat->set_course_code($courseInfo['code']);
@@ -2683,8 +2694,8 @@ class SessionManager
                 $nbr_users = 0;
                 foreach ($user_list as $enreg_user) {
                     $enreg_user_id = intval($enreg_user['user_id']);
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id)
-                            VALUES ($sessionId, $courseId, $enreg_user_id)";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility)
+                            VALUES ($sessionId, $courseId, $enreg_user_id, $sessionVisibility)";
                     $result = Database::query($sql);
 
                     Event::addEvent(

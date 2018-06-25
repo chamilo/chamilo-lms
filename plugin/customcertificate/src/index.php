@@ -325,6 +325,16 @@ $element = &$form->createElement(
     'radio',
     'contents_type',
     '',
+    get_lang('ContentsHide'),
+    3,
+    ['id' => 'contents_type_3', 'onclick' => 'javascript: contentsTypeSwitchRadioButton();']
+);
+$group[] = $element;
+
+$element = &$form->createElement(
+    'radio',
+    'contents_type',
+    '',
     get_lang('ContentsCustom'),
     2,
     ['id' => 'contents_type_2', 'onclick' => 'javascript: contentsTypeSwitchRadioButton();']
@@ -373,7 +383,7 @@ $option1 = &$form->createElement(
     '',
     get_lang('UseDateSessionAccess'),
     0,
-    ['id' => 'contents_type_0', 'onclick' => 'javascript: dateCertificateSwitchRadioButton0();']
+    ['id' => 'date_change_0', 'onclick' => 'javascript: dateCertificateSwitchRadioButton0();']
 );
 $group[] = $option1;
 
@@ -383,7 +393,7 @@ $option2 = &$form->createElement(
     '',
     get_lang('None'),
     2,
-    ['id' => 'contents_type_2', 'onclick' => 'javascript: dateCertificateSwitchRadioButton2();']
+    ['id' => 'date_change_2', 'onclick' => 'javascript: dateCertificateSwitchRadioButton2();']
 );
 $group[] = $option2;
 
@@ -393,7 +403,7 @@ $option3 = &$form->createElement(
     '',
     get_lang('Custom'),
     1,
-    ['id' => 'contents_type_1', 'onclick' => 'javascript: dateCertificateSwitchRadioButton1();']
+    ['id' => 'date_change_1', 'onclick' => 'javascript: dateCertificateSwitchRadioButton1();']
 );
 $group[] = $option3;
 

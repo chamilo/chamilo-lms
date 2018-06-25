@@ -22,6 +22,7 @@ $strings['ContentsToShow'] = "Contents to show";
 $strings['ContentsCourseDescription'] = 'Use section "Course description"> "Contents"';
 $strings['ContentsIndexLearnpath'] = "Use learnpath index";
 $strings['ContentsCustom'] = "Use custom content";
+$strings['ContentsHide'] = "No show contents";
 $strings['Dates'] = "Dates";
 $strings['CourseDeliveryDates'] = "Course delivery dates";
 $strings['Custom'] = "Custom";

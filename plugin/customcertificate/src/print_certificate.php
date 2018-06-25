@@ -320,134 +320,136 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</div>';
 
     // Rear certificate
-    $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0px; padding:0px;">';
-    if ($infoCertificate['contents_type'] == 0) {
-        $courseDescription = new CourseDescription();
-        $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
-        $domd = new DOMDocument();
-        libxml_use_internal_errors(true);
-        if (isset($contentDescription['description_content'])) {
-            $domd->loadHTML($contentDescription['description_content']);
-        }
-        libxml_use_internal_errors(false);
-        $domx = new DOMXPath($domd);
-        $items = $domx->query("//li[@style]");
-        foreach ($items as $item) {
-            $item->removeAttribute("style");
-        }
-
-        $items = $domx->query("//span[@style]");
-        foreach ($items as $item) {
-            $item->removeAttribute("style");
-        }
-
-        $output = $domd->saveHTML();
-        $htmlText .= getIndexFiltered($output);
-    }
-
-    if ($infoCertificate['contents_type'] == 1) {
-        $items = [];
-        $categoriesTempList = learnpath::getCategories($courseId);
-        $categoryTest = new CLpCategory();
-        $categoryTest->setId(0);
-        $categoryTest->setName($plugin->get_lang('WithOutCategory'));
-        $categoryTest->setPosition(0);
-        $categories = [$categoryTest];
-
-        if (!empty($categoriesTempList)) {
-            $categories = array_merge($categories, $categoriesTempList);
-        }
-
-        foreach ($categories as $item) {
-            $categoryId = $item->getId();
-
-            if (!learnpath::categoryIsVisibleForStudent($item, api_get_user_entity($studentId))) {
-                continue;
+    if ($infoCertificate['contents_type'] != 3) {
+        $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0px; padding:0px;">';
+        if ($infoCertificate['contents_type'] == 0) {
+            $courseDescription = new CourseDescription();
+            $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
+            $domd = new DOMDocument();
+            libxml_use_internal_errors(true);
+            if (isset($contentDescription['description_content'])) {
+                $domd->loadHTML($contentDescription['description_content']);
+            }
+            libxml_use_internal_errors(false);
+            $domx = new DOMXPath($domd);
+            $items = $domx->query("//li[@style]");
+            foreach ($items as $item) {
+                $item->removeAttribute("style");
             }
 
-            $sql = "SELECT 1
-                    FROM $tblProperty
-                    WHERE tool = 'learnpath_category'
-                    AND ref = $categoryId
-                    AND visibility = 0
-                    AND (session_id = $sessionId OR session_id IS NULL)";
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                continue;
+            $items = $domx->query("//span[@style]");
+            foreach ($items as $item) {
+                $item->removeAttribute("style");
             }
 
-            $list = new LearnpathList(
-                $studentId,
-                $courseCode,
-                $sessionId,
-                null,
-                false,
-                $categoryId
-            );
+            $output = $domd->saveHTML();
+            $htmlText .= getIndexFiltered($output);
+        }
 
-            $flat_list = $list->get_flat_list();
+        if ($infoCertificate['contents_type'] == 1) {
+            $items = [];
+            $categoriesTempList = learnpath::getCategories($courseId);
+            $categoryTest = new CLpCategory();
+            $categoryTest->setId(0);
+            $categoryTest->setName($plugin->get_lang('WithOutCategory'));
+            $categoryTest->setPosition(0);
+            $categories = [$categoryTest];
 
-            if (empty($flat_list)) {
-                continue;
+            if (!empty($categoriesTempList)) {
+                $categories = array_merge($categories, $categoriesTempList);
             }
 
-            if (count($categories) > 1 && count($flat_list) > 0) {
-                if ($item->getName() != $plugin->get_lang('WithOutCategory')) {
-                    $items[] = '<h4 style="margin:0">'.$item->getName().'</h4>';
+            foreach ($categories as $item) {
+                $categoryId = $item->getId();
+
+                if (!learnpath::categoryIsVisibleForStudent($item, api_get_user_entity($studentId))) {
+                    continue;
                 }
-            }
 
-            foreach ($flat_list as $learnpath) {
-                $lpId = $learnpath['lp_old_id'];
                 $sql = "SELECT 1
                         FROM $tblProperty
-                        WHERE tool = 'learnpath'
-                        AND ref = $lpId AND visibility = 0
+                        WHERE tool = 'learnpath_category'
+                        AND ref = $categoryId
+                        AND visibility = 0
                         AND (session_id = $sessionId OR session_id IS NULL)";
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     continue;
                 }
-                $lpName = $learnpath['lp_name'];
-                $items[] = $lpName.'<br>';
+
+                $list = new LearnpathList(
+                    $studentId,
+                    $courseCode,
+                    $sessionId,
+                    null,
+                    false,
+                    $categoryId
+                );
+
+                $flat_list = $list->get_flat_list();
+
+                if (empty($flat_list)) {
+                    continue;
+                }
+
+                if (count($categories) > 1 && count($flat_list) > 0) {
+                    if ($item->getName() != $plugin->get_lang('WithOutCategory')) {
+                        $items[] = '<h4 style="margin:0">'.$item->getName().'</h4>';
+                    }
+                }
+
+                foreach ($flat_list as $learnpath) {
+                    $lpId = $learnpath['lp_old_id'];
+                    $sql = "SELECT 1
+                            FROM $tblProperty
+                            WHERE tool = 'learnpath'
+                            AND ref = $lpId AND visibility = 0
+                            AND (session_id = $sessionId OR session_id IS NULL)";
+                    $res = Database::query($sql);
+                    if (Database::num_rows($res) > 0) {
+                        continue;
+                    }
+                    $lpName = $learnpath['lp_name'];
+                    $items[] = $lpName.'<br>';
+                }
+                $items[] = '<br>';
             }
-            $items[] = '<br>';
+
+            if (count($items) > 0) {
+                $htmlText .= '<table width="100%" class="contents-learnpath">';
+                $htmlText .= '<tr>';
+                $htmlText .= '<td>';
+                $i = 0;
+                foreach ($items as $value) {
+                    if ($i == 50) {
+                        $htmlText .= '</td><td>';
+                    }
+                    $htmlText .= $value;
+                    $i++;
+                }
+                $htmlText .= '</td>';
+                $htmlText .= '</tr>';
+                $htmlText .= '</table>';
+            }
+            $htmlText .= '</td></table>';
         }
 
-        if (count($items) > 0) {
+        if ($infoCertificate['contents_type'] == 2) {
             $htmlText .= '<table width="100%" class="contents-learnpath">';
             $htmlText .= '<tr>';
             $htmlText .= '<td>';
-            $i = 0;
-            foreach ($items as $value) {
-                if ($i == 50) {
-                    $htmlText .= '</td><td>';
-                }
-                $htmlText .= $value;
-                $i++;
-            }
+            $myContentHtml = strip_tags(
+                $infoCertificate['contents'],
+                '<p><b><strong><table><tr><td><th><span><i><li><ol><ul>'.
+                '<dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
+            );
+            $htmlText .= $myContentHtml;
             $htmlText .= '</td>';
             $htmlText .= '</tr>';
             $htmlText .= '</table>';
         }
-        $htmlText .= '</td></table>';
+        $htmlText .= '</div>';
     }
-
-    if ($infoCertificate['contents_type'] == 2) {
-        $htmlText .= '<table width="100%" class="contents-learnpath">';
-        $htmlText .= '<tr>';
-        $htmlText .= '<td>';
-        $myContentHtml = strip_tags(
-            $infoCertificate['contents'],
-            '<p><b><strong><table><tr><td><th><span><i><li><ol><ul>'.
-            '<dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
-        );
-        $htmlText .= $myContentHtml;
-        $htmlText .= '</td>';
-        $htmlText .= '</tr>';
-        $htmlText .= '</table>';
-    }
-    $htmlText .= '</div>';
 }
 $htmlText .= '</body></html>';
 

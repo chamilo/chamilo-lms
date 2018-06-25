@@ -31,7 +31,7 @@
                   <h4 class="title">
                       {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
                           {{ course.title }}
-                          <span class="code-title">{{ course.code }}</span>
+                          <span class="code-title">{{ course.visual_code }}</span>
                       {% else %}
                           <a href="{{ course.link }}">{{ course.title }}</a>
                       {% endif %}

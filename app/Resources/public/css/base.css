@@ -5897,7 +5897,9 @@ div#chat-remote-video video {
 
 .grid-courses .items .code-title {
     font-size: 10px;
-    font-weight: normal;
+    font-weight: bold;
+    padding-top: 8px;
+    color: #666;
 }
 
 .toolbar-edit {
@@ -5973,6 +5975,7 @@ div#chat-remote-video video {
     padding: 0;
     font-weight: bold;
     margin: 0;
+    font-size: 14px;
 }
 
 .grid-courses .items .toolbar > div {
@@ -6101,6 +6104,7 @@ div#chat-remote-video video {
 
 .grid-courses .items .description {
     padding: 5px 10px 15px;
+    min-height: 155px;
 }
 
 .grid-courses .items .description .text {

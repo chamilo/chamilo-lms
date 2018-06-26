@@ -4393,7 +4393,9 @@ class CourseManager
         $special = isset($course['special_course']) ? true : false;
         $params['title'] = $session_title;
         $params['special'] = $special;
-        $params['code'] = $course_info['visual_code'];
+        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
+            $params['visual_code'] = '(' . $course_info['visual_code'] . ')';
+        }
         $params['extra'] = '';
         $html = $params;
 

@@ -41,6 +41,9 @@ class CourseManager
     public static function create_course($params, $authorId = 0)
     {
         global $_configuration;
+
+        $hook = HookCreateCourse::create();
+
         // Check portal limits
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {
@@ -97,6 +100,11 @@ class CourseManager
             if (empty($course_info)) {
                 $course_id = AddCourse::register_course($params);
                 $course_info = api_get_course_info_by_id($course_id);
+
+                if ($hook) {
+                    $hook->setEventData(['course_info' => $course_info]);
+                    $hook->notifyCreateCourse(HOOK_EVENT_TYPE_POST);
+                }
 
                 if (!empty($course_info)) {
                     self::fillCourse($course_info, $params, $authorId);

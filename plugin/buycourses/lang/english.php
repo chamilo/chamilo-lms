@@ -139,3 +139,25 @@ $strings['XIsOnlyPaymentMethodAvailable'] = '%s is the only payment method avail
 $strings['hide_free_text'] = "Hide 'Free' text";
 $strings['culqi_enable'] = "Enable culqi";
 $strings['include_services'] = "Include services";
+
+$strings['Services'] = "Services";
+$strings['ServiceName'] = "Service name";
+$strings['AppliesTo'] = "Applies to";
+$strings['ListOfServicesOnSale'] = "List of services on sale";
+$strings['GlobalConfig'] = "Global configuration";
+$strings['WriteHereTheTermsAndConditionsOfYourECommerce'] = "Write here the terms and conditions of your e-commerce";
+$strings['NewService'] = "New service";
+$strings['Service'] = "Service";
+$strings['ServiceInformation'] = "Service information";
+$strings['EditService'] = "Edit service";
+$strings['DeleteThisService'] = "Delete this service";
+$strings['IConfirmIReadAndAcceptTermsAndCondition'] = "I confirm I read and accept the terms and conditions";
+$strings['PleaseSelectTheCorrectInfoToApplyTheService'] = "Please select the correct info to apply the service";
+$strings['SaleStatusCancelled'] = "Sale cancelled";
+$strings['ServiceSaleInfo'] = "Service sale info";
+$strings['ServiceId'] = "Service Id";
+$strings['BoughtBy'] = "BoughtBy";
+$strings['PurchaserUser'] = "Purchaser user";
+$strings['Pending'] = "Pending";
+$strings['Names'] = "Names";
+

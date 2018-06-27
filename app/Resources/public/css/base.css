@@ -5905,6 +5905,7 @@ div#chat-remote-video video {
 .toolbar-edit {
     display: inline-block;
     width: 100%;
+    margin-top: 10px;
 }
 
 .bar-progress {
@@ -5939,10 +5940,6 @@ div#chat-remote-video video {
 
 .grid-courses .items.my-courses .title {
     font-size: 14px;
-}
-
-.grid-courses .items.my-courses .block-title {
-    margin: 10px;
 }
 
 .grid-courses .items.items-courses {
@@ -6103,8 +6100,8 @@ div#chat-remote-video video {
 }
 
 .grid-courses .items .description {
-    padding: 5px 10px 15px;
-    min-height: 155px;
+    padding: 5px 10px 5px;
+    min-height: 125px;
 }
 
 .grid-courses .items .description .text {
@@ -6140,7 +6137,7 @@ div#chat-remote-video video {
 /*---- */
 .grid-courses .items .block-author {
     display: flex;
-    margin: 5px 0 10px;
+    margin: 5px 0 5px;
 }
 
 .grid-courses .items .block-author img {

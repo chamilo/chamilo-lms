@@ -4318,7 +4318,7 @@ class CourseManager
 
                 if ($userInCourseStatus == COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
-                    $session_title = '<a href="'.$session_url.'">'.$course_info['name'].'</a>'.$notifications;
+                    $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.$course_info['name'].'</a>'.$notifications;
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -4353,6 +4353,7 @@ class CourseManager
         $params['image'] = $image;
         $params['link'] = $session_url;
         $params['title'] = $session_title;
+        $params['name'] = $course_info['name'];
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];

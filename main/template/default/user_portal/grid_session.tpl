@@ -4,7 +4,9 @@
     <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="items items-sessions">
             <div class="image">
-                <img src="{{ course.image }}" class="img-responsive">
+                <a title="{{ course.name }}" href="{{ course.link }}">
+                    <img src="{{ course.image }}" class="img-responsive">
+                </a>
                 {% if course.category != '' and show_category %}
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>

@@ -137,3 +137,5 @@ $strings['PleaseSelectThePaymentMethodBeforeConfirmYourOrder'] = "Please select 
 $strings['NoPaymentOptionAvailable'] = 'No payment option available. Please report to the administrator.';
 $strings['XIsOnlyPaymentMethodAvailable'] = '%s is the only payment method available for this purchase.';
 $strings['hide_free_text'] = "Hide 'Free' text";
+$strings['culqi_enable'] = "Enable culqi";
+$strings['include_services'] = "Include services";

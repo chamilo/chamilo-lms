@@ -136,3 +136,8 @@ $strings['SWIFT_help'] = "Format standard des codes d'identification de banque (
 $strings['PleaseSelectThePaymentMethodBeforeConfirmYourOrder'] = 'Veuillez sélectionner votre méthode de paiement préférée avant de confirmer';
 $strings['NoPaymentOptionAvailable'] = 'Aucune méthode de paiement disponible. Merci de bien vouloir rapporter ce problème à l\'administrateur.';
 $strings['XIsOnlyPaymentMethodAvailable'] = '%s est la seule méthode de paiement disponible pour cet achat.';
+$strings['public_main_menu_tab'] = "Montrer l'onglet dans le menu principal aux utilisateurs anonyme également";
+$strings['culqi_enable'] = "Activé culqi";
+$strings['include_services'] = "Inclure les services";
+$strings['hide_free_text'] = "Cacher le texte 'Free' ou 'Gratuit'";
+

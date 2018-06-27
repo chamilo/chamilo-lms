@@ -22,6 +22,7 @@ $strings['ContentsToShow'] = "Contenidos a mostrar";
 $strings['ContentsCourseDescription'] = 'Usar apartado "Descripcion del curso" > "Contenidos"';
 $strings['ContentsIndexLearnpath'] = "Usar indice de lecciones";
 $strings['ContentsCustom'] = "Usar contenido personalizado";
+$strings['ContentsHide'] = "No mostrar contenidos";
 $strings['Dates'] = "Fechas";
 $strings['CourseDeliveryDates'] = "Fechas de impartición del curso";
 $strings['Custom'] = "Personalizado";

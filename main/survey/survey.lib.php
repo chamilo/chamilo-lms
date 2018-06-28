@@ -1874,7 +1874,8 @@ class SurveyManager
             $invitation = Database::getManager()
                 ->createQuery("
                     SELECT i FROM ChamiloCourseBundle:CSurveyInvitation i
-                    INNER JOIN ChamiloCourseBundle:CSurvey s WITH s.code = i.surveyCode
+                    INNER JOIN ChamiloCourseBundle:CSurvey s
+                        WITH (s.code = i.surveyCode AND s.cId = i.cId AND s.sessionId = i.sessionId)
                     INNER JOIN ChamiloCoreBundle:ExtraFieldValues efv WITH efv.itemId = s.iid
                     INNER JOIN ChamiloCoreBundle:ExtraField ef WITH efv.field = ef.id
                     WHERE i.answered = 0

@@ -39,7 +39,7 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('Updated'), 'success')
+        Display::return_message(get_lang('ItemUpdated'), 'success')
     );
 
     header("Location: $baseUrl");

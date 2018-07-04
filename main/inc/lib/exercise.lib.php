@@ -2229,12 +2229,10 @@ HOTSPOT;
                                     $results[$i]['username'],
                                     $dt
                                 ).'\')) return false;">';
-                                $delete_link .= Display:: return_icon(
+                                $delete_link .= Display::return_icon(
                                     'delete.png',
                                         addslashes(get_lang('Delete'))
                                 ).'</a>';
-
-                                //$delete_link = utf8_encode($delete_link);
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
@@ -2527,13 +2525,14 @@ HOTSPOT;
         }
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
 
-        // Formats values
-        $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
-
         if ($roundValues) {
+            // Formats values
+            $percentage = ceil($percentage);
             $score = ceil($score);
             $weight = ceil($weight);
         } else {
+            // Formats values
+            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
             $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }

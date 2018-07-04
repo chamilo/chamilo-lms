@@ -289,7 +289,7 @@ class scorm extends learnpath
                                 '$iFrameHolder.html(iFrameTag);',
                             ];
                             $replace = [
-                                'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img width="16px" src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); ',
+                                'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img width="16px" src="'.Display::returnIconPath('link-external.png').'"></a>\'; $iFrameHolder.html(iFrameTag); ',
                             ];
                             $content = str_replace($find, $replace, $content);
                             file_put_contents($framePath, $content);

@@ -54,19 +54,19 @@ Feature: LP tool
     And I follow "Delete"
     Then I should not see "LP category 1"
 
-  Scenario: Check the PDF export in LP list
+  Scenario: Check the PDF export in LP list if hide SCORM PDF link is false
     Given I am on "/main/admin/settings.php?category=Course"
     And I check the "hide_scorm_pdf_link" radio button with "false" value
     And I press "Save settings"
     And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=true"
-    Then I should see an icon with title "Export to PDF"
+    Then I should see an icon with title "Export to PDF web pages and images"
 
-  Scenario: Check the PDF export in LP list
+  Scenario: Check the PDF export in LP list if hide SCORM PDF link is true
     Given I am on "/main/admin/settings.php?category=Course"
     And I check the "hide_scorm_pdf_link" radio button with "true" value
     And I press "Save settings"
     And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=true"
-    Then I should not see an icon with title "Export to PDF"
+    Then I should not see an icon with title "Export to PDF web pages and images"
 
   Scenario: Delete a LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"

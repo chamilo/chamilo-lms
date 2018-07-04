@@ -319,8 +319,8 @@ if ($_GET['action'] == 'add') {
     $form->addRule('survey_code', '', 'maxlength', 20);
 }
 $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('start_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime': 'date');
-$form->addRule('end_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime': 'date');
+$form->addRule('start_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
+$form->addRule('end_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
 $form->addRule(
     ['start_date', 'end_date'],
     get_lang('StartDateShouldBeBeforeEndDate'),

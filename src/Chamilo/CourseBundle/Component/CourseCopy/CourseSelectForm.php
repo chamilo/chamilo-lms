@@ -48,13 +48,14 @@ class CourseSelectForm
 
         return $list;
     }
+
     /**
      * Display the form.
      *
      * @param array $course
-     * @param array $hidden_fields   hidden fields to add to the form
-     * @param bool  $avoidSerialize  the document array will be serialize.
-     *                               This is used in the course_copy.php file
+     * @param array $hidden_fields     hidden fields to add to the form
+     * @param bool  $avoidSerialize    the document array will be serialize.
+     *                                 This is used in the course_copy.php file
      * @param bool  $avoidCourseInForm
      */
     public static function display_form(
@@ -63,8 +64,7 @@ class CourseSelectForm
         $avoidSerialize = false,
         $avoidCourseInForm = false
     ) {
-        global $charset;
-        ?>
+        global $charset; ?>
         <script>
             function exp(item) {
                 el = document.getElementById('div_'+item);
@@ -486,8 +486,8 @@ class CourseSelectForm
     /**
      * Get the posted course.
      *
-     * @param string $from        who calls the function?
-     *                            It can be copy_course, create_backup, import_backup or recycle_course
+     * @param string $from         who calls the function?
+     *                             It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
      * @param Course $postedCourse

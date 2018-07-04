@@ -2493,7 +2493,7 @@ HOTSPOT;
      * @param bool   $hidePercentageSign    hide "%" sign
      * @param string $decimalSeparator
      * @param string $thousandSeparator
-     * @param bool   $roundValues This option rounds the float values into a int using ceil()
+     * @param bool   $roundValues           This option rounds the float values into a int using ceil()
      *
      * @return string an html with the score modified
      */

@@ -160,4 +160,3 @@ $strings['BoughtBy'] = "BoughtBy";
 $strings['PurchaserUser'] = "Purchaser user";
 $strings['Pending'] = "Pending";
 $strings['Names'] = "Names";
-

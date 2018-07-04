@@ -157,10 +157,10 @@ class CourseBuilder
      *
      * @param int    $session_id
      * @param string $courseCode
-     * @param bool   $withBaseContent true if you want to get the elements that exists in the course and
-     *                                in the session, (session_id = 0 or session_id = X)
-     * @param array $parseOnlyToolList
-     * @param array $toolsFromPost
+     * @param bool   $withBaseContent   true if you want to get the elements that exists in the course and
+     *                                  in the session, (session_id = 0 or session_id = X)
+     * @param array  $parseOnlyToolList
+     * @param array  $toolsFromPost
      *
      * @return Course The course object structure
      */
@@ -665,10 +665,10 @@ class CourseBuilder
     /**
      * Build the Quizzes.
      *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
+     * @param int   $session_id           Internal session ID
+     * @param int   $courseId             Internal course ID
+     * @param bool  $withBaseContent      Whether to include content from the course without session or not
+     * @param array $idList               If you want to restrict the structure to only the given IDs
      * @param bool  $buildOrphanQuestions
      */
     public function build_quizzes(
@@ -754,10 +754,9 @@ class CourseBuilder
     /**
      * Build the Quiz-Questions.
      *
-     * @param int   $courseId Internal course ID
+     * @param int   $courseId             Internal course ID
      * @param array $questionList
      * @param bool  $buildOrphanQuestions
-     *
      */
     public function build_quiz_questions($courseId = 0, $questionList = [], $buildOrphanQuestions = true)
     {
@@ -923,7 +922,7 @@ class CourseBuilder
 
     /**
      * @deprecated
-     * Build the orphan questions.
+     * Build the orphan questions
      */
     public function build_quiz_orphan_questions()
     {

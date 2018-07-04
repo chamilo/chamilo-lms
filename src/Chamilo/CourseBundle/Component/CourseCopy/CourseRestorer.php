@@ -1909,7 +1909,6 @@ class CourseRestorer
                         Database::query($sql);
                     }
                 }
-
             }
         }
     }

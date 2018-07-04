@@ -115,4 +115,3 @@ if (Security::check_token('post') &&
 }
 
 Display::display_footer();
-

@@ -682,7 +682,7 @@ class Plugin
                     $subkey .= $userFilter;
                     break;
             }
-	}
+        }
 
         $currentUrlId = api_get_current_access_url_id();
         $attributes = [

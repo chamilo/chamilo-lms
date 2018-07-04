@@ -4395,7 +4395,7 @@ class CourseManager
         $params['title'] = $session_title;
         $params['special'] = $special;
         if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-            $params['visual_code'] = '(' . $course_info['visual_code'] . ')';
+            $params['visual_code'] = '('.$course_info['visual_code'].')';
         }
         $params['extra'] = '';
         $html = $params;

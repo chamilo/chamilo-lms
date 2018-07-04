@@ -2398,18 +2398,30 @@ HOTSPOT;
                                 $roundValues
                             );
 
-                            $results[$i]['only_score'] = $scoreDisplay->format_score(
-                                $my_res,
-                                false,
-                                $decimalSeparator,
-                                $thousandSeparator
-                            );
-                            $results[$i]['total'] = $scoreDisplay->format_score(
-                                $my_total,
-                                false,
-                                $decimalSeparator,
-                                $thousandSeparator
-                            );
+                            if ($roundValues) {
+                                $onlyScore = ceil($my_res);
+                            } else {
+                                $onlyScore = $scoreDisplay->format_score(
+                                    $my_res,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+                            }
+
+                            $results[$i]['only_score'] = $onlyScore;
+
+                            if ($roundValues) {
+                                $onlyTotal = ceil($my_total);
+                            } else {
+                                $onlyTotal = $scoreDisplay->format_score(
+                                    $my_total,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+                            }
+                            $results[$i]['total'] = $onlyTotal;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $listInfo[] = $results[$i];

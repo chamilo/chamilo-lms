@@ -1418,7 +1418,7 @@ function reinit_updatable_vars_list() {
             olms.updatable_vars_list[olms.scorm_variables[i]]=false;
         }
     }
-    olms.lesson_status='';
+    olms.lesson_status = 'not attempted';
 }
 
 /**

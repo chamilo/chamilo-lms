@@ -385,7 +385,7 @@ function Initialize() {
  * @return  string  All return values must be string (see SCORM)
  */
 function LMSGetValue(param) {
-    olms.G_LastError = G_NoError ;
+    olms.G_LastError = G_NoError;
     olms.G_LastErrorMessage = 'No error';
     var result='';
 
@@ -394,14 +394,13 @@ function LMSGetValue(param) {
          if (param == 'cmi.core.score.raw') {
              return '';
          }
-         olms.G_LastError 		= G_NotInitialized;
+         olms.G_LastError = G_NotInitialized;
          olms.G_LastErrorMessage = G_NotInitializedMessage;
          logit_scorm('LMSGetValue('+param+') on item id '+olms.lms_item_id+':<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
          return '';
     }
 
-    //Chamilo does not support these SCO object properties
-
+    // Chamilo does not support these SCO object properties
     if (param == 'cmi.student_preference.text' ||
         param == 'cmi.student_preference.language' ||
         param == 'cmi.student_preference.speed' ||
@@ -410,8 +409,8 @@ function LMSGetValue(param) {
         param == 'cmi.student_data.time_limit_action' ||
         param == 'cmi.comments' ||
         param == 'cmi.comments_from_lms' ||
-/* The following properties were part of SCORM 1.0 or never implemented at all
- but seem to react badly to Captivate content producer when not defined */
+        /* The following properties were part of SCORM 1.0 or never implemented at all
+         but seem to react badly to Captivate content producer when not defined */
         param == 'cmi.student_demographics._children' ||
         param == 'cmi.student_demographics.city' ||
         param == 'cmi.student_demographics.class' ||
@@ -429,7 +428,7 @@ function LMSGetValue(param) {
         // the value is not supported
         olms.G_LastError = G_NotImplementedError  ;
         olms.G_LastErrorString = G_NotImplementedErrorMessage;
-        logit_scorm("LMSGetValue  ('"+param+"') Error '"+G_NotImplementedErrorMessage+"'",1);
+        logit_scorm("LMSGetValue ('"+param+"') Error '"+G_NotImplementedErrorMessage+"'",1);
         result = '';
         return result;
     }
@@ -449,7 +448,7 @@ function LMSGetValue(param) {
         } else {
             result='';
         }
-    } else if(param == 'cmi.core.exit'){
+    } else if(param == 'cmi.core.exit') {
         // ---- cmi.core.exit
         result='';
         olms.G_LastError = G_ElementIsWriteOnly;
@@ -458,8 +457,8 @@ function LMSGetValue(param) {
         olms.G_LastError = G_ElementIsWriteOnly;
     } else if(param == 'cmi.core.lesson_status'){
         // ---- cmi.core.lesson_status
-        if(olms.lesson_status != '') {
-            result=olms.lesson_status;
+        if (olms.lesson_status != '') {
+            result = olms.lesson_status;
         } else {
             //result='not attempted';
         }
@@ -637,18 +636,17 @@ function LMSSetValue(param, val) {
     olms.commit = true; //value has changed, need to re-commit
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
-
     return_value = 'false';
 
-    if ( param == "cmi.core.score.raw" ) {
+    if (param == "cmi.core.score.raw") {
         olms.score= val;
         olms.updatable_vars_list['cmi.core.score.raw']=true;
         return_value='true';
-    } else if ( param == "cmi.core.score.max" ) {
+    } else if ( param == "cmi.core.score.max") {
         olms.max = val;
         olms.updatable_vars_list['cmi.core.score.max']=true;
         return_value='true';
-    } else if ( param == "cmi.core.score.min" ) {
+    } else if ( param == "cmi.core.score.min") {
         olms.min = val;
         olms.updatable_vars_list['cmi.core.score.min']=true;
         return_value='true';
@@ -681,9 +679,9 @@ function LMSSetValue(param, val) {
         success_status = val;
         olms.updatable_vars_list['cmi.success_status']=true;
         return_value='true'; //1.3
-    } else if ( param == "cmi.suspend_data" ) {
+    } else if ( param == "cmi.suspend_data") {
         olms.suspend_data = val;
-        olms.updatable_vars_list['cmi.suspend_data']=true;
+        olms.updatable_vars_list['cmi.suspend_data'] = true;
         return_value='true';
     } else if ( param == "cmi.core.exit" ) {
         olms.lms_item_core_exit = val;
@@ -797,11 +795,11 @@ function LMSSetValue(param, val) {
                         if(olms.item_objectives[obj_id]==null) {
                             olms.item_objectives[obj_id] = ['','','','',''];
                         }
-                        if( req_type == "id" ) {
-                                //olms.item_objectives[obj_id][0] = val.substring(51,57);
-                                olms.item_objectives[obj_id][0] = val;
-                                logit_scorm("Objective "+obj_id+"'s id updated",2);
-                                return_value = 'true';
+                        if (req_type == "id") {
+                            //olms.item_objectives[obj_id][0] = val.substring(51,57);
+                            olms.item_objectives[obj_id][0] = val;
+                            logit_scorm("Objective "+obj_id+"'s id updated",2);
+                            return_value = 'true';
                         } else if ( req_type == "score" ) {
                             if (myres[3] == '._children'){
                                 return_value = '';
@@ -819,18 +817,18 @@ function LMSSetValue(param, val) {
                                 olms.item_objectives[obj_id][4] = val;
                                 logit_scorm("Objective "+obj_id+"'s score min updated",2);
                                 return_value = 'true';
-                            } else{
+                            } else {
                                 return_value = '';
                                 olms.G_LastError = G_NotImplementedError;
                                 olms.G_LastErrorString = 'Not implemented yet';
                             }
                         } else if ( req_type == "status" ) {
-                                olms.item_objectives[obj_id][1] = val;
-                                logit_scorm("Objective "+obj_id+"'s status updated",2);
-                                return_value = 'true';
+                            olms.item_objectives[obj_id][1] = val;
+                            logit_scorm("Objective "+obj_id+"'s status updated",2);
+                            return_value = 'true';
                         } else {
-                                olms.G_LastError = G_NotImplementedError;
-                                olms.G_LastErrorString = 'Not implemented yet';
+                            olms.G_LastError = G_NotImplementedError;
+                            olms.G_LastErrorString = 'Not implemented yet';
                         }
                     }
                 }
@@ -868,7 +866,6 @@ function savedata(item_id) {
     }
 
     old_item_id = olms.info_lms_item[0];
-
     var item_to_save = olms.lms_item_id;
     logit_lms('item_to_save (original value): ' + item_to_save, 3);
 
@@ -981,8 +978,9 @@ function Finish(val) {
  * @return  string  Error code
  */
 function LMSGetLastError() {
-    logit_scorm('LMSGetLastError()',1);
-    return(olms.G_LastError.toString());
+    var error = olms.G_LastError.toString();
+    logit_scorm('LMSGetLastError() returned: ' + error, 1);
+    return error;
 }
 
 /**

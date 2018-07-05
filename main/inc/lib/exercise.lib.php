@@ -2399,7 +2399,9 @@ HOTSPOT;
                             );
 
                             if ($roundValues) {
-                                if ($my_res > 0.5) {
+                                $whole = floor($my_res); // 1
+                                $fraction = $my_res - $whole; // .25
+                                if ($fraction >= 0.5) {
                                     $onlyScore = ceil($my_res);
                                 } else {
                                     $onlyScore = round($my_res);
@@ -2416,7 +2418,9 @@ HOTSPOT;
                             $results[$i]['only_score'] = $onlyScore;
 
                             if ($roundValues) {
-                                if ($my_total > 0.5) {
+                                $whole = floor($my_total); // 1
+                                $fraction = $my_total - $whole; // .25
+                                if ($fraction >= 0.5) {
                                     $onlyTotal = ceil($my_total);
                                 } else {
                                     $onlyTotal = round($my_total);
@@ -2546,20 +2550,27 @@ HOTSPOT;
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
 
         if ($roundValues) {
+            $whole = floor($percentage); // 1
+            $fraction = $percentage - $whole; // .25
+
             // Formats values
-            if ($percentage > 0.5) {
+            if ($fraction >= 0.5) {
                 $percentage = ceil($percentage);
             } else {
                 $percentage = round($percentage);
             }
 
-            if ($score > 0.5) {
+            $whole = floor($score); // 1
+            $fraction = $score - $whole; // .25
+            if ($fraction >= 0.5) {
                 $score = ceil($score);
             } else {
                 $score = round($score);
             }
 
-            if ($weight > 0.5) {
+            $whole = floor($weight); // 1
+            $fraction = $weight - $whole; // .25
+            if ($fraction >= 0.5) {
                 $weight = ceil($weight);
             } else {
                 $weight = round($weight);

@@ -1677,7 +1677,7 @@ function api_get_user_info(
                     false,
                     true
                 );
-                if (@intval($user_status['user_chat_status']) == 1) {
+                if ((int) $user_status['user_chat_status'] == 1) {
                     $user_online_in_chat = 1;
                 }
             }

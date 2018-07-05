@@ -8084,9 +8084,15 @@ $RedirectToTheDocumentList = "Rediriger vers la liste des documents";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "La fonctionnalité d'auto-démarrage des exercices est activée. Les apprenants seront automatiquement redirigés vers la liste des exercices.";
 $PostedExpirationDate = "Date limite affichée d'envoi du travail (visible par l'apprenant)";
 $BossAlertMsgSentToUserXTitle = "Message de suivi concernant l'apprenant %s";
-$BossAlertUserXSentMessageToUserYWithLinkZ = "Bonjour,
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Bonjour,<br/><br/>
 
-L'utilisateur %s a envoyé un message de suivi concernant l'apprenant %s.
+L'utilisateur %s a envoyé un message de suivi concernant l'apprenant %s.<br/><br/>
 
 Le message est visible sur %s";
+$include_services = "Inclure les services";
+$culqi_enable = "Activé culqi";
+$SelectedUsersDisabled = "Les utilisateurs sélectionnés ont tous été désactivés.";
+$SomeUsersNotDisabled = "Certains des utilisateurs sélectionnés n'ont pas été supprimés. Nous vous recommandons de confirmer lesquels en utilisant la recherche avancée.";
+$SelectedUsersEnabled = "Tous les utilisateurs sélectionnés ont été activés.";
+$SomeUsersNotEnabled = "Certains des utilisateurs sélectionnés n'ont pas été activés. Nous vous recommandons de confirmer lesquels en utilisant la recherche avancée.";
 ?>

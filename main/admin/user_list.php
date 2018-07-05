@@ -439,7 +439,7 @@ function get_number_of_users()
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
- *
+ * @return  array   Users list
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -512,6 +512,8 @@ function email_filter($email)
  * Returns a mailto-link.
  *
  * @param string $email An email-address
+ * @param array  $params Deprecated
+ * @param array  $row
  *
  * @return string HTML-code with a mailto-link
  */
@@ -528,6 +530,7 @@ function user_filter($name, $params, $row)
  * @param   array   Row of elements to alter
  *
  * @return string Some HTML-code with modify-buttons
+ * @throws Exception
  */
 function modify_filter($user_id, $url_params, $row)
 {
@@ -808,9 +811,7 @@ function active_filter($active, $params, $row)
 
 /**
  * Instead of displaying the integer of the status, we give a translation for the status.
- *
  * @param int $status
- *
  * @return string translation
  *
  * @version march 2008
@@ -887,17 +888,17 @@ if (!empty($action)) {
             case 'delete':
                 if (api_is_platform_admin()) {
                     $number_of_selected_users = count($_POST['id']);
-                    $number_of_deleted_users = 0;
+                    $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
                             if ($user_id != $_user['user_id']) {
                                 if (UserManager::delete_user($user_id)) {
-                                    $number_of_deleted_users++;
+                                    $number_of_affected_users++;
                                 }
                             }
                         }
                     }
-                    if ($number_of_selected_users == $number_of_deleted_users) {
+                    if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
                             get_lang('SelectedUsersDeleted'),
                             'confirmation'
@@ -905,6 +906,58 @@ if (!empty($action)) {
                     } else {
                         $message = Display::return_message(
                             get_lang('SomeUsersNotDeleted'),
+                            'error'
+                        );
+                    }
+                }
+                break;
+            case 'disable':
+                if (api_is_platform_admin()) {
+                    $number_of_selected_users = count($_POST['id']);
+                    $number_of_affected_users = 0;
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $user_id) {
+                            if ($user_id != $_user['user_id']) {
+                                if (UserManager::disable($user_id)) {
+                                    $number_of_affected_users++;
+                                }
+                            }
+                        }
+                    }
+                    if ($number_of_selected_users == $number_of_affected_users) {
+                        $message = Display::return_message(
+                            get_lang('SelectedUsersDisabled'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('SomeUsersNotDisabled'),
+                            'error'
+                        );
+                    }
+                }
+                break;
+            case 'enable':
+                if (api_is_platform_admin()) {
+                    $number_of_selected_users = count($_POST['id']);
+                    $number_of_affected_users = 0;
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $user_id) {
+                            if ($user_id != $_user['user_id']) {
+                                if (UserManager::enable($user_id)) {
+                                    $number_of_affected_users++;
+                                }
+                            }
+                        }
+                    }
+                    if ($number_of_selected_users == $number_of_affected_users) {
+                        $message = Display::return_message(
+                            get_lang('SelectedUsersEnabled'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('SomeUsersNotEnabled'),
                             'error'
                         );
                     }
@@ -1053,13 +1106,15 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
+$actionsList = [];
 if (api_is_platform_admin() &&
     !api_get_configuration_value('deny_delete_users')
 ) {
-    $table->set_form_actions(['delete' => get_lang('DeleteFromPlatform')]);
-} else {
-    $table->set_form_actions(['none' => get_lang('NoActionAvailable')]);
+    $actionsList['delete'] = get_lang('DeleteFromPlatform');
 }
+$actionsList['disable'] = get_lang('Disable');
+$actionsList['enable'] = get_lang('Enable');
+$table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';

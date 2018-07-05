@@ -96,7 +96,7 @@ class CourseChatUtils
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $basepath_chat = '/chat_files';
         $group_info = [];
-        if (!$this->groupId) {
+        if ($this->groupId) {
             $group_info = GroupManager::get_group_properties($this->groupId);
             $basepath_chat = $group_info['directory'].'/chat_files';
         }

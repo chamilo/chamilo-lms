@@ -2399,7 +2399,11 @@ HOTSPOT;
                             );
 
                             if ($roundValues) {
-                                $onlyScore = ceil($my_res);
+                                if ($my_res > 0.5) {
+                                    $onlyScore = ceil($my_res);
+                                } else {
+                                    $onlyScore = round($my_res);
+                                }
                             } else {
                                 $onlyScore = $scoreDisplay->format_score(
                                     $my_res,
@@ -2412,7 +2416,11 @@ HOTSPOT;
                             $results[$i]['only_score'] = $onlyScore;
 
                             if ($roundValues) {
-                                $onlyTotal = ceil($my_total);
+                                if ($my_total > 0.5) {
+                                    $onlyTotal = ceil($my_total);
+                                } else {
+                                    $onlyTotal = round($my_total);
+                                }
                             } else {
                                 $onlyTotal = $scoreDisplay->format_score(
                                     $my_total,
@@ -2539,9 +2547,23 @@ HOTSPOT;
 
         if ($roundValues) {
             // Formats values
-            $percentage = ceil($percentage);
-            $score = ceil($score);
-            $weight = ceil($weight);
+            if ($percentage > 0.5) {
+                $percentage = ceil($percentage);
+            } else {
+                $percentage = round($percentage);
+            }
+
+            if ($score > 0.5) {
+                $score = ceil($score);
+            } else {
+                $score = round($score);
+            }
+
+            if ($weight > 0.5) {
+                $weight = ceil($weight);
+            } else {
+                $weight = round($weight);
+            }
         } else {
             // Formats values
             $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);

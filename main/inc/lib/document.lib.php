@@ -1317,10 +1317,10 @@ class DocumentManager
             return false;
         }
 
-        $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
+        $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $id = intval($id);
+        $id = (int) $id;
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
@@ -3321,7 +3321,7 @@ class DocumentManager
                     api_get_user_id()
                 );
 
-                if ($showInvisibleFiles == false) {
+                if ($showInvisibleFiles === false) {
                     if (!$is_visible) {
                         continue;
                     }
@@ -3342,7 +3342,7 @@ class DocumentManager
         } else {
             if (is_array($parentData)) {
                 $documents[$parentData['title']] = [
-                    'id' => intval($folderId),
+                    'id' => (int) $folderId,
                     'files' => $newResources,
                 ];
             }
@@ -3361,15 +3361,15 @@ class DocumentManager
         );
 
         $return .= $write_result;
-        if ($lp_id == false) {
-            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
+        if ($lp_id === false) {
+            $url = api_get_path(WEB_AJAX_PATH).
+                'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
             $return .= "<script>
             $('.doc_folder').click(function() {
                 var realId = this.id;
                 var my_id = this.id.split('_')[2];
                 var tempId = 'temp_'+my_id;
                 $('#res_'+my_id).show();
-
                 var tempDiv = $('#'+realId).find('#'+tempId);
                 if (tempDiv.length == 0) {
                     $.ajax({
@@ -3391,7 +3391,6 @@ class DocumentManager
                 $('.lp_resource').remove();
                 $('.document_preview_container').html('');
             });
-
             </script>";
         } else {
             //For LPs
@@ -3414,7 +3413,6 @@ class DocumentManager
                     image.attr('src', '".Display::returnIconPath('nolines_minus.gif')."');
                     $('#'+id).hide();
                     $('#'+tempId).show();
-
                     var tempDiv = $('#'+parentId).find('#'+tempId);
                     if (tempDiv.length == 0) {
                         $.ajax({
@@ -3495,7 +3493,7 @@ class DocumentManager
                     $return .= '</div>';
                     $return .= '</ul>';
                 } else {
-                    if ($resource['filetype'] == 'folder') {
+                    if ($resource['filetype'] === 'folder') {
                         $return .= self::parseFolder($folderId, $resource, $lp_id);
                     } else {
                         $return .= self::parseFile(

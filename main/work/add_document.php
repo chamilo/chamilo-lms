@@ -6,8 +6,8 @@ require_once 'work.lib.php';
 
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
-$docId = isset($_GET['document_id']) ? intval($_GET['document_id']) : null;
+$workId = isset($_GET['id']) ? (int) $_GET['id'] : null;
+$docId = isset($_GET['document_id']) ? (int) $_GET['document_id'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 if (empty($workId)) {
@@ -51,7 +51,6 @@ switch ($action) {
 
 if (empty($docId)) {
     Display::display_header(null);
-
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
         echo Display::page_subheader(get_lang('DocumentsAdded'));

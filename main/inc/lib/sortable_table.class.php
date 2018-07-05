@@ -675,7 +675,11 @@ class SortableTable extends HTML_Table
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
         $result[] = '<select name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
-        for ($nr = 10; $nr <= min(50, $total_number_of_items); $nr += 10) {
+        $list = [10, 20, 50, 100, 500, 1000];
+        foreach ($list as $nr) {
+            if ($total_number_of_items <= $nr) {
+                break;
+            }
             $result[] = '<option value="'.$nr.'" '.($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
         }
         // @todo no limits

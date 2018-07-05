@@ -620,7 +620,7 @@ class UserGroup extends Model
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id AND u.usergroup_id)";
+                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.usergroup_id)";
             $where = ['where' => ['user_id = ? AND access_url_id = ? ' => [$userId, $urlId]]];
         } else {
             $from = $this->usergroup_rel_user_table." u ";

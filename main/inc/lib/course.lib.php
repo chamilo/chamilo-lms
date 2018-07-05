@@ -41,6 +41,9 @@ class CourseManager
     public static function create_course($params, $authorId = 0)
     {
         global $_configuration;
+
+        $hook = HookCreateCourse::create();
+
         // Check portal limits
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {
@@ -97,6 +100,11 @@ class CourseManager
             if (empty($course_info)) {
                 $course_id = AddCourse::register_course($params);
                 $course_info = api_get_course_info_by_id($course_id);
+
+                if ($hook) {
+                    $hook->setEventData(['course_info' => $course_info]);
+                    $hook->notifyCreateCourse(HOOK_EVENT_TYPE_POST);
+                }
 
                 if (!empty($course_info)) {
                     self::fillCourse($course_info, $params, $authorId);
@@ -4310,7 +4318,7 @@ class CourseManager
 
                 if ($userInCourseStatus == COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
-                    $session_title = '<a href="'.$session_url.'">'.$course_info['name'].'</a>'.$notifications;
+                    $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.$course_info['name'].'</a>'.$notifications;
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -4345,6 +4353,7 @@ class CourseManager
         $params['image'] = $image;
         $params['link'] = $session_url;
         $params['title'] = $session_title;
+        $params['name'] = $course_info['name'];
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];
@@ -4385,7 +4394,9 @@ class CourseManager
         $special = isset($course['special_course']) ? true : false;
         $params['title'] = $session_title;
         $params['special'] = $special;
-        $params['code'] = $course_info['visual_code'];
+        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
+            $params['visual_code'] = '('.$course_info['visual_code'].')';
+        }
         $params['extra'] = '';
         $html = $params;
 

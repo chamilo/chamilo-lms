@@ -735,7 +735,7 @@ $userGroups = $userGroupManager->getNameListByUser(
                         <td align="right">
                             <?php
                             echo get_lang('Progress').' ';
-                            Display::display_icon(
+                    Display::display_icon(
                                 'info3.gif',
                                 get_lang('ScormAndLPProgressTotalAverage'),
                                 ['align' => 'absmiddle', 'hspace' => '3px']
@@ -747,7 +747,7 @@ $userGroups = $userGroupManager->getNameListByUser(
                         <td align="right">
                             <?php
                             echo get_lang('Score').' ';
-                            Display::display_icon(
+                    Display::display_icon(
                                 'info3.gif',
                                 get_lang('ScormAndLPTestTotalAverage'),
                                 ['align' => 'absmiddle', 'hspace' => '3px']
@@ -799,7 +799,7 @@ $userGroups = $userGroupManager->getNameListByUser(
                 </tbody>
             </table>
             <?php if (!empty($userGroups)) {
-                ?>
+                    ?>
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
@@ -817,7 +817,7 @@ $userGroups = $userGroupManager->getNameListByUser(
                     </tbody>
                 </table>
                 <?php
-            } ?>
+                } ?>
         </div>
     </div>
 <?php

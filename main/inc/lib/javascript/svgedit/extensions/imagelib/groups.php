@@ -33,15 +33,17 @@ $docs_and_folders = DocumentManager::getAllDocumentData(
 
 //get all group filenames
 $array_to_search = !empty($docs_and_folders) ? $docs_and_folders : [];
+$all_files = [];
 
 if (count($array_to_search) > 0) {
-	while (list($key) = each($array_to_search)) {
+    foreach ($array_to_search as $key => $value) {
 		$all_files[] = basename($array_to_search[$key]['path']);
 	}
 }
 
 //get all svg and png group files
 $accepted_extensions = array('.svg', '.png');
+$png_svg_files = [];
 
 if (is_array($all_files) && count($all_files) > 0) {
     foreach ($all_files as & $file) {

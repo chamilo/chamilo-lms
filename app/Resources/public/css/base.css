@@ -5897,12 +5897,15 @@ div#chat-remote-video video {
 
 .grid-courses .items .code-title {
     font-size: 10px;
-    font-weight: normal;
+    font-weight: bold;
+    padding-top: 8px;
+    color: #666;
 }
 
 .toolbar-edit {
     display: inline-block;
     width: 100%;
+    margin-top: 10px;
 }
 
 .bar-progress {
@@ -5939,10 +5942,6 @@ div#chat-remote-video video {
     font-size: 14px;
 }
 
-.grid-courses .items.my-courses .block-title {
-    margin: 10px;
-}
-
 .grid-courses .items.items-courses {
     padding-bottom: 10px;
     box-shadow: 2px 4px 15px 0 rgba(46, 61, 73, .1);
@@ -5973,6 +5972,7 @@ div#chat-remote-video video {
     padding: 0;
     font-weight: bold;
     margin: 0;
+    font-size: 14px;
 }
 
 .grid-courses .items .toolbar > div {
@@ -6100,7 +6100,8 @@ div#chat-remote-video video {
 }
 
 .grid-courses .items .description {
-    padding: 5px 10px 15px;
+    padding: 5px 10px 5px;
+    min-height: 125px;
 }
 
 .grid-courses .items .description .text {
@@ -6136,7 +6137,7 @@ div#chat-remote-video video {
 /*---- */
 .grid-courses .items .block-author {
     display: flex;
-    margin: 5px 0 10px;
+    margin: 5px 0 5px;
 }
 
 .grid-courses .items .block-author img {

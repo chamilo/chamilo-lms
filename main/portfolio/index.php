@@ -133,7 +133,7 @@ switch ($action) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('PortfolioItemDeleted'), 'success')
+            Display::return_message(get_lang('CategoryDeleted'), 'success')
         );
 
         header("Location: $baseUrl");
@@ -201,7 +201,7 @@ switch ($action) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('PortfolioItemDeleted'), 'success')
+            Display::return_message(get_lang('ItemDeleted'), 'success')
         );
 
         header("Location: $baseUrl");

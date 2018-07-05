@@ -2229,12 +2229,10 @@ HOTSPOT;
                                     $results[$i]['username'],
                                     $dt
                                 ).'\')) return false;">';
-                                $delete_link .= Display:: return_icon(
+                                $delete_link .= Display::return_icon(
                                     'delete.png',
                                         addslashes(get_lang('Delete'))
                                 ).'</a>';
-
-                                //$delete_link = utf8_encode($delete_link);
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
@@ -2400,18 +2398,30 @@ HOTSPOT;
                                 $roundValues
                             );
 
-                            $results[$i]['only_score'] = $scoreDisplay->format_score(
-                                $my_res,
-                                false,
-                                $decimalSeparator,
-                                $thousandSeparator
-                            );
-                            $results[$i]['total'] = $scoreDisplay->format_score(
-                                $my_total,
-                                false,
-                                $decimalSeparator,
-                                $thousandSeparator
-                            );
+                            if ($roundValues) {
+                                $onlyScore = ceil($my_res);
+                            } else {
+                                $onlyScore = $scoreDisplay->format_score(
+                                    $my_res,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+                            }
+
+                            $results[$i]['only_score'] = $onlyScore;
+
+                            if ($roundValues) {
+                                $onlyTotal = ceil($my_total);
+                            } else {
+                                $onlyTotal = $scoreDisplay->format_score(
+                                    $my_total,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+                            }
+                            $results[$i]['total'] = $onlyTotal;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $listInfo[] = $results[$i];
@@ -2493,7 +2503,7 @@ HOTSPOT;
      * @param bool   $hidePercentageSign    hide "%" sign
      * @param string $decimalSeparator
      * @param string $thousandSeparator
-     * @param bool   $roundValues This option rounds the float values into a int using ceil()
+     * @param bool   $roundValues           This option rounds the float values into a int using ceil()
      *
      * @return string an html with the score modified
      */
@@ -2527,13 +2537,14 @@ HOTSPOT;
         }
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
 
-        // Formats values
-        $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
-
         if ($roundValues) {
+            // Formats values
+            $percentage = ceil($percentage);
             $score = ceil($score);
             $weight = ceil($weight);
         } else {
+            // Formats values
+            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
             $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }

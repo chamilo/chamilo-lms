@@ -33,7 +33,8 @@
     "qtip2": "*",
     "js-cookie": "2.1.*",
     "flag-icon-css": "*",
-    "jquery.easy-pie-chart": "^2.1.6"
+    "jquery.easy-pie-chart": "^2.1.6",
+    "jqueryui-touch-punch": "*"
   },
   "resolutions": {
     "jquery": "2.1.4"

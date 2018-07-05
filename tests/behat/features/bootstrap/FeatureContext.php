@@ -466,11 +466,9 @@ class FeatureContext extends MinkContext
     public function iShouldNotSeeAnIconWithTitle($value)
     {
         $el = $this->getSession()->getPage()->find('xpath', "//img[@title='$value']");
-        if (null !== $el) {
-            throw new Exception(
-                'Found an icon with title: '.$value
-            );
+        if (null === $el) {
+            return true;
         }
-        return true;
+        return false;
     }
 }

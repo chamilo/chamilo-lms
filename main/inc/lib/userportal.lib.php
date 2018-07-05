@@ -547,7 +547,7 @@ class IndexManager
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = [];
                         if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-                            $course_details[] = $course['visual_code'];
+                            $course_details[] = '('.$course['visual_code'].')';
                         }
                         if (api_get_setting('display_teacher_in_courselist') === 'true') {
                             $course_details[] = CourseManager::getTeacherListFromCourseCodeToString($course['code']);
@@ -592,7 +592,7 @@ class IndexManager
                     }
                     $course_details = [];
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-                        $course_details[] = $course['visual_code'];
+                        $course_details[] = '('.$course['visual_code'].')';
                     }
                     if (api_get_setting('display_teacher_in_courselist') === 'true') {
                         if (!empty($course['tutor_name'])) {

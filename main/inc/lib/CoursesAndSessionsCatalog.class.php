@@ -24,7 +24,7 @@ class CoursesAndSessionsCatalog
      */
     public static function is($value = CATALOG_COURSES)
     {
-        $showCoursesSessions = intval(api_get_setting('catalog_show_courses_sessions'));
+        $showCoursesSessions = (int) api_get_setting('catalog_show_courses_sessions');
         if ($showCoursesSessions == $value) {
             return true;
         }
@@ -41,7 +41,7 @@ class CoursesAndSessionsCatalog
      */
     public static function showSessions()
     {
-        $catalogShow = intval(api_get_setting('catalog_show_courses_sessions'));
+        $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
 
         if ($catalogShow == CATALOG_SESSIONS || $catalogShow == CATALOG_COURSES_SESSIONS) {
             return true;
@@ -59,7 +59,7 @@ class CoursesAndSessionsCatalog
      */
     public static function showCourses()
     {
-        $catalogShow = intval(api_get_setting('catalog_show_courses_sessions'));
+        $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
 
         if ($catalogShow == CATALOG_COURSES || $catalogShow == CATALOG_COURSES_SESSIONS) {
             return true;

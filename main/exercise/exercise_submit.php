@@ -1113,7 +1113,7 @@ if (!empty($error)) {
 
             $("form#exercise_form").prepend($("#exercise-description"));
         
-            $(\'button[name="previous_question_and_save"]\').on("click", function (e) {
+            $(\'button[name="previous_question_and_save"]\').on("touchstart click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();    
                 var
@@ -1124,7 +1124,7 @@ if (!empty($error)) {
                 previous_question_and_save(previousId, questionId);
             });
 
-            $(\'button[name="save_question_list"]\').on(\'click\', function (e) {
+            $(\'button[name="save_question_list"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var $this = $(this);
@@ -1133,7 +1133,7 @@ if (!empty($error)) {
                 save_question_list(questionList);
             });
 
-            $(\'button[name="save_now"]\').on(\'click\', function (e) {
+            $(\'button[name="save_now"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();                
                 var
@@ -1144,7 +1144,7 @@ if (!empty($error)) {
                 save_now(questionId, urlExtra);
             });
 
-            $(\'button[name="validate_all"]\').on(\'click\', function (e) {
+            $(\'button[name="validate_all"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();                
                 validate_all();

@@ -47,6 +47,7 @@ function switchMe(editor, callback) {
 	} else {
 		newToolbar = origSmallToolbar;
 	}
+	var origFullPage = !!editor.config.fullPage;
 	
 	// Copy data to original text element before getting rid of the old editor
 	var data = editor.getData();
@@ -67,6 +68,7 @@ function switchMe(editor, callback) {
 		smallToolbar: origSmallToolbar,
 		maximizedToolbar: origMaximizedToolbar,
 		extraPlugins : origExtraPlugins,
+		fullPage : origFullPage,
 		on: {
 			instanceReady: function(e) {
 				if (typeof CKeditor_OnComplete !== 'undefined') {

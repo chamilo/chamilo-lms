@@ -774,7 +774,7 @@ class Template
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }
 
-        if (api_get_setting('include_asciimathml_script') == 'true') {
+        if (api_get_setting('include_asciimathml_script') === 'true') {
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 

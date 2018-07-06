@@ -166,8 +166,9 @@ class ExerciseLink extends AbstractLink
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
      *
-     * @param int $stud_id student id (default: all students who have results -
-     *                     then the average is returned)
+     * @param int    $stud_id student id (default: all students who have results -
+     *                        then the average is returned)
+     * @param string $type
      *
      * @return array (score, max) if student is given
      *               array (sum of scores, number of scores) otherwise
@@ -260,7 +261,20 @@ class ExerciseLink extends AbstractLink
             $weight = 0;
             $sumResult = 0;
 
+            $studentList = $this->getStudentList();
+            $studentIdList = [];
+            if (!empty($studentList)) {
+                $studentIdList = array_column($studentList, 'user_id');
+            }
+
             while ($data = Database::fetch_array($scores, 'ASSOC')) {
+                // Only take into account users in the current student list.
+                if (!empty($studentIdList)) {
+                    if (!in_array($data['exe_user_id'], $studentIdList)) {
+                        continue;
+                    }
+                }
+
                 if (!isset($students[$data['exe_user_id']])) {
                     if ($data['exe_weighting'] != 0) {
                         $students[$data['exe_user_id']] = $data['exe_result'];

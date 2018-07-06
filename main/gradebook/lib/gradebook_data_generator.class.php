@@ -387,8 +387,7 @@ class GradebookDataGenerator
             true
         );
         $type = $item->get_item_type();
-
-        if ($type == 'L' && get_class($item) == 'ExerciseLink') {
+        if ($type === 'L' && get_class($item) === 'ExerciseLink') {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 

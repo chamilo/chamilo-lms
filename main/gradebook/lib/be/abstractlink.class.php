@@ -212,6 +212,9 @@ abstract class AbstractLink implements GradebookItem
         }
     }
 
+    /**
+     * @return array
+     */
     public function getStudentList()
     {
         if (empty($this->studentList)) {
@@ -221,6 +224,9 @@ abstract class AbstractLink implements GradebookItem
         return $this->studentList;
     }
 
+    /**
+     * @param array $list
+     */
     public function setStudentList($list)
     {
         $this->studentList = $list;

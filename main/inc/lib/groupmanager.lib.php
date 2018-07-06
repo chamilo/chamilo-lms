@@ -2339,8 +2339,12 @@ class GroupManager
                 $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
 
-                $group_name2 = '<a href="suivi_group_space.php?cidReq='.api_get_course_id().'&gidReq='.$this_group['id'].'">
-                                '.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
+                $group_name2 = '';
+
+                if (api_get_configuration_value('extra')) {
+                    $group_name2 = '<a href="suivi_group_space.php?cidReq='.api_get_course_id().'&gidReq='
+                        .$this_group['id'].'">'.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
+                }
 
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');

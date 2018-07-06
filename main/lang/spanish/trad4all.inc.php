@@ -8170,4 +8170,16 @@ $DocumentAutoLaunch = "Lanzamiento automático para documentos";
 $RedirectToTheDocumentList = "Redirigir a la lista de documentos";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "La funcionalidad de lanzamiento automático de ejercicios está activada. Los estudiantes serán automáticamente redirigidos a la lista de ejercicios.";
 $PostedExpirationDate = "Fecha límite publicada para enviar el trabajo (visible para el alumno)";
+$BossAlertMsgSentToUserXTitle = "Mensaje de seguimiento sobre alumno %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Hola,<br/><br/>
+
+El usuario %s ha enviado un mensaje de seguimiento sobre el alumno %s.<br/><br/>
+
+El mensaje se puede ver en %s";
+$include_services = "Incluir los servicios";
+$culqi_enable = "Activar Culqi";
+$SelectedUsersDisabled = "Todos los usuarios seleccionados han sido desactivado.";
+$SomeUsersNotDisabled = "Algunos de los usuarios seleccionados no han sido desactivado. Le recomendamos una verificación adicional a través de la búsqueda avanzada.";
+$SelectedUsersEnabled = "Todos los usuarios seleccionados han sido activado.";
+$SomeUsersNotEnabled = "Algunos de los usuarios seleccionados no han sido activado. Le recomendamos una verificación adicional a través de la búsqueda avanzada.";
 ?>

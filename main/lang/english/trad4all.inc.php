@@ -1776,7 +1776,7 @@ $UserLocked = "User locked";
 $UserUnlocked = "User unlocked";
 $CannotDeleteUser = "You cannot delete this user";
 $SelectedUsersDeleted = "Selected users deleted";
-$SomeUsersNotDeleted = "Some users has not been deleted";
+$SomeUsersNotDeleted = "Some of the selected users have not been deleted. We recommend you confirm which, by using the advanced search.";
 $ExternalAuthentication = "External authentification";
 $RegistrationDate = "Registration date";
 $UserUpdated = "User updated";
@@ -8146,4 +8146,16 @@ $DocumentAutoLaunch = "Auto-launch for documents";
 $RedirectToTheDocumentList = "Redirect to the document list";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to exercise list.";
 $PostedExpirationDate = "Posted deadline for sending the work (Visible to the learner)";
+$BossAlertMsgSentToUserXTitle = "Follow up message about student %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Hi,<br/><br/>
+
+User %s sent a follow up message about student %s.<br/><br/>
+
+The message can be seen here %s";
+$include_services = "Include services";
+$culqi_enable = "Enable culqi";
+$SelectedUsersDisabled = "The selected users have all been disabled";
+$SomeUsersNotDisabled = "Some of the selected users have not been disabled. We recommend you confirm which, by using the advanced search.";
+$SelectedUsersEnabled = "The selected users were all enabled.";
+$SomeUsersNotEnabled = "Some of the selected users have not been enabled. We recommend you confirm which, by using the advanced search.";
 ?>

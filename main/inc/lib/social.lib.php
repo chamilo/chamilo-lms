@@ -2057,7 +2057,7 @@ class SocialManager extends UserManager
                     $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                     $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
-                    if (!empty($user_info_friend['user_is_online'])) {
+                    if (!empty($user_info_friend['user_is_online_in_chat'])) {
                         $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
                         $status = 1;
                     } else {

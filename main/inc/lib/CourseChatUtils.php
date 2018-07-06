@@ -4,7 +4,9 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CChatConnected;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Michelf\MarkdownExtra;
 
@@ -94,7 +96,7 @@ class CourseChatUtils
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $basepath_chat = '/chat_files';
         $group_info = [];
-        if (!$this->groupId) {
+        if ($this->groupId) {
             $group_info = GroupManager::get_group_properties($this->groupId);
             $basepath_chat = $group_info['directory'].'/chat_files';
         }
@@ -703,29 +705,59 @@ class CourseChatUtils
     }
 
     /**
+     * Format the user data to return it in the user list
+     *
+     * @param User $user
+     * @param int  $status
+     *
+     * @return array
+     */
+    private function formatUser(User $user, $status)
+    {
+        return [
+            'id' => $user->getId(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'status' => $status,
+            'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
+            'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
+            'complete_name' => $user->getCompleteName(),
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'isConnected' => $this->userIsConnected($user->getId()),
+        ];
+    }
+
+    /**
      * Get the users online data.
      *
      * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function listUsersOnline()
     {
         $subscriptions = $this->getUsersSubscriptions();
         $usersInfo = [];
-        /** @var CourseRelUser $subscription */
-        foreach ($subscriptions as $subscription) {
-            $user = $subscription->getUser();
-            $usersInfo[] = [
-                'id' => $user->getId(),
-                'firstname' => $user->getFirstname(),
-                'lastname' => $user->getLastname(),
-                'status' => !$this->sessionId ? $subscription->getStatus() : $user->getStatus(),
-                'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
-                'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-                'complete_name' => $user->getCompleteName(),
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'isConnected' => $this->userIsConnected($user->getId()),
-            ];
+
+        if ($this->groupId) {
+            /** @var User $groupUser */
+            foreach ($subscriptions as $groupUser) {
+                $usersInfo[] = $this->formatUser(
+                    $groupUser,
+                    $groupUser->getStatus()
+                );
+            }
+        } else {
+            /** @var CourseRelUser|SessionRelCourseRelUser $subscription */
+            foreach ($subscriptions as $subscription) {
+                $user = $subscription->getUser();
+                $usersInfo[] = $this->formatUser(
+                    $user,
+                    $this->sessionId ? $user->getStatus() : $subscription->getStatus()
+                );
+            }
         }
 
         return $usersInfo;
@@ -743,6 +775,30 @@ class CourseChatUtils
     private function getUsersSubscriptions()
     {
         $em = Database::getManager();
+
+        if ($this->groupId) {
+            $students = $em
+                ->createQuery(
+                    'SELECT u FROM ChamiloUserBundle:User u
+                    INNER JOIN ChamiloCourseBundle:CGroupRelUser gru
+                        WITH u.id = gru.userId AND gru.cId = :course
+                    WHERE u.id != :user AND gru.groupId = :group'
+                )
+                ->setParameters(['course' => $this->courseId, 'user' => $this->userId, 'group' => $this->groupId])
+                ->getResult();
+            $tutors = $em
+                ->createQuery(
+                    'SELECT u FROM ChamiloUserBundle:User u
+                    INNER JOIN ChamiloCourseBundle:CGroupRelTutor grt
+                        WITH u.id = grt.userId AND grt.cId = :course
+                    WHERE u.id != :user AND grt.groupId = :group'
+                )
+                ->setParameters(['course' => $this->courseId, 'user' => $this->userId, 'group' => $this->groupId])
+                ->getResult();
+
+            return array_merge($tutors, $students);
+        }
+
         /** @var Course $course */
         $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
 

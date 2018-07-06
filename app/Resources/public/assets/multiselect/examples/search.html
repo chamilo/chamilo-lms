@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" lang="en" content="jQuery multiselect plugin with two sides. The user can select one or more items and send them to the other side."/>
+    <meta name="keywords" lang="en" content="jQuery multiselect plugin" />
+
+    <base href="http://crlcu.github.io/multiselect/" />
+    
+    <title>jQuery multiselect plugin with two sides</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://github.com/favicon.ico" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/google-code-prettify/prettify.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="https://github.com/crlcu/multiselect" class="github ribbon">
+        <img src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+    </a>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand scroll" href="#">Multiselect</a>
+                </div>
+                
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" class="scroll">Home</a></li>
+                        <li><a href="#documentation" class="scroll">Documentation</a></li>
+                        <li><a href="#browser-support" class="scroll">Browser Support</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Examples <span  class="caret"></span ></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="examples/zero-configuration.html">Zero configuration</a></li>
+                                <li><a href="examples/data-options.html">With <code>data</code> options</a></li>
+                                <li><a href="examples/javascript-options.html">With <code>javascript</code> options</a></li>
+                                <li><a href="examples/search.html">With <code>search</code></a></li>
+                                <li><a href="examples/keep-rendering-sort.html">Keep rendering <code>sort</code></a></li>
+                                <li><a href="examples/custom-sort.html">Custom <code>sort</code></a></li>
+                                <li><a href="examples/undo-redo.html">Undo / Redo</a></li>
+                                <li><a href="examples/multiple-destinations.html">Multiple destinations</a></li>
+                                <li><a href="examples/optgroup.html">With <code>optgroup</code></a></li>
+                                <li><a href="examples/move-up-down.html">With move <code>up</code>/<code>down</code> buttons</a></li>
+                                <li><a href="examples/multiple.html">Multiple instances</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#download" class="scroll">Download</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="wrap" class="container">            
+        <h4 id="demo-search">With search</h4>
+            
+            <div class="row">
+                <div class="col-sm-5">
+                    <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
+                        <option value="1" data-position="1">Item 1</option>
+                        <option value="2" data-position="2">Item 5</option>
+                        <option value="2" data-position="3">Item 2</option>
+                        <option value="2" data-position="4">Item 4</option>
+                        <option value="3" data-position="5">Item 3</option>
+                    </select>
+                </div>
+                
+                <div class="col-sm-2">
+                    <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+                    <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                    <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                    <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                </div>
+                
+                <div class="col-sm-5">
+                    <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <h5>HTML</h5>
+<pre class="prettyprint linenums">
+&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col-xs-5&quot;&gt;
+        &lt;select name=&quot;from[]&quot; id=&quot;search&quot; class=&quot;form-control&quot; size=&quot;8&quot; multiple=&quot;multiple&quot;&gt;
+            &lt;option value=&quot;1&quot;&gt;Item 1&lt;/option&gt;
+            &lt;option value=&quot;2&quot;&gt;Item 5&lt;/option&gt;
+            &lt;option value=&quot;2&quot;&gt;Item 2&lt;/option&gt;
+            &lt;option value=&quot;2&quot;&gt;Item 4&lt;/option&gt;
+            &lt;option value=&quot;3&quot;&gt;Item 3&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&quot;col-xs-2&quot;&gt;
+        &lt;button type=&quot;button&quot; id=&quot;search_rightAll&quot; class=&quot;btn btn-block&quot;&gt;&lt;i class=&quot;glyphicon glyphicon-forward&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+        &lt;button type=&quot;button&quot; id=&quot;search_rightSelected&quot; class=&quot;btn btn-block&quot;&gt;&lt;i class=&quot;glyphicon glyphicon-chevron-right&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+        &lt;button type=&quot;button&quot; id=&quot;search_leftSelected&quot; class=&quot;btn btn-block&quot;&gt;&lt;i class=&quot;glyphicon glyphicon-chevron-left&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+        &lt;button type=&quot;button&quot; id=&quot;search_leftAll&quot; class=&quot;btn btn-block&quot;&gt;&lt;i class=&quot;glyphicon glyphicon-backward&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&quot;col-xs-5&quot;&gt;
+        &lt;select name=&quot;to[]&quot; id=&quot;search_to&quot; class=&quot;form-control&quot; size=&quot;8&quot; multiple=&quot;multiple&quot;&gt;&lt;/select&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+            <h5>JavaScript</h5>
+<pre class="prettyprint linenums">
+&lt;script type=&quot;text/javascript&quot;&gt;
+jQuery(document).ready(function($) {
+    $(&#39;#search&#39;).multiselect({
+        search: {
+            left: &#39;&lt;input type=&quot;text&quot; name=&quot;q&quot; class=&quot;form-control&quot; placeholder=&quot;Search...&quot; /&gt;&#39;,
+            right: &#39;&lt;input type=&quot;text&quot; name=&quot;q&quot; class=&quot;form-control&quot; placeholder=&quot;Search...&quot; /&gt;&#39;,
+        },
+        fireSearch: function(value) {
+            return value.length &gt; 3;
+        }
+    });
+});
+&lt;/script&gt;
+</pre>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script type="text/javascript" src="dist/js/multiselect.min.js"></script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+    ga('create', 'UA-39934286-1', 'github.com');
+    ga('send', 'pageview');
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // make code pretty
+    window.prettyPrint && prettyPrint();
+
+    $('#search').multiselect({
+        search: {
+            left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+        },
+        fireSearch: function(value) {
+            return value.length > 3;
+        }
+    });
+});
+</script>
+</body>
+</html>

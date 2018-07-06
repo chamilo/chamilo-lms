@@ -34,7 +34,9 @@
     "js-cookie": "2.1.*",
     "flag-icon-css": "*",
     "jquery.easy-pie-chart": "^2.1.6",
-    "jqueryui-touch-punch": "*"
+    "jqueryui-touch-punch": "*",
+    "multiselect-two-sides": "*"
+
   },
   "resolutions": {
     "jquery": "2.1.4"

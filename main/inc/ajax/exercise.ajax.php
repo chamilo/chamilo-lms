@@ -13,9 +13,9 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 if ($debug) {
-    error_log("-----------------------------------------------------");
+    error_log('-----------------------------------------------------');
     error_log("$action ajax call");
-    error_log("-----------------------------------------------------");
+    error_log('-----------------------------------------------------');
 }
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
@@ -34,7 +34,7 @@ switch ($action) {
 
         if (empty($exeId)) {
             if ($debug) {
-                error_log("Exe id not provided.");
+                error_log('Exe id not provided.');
             }
             exit;
         }
@@ -44,7 +44,7 @@ switch ($action) {
 
         if (empty($exerciseInSession)) {
             if ($debug) {
-                error_log("Exercise obj not provided.");
+                error_log('Exercise obj not provided.');
             }
             exit;
         }
@@ -698,17 +698,22 @@ switch ($action) {
 
         $objExercise = new Exercise();
         $objExercise->read($exerciseId);
-
         $objQuestion = Question::read($questionId);
 
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type == FILL_IN_BLANKS) {
+        if ($objQuestion->type === FILL_IN_BLANKS) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
                 });
             </script>';
         }
+
+        // Allows render MathJax elements in a ajax call
+        if (api_get_setting('include_asciimathml_script') === 'true') {
+            echo '<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]);</script>';
+        }
+
         ExerciseLib::showQuestion(
             $objExercise,
             $questionId,

@@ -5258,58 +5258,7 @@ class UserManager
     }
 
     /**
-     * @param int  $student_id
-     * @param int  $years
-     * @param bool $warning_message  show warning_message
-     * @param bool $return_timestamp return_timestamp
-     */
-    public static function delete_inactive_student(
-        $student_id,
-        $years = 2,
-        $warning_message = false,
-        $return_timestamp = false
-    ) {
-        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql = 'SELECT login_date FROM '.$tbl_track_login.'
-                WHERE login_user_id = '.intval($student_id).'
-                ORDER BY login_date DESC LIMIT 0,1';
-        if (empty($years)) {
-            $years = 1;
-        }
-        $inactive_time = $years * 31536000; //1 year
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                $last_login_date = api_get_local_time(
-                    $last_login_date,
-                    null,
-                    date_default_timezone_get()
-                );
-                if ($return_timestamp) {
-                    return api_strtotime($last_login_date);
-                } else {
-                    if (!$warning_message) {
-                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        $timestamp = api_strtotime($last_login_date);
-                        $currentTimestamp = time();
-
-                        //If the last connection is > than 7 days, the text is red
-                        //345600 = 7 days in seconds 63072000= 2 ans
-                        // if ($currentTimestamp - $timestamp > 184590 )
-                        if ($currentTimestamp - $timestamp > $inactive_time && self::delete_user($student_id)) {
-                            echo Display::return_message(get_lang('UserDeleted'));
-                            echo '<p>', 'id', $student_id, ':', $last_login_date, '</p>';
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
+     * Returns an array of the different types of user extra fields [id => title translation]
      * @return array
      */
     public static function get_user_field_types()
@@ -5406,13 +5355,14 @@ class UserManager
      * @param array $bossList
      * @param bool  $sendNotification
      *
-     * @return int Affected rows
+     * @return mixed Affected rows or false on failure
      */
     public static function subscribeUserToBossList(
         $studentId,
         $bossList,
         $sendNotification = false
     ) {
+        $inserted = 0;
         if ($bossList) {
             $studentId = (int) $studentId;
             $studentInfo = api_get_user_info($studentId);
@@ -5432,20 +5382,24 @@ class UserManager
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);
 
-                if ($insertId && $sendNotification) {
-                    $name = $studentInfo['complete_name'];
-                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
-                    $url = Display::url($url, $url);
-                    $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
-                    $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
-                    MessageManager::send_message_simple(
-                        $bossId,
-                        $subject,
-                        $message
-                    );
+                if ($insertId) {
+                    if ($sendNotification) {
+                        $name = $studentInfo['complete_name'];
+                        $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
+                        $url = Display::url($url, $url);
+                        $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
+                        $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                        MessageManager::send_message_simple(
+                            $bossId,
+                            $subject,
+                            $message
+                        );
+                    }
+                    $inserted++;
                 }
             }
         }
+        return $inserted;
     }
 
     /**
@@ -5802,6 +5756,7 @@ SQL;
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
+        return '';
     }
 
     /**
@@ -5960,6 +5915,7 @@ SQL;
      * Send user confirmation mail.
      *
      * @param User $user
+     * @throws Exception
      */
     public static function sendUserConfirmationMail(User $user)
     {
@@ -6016,6 +5972,7 @@ SQL;
      *
      * @param int $user_id
      * @param int $active  Enable or disable
+     * @return bool True on success, false on failure
      * @assert (-1,0) === false
      * @assert (1,1) === true
      */
@@ -6046,7 +6003,7 @@ SQL;
      * Get either a Gravatar URL or complete image tag for a specified email address.
      *
      * @param string $email The email address
-     * @param string $s     Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param int    $s     Size in pixels, defaults to 80px [ 1 - 2048 ]
      * @param string $d     Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
      * @param string $r     Maximum rating (inclusive) [ g | pg | r | x ]
      * @param bool   $img   True to return a complete IMG tag False for just the URL

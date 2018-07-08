@@ -56,7 +56,9 @@ class UserManager
      */
     public static function getRepository()
     {
-        return Database::getManager()->getRepository('ChamiloUserBundle:User');
+        /** @var UserRepository $userRepository */
+        $userRepository = Database::getManager()->getRepository('ChamiloUserBundle:User');
+        return $userRepository;
     }
 
     /**
@@ -678,6 +680,7 @@ class UserManager
      * @return bool true if user is successfully deleted, false otherwise
      * @assert (null) === false
      * @assert ('abc') === false
+     * @throws Exception
      */
     public static function delete_user($user_id)
     {
@@ -964,9 +967,10 @@ class UserManager
         $r = Database::query($sql);
         if ($r !== false) {
             Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $ids);
+            return true;
         }
 
-        return $r;
+        return false;
     }
 
     /**
@@ -998,9 +1002,10 @@ class UserManager
         $r = Database::query($sql);
         if ($r !== false) {
             Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $ids);
+            return true;
         }
 
-        return $r;
+        return false;
     }
 
     /**
@@ -1026,26 +1031,36 @@ class UserManager
                 openid='".Database::escape_string($openid)."'";
         $sql .= " WHERE id= $user_id";
 
-        return Database::query($sql);
+        if (Database::query($sql) !== false) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Update user information with all the parameters passed to this function.
      *
-     * @param int The ID of the user to be updated
-     * @param string The user's firstname
-     * @param string The user's lastname
-     * @param string The user's username (login)
-     * @param string The user's password
-     * @param string The authentication source (default: "platform")
-     * @param string The user's e-mail address
-     * @param int The user's status
-     * @param string The user's official code (usually just an internal institutional code)
-     * @param string The user's phone number
-     * @param string The user's picture URL (internal to the Chamilo directory)
-     * @param int The user ID of the person who registered this user (optional, defaults to null)
-     * @param int The department of HR in which the user is registered (optional, defaults to 0)
-     * @param array A series of additional fields to add to this user as extra fields (optional, defaults to null)
+     * @param int $user_id The ID of the user to be updated
+     * @param string $firstname The user's firstname
+     * @param string $lastname The user's lastname
+     * @param string $username The user's username (login)
+     * @param string $password The user's password
+     * @param string $auth_source The authentication source (default: "platform")
+     * @param string $email The user's e-mail address
+     * @param int    $status The user's status
+     * @param string $official_code The user's official code (usually just an internal institutional code)
+     * @param string $phone The user's phone number
+     * @param string $picture_uri The user's picture URL (internal to the Chamilo directory)
+     * @param string $expiration_date The date at which this user will be automatically disabled
+     * @param int   $active Whether this account needs to be enabled (1) or disabled (0)
+     * @param int   $creator_id The user ID of the person who registered this user (optional, defaults to null)
+     * @param int   $hr_dept_id The department of HR in which the user is registered (optional, defaults to 0)
+     * @param array $extra A series of additional fields to add to this user as extra fields (optional, defaults to null)
+     * @param string $language The language to which the user account will be set
+     * @param string $encrypt_method The cipher method. This parameter is deprecated. It will use the system's default
+     * @param bool   $send_email Whether to send an e-mail to the user after the update is complete
+     * @param int    $reset_password Method used to reset password (0, 1, 2 or 3 - see usage examples for details)
+     * @param string $address
      *
      * @return bool|int False on error, or the user ID if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
@@ -1102,11 +1117,11 @@ class UserManager
             $original_password = $password = api_generate_password();
             $auth_source = PLATFORM_AUTH_SOURCE;
         } elseif ($reset_password == 2) {
-            $password = $password;
+            //$password = $password;
             $auth_source = PLATFORM_AUTH_SOURCE;
         } elseif ($reset_password == 3) {
-            $password = $password;
-            $auth_source = $auth_source;
+            //$password = $password;
+            //$auth_source = $auth_source;
         }
 
         // Checking the user language
@@ -1611,7 +1626,7 @@ class UserManager
         }
 
         if (count($order_by) > 0) {
-            $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
+            $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }
 
         if (is_numeric($limit_from) && is_numeric($limit_from)) {
@@ -1633,6 +1648,8 @@ class UserManager
      *
      * @param array $conditions a list of condition (exemple : status=>STUDENT)
      * @param array $order_by   a list of fields on which sort
+     * @param bool  $simple_like Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
+     * @param string $condition  Whether we want the filters to be combined by AND or OR
      *
      * @return array an array with all users of the platform
      *
@@ -1679,7 +1696,7 @@ class UserManager
             }
         }
         if (count($order_by) > 0) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
+            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }
 
         $sql_result = Database::query($sql_query);
@@ -2221,7 +2238,7 @@ class UserManager
     /**
      * Returns an array with the user's productions.
      *
-     * @param   $user_id User id
+     * @param  int $user_id User id
      *
      * @return array An array containing the user's productions
      */
@@ -2553,9 +2570,9 @@ class UserManager
     public static function get_extra_user_data(
         $user_id,
         $prefix = false,
-        $all_visibility = true,
-        $splitmultiple = false,
-        $field_filter = null
+        $allVisibility = true,
+        $splitMultiple = false,
+        $fieldFilter = null
     ) {
         // A sanity check.
         if (empty($user_id)) {
@@ -2576,16 +2593,16 @@ class UserManager
                 ";
         $filter_cond = '';
 
-        if (!$all_visibility) {
-            if (isset($field_filter)) {
-                $field_filter = intval($field_filter);
-                $filter_cond .= " AND filter = $field_filter ";
+        if (!$allVisibility) {
+            if (isset($fieldFilter)) {
+                $fieldFilter = intval($fieldFilter);
+                $filter_cond .= " AND filter = $fieldFilter ";
             }
             $sql .= " AND f.visible_to_self = 1 $filter_cond ";
         } else {
-            if (isset($field_filter)) {
-                $field_filter = intval($field_filter);
-                $sql .= " AND filter = $field_filter ";
+            if (isset($fieldFilter)) {
+                $fieldFilter = intval($fieldFilter);
+                $sql .= " AND filter = $fieldFilter ";
             }
         }
 
@@ -3485,14 +3502,14 @@ class UserManager
      *
      * @param string $user_id      User ID
      * @param string $course       course directory
-     * @param string $resourcetype resourcetype: images, all
+     * @param string $resourceType resource type: images, all
      *
      * @return string
      */
     public static function get_user_upload_files_by_course(
         $user_id,
         $course,
-        $resourcetype = 'all'
+        $resourceType = 'all'
     ) {
         $return = '';
         if (!empty($user_id) && !empty($course)) {
@@ -3515,9 +3532,9 @@ class UserManager
                 }
                 $extensionList = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif'];
                 foreach ($file_list as $file) {
-                    if ($resourcetype == "all") {
+                    if ($resourceType == 'all') {
                         $return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
-                    } elseif ($resourcetype == "images") {
+                    } elseif ($resourceType == 'images') {
                         //get extension
                         $ext = explode('.', $file);
                         if (isset($ext[1]) && in_array($ext[1], $extensionList)) {
@@ -3544,7 +3561,7 @@ class UserManager
      * @param int     Optional user id (defaults to the result of api_get_user_id())
      * @param string $api_service
      *
-     * @return array Non-indexed array containing the list of API keys for this user, or FALSE on error
+     * @return mixed Non-indexed array containing the list of API keys for this user, or FALSE on error
      */
     public static function get_api_keys($user_id = null, $api_service = 'dokeos')
     {
@@ -3926,7 +3943,7 @@ class UserManager
      * @param int  $field_id
      * @param bool $show_links show links or not
      *
-     * @return array
+     * @return string
      */
     public static function get_user_tags_to_string($user_id, $field_id, $show_links = true)
     {
@@ -3967,8 +3984,6 @@ class UserManager
         } else {
             return '';
         }
-
-        return $return;
     }
 
     /**
@@ -4029,7 +4044,7 @@ class UserManager
      * @param int   $user_id
      * @param int   $field_id field id of the tag
      *
-     * @return bool
+     * @return bool True if the tag was inserted or updated. False otherwise. The return value doesn't take into account *values* added to the tag. Only the creation/update of the tag field itself.
      */
     public static function add_tag($tag, $user_id, $field_id)
     {
@@ -4083,7 +4098,9 @@ class UserManager
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
                 Database::query($sql);
             }
+            return true;
         }
+        return false;
     }
 
     /**
@@ -4269,7 +4286,7 @@ class UserManager
     /**
      * Get extra filterable user fields (only type select).
      *
-     * @return array
+     * @return array Array of extra fields as [int => ['name' => ..., 'variable' => ..., 'data' => ...]] (or empty array if no extra field)
      */
     public static function getExtraFilterableFields()
     {
@@ -4288,15 +4305,13 @@ class UserManager
             }
         }
 
-        if (is_array($fields) && count($fields) > 0) {
-            return $fields;
-        }
+        return $fields;
     }
 
     /**
-     * Get extra where clauses for finding users based on extra filtrable user fields (type select).
+     * Get extra where clauses for finding users based on extra filterable user fields (type select).
      *
-     * @return string With AND clauses based on user's ID which have the values to search in extra user fields
+     * @return string With AND clauses based on user's ID which have the values to search in extra user fields (or empty if no extra field exists)
      */
     public static function get_search_form_where_extra_fields()
     {
@@ -4339,6 +4354,7 @@ class UserManager
 
             return $whereFilter;
         }
+        return '';
     }
 
     /**
@@ -4347,6 +4363,7 @@ class UserManager
      * @param string $query the value of the search box
      *
      * @return string HTML form
+     * @throws Exception
      */
     public static function get_search_form($query, $defaultParams = [])
     {
@@ -4428,7 +4445,7 @@ class UserManager
         echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
         echo '<span style="float:right; padding-top:7px;">'.
         '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
-        '</span>';
+        echo '</span>';
         echo '</div>';
     }
 
@@ -4650,7 +4667,7 @@ class UserManager
      * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
      *
-     * @return array user list
+     * @return mixed Users list (array) or the SQL query if $getSQL was set to true
      */
     public static function getUsersFollowedByUser(
         $userId,
@@ -4886,7 +4903,7 @@ class UserManager
      * Register request to assign users to HRM.
      *
      * @param int $hrmId   The HRM ID
-     * @param int $usersId The users ID
+     * @param array $usersId The users IDs
      *
      * @return int
      */
@@ -4922,7 +4939,7 @@ class UserManager
      * Add subscribed users to a user by relation type.
      *
      * @param int    $userId                   The user id
-     * @param array  $subscribedUsersId        The id of suscribed users
+     * @param array  $subscribedUsersId        The id of subscribed users
      * @param string $relationType             The relation type
      * @param bool   $deleteUsersBeforeInsert
      * @param bool   $deleteOtherAssignedUsers
@@ -5036,11 +5053,11 @@ class UserManager
     }
 
     /**
-     * get user id of teacher or session administrator.
+     * Return the user id of teacher or session administrator.
      *
      * @param array $courseInfo
      *
-     * @return int The user id
+     * @return mixed The user id, or false if the session ID was negative
      */
     public static function get_user_id_of_course_admin_or_session_admin($courseInfo)
     {
@@ -5081,6 +5098,7 @@ class UserManager
 
             return $row['uid'];
         }
+        return false;
     }
 
     /**

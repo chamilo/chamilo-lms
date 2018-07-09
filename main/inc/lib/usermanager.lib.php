@@ -3359,8 +3359,8 @@ class UserManager
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         //we filter the courses from the URL
         $join_access_url = $where_access_url = '';
 
@@ -3393,15 +3393,19 @@ class UserManager
                     $where_access_url
                 ORDER BY sc.position ASC, c.id";
 
-        $personal_course_list = [];
+        $myCourseList = [];
         $courses = [];
-
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                 $result_row['status'] = 5;
                 if (!in_array($result_row['real_id'], $courses)) {
-                    $personal_course_list[] = $result_row;
+                    $position = $result_row['position'];
+                    if (!isset($myCourseList[$position])) {
+                        $myCourseList[$position] = $result_row;
+                    } else {
+                        $myCourseList[] = $result_row;
+                    }
                     $courses[] = $result_row['real_id'];
                 }
             }
@@ -3435,7 +3439,12 @@ class UserManager
                 while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                     $result_row['status'] = 2;
                     if (!in_array($result_row['real_id'], $courses)) {
-                        $personal_course_list[] = $result_row;
+                        $position = $result_row['position'];
+                        if (!isset($myCourseList[$position])) {
+                            $myCourseList[$position] = $result_row;
+                        } else {
+                            $myCourseList[] = $result_row;
+                        }
                         $courses[] = $result_row['real_id'];
                     }
                 }
@@ -3450,7 +3459,12 @@ class UserManager
                 if (!empty($courseList)) {
                     foreach ($courseList as $course) {
                         if (!in_array($course['id'], $courses)) {
-                            $personal_course_list[] = $course;
+                            $position = $course['position'];
+                            if (!isset($myCourseList[$position])) {
+                                $myCourseList[$position] = $course;
+                            } else {
+                                $myCourseList[] = $course;
+                            }
                         }
                     }
                 }
@@ -3463,14 +3477,23 @@ class UserManager
                 if (!empty($courseList)) {
                     foreach ($courseList as $course) {
                         if (!in_array($course['id'], $courses)) {
-                            $personal_course_list[] = $course;
+                            $position = $course['position'];
+                            if (!isset($myCourseList[$position])) {
+                                $myCourseList[$position] = $course;
+                            } else {
+                                $myCourseList[] = $course;
+                            }
                         }
                     }
                 }
             }
         }
 
-        return $personal_course_list;
+        if (!empty($myCourseList)) {
+            ksort($myCourseList);
+        }
+
+        return $myCourseList;
     }
 
     /**

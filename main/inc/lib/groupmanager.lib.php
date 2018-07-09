@@ -2340,7 +2340,6 @@ class GroupManager
                     Security::remove_XSS($this_group['name']).'</a> ';
 
                 $group_name2 = '';
-
                 if (api_get_configuration_value('extra')) {
                     $group_name2 = '<a href="suivi_group_space.php?cidReq='.api_get_course_id().'&gidReq='
                         .$this_group['id'].'">'.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';

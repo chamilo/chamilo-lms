@@ -1498,7 +1498,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
     }
 
-    $user_id = intval($user['user_id']);
+    $user_id = (int) $user['user_id'];
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
 
@@ -1554,7 +1554,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
     }
     if (isset($user['user_is_online_in_chat'])) {
-        $result['user_is_online_in_chat'] = intval($user['user_is_online_in_chat']);
+        $result['user_is_online_in_chat'] = (int) $user['user_is_online_in_chat'];
     }
 
     if ($add_password) {
@@ -1648,7 +1648,7 @@ function api_get_user_info(
     }
 
     // Make sure user_id is safe
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
 
     // Re-use user information if not stale and already stored in APCu
     if ($cacheAvailable === true) {
@@ -2092,7 +2092,7 @@ function api_get_session_entity($id = 0)
 function api_get_course_info_by_id($id = null)
 {
     if (!empty($id)) {
-        $id = intval($id);
+        $id = (int) $id;
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT
@@ -2532,7 +2532,7 @@ function api_get_session_visibility(
         return 0; // Means that the session is still available.
     }
 
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $result = Database::query("SELECT * FROM $tbl_session WHERE id = $session_id");
@@ -2658,7 +2658,7 @@ function api_get_session_condition(
     $with_base_content = false,
     $session_field = 'session_id'
 ) {
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
 
     if (empty($session_field)) {
         $session_field = "session_id";
@@ -2837,7 +2837,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null)
 {
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
@@ -2849,7 +2849,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
         return $is_admin;
     }
     // We get here only if $url is set
-    $url = intval($url);
+    $url = (int) $url;
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT * FROM $url_user_table
             WHERE access_url_id = $url AND user_id = $user_id";
@@ -2868,7 +2868,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
  */
 function api_get_user_status($user_id = null)
 {
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
@@ -3891,14 +3891,14 @@ function api_get_item_visibility(
     }
 
     $tool = Database::escape_string($tool);
-    $id = intval($id);
+    $id = (int) $id;
     $session = (int) $session;
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id = intval($_course['real_id']);
+    $course_id = (int) $_course['real_id'];
 
     $userCondition = '';
     if (!empty($user_id)) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $userCondition = " AND to_user_id = $user_id ";
     }
 
@@ -3910,7 +3910,7 @@ function api_get_item_visibility(
 
     $groupCondition = '';
     if (!empty($group_id)) {
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
         $groupCondition = " AND to_group_id = '$group_id' ";
     }
 
@@ -3958,7 +3958,7 @@ function api_item_property_delete(
         return false;
     }
 
-    $courseId = intval($courseInfo['real_id']);
+    $courseId = (int) $courseInfo['real_id'];
 
     if (empty($courseId) || empty($tool) || empty($itemId)) {
         return false;
@@ -4072,7 +4072,7 @@ function api_item_property_update(
     $time = api_get_utc_datetime();
 
     if (!empty($session_id)) {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
     } else {
         $session_id = api_get_session_id();
     }
@@ -4086,7 +4086,7 @@ function api_item_property_update(
 
     if (!is_null($to_user_id)) {
         // $to_user_id has more priority than $to_group_id
-        $to_user_id = intval($to_user_id);
+        $to_user_id = (int) $to_user_id;
         $to_field = 'to_user_id';
         $to_value = $to_user_id;
     } else {
@@ -4338,7 +4338,7 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
     $session_condition = ' AND session_id = '.$session_id;
     if (empty($session_id)) {
         $session_condition = " AND (session_id = 0 OR session_id IS NULL) ";

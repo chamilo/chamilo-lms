@@ -3899,7 +3899,7 @@ class SessionManager
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $sqlSelect = "*, c.id, c.id as real_id";
 
         if ($getCount) {
@@ -3937,7 +3937,7 @@ class SessionManager
             if ($getCount) {
                 $count = Database::fetch_assoc($result);
 
-                return intval($count['count']);
+                return (int) $count['count'];
             }
 
             while ($row = Database::fetch_array($result, 'ASSOC')) {

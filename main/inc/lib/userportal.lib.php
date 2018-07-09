@@ -1438,7 +1438,7 @@ class IndexManager
                                 }
 
                                 if ($showAllSessions) {
-                                    if ($allowed_time < $session_now && $allowedEndTime == false) {
+                                    if ($allowed_time < $session_now && $allowedEndTime === false) {
                                         $markAsOld = true;
                                     }
                                     if ($allowed_time > $session_now && $endSessionToTms > $session_now) {
@@ -1451,7 +1451,7 @@ class IndexManager
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
                                     // Read only and accessible.
                                     $atLeastOneCourseIsVisible = true;
-                                    if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                    if (api_get_setting('hide_courses_in_sessions') === 'false') {
                                         $courseUserHtml = CourseManager::get_logged_user_course_html(
                                             $course,
                                             $session_id,
@@ -1518,7 +1518,7 @@ class IndexManager
                             }
 
                             // No courses to show.
-                            if ($atLeastOneCourseIsVisible == false) {
+                            if ($atLeastOneCourseIsVisible === false) {
                                 if (empty($html_courses_session)) {
                                     continue;
                                 }

@@ -4261,7 +4261,7 @@ class CourseManager
         $course_info = api_get_course_info_by_id($course['real_id']);
         $course_visibility = $course_info['visibility'];
 
-        if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
+        if ($course_visibility === COURSE_VISIBILITY_HIDDEN) {
             return '';
         }
 
@@ -4316,9 +4316,10 @@ class CourseManager
                     $sessionCourseAvailable = true;
                 }
 
-                if ($userInCourseStatus == COURSEMANAGER || $sessionCourseAvailable) {
+                if ($userInCourseStatus === COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
-                    $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.$course_info['name'].'</a>'.$notifications;
+                    $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.
+                        $course_info['name'].'</a>'.$notifications;
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -4364,7 +4365,10 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
-                    $params['document'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'.
+                    $params['document'] .= '<a 
+                        id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" 
+                        class="document_preview btn btn-default btn-sm" 
+                        href="javascript:void(0);">'.
                         Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div('', [
                         'id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'],
@@ -4378,7 +4382,6 @@ class CourseManager
                 $course_info['real_id'],
                 true
             );
-
             $course_coachs = self::get_coachs_from_course(
                 $course_info['id_session'],
                 $course_info['real_id']
@@ -4415,8 +4418,8 @@ class CourseManager
                 $session_category_id = self::get_session_category_id_by_session_id($course_info['id_session']);
 
                 if (
-                    $session['access_start_date'] == '0000-00-00 00:00:00' || empty($session['access_start_date']) ||
-                    $session['access_start_date'] == '0000-00-00'
+                    $session['access_start_date'] === '0000-00-00 00:00:00' || empty($session['access_start_date']) ||
+                    $session['access_start_date'] === '0000-00-00'
                 ) {
                     $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {
@@ -4424,7 +4427,9 @@ class CourseManager
                     }
                     $active = true;
                 } else {
-                    $session['dates'] = ' - '.get_lang('From').' '.$session['access_start_date'].' '.get_lang('To').' '.$session['access_end_date'];
+                    $session['dates'] = ' - '.
+                        get_lang('From').' '.$session['access_start_date'].' '.
+                        get_lang('To').' '.$session['access_end_date'];
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
                     }

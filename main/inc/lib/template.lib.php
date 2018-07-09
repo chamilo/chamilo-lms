@@ -760,7 +760,7 @@ class Template
             'bootstrap-select/dist/js/bootstrap-select.min.js',
             $selectLink,
             'select2/dist/js/select2.min.js',
-            "select2/dist/js/i18n/$isoCode.js",
+            "select2/dist/js/i18n/$isoCode.js"
         ];
 
         $features = api_get_configuration_value('video_features');

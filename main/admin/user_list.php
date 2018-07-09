@@ -439,7 +439,9 @@ function get_number_of_users()
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
- * @return  array   Users list
+ *
+ * @return array Users list
+ *
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -511,7 +513,7 @@ function email_filter($email)
 /**
  * Returns a mailto-link.
  *
- * @param string $email An email-address
+ * @param string $email  An email-address
  * @param array  $params Deprecated
  * @param array  $row
  *
@@ -529,8 +531,9 @@ function user_filter($name, $params, $row)
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
  *
- * @return string Some HTML-code with modify-buttons
  * @throws Exception
+ *
+ * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row)
 {
@@ -811,7 +814,9 @@ function active_filter($active, $params, $row)
 
 /**
  * Instead of displaying the integer of the status, we give a translation for the status.
+ *
  * @param int $status
+ *
  * @return string translation
  *
  * @version march 2008

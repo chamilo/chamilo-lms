@@ -8,7 +8,7 @@
 */
 
 /**
- * Class OLPC_Peru_FilterPlugin
+ * Class OLPC_Peru_FilterPlugin.
  */
 class OLPC_Peru_FilterPlugin extends Plugin
 {

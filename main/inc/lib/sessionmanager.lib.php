@@ -2486,8 +2486,10 @@ class SessionManager
      * @param bool  $removeExistingCoursesWithUsers Whether to unsubscribe
      *                                              existing courses and users (true, default) or not (false)
      * @param bool  $copyEvaluation                 from base course to session course
-     * @return  bool False on failure, true otherwise
+     *
      * @throws Exception
+     *
+     * @return bool False on failure, true otherwise
      * */
     public static function add_courses_to_session(
         $sessionId,
@@ -2510,7 +2512,6 @@ class SessionManager
             return false;
         }
         $sessionVisibility = $session->getVisibility();
-
 
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2743,6 +2744,7 @@ class SessionManager
                 SET nbr_courses = $nbr_courses
                 WHERE id = $sessionId";
         Database::query($sql);
+
         return true;
     }
 

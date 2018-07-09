@@ -58,6 +58,7 @@ class UserManager
     {
         /** @var UserRepository $userRepository */
         $userRepository = Database::getManager()->getRepository('ChamiloUserBundle:User');
+
         return $userRepository;
     }
 
@@ -677,10 +678,11 @@ class UserManager
      *
      * @param int The ID of th user to be deleted
      *
+     * @throws Exception
+     *
      * @return bool true if user is successfully deleted, false otherwise
      * @assert (null) === false
      * @assert ('abc') === false
-     * @throws Exception
      */
     public static function delete_user($user_id)
     {
@@ -967,6 +969,7 @@ class UserManager
         $r = Database::query($sql);
         if ($r !== false) {
             Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $ids);
+
             return true;
         }
 
@@ -1002,6 +1005,7 @@ class UserManager
         $r = Database::query($sql);
         if ($r !== false) {
             Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $ids);
+
             return true;
         }
 
@@ -1034,32 +1038,33 @@ class UserManager
         if (Database::query($sql) !== false) {
             return true;
         }
+
         return false;
     }
 
     /**
      * Update user information with all the parameters passed to this function.
      *
-     * @param int $user_id The ID of the user to be updated
-     * @param string $firstname The user's firstname
-     * @param string $lastname The user's lastname
-     * @param string $username The user's username (login)
-     * @param string $password The user's password
-     * @param string $auth_source The authentication source (default: "platform")
-     * @param string $email The user's e-mail address
-     * @param int    $status The user's status
-     * @param string $official_code The user's official code (usually just an internal institutional code)
-     * @param string $phone The user's phone number
-     * @param string $picture_uri The user's picture URL (internal to the Chamilo directory)
+     * @param int    $user_id         The ID of the user to be updated
+     * @param string $firstname       The user's firstname
+     * @param string $lastname        The user's lastname
+     * @param string $username        The user's username (login)
+     * @param string $password        The user's password
+     * @param string $auth_source     The authentication source (default: "platform")
+     * @param string $email           The user's e-mail address
+     * @param int    $status          The user's status
+     * @param string $official_code   The user's official code (usually just an internal institutional code)
+     * @param string $phone           The user's phone number
+     * @param string $picture_uri     The user's picture URL (internal to the Chamilo directory)
      * @param string $expiration_date The date at which this user will be automatically disabled
-     * @param int   $active Whether this account needs to be enabled (1) or disabled (0)
-     * @param int   $creator_id The user ID of the person who registered this user (optional, defaults to null)
-     * @param int   $hr_dept_id The department of HR in which the user is registered (optional, defaults to 0)
-     * @param array $extra A series of additional fields to add to this user as extra fields (optional, defaults to null)
-     * @param string $language The language to which the user account will be set
-     * @param string $encrypt_method The cipher method. This parameter is deprecated. It will use the system's default
-     * @param bool   $send_email Whether to send an e-mail to the user after the update is complete
-     * @param int    $reset_password Method used to reset password (0, 1, 2 or 3 - see usage examples for details)
+     * @param int    $active          Whether this account needs to be enabled (1) or disabled (0)
+     * @param int    $creator_id      The user ID of the person who registered this user (optional, defaults to null)
+     * @param int    $hr_dept_id      The department of HR in which the user is registered (optional, defaults to 0)
+     * @param array  $extra           A series of additional fields to add to this user as extra fields (optional, defaults to null)
+     * @param string $language        The language to which the user account will be set
+     * @param string $encrypt_method  The cipher method. This parameter is deprecated. It will use the system's default
+     * @param bool   $send_email      Whether to send an e-mail to the user after the update is complete
+     * @param int    $reset_password  Method used to reset password (0, 1, 2 or 3 - see usage examples for details)
      * @param string $address
      *
      * @return bool|int False on error, or the user ID if the user information was updated
@@ -1646,10 +1651,10 @@ class UserManager
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
      *
-     * @param array $conditions a list of condition (exemple : status=>STUDENT)
-     * @param array $order_by   a list of fields on which sort
-     * @param bool  $simple_like Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
-     * @param string $condition  Whether we want the filters to be combined by AND or OR
+     * @param array  $conditions  a list of condition (exemple : status=>STUDENT)
+     * @param array  $order_by    a list of fields on which sort
+     * @param bool   $simple_like Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
+     * @param string $condition   Whether we want the filters to be combined by AND or OR
      *
      * @return array an array with all users of the platform
      *
@@ -2238,7 +2243,7 @@ class UserManager
     /**
      * Returns an array with the user's productions.
      *
-     * @param  int $user_id User id
+     * @param int $user_id User id
      *
      * @return array An array containing the user's productions
      */
@@ -4098,8 +4103,10 @@ class UserManager
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
                 Database::query($sql);
             }
+
             return true;
         }
+
         return false;
     }
 
@@ -4354,6 +4361,7 @@ class UserManager
 
             return $whereFilter;
         }
+
         return '';
     }
 
@@ -4362,8 +4370,9 @@ class UserManager
      *
      * @param string $query the value of the search box
      *
-     * @return string HTML form
      * @throws Exception
+     *
+     * @return string HTML form
      */
     public static function get_search_form($query, $defaultParams = [])
     {
@@ -4902,7 +4911,7 @@ class UserManager
     /**
      * Register request to assign users to HRM.
      *
-     * @param int $hrmId   The HRM ID
+     * @param int   $hrmId   The HRM ID
      * @param array $usersId The users IDs
      *
      * @return int
@@ -5098,6 +5107,7 @@ class UserManager
 
             return $row['uid'];
         }
+
         return false;
     }
 
@@ -5276,7 +5286,8 @@ class UserManager
     }
 
     /**
-     * Returns an array of the different types of user extra fields [id => title translation]
+     * Returns an array of the different types of user extra fields [id => title translation].
+     *
      * @return array
      */
     public static function get_user_field_types()
@@ -5417,6 +5428,7 @@ class UserManager
                 }
             }
         }
+
         return $inserted;
     }
 
@@ -5774,6 +5786,7 @@ SQL;
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
+
         return '';
     }
 
@@ -5933,6 +5946,7 @@ SQL;
      * Send user confirmation mail.
      *
      * @param User $user
+     *
      * @throws Exception
      */
     public static function sendUserConfirmationMail(User $user)
@@ -5990,6 +6004,7 @@ SQL;
      *
      * @param int $user_id
      * @param int $active  Enable or disable
+     *
      * @return bool True on success, false on failure
      * @assert (-1,0) === false
      * @assert (1,1) === true

@@ -705,36 +705,13 @@ class CourseChatUtils
     }
 
     /**
-     * Format the user data to return it in the user list
-     *
-     * @param User $user
-     * @param int  $status
-     *
-     * @return array
-     */
-    private function formatUser(User $user, $status)
-    {
-        return [
-            'id' => $user->getId(),
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'status' => $status,
-            'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
-            'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-            'complete_name' => $user->getCompleteName(),
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'isConnected' => $this->userIsConnected($user->getId()),
-        ];
-    }
-
-    /**
      * Get the users online data.
      *
-     * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return array
      */
     public function listUsersOnline()
     {
@@ -761,6 +738,30 @@ class CourseChatUtils
         }
 
         return $usersInfo;
+    }
+
+    /**
+     * Format the user data to return it in the user list.
+     *
+     * @param User $user
+     * @param int  $status
+     *
+     * @return array
+     */
+    private function formatUser(User $user, $status)
+    {
+        return [
+            'id' => $user->getId(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'status' => $status,
+            'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
+            'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
+            'complete_name' => $user->getCompleteName(),
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'isConnected' => $this->userIsConnected($user->getId()),
+        ];
     }
 
     /**

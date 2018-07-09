@@ -5858,7 +5858,7 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 function api_get_access_url($id, $returnDefault = true)
 {
     static $staticResult;
-    $id = intval($id);
+    $id = (int) $id;
 
     if (isset($staticResult[$id])) {
         $result = $staticResult[$id];
@@ -6306,7 +6306,7 @@ function api_get_current_access_url_id()
  */
 function api_get_access_url_from_user($user_id)
 {
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT access_url_id
@@ -6663,7 +6663,7 @@ function api_get_tool_information_by_name($name)
  */
 function api_is_global_platform_admin($user_id = null)
 {
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }

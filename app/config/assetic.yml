@@ -79,7 +79,6 @@ assetic:
 #                - bundles/chamilocore/components/jquery.scrollbar/jquery.scrollbar.js
 #                - bundles/chamilocore/components/mediaelement/build/mediaelement-and-player.js
 #                - bundles/chamilocore/js/upload.js
-#                - bundles/chamilocore/js/pear/qfamsHandler.js
 #                - bundles/chamilocore/components/image-map-resizer/js/imageMapResizer.js
 #
 #                - bundles/chamilocore/components/blueimp-load-image/js/load-image.all.min.js

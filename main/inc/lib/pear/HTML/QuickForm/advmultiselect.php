@@ -50,7 +50,7 @@
 define('HTML_QUICKFORM_ADVMULTISELECT_ERROR_INVALID_INPUT', 1);
 
 /**
- * @todo clean class to use only with the multiselect.js library and remove old javascript/pear/qfamsHandler.js file
+ * @todo clean class to use only with the multiselect.js library
  *
  * Element for HTML_QuickForm that emulate a multi-select.
  *

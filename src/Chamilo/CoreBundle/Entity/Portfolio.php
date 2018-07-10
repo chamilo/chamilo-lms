@@ -51,7 +51,7 @@ class Portfolio
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $user;
 
@@ -59,7 +59,7 @@ class Portfolio
      * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $course = null;
 
@@ -67,7 +67,7 @@ class Portfolio
      * @var Session
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $session = null;
 

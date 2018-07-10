@@ -9,15 +9,14 @@
                 {% if is_allowed_to_edit %}
                     <div class="pull-right">
                         {% if session_id == description.session_id %}
-                            <a href="{{ _p.web_self }}?action=delete&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
-                               onclick="delete_entry('description_{{ description.id }}', this); return false;"
-                               title="{{ 'Delete'|get_lang }}">
-                                <img src="{{ 'delete.png'|icon(22) }}"/>
-                            </a>
-
                             <a href="{{ _p.web_self }}?action=edit&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
                                title="{{ 'Edit'|get_lang }}">
                                 <img src="{{ 'edit.png'|icon(22) }}"/>
+                            </a>
+                            <a href="{{ _p.web_self }}?action=delete&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
+                               onclick="javascript:return confirmation('{{ description.title_js }}');"
+                               title="{{ 'Delete'|get_lang }}">
+                                <img src="{{ 'delete.png'|icon(22) }}"/>
                             </a>
                         {% else %}
                             <img title="{{ 'EditionNotAvailableFromSession'|get_lang }}"

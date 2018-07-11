@@ -687,7 +687,9 @@ class ExerciseLib
                                     }
                                     $attributes['onChange'] = 'RadioValidator(' . $questionId . ', ' . $numAnswer . ')';
                                     // gère la séletion des radio button du degré de certitude
-                                    if (isset($myChoiceDegreeCertainty[$numAnswer]) && $id == $myChoiceDegreeCertainty[$numAnswer]) {
+                                    if (isset($myChoiceDegreeCertainty[$numAnswer]) && 
+                                        $id == $myChoiceDegreeCertainty[$numAnswer]
+                                       ) {
                                         $attributes1 = ['checked' => 1, 'selected' => 1];
                                     } else {
                                         $attributes1 = [];

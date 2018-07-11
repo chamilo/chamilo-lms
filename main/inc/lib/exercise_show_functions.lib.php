@@ -530,31 +530,31 @@ class ExerciseShowFunctions
         <tr>
             <td width="5%">
                 <?php
-                    $question = new MultipleAnswerTrueFalseDegreeCertainty();
-                    $courseId = api_get_course_int_id();
-                    $newOptions = Question::readQuestionOption($questionId, $courseId);
+                $question = new MultipleAnswerTrueFalseDegreeCertainty();
+                $courseId = api_get_course_int_id();
+                $newOptions = Question::readQuestionOption($questionId, $courseId);
 
-                    //Your choice
-                    if (isset($newOptions[$studentChoice])) {
-                        echo get_lang($newOptions[$studentChoice]['name']);
-                    } else {
-                        echo '-';
-                    }
+                //Your choice
+                if (isset($newOptions[$studentChoice])) {
+                    echo get_lang($newOptions[$studentChoice]['name']);
+                } else {
+                    echo '-';
+                }
                 ?>
             </td>
             <td width="5%">
                 <?php
-                    //Expected choice
-                    if (!$hideExpectedAnswer) {
-                        if (isset($newOptions[$answerCorrect])) {
+                //Expected choice
+                if (!$hideExpectedAnswer) {
+                    if (isset($newOptions[$answerCorrect])) {
 
-                            echo get_lang($newOptions[$answerCorrect]['name']);
-                        } else {
-                            echo '-';
-                        }
+                        echo get_lang($newOptions[$answerCorrect]['name']);
                     } else {
                         echo '-';
                     }
+                } else {
+                    echo '-';
+                }
                 ?>
             </td>
             <td width="25%">
@@ -562,7 +562,7 @@ class ExerciseShowFunctions
             </td>
             <td width="5%" style="text-align:center;">
                 <?php
-                    echo  $newOptions[$studentChoiceDegree]['name'];
+                echo  $newOptions[$studentChoiceDegree]['name'];
                 ?>
             </td>
             <!-- color by certainty -->
@@ -587,10 +587,10 @@ class ExerciseShowFunctions
             <?php if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
             <td width="20%">
                 <?php
-                    $color = "black";
-                    if (isset($newOptions[$studentChoice])) {
-                        echo '<span style="font-weight: bold; color: ' . $color . ';">' . nl2br($answerComment) . '</span>';
-                    }
+                $color = "black";
+                if (isset($newOptions[$studentChoice])) {
+                    echo '<span style="font-weight: bold; color: ' . $color . ';">' . nl2br($answerComment) . '</span>';
+                }
                 ?>
             </td>
             <?php } else { ?>

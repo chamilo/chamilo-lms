@@ -823,7 +823,7 @@ if ($question_count != 0) {
 
                     // show histogram
                     require_once api_get_path(SYS_CODE_PATH)
-                        . "exercise/multiple_answer_true_false_degree_certainty.class.php";
+                        . "exercise/multipleAnswerTrueFalseDegreeCertainty.php";
                     $message .= MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($exe_id, $objExercise);
                     $message .= get_lang('KindRegards');
 

@@ -2,13 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.5.2"></a>
+## [2.5.2](https://github.com/crlcu/multiselect/compare/v2.5.1...v2.5.2) (2018-07-10)
+
+
+### Bug Fixes
+
+* [#164](https://github.com/crlcu/multiselect/issues/164) - Invalid regular expression ([541bb68](https://github.com/crlcu/multiselect/commit/541bb68))
+
+
+
 <a name="2.5.1"></a>
 ## [2.5.1](https://github.com/crlcu/multiselect/compare/v2.5.0...v2.5.1) (2018-04-27)
 
 
+### Patches
+
+* change the value for the main path ([22414f8](https://github.com/crlcu/multiselect/commit/22414f8))
+
 ### Features
 
-* now we can have different sort functions for left and right ([d5fc6a1](https://github.com/crlcu/multiselect/commit/d5fc6a1))
+* add afterInit event ([22e1523](https://github.com/crlcu/multiselect/commit/22e1523))
 
 
 

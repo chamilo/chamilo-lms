@@ -917,7 +917,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
     public function getElementJs($raw = true, $min = true)
     {
         $name = $this->getName();
-        $js = api_get_asset('multiselect/dist/js/multiselect.js');
+        $js = api_get_asset('multiselect-two-sides/dist/js/multiselect.js');
         $search =
         '<input type="text" name="q" class="form-control" placeholder="'.addslashes(get_lang('Search')).'" /><br />';
 

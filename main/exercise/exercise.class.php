@@ -3597,7 +3597,8 @@ class Exercise
                     }
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ? $choiceDegreeCertainty[$answerAutoId] : null;
+                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ? 
+                        $choiceDegreeCertainty[$answerAutoId] : null;
 
                     // student score update
                     if (!empty($studentChoice)){

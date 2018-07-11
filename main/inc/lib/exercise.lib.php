@@ -947,7 +947,8 @@ class ExerciseLib
                             $correctAnswerList
                         );
 
-                        // get student answer to display it if student go back to previous calculated answer question in a test
+                        // get student answer to display it if student go back 
+                        // to previous calculated answer question in a test
                         if (isset($user_choice[0]['answer'])) {
                             api_preg_match_all(
                                 '/\[[^]]+\]/',

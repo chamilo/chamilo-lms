@@ -256,7 +256,7 @@ class CourseDriver extends Driver implements DriverInterface
                     $this->connector->course,
                     $realPath,
                     'file',
-                    intval($result['size']),
+                    (int) $result['size'],
                     $result['name']
                 );
             }
@@ -335,7 +335,7 @@ class CourseDriver extends Driver implements DriverInterface
         // Needed to load course information in elfinder
         $this->setConnectorFromPlugin();
 
-        if ($this->allowToEdit() == false) {
+        if ($this->allowToEdit() === false) {
             return false;
         }
 
@@ -348,7 +348,6 @@ class CourseDriver extends Driver implements DriverInterface
 
             // Removing course path
             $newPath = str_replace($realPathRoot, '/', $realPath);
-
             $documentId = add_document(
                 $_course,
                 $newPath,

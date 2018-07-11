@@ -8944,7 +8944,7 @@ function api_unique_multidim_array($array, $key)
 }
 
 /**
- * Limit the access to Session Admins wheen the limit_session_admin_role
+ * Limit the access to Session Admins when the limit_session_admin_role
  * configuration variable is set to true.
  */
 function api_protect_limit_for_session_admin()

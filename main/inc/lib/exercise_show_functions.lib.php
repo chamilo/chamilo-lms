@@ -511,8 +511,15 @@ class ExerciseShowFunctions
      * @param boolean $inResultsDisabled
      * @return void
      */
-    static function displayMultipleAnswerTrueFalseDegreeCertainty(
-        $feedbackType, $studentChoice, $studentChoiceDegree, $answer, $answerComment, $answerCorrect, $id, $questionId, $answerNumber, $inResultsDisabled
+    static function displayMultipleAnswerTrueFalseDegreeCertainty (
+        $feedbackType,
+        $studentChoice,
+        $studentChoiceDegree,
+        $answer,
+        $answerComment,
+        $answerCorrect,
+        $questionId,
+        $inResultsDisabled
     ) {
 
         $hideExpectedAnswer = false;

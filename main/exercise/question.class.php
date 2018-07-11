@@ -51,7 +51,7 @@ abstract class Question
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
         MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
-            'multiple_answer_true_false_degree_certainty.class.php',
+            'multipleAnswerTrueFalseDegreeCertainty.php',
             'MultipleAnswerTrueFalseDegreeCertainty'
         ],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [

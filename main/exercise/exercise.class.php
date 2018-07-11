@@ -4678,9 +4678,7 @@ class Exercise
                                 $answer,
                                 $answerComment,
                                 $answerCorrect,
-                                0,
                                 $questionId,
-                                0,
                                 $results_disabled
                             );
 
@@ -5074,9 +5072,7 @@ class Exercise
                                     $answer,
                                     $answerComment,
                                     $answerCorrect,
-                                    $exeId,
                                     $questionId,
-                                    $answerId,
                                     $results_disabled
                                 );
                             } else {
@@ -5087,9 +5083,7 @@ class Exercise
                                     $answer,
                                     $answerComment,
                                     $answerCorrect,
-                                    $exeId,
                                     $questionId,
-                                    "",
                                     $results_disabled
                                 );
                             }

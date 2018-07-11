@@ -1,7 +1,7 @@
 /*
  * @license
  *
- * Multiselect v2.5.0
+ * Multiselect v2.5.2
  * http://crlcu.github.io/multiselect/
  *
  * Copyright (c) 2016-2018 Adrian Crisan
@@ -805,7 +805,7 @@ if (typeof jQuery === 'undefined') {
     };
 
     $.expr[":"].search = function(elem, index, meta) {
-        var regex = new RegExp(meta[3], "i");
+        var regex = new RegExp(meta[3].replace(/([^a-zA-Z0-9])/g, "\\$1"), "i");
 
         return $(elem).text().match(regex);
     }

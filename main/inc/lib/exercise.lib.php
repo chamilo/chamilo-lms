@@ -411,11 +411,13 @@ class ExerciseLib
                             '&nbsp;',
                             ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);
                     } else {
-                        $color_border2 =($counter2 == (count($objQuestionTmp->options)-1)) ? '' : 'border-right: solid #FFFFFF 1px;font-size:11px;' ;
+                        $color_border2 =($counter2 == (count($objQuestionTmp->options)-1)) ? 
+                            '' : 'border-right: solid #FFFFFF 1px;font-size:11px;' ;
                         $header2 .= Display::tag(
                             'td',
                             nl2br($descriptionList[$counter2]),
-                            array('style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center; vertical-align: top; padding:5px; '.$color_border2));
+                            array('style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center; 
+                                vertical-align: top; padding:5px; '.$color_border2));
                         $counter2++;
                     }
 

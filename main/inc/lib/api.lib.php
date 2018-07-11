@@ -749,7 +749,7 @@ function api_get_path($path = '', $configuration = [])
                         $server_name .= ":".$_SERVER['SERVER_PORT'];
                     }
                     $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                    $root_sys = str_replace('\\', '/', realpath(__DIR__ . '/../../ficher test degre certitudes/')).'/';
+                    $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
                 }
                 // Here we give up, so we don't touch anything.
             }

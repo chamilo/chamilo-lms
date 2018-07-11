@@ -27,7 +27,7 @@
         /**
          * Constructor
          */
-        public function MultipleAnswerTrueFalseDegreeCertainty() {
+        public function __construct() {
             parent::__construct();
             $this->type = MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY;
             $this->isContent = $this->getIsContent();

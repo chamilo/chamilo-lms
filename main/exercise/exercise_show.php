@@ -781,7 +781,6 @@ foreach ($questionList as $questionId) {
             $feedback_form->setDefaults($default);
             $feedback_form->display();
 
-
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
@@ -966,7 +965,7 @@ if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])
                 $totalWeighting,
                 true
             );
-        } else{
+        } else {
             $totalScoreText .= ExerciseLib::getTotalScoreRibbon(
                 $objExercise,
                 $myTotalScoreTemp,
@@ -979,7 +978,7 @@ if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])
         $totalScoreText .= '</div>';
     }
 }
-if ( $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
     $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($id, $objExercise);
     echo $chartMultiAnswer;
 }
@@ -1130,14 +1129,14 @@ if ($origin == 'student_progress') {
     </button>
     <?php
 } elseif ($origin == 'myprogress') {
-    ?>
+        ?>
     <button type="button" class="save"
             onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id(); ?>'"
             value="<?php echo get_lang('Finish'); ?>">
         <?php echo get_lang('Finish'); ?>
     </button>
     <?php
-}
+    }
 
 if ($origin != 'learnpath') {
     //we are not in learnpath tool

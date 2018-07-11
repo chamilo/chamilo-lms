@@ -248,7 +248,7 @@ class ExerciseLib
                     $header,
                     ['style' => 'text-align:left;']
                 );
-            } else if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+            } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 echo "<script>
                    function RadioValidator(question_id, answer_id) 
                    {
@@ -343,15 +343,15 @@ class ExerciseLib
                                 
                     
                 </script>";
-                $header = Display::tag('th', get_lang('Options'), array('width' => '50%'));
+                $header = Display::tag('th', get_lang('Options'), ['width' => '50%']);
 
                 foreach ($objQuestionTmp->optionsTitle as $item) {
                     if (in_array($item, $objQuestionTmp->optionsTitle)) {
-                        $properties = array();
+                        $properties = [];
                         if ($item == "langAnswers") {
                             $properties["colspan"] = 2;
                             $properties["style"] = "background-color: #F56B2A; color: #ffffff;";
-                        } else if ($item == "DegreeOfCertainty") {
+                        } elseif ($item == "DegreeOfCertainty") {
                             $properties["colspan"] = 6;
                             $properties["style"] = "background-color: #330066; color: #ffffff;";
                         }
@@ -364,7 +364,6 @@ class ExerciseLib
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
 
-
                 $s .= '<table class="data_table">';
                 $s .= Display::tag('tr', $header, ['style' => 'text-align:left;']);
 
@@ -372,14 +371,13 @@ class ExerciseLib
                 $header1 = Display::tag('th', '&nbsp;');
                 $cpt1 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    $colorBorder1 =($cpt1 == (count($objQuestionTmp->options)-1))?'':'border-right: solid #FFFFFF 1px;' ;
+                    $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1)) ? '' : 'border-right: solid #FFFFFF 1px;';
                     if ($item == "True" || $item == "False") {
                         $header1 .= Display::tag('th',
                             get_lang($item),
-                            ['style' => 'background-color: #F7C9B4; color: black;'. $colorBorder1]
+                            ['style' => 'background-color: #F7C9B4; color: black;'.$colorBorder1]
                         );
                     } else {
-
                         $header1 .= Display::tag('th',
                             $item,
                             ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]);
@@ -400,27 +398,25 @@ class ExerciseLib
                     get_lang('Unsure'),
                     get_lang('PrettySur'),
                     get_lang('Sur'),
-                    get_lang('VerySur')
+                    get_lang('VerySur'),
                 ];
                 $counter2 = 0;
 
                 foreach ($objQuestionTmp->options as $item) {
-
                     if ($item == "True" || $item == "False") {
                         $header2 .= Display::tag('td',
                             '&nbsp;',
                             ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);
                     } else {
-                        $color_border2 =($counter2 == (count($objQuestionTmp->options)-1)) ? 
-                            '' : 'border-right: solid #FFFFFF 1px;font-size:11px;' ;
+                        $color_border2 = ($counter2 == (count($objQuestionTmp->options) - 1)) ?
+                            '' : 'border-right: solid #FFFFFF 1px;font-size:11px;';
                         $header2 .= Display::tag(
                             'td',
                             nl2br($descriptionList[$counter2]),
-                            array('style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center; 
-                                vertical-align: top; padding:5px; '.$color_border2));
+                            ['style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center; 
+                                vertical-align: top; padding:5px; '.$color_border2]);
                         $counter2++;
                     }
-
                 }
                 if ($show_comment) {
                     $header2 .= Display::tag('th', '&nbsp;');
@@ -658,7 +654,7 @@ class ExerciseLib
                                 $s .= '</td>';
                             }
                             $s .= '</tr>';
-                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                             $myChoice = [];
                             if (!empty($userChoiceList)) {
                                 foreach ($userChoiceList as $item) {
@@ -677,17 +673,15 @@ class ExerciseLib
                             $s .= Display::tag('td', $answer);
 
                             if (!empty($quizQuestionOptions)) {
-
                                 foreach ($quizQuestionOptions as $id => $item) {
-
                                     if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
                                         $attributes = ['checked' => 1, 'selected' => 1];
                                     } else {
                                         $attributes = [];
                                     }
-                                    $attributes['onChange'] = 'RadioValidator(' . $questionId . ', ' . $numAnswer . ')';
+                                    $attributes['onChange'] = 'RadioValidator('.$questionId.', '.$numAnswer.')';
                                     // gère la séletion des radio button du degré de certitude
-                                    if (isset($myChoiceDegreeCertainty[$numAnswer]) && 
+                                    if (isset($myChoiceDegreeCertainty[$numAnswer]) &&
                                         $id == $myChoiceDegreeCertainty[$numAnswer]
                                        ) {
                                         $attributes1 = ['checked' => 1, 'selected' => 1];
@@ -695,7 +689,7 @@ class ExerciseLib
                                         $attributes1 = [];
                                     }
 
-                                    $attributes1['onChange'] = 'RadioValidator(' . $questionId . ', ' . $numAnswer . ')';
+                                    $attributes1['onChange'] = 'RadioValidator('.$questionId.', '.$numAnswer.')';
 
                                     if ($debug_mark_answer) {
                                         if ($id == $answerCorrect) {
@@ -707,27 +701,27 @@ class ExerciseLib
                                     if ($item["name"] == "True" || $item["name"] == "False") {
                                         $s .= Display::tag('td',
                                             Display::input('radio',
-                                                'choice[' . $questionId . '][' . $numAnswer . ']',
+                                                'choice['.$questionId.']['.$numAnswer.']',
                                                 $id,
                                                 $attributes
                                             ),
                                             ['style' => 'text-align:center; background-color:#F7E1D7;',
-                                                'onclick' => 'handleRadioRow(event, ' .
-                                                $questionId . ', ' . 
-                                                $numAnswer . ')'
+                                                'onclick' => 'handleRadioRow(event, '.
+                                                $questionId.', '.
+                                                $numAnswer.')',
                                             ]
                                         );
                                     } else {
                                         $s .= Display::tag('td',
                                             Display::input('radio',
-                                                'choiceDegreeCertainty[' . $questionId . '][' . $numAnswer . ']',
+                                                'choiceDegreeCertainty['.$questionId.']['.$numAnswer.']',
                                                 $id,
                                                 $attributes1
                                             ),
                                             ['style' => 'text-align:center; background-color:#EFEFFC;',
-                                                'onclick' => 'handleRadioRow(event, ' . 
-                                                $questionId . ', ' . 
-                                                $numAnswer . ')'
+                                                'onclick' => 'handleRadioRow(event, '.
+                                                $questionId.', '.
+                                                $numAnswer.')',
                                             ]
                                         );
                                     }
@@ -739,7 +733,7 @@ class ExerciseLib
                                 $s .= $comment;
                                 $s .= '</td>';
                             }
-                            $s.='</tr>';
+                            $s .= '</tr>';
                         }
                         break;
                     case MULTIPLE_ANSWER_COMBINATION:
@@ -924,7 +918,7 @@ class ExerciseLib
                             global $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                             $sql = 'SELECT answer FROM '.$trackAttempts.'
-                                    WHERE exe_id=' . $exe_id.' AND question_id='.$questionId;
+                                    WHERE exe_id='.$exe_id.' AND question_id='.$questionId;
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
                             $answer = $rowLastAttempt['answer'];
@@ -947,7 +941,7 @@ class ExerciseLib
                             $correctAnswerList
                         );
 
-                        // get student answer to display it if student go back 
+                        // get student answer to display it if student go back
                         // to previous calculated answer question in a test
                         if (isset($user_choice[0]['answer'])) {
                             api_preg_match_all(
@@ -1338,7 +1332,7 @@ HTML;
                     UNIQUE_ANSWER_NO_OPTION,
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
-                    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
+                    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
                 ]
             )) {
                 $s .= '</table>';
@@ -1944,9 +1938,9 @@ HOTSPOT;
      * @param null   $extra_where_conditions
      * @param bool   $get_count
      * @param string $courseCode
-     * @param bool $showSessionField
-     * @param bool $showExerciseCategories
-     * @param array $userExtraFieldsToAdd
+     * @param bool   $showSessionField
+     * @param bool   $showExerciseCategories
+     * @param array  $userExtraFieldsToAdd
      *
      * @return array
      */
@@ -2699,10 +2693,10 @@ HOTSPOT;
      *
      * @param float $score
      * @param float $weight
-     * @param bool $show_percentage show percentage or not
-     * @param bool $use_platform_settings use or not the platform settings
-     * @param bool $show_only_percentage
-     * @param bool $hidePercetangeSign hide "%" sign
+     * @param bool  $show_percentage       show percentage or not
+     * @param bool  $use_platform_settings use or not the platform settings
+     * @param bool  $show_only_percentage
+     * @param bool  $hidePercetangeSign    hide "%" sign
      *
      * @return string an html with the score modified
      */
@@ -3731,6 +3725,7 @@ EOT;
      *
      * @param int $question_id
      * @param int $exercise_id
+     *
      * @return int
      */
     public static function getNumberStudentsFillBlanksAnswerCount(
@@ -4219,9 +4214,10 @@ EOT;
     }
 
     /**
-     * @param string $in_name is the name and the id of the <select>
-     * @param string $in_default default value for option
+     * @param string $in_name     is the name and the id of the <select>
+     * @param string $in_default  default value for option
      * @param string $in_onchange
+     *
      * @return string the html code of the <select>
      */
     public static function displayGroupMenu($in_name, $in_default, $in_onchange = "")
@@ -4250,6 +4246,7 @@ EOT;
                     $tabGroups[$i]["name"]."</option>";
         }
         $res .= "</select>";
+
         return $res;
     }
 
@@ -4585,7 +4582,7 @@ EOT;
                 echo "<h1 style='text-align : center; margin : 20px 0;'>Vos Résultats</h1><br>";
             }
             $totalScoreText .= '<div class="question_row_score">';
-            if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+            if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 $totalScoreText .= self::getQuestionRibbonDiag($objExercise,
                     $total_score,
                     $total_weight,
@@ -4603,7 +4600,7 @@ EOT;
             $totalScoreText .= '</div>';
         }
 
-        if($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
+        if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults(
                 $exeId,
                 $objExercise);
@@ -4693,15 +4690,16 @@ EOT;
 
     /**
      * @param Exercise $objExercise
-     * @param float $score
-     * @param float $weight
-     * @param bool $checkPassPercentage
+     * @param float    $score
+     * @param float    $weight
+     * @param bool     $checkPassPercentage
+     *
      * @return string
      */
-    public static function getQuestionRibbonDiag($objExercise, $score, $weight, $checkPassPercentage = false) {
-
+    public static function getQuestionRibbonDiag($objExercise, $score, $weight, $checkPassPercentage = false)
+    {
         $displayChartDegree = true;
-        $ribbon = $displayChartDegree? '<div class="ribbon">' : '';
+        $ribbon = $displayChartDegree ? '<div class="ribbon">' : '';
 
         if ($checkPassPercentage) {
             $isSuccess = self::isSuccessExerciseResult(
@@ -4716,14 +4714,13 @@ EOT;
                     $ribbonTotalSuccessOrError = ' ribbon-total-error';
                 }
             }
-            $ribbon .= $displayChartDegree? '<div class="rib rib-total ' . $ribbonTotalSuccessOrError . '">' : '';
+            $ribbon .= $displayChartDegree ? '<div class="rib rib-total '.$ribbonTotalSuccessOrError.'">' : '';
         } else {
-            $ribbon .= $displayChartDegree? '<div class="rib rib-total">' : '';
+            $ribbon .= $displayChartDegree ? '<div class="rib rib-total">' : '';
         }
 
-        if ($displayChartDegree){
-            $ribbon .= '<h3>' . get_lang('YourTotalScore') . ":&nbsp;";
-
+        if ($displayChartDegree) {
+            $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
 
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
@@ -4736,11 +4733,10 @@ EOT;
             );
         }
 
-        $ribbon .= $displayChartDegree? '</div>' : '';
+        $ribbon .= $displayChartDegree ? '</div>' : '';
 
         return $ribbon;
     }
-
 
     /**
      * @param Exercise $objExercise

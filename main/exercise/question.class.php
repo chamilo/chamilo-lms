@@ -52,7 +52,7 @@ abstract class Question
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
         MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
             'multipleAnswerTrueFalseDegreeCertainty.php',
-            'MultipleAnswerTrueFalseDegreeCertainty'
+            'MultipleAnswerTrueFalseDegreeCertainty',
         ],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
             'multiple_answer_combination_true_false.class.php',
@@ -1986,7 +1986,7 @@ abstract class Question
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
         // dont display score for certainty degree questions
-        if($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+        if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
         }
 

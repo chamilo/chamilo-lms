@@ -6160,6 +6160,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
             return true;
         }
     }
+
     return false;
 }
 
@@ -9022,8 +9023,9 @@ function api_float_val($number)
  *
  * @todo WIP
  *
- * @param string $number            number in iso code
+ * @param string $number   number in iso code
  * @param int    $decimals
+ *
  * @return bool|string
  */
 function api_number_format($number, $decimals = 0)

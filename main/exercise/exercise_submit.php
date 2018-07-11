@@ -802,10 +802,10 @@ if ($question_count != 0) {
                     );
                     $emailGenerique = api_get_setting('emailAdministrator');
 
-                    $subject = "[" . get_lang('DoNotReply') . "] "
-                        . html_entity_decode(get_lang('ResultAccomplishedTest')." \"" . $objExercise->title . "\"");
+                    $subject = "[".get_lang('DoNotReply')."] "
+                        .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
                     // message sended to the student
-                    $message = get_lang('Dear') . ' ' . $recipient_name . ",<br><br>";
+                    $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
                     //calcul du chemmin sans les script php
                     $url = $_SERVER['SCRIPT_NAME'];
                     $pos = strripos($url, "/");
@@ -813,9 +813,9 @@ if ($question_count != 0) {
                     $path = substr($url, 0, $pos);
 
                     $message .= get_lang('MessageQuestionCertainty');
-                    $exerciseLink = "<a href='" . api_get_path(WEB_CODE_PATH) . "/exercise/result.php?show_headers=1&"
-                        . api_get_cidreq()
-                        . "&id=$exe_id'>";
+                    $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
+                        .api_get_cidreq()
+                        ."&id=$exe_id'>";
                     $titleExercice = $objExercise->title;
                     $message = str_replace('%exerTitle', $titleExercice, $message);
                     $message = str_replace('%webPath', api_get_path(WEB_PATH), $message);
@@ -823,7 +823,7 @@ if ($question_count != 0) {
 
                     // show histogram
                     require_once api_get_path(SYS_CODE_PATH)
-                        . "exercise/multipleAnswerTrueFalseDegreeCertainty.php";
+                        ."exercise/multipleAnswerTrueFalseDegreeCertainty.php";
                     $message .= MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($exe_id, $objExercise);
                     $message .= get_lang('KindRegards');
 
@@ -837,12 +837,11 @@ if ($question_count != 0) {
                         ['content-type' => 'html']
                     );
 
-
                     header("Location: exercise_result.php?"
-                        . api_get_cidreq()
-                        . "&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id="
-                        . $learnpath_item_id
-                        . "&learnpath_item_view_id=$learnpath_item_view_id"
+                        .api_get_cidreq()
+                        ."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id="
+                        .$learnpath_item_id
+                        ."&learnpath_item_view_id=$learnpath_item_view_id"
                     );
                     exit;
                 }
@@ -1097,8 +1096,6 @@ if (!empty($error)) {
     if ($number_of_hotspot_questions > 0) {
         $onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
-
-
 
     $saveIcon = Display::return_icon(
         'save.png',

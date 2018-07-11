@@ -3398,7 +3398,7 @@ class Exercise
 
         // Extra information of the question
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
-            $answerType ==  MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY &&
+            $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY &&
             !empty($extra)
         ) {
             $extra = explode(':', $extra);
@@ -3582,7 +3582,7 @@ class Exercise
                         $sql = "SELECT answer 
                             FROM $TBL_TRACK_ATTEMPT
                             WHERE 
-                            exe_id = $exeId AND question_id = " . $questionId;
+                            exe_id = $exeId AND question_id = ".$questionId;
 
                         $result = Database::query($sql);
                         while ($row = Database::fetch_array($result)) {
@@ -3597,12 +3597,11 @@ class Exercise
                     }
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ? 
+                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ?
                         $choiceDegreeCertainty[$answerAutoId] : null;
 
                     // student score update
-                    if (!empty($studentChoice)){
-
+                    if (!empty($studentChoice)) {
                         if ($studentChoice == $answerCorrect) {
                             // correct answer and student is Unsure or PrettySur
                             if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
@@ -3869,7 +3868,7 @@ class Exercise
                                     // else if the word entered by the student IS NOT the same as
                                     // the one defined by the professor
                                     // adds the word in red at the end of the string, and strikes it
-                                    $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
+                                    $answer .= '<font color="red"><s>'.$user_tags[$i].'</s></font>';
                                 } else {
                                     // adds a tabulation if no word has been typed by the student
                                     $answer .= ''; // remove &nbsp; that causes issue
@@ -4133,7 +4132,7 @@ class Exercise
                             // else if the word entered by the student IS NOT the same as
                             // the one defined by the professor
                             // adds the word in red at the end of the string, and strikes it
-                            $answer .= '<font color="red"><s>' . $userTags[$i] . '</s></font>';
+                            $answer .= '<font color="red"><s>'.$userTags[$i].'</s></font>';
                             $calculatedChoice = $userTags[$i];
                         } else {
                             // adds a tabulation if no word has been typed by the student
@@ -4670,8 +4669,7 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
-                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY){
-
+                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                             ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
                                 $feedback_type,
                                 $studentChoice,
@@ -4682,7 +4680,6 @@ class Exercise
                                 $questionId,
                                 $results_disabled
                             );
-
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false(
                                 $this,
@@ -5064,7 +5061,7 @@ class Exercise
                                 );
                             }
                             break;
-                        case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY :
+                        case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
                                     $feedback_type,
@@ -5648,7 +5645,7 @@ class Exercise
                                 $answerDegreeCertainty = $replyDegreeCertainty[$i];
                                 Event::saveQuestionAttempt(
                                     $questionScore,
-                                    $answerChoosen . ':' . $choice[$answerChoosen] . ':' . $choiceDegreeCertainty[$answerDegreeCertainty],
+                                    $answerChoosen.':'.$choice[$answerChoosen].':'.$choiceDegreeCertainty[$answerDegreeCertainty],
                                     $quesId,
                                     $exeId,
                                     $i,
@@ -5753,7 +5750,7 @@ class Exercise
             ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
-                //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
+            //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
@@ -5795,8 +5792,8 @@ class Exercise
         if ($saved_results) {
             $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = 'UPDATE '.$stat_table.' SET
-                        exe_result = exe_result + ' . floatval($questionScore).'
-                    WHERE exe_id = ' . $exeId;
+                        exe_result = exe_result + '.floatval($questionScore).'
+                    WHERE exe_id = '.$exeId;
             Database::query($sql);
         }
 

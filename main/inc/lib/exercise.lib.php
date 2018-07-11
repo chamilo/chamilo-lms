@@ -712,7 +712,9 @@ class ExerciseLib
                                                 $attributes
                                             ),
                                             ['style' => 'text-align:center; background-color:#F7E1D7;',
-                                                'onclick' => 'handleRadioRow(event, ' . $questionId . ', ' . $numAnswer . ')'
+                                                'onclick' => 'handleRadioRow(event, ' .
+                                                $questionId . ', ' . 
+                                                $numAnswer . ')'
                                             ]
                                         );
                                     } else {
@@ -723,7 +725,9 @@ class ExerciseLib
                                                 $attributes1
                                             ),
                                             ['style' => 'text-align:center; background-color:#EFEFFC;',
-                                                'onclick' => 'handleRadioRow(event, ' . $questionId . ', ' . $numAnswer . ')'
+                                                'onclick' => 'handleRadioRow(event, ' . 
+                                                $questionId . ', ' . 
+                                                $numAnswer . ')'
                                             ]
                                         );
                                     }

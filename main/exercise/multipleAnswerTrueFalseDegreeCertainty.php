@@ -429,38 +429,49 @@
         public static function showColorCode()
         {
             ?>
-            <table class="fc-border-separate" cellspacing="0" style="width:600px ;margin: auto; border: 3px solid #A39E9E;" >
+            <table class="fc-border-separate" cellspacing="0" style="width:600px; 
+                margin: auto; border: 3px solid #A39E9E;" >
 
                 <tr style="border-bottom: 1px solid #A39E9E;">
-                    <td style="width:15%; height:30px; background-color: #088A08; border-right: 1px solid #A39E9E;">&nbsp;</td>
+                    <td style="width:15%; height:30px; background-color: #088A08; border-right: 1px solid #A39E9E;">
+                        &nbsp;
+                    </td>
                     <td style="padding-left:10px;">
                         <b><?php echo get_lang('langVerySure'); ?> :</b>
                         <?php echo get_lang('langExplainVerySure'); ?>
                     </td>
                 </tr>
                 <tr style="border-bottom: 1px solid #A39E9E;">
-                    <td style="width:15%; height:30px; background-color: #A9F5A9; border-right: 1px solid #A39E9E;">&nbsp;</td>
+                    <td style="width:15%; height:30px; background-color: #A9F5A9; border-right: 1px solid #A39E9E;">
+                        &nbsp;
+                    </td>
                     <td style="padding-left:10px;">
                         <b><?php echo get_lang('langPrettySur'); ?> :</b>
                         <?php echo get_lang('langExplainPrettySur'); ?>
                     </td>
                 </tr>
                 <tr style="border: 1px solid #A39E9E;">
-                    <td style="width:15%; height:30px; background-color: #FFFFFF; border-right: 1px solid #A39E9E;">&nbsp;</td>
+                    <td style="width:15%; height:30px; background-color: #FFFFFF; border-right: 1px solid #A39E9E;">
+                        &nbsp;
+                    </td>
                     <td style="padding-left:10px;">
                         <b><?php echo get_lang('langIgnorance'); ?> :</b>
                         <?php echo get_lang('langExplainIgnorance'); ?>
                     </td>
                 </tr>
                 <tr style="border: 1px solid #A39E9E;">
-                    <td style="width:15%; height:30px; background-color: #F6CECE; border-right: 1px solid #A39E9E;">&nbsp;</td>
+                    <td style="width:15%; height:30px; background-color: #F6CECE; border-right: 1px solid #A39E9E;">
+                        &nbsp;
+                    </td>
                     <td style="padding-left:10px;">
                         <b><?php echo get_lang('langUnsure'); ?> :</b>
                         <?php echo get_lang('langExplainUnsure'); ?>
                     </td>
                 </tr>
                 <tr style="border-bottom: 1px solid #A39E9E;">
-                    <td style="width:15%; height:30px; background-color: #FE2E2E; border-right: 1px solid #A39E9E;">&nbsp;</td>
+                    <td style="width:15%; height:30px; background-color: #FE2E2E; border-right: 1px solid #A39E9E;">
+                        &nbsp;
+                    </td>
                     <td style="padding-left:10px;">
                         <b><?php echo get_lang('langVeryUnsure'); ?> :</b>
                         <?php echo get_lang('langExplainVeryUnsure'); ?>
@@ -494,11 +505,16 @@
                         // check if we have already see this prefix
                         if (array_key_exists($matches[1], $categoryPrefixList)) {
                             // add the result color for this entry
-                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_DARKGREEN] += $scoreListForCategory[self::LEVEL_DARKGREEN];
-                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_LIGHTGREEN] += $scoreListForCategory[self::LEVEL_LIGHTGREEN];
-                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_WHITE] += $scoreListForCategory[self::LEVEL_WHITE];
-                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_LIGHTRED] += $scoreListForCategory[self::LEVEL_LIGHTRED];
-                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_DARKRED] += $scoreListForCategory[self::LEVEL_DARKRED];
+                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_DARKGREEN] += 
+                                $scoreListForCategory[self::LEVEL_DARKGREEN];
+                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_LIGHTGREEN] += 
+                                $scoreListForCategory[self::LEVEL_LIGHTGREEN];
+                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_WHITE] += 
+                                $scoreListForCategory[self::LEVEL_WHITE];
+                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_LIGHTRED] += 
+                                $scoreListForCategory[self::LEVEL_LIGHTRED];
+                            $scoreList[$categoryPrefixList[$matches[1]]][self::LEVEL_DARKRED] += 
+                                $scoreListForCategory[self::LEVEL_DARKRED];
                         } else {
                             $categoryPrefixList[$matches[1]] = $categoryId;
                             $scoreList[$categoryId] = $scoreListAll[$categoryId];
@@ -905,7 +921,8 @@
         }
 
         /**
-         * return an array of number of answer color for exe attempt for question type = MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
+         * return an array of number of answer color for exe attempt 
+         * for question type = MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
          * e.g.
          * [LEVEL_DARKGREEN => 3, LEVEL_LIGHTGREEN => 0, LEVEL_WHITE => 5, LEVEL_LIGHTRED => 12, LEVEL_DARKTRED => 0].
          *

@@ -4242,8 +4242,10 @@ EOT;
                 $res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
                 $currentCatId = $tabCategory["id"];
             }
-            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".
-                    $tabGroups[$i]["name"]."</option>";
+            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".
+                $tabGroups[$i]["id"]."'>".
+                $tabGroups[$i]["name"].
+                "</option>";
         }
         $res .= "</select>";
 

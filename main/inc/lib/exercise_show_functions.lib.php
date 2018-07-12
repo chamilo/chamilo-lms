@@ -574,7 +574,10 @@ class ExerciseShowFunctions
                 $newOptions[$studentChoiceDegree]['position']
             ); ?>
             <td width="10%">
-                <div style="text-align:center;color: <?php echo $color; ?>; border:1px #D6D4D4 solid;background-color: <?php echo $degreCertitudeColor; ?>; line-height:30px;height:30px;width: 100%;margin:auto;"><?php echo nl2br($codeResponse); ?></div>
+                <div style="text-align:center;color: <?php echo $color; ?>; 
+                    border:1px #D6D4D4 solid;background-color: <?php echo $degreCertitudeColor; ?>; 
+                    line-height:30px;height:30px;width: 100%;margin:auto;"><?php echo nl2br($codeResponse); ?>
+                </div>
             </td>
             <?php if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 ?>

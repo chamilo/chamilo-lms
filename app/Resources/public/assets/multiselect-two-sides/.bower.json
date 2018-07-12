@@ -21,6 +21,6 @@
     "commit": "5d850b4a2992dbab1cf913559da0d2398f5db30f"
   },
   "_source": "https://github.com/crlcu/multiselect.git",
-  "_target": "*",
+  "_target": "2.5.*",
   "_originalSource": "multiselect-two-sides"
 }

@@ -8032,4 +8032,13 @@ $TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool = "A co
 $DocumentAutoLaunch = "Lançamento automático para documentos";
 $RedirectToTheDocumentList = "Redirecionar para a lista de documentos";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "A configuração do recurso de início automático de exercícios está ativada. Os alunos serão automaticamente redirecionados para a lista de exercícios.";
+$PostedExpirationDate = "Prazo publicado para envio do trabalho (visível ao aluno)";
+$BossAlertMsgSentToUserXTitle = "Mensagem de acompanhamento sobre o aluno %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Oi, o 
+
+usuário %s enviou uma mensagem de acompanhamento sobre o aluno %s. 
+
+A mensagem pode ser vista aqui %s";
+$include_services = "Incluir serviços";
+$culqi_enable = "Habilitar culqi";
 ?>

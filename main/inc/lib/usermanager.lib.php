@@ -3391,7 +3391,7 @@ class UserManager
                     scu.user_id = $user_id AND
                     scu.session_id = $session_id
                     $where_access_url
-                ORDER BY sc.position ASC, c.id";
+                ORDER BY sc.position ASC";
 
         $myCourseList = [];
         $courses = [];

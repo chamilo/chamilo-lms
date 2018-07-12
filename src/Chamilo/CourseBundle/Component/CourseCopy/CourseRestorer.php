@@ -232,7 +232,7 @@ class CourseRestorer
 
                                 $params['c_id'] = $this->destination_course_id;
                                 $params['tool'] = self::DBUTF8($property['tool']);
-                                $params['insert_user_id'] = $this->checkUserId($property['insert_user_id']);
+                                $params['insert_user_id'] = $this->checkUserId($property['insert_user_id']) ?: null;
                                 $params['insert_date'] = self::DBUTF8($property['insert_date']);
                                 $params['lastedit_date'] = self::DBUTF8($property['lastedit_date']);
                                 $params['ref'] = $resource->destination_id;
@@ -241,7 +241,7 @@ class CourseRestorer
                                 $params['visibility'] = self::DBUTF8($property['visibility']);
                                 $params['start_visible'] = self::DBUTF8($property['start_visible']);
                                 $params['end_visible'] = self::DBUTF8($property['end_visible']);
-                                $params['to_user_id'] = $this->checkUserId($property['to_user_id']);
+                                $params['to_user_id'] = $this->checkUserId($property['to_user_id']) ?: null;
 
                                 $id = Database::insert($table, $params);
                                 if ($id) {

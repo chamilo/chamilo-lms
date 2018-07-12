@@ -337,7 +337,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
-        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
+        $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -421,7 +421,7 @@ if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
     if ($exerciseExists) {
         $interbreadcrumb[] = [
-            "url" => "admin.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
+            "url" => '#',
             "name" => $objExerciseTmp->selectTitle(true),
         ];
     }

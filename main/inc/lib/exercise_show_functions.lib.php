@@ -528,8 +528,8 @@ class ExerciseShowFunctions
             <td width="5%">
                 <?php
                 $question = new MultipleAnswerTrueFalseDegreeCertainty();
-        $courseId = api_get_course_int_id();
-        $newOptions = Question::readQuestionOption($questionId, $courseId);
+                $courseId = api_get_course_int_id();
+                $newOptions = Question::readQuestionOption($questionId, $courseId);
 
         //Your choice
         if (isset($newOptions[$studentChoice])) {

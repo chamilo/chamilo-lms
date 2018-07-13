@@ -13,6 +13,7 @@ class LpCalendarPlugin extends Plugin
 {
     const EVENT_TYPE_TAKEN = 1;
     const EVENT_TYPE_EXAM = 2;
+    public $hasPersonalEvents = true;
 
     /**
      * Class constructor
@@ -24,6 +25,9 @@ class LpCalendarPlugin extends Plugin
         parent::__construct($version, $author, ['enabled' => 'boolean']);
     }
 
+    /**
+     * @return array
+     */
     public static function getEventTypeList()
     {
         return [
@@ -203,7 +207,48 @@ class LpCalendarPlugin extends Plugin
         }
 
         return $list;
+    }
 
+    /**
+     * @param array $calendarInfo
+     * @param int $start
+     * @param int $end
+     *
+     * @return array
+     */
+    public static function getCalendarsEventsByDate($calendarInfo, $start, $end)
+    {
+        if (empty($calendarInfo)) {
+            return [];
+        }
+
+        $calendarId = (int) $calendarInfo['id'];
+        $start = (int) $start;
+        $end = (int) $end;
+
+        $startCondition = '';
+        $endCondition = '';
+
+        if ($start !== 0) {
+            $start = api_get_utc_datetime($start);
+            $startCondition = "AND start_date >= '".$start."'";
+        }
+        if ($start !== 0) {
+            $end = api_get_utc_datetime($end);
+            $endCondition = "AND (end_date <= '".$end."' OR end_date IS NULL)";
+        }
+
+        $sql = "SELECT * FROM learning_calendar_events 
+                WHERE calendar_id = $calendarId $startCondition $endCondition ";
+
+        $result = Database::query($sql);
+        $list = [];
+        $link = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php';
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $list[] = $row;
+        }
+
+        return ['calendar' => $calendarInfo, 'events' => $list];
     }
 
     /**
@@ -289,6 +334,25 @@ class LpCalendarPlugin extends Plugin
         $item = Database::fetch_array($result, 'ASSOC');
 
         return $item;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $start
+     * @param int $end
+     *
+     * @return array
+     */
+    public static function getUserEvents($userId, $start, $end)
+    {
+        $calendarRelUser = self::getUserCalendar($userId);
+        if (!empty($calendarRelUser)) {
+            $calendar = self::getCalendar($calendarRelUser['calendar_id']);
+
+            return self::getCalendarsEventsByDate($calendar, $start, $end);
+        }
+
+        return [];
     }
 
     /**
@@ -389,5 +453,57 @@ class LpCalendarPlugin extends Plugin
         $form->addText('total_hours', get_lang('TotalHours'));
         $form->addText('minutes_per_day', get_lang('MinutesPerDay'));
         $form->addHtmlEditor('description', get_lang('Description'), false);
+    }
+
+    /**
+     * @param int $start
+     * @param int $end
+     *
+     * @return array
+     */
+    public function getPersonalEvents($calendar, $start, $end)
+    {
+        $userId = api_get_user_id();
+        $events = self::getUserEvents($userId, $start, $end);
+
+        if (empty($events)) {
+            return [];
+        }
+
+        $calendarInfo = $events['calendar'];
+        $events = $events['events'];
+
+        $list = [];
+        $typeList = self::getEventTypeList();
+        foreach ($events as $row) {
+            $event['id'] = 'personal_'.$row['id'];
+            $event['title'] = $calendarInfo['title'];
+            $event['className'] = 'personal';
+            $color = isset($typeList[$row['type']]) ? $typeList[$row['type']] : 'green';
+            $event['borderColor'] = $color;
+            $event['backgroundColor'] = $color;
+
+            $event['editable'] = false;
+            $event['sent_to'] = get_lang('Me');
+            $event['type'] = 'personal';
+
+            if (!empty($row['start_date'])) {
+                $event['start'] = $calendar->formatEventDate($row['start_date']);
+                $event['start_date_localtime'] = api_get_local_time($row['start_date']);
+            }
+
+            if (!empty($row['end_date'])) {
+                $event['end'] = $calendar->formatEventDate($row['end_date']);
+                $event['end_date_localtime'] = api_get_local_time($row['end_date']);
+            }
+
+            $event['description'] = 'plugin';
+            $event['allDay'] = 1;
+            $event['parent_event_id'] = 0;
+            $event['has_children'] = 0;
+            $list[] = $event;
+        }
+
+        return $list;
     }
 }

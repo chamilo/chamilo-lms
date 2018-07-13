@@ -165,7 +165,7 @@ class Agenda
      */
     public function setSessionId($id)
     {
-        $this->sessionId = intval($id);
+        $this->sessionId = (int) $id;
     }
 
     /**
@@ -1514,18 +1514,16 @@ class Agenda
      */
     public function getPersonalEvents($start, $end)
     {
-        $start = intval($start);
-        $end = intval($end);
+        $start = (int) $start;
+        $end = (int) $end;
         $startCondition = '';
         $endCondition = '';
 
         if ($start !== 0) {
-            $start = api_get_utc_datetime($start);
-            $startCondition = "AND date >= '".$start."'";
+            $startCondition = "AND date >= '".api_get_utc_datetime($start)."'";
         }
         if ($start !== 0) {
-            $end = api_get_utc_datetime($end);
-            $endCondition = "AND (enddate <= '".$end."' OR enddate IS NULL)";
+            $endCondition = "AND (enddate <= '".api_get_utc_datetime($end)."' OR enddate IS NULL)";
         }
         $user_id = api_get_user_id();
 
@@ -1547,16 +1545,12 @@ class Agenda
 
                 if (!empty($row['date'])) {
                     $event['start'] = $this->formatEventDate($row['date']);
-                    $event['start_date_localtime'] = api_get_local_time(
-                        $row['date']
-                    );
+                    $event['start_date_localtime'] = api_get_local_time($row['date']);
                 }
 
                 if (!empty($row['enddate'])) {
                     $event['end'] = $this->formatEventDate($row['enddate']);
-                    $event['end_date_localtime'] = api_get_local_time(
-                        $row['enddate']
-                    );
+                    $event['end_date_localtime'] = api_get_local_time($row['enddate']);
                 }
 
                 $event['description'] = $row['text'];
@@ -1566,6 +1560,21 @@ class Agenda
 
                 $my_events[] = $event;
                 $this->events[] = $event;
+            }
+        }
+
+        // Add plugin personal events
+
+        $this->plugin = new AppPlugin();
+        $plugins = $this->plugin->getInstalledPluginListObject();
+        /** @var Plugin $plugin */
+        foreach ($plugins as $plugin) {
+            if ($plugin->hasPersonalEvents && method_exists($plugin, 'getPersonalEvents')) {
+                $pluginEvents = $plugin->getPersonalEvents($this, $start, $end);
+
+                if (!empty($pluginEvents)) {
+                    $this->events = array_merge($this->events, $pluginEvents);
+                }
             }
         }
 
@@ -1973,18 +1982,12 @@ class Agenda
                 }
 
                 if (!empty($row['start_date'])) {
-                    $event['start'] = $this->formatEventDate(
-                        $row['start_date']
-                    );
-                    $event['start_date_localtime'] = api_get_local_time(
-                        $row['start_date']
-                    );
+                    $event['start'] = $this->formatEventDate($row['start_date']);
+                    $event['start_date_localtime'] = api_get_local_time($row['start_date']);
                 }
                 if (!empty($row['end_date'])) {
                     $event['end'] = $this->formatEventDate($row['end_date']);
-                    $event['end_date_localtime'] = api_get_local_time(
-                        $row['end_date']
-                    );
+                    $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
 
                 $event['sent_to'] = '';
@@ -2099,7 +2102,7 @@ class Agenda
                 $event['editable'] = false;
                 $event['type'] = 'admin';
 
-                if (api_is_platform_admin() && $this->type == 'admin') {
+                if (api_is_platform_admin() && $this->type === 'admin') {
                     $event['editable'] = true;
                 }
 
@@ -3508,7 +3511,8 @@ class Agenda
     }
 
     /**
-     * This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
+     * This function retrieves all the personal agenda items and add them to the agenda items found by the other
+     * functions.
      */
     public static function get_personal_agenda_items(
         $user_id,
@@ -3631,7 +3635,8 @@ class Agenda
      * @param    array    Agendaitems
      * @param    int    Month number
      * @param    int    Year number
-     * @param    array    Array of strings containing long week day names (deprecated, you can send an empty array instead)
+     * @param    array    Array of strings containing long week day names (deprecated, you can send an empty array
+     *                          instead)
      * @param    string    The month name
      */
     public static function display_mymonthcalendar(
@@ -4109,7 +4114,7 @@ class Agenda
      *
      * @return bool|string
      */
-    private function formatEventDate($utcTime)
+    public function formatEventDate($utcTime)
     {
         $utcTimeZone = new DateTimeZone('UTC');
         $platformTimeZone = new DateTimeZone(api_get_timezone());

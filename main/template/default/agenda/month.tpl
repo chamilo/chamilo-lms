@@ -395,7 +395,6 @@ $(document).ready(function() {
             }
 
             var onHoverInfo = '';
-
             {% if on_hover_info.description %}
                 if (event.description) {
                     onHoverInfo = event.description;

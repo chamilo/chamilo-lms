@@ -7977,4 +7977,10 @@ $TempScoreXQuestionsNotCorrectedYet = "Temporäre Auswertung: %s offene Frage(n)
 $GoToSurvey = "Zur Umfrage";
 $OralExpressionHelpText = "Du kannst während der Aufnahme auf « Aufnahme anhalten » klicken. Wenn du nicht zufrieden bist, nimm dich erneut auf. Dies wird die vorherige Aufnahme überschreiben. Zufrieden? Um deine Aufnahme zu senden, klick einfach auf « Übung beenden ».";
 $MyGeneralCertificate = "Mein Zertifikat";
+$BossAlertMsgSentToUserXTitle = "Follow-up Nachricht über Lernende %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Hallo,<br/><br/>
+
+Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
+
+Die Nachricht ist an %s sichtbar";
 ?>

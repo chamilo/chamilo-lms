@@ -453,18 +453,18 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 // X-Frame-Options tells the browser whether you want to allow your site to
 // be framed or not. By preventing a browser from framing your site you can
 // defend against attacks like clickjacking.
-// Recommended value "x-frame-options: SAMEORIGIN".
-//$_configuration['security_x_frame_options'] = 'x-frame-options: SAMEORIGIN';
+// Recommended value "SAMEORIGIN".
+//$_configuration['security_x_frame_options'] = 'SAMEORIGIN';
 //
 // X-XSS-Protection sets the configuration for the cross-site scripting
 // filter built into most browsers.
-// Recommended value "X-XSS-Protection: 1; mode=block".
-//$_configuration['security_xss_protection'] = 'X-XSS-Protection: 1; mode=block';
+// Recommended value "1; mode=block".
+//$_configuration['security_xss_protection'] = '1; mode=block';
 //
 // X-Content-Type-Options stops a browser from trying to MIME-sniff the
 // content type and forces it to stick with the declared content-type. The only
-// valid value for this header is "X-Content-Type-Options: nosniff".
-//$_configuration['security_x_content_type_options'] = 'X-Content-Type-Options: nosniff';
+// valid value for this header is "nosniff".
+//$_configuration['security_x_content_type_options'] = 'nosniff';
 //
 // Referrer Policy is a new header that allows a site to control how much
 // information the browser includes with navigation away from a document

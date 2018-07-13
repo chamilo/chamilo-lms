@@ -75,7 +75,7 @@ class Category
      */
     public function __toString()
     {
-        return $this->getHeadline();
+        return (string) $this->getHeadline();
     }
 
     /**

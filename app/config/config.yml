@@ -289,3 +289,11 @@ knp_menu:
 sonata_doctrine_orm_admin:
     audit:
         force: false # Audits are set in the admin.yml files with audit:true
+
+sensio_framework_extra:
+    view:
+        annotations: true
+
+fos_rest:
+    access_denied_listener: true
+    exception: true # Activates the FOSRestBundle exception controller

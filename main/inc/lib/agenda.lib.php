@@ -138,7 +138,7 @@ class Agenda
      */
     public function setSenderId($senderId)
     {
-        $this->senderId = intval($senderId);
+        $this->senderId = (int) $senderId;
     }
 
     /**

@@ -211,12 +211,14 @@ class LpCalendarPlugin extends Plugin
 
     /**
      * @param array $calendarInfo
-     * @param int $start
-     * @param int $end
+     * @param int   $start
+     * @param int   $end
+     * @param int   $type
+     * @param bool  $getCount
      *
      * @return array
      */
-    public static function getCalendarsEventsByDate($calendarInfo, $start, $end)
+    public static function getCalendarsEventsByDate($calendarInfo, $start, $end, $type = 0, $getCount = false)
     {
         if (empty($calendarInfo)) {
             return [];
@@ -228,20 +230,37 @@ class LpCalendarPlugin extends Plugin
 
         $startCondition = '';
         $endCondition = '';
+        $typeCondition = '';
 
         if ($start !== 0) {
             $start = api_get_utc_datetime($start);
             $startCondition = "AND start_date >= '".$start."'";
         }
-        if ($start !== 0) {
+        if ($end !== 0) {
             $end = api_get_utc_datetime($end);
             $endCondition = "AND (end_date <= '".$end."' OR end_date IS NULL)";
         }
 
-        $sql = "SELECT * FROM learning_calendar_events 
-                WHERE calendar_id = $calendarId $startCondition $endCondition ";
+        if (!empty($type)) {
+            $type = (int) $type;
+            $typeCondition = " AND type = $type ";
+        }
 
+        $select = '*';
+        if ($getCount) {
+            $select = 'count(id) count ';
+        }
+
+        $sql = "SELECT $select FROM learning_calendar_events 
+                WHERE calendar_id = $calendarId $startCondition $endCondition ";
         $result = Database::query($sql);
+
+        if ($getCount) {
+            $row = Database::fetch_array($result, 'ASSOC');
+
+            return $row['count'];
+        }
+
         $list = [];
         $link = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -249,6 +268,33 @@ class LpCalendarPlugin extends Plugin
         }
 
         return ['calendar' => $calendarInfo, 'events' => $list];
+    }
+
+    /**
+     * @param array $calendarInfo
+     *
+     * @return array
+     */
+    public static function getFirstCalendarDate($calendarInfo)
+    {
+        if (empty($calendarInfo)) {
+            return [];
+        }
+
+        $calendarId = (int) $calendarInfo['id'];
+
+        /*if (!empty($type)) {
+            $type = (int) $type;
+            $typeCondition = " AND type = $type ";
+        }*/
+
+        $sql = "SELECT start_date FROM learning_calendar_events 
+                WHERE calendar_id = $calendarId ORDER BY start_date LIMIT 1";
+        $result = Database::query($sql);
+
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return $row['start_date'];
     }
 
     /**
@@ -337,19 +383,21 @@ class LpCalendarPlugin extends Plugin
     }
 
     /**
-     * @param int $userId
-     * @param int $start
-     * @param int $end
+     * @param int  $userId
+     * @param int  $start
+     * @param int  $end
+     * @param int  $type
+     * @param bool $getCount
      *
      * @return array
      */
-    public static function getUserEvents($userId, $start, $end)
+    public static function getUserEvents($userId, $start, $end, $type = 0, $getCount = false)
     {
         $calendarRelUser = self::getUserCalendar($userId);
         if (!empty($calendarRelUser)) {
             $calendar = self::getCalendar($calendarRelUser['calendar_id']);
 
-            return self::getCalendarsEventsByDate($calendar, $start, $end);
+            return self::getCalendarsEventsByDate($calendar, $start, $end, $type, $getCount);
         }
 
         return [];
@@ -505,5 +553,109 @@ class LpCalendarPlugin extends Plugin
         }
 
         return $list;
+    }
+
+    /**
+     * @param array $coursesAndSessions
+     *
+     * @return int
+     */
+    public static function getItemCountChecked($userId, $coursesAndSessions)
+    {
+        $userId = (int) $userId;
+
+        if (empty($coursesAndSessions)) {
+            return 0;
+        }
+
+        $tableItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tableLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tableLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $tableLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $extraField = new ExtraField('lp_item');
+        $fieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');
+
+        if (empty($fieldInfo)) {
+            return 0;
+        }
+
+        $courseAndSessionCondition = [];
+        foreach ($coursesAndSessions as $sessionId => $courseList) {
+            if (isset($courseList['course_list'])) {
+                $courseList = array_keys($courseList['course_list']);
+            }
+            if (empty($courseList)) {
+                continue;
+            }
+            $courseListToString = implode("','", $courseList);
+            if (empty($sessionId)) {
+                $courseAndSessionCondition[] =
+                    " ((l.session_id = 0 OR l.session_id is NULL) AND i.c_id IN ('$courseListToString'))";
+            } else {
+                $courseAndSessionCondition[] = " 
+                    (
+                        ((l.session_id = 0 OR l.session_id is NULL) OR l.session_id = $sessionId) AND 
+                        i.c_id IN ('$courseListToString')
+                    )";
+            }
+        }
+
+        if (empty($courseAndSessionCondition)) {
+            return 0;
+        }
+
+        $courseSessionConditionToString = 'AND ('.implode(' OR ', $courseAndSessionCondition).') ';
+
+        $sql = "SELECT count(*) as count 
+                FROM $tableItem i INNER JOIN $tableLp l
+                ON (i.c_id = l.c_id AND i.lp_id = l.iid) 
+                INNER JOIN $tableLpItemView iv
+                ON (iv.c_id = l.c_id AND i.iid = iv.lp_item_id) 
+                INNER JOIN $tableLpView v
+                ON (v.c_id = l.c_id AND v.lp_id = l.iid AND iv.lp_view_id = v.iid)
+                INNER JOIN extra_field_values e 
+                ON (e.item_id = i.iid AND value = 1 AND field_id = ".$fieldInfo['id'].")
+                WHERE v.user_id = $userId AND status = 'completed' $courseSessionConditionToString";
+
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+
+            return $row['count'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $courseAndSessionList
+     *
+     * @return string
+     */
+    public static function getUserStats($userId, $courseAndSessionList)
+    {
+        // @todo use translation
+        // get events from this year to today
+        $takenCount = self::getUserEvents(
+            $userId,
+            strtotime(date('Y-01-01')),
+            time(),
+            LpCalendarPlugin::EVENT_TYPE_TAKEN,
+            true
+        );
+
+        $html = "Nombre de jours cumulés dans le calendrier: $takenCount";
+        if (!empty($courseAndSessionList)) {
+            $count = self::getItemCountChecked($userId, $courseAndSessionList);
+            $html .= '<br />';
+            $html .= "Nombre de jours cumulés dans les parcours réalisés: $count";
+            $html .= '<br />';
+            $html .= 'Nombre de jour de retard ou d\'avance à la date d\'aujourd\'hui '.($takenCount - $count);
+        }
+
+        $html = Display::panel($html, get_lang('CalendarStats'));
+        return $html;
     }
 }

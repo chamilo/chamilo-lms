@@ -4670,7 +4670,7 @@ class Tracking
         $urlId = api_get_current_access_url_id();
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT c.code, title
+            $sql = "SELECT c.id, c.code, title
                     FROM $tbl_course_user cu
                     INNER JOIN $tbl_course c
                     ON (cu.c_id = c.id)
@@ -4682,7 +4682,7 @@ class Tracking
                         access_url_id = ".$urlId."
                     ORDER BY title";
         } else {
-            $sql = "SELECT c.code, title
+            $sql = "SELECT c.id, c.code, title
                     FROM $tbl_course_user u
                     INNER JOIN $tbl_course c ON (c_id = c.id)
                     WHERE
@@ -4693,8 +4693,10 @@ class Tracking
 
         $rs = Database::query($sql);
         $courses = $course_in_session = $temp_course_in_session = [];
+        $courseIdList = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $courses[$row['code']] = $row['title'];
+            $courseIdList[] = $row['id'];
         }
 
         $orderBy = " ORDER BY name ";
@@ -5401,6 +5403,13 @@ class Tracking
                     $html .= '</tr>';
                 }
                 $html .= '</tbody></table></div>';
+            }
+
+            $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+            if ($pluginCalendar) {
+                $course_in_session[0] = $courseIdList;
+                $plugin = LpCalendarPlugin::create();
+                $html .= LpCalendarPlugin::getUserStats($user_id, $course_in_session);
             }
         }
 

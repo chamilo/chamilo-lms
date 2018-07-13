@@ -823,7 +823,7 @@ $userGroups = $userGroupManager->getNameListByUser(
 <?php
 
 $exportCourseList = [];
-
+$lpIdList = [];
 if (empty($details)) {
     $csv_content[] = [];
     $csv_content[] = [
@@ -990,7 +990,9 @@ if (empty($details)) {
                         $sId
                     );
 
-                    $totalScore += $score;
+                    if (is_numeric($score)) {
+                        $totalScore += $score;
+                    }
 
                     $progress = empty($progress) ? '0%' : $progress.'%';
                     $score = empty($score) ? '0%' : $score.'%';
@@ -1224,6 +1226,8 @@ if (empty($details)) {
                 echo '</tr></thead><tbody>';
 
                 foreach ($flat_list as $learnpath) {
+                    $lpIdList[] = $learnpath['iid'];
+
                     $lp_id = $learnpath['lp_old_id'];
                     $lp_name = $learnpath['lp_name'];
                     $any_result = false;
@@ -1866,6 +1870,12 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
         $row++;
     }
     $table->display();
+}
+
+$pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+if ($pluginCalendar) {
+    $plugin = LpCalendarPlugin::create();
+    echo LpCalendarPlugin::getUserStats($student_id, $courses_in_session);
 }
 
 if ($export) {

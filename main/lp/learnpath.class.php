@@ -6322,6 +6322,15 @@ class learnpath
             $prerequisities_icon = '';
             $forumIcon = '';
             $previewIcon = '';
+            $pluginCalendarIcon = '';
+
+            $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+            $plugin = null;
+            if ($pluginCalendar) {
+                $plugin = LpCalendarPlugin::create();
+            }
+
+            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php?';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio != 'true') {
@@ -6387,7 +6396,7 @@ class learnpath
                                         ICON_SIZE_TINY
                                     ),
                                     $forumIconUrl,
-                                    ['class' => "btn btn-default lp-btn-associate-forum"]
+                                    ['class' => 'btn btn-default lp-btn-associate-forum']
                                 );
                             }
                         }
@@ -6412,6 +6421,22 @@ class learnpath
                         );
                         $edit_icon .= '</a>';
                     }
+                }
+
+                if ($pluginCalendar) {
+                    $pluginLink = $pluginUrl.
+                        '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+
+                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('Edit'), [], ICON_SIZE_TINY);
+                    $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
+                    if ($itemInfo && $itemInfo['value'] == 1) {
+                        $iconCalendar = Display::return_icon('agenda.png', get_lang('Edit'), [], ICON_SIZE_TINY);
+                    }
+                    $pluginCalendarIcon = Display::url(
+                        $iconCalendar,
+                        $pluginLink,
+                        ['class' => 'btn btn-default']
+                    );
                 }
 
                 $delete_icon .= ' <a 
@@ -6532,6 +6557,7 @@ class learnpath
                                     $previewIcon 
                                     $audio 
                                     $edit_icon 
+                                    $pluginCalendarIcon
                                     $forumIcon 
                                     $prerequisities_icon 
                                     $move_item_icon 
@@ -6640,7 +6666,7 @@ class learnpath
         $result = $this->processBuildMenuElements($update_audio);
 
         $list = '<ul id="lp_item_list">';
-        $tree = self::print_recursive(
+        $tree = $this->print_recursive(
             $result['elements'],
             $result['default_data'],
             $result['default_content']
@@ -6664,7 +6690,7 @@ class learnpath
             'scorm-list-collapse'
         );
 
-        if ($update_audio == 'true') {
+        if ($update_audio === 'true') {
             $return = $result['return_audio'];
         }
 
@@ -10983,7 +11009,7 @@ class learnpath
                             $children = $organization->childNodes;
                             $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                             if ($possible_parent) {
-                                if ($possible_parent->getAttribute('identifier') == 'ITEM_'.$item->parent) {
+                                if ($possible_parent->getAttribute('identifier') === 'ITEM_'.$item->parent) {
                                     $possible_parent->appendChild($my_item);
                                 }
                             }

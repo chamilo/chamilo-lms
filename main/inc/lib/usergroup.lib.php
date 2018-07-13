@@ -64,6 +64,70 @@ class UserGroup extends Model
     }
 
     /**
+     * @param int  $id
+     * @param bool $getCount
+     *
+     * @return array|int
+     */
+    public function getUserGroupUsers($id, $getCount = false)
+    {
+        $id = (int) $id;
+
+        if ($getCount) {
+            $select = 'COUNT(u.id) count ';
+        } else {
+            $select = ' u.* ';
+        }
+
+        if ($this->useMultipleUrl) {
+            $urlId = api_get_current_access_url_id();
+            $sql = "SELECT $select
+                    FROM ".$this->usergroup_rel_user_table." u
+                    INNER JOIN ".$this->access_url_rel_usergroup." a 
+                    ON (u.user_id = a.user_id)
+                    WHERE usergroup_id = $id AND access_url_id = $urlId ";
+        } else {
+            $sql = "SELECT $select
+                    FROM ".$this->usergroup_rel_user_table." u
+                    WHERE usergroup_id = $id";
+        }
+        $result = Database::query($sql);
+        if ($getCount) {
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+
+                return $row['count'];
+            }
+            return 0;
+        } else {
+            $list = [];
+            $showCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+
+            while ($data = Database::fetch_array($result)) {
+                $userId = $data['user_id'];
+                $userInfo = api_get_user_info($userId);
+                $data['name'] = $userInfo['complete_name_with_username'];
+
+                if ($showCalendar) {
+                    $calendar = LpCalendarPlugin::getUserCalendar($userId);
+                    $data['calendar_id'] = 0;
+                    $data['calendar'] = '';
+                    if (!empty($calendar)) {
+                        $calendarInfo = LpCalendarPlugin::getCalendar($calendar['calendar_id']);
+                        if ($calendarInfo) {
+                            $data['calendar_id'] = $calendar['calendar_id'];
+                            $data['calendar'] = $calendarInfo['title'];
+                        }
+                    }
+                }
+                $data['id'] = $data['user_id'];
+                $list[] = $data;
+            }
+            return $list;
+        }
+    }
+
+    /**
      * @param int $type
      *
      * @return int
@@ -88,7 +152,7 @@ class UserGroup extends Model
         } else {
             $typeCondition = '';
             if ($type != -1) {
-                $type = intval($type);
+                $type = (int) $type;
                 $typeCondition = " WHERE group_type = $type ";
             }
 
@@ -114,7 +178,7 @@ class UserGroup extends Model
     public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
     {
         if ($this->useMultipleUrl) {
-            $course_id = intval($course_id);
+            $course_id = (int) $course_id;
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT count(c.usergroup_id) as count
                     FROM {$this->usergroup_rel_course_table} c
@@ -133,7 +197,7 @@ class UserGroup extends Model
         } else {
             $typeCondition = '';
             if ($type != -1) {
-                $type = intval($type);
+                $type = (int) $type;
                 $typeCondition = " AND group_type = $type ";
             }
             $sql = "SELECT count(c.usergroup_id) as count
@@ -193,6 +257,20 @@ class UserGroup extends Model
             Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
             'usergroup_export.php'
         );
+        echo '</div>';
+        echo Display::grid_html('usergroups');
+    }
+
+    /**
+     * Displays the title + grid.
+     */
+    public function displayToolBarUserGroupUsers()
+    {
+        // action links
+        echo '<div class="actions">';
+        echo '<a href="../admin/usergroups.php">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+            '</a>';
         echo '</div>';
         echo Display::grid_html('usergroups');
     }
@@ -300,7 +378,7 @@ class UserGroup extends Model
 
         $typeCondition = '';
         if ($type != -1) {
-            $type = intval($type);
+            $type = (int) $type;
             $typeCondition = " AND group_type = $type ";
         }
 
@@ -341,7 +419,7 @@ class UserGroup extends Model
     {
         $course_id = null;
         if (isset($options['course_id'])) {
-            $course_id = intval($options['course_id']);
+            $course_id = (int) $options['course_id'];
             unset($options['course_id']);
         }
 
@@ -351,7 +429,7 @@ class UserGroup extends Model
 
         $typeCondition = '';
         if ($type != -1) {
-            $type = intval($type);
+            $type = (int) $type;
             $typeCondition = " AND group_type = $type ";
         }
 
@@ -943,8 +1021,8 @@ class UserGroup extends Model
     {
         $sord = in_array(strtolower($sord), ['asc', 'desc']) ? $sord : 'desc';
 
-        $start = intval($start);
-        $limit = intval($limit);
+        $start = (int) $start;
+        $limit = (int) $limit;
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a ON (u.id = a.usergroup_id)";
@@ -985,7 +1063,10 @@ class UserGroup extends Model
                         ];
                         break;
                 }
-                $group['users'] = count($this->get_users_by_usergroup($group['id'], $roles));
+                $group['users'] = Display::url(
+                    count($this->get_users_by_usergroup($group['id'], $roles)),
+                    api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?id='.$group['id']
+                );
                 $new_result[] = $group;
             }
             $result = $new_result;
@@ -1616,7 +1697,7 @@ class UserGroup extends Model
             return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
         }
 
-        $id = intval($id);
+        $id = (int) $id;
         $group_table = Database::get_main_table(TABLE_USERGROUP);
         $sql = "SELECT picture FROM $group_table WHERE id = ".$id;
         $res = Database::query($sql);
@@ -1668,7 +1749,7 @@ class UserGroup extends Model
      */
     public function setGroupType($type)
     {
-        $this->groupType = intval($type);
+        $this->groupType = (int) $type;
     }
 
     /**
@@ -1845,18 +1926,25 @@ class UserGroup extends Model
      *
      * @author Julio Montoya
      *
-     * @param int $user_id
-     * @param int $group_id
+     * @param int $userId
+     * @param int $groupId
      *
      * @return bool true if success
      * */
-    public function delete_user_rel_group($user_id, $group_id)
+    public function delete_user_rel_group($userId, $groupId)
     {
+        $userId = (int) $userId;
+        $groupId = (int) $groupId;
+        if (empty($userId) || empty($groupId)) {
+            return false;
+        }
+
         $table = $this->usergroup_rel_user_table;
         $sql = "DELETE FROM $table
                 WHERE
-                    user_id = ".intval($user_id)." AND
-                    usergroup_id = ".intval($group_id)."  ";
+                    user_id = $userId AND
+                    usergroup_id = $groupId";
+
         $result = Database::query($sql);
 
         return $result;
@@ -2609,5 +2697,14 @@ class UserGroup extends Model
     public static function canLeave($groupInfo)
     {
         return $groupInfo['allow_members_leave_group'] == 1 ? true : false;
+    }
+
+    /**
+     * Check permissions and blocks the page
+     */
+    public function protectScript()
+    {
+        api_protect_admin_script(true);
+        api_protect_limit_for_session_admin();
     }
 }

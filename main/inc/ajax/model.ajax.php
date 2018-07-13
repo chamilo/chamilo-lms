@@ -60,6 +60,8 @@ if (!in_array(
         'get_sessions',
         'get_course_announcements',
         'course_log_events',
+        'get_learning_path_calendars',
+        'get_usergroups_users',
     ]
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -228,6 +230,14 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'get_usergroups_users':
+        $usergroup = new UserGroup();
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+        $count = $usergroup->getUserGroupUsers($id, true);
+        break;
+    case 'get_learning_path_calendars':
+        $count = LpCalendarPlugin::getCalendarCount();
+        break;
     case 'course_log_events':
         $courseId = api_get_course_int_id();
         if (empty($courseId)) {
@@ -737,10 +747,9 @@ switch ($action) {
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
-        $groupFilter = isset($_REQUEST['group_filter']) ? intval($_REQUEST['group_filter']) : 0;
-
+        $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
         $course_id = api_get_course_int_id();
-        if ($type == 'registered') {
+        if ($type === 'registered') {
             $count = $obj->getUserGroupByCourseWithDataCount(
                 $course_id,
                 $groupFilter
@@ -780,6 +789,23 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit
 $columns = [];
 
 switch ($action) {
+    case 'get_usergroups_users':
+        $usergroup->protectScript();
+        $columns = ['name', 'actions'];
+        if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
+            $columns = ['name', 'calendar', 'actions', 'calendar_id'];
+        }
+        $result = $usergroup->getUserGroupUsers($id);
+        break;
+    case 'get_learning_path_calendars':
+        $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
+        $result = LpCalendarPlugin::getCalendars(
+            $start,
+            $limit,
+            $sidx,
+            $sord
+        );
+        break;
     case 'course_log_events':
         $columns = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -791,7 +817,6 @@ switch ($action) {
             $courseId,
             $sessionId
         );
-
         break;
     case 'get_programmed_announcements':
         $columns = ['subject', 'date', 'sent', 'actions'];
@@ -1910,6 +1935,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
+        $obj->protectScript();
         $columns = ['name', 'users', 'courses', 'sessions', 'group_type', 'actions'];
         $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit);
         break;
@@ -2082,8 +2108,12 @@ switch ($action) {
 
         $new_result = [];
         if (!empty($result)) {
+            $url = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
-                $group['users'] = count($obj->get_users_by_usergroup($group['id']));
+                $group['users'] = Display::url(
+                    count($obj->get_users_by_usergroup($group['id'])),
+                    $url.'&id='.$group['id']
+                );
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
                     $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
@@ -2155,6 +2185,8 @@ $allowed_actions = [
     'get_course_announcements',
     'get_programmed_announcements',
     'course_log_events',
+    'get_learning_path_calendars',
+    'get_usergroups_users',
 ];
 
 //5. Creating an obj to return a json

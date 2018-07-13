@@ -14,14 +14,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
+$usergroup = new UserGroup();
+$usergroup->protectScript();
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
-
-// Database Table Definitions
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToClass');
@@ -66,8 +64,8 @@ function validate_filter() {
     document.formulaire.submit();
 }
 
-function checked_in_no_group(checked) {
-
+function checked_in_no_group(checked) 
+{
     $("#relation")
     .find("option")
     .attr("selected", false);
@@ -101,8 +99,6 @@ if (is_array($extra_field_list)) {
         }
     }
 }
-
-$usergroup = new UserGroup();
 
 if (empty($id)) {
     api_not_allowed(true);

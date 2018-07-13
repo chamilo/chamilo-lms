@@ -10,14 +10,14 @@ $cidReset = true;
 // Including some necessary files.
 require_once __DIR__.'/../inc/global.inc.php';
 
+$usergroup = new UserGroup();
+$usergroup->protectScript();
+
 $xajax = new xajax();
 $xajax->registerFunction('search');
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
-
-// Access restrictions.
-api_protect_admin_script(true);
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
@@ -48,7 +48,6 @@ function remove_item(origin) {
 $form_sent = 0;
 $errorMsg = '';
 $sessions = [];
-$usergroup = new UserGroup();
 $id = intval($_GET['id']);
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {

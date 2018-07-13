@@ -119,6 +119,23 @@ class UserGroup extends Model
                             $data['calendar'] = $calendarInfo['title'];
                         }
                     }
+
+                    $courseAndSessionList = Tracking::show_user_progress(
+                        $userId,
+                        0,
+                        '',
+                        true,
+                        true,
+                        true
+                    );
+
+                    $stats = LpCalendarPlugin::getUserStats($userId, $courseAndSessionList)
+                    $data['examn'] = 'examn';
+                    $data['time_spent'] = 'time_spent';
+                    $data['lp_day_completed'] = 'lp_day_completed';
+                    $data['days_diff'] = 'days_diff';
+
+
                 }
                 $data['id'] = $data['user_id'];
                 $list[] = $data;

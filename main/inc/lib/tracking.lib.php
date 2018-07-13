@@ -4635,7 +4635,8 @@ class Tracking
         $session_id = 0,
         $extra_params = '',
         $show_courses = true,
-        $showAllSessions = true
+        $showAllSessions = true,
+        $returnArray = false
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4772,6 +4773,12 @@ class Tracking
             }
             $course_in_session[$my_session_id]['course_list'] = $final_course_data;
             $course_in_session[$my_session_id]['name'] = $session_name;
+        }
+
+        if ($returnArray) {
+            $course_in_session[0] = $courseIdList;
+
+            return $course_in_session;
         }
 
         $html = '';
@@ -5409,7 +5416,7 @@ class Tracking
             if ($pluginCalendar) {
                 $course_in_session[0] = $courseIdList;
                 $plugin = LpCalendarPlugin::create();
-                $html .= LpCalendarPlugin::getUserStats($user_id, $course_in_session);
+                $html .= LpCalendarPlugin::getUserStatsPanel($user_id, $course_in_session);
             }
         }
 
@@ -6830,7 +6837,36 @@ class Tracking
 
         return $allow;
     }
+
+    public function getCoursesAndSessions($userId)
+    {
+        $userId = (int) $userId;
+
+        // Get the list of sessions where the user is subscribed as student
+        $sql = 'SELECT session_id, c_id
+        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
+        WHERE user_id='.$userId;
+        $rs = Database::query($sql);
+        $tmp_sessions = [];
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $tmp_sessions[] = $row['session_id'];
+            if ($drh_can_access_all_courses) {
+                if (in_array($row['session_id'], $tmp_sessions)) {
+                    $courses_in_session[$row['session_id']][] = $row['c_id'];
+                }
+            } else {
+                if (isset($courses_in_session_by_coach[$row['session_id']])) {
+                    if (in_array($row['session_id'], $tmp_sessions)) {
+                        $courses_in_session[$row['session_id']][] = $row['c_id'];
+                    }
+                }
+            }
+        }
+
+    }
 }
+
+
 
 /**
  * @todo move into a proper file

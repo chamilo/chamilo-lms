@@ -793,7 +793,16 @@ switch ($action) {
         $usergroup->protectScript();
         $columns = ['name', 'actions'];
         if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
-            $columns = ['name', 'calendar', 'actions', 'calendar_id'];
+            $columns = [
+                'name',
+                'calendar',
+                'examn',
+                'time_sent',
+                'lp_day_completed',
+                'days_diff',
+                'actions',
+                'calendar_id',
+            ];
         }
         $result = $usergroup->getUserGroupUsers($id);
         break;

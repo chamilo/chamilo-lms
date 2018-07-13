@@ -1875,7 +1875,7 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
 $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
 if ($pluginCalendar) {
     $plugin = LpCalendarPlugin::create();
-    echo LpCalendarPlugin::getUserStats($student_id, $courses_in_session);
+    echo LpCalendarPlugin::getUserStatsPanel($student_id, $courses_in_session);
 }
 
 if ($export) {

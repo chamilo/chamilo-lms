@@ -634,6 +634,31 @@ class LpCalendarPlugin extends Plugin
      *
      * @return string
      */
+    public static function getUserStatsPanel($userId, $courseAndSessionList)
+    {
+        // @todo use translation
+        // get events from this year to today
+        $stats = self::getUserStats($userId, $courseAndSessionList);
+
+        $html = "Nombre de jours cumulés dans le calendrier: ".$stats['user_event_count'];
+        if (!empty($courseAndSessionList)) {
+            $count = $stats['completed'];
+            $html .= '<br />';
+            $html .= "Nombre de jours cumulés dans les parcours réalisés: ".$stats['completed'];
+            $html .= '<br />';
+            $html .= 'Nombre de jour de retard ou d\'avance à la date d\'aujourd\'hui '.$stats['diff'];
+        }
+
+        $html = Display::panel($html, get_lang('CalendarStats'));
+        return $html;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseAndSessionList
+     *
+     * @return array
+     */
     public static function getUserStats($userId, $courseAndSessionList)
     {
         // @todo use translation
@@ -646,16 +671,18 @@ class LpCalendarPlugin extends Plugin
             true
         );
 
+        $completed = 0;
+        $diff = 0;
+
         $html = "Nombre de jours cumulés dans le calendrier: $takenCount";
         if (!empty($courseAndSessionList)) {
-            $count = self::getItemCountChecked($userId, $courseAndSessionList);
-            $html .= '<br />';
-            $html .= "Nombre de jours cumulés dans les parcours réalisés: $count";
-            $html .= '<br />';
-            $html .= 'Nombre de jour de retard ou d\'avance à la date d\'aujourd\'hui '.($takenCount - $count);
+            $completed = self::getItemCountChecked($userId, $courseAndSessionList);
+            $diff = $takenCount - $completed;
         }
-
-        $html = Display::panel($html, get_lang('CalendarStats'));
-        return $html;
+        return [
+            'user_event_count' => $takenCount,
+            'completed' => $completed,
+            'diff' => $diff
+        ];
     }
 }

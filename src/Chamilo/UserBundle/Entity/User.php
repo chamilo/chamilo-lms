@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 //use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Doctrine\Common\Util\Inflector;
+use Doctrine\ORM\Mapping\ClassMetadata as ORMMeta;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -2468,5 +2471,94 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getSessionAsGeneralCoach()
     {
         return $this->sessionAsGeneralCoach;
+    }
+
+    /**
+     * Get a list of properties in this entity
+     * @param EntityManager $em
+     * @return array
+     */
+    protected function _serialize($em)
+    {
+        // This method is borrowed from https://github.com/borisguery/bgylibrary/blob/master/library/Bgy/Doctrine/EntitySerializer.php
+        $className = get_class($this);
+        $metadata = $em->getClassMetadata($className);
+
+        $data = array();
+
+        foreach ($metadata->fieldMappings as $field => $mapping) {
+            $value = $metadata->reflFields[$field]->getValue($this);
+            $field = Inflector::tableize($field);
+            if ($value instanceof \Datetime) {
+                $data[$field] = (array)$value;
+            } elseif (is_object($value)) {
+                $data[$field] = (string)$value;
+            } else {
+                $data[$field] = $value;
+            }
+        }
+
+        foreach ($metadata->associationMappings as $field => $mapping) {
+            $key = Inflector::tableize($field);
+            if ($mapping['isCascadeDetach']) {
+                $data[$key] = $metadata->reflFields[$field]->getValue($this);
+                if (null !== $data[$key]) {
+                    $data[$key] = $this->_serializeEntity($data[$key]);
+                }
+            } elseif ($mapping['isOwningSide'] && $mapping['type'] & ORMMeta::TO_ONE) {
+                if (null !== $metadata->reflFields[$field]->getValue($this)) {
+                    if ($this->_recursionDepth < $this->_maxRecursionDepth) {
+                        $this->_recursionDepth++;
+                        $data[$key] = $this->_serializeEntity(
+                            $metadata->reflFields[$field]
+                                ->getValue($this)
+                            );
+                        $this->_recursionDepth--;
+                    } else {
+                        $data[$key] = $this->getEntityManager()
+                            ->getUnitOfWork()
+                            ->getEntityIdentifier(
+                                $metadata->reflFields[$field]
+                                    ->getValue($this)
+                                );
+                    }
+                } else {
+                    // In some case the relationship may not exist, but we want
+                    // to know about it
+                    $data[$key] = null;
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Serialize the whole entity to an array
+     * @param EntityManager $em
+     * @return array $values
+     */
+    public function getPersonalData($em)
+    {
+        $d = $this->_serialize($em);
+        foreach ($d as $key => $value) {
+            switch ($key) {
+                case 'password':
+                    $d[$key] = get_lang('YourEncryptedPassword');
+                    break;
+                case 'salt':
+                    $d[$key] = get_lang('YourPasswordSaltKey');
+                    break;
+                case 'picture_uri';
+                    if (!empty($value)) {
+                       // $d[$key] = '<a href="'.UserManager::get_user_picture_path_by_id($this->getId()).'">'.$value.'</a>';
+                    }
+                    break;
+            }
+            if (empty($value)) {
+                $d[$key] = get_lang('NoValue');
+            }
+
+        }
+        return $d;
     }
 }

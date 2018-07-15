@@ -92,6 +92,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         'legal_accept'
     );
     $termsAndConditionsAcceptance['icon'] = Display::return_icon('accept_na.png', get_lang('NotAccepted'));
+    $termsAndConditionsAcceptance['last_login'] = $user->getLastLogin();
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
         $termsAndConditionsAcceptance['accepted'] = true;
@@ -103,7 +104,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
             api_get_self().'?action=delete_legal&user_id='.$userId,
             ['class' => 'btn btn-danger btn-xs']
         );
-
     } else {
         // @TODO add action handling for button
         $termsAndConditionsAcceptance['button'] = Display::url(

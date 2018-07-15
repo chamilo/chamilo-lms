@@ -18,9 +18,14 @@ class TrackELogin
     /**
      * @var int
      *
-     * @ORM\Column(name="login_user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="logins")
+     * @ORM\JoinColumn(name="login_user_id", referencedColumnName="id")
      */
     private $loginUserId;
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="commentedUserSkills")
+     * @ORM\JoinColumn(name="feedback_giver_id", referencedColumnName="id")
+     */
 
     /**
      * @var \DateTime

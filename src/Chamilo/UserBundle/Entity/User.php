@@ -436,6 +436,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackELogin", mappedBy="loginUserId", orphanRemoval=true, cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    private $logins;
 
     /**
      * Constructor.
@@ -1438,6 +1443,12 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getLastLogin()
     {
+        // If not last_login has been registered in the user table
+        // (for users without login after version 1.10), get the last login
+        // from the track_e_login table
+        if (empty($this->lastLogin)) {
+            return $this->getExtendedLastLogin();
+        }
         return $this->lastLogin;
     }
 
@@ -2561,5 +2572,21 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
         }
         return $d;
+    }
+
+    /**
+     * Get last login (used only if user.last_login is empty)
+     * @return string Last login date for this user
+     */
+    public function getExtendedLastLogin()
+    {
+        $lastLogin = 0;
+        foreach ($this->logins as $login) {
+            $loginDate = api_get_local_time($login->getLoginDate());
+            if ($loginDate > $lastLogin) {
+                $lastLogin = $loginDate;
+            }
+        }
+        return $lastLogin;
     }
 }

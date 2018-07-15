@@ -34,7 +34,7 @@
                     <ul>
                         <li>{{ 'CurrentStatus' | get_lang }}: {{ personal_data.permissions.icon }} ({{ 'LegalAgreementAccepted' | get_lang }})</li>
                         <li>{{ 'Date' | get_lang }}: {{ personal_data.permissions.date }}</li>
-                        <li>{{ 'LatestLoginInPlatform' | get_lang }}: {{ personal_data.permissions.date }}</li>
+                        <li>{{ 'LatestLoginInPlatform' | get_lang }}: {{ personal_data.permissions.last_login }}</li>
                     </ul>
                 {% endif %}
                 {{ personal_data.permissions.button }}

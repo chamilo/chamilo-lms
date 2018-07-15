@@ -15,6 +15,26 @@ if (!api_get_configuration_value('enable_gdpr')) {
     api_not_allowed(true);
 }
 
+$userId = api_get_user_id();
+
+$entityManager = Database::getManager();
+/** @var UserRepository $repository */
+$repository = $entityManager->getRepository('ChamiloUserBundle:User');
+/** @var User $user */
+$user = $repository->find($userId);
+$properties = $user->getPersonalData($entityManager);
+
+if (!empty($_GET['export'])) {
+    $jsonProperties = json_encode($properties);
+    $filename = md5(rand(0,1000000)).'.json';
+    $path = api_get_path(SYS_ARCHIVE_PATH).$filename;
+    $writeResult = file_put_contents($path, $jsonProperties);
+    if ($writeResult !== false) {
+        DocumentManager::file_send_for_download($path, true, $filename);
+        exit;
+    }
+}
+
 $allowSocial = api_get_setting('allow_social_tool') == 'true';
 
 $nameTools = get_lang('PersonalDataReport');
@@ -39,34 +59,69 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('PersonalDataReport')];
 $actions = '';
 
 // LEFT CONTENT
-$social_menu_block = '';
+$socialMenuBlock = '';
 if ($allowSocial) {
     // Block Social Menu
-    $social_menu_block = SocialManager::show_social_menu('personal-data');
+    $socialMenuBlock = SocialManager::show_social_menu('personal-data');
 }
 
 //MAIN CONTENT
-$social_right_content = '';
-$social_right_content = '<ul>';
-$entityManager = Database::getManager();
-/** @var UserRepository $repository */
-$repository = $entityManager->getRepository('ChamiloUserBundle:User');
-/** @var User $user */
-$user = $repository->find(api_get_user_id());
-
-$properties = $user->getPersonalData($entityManager);
+$personalDataContent = '<ul>';
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
-        //skip
+        //skip in some cases
+        if (!empty($value['date'])) {
+            $personalDataContent .= '<li>'.$key.': '.$value['date'].'</li>';
+        } else {
+            $personalDataContent .= '<li>'.$key.': '.get_lang('ComplexDataNotShown').'</li>';
+        }
     } else {
-        $social_right_content .= '<li>'.$key.': '.$value.'</li>';
+        $personalDataContent .= '<li>'.$key.': '.$value.'</li>';
     }
 }
-$social_right_content .= '</ul>';
+$jsonProperties = json_encode($properties);
+$personalDataContent .= '</ul>';
 
-$personal_data = [];
-$personal_data['data'] = $social_right_content;
+// Check terms acceptation
+$termsAndConditionsAcceptance = [];
+$termsAndConditionsAcceptance['accepted'] = false;
+if (api_get_setting('allow_terms_conditions') === 'true') {
+    $extraFieldValue = new ExtraFieldValue('user');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $userId,
+        'legal_accept'
+    );
+    $termsAndConditionsAcceptance['icon'] = Display::return_icon('accept_na.png', get_lang('NotAccepted'));
+    if (isset($value['value']) && !empty($value['value'])) {
+        list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+        $termsAndConditionsAcceptance['accepted'] = true;
+        $termsAndConditionsAcceptance['icon'] = Display::return_icon('accept.png', get_lang('LegalAgreementAccepted'));
+        $termsAndConditionsAcceptance['date'] = api_get_local_time($legalTime);
+        // @TODO add action handling for button
+        $termsAndConditionsAcceptance['button'] = Display::url(
+            get_lang('DeleteLegal'),
+            api_get_self().'?action=delete_legal&user_id='.$userId,
+            ['class' => 'btn btn-danger btn-xs']
+        );
 
+    } else {
+        // @TODO add action handling for button
+        $termsAndConditionsAcceptance['button'] = Display::url(
+            get_lang('SendLegal'),
+            api_get_self().'?action=send_legal&user_id='.$userId,
+            ['class' => 'btn btn-primary btn-xs']
+        );
+    }
+    $termsAndConditionsAcceptance['label'] = get_lang('LegalAccepted');
+} else {
+    $termsAndConditionsAcceptance['label'] = get_lang('NoTermsAndConditionsAvailable');
+}
+
+$personalData = [];
+$personalData['data'] = $personalDataContent;
+$icon = Display::return_icon('export_excel.png', get_lang('Export'), null,ICON_SIZE_MEDIUM);
+$personalData['data_export_icon'] = $icon;
+$personalData['permissions'] = $termsAndConditionsAcceptance;
 $tpl = new Template(null);
 
 if ($actions) {
@@ -75,13 +130,13 @@ if ($actions) {
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('personal_data', $personal_data);
+    $tpl->assign('social_menu_block', $socialMenuBlock);
+    $tpl->assign('personal_data', $personalData);
     $social_layout = $tpl->get_template('social/personal_data.tpl');
     $tpl->display($social_layout);
 } else {
     $tpl->assign('social_menu_block', '');
-    $tpl->assign('personal_data_block', $social_right_content);
+    $tpl->assign('personal_data_block', $personalDataContent);
     $social_layout = $tpl->get_template('social/personal_data.tpl');
     $tpl->display($social_layout);
 }

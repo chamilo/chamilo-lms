@@ -2476,13 +2476,15 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get a list of properties in this entity
      * @param EntityManager $em
+     * @param int $recursionDepth Up to how deep we want to get the data
      * @return array
      */
-    protected function _serialize($em)
+    protected function _toArray($em, $recursionDepth = 0)
     {
         // This method is borrowed from https://github.com/borisguery/bgylibrary/blob/master/library/Bgy/Doctrine/EntitySerializer.php
         $className = get_class($this);
         $metadata = $em->getClassMetadata($className);
+        $maxRecursionDepth = 5;
 
         $data = array();
 
@@ -2503,20 +2505,19 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             if ($mapping['isCascadeDetach']) {
                 $data[$key] = $metadata->reflFields[$field]->getValue($this);
                 if (null !== $data[$key]) {
-                    $data[$key] = $this->_serializeEntity($data[$key]);
+                    $data[$key] = $this->_toArray($data[$key], $recursionDepth + 1);
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ORMMeta::TO_ONE) {
                 if (null !== $metadata->reflFields[$field]->getValue($this)) {
-                    if ($this->_recursionDepth < $this->_maxRecursionDepth) {
-                        $this->_recursionDepth++;
-                        $data[$key] = $this->_serializeEntity(
-                            $metadata->reflFields[$field]
-                                ->getValue($this)
-                            );
-                        $this->_recursionDepth--;
+                    if ($recursionDepth < $maxRecursionDepth) {
+                        $recursionDepth++;
+                        $data[$key] = $this->_toArray(
+                            $metadata->reflFields[$field]->getValue($this),
+                            $recursionDepth
+                        );
+                        $recursionDepth--;
                     } else {
-                        $data[$key] = $this->getEntityManager()
-                            ->getUnitOfWork()
+                        $data[$key] = $em->getUnitOfWork()
                             ->getEntityIdentifier(
                                 $metadata->reflFields[$field]
                                     ->getValue($this)
@@ -2539,14 +2540,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getPersonalData($em)
     {
-        $d = $this->_serialize($em);
+        $d = $this->_toArray($em);
         foreach ($d as $key => $value) {
             switch ($key) {
                 case 'password':
-                    $d[$key] = get_lang('YourEncryptedPassword');
+                    $d[$key] = get_lang('EncryptedData');
                     break;
                 case 'salt':
-                    $d[$key] = get_lang('YourPasswordSaltKey');
+                    $d[$key] = get_lang('RandomData');
                     break;
                 case 'picture_uri';
                     if (!empty($value)) {
@@ -2555,7 +2556,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
                     break;
             }
             if (empty($value)) {
-                $d[$key] = get_lang('NoValue');
+                $d[$key] = get_lang('NoData');
             }
 
         }

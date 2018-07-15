@@ -8158,4 +8158,31 @@ $SelectedUsersDisabled = "The selected users have all been disabled";
 $SomeUsersNotDisabled = "Some of the selected users have not been disabled. We recommend you confirm which, by using the advanced search.";
 $SelectedUsersEnabled = "The selected users were all enabled.";
 $SomeUsersNotEnabled = "Some of the selected users have not been enabled. We recommend you confirm which, by using the advanced search.";
+$EncryptedData = "Encrypted data";
+$RandomData = "Random data";
+$PersonalDataReport = "Personal data";
+$ComplexDataNotShown = "Complex data (not shown)";
+$PersonalDataIntroductionTitle = "Personal data: introduction";
+$PersonalDataKeptOnYou = "Personal data we keep about you";
+$PersonalDataPermissionsYouGaveUs = "Permissions you gave us";
+$PersonalDataResponsibleOrganization = "Organization responsible for your data treatment";
+$PersonalDataTreatment = "Personal data treatment";
+$PersonalDataCollection = "Personal data collection";
+$PersonalDataRecording = "Personal data recording";
+$PersonalDataOrganization = "Personal data organization";
+$PersonalDataStructure = "Personal data structure";
+$PersonalDataConservation = "Personal data conservation";
+$PersonalDataAdaptationOrModification = "Personal data adaptation or modification";
+$PersonalDataExtraction = "Personal data extraction";
+$PersonalDataConsultation = "Personal data queries";
+$PersonalDataUsage = "Personal data use";
+$PersonalDataCommunicationAndSharing = "Personal data communication and sharing";
+$PersonalDataInterconnection = "Personal data interconnection";
+$PersonalDataLimitation = "Personal data limitation";
+$PersonalDataDeletion = "Personal data deletion";
+$PersonalDataDestruction = "Personal data destruction";
+$PersonalDataProfiling = "Personal data profiling";
+$PersonalDataIntroductionText = "We respect your privacy!
+This page unites all aspects of the personal data we might be keeping on you, how we treat it, what you have authorized us to do with it and who we are, in an effort to comply with most data privacy laws available.
+Please read this information carefully and, if you have any question, check the contact details below to ask us for more details.";
 ?>

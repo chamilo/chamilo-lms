@@ -92,7 +92,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         'legal_accept'
     );
     $termsAndConditionsAcceptance['icon'] = Display::return_icon('accept_na.png', get_lang('NotAccepted'));
-    $termsAndConditionsAcceptance['last_login'] = $user->getLastLogin();
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
         $termsAndConditionsAcceptance['accepted'] = true;
@@ -117,13 +116,37 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $termsAndConditionsAcceptance['label'] = get_lang('NoTermsAndConditionsAvailable');
 }
 
+//Build the final array to pass to template
 $personalData = [];
 $personalData['data'] = $personalDataContent;
 $icon = Display::return_icon('export_excel.png', get_lang('Export'), null,ICON_SIZE_MEDIUM);
 $personalData['data_export_icon'] = $icon;
 $personalData['permissions'] = $termsAndConditionsAcceptance;
-$tpl = new Template(null);
+$personalData['responsible'] = api_get_setting('personal_data_responsible_org');
+//Get data about the treatment of data
+$treatmentTypes = [
+    'collection',
+    'recording',
+    'organization',
+    'structure',
+    'conservation',
+    'adaptation',
+    'extraction',
+    'consultation',
+    'usage',
+    'communication',
+    'interconnection',
+    'limitation',
+    'deletion',
+    'destruction',
+    'profiling',
+];
+foreach ($treatmentTypes as $item) {
+    $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item));
+    $personalData['treatment'][$item]['content'] = api_get_setting('personal_data_treatment_'.$item);
+}
 
+$tpl = new Template(null);
 if ($actions) {
     $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }

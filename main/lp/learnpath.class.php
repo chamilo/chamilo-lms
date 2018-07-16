@@ -32,6 +32,8 @@ use Symfony\Component\Finder\Finder;
  */
 class learnpath
 {
+    const MAX_LP_ITEM_TITLE_LENGTH = 32;
+
     public $attempt = 0; // The number for the current ID view.
     public $cc; // Course (code) this learnpath is located in. @todo change name for something more comprensible ...
     public $current; // Id of the current item the user is viewing.
@@ -6246,7 +6248,7 @@ class learnpath
 
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
-            $title_cut = cut($arrLP[$i]['title'], 25);
+            $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
 
             // Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {

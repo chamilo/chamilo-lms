@@ -2560,11 +2560,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
                 case 'salt':
                     $d[$key] = get_lang('RandomData');
                     break;
-                case 'picture_uri';
-                    if (!empty($value)) {
-                       // $d[$key] = '<a href="'.UserManager::get_user_picture_path_by_id($this->getId()).'">'.$value.'</a>';
-                    }
-                    break;
             }
             if (empty($value)) {
                 $d[$key] = get_lang('NoData');

@@ -806,7 +806,7 @@ if ($question_count != 0) {
                         .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
                     // message sended to the student
                     $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
-                    //calcul du chemmin sans les script php
+                    // build path without php script
                     $url = $_SERVER['SCRIPT_NAME'];
                     $pos = strripos($url, "/");
 

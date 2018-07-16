@@ -6233,7 +6233,6 @@ $DisableLPAutoLaunch = "Désactiver lancement automatique du parcours";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Le paramètre d'auto-démarrage des parcours d'apprentissage est activé. Lorsque les apprenants entreront dans cet espace de cours, ils seront automatiquement redirigés vers le parcours d'apprentissage sélectionné pour l'auto-démarrage.";
 $UniqueAnswerNoOption = "Rép. unique avec ne-sais-pas";
 $MultipleAnswerTrueFalse = "Rép. multiples vrai/faux/ne-sais-pas";
-$MultipleAnswerTrueFalseDegreeCertainty = "Rép. multiples vrai/faux/degré de certitude";
 $MultipleAnswerCombinationTrueFalse = "C. exacte vrai/faux/ne-sais-pas";
 $DontKnow = "Ne sais pas";
 $ExamNotAvailableAtThisTime = "Examen non disponible pour l'instant";
@@ -6295,32 +6294,6 @@ $LatestAttempt = "Dernière tentative";
 $PDFWaterMarkHeader = "En-tête en filigrane (exports PDF)";
 $False = "Faux";
 $DoubtScore = "Ne sais pas";
-// remplacer texte "Ne sais pas" par "Degré de certitude" pour MultipleAnswerTrueFalse
-$YourDegreeOfCertainty = "Votre degré de certitude";
-$DegreeOfCertainty = "Degré de certitude que la réponse soit jugée correcte";
-// explication des degré de certitude du tableau d'exercice
-$Ignorance = "J’ignore la bonne réponse et j’ai choisi au hasard";
-$VeryUnsure = "Je suis très peu sûr";
-$Unsure = "Je suis peu sûr";
-$PrettySur = "Je suis assez sûr";
-$Sur = "Je suis quasiment sûr";
-$VerySur = "Je suis tout à fait sûr";
-// description des codes couleur
-$langVeryUnsure = "Erreur dangereuse";
-$langExplainVeryUnsure = " votre réponse a été incorrecte et vous étiez pourtant sûr à 80% ou plus";
-$langUnsure = "Erreur présumée";
-$langExplainUnsure = "votre réponse a été incorrecte, mais vous en doutiez (certitude 60% ou 70 %)";
-$langIgnorance = "Ignorance déclarée";
-$langExplainIgnorance = " vous ne connnaissiez pas la réponse - dégré de certitude 50%";
-$langPrettySur = "Savoir fragile";
-$langExplainPrettySur = "votre réponse a été correcte mais vous etiez peu sûr (certitude 60% ou 70%)";
-$langVerySure = "Savoir certain";
-$langExplainVerySure = "votre réponse a été correcte et vous etiez sûr à 80% ou plus - <b>félicitation</b>";
-$langAnswers = "Réponses";
-// description réponse sur les histogrammes
-$langCorrectsAnswers = "Réponses correctes";
-$langWrongsAnswers = "Réponses incorrectes";
-$langIgnoranceAnswers = "Ignorance";
 $RegistrationByUsersGroups = "Inscription par groupes d'utilisateurs";
 $ContactInformationHasNotBeenSent = "Vos détails de contact n'ont pas pu être envoyés. C'est probablement dû à un problème de réseau. Veuillez essayer à nouveau dans quelques secondes. Si le problème persiste, ignorez simplement ce processus d'inscription et cliquez sur l'autre bouton pour passer à l'étape suivante.";
 $FillCourses = "Générer des cours";
@@ -8073,27 +8046,6 @@ $YouWillReceivedASecondEmail = "Vous allez recevoir un autre mail avec votre mot
 $YouReceivedAnEmailWithTheUsername = "Vous avez du recevoir un autre mail avec votre identifiant.";
 $TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName = "Vous devez envoyer un fichier zip du même nom que le fichier SCORM original.";
 $YourChoice = "Votre choix";
-
-
-
-$MessageQuestionCertainty = "Voici ci dessous vos résultats du test \"<span style=\"font-family: Arial; font-size: 18px; color: green;\">"
-    . "%exerTitle" //$objExercise->title
-    . "\"</span>."
-    . "<br/>Pour consulter le détail des résultats "
-    . "<br/><br/>1. Connectez vous sur la plate forme Chamilo (identifiant/mot de passe universitaire) : "
-    . "<a href='"
-    . " %webPath " // api_get_path(WEB_PATH)
-    . "'>se connecter à Chamilo : </a>"
-    . "<br/><br/>2. Puis cliquez sur ce lien %s "
-    . "voir mes résultats détaillés </a>.<br/><br/>";
-$KindRegards = "Cordialement, <br>";
-$DoNotReply = "Ne pas répondre";
-$ResultAccomplishedTest = "Résultats du test réalisé";
-$NonCategory = "Sans catégorie";
-$ResultTest = "Votre résultat sur l'ensemble du test";
-$CompareLastResult = "Pour comparaison, votre dernier résultat à ce test";
-$ResultsbyDiscipline = "Vos résultats discipline par discipline";
-
 $YouNeedToCreateASkillProfile = "Vous devez créer un profil de compétences";
 $SkillLevel = "Niveau de compétence";
 $Portfolio = "Portfolio";
@@ -8143,4 +8095,58 @@ $SelectedUsersDisabled = "Les utilisateurs sélectionnés ont tous été désact
 $SomeUsersNotDisabled = "Certains des utilisateurs sélectionnés n'ont pas été supprimés. Nous vous recommandons de confirmer lesquels en utilisant la recherche avancée.";
 $SelectedUsersEnabled = "Tous les utilisateurs sélectionnés ont été activés.";
 $SomeUsersNotEnabled = "Certains des utilisateurs sélectionnés n'ont pas été activés. Nous vous recommandons de confirmer lesquels en utilisant la recherche avancée.";
+$EncryptedData = "Données encryptées";
+$RandomData = "Données aléatoires";
+$PersonalDataReport = "Données personnelles";
+$ComplexDataNotShown = "Données complexes non affichées";
+$PersonalDataIntroductionTitle = "Introduction à vos données personnelles";
+$PersonalDataKeptOnYou = "Données personnelles que nous conservons à votre sujet";
+$PersonalDataPermissionsYouGaveUs = "Permissions que vous nous avez données";
+$PersonalDataResponsibleOrganizationTitle = "Organisation responsable du traitement";
+$PersonalDataTreatmentTitle = "Traitement des données";
+$PersonalDataCollectionTitle = "Collecte des données personnelles";
+$PersonalDataRecordingTitle = "Enregistrement des données personnelles";
+$PersonalDataOrganizationTitle = "Organisation des données personnelles";
+$PersonalDataStructureTitle = "Structuration des données personnelles";
+$PersonalDataConservationTitle = "Conservation des données personnelles";
+$PersonalDataAdaptationTitle = "Adaptation ou modification des données personnelles";
+$PersonalDataExtractionTitle = "Extraction des données personnelles";
+$PersonalDataConsultationTitle = "Consultation des données personnelles";
+$PersonalDataUsageTitle = "Utilisation des données personnelles";
+$PersonalDataCommunicationTitle = "Communication et diffusion des données personnelles";
+$PersonalDataInterconnectionTitle = "Interconnexion des données personnelles";
+$PersonalDataLimitationTitle = "Limitation des données personnelles";
+$PersonalDataDeletionTitle = "Effacement des donnée personnelles";
+$PersonalDataDestructionTitle = "Destruction des donnée personnelles";
+$PersonalDataProfilingTitle = "Profilage des donnée personnelles";
+$PersonalDataIntroductionText = "Nous respectons vos données personnelles! Cette page unit tous les aspects correspondants aux données personnelles que nous pourrions conserver à votre sujet, comment nous les traitons et ce que vous nous avez autorisé de faire avec, ainsi que qui nous sommes, dans un effort de correspondance à la majorité des lois de protection des données disponibles et applicables. Merci de llire l'information à votre disposition avec attention. Si vous avez des questions, merci de localiser nos données de contact ci-dessous et de nous y envoyer vos questions.";
+$YourDegreeOfCertainty = "Votre degré de certitude";
+$DegreeOfCertaintyThatMyAnswerIsCorrect = "Degré de certitude que la réponse soit jugée correcte";
+$IncorrectAnswersX = "Réponses incorrectes: %s";
+$KindRegards = "Cordialement,";
+$DoNotReply = "Ne pas répondre";
+$ResultAccomplishedTest = "Résultats du test réalisé";
+$YourResultsByDiscipline = "Vos résultats discipline par discipline";
+$ForComparisonYourLastResultToThisTest = "Pour comparaison, votre dernier résultat à ce test";
+$YourOverallResultForTheTest = "Votre résultat sur l'ensemble du test";
+$QuestionDegreeCertaintyHTMLMail = "Voici, ci-dessous vos résultats pour le test %s.<br />Pour consulter le détail des résultats <br /><br />1. Connectez-vous sur la plateforme Chamilo (identifiant/mot de passe universitaire): <a href='%s'>se connecter à Chamilo</a>.<br /><br />2. Puis cliquez sur ce lien: <a href='%s'>voir mes résultats détaillés</a>.<br /><br />";
+$DegreeOfCertaintyVerySure = "Savoir certain";
+$DegreeOfCertaintyVerySureDescription = "Votre réponse a été correcte et vous étiez sûr à 80% ou plus. Félicitations.";
+$DegreeOfCertaintyPrettySure = "Savoir fragile";
+$DegreeOfCertaintyPrettySureDescription = "Votre réponse était correcte mais vous étiez peu sûr (certitude 60% ou 70%)";
+$DegreeOfCertaintyDeclaredIgnorance = "Ignorance déclarée";
+$DegreeOfCertaintyDeclaredIgnoranceDescription = "Vous ne connaissiez pas la réponse - degré de certitude 50%";
+$DegreeOfCertaintyUnsure = "Erreur présumée";
+$DegreeOfCertaintyUnsureDescription = "Votre réponse était incorrecte, mais vous vous en doutiez (certitude 60% ou 70%)";
+$DegreeOfCertaintyVeryUnsure = "Erreur dangereuse";
+$DegreeOfCertaintyVeryUnsureDescription = "Votre réponse était incorrecte, mais vous en étiez sûr à 80% ou plus";
+$DegreeOfCertaintyIDeclareMyIgnorance = "J’ignore la bonne réponse et j’ai choisi au hasard";
+$DegreeOfCertaintyIAmVeryUnsure = "Je suis très peu sûr";
+$DegreeOfCertaintyIAmUnsure = "Je suis peu sûr";
+$DegreeOfCertaintyIAmPrettySure = "Je suis assez sûr";
+$DegreeOfCertaintyIAmSure = "Je suis quasiment sûr";
+$DegreeOfCertaintyIAmVerySure = "Je suis tout à fait sûr";
+$MultipleAnswerTrueFalseDegreeCertainty = "Rép. multiples vrai/faux/degré de certitude";
+$IgnoranceAnswersX = "Ignorance: %s";
+$CorrectAnswersX = "Réponses correctes: %s";
 ?>

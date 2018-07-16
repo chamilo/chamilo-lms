@@ -815,14 +815,14 @@ if ($question_count != 0) {
                     $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
                         .api_get_cidreq()
                         ."&id=$exe_id'>";
-                    $titleExercise = $objExercise->title;
+                    $titleExercise = '<span style="font-family: Arial; font-size: 18px; color: green;">'.$objExercise->title.'</span>';
                     $message .= sprintf(get_lang('QuestionDegreeCertaintyHTMLMail'), $titleExercise, api_get_path(WEB_PATH), $exerciseLink);
 
                     // show histogram
                     require_once api_get_path(SYS_CODE_PATH)
                         ."exercise/multipleAnswerTrueFalseDegreeCertainty.php";
                     $message .= MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($exe_id, $objExercise);
-                    $message .= get_lang('KindRegards');
+                    $message .= get_lang('KindRegards').'<br />';
 
                     $message = api_preg_replace("/\\\n/", "", $message);
                     api_mail_html($recipient_name,

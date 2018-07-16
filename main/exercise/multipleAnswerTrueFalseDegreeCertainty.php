@@ -781,16 +781,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 <td class="firstLine borderRight '.$classGlobalChart.'" 
                     colspan="2" 
                     style="width:'.($colWidth * 2).'px; font-size:'.$textSize.'%;">'.
-            get_lang('langWrongsAnswers').'&nbsp;: '.$nbResponsesInc.'
+            sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc).'
                 </td>
                 <td class="firstLine borderRight '.$classGlobalChart.'" 
                     style="width:'.$colWidth.'px; font-size :'.$textSize.'%;">'.
-            get_lang('langIgnoranceAnswers').'&nbsp;: '.$nbResponsesIng.'
+            sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng).'
                 </td>
                 <td class="firstLine '.$classGlobalChart.'" 
                     colspan="2" 
                     style="width:'.($colWidth * 2).'px; font-size:'.$textSize.'%;">'.
-            get_lang('langCorrectsAnswers').'&nbsp;: '.$nbResponsesCor.'
+            sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor).'
                 </td>
             </tr>';
         $html .= '<tr>';

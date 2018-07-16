@@ -223,7 +223,7 @@ if ($action != 'export') {
             }
         }
     </script>
-    <?php
+<?php
 }
 
 $show_results = true;

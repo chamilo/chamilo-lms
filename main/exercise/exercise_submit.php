@@ -804,14 +804,9 @@ if ($question_count != 0) {
 
                     $subject = "[".get_lang('DoNotReply')."] "
                         .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
+                    
                     // message sended to the student
                     $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
-                    // build path without php script
-                    $url = $_SERVER['SCRIPT_NAME'];
-                    $pos = strripos($url, "/");
-
-                    $path = substr($url, 0, $pos);
-
                     $message .= get_lang('MessageQuestionCertainty');
                     $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
                         .api_get_cidreq()

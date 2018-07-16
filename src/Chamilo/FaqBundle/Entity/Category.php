@@ -31,6 +31,7 @@ class Category
 
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="category")
+     * @ORM\OrderBy({"rank" = "ASC"})
      */
     protected $questions;
 

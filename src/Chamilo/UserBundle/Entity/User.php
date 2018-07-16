@@ -2576,7 +2576,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getExtendedLastLogin()
     {
         $lastLoginString = 0;
-        $lastLoginDateTime = new DateTime();
+        $lastLoginDateTime = new \DateTime();
         foreach ($this->logins as $login) {
             $loginDate = api_get_local_time($login->getLoginDate());
             if ($loginDate > $lastLoginString) {

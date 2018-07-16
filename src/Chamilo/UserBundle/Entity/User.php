@@ -2571,17 +2571,19 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * Get last login (used only if user.last_login is empty)
-     * @return string Last login date for this user
+     * @return \DateTime Last login date for this user
      */
     public function getExtendedLastLogin()
     {
-        $lastLogin = 0;
+        $lastLoginString = 0;
+        $lastLoginDateTime = new DateTime();
         foreach ($this->logins as $login) {
             $loginDate = api_get_local_time($login->getLoginDate());
-            if ($loginDate > $lastLogin) {
-                $lastLogin = $loginDate;
+            if ($loginDate > $lastLoginString) {
+                $lastLoginString = $loginDate;
+                $lastLoginDateTime = $login->getLoginDate();
             }
         }
-        return $lastLogin;
+        return $lastLoginDateTime;
     }
 }

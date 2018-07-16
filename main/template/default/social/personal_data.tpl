@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="panel personal-data-responsible">
-            <div class="panel-title">{{ 'PersonalDataResponsibleOrganization' | get_lang }}</div>
+            <div class="panel-title">{{ 'PersonalDataResponsibleOrganizationTitle' | get_lang }}</div>
             <div class="personal-data-responsible-description">
             {{ personal_data.responsible }}
             </div>

@@ -142,7 +142,7 @@ $treatmentTypes = [
     'profiling',
 ];
 foreach ($treatmentTypes as $item) {
-    $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item));
+    $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item).'Title');
     $personalData['treatment'][$item]['content'] = api_get_setting('personal_data_treatment_'.$item);
 }
 

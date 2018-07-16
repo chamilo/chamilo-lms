@@ -747,7 +747,7 @@ function api_get_path($path = '', $configuration = [])
                     if (isset($_SERVER['SERVER_PORT']) &&
                         !strpos($server_name, ':') &&
                         (($server_protocol == 'http' && $_SERVER['SERVER_PORT'] != 80) ||
-                            ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
+                        ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
                     ) {
                         $server_name .= ":".$_SERVER['SERVER_PORT'];
                     }
@@ -2766,6 +2766,11 @@ function api_get_settings_params($params)
     return $result;
 }
 
+/**
+ * @param array $params example: [id = ? => '1']
+ *
+ * @return array
+ */
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -3003,7 +3008,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
 
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $sessionIsCoach = null;
+    $sessionIsCoach = [];
 
     if (!empty($courseId)) {
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
@@ -3286,10 +3291,6 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $sessionId = api_get_session_id();
-    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($sessionId);
-
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
@@ -3317,6 +3318,11 @@ function api_is_allowed_to_edit(
     $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
     $session_visibility = api_get_session_visibility($sessionId);
     $is_courseAdmin = api_is_course_admin();
+
+    if (!$is_courseAdmin && $tutor) {
+        // If we also want to check if the user is a tutor...
+        $is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
+    }
 
     if (!$is_courseAdmin && $coach) {
         // If we also want to check if the user is a coach...';
@@ -4934,7 +4940,7 @@ function api_get_visual_theme()
         }
 
         $course_id = api_get_course_id();
-        if (!empty($course_id) && $course_id != -1) {
+        if (!empty($course_id)) {
             if (api_get_setting('allow_course_theme') == 'true') {
                 $course_theme = api_get_course_setting('course_theme', $course_id);
 

@@ -7,7 +7,7 @@ use ChamiloSession as Session;
  * Class ExerciseLib
  * shows a question and its answers.
  *
- * @author Olivier Brouckaert <oli.brouckaert@skynet.be>
+ * @author Olivier Brouckaert <oli.brouckaert@skynet.be> 2003-2004
  * @author Hubert Borderiou 2011-10-21
  * @author ivantcholakov2009-07-20
  */
@@ -28,6 +28,7 @@ class ExerciseLib
      * @param bool     $show_answers
      *
      * @return bool|int
+     * @throws \Exception
      */
     public static function showQuestion(
         $exercise,
@@ -348,10 +349,10 @@ class ExerciseLib
                 foreach ($objQuestionTmp->optionsTitle as $item) {
                     if (in_array($item, $objQuestionTmp->optionsTitle)) {
                         $properties = [];
-                        if ($item == "langAnswers") {
+                        if ($item == 'Answers') {
                             $properties["colspan"] = 2;
                             $properties["style"] = "background-color: #F56B2A; color: #ffffff;";
-                        } elseif ($item == "DegreeOfCertainty") {
+                        } elseif ($item == 'DegreeOfCertaintyThatMyAnswerIsCorrect') {
                             $properties["colspan"] = 6;
                             $properties["style"] = "background-color: #330066; color: #ffffff;";
                         }
@@ -393,12 +394,12 @@ class ExerciseLib
                 // add explanation
                 $header2 = Display::tag('th', '&nbsp;');
                 $descriptionList = [
-                    get_lang('Ignorance'),
-                    get_lang('VeryUnsure'),
-                    get_lang('Unsure'),
-                    get_lang('PrettySur'),
-                    get_lang('Sur'),
-                    get_lang('VerySur'),
+                    get_lang('DegreeOfCertaintyIDeclareMyIgnorance'),
+                    get_lang('DegreeOfCertaintyIAmVeryUnsure'),
+                    get_lang('DegreeOfCertaintyIAmUnsure'),
+                    get_lang('DegreeOfCertaintyIAmPrettySure'),
+                    get_lang('DegreeOfCertaintyIAmSure'),
+                    get_lang('DegreeOfCertaintyIAmVerySure'),
                 ];
                 $counter2 = 0;
 
@@ -558,10 +559,10 @@ class ExerciseLib
                             $s .= $answer_input;
                         }
                         break;
-                    case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                     case MULTIPLE_ANSWER:
                     case MULTIPLE_ANSWER_TRUE_FALSE:
                     case GLOBAL_MULTIPLE_ANSWER:
+                    case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         $answer = Security::remove_XSS($answer, STUDENT);
 
@@ -949,13 +950,11 @@ class ExerciseLib
                                 $answer,
                                 $studentAnswerList
                             );
-                            $studentAnswerListTobecleaned = $studentAnswerList[0];
+                            $studentAnswerListToClean = $studentAnswerList[0];
                             $studentAnswerList = [];
 
-                            for ($i = 0; $i < count(
-                                $studentAnswerListTobecleaned
-                            ); $i++) {
-                                $answerCorrected = $studentAnswerListTobecleaned[$i];
+                            for ($i = 0; $i < count($studentAnswerListToClean); $i++) {
+                                $answerCorrected = $studentAnswerListToClean[$i];
                                 $answerCorrected = api_preg_replace(
                                     '| / <font color="green"><b>.*$|',
                                     '',
@@ -1000,7 +999,7 @@ class ExerciseLib
                             ' '.$answer.' '
                         );
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = "";
+                            $answer = '';
                             $i = 0;
                             foreach ($studentAnswerList as $studentItem) {
                                 // remove surronding brackets
@@ -1093,8 +1092,8 @@ class ExerciseLib
                             if (isset($select_items[$lines_count])) {
                                 $s .= '<div class="text-right">
                                         <p class="indent">'.
-                                    $select_items[$lines_count]['letter'].'.&nbsp; '.
-                                    $select_items[$lines_count]['answer'].'
+                                            $select_items[$lines_count]['letter'].'.&nbsp; '.
+                                            $select_items[$lines_count]['answer'].'
                                         </p>
                                         </div>';
                             } else {
@@ -1112,7 +1111,7 @@ class ExerciseLib
                                       <td colspan="2"></td>
                                       <td valign="top">';
                                     $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.
-                                        $select_items[$lines_count]['answer'];
+                                                $select_items[$lines_count]['answer'];
                                     $s .= "</td>
                                 </tr>";
                                     $lines_count++;
@@ -1960,7 +1959,6 @@ HOTSPOT;
         $courseCode = null,
         $showSessionField = false,
         $showExerciseCategories = false,
-        $userExtraFieldsToAdd = []
         $userExtraFieldsToAdd = [],
         $useCommaAsDecimalPoint = false,
         $roundValues = false
@@ -1976,7 +1974,12 @@ HOTSPOT;
         }
 
         $course_id = $courseInfo['real_id'];
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
+        $is_allowedToEdit =
+            api_is_allowed_to_edit(null, true) ||
+            api_is_allowed_to_edit(true) ||
+            api_is_drh() ||
+            api_is_student_boss() ||
+            api_is_session_admin();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
@@ -2211,6 +2214,15 @@ HOTSPOT;
             foreach ($teacher_list as $teacher) {
                 $teacher_id_list[] = $teacher['user_id'];
             }
+        }
+
+        $scoreDisplay = new ScoreDisplay();
+        $decimalSeparator = '.';
+        $thousandSeparator = ',';
+
+        if ($useCommaAsDecimalPoint) {
+            $decimalSeparator = ',';
+            $thousandSeparator = '';
         }
 
         $listInfo = [];
@@ -2627,7 +2639,6 @@ HOTSPOT;
                                     true,
                                     true,
                                     true, // $show_only_percentage = false
-                                    true // hide % sign
                                     true, // hide % sign
                                     $decimalSeparator,
                                     $thousandSeparator,
@@ -2646,10 +2657,6 @@ HOTSPOT;
                                 true,
                                 true,
                                 true,
-                                true
-                            );
-                            $results[$i]['only_score'] = $my_res;
-                            $results[$i]['total'] = $my_total;
                                 true,
                                 $decimalSeparator,
                                 $thousandSeparator,
@@ -2765,12 +2772,6 @@ HOTSPOT;
      * Converts the score with the exercise_max_note and exercise_min_score
      * the platform settings + formats the results using the float_format function.
      *
-     * @param float $score
-     * @param float $weight
-     * @param bool  $show_percentage       show percentage or not
-     * @param bool  $use_platform_settings use or not the platform settings
-     * @param bool  $show_only_percentage
-     * @param bool  $hidePercetangeSign    hide "%" sign
      * @param float  $score
      * @param float  $weight
      * @param bool   $show_percentage       show percentage or not
@@ -2789,7 +2790,6 @@ HOTSPOT;
         $show_percentage = true,
         $use_platform_settings = true,
         $show_only_percentage = false,
-        $hidePercetangeSign = false
         $hidePercentageSign = false,
         $decimalSeparator = '.',
         $thousandSeparator = ',',
@@ -2853,7 +2853,7 @@ HOTSPOT;
         $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
-            if ($hidePercetangeSign) {
+            if ($hidePercentageSign) {
                 $percentageSign = '';
             }
             $html = $percentage."$percentageSign ($score / $weight)";
@@ -3842,7 +3842,7 @@ EOT;
      * @param int $question_id
      * @param int $exercise_id
      *
-     * @return int
+     * @return array
      */
     public static function getNumberStudentsFillBlanksAnswerCount(
         $question_id,
@@ -3885,6 +3885,7 @@ EOT;
     }
 
     /**
+     * Get the number of questions with answers
      * @param int    $question_id
      * @param int    $exercise_id
      * @param string $course_code
@@ -3976,6 +3977,7 @@ EOT;
     }
 
     /**
+     * Get number of answers to hotspot questions
      * @param int    $answer_id
      * @param int    $question_id
      * @param int    $exercise_id
@@ -4330,6 +4332,7 @@ EOT;
     }
 
     /**
+     * Return an HTML select menu with the student groups
      * @param string $in_name     is the name and the id of the <select>
      * @param string $in_default  default value for option
      * @param string $in_onchange
@@ -4528,6 +4531,7 @@ EOT;
         }
 
         $countPendingQuestions = 0;
+        $result = [];
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
@@ -4697,11 +4701,12 @@ EOT;
         $totalScoreText = null;
         if ($show_results || $show_only_score) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-                echo "<h1 style='text-align : center; margin : 20px 0;'>Vos Résultats</h1><br>";
+                echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
             }
             $totalScoreText .= '<div class="question_row_score">';
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-                $totalScoreText .= self::getQuestionRibbonDiag($objExercise,
+                $totalScoreText .= self::getQuestionDiagnosisRibbon(
+                    $objExercise,
                     $total_score,
                     $total_weight,
                     true
@@ -4807,6 +4812,7 @@ EOT;
     }
 
     /**
+     * Get a special ribbon on top of "degree of certainty" questions (variation from getTotalScoreRibbon() for other question types)
      * @param Exercise $objExercise
      * @param float    $score
      * @param float    $weight
@@ -4814,7 +4820,7 @@ EOT;
      *
      * @return string
      */
-    public static function getQuestionRibbonDiag($objExercise, $score, $weight, $checkPassPercentage = false)
+    public static function getQuestionDiagnosisRibbon($objExercise, $score, $weight, $checkPassPercentage = false)
     {
         $displayChartDegree = true;
         $ribbon = $displayChartDegree ? '<div class="ribbon">' : '';

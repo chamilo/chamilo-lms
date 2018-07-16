@@ -955,14 +955,14 @@ $totalScoreText = '';
 // Total score
 $my_total_score_temp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {        
-        $totalScoreText .= '<div class="question_row">';        
+    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
+        $totalScoreText .= '<div class="question_row">';
         if ($objExercise->selectPropagateNeg() == 0 && $myTotalScoreTemp < 0) {
-            $myTotalScoreTemp = 0;                
+            $myTotalScoreTemp = 0;
         }
 
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-            $totalScoreText .= ExerciseLib::getQuestionRibbonDiag(
+            $totalScoreText .= ExerciseLib::getQuestionDiagnosisRibbon(
                 $objExercise,
                 $myTotalScoreTemp,
                 $totalWeighting,

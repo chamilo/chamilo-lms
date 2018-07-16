@@ -791,7 +791,7 @@ if ($question_count != 0) {
                     header('Location: exercise_reminder.php?'.$params);
                     exit;
                 } else {
-                    // Question degree certainty
+                    // Certainty grade question
                     // We send un email to the student before redirection to the result page
                     $userInfo = api_get_user_info($user_id);
                     $recipient_name = api_get_person_name($userInfo['firstname'],
@@ -805,21 +805,18 @@ if ($question_count != 0) {
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $emailGenerique = api_get_setting('emailAdministrator');
+                    $senderEmail = api_get_setting('emailAdministrator');
 
                     $subject = "[".get_lang('DoNotReply')."] "
                         .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
                     
-                    // message sended to the student
+                    // message sent to the student
                     $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
-                    $message .= get_lang('MessageQuestionCertainty');
                     $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
                         .api_get_cidreq()
                         ."&id=$exe_id'>";
-                    $titleExercice = $objExercise->title;
-                    $message = str_replace('%exerTitle', $titleExercice, $message);
-                    $message = str_replace('%webPath', api_get_path(WEB_PATH), $message);
-                    $message = str_replace('%s', $exerciseLink, $message);
+                    $titleExercise = $objExercise->title;
+                    $message .= sprintf(get_lang('QuestionDegreeCertaintyHTMLMail'), $titleExercise, api_get_path(WEB_PATH), $exerciseLink);
 
                     // show histogram
                     require_once api_get_path(SYS_CODE_PATH)
@@ -833,7 +830,7 @@ if ($question_count != 0) {
                         $subject,
                         $message,
                         $senderName,
-                        $emailGenerique,
+                        $senderEmail,
                         ['content-type' => 'html']
                     );
 

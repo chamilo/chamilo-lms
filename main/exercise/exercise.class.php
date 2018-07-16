@@ -2851,12 +2851,12 @@ class Exercise
         }
 
         $sql = "SELECT exe_id
-                FROM $table_track_e_exercises
-                WHERE
-                    c_id = ".api_get_course_int_id()." AND
-                    exe_exo_id = ".$this->id." AND
-                    session_id = ".api_get_session_id()." ".
-            $sql_where;
+            FROM $table_track_e_exercises
+            WHERE
+                c_id = ".api_get_course_int_id()." AND
+                exe_exo_id = ".$this->id." AND
+                session_id = ".api_get_session_id()." ".
+                $sql_where;
 
         $result = Database::query($sql);
         $exe_list = Database::store_result($result);
@@ -3384,9 +3384,11 @@ class Exercise
         $totalScore = 0;
 
         // Extra information of the question
-        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
-            $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY &&
-            !empty($extra)
+        if ((
+            $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+            $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
+            )
+            && !empty($extra)
         ) {
             $extra = explode(':', $extra);
             if ($debug) {
@@ -3566,7 +3568,7 @@ class Exercise
                         $sql = "SELECT answer 
                             FROM $TBL_TRACK_ATTEMPT
                             WHERE 
-                            exe_id = $exeId AND question_id = ".$questionId;
+                            exe_id = $exeId AND question_id = $questionId";
 
                         $result = Database::query($sql);
                         while ($row = Database::fetch_array($result)) {
@@ -3820,12 +3822,12 @@ class Exercise
                                     $choice[$j] = null;
                                 }
                             } else {
-                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                // This value is the user input, not escaped while correct answer is escaped by ckeditor
                                 $choice[$j] = api_htmlentities(trim($choice[$j]));
                             }
 
                             $user_tags[] = $choice[$j];
-                            //put the contents of the [] answer tag into correct_tags[]
+                            // Put the contents of the [] answer tag into correct_tags[]
                             $correct_tags[] = api_substr($temp, 0, $pos);
                             $j++;
                             $temp = api_substr($temp, $pos + 1);
@@ -5631,14 +5633,14 @@ class Exercise
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
-                        $answerChoosen = $reply[$i];
+                        $chosenAnswer = $reply[$i];
                         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                             if ($choiceDegreeCertainty != 0) {
                                 $replyDegreeCertainty = array_keys($choiceDegreeCertainty);
                                 $answerDegreeCertainty = $replyDegreeCertainty[$i];
                                 Event::saveQuestionAttempt(
                                     $questionScore,
-                                    $answerChoosen.':'.$choice[$answerChoosen].':'.$choiceDegreeCertainty[$answerDegreeCertainty],
+                                    $chosenAnswer.':'.$choice[$chosenAnswer].':'.$choiceDegreeCertainty[$answerDegreeCertainty],
                                     $quesId,
                                     $exeId,
                                     $i,
@@ -5648,7 +5650,7 @@ class Exercise
                         } else {
                             Event::saveQuestionAttempt(
                                 $questionScore,
-                                $answerChoosen.':'.$choice[$answerChoosen],
+                                $chosenAnswer.':'.$choice[$chosenAnswer],
                                 $quesId,
                                 $exeId,
                                 $i,
@@ -5656,7 +5658,7 @@ class Exercise
                             );
                         }
                         if ($debug) {
-                            error_log('result =>'.$questionScore.' '.$answerChoosen.':'.$choice[$answerChoosen]);
+                            error_log('result =>'.$questionScore.' '.$chosenAnswer.':'.$choice[$chosenAnswer]);
                         }
                     }
                 } else {
@@ -5792,10 +5794,10 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = 'UPDATE '.$stat_table.' SET
-                        exe_result = exe_result + '.floatval($questionScore).'
-                    WHERE exe_id = '.$exeId;
+            $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "UPDATE $statsTable SET
+                        exe_result = exe_result + ".floatval($questionScore)."
+                    WHERE exe_id = $exeId";
             Database::query($sql);
             if ($debug) {
                 error_log($sql);

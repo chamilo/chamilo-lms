@@ -12,6 +12,7 @@ api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
+
 if ($debug) {
     error_log('-----------------------------------------------------');
     error_log("$action ajax call");
@@ -272,13 +273,13 @@ switch ($action) {
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
                     $timeInfo = api_format_date(
-                        $row['start_date'],
-                        DATE_TIME_FORMAT_LONG
-                    ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
-                } else {
-                    $timeInfo = api_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
+                        ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
+                } else {
+                    $timeInfo = api_format_date(
+                        $row['start_date'],
+                        DATE_TIME_FORMAT_LONG
                     );
                 }
                 $array = [
@@ -394,6 +395,9 @@ switch ($action) {
 
             // Questions choices.
             $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
+
+            // cretainty degree choice
+            $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : null;
 
             // Hot spot coordinates from all questions.
             $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
@@ -517,6 +521,11 @@ switch ($action) {
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
+                if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    // LQ debug
+                    $myChoiceDegreeCertainty = isset($choiceDegreeCertainty[$my_question_id]) ? $choiceDegreeCertainty[$my_question_id] : null;
+                }
+
                 // Getting free choice data.
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type == 'all') {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
@@ -584,18 +593,37 @@ switch ($action) {
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
-                $result = $objExercise->manage_answer(
-                    $exeId,
-                    $my_question_id,
-                    $my_choice,
-                    'exercise_result',
-                    $hot_spot_coordinates,
-                    true,
-                    false,
-                    false,
-                    $objExercise->selectPropagateNeg(),
-                    $hotspot_delineation_result
-                );
+
+                if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    $myChoiceTmp = [];
+                    $myChoiceTmp["choice"] = $my_choice;
+                    $myChoiceTmp["choiceDegreeCertainty"] = $myChoiceDegreeCertainty;
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $myChoiceTmp,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                } else {
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $my_choice,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                }
 
                 //  Adding the new score.
                 $total_score += $result['score'];

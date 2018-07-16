@@ -64,6 +64,9 @@ if (empty($exerciseResult)) {
     $exerciseResult = Session::read('exerciseResult');
 }
 
+if (empty($choiceDegreeCertainty)) {
+    $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : null;
+}
 $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
 
 if (empty($choice)) {
@@ -148,6 +151,7 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
 
 $this_section = SECTION_COURSES;
+
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
@@ -232,41 +236,43 @@ if (!empty($track_exercise_info)) {
     // if the results_disabled of the Quiz is 1 when block the script
     $result_disabled = $track_exercise_info['results_disabled'];
 
-    if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
-        $show_results = false;
-    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-        $show_results = false;
-        $show_only_total_score = true;
-        if ($origin != 'learnpath') {
-            if ($currentUserId == $student_id) {
-                echo Display::return_message(
-                    get_lang('ThankYouForPassingTheTest'),
-                    'warning',
-                    false
-                );
+    if (true) {
+        if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+            $show_results = false;
+        } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
+            $show_results = false;
+            $show_only_total_score = true;
+            if ($origin != 'learnpath') {
+                if ($currentUserId == $student_id) {
+                    echo Display::return_message(
+                        get_lang('ThankYouForPassingTheTest'),
+                        'warning',
+                        false
+                    );
+                }
             }
-        }
-    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-        $attempts = Event::getExerciseResultsByUser(
-            $currentUserId,
-            $objExercise->id,
-            api_get_course_int_id(),
-            api_get_session_id(),
-            $track_exercise_info['orig_lp_id'],
-            $track_exercise_info['orig_lp_item_id'],
-            'desc'
-        );
-        $numberAttempts = count($attempts);
-        if ($numberAttempts >= $track_exercise_info['max_attempt']) {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Attempt reach max so show score/feedback now
-            $showTotalScoreAndUserChoicesInLastAttempt = true;
-        } else {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Last attempt not reach don't show score/feedback
-            $showTotalScoreAndUserChoicesInLastAttempt = false;
+        } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $attempts = Event::getExerciseResultsByUser(
+                $currentUserId,
+                $objExercise->id,
+                api_get_course_int_id(),
+                api_get_session_id(),
+                $track_exercise_info['orig_lp_id'],
+                $track_exercise_info['orig_lp_item_id'],
+                'desc'
+            );
+            $numberAttempts = count($attempts);
+            if ($numberAttempts >= $track_exercise_info['max_attempt']) {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Attempt reach max so show score/feedback now
+                $showTotalScoreAndUserChoicesInLastAttempt = true;
+            } else {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Last attempt not reach don't show score/feedback
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
+            }
         }
     }
 } else {
@@ -321,11 +327,11 @@ $sql = "SELECT attempts.question_id, answer
             attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
-$questionListFromDatabase = [];
+$question_list_from_database = [];
 $exerciseResult = [];
 
 while ($row = Database::fetch_array($result)) {
-    $questionListFromDatabase[] = $row['question_id'];
+    $question_list_from_database[] = $row['question_id'];
     $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
@@ -339,16 +345,16 @@ if (!empty($track_exercise_info['data_tracking'])) {
     }
     // If for some reason data_tracking is empty we select the question list from db
     if (empty($questionList)) {
-        $questionList = $questionListFromDatabase;
+        $questionList = $question_list_from_database;
     }
 } else {
-    $questionList = $questionListFromDatabase;
+    $questionList = $question_list_from_database;
 }
 
 // Display the text when finished message if we are on a LP #4227
-$endOfMessage = $objExercise->selectTextWhenFinished();
-if (!empty($endOfMessage) && ($origin == 'learnpath')) {
-    echo Display::return_message($endOfMessage, 'normal', false);
+$end_of_message = $objExercise->selectTextWhenFinished();
+if (!empty($end_of_message) && ($origin == 'learnpath')) {
+    echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
 }
 
@@ -365,6 +371,7 @@ $counter = 1;
 $exercise_content = '';
 $category_list = [];
 $useAdvancedEditor = true;
+
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
@@ -427,6 +434,25 @@ foreach ($questionList as $questionId) {
             );
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
+            break;
+        case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
+            $choiceTmp = [];
+            $choiceTmp["choice"] = $choice;
+            $choiceTmp["choiceDegreeCertainty"] = $choiceDegreeCertainty;
+
+            $questionResult = $objExercise->manage_answer(
+                $id,
+                $questionId,
+                $choiceTmp,
+                'exercise_show',
+                [],
+                false,
+                true,
+                $show_results,
+                $objExercise->selectPropagateNeg()
+            );
+            $questionScore = $questionResult['score'];
+            $totalScore += $questionResult['score'];
             break;
         case HOT_SPOT:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
@@ -757,6 +783,7 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
+
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
@@ -923,31 +950,46 @@ foreach ($questionList as $questionId) {
     $exercise_content .= Display::panel($question_content);
 } // end of large foreach on questions
 
-$total_score_text = '';
+$totalScoreText = '';
 
 // Total score
 $my_total_score_temp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
-        $total_score_text .= '<div class="question_row">';
-        if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
-            $my_total_score_temp = 0;
+    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {        
+        $totalScoreText .= '<div class="question_row">';        
+        if ($objExercise->selectPropagateNeg() == 0 && $myTotalScoreTemp < 0) {
+            $myTotalScoreTemp = 0;                
         }
-        $total_score_text .= ExerciseLib::getTotalScoreRibbon(
-            $objExercise,
-            $my_total_score_temp,
-            $totalWeighting,
-            true,
-            $countPendingQuestions
-        );
-        $total_score_text .= '</div>';
+
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $totalScoreText .= ExerciseLib::getQuestionRibbonDiag(
+                $objExercise,
+                $myTotalScoreTemp,
+                $totalWeighting,
+                true
+            );
+        } else {
+            $totalScoreText .= ExerciseLib::getTotalScoreRibbon(
+                $objExercise,
+                $myTotalScoreTemp,
+                $totalWeighting,
+                true,
+                $countPendingQuestions
+            );
+        }
+
+        $totalScoreText .= '</div>';
     }
+}
+if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+    $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($id, $objExercise);
+    echo $chartMultiAnswer;
 }
 
 if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)) {
     // Adding total
     $category_list['total'] = [
-        'score' => $my_total_score_temp,
+        'score' => $myTotalScoreTemp,
         'total' => $totalWeighting,
     ];
     echo TestCategory::get_stats_table_by_attempt(
@@ -956,12 +998,12 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
-echo $total_score_text;
+echo $totalScoreText;
 echo $exercise_content;
 
 // only show "score" in bottom of page if there's exercise content
 if ($show_results) {
-    echo $total_score_text;
+    echo $totalScoreText;
 }
 
 if ($action == 'export') {
@@ -1135,5 +1177,3 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
-
-Session::erase('calculatedAnswerId');

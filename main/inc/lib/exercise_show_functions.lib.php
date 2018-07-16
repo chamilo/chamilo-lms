@@ -500,6 +500,108 @@ class ExerciseShowFunctions
     /**
      * Display the answers to a multiple choice question.
      *
+     * @param int    $feedbackType
+     * @param int    $studentChoice
+     * @param int    $studentChoiceDegree
+     * @param string $answer
+     * @param string $answerComment
+     * @param int    $answerCorrect
+     * @param int    $id
+     * @param int    $questionId
+     * @param int    $answerNumber
+     * @param bool   $inResultsDisabled
+     */
+    public static function displayMultipleAnswerTrueFalseDegreeCertainty(
+        $feedbackType,
+        $studentChoice,
+        $studentChoiceDegree,
+        $answer,
+        $answerComment,
+        $answerCorrect,
+        $questionId,
+        $inResultsDisabled
+    ) {
+        $hideExpectedAnswer = false;
+        if ($feedbackType == 0 && $inResultsDisabled == 2) {
+            $hideExpectedAnswer = true;
+        } ?>
+        <tr>
+            <td width="5%">
+                <?php
+                $question = new MultipleAnswerTrueFalseDegreeCertainty();
+                $courseId = api_get_course_int_id();
+                $newOptions = Question::readQuestionOption($questionId, $courseId);
+
+        //Your choice
+        if (isset($newOptions[$studentChoice])) {
+            echo get_lang($newOptions[$studentChoice]['name']);
+        } else {
+            echo '-';
+        } ?>
+            </td>
+            <td width="5%">
+                <?php
+                //Expected choice
+                if (!$hideExpectedAnswer) {
+                    if (isset($newOptions[$answerCorrect])) {
+                        echo get_lang($newOptions[$answerCorrect]['name']);
+                    } else {
+                        echo '-';
+                    }
+                } else {
+                    echo '-';
+                } ?>
+            </td>
+            <td width="25%">
+                <?php echo $answer; ?>
+            </td>
+            <td width="5%" style="text-align:center;">
+                <?php
+                echo  $newOptions[$studentChoiceDegree]['name']; ?>
+            </td>
+            <!-- color by certainty -->
+            <?php
+            $degreCertitudeColor = $question->getColorResponse($studentChoice,
+                $answerCorrect,
+                $newOptions[$studentChoiceDegree]['position']
+            );
+        if ($degreCertitudeColor == "#088A08" || $degreCertitudeColor == "#FE2E2E") {
+            $color = "#FFFFFF";
+        } else {
+            $color = "#000000";
+        }
+        $codeResponse = $question->getCodeResponse($studentChoice,
+                $answerCorrect,
+                $newOptions[$studentChoiceDegree]['position']
+            ); ?>
+            <td width="10%">
+                <div style="text-align:center;color: <?php echo $color; ?>; 
+                    border:1px #D6D4D4 solid;background-color: <?php echo $degreCertitudeColor; ?>; 
+                    line-height:30px;height:30px;width: 100%;margin:auto;"><?php echo nl2br($codeResponse); ?>
+                </div>
+            </td>
+            <?php if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                ?>
+            <td width="20%">
+                <?php
+                $color = "black";
+                if (isset($newOptions[$studentChoice])) {
+                    echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+                } ?>
+            </td>
+            <?php
+            } else {
+                ?>
+                <td>&nbsp;</td>
+            <?php
+            } ?>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Display the answers to a multiple choice question.
+     *
      * @param Exercise $exercise
      * @param int Answer type
      * @param int Student choice

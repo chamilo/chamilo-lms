@@ -845,7 +845,8 @@ class Answer
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
-            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
+            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
+            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
         ) {
             // Selecting origin options
             $origin_options = Question::readQuestionOption(
@@ -964,7 +965,8 @@ class Answer
 
                     $correct = $this->correct[$i];
                     if ($newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
-                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE
+                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
+                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
                     ) {
                         $correct = $fixed_list[intval($correct)];
                     }

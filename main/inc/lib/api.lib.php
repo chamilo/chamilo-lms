@@ -9036,18 +9036,18 @@ function api_float_val($number)
  * 3.141516 => 3.14
  * 3,141516 => 3,14
  *
- * @todo WIP
- *
- * @param string $number   number in iso code
+ * @param string $number            number in iso code
  * @param int    $decimals
+ * @param string $decimalSeparator
+ * @param string $thousandSeparator
  *
  * @return bool|string
  */
-function api_number_format($number, $decimals = 0)
+function api_number_format($number, $decimals = 0, $decimalSeparator = '.', $thousandSeparator = ',')
 {
     $number = api_float_val($number);
 
-    return number_format($number, $decimals);
+    return number_format($number, $decimals, $decimalSeparator, $thousandSeparator);
 }
 
 /**

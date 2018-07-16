@@ -8,6 +8,8 @@
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
+use \Chamilo\CoreBundle\Entity\Repository\LegalRepository;
+
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
@@ -22,7 +24,10 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">';
 echo Display::return_icon('edit.png', get_lang('EditTermsAndConditions')).get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
-$legal_count = LegalManager::count();
+$em = Database::getManager();
+/** @var LegalRepository $legalTerms */
+$legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
+$legal_count = $legalTermsRepo->countAllActiveLegalTerms();
 $languages = api_get_languages();
 $available_languages = count($languages['folder']);
 if ($legal_count != $available_languages) {

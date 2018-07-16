@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="panel personal-data-treatment">
-            <div class="panel-title">{{ 'PersonalDataTreatment' | get_lang }}</div>
+            <div class="panel-title">{{ 'PersonalDataTreatmentTitle' | get_lang }}</div>
             <div class="personal-data-treatment-description">
                 {% for treatment in personal_data.treatment %}
                     {% if treatment.content %}

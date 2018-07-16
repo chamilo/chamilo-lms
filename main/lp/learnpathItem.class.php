@@ -14,6 +14,7 @@
 class learnpathItem
 {
     const DEBUG = 0; // Logging parameter.
+    public $iId;
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = []; // Contains the ids of children items.
@@ -106,12 +107,12 @@ class learnpathItem
             error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
             error_log("item_content: ".print_r($item_content, 1));
         }
-        $id = intval($id);
+        $id = (int) $id;
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
             } else {
-                $course_id = intval($course_id);
+                $course_id = (int) $course_id;
             }
             $sql = "SELECT * FROM $items_table
                     WHERE iid = $id";
@@ -125,6 +126,7 @@ class learnpathItem
         }
 
         $this->lp_id = $row['lp_id'];
+        $this->iId = $row['iid'];
         $this->max_score = $row['max_score'];
         $this->min_score = $row['min_score'];
         $this->name = $row['title'];
@@ -363,7 +365,7 @@ class learnpathItem
         }
         $res = 1;
         if (!empty($this->attempt_id)) {
-            $res = intval($this->attempt_id);
+            $res = (int) $this->attempt_id;
         }
         if (self::DEBUG > 0) {
             error_log(
@@ -1046,17 +1048,15 @@ class learnpathItem
         if ($recursivity > $max) {
             return [];
         }
-        if (!isset($type)) {
-            $type = $this->get_type();
-        }
+
+        $type = empty($type) ? $this->get_type() : $type;
+
         if (!isset($abs_path)) {
             $path = $this->get_file_path();
             $abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
         }
 
         $files_list = [];
-        $type = $this->get_type();
-
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
@@ -2487,7 +2487,8 @@ class learnpathItem
                                                             exe_user_id = '.$user_id.' AND
                                                             orig_lp_id = '.$this->lp_id.' AND
                                                             orig_lp_item_id = '.$prereqs_string.' AND
-                                                            status <> "incomplete"
+                                                            status <> "incomplete" AND
+                                                            c_id = '.$course_id.'
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
@@ -2530,11 +2531,12 @@ class learnpathItem
                                                 }
                                             }
                                         } else {
-                                            // 3. for multiple attempts we check that there are minimum 1 item completed.
+                                            // 3. For multiple attempts we check that there are minimum 1 item completed
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
                                                     FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
+                                                        c_id = '.$course_id.' AND 
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
@@ -2560,7 +2562,9 @@ class learnpathItem
                                                             $returnstatus = false;
                                                         }
                                                     } else {
-                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                        if ($quiz['exe_result'] >=
+                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                        ) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
@@ -2613,35 +2617,39 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database::fetch_row($rs_lp);
-                                            $my_lp_id = $lp_id[0];
+                                            if (Database::num_rows($rs_lp)) {
+                                                $lp_id = Database::fetch_row($rs_lp);
+                                                $my_lp_id = $lp_id[0];
 
-                                            $sql = 'SELECT status FROM '.$lp_item_view.'
-                                                   WHERE
-                                                        c_id = '.$course_id.' AND
-                                                        lp_view_id = '.$my_lp_id.' AND
-                                                        lp_item_id = '.$refs_list[$prereqs_string].'
-                                                    LIMIT 0, 1';
-                                            $rs_lp = Database::query($sql);
-                                            $status_array = Database::fetch_row($rs_lp);
-                                            $status = $status_array[0];
+                                                $sql = 'SELECT status FROM '.$lp_item_view.'
+                                                        WHERE
+                                                            c_id = '.$course_id.' AND
+                                                            lp_view_id = '.$my_lp_id.' AND
+                                                            lp_item_id = '.$refs_list[$prereqs_string].'
+                                                        LIMIT 0, 1';
+                                                $rs_lp = Database::query($sql);
+                                                $status_array = Database::fetch_row($rs_lp);
+                                                $status = $status_array[0];
 
-                                            $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
-                                            if (!$returnstatus && empty($this->prereq_alert)) {
-                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-                                            }
-                                            if (!$returnstatus) {
-                                                if (self::DEBUG > 1) {
-                                                    error_log('New LP - Prerequisite '.$prereqs_string.' not complete');
+                                                $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                                                if (!$returnstatus && empty($this->prereq_alert)) {
+                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 }
-                                            } else {
-                                                if (self::DEBUG > 1) {
-                                                    error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                if (!$returnstatus) {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log(
+                                                            'New LP - Prerequisite '.$prereqs_string.' not complete'
+                                                        );
+                                                    }
+                                                } else {
+                                                    if (self::DEBUG > 1) {
+                                                        error_log('New LP - Prerequisite '.$prereqs_string.' complete');
+                                                    }
                                                 }
+
+                                                return $returnstatus;
                                             }
                                         }
-
-                                        return $returnstatus;
                                     }
                                 } else {
                                     if (self::DEBUG > 1) {
@@ -3579,7 +3587,7 @@ class learnpathItem
         }
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = intval($this->lp_id);
+        $lp_id = (int) $this->lp_id;
         $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
@@ -4493,7 +4501,7 @@ class learnpathItem
      */
     public function getForumThread($lpCourseId, $lpSessionId = 0)
     {
-        $lpSessionId = intval($lpSessionId);
+        $lpSessionId = (int) $lpSessionId;
         $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -4557,7 +4565,7 @@ class learnpathItem
         $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
         $forumThread = $threadRepo->findOneBy([
             'threadTitle' => "{$this->title} - {$this->db_id}",
-            'forumId' => intval($currentForumId),
+            'forumId' => (int) $currentForumId,
         ]);
 
         if (!$forumThread) {
@@ -4624,5 +4632,13 @@ class learnpathItem
     public function getLastScormSessionTime()
     {
         return $this->last_scorm_session_time;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iId;
     }
 }

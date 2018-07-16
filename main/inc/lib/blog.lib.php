@@ -28,10 +28,10 @@ class Blog
         $course_id = api_get_course_int_id();
 
         if (is_numeric($blog_id)) {
-            $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+            $table = Database::get_course_table(TABLE_BLOGS);
 
             $sql = "SELECT blog_name
-                    FROM $tbl_blogs
+                    FROM $table
                     WHERE c_id = $course_id AND blog_id = ".intval($blog_id);
 
             $result = Database::query($sql);
@@ -52,9 +52,9 @@ class Blog
      */
     public static function getBlogSubtitle($blog_id)
     {
-        $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+        $table = Database::get_course_table(TABLE_BLOGS);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT blog_subtitle FROM $tbl_blogs
+        $sql = "SELECT blog_subtitle FROM $table
                 WHERE c_id = $course_id AND blog_id ='".intval($blog_id)."'";
         $result = Database::query($sql);
         $blog = Database::fetch_array($result);
@@ -446,7 +446,7 @@ class Blog
      */
     public static function editPost($post_id, $title, $full_text, $blog_id)
     {
-        $tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
+        $table = Database::get_course_table(TABLE_BLOGS_POSTS);
         $course_id = api_get_course_int_id();
         $title = Database::escape_string($title);
         $full_text = Database::escape_string($full_text);
@@ -454,7 +454,7 @@ class Blog
         $blog_id = intval($blog_id);
 
         // Create the post
-        $sql = "UPDATE $tbl_blogs_posts SET
+        $sql = "UPDATE $table SET
                 title = '$title',
                 full_text = '$full_text'
                 WHERE c_id = $course_id AND post_id = $post_id AND blog_id = $blog_id
@@ -821,13 +821,13 @@ class Blog
      */
     public static function deleteTask($blog_id, $task_id)
     {
-        $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+        $table = Database::get_course_table(TABLE_BLOGS_TASKS);
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
         $task_id = intval($task_id);
 
         // Delete posts
-        $sql = "DELETE FROM $tbl_blogs_tasks
+        $sql = "DELETE FROM $table
                 WHERE c_id = $course_id AND blog_id = $blog_id AND task_id = $task_id";
         Database::query($sql);
     }
@@ -1017,6 +1017,7 @@ class Blog
         // Display
         if (Database::num_rows($result) > 0) {
             $limit = 200;
+            $listArticle = [];
             while ($blog_post = Database::fetch_array($result)) {
                 // Get number of comments
                 $sql = "SELECT COUNT(1) as number_of_comments
@@ -1408,14 +1409,14 @@ class Blog
      */
     public static function displayRating($type, $blog_id, $item_id)
     {
-        $tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
+        $table = Database::get_course_table(TABLE_BLOGS_RATING);
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
         $item_id = intval($item_id);
         $type = Database::escape_string($type);
 
         // Calculate rating
-        $sql = "SELECT AVG(rating) as rating FROM $tbl_blogs_rating
+        $sql = "SELECT AVG(rating) as rating FROM $table
                 WHERE
                     c_id = $course_id AND
                     blog_id = $blog_id AND
@@ -2187,7 +2188,7 @@ class Blog
      */
     public static function displayAssignedTaskEditForm($blog_id, $task_id, $user_id)
     {
-        $tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
+        $table = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
@@ -2197,7 +2198,7 @@ class Blog
         // Get assign date;
         $sql = "
             SELECT target_date
-            FROM $tbl_blogs_tasks_rel_user
+            FROM $table
             WHERE c_id = $course_id AND
                   blog_id = $blog_id AND
                   user_id = $user_id AND
@@ -2232,7 +2233,7 @@ class Blog
      */
     public static function assignTask($blog_id, $user_id, $task_id, $target_date)
     {
-        $tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
+        $table = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
         $user_id = intval($user_id);
@@ -2241,7 +2242,7 @@ class Blog
 
         $sql = "
             SELECT COUNT(*) as 'number'
-            FROM $tbl_blogs_tasks_rel_user
+            FROM $table
             WHERE c_id = $course_id 
             AND blog_id = $blog_id 
             AND	user_id = $user_id 
@@ -2252,7 +2253,7 @@ class Blog
 
         if ($row['number'] == 0) {
             $sql = "
-                INSERT INTO ".$tbl_blogs_tasks_rel_user." (
+                INSERT INTO ".$table." (
                     c_id,
                     blog_id,
                     user_id,
@@ -2579,7 +2580,8 @@ class Blog
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT user.user_id, user.lastname, user.firstname, user.email, user.username
-                FROM $tbl_users user INNER JOIN $tbl_blogs_rel_user blogs_rel_user
+                FROM $tbl_users user 
+                INNER JOIN $tbl_blogs_rel_user blogs_rel_user
                 ON user.user_id = blogs_rel_user.user_id
                 WHERE blogs_rel_user.c_id = $course_id AND  blogs_rel_user.blog_id = $blog_id";
 
@@ -2588,7 +2590,6 @@ class Blog
         }
 
         $user_data = [];
-
         while ($myrow = Database::fetch_array($sql_result)) {
             $row = [];
             $row[] = '<input type="checkbox" name="user[]" value="'.$myrow['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '').'/>';

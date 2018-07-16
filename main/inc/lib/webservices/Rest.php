@@ -823,16 +823,9 @@ class Rest extends WebService
      */
     public static function decodeParams($encoded)
     {
-        $decoded = str_replace(['-', '_', '.'], ['+', '/', '='], $encoded);
-        $mod4 = strlen($decoded) % 4;
+        $decoded = json_decode($encoded);
 
-        if ($mod4) {
-            $decoded .= substr('====', $mod4);
-        }
-
-        $b64Decoded = base64_decode($decoded);
-
-        return unserialize($b64Decoded);
+        return $decoded;
     }
 
     /**
@@ -916,7 +909,7 @@ class Rest extends WebService
                     ];
                 }
 
-                $sessionBox = Display::get_session_title_box($sessions['session_id']);
+                $sessionBox = Display::getSessionTitleBox($sessions['session_id']);
 
                 $categorySessions[] = [
                     'name' => $sessionBox['title'],
@@ -1319,10 +1312,8 @@ class Rest extends WebService
             'api_key' => $this->apiKey,
             'username' => $this->user->getUsername(),
         ]);
+        $encoded = json_encode($params);
 
-        $strParams = serialize($params);
-        $b64Encoded = base64_encode($strParams);
-
-        return str_replace(['+', '/', '='], ['-', '_', '.'], $b64Encoded);
+        return $encoded;
     }
 }

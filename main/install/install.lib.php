@@ -2477,6 +2477,7 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseCode = $item['course_code'];
+        $categoryId = (int) $item['category_id'];
 
         $sql = "SELECT * FROM course WHERE code = '$courseCode'";
         $courseInfo = $connection->fetchAssoc($sql);
@@ -2513,7 +2514,7 @@ function fixIds(EntityManager $em)
             if (isset($data) && isset($data['iid'])) {
                 $newId = $data['iid'];
                 $sql = "UPDATE gradebook_link SET ref_id = $newId
-                        WHERE id = $iid";
+                        WHERE id = $iid AND course_code = '$courseCode' AND category_id = $categoryId ";
                 $connection->executeQuery($sql);
             }
         }
@@ -2870,8 +2871,8 @@ function fixLpId($connection, $debug)
                         WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
                     $connection->query($sql);
                     if ($debug) {
-                        error_log("Fix wrong c_tool links");
-                        error_log($sql);
+                        //error_log("Fix wrong c_tool links");
+                        //error_log($sql);
                     }
                 }
 
@@ -2885,7 +2886,7 @@ function fixLpId($connection, $debug)
                                     WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                             $connection->query($sql);
                             if ($debug) {
-                                error_log($sql);
+                                //error_log($sql);
                             }
                         }
                     }
@@ -2902,8 +2903,8 @@ function fixLpId($connection, $debug)
                                     WHERE iid = $itemIid AND c_id = $courseId";
                                 $connection->query($sql);
                                 if ($debug) {
-                                    error_log("Fix document: ");
-                                    error_log($sql);
+                                    //error_log("Fix document: ");
+                                    //error_log($sql);
                                 }
                             }
                         }
@@ -2939,6 +2940,7 @@ function fixLpId($connection, $debug)
                             $userId = $itemView['user_id'];
                             $oldItemViewId = $itemView['id'];
                             $newItemView = $itemView['iid'];
+
                             if (empty($oldItemViewId)) {
                                 continue;
                             }
@@ -2953,15 +2955,23 @@ function fixLpId($connection, $debug)
                                   exe_user_id = $userId                                       
                                   ";
                             $connection->query($sql);
+
+                            /*$sql = "UPDATE c_lp_item_view
+                                    SET lp_view_id = $newItemView
+                                    WHERE
+                                      lp_view_id = $oldItemViewId AND
+                                      c_id = $courseId
+                                  ";
+                            $connection->query($sql);*/
                         }
                     }
 
                     $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
-                        WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
+                            WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
 
                     $sql = "UPDATE $tblCLpItem SET id = iid 
-                    WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
+                            WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
                 }
 
@@ -2983,7 +2993,7 @@ function fixLpId($connection, $debug)
     }
 
     if ($debug) {
-        error_log('----- END - fixIds');
+        error_log('END Fix lp.id lp.iids');
     }
 }
 

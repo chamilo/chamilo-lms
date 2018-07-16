@@ -10,6 +10,9 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
+
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $htmlHeadXtra[] = '
@@ -326,8 +329,7 @@ $form->addHtmlEditor(
     get_lang('Content'),
     true,
     true,
-    $editorConfig,
-    true
+    $editorConfig
 );
 
 // Comment-field
@@ -631,7 +633,6 @@ if ($form->validate()) {
 
     Display :: display_header($nameTools, "Doc");
     // actions
-
     // link back to the documents overview
     if ($is_certificate_mode) {
         $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.

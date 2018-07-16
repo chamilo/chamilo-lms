@@ -22,11 +22,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-}
+api_set_more_memory_and_time_limits();
 
 // Section for the tabs
 $this_section = SECTION_COURSES;
@@ -99,7 +95,8 @@ if (Security::check_token('post') && (
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
         echo Display::return_message(get_lang('ImportFinished'));
-        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang('CourseHomepage').'</a>';
+        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.
+            get_lang('CourseHomepage').'</a>';
     } else {
         if (!$error) {
             echo Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning');

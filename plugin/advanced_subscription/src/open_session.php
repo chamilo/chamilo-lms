@@ -44,7 +44,7 @@ if (SessionManager::isUserSubscribedAsStudent(
         $tpl->assign('is_subscribed', false);
         $tpl->assign('errorMessages', $plugin->getErrorMessages());
     } else {
-        SessionManager::subscribe_users_to_session(
+        SessionManager::subscribeUsersToSession(
             $_GET['session_id'],
             [$_GET['user_id']],
             SESSION_VISIBLE_READ_ONLY,

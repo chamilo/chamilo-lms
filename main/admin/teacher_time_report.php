@@ -230,7 +230,7 @@ if (!empty($selectedSession)) {
 
 if (!empty($selectedTeacher)) {
     $withFilter = true;
-    $teacher = api_get_user_info();
+    $teacher = api_get_user_info($selectedTeacher);
     $teacherData = [
         'userId' => $teacher['user_id'],
         'lastname' => $teacher['lastname'],

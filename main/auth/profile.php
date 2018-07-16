@@ -361,87 +361,20 @@ if (is_profile_editable()) {
 } else {
     $form->freeze();
 }
-$form->setDefaults($user_data);
 
-/**
- * Is user auth_source is platform ?
- *
- * @return bool if auth_source is platform
- */
-function is_platform_authentication()
-{
-    $tab_user_info = api_get_user_info();
-
-    return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
-}
-
-/**
- * Can a user edit his/her profile?
- *
- * @return bool Editability of the profile
- */
-function is_profile_editable()
-{
-    if (isset($GLOBALS['profileIsEditable'])) {
-        return (bool) $GLOBALS['profileIsEditable'];
-    }
-
-    return true;
-}
-
-/*
-    PRODUCTIONS FUNCTIONS
-*/
-
-/**
- * Upload a submitted user production.
- *
- * @param   $user_id User id
- *
- * @return The filename of the new production or FALSE if the upload has failed
- */
-function upload_user_production($user_id)
-{
-    $production_repository = UserManager::getUserPathById($user_id, 'system');
-
-    if (!file_exists($production_repository)) {
-        @mkdir($production_repository, api_get_permissions_for_new_directories(), true);
-    }
-    $filename = api_replace_dangerous_char($_FILES['production']['name']);
-    $filename = disable_dangerous_file($filename);
-
-    if (filter_extension($filename)) {
-        if (@move_uploaded_file($_FILES['production']['tmp_name'], $production_repository.$filename)) {
-            return $filename;
+// Student cannot modified their user conditions
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $element->freeze();
         }
     }
-
-    return false; // this should be returned if anything went wrong with the upload
 }
 
-/**
- * Check current user's current password.
- *
- * @param    char    email
- *
- * @return bool true o false
- *
- * @uses \Gets user ID from global variable
- */
-function check_user_email($email)
-{
-    $user_id = api_get_user_id();
-    if ($user_id != strval(intval($user_id)) || empty($email)) {
-        return false;
-    }
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $email = Database::escape_string($email);
-    $sql = "SELECT * FROM $table_user
-            WHERE user_id='".$user_id."' AND email='".$email."'";
-    $result = Database::query($sql);
-
-    return Database::num_rows($result) != 0;
-}
+$form->setDefaults($user_data);
 
 $filtered_extension = false;
 
@@ -781,11 +714,86 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $normalImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
 
     $imageToShow = '<div id="image-message-container">';
-    $imageToShow .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
+    $imageToShow .= '<a class="expand-image pull-right" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
 
     $content = $imageToShow.$form->returnForm();
 
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
+}
+
+// Helper functions defined below this point
+
+/**
+ * Is user auth_source is platform ?
+ *
+ * @return bool Whether auth_source is 'platform' or not
+ */
+function is_platform_authentication()
+{
+    $tabUserInfo = api_get_user_info();
+
+    return $tabUserInfo['auth_source'] == PLATFORM_AUTH_SOURCE;
+}
+
+/**
+ * Can a user edit his/her profile?
+ *
+ * @return bool Whether the profile can be edited by the user or not
+ */
+function is_profile_editable()
+{
+    if (isset($GLOBALS['profileIsEditable'])) {
+        return (bool) $GLOBALS['profileIsEditable'];
+    }
+
+    return true;
+}
+
+/**
+ * Upload a submitted user production.
+ *
+ * @param int $userId User id
+ *
+ * @return mixed The filename of the new production or FALSE if the upload has failed
+ */
+function upload_user_production($userId)
+{
+    $productionRepository = UserManager::getUserPathById($userId, 'system');
+
+    if (!file_exists($productionRepository)) {
+        @mkdir($productionRepository, api_get_permissions_for_new_directories(), true);
+    }
+    $filename = api_replace_dangerous_char($_FILES['production']['name']);
+    $filename = disable_dangerous_file($filename);
+
+    if (filter_extension($filename)) {
+        if (@move_uploaded_file($_FILES['production']['tmp_name'], $productionRepository.$filename)) {
+            return $filename;
+        }
+    }
+
+    return false; // this should be returned if anything went wrong with the upload
+}
+
+/**
+ * Check current user's current password.
+ *
+ * @param string $email E-mail
+ *
+ * @return bool Whether this e-mail is already in use or not
+ */
+function check_user_email($email)
+{
+    $userId = api_get_user_id();
+    if ($userId != strval(intval($userId)) || empty($email)) {
+        return false;
+    }
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+    $email = Database::escape_string($email);
+    $sql = "SELECT * FROM $tableUser WHERE user_id = $userId AND email = '$email'";
+    $result = Database::query($sql);
+
+    return Database::num_rows($result) != 0;
 }

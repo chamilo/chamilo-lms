@@ -2734,29 +2734,33 @@ class MySpace
         return $users;
     }
 
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $studentId
+     */
     public static function displayTrackingAccessOverView($courseId, $sessionId, $studentId)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
-        $studentId = intval($studentId);
-
-        $em = Database::getManager();
-        $sessionRepo = $em->getRepository('ChamiloCoreBundle:Session');
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $studentId = (int) $studentId;
 
         $courseList = [];
         $sessionList = [];
         $studentList = [];
 
         if (!empty($courseId)) {
-            $course = $em->find('ChamiloCoreBundle:Course', $courseId);
-
-            $courseList[$course->getId()] = $course->getTitle();
+            $course = api_get_course_entity($courseId);
+            if ($course) {
+                $courseList[$course->getId()] = $course->getTitle();
+            }
         }
 
         if (!empty($sessionId)) {
-            $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
-
-            $sessionList[$session->getId()] = $session->getName();
+            $session = api_get_session_entity($sessionId);
+            if ($session) {
+                $sessionList[$session->getId()] = $session->getName();
+            }
         }
 
         if (!empty($studentId)) {
@@ -2776,9 +2780,11 @@ class MySpace
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query([
                     'a' => 'search_course_by_session_all',
                     'session_id' => $sessionId,
+                    'course_id' => $courseId,
                 ]),
             ]
         );
+
         $form->addElement(
             'select_ajax',
             'session_id',
@@ -2789,7 +2795,7 @@ class MySpace
                     function () {
                         var params = $.param({
                             a: 'search_session_by_course',
-                            course_id: $('#course_id').val() || 0
+                            course_id: $('#access_overview_course_id').val() || 0
                         });
 
                         return '".api_get_path(WEB_AJAX_PATH)."session.ajax.php?' + params;
@@ -2797,6 +2803,7 @@ class MySpace
                 ",
             ]
         );
+
         $form->addSelect(
             'profile',
             get_lang('Profile'),
@@ -2808,6 +2815,7 @@ class MySpace
             ],
             ['id' => 'profile']
         );
+
         $form->addElement(
             'select_ajax',
             'student_id',
@@ -2816,11 +2824,11 @@ class MySpace
             [
                 'placeholder' => get_lang('All'),
                 'url_function' => "
-                    function () {
+                    function () {                    
                         var params = $.param({
                             a: 'search_user_by_course',
-                            session_id: $('#session_id').val(),
-                            course_id: $('#course_id').val()
+                            session_id: $('#access_overview_session_id').val(),
+                            course_id: $('#access_overview_course_id').val()
                         });
 
                         return '".api_get_path(WEB_AJAX_PATH)."course.ajax.php?' + params;
@@ -2853,7 +2861,8 @@ class MySpace
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
-            $table->additional_parameters = $form->exportValues();
+
+            //$table->additional_parameters = $form->exportValues();
 
             $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);
@@ -2919,11 +2928,9 @@ class MySpace
         $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
-
+        $is_western_name_order = api_is_western_name_order();
         if ($export_csv) {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-        } else {
-            $is_western_name_order = api_is_western_name_order();
         }
 
         //TODO add course name
@@ -2945,15 +2952,44 @@ class MySpace
                 u.user_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.c_id = c.id";
+            INNER JOIN $course c ON a.c_id = c.id
+            WHERE 1=1 ";
+
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int) $_GET['course_id'];
+            $sql .= " AND c.id = ".$courseId;
+        }
 
         if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = intval($_GET['session_id']);
-            $sql .= " WHERE a.session_id = ".$sessionId;
+            $sessionId = (int) $_GET['session_id'];
+            $sql .= " AND a.session_id = ".$sessionId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dates = DateRangePicker::parseDateRange($_GET['date']);
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dates['start'] = Database::escape_string($dates['start']);
+                $sql .= " AND login_course_date >= '".$dates['start']."'";
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dates['end'] = Database::escape_string($dates['end']);
+                $sql .= " AND logout_course_date <= '".$dates['end']."'";
+            }
         }
 
         $sql .= " ORDER BY col$column $orderDirection ";
         $sql .= " LIMIT $from,$numberItems";
+
         $result = Database::query($sql);
 
         $data = [];
@@ -3019,7 +3055,7 @@ class MySpace
         $end_date
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $connections = [];
         if (!empty($course_info)) {
             $courseId = intval($course_info['real_id']);

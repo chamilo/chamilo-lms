@@ -374,7 +374,20 @@ $_configuration['agenda_colors'] = [
 */
 // ------
 //
-// Save some tool titles with HTML editor
+// Save some tool titles with HTML editor. Require DB changes:
+/*
+ALTER TABLE course_category CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_course_description CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_thematic CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_quiz CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_lp_category CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL;
+-- Only with allow_portfolio_tool enabled
+ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
+--
+*/
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
@@ -440,18 +453,18 @@ $_configuration['agenda_colors'] = [
 // X-Frame-Options tells the browser whether you want to allow your site to
 // be framed or not. By preventing a browser from framing your site you can
 // defend against attacks like clickjacking.
-// Recommended value "x-frame-options: SAMEORIGIN".
-//$_configuration['security_x_frame_options'] = 'x-frame-options: SAMEORIGIN';
+// Recommended value "SAMEORIGIN".
+//$_configuration['security_x_frame_options'] = 'SAMEORIGIN';
 //
 // X-XSS-Protection sets the configuration for the cross-site scripting
 // filter built into most browsers.
-// Recommended value "X-XSS-Protection: 1; mode=block".
-//$_configuration['security_xss_protection'] = 'X-XSS-Protection: 1; mode=block';
+// Recommended value "1; mode=block".
+//$_configuration['security_xss_protection'] = '1; mode=block';
 //
 // X-Content-Type-Options stops a browser from trying to MIME-sniff the
 // content type and forces it to stick with the declared content-type. The only
-// valid value for this header is "X-Content-Type-Options: nosniff".
-//$_configuration['security_x_content_type_options'] = 'X-Content-Type-Options: nosniff';
+// valid value for this header is "nosniff".
+//$_configuration['security_x_content_type_options'] = 'nosniff';
 //
 // Referrer Policy is a new header that allows a site to control how much
 // information the browser includes with navigation away from a document
@@ -481,6 +494,10 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // Hide survey edition tools for all or some surveys.
 //Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked
 //$_configuration['hide_survey_edition'] = ['codes' => []];
+// Allows to set the date and time of availability for surveys. Requires DB changes:
+// ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL, CHANGE avail_till avail_till DATETIME DEFAULT NULL;
+// Requires change the Doctrine type from date to datime in CSurvey::$availFrom and CSurvey::$availTill
+//$_configuration['allow_survey_availability_datetime'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:
@@ -529,6 +546,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_free_question_score'] = false;
 // Hide user information in the quiz result's page
 //$_configuration['hide_user_info_in_quiz_result'] = false;
+// Show the username field in exercise results report
+//$_configuration['exercise_attempts_report_show_username'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label
@@ -798,10 +817,10 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 /*
 CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id);
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id) ON DELETE SET NULL;
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
 */
@@ -812,6 +831,79 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;
+
+// Allow sharing options for the documents inside a group
+//ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;
+//$_configuration['group_document_access'] = false;
+
+// Allow sharing options for the documents inside a group category
+//ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;
+//$_configuration['group_category_document_access'] = false;
+
+// Allow LP export to chamilo format (CourseBackup)
+//$_configuration['allow_lp_chamilo_export'] = false;
+
+// Allow exercise auto launch
+//$_configuration['allow_exercise_auto_launch'] = false;
+// ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0;
+
+// Enable speed controller in video player
+// $_configuration['video_features'] = ['features' => ['speed']];
+
+// Disable token verification when sending a message
+// $_configuration['disable_token_in_new_message'] = false;
+
+// My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
+// $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
+
+// Allow set courses in session in read-only mode. Require DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, filter, created_at)
+VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1, 1, NOW());
+*/
+// $_configuration['session_courses_read_only_mode'] = false;
+
+// Allow SCORM packages when importing a course
+// $_configuration['allow_import_scorm_package_in_course_builder'] = false;
+
+// Hide announcement "sent to" label
+// $_configuration['hide_announcement_sent_to_users_info'] = false;
+
+// Hide gradebook graph
+// $_configuration['gradebook_hide_graph'] = false;
+
+// Hide gradebook "download report in PDF" button
+// $_configuration['gradebook_hide_pdf_report_button'] = false;
+
+// Show pending survey link in user menu
+// $_configuration['show_pending_survey_in_menu'] = false;
+
+// Show multiple conditions to user during sign up process
+// Example with a GDPR condition
+/*$_configuration['show_conditions_to_user'] = [
+    'conditions' => [
+        [
+            'variable' => 'gdpr', // internal extra field name
+            'display_text' => 'GDPRTitle', // checkbox title will be translated with get_lang('GDPRTitle')
+            'text_area' => 'GDPRTextArea', // this will be translated using get_lang('GDPRTextArea')
+        ],
+        [
+            'variable' => 'my_terms',
+            'display_text' => 'My test conditions',
+            'text_area' => 'This is a long text area, with lot of terms and conditions ... ',
+        ],
+    ],
+];*/
+
+// Hide LP item prerequisite label in the LP view
+//$_configuration['hide_accessibility_label_on_lp_item'] = true;
+
+// Round score in exercise category export
+//$_configuration['exercise_category_round_score_in_export'] = false;
+
+// Redirect index to url for logged in users
+// In this example the index.php will be redirected to user_portal.php for logged in users
+//$_configuration['redirect_index_to_url_for_logged_users'] = 'user_portal.php';
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

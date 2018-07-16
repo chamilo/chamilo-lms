@@ -359,6 +359,13 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 if (($validPassword || $cas_login) &&
                     (trim($login) == $uData['username'])
                 ) {
+                    // Means that the login was loaded in a different page than index.php
+                    // we force the reload of the course access using cidReset just in case
+                    if (isset($_REQUEST['redirect_after_not_allow_page']) &&
+                        $_REQUEST['redirect_after_not_allow_page'] == 1
+                    ) {
+                        $cidReset = true;
+                    }
                     $update_type = UserManager::get_extra_user_data_by_field(
                         $uData['user_id'],
                         'update_type'
@@ -967,7 +974,7 @@ if ($cidReset) {
             Session::write('_course', $_course);
 
             if (!empty($_GET['gidReq'])) {
-                $_SESSION['_gid'] = intval($_GET['gidReq']);
+                $_SESSION['_gid'] = (int) $_GET['gidReq'];
             } else {
                 Session::erase('_gid');
             }
@@ -1039,7 +1046,7 @@ if ($cidReset) {
         $_course = $_SESSION['_course'];
 
         if (!empty($_REQUEST['gidReq'])) {
-            $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
+            $_SESSION['_gid'] = (int) $_REQUEST['gidReq'];
 
             $group_table = Database::get_course_table(TABLE_GROUP);
             $sql = "SELECT * FROM $group_table
@@ -1050,6 +1057,8 @@ if ($cidReset) {
                 $_gid = $gpData['id'];
                 Session::write('_gid', $_gid);
             }
+        } else {
+            Session::write('_gid', 0);
         }
     }
 }
@@ -1074,7 +1083,7 @@ $is_courseMember = false;
 
 if ((isset($uidReset) && $uidReset) || $cidReset) {
     if (isset($_cid) && $_cid) {
-        $my_user_id = isset($user_id) ? intval($user_id) : 0;
+        $my_user_id = isset($user_id) ? (int) $user_id : 0;
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
 
         $user_pass_open_course = false;

@@ -6,16 +6,17 @@
  * main/img/icons/64/plugin_name.png
  * main/img/icons/64/plugin_name_na.png
 */
+
+/**
+ * Class OLPC_Peru_FilterPlugin.
+ */
 class OLPC_Peru_FilterPlugin extends Plugin
 {
     public $blacklist_enabled_file = '/var/sqg/blacklists';
     public $blacklists_dir = '/var/squidGuard/blacklists';
-
     public $isCoursePlugin = true;
-
-    //When creating a new course, these settings are added to the course
-    public $course_settings = [
-    ];
+    // When creating a new course, these settings are added to the course
+    public $course_settings = [];
     public $course_settings_callback = true;
     public $error = '';
 
@@ -54,7 +55,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
     public function uninstall()
     {
         //Deleting course settings
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
+        $this->uninstall_course_fields_in_all_courses();
     }
 
     /**

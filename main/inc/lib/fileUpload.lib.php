@@ -1312,9 +1312,10 @@ function filter_extension(&$filename)
  * @param string $comment
  * @param int    $readonly
  * @param bool   $saveVisibility
- * @param int    $group_id       group.id
- * @param int    $sessionId      Session ID, if any
- * @param int    $userId         creator user id
+ * @param int    $group_id         group.id
+ * @param int    $sessionId        Session ID, if any
+ * @param int    $userId           creator user id
+ * @param bool   $sendNotification
  *
  * @return int id if inserted document
  */
@@ -1329,7 +1330,8 @@ function add_document(
     $saveVisibility = true,
     $group_id = 0,
     $sessionId = 0,
-    $userId = 0
+    $userId = 0,
+    $sendNotification = true
 ) {
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
@@ -1364,7 +1366,7 @@ function add_document(
         }
 
         $allowNotification = api_get_configuration_value('send_notification_when_document_added');
-        if ($allowNotification) {
+        if ($sendNotification && $allowNotification) {
             $courseTitle = $courseInfo['title'];
             if (!empty($sessionId)) {
                 $sessionInfo = api_get_session_info($sessionId);
@@ -1596,6 +1598,7 @@ function search_img_from_html($html_file)
  * @param string $title                   "folder2"
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
+ * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
  *
  * @return string actual directory name if it succeeds,
  *                boolean false otherwise
@@ -1610,7 +1613,8 @@ function create_unexisting_directory(
     $desired_dir_name,
     $title = '',
     $visibility = '',
-    $generateNewNameIfExists = false
+    $generateNewNameIfExists = false,
+    $sendNotification = true
 ) {
     $course_id = $_course['real_id'];
     $session_id = intval($session_id);
@@ -1695,7 +1699,8 @@ function create_unexisting_directory(
                     true,
                     $to_group_id,
                     $session_id,
-                    $user_id
+                    $user_id,
+                    $sendNotification
                 );
 
                 if ($document_id) {

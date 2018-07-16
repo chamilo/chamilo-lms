@@ -312,22 +312,22 @@ class ScheduledAnnouncement extends Model
                     }
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
-                        '0',
+                        0,
                         false,
                         $urlId
                     );
 
-                    if (empty($users)) {
+                    $coachId = $sessionInfo['id_coach'];
+
+                    if (empty($users) || empty($coachId)) {
                         continue;
                     }
 
-                    $attachments = $this->getAttachmentToString($result['id']);
-
-                    self::update(['id' => $result['id'], 'sent' => 1]);
-
-                    $subject = $result['subject'];
-
                     if ($users) {
+                        self::update(['id' => $result['id'], 'sent' => 1]);
+                        $attachments = $this->getAttachmentToString($result['id']);
+                        $subject = $result['subject'];
+
                         foreach ($users as $user) {
                             // Take original message
                             $message = $result['message'];
@@ -393,10 +393,11 @@ class ScheduledAnnouncement extends Model
                             $message = str_replace(array_keys($tags), $tags, $message);
                             $message .= $attachments;
 
-                            MessageManager::send_message(
+                            MessageManager::send_message_simple(
                                 $userInfo['user_id'],
                                 $subject,
-                                $message
+                                $message,
+                                $coachId
                             );
                         }
                     }

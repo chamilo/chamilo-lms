@@ -34,7 +34,7 @@ plugins:
   phpcodesniffer:
     enabled: true
     config:
-      standard: "Symfony"
+      standard: "Symfony2"
       file_extensions: "php"
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:

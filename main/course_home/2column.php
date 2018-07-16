@@ -86,11 +86,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $content .= get_lang('CourseAdminOnly');
     $content .= "</span>";
     $content .= "<table width=\"100%\">";
-
     $content .= CourseHome::show_tool_2column(TOOL_COURSE_ADMIN);
-
     /*	INACTIVE TOOLS - HIDDEN (GREY) LINKS */
-
     $content .= "<tr><td colspan=\"4\"><hr style='color:\"#4171B5\"' noshade=\"noshade\" size=\"1\" /></td></tr>\n".
             "<tr>\n".
             "<td colspan=\"4\">\n".
@@ -104,7 +101,6 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 }
 
 /*	Tools for platform admin only */
-
 if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $content .= '<div class="platformadminview">
     <span class="viewcaption">'.get_lang('PlatformAdminOnly').'</span>

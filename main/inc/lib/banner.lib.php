@@ -201,6 +201,26 @@ function return_logo($theme = '')
 }
 
 /**
+ * Check if user have access to "who is online" page.
+ *
+ * @return bool
+ */
+function accessToWhoIsOnline()
+{
+    $user_id = api_get_user_id();
+    $course_id = api_get_course_int_id();
+    $access = false;
+    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
+        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
+    ) {
+        $access = true;
+    }
+
+    return $access;
+}
+
+/**
  * Return HTML string of a list as <li> items.
  *
  * @return string
@@ -208,19 +228,11 @@ function return_logo($theme = '')
 function returnNotificationMenu()
 {
     $courseInfo = api_get_course_info();
-    $course_id = 0;
-    if (!empty($courseInfo)) {
-        $course_id = $courseInfo['code'];
-    }
-
     $user_id = api_get_user_id();
     $sessionId = api_get_session_id();
     $html = '';
 
-    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
-        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
-    ) {
+    if (accessToWhoIsOnline()) {
         $number = getOnlineUsersCount();
         $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
 
@@ -229,7 +241,7 @@ function returnNotificationMenu()
             (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
             (api_get_setting('showonline', 'users') == 'true' && $user_id)
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
+            $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
                 .get_lang('UsersOnline').'" >'
                 .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
                 .' '.$number.'</a></li>';
@@ -242,19 +254,23 @@ function returnNotificationMenu()
                 api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
             )
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
+            $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
                 .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
         }
 
-        if (isset($user_id) && $sessionId != 0) {
-            $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
-
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
-                .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
-                .' '.$numberOnlineInSession
-                .'</a></li>';
+        if (!empty($sessionId)) {
+            $allow = api_is_platform_admin(true) ||
+                api_is_coach($sessionId, null, false) ||
+                SessionManager::isUserSubscribedAsStudent($sessionId, api_get_user_id());
+            if ($allow) {
+                $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
+                $html .= '<li class="user-online-session">
+                            <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php" target="_self">'
+                            .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
+                            .' '.$numberOnlineInSession.'</a></li>';
+            }
         }
     }
 
@@ -500,11 +516,7 @@ function menuArray()
         );
     }
     if (!empty($open) || !empty($openMenuTabsLoggedIn)) {
-        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
-            if (api_is_anonymous()) {
-                $mainNavigation['navigation'][SECTION_CAMPUS] = null;
-            }
-        } else {
+        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') !== false) {
             $list = explode("\n", api_get_user_id() && !api_is_anonymous() ? $openMenuTabsLoggedIn : $open);
 
             foreach ($list as $link) {

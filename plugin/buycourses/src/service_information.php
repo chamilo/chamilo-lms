@@ -14,7 +14,9 @@ $cidReset = true;
 require_once '../../../main/inc/global.inc.php';
 
 $serviceId = isset($_GET['service_id']) ? intval($_GET['service_id']) : false;
-
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
+        WEB_PLUGIN_PATH
+    ).'buycourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 
 $includeServices = $plugin->get('include_services') === 'true';

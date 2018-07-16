@@ -501,7 +501,6 @@ class Career extends Model
             $list[$column]['rows'][$row]['group_label'] = $groupLabel;
             $list[$column]['rows'][$row]['subgroup'] = $subGroup;
             $list[$column]['rows'][$row]['subgroup_label'] = $subGroupLabel;
-            //$list[$column]['label'] = $subGroupLabel;
             $list[$column]['label'] = $groupLabel;
             $list[$column]['column'] = $column;
         }
@@ -588,7 +587,7 @@ class Career extends Model
             }
         }
 
-        $graphHtml = '<div id ="career_grid">';
+        $graphHtml = '';
         $groupsBetweenColumns = [];
         foreach ($list as $column => $columnList) {
             foreach ($columnList['rows'] as $subGroupList) {
@@ -614,36 +613,18 @@ class Career extends Model
             self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
         }
 
-        $graphHtml .= '</div>';
         $graphHtml .= '<style>
-             #career_grid {
-                 display: grid;
-                 grid-gap: 40px;
-                 grid-template-columns: repeat(6, [col] auto ) ;
-                 grid-template-rows: repeat(2, [row] auto);
-                 background-color: #fff;
-                 color: #444;
-                 justify-items: stretch;
-                 align-items: start;
-                 align-content: start;
-                 justify-content: stretch;
-             }
-             .group_class {
-                 border: solid 2px;
-                 padding: 8px;
-             }
              .panel-title {
                 font-size: 11px;
              }
-             </style>
-             ';
+             </style>';
 
         // Create groups
         if (!empty($graph->groupList)) {
             $groupList = [];
             $groupDiffX = 20;
             $groupDiffY = 10;
-            $style = 'whiteSpace=wrap;rounded;strokeColor=red;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
+            $style = 'whiteSpace=wrap;rounded;html=1;strokeColor=red;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
             foreach ($graph->groupList as $id => $data) {
                 if (empty($id)) {
                     continue;
@@ -707,6 +688,7 @@ class Career extends Model
                 $subGroupList[] = $vertexData;
             }
         }
+
         // Create connections (arrows)
         if (!empty($simpleConnectionList)) {
             $connectionList = [];
@@ -896,7 +878,6 @@ class Career extends Model
             $style = 'text;html=1;strokeColor=green;fillColor=#ffffff;overflow=fill;rounded=0;align=left;';
 
             $panel = str_replace(["\n", "\r"], '', $panel);
-            //$panel = $title.' - '.$group.' row: '.$originalRow.' heigh: '.$height.' id: '.$id;
             $vertexData = "var v$id = graph.insertVertex(parent, null, '".addslashes($panel)."', $x, $y, $width, $height, '$style');";
 
             $graph->elementList[$id] = $vertexData;

@@ -65,7 +65,9 @@
                 btnStopId: '#btn-stop-record',
                 btnSaveId: '#btn-save-record',
                 plyrPreviewId: '#record-preview',
-                directory: '{{ directory }}'
+                directory: '{{ directory }}',
+                reload_page: 1,
+                type : 'document'
             },
             {
                 blockId: '#record-audio-wami',

@@ -1,3 +1,5 @@
+dist: trusty
+sudo: required
 language: php
 
 addons:
@@ -12,14 +14,10 @@ addons:
 services:
     - mysql
 
-sudo: required
-dist: trusty
 cache:
   directories:
     - $HOME/.composer/cache/files
-
 php:
-  #- 5.4 // Removed because of Chash dependencies on PHP 5.5
   - 5.5
   - 5.6
   - 7.0
@@ -55,7 +53,6 @@ before_install:
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
-  #- java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
@@ -67,15 +64,14 @@ before_install:
   - mysqld --version
   - apache2 -v
   - php -v
+  - php -ini | grep memory_limit
   - sudo cat /etc/hosts
-
-  - phpenv config-add tests/travis/php-config.ini
 
   # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
   - git checkout v0.1.1
-  - composer update
+  - composer install
   - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
   - sudo mv chash.phar /usr/local/bin/chash
@@ -84,7 +80,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - composer update
+  - travis_wait 30 composer install
   # Install chamilo
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --no-interaction --sitename="Chamilo" --site_url="http://$VHOST_URL/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
   - sudo chmod -R 777 app/cache app/logs app/courses app/upload
@@ -97,11 +93,13 @@ before_install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
-  - curl $VHOST_URL
+  #- curl $VHOST_URL
 
 script:
   - whereis google-chrome-stable
+  - google-chrome-stable --version
   - whereis chromedriver
+  - chromedriver --version
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v

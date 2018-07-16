@@ -24,7 +24,9 @@ $serviceId = intval($_REQUEST['i']);
 if (empty($currentUserId)) {
     api_not_allowed(true);
 }
-
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
+        WEB_PLUGIN_PATH
+    ).'buycourses/resources/css/style.css"/>';
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
@@ -252,6 +254,6 @@ $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
 $tpl->assign('user', api_get_user_info());
 $tpl->assign('form', $form->returnForm());
-$content = $tpl->fetch('buycourses/view/process.tpl');
+$content = $tpl->fetch('buycourses/view/service_process.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

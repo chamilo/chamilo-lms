@@ -36,7 +36,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 $htmlHeadXtra[] = DashboardManager::getStyleSheet();
 
 // course description controller object
-$dashboard_controller = new DashboardController();
+$dashboardController = new DashboardController();
 
 if (isset($_GET['path'])) {
     $path = $_GET['path'];
@@ -45,14 +45,14 @@ if (isset($_GET['path'])) {
 // distpacher actions to controller
 switch ($action) {
     case 'listing':
-        $dashboard_controller->display();
+        $dashboardController->display();
         break;
     case 'store_user_block':
-        $dashboard_controller->store_user_block();
+        $dashboardController->store_user_block();
         break;
     case 'disable_block':
-        $dashboard_controller->close_user_block($path);
+        $dashboardController->close_user_block($path);
         break;
     default:
-        $dashboard_controller->display();
+        $dashboardController->display();
 }

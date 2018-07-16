@@ -6,71 +6,52 @@
  *
  * @package chamilo.main
  */
-include_once './main/inc/global.inc.php';
+require_once './main/inc/global.inc.php';
+
 api_block_anonymous_users();
 
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$userId = api_get_user_id();
+if (empty($userId)) {
+    api_not_allowed(true);
+}
 
-/**
- * Header
- * include the HTTP, HTML headers plus the top banner.
- */
-Display::display_header(get_lang('UserOnlineListSession'));
-?>
-<br />
-<table class="data_table">
-    <tr class="tableName">
-        <td colspan="4">
-            <strong><?php echo get_lang('UserOnlineListSession'); ?></strong>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <?php echo get_lang('Name'); ?>
-        </th>
-        <th>
-            <?php echo get_lang('InCourse'); ?>
-        </th>
-        <th>
-            <?php echo get_lang('Email'); ?>
-        </th>
-        <th>
-            <?php echo get_lang('Chat'); ?>
-        </th>
-    </tr>
-<?php
-$session_is_coach = [];
+$sessionId = api_get_session_id();
+if (empty($sessionId)) {
+    api_not_allowed(true);
+}
 
-if (isset($_user['user_id']) && $_user['user_id'] != '') {
-    $_user['user_id'] = intval($_user['user_id']);
-    $sql = "SELECT DISTINCT session.id,
-                name,
-                access_start_date,
-                access_end_date
-            FROM $tbl_session as session
-            INNER JOIN $tbl_session_course_user as srcru
-            ON 
-                srcru.user_id = ".$_user['user_id']." AND 
-                srcru.status=2 AND 
-                session.id = srcru.session_id
-            ORDER BY access_start_date, access_end_date, name";
-    $result = Database::query($sql);
+$allow = api_is_platform_admin(true) ||
+    api_is_coach($sessionId, null, false) ||
+    SessionManager::isUserSubscribedAsStudent($sessionId, api_get_user_id());
 
-    while ($session = Database:: fetch_array($result)) {
-        $session_is_coach[$session['id']] = $session;
-    }
+if (!$allow) {
+    api_not_allowed(true);
+}
 
-    $sql = "SELECT DISTINCT session.id,
-                name,
-                access_start_date,
-                access_end_date
-            FROM $tbl_session as session
-            WHERE session.id_coach = ".$_user['user_id']."
-            ORDER BY access_start_date, access_end_date, name";
-    $result = Database::query($sql);
-    while ($session = Database:: fetch_array($result)) {
-        $session_is_coach[$session['id']] = $session;
+$maxNumberItems = 20;
+$sessionInfo = api_get_session_info($sessionId);
+
+Display::display_header(get_lang('UsersOnLineList'));
+echo Display::page_header($sessionInfo['name']);
+
+function getUsers(
+    $from,
+    $numberItems,
+    $column,
+    $direction,
+    $getCount = false
+) {
+    $sessionId = api_get_session_id();
+    $from = (int) $from;
+    $numberItems = (int) $numberItems;
+
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = user.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
     }
 
     if (empty($time_limit)) {
@@ -81,65 +62,89 @@ if (isset($_user['user_id']) && $_user['user_id'] != '') {
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
-    $students_online = [];
-    foreach ($session_is_coach as $session) {
-        $sql = "SELECT DISTINCT last_access.access_user_id,
-                    last_access.access_date,
-                    last_access.c_id,
-                    last_access.access_session_id,
-                    ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." as name,
-                    user.email
-                FROM ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
-                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user
-                    ON user.user_id = last_access.access_user_id
-                WHERE access_session_id='".$session['id']."'
-                AND access_date >= '$current_date'
-                GROUP BY access_user_id";
 
+    if ($getCount) {
+        $sql = "SELECT 
+            count(DISTINCT last_access.login_user_id) count
+            FROM ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE)." AS last_access
+            INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user
+            ON user.id = last_access.login_user_id
+            $urlJoin
+        WHERE 
+            session_id ='".$sessionId."' AND 
+            login_date >= '$current_date'
+            $urlCondition";
         $result = Database::query($sql);
-        while ($user_list = Database::fetch_array($result)) {
-            $students_online[$user_list['access_user_id']] = $user_list;
-        }
+        $result = Database::fetch_array($result);
+
+        return $result['count'];
     }
 
-    if (count($students_online) > 0) {
-        foreach ($students_online as $student_online) {
-            echo "<tr>
-                    <td>
-                ";
-            echo $student_online['name'];
-            echo "	</td>
-                    <td>
-                 ";
-            $courseInfo = api_get_course_info_by_id($student_online['c_id']);
-            echo $courseInfo['title'];
-            echo "	</td>
-                    <td>
-                 ";
-            if (!empty($student_online['email'])) {
-                echo $student_online['email'];
-            } else {
-                echo get_lang('NoEmail');
-            }
-            echo "	</td>
-                    <td>
-                 ";
-            echo '<a href="main/chat/chat.php?cidReq='.$courseInfo['code'].'&id_session='.$student_online['access_session_id'].'"> -> </a>';
-            echo "	</td>
-                </tr>
-                 ";
-        }
-    } else {
-        echo '	<tr>
-                    <td colspan="4">
-                        '.get_lang('NoOnlineStudents').'
-                    </td>
-                </tr>
-             ';
+    $sql = "SELECT DISTINCT 
+            last_access.login_user_id,
+            last_access.c_id
+        FROM ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE)." AS last_access
+        INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user
+        ON user.id = last_access.login_user_id
+        $urlJoin
+        WHERE 
+            session_id ='".$sessionId."' AND 
+            login_date >= '$current_date'
+            $urlCondition            
+        GROUP BY login_user_id
+        LIMIT $from, $numberItems";
+
+    $studentsOnline = [];
+    $result = Database::query($sql);
+    while ($user_list = Database::fetch_array($result)) {
+        $studentsOnline[$user_list['login_user_id']] = $user_list;
     }
+
+    return $studentsOnline;
 }
-?>
-</table>
-<?php
+
+function getCountUsers()
+{
+    return getUsers(0, 0, 0, 0, true);
+}
+
+$table = new SortableTable(
+    'users',
+    'getCountUsers',
+    'getUsers',
+    '1',
+    $maxNumberItems
+);
+$table->set_header(0, get_lang('Name'), false);
+$table->set_header(1, get_lang('InCourse'), false);
+
+$table->set_column_filter(0, 'user_filter');
+$table->set_column_filter(1, 'course_filter');
+$table->display();
+
+function user_filter($userId, $urlParams, $row)
+{
+    $userInfo = api_get_user_info($userId);
+
+    return $userInfo['complete_name_with_message_link'];
+}
+
+function course_filter($courseId, $urlParams, $row)
+{
+    $sessionId = api_get_session_id();
+    $courseInfo = api_get_course_info_by_id($courseId);
+
+    return Display::url(
+        $courseInfo['title'],
+        $courseInfo['course_public_url'].'?id_session='.$sessionId,
+        ['target' => '_blank']
+    ).
+    '&nbsp;'.
+    Display::url(
+        get_lang('Chat'),
+        'main/chat/chat.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
+        ['target' => '_blank', 'class' => 'btn btn-primary']
+    );
+}
 
 Display::display_footer();

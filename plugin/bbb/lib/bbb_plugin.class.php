@@ -120,12 +120,10 @@ class BBBPlugin extends Plugin
         Database::query(
             "CREATE TABLE IF NOT EXISTS plugin_bbb_room (
                 id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                meeting_id int unsigned NOT NULL,
-                participant_id int NOT NULL,
+                meeting_id int NOT NULL,
+                participant_id int(11) NOT NULL,
                 in_at datetime NOT NULL,
-                out_at datetime NOT NULL,
-                FOREIGN KEY (meeting_id) REFERENCES plugin_bbb_meeting (id),
-                FOREIGN KEY (participant_id) REFERENCES user (id)
+                out_at datetime NOT NULL
             );"
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';

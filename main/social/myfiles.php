@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * @author Juan Carlos Trabado herodoto@telefonica.net
+ * @author  Juan Carlos Trabado herodoto@telefonica.net
  *
  * @package chamilo.social
  */
@@ -19,15 +19,15 @@ if (api_get_setting('allow_my_files') === 'false') {
 
 $htmlHeadXtra[] = '
 <script>
-
 function denied_friend (element_input) {
-	name_button=$(element_input).attr("id");
+    name_button=$(element_input).attr("id");
 	name_div_id="id_"+name_button.substring(13);
 	user_id=name_div_id.split("_");
 	friend_user_id=user_id[1];
-	 $.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
+
+	$.ajax({
+	    contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(myObject) {
 		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
@@ -38,15 +38,17 @@ function denied_friend (element_input) {
 		}
 	});
 }
+
 function register_friend(element_input) {
     if(confirm("'.get_lang('AddToFriends').'")) {
     	name_button=$(element_input).attr("id");
     	name_div_id="id_"+name_button.substring(13);
     	user_id=name_div_id.split("_");
     	user_friend_id=user_id[1];
-    	 $.ajax({
+    	
+        $.ajax({
     		contentType: "application/x-www-form-urlencoded",
-    		beforeSend: function(objeto) {
+    		beforeSend: function(myObject) {
     		$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
     		type: "POST",
     		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
@@ -54,20 +56,21 @@ function register_friend(element_input) {
     		success: function(datos) {  $("div#"+name_div_id).hide("slow");
     			$("form").submit()
     		}
-    	});
+        });
     }
 }
 
 $(document).on("ready", function () {
-    $("#el-finder").elfinder({
-        url: "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/php/connector.php",
-        lang: "'.api_get_language_isocode().'",
-        height: 600,
-        resizable: false,
-        rememberLastDir: false,
-    }).elfinder("instance");
+    $("#el-finder")
+        .elfinder({
+            url: "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/php/connector.php",
+            lang: "'.api_get_language_isocode().'",
+            height: 600,
+            resizable: false,
+            rememberLastDir: false,
+        })
+        .elfinder("instance");
 });
-
 </script>';
 
 // Social Menu Block
@@ -95,9 +98,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     ];
 }
 
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyFiles')];
-
-$tpl = new Template();
+$tpl = new Template(get_lang('MyFiles'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
 $template = $tpl->get_template($editor->getEditorStandAloneTemplate());

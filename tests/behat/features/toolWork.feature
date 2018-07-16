@@ -47,8 +47,8 @@ Feature: Work tool
     And I follow "Work 1"
     And wait for the page to be loaded
     Then I should see "Work description"
-    Then I follow "Correct and rate"
-    Then I follow "Download"
+    And wait for the page to be loaded
+    Then I should see "base.css"
 
 #  Scenario: Add a comment and a attachment to the work previously uploaded by student
 #    Given I am a platform administrator

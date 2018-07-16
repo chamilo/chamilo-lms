@@ -620,7 +620,7 @@ class UserGroup extends Model
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id AND u.usergroup_id)";
+                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.usergroup_id)";
             $where = ['where' => ['user_id = ? AND access_url_id = ? ' => [$userId, $urlId]]];
         } else {
             $from = $this->usergroup_rel_user_table." u ";
@@ -695,7 +695,7 @@ class UserGroup extends Model
                 Database::insert($this->usergroup_rel_session_table, $params);
 
                 if (!empty($user_list)) {
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $session_id,
                         $user_list,
                         null,
@@ -887,7 +887,7 @@ class UserGroup extends Model
             // Adding sessions
             if (!empty($session_list)) {
                 foreach ($session_list as $session_id) {
-                    SessionManager::subscribe_users_to_session($session_id, $new_items, null, false);
+                    SessionManager::subscribeUsersToSession($session_id, $new_items, null, false);
                 }
             }
 

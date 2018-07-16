@@ -344,16 +344,17 @@ class PDF
     /**
      * Converts an html string to PDF.
      *
-     * @param string $document_html valid html
-     * @param string $css           CSS content of a CSS file
-     * @param string $pdf_name      pdf name
-     * @param string $course_code   course code
-     *                              (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode    the MPDF output mode can be:
+     * @param string $document_html  valid html
+     * @param string $css            CSS content of a CSS file
+     * @param string $pdf_name       pdf name
+     * @param string $course_code    course code
+     *                               (if you are using html that are located in the document tool you must provide this)
+     * @param string $outputMode     the MPDF output mode can be:
      * @param bool   $saveInFile
      * @param string $fileToSave
      * @param bool   $returnHtml
      * @param bool   $addDefaultCss
+     * @param bool   $completeHeader
      *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
@@ -371,7 +372,8 @@ class PDF
         $saveInFile = false,
         $fileToSave = null,
         $returnHtml = false,
-        $addDefaultCss = false
+        $addDefaultCss = false,
+        $completeHeader = true
     ) {
         $urlAppend = api_get_configuration_value('url_append');
 
@@ -387,9 +389,7 @@ class PDF
 
         // Formatting the pdf
         $course_data = api_get_course_info($course_code);
-
-        self::format_pdf($course_data);
-
+        self::format_pdf($course_data, $completeHeader);
         $document_html = preg_replace($clean_search, '', $document_html);
 
         //absolute path for frames.css //TODO: necessary?
@@ -417,7 +417,9 @@ class PDF
                     $old_src = $item->getAttribute('src');
                     if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
-                            if (strpos($old_src, '/main/inc/lib/') === false) {
+                            if (strpos($old_src, '/main/inc/lib/') === false &&
+                                strpos($old_src, '/app/upload/') === false
+                            ) {
                                 $old_src_fixed = str_replace(
                                     api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/',
                                     '',

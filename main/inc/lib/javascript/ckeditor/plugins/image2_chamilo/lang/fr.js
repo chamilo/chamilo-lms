@@ -18,13 +18,29 @@ CKEDITOR.plugins.setLang( 'image2_chamilo', 'fr', {
 	uploadTab: 'Téléverser',
 	urlMissing: 'L\'URL source de l\'image est manquante.',
 	altMissing: 'Texte alternatif manquant.',
-        responsive: 'Image adaptive',
-        alignBaseline: 'Sur la ligne',
-        alignTop: 'En haut',
-        alignBottom: 'En bas',
-        alignMiddle: 'Au milieu',
-        alignSuper: 'Superieur',
-        alignSub: 'Inférieur',
-        alignTextTop: 'Text-en-haut',
-        alignTextBottom: 'Text-en-bas'
+	responsive: 'Image adaptive',
+	alignBaseline: 'Sur la ligne',
+	alignTop: 'En haut',
+	alignBottom: 'En bas',
+	alignMiddle: 'Au milieu',
+	alignSuper: 'Superieur',
+	alignSub: 'Inférieur',
+	alignTextTop: 'Text-en-haut',
+	alignTextBottom: 'Text-en-bas',
+    advanced: 'Advanced', // MISSING
+    borderWidth: 'Border width', // MISSING
+    borderColor: 'Border color', // MISSING
+    borderStyle: 'Border style', // MISSING
+    borderRadius: 'Border radius', // MISSING
+    backgroundColor: 'Background color', // MISSING
+    color: 'Color', // MISSING
+    borderStyleNone: 'None', // MISSING
+    borderStyleDotted: 'Dotted', // MISSING
+    borderStyleDashed: 'Dashed', // MISSING
+    borderStyleSolid: 'Solid', // MISSING
+    borderStyleDouble: 'Double', // MISSING
+    borderStyleGroove: 'Groove', // MISSING
+    borderStyleRidge: 'Ridge', // MISSING
+    borderStyleInset: 'Inset', // MISSING
+    borderStyleOutset: 'Outset' // MISSING
 } );

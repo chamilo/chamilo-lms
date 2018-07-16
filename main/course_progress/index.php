@@ -18,7 +18,6 @@ require_once 'thematic_controller.php';
 
 // current section
 $this_section = SECTION_COURSES;
-
 $current_course_tool = TOOL_COURSE_PROGRESS;
 
 // protect a course script
@@ -117,7 +116,7 @@ $htmlHeadXtra[] = '<script>
 function datetime_by_attendance(attendance_id, thematic_advance_id) {
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {},
+		beforeSend: function(myObject) {},
 		type: "GET",
 		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
 		data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
@@ -133,7 +132,7 @@ function datetime_by_attendance(attendance_id, thematic_advance_id) {
 function update_done_thematic_advance(selected_value) {
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {},
+		beforeSend: function(myObject) {},
 		type: "GET",
 		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=update_done_thematic_advance",
 		data: "thematic_advance_id="+selected_value,

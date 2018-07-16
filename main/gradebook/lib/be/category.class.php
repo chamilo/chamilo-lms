@@ -885,7 +885,7 @@ class Category implements GradebookItem
      * Calculate the score of this category.
      *
      * @param int    $stud_id     student id (default: all students - then the average is returned)
-     * @param int    $session_id
+     * @param        $type
      * @param string $course_code
      * @param int    $session_id
      *
@@ -1588,6 +1588,7 @@ class Category implements GradebookItem
                 $this->id,
                 api_is_allowed_to_edit() ? null : 1
             );
+
             /** @var Category $cat */
             foreach ($cats as $cat) {
                 if ($cat->hasEvaluationsWithStudentResults($studentId)) {
@@ -1875,7 +1876,7 @@ class Category implements GradebookItem
                 null,
                 null,
                 null,
-                empty($this->course_code) ? null : $course_code,
+                $course_code,
                 $this->id,
                 api_is_allowed_to_edit() ? null : 1
             );
@@ -1886,7 +1887,7 @@ class Category implements GradebookItem
                 null,
                 null,
                 null,
-                empty($this->course_code) ? null : $this->course_code,
+                $course_code,
                 $this->id,
                 null
             );

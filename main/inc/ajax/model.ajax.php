@@ -1229,7 +1229,7 @@ switch ($action) {
         break;
     case 'get_exercise_results_report':
         // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $sessionId = api_get_session_id();
 
         $columns = [
@@ -1239,6 +1239,8 @@ switch ($action) {
         ];
         $extraFieldsToAdd = [];
         $extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+        $roundValues = api_get_configuration_value('exercise_category_round_score_in_export');
+
         if (!empty($extraFields) && isset($extraFields['fields'])) {
             $extraField = new ExtraField('user');
             foreach ($extraFields['fields'] as $variable) {
@@ -1257,7 +1259,7 @@ switch ($action) {
         $columns[] = 'exe_date';
         $columns[] = 'score';
 
-        if ($operation == 'excel') {
+        if ($operation === 'excel') {
             $columns = [
                 'firstname',
                 'lastname',
@@ -1277,7 +1279,6 @@ switch ($action) {
 
             $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
             $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
-
             $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score').' - '.get_lang('Percentage');
             $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
             $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
@@ -1321,7 +1322,8 @@ switch ($action) {
             true,
             true,
             $extraFieldsToAdd,
-            true
+            true,
+            $roundValues
         );
         break;
     case 'get_hotpotatoes_exercise_results':
@@ -1436,20 +1438,13 @@ switch ($action) {
                     0,
                     true
                 );
-                $session_date = [];
-                if (!empty($session['access_start_date'])) {
-                    $session_date[] = get_lang('From').' '.api_format_date($session['access_start_date'], DATE_FORMAT_SHORT);
-                }
 
-                if (!empty($session['access_end_date'])) {
-                    $session_date[] = get_lang('Until').' '.api_format_date($session['access_end_date'], DATE_FORMAT_SHORT);
-                }
-
-                if (empty($session_date)) {
-                    $session_date_string = '-';
-                } else {
-                    $session_date_string = implode(' ', $session_date);
-                }
+                $session['display_start_date'] = '';
+                $session['display_end_date'] = '';
+                $session['coach_access_start_date'] = '';
+                $session['coach_access_end_date'] = '';
+                $dateData = SessionManager::parseSessionDates($session, true);
+                $dateToString = $dateData['access'];
 
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
@@ -1466,7 +1461,7 @@ switch ($action) {
                         $session['name'],
                         api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
                     ),
-                    'date' => $session_date_string,
+                    'date' => $dateToString,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
                     'details' => implode(' ', $detailButtons),
@@ -2171,7 +2166,6 @@ if (in_array($action, $allowed_actions)) {
 
     if ($operation && $operation == 'excel') {
         $j = 1;
-
         $array = [];
         if (empty($column_names)) {
             $column_names = $columns;
@@ -2179,7 +2173,7 @@ if (in_array($action, $allowed_actions)) {
 
         // Headers
         foreach ($column_names as $col) {
-            // Ovewrite titles
+            // Overwrite titles
             if (isset($overwriteColumnHeaderExport[$col])) {
                 $col = $overwriteColumnHeaderExport[$col];
             }

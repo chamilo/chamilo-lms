@@ -23,7 +23,7 @@ if ($sessionsCopy !== 'true') {
     api_not_allowed(true);
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 echo Display::page_subheader(
     Display::return_icon(

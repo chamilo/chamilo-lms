@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Action controller for the upload process. The display scripts (web forms)
  * redirect
@@ -23,10 +24,6 @@ $form_style = '<style>
 #dynamic_div_waiter_container{float:left;}
 </style>';
 
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
-    var myUpload = new upload(0);
-</script>';
 $htmlHeadXtra[] = $form_style;
 
 if (api_get_setting('search_enabled') == 'true') {

@@ -899,7 +899,7 @@ function WSCreateUsersPasswordCrypted($params)
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save the external system's id into user_field_value table.
-                        $res = UserManager::update_extra_field_value(
+                        UserManager::update_extra_field_value(
                             $r_check_user[0],
                             $extra_field_name,
                             $extra_field_value
@@ -5364,7 +5364,7 @@ function WSSuscribeUsersToSession($params)
                     continue; // user_id is not active.
                 }
 
-                SessionManager::subscribe_users_to_session(
+                SessionManager::subscribeUsersToSession(
                     $sessionId,
                     [$user_id],
                     SESSION_VISIBLE_READ_ONLY,
@@ -5461,7 +5461,7 @@ function WSSubscribeUserToSessionSimple($params)
                 error_log($result);
             }
         } else {
-            SessionManager::subscribe_users_to_session(
+            SessionManager::subscribeUsersToSession(
                 $session_id,
                 [$user_id],
                 SESSION_VISIBLE_READ_ONLY,

@@ -1352,7 +1352,10 @@ HTML;
                         $s .= $isVertical ? '<div class="row">' : '';
                         $s .= '
                             <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
-                                <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                <div class="droppable-item">
+                                    <span class="number">'.$counterAnswer.'.</span>
+                                    <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                 </div>
                             </div>
                         ';
                         $s .= $isVertical ? '</div>' : '';
@@ -1446,7 +1449,6 @@ HTML;
                         </ul>
                     </div>
                 ';
-
                 if ($freeze) {
                     $relPath = api_get_path(WEB_CODE_PATH);
                     echo "
@@ -1462,6 +1464,7 @@ HTML;
                                 new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
                                     questionId: $questionId,
                                     exerciseId: $exerciseId,
+                                    exeId: 0,
                                     selector: '#hotspot-preview-$questionId',
                                     for: 'preview',
                                     relPath: '$relPath'
@@ -1603,35 +1606,35 @@ HOTSPOT;
     }
 
     /**
-     * @param int $exe_id
+     * @param int $exeId
      *
      * @return array
      */
-    public static function get_exercise_track_exercise_info($exe_id)
+    public static function get_exercise_track_exercise_info($exeId)
     {
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_TRACK_EXERCICES = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $TBL_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
-        $exe_id = intval($exe_id);
+        $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
+        $trackExerciseTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $exeId = (int) $exeId;
         $result = [];
-        if (!empty($exe_id)) {
+        if (!empty($exeId)) {
             $sql = " SELECT q.*, tee.*
-                FROM $TBL_EXERCICES as q
-                INNER JOIN $TBL_TRACK_EXERCICES as tee
+                FROM $quizTable as q
+                INNER JOIN $trackExerciseTable as tee
                 ON q.id = tee.exe_exo_id
-                INNER JOIN $TBL_COURSE c
+                INNER JOIN $courseTable c
                 ON c.id = tee.c_id
-                WHERE tee.exe_id = $exe_id
+                WHERE tee.exe_id = $exeId
                 AND q.c_id = c.id";
 
-            $res_fb_type = Database::query($sql);
-            $result = Database::fetch_array($res_fb_type, 'ASSOC');
-            $result['duration_formatted'] = '';
-            if (!empty($result['exe_duration'])) {
-                $time = api_format_time($result['exe_duration'], 'js');
-                $result['duration_formatted'] = $time;
+            $sqlResult = Database::query($sql);
+            if (Database::num_rows($sqlResult)) {
+                $result = Database::fetch_array($sqlResult, 'ASSOC');
+                $result['duration_formatted'] = '';
+                if (!empty($result['exe_duration'])) {
+                    $time = api_format_time($result['exe_duration'], 'js');
+                    $result['duration_formatted'] = $time;
+                }
             }
         }
 
@@ -1941,6 +1944,8 @@ HOTSPOT;
      * @param bool   $showSessionField
      * @param bool   $showExerciseCategories
      * @param array  $userExtraFieldsToAdd
+     * @param bool   $useCommaAsDecimalPoint
+     * @param bool   $roundValues
      *
      * @return array
      */
@@ -1956,6 +1961,9 @@ HOTSPOT;
         $showSessionField = false,
         $showExerciseCategories = false,
         $userExtraFieldsToAdd = []
+        $userExtraFieldsToAdd = [],
+        $useCommaAsDecimalPoint = false,
+        $roundValues = false
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1983,7 +1991,7 @@ HOTSPOT;
             $session_id_and = " AND te.session_id = $sessionId ";
             $sessionCondition = " AND ttte.session_id = $sessionId";
         }
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
         $exercise_where = '';
         if (!empty($exercise_id)) {
             $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
@@ -2209,8 +2217,8 @@ HOTSPOT;
         // Simple exercises
         if (empty($hotpotatoe_where)) {
             $column = !empty($column) ? Database::escape_string($column) : null;
-            $from = intval($from);
-            $number_of_items = intval($number_of_items);
+            $from = (int) $from;
+            $number_of_items = (int) $number_of_items;
 
             if (!empty($column)) {
                 $sql .= " ORDER BY $column $direction ";
@@ -2321,7 +2329,6 @@ HOTSPOT;
                     }
 
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-
                     $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
                     $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
@@ -2344,7 +2351,17 @@ HOTSPOT;
                             $my_res = 0;
                         }
 
-                        $score = self::show_score($my_res, $my_total);
+                        $score = self::show_score(
+                            $my_res,
+                            $my_total,
+                            true,
+                            true,
+                            false,
+                            false,
+                            $decimalSeparator,
+                            $thousandSeparator,
+                            $roundValues
+                        );
 
                         $actions = '<div class="pull-right">';
                         if ($is_allowedToEdit) {
@@ -2462,19 +2479,20 @@ HOTSPOT;
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\''.sprintf(
-                                        get_lang('DeleteAttempt'),
-                                        $results[$i]['username'],
-                                        $dt
-                                    ).'\')) return false;">';
-                                $delete_link .=
-                                    Display:: return_icon(
-                                        'delete.png',
-                                        get_lang('Delete')
-                                    ).'</a>';
-                                $delete_link = utf8_encode($delete_link);
+                                    addslashes(get_lang('DeleteAttempt')),
+                                    $results[$i]['username'],
+                                    $dt
+                                ).'\')) return false;">';
+                                $delete_link .= Display::return_icon(
+                                    'delete.png',
+                                        addslashes(get_lang('Delete'))
+                                ).'</a>';
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
+                                }
+                                if (api_is_session_admin()) {
+                                    $delete_link = '';
                                 }
                                 if ($revised == 3) {
                                     $delete_link = null;
@@ -2591,7 +2609,17 @@ HOTSPOT;
                             }
 
                             foreach ($category_list as $categoryId => $result) {
-                                $scoreToDisplay = self::show_score($result['score'], $result['total']);
+                                $scoreToDisplay = self::show_score(
+                                    $result['score'],
+                                    $result['total'],
+                                    true,
+                                    true,
+                                    false,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator,
+                                    $roundValues
+                                );
                                 $results[$i]['category_'.$categoryId] = $scoreToDisplay;
                                 $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
                                     $result['score'],
@@ -2600,6 +2628,10 @@ HOTSPOT;
                                     true,
                                     true, // $show_only_percentage = false
                                     true // hide % sign
+                                    true, // hide % sign
+                                    $decimalSeparator,
+                                    $thousandSeparator,
+                                    $roundValues
                                 );
                                 $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
                                 $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
@@ -2618,6 +2650,48 @@ HOTSPOT;
                             );
                             $results[$i]['only_score'] = $my_res;
                             $results[$i]['total'] = $my_total;
+                                true,
+                                $decimalSeparator,
+                                $thousandSeparator,
+                                $roundValues
+                            );
+
+                            if ($roundValues) {
+                                $whole = floor($my_res); // 1
+                                $fraction = $my_res - $whole; // .25
+                                if ($fraction >= 0.5) {
+                                    $onlyScore = ceil($my_res);
+                                } else {
+                                    $onlyScore = round($my_res);
+                                }
+                            } else {
+                                $onlyScore = $scoreDisplay->format_score(
+                                    $my_res,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+                            }
+
+                            $results[$i]['only_score'] = $onlyScore;
+
+                            if ($roundValues) {
+                                $whole = floor($my_total); // 1
+                                $fraction = $my_total - $whole; // .25
+                                if ($fraction >= 0.5) {
+                                    $onlyTotal = ceil($my_total);
+                                } else {
+                                    $onlyTotal = round($my_total);
+                                }
+                            } else {
+                                $onlyTotal = $scoreDisplay->format_score(
+                                    $my_total,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+                            }
+                            $results[$i]['total'] = $onlyTotal;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $listInfo[] = $results[$i];
@@ -2697,6 +2771,15 @@ HOTSPOT;
      * @param bool  $use_platform_settings use or not the platform settings
      * @param bool  $show_only_percentage
      * @param bool  $hidePercetangeSign    hide "%" sign
+     * @param float  $score
+     * @param float  $weight
+     * @param bool   $show_percentage       show percentage or not
+     * @param bool   $use_platform_settings use or not the platform settings
+     * @param bool   $show_only_percentage
+     * @param bool   $hidePercentageSign    hide "%" sign
+     * @param string $decimalSeparator
+     * @param string $thousandSeparator
+     * @param bool   $roundValues           This option rounds the float values into a int using ceil()
      *
      * @return string an html with the score modified
      */
@@ -2707,6 +2790,10 @@ HOTSPOT;
         $use_platform_settings = true,
         $show_only_percentage = false,
         $hidePercetangeSign = false
+        $hidePercentageSign = false,
+        $decimalSeparator = '.',
+        $thousandSeparator = ',',
+        $roundValues = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
@@ -2726,21 +2813,52 @@ HOTSPOT;
             }
         }
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
-
         // Formats values
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
         $weight = float_format($weight, 1);
+        if ($roundValues) {
+            $whole = floor($percentage); // 1
+            $fraction = $percentage - $whole; // .25
 
+            // Formats values
+            if ($fraction >= 0.5) {
+                $percentage = ceil($percentage);
+            } else {
+                $percentage = round($percentage);
+            }
+
+            $whole = floor($score); // 1
+            $fraction = $score - $whole; // .25
+            if ($fraction >= 0.5) {
+                $score = ceil($score);
+            } else {
+                $score = round($score);
+            }
+
+            $whole = floor($weight); // 1
+            $fraction = $weight - $whole; // .25
+            if ($fraction >= 0.5) {
+                $weight = ceil($weight);
+            } else {
+                $weight = round($weight);
+            }
+        } else {
+            // Formats values
+            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
+            $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
+            $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+        }
+        
         $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
             if ($hidePercetangeSign) {
                 $percentageSign = '';
             }
-            $html = $percentage."$percentageSign  ($score / $weight)";
+            $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
-                $html = $percentage."$percentageSign ";
+                $html = $percentage.$percentageSign;
             }
         } else {
             $html = $score.' / '.$weight;
@@ -2765,9 +2883,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        //$modelWithStyle = get_lang($model['name']);
-        $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-        //$modelWithStyle .= $percentage;
+        $modelWithStyle = '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 
         return $modelWithStyle;
     }
@@ -3133,7 +3249,7 @@ EOT;
             } else {
                 $conditions = [
                     'where' => [
-                        $active_sql.' (session_id = 0 OR session_id = ? ) AND c_id = ? '.$needle_where.$time_conditions => [
+                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$time_conditions => [
                             $session_id,
                             $course_id,
                             $needle,
@@ -3222,7 +3338,7 @@ EOT;
         } else {
             // All exercises
             $conditions = [
-                'where' => ["$sql_active_exercises (session_id = 0 OR session_id = ? ) AND c_id=?" => $params],
+                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id=?" => $params],
                 'order' => 'title',
             ];
         }
@@ -4876,8 +4992,6 @@ EOT;
      */
     public static function getFeedbackText($message)
     {
-        // Old style
-        //return '<div id="question_feedback">'.$message.'</div>';
         return Display::return_message($message, 'warning', false);
     }
 

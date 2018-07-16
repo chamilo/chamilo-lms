@@ -115,7 +115,7 @@ if (isset($_REQUEST['load_ajax'])) {
                         echo 'User added to the session';
                     }
                     //Registering user to the new session
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $new_session_id,
                         [$user_id],
                         false
@@ -641,7 +641,7 @@ $htmlHeadXtra[] = '<script>
         var session_id = document.getElementById(unique_id).options[document.getElementById(unique_id).selectedIndex].value;
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
+            beforeSend: function(myObject) {
             $("div#reponse_"+unique_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
             type: "POST",
             url: "user_move_stats.php",
@@ -656,7 +656,7 @@ $htmlHeadXtra[] = '<script>
 
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
+            beforeSend: function(myObject) {
             $("div#reponse_"+unique_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
             type: "POST",
             url: "user_move_stats.php",

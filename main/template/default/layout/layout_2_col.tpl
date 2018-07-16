@@ -1,12 +1,10 @@
 {% extends 'layout/page.tpl'|get_template %}
 
+{% import 'macro/macro.tpl'|get_template as display %}
+
 {% block body %}
     {% if plugin_main_top %}
-        <div class="row">
-            <div class="page-main-top" class="col-md-12">
-                {{ plugin_main_top }}
-            </div>
-        </div>
+        {{ display.pluginPanel('main-top', plugin_main_top) }}
     {% endif %}
     <div class="row">
         <div class="col-md-9 col-md-push-3">
@@ -23,6 +21,12 @@
                     <article id="home-welcome">
                         {{ home_welcome }}
                     </article>
+                {% endif %}
+
+                {% if home_include %}
+                <article id="home-include">
+                    {{ home_include }}
+                </article>
                 {% endif %}
 
                 {% block page_body %}
@@ -55,9 +59,13 @@
                     </article>
                 {% endif %}
 
-                {% include 'layout/hot_courses.tpl'|get_template %}
+                
 
-                {% include 'session/sessions_current.tpl'|get_template %}
+                    {% include 'layout/hot_courses.tpl'|get_template %}
+
+                    {% include 'session/sessions_current.tpl'|get_template %}
+
+                
 
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">
@@ -68,10 +76,9 @@
         </div>
         <div class="col-md-3 col-md-pull-9">
             <div class="sidebar">
+
                 {% if plugin_menu_top %}
-                    <div class="siderbar-menu-top">
-                        {{ plugin_menu_top }}
-                    </div>
+                    {{ display.pluginSidebar('sidebar-top', plugin_menu_top) }}
                 {% endif %}
 
                 {% include 'layout/login_form.tpl'|get_template %}
@@ -80,64 +87,19 @@
                     {{ user_image_block }}
                 {% endif %}
 
+                <!-- BLOCK PROFILE -->
                 {% if profile_block %}
-                <!-- block profile -->
-                <div class="panel-group" id="profile" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default" id="profile_block">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#profile" href="#profileCollapse" aria-expanded="true" aria-controls="profileCollapse">
-                                    {{ 'Profile' | get_lang }}
-                                </a>
-                            </h4>
-                        </div>
-                        <div style="" aria-expanded="true" id="profileCollapse" class="panel-collapse collapse in" role="tabpanel">
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    {% for item in profile_block %}
-                                    <li class="list-group-item {{ item.class }}">
-                                        <span class="item-icon">
-                                            {{ item.icon }}
-                                        </span>
-                                        <a href="{{ item.link }}">{{ item.title }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end block profile -->
+                    {{ display.collapseMenu('profile' , 'Profile'|get_lang, profile_block) }}
                 {% endif %}
 
+                <!-- BLOCK COURSE -->
                 {% if course_block %}
-                <!-- block course -->
-                <div class="panel-group" id="course" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default" id="course_block">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#course" href="#courseCollapse" aria-expanded="true" aria-controls="courseCollapse">
-                                    {{ 'Courses' | get_lang }}
-                                </a>
-                            </h4>
-                        </div>
-                        <div style="" aria-expanded="true" id="courseCollapse" class="panel-collapse collapse in" role="tabpanel">
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    {% for item in course_block %}
-                                    <li class="list-group-item {{ item.class }}">
-                                        <span class="item-icon">
-                                            {{ item.icon }}
-                                        </span>
-                                        <a href="{{ item.link }}">{{ item.title }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end block course -->
+                    {{ display.collapseMenu('courses' , 'Courses'|get_lang, course_block) }}
+                {% endif %}
+
+                <!-- BLOCK SKILLS -->
+                {% if skills_block %}
+                    {{ display.collapseMenu('skills' , 'Skills'|get_lang, skills_block) }}
                 {% endif %}
 
                 {% if grade_book_sidebar %}
@@ -181,85 +143,35 @@
                 </div>
 
                 {% endif %}
-
-                {% if skills_block %}
-                <!-- block skills -->
-                <div class="panel-group" id="skill" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default" id="skill_block">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#skill" href="#skillCollapse" aria-expanded="true" aria-controls="skillCollapse">
-                                    {{ 'Skills' | get_lang }}
-                                </a>
-                            </h4>
-                        </div>
-                        <div style="" aria-expanded="true" id="skillCollapse" class="panel-collapse collapse in" role="tabpanel">
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    {% for item in skills_block %}
-                                    <li class="list-group-item {{ item.class }}">
-                                        <span class="item-icon">
-                                            {{ item.icon }}
-                                        </span>
-                                        <a href="{{ item.link }}">{{ item.title }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end block skills -->
-                {% endif %}
-
-                {{ teacher_block }}
                 {{ certificates_search_block }}
-                {{ notice_block }}
-                {{ help_block }}
 
-                <!-- block navigation -->
-                {% if navigation_course_links %}
-                <div class="panel-group" id="menu" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default" id="menu_block">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#menu" href="#menuCollapse" aria-expanded="true" aria-controls="menuCollapse">
-                                    {{ 'MainNavigation' | get_lang }}
-                                </a>
-                            </h4>
-                        </div>
-                        <div style="" aria-expanded="true" id="menuCollapse" class="panel-collapse collapse in" role="tabpanel">
-                            <div class="panel-body">
-                                <ul class="nav nav-pills nav-stacked">
-                                    {% for item in navigation_course_links %}
-                                    <li>
-                                        <a href="{{ item.link }}">{{ item.title }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- BLOCK NOTICE -->
+                {% if notice_block %}
+                    {{ display.collapse('notice' , 'Notice'|get_lang, notice_block) }}
                 {% endif %}
-                <!-- end block navigation -->
+
+                <!-- BLOCK HELP -->
+                {% if help_block %}
+                    {{ display.collapse('help' , 'MenuGeneral'|get_lang, help_block, true) }}
+                {% endif %}
+
+                <!-- BLOCK LINKS NAVIGATION -->
+                {% if navigation_links %}
+                    {{ display.collapseFor('navigation_sidebar' , 'MainNavigation'|get_lang, navigation_links) }}
+                {% endif %}
+
 
                 {{ search_block }}
                 {{ classes_block }}
 
                 {% if plugin_menu_bottom %}
-                    <div class="sidebar-menu-bottom">
-                        {{ plugin_menu_bottom }}
-                    </div>
+                    {{ display.pluginSidebar('sidebar-bottom', plugin_menu_bottom) }}
                 {% endif %}
+
             </div>
         </div>
     </div>
     {% if plugin_main_bottom %}
-        <div class="row">
-            <div class="page-main-bottom" class="col-md-12">
-                {{ plugin_main_bottom }}
-            </div>
-        </div>
+        {{ display.pluginPanel('main-bottom', plugin_main_bottom) }}
     {% endif %}
 {% endblock %}

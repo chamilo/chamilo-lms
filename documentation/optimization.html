@@ -205,6 +205,10 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
     <pre>
         CREATE INDEX idx_accessurs_sid ON access_url_rel_session (session_id);
     </pre>
+    And finally, if you have lots of gradebook stuff, add this
+    <pre>
+        ALTER TABLE gradebook_result ADD INDEX idx_gb_uid_eid (user_id, evaluation_id);
+    </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.6/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />

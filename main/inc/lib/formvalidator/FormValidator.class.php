@@ -178,16 +178,21 @@ EOT;
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $label      The label for the form-element
-     * @param string $name       The element name
-     * @param bool   $required   (optional)    Is the form-element required (default=true)
-     * @param array  $attributes (optional)    List of attributes for the form-element
+     * @param string|array $label      The label for the form-element
+     * @param string       $name       The element name
+     * @param bool         $required   (optional)    Is the form-element required (default=true)
+     * @param array        $attributes (optional)    List of attributes for the form-element
      *
      * @return HTML_QuickForm_text
      */
-    public function addText($name, $label, $required = true, $attributes = [])
+    public function addText($name, $label, $required = true, $attributes = [], $createElement = false)
     {
-        $element = $this->addElement('text', $name, $label, $attributes);
+        if ($createElement) {
+            $element = $this->createElement('text', $name, $label, $attributes);
+        } else {
+            $element = $this->addElement('text', $name, $label, $attributes);
+        }
+
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
@@ -860,11 +865,20 @@ EOT;
     /**
      * @param string $label
      * @param string $text
+     * @param bool   $createElement
      *
-     * @return HTML_QuickForm_label
+     * @return HTML_QuickForm_Element
      */
-    public function addLabel($label, $text)
+    public function addLabel($label, $text, $createElement = false)
     {
+        if ($createElement) {
+            return $this->createElement(
+                'label',
+                $label,
+                $text
+            );
+        }
+
         return $this->addElement('label', $label, $text);
     }
 
@@ -918,6 +932,46 @@ EOT;
     }
 
     /**
+     * Draws a panel of options see the course_info/infocours.php page.
+     *
+     * @param string $name      internal name
+     * @param string $title     visible title
+     * @param array  $groupList list of group or elements
+     */
+    public function addPanelOption($name, $title, $groupList)
+    {
+        $this->addHtml('<div class="panel panel-default">');
+        $this->addHtml(
+            '
+            <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
+        '
+        );
+        $this->addHtml($title);
+        $this->addHtml('</a></h4></div>');
+        $this->addHtml('<div id="collapse-'.$name.'-settings" class="panel-collapse collapse" role="tabpanel"
+             aria-labelledby="heading-'.$name.'-settings">
+            <div class="panel-body">
+        ');
+
+        foreach ($groupList as $groupName => $group) {
+            // Add group array
+            if (!empty($groupName) && is_array($group)) {
+                $this->addGroup($group, '', $groupName);
+            }
+            // Add element
+            if ($group instanceof HTML_QuickForm_element) {
+                $this->addElement($group);
+            }
+        }
+
+        $this->addHtml('</div></div>');
+        $this->addHtml('</div>');
+    }
+
+    /**
      * Adds a HTML-editor to the form.
      *
      * @param string $name
@@ -925,15 +979,13 @@ EOT;
      * @param bool   $required (optional) Is the form-element required (default=true)
      * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page
      * @param array  $config   (optional) Configuration settings for the online editor
-     * @param bool   $style
      */
     public function addHtmlEditor(
         $name,
         $label,
         $required = true,
         $fullPage = false,
-        $config = [],
-        $style = false
+        $config = []
     ) {
         $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
@@ -949,12 +1001,11 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-
-        if ($style) {
-            $config['style'] = true;
-        }
+        $config['style'] = false;
         if ($fullPage) {
             $config['fullPage'] = true;
+            // Adds editor_content.css in ckEditor
+            $config['style'] = true;
         }
 
         if ($element->editor) {
@@ -1774,18 +1825,7 @@ EOT;
                 );
             }).on('fileuploaddone', function (e, data) {
                 $.each(data.result.files, function (index, file) {
-                    if (file.url) {
-                        var link = $('<a>')
-                            .attr({target: '_blank', class : 'panel-image'})
-                            .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);
-                        // Update file name with new one from Chamilo
-                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                        var message = $('<div class=\"col-sm-3\">').html(
-                            $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
-                        );
-                        $(data.context.children()[index]).parent().append(message);                    
-                    } else if (file.error) {
+                    if (file.error) {
                         var link = $('<div>')
                             .attr({class : 'panel-image'})                            ;
                         $(data.context.children()[index]).parent().wrap(link);
@@ -1795,7 +1835,21 @@ EOT;
                             $('<span class=\"message-image-danger\"/>').text(file.error)
                         );
                         $(data.context.children()[index]).parent().append(message);
+
+                        return;
                     }
+                    if (file.url) {
+                        var link = $('<a>')
+                            .attr({target: '_blank', class : 'panel-image'})
+                            .prop('href', file.url);
+                        $(data.context.children()[index]).parent().wrap(link);
+                    }
+                    // Update file name with new one from Chamilo
+                    $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    var message = $('<div class=\"col-sm-3\">').html(
+                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
+                    );
+                    $(data.context.children()[index]).parent().append(message);
                 });                
                 $('#dropzone').removeClass('hover');                
                 ".$redirectCondition."

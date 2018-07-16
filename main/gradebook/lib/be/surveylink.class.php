@@ -90,43 +90,7 @@ class SurveyLink extends AbstractLink
             ];
         }
 
-        return isset($links) ? $links : null;
-    }
-
-    /**
-     * Generates an array of surveys that a teacher hasn't created a link for.
-     *
-     * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-     */
-    public function get_not_created_links()
-    {
-        if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
-        }
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $sql = 'SELECT survey_id, title, code
-                FROM '.$this->get_survey_table().' AS srv
-                WHERE survey_id NOT IN
-                    (
-                    SELECT ref_id FROM '.$tbl_grade_links.'
-                    WHERE
-                        type = '.LINK_SURVEY.' AND
-                        course_code = "'.$this->get_course_code().'"
-                    )
-                    AND srv.session_id = '.api_get_session_id();
-
-        $result = Database::query($sql);
-
-        $links = [];
-        while ($data = Database::fetch_array($result)) {
-            $links[] = [
-                $data['survey_id'],
-                api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80),
-            ];
-        }
-
-        return $links;
+        return isset($links) ? $links : [];
     }
 
     /**

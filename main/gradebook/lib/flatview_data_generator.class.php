@@ -18,6 +18,7 @@ class FlatViewDataGenerator
     const FVDG_SORT_ASC = 4;
     const FVDG_SORT_DESC = 8;
     public $params;
+    /** @var Category */
     public $category;
 
     private $users;
@@ -171,6 +172,7 @@ class FlatViewDataGenerator
         $evaluationsAdded = [];
         if ($parent_id == 0 && !empty($allcat)) {
             // Means there are any subcategory
+            /** @var Category $sub_cat */
             foreach ($allcat as $sub_cat) {
                 $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
@@ -283,8 +285,13 @@ class FlatViewDataGenerator
     /**
      * Get actual array data.
      *
-     * @param int $users_count
-     * @param int $items_count
+     * @param int  $users_sorting
+     * @param int  $users_start
+     * @param null $users_count
+     * @param int  $items_start
+     * @param null $items_count
+     * @param bool $ignore_score_color
+     * @param bool $show_all
      *
      * @return array 2-dimensional array - each array contains the elements:
      *               0: user id

@@ -45,9 +45,14 @@ class Test2pdfPlugin extends Plugin
         $dstfile1 = __DIR__.'/../../../main/img/icons/64/test2pdf.png';
         $dstfile2 = __DIR__.'/../../../main/img/icons/64/test2pdf_na.png';
         $dstfile3 = __DIR__.'/../../../main/img/test2pdf.png';
-        copy($srcfile1, $dstfile1);
-        copy($srcfile2, $dstfile2);
-        copy($srcfile3, $dstfile3);
+        $res1 = @copy($srcfile1, $dstfile1);
+        $res2 = @copy($srcfile2, $dstfile2);
+        $res3 = @copy($srcfile3, $dstfile3);
+        if (!$res1 || !$res2 || !$res3) {
+            $warning = 'Test2PDF plugin icons could not be copied to main/img/ because of folder permissions. To fix, give web server user permissions to write to main/img/ before enabling this plugin.';
+            Display::addFlash($warning);
+            error_log($warning);
+        }
     }
 
     /**

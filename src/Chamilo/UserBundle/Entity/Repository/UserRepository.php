@@ -120,28 +120,29 @@ class UserRepository extends EntityRepository
      *
      * @return array
      */
-    public function searchUsersByStatus($query, $status, $accessUrlId = null)
+    public function searchUsersByStatus($query, $status, $accessUrlId = 0)
     {
-        $accessUrlId = intval($accessUrlId);
-
+        $accessUrlId = (int) $accessUrlId;
         $queryBuilder = $this->createQueryBuilder('u');
 
         if ($accessUrlId > 0) {
             $queryBuilder->innerJoin(
                 'ChamiloCoreBundle:AccessUrlRelUser',
                 'auru',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'u.id = auru.userId'
             );
         }
 
-        $queryBuilder->where('u.status = :status')
+        $queryBuilder
+            ->where('u.status = :status')
             ->andWhere('u.username LIKE :query OR u.firstname LIKE :query OR u.lastname LIKE :query')
             ->setParameter('status', $status)
             ->setParameter('query', "$query%");
 
         if ($accessUrlId > 0) {
-            $queryBuilder->andWhere('auru.accessUrlId = :url')
+            $queryBuilder
+                ->andWhere('auru.accessUrlId = :url')
                 ->setParameter(':url', $accessUrlId);
         }
 
@@ -154,13 +155,14 @@ class UserRepository extends EntityRepository
      * @param Session $session The session
      * @param Course  $course  The course
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
     {
         $queryBuilder = $this->createQueryBuilder('u');
 
-        $queryBuilder->select('u')
+        $queryBuilder
+            ->select('u')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourseRelUser',
                 'scu',
@@ -317,5 +319,36 @@ class UserRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setParameters(['search' => "%$search%"])
             ->getResult();
+    }
+
+    /**
+     * Get the list of HRM who have assigned this user.
+     *
+     * @param int $userId
+     * @param int $urlId
+     *
+     * @return array
+     */
+    public function getAssignedHrmUserList($userId, $urlId)
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $hrmList = $qb
+            ->select('uru')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
+            ->where(
+                $qb->expr()->eq('auru.accessUrlId', $urlId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.userId', $userId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $hrmList;
     }
 }

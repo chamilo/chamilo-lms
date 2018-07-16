@@ -56,17 +56,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
         }
     }
 
-    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
-        if (empty($id)) {
-            // Options
-            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
-            $output .= Display::return_icon(
-                'settings.png',
-                get_lang('EditToolOptions'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-        }
+    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && $action == 'list') {
         $output .= '<a id="open-view-list" href="#">'.
             Display::return_icon(
                 'listwork.png',
@@ -82,45 +72,6 @@ function displayWorkActionLinks($id, $action, $isTutor)
         echo $output;
         echo '</div>';
     }
-}
-
-/**
- * Returns a form displaying all options for this tool.
- * These are
- * - make all files visible / invisible
- * - set the default visibility of uploaded files.
- *
- * @param $defaults
- *
- * @return string The HTML form
- */
-function settingsForm($defaults)
-{
-    $allowed = api_is_allowed_to_edit(null, true);
-    if (!$allowed) {
-        return;
-    }
-
-    $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&action=settings';
-    $form = new FormValidator('edit_settings', 'post', $url);
-    $form->addElement('hidden', 'changeProperties', 1);
-    $form->addElement('header', get_lang('EditToolOptions'));
-
-    $group = [
-        $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
-        $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),
-    ];
-    $form->addGroup($group, '', get_lang('DefaultUpload'));
-
-    $group = [
-        $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
-        $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
-    ];
-    $form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
-    $form->addButtonSave(get_lang('Save'));
-    $form->setDefaults($defaults);
-
-    return $form->returnForm();
 }
 
 /**
@@ -748,21 +699,23 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
  * @author Bert Vanderkimpen
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
  *
- * @param string $base_work_dir  Base work dir (.../work)
+ * @param string $workDir        Base work dir (.../work)
  * @param string $desiredDirName complete path of the desired name
  *
  * @return string actual directory name if it succeeds, boolean false otherwise
  */
-function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
+function create_unexisting_work_directory($workDir, $desiredDirName)
 {
-    $nb = '';
-    $base_work_dir = (substr($base_work_dir, -1, 1) == '/' ? $base_work_dir : $base_work_dir.'/');
-    while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
-        $nb += 1;
+    $counter = 0;
+    $workDir = (substr($workDir, -1, 1) == '/' ? $workDir : $workDir.'/');
+    $checkDirName = $desiredDirName;
+    while (file_exists($workDir.$checkDirName)) {
+        $counter += 1;
+        $checkDirName = $desiredDirName.$counter;
     }
 
-    if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
-        return $desired_dir_name.$nb;
+    if (@mkdir($workDir.$checkDirName, api_get_permissions_for_new_directories())) {
+        return $checkDirName;
     } else {
         return false;
     }
@@ -2888,9 +2841,7 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
         return true;
     }
 
-    if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
-        api_not_allowed(true);
-    }
+    return userIsSubscribedToWork($userId, $workId, $courseId);
 }
 
 /**
@@ -4071,8 +4022,9 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 {
     $em = Database::getManager();
 
-    $user_id = intval($user_id);
-    $groupId = intval($groupId);
+    $user_id = (int) $user_id;
+    $groupId = (int) $groupId;
+    $sessionId = (int) $sessionId;
 
     $groupIid = 0;
     $groupInfo = [];
@@ -4080,7 +4032,6 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
     }
-    $sessionId = (int) $sessionId;
     $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
@@ -4088,6 +4039,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $directory = api_replace_dangerous_char($formValues['new_dir']);
     $directory = disable_dangerous_file($directory);
+
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
     if (empty($created_dir)) {
@@ -4721,64 +4673,6 @@ function getUploadDocumentType()
 }
 
 /**
- * @param array $courseInfo
- * @param bool  $showScore
- * @param bool  $studentDeleteOwnPublication
- *
- * @return bool
- */
-function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
-{
-    $showScore = (int) $showScore;
-    $courseId = api_get_course_int_id();
-    $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $table_course_setting = Database::get_course_table(TOOL_COURSE_SETTING);
-
-    if (empty($courseId)) {
-        return false;
-    }
-
-    $query = "UPDATE $main_course_table
-              SET show_score = '$showScore'
-              WHERE id = $courseId";
-    Database::query($query);
-
-    /**
-     * Course data are cached in session so we need to update both the database
-     * and the session data.
-     */
-    $courseInfo['show_score'] = $showScore;
-    Session::write('_course', $courseInfo);
-
-    // changing the tool setting: is a student allowed to delete his/her own document
-    // counting the number of occurrences of this setting (if 0 => add, if 1 => update)
-    $query = "SELECT * FROM $table_course_setting
-              WHERE
-                c_id = $courseId AND
-                variable = 'student_delete_own_publication'";
-
-    $result = Database::query($query);
-    $number_of_setting = Database::num_rows($result);
-
-    if ($number_of_setting == 1) {
-        $query = "UPDATE $table_course_setting SET
-                  value = '".Database::escape_string($studentDeleteOwnPublication)."'
-                  WHERE variable = 'student_delete_own_publication' AND c_id = $courseId";
-        Database::query($query);
-    } else {
-        $params = [
-            'c_id' => $courseId,
-            'variable' => 'student_delete_own_publication',
-            'value' => $studentDeleteOwnPublication,
-            'category' => 'work',
-        ];
-        Database::insert($table_course_setting, $params);
-    }
-
-    return true;
-}
-
-/**
  * @param int   $item_id
  * @param array $course_info
  *
@@ -5116,16 +5010,16 @@ function getFile($id, $course_info, $download = true, $isCorrection = false)
  * Get the file contents for an assigment.
  *
  * @param int   $id
- * @param array $course_info
- * @param int Session ID
- * @param $correction
+ * @param array $courseInfo
+ * @param int   $sessionId
+ * @param bool  $correction
  *
  * @return array|bool
  */
-function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
+function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
 {
-    $id = intval($id);
-    if (empty($course_info) || empty($id)) {
+    $id = (int) $id;
+    if (empty($courseInfo) || empty($id)) {
         return false;
     }
     if (empty($sessionId)) {
@@ -5133,10 +5027,11 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
     }
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    if (!empty($course_info['real_id'])) {
-        $sql = 'SELECT *
-                FROM '.$table.'
-                WHERE c_id = '.$course_info['real_id'].' AND id = "'.$id.'"';
+    if (!empty($courseInfo['real_id'])) {
+        $sql = "SELECT *
+                FROM $table
+                WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
+
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -5162,11 +5057,15 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 return false;
             }
 
-            allowOnlySubscribedUser(
+            $isAllow = allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
-                $course_info['real_id']
+                $courseInfo['real_id']
             );
+
+            if (empty($isAllow)) {
+                return false;
+            }
 
             /*
             field show_score in table course :
@@ -5197,7 +5096,7 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             */
 
             $work_is_visible = $item_info['visibility'] == 1 && $row['accepted'] == 1;
-            $doc_visible_for_all = (int) $course_info['show_score'] === 0;
+            $doc_visible_for_all = (int) $courseInfo['show_score'] === 0;
 
             $is_editor = api_is_allowed_to_edit(true, true, true);
             $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
@@ -5341,7 +5240,7 @@ function exportAllStudentWorkFromPublication(
     $expiresOn = null;
 
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>'.get_lang('ExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>'.get_lang('PostedExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 
@@ -5578,7 +5477,11 @@ function protectWork($courseInfo, $workId)
         api_not_allowed(true);
     }
 
-    allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    $isAllow = allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    if (empty($isAllow)) {
+        api_not_allowed(true);
+    }
+
     $groupInfo = GroupManager::get_group_properties($groupId);
 
     if (!empty($groupId)) {

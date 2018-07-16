@@ -41,11 +41,7 @@ if (empty($courseCode) || empty($sessionId)) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    ini_set('memory_limit', '256M');
-    ini_set('max_execution_time', 1800);
-}
+api_set_more_memory_and_time_limits();
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('CopyCourse');

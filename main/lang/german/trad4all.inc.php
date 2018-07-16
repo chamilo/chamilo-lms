@@ -2822,8 +2822,8 @@ $OpenQuestionsAttemptedAre = "Die versuchte offene Frage ist";
 $UploadJpgPicture = "Ein JPG Bild hochladen";
 $HotspotDescription = "Hotspot Beschreibung";
 $ExamSheetVCC = "Testergebnnis  wurde vom Kursleiter angesehen / korrigiert / kommentiert.";
-$AttemptVCC = "Ihr nachfolgende Einsendung wurde vom Kursleiter angesehen / kommentiert / korrigiert.";
-$ClickLinkToViewComment = "Klicken Sie nachfolgenden Link, um zu Ihrem Zugang zu gelangen und Ihr kommentiertes testergebnis anzusehen";
+$AttemptVCC = "Ihre nachfolgende Einsendung wurde vom Kursleiter angesehen / kommentiert / korrigiert.";
+$ClickLinkToViewComment = "Klicken Sie auf den nachfolgenden Link, um zu Ihrem Zugang zu gelangen und Ihr kommentiertes testergebnis anzusehen";
 $Regards = "Mit freundlichen Grüßen";
 $AttemptVCCLong = "Ihre Einsendung von Test %s wurde vom Kursleiter angesehen / kommentiert / korrigiert. Klicken Sie den nachfolgenden Link, um zu Ihrem Zugang zu gelangen und Ihre Auswertung anzusehen.<br/n>/n";
 $DearStudentEmailIntroduction = "Sehr geehrte(r) Teilnehmer(in),";
@@ -7975,5 +7975,12 @@ $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "E-Mail an den Tutor s
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat, aber nur wenn er eine mündliche Frage beantwortet hat";
 $TempScoreXQuestionsNotCorrectedYet = "Temporäre Auswertung: %s offene Frage(n) noch nicht korrigiert.";
 $GoToSurvey = "Zur Umfrage";
+$OralExpressionHelpText = "Du kannst während der Aufnahme auf « Aufnahme anhalten » klicken. Wenn du nicht zufrieden bist, nimm dich erneut auf. Dies wird die vorherige Aufnahme überschreiben. Zufrieden? Um deine Aufnahme zu senden, klick einfach auf « Übung beenden ».";
 $MyGeneralCertificate = "Mein Zertifikat";
+$BossAlertMsgSentToUserXTitle = "Follow-up Nachricht über Lernende %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Hallo,<br/><br/>
+
+Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
+
+Die Nachricht ist an %s sichtbar";
 ?>

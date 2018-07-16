@@ -504,7 +504,8 @@ if ($survey_data['form_fields'] != '' &&
     $returnParams = $extraField->addElements($form, api_get_user_id());
     $jquery_ready_content = $returnParams['jquery_ready_content'];
 
-    // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+    // the $jquery_ready_content variable collects all functions
+    // that will be load in the $(document).ready javascript function
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
         '.$jquery_ready_content.'
@@ -691,10 +692,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             survey_question_option.sort as option_sort
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                            ON survey_question.question_id = survey_question_option.question_id AND
-                            survey_question_option.c_id = $course_id
+                        ON survey_question.question_id = survey_question_option.question_id AND
+                        survey_question_option.c_id = $course_id
                         WHERE
-                            survey_question.survey_id = '".Database :: escape_string($survey_invitation['survey_id'])."' AND
+                            survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND
                             survey_question.question_id NOT IN (
                                 SELECT sa.question_id
                                 FROM ".$table_survey_answer." sa
@@ -764,9 +765,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             } else {
                 $order = $shuffle;
             }
-
             $answer_list = [];
-
             // Get current user results
             $results = [];
             $sql = "SELECT survey_group_pri, user, SUM(value) as value
@@ -809,7 +808,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             survey_group_sec2='0'
                         GROUP BY survey_group_pri, survey_question.question_id
                     ) as temp
-
                     GROUP BY temp.survey_group_pri
                     ORDER BY temp.survey_group_pri";
 
@@ -869,7 +867,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
              */
 
             // i.e 70% - 70% -70% 70%  $equal_count =3
-
             $i = 0;
             $group_cant = 0;
             $equal_count = 0;
@@ -898,18 +895,19 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         ($result[2]['value'] == $result[3]['value'])
                     ) {
                         $group_cant = 1;
-                    }
-                    // i.e 70% - 70% -0% - 0%     -    $equal_count = 0 we only get the first 2 options
-                    /* elseif (($result[0]['value'] == $result[1]['value']) && ($result[1]['value'] != $result[2]['value'])) {
-                      $group_cant = 0;
-                      } */
-                    /*
-                      // i.e 70% - 70% -60% - 60%  $equal_count = 0 we only get the first 2 options
-                      elseif (($result[0]['value'] == $result[1]['value'])  &&  ($result[2]['value'] == $result[3]['value'])) {
-                      $group_cant = 0;
-                      } */
-                    // i.e. 80% - 70% - 70% - 70%
-                    elseif (($result[0]['value'] != $result[1]['value']) && ($result[1]['value'] == $result[2]['value']) && ($result[2]['value'] == $result[3]['value'])) {
+                    } elseif (($result[0]['value'] != $result[1]['value']) &&
+                        ($result[1]['value'] == $result[2]['value']) && ($result[2]['value'] == $result[3]['value'])
+                    ) {
+                        // i.e 70% - 70% -0% - 0%     -    $equal_count = 0 we only get the first 2 options
+                        /* elseif (($result[0]['value'] == $result[1]['value']) && ($result[1]['value'] != $result[2]['value'])) {
+                          $group_cant = 0;
+                          } */
+                        /*
+                          // i.e 70% - 70% -60% - 60%  $equal_count = 0 we only get the first 2 options
+                          elseif (($result[0]['value'] == $result[1]['value'])  &&  ($result[2]['value'] == $result[3]['value'])) {
+                          $group_cant = 0;
+                          } */
+                        // i.e. 80% - 70% - 70% - 70%
                         $group_cant = 0;
                     } else {
                         // i.e. 80% - 70% - 70% - 50
@@ -986,12 +984,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     if ($shuffle == '') {
                         $shuffle = ' BY survey_question.sort, survey_question_option.sort ASC ';
                     }
-
-                    //$val = 0;
-                    //if ($survey_data['one_question_per_page'] == 0) {
                     $val = (int) $_POST['personality'];
-                    //}
-                    //echo '<pre>'; print_r($paged_questions_sec); echo '</pre>';
                     if (is_array($paged_questions_sec)) {
                         $sql = "SELECT
                                     survey_question.survey_group_sec1,
@@ -1095,15 +1088,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             if ($shuffle == '') {
                 $order_sql = ' BY survey_question.sort, survey_question_option.sort ASC ';
             }
-
-            //$val = 0;
-            //if ($survey_data['one_question_per_page'] == 0) {
             $val = $_GET['show'];
-            //}
-
             $result = null;
             if ($val != '') {
-                $imploded = implode(',', $paged_questions[$val]);
+                $imploded = Database::escape_string(implode(',', $paged_questions[$val]));
                 if ($imploded != '') {
                     // The answers are always in the same order NO shuffle
                     $order_sql = ' BY survey_question.sort, survey_question_option.sort ASC ';
@@ -1135,6 +1123,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     $question_counter_max = Database :: num_rows($result);
                 }
             }
+
             if (!is_null($result)) {
                 $counter = 0;
                 $limit = 0;
@@ -1172,11 +1161,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
 $sql = "SELECT * FROM $table_survey_question
         WHERE
             c_id = $course_id AND
-            type='".Database::escape_string('pagebreak')."' AND
+            type = '".Database::escape_string('pagebreak')."' AND
             survey_id='".intval($survey_invitation['survey_id'])."'";
 $result = Database::query($sql);
 $numberofpages = Database::num_rows($result) + 1;
-
 // Displaying the form with the questions
 if (isset($_GET['show'])) {
     $show = (int) $_GET['show'] + 1;
@@ -1196,9 +1184,7 @@ $g_c = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $g_ic = isset($_GET['invitationcode']) ? Security::remove_XSS($_GET['invitationcode']) : '';
 $g_cr = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : '';
-
 $add_parameters = isset($_GET['user_id']) ? '&user_id='.intval($_GET['user_id']) : '';
-
 $url = api_get_self().'?cidReq='.$courseInfo['code'].
     '&id_session='.$sessionId.
     $add_parameters.
@@ -1378,11 +1364,14 @@ Display::display_footer();
  */
 function check_time_availability($surveyData)
 {
+    $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
     $utcZone = new DateTimeZone('UTC');
     $startDate = new DateTime($surveyData['start_date'], $utcZone);
     $endDate = new DateTime($surveyData['end_date'], $utcZone);
     $currentDate = new DateTime('now', $utcZone);
-    $currentDate->modify('today');
+    if (!$allowSurveyAvailabilityDatetime) {
+        $currentDate->modify('today');
+    }
     if ($currentDate < $startDate) {
         api_not_allowed(
             true,

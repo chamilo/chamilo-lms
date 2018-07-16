@@ -55,7 +55,7 @@ $sessionId = api_get_session_id();
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 
 /* Introduction section (editable by course admins) */
-$introductionSection = Display::return_introduction_section(
+$introduction = Display::return_introduction_section(
     TOOL_LEARNPATH,
     [
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH)
@@ -176,8 +176,24 @@ $data = [];
 foreach ($categories as $item) {
     $categoryId = $item->getId();
 
-    if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
-        continue;
+    if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
+        // "Without category" has id = 0
+        $categoryVisibility = api_get_item_visibility(
+            $courseInfo,
+            TOOL_LEARNPATH_CATEGORY,
+            $categoryId,
+            $sessionId
+        );
+
+        if (!$is_allowed_to_edit) {
+            if ((int) $categoryVisibility !== 1 && $categoryVisibility != -1) {
+                continue;
+            }
+        }
+
+        if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
+            continue;
+        }
     }
 
     $list = new LearnpathList(
@@ -197,6 +213,7 @@ foreach ($categories as $item) {
     }
 
     $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+    $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
     $listData = [];
 
     if (!empty($flat_list)) {
@@ -204,7 +221,6 @@ foreach ($categories as $item) {
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
-
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
             // Validation when belongs to a session.
@@ -386,6 +402,9 @@ foreach ($categories as $item) {
             $lp_auto_launch_icon = null;
             $actionSeriousGame = null;
             $actionUpdateScormFile = '';
+            $actionExportToCourseBuild = '';
+            // Only for "Chamilo" packages
+            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] == 'Chamilo';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -778,6 +797,17 @@ foreach ($categories as $item) {
                     );
                 }
 
+                if ($allowExportCourseFormat) {
+                    $actionExportToCourseBuild = Display::url(
+                        Display::return_icon(
+                            'backup.png',
+                            get_lang('ExportToChamiloFormat')
+                        ),
+                        api_get_self().'?'.api_get_cidreq()
+                        ."&action=export_to_course_build&lp_id=$id"
+                    );
+                }
+
                 if ($is_allowed_to_edit) {
                     $start_time = $start_time;
                     $end_time = $end_time;
@@ -862,6 +892,7 @@ foreach ($categories as $item) {
                 'action_serious_game' => $actionSeriousGame,
                 'action_subscribe_users' => $subscribeUsers,
                 'action_update_scorm' => $actionUpdateScormFile,
+                'action_export_to_course_build' => $actionExportToCourseBuild,
             ];
 
             $lpIsShown = true;
@@ -905,7 +936,7 @@ $template->assign('is_invitee', api_is_invitee());
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);
-$template->assign('introduction_section', $introductionSection);
+$template->assign('introduction', $introduction);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);

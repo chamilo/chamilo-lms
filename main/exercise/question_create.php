@@ -14,6 +14,12 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
+$allow = api_is_allowed_to_edit();
+
+if (!$allow) {
+    api_not_allowed(true);
+}
+
 // breadcrumbs
 $interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
 

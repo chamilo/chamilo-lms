@@ -7,12 +7,16 @@
  * @package chamilo.plugin.notebookteacher
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
+ * @author Julio Montoya
  */
 class NotebookTeacherPlugin extends Plugin
 {
     const TABLE_NOTEBOOKTEACHER = 'plugin_notebook_teacher';
     public $isCoursePlugin = true;
 
+    /**
+     * NotebookTeacherPlugin constructor.
+     */
     protected function __construct()
     {
         parent::__construct(
@@ -41,7 +45,7 @@ class NotebookTeacherPlugin extends Plugin
      */
     public function install()
     {
-        //Installing course settings
+        // Installing course settings
         $this->install_course_fields_in_all_courses();
 
         $tablesToBeCompared = [self::TABLE_NOTEBOOKTEACHER];
@@ -76,9 +80,9 @@ class NotebookTeacherPlugin extends Plugin
     public function uninstall()
     {
         // Deleting course settings.
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
+        $this->uninstall_course_fields_in_all_courses();
 
-        $tablesToBeDeleted = [TABLE_NOTEBOOKTEACHER];
+        $tablesToBeDeleted = [self::TABLE_NOTEBOOKTEACHER];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
             $sql = "DROP TABLE IF EXISTS $table";
@@ -87,6 +91,9 @@ class NotebookTeacherPlugin extends Plugin
         $this->manageTab(false);
     }
 
+    /**
+     * Update.
+     */
     public function update()
     {
         $tableNotebookTeacher = self::TABLE_NOTEBOOKTEACHER;

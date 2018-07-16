@@ -20,7 +20,7 @@ class LegalManager
      *
      * @param int    $language language id
      * @param string $content  content
-     * @param int    $type     term and condition type (0 or 1)
+     * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
      * @param string $changes  explain changes
      *
      * @return bool success
@@ -29,18 +29,18 @@ class LegalManager
     {
         $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
-        $type = intval($type);
+        $type = (int) $type;
         $time = time();
 
         if ($last['content'] != $content) {
-            $version = intval(self::get_last_condition_version($language));
+            $version = (int) self::get_last_condition_version($language);
             $version++;
             $params = [
                 'language_id' => $language,
                 'content' => $content,
                 'changes' => $changes,
                 'type' => $type,
-                'version' => intval($version),
+                'version' => (int) $version,
                 'date' => $time,
             ];
             Database::insert($legal_table, $params);
@@ -69,7 +69,7 @@ class LegalManager
     {
         /*
         $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
         */
     }
@@ -84,9 +84,9 @@ class LegalManager
     public static function get_last_condition_version($language)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = Database::escape_string($language);
+        $language = (int) $language;
         $sql = "SELECT version FROM $table
-                WHERE language_id = '".$language."'
+                WHERE language_id = $language
                 ORDER BY id DESC LIMIT 1 ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -107,9 +107,9 @@ class LegalManager
     public static function get_last_condition($language)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = Database::escape_string($language);
+        $language = (int) $language;
         $sql = "SELECT * FROM $table
-                WHERE language_id = '".$language."'
+                WHERE language_id = $language
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
@@ -133,8 +133,8 @@ class LegalManager
     public static function hasVersion($language, $version)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = intval($language);
-        $version = intval($version);
+        $language = (int) $language;
+        $version = (int) $version;
 
         if (empty($language)) {
             return false;
@@ -142,8 +142,8 @@ class LegalManager
 
         $sql = "SELECT version FROM $table
                 WHERE 
-                    language_id = '$language' AND 
-                    version = '$version'                
+                    language_id = $language AND 
+                    version = $version                
                 LIMIT 1 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -186,9 +186,9 @@ class LegalManager
     public static function get_last_version($language)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = intval($language);
+        $language = (int) $language;
         $sql = "SELECT version FROM $table
-                WHERE language_id = '".$language."'
+                WHERE language_id = '$language'
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
@@ -258,9 +258,9 @@ class LegalManager
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $lang_table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
-        $column = intval($column);
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+        $column = (int) $column;
 
         $sql = "SELECT version, original_name as language, content, changes, type, FROM_UNIXTIME(date)
                 FROM $table 
@@ -308,19 +308,21 @@ class LegalManager
 
     /**
      * Get type of terms and conditions.
+     * Type 0 is HTML Text
+     * Type 1 is a link to a different terms and conditions page.
      *
      * @param int $legal_id
      * @param int $language_id
      *
-     * @return int The current type of terms and conditions
+     * @return mixed The current type of terms and conditions (int) or false on error
      */
     public static function get_type_of_terms_and_conditions($legal_id, $language_id)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $legal_id = intval($legal_id);
-        $language_id = intval($language_id);
-        $sql = 'SELECT type FROM '.$table.'
-                WHERE id = "'.$legal_id.'" AND language_id="'.$language_id.'"';
+        $legal_id = (int) $legal_id;
+        $language_id = (int) $language_id;
+        $sql = "SELECT type FROM $table
+                WHERE id = $legal_id AND language_id = $language_id";
         $rs = Database::query($sql);
 
         return Database::result($rs, 0, 'type');

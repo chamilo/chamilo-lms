@@ -91,11 +91,12 @@
             $("#" + inputId).filterByText($("#" + inputId + "-filter"));
         });
 
-        $(".jp-jplayer audio").addClass('skip');
-
         // Mediaelement
         if ( {{ show_media_element }} == 1) {
             $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+                pluginPath: '{{ _p.web }}web/assets/mediaelement/build/',
+                renderers: ['html5', 'flash_video', 'native_flv'],
+                features: ['{{ video_features }}'],
                 success: function(mediaElement, originalNode, instance) {
                 }
             });

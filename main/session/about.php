@@ -30,7 +30,7 @@ $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 if (!$session) {
     api_not_allowed(true);
 }
-
+$htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 $courses = [];
 $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
@@ -65,6 +65,8 @@ foreach ($sessionCourses as $sessionCourse) {
                 $courseCoach->getId(),
                 USER_IMAGE_SIZE_ORIGINAL
             ),
+            'diploma' => $courseCoach->getDiplomas(),
+            'openarea' => $courseCoach->getOpenarea(),
             'extra_fields' => $userValues->getAllValuesForAnItem(
                 $courseCoach->getId(),
                 null,
@@ -121,6 +123,7 @@ foreach ($sessionCourses as $sessionCourse) {
     $courses[] = [
         'course' => $sessionCourse,
         'description' => $courseDescription,
+        'image' => $sessionCourse->getPicturePath(true),
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
@@ -198,7 +201,7 @@ $template->assign(
 
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
-
+$sessionIsPremium = null;
 if ($checker) {
     $sessionIsPremium = $plugin->getItemByProduct(
         $sessionId,
@@ -227,9 +230,9 @@ $template->assign(
 );
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
-$template->assign('is_premiun', $sessionIsPremium);
+$template->assign('is_premium', $sessionIsPremium);
 $layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);
-$template->assign('header', $session->getName());
+//$template->assign('header', $session->getName());
 $template->assign('content', $content);
 $template->display_one_col_template();

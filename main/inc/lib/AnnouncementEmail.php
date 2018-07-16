@@ -30,9 +30,8 @@ class AnnouncementEmail
         $this->session_id = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
 
         if (is_numeric($announcementId)) {
-            $announcementId = AnnouncementManager::get_by_id($courseInfo['real_id'], $announcementId);
+            $this->announcement = AnnouncementManager::get_by_id($courseInfo['real_id'], $announcementId);
         }
-        $this->announcement = $announcementId;
         $this->logger = $logger;
     }
 
@@ -280,8 +279,7 @@ class AnnouncementEmail
      *
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
-     * @param int  $senderId
-     *                                   related to the main user
+     * @param int  $senderId             related to the main user
      */
     public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0)
     {
@@ -300,18 +298,30 @@ class AnnouncementEmail
         }
 
         foreach ($users as $user) {
-            if (!empty($this->logger)) {
-                $this->logger->addInfo('Announcement: #'.$this->announcement('id').'. Send email to user: #'.$user['user_id']);
-            }
             $message = $this->message($user['user_id']);
-            MessageManager::send_message_simple(
-                $user['user_id'],
-                $subject,
-                $message,
-                $senderId,
-                $sendToDrhUsers,
-                true
-            );
+            $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);
+            if ($wasSent === false) {
+                if (!empty($this->logger)) {
+                    $this->logger->addInfo(
+                        'Announcement: #'.$this->announcement('id').'. Send email to user: #'.$user['user_id']
+                    );
+                }
+                MessageManager::send_message_simple(
+                    $user['user_id'],
+                    $subject,
+                    $message,
+                    $senderId,
+                    $sendToDrhUsers,
+                    true
+                );
+            } else {
+                if (!empty($this->logger)) {
+                    $this->logger->addInfo(
+                        'Message "'.$subject.'" was already sent. Announcement: #'.$this->announcement('id').'. 
+                        User: #'.$user['user_id']
+                    );
+                }
+            }
 
             if (($counter % $batchSize) === 0) {
                 $em->flush();

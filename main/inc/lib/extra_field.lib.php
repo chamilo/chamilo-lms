@@ -824,7 +824,7 @@ class ExtraField extends Model
      *
      * @return string
      */
-    public static function extrafieldSelectWithTextConvertArrayToString(array $options)
+    public static function extraFieldSelectWithTextConvertArrayToString(array $options)
     {
         $string = '';
         $parsedOptions = self::extra_field_double_select_convert_array_to_ordered_array($options);

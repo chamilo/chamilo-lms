@@ -1,5 +1,5 @@
 <script>
-jQuery(document).ready(function(){
+$(function() {
     jQuery('.scrollbar-inner').scrollbar();
 });
 </script>

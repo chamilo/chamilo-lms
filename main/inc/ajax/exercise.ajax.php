@@ -14,9 +14,9 @@ $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 
 if ($debug) {
-    error_log("-----------------");
+    error_log('-----------------------------------------------------');
     error_log("$action ajax call");
-    error_log("-----------------");
+    error_log('-----------------------------------------------------');
 }
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
@@ -35,7 +35,7 @@ switch ($action) {
 
         if (empty($exeId)) {
             if ($debug) {
-                error_log("Exe id not provided.");
+                error_log('Exe id not provided.');
             }
             exit;
         }
@@ -45,7 +45,7 @@ switch ($action) {
 
         if (empty($exerciseInSession)) {
             if ($debug) {
-                error_log("Exercise obj not provided.");
+                error_log('Exercise obj not provided.');
             }
             exit;
         }
@@ -106,10 +106,6 @@ switch ($action) {
             ) {
                 $sessionTime = $previousTime[$key];
                 $duration = $sessionTime = $now - $sessionTime;
-                /*if ($debug) {
-                    error_log("Now in UTC: ".$nowObject->format('Y-m-d H:i:s'));
-                    error_log("Session time in UTC: ".api_get_utc_datetime($sessionTime));
-                }*/
                 if (!empty($durationFromObject)) {
                     $duration += $durationFromObject;
                 }
@@ -358,15 +354,34 @@ switch ($action) {
     case 'add_question_to_reminder':
         /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
-        if (empty($objExercise)) {
+        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
+
+        if (empty($objExercise) || empty($exeId)) {
             echo 0;
             exit;
         } else {
-            $objExercise->editQuestionToRemind(
-                $_REQUEST['exe_id'],
-                $_REQUEST['question_id'],
-                $_REQUEST['action']
-            );
+            $option = isset($_GET['option']) ? $_GET['option'] : '';
+            switch ($option) {
+                case 'add_all':
+                    $questionListInSession = Session::read('questionList');
+                    $objExercise->addAllQuestionToRemind(
+                        $exeId,
+                        $questionListInSession
+                    );
+                    break;
+                case 'remove_all':
+                    $objExercise->removeAllQuestionToRemind(
+                        $exeId
+                    );
+                    break;
+                default:
+                    $objExercise->editQuestionToRemind(
+                        $exeId,
+                        $_REQUEST['question_id'],
+                        $_REQUEST['action']
+                    );
+                    break;
+            }
         }
         break;
     case 'save_exercise_by_now':
@@ -395,7 +410,7 @@ switch ($action) {
             $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
             // Attempt id.
-            $exeId = $_REQUEST['exe_id'];
+            $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
             if ($debug) {
                 error_log("exe_id = $exeId");
@@ -403,6 +418,7 @@ switch ($action) {
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
                 error_log("remind_list = ".print_r($remind_list, 1));
+                error_log("--------------------------------");
             }
 
             // Exercise information.
@@ -410,7 +426,7 @@ switch ($action) {
             $objExercise = Session::read('objExercise');
 
             // Question info.
-            $question_id = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
+            $question_id = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
             $question_list = Session::read('questionList');
 
             // If exercise or question is not set then exit.
@@ -445,7 +461,6 @@ switch ($action) {
             // Updating Reminder algorithm.
             if ($objExercise->type == ONE_PER_PAGE) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
-
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
                     $new_list = [];
@@ -479,7 +494,6 @@ switch ($action) {
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
-
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
                     $objQuestionTmp = Question::read($my_question_id, $course_id);
@@ -552,7 +566,7 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
-                        error_log("delete_attempt  exe_id : $exeId, my_question_id: $my_question_id");
+                        error_log("delete_attempt exe_id : $exeId, my_question_id: $my_question_id");
                     }
                     Event::delete_attempt(
                         $exeId,
@@ -621,7 +635,6 @@ switch ($action) {
 
                 $duration = 0;
                 $now = time();
-
                 if ($type == 'all') {
                     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                 }
@@ -672,17 +685,27 @@ switch ($action) {
                 // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
-                    error_log(" -- end question -- ");
+                    error_log("---------- end question ------------");
                 }
-            }
-            if ($debug) {
-                error_log(" ------ end ajax call ------- ");
             }
         }
 
+        if ($type == 'all') {
+            echo 'ok';
+            exit;
+        }
+
         if ($objExercise->type == ONE_PER_PAGE) {
+            if ($debug) {
+                error_log("result: one_per_page");
+                error_log(" ------ end ajax call ------- ");
+            }
             echo 'one_per_page';
             exit;
+        }
+        if ($debug) {
+            error_log("result: ok");
+            error_log(" ------ end ajax call ------- ");
         }
         echo 'ok';
         break;
@@ -703,17 +726,22 @@ switch ($action) {
 
         $objExercise = new Exercise();
         $objExercise->read($exerciseId);
-
         $objQuestion = Question::read($questionId);
 
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type == FILL_IN_BLANKS) {
+        if ($objQuestion->type === FILL_IN_BLANKS) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
                 });
             </script>';
         }
+
+        // Allows render MathJax elements in a ajax call
+        if (api_get_setting('include_asciimathml_script') === 'true') {
+            echo '<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]);</script>';
+        }
+
         ExerciseLib::showQuestion(
             $objExercise,
             $questionId,

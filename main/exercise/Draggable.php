@@ -55,7 +55,7 @@ class Draggable extends Question
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0) {
+            if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
@@ -88,7 +88,7 @@ class Draggable extends Question
 
         $form->addRadio(
             'orientation',
-            get_lang('Orientation'),
+            get_lang('ChooseOrientation'),
             ['h' => get_lang('Horizontal'), 'v' => get_lang('Vertical')]
         );
 

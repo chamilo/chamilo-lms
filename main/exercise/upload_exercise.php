@@ -266,17 +266,16 @@ function lp_upload_quiz_action_handling()
 
         // Quiz object
         $exercise = new Exercise();
-        $quiz_id = $exercise->createExercise(
-            $quizTitle,
-            $expired_time,
-            $type,
-            $random,
-            $active,
-            $results,
-            $max_attempt,
-            $feedback,
-            $propagateNegative
-        );
+        $exercise->updateTitle($quizTitle);
+        $exercise->updateExpiredTime($expired_time);
+        $exercise->updateType($type);
+        $exercise->setRandom($random);
+        $exercise->active = $active;
+        $exercise->updateResultsDisabled($results);
+        $exercise->updateAttempts($max_attempt);
+        $exercise->updateFeedbackType($feedback);
+        $exercise->updatePropagateNegative($propagateNegative);
+        $quiz_id = $exercise->save();
 
         if ($quiz_id) {
             // insert into the item_property table
@@ -387,7 +386,7 @@ function lp_upload_quiz_action_handling()
                                 $score = 0;
                                 if (strtolower($answer_data['extra']) == 'x') {
                                     $correct = 1;
-                                    $score = isset($scoreList[$i]) ? $scoreList[$i] : null;
+                                    $score = isset($scoreList[$i]) ? $scoreList[$i] : 0;
                                     $comment = isset($feedbackTrueList[$i]) ? $feedbackTrueList[$i] : '';
                                 } else {
                                     $comment = isset($feedbackFalseList[$i]) ? $feedbackFalseList[$i] : '';
@@ -439,7 +438,7 @@ function lp_upload_quiz_action_handling()
                                     $id
                                 );
 
-                                $total += $score;
+                                $total += (float) $score;
                                 $id++;
                             }
 
@@ -461,7 +460,7 @@ function lp_upload_quiz_action_handling()
                                         $questionObj->updateWeighting($total);
                                         break;
                                 }
-                                $questionObj->save();
+                                $questionObj->save($exercise);
                             }
                         }
                         break;
@@ -470,7 +469,7 @@ function lp_upload_quiz_action_handling()
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
-                            $questionObj->save();
+                            $questionObj->save($exercise);
                         }
                         break;
                     case FILL_IN_BLANKS:
@@ -503,7 +502,7 @@ function lp_upload_quiz_action_handling()
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
-                            $questionObj->save();
+                            $questionObj->save($exercise);
                         }
                         break;
                     case MATCHING:
@@ -534,7 +533,7 @@ function lp_upload_quiz_action_handling()
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
-                            $questionObj->save();
+                            $questionObj->save($exercise);
                         }
                         break;
                 }

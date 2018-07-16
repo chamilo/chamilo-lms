@@ -117,7 +117,7 @@ class ForumThreadLink extends AbstractLink
                 $cats[] = [$data['thread_id'], $data['thread_title']];
             }
         }
-        $my_cats = isset($cats) ? $cats : null;
+        $my_cats = isset($cats) ? $cats : [];
 
         return $my_cats;
     }
@@ -152,9 +152,7 @@ class ForumThreadLink extends AbstractLink
     {
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
         $threadInfo = get_thread_information('', $this->get_ref_id());
-
         $thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-
         $sessionId = $this->get_session_id();
         $sessionCondition = api_get_session_condition(
             $sessionId,

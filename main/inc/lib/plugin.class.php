@@ -684,6 +684,7 @@ class Plugin
             }
         }
 
+        $currentUrlId = api_get_current_access_url_id();
         $attributes = [
             'variable' => 'show_tabs',
             'subkey' => $subkey,
@@ -693,7 +694,7 @@ class Plugin
             'title' => $tabName,
             'comment' => $url,
             'subkeytext' => $subkeytext,
-            'access_url' => 1,
+            'access_url' => $currentUrlId,
             'access_url_changeable' => 1,
             'access_url_locked' => 0,
         ];
@@ -877,9 +878,19 @@ class Plugin
      *
      * @return string
      */
-    public function getToolIconVisibility()
+    public function getToolIconVisibilityPerUserStatus()
     {
         return '';
+    }
+
+    /**
+     * Default tool icon visibility.
+     *
+     * @return bool
+     */
+    public function isIconVisibleByDefault()
+    {
+        return true;
     }
 
     /**
@@ -928,7 +939,8 @@ class Plugin
             return null;
         }
 
-        $visibility = $this->getToolIconVisibility();
+        $visibilityPerStatus = $this->getToolIconVisibilityPerUserStatus();
+        $visibility = $this->isIconVisibleByDefault();
 
         $em = Database::getManager();
 
@@ -948,10 +960,10 @@ class Plugin
             $tool
                 ->setId($cToolId)
                 ->setCId($courseId)
-                ->setName($name.$visibility)
+                ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
-                ->setVisibility(true)
+                ->setVisibility($visibility)
                 ->setAdmin(0)
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)

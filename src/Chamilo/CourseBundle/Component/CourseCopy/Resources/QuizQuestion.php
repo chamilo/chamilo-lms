@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+
 /**
  * Exercises questions backup script
  * Class QuizQuestion.
@@ -66,12 +68,12 @@ class QuizQuestion extends Resource
      * @param string $question
      * @param string $description
      * @param int    $ponderation
-     * @param $type
-     * @param $position
-     * @param $picture
-     * @param $level
-     * @param $extra
-     * @param int $question_category
+     * @param        $type
+     * @param        $position
+     * @param string $picture
+     * @param        $level
+     * @param        $extra
+     * @param int    $question_category
      */
     public function __construct(
         $id,
@@ -91,11 +93,42 @@ class QuizQuestion extends Resource
         $this->ponderation = $ponderation;
         $this->quiz_type = $type;
         $this->position = $position;
-        $this->picture = $picture;
         $this->level = $level;
         $this->answers = [];
         $this->extra = $extra;
         $this->question_category = $question_category;
+        $this->picture = $picture;
+    }
+
+    /**
+     * @param CourseBuilder $courseBuilder
+     */
+    public function addPicture(CourseBuilder $courseBuilder)
+    {
+        if (!empty($this->picture)) {
+            $courseInfo = $courseBuilder->course->info;
+            $courseId = $courseInfo['real_id'];
+            $courseCode = $courseInfo['code'];
+            $questionId = $this->source_id;
+            $question = \Question::read($questionId, $courseId);
+            $pictureId = $question->getPictureId();
+            // Add the picture document in the builder
+            if (!empty($pictureId)) {
+                $itemsToAdd[] = $pictureId;
+                // Add the "images" folder needed for correct restore
+                $documentData = \DocumentManager::get_document_data_by_id($pictureId, $courseCode, true);
+                if ($documentData) {
+                    if (isset($documentData['parents'])) {
+                        foreach ($documentData['parents'] as $parent) {
+                            $itemsToAdd[] = $parent['id'];
+                        }
+                    }
+                }
+
+                // Add the picture
+                $courseBuilder->build_documents(api_get_session_id(), $courseId, false, $itemsToAdd);
+            }
+        }
     }
 
     /**
@@ -133,11 +166,11 @@ class QuizQuestion extends Resource
     }
 
     /**
-     * @param QuizQuestionOption $option_obj
+     * @param QuizQuestionOption $option
      */
-    public function add_option($option_obj)
+    public function add_option($option)
     {
-        $this->question_options[$option_obj->obj->id] = $option_obj;
+        $this->question_options[$option->obj->id] = $option;
     }
 
     /**

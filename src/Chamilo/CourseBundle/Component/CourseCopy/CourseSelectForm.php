@@ -19,50 +19,64 @@ use Display;
 class CourseSelectForm
 {
     /**
+     * @return array
+     */
+    public static function getResourceTitleList()
+    {
+        $list = [];
+        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
+        $list[RESOURCE_ASSET] = get_lang('Assets');
+        $list[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
+        $list[RESOURCE_EVENT] = get_lang('Events');
+        $list[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
+        $list[RESOURCE_DOCUMENT] = get_lang('Documents');
+        $list[RESOURCE_LINK] = get_lang('Links');
+        $list[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
+        $list[RESOURCE_FORUM] = get_lang('Forums');
+        $list[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
+        $list[RESOURCE_QUIZ] = get_lang('Tests');
+        $list[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
+        $list[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
+        $list[RESOURCE_SCORM] = 'SCORM';
+        $list[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
+        $list[RESOURCE_SURVEY] = get_lang('Survey');
+        $list[RESOURCE_GLOSSARY] = get_lang('Glossary');
+        $list[RESOURCE_WIKI] = get_lang('Wiki');
+        $list[RESOURCE_THEMATIC] = get_lang('Thematic');
+        $list[RESOURCE_ATTENDANCE] = get_lang('Attendance');
+        $list[RESOURCE_WORK] = get_lang('ToolStudentPublication');
+
+        return $list;
+    }
+
+    /**
      * Display the form.
      *
      * @param array $course
-     * @param array $hidden_fields   hidden fields to add to the form
-     * @param bool  $avoid_serialize the document array will be serialize.
-     *                               This is used in the course_copy.php file
+     * @param array $hidden_fields     hidden fields to add to the form
+     * @param bool  $avoidSerialize    the document array will be serialize.
+     *                                 This is used in the course_copy.php file
+     * @param bool  $avoidCourseInForm
      */
     public static function display_form(
         $course,
         $hidden_fields = null,
-        $avoid_serialize = false
+        $avoidSerialize = false,
+        $avoidCourseInForm = false
     ) {
-        global $charset;
-        $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
-        $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
-        $resource_titles[RESOURCE_EVENT] = get_lang('Events');
-        $resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
-        $resource_titles[RESOURCE_DOCUMENT] = get_lang('Documents');
-        $resource_titles[RESOURCE_LINK] = get_lang('Links');
-        $resource_titles[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
-        $resource_titles[RESOURCE_FORUM] = get_lang('Forums');
-        $resource_titles[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
-        $resource_titles[RESOURCE_QUIZ] = get_lang('Tests');
-        $resource_titles[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
-        $resource_titles[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
-        $resource_titles[RESOURCE_SCORM] = 'SCORM';
-        $resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
-        $resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
-        $resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
-        $resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
-        $resource_titles[RESOURCE_THEMATIC] = get_lang('Thematic');
-        $resource_titles[RESOURCE_ATTENDANCE] = get_lang('Attendance');
-        $resource_titles[RESOURCE_WORK] = get_lang('ToolStudentPublication'); ?>
+        global $charset; ?>
         <script>
             function exp(item) {
                 el = document.getElementById('div_'+item);
                 if (el.style.display == 'none') {
                     el.style.display = '';
-                    if (document.getElementById('img_'+item).length)
-                    document.getElementById('img_'+item).className = 'fa fa-minus-square-o fa-lg';
+                    $('#img_'+item).removeClass();
+                    $('#img_'+item).addClass('fa fa-minus-square-o fa-lg');
+
                 } else {
-                    el.style.display='none';
-                    if (document.getElementById('img_'+item).length)
-                    document.getElementById('img_'+item).className ='fa fa-plus-square-o fa-lg';
+                    el.style.display = 'none';
+                    $('#img_'+item).removeClass();
+                    $('#img_'+item).addClass('fa fa-plus-square-o fa-lg');
                 }
             }
 
@@ -154,6 +168,7 @@ class CourseSelectForm
             echo get_lang('DestinationCourse').' : '.$courseInfo['title'].' ('.$courseInfo['code'].') '.$sessionTitle;
             echo '</h3>';
         }
+
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
         echo '<div class="tool-backups-options">';
         echo '<form method="post" id="upload_form" name="course_select_form">';
@@ -170,7 +185,6 @@ class CourseSelectForm
             echo '<input type="hidden" name="origin_session" value="'.$hidden_fields['origin_session'].'"/>';
         }
 
-        $element_count = 0;
         $forum_categories = [];
         $forums = [];
         $forum_topics = [];
@@ -178,13 +192,149 @@ class CourseSelectForm
         echo '<p>';
         echo get_lang('SelectResources');
         echo '</p>';
-
         echo Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
 
-        foreach ($course->resources as $type => $resources) {
+        $resource_titles = self::getResourceTitleList();
+        $element_count = self::parseResources($resource_titles, $course->resources, true, true);
+
+        // Fixes forum order
+        if (!empty($forum_categories)) {
+            $type = RESOURCE_FORUMCATEGORY;
+            echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
+            echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg"></em>';
+            echo '<span class="title">'.$resource_titles[RESOURCE_FORUM].'</span></div>';
+            echo '<div class="item-content" id="div_'.$type.'">';
+            echo '<ul class="list-backups-options">';
+            foreach ($forum_categories as $forum_category_id => $forum_category) {
+                echo '<li>';
+                echo '<label class="checkbox">';
+                echo '<input type="checkbox" 
+                    id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" 
+                    my_rel="'.$forum_category_id.'" 
+                    onclick="javascript:check_category(this);" 
+                    name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']" /> ';
+                $forum_category->show();
+                echo '</label>';
+                echo '</li>';
+
+                if (isset($forums[$forum_category_id])) {
+                    $my_forums = $forums[$forum_category_id];
+                    echo '<ul>';
+                    foreach ($my_forums as $forum_id => $forum) {
+                        echo '<li>';
+                        echo '<label class="checkbox">';
+                        echo '<input type="checkbox" 
+                            class="resource_forum" 
+                            id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'" 
+                            onclick="javascript:check_forum(this);" 
+                            my_rel="'.$forum_id.'" 
+                            rel="'.$forum_category_id.'" 
+                            name="resource['.RESOURCE_FORUM.']['.$forum_id.']" />';
+                        $forum->show();
+                        echo '</label>';
+                        echo '</li>';
+                        if (isset($forum_topics[$forum_id])) {
+                            $my_forum_topics = $forum_topics[$forum_id];
+                            if (!empty($my_forum_topics)) {
+                                echo '<ul>';
+                                foreach ($my_forum_topics as $topic_id => $topic) {
+                                    echo '<li>';
+                                    echo '<label class="checkbox">';
+                                    echo '<input 
+                                        type="checkbox" 
+                                        id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'" 
+                                        onclick="javascript:check_topic(this);" class="resource_topic" 
+                                        forum_id="'.$forum_id.'"  
+                                        rel="'.$forum_id.'" 
+                                        cat_id="'.$forum_category_id.'" 
+                                        name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']" />';
+                                    $topic->show();
+                                    echo '</label>';
+                                    echo '</li>';
+                                }
+                                echo '</ul>';
+                            }
+                        }
+                    }
+                    echo '</ul>';
+                }
+                echo '<hr/>';
+            }
+            echo '</ul>';
+            echo '</div>';
+            echo '<script language="javascript">exp('."'$type'".')</script>';
+        }
+
+        if ($avoidSerialize) {
+            /*Documents are avoided due the huge amount of memory that the serialize php function "eats"
+            (when there are directories with hundred/thousand of files) */
+            // this is a known issue of serialize
+            $course->resources['document'] = null;
+        }
+
+        if ($avoidCourseInForm === false) {
+            /** @var Course $course */
+            $courseSerialized = base64_encode(Course::serialize($course));
+            echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
+        }
+
+        if (is_array($hidden_fields)) {
+            foreach ($hidden_fields as $key => $value) {
+                echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
+            }
+        }
+
+        $recycleOption = isset($_POST['recycle_option']) ? true : false;
+        if (empty($element_count)) {
+            echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+        } else {
+            if (!empty($hidden_fields['destination_session'])) {
+                echo '<br />
+                      <button 
+                        class="save" 
+                        type="submit" 
+                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                    get_lang('Ok').'</button>';
+            } else {
+                if ($recycleOption) {
+                    echo '<br /><button class="save" type="submit">'.get_lang('Ok').'</button>';
+                } else {
+                    echo '<br />
+                          <button 
+                                class="save btn btn-primary" 
+                                type="submit" 
+                                onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
+                    get_lang('Ok').'</button>';
+                }
+            }
+        }
+
+        self::display_hidden_quiz_questions($course);
+        self::display_hidden_scorm_directories($course);
+        echo '</form>';
+        echo '</div>';
+        echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
+    }
+
+    /**
+     * @param array $resource_titles
+     * @param array $resourceList
+     * @param bool  $showHeader
+     * @param bool  $showItems
+     *
+     * @return int
+     */
+    public static function parseResources(
+        $resource_titles,
+        $resourceList,
+        $showHeader = true,
+        $showItems = true
+    ) {
+        $element_count = 0;
+        foreach ($resourceList as $type => $resources) {
             if (count($resources) > 0) {
                 switch ($type) {
-                    //Resources to avoid
+                    // Resources to avoid
                     case RESOURCE_FORUMCATEGORY:
                         foreach ($resources as $id => $resource) {
                             $forum_categories[$id] = $resource;
@@ -211,10 +361,14 @@ class CourseSelectForm
                     case RESOURCE_SCORM:
                         break;
                     default:
-                        echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
-                        echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" ></em>';
-                        echo '<span class="title">'.$resource_titles[$type].'</span></div>';
-                        echo '<div class="item-content" id="div_'.$type.'">';
+                        if ($showHeader) {
+                            echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
+                            echo '<em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg"></em>';
+                            echo '<span class="title">'.$resource_titles[$type].'</span>';
+                            echo '</div>';
+                            echo '<div class="item-content" id="div_'.$type.'">';
+                        }
+
                         if ($type == RESOURCE_LEARNPATH) {
                             echo Display::return_message(
                                 get_lang(
@@ -229,6 +383,7 @@ class CourseSelectForm
                                 'warning'
                             );
                         }
+
                         if ($type == RESOURCE_DOCUMENT) {
                             if (api_get_setting('show_glossary_in_documents') != 'none') {
                                 echo Display::return_message(
@@ -240,123 +395,46 @@ class CourseSelectForm
                             }
                         }
 
-                        echo '<div class="well">';
-                        echo '<div class="btn-group">';
-                        echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
-                        echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
-                        echo '</div>';
-                        echo '<ul class="list-backups-options">';
-                        foreach ($resources as $id => $resource) {
-                            if ($resource) {
-                                echo '<li>';
-                                // Event obj in 1.9.x in 1.10.x the class is CalendarEvent
-                                Resource::setClassType($resource);
-                                echo '<label class="checkbox">';
-                                echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
-                                $resource->show();
-                                echo '</label>';
-                                echo '</li>';
+                        if ($showItems) {
+                            echo '<div class="well">';
+                            echo '<div class="btn-group">';
+                            echo "<a class=\"btn btn-default\" 
+                                        href=\"javascript: void(0);\" 
+                                        onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
+                            echo "<a class=\"btn btn-default\" 
+                                        href=\"javascript: void(0);\" 
+                                        onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
+                            echo '</div>';
+                            echo '<ul class="list-backups-options">';
+                            foreach ($resources as $id => $resource) {
+                                if ($resource) {
+                                    echo '<li>';
+                                    // Event obj in 1.9.x in 1.10.x the class is CalendarEvent
+                                    Resource::setClassType($resource);
+                                    echo '<label class="checkbox">';
+                                    echo '<input 
+                                        type="checkbox" 
+                                        name="resource['.$type.']['.$id.']"  
+                                        id="resource['.$type.']['.$id.']" />';
+                                    $resource->show();
+                                    echo '</label>';
+                                    echo '</li>';
+                                }
                             }
+                            echo '</ul>';
+                            echo '</div>';
                         }
-                        echo '</ul>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '<script language="javascript">exp('."'$type'".')</script>';
+
+                        if ($showHeader) {
+                            echo '</div>';
+                            echo '<script language="javascript">exp('."'$type'".')</script>';
+                        }
                         $element_count++;
                 }
             }
         }
 
-        //Fixes forum order
-        if (!empty($forum_categories)) {
-            $type = RESOURCE_FORUMCATEGORY;
-            echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
-            echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg"></em>';
-            echo '<span class="title">'.$resource_titles[RESOURCE_FORUM].'</span></div>';
-            echo '<div class="item-content" id="div_'.$type.'">';
-
-            echo '<ul class="list-backups-options">';
-            foreach ($forum_categories as $forum_category_id => $forum_category) {
-                echo '<li>';
-                echo '<label class="checkbox">';
-                echo '<input type="checkbox" id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" my_rel="'.$forum_category_id.'" onclick="javascript:check_category(this);"  name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']"  /> ';
-                $forum_category->show();
-                echo '</label>';
-                echo '</li>';
-
-                if (isset($forums[$forum_category_id])) {
-                    $my_forums = $forums[$forum_category_id];
-                    echo '<ul>';
-                    foreach ($my_forums as $forum_id => $forum) {
-                        echo '<li>';
-                        echo '<label class="checkbox">';
-                        echo '<input type="checkbox" class="resource_forum" id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'" onclick="javascript:check_forum(this);" my_rel="'.$forum_id.'" rel="'.$forum_category_id.'" name="resource['.RESOURCE_FORUM.']['.$forum_id.']"  />';
-                        $forum->show();
-                        echo '</label>';
-                        echo '</li>';
-                        if (isset($forum_topics[$forum_id])) {
-                            $my_forum_topics = $forum_topics[$forum_id];
-                            if (!empty($my_forum_topics)) {
-                                echo '<ul>';
-                                foreach ($my_forum_topics as $topic_id => $topic) {
-                                    echo '<li>';
-                                    echo '<label class="checkbox">';
-                                    echo '<input type="checkbox"  id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'" onclick="javascript:check_topic(this);" class="resource_topic" forum_id="'.$forum_id.'"  rel="'.$forum_id.'" cat_id="'.$forum_category_id.'" name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']"  />';
-                                    $topic->show();
-                                    echo '</label>';
-                                    echo '</li>';
-                                }
-                                echo '</ul>';
-                            }
-                        }
-                    }
-                    echo '</ul>';
-                }
-                echo '<hr/>';
-            }
-            echo '</ul>';
-            echo '</div>';
-            echo '<script language="javascript">exp('."'$type'".')</script>';
-        }
-
-        if ($avoid_serialize) {
-            /*Documents are avoided due the huge amount of memory that the serialize php function "eats"
-            (when there are directories with hundred/thousand of files) */
-            // this is a known issue of serialize
-            $course->resources['document'] = null;
-        }
-
-        echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
-        if (is_array($hidden_fields)) {
-            foreach ($hidden_fields as $key => $value) {
-                echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
-            }
-        }
-
-        $recycleOption = isset($_POST['recycle_option']) ? true : false;
-
-        if (empty($element_count)) {
-            echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
-        } else {
-            if (!empty($hidden_fields['destination_session'])) {
-                echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
-                    get_lang('Ok').'</button>';
-            } else {
-                if ($recycleOption) {
-                    echo '<br /><button class="save" type="submit">'.
-                        get_lang('Ok').'</button>';
-                } else {
-                    echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
-                    get_lang('Ok').'</button>';
-                }
-            }
-        }
-
-        self::display_hidden_quiz_questions($course);
-        self::display_hidden_scorm_directories($course);
-        echo '</form>';
-        echo '</div>';
-        echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
+        return $element_count;
     }
 
     /**
@@ -408,20 +486,27 @@ class CourseSelectForm
     /**
      * Get the posted course.
      *
-     * @param string $from        who calls the function?
-     *                            It can be copy_course, create_backup, import_backup or recycle_course
+     * @param string $from         who calls the function?
+     *                             It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
+     * @param Course $postedCourse
      *
-     * @return course The course-object with all resources selected by the user
+     * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)
      */
-    public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
+    public static function get_posted_course($from = '', $session_id = 0, $course_code = '', $postedCourse = null)
     {
         $course = null;
         if (isset($_POST['course'])) {
             $course = Course::unserialize(base64_decode($_POST['course']));
-        } else {
+        }
+
+        if ($postedCourse) {
+            $course = $postedCourse;
+        }
+
+        if (empty($course)) {
             return false;
         }
 
@@ -435,7 +520,7 @@ class CourseSelectForm
         $course_id = $course_info['real_id'];
 
         /* Searching the documents resource that have been set to null because
-        $avoid_serialize is true in the display_form() function*/
+        $avoidSerialize is true in the display_form() function*/
         if ($from === 'copy_course') {
             if (is_array($resource)) {
                 $resource = array_keys($resource);
@@ -518,7 +603,6 @@ class CourseSelectForm
                                         $forum_id == $post->obj->forum_id &&
                                         $title == $post->obj->post_title
                                     ) {
-                                        //unset($course->resources[RESOURCE_FORUMPOST][$post_id]);
                                         $posts_to_save[] = $post_id;
                                     }
                                 }
@@ -596,8 +680,11 @@ class CourseSelectForm
                                         }
                                     }
                                 }
-                                if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
-                                    unset($course->resources[$type][$id]);
+                                // quiz question can be, not attached to an exercise
+                                if ($type != RESOURCE_QUIZQUESTION) {
+                                    if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
+                                        unset($course->resources[$type][$id]);
+                                    }
                                 }
                             }
                         }
@@ -612,13 +699,13 @@ class CourseSelectForm
      * Display the form session export.
      *
      * @param array $list_course
-     * @param array $hidden_fields   hidden fields to add to the form
-     * @param bool  $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
+     * @param array $hidden_fields  hidden fields to add to the form
+     * @param bool  $avoidSerialize the document array will be serialize. This is used in the course_copy.php file
      */
     public static function display_form_session_export(
         $list_course,
         $hidden_fields = null,
-        $avoid_serialize = false
+        $avoidSerialize = false
     ) {
         ?>
         <script>
@@ -628,13 +715,13 @@ class CourseSelectForm
                     el.style.display = '';
                     if (document.getElementById('img_'+item).length)
                     document.getElementById('img_'+item).className('fa fa-minus-square-o fa-lg');
-                }
-                else{
+                } else {
                     el.style.display = 'none';
                     if (document.getElementById('img_'+item).length)
                     document.getElementById('img_'+item).className('fa fa-plus-square-o fa-lg');
                 }
             }
+
             function setCheckbox(type,value) {
                 d = document.course_select_form;
                 for (i = 0; i < d.elements.length; i++) {
@@ -707,7 +794,7 @@ class CourseSelectForm
                 }
             }
         }
-        if ($avoid_serialize) {
+        if ($avoidSerialize) {
             // Documents are avoided due the huge amount of memory that the serialize php
             // function "eats" (when there are directories with hundred/thousand of files)
             // this is a known issue of serialize

@@ -419,8 +419,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSessionsForConfiguration()
     {
-        $auth = new Auth();
-        $sessions = $auth->browseSessions();
+        $sessions = CoursesAndSessionsCatalog::browseSessions();
         $currency = $this->getSelectedCurrency();
         $items = [];
         foreach ($sessions as $session) {
@@ -580,10 +579,21 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
+        $courseDescription = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
+            ->findOneBy(
+                [
+                    'cId' => $course->getId(),
+                    'sessionId' => 0,
+                ],
+                [
+                    'descriptionType' => 'ASC',
+                ]
+            );
+
         $courseInfo = [
             'id' => $course->getId(),
             'title' => $course->getTitle(),
-            'description' => $course->getDescription(),
+            'description' => $courseDescription->getContent(),
             'code' => $course->getCode(),
             'visual_code' => $course->getVisualCode(),
             'teachers' => [],
@@ -594,8 +604,11 @@ class BuyCoursesPlugin extends Plugin
 
         $courseTeachers = $course->getTeachers();
 
-        foreach ($courseTeachers as $teacher) {
-            $courseInfo['teachers'][] = $teacher->getUser()->getCompleteName();
+        foreach ($courseTeachers as $teachers) {
+            $user = $teachers->getUser();
+            $teacher['id'] = $user->getId();
+            $teacher['name'] = $user->getCompleteName();
+            $courseInfo['teachers'][] = $teacher;
         }
 
         $possiblePath = api_get_path(SYS_COURSE_PATH);
@@ -646,11 +659,14 @@ class BuyCoursesPlugin extends Plugin
         $sessionInfo = [
             'id' => $session->getId(),
             'name' => $session->getName(),
+            'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
             'price' => $item['price'],
             'currency' => $item['iso_code'],
             'image' => null,
+            'nbrCourses' => $session->getNbrCourses(),
+            'nbrUsers' => $session->getNbrUsers(),
         ];
 
         $fieldValue = new ExtraFieldValue('session');
@@ -680,7 +696,9 @@ class BuyCoursesPlugin extends Plugin
 
             foreach ($userCourseSubscriptions as $userCourseSubscription) {
                 $user = $userCourseSubscription->getUser();
-                $sessionCourseData['coaches'][] = $user->getCompleteName();
+                $coaches['id'] = $user->getUserId();
+                $coaches['name'] = $user->getCompleteName();
+                $sessionCourseData['coaches'][] = $coaches;
             }
 
             $sessionInfo['courses'][] = $sessionCourseData;
@@ -864,7 +882,7 @@ class BuyCoursesPlugin extends Plugin
                 $saleIsCompleted = CourseManager::subscribe_user($sale['user_id'], $course['code']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
-                SessionManager::subscribe_users_to_session(
+                SessionManager::subscribeUsersToSession(
                     $sale['product_id'],
                     [$sale['user_id']],
                     api_get_session_visibility($sale['product_id']),
@@ -1713,7 +1731,9 @@ class BuyCoursesPlugin extends Plugin
             $services['owner_id'] = $return['owner_id'];
             $services['owner_name'] = api_get_person_name($return['firstname'], $return['lastname']);
             $services['visibility'] = $return['visibility'];
-            $services['image'] = $return['image'];
+            $services['image'] = !empty($return['image']) ? api_get_path(
+                    WEB_PLUGIN_PATH
+                ).'buycourses/uploads/services/images/'.$return['image'] : null;
             $services['video_url'] = $return['video_url'];
             $services['service_information'] = $return['service_information'];
 
@@ -1731,7 +1751,9 @@ class BuyCoursesPlugin extends Plugin
             $services[$index]['owner_id'] = $service['owner_id'];
             $services[$index]['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
             $services[$index]['visibility'] = $service['visibility'];
-            $services[$index]['image'] = $service['image'];
+            $services[$index]['image'] = !empty($service['image']) ? api_get_path(
+                    WEB_PLUGIN_PATH
+                ).'buycourses/uploads/services/images/'.$service['image'] : null;
             $services[$index]['video_url'] = $service['video_url'];
             $services[$index]['service_information'] = $service['service_information'];
         }
@@ -2360,9 +2382,7 @@ class BuyCoursesPlugin extends Plugin
     private function filterSessionList($name = null, $min = 0, $max = 0)
     {
         if (empty($name) && empty($min) && empty($max)) {
-            $auth = new Auth();
-
-            return $auth->browseSessions();
+            return CoursesAndSessionsCatalog::browseSessions();
         }
 
         $itemTable = Database::get_main_table(self::TABLE_ITEM);

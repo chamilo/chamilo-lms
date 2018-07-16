@@ -129,7 +129,6 @@ if ($action == 'thematic_list') {
             $list['content'] = Security::remove_XSS($thematic['content'], STUDENT);
             $list['display_orden'] = $thematic['display_order'];
             $list['active'] = $thematic['active'];
-
             $my_thematic_id = $thematic['id'];
 
             $session_star = '';
@@ -248,7 +247,7 @@ if ($action == 'thematic_list') {
         get_lang('Content'),
         false,
         false,
-        ['ToolbarSet' => 'TrainingDescription', 'Height' => '150']
+        ['ToolbarSet' => 'Basic', 'Height' => '150']
     );
     $form->addButtonSave(get_lang('Save'));
 

@@ -76,7 +76,7 @@ $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(myObject) {
             $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.$url.'",
@@ -92,7 +92,7 @@ function load_course_list (div_course,my_user_id) {
 function load_session_list(div_session, my_user_id) {
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(myObject) {
             $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.$urlSession.'",
@@ -119,7 +119,7 @@ function active_user(element_div) {
     if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
+            beforeSend: function(myObject) {
                 $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
@@ -208,17 +208,17 @@ function trimVariables()
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
  *
- * @param bool $is_count Whether to count, or get data
+ * @param bool $getCount Whether to count, or get data
  *
  * @return string SQL query
  */
-function prepare_user_sql_query($is_count)
+function prepare_user_sql_query($getCount)
 {
     $sql = '';
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-    if ($is_count) {
+    if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
         $sql .= "SELECT u.id AS col0, u.official_code AS col2, ";
@@ -325,6 +325,7 @@ function prepare_user_sql_query($is_count)
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
         }
+
         $sql .= "
             $keyword_admin
             $keyword_extra_value
@@ -340,6 +341,11 @@ function prepare_user_sql_query($is_count)
             $sql .= " AND u.active = 0";
         }
         $sql .= " ) ";
+    }
+
+    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
+    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
+        $sql .= " AND u.creator_id = ".api_get_user_id();
     }
 
     $variables = Session::read('variables_to_show', []);
@@ -434,6 +440,8 @@ function get_number_of_users()
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
  *
+ * @return array Users list
+ *
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -445,12 +453,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $column = intval($column);
     $from = intval($from);
     $number_of_items = intval($number_of_items);
-
-    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
-    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
-        $sql .= " WHERE u.creator_id = ".api_get_user_id();
-    }
-
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
 
@@ -511,7 +513,9 @@ function email_filter($email)
 /**
  * Returns a mailto-link.
  *
- * @param string $email An email-address
+ * @param string $email  An email-address
+ * @param array  $params Deprecated
+ * @param array  $row
  *
  * @return string HTML-code with a mailto-link
  */
@@ -526,6 +530,8 @@ function user_filter($name, $params, $row)
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
+ * @throws Exception
  *
  * @return string Some HTML-code with modify-buttons
  */
@@ -887,17 +893,17 @@ if (!empty($action)) {
             case 'delete':
                 if (api_is_platform_admin()) {
                     $number_of_selected_users = count($_POST['id']);
-                    $number_of_deleted_users = 0;
+                    $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
                             if ($user_id != $_user['user_id']) {
                                 if (UserManager::delete_user($user_id)) {
-                                    $number_of_deleted_users++;
+                                    $number_of_affected_users++;
                                 }
                             }
                         }
                     }
-                    if ($number_of_selected_users == $number_of_deleted_users) {
+                    if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
                             get_lang('SelectedUsersDeleted'),
                             'confirmation'
@@ -905,6 +911,58 @@ if (!empty($action)) {
                     } else {
                         $message = Display::return_message(
                             get_lang('SomeUsersNotDeleted'),
+                            'error'
+                        );
+                    }
+                }
+                break;
+            case 'disable':
+                if (api_is_platform_admin()) {
+                    $number_of_selected_users = count($_POST['id']);
+                    $number_of_affected_users = 0;
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $user_id) {
+                            if ($user_id != $_user['user_id']) {
+                                if (UserManager::disable($user_id)) {
+                                    $number_of_affected_users++;
+                                }
+                            }
+                        }
+                    }
+                    if ($number_of_selected_users == $number_of_affected_users) {
+                        $message = Display::return_message(
+                            get_lang('SelectedUsersDisabled'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('SomeUsersNotDisabled'),
+                            'error'
+                        );
+                    }
+                }
+                break;
+            case 'enable':
+                if (api_is_platform_admin()) {
+                    $number_of_selected_users = count($_POST['id']);
+                    $number_of_affected_users = 0;
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $user_id) {
+                            if ($user_id != $_user['user_id']) {
+                                if (UserManager::enable($user_id)) {
+                                    $number_of_affected_users++;
+                                }
+                            }
+                        }
+                    }
+                    if ($number_of_selected_users == $number_of_affected_users) {
+                        $message = Display::return_message(
+                            get_lang('SelectedUsersEnabled'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('SomeUsersNotEnabled'),
                             'error'
                         );
                     }
@@ -1053,13 +1111,15 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
+$actionsList = [];
 if (api_is_platform_admin() &&
     !api_get_configuration_value('deny_delete_users')
 ) {
-    $table->set_form_actions(['delete' => get_lang('DeleteFromPlatform')]);
-} else {
-    $table->set_form_actions(['none' => get_lang('NoActionAvailable')]);
+    $actionsList['delete'] = get_lang('DeleteFromPlatform');
 }
+$actionsList['disable'] = get_lang('Disable');
+$actionsList['enable'] = get_lang('Enable');
+$table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';

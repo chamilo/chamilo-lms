@@ -275,7 +275,7 @@ if ($allowTutors == 'true') {
 
         if ($form_sent == 1) {
             //added a parameter to send emails when registering a user
-            SessionManager::subscribe_users_to_session($id_session, $UserList, null, true);
+            SessionManager::subscribeUsersToSession($id_session, $UserList, null, true);
             header('Location: resume_session.php?id_session='.$id_session);
             exit;
         }

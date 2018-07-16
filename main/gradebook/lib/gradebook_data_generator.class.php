@@ -127,37 +127,33 @@ class GradebookDataGenerator
             $row[] = $item->get_weight();
             $item->setStudentList($studentList);
 
-            //if (count($this->evals_links) > 0) {
             if (get_class($item) == 'Evaluation') {
                 // Items inside a category.
-                if (1) {
-                    $resultColumn = $this->build_result_column(
-                        $userId,
-                        $item,
-                        $ignore_score_color
-                    );
+                $resultColumn = $this->build_result_column(
+                    $userId,
+                    $item,
+                    $ignore_score_color
+                );
 
-                    $row[] = $resultColumn['display'];
-                    $row['result_score'] = $resultColumn['score'];
-                    $row['result_score_weight'] = $resultColumn['score_weight'];
+                $row[] = $resultColumn['display'];
+                $row['result_score'] = $resultColumn['score'];
+                $row['result_score_weight'] = $resultColumn['score_weight'];
 
-                    // Best
-                    $best = $this->buildBestResultColumn($item);
-                    $row['best'] = $best['display'];
-                    $row['best_score'] = $best['score'];
+                // Best
+                $best = $this->buildBestResultColumn($item);
+                $row['best'] = $best['display'];
+                $row['best_score'] = $best['score'];
 
-                    // Average
-                    $average = $this->buildAverageResultColumn($item);
-                    $row['average'] = $average['display'];
-                    $row['average_score'] = $average['score'];
+                // Average
+                $average = $this->buildAverageResultColumn($item);
+                $row['average'] = $average['display'];
+                $row['average_score'] = $average['score'];
 
-                    // Ranking
-                    $ranking = $this->buildRankingColumn($item, $userId, $userCount);
-                    $row['ranking'] = $ranking['display'];
-                    $row['ranking_score'] = $ranking['score'];
-
-                    $row[] = $item;
-                }
+                // Ranking
+                $ranking = $this->buildRankingColumn($item, $userId, $userCount);
+                $row['ranking'] = $ranking['display'];
+                $row['ranking_score'] = $ranking['score'];
+                $row[] = $item;
             } else {
                 // Category.
                 $result = $this->build_result_column(
@@ -391,8 +387,7 @@ class GradebookDataGenerator
             true
         );
         $type = $item->get_item_type();
-
-        if ($type == 'L' && get_class($item) == 'ExerciseLink') {
+        if ($type === 'L' && get_class($item) === 'ExerciseLink') {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 

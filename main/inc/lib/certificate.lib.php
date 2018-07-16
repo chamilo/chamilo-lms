@@ -508,7 +508,7 @@ class Certificate extends Model
      */
     public function generateQRImage($text, $path)
     {
-        //Make sure HTML certificate is generated
+        // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             //L low, M - Medium, L large error correction
             return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
@@ -645,8 +645,8 @@ class Certificate extends Model
 
             // Remove media=screen to be available when printing a document
             $certificateContent = str_replace(
-                api_get_path(WEB_CSS_PATH).'editor.css" media="screen"',
-                api_get_path(WEB_CSS_PATH).'editor.css" ',
+                ' media="screen"',
+                '',
                 $certificateContent
             );
 
@@ -692,7 +692,6 @@ class Certificate extends Model
         }
 
         $userInfo = api_get_user_info($this->user_id);
-
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
         $termsValidationDate = '';
@@ -700,17 +699,20 @@ class Certificate extends Model
             list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
         }
 
-        $sessions = SessionManager::get_sessions_by_user($this->user_id);
+        $sessions = SessionManager::get_sessions_by_user($this->user_id, false, true);
+        $totalTimeInLearningPaths = 0;
         $sessionsApproved = [];
+        $coursesApproved = [];
         if ($sessions) {
             foreach ($sessions as $session) {
                 $allCoursesApproved = [];
                 foreach ($session['courses'] as $course) {
                     $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $courseCode = $courseInfo['code'];
                     $gradebookCategories = Category::load(
                         null,
                         null,
-                        $courseInfo['code'],
+                        $courseCode,
                         null,
                         false,
                         $session['session_id']
@@ -726,6 +728,16 @@ class Certificate extends Model
                         );
 
                         if ($result) {
+                            $coursesApproved[$course['real_id']] = $courseInfo['title'];
+
+                            // Find time spent in LP
+                            $totalTimeInLearningPaths += Tracking::get_time_spent_in_lp(
+                                $this->user_id,
+                                $courseCode,
+                                [],
+                                $session['session_id']
+                            );
+
                             $allCoursesApproved[] = true;
                         }
                     }
@@ -781,7 +793,8 @@ class Certificate extends Model
         );
         $tplContent->assign('skills', $skills);
         $tplContent->assign('sessions', $sessionsApproved);
-
+        $tplContent->assign('courses', $coursesApproved);
+        $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 

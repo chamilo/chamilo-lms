@@ -135,7 +135,6 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     }
 } else {
     $tools = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-
     $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
         api_get_user_id(),
         api_get_course_info()
@@ -174,7 +173,6 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
 
     if ($isDrhOfCourse) {
         $drhTool = CourseHome::get_tools_category(TOOL_DRH);
-
         $blocks[] = ['content' => CourseHome::show_tools_category($drhTool)];
     }
 }

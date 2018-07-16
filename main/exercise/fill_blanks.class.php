@@ -34,23 +34,21 @@ class FillBlanks extends Question
     public function createAnswersForm($form)
     {
         $defaults = [];
+        $defaults['answer'] = get_lang('DefaultTextInBlanks');
+        $defaults['select_separator'] = 0;
+        $blankSeparatorNumber = 0;
         if (!empty($this->id)) {
             $objectAnswer = new Answer($this->id);
             $answer = $objectAnswer->selectAnswer(1);
             $listAnswersInfo = self::getAnswerInfo($answer);
+            $defaults['multiple_answer'] = 0;
             if ($listAnswersInfo['switchable']) {
                 $defaults['multiple_answer'] = 1;
-            } else {
-                $defaults['multiple_answer'] = 0;
             }
             // Take the complete string except after the last '::'
             $defaults['answer'] = $listAnswersInfo['text'];
             $defaults['select_separator'] = $listAnswersInfo['blank_separator_number'];
             $blankSeparatorNumber = $listAnswersInfo['blank_separator_number'];
-        } else {
-            $defaults['answer'] = get_lang('DefaultTextInBlanks');
-            $defaults['select_separator'] = 0;
-            $blankSeparatorNumber = 0;
         }
 
         $blankSeparatorStart = self::getStartSeparator($blankSeparatorNumber);
@@ -523,6 +521,7 @@ class FillBlanks extends Question
         $inTabTeacherSolution = $listAnswersInfo['words'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
 
+        $labelId = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
             case self::FILL_THE_BLANK_MENU:
                 $selected = '';
@@ -558,6 +557,7 @@ class FillBlanks extends Question
                     [
                         'class' => 'selectpicker',
                         'data-width' => $width,
+                        'id' => $labelId,
                     ],
                     false
                 );
@@ -565,7 +565,7 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
+                $attributes['id'] = $labelId;
                 $result = Display::input(
                     'text',
                     "choice[$questionId][]",
@@ -675,13 +675,13 @@ class FillBlanks extends Question
                     },
                     $listSeveral
                 );
-                $studentAnswer = htmlspecialchars($studentAnswer);
+                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $correctAnswer = api_html_entity_decode($correctAnswer);
-                $studentAnswer = htmlspecialchars($studentAnswer);
+                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = $studentAnswer == self::trimOption($correctAnswer);
                 break;
         }
@@ -696,13 +696,14 @@ class FillBlanks extends Question
      */
     public static function getFillTheBlankAnswerType($correctAnswer)
     {
+        $type = self::FILL_THE_BLANK_STANDARD;
         if (api_strpos($correctAnswer, '|') && !api_strpos($correctAnswer, '||')) {
-            return self::FILL_THE_BLANK_MENU;
+            $type = self::FILL_THE_BLANK_MENU;
         } elseif (api_strpos($correctAnswer, '||')) {
-            return self::FILL_THE_BLANK_SEVERAL_ANSWER;
-        } else {
-            return self::FILL_THE_BLANK_STANDARD;
+            $type = self::FILL_THE_BLANK_SEVERAL_ANSWER;
         }
+
+        return $type;
     }
 
     /**
@@ -833,7 +834,6 @@ class FillBlanks extends Question
             // if we are in student view, we've got 3 times :::::: for common words
             $commonWords = api_preg_replace("/::::::/", "::", $commonWords);
         }
-
         $listAnswerResults['common_words'] = explode("::", $commonWords);
 
         return $listAnswerResults;
@@ -845,7 +845,7 @@ class FillBlanks extends Question
      * -2  : didn't answer
      * -1  : student answer is wrong
      *  0  : student answer is correct
-     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer indice is 0).
+     * >0  : fill the blank question with choice menu, is the index of the student answer (right answer index is 0).
      *
      * @param int $testId
      * @param int $questionId
@@ -899,52 +899,52 @@ class FillBlanks extends Question
         ';
 
         $res = Database::query($sql);
-        $tabUserResult = [];
+        $userResult = [];
         // foreach attempts for all students starting with his older attempt
         while ($data = Database::fetch_array($res)) {
-            $tabAnswer = self::getAnswerInfo($data['answer'], true);
+            $answer = self::getAnswerInfo($data['answer'], true);
 
             // for each bracket to find in this question
-            foreach ($tabAnswer['student_answer'] as $bracketNumber => $studentAnswer) {
-                if ($tabAnswer['student_answer'][$bracketNumber] != '') {
+            foreach ($answer['student_answer'] as $bracketNumber => $studentAnswer) {
+                if ($answer['student_answer'][$bracketNumber] != '') {
                     // student has answered this bracket, cool
-                    switch (self::getFillTheBlankAnswerType($tabAnswer['words'][$bracketNumber])) {
+                    switch (self::getFillTheBlankAnswerType($answer['words'][$bracketNumber])) {
                         case self::FILL_THE_BLANK_MENU:
                             // get the indice of the choosen answer in the menu
                             // we know that the right answer is the first entry of the menu, ie 0
                             // (remember, menu entries are shuffled when taking the test)
-                            $tabUserResult[$data['user_id']][$bracketNumber] = self::getFillTheBlankMenuAnswerNum(
-                                $tabAnswer['words'][$bracketNumber],
-                                $tabAnswer['student_answer'][$bracketNumber]
+                            $userResult[$data['user_id']][$bracketNumber] = self::getFillTheBlankMenuAnswerNum(
+                                $answer['words'][$bracketNumber],
+                                $answer['student_answer'][$bracketNumber]
                             );
                             break;
                         default:
                             if (self::isStudentAnswerGood(
-                                $tabAnswer['student_answer'][$bracketNumber],
-                                $tabAnswer['words'][$bracketNumber]
+                                $answer['student_answer'][$bracketNumber],
+                                $answer['words'][$bracketNumber]
                             )
                             ) {
-                                $tabUserResult[$data['user_id']][$bracketNumber] = 0; //  right answer
+                                $userResult[$data['user_id']][$bracketNumber] = 0; //  right answer
                             } else {
-                                $tabUserResult[$data['user_id']][$bracketNumber] = -1; // wrong answer
+                                $userResult[$data['user_id']][$bracketNumber] = -1; // wrong answer
                             }
                     }
                 } else {
                     // student didn't answer this bracket
                     if ($useLastAnsweredAttempt) {
                         // if we take into account the last answered attempt
-                        if (!isset($tabUserResult[$data['user_id']][$bracketNumber])) {
-                            $tabUserResult[$data['user_id']][$bracketNumber] = -2; // not answered
+                        if (!isset($userResult[$data['user_id']][$bracketNumber])) {
+                            $userResult[$data['user_id']][$bracketNumber] = -2; // not answered
                         }
                     } else {
                         // we take the last attempt, even if the student answer the question before
-                        $tabUserResult[$data['user_id']][$bracketNumber] = -2; // not answered
+                        $userResult[$data['user_id']][$bracketNumber] = -2; // not answered
                     }
                 }
             }
         }
 
-        return $tabUserResult;
+        return $userResult;
     }
 
     /**
@@ -1266,8 +1266,8 @@ class FillBlanks extends Question
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
-                $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
-                $correctAnswerHtml .= " <span style='font-weight:normal'>(";
+                $correctAnswerHtml .= "<span class='correct-answer'><strong>".$listPossibleAnswers[0]."</strong>";
+                $correctAnswerHtml .= " (";
                 for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {
@@ -1282,11 +1282,11 @@ class FillBlanks extends Question
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span class='feedback-green'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span class='correct-answer'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span class='feedback-green'>".$correct."</span>";
+                $correctAnswerHtml = "<span class='correct-answer'>".$correct."</span>";
         }
 
         if ($hideExpectedAnswer) {
@@ -1297,7 +1297,7 @@ class FillBlanks extends Question
 
         $result = "<span class='feedback-question'>";
         $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
-        $result .= "<span class='feedback-separator'> / </span>";
+        $result .= "<span class='feedback-separator'>|</span>";
         $result .= $correctAnswerHtml;
         $result .= "</span>";
 

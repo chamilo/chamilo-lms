@@ -3,13 +3,10 @@
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="items items-hotcourse">
                 <div class="image">
-                    {% if item.is_registered %}
-                        <a title="{{ item.title}}" href="{{ item.course_public_url }}">
+                        <a title="{{ item.title}}" href="{{ _p.web }}course/{{ item.real_id  }}/about">
                             <img src="{{ item.course_image_large }}" class="img-responsive" alt="{{ item.title }}">
                         </a>
-                    {% else %}
-                        <img src="{{ item.course_image_large }}" class="img-responsive" alt="{{ item.title }}">
-                    {% endif %}
+
                     {% if item.categoryName != '' %}
                         <span class="category">{{ item.categoryName }}</span>
                         <div class="cribbon"></div>
@@ -18,17 +15,11 @@
                 </div>
                 <div class="description">
                     <div class="block-title">
-                        {% if item.is_registered or _u.is_admin %}
-                            <h5 class="title">
-                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ item.course_public_url }}">
-                                    {{ item.title_cut}}
-                                </a>
-                            </h5>
-                        {% else %}
-                            <h5 class="title" title="{{ item.title }}">
+                        <h5 class="title">
+                            <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}course/{{ item.real_id  }}/about">
                                 {{ item.title_cut}}
-                            </h5>
-                        {% endif %}
+                            </a>
+                        </h5>
                     </div>
                     <div class="ranking">
                         {{ item.rating_html }}

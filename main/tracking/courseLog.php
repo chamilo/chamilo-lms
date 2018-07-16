@@ -16,24 +16,16 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
+$session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
 
+$this_section = SECTION_COURSES;
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";
-} else {
-    $this_section = SECTION_COURSES;
+    $this_section = 'session_my_space';
 }
 
 // Access restrictions.
-$is_allowedToTrack =
-    api_is_platform_admin() ||
-    SessionManager::user_is_general_coach(api_get_user_id(), $session_id) ||
-    api_is_allowed_to_create_course() ||
-    api_is_session_admin() ||
-    api_is_drh() ||
-    api_is_course_tutor() ||
-    api_is_course_admin();
+$is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -97,10 +89,10 @@ $csv_content = [];
 // Scripts for reporting array hide/show columns
 $js = "<script>
     // hide column and display the button to unhide it
-    function foldup(in_id) {
-        $('#reporting_table .data_table tr td:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-        $('#reporting_table .data_table tr th:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-        $('div#unhideButtons a:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+    function foldup(id) {
+        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggleClass('hide');
+        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggleClass('hide');
+        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggleClass('hide');
     }
 
     // add the red cross on top of each column
@@ -315,9 +307,23 @@ if ($showReporting) {
         );
 
         $html .= '<ul class="session-list">';
+        $urlWebCode = api_get_path(WEB_CODE_PATH);
+        $isAdmin = api_is_platform_admin();
         foreach ($sessionList as $session) {
-            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='
-                .$session['id'].'&cidReq='.$courseInfo['code'];
+            if (!$isAdmin) {
+                // Check session visibility
+                $visibility = api_get_session_visibility($session['id'], api_get_course_int_id());
+                if ($visibility == SESSION_INVISIBLE) {
+                    continue;
+                }
+
+                // Check if is coach
+                $isCoach = api_is_coach($session['id'], api_get_course_int_id());
+                if (!$isCoach) {
+                    continue;
+                }
+            }
+            $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
             $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
         }
         $html .= '</ul>';
@@ -327,7 +333,7 @@ if ($showReporting) {
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
 // PERSON_NAME_DATA_EXPORT is buggy
-$is_western_name_order = api_is_western_name_order();
+$sortByFirstName = api_sort_by_first_name();
 
 if (count($a_students) > 0) {
     $getLangXDays = get_lang('XDays');
@@ -380,17 +386,16 @@ if (count($a_students) > 0) {
 
     $all_datas = [];
     $course_code = $_course['id'];
-
     $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
         'users_tracking',
         ['TrackingCourseLog', 'get_number_of_users'],
         ['TrackingCourseLog', 'get_user_data'],
-        (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
+        1
     );
 
-    $parameters['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+    $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
     $parameters['id_session'] = $session_id;
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
@@ -399,15 +404,15 @@ if (count($a_students) > 0) {
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
     $headers['official_code'] = get_lang('OfficialCode');
-    if ($is_western_name_order) {
+    if ($sortByFirstName) {
         $table->set_header(1, get_lang('FirstName'), true);
-        $headers['firstname'] = get_lang('FirstName');
         $table->set_header(2, get_lang('LastName'), true);
+        $headers['firstname'] = get_lang('FirstName');
         $headers['lastname'] = get_lang('LastName');
     } else {
         $table->set_header(1, get_lang('LastName'), true);
-        $headers['lastname'] = get_lang('LastName');
         $table->set_header(2, get_lang('FirstName'), true);
+        $headers['lastname'] = get_lang('LastName');
         $headers['firstname'] = get_lang('FirstName');
     }
     $table->set_header(3, get_lang('Login'), false);
@@ -491,7 +496,6 @@ if (count($a_students) > 0) {
                 'onclick' => "foldup($index); return false;",
             ]
         );
-
         $index++;
     }
     $html .= "</div>";
@@ -509,7 +513,7 @@ echo Display::panel($html, $titleSession);
 if ($export_csv) {
     $csv_headers = [];
     $csv_headers[] = get_lang('OfficialCode');
-    if ($is_western_name_order) {
+    if ($sortByFirstName) {
         $csv_headers[] = get_lang('FirstName');
         $csv_headers[] = get_lang('LastName');
     } else {

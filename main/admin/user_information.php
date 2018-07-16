@@ -620,7 +620,13 @@ if ($studentBossList) {
     echo $studentBossListToString;
 }
 
-$hrmList = $userEntity->getHrm();
+$em = Database::getManager();
+$userRepository = $em->getRepository('ChamiloUserBundle:User');
+
+$hrmList = $userRepository->getAssignedHrmUserList(
+    $userEntity->getId(),
+    api_get_current_access_url_id()
+);
 
 if ($hrmList) {
     echo Display::page_subheader(get_lang('HrmList'));
@@ -629,21 +635,20 @@ if ($hrmList) {
     /** @var UserRelUser $hrm */
     foreach ($hrmList as $hrm) {
         $hrmInfo = api_get_user_info($hrm->getFriendUserId());
-        $userPicture = isset($hrmInfo["avatar_medium"]) ? $hrmInfo["avatar_medium"] : $hrmInfo["avatar"];
 
+        $userPicture = isset($hrmInfo['avatar_medium']) ? $hrmInfo['avatar_medium'] : $hrmInfo['avatar'];
         echo '<div class="col-sm-4 col-md-3">';
         echo '<div class="media">';
         echo '<div class="media-left">';
         echo Display::img($userPicture, $hrmInfo['complete_name'], ['class' => 'media-object'], false);
         echo '</div>';
         echo '<div class="media-body">';
-        echo '<h4 class="media-heading">'.$hrmInfo['complete_name'].'</h4>';
+        echo '<h4 class="media-heading">'.$hrmInfo['complete_name_with_message_link'].'</h4>';
         echo $hrmInfo['username'];
         echo '</div>';
         echo '</div>';
         echo '</div>';
     }
-
     echo '</div>';
 }
 
@@ -656,7 +661,7 @@ if ($user['status'] == DRH) {
 
         foreach ($usersAssigned as $userAssigned) {
             $userAssigned = api_get_user_info($userAssigned['user_id']);
-            $userPicture = isset($userAssigned["avatar_medium"]) ? $userAssigned["avatar_medium"] : $userAssigned["avatar"];
+            $userPicture = isset($userAssigned['avatar_medium']) ? $userAssigned['avatar_medium'] : $userAssigned['avatar'];
 
             echo '<div class="col-sm-4 col-md-3">';
             echo '<div class="media">';
@@ -664,13 +669,12 @@ if ($user['status'] == DRH) {
             echo Display::img($userPicture, $userAssigned['complete_name'], ['class' => 'media-object'], false);
             echo '</div>';
             echo '<div class="media-body">';
-            echo '<h4 class="media-heading">'.$userAssigned['complete_name'].'</h4>';
-            echo $userAssigned['username'];
+            echo '<h4 class="media-heading">'.$userAssigned['complete_name_with_message_link'].'</h4>';
+            echo $userAssigned['official_code'];
             echo '</div>';
             echo '</div>';
             echo '</div>';
         }
-
         echo '</div>';
     }
 }

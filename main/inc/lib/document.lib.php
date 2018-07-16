@@ -104,6 +104,7 @@ class DocumentManager
             'etx' => 'text/x-setext',
             'exe' => 'application/octet-stream',
             'ez' => 'application/andrew-inset',
+            'flv' => 'video/flv',
             'gif' => 'image/gif',
             'gtar' => 'application/x-gtar',
             'gz' => 'application/x-gzip',
@@ -375,6 +376,7 @@ class DocumentManager
                     header('Content-type: application/octet-stream');
                     break;
             }
+
             header('Content-type: '.$contentType);
             header('Content-Length: '.$len);
             $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
@@ -1292,11 +1294,12 @@ class DocumentManager
     /**
      * Gets the document data with a given id.
      *
-     * @param int    $id           Document Id (id field in c_document table)
-     * @param string $course_code  Course code
-     * @param bool   $load_parents load folder parents
-     * @param int    $session_id   The session ID,
-     *                             0 if requires context *out of* session, and null to use global context
+     * @param int    $id            Document Id (id field in c_document table)
+     * @param string $course_code   Course code
+     * @param bool   $load_parents  load folder parents
+     * @param int    $session_id    The session ID,
+     *                              0 if requires context *out of* session, and null to use global context
+     * @param bool   $ignoreDeleted
      *
      * @return array document content
      */
@@ -1304,7 +1307,8 @@ class DocumentManager
         $id,
         $course_code,
         $load_parents = false,
-        $session_id = null
+        $session_id = null,
+        $ignoreDeleted = false
     ) {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -1313,14 +1317,18 @@ class DocumentManager
             return false;
         }
 
-        $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
+        $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $id = intval($id);
+        $id = (int) $id;
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
                 WHERE c_id = $course_id $sessionCondition AND id = $id";
+
+        if ($ignoreDeleted) {
+            $sql .= " AND path NOT LIKE '%_DELETED_%' ";
+        }
 
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
@@ -1992,6 +2000,7 @@ class DocumentManager
                     $dir_name,
                     $post_dir_name,
                     null,
+                    false,
                     false
                 );
 
@@ -2007,7 +2016,10 @@ class DocumentManager
                         null,
                         0,
                         true,
-                        $to_group_id
+                        $to_group_id,
+                        0,
+                        0,
+                        false
                     );
                 }
 
@@ -3072,29 +3084,16 @@ class DocumentManager
      *
      * @return string
      */
-    public static function generate_jplayer_jquery($params = [])
+    public static function generateAudioJavascript($params = [])
     {
-        $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
         $js = '
-            $("#jquery_jplayer_'.$params['count'].'").jPlayer({
-                ready: function() {
-                    $(this).jPlayer("setMedia", {
-                        '.$params['extension'].' : "'.$params['url'].'"
-                    });
-                },
-                play: function() { // To avoid both jPlayers playing together.
-                    $(this).jPlayer("pauseOthers");
-                },
-                //errorAlerts: true,
-                //warningAlerts: true,
-                swfPath: "'.$js_path.'jquery-jplayer/jplayer/",
-                //supplied: "m4a, oga, mp3, ogg, wav",
-                supplied: "'.$params['extension'].'",
-                wmode: "window",
-                solution: "flash, html",  // Do not change this setting
-                cssSelectorAncestor: "#jp_container_'.$params['count'].'",
-            });  	 '."\n\n";
+            $(\'audio.audio_preview\').mediaelementplayer({
+                features: [\'playpause\'],
+                audioWidth: 30,
+                audioHeight: 30,
+                success: function(mediaElement, originalNode, instance) {                
+                }
+            });';
 
         return $js;
     }
@@ -3102,94 +3101,34 @@ class DocumentManager
     /**
      * Shows a play icon next to the document title in the document list.
      *
-     * @param int
-     * @param string
+     * @param string $documentWebPath
+     * @param array  $documentInfo
      *
-     * @return string html content
+     * @return string
      */
-    public static function generate_media_preview($i, $type = 'simple')
+    public static function generateAudioPreview($documentWebPath, $documentInfo)
     {
-        $i = intval($i);
-        $extra_controls = $progress = '';
-        if ($type == 'advanced') {
-            $extra_controls = ' <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-                                <li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
-                                <li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>';
-            $progress = '<div class="jp-progress">
-                                <div class="jp-seek-bar">
-                                    <div class="jp-play-bar"></div>
-                                </div>
-                            </div>';
-        }
-
-        //Shows only the play button
-        $html = '<div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
-                <div id="jp_container_'.$i.'" class="jp-audio">
-                    <div class="jp-type-single">
-                        <div class="jp-gui jp-interface">
-                            <ul class="jp-controls">
-                                <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-                                <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-                                '.$extra_controls.'
-                            </ul>
-                            '.$progress.'
-                        </div>
-                    </div>
-                </div>';
+        $filePath = $documentWebPath.$documentInfo['path'];
+        $extension = $documentInfo['file_extension'];
+        $html = '<span class="preview"> <audio class="audio_preview skip" src="'.$filePath.'" type="audio/'.$extension.'" > </audio></span>';
 
         return $html;
     }
 
     /**
-     * @param array $document_data
+     * @param string $file
+     * @param string $extension
      *
      * @return string
      */
-    public static function generate_video_preview($document_data = [])
+    public static function generateVideoPreview($file, $extension)
     {
-        $html = '
-        <div id="jp_container_1" class="jp-video center-block" role="application" aria-label="media player">
-            <div class="jp-type-single">
-                <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-                <div class="jp-gui">
-                    <div class="jp-video-play">
-                    </div>
-                    <div class="jp-interface">
-                        <div class="jp-progress">
-                            <div class="jp-seek-bar">
-                                <div class="jp-play-bar"></div>
-                            </div>
-                        </div>
-                        <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
-                        <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
-                        <div class="jp-controls-holder">
-                          <div class="jp-controls">
-                            <button class="jp-play" role="button" tabindex="0">play</button>
-                            <button class="jp-stop" role="button" tabindex="0">stop</button>
-                          </div>
-                          <div class="jp-volume-controls">
-                            <button class="jp-mute" role="button" tabindex="0">mute</button>
-                            <button class="jp-volume-max" role="button" tabindex="0">max volume</button>
-                            <div class="jp-volume-bar">
-                                <div class="jp-volume-bar-value"></div>
-                            </div>
-                          </div>
-                          <div class="jp-toggles">
-                            <button class="jp-repeat" role="button" tabindex="0">repeat</button>
-                            <button class="jp-full-screen" role="button" tabindex="0">full screen</button>
-                          </div>
-                        </div>
-                        <div class="jp-details">
-                          <div class="jp-title" aria-label="title">&nbsp;</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="jp-no-solution">
-                    <span>'.get_lang('UpdateRequire').'</span>
-                    '.get_lang("ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile").'
-                </div>
-            </div>
-        </div>';
+        $type = '';
+        /*if ($extension != 'flv') {
+
+        }*/
+        //$type = "video/$extension";
+        $html = '<video id="myvideo"  src="'.$file.'" controls '.$type.'">';
 
         return $html;
     }
@@ -3382,7 +3321,7 @@ class DocumentManager
                     api_get_user_id()
                 );
 
-                if ($showInvisibleFiles == false) {
+                if ($showInvisibleFiles === false) {
                     if (!$is_visible) {
                         continue;
                     }
@@ -3403,7 +3342,7 @@ class DocumentManager
         } else {
             if (is_array($parentData)) {
                 $documents[$parentData['title']] = [
-                    'id' => intval($folderId),
+                    'id' => (int) $folderId,
                     'files' => $newResources,
                 ];
             }
@@ -3422,15 +3361,15 @@ class DocumentManager
         );
 
         $return .= $write_result;
-        if ($lp_id == false) {
-            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
+        if ($lp_id === false) {
+            $url = api_get_path(WEB_AJAX_PATH).
+                'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
             $return .= "<script>
             $('.doc_folder').click(function() {
                 var realId = this.id;
                 var my_id = this.id.split('_')[2];
                 var tempId = 'temp_'+my_id;
                 $('#res_'+my_id).show();
-
                 var tempDiv = $('#'+realId).find('#'+tempId);
                 if (tempDiv.length == 0) {
                     $.ajax({
@@ -3452,7 +3391,6 @@ class DocumentManager
                 $('.lp_resource').remove();
                 $('.document_preview_container').html('');
             });
-
             </script>";
         } else {
             //For LPs
@@ -3475,7 +3413,6 @@ class DocumentManager
                     image.attr('src', '".Display::returnIconPath('nolines_minus.gif')."');
                     $('#'+id).hide();
                     $('#'+tempId).show();
-
                     var tempDiv = $('#'+parentId).find('#'+tempId);
                     if (tempDiv.length == 0) {
                         $.ajax({
@@ -3556,7 +3493,7 @@ class DocumentManager
                     $return .= '</div>';
                     $return .= '</ul>';
                 } else {
-                    if ($resource['filetype'] == 'folder') {
+                    if ($resource['filetype'] === 'folder') {
                         $return .= self::parseFolder($folderId, $resource, $lp_id);
                     } else {
                         $return .= self::parseFile(
@@ -4967,20 +4904,20 @@ class DocumentManager
     /**
      * Create a html hyperlink depending on if it's a folder or a file.
      *
-     * @param array $document_data
-     * @param array $course_info
-     * @param bool  $show_as_icon      - if it is true, only a clickable icon will be shown
-     * @param int   $visibility        (1/0)
-     * @param int   $counter
-     * @param int   $size
-     * @param bool  $isAllowedToEdit
-     * @param bool  $isCertificateMode
+     * @param string $documentWebPath
+     * @param array  $document_data
+     * @param bool   $show_as_icon      - if it is true, only a clickable icon will be shown
+     * @param int    $visibility        (1/0)
+     * @param int    $counter
+     * @param int    $size
+     * @param bool   $isAllowedToEdit
+     * @param bool   $isCertificateMode
      *
      * @return string url
      */
     public static function create_document_link(
+        $documentWebPath,
         $document_data,
-        $course_info,
         $show_as_icon = false,
         $counter = null,
         $visibility,
@@ -4989,10 +4926,10 @@ class DocumentManager
         $isCertificateMode = false
     ) {
         global $dbl_click_id;
+        $www = $documentWebPath;
 
-        $current_session_id = api_get_session_id();
+        $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
-        $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $webODFList = self::get_web_odf_extension_list();
 
         // Get the title or the basename depending on what we're using
@@ -5015,11 +4952,11 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = ($filetype == 'folder') ? api_get_self().'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id'] : api_get_self().'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+            $forcedownload_link = $filetype == 'folder' ? api_get_self().'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id'] : api_get_self().'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
             // Folder download or file download?
-            $forcedownload_icon = ($filetype == 'folder') ? 'save_pack.png' : 'save.png';
+            $forcedownload_icon = $filetype == 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
-            $prevent_multiple_click = ($filetype == 'folder') ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
+            $prevent_multiple_click = $filetype == 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
         }
 
         $target = '_self';
@@ -5087,6 +5024,8 @@ class DocumentManager
         $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
         $send_to = null;
         $checkExtension = $path;
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        $document_data['file_extension'] = $extension;
 
         if (!$show_as_icon) {
             if ($filetype == 'folder') {
@@ -5095,9 +5034,9 @@ class DocumentManager
                     api_get_setting('students_download_folders') == 'true'
                 ) {
                     // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
-                    if (self::is_shared_folder($curdirpath, $current_session_id)) {
+                    if (self::is_shared_folder($curdirpath, $sessionId)) {
                         if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
-                            preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
+                            preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
                             $isAllowedToEdit || api_is_platform_admin()
                         ) {
                             $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
@@ -5132,7 +5071,6 @@ class DocumentManager
             }
 
             $pdf_icon = '';
-            $extension = pathinfo($path, PATHINFO_EXTENSION);
             if (!$isAllowedToEdit &&
                 api_get_setting('students_export2pdf') == 'true' &&
                 $filetype == 'file' &&
@@ -5148,7 +5086,7 @@ class DocumentManager
             }
 
             if ($filetype == 'file') {
-                // Sound preview with jplayer
+                // Sound preview
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                     (preg_match('/wav$/i', urldecode($checkExtension))) ||
                     preg_match('/ogg$/i', urldecode($checkExtension))
@@ -5210,16 +5148,16 @@ class DocumentManager
             // Icon column
             if (preg_match('/shared_folder/', urldecode($checkExtension)) &&
                 preg_match('/shared_folder$/', urldecode($checkExtension)) == false &&
-                preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url)) == false
+                preg_match('/shared_folder_session_'.$sessionId.'$/', urldecode($url)) == false
             ) {
                 if ($filetype == 'file') {
-                    //Sound preview with jplayer
+                    //Sound preview
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
-                        $sound_preview = self::generate_media_preview($counter);
+                        $soundPreview = self::generateAudioPreview($documentWebPath, $document_data);
 
-                        return $sound_preview;
+                        return $soundPreview;
                     } elseif (
                         // Show preview
                         preg_match('/swf$/i', urldecode($checkExtension)) ||
@@ -5254,9 +5192,9 @@ class DocumentManager
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
-                        $sound_preview = self::generate_media_preview($counter);
+                        $soundPreview = self::generateAudioPreview($documentWebPath, $document_data);
 
-                        return $sound_preview;
+                        return $soundPreview;
                     } elseif (
                         //Show preview
                         preg_match('/html$/i', urldecode($checkExtension)) ||
@@ -5299,7 +5237,7 @@ class DocumentManager
     public static function build_document_icon_tag($type, $path, $isAllowedToEdit = null)
     {
         $basename = basename($path);
-        $current_session_id = api_get_session_id();
+        $sessionId = api_get_session_id();
         if (is_null($isAllowedToEdit)) {
             $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         }
@@ -5324,7 +5262,7 @@ class DocumentManager
                 $basename = get_lang('UserFolder').' '.$userInfo['complete_name'];
                 $user_image = true;
             } elseif (strstr($path, 'shared_folder_session_')) {
-                $sessionName = api_get_session_name($current_session_id);
+                $sessionName = api_get_session_name($sessionId);
                 if ($isAllowedToEdit) {
                     $basename = '***('.$sessionName.')*** '.get_lang('HelpUsersFolder');
                 } else {
@@ -5689,16 +5627,16 @@ class DocumentManager
      * Checks whether the user is in shared folder.
      *
      * @param string $curdirpath
-     * @param int    $current_session_id
+     * @param int    $sessionId
      *
      * @return bool Return true when user is into shared folder
      */
-    public static function is_shared_folder($curdirpath, $current_session_id)
+    public static function is_shared_folder($curdirpath, $sessionId)
     {
         $clean_curdirpath = Security::remove_XSS($curdirpath);
         if ($clean_curdirpath == '/shared_folder') {
             return true;
-        } elseif ($clean_curdirpath == '/shared_folder_session_'.$current_session_id) {
+        } elseif ($clean_curdirpath == '/shared_folder_session_'.$sessionId) {
             return true;
         } else {
             return false;
@@ -5749,7 +5687,9 @@ class DocumentManager
                     $documentDirectory,
                     '/shared_folder',
                     get_lang('UserFolders'),
-                    0
+                    0,
+                    false,
+                    false
                 );
             }
             // Create dynamic user shared folder
@@ -5763,7 +5703,9 @@ class DocumentManager
                     $documentDirectory,
                     '/shared_folder/sf_user_'.$userId,
                     $userInfo['complete_name'],
-                    1
+                    1,
+                    false,
+                    false
                 );
             }
 
@@ -5781,7 +5723,9 @@ class DocumentManager
                 $documentDirectory,
                 '/shared_folder_session_'.$sessionId,
                 get_lang('UserFolders').' ('.api_get_session_name($sessionId).')',
-                0
+                0,
+                false,
+                false
             );
         }
         //Create dynamic user shared folder into a shared folder session
@@ -5795,7 +5739,9 @@ class DocumentManager
                 $documentDirectory,
                 '/shared_folder_session_'.$sessionId.'/sf_user_'.$userId,
                 $userInfo['complete_name'].'('.api_get_session_name($sessionId).')',
-                1
+                1,
+                false,
+                false
             );
         }
     }

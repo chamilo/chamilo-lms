@@ -9,14 +9,12 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = "session_my_space";
+$this_section = 'session_my_space';
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_session_general_coach || $is_sessionAdmin;
+$allow = Tracking::isAllowToTrack(api_get_session_id());
 
-if (!$is_allowedToTrack) {
-    Display::display_header(null);
-    api_not_allowed();
-    Display::display_footer();
+if (!$allow) {
+    api_not_allowed(true);
 }
 
 $export_to_xls = false;

@@ -18,5 +18,29 @@ CKEDITOR.plugins.setLang( 'image2_chamilo', 'sq', {
 	uploadTab: 'Ngarko',
 	urlMissing: 'Mungon URL e burimit të fotografisë.',
 	altMissing: 'Alternative text is missing.', // MISSING
-    responsive: 'Responsive image' // MISSING
+    responsive: 'Responsive image', // MISSING
+    alignBaseline: 'Baseline', // MISSING
+    alignTop: 'Top', // MISSING
+    alignBottom: 'Bottom', // MISSING
+    alignMiddle: 'Middle', // MISSING
+    alignSuper: 'Super', // MISSING
+    alignSub: 'Sub', // MISSING
+    alignTextTop: 'Text-top', // MISSING
+    alignTextBottom: 'Text-bottom', // MISSING
+    advanced: 'Advanced', // MISSING
+    borderWidth: 'Border width', // MISSING
+    borderColor: 'Border color', // MISSING
+    borderStyle: 'Border style', // MISSING
+    borderRadius: 'Border radius', // MISSING
+    backgroundColor: 'Background color', // MISSING
+    color: 'Color', // MISSING
+    borderStyleNone: 'None', // MISSING
+    borderStyleDotted: 'Dotted', // MISSING
+    borderStyleDashed: 'Dashed', // MISSING
+    borderStyleSolid: 'Solid', // MISSING
+    borderStyleDouble: 'Double', // MISSING
+    borderStyleGroove: 'Groove', // MISSING
+    borderStyleRidge: 'Ridge', // MISSING
+    borderStyleInset: 'Inset', // MISSING
+    borderStyleOutset: 'Outset' // MISSING
 } );

@@ -72,36 +72,6 @@ class StudentPublicationLink extends AbstractLink
     }
 
     /**
-     * Generate an array of exercises that a teacher hasn't created a link for.
-     *
-     * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-     */
-    public function get_not_created_links()
-    {
-        return false;
-        if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
-        }
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $sql = 'SELECT id, url from '.$this->get_studpub_table()
-            .' pup WHERE c_id = '.$this->course_id.' AND has_properties != '."''".' AND id NOT IN'
-            .' (SELECT ref_id FROM '.$tbl_grade_links
-            .' WHERE type = '.LINK_STUDENTPUBLICATION
-            ." AND course_code = '".Database::escape_string($this->get_course_code())."'"
-            .') AND pub.session_id='.api_get_session_id().'';
-
-        $result = Database::query($sql);
-
-        $cats = [];
-        while ($data = Database::fetch_array($result)) {
-            $cats[] = [$data['id'], $data['url']];
-        }
-
-        return $cats;
-    }
-
-    /**
      * Generate an array of all exercises available.
      *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
@@ -109,7 +79,7 @@ class StudentPublicationLink extends AbstractLink
     public function get_all_links()
     {
         if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
+            return [];
         }
         $em = Database::getManager();
         $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());

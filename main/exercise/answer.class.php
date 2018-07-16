@@ -35,6 +35,7 @@ class Answer
     public $new_hotspot_coordinates;
     public $new_hotspot_type;
     public $autoId;
+    /** @var int Number of answers in the question */
     public $nbrAnswers;
     public $new_nbrAnswers;
     public $new_destination; // id of the next question if feedback option is set to Directfeedback

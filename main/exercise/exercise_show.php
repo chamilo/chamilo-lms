@@ -20,7 +20,7 @@ $debug = false;
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = $origin == 'learnpath';
-$id = intval($_REQUEST['id']); //exe id
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -85,14 +85,15 @@ if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
 
-$exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin()
-    || api_is_drh() || api_is_student_boss();
-
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+    api_is_course_tutor() ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_student_boss();
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
         $currentUserId,
@@ -485,7 +486,8 @@ foreach ($questionList as $questionId) {
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $id,
+                                            exerciseId: {$objExercise->id},                                            
+                                            exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -653,7 +655,8 @@ foreach ($questionList as $questionId) {
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: $id,
+                                            exerciseId: {$objExercise->id},
+                                            exeId: $id,
                                             selector: '#hotspot-solution',
                                             for: 'solution',
                                             relPath: '$relPath'
@@ -949,13 +952,13 @@ foreach ($questionList as $questionId) {
 
 $totalScoreText = '';
 
-//Total score
+// Total score
+$my_total_score_temp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
-        $totalScoreText .= '<div class="question_row">';
-        $myTotalScoreTemp = $totalScore;
+    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {        
+        $totalScoreText .= '<div class="question_row">';        
         if ($objExercise->selectPropagateNeg() == 0 && $myTotalScoreTemp < 0) {
-            $myTotalScoreTemp = 0;
+            $myTotalScoreTemp = 0;                
         }
 
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -1145,11 +1148,11 @@ if ($origin != 'learnpath') {
     if (!isset($_GET['fb_type'])) {
         $lp_mode = Session::read('lp_mode');
         $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
-        $url .= http_build_url([
+        $url .= http_build_query([
             'action' => 'view',
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,
-            'exeId' => $exeId,
+            'exeId' => $id,
             'fb_type' => $feedback_type,
         ]);
         $href = ($lp_mode == 'fullscreen')

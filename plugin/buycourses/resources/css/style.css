@@ -1,302 +1,369 @@
 .buy-courses-tabs {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .buy-courses-page-header {
-  padding-bottom: 9px;
-  margin: 40px 0 20px;
-  border-bottom: 1px solid #eee;
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eee;
 }
 
 .buy-courses-block-button {
-  display: block;
-  width: 100%;
-  height: 50px;
-  line-height: 35px;
-  font-size: 16px;
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 35px;
+    font-size: 16px;
 }
 
 .buy-courses-cross-out {
-  text-decoration:line-through;
+    text-decoration: line-through;
 }
 
 .buy-courses-title-color {
-  color: #5DC3E1;
-  padding-bottom: 10px;
+    color: #5DC3E1;
+    padding-bottom: 10px;
 }
 
 .buy-courses-description-service {
-  text-align: justify;
-  font-size: 18px;
-  line-height: 1.42857;
+    text-align: justify;
+    font-size: 18px;
+    line-height: 1.42857;
+}
+
+/* PROCESS BUY */
+.buy-info .price, .service-buy .price {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    letter-spacing: -0.020em;
+}
+
+.buy-info .buy-item .title {
+    margin-top: 5px;
+    font-weight: bold;
+    line-height: 24px;
+    font-size: 18px;
+}
+
+.buy-info .buy-item .description, .buy-info .buy-item .coaches {
+    margin-bottom: 20px;
+    color: #666666;
+}
+
+.buy-info .buy-item .list-description {
+    color: #666666;
+}
+
+.buy-info .buy-item .date {
+    margin-bottom: 10px;
+    color: #666666;
+}
+
+.buy-summary {
+    margin-top: 10px;
+    border-top: 1px solid #CCCCCC;
+}
+
+.panel-box-buy {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, .1);
+    padding: 20px;
+}
+
+.buy-summary .alert-info {
+    color: #31708f;
+    background-color: #e8f2f8;
+    border-color: #bce8f1;
 }
 
 @-moz-keyframes wobblebar-loader {
-  0% {
-    left: 4px;
-  }
-  3% {
-    left: 204px;
-  }
-  6% {
-    left: 4px;
-  }
-  9% {
-    left: 204px;
-  }
-  12% {
-    left: 4px;
-  }
-  15% {
-    left: 204px;
-  }
-  18% {
-    left: 32px;
-  }
-  27% {
-    left: 32px;
-  }
-  30% {
-    left: 204px;
-  }
-  33% {
-    left: 4px;
-  }
-  36% {
-    left: 204px;
-  }
-  39% {
-    left: 4px;
-  }
-  42% {
-    left: 204px;
-  }
-  45% {
-    left: 4px;
-  }
-  48% {
-    left: 204px;
-  }
-  51% {
-    left: 152px;
-  }
-  63% {
-    left: 152px;
-  }
-  66% {
-    left: 4px;
-  }
-  69% {
-    left: 204px;
-  }
-  72% {
-    left: 4px;
-  }
-  75% {
-    left: 204px;
-  }
-  78% {
-    left: 4px;
-  }
-  81% {
-    left: 204px;
-  }
-  84% {
-    left: 72px;
-  }
-  94% {
-    left: 72px;
-  }
-  97% {
-    left: 204px;
-  }
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
 }
+
 @-webkit-keyframes wobblebar-loader {
-  0% {
-    left: 4px;
-  }
-  3% {
-    left: 204px;
-  }
-  6% {
-    left: 4px;
-  }
-  9% {
-    left: 204px;
-  }
-  12% {
-    left: 4px;
-  }
-  15% {
-    left: 204px;
-  }
-  18% {
-    left: 32px;
-  }
-  27% {
-    left: 32px;
-  }
-  30% {
-    left: 204px;
-  }
-  33% {
-    left: 4px;
-  }
-  36% {
-    left: 204px;
-  }
-  39% {
-    left: 4px;
-  }
-  42% {
-    left: 204px;
-  }
-  45% {
-    left: 4px;
-  }
-  48% {
-    left: 204px;
-  }
-  51% {
-    left: 152px;
-  }
-  63% {
-    left: 152px;
-  }
-  66% {
-    left: 4px;
-  }
-  69% {
-    left: 204px;
-  }
-  72% {
-    left: 4px;
-  }
-  75% {
-    left: 204px;
-  }
-  78% {
-    left: 4px;
-  }
-  81% {
-    left: 204px;
-  }
-  84% {
-    left: 72px;
-  }
-  94% {
-    left: 72px;
-  }
-  97% {
-    left: 204px;
-  }
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
 }
+
 @keyframes wobblebar-loader {
-  0% {
-    left: 4px;
-  }
-  3% {
-    left: 204px;
-  }
-  6% {
-    left: 4px;
-  }
-  9% {
-    left: 204px;
-  }
-  12% {
-    left: 4px;
-  }
-  15% {
-    left: 204px;
-  }
-  18% {
-    left: 32px;
-  }
-  27% {
-    left: 32px;
-  }
-  30% {
-    left: 204px;
-  }
-  33% {
-    left: 4px;
-  }
-  36% {
-    left: 204px;
-  }
-  39% {
-    left: 4px;
-  }
-  42% {
-    left: 204px;
-  }
-  45% {
-    left: 4px;
-  }
-  48% {
-    left: 204px;
-  }
-  51% {
-    left: 152px;
-  }
-  63% {
-    left: 152px;
-  }
-  66% {
-    left: 4px;
-  }
-  69% {
-    left: 204px;
-  }
-  72% {
-    left: 4px;
-  }
-  75% {
-    left: 204px;
-  }
-  78% {
-    left: 4px;
-  }
-  81% {
-    left: 204px;
-  }
-  84% {
-    left: 72px;
-  }
-  94% {
-    left: 72px;
-  }
-  97% {
-    left: 204px;
-  }
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
 }
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+    .panel-box-buy {
+        padding: 0;
+    }
+
+    .buy-summary .pull-right {
+        float: left !important;
+    }
+
+    .buy-summary .btn-success {
+        width: 100%;
+    }
+}
+
 /* :not(:required) hides this rule from IE9 and below */
 .wobblebar-loader:not(:required) {
-  background: #2E6DA4;
-  -moz-border-radius: 10.66667px;
-  -webkit-border-radius: 10.66667px;
-  border-radius: 10.66667px;
-  display: inline-block;
-  overflow: hidden;
-  text-indent: -9999px;
-  width: 228px;
-  height: 21.33333px;
-  position: relative;
+    background: #2E6DA4;
+    -moz-border-radius: 10.66667px;
+    -webkit-border-radius: 10.66667px;
+    border-radius: 10.66667px;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 228px;
+    height: 21.33333px;
+    position: relative;
 }
+
 .wobblebar-loader:not(:required)::after {
-  -moz-animation: wobblebar-loader 15000ms infinite ease;
-  -webkit-animation: wobblebar-loader 15000ms infinite ease;
-  animation: wobblebar-loader 15000ms infinite ease;
-  background: white;
-  display: block;
-  -moz-border-radius: 7.11111px;
-  -webkit-border-radius: 7.11111px;
-  border-radius: 7.11111px;
-  content: '';
-  position: absolute;
-  top: 3.55556px;
-  left: 4px;
-  width: 21.33333px;
-  height: 14.22222px;
+    -moz-animation: wobblebar-loader 15000ms infinite ease;
+    -webkit-animation: wobblebar-loader 15000ms infinite ease;
+    animation: wobblebar-loader 15000ms infinite ease;
+    background: white;
+    display: block;
+    -moz-border-radius: 7.11111px;
+    -webkit-border-radius: 7.11111px;
+    border-radius: 7.11111px;
+    content: '';
+    position: absolute;
+    top: 3.55556px;
+    left: 4px;
+    width: 21.33333px;
+    height: 14.22222px;
 }
+

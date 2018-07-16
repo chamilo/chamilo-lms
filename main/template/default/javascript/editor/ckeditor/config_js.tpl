@@ -32,22 +32,22 @@ CKEDITOR.editorConfig = function (config) {
         },
         {
             name : 'Alert Success',
-            element : 'p',
+            element : 'div',
             attributes : { 'class': 'alert alert-success' }
         },
         {
             name : 'Alert Info',
-            element : 'p',
+            element : 'div',
             attributes : { 'class': 'alert alert-info' }
         },
         {
             name : 'Alert Warning',
-            element : 'p',
+            element : 'div',
             attributes : { 'class': 'alert alert-warning' }
         },
         {
             name : 'Alert Danger',
-            element : 'p',
+            element : 'div',
             attributes : { 'class': 'alert alert-danger' }
         },
         {
@@ -96,7 +96,6 @@ CKEDITOR.editorConfig = function (config) {
         }
     ];
 
-
     {% if moreButtonsInMaximizedMode %}
         config.toolbar = 'minToolbar';
         config.smallToolbar = 'minToolbar';
@@ -109,8 +108,12 @@ CKEDITOR.editorConfig = function (config) {
 
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
-    config.contentsCss = '{{ cssEditor }}';
-    config.customConfig = '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/config_js.php'}}';
+    // Option to set the "styles" menu
+    config.contentsCss = [
+        '{{ bootstrap_css }}',
+        '{{ font_awesome_css }}',
+        '{{ css_editor }}',
+    ];
 };
 
 // Sets default target to "_blank" in link plugin

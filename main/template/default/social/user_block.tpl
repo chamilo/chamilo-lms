@@ -82,7 +82,7 @@
 
                     {% if not profile_edition_link is empty %}
                     <li class="item">
-                        <a class="btn btn-link btn-sm btn-block" href="{{ profile_edition_link }}">
+                        <a class="btn btn-default btn-sm btn-block" href="{{ profile_edition_link }}">
                         <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
                         </a>
                     </li>

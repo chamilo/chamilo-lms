@@ -5668,10 +5668,10 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 $insert = "INSERT INTO $t_settings (variable, subkey, type,category, selected_value, title, comment, scope, subkeytext, access_url)
                         VALUES
                         ('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                    "'".$row['type']."','".$row['category']."',".
-                    "'$value','".$row['title']."',".
-                    "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                    "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
+                        "'".$row['type']."','".$row['category']."',".
+                        "'$value','".$row['title']."',".
+                        "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
+                        "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
                 Database::query($insert);
             } else {
                 // Such a setting does not exist.

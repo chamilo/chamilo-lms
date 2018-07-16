@@ -1624,18 +1624,18 @@ class Tracking
         $courseId,
         $session_id = 0
     ) {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
 
         if (empty($courseId) || empty($user_id)) {
             return 0;
         }
 
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (is_array($user_id)) {
             $user_id = array_map('intval', $user_id);
             $conditionUser = " AND user_id IN (".implode(',', $user_id).") ";
         } else {
-            $user_id = intval($user_id);
+            $user_id = (int) $user_id;
             $conditionUser = " AND user_id = $user_id ";
         }
 
@@ -4627,6 +4627,7 @@ class Tracking
      * @param string $extra_params
      * @param bool   $show_courses
      * @param bool   $showAllSessions
+     * @param bool   $returnArray
      *
      * @return string
      */
@@ -4666,8 +4667,8 @@ class Tracking
             $trackingColumns = $trackingColumnsConfig;
         }
 
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $urlId = api_get_current_access_url_id();
 
         if (api_is_multiple_url_enabled()) {
@@ -4680,7 +4681,7 @@ class Tracking
                     WHERE
                         cu.user_id = $user_id AND
                         relation_type<> ".COURSE_RELATION_TYPE_RRHH." AND
-                        access_url_id = ".$urlId."
+                        access_url_id = $urlId
                     ORDER BY title";
         } else {
             $sql = "SELECT c.id, c.code, title
@@ -4688,7 +4689,7 @@ class Tracking
                     INNER JOIN $tbl_course c ON (c_id = c.id)
                     WHERE
                         u.user_id= $user_id AND
-                        relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                        relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     ORDER BY title";
         }
 
@@ -4700,11 +4701,11 @@ class Tracking
             $courseIdList[] = $row['id'];
         }
 
-        $orderBy = " ORDER BY name ";
+        $orderBy = ' ORDER BY name ';
         $extraInnerJoin = null;
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
-            $orderBy = " ORDER BY s.id, position ";
+            $orderBy = ' ORDER BY s.id, position ';
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
                                 ON (cu.c_id = src.c_id AND src.session_id = $session_id) ";
@@ -4981,14 +4982,14 @@ class Tracking
                         // Exercise is not necessary to be visible to show results check the result_disable configuration instead
                         //$visible_return = $exercise_obj->is_visible();
                         if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
-                            $best_average = intval(
+                            $best_average = (int)
                                 ExerciseLib::get_best_average_score_by_exercise(
                                     $exercise_data['id'],
                                     $course_data['real_id'],
                                     $my_session_id,
                                     $user_count
                                 )
-                            );
+                            ;
 
                             $exercise_graph_list[] = $best_average;
                             $all_exercise_graph_list[] = $best_average;
@@ -5175,7 +5176,7 @@ class Tracking
 
             // Checking selected session.
             if (isset($_GET['session_id'])) {
-                $session_id_from_get = intval($_GET['session_id']);
+                $session_id_from_get = (int) $_GET['session_id'];
                 $session_data = $course_in_session[$session_id_from_get];
                 $course_list = $session_data['course_list'];
 
@@ -5411,13 +5412,12 @@ class Tracking
                 }
                 $html .= '</tbody></table></div>';
             }
+        }
 
-            $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
-            if ($pluginCalendar) {
-                $course_in_session[0] = $courseIdList;
-                $plugin = LpCalendarPlugin::create();
-                $html .= LpCalendarPlugin::getUserStatsPanel($user_id, $course_in_session);
-            }
+        $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+        if ($pluginCalendar) {
+            $course_in_session[0] = $courseIdList;
+            $html .= LpCalendarPlugin::getUserStatsPanel($user_id, $course_in_session);
         }
 
         return $html;
@@ -6862,7 +6862,6 @@ class Tracking
                 }
             }
         }
-
     }
 }
 

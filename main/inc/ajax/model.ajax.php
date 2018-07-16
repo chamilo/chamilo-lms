@@ -797,7 +797,7 @@ switch ($action) {
                 'name',
                 'calendar',
                 'examn',
-                'time_sent',
+                'time_spent',
                 'lp_day_completed',
                 'days_diff',
                 'actions',

@@ -129,11 +129,20 @@ class UserGroup extends Model
                         true
                     );
 
-                    $stats = LpCalendarPlugin::getUserStats($userId, $courseAndSessionList)
+                    $stats = LpCalendarPlugin::getUserStats($userId, $courseAndSessionList);
+
                     $data['examn'] = 'examn';
-                    $data['time_spent'] = 'time_spent';
-                    $data['lp_day_completed'] = 'lp_day_completed';
-                    $data['days_diff'] = 'days_diff';
+                    $totalTime = 0;
+                    foreach ($courseAndSessionList as $sessionId => $course) {
+                        foreach ($course as $courseId) {
+                            $totalTime += Tracking::get_time_spent_on_the_course($userId, $courseId,$sessionId);
+                        }
+                    }
+
+                    $data['time_spent'] = api_time_to_hms($totalTime);
+
+                    $data['lp_day_completed'] = $stats['completed'];
+                    $data['days_diff'] = $stats['diff'];
 
 
                 }

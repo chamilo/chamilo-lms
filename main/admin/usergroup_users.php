@@ -34,7 +34,7 @@ switch ($action) {
     case 'add_calendar':
         $calendars = LpCalendarPlugin::getCalendars(0, 1000, '');
         if (empty($calendars)) {
-            echo Display::return_message(get_lang('Nodata'));
+            echo Display::return_message(get_lang('NoData'), 'warning');
             exit;
         }
         $userInfo = api_get_user_info($userId);
@@ -131,7 +131,6 @@ $column_model = [
         'formatter' => 'action_formatter',
     ],
 ];
-
 
 if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
     $columns = [

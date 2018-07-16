@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -48,20 +49,21 @@ switch ($action) {
                 'calendar_id' => $calendarId,
                 'start_date' => $startDate,
                 'end_date' => $startDate,
-                'type' => LpCalendarPlugin::EVENT_TYPE_TAKEN
+                'type' => LpCalendarPlugin::EVENT_TYPE_TAKEN,
             ];
             Database::insert('learning_calendar_events', $params);
         }
         break;
     case 'get_events':
-        $sql = "SELECT * FROM learning_calendar_events";
+        $sql = "SELECT * FROM learning_calendar_events 
+                WHERE calendar_id = $calendarId ";
         $result = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $list[] = [
                 'start_date' => $row['start_date'],
                 'end_date' => $row['start_date'],
-                'color' => $eventTypeList[$row['type']]
+                'color' => $eventTypeList[$row['type']],
             ];
         }
         echo json_encode($list);

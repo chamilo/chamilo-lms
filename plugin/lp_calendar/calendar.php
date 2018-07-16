@@ -35,10 +35,6 @@ $plugin = LpCalendarPlugin::create();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $formToString = '';
 
-switch ($action) {
-
-}
-
 $template = new Template();
 
 $actionLeft = Display::url(

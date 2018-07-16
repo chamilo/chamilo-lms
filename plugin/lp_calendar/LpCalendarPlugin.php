@@ -1,25 +1,20 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\DBALException;
-use Symfony\Component\Filesystem\Filesystem;
-
 /**
- * Class LpCalendarPlugin
+ * Class LpCalendarPlugin.
  */
 class LpCalendarPlugin extends Plugin
 {
     const EVENT_TYPE_TAKEN = 1;
     const EVENT_TYPE_EXAM = 2;
-    public $hasPersonalEvents = true;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     protected function __construct()
     {
+        $this->hasPersonalEvents = true;
         $version = '0.1';
         $author = 'Julio Montoya';
         parent::__construct($version, $author, ['enabled' => 'boolean']);
@@ -33,12 +28,12 @@ class LpCalendarPlugin extends Plugin
         return [
             //self::EVENT_TYPE_FREE => 'green',
             self::EVENT_TYPE_TAKEN => 'red',
-            self::EVENT_TYPE_EXAM => 'yellow'
+            self::EVENT_TYPE_EXAM => 'yellow',
         ];
     }
 
     /**
-     * Get the class instance
+     * Get the class instance.
      *
      * @return $this
      */
@@ -50,7 +45,7 @@ class LpCalendarPlugin extends Plugin
     }
 
     /**
-     * Get the plugin directory name
+     * Get the plugin directory name.
      */
     public function get_name()
     {
@@ -58,7 +53,7 @@ class LpCalendarPlugin extends Plugin
     }
 
     /**
-     * Install the plugin. Setup the database
+     * Install the plugin. Setup the database.
      */
     public function install()
     {
@@ -121,7 +116,7 @@ class LpCalendarPlugin extends Plugin
     }
 
     /**
-     * uninstall plugin. Clear the database
+     * Uninstall the plugin.
      */
     public function uninstall()
     {
@@ -389,7 +384,7 @@ class LpCalendarPlugin extends Plugin
      * @param int  $type
      * @param bool $getCount
      *
-     * @return array
+     * @return array|int
      */
     public static function getUserEvents($userId, $start, $end, $type = 0, $getCount = false)
     {
@@ -398,6 +393,10 @@ class LpCalendarPlugin extends Plugin
             $calendar = self::getCalendar($calendarRelUser['calendar_id']);
 
             return self::getCalendarsEventsByDate($calendar, $start, $end, $type, $getCount);
+        }
+
+        if ($getCount) {
+            return 0;
         }
 
         return [];
@@ -667,7 +666,7 @@ class LpCalendarPlugin extends Plugin
             $userId,
             strtotime(date('Y-01-01')),
             time(),
-            LpCalendarPlugin::EVENT_TYPE_TAKEN,
+            self::EVENT_TYPE_TAKEN,
             true
         );
 

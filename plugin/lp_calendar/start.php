@@ -1,7 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
 
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $allow = api_is_allowed_to_edit();
@@ -180,7 +179,6 @@ if (in_array($action, ['add', 'edit'])) {
         ),
         api_get_self().'?'.api_get_cidreq()
     );
-
 } else {
     $actionLeft = Display::url(
         Display::return_icon(

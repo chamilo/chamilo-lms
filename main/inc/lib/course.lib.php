@@ -1235,6 +1235,7 @@ class CourseManager
      * @param array     $userIdList
      * @param string    $filterByActive
      * @param array     $sessionIdList
+     * @param string    $searchByKeyword
      *
      * @return array|int
      */
@@ -1251,12 +1252,13 @@ class CourseManager
         $courseCodeList = [],
         $userIdList = [],
         $filterByActive = null,
-        $sessionIdList = []
+        $sessionIdList = [],
+        $searchByKeyword = ''
     ) {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = 0;
@@ -1353,12 +1355,13 @@ class CourseManager
                 }
             }
 
-            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user '
-                  .' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
+            $sql .= " FROM ".Database::get_main_table(TABLE_MAIN_USER)." as user 
+                      LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." as course_rel_user
                       ON 
                         user.id = course_rel_user.user_id AND
-                        course_rel_user.relation_type <> '.COURSE_RELATION_TYPE_RRHH.'  '
-                  ." INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
+                        course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                       INNER JOIN $course_table course 
+                       ON course_rel_user.c_id = course.id ";
 
             if (!empty($course_code)) {
                 $sql .= ' AND course_rel_user.c_id = "'.$courseId.'"';
@@ -1366,7 +1369,7 @@ class CourseManager
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
             if (isset($filter_by_status) && is_numeric($filter_by_status)) {
-                $filter_by_status = intval($filter_by_status);
+                $filter_by_status = (int) $filter_by_status;
                 $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
             }
         }
@@ -1419,8 +1422,17 @@ class CourseManager
         }
 
         if (isset($filterByActive)) {
-            $filterByActive = intval($filterByActive);
+            $filterByActive = (int) $filterByActive;
             $sql .= ' AND user.active = '.$filterByActive;
+        }
+
+        if (!empty($searchByKeyword)) {
+            $searchByKeyword = Database::escape_string($searchByKeyword);
+            $sql .= " AND (
+                        user.firstname LIKE '$searchByKeyword' OR 
+                        user.username LIKE '$searchByKeyword' OR 
+                        user.lastname LIKE '$searchByKeyword'
+                    ) ";
         }
 
         $sql .= ' '.$order_by.' '.$limit;

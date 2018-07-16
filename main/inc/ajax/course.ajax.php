@@ -231,27 +231,41 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $user = Database::get_main_table(TABLE_MAIN_USER);
             $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $sessionId = $_GET['session_id'];
             $course = api_get_course_info_by_id($_GET['course_id']);
 
             $json = [
                 'items' => [],
             ];
 
-            $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname
-                    FROM $user u
-                    INNER JOIN $session_course_user r 
-                    ON u.user_id = r.user_id
-                    WHERE session_id = %d AND c_id =  '%s'
-                    AND (u.firstname LIKE '%s' OR u.username LIKE '%s' OR u.lastname LIKE '%s')";
-            $needle = '%'.$_GET['q'].'%';
-            $sql_query = sprintf($sql, $_GET['session_id'], $course['real_id'], $needle, $needle, $needle);
+            $keyword = Database::escape_string($_GET['q']);
+            $status = 0;
+            if (empty($sessionId)) {
+                $status = STUDENT;
+            }
 
-            $result = Database::query($sql_query);
-            while ($user = Database::fetch_assoc($result)) {
+            $userList = CourseManager::get_user_list_from_course_code(
+                $course['code'],
+                $sessionId,
+                null,
+                null,
+                $status,
+                false,
+                false,
+                false,
+                [],
+                [],
+                [],
+                true,
+                [],
+                $_GET['q']
+            );
+
+            foreach ($userList as $user) {
                 $userCompleteName = api_get_person_name($user['firstname'], $user['lastname']);
 
                 $json['items'][] = [
-                    'id' => $user['id'],
+                    'id' => $user['user_id'],
                     'text' => "{$user['username']} ($userCompleteName)",
                 ];
             }

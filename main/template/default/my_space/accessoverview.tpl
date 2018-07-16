@@ -8,8 +8,8 @@
 
 <script>
     $(document).on('ready', function () {
-        var courseIdEl = $('#course_id'),
-            sessionIdEl = $('#session_id');
+        var courseIdEl = $('#access_overview_course_id'),
+            sessionIdEl = $('#access_overview_session_id');
 
         if (!courseIdEl.val()) {
             sessionIdEl

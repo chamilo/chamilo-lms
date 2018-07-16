@@ -25,4 +25,19 @@ class LegalRepository extends EntityRepository
             ->groupBy('l.languageId');
         return count($qb->getQuery()->getResult());
     }
+
+    /**
+     * Get the latest version of terms of the given type and language
+     * @param   int $typeId The type of terms (0 for general text, 1 for general HTML link, 101 for private data collection, etc - see personal_data.php)
+     * @param   int $languageId   The Id of the language
+     * @return  array  The terms for those type and language
+     */
+    public function findOneByTypeAndLanguage($typeId, $languageId)
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb->select('l.content')
+            ->where($qb->expr()->eq('l.type', $typeId))
+            ->andWhere($qb->expr()->eq('l.languageId', $languageId));
+        return $qb->getQuery()->getResult();
+    }
 }

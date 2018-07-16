@@ -9,6 +9,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
 
 api_block_anonymous_users();
 if (!api_get_configuration_value('enable_gdpr')) {
@@ -123,27 +124,38 @@ $icon = Display::return_icon('export_excel.png', get_lang('Export'), null,ICON_S
 $personalData['data_export_icon'] = $icon;
 $personalData['permissions'] = $termsAndConditionsAcceptance;
 $personalData['responsible'] = api_get_setting('personal_data_responsible_org');
+
+$em = Database::getManager();
+/** @var LegalRepository $legalTerms */
+$legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
 //Get data about the treatment of data
 $treatmentTypes = [
-    'collection',
-    'recording',
-    'organization',
-    'structure',
-    'conservation',
-    'adaptation',
-    'extraction',
-    'consultation',
-    'usage',
-    'communication',
-    'interconnection',
-    'limitation',
-    'deletion',
-    'destruction',
-    'profiling',
+    101 => 'collection',
+    102 => 'recording',
+    103 => 'organization',
+    104 => 'structure',
+    105 => 'conservation',
+    106 => 'adaptation',
+    107 => 'extraction',
+    108 => 'consultation',
+    109 => 'usage',
+    110 => 'communication',
+    111 => 'interconnection',
+    112 => 'limitation',
+    113 => 'deletion',
+    114 => 'destruction',
+    115 => 'profiling',
 ];
-foreach ($treatmentTypes as $item) {
+
+foreach ($treatmentTypes as $id => $item) {
     $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item).'Title');
-    $personalData['treatment'][$item]['content'] = api_get_setting('personal_data_treatment_'.$item);
+
+    $legalTerm = $legalTermsRepo->findOneByTypeAndLanguage($id, api_get_language_id($user_language));
+    $legalTermContent = '';
+    if (!empty($legalTerm[0]) && is_array($legalTerm[0])) {
+        $legalTermContent = $legalTerm[0]['content'];
+    }
+    $personalData['treatment'][$item]['content'] = $legalTermContent;
 }
 
 $tpl = new Template(null);

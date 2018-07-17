@@ -240,7 +240,7 @@ class ImsSection
      *
      * @author Amand Tihon <amand@alrj.org>
      */
-    public function export_questions()
+    public function exportQuestions()
     {
         $out = '';
         foreach ($this->exercise->selectQuestionList() as $q) {
@@ -273,7 +273,7 @@ class ImsSection
              .$this->export_duration()
              .$this->export_presentation()
              .$this->export_ordering()
-             .$this->export_questions()
+             .$this->exportQuestions()
              .$this->end_section()
              .$foot;
 

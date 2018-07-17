@@ -10571,7 +10571,10 @@ class learnpath
         $root->setAttribute('xmlns', 'http://www.imsproject.org/xsd/imscp_rootv1p1p2');
         $root->setAttribute('xmlns:adlcp', 'http://www.adlnet.org/xsd/adlcp_rootv1p2');
         $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $root->setAttribute('xsi:schemaLocation', 'http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd');
+        $root->setAttribute(
+            'xsi:schemaLocation',
+            'http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'
+        );
         // Build mandatory sub-root container elements.
         $metadata = $xmldoc->createElement('metadata');
         $md_schema = $xmldoc->createElement('schema', 'ADL SCORM');
@@ -10595,7 +10598,6 @@ class learnpath
         // The title is then decoded twice when extracting (see scorm::parse_manifest).
         $org_title = $xmldoc->createElement('title', api_utf8_encode($this->get_name()));
         $organization->appendChild($org_title);
-
         $folder_name = 'document';
 
         // Removes the learning_path/scorm_folder path when exporting see #4841
@@ -10616,7 +10618,7 @@ class learnpath
         // Always call the learnpathItem->scorm_export() method to change it to the SCORM format.
         $link_updates = [];
         $links_to_create = [];
-        //foreach ($this->items as $index => $item) {
+
         foreach ($this->ordered_items as $index => $itemId) {
             $item = $this->items[$itemId];
             if (!in_array($item->type, [TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION])) {
@@ -10687,10 +10689,10 @@ class learnpath
                 $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
 
                 if (!empty($path_to_remove)) {
-                    //From docs
+                    // From docs
                     $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);
 
-                    //From quiz
+                    // From quiz
                     if ($this->ref === 'chamilo_scorm_export') {
                         $path_to_remove = 'scorm/'.$this->path.'/';
                         $my_xml_file_path = str_replace($path_to_remove, '', $my_file_path);
@@ -10774,7 +10776,8 @@ class learnpath
                                         }
                                     }
                                     break;
-                                case 'abs': // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
+                                case 'abs':
+                                    // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
                                     $my_dep_file->setAttribute('href', $doc_info[0]);
                                     $my_dep->setAttribute('xml:base', '');
 
@@ -10787,9 +10790,7 @@ class learnpath
                                         $abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir, strlen($relp));
                                     }
 
-                                    //$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
                                     $file_path = realpath(api_get_path(SYS_APP_PATH).$abs_img_path_without_subdir);
-
                                     $file_path = str_replace('\\', '/', $file_path);
                                     $file_path = str_replace('//', '/', $file_path);
 
@@ -10811,6 +10812,7 @@ class learnpath
                                             // might still generate wrong links.
                                             //$file_path = substr($file_path,strlen($cur_path));
                                             // Calculate the directory path to the current file (without trailing slash).
+
                                             $my_relative_path = dirname($file_path);
                                             $my_relative_path = str_replace('\\', '/', $my_relative_path);
                                             $my_relative_file = basename($file_path);
@@ -10818,7 +10820,9 @@ class learnpath
                                             $my_orig_file_path = substr($orig_file_path, 0, -1);
                                             $dotdot = '';
                                             $subdir = '';
-                                            while (strstr($my_relative_path, $my_orig_file_path) === false && (strlen($my_orig_file_path) > 1) && (strlen($my_relative_path) > 1)) {
+                                            while (strstr($my_relative_path, $my_orig_file_path) === false &&
+                                                (strlen($my_orig_file_path) > 1) && (strlen($my_relative_path) > 1)
+                                            ) {
                                                 $my_relative_path2 = dirname($my_relative_path);
                                                 $my_relative_path2 = str_replace('\\', '/', $my_relative_path2);
                                                 $my_orig_file_path = dirname($my_orig_file_path);
@@ -10834,6 +10838,7 @@ class learnpath
                                         $zip_files[] = $file_path;
                                         // Update the links to the current document in the containing document (make them relative).
                                         $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $relative_path];
+
                                         $my_dep_file->setAttribute('href', $file_path);
                                         $my_dep->setAttribute('xml:base', '');
                                     } elseif (strstr($file_path, $main_path) !== false) {
@@ -10952,7 +10957,7 @@ class learnpath
 
                         $my_file_path = 'link_'.$item->get_id().'.html';
                         $sql = 'SELECT url, title FROM '.Database::get_course_table(TABLE_LINK).'
-                                WHERE c_id = '.$course_id.' AND id='.$item->path;
+                                WHERE c_id = '.$course_id.' AND id = '.$item->path;
                         $rs = Database::query($sql);
                         if ($link = Database::fetch_array($rs)) {
                             $url = $link['url'];
@@ -10979,7 +10984,8 @@ class learnpath
                         }
                         break;
                     case TOOL_QUIZ:
-                        $exe_id = $item->path; // Should be using ref when everything will be cleaned up in this regard.
+                        $exe_id = $item->path;
+                        // Should be using ref when everything will be cleaned up in this regard.
                         $exe = new Exercise();
                         $exe->read($exe_id);
                         $my_item = $xmldoc->createElement('item');
@@ -11024,7 +11030,7 @@ class learnpath
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = ScormSection::export_exercise_to_scorm(
+                        $contents = ScormSection::exportExerciseToScorm(
                             $exe,
                             true
                         );
@@ -11056,6 +11062,7 @@ class learnpath
 
                         // Get included docs.
                         $inc_docs = $item->get_resources_from_source(null, $tmp_file_path);
+
                         // Dependency to other files - not yet supported.
                         $i = 1;
                         foreach ($inc_docs as $doc_info) {
@@ -11093,10 +11100,6 @@ class learnpath
                                             $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                             $my_dep->setAttribute('xml:base', '');
                                         } elseif (empty($file_path)) {
-                                            /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
-                                            if (strpos($document_root,-1) == '/') {
-                                                $document_root = substr(0, -1, $document_root);
-                                            }*/
                                             $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
                                             $file_path = str_replace('//', '/', $file_path);
                                             if (file_exists($file_path)) {
@@ -11108,7 +11111,8 @@ class learnpath
                                             }
                                         }
                                         break;
-                                    case 'abs': // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
+                                    case 'abs':
+                                        // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
                                         $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
                                         $current_dir = str_replace('\\', '/', $current_dir);
                                         $file_path = realpath($doc_info[0]);
@@ -11139,7 +11143,7 @@ class learnpath
                                     case 'rel':
                                         // Path relative to the current document. Save xml:base as current document's
                                         // directory and save file in zip as subdir.file_path
-                                        if (substr($doc_info[0], 0, 2) == '..') {
+                                        if (substr($doc_info[0], 0, 2) === '..') {
                                             // Relative path going up.
                                             $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
                                             $current_dir = str_replace('\\', '/', $current_dir);
@@ -11159,8 +11163,6 @@ class learnpath
                                                     // Add character "/" in file path.
                                                     $file_path_dest = 'document/'.$file_path;
                                                 }
-
-                                                //error_log('Reduced path: '.$file_path, 0);
                                                 $zip_files_abs[] = $file_path;
 
                                                 $link_updates[$my_file_path][] = [
@@ -11215,7 +11217,6 @@ class learnpath
                         $my_file->setAttribute('href', 'document/'.$my_xml_file_path);
                         $my_resource->appendChild($my_file);
                         $resources->appendChild($my_resource);
-
                         break;
                 }
             }
@@ -11329,7 +11330,9 @@ class learnpath
                     // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
                     // to find the flv to play in document/main/, so we replace main/ in the flv path by
                     // ../../.. to return from inc/lib/flv_player to the document/main path.
-                    if (substr($old_new['dest'], -3) == 'flv' && substr($old_new['dest'], 0, 5) == 'main/') {
+                    if (substr($old_new['dest'], -3) == 'flv' &&
+                        substr($old_new['dest'], 0, 5) == 'main/'
+                    ) {
                         $old_new['dest'] = str_replace('main/', '../../../', $old_new['dest']);
                     }
                     $string = str_replace($old_new['orig'], $old_new['dest'], $string);
@@ -11428,7 +11431,7 @@ EOD;
      */
     public function scorm_export_to_pdf($lp_id)
     {
-        $lp_id = intval($lp_id);
+        $lp_id = (int) $lp_id;
         $files_to_export = [];
         $course_data = api_get_course_info($this->cc);
         if (!empty($course_data)) {

@@ -8,13 +8,14 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true);
-api_protect_limit_for_session_admin();
 
-//Add the JS needed to use the jqgrid
+$usergroup = new UserGroup();
+$usergroup->protectScript();
+
+// Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
+
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 if ($action == 'add') {
     $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
@@ -60,7 +61,14 @@ $column_model = [
     ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left'],
     ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left'],
     ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center'],
-    ['name' => 'actions', 'index' => 'actions', 'width' => '20', 'align' => 'center', 'sortable' => 'false', 'formatter' => 'action_formatter'],
+    [
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '20',
+        'align' => 'center',
+        'sortable' => 'false',
+        'formatter' => 'action_formatter',
+    ],
 ];
 
 //Autowidth
@@ -99,7 +107,6 @@ $(function() {
 </script>
 <?php
 
-$usergroup = new UserGroup();
 $usergroup->showGroupTypeSetting = true;
 // Action handling: Adding a note
 if ($action == 'add') {
@@ -135,7 +142,7 @@ if ($action == 'add') {
     } else {
         echo '<div class="actions">';
         echo '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -193,4 +200,4 @@ if ($action == 'add') {
 } else {
     $usergroup->display();
 }
-Display :: display_footer();
+Display::display_footer();

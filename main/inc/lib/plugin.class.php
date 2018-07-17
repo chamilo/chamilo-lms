@@ -25,6 +25,7 @@ class Plugin
     public $isMailPlugin = false;
     // Adds icon in the course home
     public $addCourseTool = true;
+    public $hasPersonalEvents = false;
 
     /**
      * When creating a new course, these settings are added to the course, in

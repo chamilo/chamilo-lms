@@ -138,7 +138,7 @@ $(document).ready(function() {
 
             modalDialog.removeClass('modal-lg modal-sm').css('width', '');
 
-            if (modalSize) {
+            if (modalSize && modalSize.length != 0) {
                 switch (modalSize) {
                     case 'lg':
                         modalDialog.addClass('modal-lg');

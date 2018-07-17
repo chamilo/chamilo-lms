@@ -223,7 +223,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      */
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
+        $questionWeighting = 0;
         $objAnswer = new Answer($this->id);
         $nbAnswers = $form->getSubmitValue('nb_answers');
 
@@ -953,7 +953,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $attemptInfoList = self::getExerciseAttemptInfo($exeId);
 
-        foreach ($attemptInfoList as $i => $attemptInfo) {
+        foreach ($attemptInfoList as $attemptInfo) {
             $oQuestion = new MultipleAnswerTrueFalseDegreeCertainty();
             $oQuestion->read($attemptInfo['question_id']);
             if ($oQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {

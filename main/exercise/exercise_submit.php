@@ -1226,12 +1226,16 @@ if (!empty($error)) {
             }
 
             // Only for the first time
-            $("#save_for_now_"+question_id).html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
+            var dataparam = "'.$params.'&type=simple&question_id="+question_id;
+            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc;
+            
+            $("#save_for_now_"+question_id).html(\''.
+                Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
             $.ajax({
                 type:"post",
                 async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
-                data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc,
+                data: dataparam,
                 success: function(return_value) {
                     if (return_value == "ok") {
                         $("#save_for_now_"+question_id).html(\''.

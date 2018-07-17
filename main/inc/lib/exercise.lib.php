@@ -360,7 +360,8 @@ class ExerciseLib
                 $header1 = Display::tag('th', '&nbsp;');
                 $cpt1 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1)) ? '' : 'border-right: solid #FFFFFF 1px;';
+                    $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
+                        ? '' : 'border-right: solid #FFFFFF 1px;';
                     if ($item == "True" || $item == "False") {
                         $header1 .= Display::tag('th',
                             get_lang($item),
@@ -4324,18 +4325,18 @@ EOT;
 
     /**
      * Return an HTML select menu with the student groups
-     * @param string $in_name     is the name and the id of the <select>
-     * @param string $in_default  default value for option
-     * @param string $in_onchange
+     * @param string $name     is the name and the id of the <select>
+     * @param string $default  default value for option
+     * @param string $onchange
      *
      * @return string the html code of the <select>
      */
-    public static function displayGroupMenu($in_name, $in_default, $in_onchange = "")
+    public static function displayGroupMenu($name, $default, $onchange = "")
     {
         // check the default value of option
-        $tabSelected = [$in_default => " selected='selected' "];
+        $tabSelected = [$default => " selected='selected' "];
         $res = "";
-        $res .= "<select name='$in_name' id='$in_name' onchange='".$in_onchange."' >";
+        $res .= "<select name='$name' id='$name' onchange='".$onchange."' >";
         $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang(
                 'AllGroups'
             )." --</option>";
@@ -4735,7 +4736,8 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= "<div class='normal-message'>".get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
+            $exercise_content .= "<div class='normal-message'>".
+                get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939
@@ -4804,7 +4806,8 @@ EOT;
     }
 
     /**
-     * Get a special ribbon on top of "degree of certainty" questions (variation from getTotalScoreRibbon() for other question types)
+     * Get a special ribbon on top of "degree of certainty" questions (
+     * variation from getTotalScoreRibbon() for other question types)
      * @param Exercise $objExercise
      * @param float    $score
      * @param float    $weight

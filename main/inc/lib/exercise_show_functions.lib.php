@@ -601,7 +601,7 @@ class ExerciseShowFunctions
             ?>
             <td>&nbsp;</td>
         <?php
-        }
+            }
         ?>
         </tr>
         <?php

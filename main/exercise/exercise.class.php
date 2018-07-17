@@ -5640,7 +5640,8 @@ class Exercise
                                 $answerDegreeCertainty = $replyDegreeCertainty[$i];
                                 Event::saveQuestionAttempt(
                                     $questionScore,
-                                    $chosenAnswer.':'.$choice[$chosenAnswer].':'.$choiceDegreeCertainty[$answerDegreeCertainty],
+                                    $chosenAnswer.':'.$choice[$chosenAnswer].':'.
+                                        $choiceDegreeCertainty[$answerDegreeCertainty],
                                     $quesId,
                                     $exeId,
                                     $i,

@@ -417,7 +417,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 return get_lang('DegreeOfCertaintyUnsure');
             }
             if ($studentDegreeChoicePosition == 3) {
-                return get_lang('DegreeOfCertaintyIgnorance');
+                return get_lang('DegreeOfCertaintyDeclaredIgnorance');
             }
         }
     }
@@ -847,7 +847,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $explainHistoList = [
                 'DegreeOfCertaintyVeryUnsure',
                 'DegreeOfCertaintyUnsure',
-                'DegreeOfCertaintyIgnorance',
+                'DegreeOfCertaintyDeclaredIgnorance',
                 'DegreeOfCertaintyPrettySure',
                 'DegreeOfCertaintyVerySure',
             ];

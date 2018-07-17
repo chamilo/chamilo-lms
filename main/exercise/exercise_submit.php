@@ -1235,13 +1235,13 @@ if (!empty($error)) {
 
         function save_now(question_id, url_extra) {
             //1. Normal choice inputs
-            var my_choice = $(\'*[name*="choice['+question_id+']"]\').serialize();
+            var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
             //2. Reminder checkbox
             var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
             //3. Hotspots
-            var hotspot = $(\'*[name*="hotspot['+question_id+']"]\').serialize();
+            var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
             
             // Checking FCK
             if (question_id) {

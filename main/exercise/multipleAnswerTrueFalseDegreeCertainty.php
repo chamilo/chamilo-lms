@@ -151,7 +151,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 'html_editor',
                 'answer['.$i.']',
                 null,
-                'style="vertical-align:middle"',
+                ['style' => 'vertical-align:middle;'],
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']);
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -160,7 +160,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $form->addElement('html_editor',
                     'comment['.$i.']',
                     null,
-                    'style="vertical-align:middle"',
+                    ['style' => 'vertical-align:middle;'],
                     ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']);
             }
             $form->addElement('html', '</tr>');

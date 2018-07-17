@@ -98,6 +98,7 @@ class UserGroup extends Model
 
                 return $row['count'];
             }
+
             return 0;
         } else {
             $list = [];
@@ -135,7 +136,7 @@ class UserGroup extends Model
                     $totalTime = 0;
                     foreach ($courseAndSessionList as $sessionId => $course) {
                         foreach ($course as $courseId) {
-                            $totalTime += Tracking::get_time_spent_on_the_course($userId, $courseId,$sessionId);
+                            $totalTime += Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
                         }
                     }
 
@@ -146,6 +147,7 @@ class UserGroup extends Model
                 $data['id'] = $data['user_id'];
                 $list[] = $data;
             }
+
             return $list;
         }
     }
@@ -2723,7 +2725,7 @@ class UserGroup extends Model
     }
 
     /**
-     * Check permissions and blocks the page
+     * Check permissions and blocks the page.
      */
     public function protectScript()
     {

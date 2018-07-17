@@ -96,7 +96,7 @@ class LpCalendarPlugin extends Plugin
             'visible_to_self' => 1,
             'changeable' => 1,
             'visible_to_others' => 1,
-            'field_type' => ExtraField::FIELD_TYPE_CHECKBOX
+            'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
         ];
 
         $extraField->save($params);
@@ -107,7 +107,7 @@ class LpCalendarPlugin extends Plugin
             'visible_to_self' => 1,
             'changeable' => 1,
             'visible_to_others' => 1,
-            'field_type' => ExtraField::FIELD_TYPE_TEXT
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
         ];
 
         $extraField->save($params);
@@ -327,7 +327,7 @@ class LpCalendarPlugin extends Plugin
                 $extraField = new ExtraFieldValue('lp_item');
                 $params = [
                     'id' => $itemInfo['id'],
-                    'value' => $newValue
+                    'value' => $newValue,
                 ];
                 $extraField->update($params);
             }
@@ -477,7 +477,6 @@ class LpCalendarPlugin extends Plugin
 
         return true;
     }
-
 
     /*public static function getUserCalendar($calendarId, $userId)
     {
@@ -647,6 +646,7 @@ class LpCalendarPlugin extends Plugin
         }
 
         $html = Display::panel($html, $this->get_lang('LearningCalendar'));
+
         return $html;
     }
 
@@ -680,7 +680,7 @@ class LpCalendarPlugin extends Plugin
         return [
             'user_event_count' => $takenCount,
             'completed' => $completed,
-            'diff' => $diff
+            'diff' => $diff,
         ];
     }
 }

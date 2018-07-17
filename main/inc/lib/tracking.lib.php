@@ -6866,8 +6866,6 @@ class Tracking
     }
 }
 
-
-
 /**
  * @todo move into a proper file
  *

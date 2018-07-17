@@ -585,7 +585,6 @@ class ExerciseShowFunctions
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             echo '</td>';
-
         } else {
             echo '<td>&nbsp;</td>';
         }

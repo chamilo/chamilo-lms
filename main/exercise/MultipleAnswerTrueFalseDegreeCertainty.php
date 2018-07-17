@@ -484,9 +484,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * Display basic bar charts of results by category of questions.
      *
-     * @param array    $scoreListAll
-     * @param string   $title        The block title
-     * @param int      $sizeRatio
+     * @param array  $scoreListAll
+     * @param string $title        The block title
+     * @param int    $sizeRatio
      *
      * @return string The HTML/CSS code for the charts block
      */
@@ -771,9 +771,24 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .'</th><tr>'
         ;
 
-        $nbResponsesInc = (isset($scoreList[4]) || isset($scoreList[5])) ? $scoreList[4] + $scoreList[5] : 0;
-        $nbResponsesIng = (isset($scoreList[3])) ? $scoreList[3] : 0;
-        $nbResponsesCor = (isset($scoreList[1]) || isset($scoreList[2])) ? $scoreList[1] + $scoreList[2] : 0;
+        $nbResponsesInc = 0;
+        if (isset($scoreList[4])) {
+            $nbResponsesInc += (int) $scoreList[4];
+        }
+        if (isset($scoreList[5])) {
+            $nbResponsesInc += (int) $scoreList[5];
+        }
+
+        $nbResponsesIng = isset($scoreList[3]) ? $scoreList[3] : 0;
+
+        $nbResponsesCor = 0;
+        if (isset($scoreList[1])) {
+            $nbResponsesCor += (int) $scoreList[1];
+        }
+        if (isset($scoreList[2])) {
+            $nbResponsesCor += (int) $scoreList[2];
+        }
+
         $colWidth = $widthTable / 5;
 
         $html .= '<tr>
@@ -1245,9 +1260,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * send mail to student with degre certainty result test.
      *
-     * @param int $userId
+     * @param int      $userId
      * @param Exercise $objExercise
-     * @param int $exeId
+     * @param int      $exeId
      */
     public static function sendQuestionCertaintyNotification($userId, $objExercise, $exeId)
     {

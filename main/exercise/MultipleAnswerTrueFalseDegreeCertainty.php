@@ -337,8 +337,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 'label' => get_lang('DegreeOfCertaintyDeclaredIgnorance'),
                 'description' => get_lang('DegreeOfCertaintyDeclaredIgnoranceDescription'),
             ];
-
-            return $result;
         } else {
             $checkResult = $studentAnswer == $expectedAnswer ? true : false;
             if ($checkResult) {
@@ -350,10 +348,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyVerySure'),
                         'description' => get_lang('DegreeOfCertaintyVerySureDescription'),
                     ];
-
-                    return $result;
-                }
-                if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
+                } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
                         'color' => '#000000',
                         'background-color' => '#A9F5A9',
@@ -361,8 +356,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyPrettySure'),
                         'description' => get_lang('DegreeOfCertaintyPrettySureDescription'),
                     ];
-
-                    return $result;
                 }
             } else {
                 if ($studentDegreeChoicePosition >= 6) {
@@ -373,10 +366,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyVeryUnsure'),
                         'description' => get_lang('DegreeOfCertaintyVeryUnsureDescription'),
                     ];
-
-                    return $result;
-                }
-                if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
+                } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
                         'color' => '#000000',
                         'background-color' => '#F6CECE',
@@ -384,11 +374,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyUnsure'),
                         'description' => get_lang('DegreeOfCertaintyUnsureDescription'),
                     ];
-
-                    return $result;
                 }
             }
         }
+
+        return $result;
     }
 
     /**

@@ -2835,7 +2835,7 @@ class Exercise
 
         // if we want to delete results from LP too
         if ($cleanLpTests) {
-            $sql_where = "";
+            $sql_where = '';
         }
 
         // if we want to delete attempts before date $cleanResultBeforeDate
@@ -2851,12 +2851,12 @@ class Exercise
         }
 
         $sql = "SELECT exe_id
-                FROM $table_track_e_exercises
-                WHERE
-                    c_id = ".api_get_course_int_id()." AND
-                    exe_exo_id = ".$this->id." AND
-                    session_id = ".api_get_session_id()." ".
-                    $sql_where;
+            FROM $table_track_e_exercises
+            WHERE
+                c_id = ".api_get_course_int_id()." AND
+                exe_exo_id = ".$this->id." AND
+                session_id = ".api_get_session_id()." ".
+                $sql_where;
 
         $result = Database::query($sql);
         $exe_list = Database::store_result($result);
@@ -2876,10 +2876,10 @@ class Exercise
         $session_id = api_get_session_id();
         // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
-                WHERE c_id = ".api_get_course_int_id()."
-                AND exe_exo_id = ".$this->id."
-                $sql_where
-                AND session_id = ".$session_id;
+                WHERE 
+                  c_id = ".api_get_course_int_id()." AND 
+                  exe_exo_id = ".$this->id." $sql_where AND 
+                  session_id = ".$session_id;
         Database::query($sql);
 
         Event::addEvent(
@@ -3296,7 +3296,7 @@ class Exercise
      *
      * @param int    $exeId
      * @param int    $questionId
-     * @param int    $choice                                    the user selected
+     * @param mixed  $choice                                    the user-selected option
      * @param string $from                                      function is called from 'exercise_show' or 'exercise_result'
      * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] = coordinates
      * @param bool   $saved_results                             save results in the DB or just show the reponse
@@ -3384,12 +3384,18 @@ class Exercise
         $totalScore = 0;
 
         // Extra information of the question
-        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE && !empty($extra)) {
+        if ((
+            $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+            $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
+            )
+            && !empty($extra)
+        ) {
             $extra = explode(':', $extra);
             if ($debug) {
                 error_log(print_r($extra, 1));
             }
             // Fixes problems with negatives values using intval
+
             $true_score = floatval(trim($extra[0]));
             $false_score = floatval(trim($extra[1]));
             $doubt_score = floatval(trim($extra[2]));
@@ -3402,6 +3408,12 @@ class Exercise
         if ($debug) {
             error_log('Count of answers: '.$nbrAnswers);
             error_log('$answerType: '.$answerType);
+        }
+
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $choiceTmp = $choice;
+            $choice = $choiceTmp["choice"];
+            $choiceDegreeCertainty = $choiceTmp["choiceDegreeCertainty"];
         }
 
         if ($answerType == FREE_ANSWER ||
@@ -3546,6 +3558,55 @@ class Exercise
                         // If no result then the user just hit don't know
                         $studentChoice = 3;
                         $questionScore += $doubt_score;
+                    }
+                    $totalScore = $questionScore;
+                    break;
+                case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
+                    if ($from_database) {
+                        $choice = [];
+                        $choiceDegreeCertainty = [];
+                        $sql = "SELECT answer 
+                            FROM $TBL_TRACK_ATTEMPT
+                            WHERE 
+                            exe_id = $exeId AND question_id = $questionId";
+
+                        $result = Database::query($sql);
+                        while ($row = Database::fetch_array($result)) {
+                            $ind = $row['answer'];
+                            $values = explode(':', $ind);
+                            $myAnswerId = $values[0];
+                            $option = $values[1];
+                            $percent = $values[2];
+                            $choice[$myAnswerId] = $option;
+                            $choiceDegreeCertainty[$myAnswerId] = $percent;
+                        }
+                    }
+
+                    $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ?
+                        $choiceDegreeCertainty[$answerAutoId] : null;
+
+                    // student score update
+                    if (!empty($studentChoice)) {
+                        if ($studentChoice == $answerCorrect) {
+                            // correct answer and student is Unsure or PrettySur
+                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
+                                && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
+                                $questionScore += $true_score;
+                            } else {
+                                // student ignore correct answer
+                                $questionScore += $doubt_score;
+                            }
+                        } else {
+                            // false answer and student is Unsure or PrettySur
+                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
+                                && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
+                                $questionScore += $false_score;
+                            } else {
+                                // student ignore correct answer
+                                $questionScore += $doubt_score;
+                            }
+                        }
                     }
                     $totalScore = $questionScore;
                     break;
@@ -3774,6 +3835,7 @@ class Exercise
                         $answer = '';
                         $real_correct_tags = $correct_tags;
                         $chosen_list = [];
+
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if ($i == 0) {
                                 $answer .= $real_text[0];
@@ -4604,6 +4666,17 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
+                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                            ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                $feedback_type,
+                                $studentChoice,
+                                $studentChoiceDegree,
+                                $answer,
+                                $answerComment,
+                                $answerCorrect,
+                                $questionId,
+                                $results_disabled
+                            );
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false(
                                 $this,
@@ -4985,6 +5058,31 @@ class Exercise
                                 );
                             }
                             break;
+                        case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
+                            if ($answerId == 1) {
+                                ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                    $feedback_type,
+                                    $studentChoice,
+                                    $studentChoiceDegree,
+                                    $answer,
+                                    $answerComment,
+                                    $answerCorrect,
+                                    $questionId,
+                                    $results_disabled
+                                );
+                            } else {
+                                ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                    $feedback_type,
+                                    $studentChoice,
+                                    $studentChoiceDegree,
+                                    $answer,
+                                    $answerComment,
+                                    $answerCorrect,
+                                    $questionId,
+                                    $results_disabled
+                                );
+                            }
+                            break;
                         case FILL_IN_BLANKS:
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $feedback_type,
@@ -5361,19 +5459,19 @@ class Exercise
                                     <td><b>'.get_lang('Overlap').'</b></td>
                                     <td>'.get_lang('Min').' '.$threadhold1.'</td>
                                     <td><div style="color:'.$overlap_color.'">'
-                                        .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
+                            .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excess').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold2.'</td>
                                     <td><div style="color:'.$excess_color.'">'
-                                        .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
+                            .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold3.'</td>
                                     <td><div style="color:'.$missing_color.'">'
-                                        .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
+                            .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
                                 </tr>
                             </table>';
                         if ($next == 0) {
@@ -5502,9 +5600,11 @@ class Exercise
                 }
             }
 
+            //if ($origin != 'learnpath') {
             if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
+            //	}
         }
         unset($objAnswerTmp);
 
@@ -5522,21 +5622,44 @@ class Exercise
             if (empty($choice)) {
                 $choice = 0;
             }
-            if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+            // with certainty degree
+            if (empty($choiceDegreeCertainty)) {
+                $choiceDegreeCertainty = 0;
+            }
+            if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+                $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ||
+                $answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
+            ) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
-                        $ans = $reply[$i];
-                        Event::saveQuestionAttempt(
-                            $questionScore,
-                            $ans.':'.$choice[$ans],
-                            $quesId,
-                            $exeId,
-                            $i,
-                            $this->id
-                        );
+                        $chosenAnswer = $reply[$i];
+                        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                            if ($choiceDegreeCertainty != 0) {
+                                $replyDegreeCertainty = array_keys($choiceDegreeCertainty);
+                                $answerDegreeCertainty = $replyDegreeCertainty[$i];
+                                Event::saveQuestionAttempt(
+                                    $questionScore,
+                                    $chosenAnswer.':'.$choice[$chosenAnswer].':'.
+                                        $choiceDegreeCertainty[$answerDegreeCertainty],
+                                    $quesId,
+                                    $exeId,
+                                    $i,
+                                    $this->id
+                                );
+                            }
+                        } else {
+                            Event::saveQuestionAttempt(
+                                $questionScore,
+                                $chosenAnswer.':'.$choice[$chosenAnswer],
+                                $quesId,
+                                $exeId,
+                                $i,
+                                $this->id
+                            );
+                        }
                         if ($debug) {
-                            error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
+                            error_log('result =>'.$questionScore.' '.$chosenAnswer.':'.$choice[$chosenAnswer]);
                         }
                     }
                 } else {
@@ -5672,17 +5795,17 @@ class Exercise
         }
 
         if ($saved_results) {
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = 'UPDATE '.$table.' SET
-                        exe_result = exe_result + '.floatval($questionScore).'
-                    WHERE exe_id = '.$exeId;
+            $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "UPDATE $statsTable SET
+                        exe_result = exe_result + ".floatval($questionScore)."
+                    WHERE exe_id = $exeId";
             Database::query($sql);
             if ($debug) {
                 error_log($sql);
             }
         }
 
-        $return = [
+        $return_array = [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
@@ -5692,7 +5815,7 @@ class Exercise
             'generated_oral_file' => $generatedFile,
         ];
 
-        return $return;
+        return $return_array;
     }
 
     /**
@@ -8036,25 +8159,25 @@ class Exercise
         $courseInfo = api_get_course_info($courseCode);
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
-                    .get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
+            .get_lang('AttemptDetails').' : <br /><br />'
+            .'<table>'
+            .'<tr>'
+            .'<td><em>'.get_lang('CourseName').'</em></td>'
+            .'<td>&nbsp;<b>#course#</b></td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('TestAttempted').'</td>'
+            .'<td>&nbsp;#exercise#</td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('StudentName').'</td>'
+            .'<td>&nbsp;#firstName# #lastName#</td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('StudentEmail').'</td>'
+            .'<td>&nbsp;#mail#</td>'
+            .'</tr>'
+            .'</table>';
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
@@ -8064,19 +8187,19 @@ class Exercise
             if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
                 $open_question_list .=
                     '<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
                     .'</tr>'
                     .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
                     .'</tr>';
             }
         }
 
         if (!empty($open_question_list)) {
             $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
-                    '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+                '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);

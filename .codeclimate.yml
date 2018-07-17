@@ -41,6 +41,8 @@ plugins:
         enabled: false
       PSR1 Files SideEffects FoundWithSymbols:
         enabled: false
+      Squiz Strings ConcatenationSpacing PaddingFound:
+        enabled: false
 
   phpmd:
     enabled: true

@@ -484,4 +484,3 @@ HTML;
         return [$js, $html];
     }
 }
-

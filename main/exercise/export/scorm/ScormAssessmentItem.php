@@ -237,4 +237,3 @@ class ScormAssessmentItem
         }
     }
 }
-

@@ -12,6 +12,7 @@ api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
+
 if ($debug) {
     error_log('-----------------------------------------------------');
     error_log("$action ajax call");
@@ -272,13 +273,13 @@ switch ($action) {
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
                     $timeInfo = api_format_date(
-                        $row['start_date'],
-                        DATE_TIME_FORMAT_LONG
-                    ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
-                } else {
-                    $timeInfo = api_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
+                        ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
+                } else {
+                    $timeInfo = api_format_date(
+                        $row['start_date'],
+                        DATE_TIME_FORMAT_LONG
                     );
                 }
                 $array = [
@@ -395,15 +396,20 @@ switch ($action) {
             // Questions choices.
             $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
+            // certainty degree choice
+            $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty'])
+                ? $_REQUEST['choiceDegreeCertainty'] : null;
+
             // Hot spot coordinates from all questions.
             $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
 
             // There is a reminder?
-            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list']) ? array_keys($_REQUEST['remind_list']) : null;
+            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])
+                ? array_keys($_REQUEST['remind_list']) : null;
 
             // Needed in manage_answer.
-            $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 
             // Attempt id.
             $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
@@ -481,7 +487,7 @@ switch ($action) {
                 // Fires an error.
                 echo 'error';
                 if ($debug) {
-                    error_log("exe_id is empty");
+                    error_log('exe_id is empty');
                 }
                 exit;
             }
@@ -516,6 +522,10 @@ switch ($action) {
 
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
+
+                if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    $myChoiceDegreeCertainty = isset($choiceDegreeCertainty[$my_question_id]) ? $choiceDegreeCertainty[$my_question_id] : null;
+                }
 
                 // Getting free choice data.
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type == 'all') {
@@ -584,18 +594,37 @@ switch ($action) {
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
-                $result = $objExercise->manage_answer(
-                    $exeId,
-                    $my_question_id,
-                    $my_choice,
-                    'exercise_result',
-                    $hot_spot_coordinates,
-                    true,
-                    false,
-                    false,
-                    $objExercise->selectPropagateNeg(),
-                    $hotspot_delineation_result
-                );
+
+                if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    $myChoiceTmp = [];
+                    $myChoiceTmp["choice"] = $my_choice;
+                    $myChoiceTmp["choiceDegreeCertainty"] = $myChoiceDegreeCertainty;
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $myChoiceTmp,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                } else {
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $my_choice,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                }
 
                 //  Adding the new score.
                 $total_score += $result['score'];

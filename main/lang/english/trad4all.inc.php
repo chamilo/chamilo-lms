@@ -8158,4 +8158,65 @@ $SelectedUsersDisabled = "The selected users have all been disabled";
 $SomeUsersNotDisabled = "Some of the selected users have not been disabled. We recommend you confirm which, by using the advanced search.";
 $SelectedUsersEnabled = "The selected users were all enabled.";
 $SomeUsersNotEnabled = "Some of the selected users have not been enabled. We recommend you confirm which, by using the advanced search.";
+$EncryptedData = "Encrypted data";
+$RandomData = "Random data";
+$PersonalDataReport = "Personal data";
+$ComplexDataNotShown = "Complex data (not shown)";
+$PersonalDataIntroductionTitle = "Personal data: introduction";
+$PersonalDataKeptOnYou = "Personal data we keep about you";
+$PersonalDataPermissionsYouGaveUs = "Permissions you gave us";
+$PersonalDataResponsibleOrganizationTitle = "Organization responsible for your data treatment";
+$PersonalDataTreatmentTitle = "Personal data treatment";
+$PersonalDataCollectionTitle = "Personal data collection";
+$PersonalDataRecordingTitle = "Personal data recording";
+$PersonalDataOrganizationTitle = "Personal data organization";
+$PersonalDataStructureTitle = "Personal data structure";
+$PersonalDataConservationTitle = "Personal data conservation";
+$PersonalDataAdaptationTitle = "Personal data adaptation or modification";
+$PersonalDataExtractionTitle = "Personal data extraction";
+$PersonalDataConsultationTitle = "Personal data queries";
+$PersonalDataUsageTitle = "Personal data use";
+$PersonalDataCommunicationTitle = "Personal data communication and sharing";
+$PersonalDataInterconnectionTitle = "Personal data interconnection";
+$PersonalDataLimitationTitle = "Personal data limitation";
+$PersonalDataDeletionTitle = "Personal data deletion";
+$PersonalDataDestructionTitle = "Personal data destruction";
+$PersonalDataProfilingTitle = "Personal data profiling";
+$PersonalDataIntroductionText = "We respect your privacy!
+This page unites all aspects of the personal data we might be keeping on you, how we treat it, what you have authorized us to do with it and who we are, in an effort to comply with most data privacy laws available.
+Please read this information carefully and, if you have any question, check the contact details below to ask us for more details.";
+$YourDegreeOfCertainty = "Your degree of certainty";
+$DegreeOfCertaintyThatMyAnswerIsCorrect = "Degree of certainty that my answer will be considered correct";
+$IncorrectAnswersX = "Incorrect answers: %s";
+$KindRegards = "Kind regards,";
+$DoNotReply = "Please do not reply";
+$ResultAccomplishedTest = "Results for the accomplished test";
+$YourResultsByDiscipline = "Your results by discipline";
+$ForComparisonYourLastResultToThisTest = "In comparison, your latest results for this test";
+$YourOverallResultForTheTest = "Your overall results for the test";
+$QuestionDegreeCertaintyHTMLMail = "You will find your results for test %s below.<br />
+To see the details of these results:
+<br /><br />
+1. Connect to the platform (login/password): <a href='%s'>To the platform</a>.
+<br /><br />
+2. Click this link: <a href='%s'>See detailed results</a>.";
+$DegreeOfCertaintyVerySure = "Very sure";
+$DegreeOfCertaintyVerySureDescription = "Your answer was correct and you were 80% sure about it. Congratulations!";
+$DegreeOfCertaintyPrettySure = "Pretty sure";
+$DegreeOfCertaintyPrettySureDescription = "Your answer was correct but you were not completely sure (only 60% to 70% sure)";
+$DegreeOfCertaintyDeclaredIgnorance = "Declared ignorance";
+$DegreeOfCertaintyDeclaredIgnoranceDescription = "You didn't know the answer - only 50% sure";
+$DegreeOfCertaintyUnsure = "Unsure";
+$DegreeOfCertaintyUnsureDescription = "Your answer was incorrect, but you guessed it was (60% to 70% sure)";
+$DegreeOfCertaintyVeryUnsure = "Very unsure";
+$DegreeOfCertaintyVeryUnsureDescription = "Your answer was incorrect although you were about 80% (or more) sure it was wrong";
+$DegreeOfCertaintyIDeclareMyIgnorance = "I don't know the answer and I've picked at random";
+$DegreeOfCertaintyIAmVeryUnsure = "I am very unsure";
+$DegreeOfCertaintyIAmUnsure = "I am unsure";
+$DegreeOfCertaintyIAmPrettySure = "I am pretty sure";
+$DegreeOfCertaintyIAmSure = "I am almost 100% sure";
+$DegreeOfCertaintyIAmVerySure = "I am totally sure";
+$MultipleAnswerTrueFalseDegreeCertainty = "Multiple answer true/false/degree of certainty";
+$IgnoranceAnswersX = "Ignorance: %s";
+$CorrectAnswersX = "Correct answers: %s";
 ?>

@@ -8,6 +8,8 @@ checks:
     enabled: false
   method-complexity:
     enabled: true
+    config:
+      threshold: 20
   method-count:
     enabled: false
   method-lines:

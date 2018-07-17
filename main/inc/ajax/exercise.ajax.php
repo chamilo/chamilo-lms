@@ -408,8 +408,8 @@ switch ($action) {
                 ? array_keys($_REQUEST['remind_list']) : null;
 
             // Needed in manage_answer.
-            $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 
             // Attempt id.
             $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
@@ -487,7 +487,7 @@ switch ($action) {
                 // Fires an error.
                 echo 'error';
                 if ($debug) {
-                    error_log("exe_id is empty");
+                    error_log('exe_id is empty');
                 }
                 exit;
             }

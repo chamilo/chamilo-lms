@@ -523,11 +523,10 @@ class ExerciseShowFunctions
         $hideExpectedAnswer = false;
         if ($feedbackType == 0 && $inResultsDisabled == 2) {
             $hideExpectedAnswer = true;
-        } ?>
-        <tr>
-            <td width="5%">
-                <?php
-                $question = new MultipleAnswerTrueFalseDegreeCertainty();
+        }
+
+        echo '<tr><td width="5%">';
+        $question = new MultipleAnswerTrueFalseDegreeCertainty();
         $courseId = api_get_course_int_id();
         $newOptions = Question::readQuestionOption($questionId, $courseId);
 
@@ -536,70 +535,61 @@ class ExerciseShowFunctions
             echo get_lang($newOptions[$studentChoice]['name']);
         } else {
             echo '-';
-        } ?>
-            </td>
-            <td width="5%">
-                <?php
-                //Expected choice
-                if (!$hideExpectedAnswer) {
-                    if (isset($newOptions[$answerCorrect])) {
-                        echo get_lang($newOptions[$answerCorrect]['name']);
-                    } else {
-                        echo '-';
-                    }
-                } else {
-                    echo '-';
-                } ?>
-            </td>
-            <td width="25%">
-            <?php
-            echo $answer; ?>
-            </td>
-            <td width="5%" style="text-align:center;">
-            <?php
-            echo  $newOptions[$studentChoiceDegree]['name']; ?>
-            </td>
-            <!-- color by certainty -->
-            <?php
-            $degreeCertaintyColor = $question->getColorResponse(
-                $studentChoice,
-                $answerCorrect,
-                $newOptions[$studentChoiceDegree]['position']
-            );
-        if ($degreeCertaintyColor == "#088A08" || $degreeCertaintyColor == "#FE2E2E") {
-            $color = "#FFFFFF";
+        }
+        echo '</td><td width="5%">';
+
+        // Expected choice
+        if (!$hideExpectedAnswer) {
+            if (isset($newOptions[$answerCorrect])) {
+                echo get_lang($newOptions[$answerCorrect]['name']);
+            } else {
+                echo '-';
+            }
         } else {
-            $color = "#000000";
+            echo '-';
+        }
+
+        echo '</td><td width="25%">';
+        echo $answer;
+        echo '</td><td width="5%" style="text-align:center;">';
+        echo $newOptions[$studentChoiceDegree]['name'];
+        echo '</td>';
+        $degreeCertaintyColor = $question->getColorResponse(
+            $studentChoice,
+            $answerCorrect,
+            $newOptions[$studentChoiceDegree]['position']
+        );
+        if ($degreeCertaintyColor == '#088A08' || $degreeCertaintyColor == '#FE2E2E') {
+            $color = '#FFFFFF';
+        } else {
+            $color = '#000000';
         }
         $responseCode = $question->getCodeResponse(
-                $studentChoice,
-                $answerCorrect,
-                $newOptions[$studentChoiceDegree]['position']
-            ); ?>
+            $studentChoice,
+            $answerCorrect,
+            $newOptions[$studentChoiceDegree]['position']
+        );
+
+        echo '
             <td width="10%">
-                <div style="text-align:center;color: <?php echo $color; ?>; 
-                    border:1px #D6D4D4 solid;background-color: <?php echo $degreeCertaintyColor; ?>;
-                    line-height:30px;height:30px;width: 100%;margin:auto;"><?php echo nl2br($responseCode); ?>
+                <div style="text-align:center;color: '.$color.';
+                    border:1px #D6D4D4 solid;background-color: '.$degreeCertaintyColor.';
+                    line-height:30px;height:30px;width: 100%;margin:auto;">'.nl2br($responseCode).'
                 </div>
-            </td>
-            <?php
-            if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                ?>
-            <td width="20%">
-            <?php
-            $color = "black";
-                if (isset($newOptions[$studentChoice])) {
-                    echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-                } ?>
-            </td>
-            <?php
-            } else {
-                ?>
-            <td>&nbsp;</td>
-        <?php
-            } ?>
-        </tr>
-        <?php
+            </td>';
+
+        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            echo '<td width="20%">';
+            $color = 'black';
+            if (isset($newOptions[$studentChoice])) {
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+            }
+            echo '</td>';
+
+        } else {
+            echo '<td>&nbsp;</td>';
+        }
+        echo '</tr>';
     }
 
     /**

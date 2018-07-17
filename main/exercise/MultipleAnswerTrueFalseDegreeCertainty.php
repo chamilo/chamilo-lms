@@ -487,11 +487,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param array    $scoreListAll
      * @param string   $title        The block title
      * @param int      $sizeRatio
-     * @param Exercise $objExercise
      *
      * @return string The HTML/CSS code for the charts block
      */
-    public static function displayDegreeChartByCategory($scoreListAll, $title, $sizeRatio = 1, $objExercise)
+    public static function displayDegreeChartByCategory($scoreListAll, $title, $sizeRatio = 1)
     {
         $maxHeight = 0;
         $groupCategoriesByBracket = false;

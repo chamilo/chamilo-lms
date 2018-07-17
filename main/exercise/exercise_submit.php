@@ -792,46 +792,9 @@ if ($question_count != 0) {
                     exit;
                 } else {
                     // Certainty grade question
-                    // We send un email to the student before redirection to the result page
-                    $userInfo = api_get_user_info($user_id);
-                    $recipient_name = api_get_person_name($userInfo['firstname'],
-                        $userInfo['lastname'],
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
-                    );
-                    $emailTo = $userInfo['email'];
-                    $senderName = api_get_person_name(api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname'),
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
-                    );
-                    $senderEmail = api_get_setting('emailAdministrator');
-
-                    $subject = "[".get_lang('DoNotReply')."] "
-                        .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
-                    
-                    // message sent to the student
-                    $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
-                    $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
-                        .api_get_cidreq()
-                        ."&id=$exe_id'>";
-                    $titleExercise = '<span style="font-family: Arial; font-size: 18px; color: green;">'.$objExercise->title.'</span>';
-                    $message .= sprintf(get_lang('QuestionDegreeCertaintyHTMLMail'), $titleExercise, api_get_path(WEB_PATH), $exerciseLink);
-
-                    // show histogram
-                    require_once api_get_path(SYS_CODE_PATH)
-                        ."exercise/multipleAnswerTrueFalseDegreeCertainty.php";
-                    $message .= MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($exe_id, $objExercise);
-                    $message .= get_lang('KindRegards').'<br />';
-
-                    $message = api_preg_replace("/\\\n/", "", $message);
-                    api_mail_html($recipient_name,
-                        $emailTo,
-                        $subject,
-                        $message,
-                        $senderName,
-                        $senderEmail,
-                        ['content-type' => 'html']
+                    // We send an email to the student before redirection to the result page
+                    MultipleAnswerTrueFalseDegreeCertainty::sendQuestionCertaintyNotification(
+                        $user_id, $objExercise, $exe_id
                     );
 
                     header("Location: exercise_result.php?"
@@ -1243,6 +1206,9 @@ if (!empty($error)) {
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
             
+            //4. choice for degree of certainty
+            var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
+
             // Checking FCK
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1265,33 +1231,39 @@ if (!empty($error)) {
                 type:"post",
                 async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
-                data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
+                data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "error") {
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
                             url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
                         } else if ('.$reminder.' == 2 ) {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
+                                '&remind_question_id='.$remind_question_id.'&reminder=2";
                         } else {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
+                                '&remind_question_id='.$remind_question_id.'";
                         }
 
                         if (url_extra) {
                             url = url_extra;
                         }
 
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }
                 },
                 error: function() {
-                    $("#save_for_now_"+question_id).html(\''.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                    $("#save_for_now_"+question_id).html(\''.
+                        Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
                 }
             });
         }
@@ -1348,7 +1320,9 @@ if (!empty($error)) {
         }
     </script>';
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.'&autocomplete=off&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
+    echo '<form id="exercise_form" method="post" action="'.
+            api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.
+            '&autocomplete=off&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent" value="1" />
          <input type="hidden" name="exerciseId" value="'.$exerciseId.'" />
          <input type="hidden" name="num" value="'.$current_question.'" id="num_current_id" />

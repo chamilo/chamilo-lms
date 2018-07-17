@@ -250,101 +250,89 @@ class ExerciseLib
                     ['style' => 'text-align:left;']
                 );
             } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-                echo "<script>
-                   function RadioValidator(question_id, answer_id) 
-                   {
-                        var ShowAlert = \"\";
-                        var typeRadioB = \"\";
-                        var AllFormElements = window.document.getElementById(\"exercise_form\").elements;
-
+                $header = Display::tag('th', get_lang('Options'), ['width' => '50%']);
+                echo "
+                <script>
+                    function RadioValidator(question_id, answer_id) 
+                    {
+                        var ShowAlert = '';
+                        var typeRadioB = '';
+                        var AllFormElements = window.document.getElementById('exercise_form').elements;
+                    
                         for (i = 0; i < AllFormElements.length; i++) {
-                            if (AllFormElements[i].type == \"radio\") {
+                            if (AllFormElements[i].type == 'radio') {
                                 var ThisRadio = AllFormElements[i].name;
-                               
-                                var ThisChecked = \"No\";
+                                var ThisChecked = 'No';
                                 var AllRadioOptions = document.getElementsByName(ThisRadio);
                               
                                 for (x = 0; x < AllRadioOptions.length; x++) {
-                                     if (AllRadioOptions[x].checked && ThisChecked == \"No\") {
-                                         ThisChecked = \"Yes\";
+                                     if (AllRadioOptions[x].checked && ThisChecked == 'No') {
+                                         ThisChecked = 'Yes';
                                          break;
                                      } 
                                 }  
                               
                                 var AlreadySearched = ShowAlert.indexOf(ThisRadio);
                                 
-                                if (ThisChecked == \"No\" && AlreadySearched == -1) { 
+                                if (ThisChecked == 'No' && AlreadySearched == -1) { 
                                     ShowAlert = ShowAlert + ThisRadio;
                                 }     
                             }
-                            
                         }
-                        if (ShowAlert != \"\") {
-           
+                        if (ShowAlert != '') {
+                    
                         } else {
-                            $(\".question-validate-btn\").attr(\"onclick\", \"save_now (\" + question_id +\", '', \" + answer_id+\")\");                            
-                            $(\".question-validate-btn\").removeAttr('disabled');
+                            $('.question-validate-btn').removeAttr('disabled');
                         }
                     }
                     
                     function handleRadioRow(event, question_id, answer_id) {
                         var t = event.target;
-                        if (t && t.tagName == \"INPUT\")
+                        if (t && t.tagName == 'INPUT')
                             return;
-                        while (t && t.tagName != \"TD\") {
+                        while (t && t.tagName != 'TD') {
                             t = t.parentElement;
                         }
-                        var r = t.getElementsByTagName(\"INPUT\")[0];
+                        var r = t.getElementsByTagName('INPUT')[0];
                         r.click();
                         RadioValidator(question_id, answer_id);
                     }
-                 
-                    $( document ).ready(function() {
-
-
-                        var ShowAlert = \"\";
-                        var typeRadioB = \"\";
-                        var question_id = $('input[name=question_id]').val()
-                        var AllFormElements = window.document.getElementById(\"exercise_form\").elements;
-
-                            for (i = 0; i < AllFormElements.length; i++) {
-                               if (AllFormElements[i].type == \"radio\") {
-                                    var ThisRadio = AllFormElements[i].name;
-
-                                    var ThisChecked = \"No\";
-                                    var AllRadioOptions = document.getElementsByName(ThisRadio);
-
-                                    for (x = 0; x < AllRadioOptions.length; x++) {
-                                        if (AllRadioOptions[x].checked && ThisChecked == \"No\") {
-                                            ThisChecked = \"Yes\";
-                                            break;
-                                        }
-                                    }
-
-                                    var AlreadySearched = ShowAlert.indexOf(ThisRadio);
-
-                                    if (ThisChecked == \"No\" && AlreadySearched == -1) { 
-                                        ShowAlert = ShowAlert + ThisRadio;
-                                    }
-                                }
-
-                                }
-                                    if (ShowAlert != \"\") {
-                                         $(\".question-validate-btn\").attr(\"onclick\", \"\");
-                                         $(\".question-validate-btn\").attr(\"disabled\", \"disabled\");
-                                    } else {
-                                        $(\".question-validate-btn\").attr(\"onclick\", \"save_now(\" + question_id +\", '', '')\");
-                                        $(\".question-validate-btn\").removeAttr('disabled');
-                                    }
-
-
-
-                                });
-                                
-                                
                     
+                    $( document ).ready(function() {
+                        var ShowAlert = '';
+                        var typeRadioB = '';
+                        var question_id = $('input[name=question_id]').val();
+                        var AllFormElements = window.document.getElementById('exercise_form').elements;
+                    
+                        for (i = 0; i < AllFormElements.length; i++) {
+                            if (AllFormElements[i].type == 'radio') {
+                                var ThisRadio = AllFormElements[i].name;
+                                var ThisChecked = 'No';
+                                var AllRadioOptions = document.getElementsByName(ThisRadio);
+                                
+                                for (x = 0; x < AllRadioOptions.length; x++) {
+                                    if (AllRadioOptions[x].checked && ThisChecked == 'No') {
+                                        ThisChecked = \"Yes\";
+                                        break;
+                                    }
+                                }
+                                
+                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);
+                                
+                                if (ThisChecked == 'No' && AlreadySearched == -1) { 
+                                    ShowAlert = ShowAlert + ThisRadio;
+                                }
+                            }
+                        }
+                        
+                        if (ShowAlert != '') {
+                             $('.question-validate-btn').attr('disabled', 'disabled');
+                        } else {
+                            $('.question-validate-btn').removeAttr('disabled');
+                        }
+                    
+                    });
                 </script>";
-                $header = Display::tag('th', get_lang('Options'), ['width' => '50%']);
 
                 foreach ($objQuestionTmp->optionsTitle as $item) {
                     if (in_array($item, $objQuestionTmp->optionsTitle)) {
@@ -681,7 +669,8 @@ class ExerciseLib
                                         $attributes = [];
                                     }
                                     $attributes['onChange'] = 'RadioValidator('.$questionId.', '.$numAnswer.')';
-                                    // gère la séletion des radio button du degré de certitude
+
+                                    // radio button selection
                                     if (isset($myChoiceDegreeCertainty[$numAnswer]) &&
                                         $id == $myChoiceDegreeCertainty[$numAnswer]
                                        ) {
@@ -981,7 +970,8 @@ class ExerciseLib
                             }
                         }
 
-                        // If display preview of answer in test view for exemple, set the student answer to the correct answers
+                        // If display preview of answer in test view for exemple,
+                        // set the student answer to the correct answers
                         if ($debug_mark_answer) {
                             // contain the rights answers surronded with brackets
                             $studentAnswerList = $correctAnswerList[0];

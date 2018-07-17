@@ -396,7 +396,7 @@ switch ($action) {
             // Questions choices.
             $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
-            // cretainty degree choice
+            // certainty degree choice
             $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : null;
 
             // Hot spot coordinates from all questions.
@@ -522,7 +522,7 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-                    // LQ debug
+
                     $myChoiceDegreeCertainty = isset($choiceDegreeCertainty[$my_question_id]) ? $choiceDegreeCertainty[$my_question_id] : null;
                 }
 

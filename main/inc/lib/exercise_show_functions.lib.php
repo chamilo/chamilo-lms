@@ -265,7 +265,8 @@ class ExerciseShowFunctions
         ];
         echo '<table class="data_table"><tr>';
         echo '<td class="text-center" width="5%">';
-        echo '<span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color:'.$hotspot_colors[$orderColor].'"></span>';
+        echo '<span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color:'.
+            $hotspot_colors[$orderColor].'"></span>';
         echo '</td>';
         echo '<td class="text-left" width="25%">';
         echo "$answerId - $answer";
@@ -552,31 +553,31 @@ class ExerciseShowFunctions
             </td>
             <td width="25%">
             <?php
-                echo $answer;
+            echo $answer;
             ?>
             </td>
             <td width="5%" style="text-align:center;">
             <?php
-                echo  $newOptions[$studentChoiceDegree]['name'];
+            echo  $newOptions[$studentChoiceDegree]['name'];
             ?>
             </td>
             <!-- color by certainty -->
             <?php
-                $degreeCertaintyColor = $question->getColorResponse(
-                    $studentChoice,
-                    $answerCorrect,
-                    $newOptions[$studentChoiceDegree]['position']
-                );
-                if ($degreeCertaintyColor == "#088A08" || $degreeCertaintyColor == "#FE2E2E") {
-                    $color = "#FFFFFF";
-                } else {
-                    $color = "#000000";
-                }
-                $responseCode = $question->getCodeResponse(
-                    $studentChoice,
-                    $answerCorrect,
-                    $newOptions[$studentChoiceDegree]['position']
-                );
+            $degreeCertaintyColor = $question->getColorResponse(
+                $studentChoice,
+                $answerCorrect,
+                $newOptions[$studentChoiceDegree]['position']
+            );
+            if ($degreeCertaintyColor == "#088A08" || $degreeCertaintyColor == "#FE2E2E") {
+                $color = "#FFFFFF";
+            } else {
+                $color = "#000000";
+            }
+            $responseCode = $question->getCodeResponse(
+                $studentChoice,
+                $answerCorrect,
+                $newOptions[$studentChoiceDegree]['position']
+            );
             ?>
             <td width="10%">
                 <div style="text-align:center;color: <?php echo $color; ?>; 
@@ -585,14 +586,14 @@ class ExerciseShowFunctions
                 </div>
             </td>
             <?php
-                if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
             ?>
             <td width="20%">
             <?php
-                    $color = "black";
-                    if (isset($newOptions[$studentChoice])) {
-                        echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-                    }
+            $color = "black";
+            if (isset($newOptions[$studentChoice])) {
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+            }
             ?>
             </td>
             <?php

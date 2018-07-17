@@ -44,9 +44,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
     /**
      * Redefines Question::createAnswersForm: creates the HTML form to answer the question
-     * @param FormValidator $form
-     * @throws \Exception
      * @uses globals $text and $class, defined in the calling script
+     * @param FormValidator $form
+     * @throws Exception
+     * @throws HTML_QuickForm_Error
      */
     public function createAnswersForm($form)
     {
@@ -100,20 +101,20 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         for ($i = 1; $i <= $nbAnswers; ++$i) {
             $renderer->setElementTemplate(
-                    '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                    'correct['.$i.']'
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'correct['.$i.']'
             );
             $renderer->setElementTemplate(
-                    '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                    'counter['.$i.']'
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'counter['.$i.']'
             );
             $renderer->setElementTemplate(
-                    '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                    'answer['.$i.']'
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'answer['.$i.']'
             );
             $renderer->setElementTemplate(
-                    '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                    'comment['.$i.']'
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'comment['.$i.']'
             );
 
             $answerNumber = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
@@ -270,7 +271,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
             if (empty($options)) {
-                //If this is the first time that the question is created when change the default values from the form 1 and 2 by the correct "option id" registered
+                // If this is the first time that the question is created then change
+                // the default values from the form 1 and 2 by the correct "option id" registered
                 $goodAnswer = $sortedByPosition[$goodAnswer]['id'];
             }
             $questionWeighting += $extraValues[0]; //By default 0 has the correct answers
@@ -973,7 +975,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * [
      *      (categoryId=)5 => [LEVEL_DARKGREEN => 3, LEVEL_WHITE => 5, LEVEL_LIGHTRED => 12]
      *      (categoryId=)2 => [LEVEL_DARKGREEN => 8, LEVEL_LIGHTRED => 2, LEVEL_DARKTRED => 8]
-     *      (categoryId=)0 => [LEVEL_DARKGREEN => 1, LEVEL_LIGHTGREEN => 2, LEVEL_WHITE => 6, LEVEL_LIGHTRED => 1, LEVEL_DARKTRED => 9]
+     *      (categoryId=)0 => [LEVEL_DARKGREEN => 1,
+     *          LEVEL_LIGHTGREEN => 2,
+     *          LEVEL_WHITE => 6,
+     *          LEVEL_LIGHTRED => 1,
+     *          LEVEL_DARKTRED => 9]
      * ]
      *
      * @param $exeId
@@ -1227,4 +1233,59 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         return $html;
     }
+
+
+    /**
+     * send mail to student with degre certainty result test
+     * @param $userId
+     * @param $objExercise
+     * @param $exeId
+     */
+    public static function sendQuestionCertaintyNotification($userId, $objExercise, $exeId)
+    {
+        $userInfo = api_get_user_info($userId);
+        $recipient_name = api_get_person_name($userInfo['firstname'],
+            $userInfo['lastname'],
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
+        $emailTo = $userInfo['email'];
+        $senderName = api_get_person_name(api_get_setting('administratorName'),
+            api_get_setting('administratorSurname'),
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
+        $genericEmail = api_get_setting('emailAdministrator');
+
+        $subject = "[".get_lang('DoNotReply')."] "
+            .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
+
+        // message sended to the student
+        $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
+        $message .= get_lang('MessageQuestionCertainty');
+        $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
+            .api_get_cidreq()
+            ."&id=$exeId'>";
+        $titleExercice = $objExercise->title;
+        $message = str_replace('%exerTitle', $titleExercice, $message);
+        $message = str_replace('%webPath', api_get_path(WEB_PATH), $message);
+        $message = str_replace('%s', $exerciseLink, $message);
+
+        // show histogram
+        require_once api_get_path(SYS_CODE_PATH)
+            ."exercise/multipleAnswerTrueFalseDegreeCertainty.php";
+        $message .= MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($exeId, $objExercise);
+        $message .= get_lang('KindRegards');
+
+        $message = api_preg_replace("/\\\n/", "", $message);
+        api_mail_html($recipient_name,
+            $emailTo,
+            $subject,
+            $message,
+            $senderName,
+            $genericEmail,
+            ['content-type' => 'html']
+        );
+    }
+
 }

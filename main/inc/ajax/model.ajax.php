@@ -796,7 +796,7 @@ switch ($action) {
             $columns = [
                 'name',
                 'calendar',
-                'examn',
+                'gradebook_items',
                 'time_spent',
                 'lp_day_completed',
                 'days_diff',

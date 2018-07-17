@@ -101,8 +101,9 @@ if ($is_platform_admin) {
 
         $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
         if ($pluginCalendar) {
+            $lpCalendar = LpCalendarPlugin::create();
             $menu_items[] = Display::url(
-                Display::return_icon('agenda.png', get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
+                Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
             );
         }

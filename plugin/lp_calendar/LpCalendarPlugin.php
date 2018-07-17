@@ -257,7 +257,7 @@ class LpCalendarPlugin extends Plugin
         }
 
         $list = [];
-        $link = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php';
+        //$link = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $list[] = $row;
         }
@@ -633,35 +633,32 @@ class LpCalendarPlugin extends Plugin
      *
      * @return string
      */
-    public static function getUserStatsPanel($userId, $courseAndSessionList)
+    public function getUserStatsPanel($userId, $courseAndSessionList)
     {
         // @todo use translation
         // get events from this year to today
         $stats = self::getUserStats($userId, $courseAndSessionList);
-
-        $html = "Nombre de jours cumulés dans le calendrier: ".$stats['user_event_count'];
+        $html = $this->get_lang('NumberDaysAccumulatedInCalendar').$stats['user_event_count'];
         if (!empty($courseAndSessionList)) {
-            $count = $stats['completed'];
             $html .= '<br />';
-            $html .= "Nombre de jours cumulés dans les parcours réalisés: ".$stats['completed'];
+            $html .= $this->get_lang('NumberDaysAccumulatedInLp').$stats['completed'];
             $html .= '<br />';
-            $html .= 'Nombre de jour de retard ou d\'avance à la date d\'aujourd\'hui '.$stats['diff'];
+            $html .= $this->get_lang('NumberDaysInRetard').' '.$stats['diff'];
         }
 
-        $html = Display::panel($html, get_lang('CalendarStats'));
+        $html = Display::panel($html, $this->get_lang('LearningCalendar'));
         return $html;
     }
 
     /**
-     * @param int $userId
-     * @param int $courseAndSessionList
+     * @param int   $userId
+     * @param array $courseAndSessionList
      *
      * @return array
      */
     public static function getUserStats($userId, $courseAndSessionList)
     {
-        // @todo use translation
-        // get events from this year to today
+        // Get events from this year to today
         $takenCount = self::getUserEvents(
             $userId,
             strtotime(date('Y-01-01')),
@@ -673,11 +670,13 @@ class LpCalendarPlugin extends Plugin
         $completed = 0;
         $diff = 0;
 
-        $html = "Nombre de jours cumulés dans le calendrier: $takenCount";
         if (!empty($courseAndSessionList)) {
             $completed = self::getItemCountChecked($userId, $courseAndSessionList);
-            $diff = $takenCount - $completed;
+            if ($takenCount > $completed) {
+                $diff = $takenCount - $completed;
+            }
         }
+
         return [
             'user_event_count' => $takenCount,
             'completed' => $completed,

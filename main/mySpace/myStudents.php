@@ -16,7 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
-$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
@@ -367,7 +367,7 @@ if (api_is_session_admin() || api_is_drh()) {
 // Teacher or admin
 if (!empty($sessions_coached_by_user)) {
     foreach ($sessions_coached_by_user as $session_coached_by_user) {
-        $sid = intval($session_coached_by_user['id']);
+        $sid = (int) $session_coached_by_user['id'];
         $courses_followed_by_coach = Tracking::get_courses_followed_by_coach(api_get_user_id(), $sid);
         $courses_in_session_by_coach[$sid] = $courses_followed_by_coach;
     }
@@ -1875,7 +1875,7 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
 $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
 if ($pluginCalendar) {
     $plugin = LpCalendarPlugin::create();
-    echo LpCalendarPlugin::getUserStatsPanel($student_id, $courses_in_session);
+    echo $plugin->getUserStatsPanel($student_id, $courses_in_session);
 }
 
 if ($export) {

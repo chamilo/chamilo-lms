@@ -5417,7 +5417,8 @@ class Tracking
         $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
         if ($pluginCalendar) {
             $course_in_session[0] = $courseIdList;
-            $html .= LpCalendarPlugin::getUserStatsPanel($user_id, $course_in_session);
+            $plugin = LpCalendarPlugin::create();
+            $html .= $plugin->getUserStatsPanel($user_id, $course_in_session);
         }
 
         return $html;

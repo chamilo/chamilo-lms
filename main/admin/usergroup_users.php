@@ -133,13 +133,14 @@ $column_model = [
 ];
 
 if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
+    $calendarPlugin = LpCalendarPlugin::create();
     $columns = [
         get_lang('Name'),
         get_lang('Calendar'),
-        get_lang('Examn'),
-        get_lang('TimeSpentInTheCourse'),
-        get_lang('Jours de parcours réalisés'),
-        get_lang('Différence de nombre de jours avec le plan issu du learning_calendar '),
+        get_lang('ClassroomActivity'),
+        get_lang('TimeSpentByStudentsInCourses'),
+        $calendarPlugin->get_lang('NumberDaysAccumulatedInCalendar'),
+        $calendarPlugin->get_lang('DifferenceOfDaysAndCalendar'),
         get_lang('Actions'),
     ];
 
@@ -154,7 +155,13 @@ if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
             'sortable' => 'false',
             'formatter' => 'extra_formatter',
         ],
-        ['name' => 'examn', 'index' => 'examn', 'width' => '35', 'align' => 'left', 'sortable' => 'false'],
+        [
+            'name' => 'gradebook_items',
+            'index' => 'gradebook_items',
+            'width' => '35',
+            'align' => 'left',
+            'sortable' => 'false',
+        ],
         ['name' => 'time_spent', 'index' => 'time_spent', 'width' => '35', 'align' => 'left', 'sortable' => 'false'],
         [
             'name' => 'lp_day_completed',

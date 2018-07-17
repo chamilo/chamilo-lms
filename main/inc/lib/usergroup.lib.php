@@ -131,7 +131,7 @@ class UserGroup extends Model
 
                     $stats = LpCalendarPlugin::getUserStats($userId, $courseAndSessionList);
 
-                    $data['examn'] = 'examn';
+                    $data['gradebook_items'] = '@todo';
                     $totalTime = 0;
                     foreach ($courseAndSessionList as $sessionId => $course) {
                         foreach ($course as $courseId) {
@@ -140,11 +140,8 @@ class UserGroup extends Model
                     }
 
                     $data['time_spent'] = api_time_to_hms($totalTime);
-
                     $data['lp_day_completed'] = $stats['completed'];
                     $data['days_diff'] = $stats['diff'];
-
-
                 }
                 $data['id'] = $data['user_id'];
                 $list[] = $data;

@@ -27,8 +27,9 @@ class ExerciseLib
      * @param bool     $show_comment
      * @param bool     $show_answers
      *
-     * @return bool|int
      * @throws \Exception
+     *
+     * @return bool|int
      */
     public static function showQuestion(
         $exercise,
@@ -2841,7 +2842,7 @@ HOTSPOT;
             $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }
-        
+
         $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
@@ -3877,7 +3878,8 @@ EOT;
     }
 
     /**
-     * Get the number of questions with answers
+     * Get the number of questions with answers.
+     *
      * @param int    $question_id
      * @param int    $exercise_id
      * @param string $course_code
@@ -3969,7 +3971,8 @@ EOT;
     }
 
     /**
-     * Get number of answers to hotspot questions
+     * Get number of answers to hotspot questions.
+     *
      * @param int    $answer_id
      * @param int    $question_id
      * @param int    $exercise_id
@@ -4324,7 +4327,8 @@ EOT;
     }
 
     /**
-     * Return an HTML select menu with the student groups
+     * Return an HTML select menu with the student groups.
+     *
      * @param string $name     is the name and the id of the <select>
      * @param string $default  default value for option
      * @param string $onchange
@@ -4807,7 +4811,8 @@ EOT;
 
     /**
      * Get a special ribbon on top of "degree of certainty" questions (
-     * variation from getTotalScoreRibbon() for other question types)
+     * variation from getTotalScoreRibbon() for other question types).
+     *
      * @param Exercise $objExercise
      * @param float    $score
      * @param float    $weight

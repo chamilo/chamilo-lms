@@ -524,7 +524,6 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-
                     $myChoiceDegreeCertainty = isset($choiceDegreeCertainty[$my_question_id]) ? $choiceDegreeCertainty[$my_question_id] : null;
                 }
 

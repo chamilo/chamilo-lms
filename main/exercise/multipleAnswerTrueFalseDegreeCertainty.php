@@ -43,9 +43,12 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Redefines Question::createAnswersForm: creates the HTML form to answer the question
-     * @uses globals $text and $class, defined in the calling script
+     * Redefines Question::createAnswersForm: creates the HTML form to answer the question.
+     *
+     * @uses \globals $text and $class, defined in the calling script
+     *
      * @param FormValidator $form
+     *
      * @throws Exception
      * @throws HTML_QuickForm_Error
      */
@@ -288,7 +291,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Show result table headers
+     * Show result table headers.
+     *
      * @param int   $feedbackType
      * @param int   $counter
      * @param float $score
@@ -485,11 +489,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Display basic bar charts of results by category of questions
-     * @param array $scoreListAll
-     * @param string $title The block title
-     * @param int $sizeRatio
+     * Display basic bar charts of results by category of questions.
+     *
+     * @param array    $scoreListAll
+     * @param string   $title        The block title
+     * @param int      $sizeRatio
      * @param Exercise $objExercise
+     *
      * @return string The HTML/CSS code for the charts block
      */
     public static function displayDegreeChartByCategory($scoreListAll, $title, $sizeRatio = 1, $objExercise)
@@ -1234,9 +1240,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         return $html;
     }
 
-
     /**
-     * send mail to student with degre certainty result test
+     * send mail to student with degre certainty result test.
+     *
      * @param $userId
      * @param $objExercise
      * @param $exeId
@@ -1287,5 +1293,4 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             ['content-type' => 'html']
         );
     }
-
 }

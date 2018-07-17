@@ -1258,14 +1258,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
-        $emailTo = $userInfo['email'];
-        $senderName = api_get_person_name(api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
-        $genericEmail = api_get_setting('emailAdministrator');
-
         $subject = "[".get_lang('DoNotReply')."] "
             .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
 
@@ -1285,13 +1277,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $message .= get_lang('KindRegards');
         $message = api_preg_replace("/\\\n/", '', $message);
 
-        api_mail_html($recipient_name,
-            $emailTo,
-            $subject,
-            $message,
-            $senderName,
-            $genericEmail,
-            ['content-type' => 'html']
-        );
+        MessageManager::send_message_simple($userId, $subject, $message);
     }
 }

@@ -2835,7 +2835,7 @@ class Exercise
 
         // if we want to delete results from LP too
         if ($cleanLpTests) {
-            $sql_where = "";
+            $sql_where = '';
         }
 
         // if we want to delete attempts before date $cleanResultBeforeDate

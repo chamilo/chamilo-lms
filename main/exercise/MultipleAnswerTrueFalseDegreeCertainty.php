@@ -318,10 +318,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Get color code, status, label and description for the current answer
-     * @param  string $studentAnswer
-     * @param  string $expectedAnswer
-     * @param  int $studentDegreeChoicePosition
+     * Get color code, status, label and description for the current answer.
+     *
+     * @param string $studentAnswer
+     * @param string $expectedAnswer
+     * @param int    $studentDegreeChoicePosition
      *
      * @return array An array with indexes 'color', 'background-color', 'status', 'label' and 'description'
      */
@@ -336,6 +337,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 'label' => get_lang('DegreeOfCertaintyDeclaredIgnorance'),
                 'description' => get_lang('DegreeOfCertaintyDeclaredIgnoranceDescription'),
             ];
+
             return $result;
         } else {
             $checkResult = $studentAnswer == $expectedAnswer ? true : false;
@@ -348,6 +350,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyVerySure'),
                         'description' => get_lang('DegreeOfCertaintyVerySureDescription'),
                     ];
+
                     return $result;
                 }
                 if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
@@ -358,6 +361,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyPrettySure'),
                         'description' => get_lang('DegreeOfCertaintyPrettySureDescription'),
                     ];
+
                     return $result;
                 }
             } else {
@@ -369,6 +373,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyVeryUnsure'),
                         'description' => get_lang('DegreeOfCertaintyVeryUnsureDescription'),
                     ];
+
                     return $result;
                 }
                 if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
@@ -379,6 +384,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'label' => get_lang('DegreeOfCertaintyUnsure'),
                         'description' => get_lang('DegreeOfCertaintyUnsureDescription'),
                     ];
+
                     return $result;
                 }
             }

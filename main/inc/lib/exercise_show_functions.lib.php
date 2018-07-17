@@ -554,17 +554,8 @@ class ExerciseShowFunctions
         echo '</td><td width="5%" style="text-align:center;">';
         echo $newOptions[$studentChoiceDegree]['name'];
         echo '</td>';
-        $degreeCertaintyColor = $question->getColorResponse(
-            $studentChoice,
-            $answerCorrect,
-            $newOptions[$studentChoiceDegree]['position']
-        );
-        if ($degreeCertaintyColor == '#088A08' || $degreeCertaintyColor == '#FE2E2E') {
-            $color = '#FFFFFF';
-        } else {
-            $color = '#000000';
-        }
-        $responseCode = $question->getCodeResponse(
+
+        $degreeInfo = $question->getResponseDegreeInfo(
             $studentChoice,
             $answerCorrect,
             $newOptions[$studentChoiceDegree]['position']
@@ -572,17 +563,18 @@ class ExerciseShowFunctions
 
         echo '
             <td width="10%">
-                <div style="text-align:center;color: '.$color.';
-                    border:1px #D6D4D4 solid;background-color: '.$degreeCertaintyColor.';
-                    line-height:30px;height:30px;width: 100%;margin:auto;">'.nl2br($responseCode).'
-                </div>
+                <div style="text-align:center;color: '.$degreeInfo['color'].';
+                    border:1px #D6D4D4 solid;background-color: '.$degreeInfo['background-color'].';
+                    line-height:30px;height:30px;width: 100%;margin:auto;"
+                    title="'.$degreeInfo['description'].'">'.
+                    nl2br($degreeInfo['label']).
+                '</div>
             </td>';
 
         if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
             echo '<td width="20%">';
-            $color = 'black';
             if (isset($newOptions[$studentChoice])) {
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+                echo '<span style="font-weight: bold; color: black;">'.nl2br($answerComment).'</span>';
             }
             echo '</td>';
         } else {

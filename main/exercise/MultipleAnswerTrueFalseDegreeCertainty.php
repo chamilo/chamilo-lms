@@ -303,9 +303,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .get_lang('ExpectedChoice')
             .'</th><th>'
             .get_lang('Answer')
-            .'</th><th>'
+            .'</th><th colspan="2" style="text-align:center;">'
             .get_lang('YourDegreeOfCertainty')
-            .'</th><th>&nbsp;</th>'
+            .'</th>'
         ;
         if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $header .= '<th>'.get_lang('Comment').'</th>';
@@ -318,106 +318,69 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Method to recovery color to show by precision of the student's answer.
+     * Get color code, status, label and description for the current answer
+     * @param  string $studentAnswer
+     * @param  string $expectedAnswer
+     * @param  int $studentDegreeChoicePosition
      *
-     * @param $studentAnswer
-     * @param $expectedAnswer
-     * @param $studentDegreeChoicePosition
-     *
-     * @return string
+     * @return array An array with indexes 'color', 'background-color', 'status', 'label' and 'description'
      */
-    public function getColorResponse($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
+    public function getResponseDegreeInfo($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
     {
-        $checkResult = $studentAnswer == $expectedAnswer ? true : false;
-        if ($checkResult) {
-            if ($studentDegreeChoicePosition >= 6) {
-                return '#088A08';
-            }
-            if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
-                return '#A9F5A9';
-            }
-            if ($studentDegreeChoicePosition == 3) {
-                return '#FFFFFF';
-            }
+        $result = [];
+        if ($studentDegreeChoicePosition == 3) {
+            $result = [
+                'color' => '#000000',
+                'background-color' => '#FFFFFF',
+                'status' => self::LEVEL_WHITE,
+                'label' => get_lang('DegreeOfCertaintyDeclaredIgnorance'),
+                'description' => get_lang('DegreeOfCertaintyDeclaredIgnoranceDescription'),
+            ];
+            return $result;
         } else {
-            if ($studentDegreeChoicePosition >= 6) {
-                return '#FE2E2E';
-            }
-            if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
-                return '#F6CECE';
-            }
-            if ($studentDegreeChoicePosition == 3) {
-                return '#FFFFFF';
-            }
-        }
-    }
-
-    /**
-     * Return the color code for student answer.
-     *
-     * @param $studentAnswer
-     * @param $expectedAnswer
-     * @param $studentDegreeChoicePosition
-     *
-     * @return int
-     */
-    public function getStatusResponse($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
-    {
-        $checkResult = $studentAnswer == $expectedAnswer ? true : false;
-        if ($checkResult) {
-            if ($studentDegreeChoicePosition >= 6) {
-                return self::LEVEL_DARKGREEN;
-            }
-            if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
-                return self::LEVEL_LIGHTGREEN;
-            }
-            if ($studentDegreeChoicePosition == 3) {
-                return self::LEVEL_WHITE;
-            }
-        } else {
-            if ($studentDegreeChoicePosition >= 6) {
-                return self::LEVEL_DARKRED;
-            }
-            if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
-                return self::LEVEL_LIGHTRED;
-            }
-            if ($studentDegreeChoicePosition == 3) {
-                return self::LEVEL_WHITE;
-            }
-        }
-    }
-
-    /**
-     * Method to recover labels for color codes.
-     *
-     * @param $studentAnswer
-     * @param  $expectedAnswer
-     * @param  $studentDegreeChoicePosition
-     *
-     * @return string
-     */
-    public function getCodeResponse($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
-    {
-        $checkResult = $studentAnswer == $expectedAnswer ? true : false;
-        if ($checkResult) {
-            if ($studentDegreeChoicePosition >= 6) {
-                return get_lang('DegreeOfCertaintyVerySure');
-            }
-            if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
-                return get_lang('DegreeOfCertaintyPrettySure');
-            }
-            if ($studentDegreeChoicePosition == 3) {
-                return get_lang('DegreeOfCertaintyDeclaredIgnorance');
-            }
-        } else {
-            if ($studentDegreeChoicePosition >= 6) {
-                return get_lang('DegreeOfCertaintyVeryUnsure');
-            }
-            if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
-                return get_lang('DegreeOfCertaintyUnsure');
-            }
-            if ($studentDegreeChoicePosition == 3) {
-                return get_lang('DegreeOfCertaintyDeclaredIgnorance');
+            $checkResult = $studentAnswer == $expectedAnswer ? true : false;
+            if ($checkResult) {
+                if ($studentDegreeChoicePosition >= 6) {
+                    $result = [
+                        'color' => '#FFFFFF',
+                        'background-color' => '#088A08',
+                        'status' => self::LEVEL_DARKGREEN,
+                        'label' => get_lang('DegreeOfCertaintyVerySure'),
+                        'description' => get_lang('DegreeOfCertaintyVerySureDescription'),
+                    ];
+                    return $result;
+                }
+                if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
+                    $result = [
+                        'color' => '#000000',
+                        'background-color' => '#A9F5A9',
+                        'status' => self::LEVEL_LIGHTGREEN,
+                        'label' => get_lang('DegreeOfCertaintyPrettySure'),
+                        'description' => get_lang('DegreeOfCertaintyPrettySureDescription'),
+                    ];
+                    return $result;
+                }
+            } else {
+                if ($studentDegreeChoicePosition >= 6) {
+                    $result = [
+                        'color' => '#FFFFFF',
+                        'background-color' => '#FE2E2E',
+                        'status' => self::LEVEL_DARKRED,
+                        'label' => get_lang('DegreeOfCertaintyVeryUnsure'),
+                        'description' => get_lang('DegreeOfCertaintyVeryUnsureDescription'),
+                    ];
+                    return $result;
+                }
+                if ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
+                    $result = [
+                        'color' => '#000000',
+                        'background-color' => '#F6CECE',
+                        'status' => self::LEVEL_LIGHTRED,
+                        'label' => get_lang('DegreeOfCertaintyUnsure'),
+                        'description' => get_lang('DegreeOfCertaintyUnsureDescription'),
+                    ];
+                    return $result;
+                }
             }
         }
     }
@@ -425,7 +388,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * Method to show the code color and his meaning for the test result.
      */
-    public static function showColorCode()
+    public static function showColorCodes()
     {
         ?>
         <table class="fc-border-separate" cellspacing="0" style="width:600px;

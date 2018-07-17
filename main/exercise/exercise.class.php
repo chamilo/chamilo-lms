@@ -3296,7 +3296,7 @@ class Exercise
      *
      * @param int    $exeId
      * @param int    $questionId
-     * @param int    $choice                                    the user selected
+     * @param mixed  $choice                                    the user-selected option
      * @param string $from                                      function is called from 'exercise_show' or 'exercise_result'
      * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] = coordinates
      * @param bool   $saved_results                             save results in the DB or just show the reponse

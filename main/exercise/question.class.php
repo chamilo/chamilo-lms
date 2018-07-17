@@ -51,7 +51,7 @@ abstract class Question
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
         MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
-            'multipleAnswerTrueFalseDegreeCertainty.php',
+            'MultipleAnswerTrueFalseDegreeCertainty.php',
             'MultipleAnswerTrueFalseDegreeCertainty',
         ],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
@@ -1953,7 +1953,7 @@ abstract class Question
     {
         $counterLabel = '';
         if (!empty($counter)) {
-            $counterLabel = intval($counter);
+            $counterLabel = (int) $counter;
         }
         $score_label = get_lang('Wrong');
         $class = 'error';
@@ -1974,7 +1974,7 @@ abstract class Question
                 $score['result'] = " ? / ".$weight;
                 $model = ExerciseLib::getCourseScoreModel();
                 if (!empty($model)) {
-                    $score['result'] = " ? ";
+                    $score['result'] = ' ? ';
                 }
 
                 $hide = api_get_configuration_value('hide_free_question_score');

@@ -84,7 +84,6 @@ if (empty($questionList)) {
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
@@ -141,12 +140,12 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
+    'url' => "exercise.php?".api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = [
-    "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true),
+    'url' => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
+    'name' => $objExercise->selectTitle(true),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
 
@@ -953,7 +952,7 @@ foreach ($questionList as $questionId) {
 $totalScoreText = '';
 
 // Total score
-$my_total_score_temp = $totalScore;
+$myTotalScoreTemp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
         $totalScoreText .= '<div class="question_row">';

@@ -1796,7 +1796,8 @@ abstract class Question
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
         }
 
-        echo '<div class="well">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-body">';
         echo '<ul class="question_menu">';
         foreach ($question_type_custom_list as $i => $a_type) {
             // @todo remove require_once classes are already loaded using composer
@@ -1849,6 +1850,7 @@ abstract class Question
         echo '</a>';
         echo '</div></li>';
         echo '</ul>';
+        echo '</div>';
         echo '</div>';
     }
 

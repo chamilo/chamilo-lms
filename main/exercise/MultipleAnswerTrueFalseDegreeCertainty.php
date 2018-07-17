@@ -156,16 +156,19 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 'answer['.$i.']',
                 null,
                 ['style' => 'vertical-align:middle;'],
-                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']);
+                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
+            );
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             // show comment when feedback is enable
             if ($objEx->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $form->addElement('html_editor',
+                $form->addElement(
+                    'html_editor',
                     'comment['.$i.']',
                     null,
                     ['style' => 'vertical-align:middle;'],
-                    ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']);
+                    ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
+                );
             }
             $form->addElement('html', '</tr>');
         }

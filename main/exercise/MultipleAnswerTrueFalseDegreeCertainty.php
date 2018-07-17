@@ -56,7 +56,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      */
     public function createAnswersForm($form)
     {
-        global $text, $class;
+        global $text;
         $nbAnswers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
         // The previous default value was 2. See task #1759.
         $nbAnswers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -286,9 +286,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * Show result table headers.
      *
-     * @param int   $feedbackType
-     * @param int   $counter
-     * @param float $score
+     * @param Exercise $exercise
+     * @param int      $counter
+     * @param float    $score
      *
      * @return null|string
      */
@@ -320,15 +320,15 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * Method to recovery color to show by precision of the student's answer.
      *
-     * @param $studentAnwser
+     * @param $studentAnswer
      * @param $expectedAnswer
      * @param $studentDegreeChoicePosition
      *
      * @return string
      */
-    public function getColorResponse($studentAnwser, $expectedAnswer, $studentDegreeChoicePosition)
+    public function getColorResponse($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
     {
-        $checkResult = ($studentAnwser == $expectedAnswer) ? true : false;
+        $checkResult = $studentAnswer == $expectedAnswer ? true : false;
         if ($checkResult) {
             if ($studentDegreeChoicePosition >= 6) {
                 return '#088A08';
@@ -355,15 +355,15 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * Return the color code for student answer.
      *
-     * @param $studentAnwser
+     * @param $studentAnswer
      * @param $expectedAnswer
      * @param $studentDegreeChoicePosition
      *
      * @return int
      */
-    public function getStatusResponse($studentAnwser, $expectedAnswer, $studentDegreeChoicePosition)
+    public function getStatusResponse($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
     {
-        $checkResult = $studentAnwser == $expectedAnswer ? true : false;
+        $checkResult = $studentAnswer == $expectedAnswer ? true : false;
         if ($checkResult) {
             if ($studentDegreeChoicePosition >= 6) {
                 return self::LEVEL_DARKGREEN;
@@ -494,7 +494,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $groupCategoriesByBracket = false;
         if ($groupCategoriesByBracket) {
             $scoreList = [];
-            $categoryPrefixList = [];  // categoryPrefix['Math'] = firstCategoryId for this prefix
+            $categoryPrefixList = [];
+            // categoryPrefix['Math'] = firstCategoryId for this prefix
             // rebuild $scoreList factorizing data with category prefix
             foreach ($scoreListAll as $categoryId => $scoreListForCategory) {
                 $objCategory = new Testcategory();
@@ -720,8 +721,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 table.certaintyTable td {
                     padding : 10px;                    
                 }
-                
-                
+                                
                 table.certaintyTable td.borderRight {
                     border-right: 1px dotted #000000; 
                 }
@@ -1216,18 +1216,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $numberOfQuestions = self::getNumberOfQuestionsForExeId($exeId);
         $globalScoreList = self::getColorNumberListForAttempt($exeId);
         $html = self::displayDegreeChart(
-                $globalScoreList,
-                600,
-                get_lang('YourOverallResultForTheTest'),
-                2,
-                0,
-                true,
-                false,
-                false,
-                $numberOfQuestions
-            )
-            .'<br/>'
-        ;
+            $globalScoreList,
+            600,
+            get_lang('YourOverallResultForTheTest'),
+            2,
+            0,
+            true,
+            false,
+            false,
+            $numberOfQuestions
+        );
+        $html .= '<br/>';
 
         $previousAttemptId = self::getPreviousAttemptId($exeId);
         if ($previousAttemptId > 0) {

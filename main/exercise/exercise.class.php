@@ -2876,10 +2876,10 @@ class Exercise
         $session_id = api_get_session_id();
         // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
-                WHERE c_id = ".api_get_course_int_id()."
-                AND exe_exo_id = ".$this->id."
-                $sql_where
-                AND session_id = ".$session_id;
+                WHERE 
+                  c_id = ".api_get_course_int_id()." AND 
+                  exe_exo_id = ".$this->id." $sql_where AND 
+                  session_id = ".$session_id;
         Database::query($sql);
 
         Event::addEvent(

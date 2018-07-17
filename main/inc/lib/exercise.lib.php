@@ -4723,7 +4723,8 @@ EOT;
         if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults(
                 $exeId,
-                $objExercise);
+                $objExercise
+            );
             echo $chartMultiAnswer;
         }
 
@@ -4740,8 +4741,7 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= "<div class='normal-message'>".
-                get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
+            $exercise_content .= Display::return_message(get_lang('ExerciseWithFeedbackWithoutCorrectionComment'));
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939
@@ -4845,7 +4845,6 @@ EOT;
 
         if ($displayChartDegree) {
             $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
-
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
             $ribbon .= '</div>';
@@ -4853,7 +4852,9 @@ EOT;
 
         if ($checkPassPercentage) {
             $ribbon .= self::showSuccessMessage(
-                $score, $weight, $objExercise->selectPassPercentage()
+                $score,
+                $weight,
+                $objExercise->selectPassPercentage()
             );
         }
 

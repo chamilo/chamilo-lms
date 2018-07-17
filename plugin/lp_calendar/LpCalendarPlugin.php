@@ -153,7 +153,7 @@ class LpCalendarPlugin extends Plugin
      * @param int    $column
      * @param string $direction
      *
-     * @return array|\Doctrine\DBAL\Driver\Statement
+     * @return array
      */
     public static function getCalendars(
         $from,
@@ -344,6 +344,10 @@ class LpCalendarPlugin extends Plugin
         $extraField = new ExtraFieldValue('lp_item');
         $values = $extraField->get_values_by_handler_and_field_variable($id, 'calendar');
 
+        if (empty($values)) {
+            return [];
+        }
+
         return $values;
     }
 
@@ -522,6 +526,7 @@ class LpCalendarPlugin extends Plugin
         $list = [];
         $typeList = self::getEventTypeList();
         foreach ($events as $row) {
+            $event = [];
             $event['id'] = 'personal_'.$row['id'];
             $event['title'] = $calendarInfo['title'];
             $event['className'] = 'personal';

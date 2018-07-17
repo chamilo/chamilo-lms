@@ -76,7 +76,7 @@ switch ($action) {
         $item['title'] = $item['title'].' - '.get_lang('Copy');
 
         $newCalendarId = Database::insert('learning_calendar', $item);
-        if ($newCalendarId) {
+        if (!empty($newCalendarId)) {
             Display::addFlash(Display::return_message(get_lang('Saved')));
             $sql = "SELECT * FROM learning_calendar_events WHERE calendar_id = $calendarId";
             $result = Database::query($sql);
@@ -110,8 +110,8 @@ switch ($action) {
 
         break;
     case 'toggle_visibility':
-        $itemId = isset($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : '';
-        $lpId = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : '';
+        $itemId = isset($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : 0;
+        $lpId = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : 0;
         $plugin->toggleVisibility($itemId);
         Display::addFlash(Display::return_message(get_lang('Updated')));
         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_item&lp_id='.$lpId.'&'.api_get_cidreq();

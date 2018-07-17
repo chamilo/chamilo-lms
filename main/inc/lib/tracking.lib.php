@@ -4629,7 +4629,7 @@ class Tracking
      * @param bool   $showAllSessions
      * @param bool   $returnArray
      *
-     * @return string
+     * @return string|array
      */
     public static function show_user_progress(
         $user_id,

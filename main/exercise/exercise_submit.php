@@ -791,11 +791,21 @@ if ($question_count != 0) {
                     header('Location: exercise_reminder.php?'.$params);
                     exit;
                 } else {
-                    // Certainty grade question
-                    // We send an email to the student before redirection to the result page
-                    MultipleAnswerTrueFalseDegreeCertainty::sendQuestionCertaintyNotification(
-                        $user_id, $objExercise, $exe_id
-                    );
+                    $certaintyQuestionPresent = false;
+                    foreach ($questionList as $questionId) {
+                        $question = Question::read($questionId);
+                        if ($question->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                            $certaintyQuestionPresent = true;
+                            break;
+                        }
+                    }
+                    if ($certaintyQuestionPresent) {
+                        // Certainty grade question
+                        // We send an email to the student before redirection to the result page
+                        MultipleAnswerTrueFalseDegreeCertainty::sendQuestionCertaintyNotification(
+                            $user_id, $objExercise, $exe_id
+                        );
+                    }
 
                     header("Location: exercise_result.php?"
                         .api_get_cidreq()

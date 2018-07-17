@@ -953,7 +953,8 @@ class ExerciseLib
                             $studentAnswerListToClean = $studentAnswerList[0];
                             $studentAnswerList = [];
 
-                            for ($i = 0; $i < count($studentAnswerListToClean); $i++) {
+                            $maxStudents = count($studentAnswerListToClean);
+                            for ($i = 0; $i < $maxStudents; $i++) {
                                 $answerCorrected = $studentAnswerListToClean[$i];
                                 $answerCorrected = api_preg_replace(
                                     '| / <font color="green"><b>.*$|',
@@ -4353,7 +4354,8 @@ EOT;
             )." -</option>";
         $tabGroups = GroupManager::get_group_list();
         $currentCatId = 0;
-        for ($i = 0; $i < count($tabGroups); $i++) {
+        $countGroups = count($tabGroups);
+        for ($i = 0; $i < $countGroups; $i++) {
             $tabCategory = GroupManager::get_category_from_group(
                 $tabGroups[$i]['iid']
             );

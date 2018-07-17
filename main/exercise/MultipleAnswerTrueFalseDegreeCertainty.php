@@ -125,14 +125,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $answerNumber = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answerNumber->freeze();
 
+            $defaults['answer['.$i.']'] = '';
+            $defaults['comment['.$i.']'] = '';
+            $defaults['correct['.$i.']'] = '';
+
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
                 $defaults['comment['.$i.']'] = $answer->comment[$i];
                 $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
-
                 $correct = $answer->correct[$i];
                 $defaults['correct['.$i.']'] = $correct;
-
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
@@ -146,10 +148,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             } else {
                 $form->addElement('radio', 'correct['.$i.']', null, null, 1);
                 $form->addElement('radio', 'correct['.$i.']', null, null, 2);
-
-                $defaults['answer['.$i.']'] = '';
-                $defaults['comment['.$i.']'] = '';
-                $defaults['correct['.$i.']'] = '';
             }
 
             $boxesNames[] = 'correct['.$i.']';
@@ -537,7 +535,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if ($category) {
                 $categoryQuestionName = $category->name;
             }
-            list($null, $height) = self::displayDegreeChart(
+            list($noValue, $height) = self::displayDegreeChart(
                 $scoreListForCategory,
                 300,
                 '',
@@ -993,7 +991,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      *          LEVEL_DARKTRED => 9]
      * ]
      *
-     * @param $exeId
+     * @param int $exeId
      *
      * @return array
      */
@@ -1002,7 +1000,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $result = [];
         $attemptInfoList = self::getExerciseAttemptInfo($exeId);
 
-        foreach ($attemptInfoList as $i => $attemptInfo) {
+        foreach ($attemptInfoList as $attemptInfo) {
             $oQuestion = new MultipleAnswerTrueFalseDegreeCertainty();
             $oQuestion->read($attemptInfo['question_id']);
             if ($oQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -1032,7 +1030,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param $questionId
      * @param $position
      *
-     * @return bool
+     * @return int
      */
     public static function getAnswerColor($exeId, $questionId, $position)
     {
@@ -1267,7 +1265,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function sendQuestionCertaintyNotification($userId, $objExercise, $exeId)
     {
         $userInfo = api_get_user_info($userId);
-        $recipient_name = api_get_person_name($userInfo['firstname'],
+        $recipientName = api_get_person_name($userInfo['firstname'],
             $userInfo['lastname'],
             null,
             PERSON_NAME_EMAIL_ADDRESS
@@ -1276,7 +1274,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
 
         // message sended to the student
-        $message = get_lang('Dear').' '.$recipient_name.",<br><br>";
+        $message = get_lang('Dear').' '.$recipientName.",<br><br>";
         $message .= get_lang('MessageQuestionCertainty');
         $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
             .api_get_cidreq()

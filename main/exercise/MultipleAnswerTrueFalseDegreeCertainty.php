@@ -1273,13 +1273,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
 
         // message sended to the student
-        $message = get_lang('Dear').' '.$recipientName.",<br><br>";
+        $message = get_lang('Dear').' '.$recipientName.",<br /><br />";
         $message .= get_lang('MessageQuestionCertainty');
         $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
             .api_get_cidreq()
             ."&id=$exeId'>";
-        $titleExercice = $objExercise->title;
-        $message = str_replace('%exerTitle', $titleExercice, $message);
+        $exerciseTitle = $objExercise->title;
+        $message = str_replace('%exerTitle', $exerciseTitle, $message);
         $message = str_replace('%webPath', api_get_path(WEB_PATH), $message);
         $message = str_replace('%s', $exerciseLink, $message);
 

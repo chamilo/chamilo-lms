@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Homepage for the MySpace directory.
  *
@@ -100,6 +98,15 @@ if ($is_platform_admin) {
             Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
+
+        $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+        if ($pluginCalendar) {
+            $lpCalendar = LpCalendarPlugin::create();
+            $menu_items[] = Display::url(
+                Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
+                api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
+            );
+        }
     }
 }
 

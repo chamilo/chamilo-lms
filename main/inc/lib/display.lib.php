@@ -1414,6 +1414,7 @@ class Display
         $json_encode = str_replace('"wrap_cell":true', 'cellattr : function(rowId, value, rowObject, colModel, arrData) { return \'class = "jqgrid_whitespace"\'; }', $json_encode);
         $json_encode = str_replace(':"false"', ':false', $json_encode);
         $json_encode = str_replace('"formatter":"action_formatter"', 'formatter:action_formatter', $json_encode);
+        $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
         // Creating the jqgrid element.

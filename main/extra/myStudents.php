@@ -9,8 +9,8 @@ if (empty($allow)) {
 }
 
 api_block_anonymous_users();
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$course_code = isset($_GET['course']) ? Security:: remove_XSS($_GET['course']) : null;
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 $_course = api_get_course_info();
 $coment = '';
 
@@ -217,7 +217,7 @@ switch ($action) {
         }
         break;
     case 'reset_lp':
-        $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
+        $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : '';
 
         if (api_is_allowed_to_edit() &&
             !empty($lp_id) &&
@@ -273,8 +273,8 @@ if (api_is_session_admin() || api_is_drh()) {
 // Teacher or admin
 if (!empty($sessions_coached_by_user)) {
     foreach ($sessions_coached_by_user as $session_coached_by_user) {
-        $sid = intval($session_coached_by_user['id']);
-        $courses_followed_by_coach = Tracking:: get_courses_followed_by_coach(api_get_user_id(), $sid);
+        $sid = (int) $session_coached_by_user['id'];
+        $courses_followed_by_coach = Tracking::get_courses_followed_by_coach(api_get_user_id(), $sid);
         $courses_in_session_by_coach[$sid] = $courses_followed_by_coach;
     }
 }

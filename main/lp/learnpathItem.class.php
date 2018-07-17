@@ -503,6 +503,7 @@ class learnpathItem
         }
         $path = $this->get_path();
         $type = $this->get_type();
+
         if (empty($path)) {
             if ($type == 'dir') {
                 return '';
@@ -1077,23 +1078,24 @@ class learnpathItem
                     case 'htm':
                     case 'shtml':
                     case 'css':
-                        $wanted_attributes = [
+                        $wantedAttributes = [
                             'src',
                             'url',
                             '@import',
                             'href',
                             'value',
                         ];
+
                         // Parse it for included resources.
-                        $file_content = file_get_contents($abs_path);
+                        $fileContent = file_get_contents($abs_path);
                         // Get an array of attributes from the HTML source.
                         $attributes = DocumentManager::parse_HTML_attributes(
-                            $file_content,
-                            $wanted_attributes
+                            $fileContent,
+                            $wantedAttributes
                         );
 
                         // Look at 'src' attributes in this file
-                        foreach ($wanted_attributes as $attr) {
+                        foreach ($wantedAttributes as $attr) {
                             if (isset($attributes[$attr])) {
                                 // Find which kind of path these are (local or remote).
                                 $sources = $attributes[$attr];

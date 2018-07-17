@@ -16,7 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
-$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
@@ -367,7 +367,7 @@ if (api_is_session_admin() || api_is_drh()) {
 // Teacher or admin
 if (!empty($sessions_coached_by_user)) {
     foreach ($sessions_coached_by_user as $session_coached_by_user) {
-        $sid = intval($session_coached_by_user['id']);
+        $sid = (int) $session_coached_by_user['id'];
         $courses_followed_by_coach = Tracking::get_courses_followed_by_coach(api_get_user_id(), $sid);
         $courses_in_session_by_coach[$sid] = $courses_followed_by_coach;
     }
@@ -823,7 +823,7 @@ $userGroups = $userGroupManager->getNameListByUser(
 <?php
 
 $exportCourseList = [];
-
+$lpIdList = [];
 if (empty($details)) {
     $csv_content[] = [];
     $csv_content[] = [
@@ -990,7 +990,9 @@ if (empty($details)) {
                         $sId
                     );
 
-                    $totalScore += $score;
+                    if (is_numeric($score)) {
+                        $totalScore += $score;
+                    }
 
                     $progress = empty($progress) ? '0%' : $progress.'%';
                     $score = empty($score) ? '0%' : $score.'%';
@@ -1224,6 +1226,8 @@ if (empty($details)) {
                 echo '</tr></thead><tbody>';
 
                 foreach ($flat_list as $learnpath) {
+                    $lpIdList[] = $learnpath['iid'];
+
                     $lp_id = $learnpath['lp_old_id'];
                     $lp_name = $learnpath['lp_name'];
                     $any_result = false;
@@ -1866,6 +1870,12 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
         $row++;
     }
     $table->display();
+}
+
+$pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+if ($pluginCalendar) {
+    $plugin = LpCalendarPlugin::create();
+    echo $plugin->getUserStatsPanel($student_id, $courses_in_session);
 }
 
 if ($export) {

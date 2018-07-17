@@ -31,15 +31,15 @@ if (api_get_configuration_value('block_my_progress_page')) {
 }
 
 $user_id = api_get_user_id();
-$course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
+$courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 
-if (!empty($course_user_list)) {
+if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
         $user_id,
-        $course_user_list
+        $courseUserList
     );
     $first = null;
     $last = null;

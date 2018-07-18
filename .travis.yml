@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 sudo: required
 language: php
 
@@ -50,8 +50,8 @@ before_install:
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
-  - java -version
-  - sudo apt-get install oracle-java8-installer
+#  - java -version
+#  - sudo apt-get install oracle-java9-installer
   - java -version
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"

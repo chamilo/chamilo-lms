@@ -655,6 +655,12 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     ORDER BY sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if ($survey_data['one_question_per_page'] == 1) {
+                    $paged_questions[$counter][] = $row['question_id'];
+                    $counter++;
+
+                    continue;
+                }
                 if ($row['type'] == 'pagebreak') {
                     $counter++;
                 } else {

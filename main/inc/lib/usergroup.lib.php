@@ -1062,7 +1062,6 @@ class UserGroup extends Model
             $sql = "SELECT * FROM $this->table WHERE name = '".$name."'";
         }
 
-
         $res = Database::query($sql);
 
         return Database::num_rows($res) != 0;
@@ -1170,12 +1169,12 @@ class UserGroup extends Model
                     ON (u.id = a.usergroup_id)";
             $options = ['where' => ['access_url_id = ? ' => $urlId]];
             if ($this->allowTeachers()) {
-                $options['where'] = [ ' author_id = ? ' => api_get_user_id()];
+                $options['where'] = [' author_id = ? ' => api_get_user_id()];
             }
             $classes = Database::select('a.id, name, description', $from, $options);
         } else {
             if ($this->allowTeachers()) {
-                $options['where'] = [ ' author_id = ? ' => api_get_user_id()];
+                $options['where'] = [' author_id = ? ' => api_get_user_id()];
             }
             $classes = Database::select('id, name, description', $this->table, $options);
         }

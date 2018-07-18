@@ -27,8 +27,6 @@ $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToClass');
 
-
-
 $htmlHeadXtra[] = '
 <script>
 

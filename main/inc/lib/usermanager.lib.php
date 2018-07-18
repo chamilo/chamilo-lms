@@ -1651,10 +1651,10 @@ class UserManager
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
      *
-     * @param array  $conditions  a list of condition (exemple : status=>STUDENT)
-     * @param array  $order_by    a list of fields on which sort
-     * @param bool   $simple_like Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
-     * @param string $condition   Whether we want the filters to be combined by AND or OR
+     * @param array  $conditions       a list of condition (exemple : status=>STUDENT)
+     * @param array  $order_by         a list of fields on which sort
+     * @param bool   $simple_like      Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
+     * @param string $condition        Whether we want the filters to be combined by AND or OR
      * @param array  $onlyThisUserList
      *
      * @return array an array with all users of the platform

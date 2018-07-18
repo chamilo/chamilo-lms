@@ -3149,10 +3149,10 @@ class SessionManager
     /**
      * Get a list of sessions of which the given conditions match with an = 'cond'.
      *
-     * @param array $conditions a list of condition example :
-     *                          array('status' => STUDENT) or
-     *                          array('s.name' => array('operator' => 'LIKE', value = '%$needle%'))
-     * @param array $order_by   a list of fields on which sort
+     * @param array $conditions          a list of condition example :
+     *                                   array('status' => STUDENT) or
+     *                                   array('s.name' => array('operator' => 'LIKE', value = '%$needle%'))
+     * @param array $order_by            a list of fields on which sort
      * @param int   $urlId
      * @param array $onlyThisSessionList
      *
@@ -3222,8 +3222,7 @@ class SessionManager
         if (!empty($onlyThisSessionList)) {
             $onlyThisSessionList = array_map('intval', $onlyThisSessionList);
             $onlyThisSessionList = implode("','", $onlyThisSessionList);
-            $sql_query .=" AND s.id IN ('$onlyThisSessionList') ";
-
+            $sql_query .= " AND s.id IN ('$onlyThisSessionList') ";
         }
 
         $orderAvailableList = ['name'];

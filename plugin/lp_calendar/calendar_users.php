@@ -46,7 +46,7 @@ $column_model = [
         'index' => 'exam',
         'width' => '20',
         'align' => 'center',
-        'sortable' => 'false'
+        'sortable' => 'false',
     ],
 ];
 

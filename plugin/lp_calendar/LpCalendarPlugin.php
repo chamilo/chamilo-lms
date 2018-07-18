@@ -36,7 +36,6 @@ class LpCalendarPlugin extends Plugin
     }
 
     /**
-     *
      * @return array
      */
     public function getEventTypeColorList()
@@ -732,7 +731,7 @@ class LpCalendarPlugin extends Plugin
         if (!empty($courseAndSessionList)) {
             $completed = $this->getItemCountChecked($userId, $courseAndSessionList);
             //if ($takenCount > $completed) {
-                $diff = $takenCount - $completed;
+            $diff = $takenCount - $completed;
             //}
         }
 
@@ -803,7 +802,7 @@ class LpCalendarPlugin extends Plugin
     }
 
     /**
-     * @param int $calendarId
+     * @param int    $calendarId
      * @param string $startDate
      */
     public function toogleDayType($calendarId, $startDate)

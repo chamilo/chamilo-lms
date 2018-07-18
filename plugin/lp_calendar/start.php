@@ -28,6 +28,7 @@ switch ($action) {
                 'total_hours' => $values['total_hours'],
                 'minutes_per_day' => $values['minutes_per_day'],
                 'description' => $values['description'],
+                'author_id' => api_get_user_id(),
             ];
             Database::insert('learning_calendar', $params);
             Display::addFlash(Display::return_message(get_lang('Saved')));

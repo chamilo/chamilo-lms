@@ -81,7 +81,8 @@ class LpCalendarPlugin extends Plugin
               description longtext default null,
               total_hours int not null default 0,
               minutes_per_day int not null default 0,
-              disabled int default 0
+              disabled int default 0,
+              author_id int(11) not null
             )
         ";
         Database::query($sql);
@@ -750,6 +751,7 @@ class LpCalendarPlugin extends Plugin
     public function copyCalendar($calendarId)
     {
         $item = $this->getCalendar($calendarId);
+        $item['author_id'] = api_get_user_id();
 
         if (empty($item)) {
             return false;

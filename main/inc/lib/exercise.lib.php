@@ -338,12 +338,12 @@ class ExerciseLib
                 foreach ($objQuestionTmp->optionsTitle as $item) {
                     if (in_array($item, $objQuestionTmp->optionsTitle)) {
                         $properties = [];
-                        if ($item == 'Answers') {
-                            $properties["colspan"] = 2;
-                            $properties["style"] = "background-color: #F56B2A; color: #ffffff;";
+                        if ($item === 'Answers') {
+                            $properties['colspan'] = 2;
+                            $properties['style'] = 'background-color: #F56B2A; color: #ffffff;';
                         } elseif ($item == 'DegreeOfCertaintyThatMyAnswerIsCorrect') {
-                            $properties["colspan"] = 6;
-                            $properties["style"] = "background-color: #330066; color: #ffffff;";
+                            $properties['colspan'] = 6;
+                            $properties['style'] = 'background-color: #330066; color: #ffffff;';
                         }
                         $header .= Display::tag('th', get_lang($item), $properties);
                     } else {
@@ -363,7 +363,7 @@ class ExerciseLib
                 foreach ($objQuestionTmp->options as $item) {
                     $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
                         ? '' : 'border-right: solid #FFFFFF 1px;';
-                    if ($item == "True" || $item == "False") {
+                    if ($item == 'True' || $item == 'False') {
                         $header1 .= Display::tag('th',
                             get_lang($item),
                             ['style' => 'background-color: #F7C9B4; color: black;'.$colorBorder1]
@@ -394,7 +394,7 @@ class ExerciseLib
                 $counter2 = 0;
 
                 foreach ($objQuestionTmp->options as $item) {
-                    if ($item == "True" || $item == "False") {
+                    if ($item == 'True' || $item == 'False') {
                         $header2 .= Display::tag('td',
                             '&nbsp;',
                             ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);

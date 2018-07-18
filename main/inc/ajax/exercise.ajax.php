@@ -11,7 +11,6 @@ $debug = false;
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
-$course_id = api_get_course_int_id();
 
 if ($debug) {
     error_log('-----------------------------------------------------');
@@ -19,7 +18,8 @@ if ($debug) {
     error_log('-----------------------------------------------------');
 }
 
-$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
+$course_id = api_get_course_int_id();
+$session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
@@ -86,7 +86,7 @@ switch ($action) {
 
         if ($attempt->getStatus() != 'incomplete') {
             if ($debug) {
-                error_log("Cannot update exercise is already completed.");
+                error_log('Cannot update exercise is already completed.');
             }
             exit;
         }
@@ -147,9 +147,9 @@ switch ($action) {
 
         // 1. Setting variables needed by jqgrid
         $action = $_GET['a'];
-        $exercise_id = intval($_GET['exercise_id']);
-        $page = intval($_REQUEST['page']); //page
-        $limit = intval($_REQUEST['rows']); //quantity of rows
+        $exercise_id = (int) $_GET['exercise_id'];
+        $page = (int) $_REQUEST['page']; //page
+        $limit = (int) $_REQUEST['rows']; //quantity of rows
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
@@ -166,7 +166,7 @@ switch ($action) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $minutes = intval($_REQUEST['minutes']);
+        $minutes = (int) $_REQUEST['minutes'];
         $now = time() - 60 * $minutes;
         $now = api_get_utc_datetime($now);
 
@@ -268,7 +268,9 @@ switch ($action) {
 
                 $response->rows[$i]['id'] = $row['exe_id'];
                 if (!empty($oExe->expired_time)) {
-                    $remaining = strtotime($row['start_date']) + ($oExe->expired_time * 60) - strtotime(api_get_utc_datetime(time()));
+                    $remaining = strtotime($row['start_date']) +
+                        ($oExe->expired_time * 60) -
+                        strtotime(api_get_utc_datetime(time()));
                     $h = floor($remaining / 3600);
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
@@ -310,7 +312,7 @@ switch ($action) {
                     [
                         'exercise_order' => $counter,
                         'session_id' => $session_id,
-                        'exercise_id' => intval($new_order_id),
+                        'exercise_id' => (int) $new_order_id,
                         'c_id' => $course_id,
                     ]
                 );
@@ -322,7 +324,7 @@ switch ($action) {
     case 'update_question_order':
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
-        $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
+        $exercise_id = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : null;
 
         if (empty($exercise_id)) {
             return Display::return_message(get_lang('Error'), 'error');
@@ -337,9 +339,7 @@ switch ($action) {
                     ['question_order' => $counter],
                     [
                         'question_id = ? AND c_id = ? AND exercice_id = ? ' => [
-                            intval(
-                                $new_order_id
-                            ),
+                            (int) $new_order_id,
                             $course_id,
                             $exercise_id,
                         ],
@@ -523,8 +523,11 @@ switch ($action) {
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
-                if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-                    $myChoiceDegreeCertainty = isset($choiceDegreeCertainty[$my_question_id]) ? $choiceDegreeCertainty[$my_question_id] : null;
+                $myChoiceDegreeCertainty = null;
+                if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    if (isset($choiceDegreeCertainty[$my_question_id])) {
+                        $myChoiceDegreeCertainty = $choiceDegreeCertainty[$my_question_id];
+                    }
                 }
 
                 // Getting free choice data.
@@ -545,6 +548,7 @@ switch ($action) {
                 ) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
+
                 if ($type == 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
@@ -576,7 +580,7 @@ switch ($action) {
                         $session_id,
                         $my_question_id
                     );
-                    if ($objQuestionTmp->type == HOT_SPOT) {
+                    if ($objQuestionTmp->type === HOT_SPOT) {
                         Event::delete_attempt_hotspot(
                             $exeId,
                             api_get_user_id(),
@@ -594,11 +598,10 @@ switch ($action) {
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
-
-                if ($objQuestionTmp->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                     $myChoiceTmp = [];
-                    $myChoiceTmp["choice"] = $my_choice;
-                    $myChoiceTmp["choiceDegreeCertainty"] = $myChoiceDegreeCertainty;
+                    $myChoiceTmp['choice'] = $my_choice;
+                    $myChoiceTmp['choiceDegreeCertainty'] = $myChoiceDegreeCertainty;
                     $result = $objExercise->manage_answer(
                         $exeId,
                         $my_question_id,
@@ -667,7 +670,6 @@ switch ($action) {
                 }
 
                 Session::write('duration_time', [$key => $now]);
-
                 Event::updateEventExercise(
                     $exeId,
                     $objExercise->selectId(),

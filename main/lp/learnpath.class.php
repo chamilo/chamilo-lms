@@ -6429,10 +6429,10 @@ class learnpath
                     $pluginLink = $pluginUrl.
                         '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
 
-                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('Edit'), [], ICON_SIZE_TINY);
+                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('OneDay'), [], ICON_SIZE_TINY);
                     $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
                     if ($itemInfo && $itemInfo['value'] == 1) {
-                        $iconCalendar = Display::return_icon('agenda.png', get_lang('Edit'), [], ICON_SIZE_TINY);
+                        $iconCalendar = Display::return_icon('agenda.png', get_lang('OneDay'), [], ICON_SIZE_TINY);
                     }
                     $pluginCalendarIcon = Display::url(
                         $iconCalendar,

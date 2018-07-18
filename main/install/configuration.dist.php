@@ -539,6 +539,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
 //$_configuration['private_messages_about_user'] = false;
+// Allow the messages to be visible for the students
+//$_configuration['private_messages_about_user_visible_to_user'] = false;
 // Allow send email notification per exercise
 //ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
 //$_configuration['allow_notification_setting_per_exercise'] = false;
@@ -904,6 +906,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Redirect index to url for logged in users
 // In this example the index.php will be redirected to user_portal.php for logged in users
 //$_configuration['redirect_index_to_url_for_logged_users'] = 'user_portal.php';
+
+// Teachers can CRUD classes
+// ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
+//$_configuration['allow_teachers_to_classes'] = false;
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

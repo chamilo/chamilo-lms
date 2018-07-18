@@ -26,7 +26,7 @@ $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = [];
 $user_id = api_get_user_id();
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $is_coach = api_is_coach($session_id);
 $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
@@ -56,6 +56,9 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 }
 
 $menu_items = [];
+$pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+$calendarMenuAdded = false;
+
 if ($is_platform_admin) {
     if ($view == 'admin') {
         $title = get_lang('CoachList');
@@ -99,13 +102,13 @@ if ($is_platform_admin) {
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
 
-        $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
         if ($pluginCalendar) {
             $lpCalendar = LpCalendarPlugin::create();
             $menu_items[] = Display::url(
                 Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
             );
+            $calendarMenuAdded = true;
         }
     }
 }
@@ -143,7 +146,7 @@ $actionsLeft = '';
 if ($display == 'useroverview' || $display == 'sessionoverview' || $display == 'courseoverview') {
     $actionsRight .= Display::url(
         Display::return_icon(
-            "export_csv.png",
+            'export_csv.png',
             get_lang('ExportAsCSV'),
             null,
             ICON_SIZE_MEDIUM
@@ -151,6 +154,7 @@ if ($display == 'useroverview' || $display == 'sessionoverview' || $display == '
         api_get_self().'?display='.$display.'&export=csv&view='.$view
     );
 }
+
 $actionsRight .= Display::url(
     Display::return_icon(
         'printer.png',
@@ -210,18 +214,26 @@ if (!empty($session_id) &&
             null,
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
     );
+
+    if ($pluginCalendar && api_is_teacher() && $calendarMenuAdded === false) {
+        $lpCalendar = LpCalendarPlugin::create();
+        $actionsLeft .= Display::url(
+            Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
+        );
+    }
 
     if (api_is_platform_admin(true) || api_is_student_boss()) {
         $actionsLeft .= Display::url(
             Display::return_icon(
                 "certificate_list.png",
-                get_lang("GradebookSeeListOfStudentsCertificates"),
+                get_lang('GradebookSeeListOfStudentsCertificates'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
+            api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
         );
     }
 }
@@ -291,7 +303,6 @@ $form = new FormValidator(
     api_get_path(WEB_CODE_PATH).'mySpace/student.php'
 );
 $form = Tracking::setUserSearchForm($form);
-
 $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 $totalTimeSpent = null;

@@ -14,8 +14,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$relation = isset($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : '';
 $usergroup = new UserGroup();
-$usergroup->protectScript();
+$groupInfo = $usergroup->get($id);
+$usergroup->protectScript($groupInfo);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
@@ -24,8 +27,7 @@ $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToClass');
 
-$id = intval($_GET['id']);
-$relation = isset($_REQUEST['relation']) ? intval($_REQUEST['relation']) : '';
+
 
 $htmlHeadXtra[] = '
 <script>
@@ -103,8 +105,6 @@ if (is_array($extra_field_list)) {
 if (empty($id)) {
     api_not_allowed(true);
 }
-
-$groupInfo = $usergroup->get($id);
 
 $first_letter_user = '';
 
@@ -240,7 +240,19 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 $elements_not_in = $elements_in = [];
-$complete_user_list = UserManager::get_user_list_like([], $order);
+
+$onlyThisUserList = [];
+if ($usergroup->allowTeachers()) {
+    $userId = api_get_user_id();
+    $courseList = CourseManager::getCoursesFollowedByUser($userId, COURSEMANAGER);
+    foreach ($courseList as $course) {
+        $userList = CourseManager::get_user_list_from_course_code($course['code'], 0, null, null, STUDENT);
+        $userList = array_column($userList, 'user_id');
+        $onlyThisUserList = array_merge($onlyThisUserList, $userList);
+    }
+}
+
+$complete_user_list = UserManager::getUserListLike([], $order, false, 'AND', $onlyThisUserList);
 
 if (!empty($complete_user_list)) {
     foreach ($complete_user_list as $item) {
@@ -277,9 +289,8 @@ if (!empty($complete_user_list)) {
 }
 
 $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
-
 if ($user_with_any_group) {
-    $user_list = UserManager::get_user_list_like($conditions, $order, true);
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND', $onlyThisUserList);
     $new_user_list = [];
     foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
@@ -288,7 +299,7 @@ if ($user_with_any_group) {
     }
     $user_list = $new_user_list;
 } else {
-    $user_list = UserManager::get_user_list_like($conditions, $order, true);
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND', $onlyThisUserList);
 }
 
 if (!empty($user_list)) {

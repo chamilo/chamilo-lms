@@ -28,7 +28,7 @@ define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository = $_course['path'];
-$is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
+$is_allowedToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 
@@ -127,19 +127,25 @@ $form->applyFilter('department_url', 'html_filter');
 
 // Extra fields
 $extra_field = new ExtraField('course');
+
+$extraFieldAdminPermissions = false;
+$showOnlyTheseFields = [];
+if (api_get_configuration_value('allow_teachers_to_classes') === true) {
+    $extraFieldAdminPermissions = true;
+    $showOnlyTheseFields[] = 'course_hours_duration';
+}
 $extra = $extra_field->addElements(
     $form,
     $courseId,
     [],
     false,
     false,
-    [],
+    $showOnlyTheseFields,
     [],
     true
 );
 
 //Tags ExtraField
-
 $htmlHeadXtra[] = '
 <script>
 $(function() {

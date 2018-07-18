@@ -22,7 +22,7 @@
         $('#calendar').calendar({
             style:'background',
             language : '{{ calendar_language }}',
-            enableRangeSelection: false,
+            enableRangeSelection: true,
             enableContextMenu: true,
             /*contextMenuItems:[
                 {
@@ -41,7 +41,18 @@
                 var dateString = moment(e.date).format("YYYY-MM-DD");
                 $.ajax({
                     type: "GET",
-                    url: "{{ ajax_url }}&a=toggle_day&date="+dateString,
+                    url: "{{ ajax_url }}&a=toggle_day&start_date="+dateString+"&end_date=",
+                    success: function(returnValue) {
+                        getEvents(e);
+                    }
+                });
+            },
+            selectRange: function(e) {
+                var startString = moment(e.startDate).format("YYYY-MM-DD");
+                var endString = moment(e.endDate).format("YYYY-MM-DD");
+                $.ajax({
+                    type: "GET",
+                    url: "{{ ajax_url }}&a=toggle_day&start_date="+startString+"&end_date=" + endString,
                     success: function(returnValue) {
                         getEvents(e);
                     }
@@ -60,6 +71,32 @@
     #calendar {
         overflow: visible;
     }
+
+    .calendar table.month tr td .day-content {
+        height: 24px;
+    }
 </style>
 
-<div id=calendar></div>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div id="calendar"></div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+<table>
+    {% for event in events %}
+    <tr>
+        <td>
+            {{ event.name }}:
+        </td>
+        <td>
+            <span style="display:block;height:20px;width:100px; background-color: {{ event.color }}"></span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+    </div>
+</div>

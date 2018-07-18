@@ -1655,17 +1655,19 @@ class UserManager
      * @param array  $order_by    a list of fields on which sort
      * @param bool   $simple_like Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
      * @param string $condition   Whether we want the filters to be combined by AND or OR
+     * @param array  $onlyThisUserList
      *
      * @return array an array with all users of the platform
      *
      * @todo optional course code parameter, optional sorting parameters...
      * @todo security filter order_by
      */
-    public static function get_user_list_like(
+    public static function getUserListLike(
         $conditions = [],
         $order_by = [],
         $simple_like = false,
-        $condition = 'AND'
+        $condition = 'AND',
+        $onlyThisUserList = []
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -1676,8 +1678,8 @@ class UserManager
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
         }
 
+        $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
-            $sql_query .= ' WHERE ';
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
@@ -1697,9 +1699,15 @@ class UserManager
             }
         } else {
             if (api_is_multiple_url_enabled()) {
-                $sql_query .= ' WHERE auru.access_url_id = '.api_get_current_access_url_id();
+                $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         }
+
+        if (!empty($onlyThisUserList)) {
+            $onlyThisUserListToString = implode("','", $onlyThisUserList);
+            $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";
+        }
+
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }

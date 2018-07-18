@@ -9,3 +9,6 @@ $strings['NumberDaysAccumulatedInCalendar'] = 'Nombre de jours cumulés dans le 
 $strings['NumberDaysAccumulatedInLp'] = 'Nombre de jours cumulés dans les parcours réalisés: ';
 $strings['NumberDaysInRetard'] = "Nombre de jour de retard ou d'avance à la date d'aujourd'hui: ";
 $strings['DifferenceOfDaysAndCalendar'] = 'Différence de nombre de jours avec le plan issu du learning_calendar';
+$strings['EventTypeTaken'] = 'Occupé';
+$strings['EventTypeExam'] = 'Examen';
+$strings['EventTypeFree'] = 'Libre';

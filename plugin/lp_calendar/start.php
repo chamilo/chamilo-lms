@@ -3,7 +3,7 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$allow = api_is_allowed_to_edit();
+$allow = api_is_platform_admin() || api_is_teacher();
 
 if (!$allow) {
     api_not_allowed(true);
@@ -19,7 +19,6 @@ switch ($action) {
         $form = new FormValidator('calendar', 'post', api_get_self().'?action=add');
         $plugin->getForm($form);
         $form->addButtonSave(get_lang('Save'));
-
         $formToString = $form->returnForm();
 
         if ($form->validate()) {
@@ -40,15 +39,13 @@ switch ($action) {
         $form = new FormValidator('calendar', 'post', api_get_self().'?action=edit&id='.$calendarId);
         $plugin->getForm($form);
         $form->addButtonSave(get_lang('Update'));
-
-        $item = LpCalendarPlugin::getCalendar($calendarId);
+        $item = $plugin->getCalendar($calendarId);
 
         if (empty($item)) {
             api_not_allowed(true);
         }
 
         $form->setDefaults($item);
-
         $formToString = $form->returnForm();
 
         if ($form->validate()) {
@@ -66,55 +63,29 @@ switch ($action) {
         }
         break;
     case 'copy':
-        $item = LpCalendarPlugin::getCalendar($calendarId);
-
-        if (empty($item)) {
-            api_not_allowed(true);
-        }
-
-        unset($item['id']);
-        $item['title'] = $item['title'].' - '.get_lang('Copy');
-
-        $newCalendarId = Database::insert('learning_calendar', $item);
-        if (!empty($newCalendarId)) {
+        $result = $plugin->copyCalendar($calendarId);
+        if ($result) {
             Display::addFlash(Display::return_message(get_lang('Saved')));
-            $sql = "SELECT * FROM learning_calendar_events WHERE calendar_id = $calendarId";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                unset($row['id']);
-                $row['calendar_id'] = $newCalendarId;
-                Database::insert('learning_calendar_events', $row);
-            }
         }
-
         header('Location: start.php');
         exit;
+
         break;
     case 'delete':
-        $item = LpCalendarPlugin::getCalendar($calendarId);
-
-        if (empty($item)) {
-            api_not_allowed(true);
+        $result = $plugin->deleteCalendar($calendarId);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-
-        $sql = "DELETE FROM learning_calendar WHERE id = $calendarId";
-        Database::query($sql);
-
-        // Delete events
-        $sql = "DELETE FROM learning_calendar_events WHERE calendar_id = $calendarId";
-        Database::query($sql);
-
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: start.php');
         exit;
-
         break;
     case 'toggle_visibility':
         $itemId = isset($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : 0;
         $lpId = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : 0;
         $plugin->toggleVisibility($itemId);
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_item&lp_id='.$lpId.'&'.api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH).
+            'lp/lp_controller.php?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url");
         exit;
         break;

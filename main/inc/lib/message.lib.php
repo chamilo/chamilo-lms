@@ -267,6 +267,50 @@ class MessageManager
     }
 
     /**
+     * @param array $userInfo
+     *
+     * @return string
+     */
+    public static function getMessagesAboutUserToString($userInfo)
+    {
+        $messages = self::getMessagesAboutUser($userInfo);
+        $html = '';
+        if (!empty($messages)) {
+            /** @var Message $message */
+            foreach ($messages as $message) {
+                $tag = 'message_'.$message->getId();
+                $tagAccordion = 'accordion_'.$message->getId();
+                $tagCollapse = 'collapse_'.$message->getId();
+                $date = Display::dateToStringAgoAndLongDate(
+                    $message->getSendDate()
+                );
+                $localTime = api_get_local_time(
+                    $message->getSendDate(),
+                    null,
+                    null,
+                    false,
+                    false
+                );
+                $senderId = $message->getUserSenderId();
+                $senderInfo = api_get_user_info($senderId);
+                $html .= Display::panelCollapse(
+                    $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
+                    $message->getContent().'<br />'.$date.'<br />'.get_lang(
+                        'Author'
+                    ).': '.$senderInfo['complete_name_with_message_link'],
+                    $tag,
+                    null,
+                    $tagAccordion,
+                    $tagCollapse,
+                    false
+                );
+            }
+        }
+
+        return $html;
+    }
+
+    /**
      * @param int    $senderId
      * @param int    $receiverId
      * @param string $subject

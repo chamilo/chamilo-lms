@@ -9,22 +9,27 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$usergroup = new UserGroup();
-
-$usergroup->protectScript();
-
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
-$calendarId = isset($_GET['calendar_id']) ? (int) $_GET['calendar_id'] : 0;
 
+$usergroup = new UserGroup();
 $userGroupInfo = $usergroup->get($id);
 
 if (empty($userGroupInfo)) {
     api_not_allowed(true);
 }
+
+$usergroup->protectScript($userGroupInfo);
+
+$calendarPlugin = null;
+if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
+    $calendarPlugin = LpCalendarPlugin::create();
+}
+
+// Add the JS needed to use the jqgrid
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+$userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+$calendarId = isset($_GET['calendar_id']) ? (int) $_GET['calendar_id'] : 0;
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
@@ -32,13 +37,12 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $userGroupInfo['name']];
 
 switch ($action) {
     case 'add_calendar':
-        $calendars = LpCalendarPlugin::getCalendars(0, 1000, '');
+        $calendars = $calendarPlugin->getCalendars(0, 1000, '');
         if (empty($calendars)) {
             echo Display::return_message(get_lang('NoData'), 'warning');
             exit;
         }
         $userInfo = api_get_user_info($userId);
-
         $calendars = array_column($calendars, 'title', 'id');
         $calendars = array_map('strip_tags', $calendars);
 
@@ -55,7 +59,7 @@ switch ($action) {
         if ($form->validate()) {
             $calendarId = $form->getSubmitValue('calendar_id');
             if (!empty($calendarId)) {
-                LpCalendarPlugin::addUserToCalendar($calendarId, $userId);
+                $calendarPlugin->addUserToCalendar($calendarId, $userId);
                 Display::addFlash(Display::return_message(get_lang('Added'), 'confirmation'));
                 header('Location: '.api_get_self().'?id='.$id);
                 exit;
@@ -64,7 +68,7 @@ switch ($action) {
         exit;
         break;
     case 'edit_calendar':
-        $calendars = LpCalendarPlugin::getCalendars(0, 1000, '');
+        $calendars = $calendarPlugin->getCalendars(0, 1000, '');
         if (empty($calendars)) {
             echo Display::return_message(get_lang('Nodata'));
             exit;
@@ -88,7 +92,7 @@ switch ($action) {
         if ($form->validate()) {
             $calendarId = $form->getSubmitValue('calendar_id');
             if (!empty($calendarId)) {
-                LpCalendarPlugin::updateUserToCalendar($calendarId, $userId);
+                $calendarPlugin->updateUserToCalendar($calendarId, $userId);
                 Display::addFlash(Display::return_message(get_lang('Added'), 'confirmation'));
                 header('Location: '.api_get_self().'?id='.$id);
                 exit;
@@ -98,16 +102,12 @@ switch ($action) {
         break;
     case 'delete':
         $res = $usergroup->delete_user_rel_group($_GET['user_id'], $_GET['id']);
-
-        //LpCalendarPlugin::deleteAllCalendarFromUser();
-
         Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
         header('Location: '.api_get_self().'?id='.$id);
         exit;
         break;
 }
 
-// The header.
 Display::display_header();
 
 // jqgrid will use this URL to do the selects
@@ -133,7 +133,6 @@ $column_model = [
 ];
 
 if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
-    $calendarPlugin = LpCalendarPlugin::create();
     $columns = [
         get_lang('Name'),
         get_lang('Calendar'),
@@ -221,9 +220,7 @@ function extra_formatter(cellvalue, options, rowObject) {
     return \''.
     '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('stats.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
     ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
-}
-
-';
+}';
 
 $deleteUrl = api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=delete_user_in_usergroup&group_id='.$id;
 
@@ -253,7 +250,6 @@ $(function() {
         { width:500 } // search options
     );
 });
-
 </script>
 <?php
 

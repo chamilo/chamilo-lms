@@ -180,7 +180,7 @@ if (!empty($projectId)) {
         $selectTypes[$type['category_id']] = $type['name'];
     }
 
-    $admins = UserManager::get_user_list_like(
+    $admins = UserManager::getUserListLike(
         ['status' => '1'],
         ['username'],
         true

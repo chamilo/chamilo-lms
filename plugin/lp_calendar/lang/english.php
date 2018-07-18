@@ -9,3 +9,8 @@ $strings['NumberDaysAccumulatedInCalendar'] = 'Number of days accumulated in the
 $strings['NumberDaysAccumulatedInLp'] = 'Number of days accumulated in the LP: ';
 $strings['NumberDaysInRetard'] = 'Number of days in retard: ';
 $strings['DifferenceOfDaysAndCalendar'] = 'Difference of days and calendar';
+
+$strings['EventTypeTaken'] = 'Taken';
+$strings['EventTypeExam'] = 'Exam';
+$strings['EventTypeFree'] = 'Free';
+

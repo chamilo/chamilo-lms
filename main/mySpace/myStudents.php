@@ -1784,39 +1784,7 @@ if ($allowAll) {
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    $messages = MessageManager::getMessagesAboutUser($user_info);
-
-    if (!empty($messages)) {
-        /** @var Message $message */
-        foreach ($messages as $message) {
-            $tag = 'message_'.$message->getId();
-            $tagAccordion = 'accordion_'.$message->getId();
-            $tagCollapse = 'collapse_'.$message->getId();
-            $date = Display::dateToStringAgoAndLongDate(
-                $message->getSendDate()
-            );
-            $localTime = api_get_local_time(
-                $message->getSendDate(),
-                null,
-                null,
-                false,
-                false
-            );
-            $senderId = $message->getUserSenderId();
-            $senderInfo = api_get_user_info($senderId);
-            echo Display::panelCollapse(
-                $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
-                $message->getContent().'<br />'.$date.'<br />'.get_lang(
-                    'Author'
-                ).': '.$senderInfo['complete_name_with_message_link'],
-                $tag,
-                null,
-                $tagAccordion,
-                $tagCollapse,
-                false
-            );
-        }
-    }
+    echo MessageManager::getMessagesAboutUserToString($user_info);
 
     echo Display::url(
         get_lang('NewMessage'),

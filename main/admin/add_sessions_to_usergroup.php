@@ -9,8 +9,10 @@ $cidReset = true;
 // including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $usergroup = new UserGroup();
-$usergroup->protectScript();
+$data = $usergroup->get($id);
+$usergroup->protectScript($data);
 
 $xajax = new xajax();
 $xajax->registerFunction('search_usergroup_sessions');
@@ -33,7 +35,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
-
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
     destination = document.getElementById("elements_in");
@@ -42,7 +43,6 @@ function add_user_to_session (code, content) {
                 return false;
         }
     }
-
     destination.options[destination.length] = new Option(content,code);
     destination.selectedIndex = -1;
     sortOptions(destination.options);
@@ -76,8 +76,6 @@ function validate_filter() {
 $form_sent = 0;
 $errorMsg = '';
 $sessions = [];
-$usergroup = new UserGroup();
-$id = intval($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];
@@ -91,9 +89,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         exit;
     }
 }
-$data = $usergroup->get($id);
 $session_list_in = $usergroup->get_sessions_by_usergroup($id);
-$session_list = SessionManager::get_sessions_list([], ['name']);
+
+$onlyThisSessionList = [];
+if ($usergroup->allowTeachers()) {
+    $userId = api_get_user_id();
+    $sessionList = SessionManager::getSessionsFollowedByUser($userId, COURSEMANAGER);
+    if (!empty($sessionList)) {
+        $onlyThisSessionList = array_column($sessionList, 'id');
+    }
+}
+$session_list = SessionManager::get_sessions_list([], ['name'], null, null, 0, $onlyThisSessionList);
 $elements_not_in = $elements_in = [];
 
 if (!empty($session_list)) {

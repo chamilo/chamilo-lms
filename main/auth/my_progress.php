@@ -94,6 +94,15 @@ if (!empty($dates)) {
     $content .= '</div></div>';
 }
 
+if (api_get_configuration_value('private_messages_about_user_visible_to_user') === true) {
+    $allowMessages = api_get_configuration_value('private_messages_about_user');
+    if ($allowMessages === true) {
+        // Messages
+        $content .= Display::page_subheader2(get_lang('Messages'));
+        $content .= MessageManager::getMessagesAboutUserToString(api_get_user_info());
+    }
+}
+
 $message = null;
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');

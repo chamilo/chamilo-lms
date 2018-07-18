@@ -67,6 +67,13 @@ class Usergroup
     protected $visibility;
 
     /**
+     * @var string
+     *
+     * ORM\Column(name="author_id", type="integer", nullable=true)
+     */
+    //protected $authorId;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="allow_members_leave_group", type="integer")

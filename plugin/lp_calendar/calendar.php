@@ -3,15 +3,10 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$allow = api_is_allowed_to_edit();
-
-if (!$allow) {
-    api_not_allowed(true);
-}
-
 $calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-
-$item = LpCalendarPlugin::getCalendar($calendarId);
+$plugin = LpCalendarPlugin::create();
+$plugin->protectCalendar($calendarId);
+$item = $plugin->getCalendar($calendarId);
 
 if (empty($item)) {
     api_not_allowed(true);
@@ -31,12 +26,10 @@ if ($isoCode !== 'en') {
 
 $htmlHeadXtra[] = api_get_css_asset('bootstrap-year-calendar/css/bootstrap-year-calendar.css');
 
-$plugin = LpCalendarPlugin::create();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $formToString = '';
 
 $template = new Template();
-
 $actionLeft = Display::url(
     Display::return_icon(
         'back.png',
@@ -48,10 +41,12 @@ $actionLeft = Display::url(
 );
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
+
+$eventList = $plugin->getEventTypeList();
+$template->assign('events', $eventList);
+
 $template->assign('calendar_language', $calendarLanguage);
-
 $template->assign('ajax_url', api_get_path(WEB_PLUGIN_PATH).'lp_calendar/ajax.php?id='.$calendarId);
-
 $template->assign('header', $item['title']);
 $content = $template->fetch('lp_calendar/view/calendar.tpl');
 $template->assign('actions', $actions);

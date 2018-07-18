@@ -7,7 +7,8 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 $calendarId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
 
 $plugin = LpCalendarPlugin::create();
-$plugin->protectCalendar($calendarId);
+$item = $plugin->getCalendar($calendarId);
+$plugin->protectCalendar($item);
 
 switch ($action) {
     case 'toggle_day':

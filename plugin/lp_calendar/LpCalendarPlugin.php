@@ -189,7 +189,12 @@ class LpCalendarPlugin extends Plugin
             $direction = 'DESC';
         }
 
-        $sql = 'select * FROM learning_calendar';
+        if (api_is_platform_admin()) {
+            $sql = 'SELECT * FROM learning_calendar';
+        } else {
+            $userId = api_get_user_id();
+            $sql = "SELECT * FROM learning_calendar WHERE author_id = $userId";
+        }
 
         $sql .= " LIMIT $from, $numberOfItems ";
 
@@ -315,7 +320,12 @@ class LpCalendarPlugin extends Plugin
      */
     public function getCalendarCount()
     {
-        $sql = 'select count(*) as count FROM learning_calendar';
+        if (api_is_platform_admin()) {
+            $sql = 'select count(*) as count FROM learning_calendar';
+        } else {
+            $userId = api_get_user_id();
+            $sql = "select count(*) as count FROM learning_calendar WHERE author_id = $userId";
+        }
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
@@ -751,6 +761,7 @@ class LpCalendarPlugin extends Plugin
     public function copyCalendar($calendarId)
     {
         $item = $this->getCalendar($calendarId);
+        $this->protectCalendar($item);
         $item['author_id'] = api_get_user_id();
 
         if (empty($item)) {
@@ -786,6 +797,7 @@ class LpCalendarPlugin extends Plugin
     public function deleteCalendar($calendarId)
     {
         $item = $this->getCalendar($calendarId);
+        $this->protectCalendar($item);
 
         if (empty($item)) {
             return false;
@@ -877,12 +889,23 @@ class LpCalendarPlugin extends Plugin
         return $list;
     }
 
-    public function protectCalendar($calendarId = 0)
+    /**
+     * @param array $calendarInfo
+     */
+    public function protectCalendar($calendarInfo = [])
     {
         $allow = api_is_platform_admin() || api_is_teacher();
 
         if (!$allow) {
             api_not_allowed(true);
+        }
+
+        if (!empty($calendarInfo)) {
+            if (!api_is_platform_admin() && api_is_teacher()) {
+                if ($calendarInfo['author_id'] != api_get_user_id()) {
+                    api_not_allowed(true);
+                }
+            }
         }
     }
 }

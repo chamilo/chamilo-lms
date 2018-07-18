@@ -5,12 +5,8 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $plugin = LpCalendarPlugin::create();
-$plugin->protectCalendar($calendarId);
 $item = $plugin->getCalendar($calendarId);
-
-if (empty($item)) {
-    api_not_allowed(true);
-}
+$plugin->protectCalendar($item);
 
 $isoCode = api_get_language_isocode();
 $htmlHeadXtra[] = api_get_asset('bootstrap-year-calendar/js/bootstrap-year-calendar.js');
@@ -44,7 +40,6 @@ $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
 $eventList = $plugin->getEventTypeList();
 $template->assign('events', $eventList);
-
 $template->assign('calendar_language', $calendarLanguage);
 $template->assign('ajax_url', api_get_path(WEB_PLUGIN_PATH).'lp_calendar/ajax.php?id='.$calendarId);
 $template->assign('header', $item['title']);

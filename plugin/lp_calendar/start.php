@@ -41,6 +41,7 @@ switch ($action) {
         $plugin->getForm($form);
         $form->addButtonSave(get_lang('Update'));
         $item = $plugin->getCalendar($calendarId);
+        $plugin->protectCalendar($item);
 
         if (empty($item)) {
             api_not_allowed(true);

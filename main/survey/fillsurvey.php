@@ -532,7 +532,9 @@ if (!empty($survey_data['survey_subtitle'])) {
 }
 
 // Displaying the survey introduction
-if (!isset($_GET['show'])) {
+if (
+    !isset($_GET['show']) ||
+    (isset($_GET['show'])) && $_GET['show'] == '') {
     // The first thing we do is delete the session
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
@@ -638,7 +640,10 @@ if ($survey_data['shuffle'] == 1) {
     $shuffle = ' BY RAND() ';
 }
 
-if (isset($_GET['show']) || isset($_POST['personality'])) {
+if (
+    (isset($_GET['show']) && $_GET['show'] != '') ||
+    isset($_POST['personality'])
+) {
     // Getting all the questions for this page and add them to a
     // multidimensional array where the first index is the page.
     // As long as there is no pagebreak fount we keep adding questions to the page
@@ -1172,10 +1177,21 @@ $sql = "SELECT * FROM $table_survey_question
 $result = Database::query($sql);
 $numberofpages = Database::num_rows($result) + 1;
 // Displaying the form with the questions
-if (isset($_GET['show'])) {
+if (isset($_GET['show']) && $_GET['show'] != '') {
     $show = (int) $_GET['show'] + 1;
 } else {
     $show = 0;
+}
+
+$displayFinishButton = true;
+
+if (isset($_GET['show']) && $_GET['show'] != '') {
+    $pagesIndexes = array_keys($paged_questions);
+    $pagesIndexes[] = count($pagesIndexes);
+
+    if (end($pagesIndexes) <= $show - 1 && empty($_POST)) {
+        $displayFinishButton = false;
+    }
 }
 
 // Displaying the form with the questions
@@ -1264,7 +1280,7 @@ if ($survey_data['survey_type'] === '0') {
                 );
             }
         }
-        if ($show >= $numberofpages) {
+        if ($show >= $numberofpages && $displayFinishButton) {
             $form->addButton(
                 'finish_survey',
                 get_lang('FinishSurvey'),
@@ -1294,7 +1310,7 @@ if ($survey_data['survey_type'] === '0') {
                 }
             }
 
-            if ($show >= $numberofpages) {
+            if ($show >= $numberofpages && $displayFinishButton) {
                 $form->addButton(
                     'finish_survey',
                     get_lang('FinishSurvey'),

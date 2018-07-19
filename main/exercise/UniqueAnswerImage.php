@@ -122,7 +122,7 @@ class UniqueAnswerImage extends UniqueAnswer
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
-        for ($i = 1; $i <= $numberAnswers; ++$i) {
+        for ($i = 1; $i <= $numberAnswers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer->correct[$i]) {

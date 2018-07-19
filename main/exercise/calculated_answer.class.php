@@ -209,7 +209,7 @@ class CalculatedAnswer extends Question
                 $auxFormula = $formula;
                 $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
                 if ($nb > 0) {
-                    for ($i = 0; $i < $nb; ++$i) {
+                    for ($i = 0; $i < $nb; $i++) {
                         $blankItem = $blanks[0][$i];
 
                         // take random float values when one or both edge values have a decimal point

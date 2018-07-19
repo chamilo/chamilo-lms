@@ -78,7 +78,7 @@ class GlobalMultipleAnswer extends Question
         $scoreG = "0"; //Global
 
         /* boucle pour sauvegarder les donn�es dans le tableau defaults */
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             /* si la reponse est de type objet */
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];

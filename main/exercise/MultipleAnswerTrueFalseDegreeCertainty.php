@@ -104,7 +104,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $courseId);
 
-        for ($i = 1; $i <= $nbAnswers; ++$i) {
+        for ($i = 1; $i <= $nbAnswers; $i++) {
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'correct['.$i.']'

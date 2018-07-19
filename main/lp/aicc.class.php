@@ -1065,7 +1065,7 @@ class aicc extends learnpath
                 case $enclosure:
                     if ($enclosed && $data[$i + 1] == $enclosure) {
                         $fldval .= $chr;
-                        ++$i; // Skip the next character.
+                        $i++; // Skip the next character.
                     } else {
                         $enclosed = !$enclosed;
                     }

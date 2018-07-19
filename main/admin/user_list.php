@@ -731,6 +731,21 @@ function modify_filter($user_id, $url_params, $row)
                 ICON_SIZE_SMALL
             ).
             '</a>';
+
+        if ($user_id != api_get_user_id() &&
+            !$user_is_anonymous &&
+            api_global_admin_can_edit_admin($user_id)
+        ) {
+            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
+                Display::return_icon(
+                    'anonymous.png',
+                    get_lang('Anonymize'),
+                    [],
+                    ICON_SIZE_SMALL
+                ).
+                '</a>';
+        }
+
         $deleteAllowed = !api_get_configuration_value('deny_delete_users');
         if ($deleteAllowed) {
             if ($user_id != api_get_user_id() &&
@@ -755,19 +770,6 @@ function modify_filter($user_id, $url_params, $row)
                     ICON_SIZE_SMALL
                 );
             }
-        }
-        if ($user_id != api_get_user_id() &&
-            !$user_is_anonymous &&
-            api_global_admin_can_edit_admin($user_id)
-        ) {
-            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
-                Display::return_icon(
-                    'anonymous.png',
-                    get_lang('Anonymize'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).
-                '</a>';
         }
     }
 

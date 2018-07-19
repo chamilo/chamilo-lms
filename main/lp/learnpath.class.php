@@ -12889,7 +12889,7 @@ EOD;
      * @author Yannick Warnier <ywarnier@beeznest.org>
      *
      * @param string $course_code    Course code
-     * @param string $learningPathId The tool type (using constants declared in main_api.lib.php)
+     * @param int    $learningPathId
      * @param int    $id_in_path     The resource ID
      *
      * @return string
@@ -12899,12 +12899,13 @@ EOD;
         $_course = api_get_course_info($course_code);
         $course_id = $_course['real_id'];
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $learningPathId = intval($learningPathId);
-        $id_in_path = intval($id_in_path);
+        $learningPathId = (int) $learningPathId;
+        $id_in_path = (int) $id_in_path;
 
-        $sql_item = "SELECT item_type, title, ref FROM $tbl_lp_item
-                     WHERE c_id = $course_id AND lp_id = $learningPathId AND iid = $id_in_path";
-        $res_item = Database::query($sql_item);
+        $sql = "SELECT item_type, title, ref 
+                FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = $learningPathId AND iid = $id_in_path";
+        $res_item = Database::query($sql);
 
         if (Database::num_rows($res_item) < 1) {
             return '';
@@ -12936,13 +12937,13 @@ EOD;
                 break;
             case TOOL_QUIZ:
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $id");
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['title'];
                 break;
             case TOOL_FORUM:
                 $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
-                $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
+                $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id = $id");
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['forum_name'];
                 break;

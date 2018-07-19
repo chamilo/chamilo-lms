@@ -6138,4 +6138,110 @@ SQL;
 
         return $url;
     }
+
+    /**
+     * Anonymize a user. Replace personal info by anonymous info
+     * @param int $userId User id
+     * @param bool $deleteIP Whether to replace the IP address in logs tables by 127.0.0.1 or to leave as is
+     * @return bool
+     * @assert (0) === false
+     * @throws \Exception
+     */
+    public static function anonymize($userId, $deleteIP = true)
+    {
+        global $debug;
+        if (empty($userId)) {
+            return false;
+        }
+        $em = Database::getManager();
+        $user = api_get_user_entity($userId);
+        $uniqueId = uniqid('anon');
+        $user->setFirstname($uniqueId);
+        $user->setLastname($uniqueId);
+        $user->setBiography('');
+        $user->setAddress('');
+        $user->setCurriculumItems(null);
+        $user->setDateOfBirth(null);
+        $user->setCompetences('');
+        $user->setDiplomas('');
+        $user->setOpenarea('');
+        $user->setTeach('');
+        $user->setProductions(null);
+        $user->setOpenid('');
+        $user->setEmailCanonical($uniqueId.'@example.com');
+        $user->setEmail($uniqueId.'@example.com');
+        $user->setUsername($uniqueId);
+        $user->setUsernameCanonical($uniqueId);
+        $user->setPhone('');
+        $user->setOfficialCode('');
+        UserManager::delete_user_picture($userId);
+        // @TODO: decide whether to delete the IP address
+        // The IP address is a border-case personal data, as it does
+        // not directly allow for personal identification (it is not
+        // a completely safe value in most countries - the IP could
+        // be used by neighbours and crackers)
+        if ($deleteIP) {
+            $substitute = '127.0.0.1';
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE access_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE exe_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_course_table(TABLE_WIKI);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
+            $sql = "UPDATE $table set ip_address = '$substitute' WHERE sys_insert_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_course_table(TABLE_WIKI);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+        }
+        $em->persist($user);
+        $em->flush($user);
+        Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
+        return true;
+    }
 }

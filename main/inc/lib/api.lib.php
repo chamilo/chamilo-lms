@@ -195,6 +195,7 @@ define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_USER_ENABLE', 'user_enable');
 define('LOG_USER_DISABLE', 'user_disable');
+define('LOG_USER_ANONYMIZE', 'user_anonymized');
 define('LOG_USER_FIELD_CREATE', 'user_field_created');
 define('LOG_USER_FIELD_DELETE', 'user_field_deleted');
 define('LOG_SESSION_CREATE', 'session_created');

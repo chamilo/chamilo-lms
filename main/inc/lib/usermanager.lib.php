@@ -171,12 +171,12 @@ class UserManager
      * @param string        $language             User language    (optional)
      * @param string        $phone                Phone number    (optional)
      * @param string        $picture_uri          Picture URI        (optional)
-     * @param string        $authSource           Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param string        $authSource           Authentication source (defaults to 'platform', dependind on constant)
      * @param string        $expirationDate       Account expiration date (optional, defaults to null)
      * @param int           $active               Whether the account is enabled or disabled by default
-     * @param int           $hr_dept_id           The department of HR in which the user is registered (optional, defaults to 0)
+     * @param int           $hr_dept_id           The department of HR in which the user is registered (defaults to 0)
      * @param array         $extra                Extra fields
-     * @param string        $encrypt_method       Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @param string        $encrypt_method       Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
      * @param string        $address
@@ -578,9 +578,7 @@ class UserManager
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                     $tplContent->assign('user_added', $user);
-
                     $renderer = FormValidator::getDefaultRenderer();
-
                     // Form template
                     $elementTemplate = ' {label}: {element} <br />';
                     $renderer->setElementTemplate($elementTemplate);
@@ -1060,7 +1058,7 @@ class UserManager
      * @param int    $active          Whether this account needs to be enabled (1) or disabled (0)
      * @param int    $creator_id      The user ID of the person who registered this user (optional, defaults to null)
      * @param int    $hr_dept_id      The department of HR in which the user is registered (optional, defaults to 0)
-     * @param array  $extra           A series of additional fields to add to this user as extra fields (optional, defaults to null)
+     * @param array  $extra           Additional fields to add to this user as extra fields (defaults to null)
      * @param string $language        The language to which the user account will be set
      * @param string $encrypt_method  The cipher method. This parameter is deprecated. It will use the system's default
      * @param bool   $send_email      Whether to send an e-mail to the user after the update is complete
@@ -1225,7 +1223,10 @@ class UserManager
                         get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".
                         get_lang('Problem')."\n\n".
                         get_lang('SignatureFormula').",\n\n".
-                        api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                        api_get_person_name(
+                            api_get_setting('administratorName'),
+                            api_get_setting('administratorSurname')
+                        )."\n".
                         get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
                         get_lang('Email')." : ".api_get_setting('emailAdministrator');
                 }
@@ -1415,7 +1416,8 @@ class UserManager
      * 2. an already created username but not checked for uniqueness yet.
      *
      * @param string $firstname The first name of a given user. If the second parameter $lastname is NULL, then this
-     *                          parameter is treated as username which is to be checked for uniqueness and to be modified when it is necessary.
+     *                          parameter is treated as username which is to be checked f
+     *                          or uniqueness and to be modified when it is necessary.
      * @param string $lastname  the last name of the user
      *
      * @return string Returns a username that contains only ASCII-letters and digits and that is unique in the system.
@@ -1494,7 +1496,7 @@ class UserManager
             'COUNT(1) AS count',
             Database::get_main_table(TABLE_MAIN_USER),
             [
-                'where' => ['id = ?' => intval($userId)],
+                'where' => ['id = ?' => (int) $userId],
             ],
             'first'
         );
@@ -1762,7 +1764,7 @@ class UserManager
             return $anonymousPath;
         }
 
-        $id = intval($id);
+        $id = (int) $id;
         if (empty($userInfo)) {
             $user_table = Database::get_main_table(TABLE_MAIN_USER);
             $sql = "SELECT email, picture_uri FROM $user_table
@@ -1828,11 +1830,11 @@ class UserManager
             return $anonymousPath;
         }
 
-        $id = intval($id);
+        $id = (int) $id;
 
         if (empty($userInfo)) {
             $user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT email, picture_uri FROM $user_table WHERE id=$id";
+            $sql = "SELECT email, picture_uri FROM $user_table WHERE id = $id";
             $res = Database::query($sql);
 
             if (!Database::num_rows($res)) {
@@ -1848,7 +1850,6 @@ class UserManager
         }
 
         $pictureFilename = trim($user['picture_uri']);
-
         $dir = self::getUserPathById($id, $type);
 
         return [
@@ -1872,7 +1873,7 @@ class UserManager
      */
     public static function getUserPathById($id, $type)
     {
-        $id = intval($id);
+        $id = (int) $id;
         if (!$id) {
             return null;
         }
@@ -2029,7 +2030,8 @@ class UserManager
      * @param string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      *
      * @return bool Returns the resulting common file name of created images which usually should be stored in database.
-     *              When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
+     *              When deletion is requested returns empty string.
+     *              In case of internal error or negative validation returns FALSE.
      */
     public static function update_user_picture(
         $user_id,
@@ -2239,7 +2241,15 @@ class UserManager
                         '.htmlentities($file).'
                     </a>';
                 if ($showDelete) {
-                    $production_list .= '&nbsp;&nbsp;<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
+                    $production_list .= '&nbsp;&nbsp;
+                        <input 
+                            style="width:16px;" 
+                            type="image" 
+                            name="remove_production['.urlencode($file).']" 
+                            src="'.$del_image.'" 
+                            alt="'.$del_text.'" 
+                            title="'.$del_text.' '.htmlentities($file).'" 
+                            onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
             $production_list .= '</ul></div>';
@@ -2357,7 +2367,7 @@ class UserManager
             'field_order',
             'filter',
         ];
-        $column = intval($column);
+        $column = (int) $column;
         $sort_direction = '';
         if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
             $sort_direction = strtoupper($direction);
@@ -2452,7 +2462,14 @@ class UserManager
                         '.htmlentities($filename).
                     '</a> ';
                 if ($showDelete) {
-                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_'.$extra_field.'['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
+                    $extra_file_list .= '<input 
+                        style="width:16px;" 
+                        type="image" 
+                        name="remove_extra_'.$extra_field.'['.urlencode($file).']" 
+                        src="'.$del_image.'" 
+                        alt="'.$del_text.'"
+                        title="'.$del_text.' '.htmlentities($filename).'" 
+                        onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
             $extra_file_list .= '</ul></div>';
@@ -2598,7 +2615,7 @@ class UserManager
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
                 FROM $t_uf f
                 WHERE
@@ -2608,13 +2625,13 @@ class UserManager
 
         if (!$allVisibility) {
             if (isset($fieldFilter)) {
-                $fieldFilter = intval($fieldFilter);
+                $fieldFilter = (int) $fieldFilter;
                 $filter_cond .= " AND filter = $fieldFilter ";
             }
             $sql .= " AND f.visible_to_self = 1 $filter_cond ";
         } else {
             if (isset($fieldFilter)) {
-                $fieldFilter = intval($fieldFilter);
+                $fieldFilter = (int) $fieldFilter;
                 $sql .= " AND filter = $fieldFilter ";
             }
         }
@@ -2693,7 +2710,7 @@ class UserManager
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
 
         $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
                 FROM $t_uf f
@@ -2879,12 +2896,12 @@ class UserManager
     public static function get_extra_user_data_by_field_variable($variable)
     {
         $extraInfo = self::get_extra_field_information_by_name($variable);
-        $field_id = intval($extraInfo['id']);
+        $field_id = (int) $extraInfo['id'];
 
         $extraField = new ExtraFieldValue('user');
         $data = $extraField->getValuesByFieldId($field_id);
 
-        if (!empty($data) > 0) {
+        if (!empty($data)) {
             foreach ($data as $row) {
                 $user_id = $row['item_id'];
                 $data[$user_id] = $row;
@@ -3549,7 +3566,7 @@ class UserManager
     ) {
         $return = '';
         if (!empty($user_id) && !empty($course)) {
-            $user_id = intval($user_id);
+            $user_id = (int) $user_id;
             $path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
             $web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
             $file_list = [];
@@ -3569,7 +3586,8 @@ class UserManager
                 $extensionList = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif'];
                 foreach ($file_list as $file) {
                     if ($resourceType == 'all') {
-                        $return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
+                        $return .= '<li>
+                            <a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
                     } elseif ($resourceType == 'images') {
                         //get extension
                         $ext = explode('.', $file);
@@ -3885,8 +3903,8 @@ class UserManager
     {
         // database table definition
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
-        $field_id = intval($field_id);
-        $limit = intval($limit);
+        $field_id = (int) $field_id;
+        $limit = (int) $limit;
         $tag = trim(Database::escape_string($tag));
 
         // all the information of the field
@@ -4080,7 +4098,9 @@ class UserManager
      * @param int   $user_id
      * @param int   $field_id field id of the tag
      *
-     * @return bool True if the tag was inserted or updated. False otherwise. The return value doesn't take into account *values* added to the tag. Only the creation/update of the tag field itself.
+     * @return bool True if the tag was inserted or updated. False otherwise.
+     * The return value doesn't take into account *values* added to the tag.
+     * Only the creation/update of the tag field itself.
      */
     public static function add_tag($tag, $user_id, $field_id)
     {
@@ -4324,7 +4344,8 @@ class UserManager
     /**
      * Get extra filterable user fields (only type select).
      *
-     * @return array Array of extra fields as [int => ['name' => ..., 'variable' => ..., 'data' => ...]] (or empty array if no extra field)
+     * @return array Array of extra fields as [int => ['name' => ..., 'variable' => ..., 'data' => ...]] (
+     * or empty array if no extra field)
      */
     public static function getExtraFilterableFields()
     {
@@ -4349,7 +4370,8 @@ class UserManager
     /**
      * Get extra where clauses for finding users based on extra filterable user fields (type select).
      *
-     * @return string With AND clauses based on user's ID which have the values to search in extra user fields (or empty if no extra field exists)
+     * @return string With AND clauses based on user's ID which have the values to search in extra user fields
+     * (or empty if no extra field exists)
      */
     public static function get_search_form_where_extra_fields()
     {
@@ -4467,7 +4489,11 @@ class UserManager
         $js = '<script>
         extra_field_toogle();
         function extra_field_toogle() {
-            if (jQuery("select[name=search_type]").val() != "1") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
+            if (jQuery("select[name=search_type]").val() != "1") { 
+                jQuery(".extra_field").hide(); 
+            } else { 
+                jQuery(".extra_field").show(); 
+            }
         }
         </script>';
 
@@ -4480,11 +4506,15 @@ class UserManager
     public static function show_menu()
     {
         echo '<div class="actions">';
-        echo '<a href="/main/auth/profile.php">'.Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
-        echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
-        echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
+        echo '<a href="/main/auth/profile.php">'.
+            Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
+        echo '<a href="/main/messages/inbox.php">'.
+            Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
+        echo '<a href="/main/messages/outbox.php">'.
+            Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
         echo '<span style="float:right; padding-top:7px;">'.
-        '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+        '<a href="/main/auth/profile.php?show=1">'.
+            Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
         echo '</span>';
         echo '</div>';
     }
@@ -4533,7 +4563,9 @@ class UserManager
 
         if ($row['count'] == 1) {
             //only for the case of a RRHH or a Student BOSS
-            if ($row['relation_type'] != $relation_type && ($relation_type == USER_RELATION_TYPE_RRHH || $relation_type == USER_RELATION_TYPE_BOSS)) {
+            if ($row['relation_type'] != $relation_type &&
+                ($relation_type == USER_RELATION_TYPE_RRHH || $relation_type == USER_RELATION_TYPE_BOSS)
+            ) {
                 $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
                         VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
             } else {
@@ -4595,13 +4627,19 @@ class UserManager
                 //Delete user rel user
                 $sql_i = 'UPDATE '.$tbl_my_friend.' SET relation_type='.USER_RELATION_TYPE_DELETED.'
                           WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
+
                 $sql_j = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                          WHERE user_receiver_id='.$user_id.' AND user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
-                //Delete user
+                          WHERE 
+                                user_receiver_id='.$user_id.' AND 
+                                user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
+                // Delete user
                 $sql_ij = 'UPDATE '.$tbl_my_friend.'  SET relation_type='.USER_RELATION_TYPE_DELETED.'
                            WHERE user_id='.$friend_id.' AND friend_user_id='.$user_id;
                 $sql_ji = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                           WHERE user_receiver_id='.$friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
+                           WHERE 
+                                user_receiver_id='.$friend_id.' AND 
+                                user_sender_id='.$user_id.' AND 
+                                update_date="0000-00-00 00:00:00" ';
                 Database::query($sql_i);
                 Database::query($sql_j);
                 Database::query($sql_ij);

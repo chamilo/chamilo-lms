@@ -8219,4 +8219,12 @@ $DegreeOfCertaintyIAmVerySure = "I am totally sure";
 $MultipleAnswerTrueFalseDegreeCertainty = "Multiple answer true/false/degree of certainty";
 $IgnoranceAnswersX = "Ignorance: %s";
 $CorrectAnswersX = "Correct answers: %s";
+$TotalHours = "Total hours";
+$MinutesPerDay = "Minutes per day";
+$ClassroomActivity = "Classroom activity";
+$OneDay = "1 day";
+$UserXAnonymized = "User %s's information anonymized.";
+$CannotAnonymizeUserX = "We could not anonymize user %s's information. Please try again or check the logs.";
+$NoPermissionToAnonymizeUserX = "You don't have permissions to anonymize user %s. You need the same permissions as to delete users.";
+$Anonymize = "Anonymize";
 ?>

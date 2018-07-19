@@ -148,7 +148,7 @@ class FlatViewTable extends SortableTable
                     if (!isset($resource_list[$key][$userResult])) {
                         $resource_list[$key][$userResult] = 0;
                     }
-                    $resource_list[$key][$userResult] += 1;
+                    $resource_list[$key][$userResult]++;
                     $key_list[] = $userResult;
                 }
 

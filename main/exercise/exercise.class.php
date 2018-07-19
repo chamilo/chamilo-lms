@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
 
 /**
@@ -1753,7 +1752,7 @@ class Exercise
             // random all questions
             if ($this->isRandom() && $this->isRandomByCat() == 0) {
                 if (count($this->questionList) >= $this->random && $this->random > 0) {
-                    $this->random -= 1;
+                    $this->random--;
                     $this->save();
                 }
             }

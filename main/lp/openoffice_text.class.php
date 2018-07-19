@@ -223,7 +223,7 @@ class OpenofficeText extends OpenofficeDocument
         $first_item = 0;
         foreach ($pages as $key => $page_content) {
             // For every pages, we create a new file.
-            $key += 1;
+            $key++;
             $page_content = $this->format_page_content($header, $page_content, $this->base_work_dir.$this->created_dir);
             $html_file = $this->created_dir.'-'.$key.'.html';
             $handle = fopen($this->base_work_dir.$this->created_dir.'/'.$html_file, 'w+');

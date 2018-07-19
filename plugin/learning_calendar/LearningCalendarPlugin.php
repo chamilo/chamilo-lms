@@ -635,7 +635,7 @@ class LearningCalendarPlugin extends Plugin
 
         $html = '';
         if (!empty($list)) {
-            $html = implode('<br />', array_column($list, 'name'));
+            $html = implode('&nbsp;', array_column($list, 'name'));
         }
 
         return $html;

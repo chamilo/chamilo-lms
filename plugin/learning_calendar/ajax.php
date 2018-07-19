@@ -6,7 +6,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 $calendarId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
 
-$plugin = LpCalendarPlugin::create();
+$plugin = LearningCalendarPlugin::create();
 $item = $plugin->getCalendar($calendarId);
 $plugin->protectCalendar($item);
 

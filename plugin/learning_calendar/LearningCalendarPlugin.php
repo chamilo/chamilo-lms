@@ -2,9 +2,9 @@
 /* For license terms, see /license.txt */
 
 /**
- * Class LpCalendarPlugin.
+ * Class LearningCalendarPlugin.
  */
-class LpCalendarPlugin extends Plugin
+class LearningCalendarPlugin extends Plugin
 {
     const EVENT_TYPE_TAKEN = 1;
     const EVENT_TYPE_EXAM = 2;
@@ -66,7 +66,7 @@ class LpCalendarPlugin extends Plugin
      */
     public function get_name()
     {
-        return 'lp_calendar';
+        return 'learning_calendar';
     }
 
     /**
@@ -200,12 +200,12 @@ class LpCalendarPlugin extends Plugin
 
         $result = Database::query($sql);
         $list = [];
-        $link = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php';
+        $link = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php';
         while ($row = Database::fetch_array($result)) {
             $id = $row['id'];
             $row['title'] = Display::url(
                 $row['title'],
-                api_get_path(WEB_PLUGIN_PATH).'lp_calendar/calendar.php?id='.$id
+                api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?id='.$id
             );
             $actions = Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
@@ -281,7 +281,6 @@ class LpCalendarPlugin extends Plugin
         }
 
         $list = [];
-        //$link = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $list[] = $row;
         }

@@ -56,7 +56,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 }
 
 $menu_items = [];
-$pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+$pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
 $calendarMenuAdded = false;
 
 if ($is_platform_admin) {
@@ -103,10 +103,10 @@ if ($is_platform_admin) {
         );
 
         if ($pluginCalendar) {
-            $lpCalendar = LpCalendarPlugin::create();
+            $lpCalendar = LearningCalendarPlugin::create();
             $menu_items[] = Display::url(
                 Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
+                api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
             );
             $calendarMenuAdded = true;
         }
@@ -218,10 +218,10 @@ if (!empty($session_id) &&
     );
 
     if ($pluginCalendar && api_is_teacher() && $calendarMenuAdded === false) {
-        $lpCalendar = LpCalendarPlugin::create();
+        $lpCalendar = LearningCalendarPlugin::create();
         $actionsLeft .= Display::url(
             Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
+            api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
         );
     }
 

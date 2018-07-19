@@ -5408,10 +5408,10 @@ class Tracking
             }
         }
 
-        $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+        $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
         if ($pluginCalendar) {
             $course_in_session[0] = $courseIdList;
-            $plugin = LpCalendarPlugin::create();
+            $plugin = LearningCalendarPlugin::create();
             $html .= $plugin->getUserStatsPanel($user_id, $course_in_session);
         }
 

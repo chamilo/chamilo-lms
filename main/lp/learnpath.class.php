@@ -6326,13 +6326,13 @@ class learnpath
             $previewIcon = '';
             $pluginCalendarIcon = '';
 
-            $pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+            $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
             $plugin = null;
             if ($pluginCalendar) {
-                $plugin = LpCalendarPlugin::create();
+                $plugin = LearningCalendarPlugin::create();
             }
 
-            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php?';
+            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php?';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio != 'true') {

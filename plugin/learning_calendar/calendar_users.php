@@ -4,7 +4,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$plugin = LpCalendarPlugin::create();
+$plugin = LearningCalendarPlugin::create();
 $plugin->protectCalendar($calendarId);
 $item = $plugin->getCalendar($calendarId);
 
@@ -22,7 +22,7 @@ $actionLeft = Display::url(
         null,
         ICON_SIZE_MEDIUM
     ),
-    api_get_path(WEB_PLUGIN_PATH).'lp_calendar/start.php'
+    api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
 );
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);

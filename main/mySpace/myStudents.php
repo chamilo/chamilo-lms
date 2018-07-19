@@ -1840,9 +1840,9 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $table->display();
 }
 
-$pluginCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+$pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
 if ($pluginCalendar) {
-    $plugin = LpCalendarPlugin::create();
+    $plugin = LearningCalendarPlugin::create();
     echo $plugin->getUserStatsPanel($student_id, $courses_in_session);
 }
 

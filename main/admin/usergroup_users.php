@@ -21,8 +21,8 @@ if (empty($userGroupInfo)) {
 $usergroup->protectScript($userGroupInfo);
 
 $calendarPlugin = null;
-if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
-    $calendarPlugin = LpCalendarPlugin::create();
+if (api_get_plugin_setting('learning_calendar', 'enabled') === 'true') {
+    $calendarPlugin = LearningCalendarPlugin::create();
 }
 
 // Add the JS needed to use the jqgrid
@@ -132,7 +132,7 @@ $column_model = [
     ],
 ];
 
-if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
+if (api_get_plugin_setting('learning_calendar', 'enabled') === 'true') {
     $columns = [
         get_lang('Name'),
         get_lang('Calendar'),

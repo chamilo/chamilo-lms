@@ -105,12 +105,12 @@ class UserGroup extends Model
             return 0;
         } else {
             $list = [];
-            $showCalendar = api_get_plugin_setting('lp_calendar', 'enabled') === 'true';
+            $showCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
             $calendarPlugin = null;
             if ($showCalendar) {
-                $calendarPlugin = LpCalendarPlugin::create();
+                $calendarPlugin = LearningCalendarPlugin::create();
             }
-            $url = api_get_path(WEB_PLUGIN_PATH).'lp_calendar/calendar_users.php?';
+            $url = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar_users.php?';
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);

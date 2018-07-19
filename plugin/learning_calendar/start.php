@@ -9,7 +9,7 @@ if (!$allow) {
     api_not_allowed(true);
 }
 
-$plugin = LpCalendarPlugin::create();
+$plugin = LearningCalendarPlugin::create();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $formToString = '';
@@ -184,10 +184,8 @@ if (in_array($action, ['add', 'edit'])) {
 
 $template->assign('form', $formToString);
 $actions = Display::toolbarAction('toolbar-calendar', [$actionLeft]);
-
-$content = $template->fetch('lp_calendar/view/start.tpl');
+$content = $template->fetch('learning_calendar/view/start.tpl');
 $template->assign('content', $content);
-
 $template->assign('actions', $actions);
 
 $template->display_one_col_template();

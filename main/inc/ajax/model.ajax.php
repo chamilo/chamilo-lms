@@ -233,7 +233,7 @@ if (!$sidx) {
 
 switch ($action) {
     case 'get_calendar_users':
-        $calendarPlugin = LpCalendarPlugin::create();
+        $calendarPlugin = LearningCalendarPlugin::create();
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $calendarPlugin->getUsersPerCalendarCount($id);
         break;
@@ -244,7 +244,7 @@ switch ($action) {
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
     case 'get_learning_path_calendars':
-        $calendarPlugin = LpCalendarPlugin::create();
+        $calendarPlugin = LearningCalendarPlugin::create();
         $count = $calendarPlugin->getCalendarCount();
         break;
     case 'course_log_events':
@@ -804,7 +804,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $columns = ['name', 'actions'];
-        if (api_get_plugin_setting('lp_calendar', 'enabled') === 'true') {
+        if (api_get_plugin_setting('learning_calendar', 'enabled') === 'true') {
             $columns = [
                 'name',
                 'calendar',

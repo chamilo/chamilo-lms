@@ -141,7 +141,8 @@ class UserGroup extends Model
                     );
 
                     $stats = $calendarPlugin->getUserStats($userId, $courseAndSessionList);
-                    $data['gradebook_items'] = '@todo';
+                    $evaluations = $calendarPlugin->getGradebookEvaluationListToString($userId, $courseAndSessionList);
+                    $data['gradebook_items'] = $evaluations;
                     $totalTime = 0;
                     foreach ($courseAndSessionList as $sessionId => $course) {
                         foreach ($course as $courseId) {

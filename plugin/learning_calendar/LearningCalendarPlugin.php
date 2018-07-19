@@ -624,6 +624,91 @@ class LearningCalendarPlugin extends Plugin
     }
 
     /**
+     * @param int   $userId
+     * @param array $coursesAndSessions
+     *
+     * @return string
+     */
+    public function getGradebookEvaluationListToString($userId, $coursesAndSessions)
+    {
+        $list = $this->getGradebookEvaluationList($userId, $coursesAndSessions);
+
+        $html = '';
+        if (!empty($list)) {
+            $html = implode('<br />', array_column($list, 'name'));
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param int   $userId
+     * @param array $coursesAndSessions
+     *
+     * @return array
+     */
+    public function getGradebookEvaluationList($userId, $coursesAndSessions)
+    {
+        $userId = (int) $userId;
+
+        if (empty($coursesAndSessions)) {
+            return 0;
+        }
+
+        $courseSessionConditionToString = '';
+        foreach ($coursesAndSessions as $sessionId => $courseList) {
+            if (isset($courseList['course_list'])) {
+                $courseList = array_keys($courseList['course_list']);
+            }
+            if (empty($courseList)) {
+                continue;
+            }
+            //$courseListToString = implode("','", $courseList);
+            /*if (empty($sessionId)) {
+                $courseAndSessionCondition[] =
+                    " c.id IN ('$courseListToString') ";
+            } else {
+                $courseAndSessionCondition[] = "
+                    (
+                        c.id IN ('$courseListToString')
+                    )";
+            }*/
+            $courseSessionConditionToString = " AND c.id IN ('".implode("','", $courseList)."') ";
+        }
+
+        if (empty($courseSessionConditionToString)) {
+
+            return 0;
+        }
+
+        $tableEvaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = "SELECT DISTINCT e.name, e.id
+                FROM $tableEvaluation e 
+                INNER JOIN $tableCourse c
+                ON (course_code = c.code)
+                INNER JOIN $tableResult r
+                ON (r.evaluation_id = e.id)
+                WHERE 
+                  e.type = 'evaluation' AND
+                  r.score > 0 AND
+                  r.user_id = $userId   
+                  $courseSessionConditionToString                  
+        ";
+        $result = Database::query($sql);
+        $list = [];
+        if (Database::num_rows($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $list[$row['id']] = $row;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param int   $userId
      * @param array $coursesAndSessions
      *
      * @return int
@@ -673,7 +758,6 @@ class LearningCalendarPlugin extends Plugin
         }
 
         $courseSessionConditionToString = 'AND ('.implode(' OR ', $courseAndSessionCondition).') ';
-
         $sql = "SELECT count(*) as count 
                 FROM $tableItem i INNER JOIN $tableLp l
                 ON (i.c_id = l.c_id AND i.lp_id = l.iid) 

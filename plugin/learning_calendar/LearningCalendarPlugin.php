@@ -677,7 +677,6 @@ class LearningCalendarPlugin extends Plugin
         }
 
         if (empty($courseSessionConditionToString)) {
-
             return 0;
         }
 

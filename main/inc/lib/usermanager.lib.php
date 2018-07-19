@@ -4099,8 +4099,8 @@ class UserManager
      * @param int   $field_id field id of the tag
      *
      * @return bool True if the tag was inserted or updated. False otherwise.
-     * The return value doesn't take into account *values* added to the tag.
-     * Only the creation/update of the tag field itself.
+     *              The return value doesn't take into account *values* added to the tag.
+     *              Only the creation/update of the tag field itself.
      */
     public static function add_tag($tag, $user_id, $field_id)
     {
@@ -4345,7 +4345,7 @@ class UserManager
      * Get extra filterable user fields (only type select).
      *
      * @return array Array of extra fields as [int => ['name' => ..., 'variable' => ..., 'data' => ...]] (
-     * or empty array if no extra field)
+     *               or empty array if no extra field)
      */
     public static function getExtraFilterableFields()
     {
@@ -4371,7 +4371,7 @@ class UserManager
      * Get extra where clauses for finding users based on extra filterable user fields (type select).
      *
      * @return string With AND clauses based on user's ID which have the values to search in extra user fields
-     * (or empty if no extra field exists)
+     *                (or empty if no extra field exists)
      */
     public static function get_search_form_where_extra_fields()
     {

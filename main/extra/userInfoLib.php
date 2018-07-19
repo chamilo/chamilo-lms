@@ -301,10 +301,10 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param   $definition_id
- * @param   $user_id
- * @param   $user_ip
- * @param   $content
+ * @param $definition_id
+ * @param $user_id
+ * @param $user_ip
+ * @param $content
  *
  * @return bool true if succeed, else boolean false
  */
@@ -355,10 +355,10 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param   $definition_id
- * @param   $user_id
- * @param   $user_ip       DEFAULT $REMOTE_ADDR
- * @param   $content       if empty call delete the bloc
+ * @param $definition_id
+ * @param $user_id
+ * @param $user_ip       DEFAULT $REMOTE_ADDR
+ * @param $content       if empty call delete the bloc
  *
  * @return bool true if succeed, else boolean false
  */
@@ -398,8 +398,8 @@ function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = ""
  * @author Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param   $definition_id
- * @param   $user_id
+ * @param $definition_id
+ * @param $user_id
  *
  * @return bool true if succeed, else boolean false
  */

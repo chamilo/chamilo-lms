@@ -921,6 +921,14 @@ class Plugin
     }
 
     /**
+     * @param bool $value
+     */
+    public function setHasPersonalEvents($value)
+    {
+        $this->hasPersonalEvents = $value;
+    }
+
+    /**
      * Add an link for a course tool.
      *
      * @param string $name     The tool name
@@ -977,13 +985,5 @@ class Plugin
         }
 
         return $tool;
-    }
-
-    /**
-     * @param bool $value
-     */
-    public function setHasPersonalEvents($value)
-    {
-        $this->hasPersonalEvents = $value;
     }
 }

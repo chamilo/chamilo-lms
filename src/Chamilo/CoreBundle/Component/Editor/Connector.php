@@ -40,7 +40,8 @@ class Connector
     /**
      * Connector constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->paths = [
             'root_sys' => api_get_path(SYS_PATH),
             'sys_root' => api_get_path(SYS_PATH), // just an alias

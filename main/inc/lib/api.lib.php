@@ -1737,9 +1737,9 @@ function api_get_user_info_from_username($username = '')
             WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
+        $resultArray = Database::fetch_array($result);
 
-        return _api_format_user($result_array);
+        return _api_format_user($resultArray);
     }
 
     return false;
@@ -1761,9 +1761,9 @@ function api_get_user_info_from_email($email = '')
             WHERE email ='".Database::escape_string($email)."' LIMIT 1";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
+        $resultArray = Database::fetch_array($result);
 
-        return _api_format_user($result_array);
+        return _api_format_user($resultArray);
     }
 
     return false;

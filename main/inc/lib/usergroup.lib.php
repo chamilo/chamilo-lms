@@ -110,7 +110,7 @@ class UserGroup extends Model
             if ($showCalendar) {
                 $calendarPlugin = LearningCalendarPlugin::create();
             }
-            $url = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar_users.php?';
+            $url = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?';
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
@@ -141,7 +141,6 @@ class UserGroup extends Model
                     );
 
                     $stats = $calendarPlugin->getUserStats($userId, $courseAndSessionList);
-
                     $data['gradebook_items'] = '@todo';
                     $totalTime = 0;
                     foreach ($courseAndSessionList as $sessionId => $course) {
@@ -151,7 +150,7 @@ class UserGroup extends Model
                     }
 
                     $data['time_spent'] = api_time_to_hms($totalTime);
-                    $data['lp_day_completed'] = $stats['user_event_count'];
+                    $data['lp_day_completed'] = $stats['completed'] - $stats['user_event_count'];
                     $data['days_diff'] = $stats['completed'];
                 }
                 $data['id'] = $data['user_id'];

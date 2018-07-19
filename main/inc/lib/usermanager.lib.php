@@ -1691,7 +1691,7 @@ class UserManager
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
             }
 
             if (api_is_multiple_url_enabled()) {

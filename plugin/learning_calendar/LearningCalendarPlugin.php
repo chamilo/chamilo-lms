@@ -741,9 +741,7 @@ class LearningCalendarPlugin extends Plugin
         $diff = 0;
         if (!empty($courseAndSessionList)) {
             $completed = $this->getItemCountChecked($userId, $courseAndSessionList);
-            //if ($takenCount > $completed) {
             $diff = $takenCount - $completed;
-            //}
         }
 
         return [

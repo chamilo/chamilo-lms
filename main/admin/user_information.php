@@ -621,6 +621,7 @@ if ($studentBossList) {
 }
 
 $em = Database::getManager();
+/** @var \Chamilo\UserBundle\Entity\Repository\UserRepository $userRepository */
 $userRepository = $em->getRepository('ChamiloUserBundle:User');
 
 $hrmList = $userRepository->getAssignedHrmUserList(

@@ -2,7 +2,8 @@
 /* For license terms, see /license.txt */
 
 /**
- * Uninstall the MSI/LTI Plugin
+ * Uninstall the MSI/LTI Plugin.
+ *
  * @package chamilo.plugin.ims_lti
  */
 

@@ -14,4 +14,3 @@ $strings['EventTypeTaken'] = 'Taken';
 $strings['EventTypeExam'] = 'Exam';
 $strings['EventTypeFree'] = 'Free';
 $strings['CourseHoursDuration'] = 'Course hours duration';
-

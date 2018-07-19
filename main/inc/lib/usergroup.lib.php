@@ -150,8 +150,8 @@ class UserGroup extends Model
                     }
 
                     $data['time_spent'] = api_time_to_hms($totalTime);
-                    $data['lp_day_completed'] = $stats['completed'] - $stats['user_event_count'];
-                    $data['days_diff'] = $stats['completed'];
+                    $data['lp_day_completed'] = $stats['completed'];
+                    $data['days_diff'] = $stats['completed'] - $stats['user_event_count'];
                 }
                 $data['id'] = $data['user_id'];
                 $list[] = $data;

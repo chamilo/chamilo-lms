@@ -305,12 +305,12 @@ class Tracking
                     path
                 FROM $TBL_LP_ITEM as i
                 INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                ON (i.id = iv.lp_item_id AND i.c_id = iv.c_id)
+                ON (i.iid = iv.lp_item_id AND i.c_id = iv.c_id)
                 INNER JOIN $TBL_LP_VIEW as v
                 ON (iv.lp_view_id = v.id AND v.c_id = iv.c_id)
                 WHERE
                     v.c_id = $course_id AND
-                    i.id = $my_item_id AND
+                    i.iid = $my_item_id AND
                     i.lp_id = $lp_id  AND
                     v.user_id = $user_id AND
                     v.session_id = $session_id

@@ -475,7 +475,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
      * Sets element template
      *
      * @param string $html (optional) The HTML surrounding select boxes and buttons
-     * @param string $js   (optional) if we need to include qfams javascript handler
+     * @param bool   $js   (optional) if we need to include qfams javascript handler
      *
      * @access     public
      * @return     string
@@ -589,15 +589,14 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 }
                 $checkbox_id_suffix++;
                 $strHtmlSelected .= $tab
-                    .  '<label'
-                    .  $this->_getAttrString($labelAttributes) .'>'
-                    .  '<input type="checkbox"'
-                    .  ' id="'.$selectId . $checkbox_id_suffix.'"'
-                    .  ' name="'.$selectName.'"'
-                    .  $checked
-                    .  $this->_getAttrString($option['attr'])
-                    .  ' />' .  $option['text'] . '</label>'
-                    .  PHP_EOL;
+                    .'<label'
+                    .$this->_getAttrString($labelAttributes).'>'
+                    .'<input type="checkbox"'
+                    .' id="'.$selectId.$checkbox_id_suffix.'"'
+                    .' name="'.$selectName.'"'
+                    .$checked.$this->_getAttrString($option['attr'])
+                    .' />'.$option['text'].'</label>'
+                    .PHP_EOL;
             }
             $strHtmlSelected .= $tab . '</div>'. PHP_EOL;
 
@@ -677,11 +676,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             if ($options > 0) {
                 $arrHtmlHidden = array_fill(0, $options, ' ');
                 foreach ($this->_options as $option) {
-                    if (is_array($this->_values)
-                        && in_array(
-                            (string)$option['attr']['value'],
-                            $this->_values
-                        )) {
+                    if (is_array($this->_values) && in_array((string) $option['attr']['value'], $this->_values)) {
                         // Get the post order
                         $key = array_search(
                             $option['attr']['value'],

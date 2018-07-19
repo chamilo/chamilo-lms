@@ -344,3 +344,6 @@ define('TABLE_CAL_DATE', 'cal_dates');
 define('TABLE_CAL_HORAIRE', 'cal_horaire');
 define('TABLE_CAL_TEMP', 'cal_temp');
 define('TABLE_STATISTIC_TRACK_E_EXERCICES_TEMP', 'track_e_exercices_temp');
+
+define('TABLE_USER_INFO_DEF', 'userinfo_def');
+define('TABLE_USER_INFO_CONTENT', 'userinfo_content');

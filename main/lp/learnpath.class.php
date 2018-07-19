@@ -11129,12 +11129,26 @@ class learnpath
                                             $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                             $my_dep->setAttribute('xml:base', '');
                                         } elseif (empty($file_path)) {
-                                            $file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
-                                            $file_path = str_replace('//', '/', $file_path);
-                                            if (file_exists($file_path)) {
-                                                $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
+                                            $docSysPartPath = str_replace(
+                                                api_get_path(REL_COURSE_PATH),
+                                                '',
+                                                $doc_info[0]
+                                            );
+
+                                            $docSysPartPathNoCourseCode = str_replace(
+                                                $_course['directory'].'/',
+                                                '',
+                                                $docSysPartPath
+                                            );
+
+                                            $docSysPath = api_get_path(SYS_COURSE_PATH).$docSysPartPath;
+                                            if (file_exists($docSysPath)) {
+                                                $file_path = $docSysPartPathNoCourseCode;
                                                 $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                                $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
+                                                $link_updates[$my_file_path][] = [
+                                                    'orig' => $doc_info[0],
+                                                    'dest' => $file_path,
+                                                ];
                                                 $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                                 $my_dep->setAttribute('xml:base', '');
                                             }
@@ -11263,8 +11277,8 @@ class learnpath
                     ) {
                         $old_new['dest'] = str_replace('video/', '../../../../video/', $old_new['dest']);
                     }
-                    //Fix to avoid problems with default_course_document
-                    if (strpos("main/default_course_document", $old_new['dest'] === false)) {
+                    // Fix to avoid problems with default_course_document
+                    if (strpos("main/default_course_document", $old_new['dest']) === false) {
                         //$newDestination = str_replace('document/', $mult.'document/', $old_new['dest']);
                         $newDestination = $old_new['dest'];
                     } else {

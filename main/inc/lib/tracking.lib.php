@@ -293,7 +293,7 @@ class Tracking
                     v.view_count as mycount,
                     iv.score as myscore,
                     iv.total_time as mytime,
-                    i.id as myid,
+                    i.iid as myid,
                     i.lp_id as mylpid,
                     iv.lp_view_id as mylpviewid,
                     i.title as mytitle,
@@ -328,7 +328,6 @@ class Tracking
                     if ($row['item_type'] == 'quiz') {
                         // Check results_disabled in quiz table.
                         $my_path = Database::escape_string($row['path']);
-
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
                                 WHERE
@@ -345,12 +344,10 @@ class Tracking
                     }
 
                     // If there are several attempts, and the link to extend has been clicked, show each attempt...
+                    $oddclass = 'row_even';
                     if (($counter % 2) == 0) {
                         $oddclass = 'row_odd';
-                    } else {
-                        $oddclass = 'row_even';
                     }
-
                     $extend_link = '';
                     if (!empty($inter_num)) {
                         $extend_link = Display::url(
@@ -647,10 +644,9 @@ class Tracking
                         }
                     }
 
+                    $oddclass = 'row_even';
                     if (($counter % 2) == 0) {
                         $oddclass = 'row_odd';
-                    } else {
-                        $oddclass = 'row_even';
                     }
 
                     $extend_link = '';
@@ -999,7 +995,7 @@ class Tracking
                             $sql = "SELECT path FROM $TBL_LP_ITEM
                                     WHERE
                                         c_id = $course_id AND
-                                        id = '$lp_item_id' AND
+                                        iid = '$lp_item_id' AND
                                         lp_id = '$lp_id'";
                             $res_path = Database::query($sql);
                             $row_path = Database::fetch_array($res_path);

@@ -6175,7 +6175,6 @@ SQL;
         $user->setPhone('');
         $user->setOfficialCode('');
         UserManager::delete_user_picture($userId);
-        // @TODO: decide whether to delete the IP address
         // The IP address is a border-case personal data, as it does
         // not directly allow for personal identification (it is not
         // a completely safe value in most countries - the IP could

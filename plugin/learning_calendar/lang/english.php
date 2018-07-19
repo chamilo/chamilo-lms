@@ -13,3 +13,5 @@ $strings['DifferenceOfDaysAndCalendar'] = 'Difference of days and calendar';
 $strings['EventTypeTaken'] = 'Taken';
 $strings['EventTypeExam'] = 'Exam';
 $strings['EventTypeFree'] = 'Free';
+$strings['CourseHoursDuration'] = 'Course hours duration';
+

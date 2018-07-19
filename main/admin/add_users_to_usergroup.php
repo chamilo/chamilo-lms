@@ -238,19 +238,7 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 $elements_not_in = $elements_in = [];
-
-$onlyThisUserList = [];
-if ($usergroup->allowTeachers()) {
-    $userId = api_get_user_id();
-    $courseList = CourseManager::getCoursesFollowedByUser($userId, COURSEMANAGER);
-    foreach ($courseList as $course) {
-        $userList = CourseManager::get_user_list_from_course_code($course['code'], 0, null, null, STUDENT);
-        $userList = array_column($userList, 'user_id');
-        $onlyThisUserList = array_merge($onlyThisUserList, $userList);
-    }
-}
-
-$complete_user_list = UserManager::getUserListLike([], $order, false, 'AND', $onlyThisUserList);
+$complete_user_list = UserManager::getUserListLike([], $order, false, 'AND');
 
 if (!empty($complete_user_list)) {
     foreach ($complete_user_list as $item) {
@@ -288,7 +276,7 @@ if (!empty($complete_user_list)) {
 
 $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
 if ($user_with_any_group) {
-    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND', $onlyThisUserList);
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
     $new_user_list = [];
     foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
@@ -297,7 +285,7 @@ if ($user_with_any_group) {
     }
     $user_list = $new_user_list;
 } else {
-    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND', $onlyThisUserList);
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
 }
 
 if (!empty($user_list)) {

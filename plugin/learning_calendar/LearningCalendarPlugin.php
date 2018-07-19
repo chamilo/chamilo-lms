@@ -121,7 +121,7 @@ class LearningCalendarPlugin extends Plugin
 
         $extraField = new ExtraField('course');
         $params = [
-            'display_text' => get_lang('Duration'),
+            'display_text' => $this->get_lang('CourseHoursDuration'),
             'variable' => 'course_hours_duration',
             'visible_to_self' => 1,
             'changeable' => 1,
@@ -570,12 +570,13 @@ class LearningCalendarPlugin extends Plugin
     }
 
     /**
-     * @param int $start
-     * @param int $end
+     * @param Agenda $agenda
+     * @param int    $start
+     * @param int    $end
      *
      * @return array
      */
-    public function getPersonalEvents($calendar, $start, $end)
+    public function getPersonalEvents($agenda, $start, $end)
     {
         $userId = api_get_user_id();
         $events = $this->getUserEvents($userId, $start, $end);
@@ -603,12 +604,12 @@ class LearningCalendarPlugin extends Plugin
             $event['type'] = 'personal';
 
             if (!empty($row['start_date'])) {
-                $event['start'] = $calendar->formatEventDate($row['start_date']);
+                $event['start'] = $agenda->formatEventDate($row['start_date']);
                 $event['start_date_localtime'] = api_get_local_time($row['start_date']);
             }
 
             if (!empty($row['end_date'])) {
-                $event['end'] = $calendar->formatEventDate($row['end_date']);
+                $event['end'] = $agenda->formatEventDate($row['end_date']);
                 $event['end_date_localtime'] = api_get_local_time($row['end_date']);
             }
 

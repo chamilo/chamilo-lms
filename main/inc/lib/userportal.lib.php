@@ -781,19 +781,9 @@ class IndexManager
             return '';
         }
 
-        $usergroup = new UserGroup();
-        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
         $items = [];
-        if (!empty($usergroup_list)) {
-            foreach ($usergroup_list as $group_id) {
-                $data = $usergroup->get($group_id);
-                $items[] = [
-                    'link' => api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id'],
-                    'title' => $data['name'],
-                ];
-            }
-        }
 
+        $usergroup = new UserGroup();
         if (api_is_platform_admin()) {
             $items[] = [
                 'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
@@ -802,8 +792,19 @@ class IndexManager
         } else {
             if (api_is_teacher() && $usergroup->allowTeachers()) {
                 $items[] = [
-                    'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
-                    'title' => get_lang('AddClasses'),
+                    'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php',
+                    'title' => get_lang('ClassList'),
+                ];
+            }
+        }
+
+        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
+        if (!empty($usergroup_list)) {
+            foreach ($usergroup_list as $group_id) {
+                $data = $usergroup->get($group_id);
+                $items[] = [
+                    'link' => api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id'],
+                    'title' => $data['name'],
                 ];
             }
         }

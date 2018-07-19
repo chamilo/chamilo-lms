@@ -15,10 +15,10 @@ class LearningCalendarPlugin extends Plugin
      */
     protected function __construct()
     {
-        $this->hasPersonalEvents = true;
         $version = '0.1';
         $author = 'Julio Montoya';
         parent::__construct($version, $author, ['enabled' => 'boolean']);
+        $this->setHasPersonalEvents(true);
     }
 
     /**

@@ -59,8 +59,8 @@ $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $table = new SortableTable(
     'Tickets',
-    ['TicketManager', 'get_total_tickets_by_user_id'],
-    ['TicketManager', 'get_tickets_by_user_id'],
+    ['TicketManager', 'getTotalTicketsCurrentUser'],
+    ['TicketManager', 'getTicketsByCurrentUser'],
     2,
     20,
     'DESC'

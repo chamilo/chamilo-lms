@@ -978,4 +978,12 @@ class Plugin
 
         return $tool;
     }
+
+    /**
+     * @param bool $value
+     */
+    public function setHasPersonalEvents($value)
+    {
+        $this->hasPersonalEvents = $value;
+    }
 }

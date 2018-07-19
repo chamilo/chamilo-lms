@@ -558,6 +558,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $selectNameFrom = $this->getName().'-f[]';
         $selectNameTo = $this->getName().'[]';
         $selected_count = 0;
+        $rightAll = '';
+        $leftAll = '';
 
         // placeholder {unselected} existence determines if we will render
         if (strpos($this->_elementTemplate, '{unselected}') === false) {
@@ -656,8 +658,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_attributesHidden
                 = array(
                 'name' => $selectName,
-                'style' => 'overflow: hidden; visibility: hidden; '.
-                    'width: 1px; height: 0;',
+                'style' => 'overflow: hidden; visibility: hidden; width: 1px; height: 0;',
             );
             $this->_attributesHidden
                 = array_merge($this->_attributes, $this->_attributesHidden);
@@ -707,28 +708,24 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             // The 'unselected' multi-select which appears on the left
             $unselected_count = count($arrHtmlUnselected);
             if ($unselected_count == 0) {
-                //$this->_attributesUnselected['disabled'] = 'disabled';
-                $this->_attributesUnselected
-                    = array_merge($this->_attributes, $this->_attributesUnselected);
+                $this->_attributesUnselected = array_merge($this->_attributes, $this->_attributesUnselected);
                 $attrUnselected = $this->_getAttrString($this->_attributesUnselected);
             }
             $strHtmlUnselected = "<select$attrUnselected>". PHP_EOL;
             if ($unselected_count > 0) {
                 foreach ($arrHtmlUnselected as $data) {
                     $strHtmlUnselected
-                        .= $tabs . $tab
-                        . '<option' . $this->_getAttrString($data['attr']) . '>'
-                        . $data['text'] . '</option>' . PHP_EOL;
+                        .= $tabs.$tab
+                        .'<option'.$this->_getAttrString($data['attr']).'>'
+                        .$data['text'].'</option>'.PHP_EOL;
                 }
             }
             $strHtmlUnselected .= '</select>';
 
             // The 'selected' multi-select which appears on the right
             $selected_count = count($arrHtmlSelected);
-
             if ($selected_count == 0) {
-                $this->_attributesSelected
-                    = array_merge($this->_attributes, $this->_attributesSelected);
+                $this->_attributesSelected = array_merge($this->_attributes, $this->_attributesSelected);
                 $attrSelected = $this->_getAttrString($this->_attributesSelected);
             }
             $strHtmlSelected = "<select$attrSelected>";
@@ -744,9 +741,9 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                         $text = $data['text'];
                     }
                     $strHtmlSelected
-                        .= $tabs . $tab
-                        . '<option' . $attribute. '>'
-                        . $text . '</option>';
+                        .= $tabs.$tab
+                        .'<option'.$attribute.'>'
+                        .$text.'</option>';
                 }
             }
             $strHtmlSelected .= '</select>';
@@ -762,6 +759,18 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
             $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
             $strHtmlAdd = "<button $attrStrAdd  /> <em class='fa fa-arrow-right'></em></button><br /><br />";
+
+            if ($this->selectAllCheckBox) {
+                $attributes = array('id' => $selectId.'_rightAll');
+                $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
+                $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
+                $rightAll = "<button $attrStrAdd  /> <em class='fa fa-forward'></em></button><br /><br />";
+
+                $attributes = array('id' => $selectId.'_leftAll');
+                $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
+                $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
+                $leftAll = "<br /><br /><button $attrStrAdd  /> <em class='fa fa-backward'></em></button>";
+            }
 
             // build the select all button with all its attributes
             $strHtmlAll = '';
@@ -870,8 +879,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $strHtmlSelectedCount,
             $strHtmlUnselected,
             $strHtmlSelected.$strHtmlHidden,
-            $strHtmlAdd,
-            $strHtmlRemove,
+            $rightAll.$strHtmlAdd,
+            $strHtmlRemove.$leftAll,
             $strHtmlAll,
             $strHtmlNone,
             $strHtmlToggle,
@@ -880,14 +889,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $strHtmlMoveTop,
             $strHtmlMoveBottom,
         );
-
-        if ($this->selectAllCheckBox) {
-            $strHtml .= '<div class="col-sm-8">
-                            <label >'.get_lang('SelectAll').'
-                            <input type="checkbox" class="advmultiselect_checkbox" id="'.$selectId.'_select_all'.'">
-                            </label>
-                         </div>';
-        }
 
         $strHtml = str_replace($placeHolders, $htmlElements, $strHtml);
         $comment = $this->getComment();

@@ -135,7 +135,7 @@ class Tracking
      * @param string $type            classic or simple
      * @param bool   $allowExtend     Optional. Allow or not extend te results
      *
-     * @return null|string
+     * @return string
      */
     public static function getLpStats(
         $user_id,
@@ -153,7 +153,7 @@ class Tracking
         $allowExtend = true
     ) {
         if (empty($courseInfo) || empty($lp_id)) {
-            return null;
+            return '';
         }
 
         $hideTime = api_get_configuration_value('hide_lp_time');
@@ -169,7 +169,7 @@ class Tracking
         $session_condition = api_get_session_condition($session_id);
 
         // Extend all button
-        $output = null;
+        $output = '';
         $extend_all = 0;
         if ($origin == 'tracking') {
             $url_suffix = '&session_id='.$session_id.'&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.$lp_id.'&origin='.$origin;
@@ -430,10 +430,9 @@ class Tracking
                             }
                         }
 
+                        $oddclass = 'row_even';
                         if (($counter % 2) == 0) {
                             $oddclass = 'row_odd';
-                        } else {
-                            $oddclass = 'row_even';
                         }
 
                         $lesson_status = $row['mystatus'];
@@ -543,10 +542,9 @@ class Tracking
                         if ($extend_this_attempt || $extend_all) {
                             $list1 = learnpath::get_iv_interactions_array($row['iv_id']);
                             foreach ($list1 as $id => $interaction) {
+                                $oddclass = 'row_even';
                                 if (($counter % 2) == 0) {
                                     $oddclass = 'row_odd';
-                                } else {
-                                    $oddclass = 'row_even';
                                 }
                                 $student_response = urldecode($interaction['student_response']);
                                 $content_student_response = explode('__|', $student_response);
@@ -670,6 +668,7 @@ class Tracking
                     while ($tmp_row = Database::fetch_array($result)) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
+
                     $title = $row['mytitle'];
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
                     $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
@@ -1169,10 +1168,9 @@ class Tracking
         }
         $progress = learnpath::getProgress($lp_id, $user_id, $course_id, $session_id);
 
+        $oddclass = 'row_even';
         if (($counter % 2) == 0) {
             $oddclass = 'row_odd';
-        } else {
-            $oddclass = 'row_even';
         }
 
         $action = null;

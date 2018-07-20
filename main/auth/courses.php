@@ -105,7 +105,7 @@ if (isset($_GET['move'])) {
 
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
-    if ($ctok == $_POST['sec_token']) {
+    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
         $courseController->change_course_category(
             $_POST['course_2_edit_category'],
             $_POST['course_categories']
@@ -118,7 +118,7 @@ if (isset($_POST['submit_edit_course_category']) &&
     isset($_POST['title_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
-    if ($ctok == $_POST['sec_token']) {
+    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
         $courseController->edit_course_category(
             $_POST['title_course_category'],
             $_POST['edit_course_category']
@@ -128,7 +128,7 @@ if (isset($_POST['submit_edit_course_category']) &&
 
 // we are deleting a course category
 if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
-    if ($ctok == $_GET['sec_token']) {
+    if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
         $get_id_cat = intval($_GET['id']);
         $courseController->delete_course_category($get_id_cat);
     }
@@ -139,14 +139,14 @@ if (isset($_POST['create_course_category']) &&
     isset($_POST['title_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
-    if ($ctok == $_POST['sec_token']) {
+    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
         $courseController->addCourseCategory($_POST['title_course_category']);
     }
 }
 
 // search courses
 if (isset($_REQUEST['search_course'])) {
-    if ($ctok == $_REQUEST['sec_token']) {
+    if (!empty($_REQUEST['sec_token']) && $ctok == $_REQUEST['sec_token']) {
         $courseController->search_courses(
             $searchTerm,
             null,
@@ -161,7 +161,7 @@ if (isset($_REQUEST['search_course'])) {
 
 // Subscribe user to course
 if (isset($_REQUEST['subscribe_course'])) {
-    if ($ctok == $_GET['sec_token']) {
+    if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
         $courseController->subscribe_user(
             $_GET['subscribe_course'],
             $searchTerm,
@@ -172,7 +172,7 @@ if (isset($_REQUEST['subscribe_course'])) {
 
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
-    if ($ctok == $_GET['sec_token']) {
+    if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
         $courseController->unsubscribe_user_from_course(
             $_GET['unsubscribe'],
             $searchTerm,
@@ -183,7 +183,7 @@ if (isset($_GET['unsubscribe'])) {
 
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_POST['unsubscribe'])) {
-    if ($ctok == $_POST['sec_token']) {
+    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
         $courseController->unsubscribe_user_from_course($_POST['unsubscribe']);
     }
 }

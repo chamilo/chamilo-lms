@@ -31,8 +31,8 @@ if (api_is_anonymous()) {
 }
 
 //prepare variables used in userInfoLib.php functions
-$TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
-$TBL_USERINFO_CONTENT = Database:: get_course_table(userinfo_content);
+$TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
+$TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
 if ($tool_info['visibility'] == 1) {
     $interbreadcrumb[] = ['url' => 'user.php', 'name' => get_lang('Users')];

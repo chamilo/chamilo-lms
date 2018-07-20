@@ -8241,4 +8241,12 @@ $DegreeOfCertaintyIAmVerySure = "Estoy muy seguro";
 $MultipleAnswerTrueFalseDegreeCertainty = "Respuestas múltiples v/f/grado de certeza";
 $IgnoranceAnswersX = "Ignorancia: %s";
 $CorrectAnswersX = "Respuestas correctas: %s";
+$TotalHours = "Horas totales";
+$MinutesPerDay = "Minutos por día";
+$ClassroomActivity = "Actividad de la clase";
+$OneDay = "1 día";
+$UserXAnonymized = "Los datos del usuario %s fueron anonimizados.";
+$CannotAnonymizeUserX = "No se han podido anonimizar los datos del usuario %s. Por favor intente nuevamente o verifique los registros de error del servidor.";
+$NoPermissionToAnonymizeUserX = "No tiene los permisos necesarios para anonimizar el usuario %s. Se tratan de los mismos permisos necesarios para eliminar usuarios.";
+$Anonymize = "Anonimizar";
 ?>

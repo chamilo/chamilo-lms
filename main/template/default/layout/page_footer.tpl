@@ -107,7 +107,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Cancel' | get_lang }}</button>
-                <a class="btn btn-danger btn-ok">{{ 'Delete' | get_lang }}</a>
+                <a id="delete_item" class="btn btn-danger btn-ok">{{ 'Delete' | get_lang }}</a>
             </div>
         </div>
     </div>

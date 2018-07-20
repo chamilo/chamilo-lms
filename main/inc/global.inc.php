@@ -644,6 +644,9 @@ if (!is_dir(api_get_path(SYS_PUBLIC_PATH).'build')) {
 
 // Load template layout/header.js.tpl and save it into web/build/main.js
 $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
+if (!empty($language_interface)) {
+    $file = api_get_path(SYS_PUBLIC_PATH).'build/main.'.$language_interface.'.js';
+}
 // if portal is in test mode always generate the file
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();

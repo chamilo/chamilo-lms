@@ -564,6 +564,8 @@ class Template
      */
     public function set_system_parameters()
     {
+        // Get the interface language from global.inc.php
+        global $language_interface;
         $this->theme = api_get_visual_theme();
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
@@ -583,6 +585,7 @@ class Template
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode'),
+            'language_interface' => $language_interface,
         ];
         $this->assign('_s', $_s);
     }

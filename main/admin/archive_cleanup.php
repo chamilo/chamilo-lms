@@ -38,7 +38,14 @@ if ($form->validate()) {
 
     $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
     if (file_exists($file)) {
-        rmdirr($file);
+        unlink($file);
+    }
+    $dir = api_get_path(SYS_PUBLIC_PATH).'build';
+    $files = scandir($dir);
+    foreach ($files as $file) {
+        if (preg_match('/main\..*\.js/', $file)) {
+            unlink($dir.'/'.$file);
+        }
     }
 
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);

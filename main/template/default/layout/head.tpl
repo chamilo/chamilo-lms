@@ -20,7 +20,11 @@
 {{ js_file_to_string }}
 {{ extra_headers }}
 
+{% if _s.language_interface %}
+<script type="text/javascript" src="{{ _p.web }}web/build/main.{{ _s.language_interface }}.js"></script>
+{% else %}{# language_interface *should* always be defined, so we should never come here #}
 <script type="text/javascript" src="{{ _p.web }}web/build/main.js"></script>
+{% endif %}
 
 {{ css_custom_file_to_string }}
 {{ css_style_print }}

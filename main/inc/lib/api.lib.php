@@ -1712,10 +1712,12 @@ function api_get_user_info(
 function api_get_user_entity($userId)
 {
     $userId = (int) $userId;
-    /** @var \Chamilo\UserBundle\Repository\UserRepository $repo */
-    $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
+    $repo = UserManager::getRepository();
 
-    return $repo->find($userId);
+    /** @var User $user */
+    $user = $repo->find($userId);
+
+    return $user;
 }
 
 /**

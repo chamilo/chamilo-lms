@@ -5978,6 +5978,7 @@ class CourseManager
     {
         $userList = self::getCourseUsers(true);
         $groupList = self::getCourseGroups();
+
         $array = self::buildSelectOptions(
             $groupList,
             $userList,

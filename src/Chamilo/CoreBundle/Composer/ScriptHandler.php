@@ -199,6 +199,7 @@ class ScriptHandler
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php',
+            __DIR__.'/../../../../src/Chamilo/UserBundle/Entity/Repository/UserRepository.php',
             __DIR__.'/../../../../app/Resources/public/assets/bootstrap/Gemfile',
             __DIR__.'/../../../../app/Resources/public/assets/bootstrap/Gemfile.lock',
             __DIR__.'/../../../../app/Resources/public/assets/bootstrap/Gruntfile.js',

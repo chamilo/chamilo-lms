@@ -15,7 +15,7 @@ if (!isset($_REQUEST['u'])) {
 }
 
 $em = Database::getManager();
-$userRepository = $em->getRepository('ChamiloUserBundle:User');
+$userRepository = UserManager::getRepository();
 /** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 

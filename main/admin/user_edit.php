@@ -388,7 +388,7 @@ if ($form->validate()) {
 
         $picture_uri = $user_data['picture_uri'];
         if (isset($user['delete_picture']) && $user['delete_picture']) {
-            $picture_uri = UserManager::delete_user_picture($user_id);
+            $picture_uri = UserManager::deleteUserPicture($user_id);
         } elseif (!empty($picture['name'])) {
             $picture_uri = UserManager::update_user_picture(
                 $user_id,

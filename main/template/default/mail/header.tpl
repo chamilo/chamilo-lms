@@ -1,9 +1,5 @@
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
-    <tr>
-        <td width="245" {{ mail_header_style }}>
-            {{ logo }}
-        </td>
-        <td width="100%">            &nbsp;
-        </td>
-    </tr>
-</table>
+<div id="logo-header" {{ mail_header_style }}>
+    <div style="margin-bottom: 20px; margin-top: 10px;">
+        {{ logo }}
+    </div>
+</div>

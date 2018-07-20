@@ -1,4 +1,4 @@
-<div id="email-message" style="padding-top:20px; padding-bottom:20px; margin: 10px;">
+<div id="email-message" style="padding-top:10px; padding-bottom:10px;">
     <p><strong>{{ 'DearStudentEmailIntroduction'|get_lang }}</strong> {{ 'AttemptVCC'|get_lang }} </p>
     <div style="border-color: #bce8f1; padding: 15px; background-color: #d9edf7; margin-bottom: 15px; font-size: 16px; color:#31708f;">
         <p>

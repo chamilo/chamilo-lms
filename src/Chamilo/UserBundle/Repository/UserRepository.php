@@ -132,36 +132,35 @@ class UserRepository extends EntityRepository
     /**
      * Get a filtered list of user by status and (optionally) access url.
      *
-     * @todo not use status
-     *
      * @param string $query       The query to filter
      * @param int    $status      The status
      * @param int    $accessUrlId The access URL ID
      *
      * @return array
      */
-    public function searchUsersByStatus($query, $status, $accessUrlId = null)
+    public function searchUsersByStatus($query, $status, $accessUrlId = 0)
     {
-        $accessUrlId = intval($accessUrlId);
-
+        $accessUrlId = (int) $accessUrlId;
         $queryBuilder = $this->createQueryBuilder('u');
 
         if ($accessUrlId > 0) {
             $queryBuilder->innerJoin(
                 'ChamiloCoreBundle:AccessUrlRelUser',
                 'auru',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'u.id = auru.userId'
             );
         }
 
-        $queryBuilder->where('u.status = :status')
+        $queryBuilder
+            ->where('u.status = :status')
             ->andWhere('u.username LIKE :query OR u.firstname LIKE :query OR u.lastname LIKE :query')
             ->setParameter('status', $status)
             ->setParameter('query', "$query%");
 
         if ($accessUrlId > 0) {
-            $queryBuilder->andWhere('auru.accessUrlId = :url')
+            $queryBuilder
+                ->andWhere('auru.accessUrlId = :url')
                 ->setParameter(':url', $accessUrlId);
         }
 
@@ -174,13 +173,14 @@ class UserRepository extends EntityRepository
      * @param Session $session The session
      * @param Course  $course  The course
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
     {
         $queryBuilder = $this->createQueryBuilder('u');
 
-        $queryBuilder->select('u')
+        $queryBuilder
+            ->select('u')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourseRelUser',
                 'scu',
@@ -263,7 +263,7 @@ class UserRepository extends EntityRepository
     /**
      * Get the sessions admins for a user.
      *
-     * @param User $user The user
+     * @param User $user
      *
      * @return array
      */
@@ -289,8 +289,7 @@ class UserRepository extends EntityRepository
             )
             ->andWhere(
                 $queryBuilder->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
-            )
-        ;
+            );
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -298,7 +297,7 @@ class UserRepository extends EntityRepository
     /**
      * Get the student bosses for a user.
      *
-     * @param User $user The user
+     * @param User $user
      *
      * @return array
      */
@@ -321,5 +320,115 @@ class UserRepository extends EntityRepository
             );
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Find potential users to send a message.
+     *
+     * @param int    $currentUserId The current user ID
+     * @param string $search        The search text to filter the user list
+     * @param int    $limit         Optional. Sets the maximum number of results to retrieve
+     *
+     * @return mixed
+     */
+    public function findUsersToSendMessage($currentUserId, $search, $limit = 10)
+    {
+        $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
+        $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
+
+        if (api_get_setting('allow_social_tool') === 'true' &&
+            api_get_setting('allow_message_tool') === 'true'
+        ) {
+            // All users
+            if ($allowSendMessageToAllUsers === 'true' || api_is_platform_admin()) {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                        WITH U = R.user
+                        WHERE
+                            U.active = 1 AND
+                            U.status != 6  AND
+                            U.id != $currentUserId AND
+                            R.portal = $accessUrlId";
+            } else {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
+                        INNER JOIN ChamiloUserBundle:User AS U 
+                        WITH UF.friendUserId = U
+                        WHERE
+                            U.active = 1 AND
+                            U.status != 6 AND
+                            UF.relationType NOT IN(".USER_RELATION_TYPE_DELETED.", ".USER_RELATION_TYPE_RRHH.") AND
+                            UF.userId = $currentUserId AND
+                            UF.friendUserId != $currentUserId AND
+                            U = R.user AND
+                            R.portal = $accessUrlId";
+            }
+        } elseif (
+            api_get_setting('allow_social_tool') === 'false' &&
+            api_get_setting('allow_message_tool') === 'true'
+        ) {
+            if ($allowSendMessageToAllUsers === 'true') {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R 
+                        WITH U = R.user
+                        WHERE
+                            U.active = 1 AND
+                            U.status != 6  AND
+                            U.id != $currentUserId AND
+                            R.portal = $accessUrlId";
+            } else {
+                $time_limit = api_get_setting('time_limit_whosonline');
+                $online_time = time() - $time_limit * 60;
+                $limit_date = api_get_utc_datetime($online_time);
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        INNER JOIN ChamiloCoreBundle:TrackEOnline T 
+                        WITH U.id = T.loginUserId
+                        WHERE 
+                          U.active = 1 AND 
+                          T.loginDate >= '".$limit_date."'";
+            }
+        }
+
+        $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
+
+        return $this->getEntityManager()
+            ->createQuery($dql)
+            ->setMaxResults($limit)
+            ->setParameters(['search' => "%$search%"])
+            ->getResult();
+    }
+
+    /**
+     * Get the list of HRM who have assigned this user.
+     *
+     * @param int $userId
+     * @param int $urlId
+     *
+     * @return array
+     */
+    public function getAssignedHrmUserList($userId, $urlId)
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $hrmList = $qb
+            ->select('uru')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
+            ->where(
+                $qb->expr()->eq('auru.accessUrlId', $urlId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.userId', $userId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $hrmList;
     }
 }

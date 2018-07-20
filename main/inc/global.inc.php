@@ -632,6 +632,26 @@ $default_quota = api_get_setting('default_document_quotum');
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }
+
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
+
+// Create web/build/main.js
+if (!is_dir(api_get_path(SYS_PUBLIC_PATH).'build')) {
+    mkdir(api_get_path(SYS_PUBLIC_PATH).'build');
+}
+
+// Load template layout/header.js.tpl and save it into web/build/main.js
+$file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
+if (!empty($language_interface)) {
+    $file = api_get_path(SYS_PUBLIC_PATH).'build/main.'.$language_interface.'.js';
+}
+// if portal is in test mode always generate the file
+if (!file_exists($file) || api_get_setting('server_type') === 'test') {
+    $template = new Template();
+    // Force use of default to avoid problems
+    $tpl = 'default/layout/header.js.tpl';
+    $contents = $template->fetch($tpl);
+    file_put_contents($file, $contents);
+}

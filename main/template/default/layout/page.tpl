@@ -58,8 +58,6 @@
     {% if show_footer == true %}
 	    {% include 'layout/page_footer.tpl'|get_template %}
     {% endif %}
-
-    {% include 'layout/footer.js.tpl'|get_template %}
     </div>
   </body>
 </html>

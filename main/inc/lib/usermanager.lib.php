@@ -5,8 +5,8 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
@@ -638,7 +638,7 @@ class UserManager
      * @assert (-1) === false
      * @assert ('abc') === false
      */
-    public static function can_delete_user($user_id)
+    public static function canDeleteUser($user_id)
     {
         $deny = api_get_configuration_value('deny_delete_users');
 
@@ -692,7 +692,7 @@ class UserManager
             return false;
         }
 
-        if (!self::can_delete_user($user_id)) {
+        if (!self::canDeleteUser($user_id)) {
             return false;
         }
 
@@ -1106,7 +1106,7 @@ class UserManager
         }
 
         $userManager = self::getManager();
-        /** @var Chamilo\UserBundle\Entity\User $user */
+        /** @var User $user */
         $user = self::getRepository()->find($user_id);
 
         if (empty($user)) {
@@ -1238,7 +1238,10 @@ class UserManager
                     get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
                     get_lang('Problem')."\n\n".
                     get_lang('SignatureFormula').",\n\n".
-                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                    api_get_person_name(
+                        api_get_setting('administratorName'),
+                        api_get_setting('administratorSurname')
+                    )."\n".
                     get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
                     get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
@@ -1991,7 +1994,6 @@ class UserManager
         }
 
         $pictureSysPath = self::get_user_picture_path_by_id($user_id, 'system');
-
         $file = $pictureSysPath['dir'].$realSizeName.$pictureWebFile;
         $picture = '';
         if (file_exists($file)) {
@@ -2190,13 +2192,13 @@ class UserManager
      * Deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
      *
-     * @param int $user_id the user internal identification number
+     * @param int $userId the user internal identification number
      *
      * @return mixed returns empty string on success, FALSE on error
      */
-    public static function delete_user_picture($user_id)
+    public static function deleteUserPicture($userId)
     {
-        return self::update_user_picture($user_id);
+        return self::update_user_picture($userId);
     }
 
     /**
@@ -2929,7 +2931,8 @@ class UserManager
      * Gives a list of [session_category][session_id] for the current user.
      *
      * @param int  $user_id
-     * @param bool $is_time_over                 whether to fill the first element or not (to give space for courses out of categories)
+     * @param bool $is_time_over                 whether to fill the first element or not
+     *                                           (to give space for courses out of categories)
      * @param bool $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param bool $ignoreTimeLimit              ignore time start/end
      *
@@ -2980,17 +2983,17 @@ class UserManager
                 WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
 
         // Default order
-        $order = "ORDER BY sc.name, s.name";
+        $order = 'ORDER BY sc.name, s.name';
 
         // Order by date if showing all sessions
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
         if ($showAllSessions) {
-            $order = "ORDER BY s.accessStartDate";
+            $order = 'ORDER BY s.accessStartDate';
         }
 
         // Order by position
         if ($allowOrder) {
-            $order = "ORDER BY s.position";
+            $order = 'ORDER BY s.position';
         }
 
         // Order by dates according to settings
@@ -3843,43 +3846,6 @@ class UserManager
     }
 
     /**
-     * @author Isaac flores <isaac.flores@dokeos.com>
-     *
-     * @param string The email administrator
-     * @param int The user id
-     * @param string The message title
-     * @param string The content message
-     */
-    public static function send_message_in_outbox(
-        $email_administrator,
-        $user_id,
-        $title,
-        $content
-    ) {
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $title = api_utf8_decode($title);
-        $content = api_utf8_decode($content);
-        $email_administrator = Database::escape_string($email_administrator);
-        //message in inbox
-        $sql_message_outbox = 'SELECT id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
-        //$num_row_query = Database::num_rows($sql_message_outbox);
-        $res_message_outbox = Database::query($sql_message_outbox);
-        $array_users_administrator = [];
-        while ($row_message_outbox = Database::fetch_array($res_message_outbox, 'ASSOC')) {
-            $array_users_administrator[] = $row_message_outbox['id'];
-        }
-        //allow to insert messages in outbox
-        for ($i = 0; $i < count($array_users_administrator); $i++) {
-            $sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-                " VALUES (".
-                "'".(int) $user_id."', '".(int) ($array_users_administrator[$i])."', '4', '".api_get_utc_datetime()."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-                ")";
-            Database::query($sql);
-        }
-    }
-
-    /**
      * Gets the tags of a specific field_id
      * USER TAGS.
      *
@@ -3940,7 +3906,7 @@ class UserManager
         // all the information of the field
         $sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv
                 INNER JOIN $table_user_tag ut
-                ON(ut.id = uv.tag_id)
+                ON (ut.id = uv.tag_id)
                 WHERE field_id = $field_id
                 GROUP BY tag_id
                 ORDER BY count DESC
@@ -4034,7 +4000,7 @@ class UserManager
         }
 
         if (is_array($user_tags) && count($user_tags) > 0) {
-            $return = implode(', ', $tag_tmp);
+            return implode(', ', $tag_tmp);
         } else {
             return '';
         }
@@ -6042,6 +6008,114 @@ SQL;
     }
 
     /**
+     * Anonymize a user. Replace personal info by anonymous info.
+     *
+     * @param int  $userId   User id
+     * @param bool $deleteIP Whether to replace the IP address in logs tables by 127.0.0.1 or to leave as is
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     * @assert (0) === false
+     */
+    public static function anonymize($userId, $deleteIP = true)
+    {
+        global $debug;
+        if (empty($userId)) {
+            return false;
+        }
+        $em = Database::getManager();
+        $user = api_get_user_entity($userId);
+        $uniqueId = uniqid('anon');
+        $user->setFirstname($uniqueId);
+        $user->setLastname($uniqueId);
+        $user->setBiography('');
+        $user->setAddress('');
+        $user->setCurriculumItems(null);
+        $user->setDateOfBirth(null);
+        $user->setCompetences('');
+        $user->setDiplomas('');
+        $user->setOpenarea('');
+        $user->setTeach('');
+        $user->setProductions(null);
+        $user->setOpenid('');
+        $user->setEmailCanonical($uniqueId.'@example.com');
+        $user->setEmail($uniqueId.'@example.com');
+        $user->setUsername($uniqueId);
+        $user->setUsernameCanonical($uniqueId);
+        $user->setPhone('');
+        $user->setOfficialCode('');
+        UserManager::deleteUserPicture($userId);
+        // The IP address is a border-case personal data, as it does
+        // not directly allow for personal identification (it is not
+        // a completely safe value in most countries - the IP could
+        // be used by neighbours and crackers)
+        if ($deleteIP) {
+            $substitute = '127.0.0.1';
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE access_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE exe_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_course_table(TABLE_WIKI);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
+            $sql = "UPDATE $table set ip_address = '$substitute' WHERE sys_insert_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_course_table(TABLE_WIKI);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+        }
+        $em->persist($user);
+        $em->flush($user);
+        Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
+
+        return true;
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -6137,110 +6211,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    /**
-     * Anonymize a user. Replace personal info by anonymous info
-     * @param int $userId User id
-     * @param bool $deleteIP Whether to replace the IP address in logs tables by 127.0.0.1 or to leave as is
-     * @return bool
-     * @assert (0) === false
-     * @throws \Exception
-     */
-    public static function anonymize($userId, $deleteIP = true)
-    {
-        global $debug;
-        if (empty($userId)) {
-            return false;
-        }
-        $em = Database::getManager();
-        $user = api_get_user_entity($userId);
-        $uniqueId = uniqid('anon');
-        $user->setFirstname($uniqueId);
-        $user->setLastname($uniqueId);
-        $user->setBiography('');
-        $user->setAddress('');
-        $user->setCurriculumItems(null);
-        $user->setDateOfBirth(null);
-        $user->setCompetences('');
-        $user->setDiplomas('');
-        $user->setOpenarea('');
-        $user->setTeach('');
-        $user->setProductions(null);
-        $user->setOpenid('');
-        $user->setEmailCanonical($uniqueId.'@example.com');
-        $user->setEmail($uniqueId.'@example.com');
-        $user->setUsername($uniqueId);
-        $user->setUsernameCanonical($uniqueId);
-        $user->setPhone('');
-        $user->setOfficialCode('');
-        UserManager::delete_user_picture($userId);
-        // The IP address is a border-case personal data, as it does
-        // not directly allow for personal identification (it is not
-        // a completely safe value in most countries - the IP could
-        // be used by neighbours and crackers)
-        if ($deleteIP) {
-            $substitute = '127.0.0.1';
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE access_user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE exe_user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_course_table(TABLE_WIKI);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
-            $sql = "UPDATE $table set ip_address = '$substitute' WHERE sys_insert_user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_course_table(TABLE_WIKI);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if ($res === false && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-        }
-        $em->persist($user);
-        $em->flush($user);
-        Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
-        return true;
     }
 }

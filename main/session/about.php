@@ -4,7 +4,6 @@
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -21,7 +20,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
@@ -35,8 +34,7 @@ $courses = [];
 $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
-/** @var UserRepository $userRepo */
-$userRepo = $em->getRepository('ChamiloUserBundle:User');
+$userRepo = UserManager::getRepository();
 $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([

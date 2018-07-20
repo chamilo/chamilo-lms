@@ -33,7 +33,7 @@ $editingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURS
 $editingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 
 $entityManager = Database::getManager();
-$userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+$userRepo = UserManager::getRepository();
 
 $currency = $plugin->getSelectedCurrency();
 $currencyIso = null;

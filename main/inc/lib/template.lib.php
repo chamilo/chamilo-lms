@@ -564,6 +564,8 @@ class Template
      */
     public function set_system_parameters()
     {
+        // Get the interface language from global.inc.php
+        global $language_interface;
         $this->theme = api_get_visual_theme();
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
@@ -583,6 +585,7 @@ class Template
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode'),
+            'language_interface' => $language_interface,
         ];
         $this->assign('_s', $_s);
     }
@@ -770,7 +773,7 @@ class Template
             }
         }
 
-        if (CHAMILO_LOAD_WYSIWYG == true) {
+        if (CHAMILO_LOAD_WYSIWYG === true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }
 
@@ -856,15 +859,6 @@ class Template
     public function show_footer_template()
     {
         $tpl = $this->get_template('layout/show_footer.tpl');
-        $this->display($tpl);
-    }
-
-    /**
-     * Show footer js template.
-     */
-    public function show_footer_js_template()
-    {
-        $tpl = $this->get_template('layout/footer.js.tpl');
         $this->display($tpl);
     }
 
@@ -1377,6 +1371,7 @@ class Template
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
             'web_cid_query' => api_get_cidreq(),
+            'web_rel_code' => api_get_path(REL_CODE_PATH),
         ];
     }
 
@@ -1400,15 +1395,6 @@ class Template
                 header($thisHttpHead);
             }
         }
-
-        $this->assign(
-            'online_button',
-            Display::return_icon('statusonline.png', null, [], ICON_SIZE_ATOM)
-        );
-        $this->assign(
-            'offline_button',
-            Display::return_icon('statusoffline.png', null, [], ICON_SIZE_ATOM)
-        );
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());

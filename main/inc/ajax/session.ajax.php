@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -187,9 +186,7 @@ switch ($action) {
             'items' => [],
         ];
 
-        $entityManager = Database::getManager();
-        /** @var UserRepository $usersRepo */
-        $usersRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+        $usersRepo = UserManager::getRepository();
         $users = $usersRepo->searchUsersByStatus($_GET['q'], COURSEMANAGER, api_get_current_access_url_id());
         /** @var User $user */
         foreach ($users as $user) {

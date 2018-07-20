@@ -36,6 +36,18 @@ if ($form->validate()) {
         opcache_reset();
     }
 
+    $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
+    if (file_exists($file)) {
+        unlink($file);
+    }
+    $dir = api_get_path(SYS_PUBLIC_PATH).'build';
+    $files = scandir($dir);
+    foreach ($files as $file) {
+        if (preg_match('/main\..*\.js/', $file)) {
+            unlink($dir.'/'.$file);
+        }
+    }
+
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $htaccess = @file_get_contents($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);

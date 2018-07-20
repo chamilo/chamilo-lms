@@ -473,7 +473,7 @@ if ($form->validate()) {
         }
     } elseif (!empty($user_data['remove_picture'])) {
         // remove existing picture if asked
-        UserManager::delete_user_picture(api_get_user_id());
+        UserManager::deleteUserPicture(api_get_user_id());
         $user_data['picture_uri'] = '';
     }
 

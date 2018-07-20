@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *  }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  */
 class User implements UserInterface //implements ParticipantInterface, ThemeUser
 {

@@ -116,7 +116,7 @@ $selectOptions = [
 ];
 
 if ($typeUser) {
-    $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
+    $users = UserManager::getRepository()->findAll();
     $selectOptions[$userInfo['user_id']] = api_get_person_name(
         $userInfo['firstname'],
         $userInfo['lastname']
@@ -133,7 +133,7 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('User'), $selectOptions);
 } elseif ($typeCourse) {
     /** @var User $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
+    $user = UserManager::getRepository()->find($currentUserId);
     $courses = $user->getCourses();
     $checker = false;
     foreach ($courses as $course) {
@@ -152,7 +152,7 @@ if ($typeUser) {
 } elseif ($typeSession) {
     $sessions = [];
     /** @var User $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
+    $user = UserManager::getRepository()->find($currentUserId);
     $userSubscriptions = $user->getSessionCourseSubscriptions();
 
     /** @var SessionRelCourseRelUser $userSubscription */
@@ -175,7 +175,7 @@ if ($typeUser) {
 } elseif ($typeFinalLp) {
     // We need here to check the current user courses first
     /** @var User $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
+    $user = UserManager::getRepository()->find($currentUserId);
     $courses = $user->getCourses();
     $courseLpList = [];
     $sessionLpList = [];

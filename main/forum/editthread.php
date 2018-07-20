@@ -253,9 +253,7 @@ if ($form->validate()) {
         $values = $form->exportValues();
         Security::clear_token();
         updateThread($values);
-
         Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
-
         header('Location: '.$redirectUrl);
         exit;
     }
@@ -265,7 +263,6 @@ $form->setDefaults(isset($defaults) ? $defaults : null);
 $token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
 $form->setConstants(['sec_token' => $token]);
-
 $originIsLearnPath = $origin == 'learnpath';
 
 $view = new Template(

@@ -112,6 +112,16 @@ $_configuration['hosting_total_size_limit'] = 0;
  * don't need it. These settings are for simple Origin Pull CDNs and are
  * experimental. Enable only if you really know what you're doing.
  * This might conflict with multiple-access urls.
+ * Please note that recent browsers forbid the loading of resources from
+ * a different portal URL then where they are, due to CORS rules.
+ * To allow for CDN usage with different URLs, you need to specifically
+ * allow CORS Access-Control-Allow-Origin for your main Chamilo URL.
+ * This has to be done at the web server level, because Chamilo's PHP code
+ * doesn't change HTTP headers of all files served from the Chamilo directory.
+ * To do that on Apache, use
+ *   Header set Access-Control-Allow-Origin "http(s)://main-chamilo-url"
+ * in Nginx:
+ *   add_header 'Access-Control-Allow-Origin' 'http(s)://main-chamilo-url';
  */
 // Set the following setting to true to start using the CDN
 $_configuration['cdn_enable'] = false;

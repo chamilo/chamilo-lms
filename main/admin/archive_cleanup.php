@@ -36,6 +36,11 @@ if ($form->validate()) {
         opcache_reset();
     }
 
+    $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
+    if (file_exists($file)) {
+        rmdirr($file);
+    }
+
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $htaccess = @file_get_contents($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);

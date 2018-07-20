@@ -19,42 +19,8 @@
 {{ css_static_file_to_string }}
 {{ js_file_to_string }}
 {{ extra_headers }}
-<script>
-/* Global chat variables */
-var ajax_url = '{{ _p.web_ajax }}chat.ajax.php';
-var online_button = '{{ online_button }}';
-var offline_button = '{{ offline_button }}';
-var connect_lang = '{{ "ChatConnected"|get_lang }}';
-var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
-var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
 
-function addMainEvent(elm, evType, fn, useCapture) {
-    if (elm.addEventListener) {
-        elm.addEventListener(evType, fn, useCapture);
-        return true;
-    } else if (elm.attachEvent) {
-        elm.attachEvent('on' + evType, fn);
-    } else{
-        elm['on'+evType] = fn;
-    }
-}
-
-function courseLogout() {
-    $.ajax({
-        url: logOutUrl,
-        success: function (data) {
-            return 1;
-        }
-    });
-}
-
-$(function() {
-    addMainEvent(window, 'unload', courseLogout ,false);
-});
-
-</script>
-
-{% include 'layout/header.js.tpl'|get_template %}
+<script type="text/javascript" src="{{ _p.web }}web/build/main.js"></script>
 
 {{ css_custom_file_to_string }}
 {{ css_style_print }}

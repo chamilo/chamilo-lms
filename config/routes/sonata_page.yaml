@@ -1,0 +1,11 @@
+#sonata_page_api:
+#    resource: '@SonataPageBundle/Resources/config/routing/api.xml'
+#    prefix: /
+
+#sonata_page_cache:
+#    resource: '@SonataPageBundle/Resources/config/routing/cache.xml'
+#    prefix: /
+
+sonata_page_exceptions:
+    resource: '@SonataPageBundle/Resources/config/routing/exceptions.xml'
+    prefix: /

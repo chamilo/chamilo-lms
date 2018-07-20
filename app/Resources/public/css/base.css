@@ -526,7 +526,9 @@ input[type=checkbox], input[type=radio] {
     margin-right: 5px;
     margin-top: 2px;
 }
-
+.checkbox_send_notification{
+    margin-bottom: 10px;
+}
 /* end chamilo forms fixes */
 
 .actions {

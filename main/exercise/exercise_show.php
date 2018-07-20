@@ -1049,7 +1049,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'course' => Security::remove_XSS($_GET['cidReq']),
         ]);
 
-        $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
+        $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);
         $emailForm->addHidden('lp_item_id', $learnpath_id);
         $emailForm->addHidden('lp_item_view_id', $lp_item_view_id);
         $emailForm->addHidden('student_id', $student_id);
@@ -1065,11 +1065,11 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         ]);
 
         $emailForm = new FormValidator(
-            'myform',
+            'form-email',
             'post',
             $formUrl,
             '',
-            ['id' => 'myform']
+            ['id' => 'form-email']
         );
     }
 
@@ -1079,13 +1079,13 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         get_lang('SendEmail'),
         ['onclick' => 'openEmailWrapper();']
     );
-    $emailForm->addHtml('<span id="email_content_wrapper" style="display:none">');
+    $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
     $emailForm->addHtmlEditor(
         'notification_content',
         get_lang('Content'),
         false
     );
-    $emailForm->addHtml('</span>');
+    $emailForm->addHtml('</div>');
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url

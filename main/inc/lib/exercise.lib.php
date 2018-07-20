@@ -4972,16 +4972,16 @@ EOT;
             PERSON_NAME_EMAIL_ADDRESS
         );
 
-        $message = '<p>'.get_lang('DearStudentEmailIntroduction').'</p><p>'.get_lang('AttemptVCC');
-        $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
-        $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
-        $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
-        $message .= '<p>'.get_lang('Regards').'</p>';
-        $message .= $from_name;
-        $message = str_replace("#test#", Security::remove_XSS($test), $message);
-        $message = str_replace("#url#", $url, $message);
+        $view = new Template('', false, false, false, false, false, false);
+        $view->assign('course_title', Security::remove_XSS($course_info['name']));
+        $view->assign('test_title', Security::remove_XSS($test));
+        $view->assign('url', $url );
+        $view->assign('teacher_name', $from_name);
+        $template = $view->get_template('mail/exercise_result_alert_body.tpl');
 
-        return $message;
+        return $view->fetch($template);
+
+
     }
 
     /**

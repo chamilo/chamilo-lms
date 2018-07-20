@@ -140,13 +140,11 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         } elseif ($this->_flagFrozen) {
             $label = $this->_text;
         } else {
-            $labelClass = $this->labelClass;
-            $checkboxClass = $this->checkboxClass;
-
-            $label ='
-                <div class="'.$checkboxClass.'">
-                <label class="'.$labelClass.'">' .
-                    HTML_QuickForm_input::toHtml().$this->_text.
+            $className = $this->checkboxClass;
+            $name = $this->_attributes['name'];
+            $label ='<div id="'.$name.'" class="'.$className.'_'.$name.'">
+                <label>' .
+                    HTML_QuickForm_input::toHtml().' '.$this->_text.
                 '</label>
                 </div>
             ';

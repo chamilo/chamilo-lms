@@ -1,8 +1,8 @@
 /* Global chat variables */
 
 var ajax_url = '{{ _p.web_rel_code }}inc/ajax/chat.ajax.php';
-var online_button = '{{ 'statusonline.png' |icon(8) }}';
-var offline_button = '{{ 'statusoffline.png' |icon(8) }}';
+var online_button = '{{ 'statusonline.png' |img(8) }}';
+var offline_button = '{{ 'statusoffline.png' |img(8) }}';
 var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 var logOutUrl = '{{ _p.web_rel_code }}inc/ajax/course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
@@ -157,7 +157,8 @@ $(document).ready(function() {
         header: ".accordion-heading"
     });
 
-    // Global popup
+    // Start modals
+    // class='ajax' loads a page in a modal
     $('body').on('click', 'a.ajax', function(e) {
         e.preventDefault();
 
@@ -192,6 +193,7 @@ $(document).ready(function() {
         });
     });
 
+    // Expands an image modal
     $('a.expand-image').on('click', function(e) {
         e.preventDefault();
         var title = $(this).attr('title');
@@ -211,11 +213,14 @@ $(document).ready(function() {
         image.src = this.href;
     });
 
-    // Global confirmation
-    $('.popup-confirmation').on('click', function() {
-        showConfirmationPopup(this);
-        return false;
+    // Delete modal
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        $('.debug-url').html(
+            '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>'
+        );
     });
+    // End modals
 
     // old jquery.menu.js
     $('#navigation a').stop().animate({
@@ -263,6 +268,7 @@ $(document).ready(function() {
             });
         });
     };
+
     $(".black-shadow").mouseenter(function() {
         $(this).addClass('hovered-course');
     }).mouseleave(function() {
@@ -480,7 +486,8 @@ function get_url_params(q, attribute) {
     }
 }
 
-function check_brand() {
+function check_brand()
+{
     if ($('.subnav').length) {
         if ($(window).width() >= 969) {
             $('.subnav .brand').hide();
@@ -488,66 +495,6 @@ function check_brand() {
             $('.subnav .brand').show();
         }
     }
-}
-
-function showConfirmationPopup(obj, urlParam) {
-    if (urlParam) {
-        url = urlParam
-    } else {
-        url = obj.href;
-    }
-
-    var dialog  = $("#dialog");
-    if ($("#dialog").length == 0) {
-        dialog  = $('<div id="dialog" style="display:none">{{ "ConfirmYourChoice" | get_lang }} </div>').appendTo('body');
-    }
-
-    var width_value = 350;
-    var height_value = 150;
-    var resizable_value = true;
-
-    var new_param = get_url_params(url, 'width');
-    if (new_param) {
-        width_value = new_param;
-    }
-
-    var new_param = get_url_params(url, 'height')
-    if (new_param) {
-        height_value = new_param;
-    }
-
-    var new_param = get_url_params(url, 'resizable');
-    if (new_param) {
-        resizable_value = new_param;
-    }
-
-    // Show dialog
-    dialog.dialog({
-        modal       : true,
-        width       : width_value,
-        height      : height_value,
-        resizable   : resizable_value,
-        buttons: [
-            {
-                text: '{{ 'Yes' | get_lang }}',
-                click: function() {
-                    window.location = url;
-                },
-                icons:{
-                    primary:'ui-icon-locked'
-                }
-            },
-            {
-                text: '{{ 'No' | get_lang }}',
-                click: function() { $(this).dialog("close"); },
-                icons:{
-                    primary:'ui-icon-locked'
-                }
-            }
-        ]
-    });
-    // prevent the browser to follow the link
-    return false;
 }
 
 function setCheckbox(value, table_id) {

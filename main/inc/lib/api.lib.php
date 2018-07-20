@@ -981,21 +981,22 @@ function api_get_path($path = '', $configuration = [])
 function api_get_cdn_path($web_path)
 {
     global $_configuration;
-    $web_root = api_get_path(WEB_PATH);
-    $ext = substr($web_path, strrpos($web_path, '.'));
-    if (isset($ext[2])) { // faster version of strlen to check if len>2
-        // Check for CDN definitions
-        if (!empty($_configuration['cdn_enable']) && !empty($ext)) {
-            foreach ($_configuration['cdn'] as $host => $exts) {
-                if (in_array($ext, $exts)) {
-                    //Use host as defined in $_configuration['cdn'], without
-                    // trailing slash
-                    return str_replace($web_root, $host.'/', $web_path);
+    if (!empty($_configuration['cdn_enable'])) {
+        $web_root = api_get_path(WEB_PATH);
+        $ext = substr($web_path, strrpos($web_path, '.'));
+        if (isset($ext[2])) { // faster version of strlen to check if len>2
+            // Check for CDN definitions
+            if (!empty($ext)) {
+                foreach ($_configuration['cdn'] as $host => $exts) {
+                    if (in_array($ext, $exts)) {
+                        //Use host as defined in $_configuration['cdn'], without
+                        // trailing slash
+                        return str_replace($web_root, $host.'/', $web_path);
+                    }
                 }
             }
         }
     }
-
     return $web_path;
 }
 

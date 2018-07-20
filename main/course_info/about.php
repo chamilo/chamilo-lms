@@ -14,7 +14,6 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
  *
  * @package chamilo.course
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

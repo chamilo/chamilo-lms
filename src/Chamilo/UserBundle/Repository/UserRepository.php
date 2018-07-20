@@ -260,7 +260,6 @@ class UserRepository extends EntityRepository
         return $query->execute();
     }*/
 
-
     /**
      * Get the sessions admins for a user.
      *

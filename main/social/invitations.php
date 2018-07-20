@@ -123,7 +123,8 @@ if ($number_loop != 0) {
         $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $invitationHtml .= '<div class="row">';
         $invitationHtml .= '<div class="col-md-2">';
-        $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img class="img-responsive img-rounded" src="'.$userPicture.'"/></a>';
+        $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'">';
+        $invitationHtml .= '<img class="img-responsive img-rounded" src="'.$userPicture.'"/></a>';
         $invitationHtml .= '</div>';
         $invitationHtml .= '<div class="col-md-10">';
 
@@ -170,9 +171,7 @@ if (count($list_get_invitation_sent) > 0) {
     foreach ($list_get_invitation_sent as $invitation) {
         $sender_user_id = $invitation['user_receiver_id'];
         $user_info = api_get_user_info($sender_user_id);
-
         $invitationSentHtml .= '<div id="id_'.$sender_user_id.'" class="well">';
-
         $title = Security::remove_XSS($invitation['title'], STUDENT, true);
         $content = Security::remove_XSS($invitation['content'], STUDENT, true);
         $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
@@ -203,7 +202,8 @@ if (count($pending_invitations) > 0) {
         );
         $img = '<img class="img-responsive" src="'.$picture['file'].'" />';
         $invitation['picture_uri'] = '<a href="group_view.php?id='.$invitation['id'].'">'.$img.'</a>';
-        $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.cut($invitation['name'], 120, true).'</a>';
+        $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.
+            cut($invitation['name'], 120, true).'</a>';
         $invitation['description'] = cut($invitation['description'], 220, true);
         $new_invitation[] = $invitation;
         $waitingInvitation .= '<div class="panel-invitations"><div class="row">';

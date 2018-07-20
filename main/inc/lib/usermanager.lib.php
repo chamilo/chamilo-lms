@@ -5,8 +5,8 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
-use Chamilo\UserBundle\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 

@@ -395,7 +395,7 @@ switch ($action) {
         }
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
-            'name'=> $nameTools,
+            'name' => $nameTools,
         ];
 
         $nameTools = $form_name;

@@ -642,7 +642,7 @@ if (!is_dir(api_get_path(SYS_PUBLIC_PATH).'build')) {
     mkdir(api_get_path(SYS_PUBLIC_PATH).'build');
 }
 
-// Load template layout/header.js.tpl and save it into web/build/main.js
+// Load template layout/main.js.tpl and save it into web/build/main.js
 $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
 if (!empty($language_interface)) {
     $file = api_get_path(SYS_PUBLIC_PATH).'build/main.'.$language_interface.'.js';
@@ -651,7 +651,7 @@ if (!empty($language_interface)) {
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
     // Force use of default to avoid problems
-    $tpl = 'default/layout/header.js.tpl';
+    $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);
     file_put_contents($file, $contents);
 }

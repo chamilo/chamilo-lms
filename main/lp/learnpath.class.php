@@ -3564,17 +3564,17 @@ class learnpath
                 error_log('using current: '.$this->get_current_item_id(), 0);
             }
             $item_id = $this->get_current_item_id();
-        }
 
-        if (empty($item_id)) {
-            if ($this->debug > 2) {
-                error_log('In learnpath::get_link() - no current item id found in learnpath object', 0);
+            if (empty($item_id)) {
+                if ($this->debug > 2) {
+                    error_log('In learnpath::get_link() - no current item id found in learnpath object', 0);
+                }
+                //still empty, this means there was no item_id given and we are not in an object context or
+                //the object property is empty, return empty link
+                $this->first();
+
+                return '';
             }
-            //still empty, this means there was no item_id given and we are not in an object context or
-            //the object property is empty, return empty link
-            $this->first();
-
-            return '';
         }
 
         $file = '';
@@ -3611,7 +3611,7 @@ class learnpath
                 list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
             }
             $sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
-            if ($type == 'http') {
+            if ($type === 'http') {
                 //web path
                 $course_path = api_get_path(WEB_COURSE_PATH).api_get_course_path();
             } else {
@@ -3635,7 +3635,6 @@ class learnpath
 
             // Now go through the specific cases to get the end of the path
             // @todo Use constants instead of int values.
-
             switch ($lp_type) {
                 case 1:
                     $file = self::rl_get_resource_link_for_learnpath(
@@ -12767,20 +12766,21 @@ EOD;
 
         $em = Database::getManager();
         $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');
+
         /** @var CLpItem $rowItem */
         $rowItem = $lpItemRepo->findOneBy([
             'cId' => $course_id,
             'lpId' => $learningPathId,
-            'id' => $id_in_path,
+            'iid' => $id_in_path,
         ]);
 
         if (!$rowItem) {
-            // Try one more time with iid
+            // Try one more time with "id"
             /** @var CLpItem $rowItem */
             $rowItem = $lpItemRepo->findOneBy([
                 'cId' => $course_id,
                 'lpId' => $learningPathId,
-                'iid' => $id_in_path,
+                'id' => $id_in_path,
             ]);
 
             if (!$rowItem) {

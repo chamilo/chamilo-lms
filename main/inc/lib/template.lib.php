@@ -813,21 +813,30 @@ class Template
             }
 
             $ajax = api_get_path(WEB_AJAX_PATH);
-            $courseLogoutCode = "
-            <script>
-            var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
-            function courseLogout() {
-                $.ajax({
-                    url: logOutUrl,
-                    success: function (data) {
-                        return 1;
-                    }
-                });
+            $courseId = api_get_course_id();
+            if (empty($courseId)) {
+                $courseLogoutCode = '
+                <script>
+                function courseLogout() {
+                }
+                </script>';
+            } else {
+                $courseLogoutCode = "
+                <script>
+                var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
+                function courseLogout() {                
+                    $.ajax({
+                        async : false,
+                        url: logOutUrl,
+                        success: function (data) {
+                            return 1;
+                        }
+                    });
+                }
+                </script>";
             }
-            </script>";
 
             $extraHeaders .= $courseLogoutCode;
-
             $this->assign('extra_headers', $extraHeaders);
         }
     }
@@ -849,8 +858,7 @@ class Template
                 $js_files[] = 'chat/js/chat.js';
             }
         }
-        $js_file_to_string = null;
-
+        $js_file_to_string = '';
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }

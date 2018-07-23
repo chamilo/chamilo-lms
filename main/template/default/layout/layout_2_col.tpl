@@ -1,5 +1,4 @@
 {% extends 'layout/page.tpl'|get_template %}
-
 {% import 'macro/macro.tpl'|get_template as display %}
 
 {% block body %}
@@ -58,15 +57,8 @@
                         {{ course_category_block }}
                     </article>
                 {% endif %}
-
-                
-
-                    {% include 'layout/hot_courses.tpl'|get_template %}
-
-                    {% include 'session/sessions_current.tpl'|get_template %}
-
-                
-
+                {% include 'layout/hot_courses.tpl'|get_template %}
+                {% include 'session/sessions_current.tpl'|get_template %}
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">
                         {{ plugin_content_bottom }}
@@ -76,7 +68,6 @@
         </div>
         <div class="col-md-3 col-md-pull-9">
             <div class="sidebar">
-
                 {% if plugin_menu_top %}
                     {{ display.pluginSidebar('sidebar-top', plugin_menu_top) }}
                 {% endif %}
@@ -89,17 +80,17 @@
 
                 <!-- BLOCK PROFILE -->
                 {% if profile_block %}
-                    {{ display.collapseMenu('profile' , 'Profile'|get_lang, profile_block) }}
+                    {{ display.collapseMenu('profile', 'Profile'|get_lang, profile_block) }}
                 {% endif %}
 
                 <!-- BLOCK COURSE -->
                 {% if course_block %}
-                    {{ display.collapseMenu('courses' , 'Courses'|get_lang, course_block) }}
+                    {{ display.collapseMenu('courses', 'Courses'|get_lang, course_block) }}
                 {% endif %}
 
                 <!-- BLOCK SKILLS -->
                 {% if skills_block %}
-                    {{ display.collapseMenu('skills' , 'Skills'|get_lang, skills_block) }}
+                    {{ display.collapseMenu('skills', 'Skills'|get_lang, skills_block) }}
                 {% endif %}
 
                 {% if grade_book_sidebar %}
@@ -107,7 +98,11 @@
                     <div class="panel panel-default" id="gradebook_block">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#skill" href="#skillCollapse" aria-expanded="true" aria-controls="skillCollapse">
+                                <a role="button" data-toggle="collapse"
+                                   data-parent="#skill"
+                                   href="#skillCollapse"
+                                   aria-expanded="true"
+                                   aria-controls="skillCollapse">
                                     {{ 'Gradebook' | get_lang }}
                                 </a>
                             </h4>
@@ -124,16 +119,14 @@
                                                 {% if badge.finished %}
                                                     <img class="badge_sidebar_image " src ="{{ skill.icon_big }}" />
                                                 {% else %}
-                                                    <img class="badge_sidebar_image badge_sidebar_image_transparency" src = "{{ skill.icon_big }}" />
+                                                    <img class="badge_sidebar_image badge_sidebar_image_transparency"
+                                                         src = "{{ skill.icon_big }}" />
                                                 {% endif %}
                                                 <div class="badge_sidebar_title">
                                                 {{ skill.name }}
                                                 </div>
                                             {% endfor %}
                                             </div>
-                                            {#<div class="badge_sidebar_title">#}
-                                            {#{{ badge.name }}#}
-                                            {#</div>#}
                                         {% endfor %}
                                     </li>
                                 </ul>
@@ -141,33 +134,26 @@
                         </div>
                     </div>
                 </div>
-
                 {% endif %}
                 {{ certificates_search_block }}
-
                 <!-- BLOCK NOTICE -->
                 {% if notice_block %}
-                    {{ display.collapse('notice' , 'Notice'|get_lang, notice_block) }}
+                    {{ display.collapse('notice', 'Notice'|get_lang, notice_block) }}
                 {% endif %}
-
                 <!-- BLOCK HELP -->
                 {% if help_block %}
-                    {{ display.collapse('help' , 'MenuGeneral'|get_lang, help_block, true) }}
+                    {{ display.collapse('help', 'MenuGeneral'|get_lang, help_block, true) }}
                 {% endif %}
-
                 <!-- BLOCK LINKS NAVIGATION -->
                 {% if navigation_links %}
-                    {{ display.collapseFor('navigation_sidebar' , 'MainNavigation'|get_lang, navigation_links) }}
+                    {{ display.collapseFor('navigation_sidebar', 'MainNavigation'|get_lang, navigation_links) }}
                 {% endif %}
-
-
                 {{ search_block }}
                 {{ classes_block }}
 
                 {% if plugin_menu_bottom %}
                     {{ display.pluginSidebar('sidebar-bottom', plugin_menu_bottom) }}
                 {% endif %}
-
             </div>
         </div>
     </div>

@@ -17,7 +17,7 @@ This installation guide is for development environments only.
 To run Chamilo, you will need at least a web server (we recommend Apache2 for commodity reasons), a database server (we recommend MariaDB but will explain MySQL for commodity reasons) and a PHP interpreter (and a series of libraries for it). If you are working on a Debian-based system (Debian, Ubuntu, Mint, etc), just
 type
 ```
-sudo apt-get install libapache2-mod-php mysql-server php5-gd php5-intl php5-curl php5-json
+sudo apt-get install apache2 mysql-server php libapache2-mod-php php-gd php-intl php-curl php-json php-mysql
 ```
 
 ### Install Git

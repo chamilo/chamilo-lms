@@ -1,137 +1,22 @@
-/* Global chat variables */
 
-var ajax_url = '{{ _p.web_rel_code }}inc/ajax/chat.ajax.php';
-var online_button = '{{ 'statusonline.png' |img(8) }}';
-var offline_button = '{{ 'statusoffline.png' |img(8) }}';
+var ajax_url = _p.web_ajax + 'chat.ajax.php';
+var online_button = '<img src="' + _p.web_img + 'statusonline.png">';
+var offline_button = '<img src="' + _p.web_img + 'statusoffline.png">';
 var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
-var logOutUrl = '{{ _p.web_rel_code }}inc/ajax/course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
-
-function addMainEvent(elm, evType, fn, useCapture) {
-    if (elm.addEventListener) {
-        elm.addEventListener(evType, fn, useCapture);
-        return true;
-    } else if (elm.attachEvent) {
-        elm.attachEvent('on' + evType, fn);
-    } else {
-        elm['on'+evType] = fn;
-    }
-}
-
-function courseLogout() {
-    $.ajax({
-        url: logOutUrl,
-        success: function (data) {
-            return 1;
-        }
-    });
-}
 
 $(function() {
     addMainEvent(window, 'unload', courseLogout ,false);
-});
 
-if (typeof CKEDITOR !== 'undefined') {
-    // External plugins not part of the default Ckeditor package.
-    var plugins = [
-        'asciimath',
-        'asciisvg',
-        'audio',
-        'ckeditor_wiris',
-        'dialogui',
-        'glossary',
-        'leaflet',
-        'mapping',
-        'maximize',
-        'mathjax',
-        'oembed',
-        'toolbar',
-        'toolbarswitch',
-        'video',
-        'wikilink',
-        'wordcount',
-        'youtube',
-        'flash',
-        'inserthtml',
-        'image2_chamilo'
-    ];
-
-    plugins.forEach(function (plugin) {
-        CKEDITOR.plugins.addExternal(
-            plugin,
-            '{{ _p.web_rel_code ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/'
-        );
-    });
-
-    /**
-     * Function use to load templates in a div
-     **/
-    var showTemplates = function (ckeditorName) {
-        var editorName = 'content';
-        if (ckeditorName && ckeditorName.length > 0) {
-            editorName = ckeditorName;
-        }
-        CKEDITOR.editorConfig(CKEDITOR.config);
-        CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
-            var templatesConfig = CKEDITOR.getTemplates("default");
-            var $templatesUL = $("<ul>");
-            if (templatesConfig) {
-                $.each(templatesConfig.templates, function () {
-                    var template = this;
-                    var $templateLi = $("<li>");
-                    var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
-                    templateHTML += "<b>" + template.title + "</b>";
-
-                    if (template.description) {
-                        templateHTML += "<div class=description>" + template.description + "</div>";
-                    }
-                    templateHTML += "</div>";
-
-                    $("<a>", {
-                        href: "#",
-                        html: templateHTML,
-                        click: function (e) {
-                            e.preventDefault();
-                            if (CKEDITOR.instances[editorName]) {
-                                CKEDITOR.instances[editorName].setData(template.html, function () {
-                                    this.checkDirty();
-                                });
-                            }
-                        }
-                    }).appendTo($templateLi);
-                    $templatesUL.append($templateLi);
-                });
-            }
-            $templatesUL.appendTo("#frmModel");
-        });
-    };
-}
-
-function doneResizing() {
-    var widthWindow = $(window).width();
-    if ((widthWindow>=1024) && (widthWindow>=768)) {
-        $("#profileCollapse").addClass("in");
-        $("#courseCollapse").addClass("in");
-        $("#skillsCollapse").addClass("in");
-        $("#sn-sidebar-collapse").addClass("in");
-        $("#user_image_block").removeClass("text-muted");
-    } else {
-        $("#profileCollapse").removeClass("in");
-        $("#courseCollapse").removeClass("in");
-        $("#skillsCollapse").removeClass("in");
-        $("#sn-avatar-one").removeClass("in");
-        $("#user_image_block").addClass("text-muted");
-    }
-};
-
-$(document).ready(function() {
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
     });
     $("#closed-view-list").click(function(){
         $("#student-list-work").fadeOut(300);
     });
-    check_brand();
+
+    checkBrand();
+
     var id;
     $(window).resize(function() {
         clearTimeout(id);
@@ -216,9 +101,13 @@ $(document).ready(function() {
     // Delete modal
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-        $('.debug-url').html(
-            '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>'
-        );
+        var message = '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
+
+        if ($(e.relatedTarget).data('item-question')) {
+            message = $(e.relatedTarget).data('item-question');
+        }
+
+        $('.debug-url').html(message);
     });
     // End modals
 
@@ -368,7 +257,7 @@ $(document).ready(function() {
     // Mediaelement
     if ( {{ show_media_element }} == 1) {
         $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            pluginPath: '{{ _p.web }}web/assets/mediaelement/build/',
+            pluginPath: _p.web + 'web/assets/mediaelement/build/',
             renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {
@@ -397,6 +286,7 @@ $(document).ready(function() {
     $('.boot-tooltip').tooltip(tip_options);
     var more = '{{ 'SeeMore' | get_lang | escape('js') }}';
     var close = '{{ 'Close' | get_lang | escape('js') }}';
+
     $('.list-teachers').readmore({
         speed: 75,
         moreLink: '<a href="#">' + more + '</a>',
@@ -404,10 +294,29 @@ $(document).ready(function() {
         collapsedHeight: 35,
         blockCSS: 'display: block; width: 100%;'
     });
+
+    $('.star-rating li a').on('click', function(event) {
+        var id = $(this).parents('ul').attr('id');
+        $('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
+        $.ajax({
+            url: $(this).attr('data-link'),
+            success: function(data) {
+                $("#rating_wrapper_"+id).html(data);
+                if (data == 'added') {
+                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
+                }
+                if (data == 'updated') {
+                    //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
+                }
+            }
+        });
+    });
+
+    $("#notifications").load(_p.web_ajax + "online.ajax.php?a=get_users_online");
 });
 
 $(window).resize(function() {
-    check_brand();
+    checkBrand();
 });
 
 $(document).scroll(function() {
@@ -473,7 +382,6 @@ $(document).scroll(function() {
 });
 
 function get_url_params(q, attribute) {
-    var vars;
     var hash;
     if (q != undefined) {
         q = q.split('&');
@@ -486,8 +394,7 @@ function get_url_params(q, attribute) {
     }
 }
 
-function check_brand()
-{
+function checkBrand() {
     if ($('.subnav').length) {
         if ($(window).width() >= 969) {
             $('.subnav .brand').hide();
@@ -530,8 +437,7 @@ function action_click(element, table_id) {
  * @param inTxtUnhide   : text two of the button
  * @todo : allow to detect if text is from a button or from a <a>
  */
-function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
-{
+function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide) {
     if ($('#'+inId).css("display") == "none") {
         $('#'+inId).show(400);
         $('#'+inIdTxt).attr("value", inTxtUnhide);
@@ -541,8 +447,7 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
     }
 }
 
-function expandColumnToogle(buttonSelector, col1Info, col2Info)
-{
+function expandColumnToogle(buttonSelector, col1Info, col2Info) {
     $(buttonSelector).on('click', function (e) {
         e.preventDefault();
 
@@ -575,4 +480,109 @@ function expandColumnToogle(buttonSelector, col1Info, col2Info)
         col2.removeClass('col-md-12').addClass('col-md-' + col2Info.width);
         col1.removeClass('hide').addClass('col-md-' + col1Info.width);
     });
+}
+
+// Load ckeditor plugins
+if (typeof CKEDITOR !== 'undefined') {
+    // External plugins not part of the default Ckeditor package.
+    var plugins = [
+        'asciimath',
+        'asciisvg',
+        'audio',
+        'ckeditor_wiris',
+        'dialogui',
+        'glossary',
+        'leaflet',
+        'mapping',
+        'maximize',
+        'mathjax',
+        'oembed',
+        'toolbar',
+        'toolbarswitch',
+        'video',
+        'wikilink',
+        'wordcount',
+        'youtube',
+        'flash',
+        'inserthtml',
+        'image2_chamilo'
+    ];
+
+    plugins.forEach(function (plugin) {
+        CKEDITOR.plugins.addExternal(
+            plugin,
+            _p.web_lib + '{{ 'javascript/ckeditor/plugins/' }}' + plugin + '/'
+        );
+    });
+
+    /**
+     * Function use to load templates in a div
+     **/
+    var showTemplates = function (ckeditorName) {
+        var editorName = 'content';
+        if (ckeditorName && ckeditorName.length > 0) {
+            editorName = ckeditorName;
+        }
+        CKEDITOR.editorConfig(CKEDITOR.config);
+        CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
+            var templatesConfig = CKEDITOR.getTemplates("default");
+            var $templatesUL = $("<ul>");
+            if (templatesConfig) {
+                $.each(templatesConfig.templates, function () {
+                    var template = this;
+                    var $templateLi = $("<li>");
+                    var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
+                    templateHTML += "<b>" + template.title + "</b>";
+
+                    if (template.description) {
+                        templateHTML += "<div class=description>" + template.description + "</div>";
+                    }
+                    templateHTML += "</div>";
+
+                    $("<a>", {
+                        href: "#",
+                        html: templateHTML,
+                        click: function (e) {
+                            e.preventDefault();
+                            if (CKEDITOR.instances[editorName]) {
+                                CKEDITOR.instances[editorName].setData(template.html, function () {
+                                    this.checkDirty();
+                                });
+                            }
+                        }
+                    }).appendTo($templateLi);
+                    $templatesUL.append($templateLi);
+                });
+            }
+            $templatesUL.appendTo("#frmModel");
+        });
+    };
+}
+
+function doneResizing() {
+    var widthWindow = $(window).width();
+    if ((widthWindow>=1024) && (widthWindow>=768)) {
+        $("#profileCollapse").addClass("in");
+        $("#courseCollapse").addClass("in");
+        $("#skillsCollapse").addClass("in");
+        $("#sn-sidebar-collapse").addClass("in");
+        $("#user_image_block").removeClass("text-muted");
+    } else {
+        $("#profileCollapse").removeClass("in");
+        $("#courseCollapse").removeClass("in");
+        $("#skillsCollapse").removeClass("in");
+        $("#sn-avatar-one").removeClass("in");
+        $("#user_image_block").addClass("text-muted");
+    }
+}
+
+function addMainEvent(elm, evType, fn, useCapture) {
+    if (elm.addEventListener) {
+        elm.addEventListener(evType, fn, useCapture);
+        return true;
+    } else if (elm.attachEvent) {
+        elm.attachEvent('on' + evType, fn);
+    } else {
+        elm['on'+evType] = fn;
+    }
 }

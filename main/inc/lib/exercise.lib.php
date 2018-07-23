@@ -4975,13 +4975,11 @@ EOT;
         $view = new Template('', false, false, false, false, false, false);
         $view->assign('course_title', Security::remove_XSS($course_info['name']));
         $view->assign('test_title', Security::remove_XSS($test));
-        $view->assign('url', $url );
+        $view->assign('url', $url);
         $view->assign('teacher_name', $from_name);
         $template = $view->get_template('mail/exercise_result_alert_body.tpl');
 
         return $view->fetch($template);
-
-
     }
 
     /**

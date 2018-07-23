@@ -512,9 +512,9 @@ class learnpath
         $sessionId = api_get_session_id();
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $_course = $this->course_info;
-        $parent = intval($parent);
-        $previous = intval($previous);
-        $id = intval($id);
+        $parent = (int) $parent;
+        $previous = (int) $previous;
+        $id = (int) $id;
         $max_time_allowed = htmlentities($max_time_allowed);
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
@@ -569,7 +569,7 @@ class learnpath
         $id = (int) $id;
         $typeCleaned = Database::escape_string($type);
         $max_score = 100;
-        if ($type == 'quiz') {
+        if ($type === 'quiz') {
             $sql = 'SELECT SUM(ponderation)
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
@@ -601,7 +601,7 @@ class learnpath
             'max_score' => $max_score,
             'parent_item_id' => $parent,
             'previous_item_id' => $previous,
-            'next_item_id' => intval($next),
+            'next_item_id' => (int) $next,
             'display_order' => $display_order + 1,
             'prerequisite' => $prerequisites,
             'max_time_allowed' => $max_time_allowed,
@@ -2484,7 +2484,7 @@ class learnpath
                 }
             }
 
-            $subscriptionSettings = learnpath::getSubscriptionSettings();
+            $subscriptionSettings = self::getSubscriptionSettings();
 
             // Check if the subscription users/group to a LP is ON
             if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
@@ -2938,8 +2938,8 @@ class learnpath
     public static function get_interactions_count_from_db($lp_iv_id, $course_id)
     {
         $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
-        $lp_iv_id = intval($lp_iv_id);
-        $course_id = intval($course_id);
+        $lp_iv_id = (int) $lp_iv_id;
+        $course_id = (int) $course_id;
 
         $sql = "SELECT count(*) FROM $table
                 WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
@@ -3464,7 +3464,7 @@ class learnpath
             if (in_array($item['type'], $dirTypes)) {
                 $list['css_level'] = 'level_'.$item['level'];
             } else {
-                $list['css_level'] = 'level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']);
+                $list['css_level'] = 'level_'.$item['level'].' scorm_type_'.self::format_scorm_type_item($item['type']);
             }
 
             if (in_array($item['type'], $dirTypes)) {
@@ -4488,10 +4488,10 @@ class learnpath
 
             $lpList = $list->get_flat_list();
             foreach ($lpList as $lp) {
-                learnpath::toggle_visibility($lp['iid'], 0);
+                self::toggle_visibility($lp['iid'], 0);
             }
 
-            learnpath::toggleCategoryPublish($id, 0);
+            self::toggleCategoryPublish($id, 0);
         }
 
         return api_item_property_update(
@@ -4708,7 +4708,7 @@ class learnpath
         CLpCategory $category,
         User $user
     ) {
-        $subscriptionSettings = learnpath::getSubscriptionSettings();
+        $subscriptionSettings = self::getSubscriptionSettings();
         if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
             return true;
         }
@@ -5384,7 +5384,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('In learnpath::set_prerequisite()', 0);
         }
-        $this->prerequisite = intval($prerequisite);
+        $this->prerequisite = (int) $prerequisite;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $table SET prerequisite = '".$this->prerequisite."'

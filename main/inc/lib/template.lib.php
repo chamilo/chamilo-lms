@@ -741,7 +741,7 @@ class Template
             }
         }
 
-        if (api_get_setting('accessibility_font_resize') == 'true') {
+        if (api_get_setting('accessibility_font_resize') === 'true') {
             $js_files[] = 'fontresize.js';
         }
 
@@ -795,7 +795,7 @@ class Template
         }
 
         // Loading email_editor js
-        if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
+        if (!api_is_anonymous() && api_get_setting('allow_email_editor') === 'true') {
             $template = $this->get_template('mail_editor/email_link.js.tpl');
             $js_file_to_string .= $this->fetch($template);
         }
@@ -803,17 +803,32 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
 
-            $extra_headers = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
-            //Adding jquery ui by default
-            $extra_headers .= api_get_jquery_ui_js();
-
-            //$extra_headers = '';
+            $extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
+            // Adding jquery ui by default
+            $extraHeaders .= api_get_jquery_ui_js();
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as &$this_html_head) {
-                    $extra_headers .= $this_html_head."\n";
+                    $extraHeaders .= $this_html_head."\n";
                 }
             }
-            $this->assign('extra_headers', $extra_headers);
+
+            $ajax = api_get_path(WEB_AJAX_PATH);
+            $courseLogoutCode = "
+            <script>
+            var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
+            function courseLogout() {
+                $.ajax({
+                    url: logOutUrl,
+                    success: function (data) {
+                        return 1;
+                    }
+                });
+            }
+            </script>";
+
+            $extraHeaders .= $courseLogoutCode;
+
+            $this->assign('extra_headers', $extraHeaders);
         }
     }
 

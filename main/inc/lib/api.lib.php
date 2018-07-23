@@ -7562,8 +7562,8 @@ function api_is_global_chat_enabled()
 {
     return
         !api_is_anonymous() &&
-        api_get_setting('allow_global_chat') == 'true' &&
-        api_get_setting('allow_social_tool') == 'true';
+        api_get_setting('allow_global_chat') === 'true' &&
+        api_get_setting('allow_social_tool') === 'true';
 }
 
 /**

@@ -138,16 +138,16 @@ This will prevent direct access to your settings and make it seem totally the sa
         rules would have to be at the top of your location rules to take the
         highest priority:
         <pre>
-  location ~ ^/app/(cache|courses|home|logs|upload)/.*\.(php|php4|php5)$ {
+  location ~ ^/app/(cache|courses|home|logs|upload)/.*\.ph(p[3457]?|t|tml|ar)$ {
     deny all;
   }
-  location ~ ^/main/default_course_document/images/.*\.(php|php4|php5)$ {
+  location ~ ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$ {
     deny all;
   }
-  location ~ ^/main/lang/.*\.(php|php4|php5)$ {
+  location ~ ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$ {
     deny all;
   }
-  location ~ ^/web/css/.*\.(php|php4|php5)$ {
+  location ~ ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$ {
     deny all;
   }
         </pre>

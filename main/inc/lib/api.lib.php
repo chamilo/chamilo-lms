@@ -4102,11 +4102,11 @@ function api_item_property_update(
         $to_value = $to_group_id;
     }
 
-    $toValueCondition = empty($to_value) ? "NULL" : "'$to_value'";
+    $toValueCondition = empty($to_value) ? 'NULL' : "'$to_value'";
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = " AND session_id = $session_id ";
     if (empty($session_id)) {
-        $condition_session = " AND (session_id = 0 OR session_id IS NULL) ";
+        $condition_session = ' AND (session_id = 0 OR session_id IS NULL) ';
     }
 
     $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
@@ -4534,13 +4534,13 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
     }
 
     $tool = Database::escape_string($tool);
-    $ref = intval($ref);
     $course_id = $courseInfo['real_id'];
-    $session_id = intval($session_id);
+    $ref = (int) $ref;
+    $session_id = (int) $session_id;
 
     $sessionCondition = " session_id = $session_id";
     if (empty($session_id)) {
-        $sessionCondition = " (session_id = 0 OR session_id IS NULL) ";
+        $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
     }
 
     // Definition of tables.
@@ -4554,7 +4554,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
                 $sessionCondition ";
 
     if (!empty($groupId)) {
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
         $sql .= " AND to_group_id = $groupId ";
     }
 

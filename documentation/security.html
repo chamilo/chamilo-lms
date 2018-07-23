@@ -141,13 +141,13 @@ This will prevent direct access to your settings and make it seem totally the sa
   location ~ ^/app/(cache|courses|home|logs|upload)/.*\.(php|php4|php5)$ {
     deny all;
   }
-  location ~ ^/main/default_course_document/images/.*\.php$ {
+  location ~ ^/main/default_course_document/images/.*\.(php|php4|php5)$ {
     deny all;
   }
-  location ~ ^/main/lang/.*\.php$ {
+  location ~ ^/main/lang/.*\.(php|php4|php5)$ {
     deny all;
   }
-  location ~ ^/web/css/.*\.php$ {
+  location ~ ^/web/css/.*\.(php|php4|php5)$ {
     deny all;
   }
         </pre>

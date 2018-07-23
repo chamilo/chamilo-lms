@@ -8,6 +8,12 @@
 
 RewriteEngine on
 
+# Prevent execution of PHP from directories used for different types of uploads
+RedirectMatch 403 ^/app/(cache|courses|home|logs|upload)/.*\.(php|php4|php5)$
+RedirectMatch 403 ^/main/default_course_document/images/.*\.(php|php4|php5)$
+RedirectMatch 403 ^/main/lang/.*\.(php|php4|php5)$
+RedirectMatch 403 ^/web/css/.*\.(php|php4|php5)$
+
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
 RewriteCond %{QUERY_STRING} ^id=(.*)$
 RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]

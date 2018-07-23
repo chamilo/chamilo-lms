@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManager;
  *   of older versions before upgrading.
  */
 
-/*      CONSTANTS */
+/* CONSTANTS */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
 /**
@@ -964,9 +964,9 @@ function display_requirements(
 
     $course_attempt_name = '__XxTestxX__';
     $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
-
-    //Just in case
-    @unlink($course_dir.'/test.php');
+    $fileToCreate = 'test.html';
+    // Just in case
+    @unlink($course_dir.'/'.$fileToCreate);
     @rmdir($course_dir);
 
     $perms_dir = [0777, 0755, 0775, 0770, 0750, 0700];
@@ -989,17 +989,17 @@ function display_requirements(
             if ($file_course_test_was_created == true) {
                 break;
             }
-            $r = @touch($course_dir.'/test.php', $perm);
+            $r = @touch($course_dir.'/'.$fileToCreate, $perm);
             if ($r === true) {
                 $fil_perm_verified = $perm;
-                if (check_course_script_interpretation($course_dir, $course_attempt_name, 'test.php')) {
+                if (checkCourseScriptCreation($course_dir, $course_attempt_name, $fileToCreate)) {
                     $file_course_test_was_created = true;
                 }
             }
         }
     }
 
-    @unlink($course_dir.'/test.php');
+    @unlink($course_dir.'/'.$fileToCreate);
     @rmdir($course_dir);
 
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
@@ -1017,7 +1017,7 @@ function display_requirements(
         $courseTestLabel = Display::label(get_lang('Warning'), 'warning');
         $courseTestLabel .= '<br />'.sprintf(
             get_lang('InstallWarningCouldNotInterpretPHP'),
-            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/test.php'
+            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$fileToCreate
         );
     }
 
@@ -2009,24 +2009,24 @@ function compare_setting_values($current_value, $wanted_value)
 }
 
 /**
- * @param $course_dir
- * @param $course_attempt_name
+ * @param string $course_dir
+ * @param string $course_attempt_name
  * @param string $file
  *
  * @return bool
  */
-function check_course_script_interpretation(
+function checkCourseScriptCreation(
     $course_dir,
     $course_attempt_name,
-    $file = 'test.php'
+    $file
 ) {
     $output = false;
-    //Write in file
+    // Write in file
     $file_name = $course_dir.'/'.$file;
-    $content = '<?php echo "123"; exit;';
+    $content = '123';
 
     if (is_writable($file_name)) {
-        if ($handler = @fopen($file_name, "w")) {
+        if ($handler = @fopen($file_name, 'w')) {
             //write content
             if (fwrite($handler, $content)) {
                 $sock_errno = '';

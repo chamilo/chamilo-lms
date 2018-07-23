@@ -121,7 +121,7 @@ $_configuration['hosting_total_size_limit'] = 0;
  * To do that on Apache, use
  *   Header set Access-Control-Allow-Origin "http(s)://main-chamilo-url"
  * in Nginx:
- *   add_header 'Access-Control-Allow-Origin' 'http(s)://main-chamilo-url';
+ *   add_header 'Access-Control-Allow-Origin' 'http(s)://main-chamilo-url';.
  */
 // Set the following setting to true to start using the CDN
 $_configuration['cdn_enable'] = false;

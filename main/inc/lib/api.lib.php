@@ -997,6 +997,7 @@ function api_get_cdn_path($web_path)
             }
         }
     }
+
     return $web_path;
 }
 

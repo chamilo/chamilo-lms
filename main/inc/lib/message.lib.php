@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -238,6 +239,7 @@ class MessageManager
             'update_date' => $now,
         ];
         $id = Database::insert($table, $params);
+
         if ($id) {
             return true;
         }
@@ -253,12 +255,25 @@ class MessageManager
     public static function getMessagesAboutUser($aboutUserInfo)
     {
         if (!empty($aboutUserInfo)) {
-            $criteria = [
+            $table = Database::get_main_table(TABLE_MESSAGE);
+            $sql = 'SELECT id FROM '.$table.'
+                    WHERE 
+                      user_receiver_id = '.$aboutUserInfo['id'].' AND 
+                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'                    
+                    ';
+            $result = Database::query($sql);
+            $messages = [];
+            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
+            while ($row = Database::fetch_array($result)) {
+                $message = $repo->find($row['id']);
+                $messages[] = $message;
+            }
+            /*$criteria = [
                 'userReceiverId' => $aboutUserInfo['id'],
                 'msgStatus' => MESSAGE_STATUS_CONVERSATION,
             ];
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
-            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);
+            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);*/
 
             return $messages;
         }
@@ -332,8 +347,7 @@ class MessageManager
                     user_receiver_id = $receiverId AND 
                     title = '$subject' AND 
                     content = '$message' AND
-                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.") 
-                    
+                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")                    
                 ";
         $result = Database::query($sql);
 

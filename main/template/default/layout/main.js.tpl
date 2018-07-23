@@ -101,9 +101,13 @@ $(function() {
     // Delete modal
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-        $('.debug-url').html(
-            '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>'
-        );
+        var message = '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
+
+        if ($(e.relatedTarget).data('item-question')) {
+            message = $(e.relatedTarget).data('item-question');
+        }
+
+        $('.debug-url').html(message);
     });
     // End modals
 

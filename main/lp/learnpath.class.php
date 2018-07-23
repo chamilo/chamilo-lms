@@ -10802,10 +10802,10 @@ class learnpath
                                         $destinationFile = substr($file_path, strlen($cur_path));
                                         $filePathNoCoursePart = substr($file_path, strlen($cur_path));
                                         if (false) {
-                                        //if (false !== strstr($file_path, $cur_path)) {
+                                            //if (false !== strstr($file_path, $cur_path)) {
                                             $relative_path = str_replace($cur_path, '', $file_path);
                                             $file_path = substr($file_path, strlen($cur_path));
-                                            //var_dump($relative_path, $file_path);
+                                        //var_dump($relative_path, $file_path);
                                         } else {
                                             // This case is still a problem as it's difficult to calculate
                                             // a relative path easily might still generate wrong links.

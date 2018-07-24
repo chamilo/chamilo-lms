@@ -492,7 +492,7 @@ function api_get_local_time(
     }
 
     if (is_numeric($time)) {
-        $time = intval($time);
+        $time = (int) $time;
         if ($return_null_if_invalid_date) {
             if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
                 return null;

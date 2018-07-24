@@ -2996,9 +2996,10 @@ class DocumentManager
     {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $session_id = intval($session_id);
-        $group_id = intval($group_id);
-        $course_id = intval($course_id);
+
+        $session_id = (int) $session_id;
+        $group_id = (int) $group_id;
+        $course_id = (int) $course_id;
 
         if (!$course_id) {
             $course_id = api_get_course_int_id();
@@ -3019,9 +3020,9 @@ class DocumentManager
                 INNER JOIN $TABLE_DOCUMENT AS docs
                 ON (docs.id = props.ref AND props.c_id = docs.c_id)
                 WHERE
-                    props.c_id 	= $course_id AND
-                    docs.c_id 	= $course_id AND
-                    props.tool 	= '".TOOL_DOCUMENT."' AND
+                    props.c_id = $course_id AND
+                    docs.c_id = $course_id AND
+                    props.tool = '".TOOL_DOCUMENT."' AND
                     props.visibility <> 2
                     $group_condition
                     $session_condition
@@ -3031,7 +3032,7 @@ class DocumentManager
         if ($result && Database::num_rows($result) != 0) {
             $row = Database::fetch_row($result);
 
-            return $row[0];
+            return (int) $row[0];
         } else {
             return 0;
         }

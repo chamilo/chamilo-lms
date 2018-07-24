@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 //use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Doctrine\Common\Util\Inflector;
+use Doctrine\ORM\Mapping\ClassMetadata as ORMMeta;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -433,6 +436,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackELogin", mappedBy="loginUserId", orphanRemoval=true, cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    private $logins;
 
     /**
      * Constructor.
@@ -1435,6 +1443,12 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getLastLogin()
     {
+        // If not last_login has been registered in the user table
+        // (for users without login after version 1.10), get the last login
+        // from the track_e_login table
+        if (empty($this->lastLogin)) {
+            return $this->getExtendedLastLogin();
+        }
         return $this->lastLogin;
     }
 
@@ -2468,5 +2482,108 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getSessionAsGeneralCoach()
     {
         return $this->sessionAsGeneralCoach;
+    }
+
+    /**
+     * Get a list of properties in this entity
+     * @param EntityManager $em
+     * @param int $recursionDepth Up to how deep we want to get the data
+     * @return array
+     */
+    protected function _toArray($em, $recursionDepth = 0)
+    {
+        // This method is borrowed from https://github.com/borisguery/bgylibrary/blob/master/library/Bgy/Doctrine/EntitySerializer.php
+        $className = get_class($this);
+        $metadata = $em->getClassMetadata($className);
+        $maxRecursionDepth = 5;
+
+        $data = array();
+
+        foreach ($metadata->fieldMappings as $field => $mapping) {
+            $value = $metadata->reflFields[$field]->getValue($this);
+            $field = Inflector::tableize($field);
+            if ($value instanceof \Datetime) {
+                $data[$field] = (array)$value;
+            } elseif (is_object($value)) {
+                $data[$field] = (string)$value;
+            } else {
+                $data[$field] = $value;
+            }
+        }
+
+        foreach ($metadata->associationMappings as $field => $mapping) {
+            $key = Inflector::tableize($field);
+            if ($mapping['isCascadeDetach']) {
+                $data[$key] = $metadata->reflFields[$field]->getValue($this);
+                if (null !== $data[$key]) {
+                    $data[$key] = $this->_toArray($data[$key], $recursionDepth + 1);
+                }
+            } elseif ($mapping['isOwningSide'] && $mapping['type'] & ORMMeta::TO_ONE) {
+                if (null !== $metadata->reflFields[$field]->getValue($this)) {
+                    if ($recursionDepth < $maxRecursionDepth) {
+                        $recursionDepth++;
+                        $data[$key] = $this->_toArray(
+                            $metadata->reflFields[$field]->getValue($this),
+                            $recursionDepth
+                        );
+                        $recursionDepth--;
+                    } else {
+                        $data[$key] = $em->getUnitOfWork()
+                            ->getEntityIdentifier(
+                                $metadata->reflFields[$field]
+                                    ->getValue($this)
+                                );
+                    }
+                } else {
+                    // In some case the relationship may not exist, but we want
+                    // to know about it
+                    $data[$key] = null;
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Serialize the whole entity to an array
+     * @param EntityManager $em
+     * @return array $values
+     */
+    public function getPersonalData($em)
+    {
+        $d = $this->_toArray($em);
+        foreach ($d as $key => $value) {
+            switch ($key) {
+                case 'password':
+                    $d[$key] = get_lang('EncryptedData');
+                    break;
+                case 'salt':
+                    $d[$key] = get_lang('RandomData');
+                    break;
+            }
+            if (empty($value)) {
+                $d[$key] = get_lang('NoData');
+            }
+
+        }
+        return $d;
+    }
+
+    /**
+     * Get last login (used only if user.last_login is empty)
+     * @return \DateTime Last login date for this user
+     */
+    public function getExtendedLastLogin()
+    {
+        $lastLoginString = 0;
+        $lastLoginDateTime = new \DateTime();
+        foreach ($this->logins as $login) {
+            $loginDate = api_get_local_time($login->getLoginDate());
+            if ($loginDate > $lastLoginString) {
+                $lastLoginString = $loginDate;
+                $lastLoginDateTime = $login->getLoginDate();
+            }
+        }
+        return $lastLoginDateTime;
     }
 }

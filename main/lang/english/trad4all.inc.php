@@ -8228,4 +8228,6 @@ $CannotAnonymizeUserX = "We could not anonymize user %s's information. Please tr
 $NoPermissionToAnonymizeUserX = "You don't have permissions to anonymize user %s. You need the same permissions as to delete users.";
 $Anonymize = "Anonymize";
 $XQuestions = "%d questions";
+$WebFolderRefreshSucceeded = "The styles and assets in the web/ folder have been refreshed.";
+$WebFolderRefreshFailed = "The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server.";
 ?>

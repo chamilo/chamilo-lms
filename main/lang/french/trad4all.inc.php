@@ -8158,4 +8158,6 @@ $CannotAnonymizeUserX = "Impossible d'anonymiser les données de l'utilisateur %
 $NoPermissionToAnonymizeUserX = "Vous n'avez pas les permissions pour anonymiser l'utilisateur %s. Il s'agit des mêmes permissions que pour la suppression d'utilisateurs.";
 $Anonymize = "Anonymiser";
 $XQuestions = "%d questions";
+$WebFolderRefreshSucceeded = "Les styles et fichiers statiques du répertoire web/ on été mis à jour.";
+$WebFolderRefreshFailed = "Les styles et fichiers statiques du répertoire web/ n'ont pas pu être mis à jour, probablement à cause de problèmes de permissions. Assurez-vous que l'utilisateur système de votre serveur web puisse écrire dans le répertoire web/.";
 ?>

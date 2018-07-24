@@ -8250,4 +8250,6 @@ $CannotAnonymizeUserX = "No se han podido anonimizar los datos del usuario %s. P
 $NoPermissionToAnonymizeUserX = "No tiene los permisos necesarios para anonimizar el usuario %s. Se tratan de los mismos permisos necesarios para eliminar usuarios.";
 $Anonymize = "Anonimizar";
 $XQuestions = "%d preguntas";
+$WebFolderRefreshSucceeded = "Los estilos y archivos estáticos de la carpeta web/ han sido actualizados.";
+$WebFolderRefreshFailed = "Los estilos y archivos estáticos de la carpeta web/ no han podido ser actualizados, probablemente debido a un problema de permisos. Asegúrese que el usuario sistema de su servidor web tenga los permisos suficientes para escribir en esta carpeta.";
 ?>

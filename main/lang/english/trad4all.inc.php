@@ -747,7 +747,7 @@ $ToolIntro = "Tool introduction";
 $UploadError = "Upload failed, please check maximum file size limits and folder rights.";
 $DocumentsWillBeAddedToo = "Documents will be added too";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests.";
-$ArchivesDirectoryNotWriteableContactAdmin = "The archives directory, used by this tool, is not writeable. Please contact your platform administrator.";
+$ArchivesDirectoryNotWriteableContactAdmin = "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.";
 $DestinationCourse = "Target course";
 $ConvertToMultipleAnswer = "Convert to multiple answer";
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";

@@ -256,6 +256,7 @@ class LearningCalendarPlugin extends Plugin
             if ($getCount) {
                 return 0;
             }
+
             return [];
         }
 
@@ -1066,6 +1067,7 @@ class LearningCalendarPlugin extends Plugin
         foreach ($list as $item) {
             $points[] = [$item['control_date'], $item['control_value']];
         }
+
         return $points;
     }
 
@@ -1091,7 +1093,7 @@ class LearningCalendarPlugin extends Plugin
             ];
             $data = Database::fetch_array($result);
             $id = $data['id'];
-            Database::update('learning_calendar_control_point', $params, [ 'id = ?' => $id]);
+            Database::update('learning_calendar_control_point', $params, ['id = ?' => $id]);
         } else {
             $params = [
                 'user_id' => $userId,

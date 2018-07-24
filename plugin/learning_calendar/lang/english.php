@@ -20,4 +20,3 @@ $strings['NumberOfDays'] = 'Number of days';
 $strings['Date'] = 'Date';
 $strings['AddMultipleUsersToCalendar'] = 'Add multiple users to a calendar';
 $strings['UpdateCalendar'] = 'Update calendar';
-

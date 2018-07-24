@@ -272,7 +272,7 @@ $(function() {
         { width:500 } // search options
     )
     .navButtonAdd('#usergroups_pager',{
-        caption:"<?php echo addslashes($calendarPlugin->get_lang('UpdateCalendar'));?>",
+        caption:"<?php echo addslashes($calendarPlugin->get_lang('UpdateCalendar')); ?>",
         buttonicon:"ui-icon ui-icon-plus",
         onClickButton: function(a) {
             var userIdList = $("#usergroups").jqGrid('getGridParam', 'selarrrow');
@@ -280,7 +280,7 @@ $(function() {
                 $(".modal-body #add_multiple_calendar_user_list").val(userIdList);
                 $('#myModal').modal();
             } else {
-                alert("<?php echo addslashes(get_lang('SelectStudents'));?>");
+                alert("<?php echo addslashes(get_lang('SelectStudents')); ?>");
             }
         },
         position:"last"
@@ -299,7 +299,7 @@ $(function() {
                 </h4>
             </div>
             <div class="modal-body">
-                <?php echo $form->display() ?>
+                <?php echo $form->display(); ?>
             </div>
         </div>
     </div>

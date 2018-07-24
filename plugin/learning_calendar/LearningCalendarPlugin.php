@@ -799,6 +799,19 @@ class LearningCalendarPlugin extends Plugin
     }
 
     /**
+     * @param array $htmlHeadXtra
+     */
+    public function setJavaScript(&$htmlHeadXtra)
+    {
+        $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
+        $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
+        $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.canvasOverlay.js');
+        $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.pointLabels.js');
+
+        $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
+    }
+
+    /**
      * @param int   $userId
      * @param array $courseAndSessionList
      *
@@ -824,26 +837,43 @@ class LearningCalendarPlugin extends Plugin
             $date = $this->get_lang('Date');
             $controlPoint = $this->get_lang('NumberOfDays');
 
-            $html .= '<div id="control_point_chart"></div><script>
-                    $(document).ready(function(){
-                      var cosPoints = '.$listToString.';
-                      var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
-                          series:[{showMarker:true, markerOptions:{style:\'square\'}}],
-                          axes:{
+            $html .= '<div id="control_point_chart"></div>';
+            $html .= '<script>
+                $(document).ready(function(){
+                    var cosPoints = '.$listToString.';
+                    var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
+                        //animate: !$.jqplot.use_excanvas,                      
+                        series:[{
+                            showMarker:false,
+                            pointLabels: { show:true },
+                        }],
+                        axes:{
                             xaxis:{
-                                  label: "'.$date.'",
-                                  renderer: $.jqplot.DateAxisRenderer,
-                                  tickOptions:{formatString: "%Y-%m-%d"},
-                                  tickInterval: \'30 day\'
+                                label: "'.$date.'",
+                                renderer: $.jqplot.DateAxisRenderer,
+                                tickOptions:{formatString: "%Y-%m-%d"},
+                                tickInterval: \'30 day\',                                
                             },
                             yaxis:{
-                              label: "'.$controlPoint.'",
-                              max: "20",
-                              min: "-20",    
+                                label: "'.$controlPoint.'",
+                                max: 20,
+                                min: -20,    
                             }
-                          }
-                      });
-                    });
+                        },
+                        canvasOverlay: {
+                            show: true,
+                            objects: [{
+                                horizontalLine: {
+                                    name: \'0 mark\',
+                                    y: 0,
+                                    lineWidth: 2,
+                                    color: \'rgb(f, f, f)\',
+                                    shadow: false
+                                }
+                            }]
+                        },                     
+                  });
+                });
             </script>';
         }
 

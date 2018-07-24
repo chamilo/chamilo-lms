@@ -24,13 +24,11 @@ $(function() {
 });
 </script>";
 
-
 $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
 
 if ($pluginCalendar) {
-    $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
-    $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
+    $plugin = LearningCalendarPlugin::create();
+    $plugin->setJavaScript($htmlHeadXtra);
 }
 
 if (api_get_configuration_value('block_my_progress_page')) {

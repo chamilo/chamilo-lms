@@ -441,9 +441,8 @@ if (api_is_drh() && !api_is_platform_admin()) {
 $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
 
 if ($pluginCalendar) {
-    $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
-    $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
+    $plugin = LearningCalendarPlugin::create();
+    $plugin->setJavaScript($htmlHeadXtra);
 }
 
 Display::display_header($nameTools);
@@ -1846,7 +1845,6 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
 }
 
 if ($pluginCalendar) {
-    $plugin = LearningCalendarPlugin::create();
     echo $plugin->getUserStatsPanel($student_id, $courses_in_session);
 }
 

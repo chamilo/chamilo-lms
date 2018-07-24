@@ -17,12 +17,9 @@ if (!api_get_configuration_value('enable_gdpr')) {
 }
 
 $userId = api_get_user_id();
-
 $entityManager = Database::getManager();
-/** @var UserRepository $repository */
-$repository = $entityManager->getRepository('ChamiloUserBundle:User');
 /** @var User $user */
-$user = $repository->find($userId);
+$user = api_get_user_entity($userId);
 $properties = $user->getPersonalData($entityManager);
 
 if (!empty($_GET['export'])) {

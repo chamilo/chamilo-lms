@@ -17,7 +17,7 @@ switch ($action) {
             exit;
         }
         $endDate = isset($_REQUEST['end_date']) ? $_REQUEST['end_date'] : '';
-        if (empty($endDate)) {
+        if ($startDate == $endDate) {
             // One day
             $plugin->toogleDayType($calendarId, $startDate);
         } else {

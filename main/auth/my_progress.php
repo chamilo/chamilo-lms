@@ -10,7 +10,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
-
 $nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
@@ -23,8 +22,16 @@ $(function() {
         autoPlayPause: 2000
     })
 });
-
 </script>";
+
+
+$pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+
+if ($pluginCalendar) {
+    $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
+    $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
+}
 
 if (api_get_configuration_value('block_my_progress_page')) {
     api_not_allowed(true);
@@ -33,7 +40,7 @@ if (api_get_configuration_value('block_my_progress_page')) {
 $user_id = api_get_user_id();
 $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 
 if (!empty($courseUserList)) {

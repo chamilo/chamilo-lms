@@ -838,8 +838,8 @@ class LearningCalendarPlugin extends Plugin
                             },
                             yaxis:{
                               label: "'.$controlPoint.'",
-                              max: "100"
-    
+                              max: "20",
+                              min: "-20",    
                             }
                           }
                       });

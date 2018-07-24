@@ -8157,4 +8157,5 @@ $UserXAnonymized = "Les données de l'utilisateur %s ont été anonymisées.";
 $CannotAnonymizeUserX = "Impossible d'anonymiser les données de l'utilisateur %s. Merci d'essayer à nouveau ou de vérifier les logs.";
 $NoPermissionToAnonymizeUserX = "Vous n'avez pas les permissions pour anonymiser l'utilisateur %s. Il s'agit des mêmes permissions que pour la suppression d'utilisateurs.";
 $Anonymize = "Anonymiser";
+$XQuestions = "%d questions";
 ?>

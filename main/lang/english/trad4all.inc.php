@@ -8227,4 +8227,5 @@ $UserXAnonymized = "User %s's information anonymized.";
 $CannotAnonymizeUserX = "We could not anonymize user %s's information. Please try again or check the logs.";
 $NoPermissionToAnonymizeUserX = "You don't have permissions to anonymize user %s. You need the same permissions as to delete users.";
 $Anonymize = "Anonymize";
+$XQuestions = "%d questions";
 ?>

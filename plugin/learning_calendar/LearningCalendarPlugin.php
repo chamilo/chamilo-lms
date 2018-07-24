@@ -844,7 +844,7 @@ class LearningCalendarPlugin extends Plugin
                     var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
                         //animate: !$.jqplot.use_excanvas,                      
                         series:[{
-                            showMarker:false,
+                            showMarker:true,
                             pointLabels: { show:true },
                         }],
                         axes:{

@@ -13,8 +13,11 @@ switch ($action) {
         if ($isAllowedToEdit) {
             $userGroup = new UserGroup();
             $userId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            $userIdList = explode(',', $userId);
             $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
-            $userGroup->delete_user_rel_group($userId, $groupId);
+            foreach ($userIdList as $userId) {
+                $userGroup->delete_user_rel_group($userId, $groupId);
+            }
         }
         break;
     default:

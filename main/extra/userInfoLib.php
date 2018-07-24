@@ -97,8 +97,8 @@ function edit_cat_def($id, $title, $comment, $nbline)
  */
 function remove_cat_def($id, $force = false)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
-    $TBL_USERINFO_CONTENT = Database:: get_course_table(userinfo_content);
+    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
     $id = strval(intval($id));
 
@@ -301,10 +301,10 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param   $definition_id
- * @param   $user_id
- * @param   $user_ip
- * @param   $content
+ * @param $definition_id
+ * @param $user_id
+ * @param $user_ip
+ * @param $content
  *
  * @return bool true if succeed, else boolean false
  */
@@ -355,10 +355,10 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param   $definition_id
- * @param   $user_id
- * @param   $user_ip       DEFAULT $REMOTE_ADDR
- * @param   $content       if empty call delete the bloc
+ * @param $definition_id
+ * @param $user_id
+ * @param $user_ip       DEFAULT $REMOTE_ADDR
+ * @param $content       if empty call delete the bloc
  *
  * @return bool true if succeed, else boolean false
  */
@@ -398,8 +398,8 @@ function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = ""
  * @author Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param   $definition_id
- * @param   $user_id
+ * @param $definition_id
+ * @param $user_id
  *
  * @return bool true if succeed, else boolean false
  */
@@ -434,8 +434,8 @@ function cleanout_cat_content($user_id, $definition_id)
  */
 function get_course_user_info($user_id)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
-    $TBL_USERINFO_CONTENT = Database:: get_course_table(userinfo_content);
+    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
     $sql = "SELECT  cat.id catId,   cat.title,
                     cat.comment ,   content.content
@@ -509,15 +509,15 @@ function get_main_user_info($user_id, $courseCode)
  */
 function get_cat_content($userId, $catId)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
-    $TBL_USERINFO_CONTENT = Database:: get_course_table(userinfo_content);
+    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
     $userId = strval(intval($userId));
     $catId = strval(intval($catId));
     $sql = "SELECT  cat.id catId,   cat.title,
                     cat.comment ,   cat.line_count,
                     content.id contentId,   content.content
-            FROM    ".$TBL_USERINFO_DEF." cat LEFT JOIN ".$TBL_USERINFO_CONTENT." content
+            FROM    $TBL_USERINFO_DEF cat LEFT JOIN $TBL_USERINFO_CONTENT content
             ON cat.id = content.definition_id
             AND content.user_id = '$userId'
             WHERE cat.id = '$catId' ";

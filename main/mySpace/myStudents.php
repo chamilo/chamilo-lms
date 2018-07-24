@@ -16,7 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
-$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
@@ -100,52 +100,52 @@ if (!empty($details)) {
     if ($origin === 'user_course') {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
-                "url" => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
+                'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
                 'name' => $courseInfo['title'],
             ];
         }
         $interbreadcrumb[] = [
-            "url" => "../user/user.php?cidReq=".$course_code,
-            "name" => get_lang("Users"),
+            'url' => "../user/user.php?cidReq=".$course_code,
+            'name' => get_lang("Users"),
         ];
     } else {
         if ($origin === 'tracking_course') {
             $interbreadcrumb[] = [
-                "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
-                "name" => get_lang("Tracking"),
+                'url' => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
+                'name' => get_lang("Tracking"),
             ];
         } else {
             if ($origin === 'resume_session') {
                 $interbreadcrumb[] = [
                     'url' => "../session/session_list.php",
-                    "name" => get_lang('SessionList'),
+                    'name' => get_lang('SessionList'),
                 ];
                 $interbreadcrumb[] = [
                     'url' => "../session/resume_session.php?id_session=".$sessionId,
-                    "name" => get_lang('SessionOverview'),
+                    'name' => get_lang('SessionOverview'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    "url" => api_is_student_boss() ? "#" : "index.php",
-                    "name" => get_lang('MySpace'),
+                    'url' => api_is_student_boss() ? "#" : "index.php",
+                    'name' => get_lang('MySpace'),
                 ];
                 if (!empty($coachId)) {
                     $interbreadcrumb[] = [
-                        "url" => "student.php?id_coach=".$coachId,
-                        "name" => get_lang("CoachStudents"),
+                        'url' => "student.php?id_coach=".$coachId,
+                        'name' => get_lang("CoachStudents"),
                     ];
                     $interbreadcrumb[] = [
-                        "url" => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
-                        "name" => get_lang("StudentDetails"),
+                        'url' => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
+                        'name' => get_lang("StudentDetails"),
                     ];
                 } else {
                     $interbreadcrumb[] = [
-                        "url" => "student.php",
-                        "name" => get_lang('MyStudents'),
+                        'url' => "student.php",
+                        'name' => get_lang('MyStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        "url" => "myStudents.php?student=".$student_id,
-                        "name" => get_lang('StudentDetails'),
+                        'url' => "myStudents.php?student=".$student_id,
+                        'name' => get_lang('StudentDetails'),
                     ];
                 }
             }
@@ -156,40 +156,40 @@ if (!empty($details)) {
     if ($origin == 'resume_session') {
         $interbreadcrumb[] = [
             'url' => "../session/session_list.php",
-            "name" => get_lang('SessionList'),
+            'name' => get_lang('SessionList'),
         ];
         if (!empty($sessionId)) {
             $interbreadcrumb[] = [
                 'url' => "../session/resume_session.php?id_session=".$sessionId,
-                "name" => get_lang('SessionOverview'),
+                'name' => get_lang('SessionOverview'),
             ];
         }
     } elseif ($origin === 'teacher_details') {
         $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
-        $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Teachers')];
+        $interbreadcrumb[] = ['url' => "index.php", 'name' => get_lang('MySpace')];
+        $interbreadcrumb[] = ['url' => "teachers.php", 'name' => get_lang('Teachers')];
         $nameTools = $user_info['complete_name'];
     } else {
         $interbreadcrumb[] = [
-            "url" => api_is_student_boss() ? "#" : "index.php",
-            "name" => get_lang('MySpace'),
+            'url' => api_is_student_boss() ? "#" : "index.php",
+            'name' => get_lang('MySpace'),
         ];
         if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = [
-                    "url" => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
-                    "name" => get_lang("CoachStudents"),
+                    'url' => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
+                    'name' => get_lang("CoachStudents"),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    "url" => "student.php?id_coach=".$coachId,
-                    "name" => get_lang("CoachStudents"),
+                    'url' => "student.php?id_coach=".$coachId,
+                    'name' => get_lang("CoachStudents"),
                 ];
             }
         } else {
             $interbreadcrumb[] = [
-                "url" => "student.php",
-                "name" => get_lang("MyStudents"),
+                'url' => "student.php",
+                'name' => get_lang("MyStudents"),
             ];
         }
     }
@@ -231,9 +231,7 @@ switch ($action) {
         if ($allowMessages === true) {
             $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
             $message = isset($_POST['message']) ? $_POST['message'] : '';
-
             $currentUserInfo = api_get_user_info();
-
             MessageManager::sendMessageAboutUser(
                 $user_info,
                 $currentUserInfo,
@@ -367,7 +365,7 @@ if (api_is_session_admin() || api_is_drh()) {
 // Teacher or admin
 if (!empty($sessions_coached_by_user)) {
     foreach ($sessions_coached_by_user as $session_coached_by_user) {
-        $sid = intval($session_coached_by_user['id']);
+        $sid = (int) $session_coached_by_user['id'];
         $courses_followed_by_coach = Tracking::get_courses_followed_by_coach(api_get_user_id(), $sid);
         $courses_in_session_by_coach[$sid] = $courses_followed_by_coach;
     }
@@ -823,7 +821,7 @@ $userGroups = $userGroupManager->getNameListByUser(
 <?php
 
 $exportCourseList = [];
-
+$lpIdList = [];
 if (empty($details)) {
     $csv_content[] = [];
     $csv_content[] = [
@@ -990,7 +988,9 @@ if (empty($details)) {
                         $sId
                     );
 
-                    $totalScore += $score;
+                    if (is_numeric($score)) {
+                        $totalScore += $score;
+                    }
 
                     $progress = empty($progress) ? '0%' : $progress.'%';
                     $score = empty($score) ? '0%' : $score.'%';
@@ -1224,6 +1224,8 @@ if (empty($details)) {
                 echo '</tr></thead><tbody>';
 
                 foreach ($flat_list as $learnpath) {
+                    $lpIdList[] = $learnpath['iid'];
+
                     $lp_id = $learnpath['lp_old_id'];
                     $lp_name = $learnpath['lp_name'];
                     $any_result = false;
@@ -1777,43 +1779,11 @@ if ($allowAll) {
         $sessionId
     );
 }
+
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    $messages = MessageManager::getMessagesAboutUser($user_info);
-
-    if (!empty($messages)) {
-        /** @var Message $message */
-        foreach ($messages as $message) {
-            $tag = 'message_'.$message->getId();
-            $tagAccordion = 'accordion_'.$message->getId();
-            $tagCollapse = 'collapse_'.$message->getId();
-            $date = Display::dateToStringAgoAndLongDate(
-                $message->getSendDate()
-            );
-            $localTime = api_get_local_time(
-                $message->getSendDate(),
-                null,
-                null,
-                false,
-                false
-            );
-            $senderId = $message->getUserSenderId();
-            $senderInfo = api_get_user_info($senderId);
-            echo Display::panelCollapse(
-                $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
-                $message->getContent().'<br />'.$date.'<br />'.get_lang(
-                    'Author'
-                ).': '.$senderInfo['complete_name_with_message_link'],
-                $tag,
-                null,
-                $tagAccordion,
-                $tagCollapse,
-                false
-            );
-        }
-    }
-
+    echo MessageManager::getMessagesAboutUserToString($user_info);
     echo Display::url(
         get_lang('NewMessage'),
         'javascript: void(0);',
@@ -1840,7 +1810,6 @@ if ($allowMessages === true) {
 $allow = api_get_configuration_value('allow_user_message_tracking');
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
-
     echo Display::page_subheader2(get_lang('MessageTracking'));
 
     $table = new HTML_Table(['class' => 'table']);
@@ -1866,6 +1835,12 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
         $row++;
     }
     $table->display();
+}
+
+$pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+if ($pluginCalendar) {
+    $plugin = LearningCalendarPlugin::create();
+    echo $plugin->getUserStatsPanel($student_id, $courses_in_session);
 }
 
 if ($export) {

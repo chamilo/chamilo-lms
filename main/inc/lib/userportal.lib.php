@@ -706,7 +706,7 @@ class IndexManager
      *
      * @return string
      */
-    public function show_right_block(
+    public function showRightBlock(
         $title,
         $content,
         $id = '',
@@ -766,7 +766,7 @@ class IndexManager
                 <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.
                 $search_btn.' </button>
                 </div></form>';
-            $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
+            $html .= $this->showRightBlock(get_lang('Search'), $search_content, 'search_block');
         }
 
         return $html;
@@ -775,15 +775,30 @@ class IndexManager
     /**
      * @return string
      */
-    public function return_classes_block()
+    public function returnClassesBlock()
     {
         if (api_get_setting('show_groups_to_users') !== 'true') {
             return '';
         }
 
-        $usergroup = new UserGroup();
-        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
         $items = [];
+
+        $usergroup = new UserGroup();
+        if (api_is_platform_admin()) {
+            $items[] = [
+                'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
+                'title' => get_lang('AddClasses'),
+            ];
+        } else {
+            if (api_is_teacher() && $usergroup->allowTeachers()) {
+                $items[] = [
+                    'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php',
+                    'title' => get_lang('ClassList'),
+                ];
+            }
+        }
+
+        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
         if (!empty($usergroup_list)) {
             foreach ($usergroup_list as $group_id) {
                 $data = $usergroup->get($group_id);
@@ -793,14 +808,8 @@ class IndexManager
                 ];
             }
         }
-        if (api_is_platform_admin()) {
-            $items[] = [
-                'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
-                'title' => get_lang('AddClasses'),
-            ];
-        }
 
-        $html = self::show_right_block(
+        $html = $this->showRightBlock(
             get_lang('Classes'),
             self::returnRightBlockItems($items),
             'classes_block'
@@ -827,7 +836,7 @@ class IndexManager
                 <img class="img-circle" title="'.get_lang('EditProfile').'" src="'.$userPicture.'"></a>';
             }
 
-            $html = self::show_right_block(
+            $html = $this->showRightBlock(
                 null,
                 $content,
                 'user_image_block',
@@ -852,7 +861,7 @@ class IndexManager
         $items = [];
         $userGroup = new UserGroup();
         //  @todo Add a platform setting to add the user image.
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_message_tool') === 'true') {
             // New messages.
             $number_of_new_messages = MessageManager::getCountNewMessages();
             // New contact invitations.

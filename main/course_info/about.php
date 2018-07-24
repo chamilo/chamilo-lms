@@ -1,4 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+
 /**
  * Course about page
  * Show information about a course.
@@ -7,17 +14,11 @@
  *
  * @package chamilo.course
  */
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CourseBundle\Entity\CCourseDescription;
-use Chamilo\UserBundle\Entity\User;
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : 0;
+$courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 $token = Security::get_existing_token();
 $em = Database::getManager();
 //userID
@@ -29,8 +30,8 @@ $course = $em->find('ChamiloCoreBundle:Course', $courseId);
 if (!$course) {
     api_not_allowed(true);
 }
-/** @var User $userRepo */
-$userRepo = $em->getRepository('ChamiloUserBundle:User');
+
+$userRepo = UserManager::getRepository();
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 
@@ -51,9 +52,7 @@ $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 
 $urlCourse = api_get_path(WEB_PATH).'main/course/about.php?course_id='.$courseId;
-
 $courseTeachers = $course->getTeachers();
-
 $teachersData = [];
 
 /** @var CourseRelUser $teacherSubscription */

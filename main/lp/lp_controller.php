@@ -830,7 +830,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->scorm_export();
+            $_SESSION['oLP']->scormExport();
             exit();
         }
         break;

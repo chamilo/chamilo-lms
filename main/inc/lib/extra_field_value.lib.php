@@ -565,7 +565,7 @@ class ExtraFieldValue extends Model
      */
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $item_id = Database::escape_string($item_id);
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
@@ -647,8 +647,8 @@ class ExtraFieldValue extends Model
      */
     public function searchValuesByField($tag, $field_id, $limit = 10)
     {
-        $field_id = intval($field_id);
-        $limit = intval($limit);
+        $field_id = (int) $field_id;
+        $limit = (int) $limit;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $tag = Database::escape_string($tag);
@@ -692,7 +692,7 @@ class ExtraFieldValue extends Model
         $filterByVisibility = false,
         $visibility = 0
     ) {
-        $item_id = intval($item_id);
+        $item_id = (int) $item_id;
         $field_variable = Database::escape_string($field_variable);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
@@ -706,10 +706,10 @@ class ExtraFieldValue extends Model
                     sf.extra_field_type = $extraFieldType
                 ";
         if ($filterByVisibility) {
-            $visibility = intval($visibility);
+            $visibility = (int) $visibility;
             $sql .= " AND visible_to_self = $visibility ";
         }
-        $sql .= " ORDER BY id";
+        $sql .= ' ORDER BY id';
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -826,7 +826,7 @@ class ExtraFieldValue extends Model
      */
     public function getValuesByFieldId($fieldId)
     {
-        $fieldId = intval($fieldId);
+        $fieldId = (int) $fieldId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT s.* FROM {$this->table} s
@@ -853,8 +853,8 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItemAndField($itemId, $fieldId)
     {
-        $fieldId = intval($fieldId);
-        $itemId = intval($itemId);
+        $fieldId = (int) $fieldId;
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT s.* FROM {$this->table} s
@@ -881,7 +881,7 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItem($itemId)
     {
-        $itemId = intval($itemId);
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id 
@@ -911,8 +911,8 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItemAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
-        $fieldId = intval($fieldId);
-        $itemId = intval($itemId);
+        $fieldId = (int) $fieldId;
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $fieldValue = Database::escape_string($fieldValue);
@@ -943,7 +943,7 @@ class ExtraFieldValue extends Model
      */
     public function delete_all_values_by_field_id($field_id)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     field_id = $field_id ";
@@ -959,8 +959,8 @@ class ExtraFieldValue extends Model
      */
     public function delete_values_by_handler_and_field_id($item_id, $field_id)
     {
-        $field_id = intval($field_id);
-        $item_id = intval($item_id);
+        $field_id = (int) $field_id;
+        $item_id = (int) $item_id;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
@@ -979,7 +979,7 @@ class ExtraFieldValue extends Model
      */
     public function deleteValuesByItem($itemId)
     {
-        $itemId = intval($itemId);
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
@@ -1002,8 +1002,8 @@ class ExtraFieldValue extends Model
      */
     public function deleteValuesByHandlerAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
-        $itemId = intval($itemId);
-        $fieldId = intval($fieldId);
+        $itemId = (int) $itemId;
+        $fieldId = (int) $fieldId;
 
         $fieldData = $this->getExtraField()->get($fieldId);
         if ($fieldData) {

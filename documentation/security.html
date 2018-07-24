@@ -105,8 +105,7 @@ This will prevent direct access to your settings and make it seem totally the sa
         account we authorize overrides through .htaccess, we need to set
         something that a .htaccess file cannot revert, and we need to set it
         for each of those directories. This can be done as follows inside
-        your VirtualHost definition in Apache (you'll have to translate it for
-        Nginx configurations), where "/var/www/URL/" is the path of your VirtualHost web root:<br />
+        your VirtualHost definition in Apache, where "/var/www/URL/" is the path of your VirtualHost web root:<br />
         <pre>
   &lt;Directory /var/www/URL/app/cache&gt;
     php_admin_value engine Off
@@ -132,6 +131,25 @@ This will prevent direct access to your settings and make it seem totally the sa
   &lt;Directory /var/www/URL/web/css&gt;
     php_admin_value engine Off
   &lt;/Directory&gt;
+        </pre>
+
+        For Nginx, this would look like the following rules. However, do
+        remember that Nginx interprets rules in order of appearance, so these
+        rules would have to be at the top of your location rules to take the
+        highest priority:
+        <pre>
+  location ~ ^/app/(cache|courses|home|logs|upload)/.*\.ph(p[3457]?|t|tml|ar)$ {
+    deny all;
+  }
+  location ~ ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$ {
+    deny all;
+  }
+  location ~ ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$ {
+    deny all;
+  }
+  location ~ ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$ {
+    deny all;
+  }
         </pre>
     <br />
 <hr />

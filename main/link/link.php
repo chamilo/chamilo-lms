@@ -82,17 +82,14 @@ if ($action === 'addcategory') {
 }
 
 if ($action === 'editlink') {
-    $nameTools = '';
+    $nameTools = get_lang('EditLink');
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditLink')];
 }
 
 // Statistics
 Event::event_access_tool(TOOL_LINK);
 
 /*	Action Handling */
-$nameTools = get_lang('Links');
-
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
 $show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : '';
@@ -224,10 +221,6 @@ switch ($action) {
 }
 
 Display::display_header($nameTools, 'Links');
-
-/*	Introduction section */
 Display::display_introduction_section(TOOL_LINK);
-
 echo $content;
-
 Display::display_footer();

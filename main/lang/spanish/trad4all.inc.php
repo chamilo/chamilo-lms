@@ -8207,4 +8207,47 @@ $PersonalDataDeletionTitle = "Eliminación de sus datos personales";
 $PersonalDataDestructionTitle = "Destrucción de sus datos personales";
 $PersonalDataProfilingTitle = "Perfilado de sus datos personales";
 $PersonalDataIntroductionText = "Respetamos sus datos personales! Esta página une todos los aspectos de los datos personales que podríamos conservar sobre Usted, como los tratamos, lo que nos permitió hacer con ellos y quienes somos, en un esfuerzo para cumplir con todas las normativas sobre los datos personales existentes y aplicables. Gracias por leer con mucha atención la información puesta a su disposición a continuación. Si le quedan dudas, revise los datos de contactos más a bajo y envíenos sus consultas.";
+$YourDegreeOfCertainty = "Su grado de certeza";
+$DegreeOfCertaintyThatMyAnswerIsCorrect = "Grado de certeza que mi respuesta será considerada correcta";
+$IncorrectAnswersX = "Respuestas incorrectas: %s";
+$KindRegards = "Cordialmente,";
+$DoNotReply = "No responder";
+$ResultAccomplishedTest = "Resultados de la prueba dada";
+$YourResultsByDiscipline = "Sus notas, disciplina por disciplina";
+$ForComparisonYourLastResultToThisTest = "En comparación, su última nota para esta prueba";
+$YourOverallResultForTheTest = "Su nota para la prueba en general";
+$QuestionDegreeCertaintyHTMLMail = "Encontrará su nota a continuación para la prueba %s.<br />
+Para ver más detalles:
+<br /><br />
+1. Conectarse a la plataforma (usuario/contraseña usual): <a href='%s'>Hacia la plataforma</a>.
+<br /><br />
+2. Seguir este enlace: <a href='%s'>Ver resultados más detallados</a>.";
+$DegreeOfCertaintyVerySure = "Muy seguro";
+$DegreeOfCertaintyVerySureDescription = "Dió la respuesta correcta y estaba seguro de ella al 80% ¡Felicitaciones!";
+$DegreeOfCertaintyPrettySure = "Bastante seguro";
+$DegreeOfCertaintyPrettySureDescription = "Dió la respuesta correcta pero no estaba completamente seguro (entre 60% y 70% seguro)";
+$DegreeOfCertaintyDeclaredIgnorance = "Ignorancia declarada";
+$DegreeOfCertaintyDeclaredIgnoranceDescription = "No sabía la respuesta - solo 50% de certeza";
+$DegreeOfCertaintyUnsure = "Inseguro";
+$DegreeOfCertaintyUnsureDescription = "Dió la respuesta incorrecta, pero intuía que no era correcta (60% a 70% de certeza)";
+$DegreeOfCertaintyVeryUnsure = "Muy inseguro";
+$DegreeOfCertaintyVeryUnsureDescription = "Dió la respuesta incorrecta a pesar de tener 80% de certeza de que no era la correcta";
+$DegreeOfCertaintyIDeclareMyIgnorance = "No conozco la respuesta y he seleccionado al azar";
+$DegreeOfCertaintyIAmVeryUnsure = "Estoy muy inseguro";
+$DegreeOfCertaintyIAmUnsure = "Estoy inseguro";
+$DegreeOfCertaintyIAmPrettySure = "Estoy más o menos seguro";
+$DegreeOfCertaintyIAmSure = "Estoy bastante seguro";
+$DegreeOfCertaintyIAmVerySure = "Estoy muy seguro";
+$MultipleAnswerTrueFalseDegreeCertainty = "Respuestas múltiples v/f/grado de certeza";
+$IgnoranceAnswersX = "Ignorancia: %s";
+$CorrectAnswersX = "Respuestas correctas: %s";
+$TotalHours = "Horas totales";
+$MinutesPerDay = "Minutos por día";
+$ClassroomActivity = "Actividad de la clase";
+$OneDay = "1 día";
+$UserXAnonymized = "Los datos del usuario %s fueron anonimizados.";
+$CannotAnonymizeUserX = "No se han podido anonimizar los datos del usuario %s. Por favor intente nuevamente o verifique los registros de error del servidor.";
+$NoPermissionToAnonymizeUserX = "No tiene los permisos necesarios para anonimizar el usuario %s. Se tratan de los mismos permisos necesarios para eliminar usuarios.";
+$Anonymize = "Anonimizar";
+$XQuestions = "%d preguntas";
 ?>

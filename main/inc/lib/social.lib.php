@@ -1916,7 +1916,7 @@ class SocialManager extends UserManager
         }
 
         $currentUserId = api_get_user_id();
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userRelationType = 0;
 
         $socialAvatarBlock = self::show_social_avatar_block(

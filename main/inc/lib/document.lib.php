@@ -6778,10 +6778,16 @@ class DocumentManager
             'id' => $parentId,
             'deleteid' => $documentData['id'],
         ]);
+
         $btn = Display::url(
             $iconEn,
-            api_get_self()."?$courseParams&$urlDeleteParams",
-            ['onclick' => "return confirmation('$titleToShow');"]
+            '#',
+            [
+                'data-item-title' => $titleToShow,
+                'data-href' => api_get_self()."?$courseParams&$urlDeleteParams",
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
         );
 
         if (

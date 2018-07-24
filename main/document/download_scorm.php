@@ -21,6 +21,7 @@ if (!isset($_course)) {
     api_not_allowed(true);
 }
 
+/** @var learnpath $obj */
 $obj = Session::read('oLP');
 // If LP obj exists
 if (empty($obj)) {

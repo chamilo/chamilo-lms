@@ -37,15 +37,11 @@ class Connector
     public $drivers = [];
     public $driverList = [];
 
-    public function __construct(
-        /*EntityManager $entityManager,
-        array $paths,
-        Router $urlGenerator,
-        Translator $translator,
-        SecurityContext $security,*/
-        //$user,
-        //$course = null
-    ) {
+    /**
+     * Connector constructor.
+     */
+    public function __construct()
+    {
         $this->paths = [
             'root_sys' => api_get_path(SYS_PATH),
             'sys_root' => api_get_path(SYS_PATH), // just an alias

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -14,7 +13,7 @@ $action = $_REQUEST['a'];
 switch ($action) {
     case 'get_user_sessions':
         if (api_is_platform_admin() || api_is_session_admin()) {
-            $user_id = intval($_POST['user_id']);
+            $user_id = (int) $_POST['user_id'];
             $list_sessions = SessionManager::get_sessions_by_user($user_id, true);
             if (!empty($list_sessions)) {
                 foreach ($list_sessions as $session_item) {
@@ -187,9 +186,7 @@ switch ($action) {
             'items' => [],
         ];
 
-        $entityManager = Database::getManager();
-        /** @var UserRepository $usersRepo */
-        $usersRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+        $usersRepo = UserManager::getRepository();
         $users = $usersRepo->searchUsersByStatus($_GET['q'], COURSEMANAGER, api_get_current_access_url_id());
         /** @var User $user */
         foreach ($users as $user) {

@@ -955,8 +955,7 @@ class Rest extends WebService
      */
     public function getMessageUsers($search)
     {
-        /** @var UserRepository $repo */
-        $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
+        $repo = UserManager::getRepository();
 
         $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
 
@@ -1160,8 +1159,6 @@ class Rest extends WebService
         $results = [];
         $orig_user_id_value = [];
         $userManager = UserManager::getManager();
-        $userRepository = UserManager::getRepository();
-
         $firstName = $user_param['firstname'];
         $lastName = $user_param['lastname'];
         $status = $user_param['status'];

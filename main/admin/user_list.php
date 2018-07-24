@@ -731,6 +731,21 @@ function modify_filter($user_id, $url_params, $row)
                 ICON_SIZE_SMALL
             ).
             '</a>';
+
+        if ($user_id != api_get_user_id() &&
+            !$user_is_anonymous &&
+            api_global_admin_can_edit_admin($user_id)
+        ) {
+            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
+                Display::return_icon(
+                    'anonymous.png',
+                    get_lang('Anonymize'),
+                    [],
+                    ICON_SIZE_SMALL
+                ).
+                '</a>';
+        }
+
         $deleteAllowed = !api_get_configuration_value('deny_delete_users');
         if ($deleteAllowed) {
             if ($user_id != api_get_user_id() &&
@@ -740,13 +755,13 @@ function modify_filter($user_id, $url_params, $row)
                 // you cannot lock yourself out otherwise you could disable all the accounts
                 // including your own => everybody is locked out and nobody can change it anymore.
                 $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
-                Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).
-                '</a>';
+                    Display::return_icon(
+                        'delete.png',
+                        get_lang('Delete'),
+                        [],
+                        ICON_SIZE_SMALL
+                    ).
+                    '</a>';
             } else {
                 $result .= Display::return_icon(
                     'delete_na.png',
@@ -859,18 +874,18 @@ if (!empty($action)) {
                 if (api_is_platform_admin() ||
                     ($allowDelete && api_is_session_admin())
                 ) {
-                    $user_to_delete = $_GET['user_id'];
-                    $userToDeleteInfo = api_get_user_info($user_to_delete);
-                    $current_user_id = api_get_user_id();
+                    $userToUpdate = $_GET['user_id'];
+                    $userToUpdateInfo = api_get_user_info($userToUpdate);
+                    $currentUserId = api_get_user_id();
 
-                    if ($userToDeleteInfo && $deleteUserAvailable &&
+                    if ($userToUpdateInfo && $deleteUserAvailable &&
                         api_global_admin_can_edit_admin($_GET['user_id'], null, $allowDelete)
                     ) {
-                        if ($user_to_delete != $current_user_id &&
+                        if ($userToUpdate != $currentUserId &&
                             UserManager::delete_user($_GET['user_id'])
                         ) {
                             $message = Display::return_message(
-                                get_lang('UserDeleted').': '.$userToDeleteInfo['complete_name_with_username'],
+                                get_lang('UserDeleted').': '.$userToUpdateInfo['complete_name_with_username'],
                                 'confirmation'
                             );
                         } else {
@@ -966,6 +981,41 @@ if (!empty($action)) {
                             'error'
                         );
                     }
+                }
+                break;
+            case 'anonymize':
+                if (api_is_platform_admin() ||
+                    ($allowDelete && api_is_session_admin())
+                ) {
+                    $userToUpdate = (int) $_GET['user_id'];
+                    $userToUpdateInfo = api_get_user_info($userToUpdate);
+                    $currentUserId = api_get_user_id();
+
+                    if ($userToUpdateInfo &&
+                        api_global_admin_can_edit_admin($userToUpdate, null, $allowDelete)
+                    ) {
+                        if ($userToUpdate != $currentUserId &&
+                            UserManager::anonymize($userToUpdate)
+                        ) {
+                            $message = Display::return_message(
+                                sprintf(get_lang('UserXAnonymized'), $userToUpdateInfo['complete_name_with_username']),
+                                'confirmation'
+                            );
+                        } else {
+                            $message = Display::return_message(
+                                sprintf(get_lang('CannotAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
+                                'error'
+                            );
+                        }
+                    } else {
+                        $message = Display::return_message(
+                            sprintf(get_lang('NoPermissionToAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
+                            'error'
+                        );
+                    }
+                    Display::addFlash($message);
+                    header('Location: '.api_get_self());
+                    exit;
                 }
                 break;
         }

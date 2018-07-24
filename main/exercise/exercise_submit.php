@@ -791,7 +791,28 @@ if ($question_count != 0) {
                     header('Location: exercise_reminder.php?'.$params);
                     exit;
                 } else {
-                    header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                    $certaintyQuestionPresent = false;
+                    foreach ($questionList as $questionId) {
+                        $question = Question::read($questionId);
+                        if ($question->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                            $certaintyQuestionPresent = true;
+                            break;
+                        }
+                    }
+                    if ($certaintyQuestionPresent) {
+                        // Certainty grade question
+                        // We send an email to the student before redirection to the result page
+                        MultipleAnswerTrueFalseDegreeCertainty::sendQuestionCertaintyNotification(
+                            $user_id, $objExercise, $exe_id
+                        );
+                    }
+
+                    header("Location: exercise_result.php?"
+                        .api_get_cidreq()
+                        ."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id="
+                        .$learnpath_item_id
+                        ."&learnpath_item_view_id=$learnpath_item_view_id"
+                    );
                     exit;
                 }
             }
@@ -1083,7 +1104,7 @@ if (!empty($error)) {
         }
         
         $(function() {
-            // This pre-load the save.png icon
+            //This pre-load the save.png icon
             var saveImage = new Image();
             saveImage.src = "'.$saveIcon.'";
 
@@ -1135,7 +1156,8 @@ if (!empty($error)) {
 
             $(\'button[name="save_now"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();                
+                e.stopPropagation();
+                
                 var
                     $this = $(this),
                     questionId = parseInt($this.data(\'question\')) || 0,
@@ -1146,7 +1168,8 @@ if (!empty($error)) {
 
             $(\'button[name="validate_all"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
-                e.stopPropagation();                
+                e.stopPropagation();
+                
                 validate_all();
             });
             
@@ -1193,6 +1216,9 @@ if (!empty($error)) {
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
             
+            //4. choice for degree of certainty
+            var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
+
             // Checking FCK
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1202,7 +1228,7 @@ if (!empty($error)) {
                     my_choice = $.param(my_choice);
                 }
             }
-
+            
             if ($(\'input[name="remind_list[\'+question_id+\']"]\').is(\':checked\')) {
                 $("#question_div_"+question_id).addClass("remind_highlight");
             } else {
@@ -1210,38 +1236,48 @@ if (!empty($error)) {
             }
 
             // Only for the first time
-            $("#save_for_now_"+question_id).html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
+            var dataparam = "'.$params.'&type=simple&question_id="+question_id;
+            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc;
+            
+            $("#save_for_now_"+question_id).html(\''.
+                Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
             $.ajax({
                 type:"post",
                 async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
-                data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
+                data: dataparam,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "error") {
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
                             url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
                         } else if ('.$reminder.' == 2 ) {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
+                                '&remind_question_id='.$remind_question_id.'&reminder=2";
                         } else {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
+                                '&remind_question_id='.$remind_question_id.'";
                         }
 
                         if (url_extra) {
                             url = url_extra;
                         }
 
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }
                 },
                 error: function() {
-                    $("#save_for_now_"+question_id).html(\''.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                    $("#save_for_now_"+question_id).html(\''.
+                        Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
                 }
             });
         }
@@ -1298,7 +1334,9 @@ if (!empty($error)) {
         }
     </script>';
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.'&autocomplete=off&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
+    echo '<form id="exercise_form" method="post" action="'.
+            api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.
+            '&autocomplete=off&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent" value="1" />
          <input type="hidden" name="exerciseId" value="'.$exerciseId.'" />
          <input type="hidden" name="num" value="'.$current_question.'" id="num_current_id" />

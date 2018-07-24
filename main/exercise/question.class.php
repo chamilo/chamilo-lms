@@ -50,6 +50,10 @@ abstract class Question
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
+        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
+            'MultipleAnswerTrueFalseDegreeCertainty.php',
+            'MultipleAnswerTrueFalseDegreeCertainty',
+        ],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
             'multiple_answer_combination_true_false.class.php',
             'MultipleAnswerCombinationTrueFalse',
@@ -1532,12 +1536,13 @@ abstract class Question
     public static function getInstance($type)
     {
         if (!is_null($type)) {
-            list($file_name, $class_name) = self::get_question_type($type);
-            if (!empty($file_name)) {
-                if (class_exists($class_name)) {
-                    return new $class_name();
+            list($fileName, $className) = self::get_question_type($type);
+            if (!empty($fileName)) {
+                include_once $fileName;
+                if (class_exists($className)) {
+                    return new $className();
                 } else {
-                    echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
+                    echo 'Can\'t instanciate class '.$className.' of type '.$type;
                 }
             }
         }
@@ -1791,7 +1796,8 @@ abstract class Question
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
         }
 
-        echo '<div class="well">';
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-body">';
         echo '<ul class="question_menu">';
         foreach ($question_type_custom_list as $i => $a_type) {
             // @todo remove require_once classes are already loaded using composer
@@ -1844,6 +1850,7 @@ abstract class Question
         echo '</a>';
         echo '</div></li>';
         echo '</ul>';
+        echo '</div>';
         echo '</div>';
     }
 
@@ -1948,7 +1955,7 @@ abstract class Question
     {
         $counterLabel = '';
         if (!empty($counter)) {
-            $counterLabel = intval($counter);
+            $counterLabel = (int) $counter;
         }
         $score_label = get_lang('Wrong');
         $class = 'error';
@@ -1969,7 +1976,7 @@ abstract class Question
                 $score['result'] = " ? / ".$weight;
                 $model = ExerciseLib::getCourseScoreModel();
                 if (!empty($model)) {
-                    $score['result'] = " ? ";
+                    $score['result'] = ' ? ';
                 }
 
                 $hide = api_get_configuration_value('hide_free_question_score');
@@ -1993,7 +2000,11 @@ abstract class Question
             'missing' => $score['weight'],
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
-        $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+        // dont display score for certainty degree questions
+        if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $header .= $exercise->getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
+        }
+
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(

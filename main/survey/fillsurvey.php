@@ -532,7 +532,9 @@ if (!empty($survey_data['survey_subtitle'])) {
 }
 
 // Displaying the survey introduction
-if (!isset($_GET['show'])) {
+if (
+    !isset($_GET['show']) ||
+    (isset($_GET['show'])) && $_GET['show'] == '') {
     // The first thing we do is delete the session
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
@@ -638,7 +640,10 @@ if ($survey_data['shuffle'] == 1) {
     $shuffle = ' BY RAND() ';
 }
 
-if (isset($_GET['show']) || isset($_POST['personality'])) {
+if (
+    (isset($_GET['show']) && $_GET['show'] != '') ||
+    isset($_POST['personality'])
+) {
     // Getting all the questions for this page and add them to a
     // multidimensional array where the first index is the page.
     // As long as there is no pagebreak fount we keep adding questions to the page
@@ -655,6 +660,12 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     ORDER BY sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if ($survey_data['one_question_per_page'] == 1) {
+                    $paged_questions[$counter][] = $row['question_id'];
+                    $counter++;
+
+                    continue;
+                }
                 if ($row['type'] == 'pagebreak') {
                     $counter++;
                 } else {
@@ -1166,10 +1177,21 @@ $sql = "SELECT * FROM $table_survey_question
 $result = Database::query($sql);
 $numberofpages = Database::num_rows($result) + 1;
 // Displaying the form with the questions
-if (isset($_GET['show'])) {
+if (isset($_GET['show']) && $_GET['show'] != '') {
     $show = (int) $_GET['show'] + 1;
 } else {
     $show = 0;
+}
+
+$displayFinishButton = true;
+
+if (isset($_GET['show']) && $_GET['show'] != '') {
+    $pagesIndexes = array_keys($paged_questions);
+    $pagesIndexes[] = count($pagesIndexes);
+
+    if (end($pagesIndexes) <= $show - 1 && empty($_POST)) {
+        $displayFinishButton = false;
+    }
 }
 
 // Displaying the form with the questions
@@ -1241,7 +1263,7 @@ $form->addHtml('<div class="start-survey">');
 if ($survey_data['survey_type'] === '0') {
     if ($survey_data['show_form_profile'] == 0) {
         // The normal survey as always
-        if (($show < $numberofpages) || !$_GET['show']) {
+        if (($show < $numberofpages)) {
             if ($show == 0) {
                 $form->addButton(
                     'next_survey_page',
@@ -1258,7 +1280,7 @@ if ($survey_data['survey_type'] === '0') {
                 );
             }
         }
-        if ($show >= $numberofpages && $_GET['show']) {
+        if ($show >= $numberofpages && $displayFinishButton) {
             $form->addButton(
                 'finish_survey',
                 get_lang('FinishSurvey'),
@@ -1270,7 +1292,7 @@ if ($survey_data['survey_type'] === '0') {
         // The normal survey as always but with the form profile
         if (isset($_GET['show'])) {
             $numberofpages = count($paged_questions);
-            if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
+            if (($show < $numberofpages)) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
                     $form->addButton(
                         'next_survey_page',
@@ -1288,7 +1310,7 @@ if ($survey_data['survey_type'] === '0') {
                 }
             }
 
-            if ($show >= $numberofpages && $_GET['show']) {
+            if ($show >= $numberofpages && $displayFinishButton) {
                 $form->addButton(
                     'finish_survey',
                     get_lang('FinishSurvey'),

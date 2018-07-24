@@ -195,6 +195,7 @@ define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_USER_ENABLE', 'user_enable');
 define('LOG_USER_DISABLE', 'user_disable');
+define('LOG_USER_ANONYMIZE', 'user_anonymized');
 define('LOG_USER_FIELD_CREATE', 'user_field_created');
 define('LOG_USER_FIELD_DELETE', 'user_field_deleted');
 define('LOG_SESSION_CREATE', 'session_created');
@@ -487,6 +488,7 @@ define('DRAGGABLE', 18);
 define('MATCHING_DRAGGABLE', 19);
 define('ANNOTATION', 20);
 define('READING_COMPREHENSION', 21);
+define('MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY', 22);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
@@ -538,6 +540,7 @@ define(
     UNIQUE_ANSWER_IMAGE.':'.
     DRAGGABLE.':'.
     MATCHING_DRAGGABLE.':'.
+    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY.':'.
     ANNOTATION
 );
 
@@ -978,16 +981,18 @@ function api_get_path($path = '', $configuration = [])
 function api_get_cdn_path($web_path)
 {
     global $_configuration;
-    $web_root = api_get_path(WEB_PATH);
-    $ext = substr($web_path, strrpos($web_path, '.'));
-    if (isset($ext[2])) { // faster version of strlen to check if len>2
-        // Check for CDN definitions
-        if (!empty($_configuration['cdn_enable']) && !empty($ext)) {
-            foreach ($_configuration['cdn'] as $host => $exts) {
-                if (in_array($ext, $exts)) {
-                    //Use host as defined in $_configuration['cdn'], without
-                    // trailing slash
-                    return str_replace($web_root, $host.'/', $web_path);
+    if (!empty($_configuration['cdn_enable'])) {
+        $web_root = api_get_path(WEB_PATH);
+        $ext = substr($web_path, strrpos($web_path, '.'));
+        if (isset($ext[2])) { // faster version of strlen to check if len>2
+            // Check for CDN definitions
+            if (!empty($ext)) {
+                foreach ($_configuration['cdn'] as $host => $exts) {
+                    if (in_array($ext, $exts)) {
+                        //Use host as defined in $_configuration['cdn'], without
+                        // trailing slash
+                        return str_replace($web_root, $host.'/', $web_path);
+                    }
                 }
             }
         }
@@ -1709,10 +1714,12 @@ function api_get_user_info(
 function api_get_user_entity($userId)
 {
     $userId = (int) $userId;
-    /** @var \Chamilo\UserBundle\Repository\UserRepository $repo */
-    $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
+    $repo = UserManager::getRepository();
 
-    return $repo->find($userId);
+    /** @var User $user */
+    $user = $repo->find($userId);
+
+    return $user;
 }
 
 /**
@@ -1735,9 +1742,9 @@ function api_get_user_info_from_username($username = '')
             WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
+        $resultArray = Database::fetch_array($result);
 
-        return _api_format_user($result_array);
+        return _api_format_user($resultArray);
     }
 
     return false;
@@ -1759,9 +1766,9 @@ function api_get_user_info_from_email($email = '')
             WHERE email ='".Database::escape_string($email)."' LIMIT 1";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
+        $resultArray = Database::fetch_array($result);
 
-        return _api_format_user($result_array);
+        return _api_format_user($resultArray);
     }
 
     return false;
@@ -4095,11 +4102,11 @@ function api_item_property_update(
         $to_value = $to_group_id;
     }
 
-    $toValueCondition = empty($to_value) ? "NULL" : "'$to_value'";
+    $toValueCondition = empty($to_value) ? 'NULL' : "'$to_value'";
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = " AND session_id = $session_id ";
     if (empty($session_id)) {
-        $condition_session = " AND (session_id = 0 OR session_id IS NULL) ";
+        $condition_session = ' AND (session_id = 0 OR session_id IS NULL) ';
     }
 
     $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
@@ -4527,13 +4534,13 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
     }
 
     $tool = Database::escape_string($tool);
-    $ref = intval($ref);
     $course_id = $courseInfo['real_id'];
-    $session_id = intval($session_id);
+    $ref = (int) $ref;
+    $session_id = (int) $session_id;
 
     $sessionCondition = " session_id = $session_id";
     if (empty($session_id)) {
-        $sessionCondition = " (session_id = 0 OR session_id IS NULL) ";
+        $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
     }
 
     // Definition of tables.
@@ -4547,7 +4554,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
                 $sessionCondition ";
 
     if (!empty($groupId)) {
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
         $sql .= " AND to_group_id = $groupId ";
     }
 
@@ -7555,8 +7562,8 @@ function api_is_global_chat_enabled()
 {
     return
         !api_is_anonymous() &&
-        api_get_setting('allow_global_chat') == 'true' &&
-        api_get_setting('allow_social_tool') == 'true';
+        api_get_setting('allow_global_chat') === 'true' &&
+        api_get_setting('allow_social_tool') === 'true';
 }
 
 /**
@@ -8944,7 +8951,7 @@ function api_unique_multidim_array($array, $key)
 }
 
 /**
- * Limit the access to Session Admins wheen the limit_session_admin_role
+ * Limit the access to Session Admins when the limit_session_admin_role
  * configuration variable is set to true.
  */
 function api_protect_limit_for_session_admin()

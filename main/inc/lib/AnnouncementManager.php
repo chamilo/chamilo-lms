@@ -806,7 +806,7 @@ class AnnouncementManager
         $courseId = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $id = intval($id);
+        $id = (int) $id;
 
         $params = [
             'title' => $title,
@@ -824,7 +824,7 @@ class AnnouncementManager
 
         $id_attach = 0;
         if ($row_attach) {
-            $id_attach = intval($row_attach['id']);
+            $id_attach = (int) $row_attach['id'];
         }
 
         if (!empty($file)) {
@@ -1123,14 +1123,16 @@ class AnnouncementManager
             switch ($toGroup) {
                 // it was send to one specific user
                 case null:
-                    $to[] = "USER:".$row['to_user_id'];
+                    if (isset($row['to_user_id']) && !empty($row['to_user_id'])) {
+                        $to[] = 'USER:'.$row['to_user_id'];
+                    }
                     break;
                 // it was sent to everyone
                 case 0:
                     return 'everyone';
                     break;
                 default:
-                    $to[] = "GROUP:".$toGroup;
+                    $to[] = 'GROUP:'.$toGroup;
             }
         }
 

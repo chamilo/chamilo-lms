@@ -35,8 +35,8 @@
     "flag-icon-css": "*",
     "jquery.easy-pie-chart": "^2.1.6",
     "jqueryui-touch-punch": "*",
-    "multiselect-two-sides": "*"
-
+    "multiselect-two-sides": "2.5.*",
+    "bootstrap-year-calendar": "1.1.*"
   },
   "resolutions": {
     "jquery": "2.1.4"

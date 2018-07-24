@@ -72,7 +72,9 @@ class CourseDescriptionController
                 header("X-XSS-Protection: 0");
             }
             // Add an escape version for the JS code of delete confirmation
-            $data['descriptions'][$id]['title_js'] = addslashes($description['title']);
+            if ($description) {
+                $data['descriptions'][$id]['title_js'] = addslashes($description['title']);
+            }
         }
         $actions = null;
         $actionLeft = null;

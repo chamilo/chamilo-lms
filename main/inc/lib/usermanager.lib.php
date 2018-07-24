@@ -5,8 +5,8 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
@@ -171,12 +171,12 @@ class UserManager
      * @param string        $language             User language    (optional)
      * @param string        $phone                Phone number    (optional)
      * @param string        $picture_uri          Picture URI        (optional)
-     * @param string        $authSource           Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param string        $authSource           Authentication source (defaults to 'platform', dependind on constant)
      * @param string        $expirationDate       Account expiration date (optional, defaults to null)
      * @param int           $active               Whether the account is enabled or disabled by default
-     * @param int           $hr_dept_id           The department of HR in which the user is registered (optional, defaults to 0)
+     * @param int           $hr_dept_id           The department of HR in which the user is registered (defaults to 0)
      * @param array         $extra                Extra fields
-     * @param string        $encrypt_method       Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @param string        $encrypt_method       Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
      * @param string        $address
@@ -578,9 +578,7 @@ class UserManager
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                     $tplContent->assign('user_added', $user);
-
                     $renderer = FormValidator::getDefaultRenderer();
-
                     // Form template
                     $elementTemplate = ' {label}: {element} <br />';
                     $renderer->setElementTemplate($elementTemplate);
@@ -640,7 +638,7 @@ class UserManager
      * @assert (-1) === false
      * @assert ('abc') === false
      */
-    public static function can_delete_user($user_id)
+    public static function canDeleteUser($user_id)
     {
         $deny = api_get_configuration_value('deny_delete_users');
 
@@ -694,7 +692,7 @@ class UserManager
             return false;
         }
 
-        if (!self::can_delete_user($user_id)) {
+        if (!self::canDeleteUser($user_id)) {
             return false;
         }
 
@@ -1060,7 +1058,7 @@ class UserManager
      * @param int    $active          Whether this account needs to be enabled (1) or disabled (0)
      * @param int    $creator_id      The user ID of the person who registered this user (optional, defaults to null)
      * @param int    $hr_dept_id      The department of HR in which the user is registered (optional, defaults to 0)
-     * @param array  $extra           A series of additional fields to add to this user as extra fields (optional, defaults to null)
+     * @param array  $extra           Additional fields to add to this user as extra fields (defaults to null)
      * @param string $language        The language to which the user account will be set
      * @param string $encrypt_method  The cipher method. This parameter is deprecated. It will use the system's default
      * @param bool   $send_email      Whether to send an e-mail to the user after the update is complete
@@ -1108,7 +1106,7 @@ class UserManager
         }
 
         $userManager = self::getManager();
-        /** @var Chamilo\UserBundle\Entity\User $user */
+        /** @var User $user */
         $user = self::getRepository()->find($user_id);
 
         if (empty($user)) {
@@ -1225,7 +1223,10 @@ class UserManager
                         get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".
                         get_lang('Problem')."\n\n".
                         get_lang('SignatureFormula').",\n\n".
-                        api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                        api_get_person_name(
+                            api_get_setting('administratorName'),
+                            api_get_setting('administratorSurname')
+                        )."\n".
                         get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
                         get_lang('Email')." : ".api_get_setting('emailAdministrator');
                 }
@@ -1237,7 +1238,10 @@ class UserManager
                     get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
                     get_lang('Problem')."\n\n".
                     get_lang('SignatureFormula').",\n\n".
-                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                    api_get_person_name(
+                        api_get_setting('administratorName'),
+                        api_get_setting('administratorSurname')
+                    )."\n".
                     get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
                     get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
@@ -1415,7 +1419,8 @@ class UserManager
      * 2. an already created username but not checked for uniqueness yet.
      *
      * @param string $firstname The first name of a given user. If the second parameter $lastname is NULL, then this
-     *                          parameter is treated as username which is to be checked for uniqueness and to be modified when it is necessary.
+     *                          parameter is treated as username which is to be checked f
+     *                          or uniqueness and to be modified when it is necessary.
      * @param string $lastname  the last name of the user
      *
      * @return string Returns a username that contains only ASCII-letters and digits and that is unique in the system.
@@ -1494,7 +1499,7 @@ class UserManager
             'COUNT(1) AS count',
             Database::get_main_table(TABLE_MAIN_USER),
             [
-                'where' => ['id = ?' => intval($userId)],
+                'where' => ['id = ?' => (int) $userId],
             ],
             'first'
         );
@@ -1651,21 +1656,23 @@ class UserManager
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
      *
-     * @param array  $conditions  a list of condition (exemple : status=>STUDENT)
-     * @param array  $order_by    a list of fields on which sort
-     * @param bool   $simple_like Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
-     * @param string $condition   Whether we want the filters to be combined by AND or OR
+     * @param array  $conditions       a list of condition (exemple : status=>STUDENT)
+     * @param array  $order_by         a list of fields on which sort
+     * @param bool   $simple_like      Whether we want a simple LIKE 'abc' or a LIKE '%abc%'
+     * @param string $condition        Whether we want the filters to be combined by AND or OR
+     * @param array  $onlyThisUserList
      *
      * @return array an array with all users of the platform
      *
      * @todo optional course code parameter, optional sorting parameters...
      * @todo security filter order_by
      */
-    public static function get_user_list_like(
+    public static function getUserListLike(
         $conditions = [],
         $order_by = [],
         $simple_like = false,
-        $condition = 'AND'
+        $condition = 'AND',
+        $onlyThisUserList = []
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -1676,8 +1683,8 @@ class UserManager
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
         }
 
+        $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
-            $sql_query .= ' WHERE ';
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
@@ -1689,7 +1696,7 @@ class UserManager
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
             }
 
             if (api_is_multiple_url_enabled()) {
@@ -1697,9 +1704,15 @@ class UserManager
             }
         } else {
             if (api_is_multiple_url_enabled()) {
-                $sql_query .= ' WHERE auru.access_url_id = '.api_get_current_access_url_id();
+                $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         }
+
+        if (!empty($onlyThisUserList)) {
+            $onlyThisUserListToString = implode("','", $onlyThisUserList);
+            $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";
+        }
+
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }
@@ -1754,7 +1767,7 @@ class UserManager
             return $anonymousPath;
         }
 
-        $id = intval($id);
+        $id = (int) $id;
         if (empty($userInfo)) {
             $user_table = Database::get_main_table(TABLE_MAIN_USER);
             $sql = "SELECT email, picture_uri FROM $user_table
@@ -1820,11 +1833,11 @@ class UserManager
             return $anonymousPath;
         }
 
-        $id = intval($id);
+        $id = (int) $id;
 
         if (empty($userInfo)) {
             $user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT email, picture_uri FROM $user_table WHERE id=$id";
+            $sql = "SELECT email, picture_uri FROM $user_table WHERE id = $id";
             $res = Database::query($sql);
 
             if (!Database::num_rows($res)) {
@@ -1840,7 +1853,6 @@ class UserManager
         }
 
         $pictureFilename = trim($user['picture_uri']);
-
         $dir = self::getUserPathById($id, $type);
 
         return [
@@ -1864,7 +1876,7 @@ class UserManager
      */
     public static function getUserPathById($id, $type)
     {
-        $id = intval($id);
+        $id = (int) $id;
         if (!$id) {
             return null;
         }
@@ -1982,7 +1994,6 @@ class UserManager
         }
 
         $pictureSysPath = self::get_user_picture_path_by_id($user_id, 'system');
-
         $file = $pictureSysPath['dir'].$realSizeName.$pictureWebFile;
         $picture = '';
         if (file_exists($file)) {
@@ -2021,7 +2032,8 @@ class UserManager
      * @param string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      *
      * @return bool Returns the resulting common file name of created images which usually should be stored in database.
-     *              When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
+     *              When deletion is requested returns empty string.
+     *              In case of internal error or negative validation returns FALSE.
      */
     public static function update_user_picture(
         $user_id,
@@ -2180,13 +2192,13 @@ class UserManager
      * Deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
      *
-     * @param int $user_id the user internal identification number
+     * @param int $userId the user internal identification number
      *
      * @return mixed returns empty string on success, FALSE on error
      */
-    public static function delete_user_picture($user_id)
+    public static function deleteUserPicture($userId)
     {
-        return self::update_user_picture($user_id);
+        return self::update_user_picture($userId);
     }
 
     /**
@@ -2231,7 +2243,15 @@ class UserManager
                         '.htmlentities($file).'
                     </a>';
                 if ($showDelete) {
-                    $production_list .= '&nbsp;&nbsp;<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
+                    $production_list .= '&nbsp;&nbsp;
+                        <input 
+                            style="width:16px;" 
+                            type="image" 
+                            name="remove_production['.urlencode($file).']" 
+                            src="'.$del_image.'" 
+                            alt="'.$del_text.'" 
+                            title="'.$del_text.' '.htmlentities($file).'" 
+                            onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
             $production_list .= '</ul></div>';
@@ -2349,7 +2369,7 @@ class UserManager
             'field_order',
             'filter',
         ];
-        $column = intval($column);
+        $column = (int) $column;
         $sort_direction = '';
         if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
             $sort_direction = strtoupper($direction);
@@ -2444,7 +2464,14 @@ class UserManager
                         '.htmlentities($filename).
                     '</a> ';
                 if ($showDelete) {
-                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_'.$extra_field.'['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
+                    $extra_file_list .= '<input 
+                        style="width:16px;" 
+                        type="image" 
+                        name="remove_extra_'.$extra_field.'['.urlencode($file).']" 
+                        src="'.$del_image.'" 
+                        alt="'.$del_text.'"
+                        title="'.$del_text.' '.htmlentities($filename).'" 
+                        onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
             $extra_file_list .= '</ul></div>';
@@ -2590,7 +2617,7 @@ class UserManager
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
                 FROM $t_uf f
                 WHERE
@@ -2600,13 +2627,13 @@ class UserManager
 
         if (!$allVisibility) {
             if (isset($fieldFilter)) {
-                $fieldFilter = intval($fieldFilter);
+                $fieldFilter = (int) $fieldFilter;
                 $filter_cond .= " AND filter = $fieldFilter ";
             }
             $sql .= " AND f.visible_to_self = 1 $filter_cond ";
         } else {
             if (isset($fieldFilter)) {
-                $fieldFilter = intval($fieldFilter);
+                $fieldFilter = (int) $fieldFilter;
                 $sql .= " AND filter = $fieldFilter ";
             }
         }
@@ -2685,7 +2712,7 @@ class UserManager
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
 
         $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
                 FROM $t_uf f
@@ -2871,12 +2898,12 @@ class UserManager
     public static function get_extra_user_data_by_field_variable($variable)
     {
         $extraInfo = self::get_extra_field_information_by_name($variable);
-        $field_id = intval($extraInfo['id']);
+        $field_id = (int) $extraInfo['id'];
 
         $extraField = new ExtraFieldValue('user');
         $data = $extraField->getValuesByFieldId($field_id);
 
-        if (!empty($data) > 0) {
+        if (!empty($data)) {
             foreach ($data as $row) {
                 $user_id = $row['item_id'];
                 $data[$user_id] = $row;
@@ -2904,7 +2931,8 @@ class UserManager
      * Gives a list of [session_category][session_id] for the current user.
      *
      * @param int  $user_id
-     * @param bool $is_time_over                 whether to fill the first element or not (to give space for courses out of categories)
+     * @param bool $is_time_over                 whether to fill the first element or not
+     *                                           (to give space for courses out of categories)
      * @param bool $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param bool $ignoreTimeLimit              ignore time start/end
      *
@@ -2951,21 +2979,28 @@ class UserManager
                 FROM ChamiloCoreBundle:Session AS s
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
-                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
+                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc ";
+
+        // A single OR operation on scu.user = :user OR s.generalCoach = :user
+        // is awfully inefficient for large sets of data (1m25s for 58K
+        // sessions, BT#14115) but executing a similar query twice and grouping
+        // the results afterwards in PHP takes about 1/1000th of the time
+        // (0.1s + 0.0s) for the same set of data, so we do it this way...
+        $dqlStudent = $dql." WHERE scu.user = :user AND url.accessUrlId = :url ";
+        $dqlCoach = $dql." WHERE s.generalCoach = :user AND url.accessUrlId = :url ";
 
         // Default order
-        $order = "ORDER BY sc.name, s.name";
+        $order = 'ORDER BY sc.name, s.name';
 
         // Order by date if showing all sessions
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
         if ($showAllSessions) {
-            $order = "ORDER BY s.accessStartDate";
+            $order = 'ORDER BY s.accessStartDate';
         }
 
         // Order by position
         if ($allowOrder) {
-            $order = "ORDER BY s.position";
+            $order = 'ORDER BY s.position';
         }
 
         // Order by dates according to settings
@@ -2988,18 +3023,39 @@ class UserManager
             }
         }
 
-        $dql .= $order;
+        $dqlStudent .= $order;
+        $dqlCoach .= $order;
 
-        $dql = Database::getManager()
-            ->createQuery($dql)
+        $accessUrlId = api_get_current_access_url_id();
+        $dqlStudent = Database::getManager()
+            ->createQuery($dqlStudent)
             ->setParameters(
-                ['user' => $user_id, 'url' => api_get_current_access_url_id()]
+                ['user' => $user_id, 'url' => $accessUrlId]
+            )
+        ;
+        $dqlCoach = Database::getManager()
+            ->createQuery($dqlCoach)
+            ->setParameters(
+                ['user' => $user_id, 'url' => $accessUrlId]
             )
         ;
 
-        $sessionData = $dql->getResult();
-        $categories = [];
+        $sessionDataStudent = $dqlStudent->getResult();
+        $sessionDataCoach = $dqlCoach->getResult();
 
+        $sessionData = [];
+        // First fill $sessionData with student sessions
+        foreach ($sessionDataStudent as $row) {
+            $sessionData[$row['id']] = $row;
+        }
+        // Overwrite session data of the user as a student with session data
+        // of the user as a coach.
+        // There shouldn't be such duplicate rows, but just in case...
+        foreach ($sessionDataCoach as $row) {
+            $sessionData[$row['id']] = $row;
+        }
+
+        $categories = [];
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);
@@ -3541,7 +3597,7 @@ class UserManager
     ) {
         $return = '';
         if (!empty($user_id) && !empty($course)) {
-            $user_id = intval($user_id);
+            $user_id = (int) $user_id;
             $path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
             $web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
             $file_list = [];
@@ -3561,7 +3617,8 @@ class UserManager
                 $extensionList = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif'];
                 foreach ($file_list as $file) {
                     if ($resourceType == 'all') {
-                        $return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
+                        $return .= '<li>
+                            <a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
                     } elseif ($resourceType == 'images') {
                         //get extension
                         $ext = explode('.', $file);
@@ -3817,43 +3874,6 @@ class UserManager
     }
 
     /**
-     * @author Isaac flores <isaac.flores@dokeos.com>
-     *
-     * @param string The email administrator
-     * @param int The user id
-     * @param string The message title
-     * @param string The content message
-     */
-    public static function send_message_in_outbox(
-        $email_administrator,
-        $user_id,
-        $title,
-        $content
-    ) {
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $title = api_utf8_decode($title);
-        $content = api_utf8_decode($content);
-        $email_administrator = Database::escape_string($email_administrator);
-        //message in inbox
-        $sql_message_outbox = 'SELECT id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
-        //$num_row_query = Database::num_rows($sql_message_outbox);
-        $res_message_outbox = Database::query($sql_message_outbox);
-        $array_users_administrator = [];
-        while ($row_message_outbox = Database::fetch_array($res_message_outbox, 'ASSOC')) {
-            $array_users_administrator[] = $row_message_outbox['id'];
-        }
-        //allow to insert messages in outbox
-        for ($i = 0; $i < count($array_users_administrator); $i++) {
-            $sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-                " VALUES (".
-                "'".(int) $user_id."', '".(int) ($array_users_administrator[$i])."', '4', '".api_get_utc_datetime()."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-                ")";
-            Database::query($sql);
-        }
-    }
-
-    /**
      * Gets the tags of a specific field_id
      * USER TAGS.
      *
@@ -3877,8 +3897,8 @@ class UserManager
     {
         // database table definition
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
-        $field_id = intval($field_id);
-        $limit = intval($limit);
+        $field_id = (int) $field_id;
+        $limit = (int) $limit;
         $tag = trim(Database::escape_string($tag));
 
         // all the information of the field
@@ -3914,7 +3934,7 @@ class UserManager
         // all the information of the field
         $sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv
                 INNER JOIN $table_user_tag ut
-                ON(ut.id = uv.tag_id)
+                ON (ut.id = uv.tag_id)
                 WHERE field_id = $field_id
                 GROUP BY tag_id
                 ORDER BY count DESC
@@ -4008,7 +4028,7 @@ class UserManager
         }
 
         if (is_array($user_tags) && count($user_tags) > 0) {
-            $return = implode(', ', $tag_tmp);
+            return implode(', ', $tag_tmp);
         } else {
             return '';
         }
@@ -4072,7 +4092,9 @@ class UserManager
      * @param int   $user_id
      * @param int   $field_id field id of the tag
      *
-     * @return bool True if the tag was inserted or updated. False otherwise. The return value doesn't take into account *values* added to the tag. Only the creation/update of the tag field itself.
+     * @return bool True if the tag was inserted or updated. False otherwise.
+     *              The return value doesn't take into account *values* added to the tag.
+     *              Only the creation/update of the tag field itself.
      */
     public static function add_tag($tag, $user_id, $field_id)
     {
@@ -4316,7 +4338,8 @@ class UserManager
     /**
      * Get extra filterable user fields (only type select).
      *
-     * @return array Array of extra fields as [int => ['name' => ..., 'variable' => ..., 'data' => ...]] (or empty array if no extra field)
+     * @return array Array of extra fields as [int => ['name' => ..., 'variable' => ..., 'data' => ...]] (
+     *               or empty array if no extra field)
      */
     public static function getExtraFilterableFields()
     {
@@ -4341,7 +4364,8 @@ class UserManager
     /**
      * Get extra where clauses for finding users based on extra filterable user fields (type select).
      *
-     * @return string With AND clauses based on user's ID which have the values to search in extra user fields (or empty if no extra field exists)
+     * @return string With AND clauses based on user's ID which have the values to search in extra user fields
+     *                (or empty if no extra field exists)
      */
     public static function get_search_form_where_extra_fields()
     {
@@ -4459,7 +4483,11 @@ class UserManager
         $js = '<script>
         extra_field_toogle();
         function extra_field_toogle() {
-            if (jQuery("select[name=search_type]").val() != "1") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
+            if (jQuery("select[name=search_type]").val() != "1") { 
+                jQuery(".extra_field").hide(); 
+            } else { 
+                jQuery(".extra_field").show(); 
+            }
         }
         </script>';
 
@@ -4472,11 +4500,15 @@ class UserManager
     public static function show_menu()
     {
         echo '<div class="actions">';
-        echo '<a href="/main/auth/profile.php">'.Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
-        echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
-        echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
+        echo '<a href="/main/auth/profile.php">'.
+            Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
+        echo '<a href="/main/messages/inbox.php">'.
+            Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
+        echo '<a href="/main/messages/outbox.php">'.
+            Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
         echo '<span style="float:right; padding-top:7px;">'.
-        '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+        '<a href="/main/auth/profile.php?show=1">'.
+            Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
         echo '</span>';
         echo '</div>';
     }
@@ -4525,7 +4557,9 @@ class UserManager
 
         if ($row['count'] == 1) {
             //only for the case of a RRHH or a Student BOSS
-            if ($row['relation_type'] != $relation_type && ($relation_type == USER_RELATION_TYPE_RRHH || $relation_type == USER_RELATION_TYPE_BOSS)) {
+            if ($row['relation_type'] != $relation_type &&
+                ($relation_type == USER_RELATION_TYPE_RRHH || $relation_type == USER_RELATION_TYPE_BOSS)
+            ) {
                 $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
                         VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
             } else {
@@ -4587,13 +4621,19 @@ class UserManager
                 //Delete user rel user
                 $sql_i = 'UPDATE '.$tbl_my_friend.' SET relation_type='.USER_RELATION_TYPE_DELETED.'
                           WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
+
                 $sql_j = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                          WHERE user_receiver_id='.$user_id.' AND user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
-                //Delete user
+                          WHERE 
+                                user_receiver_id='.$user_id.' AND 
+                                user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
+                // Delete user
                 $sql_ij = 'UPDATE '.$tbl_my_friend.'  SET relation_type='.USER_RELATION_TYPE_DELETED.'
                            WHERE user_id='.$friend_id.' AND friend_user_id='.$user_id;
                 $sql_ji = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                           WHERE user_receiver_id='.$friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
+                           WHERE 
+                                user_receiver_id='.$friend_id.' AND 
+                                user_sender_id='.$user_id.' AND 
+                                update_date="0000-00-00 00:00:00" ';
                 Database::query($sql_i);
                 Database::query($sql_j);
                 Database::query($sql_ij);
@@ -5993,6 +6033,114 @@ SQL;
             $mailBody
         );
         Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
+    }
+
+    /**
+     * Anonymize a user. Replace personal info by anonymous info.
+     *
+     * @param int  $userId   User id
+     * @param bool $deleteIP Whether to replace the IP address in logs tables by 127.0.0.1 or to leave as is
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     * @assert (0) === false
+     */
+    public static function anonymize($userId, $deleteIP = true)
+    {
+        global $debug;
+        if (empty($userId)) {
+            return false;
+        }
+        $em = Database::getManager();
+        $user = api_get_user_entity($userId);
+        $uniqueId = uniqid('anon');
+        $user->setFirstname($uniqueId);
+        $user->setLastname($uniqueId);
+        $user->setBiography('');
+        $user->setAddress('');
+        $user->setCurriculumItems(null);
+        $user->setDateOfBirth(null);
+        $user->setCompetences('');
+        $user->setDiplomas('');
+        $user->setOpenarea('');
+        $user->setTeach('');
+        $user->setProductions(null);
+        $user->setOpenid('');
+        $user->setEmailCanonical($uniqueId.'@example.com');
+        $user->setEmail($uniqueId.'@example.com');
+        $user->setUsername($uniqueId);
+        $user->setUsernameCanonical($uniqueId);
+        $user->setPhone('');
+        $user->setOfficialCode('');
+        UserManager::deleteUserPicture($userId);
+        // The IP address is a border-case personal data, as it does
+        // not directly allow for personal identification (it is not
+        // a completely safe value in most countries - the IP could
+        // be used by neighbours and crackers)
+        if ($deleteIP) {
+            $substitute = '127.0.0.1';
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE access_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE exe_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_course_table(TABLE_WIKI);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
+            $sql = "UPDATE $table set ip_address = '$substitute' WHERE sys_insert_user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+
+            $table = Database::get_course_table(TABLE_WIKI);
+            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
+            $res = Database::query($sql);
+            if ($res === false && $debug > 0) {
+                error_log("Could not anonymize IP address for user $userId ($sql)");
+            }
+        }
+        $em->persist($user);
+        $em->flush($user);
+        Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
+
+        return true;
     }
 
     /**

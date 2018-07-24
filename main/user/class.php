@@ -15,14 +15,14 @@ if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false'
     }
 }
 
-$tool_name = get_lang("Classes");
+$tool_name = get_lang('Classes');
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Extra entries in breadcrumb
 $interbreadcrumb[] = [
     "url" => "user.php?".api_get_cidreq(),
-    "name" => get_lang("ToolUser"),
+    "name" => get_lang('ToolUser'),
 ];
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
@@ -43,10 +43,10 @@ $usergroup = new UserGroup();
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
-            Display::return_icon('add-class.png', get_lang("AddClassesToACourse"), [], ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('add-class.png', get_lang('AddClassesToACourse'), [], ICON_SIZE_MEDIUM).'</a>';
     } else {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
-            Display::return_icon('back.png', get_lang("Classes"), [], ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Classes'), [], ICON_SIZE_MEDIUM).'</a>';
 
         $form = new FormValidator(
             'groups',
@@ -102,10 +102,10 @@ if (api_is_allowed_to_edit()) {
     }
 }
 
-//jqgrid will use this URL to do the selects
+// jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter;
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
+// The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Name'),
     get_lang('Users'),
@@ -152,7 +152,7 @@ $extraParams['autowidth'] = 'true';
 // height auto
 $extraParams['height'] = 'auto';
 
-Display :: display_header($tool_name, "User");
+Display::display_header($tool_name, 'User');
 
 ?>
 <script>
@@ -176,6 +176,5 @@ $(function() {
 
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
-
 $usergroup->display_teacher_view();
-Display :: display_footer();
+Display::display_footer();

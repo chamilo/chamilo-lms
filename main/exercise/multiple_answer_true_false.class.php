@@ -83,7 +83,7 @@ class MultipleAnswerTrueFalse extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $course_id);
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
 
             $renderer->setElementTemplate(

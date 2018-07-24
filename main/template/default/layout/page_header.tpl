@@ -36,14 +36,11 @@
                                 {{ plugin_header_right }}
                             </div>
                         {% endif %}
-                        <script>
-                            $(document).on('ready', function () {
-                                $("#notifications").load("{{ _p.web_main }}inc/ajax/online.ajax.php?a=get_users_online");
-                            });
-                        </script>
                         <div class="section-notifications">
+                            {% if _u.logged == 1 %}
                             <ul id="notifications" class="nav nav-pills pull-right">
                             </ul>
+                            {% endif %}
                         </div>
                         {{ accessibility }}
                     </div>

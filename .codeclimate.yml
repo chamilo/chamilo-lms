@@ -8,6 +8,8 @@ checks:
     enabled: false
   method-complexity:
     enabled: true
+    config:
+      threshold: 20
   method-count:
     enabled: false
   method-lines:
@@ -40,6 +42,8 @@ plugins:
       PSR1 Classes ClassDeclaration MissingNamespace:
         enabled: false
       PSR1 Files SideEffects FoundWithSymbols:
+        enabled: false
+      Squiz Strings ConcatenationSpacing PaddingFound:
         enabled: false
 
   phpmd:

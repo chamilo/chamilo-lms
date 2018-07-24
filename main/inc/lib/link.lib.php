@@ -1722,9 +1722,9 @@ class Link extends Model
     }
 
     /**
-     * @param int $linkId
-     * @param $action
-     * @param null $token
+     * @param int    $linkId
+     * @param string $action
+     * @param null   $token
      *
      * @return FormValidator
      */

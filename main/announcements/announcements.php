@@ -378,7 +378,7 @@ switch ($action) {
         }
 
         // DISPLAY ADD ANNOUNCEMENT COMMAND
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
         $url = api_get_self().'?action='.$action.'&id='.$id.'&'.api_get_cidreq();
 
         $form = new FormValidator(
@@ -389,15 +389,13 @@ switch ($action) {
             ['enctype' => 'multipart/form-data']
         );
 
+        $form_name = get_lang('ModifyAnnouncement');
         if (empty($id)) {
             $form_name = get_lang('AddAnnouncement');
-        } else {
-            $form_name = get_lang('ModifyAnnouncement');
         }
-
         $interbreadcrumb[] = [
-            "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
-            "name" => $nameTools,
+            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
+            'name' => $nameTools,
         ];
 
         $nameTools = $form_name;
@@ -424,7 +422,7 @@ switch ($action) {
             } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] === 'true') {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
-                $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
+                $since = isset($_GET['since']) ? (int) $_GET['since'] : 6;
 
                 // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(
@@ -477,7 +475,6 @@ switch ($action) {
         $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
         if (isset($announcementInfo) && !empty($announcementInfo)) {
             $to = AnnouncementManager::load_edit_users('announcement', $id);
-
             $defaults = [
                 'title' => $announcementInfo['title'],
                 'content' => $announcementInfo['content'],
@@ -498,7 +495,6 @@ switch ($action) {
                 if (!isset($parts[1]) || empty($parts[1])) {
                     continue;
                 }
-
                 $form->addHtml("
                     <script>
                         $(document).on('ready', function () {
@@ -515,20 +511,19 @@ switch ($action) {
             'text',
             'title',
             get_lang('EmailTitle'),
-            ["onkeypress" => "return event.keyCode != 13;"]
+            ['onkeypress' => 'return event.keyCode != 13;']
         );
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = '';
         $tags = AnnouncementManager::getTags();
         foreach ($tags as $tag) {
-            $htmlTags .= "<b>".$tag."</b><br />";
+            $htmlTags .= "<b>$tag</b><br />";
         }
         $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
         $form->addElement('html', '<div id="tags_options" style="display:none">');
         $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
         $form->addElement('html', '</div>');
-
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
@@ -536,7 +531,6 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-
         $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
         $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
         $form->addHidden('sec_token', $token);

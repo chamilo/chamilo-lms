@@ -549,7 +549,7 @@ class ExerciseShowFunctions
             echo '-';
         }
 
-        echo '</td><td width="25%">';
+        echo '</td><td width="20%">';
         echo $answer;
         echo '</td><td width="5%" style="text-align:center;">';
         echo $newOptions[$studentChoiceDegree]['name'];
@@ -562,9 +562,9 @@ class ExerciseShowFunctions
         );
 
         echo '
-            <td width="10%">
+            <td width="15%">
                 <div style="text-align:center;color: '.$degreeInfo['color'].';
-                    border:1px #D6D4D4 solid;background-color: '.$degreeInfo['background-color'].';
+                    background-color: '.$degreeInfo['background-color'].';
                     line-height:30px;height:30px;width: 100%;margin:auto;"
                     title="'.$degreeInfo['description'].'">'.
                     nl2br($degreeInfo['label']).

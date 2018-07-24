@@ -2979,8 +2979,15 @@ class UserManager
                 FROM ChamiloCoreBundle:Session AS s
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
-                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
+                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc ";
+
+        // A single OR operation on scu.user = :user OR s.generalCoach = :user
+        // is awfully inefficient for large sets of data (1m25s for 58K
+        // sessions, BT#14115) but executing a similar query twice and grouping
+        // the results afterwards in PHP takes about 1/1000th of the time
+        // (0.1s + 0.0s) for the same set of data, so we do it this way...
+        $dqlStudent = $dql." WHERE scu.user = :user AND url.accessUrlId = :url ";
+        $dqlCoach = $dql." WHERE s.generalCoach = :user AND url.accessUrlId = :url ";
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';
@@ -3016,18 +3023,39 @@ class UserManager
             }
         }
 
-        $dql .= $order;
+        $dqlStudent .= $order;
+        $dqlCoach .= $order;
 
-        $dql = Database::getManager()
-            ->createQuery($dql)
+        $accessUrlId = api_get_current_access_url_id();
+        $dqlStudent = Database::getManager()
+            ->createQuery($dqlStudent)
             ->setParameters(
-                ['user' => $user_id, 'url' => api_get_current_access_url_id()]
+                ['user' => $user_id, 'url' => $accessUrlId]
+            )
+        ;
+        $dqlCoach = Database::getManager()
+            ->createQuery($dqlCoach)
+            ->setParameters(
+                ['user' => $user_id, 'url' => $accessUrlId]
             )
         ;
 
-        $sessionData = $dql->getResult();
-        $categories = [];
+        $sessionDataStudent = $dqlStudent->getResult();
+        $sessionDataCoach = $dqlCoach->getResult();
 
+        $sessionData = [];
+        // First fill $sessionData with student sessions
+        foreach ($sessionDataStudent as $row) {
+            $sessionData[$row['id']] = $row;
+        }
+        // Overwrite session data of the user as a student with session data
+        // of the user as a coach.
+        // There shouldn't be such duplicate rows, but just in case...
+        foreach ($sessionDataCoach as $row) {
+            $sessionData[$row['id']] = $row;
+        }
+
+        $categories = [];
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);

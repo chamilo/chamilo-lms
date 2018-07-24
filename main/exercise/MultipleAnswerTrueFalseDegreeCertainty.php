@@ -335,7 +335,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if ($studentDegreeChoicePosition == 3) {
             $result = [
                 'color' => '#000000',
-                'background-color' => '#FFFFFF',
+                'background-color' => '#F6BA2A',
                 'status' => self::LEVEL_WHITE,
                 'label' => get_lang('DegreeOfCertaintyDeclaredIgnorance'),
                 'description' => get_lang('DegreeOfCertaintyDeclaredIgnoranceDescription'),
@@ -346,7 +346,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 if ($studentDegreeChoicePosition >= 6) {
                     $result = [
                         'color' => '#FFFFFF',
-                        'background-color' => '#088A08',
+                        'background-color' => '#1E9C55',
                         'status' => self::LEVEL_DARKGREEN,
                         'label' => get_lang('DegreeOfCertaintyVerySure'),
                         'description' => get_lang('DegreeOfCertaintyVerySureDescription'),
@@ -354,7 +354,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
                         'color' => '#000000',
-                        'background-color' => '#A9F5A9',
+                        'background-color' => '#B1E183',
                         'status' => self::LEVEL_LIGHTGREEN,
                         'label' => get_lang('DegreeOfCertaintyPrettySure'),
                         'description' => get_lang('DegreeOfCertaintyPrettySureDescription'),
@@ -364,7 +364,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 if ($studentDegreeChoicePosition >= 6) {
                     $result = [
                         'color' => '#FFFFFF',
-                        'background-color' => '#FE2E2E',
+                        'background-color' => '#ED4040',
                         'status' => self::LEVEL_DARKRED,
                         'label' => get_lang('DegreeOfCertaintyVeryUnsure'),
                         'description' => get_lang('DegreeOfCertaintyVeryUnsureDescription'),
@@ -372,7 +372,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
                         'color' => '#000000',
-                        'background-color' => '#F6CECE',
+                        'background-color' => '#F79B88',
                         'status' => self::LEVEL_LIGHTRED,
                         'label' => get_lang('DegreeOfCertaintyUnsure'),
                         'description' => get_lang('DegreeOfCertaintyUnsureDescription'),
@@ -498,7 +498,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if ($category) {
                 $categoryQuestionName = $category->name;
             }
-            list($noValue, $height) = self::displayDegreeChart(
+            list($noValue, $height) = self::displayDegreeChartChildren(
                 $scoreListForCategory,
                 300,
                 '',
@@ -519,8 +519,21 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $boxWidth = $sizeRatio * 300 + 54;
         }
 
-        $html = '<div style="width: '.$boxWidth.'px; margin : auto; padding-left : 15px;">';
-        $html .= '<h3 style="text-align: center; margin : 10px 0">'.$title.'</h3>';
+        $html = '<div class="row-chart">';
+        $html .= '<h4 class="chart-title">'.$title.'</h4>';
+
+        $legendTitle = [
+            'DegreeOfCertaintyVeryUnsure',
+            'DegreeOfCertaintyUnsure',
+            'DegreeOfCertaintyDeclaredIgnorance',
+            'DegreeOfCertaintyPrettySure',
+            'DegreeOfCertaintyVerySure',
+        ];
+        $html .= '<ul class="chart-legend">';
+        foreach ($legendTitle as $i => $item){
+            $html .= '<li><i class="fa fa-square square_color'.$i.'" aria-hidden="true"></i> '.get_lang($item).'</li>';
+        }
+        $html .= '</ul>';
 
         // get the html of items
         $i = 0;
@@ -538,8 +551,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $categoryName = $categoryQuestionName;
             }
 
-            $html .= '<div style="float:left; margin-right: 10px;">';
-            $html .= self::displayDegreeChart(
+            $html .= '<div class="col-md-4">';
+            $html .= self::displayDegreeChartChildren(
                 $scoreListForCategory,
                 300,
                 $categoryName,
@@ -551,15 +564,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             );
             $html .= '</div>';
 
-            if ($i == 1) {
-                $html .= '<div style="clear:both">&nbsp;</div>';
+            if ($i == 2) {
+                $html .= '<div style="clear:both; height: 10px;">&nbsp;</div>';
                 $i = 0;
             } else {
                 $i++;
             }
         }
+        $html .= '</div>';
 
-        return $html.'<div style="clear:both">&nbsp;</div></div>';
+        return $html.'<div style="clear:both; height: 10px;" >&nbsp;</div>';
     }
 
     /**
@@ -587,7 +601,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $returnHeight = false,
         $groupCategoriesByBracket = false,
         $numberOfQuestions = 0
-    ) {
+    )
+    {
         $topAndBottomMargin = 10;
         $colorList = [
             self::LEVEL_DARKRED,
@@ -613,103 +628,14 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // draw chart
-        $html = '<style type="text/css">
-                .certaintyQuizBox {
-                    border : 1px solid black;
-                    margin : auto;
-                }
-
-                .certaintyQuizColumn {
-                    float : left;
-                }
-
-                /* text at the top of the column */
-                .certaintyQuizDivMiddle {
-                    height : 20px;
-                    margin : 0;
-                    padding : 0;
-                    text-align: center
-                }
-
-                .certaintyQuizDivBottom {
-                    border : 1px solid black;
-                }
-
-                .certaintyVerticalLine {
-                    float: left;
-                    border-left : 1px solid black;
-                    font-size: 0;
-                }
-
-                .certaintyQuizClearer {
-                    clear : both;
-                    font-size: 0;
-                    height:0
-                }
-
-                .certaintyQuizLevel_'.self::LEVEL_DARKGREEN.' {
-                    background-color: #088A08;
-                }
-
-                .certaintyQuizLevel_'.self::LEVEL_LIGHTGREEN.' {
-                    background-color: #A9F5A9;
-                }
-
-                .certaintyQuizLevel_'.self::LEVEL_WHITE.' {
-                    background-color: #FFFFFF;
-                     width:88%
-                }
-
-                .certaintyQuizLevel_'.self::LEVEL_LIGHTRED.' {
-                    background-color: #F6CECE;
-                }
-
-                .certaintyQuizLevel_'.self::LEVEL_DARKRED.' {
-                    background-color: #FE2E2E;
-                }
-                
-                table.certaintyTable {
-                    margin : auto; 
-                    border: 1px solid #999A9B;
-                }
-                
-                table.certaintyTable th {
-                    text-align: center; 
-                    border-bottom: 1px solid #999A9B;
-                    background-color: #cdd0d4;
-                    padding : 10px;                    
-                }
-                
-                table.certaintyTable td {
-                    padding : 10px;                    
-                }
-                                
-                table.certaintyTable td.borderRight {
-                    border-right: 1px dotted #000000; 
-                }
-                
-                table.certaintyTable td.firstLine {
-                    vertical-align: top;
-                    text-align: center;
-                }
-                
-                table.certaintyTable th.globalChart {
-                    font-size : 18pt;
-                    line-height : 120%;
-                    padding : 20px;
-                }
-                
-                table.certaintyTable td.globalChart {
-                    font-weight : bold;
-                }                
-            </style>';
+        $html = '';
 
         if ($groupCategoriesByBracket) {
             $title = api_preg_replace("/[^]]*$/", '', $title);
             $title = ucfirst(api_preg_replace("/[\[\]]/", '', $title));
         }
 
-        $display = (strpos($title, "ensemble") > 0) ?
+        $titleDisplay = (strpos($title, "ensemble") > 0) ?
             $title."<br/>($totalAttemptNumber questions)" :
             $title;
         $textSize = (
@@ -717,17 +643,168 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             strpos($title, 'votre dernier résultat à ce test') > 0
         ) ? 100 : 80;
 
+
+        $html .= '<div class="row-chart">';
+        $html .= '<h4 class="chart-title">'.$titleDisplay.'</h4>';
+
+
+        $nbResponsesInc = 0;
+        if (isset($scoreList[4])) {
+            $nbResponsesInc += (int) $scoreList[4];
+        }
+        if (isset($scoreList[5])) {
+            $nbResponsesInc += (int) $scoreList[5];
+        }
+
+        $nbResponsesIng = isset($scoreList[3]) ? $scoreList[3] : 0;
+
+        $nbResponsesCor = 0;
+        if (isset($scoreList[1])) {
+            $nbResponsesCor += (int) $scoreList[1];
+        }
+        if (isset($scoreList[2])) {
+            $nbResponsesCor += (int) $scoreList[2];
+        }
+
+        $IncorrectAnswers = sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc);
+        $IgnoranceAnswers = sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng);
+        $CorrectAnswers = sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor);
+
+
+        $html .= '<div class="chart-grid">';
+
+        $explainHistoList = null;
+        if ($displayExplanationText) {
+            // Display of histogram text
+            $explainHistoList = [
+                'DegreeOfCertaintyVeryUnsure',
+                'DegreeOfCertaintyUnsure',
+                'DegreeOfCertaintyDeclaredIgnorance',
+                'DegreeOfCertaintyPrettySure',
+                'DegreeOfCertaintyVerySure',
+            ];
+        }
+
+        foreach ($colorList as $i => $color) {
+            if (array_key_exists($color, $scoreList)) {
+                $scoreOnBottom = $scoreList[$color]; // height of the colored area on the bottom
+            } else {
+                $scoreOnBottom = 0;
+            }
+            $sizeBar = ($scoreOnBottom * $sizeRatio * 2).'px;';
+
+            if ($i == 0 ) {
+                $html .= '<div class="item">';
+                $html .= '<div class="panel-certaint" style="min-height:'.$verticalLineHeight.'px; position: relative;">';
+                $html .= '<div class="answers-title">'.$IncorrectAnswers.'</div>';
+                $html .= '<ul class="certaint-list-two">';
+            } else if($i == 3){
+                $html .= '<div class="item">';
+                $html .= '<div class="panel-certaint" style="height:'.$verticalLineHeight.'px;  position: relative;">';
+                $html .= '<div class="answers-title">'.$CorrectAnswers.'</div>';
+                $html .= '<ul class="certaint-list-two">';
+            } else if($i==2){
+                $html .= '<div class="item">';
+                $html .= '<div class="panel-certaint" style="height:'.$verticalLineHeight.'px;  position: relative;">';
+                $html .= '<div class="answers-title">'.$IgnoranceAnswers.'</div>';
+                $html .= '<ul class="certaint-list">';
+            }
+            $html .= '<li>';
+            $html .= '<div class="certaint-score">';
+            $html .= $scoreOnBottom;
+            $html .= '</div>';
+            $html .= '<div class="levelbar_'.$color.'" style="height:'.$sizeBar.'">&nbsp;</div>';
+            $html .= '<div class="certaint-text">'.get_lang($explainHistoList[$i]).'</div>';
+            $html .= '</li>';
+
+            if ($i == 1 || $i == 2 || $i == 4) {
+                $html .= '</ul>';
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+        }
+
+        $html .= '</div>';
+        $html .= '</div>';
+
+
+        if ($returnHeight) {
+            return [$html, $verticalLineHeight];
+        } else {
+            return $html;
+        }
+    }
+
+    /**
+     * Return HTML code for the $scoreList of MultipleAnswerTrueFalseDegreeCertainty questions.
+     *
+     * @param        $scoreList
+     * @param        $widthTable
+     * @param string $title
+     * @param int    $sizeRatio
+     * @param int    $minHeight
+     * @param bool   $displayExplanationText
+     * @param bool   $returnHeight
+     * @param bool   $groupCategoriesByBracket
+     * @param int    $numberOfQuestions
+     *
+     * @return array|string
+     */
+    public static function displayDegreeChartChildren(
+        $scoreList,
+        $widthTable,
+        $title = '',
+        $sizeRatio = 1,
+        $minHeight = 0,
+        $displayExplanationText = true,
+        $returnHeight = false,
+        $groupCategoriesByBracket = false,
+        $numberOfQuestions = 0
+    )
+    {
+        $topAndBottomMargin = 10;
+        $colorList = [
+            self::LEVEL_DARKRED,
+            self::LEVEL_LIGHTRED,
+            self::LEVEL_WHITE,
+            self::LEVEL_LIGHTGREEN,
+            self::LEVEL_DARKGREEN,
+        ];
+
+        // get total attempt number
+        $highterColorHeight = 0;
+        foreach ($scoreList as $color => $number) {
+            if ($number > $highterColorHeight) {
+                $highterColorHeight = $number;
+            }
+        }
+
+        $totalAttemptNumber = $numberOfQuestions;
+        $verticalLineHeight = $highterColorHeight * $sizeRatio * 2 + 122 + $topAndBottomMargin * 2;
+        if ($verticalLineHeight < $minHeight) {
+            $minHeightCorrection = $minHeight - $verticalLineHeight;
+            $verticalLineHeight += $minHeightCorrection;
+        }
+
+        // draw chart
+        $html = '';
+
+        if ($groupCategoriesByBracket) {
+            $title = api_preg_replace("/[^]]*$/", '', $title);
+            $title = ucfirst(api_preg_replace("/[\[\]]/", '', $title));
+        }
+
+        $textSize = 80;
+
         $classGlobalChart = '';
         if ($displayExplanationText) {
             // global chart
             $classGlobalChart = 'globalChart';
         }
 
-        $html .= '<table class="certaintyTable" style="height :'.$verticalLineHeight.'px; width: '.$widthTable.'px;">';
-        $html .= '<tr><th colspan="5" class="'
-            .$classGlobalChart
-            .'">'
-            .$display
+        $html .= '<table class="certaintyTable" style="height :'.$verticalLineHeight.'px; margin-bottom: 10px;" >';
+        $html .= '<tr><th colspan="5" class="'.$classGlobalChart.'">'
+            .$title
             .'</th><tr>'
         ;
 
@@ -754,16 +831,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $html .= '<tr>
                 <td class="firstLine borderRight '.$classGlobalChart.'" 
                     colspan="2" 
-                    style="width:'.($colWidth * 2).'px; font-size:'.$textSize.'%;">'.
+                    style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc).'
                 </td>
                 <td class="firstLine borderRight '.$classGlobalChart.'" 
-                    style="width:'.$colWidth.'px; font-size :'.$textSize.'%;">'.
+                    style="width:'.$colWidth.'px; line-height: 15px; font-size :'.$textSize.'%;">'.
             sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng).'
                 </td>
                 <td class="firstLine '.$classGlobalChart.'" 
                     colspan="2" 
-                    style="width:'.($colWidth * 2).'px; font-size:'.$textSize.'%;">'.
+                    style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor).'
                 </td>
             </tr>';
@@ -779,7 +856,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if ($i == 1 || $i == 2) {
                 $html .= '<td width="'
                     .$colWidth
-                    .'px" style="border-right: 1px dotted #000000; vertical-align: bottom;font-size: '
+                    .'px" style="border-right: 1px dotted #7FC5FF; vertical-align: bottom;font-size: '
                     .$textSize
                     .'%;">'
                 ;
@@ -791,9 +868,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     .'%;">'
                 ;
             }
-            $html .= '<div class="certaintyQuizDivMiddle">'
+            $html .= '<div class="certaint-score">'
                 .$scoreOnBottom
-                .'</div><div class="certaintyQuizDivBottom certaintyQuizLevel_'
+                .'</div><div class="levelbar_'
                 .$color
                 .'" style="height: '
                 .$sizeOnBottom

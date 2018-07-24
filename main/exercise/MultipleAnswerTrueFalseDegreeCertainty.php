@@ -794,13 +794,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $title = ucfirst(api_preg_replace("/[\[\]]/", '', $title));
         }
 
-        $display = (strpos($title, "ensemble") > 0) ?
-            $title."<br/>($totalAttemptNumber questions)" :
-            $title;
-        $textSize = (
-            strpos($title, 'ensemble') > 0 ||
-            strpos($title, 'votre dernier résultat à ce test') > 0
-        ) ? 100 : 80;
+        $textSize = 80;
 
         $classGlobalChart = '';
         if ($displayExplanationText) {
@@ -809,10 +803,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         $html .= '<table class="certaintyTable" style="height :'.$verticalLineHeight.'px; margin-bottom: 10px;" >';
-        $html .= '<tr><th colspan="5" class="'
-            .$classGlobalChart
-            .'">'
-            .$display
+        $html .= '<tr><th colspan="5" class="'.$classGlobalChart.'">'
+            .$title
             .'</th><tr>'
         ;
 

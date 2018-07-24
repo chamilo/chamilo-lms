@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
+
 /**
  * Sessions list script.
  *
@@ -8,7 +10,6 @@
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();

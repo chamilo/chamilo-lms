@@ -463,7 +463,17 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 // X-Frame-Options tells the browser whether you want to allow your site to
 // be framed or not. By preventing a browser from framing your site you can
 // defend against attacks like clickjacking.
-// Recommended value "SAMEORIGIN".
+// If defining a URL here, it should define the URL(s) from which your content
+// should be visible, not the URLs from which your site accepts content.
+// For example, if your main URL (root_web above) is https://11.chamilo.org/,
+// then this setting should be: 'ALLOW-FROM https://11.chamilo.org'.
+// These headers only apply to pages where Chamilo is responsible of the HTTP
+// headers generation (i.e. ".php" files). It does not apply to static files.
+// If playing with this feature, make sure you also update your web server
+// configuration to add the right headers for static files. See CDN
+// configuration documentation above (search for "add_header") for more
+// information.
+// Recommended (strict) value for this setting, if enabled: "SAMEORIGIN".
 //$_configuration['security_x_frame_options'] = 'SAMEORIGIN';
 //
 // X-XSS-Protection sets the configuration for the cross-site scripting

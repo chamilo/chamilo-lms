@@ -2278,6 +2278,8 @@ class CourseManager
                 rename($course_dir, $archive_dir);
             }
 
+            Category::deleteFromCourse($course['code']);
+
             // Unsubscribe all users from the course
             $sql = "DELETE FROM $table_course_user WHERE c_id = $courseId";
             Database::query($sql);

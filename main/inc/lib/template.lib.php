@@ -1273,7 +1273,7 @@ class Template
             [],
             ICON_SIZE_LARGE
         );
-        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
+        if (api_get_setting('show_link_bug_notification') === 'true' && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '.$iconBug.'
@@ -1281,7 +1281,7 @@ class Template
 		        </div>';
         }
 
-        if (api_get_setting('show_link_ticket_notification') == 'true' &&
+        if (api_get_setting('show_link_ticket_notification') === 'true' &&
             $this->user_is_logged_in
         ) {
             // by default is project_id = 1

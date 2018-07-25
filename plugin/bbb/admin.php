@@ -8,7 +8,6 @@ use Chamilo\UserBundle\Entity\User;
  *
  * @package chamilo.plugin.bigbluebutton
  */
-
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 

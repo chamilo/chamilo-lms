@@ -4,7 +4,6 @@
 /**
  * @package chamilo.ticket
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 'true') {

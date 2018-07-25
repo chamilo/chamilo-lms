@@ -1286,27 +1286,24 @@ class Template
         ) {
             // by default is project_id = 1
             $defaultProjectId = 1;
-            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
-            if ($allow) {
-                $iconTicket = Display::return_icon(
-                    'help.png',
-                    get_lang('Ticket'),
-                    [],
-                    ICON_SIZE_LARGE
-                );
-                $courseInfo = api_get_course_info();
-                $courseParams = '';
-                if (!empty($courseInfo)) {
-                    $courseParams = api_get_cidreq();
-                }
-                $url = api_get_path(WEB_CODE_PATH).
-                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-                $rightFloatMenu .= '<div class="help">
-                    <a href="'.$url.'" target="_blank">
-                        '.$iconTicket.'
-                    </a>
-                </div>';
+            $iconTicket = Display::return_icon(
+                'help.png',
+                get_lang('Ticket'),
+                [],
+                ICON_SIZE_LARGE
+            );
+            $courseInfo = api_get_course_info();
+            $courseParams = '';
+            if (!empty($courseInfo)) {
+                $courseParams = api_get_cidreq();
             }
+            $url = api_get_path(WEB_CODE_PATH).
+                'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+            $rightFloatMenu .= '<div class="help">
+                <a href="'.$url.'" target="_blank">
+                    '.$iconTicket.'
+                </a>
+            </div>';
         }
 
         $this->assign('bug_notification', $rightFloatMenu);

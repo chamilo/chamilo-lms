@@ -1,13 +1,11 @@
 <div class ="row">
-
 {% if bbb_status == true %}
     <div class ="col-md-12" style="text-align:center">
         {{ form }}
         {% if show_join_button == true %}
             <p>
-                <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
-                    {{ 'EnterConference'| get_plugin_lang('BBBPlugin') }}
-                </a>
+                {{ enter_conference_links }}
+
                 <span id="users_online" class="label label-warning">
                     {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
                 </span>

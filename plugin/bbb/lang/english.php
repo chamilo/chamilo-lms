@@ -66,4 +66,9 @@ $strings['MaxXUsersReached'] = 'The limit of %s simultaneous users has been reac
 $strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has been reached for this conference room. To increase this limit, please contact the platform administrator.';
 $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';
 $strings['global_conference_allow_roles'] = "Global conference link only visible for this user roles";
-$strings['CreatedAt'] = "Created at";
+$strings['CreatedAt'] = 'Created at';
+$strings['interface'] = 'Interface';
+$strings['launch_type'] = 'Launch type';
+
+$strings['EnterConferenceFlash'] = 'Enter the videoconference (Flash client)';
+$strings['EnterConferenceHTML5'] = 'Enter the videoconference (HTML5 client)';

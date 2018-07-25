@@ -5,11 +5,11 @@
         {% if show_join_button == true %}
             <p>
                 {{ enter_conference_links }}
-
                 <span id="users_online" class="label label-warning">
                     {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
                 </span>
             </p>
+            {{ warning_inteface_msg }}
             {% if max_users_limit > 0 %}
                 {% if conference_manager == true %}
                     <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
@@ -19,7 +19,14 @@
             {% endif %}
             <div class="well">
                 <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
-                <input type="text" class="form-control text-center" readonly value="{{ conference_url }}">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input id="share_button" type="text" style="width:600px" class="form-control" readonly value="{{ conference_url }}">
+                        <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
+                            <span class="fa fa-copy"></span> {{ 'CopyText' }}
+                        </button>
+                    </div>
+                </div>
             </div>
         {% elseif max_users_limit > 0 %}
             {% if conference_manager == true %}

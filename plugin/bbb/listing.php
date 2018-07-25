@@ -200,6 +200,7 @@ $url = Display::url(
 );
 
 $type = $plugin->get('launch_type');
+$warningIntefaceMessage = '';
 
 switch ($type) {
     case BBBPlugin::LAUNCH_TYPE_DEFAULT:
@@ -212,6 +213,7 @@ switch ($type) {
     case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
         if ($conferenceManager) {
             $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
+            $warningIntefaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
         } else {
             $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
             switch ($meetingInfo['interface']) {
@@ -231,7 +233,9 @@ switch ($type) {
             if ($meetingExists) {
                 $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
                 $meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
-                if (empty($meetinUserInfo)) {
+                $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
+
+                /*if (empty($meetinUserInfo)) {
                     $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
                 } else {
                     switch ($meetinUserInfo['interface']) {
@@ -242,7 +246,7 @@ switch ($type) {
                             $url = $plugin->getHtmlUrl($conferenceUrl);
                             break;
                     }
-                }
+                }*/
             }
         }
 
@@ -250,6 +254,7 @@ switch ($type) {
 }
 
 $tpl->assign('enter_conference_links', $url);
+$tpl->assign('warning_inteface_msg', $warningIntefaceMessage);
 
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);

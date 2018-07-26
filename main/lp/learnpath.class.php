@@ -10853,7 +10853,6 @@ class learnpath
                                         if (file_exists($file_path)) {
                                             if (strstr($file_path, 'main/default_course_document') !== false) {
                                                 // We get the relative path.
-                                                var_dump(pathinfo($file_path));
                                                 $pos = strpos($file_path, 'main/default_course_document/');
                                                 if ($pos !== false) {
                                                     $onlyDirectory = str_replace(
@@ -11263,7 +11262,6 @@ class learnpath
 
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
-        //var_dump($zip_files, $link_updates, $zip_files_abs);        exit;
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) {
                 continue;
@@ -11350,8 +11348,6 @@ class learnpath
                 }
             }
         }
-
-        var_dump($zip_files_abs);
 
         foreach ($zip_files_abs as $file_path) {
             if (empty($file_path)) {

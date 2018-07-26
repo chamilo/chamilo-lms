@@ -746,6 +746,8 @@ class Category implements GradebookItem
 
     /**
      * Not delete this category from the database,when visible=3 is category eliminated.
+     *
+     * @deprecated To delete categories form course when deleting course use Category::deleteFromCourse
      */
     public function update_category_delete($course_id)
     {
@@ -754,6 +756,41 @@ class Category implements GradebookItem
                     visible = 3
                 WHERE course_code ="'.Database::escape_string($course_id).'"';
         Database::query($sql);
+    }
+
+    /**
+     * Delete the gradebook categories from a course, including course sessions
+     *
+     * @param string $courseCode
+     */
+    public static function deleteFromCourse($courseCode)
+    {
+        $em = Database::getManager();
+        $categories = $em
+            ->createQuery(
+                'SELECT DISTINCT gc.sessionId
+                FROM ChamiloCoreBundle:GradebookCategory gc WHERE gc.courseCode = :code'
+            )
+            ->setParameter('code', $courseCode)
+            ->getResult();
+
+        foreach ($categories as $category) {
+            $cats = self::load(
+                null,
+                null,
+                $courseCode,
+                null,
+                null,
+                (int) $category['sessionId']
+            );
+
+            if (!empty($cats)) {
+                /** @var self $cat */
+                foreach ($cats as $cat) {
+                    $cat->delete_all();
+                }
+            }
+        }
     }
 
     /**

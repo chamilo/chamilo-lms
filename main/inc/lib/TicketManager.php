@@ -2428,6 +2428,7 @@ class TicketManager
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
         // Check if a role was set to the project
+        // Project 1 is considered the default and is accessible to all users
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
             if (in_array($userInfo['status'], $allowRoleList)) {
                 return true;

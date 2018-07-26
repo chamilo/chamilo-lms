@@ -759,7 +759,7 @@ class Category implements GradebookItem
     }
 
     /**
-     * Delete the gradebook categories from a course, including course sessions
+     * Delete the gradebook categories from a course, including course sessions.
      *
      * @param string $courseCode
      */
@@ -815,20 +815,25 @@ class Category implements GradebookItem
 
     /**
      * Shows all information of an category.
+     * @param int $categoryId
+     *
+     * @return array
      */
-    public function showAllCategoryInfo($categoryId = '')
+    public function showAllCategoryInfo($categoryId = 0)
     {
-        if ($categoryId == '') {
-            return null;
-        } else {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT * FROM '.$table.'
-                    WHERE id = '.intval($categoryId);
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
-
-            return $row;
+        $categoryId = (int) $categoryId;
+        if (empty($categoryId)) {
+            return [];
         }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT * FROM '.$table.'
+                WHERE id = '.$categoryId;
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return $row;
+
     }
 
     /**
@@ -1271,7 +1276,7 @@ class Category implements GradebookItem
                 if (!empty($session_id)) {
                     $sql .= " AND session_id = ".$session_id;
                 } else {
-                    $sql .= "AND session_id IS NULL OR session_id=0";
+                    $sql .= 'AND session_id IS NULL OR session_id = 0';
                 }
             } else {
                 $sql .= ' AND course_code IN
@@ -1296,7 +1301,7 @@ class Category implements GradebookItem
 
         // course independent categories
         if (empty($course_code)) {
-            $cats = self::getIndependentCategoriesWithStudentResult(
+            $cats = $this->getIndependentCategoriesWithStudentResult(
                 0,
                 $stud_id,
                 $cats
@@ -1471,7 +1476,7 @@ class Category implements GradebookItem
                     $cat->get_name(),
                     $level + 1,
                 ];
-                $targets = self::add_subtree(
+                $targets = $this->add_subtree(
                     $targets,
                     $level + 1,
                     $cat->get_id(),
@@ -1480,14 +1485,14 @@ class Category implements GradebookItem
             }
         } else {
             // student
-            $cats = self::get_root_categories_for_student(api_get_user_id());
+            $cats = $this->get_root_categories_for_student(api_get_user_id());
             foreach ($cats as $cat) {
                 $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1,
                 ];
-                $targets = self::add_subtree(
+                $targets = $this->add_subtree(
                     $targets,
                     $level + 1,
                     $cat->get_id(),
@@ -1704,7 +1709,7 @@ class Category implements GradebookItem
         if (isset($studentId)) {
             // Special case: this is the root
             if ($this->id == 0) {
-                return self::get_root_categories_for_student($studentId, $course_code, $session_id);
+                return $this->get_root_categories_for_student($studentId, $course_code, $session_id);
             } else {
                 return self::load(
                     null,

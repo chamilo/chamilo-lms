@@ -6022,6 +6022,16 @@ SQL;
         Database::getManager()->flush();
 
         $url = api_get_path(WEB_CODE_PATH).'auth/user_mail_confirmation.php?token='.$uniqueId;
+
+        // Check if the user was originally set for an automated subscription to a course or session
+        $courseCodeToRedirect = Session::read('course_redirect');
+        $sessionToRedirect = Session::read('session_redirect');
+        if (!empty($courseCodeToRedirect)) {
+            $url .= '&c='.$courseCodeToRedirect;
+        }
+        if (!empty($sessionToRedirect)) {
+            $url .= '&s='.$sessionToRedirect;
+        }
         $mailSubject = get_lang('RegistrationConfirmation');
         $mailBody = get_lang('RegistrationConfirmationEmailMessage')
             .PHP_EOL

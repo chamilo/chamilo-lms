@@ -13,14 +13,29 @@ if (!ctype_alnum($token)) {
 $user = UserManager::getManager()->findUserByConfirmationToken($token);
 
 if ($user) {
-    $user->setActive(1); // Setted 1 to active the user
+    $user->setActive(1); // Set to 1 to activate the user
     $user->setConfirmationToken(null);
 
     Database::getManager()->persist($user);
     Database::getManager()->flush();
 
+    // See where to redirect the user to, if any redirection has been set
+    $url = api_get_path(WEB_PATH);
+
+    if (!empty($_GET['c'])) {
+        $courseCode = Security::remove_XSS($_GET['c']);
+    }
+    if (!empty($_GET['s'])) {
+        $sessionId = (int) $_GET['s'];
+    }
+    // Get URL to a course, to a session, or an empty string
+    $courseUrl = api_get_course_url($courseCode, $sessionId);
+    if (!empty($courseUrl)) {
+        $url = $courseUrl;
+    }
+
     Display::addFlash(Display::return_message(get_lang('UserConfirmedNowYouCanLogInThePlatform'), 'success'));
-    header('Location: '.api_get_path(WEB_PATH));
+    header('Location: '.$url);
     exit;
 } else {
     Display::addFlash(

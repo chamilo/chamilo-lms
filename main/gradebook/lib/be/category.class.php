@@ -746,6 +746,8 @@ class Category implements GradebookItem
 
     /**
      * Not delete this category from the database,when visible=3 is category eliminated.
+     *
+     * @deprecated To delete categories form course when deleting course use Category::deleteFromCourse
      */
     public function update_category_delete($course_id)
     {
@@ -754,6 +756,41 @@ class Category implements GradebookItem
                     visible = 3
                 WHERE course_code ="'.Database::escape_string($course_id).'"';
         Database::query($sql);
+    }
+
+    /**
+     * Delete the gradebook categories from a course, including course sessions.
+     *
+     * @param string $courseCode
+     */
+    public static function deleteFromCourse($courseCode)
+    {
+        $em = Database::getManager();
+        $categories = $em
+            ->createQuery(
+                'SELECT DISTINCT gc.sessionId
+                FROM ChamiloCoreBundle:GradebookCategory gc WHERE gc.courseCode = :code'
+            )
+            ->setParameter('code', $courseCode)
+            ->getResult();
+
+        foreach ($categories as $category) {
+            $cats = self::load(
+                null,
+                null,
+                $courseCode,
+                null,
+                null,
+                (int) $category['sessionId']
+            );
+
+            if (!empty($cats)) {
+                /** @var self $cat */
+                foreach ($cats as $cat) {
+                    $cat->delete_all();
+                }
+            }
+        }
     }
 
     /**
@@ -778,20 +815,25 @@ class Category implements GradebookItem
 
     /**
      * Shows all information of an category.
+     * @param int $categoryId
+     *
+     * @return array
      */
-    public function showAllCategoryInfo($categoryId = '')
+    public function showAllCategoryInfo($categoryId = 0)
     {
-        if ($categoryId == '') {
-            return null;
-        } else {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT * FROM '.$table.'
-                    WHERE id = '.intval($categoryId);
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
-
-            return $row;
+        $categoryId = (int) $categoryId;
+        if (empty($categoryId)) {
+            return [];
         }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT * FROM '.$table.'
+                WHERE id = '.$categoryId;
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return $row;
+
     }
 
     /**
@@ -1234,7 +1276,7 @@ class Category implements GradebookItem
                 if (!empty($session_id)) {
                     $sql .= " AND session_id = ".$session_id;
                 } else {
-                    $sql .= "AND session_id IS NULL OR session_id=0";
+                    $sql .= 'AND session_id IS NULL OR session_id = 0';
                 }
             } else {
                 $sql .= ' AND course_code IN
@@ -1259,7 +1301,7 @@ class Category implements GradebookItem
 
         // course independent categories
         if (empty($course_code)) {
-            $cats = self::getIndependentCategoriesWithStudentResult(
+            $cats = $this->getIndependentCategoriesWithStudentResult(
                 0,
                 $stud_id,
                 $cats
@@ -1434,7 +1476,7 @@ class Category implements GradebookItem
                     $cat->get_name(),
                     $level + 1,
                 ];
-                $targets = self::add_subtree(
+                $targets = $this->add_subtree(
                     $targets,
                     $level + 1,
                     $cat->get_id(),
@@ -1443,14 +1485,14 @@ class Category implements GradebookItem
             }
         } else {
             // student
-            $cats = self::get_root_categories_for_student(api_get_user_id());
+            $cats = $this->get_root_categories_for_student(api_get_user_id());
             foreach ($cats as $cat) {
                 $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1,
                 ];
-                $targets = self::add_subtree(
+                $targets = $this->add_subtree(
                     $targets,
                     $level + 1,
                     $cat->get_id(),
@@ -1667,7 +1709,7 @@ class Category implements GradebookItem
         if (isset($studentId)) {
             // Special case: this is the root
             if ($this->id == 0) {
-                return self::get_root_categories_for_student($studentId, $course_code, $session_id);
+                return $this->get_root_categories_for_student($studentId, $course_code, $session_id);
             } else {
                 return self::load(
                     null,

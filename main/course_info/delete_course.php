@@ -28,8 +28,6 @@ $tool_name = get_lang('DelCourse');
 
 if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     CourseManager::delete_course($_course['sysCode']);
-    $obj_cat = new Category();
-    $obj_cat->update_category_delete($_course['sysCode']);
 
     // DELETE CONFIRMATION MESSAGE
     Session::erase('_cid');

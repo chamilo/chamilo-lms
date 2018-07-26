@@ -129,7 +129,7 @@ $form->applyFilter('department_url', 'html_filter');
 $extra_field = new ExtraField('course');
 
 $extraFieldAdminPermissions = false;
-$showOnlyTheseFields = [];
+$showOnlyTheseFields = ['tags', 'video_url'];
 if (api_get_configuration_value('allow_teachers_to_classes') === true) {
     $extraFieldAdminPermissions = true;
     $showOnlyTheseFields[] = 'course_hours_duration';

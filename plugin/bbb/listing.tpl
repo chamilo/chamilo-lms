@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <input id="share_button" type="text" style="width:600px" class="form-control" readonly value="{{ conference_url }}">
                         <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
-                            <span class="fa fa-copy"></span> {{ 'CopyText' }}
+                            <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
                         </button>
                     </div>
                 </div>

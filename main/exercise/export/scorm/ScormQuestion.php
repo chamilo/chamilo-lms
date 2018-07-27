@@ -32,9 +32,8 @@ class ScormQuestion extends Question
      *
      * @return string|array
      */
-    public static function export_question(
+    public static function exportQuestion(
         $questionId,
-        $standalone = true,
         $js_id
     ) {
         $question = new ScormQuestion();
@@ -50,7 +49,7 @@ class ScormQuestion extends Question
         $question->weighting = $qst->weighting;
         $question->position = $qst->position;
         $question->picture = $qst->picture;
-        $assessmentItem = new ScormAssessmentItem($question, $standalone);
+        $assessmentItem = new ScormAssessmentItem($question);
 
         return $assessmentItem->export();
     }
@@ -188,7 +187,14 @@ class ScormQuestion extends Question
     public function getQuestionJS()
     {
         $weight = $this->selectWeighting();
-        $js = 'questions.push('.$this->js_id.');'."\n";
+        $js = '
+            questions.push('.$this->js_id.');
+            $(document).ready(function() {         
+                if (exerciseInfo.randomAnswers == true) {
+                    $("#question_'.$this->js_id.'").shuffleRows();                    
+                } 
+            });';
+        $js .= "\n";
 
         switch ($this->type) {
             case ORAL_EXPRESSION:

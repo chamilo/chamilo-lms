@@ -1378,7 +1378,7 @@ class CourseBuilder
         if ($result) {
             while ($obj = Database::fetch_object($result)) {
                 $items = [];
-                $sql = "SELECT * FROM ".$table_item."
+                $sql = "SELECT * FROM $table_item
                         WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
                 $resultItem = Database::query($sql);
                 while ($obj_item = Database::fetch_object($resultItem)) {

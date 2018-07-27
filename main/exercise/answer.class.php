@@ -483,7 +483,7 @@ class Answer
         }
         $row = Database::fetch_array($res);
 
-        return $row['type'];
+        return (int) $row['type'];
     }
 
     /**

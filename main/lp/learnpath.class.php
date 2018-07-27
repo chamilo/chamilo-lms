@@ -1556,7 +1556,7 @@ class learnpath
             return false;
         }
 
-        $prerequisite_id = intval($prerequisite_id);
+        $prerequisite_id = (int) $prerequisite_id;
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         if (!is_numeric($mastery_score) || $mastery_score < 0) {
@@ -10513,7 +10513,7 @@ class learnpath
         // Create the zip handler (this will remain available throughout the method).
         $archivePath = api_get_path(SYS_ARCHIVE_PATH);
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $temp_dir_short = uniqid('scorm_export');
+        $temp_dir_short = uniqid('scorm_export', true);
         $temp_zip_dir = $archivePath.'/'.$temp_dir_short;
         $temp_zip_file = $temp_zip_dir.'/'.md5(time()).'.zip';
         $zip_folder = new PclZip($temp_zip_file);
@@ -11010,7 +11010,7 @@ class learnpath
                         );
                         $my_item->appendChild($my_title);
                         $my_max_score = $xmldoc->createElement('max_score', $item->get_max());
-                        //$my_item->appendChild($my_max_score);
+                        $my_item->appendChild($my_max_score);
                         // Give a child element <adlcp:prerequisites> to the <item> element.
                         $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
                         $my_prereqs->setAttribute('type', 'aicc_script');
@@ -11037,10 +11037,8 @@ class learnpath
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = ScormSection::exportExerciseToScorm(
-                            $exe,
-                            true
-                        );
+                        $scormExercise = new ScormExercise($exe, true);
+                        $contents = $scormExercise->export();
 
                         $tmp_file_path = $archivePath.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
@@ -11057,7 +11055,6 @@ class learnpath
                         $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                         $my_resource->setAttribute('type', 'webcontent');
                         $my_resource->setAttribute('href', $my_xml_file_path);
-
                         // adlcp:scormtype can be either 'sco' or 'asset'.
                         $my_resource->setAttribute('adlcp:scormtype', 'sco');
                         // xml:base is the base directory to find the files declared in this resource.

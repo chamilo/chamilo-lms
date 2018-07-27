@@ -1854,6 +1854,7 @@ class DocumentManager
         $user_info = api_get_user_info($user_id);
         $first_name = $user_info['firstname'];
         $last_name = $user_info['lastname'];
+        $username = $user_info['username'];
         $official_code = $user_info['official_code'];
 
         // Teacher information
@@ -1889,6 +1890,7 @@ class DocumentManager
         $info_to_replace_in_content_html = [
             $first_name,
             $last_name,
+            $username,
             $organization_name,
             $portal_name,
             $teacher_first_name,
@@ -1908,6 +1910,7 @@ class DocumentManager
         $tags = [
             '((user_firstname))',
             '((user_lastname))',
+            '((user_username))',
             '((gradebook_institution))',
             '((gradebook_sitename))',
             '((teacher_firstname))',

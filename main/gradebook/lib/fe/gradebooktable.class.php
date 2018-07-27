@@ -25,7 +25,14 @@ class GradebookTable extends SortableTable
     private $datagen;
     private $evals_links;
     private $dataForGraph;
-    private $loadStats = true;
+    /**
+     * @var array Indicates which columns should be shown in gradebook
+     *
+     * @example [1] For add Ranking column
+     *          [2] For add Best Score column
+     *          [3] For add Average column
+     */
+    private $loadStats = [];
 
     /**
      * GradebookTable constructor.
@@ -39,7 +46,7 @@ class GradebookTable extends SortableTable
      * @param null     $showTeacherView
      * @param int      $userId
      * @param array    $studentList
-     * @param bool     $loadStats
+     * @param array    $loadStats
      */
     public function __construct(
         $currentcat,
@@ -51,7 +58,7 @@ class GradebookTable extends SortableTable
         $showTeacherView = null,
         $userId = null,
         $studentList = [],
-        $loadStats = true
+        array $loadStats = []
     ) {
         $this->teacherView = is_null($showTeacherView) ? api_is_allowed_to_edit(null, true) : $showTeacherView;
         $this->userId = is_null($userId) ? api_get_user_id() : $userId;
@@ -108,11 +115,13 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Weight'), false);
             $this->set_header($column++, get_lang('Result'), false);
             if (empty($model)) {
-                if ($this->loadStats) {
+                if (in_array(1, $this->loadStats)) {
                     $this->set_header($column++, get_lang('Ranking'), false);
                 }
-                $this->set_header($column++, get_lang('BestScore'), false);
-                if ($this->loadStats) {
+                if (in_array(2, $this->loadStats)) {
+                    $this->set_header($column++, get_lang('BestScore'), false);
+                }
+                if (in_array(3, $this->loadStats)) {
                     $this->set_header($column++, get_lang('Average'), false);
                 }
             }
@@ -416,15 +425,17 @@ class GradebookTable extends SortableTable
 
                         if (empty($model)) {
                             // Ranking
-                            if ($this->loadStats) {
+                            if (in_array(1, $this->loadStats)) {
                                 $row[] = $ranking;
                             }
 
                             // Best
-                            $row[] = $best;
+                            if (in_array(2, $this->loadStats)) {
+                                $row[] = $best;
+                            }
 
                             // Average
-                            if ($this->loadStats) {
+                            if (in_array(3, $this->loadStats)) {
                                 $row[] = $average;
                             }
                         }
@@ -550,16 +561,18 @@ class GradebookTable extends SortableTable
                                         $average = isset($data['average']) ? $data['average'] : null;
                                         $ranking = isset($data['ranking']) ? $data['ranking'] : null;
 
-                                        if ($this->loadStats) {
+                                        if (in_array(1, $this->loadStats)) {
                                             // Ranking
                                             $row[] = $ranking;
                                         }
 
-                                        // Best
-                                        $row[] = $best;
+                                        if (in_array(2, $this->loadStats)) {
+                                            // Best
+                                            $row[] = $best;
+                                        }
 
                                         // Average
-                                        if ($this->loadStats) {
+                                        if (in_array(3, $this->loadStats)) {
                                             $row[] = $average;
                                         }
                                     }
@@ -729,28 +742,22 @@ class GradebookTable extends SortableTable
                         $totalAverage,
                     ];
                 } else {
-                    if ($this->loadStats) {
-                        $row = [
-                            null,
-                            '<h3>'.get_lang('Total').'</h3>',
-                            null,
-                            $main_weight,
-                            $totalResult,
-                            $totalRanking,
-                            $totalBest,
-                            $totalAverage,
-                        ];
-                    } else {
-                        $row = [
-                            null,
-                            '<h3>'.get_lang('Total').'</h3>',
-                            null,
-                            $main_weight,
-                            $totalResult,
-                            //$totalRanking,
-                            $totalBest,
-                            //$totalAverage,
-                        ];
+                    $row = [
+                        null,
+                        '<h3>'.get_lang('Total').'</h3>',
+                        null,
+                        $main_weight,
+                        $totalResult,
+                    ];
+
+                    if (in_array(1, $this->loadStats)) {
+                        $row[] = $totalRanking;
+                    }
+                    if (in_array(2, $this->loadStats)) {
+                        $row[] = $totalBest;
+                    }
+                    if (in_array(3, $this->loadStats)) {
+                        $row[] = $totalAverage;
                     }
                 }
 
@@ -856,9 +863,8 @@ class GradebookTable extends SortableTable
                 $totalUserResult,
                 SCORE_DIV_PERCENT_WITH_CUSTOM
             );
-            $rowTotal[] = ' ';
-            if ($this->loadStats) {
-                $rowTotal[] = ' ';
+
+            foreach ($this->loadStats as $col) {
                 $rowTotal[] = ' ';
             }
 

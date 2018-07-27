@@ -917,11 +917,17 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
+                $loadStats = [];
                 $teacher = api_is_allowed_to_edit(null, true);
-                if ($teacher) {
-                    $loadStats = false;
-                } else {
-                    $loadStats = api_get_configuration_value('gradebook_enable_best_score') === false;
+
+                if (!$teacher) {
+                    if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+                        $loadStats = [1, 2, 3];
+                    } else {
+                        if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
+                            $loadStats = [2];
+                        }
+                    }
                 }
 
                 $gradebookTable = new GradebookTable(
@@ -943,22 +949,13 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                 } else {
                     if (empty($model)) {
-                        if ($loadStats) {
-                            $gradebookTable->td_attributes = [
-                                3 => 'class="text-right"',
-                                4 => 'class="text-center"',
-                                5 => 'class="text-center"',
-                                6 => 'class="text-center"',
-                                7 => 'class="text-center"',
-                            ];
-                        } else {
-                            $gradebookTable->td_attributes = [
-                                3 => 'class="text-right"',
-                                4 => 'class="text-center"',
-                                5 => 'class="text-center"',
-                                //6 => 'class="text-center"',
-                                //7 => 'class="text-center"',
-                            ];
+                        $gradebookTable->td_attributes = [
+                            3 => 'class="text-right"',
+                            4 => 'class="text-center"',
+                        ];
+
+                        for ($z = 5; $z < count($loadStats); $z++) {
+                            $gradebookTable->td_attributes[$z] = 'class="text-center"';
                         }
                     } else {
                         $gradebookTable->td_attributes = [

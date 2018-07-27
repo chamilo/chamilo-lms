@@ -4644,6 +4644,9 @@ function WSSubscribeUserToCourse($params)
             $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
             if (empty($courseCode)) {
+                if ($debug) {
+                    error_log('WSSubscribeUserToCourse course not found');
+                }
                 // Course was not found
                 $resultValue = 0;
             } else {

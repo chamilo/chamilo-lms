@@ -20,7 +20,7 @@ class GradebookTable extends SortableTable
     public $exportToPdf;
     public $teacherView;
     public $userId;
-    public $studentList;
+    public $studentList = [];
     private $currentcat;
     private $datagen;
     private $evals_links;
@@ -705,16 +705,18 @@ class GradebookTable extends SortableTable
                     true
                 );
 
-                // Overwrite main weight
-                $totalAverage[0] = $average / count($this->studentList);
-                $totalAverage[1] = $main_weight;
+                if ($this->exportToPdf || $this->loadStats) {
+                    // Overwrite main weight
+                    $totalAverage[0] = $average / count($this->studentList);
+                    $totalAverage[1] = $main_weight;
 
-                $totalAverage = $scoredisplay->display_score(
-                    $totalAverage,
-                    SCORE_DIV,
-                    SCORE_BOTH,
-                    true
-                );
+                    $totalAverage = $scoredisplay->display_score(
+                        $totalAverage,
+                        SCORE_DIV,
+                        SCORE_BOTH,
+                        true
+                    );
+                }
 
                 if ($this->exportToPdf) {
                     $row = [

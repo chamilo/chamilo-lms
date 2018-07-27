@@ -245,6 +245,8 @@ class ExtraField extends Model
     }
 
     /**
+     * Get an array of all the values from the extra_field and extra_field_options tables
+     * based on the current object's type
      * @param array $conditions
      * @param null  $order_field_options_by
      *
@@ -467,16 +469,17 @@ class ExtraField extends Model
     /**
      * Add elements to a form.
      *
-     * @param FormValidator $form
-     * @param int           $itemId
-     * @param array         $exclude             variables of extra field to exclude
-     * @param bool          $filter
-     * @param bool          $useTagAsSelect
-     * @param array         $showOnlyTheseFields
-     * @param array         $orderFields
-     * @param bool          $adminPermissions
+     * @param FormValidator $form The form object to which to attach this element
+     * @param int           $itemId The item (course, user, session, etc) this extra_field is linked to
+     * @param array         $exclude Variables of extra field to exclude
+     * @param bool          $filter Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
+     * @param bool          $useTagAsSelect Whether to show tag fields as select drop-down or not
+     * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
+     * @param array         $orderFields An array containing the names of the fields shown, in the right order
+     * @param bool          $adminPermissions Whether the display is considered without edition limits (true) or not (false)
      *
-     * @return array|bool
+     * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers. Returns false if the form object was not given
+     * @throws Exception
      */
     public function addElements(
         $form,
@@ -536,6 +539,7 @@ class ExtraField extends Model
     }
 
     /**
+     * Return an array of all the extra fields available for this item
      * @param int $itemId (session_id, question_id, course id)
      *
      * @return array
@@ -964,17 +968,18 @@ class ExtraField extends Model
     /**
      * Add an element that matches the given extra field to the given $form object.
      *
-     * @param FormValidator $form
+     * @param FormValidator $form The form these fields are to be attached to
      * @param array         $extraData
-     * @param bool          $adminPermissions
+     * @param bool          $adminPermissions Whether the display is considered without edition limits (true) or not (false)
      * @param array         $extra
-     * @param int           $itemId
-     * @param array         $exclude             variables of extra field to exclude
-     * @param bool          $useTagAsSelect
-     * @param array         $showOnlyTheseFields
-     * @param array         $orderFields
+     * @param int           $itemId The item (course, user, session, etc) this extra_field is attached to
+     * @param array         $exclude Extra fields to be skipped, by textual ID
+     * @param bool          $useTagAsSelect Whether to show tag fields as select drop-down or not
+     * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
+     * @param array         $orderFields An array containing the names of the fields shown, in the right order
      *
      * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
+     * @throws Exception
      */
     public function set_extra_fields_in_form(
         $form,

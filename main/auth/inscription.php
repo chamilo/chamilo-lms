@@ -585,11 +585,15 @@ if ($allowDoubleValidation && $showTerms == false) {
     $form->addHtml('</div>');
     $formContainsSendButton = true;
 } else {
-    if ((
-            api_get_setting('allow_registration') === 'approval' ||
-            api_get_setting('allow_registration') === 'true'
-        ) ||
-        $user_already_registered_show_terms || $showTerms
+    // In normal cases (without double validation), we check if the
+    // registration is allowed in any way or if the user is already registered
+    // but needs to confirm terms. If not, send not allowed message
+    if (
+        api_get_setting('allow_registration') === 'approval' ||
+        api_get_setting('allow_registration') === 'true' ||
+        api_get_setting('allow_registration') === 'confirmation' ||
+        $user_already_registered_show_terms ||
+        $showTerms
     ) {
         $form->addButtonNext(get_lang('RegisterUser'));
         $formContainsSendButton = true;

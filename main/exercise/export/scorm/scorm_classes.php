@@ -78,7 +78,6 @@ class ScormAnswerFillInBlanks extends Answer
     }
 }
 
-
 /**
  * This class handles the SCORM export of free-answer questions.
  *

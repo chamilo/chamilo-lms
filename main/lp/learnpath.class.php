@@ -1194,7 +1194,7 @@ class learnpath
     /**
      * Removes an item from the current learnpath.
      *
-     * @param int $id     Elem ID (0 if first)
+     * @param int $id Elem ID (0 if first)
      *
      * @return int Number of elements moved
      *
@@ -10772,7 +10772,6 @@ class learnpath
                                         ];
                                         $my_dep_file->setAttribute('href', $file_path);
                                         $my_dep->setAttribute('xml:base', '');
-
                                     } elseif (empty($file_path)) {
                                         $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
                                         $file_path = str_replace('//', '/', $file_path);
@@ -10867,7 +10866,7 @@ class learnpath
                                                 $zip_files_abs[] = $fileAbs;
                                                 $link_updates[$my_file_path][] = [
                                                     'orig' => $doc_info[0],
-                                                    'dest' => $destinationFile
+                                                    'dest' => $destinationFile,
                                                 ];
                                                 $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                                 $my_dep->setAttribute('xml:base', '');
@@ -11301,7 +11300,6 @@ class learnpath
                         }
                     } else {
                         $newDestination = str_replace('document/', '', $old_new['dest']);
-
                     }
                     $string = str_replace($old_new['orig'], $newDestination, $string);
 

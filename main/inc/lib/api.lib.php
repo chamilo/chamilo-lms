@@ -7228,9 +7228,9 @@ function api_get_jquery_libraries_js($libraries)
  *
  * This function relies on api_get_course_info()
  *
- * @param   string $courseCode  The course code - optional (takes it from context if not given)
- * @param   int    $sessionId The session ID  - optional (takes it from context if not given)
- * @param   int    $groupId The group ID - optional (takes it from context if not given)
+ * @param string $courseCode The course code - optional (takes it from context if not given)
+ * @param int    $sessionId  The session ID  - optional (takes it from context if not given)
+ * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
  * @return string The URL to a course, a session, or empty string if nothing works e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *

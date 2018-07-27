@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * This class represents an entire exercise to be exported in SCORM.
@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *   - max_attempts
  *   - show_answer
  *   - anonymous_attempts
+ *
  * @author Julio Montoya
  * @author Amand Tihon <amand@alrj.org>
  *
@@ -157,8 +158,8 @@ class ScormExercise
     {
         $js = $html = '';
 
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
 
         $em = Database::getManager();
         // Export cquiz

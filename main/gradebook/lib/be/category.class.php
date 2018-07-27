@@ -815,6 +815,7 @@ class Category implements GradebookItem
 
     /**
      * Shows all information of an category.
+     *
      * @param int $categoryId
      *
      * @return array
@@ -833,7 +834,6 @@ class Category implements GradebookItem
         $row = Database::fetch_array($result, 'ASSOC');
 
         return $row;
-
     }
 
     /**

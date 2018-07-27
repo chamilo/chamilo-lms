@@ -921,7 +921,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 if ($teacher) {
                     $loadStats = false;
                 } else {
-                    $loadStats = api_get_configuration_value('disable_gradebook_stats') === false;
+                    $loadStats = api_get_configuration_value('gradebook_enable_best_score') === false;
                 }
 
                 $gradebookTable = new GradebookTable(

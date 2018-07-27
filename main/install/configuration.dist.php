@@ -848,8 +848,8 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 */
 //$_configuration['allow_portfolio_tool'] = false;
 
-// Disable average and best columns in gradebook see BT#14126
-//$_configuration['disable_gradebook_stats'] = false;
+// Enable best score column in gradebook. Previously called disable_gradebook_stats
+//$_configuration['gradebook_enable_best_score'] = false;
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;

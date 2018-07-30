@@ -253,16 +253,18 @@ class BBBPlugin extends Plugin
     }
 
     /**
+     * Return an array with URL
+     *
      * @param string $conferenceUrl
      *
-     * @return string
+     * @return array
      */
     public function getUrlInterfaceLinks($conferenceUrl)
     {
-        $url = $this->getFlashUrl($conferenceUrl);
-        $url .= '&nbsp;'.$this->getHtmlUrl($conferenceUrl);
+        $urlList[] = $this->getFlashUrl($conferenceUrl);
+        $urlList[] = $this->getHtmlUrl($conferenceUrl);
 
-        return $url;
+        return $urlList;
     }
 
     /**

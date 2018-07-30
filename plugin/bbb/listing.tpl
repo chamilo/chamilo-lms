@@ -3,8 +3,64 @@
     <div class ="col-md-12" style="text-align:center">
         {{ form }}
         {% if show_join_button == true %}
+            {% if show_client_options %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="well">
+                            {{ enter_conference_links.0 }}
+                            <br />
+                            <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input id="share_button_flash" type="text"
+                                           style="width:300px"
+                                           class="form-control" readonly value="{{ conference_url }}&inteface=0">
+
+                                    <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn-default">
+                                        <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="well">
+                            {{ enter_conference_links.1 }}
+                            <br />
+                            <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input id="share_button_html" type="text"
+                                       style="width:300px"
+                                       class="form-control" readonly value="{{ conference_url }}&inteface=1">
+
+                                    <button onclick="copyTextToClipBoard('share_button_html');" class="btn btn-default">
+                                        <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                {{ enter_conference_links.0 }}
+                <br />
+                <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
+                <div class="well">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input id="share_button"
+                                   type="text"
+                                   style="width:600px"
+                                   class="form-control" readonly value="{{ conference_url }}">
+                            <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
+                                <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             <p>
-                {{ enter_conference_links }}
                 <span id="users_online" class="label label-warning">
                     {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
                 </span>
@@ -17,17 +73,7 @@
                     <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
                 {% endif %}
             {% endif %}
-            <div class="well">
-                <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <input id="share_button" type="text" style="width:600px" class="form-control" readonly value="{{ conference_url }}">
-                        <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
-                            <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
-                        </button>
-                    </div>
-                </div>
-            </div>
+        </div>
         {% elseif max_users_limit > 0 %}
             {% if conference_manager == true %}
                 <p>{{ 'MaxXUsersReachedManager' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>

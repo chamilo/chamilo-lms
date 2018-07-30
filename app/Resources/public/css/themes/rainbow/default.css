@@ -1156,12 +1156,12 @@ svg path{
     stroke-width: 2;
 }
 svg circle{
-    fill:rgb(255,255,255);
+    /*fill:rgb(255,255,255);
     stroke:rgb(132,189,0);
     stroke-width: 2;
     r: 10;
     cy:15;
-    cx:15;
+    cx:15;*/
 }
 .point_end ._jsPlumb_endpoint svg circle{
     fill:rgb(255,255,255);

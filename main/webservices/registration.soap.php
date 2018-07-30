@@ -4903,17 +4903,27 @@ function WSGetUserFromUsername($params)
     $result = [];
 
     // Get user id
-    $user_data = api_get_user_info($params['username']);
+    $user_data = api_get_user_info_from_username($params['username']);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
         $result['user_id'] = '';
         $result['firstname'] = '';
         $result['lastname'] = '';
+
+        if ($debug) {
+            error_log('User not found :(');
+        }
     } else {
         $result['user_id'] = $user_data['user_id'];
         $result['firstname'] = $user_data['firstname'];
         $result['lastname'] = $user_data['lastname'];
+        $result['email'] = $user_data['email'];
+
+        if ($debug) {
+            error_log('User found :) return value '.print_r($result, 1));
+        }
+
     }
 
     return $result;

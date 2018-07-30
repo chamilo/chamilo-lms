@@ -690,9 +690,9 @@ footer #footer_right{
     color: #FFFFFF;
 }
 .hotspot-image{
-    margin: auto;
-    border: 2px solid #e3e3e3;
-    padding: 10px;
+    /*margin: auto;*/
+    /*border: 2px solid #e3e3e3;*/
+    /*padding: 10px;*/
 }
 .sidebar-well .well{
     border-radius: 0;

@@ -4920,6 +4920,14 @@ function WSGetUserFromUsername($params)
         $result['lastname'] = $user_data['lastname'];
         $result['email'] = $user_data['email'];
 
+        // Get extra fields
+        $fieldValue = new ExtraFieldValue('user');
+        $extra = $fieldValue->getAllValuesByItem(
+            $result['user_id']
+        );
+
+        $result['extra'] = $extra;
+
         if ($debug) {
             error_log('User found :) return value '.print_r($result, 1));
         }

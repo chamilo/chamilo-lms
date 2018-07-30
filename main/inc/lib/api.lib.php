@@ -2963,9 +2963,9 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $user_id = intval($user_id);
-    $session_id = intval($session_id);
-    $courseId = intval($courseId);
+    $user_id = (int) $user_id;
+    $session_id = (int) $session_id;
+    $courseId = (int) $courseId;
 
     $sql = "SELECT DISTINCT session.id
             FROM $session_table
@@ -2995,7 +2995,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     $userId = api_get_user_id();
 
     if (!empty($session_id)) {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
     } else {
         $session_id = api_get_session_id();
     }
@@ -3006,7 +3006,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     }
 
     if (!empty($courseId)) {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
     } else {
         $courseId = api_get_course_int_id();
     }
@@ -3117,7 +3117,7 @@ function api_is_invitee()
  */
 function api_is_session_in_category($session_id, $category_name)
 {
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
     $category_name = Database::escape_string($category_name);
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -4427,7 +4427,7 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
 {
     $course_info = api_get_course_info($course_code);
     $tool = Database::escape_string($tool);
-    $ref = intval($ref);
+    $ref = (int) $ref;
 
     // Definition of tables.
     $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4435,7 +4435,7 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
     $sessionId = (int) $sessionId;
     $sessionCondition = " AND session_id = $sessionId ";
     if (empty($sessionId)) {
-        $sessionCondition = " AND (session_id = 0 OR session_id IS NULL) ";
+        $sessionCondition = ' AND (session_id = 0 OR session_id IS NULL) ';
     }
     $sql = "SELECT id FROM $tableItemProperty
             WHERE
@@ -7469,7 +7469,7 @@ function api_get_locked_settings()
  */
 function api_user_is_login($user_id = null)
 {
-    $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
+    $user_id = empty($user_id) ? api_get_user_id() : (int) $user_id;
 
     return $user_id && !api_is_anonymous();
 }
@@ -8520,7 +8520,7 @@ function api_is_student_boss()
 function api_is_excluded_user_type($checkDB = false, $userId = 0)
 {
     if ($checkDB) {
-        $userId = empty($userId) ? api_get_user_id() : intval($userId);
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
         if ($userId == 0) {
             return true;

@@ -39,9 +39,15 @@ class ScormAnswerFillInBlanks extends Answer
         $endlocations = api_strpos($answer, ']');
         while ($startlocations !== false && $endlocations !== false) {
             $texstring = api_substr($answer, $startlocations, ($endlocations - $startlocations) + 1);
+            $replaceText = '<input 
+                type="text" 
+                name="question_'.$this->questionJSId.'_fib_'.$i.'" 
+                id = "question_'.$this->questionJSId.'_fib_'.$i.'" 
+                size="10" value="" 
+                />';
             $answer = api_substr_replace(
                 $answer,
-                '<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',
+                $replaceText,
                 $startlocations,
                 ($endlocations - $startlocations) + 1
             );
@@ -183,11 +189,16 @@ class ScormAnswerHotspot extends Answer
         // Get the answers, make a list
         $nbrAnswers = $this->selectNbrAnswers();
 
-        $answer_list = '<div style="padding: 10px; margin-left: -8px; border: 1px solid #4271b5; height: 448px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
+        $answerList = '<div 
+            style="padding: 10px; 
+            margin-left: -8px; 
+            border: 1px solid #4271b5; 
+            height: 448px; 
+            width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-            $answer_list .= '<li>'.$this->selectAnswer($answerId).'</li>';
+            $answerList .= '<li>'.$this->selectAnswer($answerId).'</li>';
         }
-        $answer_list .= '</ol></div>';
+        $answerList .= '</ol></div>';
         $relPath = api_get_path(REL_PATH);
         $html .= <<<HTML
             <tr>
@@ -205,7 +216,7 @@ class ScormAnswerHotspot extends Answer
                     </script>
                 </td>
                 <td>
-                    $answer_list
+                    $answerList
                 </td>
             <tr>
 HTML;

@@ -683,72 +683,72 @@ class GradebookTable extends SortableTable
                     SCORE_DIV
                 );
 
-                    $row = [
+                $row = [
                         null,
                         '<h3>'.get_lang('Total').'</h3>',
                     ];
 
-                    if (!$this->exportToPdf) {
-                        $row[] = null;
+                if (!$this->exportToPdf) {
+                    $row[] = null;
+                }
+
+                $row[] = $main_weight;
+                $row[] = $totalResult;
+
+                if (in_array(1, $this->loadStats)) {
+                    $totalRanking = [];
+                    $invalidateRanking = true;
+                    $average = 0;
+                    foreach ($this->studentList as $student) {
+                        $score = $main_cat[0]->calc_score($student['user_id']);
+                        if (!empty($score[0])) {
+                            $invalidateRanking = false;
+                        }
+                        $totalRanking[$student['user_id']] = $score[0];
+                        $average += $score[0];
                     }
 
-                    $row[] = $main_weight;
-                    $row[] = $totalResult;
+                    $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
 
-                    if (in_array(1, $this->loadStats)) {
-                        $totalRanking = [];
-                        $invalidateRanking = true;
-                        $average = 0;
-                        foreach ($this->studentList as $student) {
-                            $score = $main_cat[0]->calc_score($student['user_id']);
-                            if (!empty($score[0])) {
-                                $invalidateRanking = false;
-                            }
-                            $totalRanking[$student['user_id']] = $score[0];
-                            $average += $score[0];
-                        }
-
-                        $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
-
-                        $totalRanking = $scoredisplay->display_score(
+                    $totalRanking = $scoredisplay->display_score(
                             $totalRanking,
                             SCORE_DIV,
                             SCORE_BOTH,
                             true
                         );
 
-                        if ($invalidateRanking) {
-                            $totalRanking = null;
-                        }
-
-                        $row[] = $totalRanking;
+                    if ($invalidateRanking) {
+                        $totalRanking = null;
                     }
-                    if (in_array(2, $this->loadStats)) {
-                        // Overwrite main weight
-                        $totalBest[1] = $main_weight;
 
-                        $totalBest = $scoredisplay->display_score(
+                    $row[] = $totalRanking;
+                }
+                if (in_array(2, $this->loadStats)) {
+                    // Overwrite main weight
+                    $totalBest[1] = $main_weight;
+
+                    $totalBest = $scoredisplay->display_score(
                             $totalBest,
                             SCORE_DIV,
                             SCORE_BOTH,
                             true
                         );
-                        $row[] = $totalBest;
-                    }
-                    if (in_array(3, $this->loadStats)) {
-                        // Overwrite main weight
-                        $totalAverage[0] = $average / count($this->studentList);
-                        $totalAverage[1] = $main_weight;
+                    $row[] = $totalBest;
+                }
+                if (in_array(3, $this->loadStats)) {
+                    // Overwrite main weight
+                    $totalAverage[0] = $average / count($this->studentList);
+                    $totalAverage[1] = $main_weight;
 
-                        $totalAverage = $scoredisplay->display_score(
+                    $totalAverage = $scoredisplay->display_score(
                             $totalAverage,
                             SCORE_DIV,
                             SCORE_BOTH,
                             true
                         );
 
-                        $row[] = $totalAverage;
-                    }
+                    $row[] = $totalAverage;
+                }
 
                 $sortable_data[] = $row;
             }

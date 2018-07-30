@@ -262,7 +262,7 @@ $tpl->assign('enter_conference_links', $urlList);
 $tpl->assign('warning_inteface_msg', $warningIntefaceMessage);
 $tpl->assign('show_client_options', $showClientOptions);
 
-$listing_tpl = 'bbb/listing.tpl';
+$listing_tpl = 'bbb/view/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
 $actionLinks = '';
 if (api_is_platform_admin()) {

@@ -105,7 +105,7 @@ $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
-$content = $tpl->fetch('bbb/admin.tpl');
+$content = $tpl->fetch('bbb/view/admin.tpl');
 
 if ($meetings) {
     $actions = Display::toolbarButton(

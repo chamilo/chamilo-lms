@@ -270,28 +270,30 @@ class BBBPlugin extends Plugin
     /**
      * @param string $conferenceUrl
      *
-     * @return string
+     * @return array
      */
     public function getFlashUrl($conferenceUrl)
     {
-        return Display::url(
-            $this->get_lang('EnterConferenceFlash'),
-            $conferenceUrl.'&interface='.self::INTERFACE_FLASH,
-            ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
-        );
+        $data = [
+            'text' => $this->get_lang('EnterConferenceFlash'),
+            'url' => $conferenceUrl . '&interface=' . self::INTERFACE_FLASH,
+            'icon' => 'resources/img/64/videoconference_flash.png'
+        ];
+        return $data;
     }
 
     /**
      * @param string $conferenceUrl
      *
-     * @return string
+     * @return array
      */
     public function getHtmlUrl($conferenceUrl)
     {
-        return Display::url(
-            $this->get_lang('EnterConferenceHTML5'),
-            $conferenceUrl.'&interface='.self::INTERFACE_HTML5,
-            ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
-        );
+        $data = [
+            'text' => $this->get_lang('EnterConferenceHTML5'),
+            'url' => $conferenceUrl . '&interface=' . self::INTERFACE_HTML5,
+            'icon' => 'resources/img/64/videoconference_html5.png'
+        ];
+        return $data;
     }
 }

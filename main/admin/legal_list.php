@@ -26,7 +26,7 @@ echo Display::return_icon('edit.png', get_lang('EditTermsAndConditions')).get_la
 echo '</div>';
 
 $em = Database::getManager();
-/** @var LegalRepository $legalTerms */
+/** @var LegalRepository $legalTermsRepo */
 $legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
 $legal_count = $legalTermsRepo->countAllActiveLegalTerms();
 $languages = api_get_languages();

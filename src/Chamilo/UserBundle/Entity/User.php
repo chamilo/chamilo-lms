@@ -2497,7 +2497,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $metadata = $em->getClassMetadata($className);
         $maxRecursionDepth = 5;
 
-        $data = array();
+        $data = [];
 
         foreach ($metadata->fieldMappings as $field => $mapping) {
             $value = $metadata->reflFields[$field]->getValue($this);

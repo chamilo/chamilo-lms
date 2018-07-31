@@ -921,6 +921,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
 
+// GDPR: European's General Data Protection Rules activation option
+// Set to true to automatically enable a new personal data page inside the social network menu
+// $_configuration['enable_gdpr'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
@@ -928,6 +932,3 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
 
-// GDPR: European's General Data Protection Rules activation option
-// Set to true to automatically enable a new personal data page inside the social network menu
-// $_configuration['enable_gdpr'] = false;

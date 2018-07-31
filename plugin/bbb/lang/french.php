@@ -50,3 +50,7 @@ $strings['MaxXUsersReachedManager'] = 'La limite de %s utilisateurs simultanés 
 $strings['MaxUsersInConferenceRoom'] = 'Nombre max d\'utilisateurs simultanés dans une salle de conférence';
 $strings['global_conference_allow_roles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
 $strings['CreatedAt'] = "Créé à";
+
+$strings['EnterConferenceFlash'] = 'Entrer dans la salle de conférence (Flash)';
+$strings['EnterConferenceHTML5'] = 'Entrer dans la salle de conférence (HTML5)';
+$strings['ParticipantsWillUseSameInterface'] = 'Les apprenants utiliseront la même interface que vous';

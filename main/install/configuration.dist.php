@@ -463,7 +463,17 @@ ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
 // X-Frame-Options tells the browser whether you want to allow your site to
 // be framed or not. By preventing a browser from framing your site you can
 // defend against attacks like clickjacking.
-// Recommended value "SAMEORIGIN".
+// If defining a URL here, it should define the URL(s) from which your content
+// should be visible, not the URLs from which your site accepts content.
+// For example, if your main URL (root_web above) is https://11.chamilo.org/,
+// then this setting should be: 'ALLOW-FROM https://11.chamilo.org'.
+// These headers only apply to pages where Chamilo is responsible of the HTTP
+// headers generation (i.e. ".php" files). It does not apply to static files.
+// If playing with this feature, make sure you also update your web server
+// configuration to add the right headers for static files. See CDN
+// configuration documentation above (search for "add_header") for more
+// information.
+// Recommended (strict) value for this setting, if enabled: "SAMEORIGIN".
 //$_configuration['security_x_frame_options'] = 'SAMEORIGIN';
 //
 // X-XSS-Protection sets the configuration for the cross-site scripting
@@ -838,8 +848,8 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 */
 //$_configuration['allow_portfolio_tool'] = false;
 
-// Disable average and best columns in gradebook see BT#14126
-//$_configuration['disable_gradebook_stats'] = false;
+// Enable best score column in gradebook. Previously called disable_gradebook_stats
+//$_configuration['gradebook_enable_best_score'] = false;
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;

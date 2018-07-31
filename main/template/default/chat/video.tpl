@@ -47,113 +47,113 @@
     </div>
 </div>
 <script>
-    (function () {
-        var VideoChat = {
-            init: function () {
-                var isCompatible = !!Modernizr.prefixed('RTCPeerConnection', window);
+(function () {
+    var VideoChat = {
+        init: function () {
+            var isCompatible = !!Modernizr.prefixed('RTCPeerConnection', window);
 
-                var notifyNotSupport = function () {
-                    $.get('{{ _p.web_ajax }}chat.ajax.php', {
-                        action: 'notify_not_support',
-                        to:{{ chat_user.id }}
-                    });
-                };
+            var notifyNotSupport = function () {
+                $.get('{{ _p.web_ajax }}chat.ajax.php', {
+                    action: 'notify_not_support',
+                    to:{{ chat_user.id }}
+                });
+            };
 
-                var startVideoChat = function () {
-                    var webRTC = new SimpleWebRTC({
-                        localVideoEl: 'chat-local-video',
-                        remoteVideosEl: '',
-                        autoRequestMedia: true
-                    });
+            var startVideoChat = function () {
+                var webRTC = new SimpleWebRTC({
+                    localVideoEl: 'chat-local-video',
+                    remoteVideosEl: '',
+                    autoRequestMedia: true
+                });
 
-                    webRTC.on('readyToCall', function () {
-                        $('#dlg-webrtc-help').replaceWith("<p>" +
-                            "<em class=\"fa fa-warning\"></em> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}" +
-                            "</p>");
+                webRTC.on('readyToCall', function () {
+                    $('#dlg-webrtc-help').replaceWith("<p>" +
+                        "<em class=\"fa fa-warning\"></em> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}" +
+                        "</p>");
 
-                        webRTC.joinRoom('{{ room_name }}');
-                    });
-                    webRTC.on('videoAdded', function (video, peer) {
-                        $(video).addClass('skip');
-                        $('#chat-remote-video').html(video);
+                    webRTC.joinRoom('{{ room_name }}');
+                });
+                webRTC.on('videoAdded', function (video, peer) {
+                    $(video).addClass('skip');
+                    $('#chat-remote-video').html(video);
 
-                        if (peer && peer.pc) {
-                            peer.pc.on('iceConnectionStateChange', function () {
-                                var alertDiv = $('<div>')
-                                        .addClass('alert');
+                    if (peer && peer.pc) {
+                        peer.pc.on('iceConnectionStateChange', function () {
+                            var alertDiv = $('<div>')
+                                    .addClass('alert');
 
-                                switch (peer.pc.iceConnectionState) {
-                                    case 'checking':
-                                        alertDiv
-                                            .addClass('alert-info')
-                                            .html('<em class="fa fa-spinner fa-spin"></em> ' + "{{ 'ConnectingToPeer'|get_lang }}");
-                                        break;
-                                    case 'connected':
-                                        //no break
-                                    case 'completed':
-                                        alertDiv
-                                            .addClass('alert-success')
-                                            .html('<em class="fa fa-commenting"></em> ' + "{{ 'ConnectionEstablished'|get_lang }}");
-                                        break;
-                                    case 'disconnected':
-                                        alertDiv
-                                            .addClass('alert-info')
-                                            .html('<em class="fa fa-frown-o"></em> ' + "{{ 'Disconnected'|get_lang }}");
-                                        break;
-                                    case 'failed':
-                                        alertDiv
-                                            .addClass('alert-danger')
-                                            .html('<em class="fa fa-times"></em> ' + "{{ 'ConnectionFailed'|get_lang }}");
-                                        break;
-                                    case 'closed':
-                                        alertDiv
-                                            .addClass('alert-danger')
-                                            .html('<em class="fa fa-close"></em> ' + "{{ 'ConnectionClosed'|get_lang }}");
-                                        break;
-                                }
+                            switch (peer.pc.iceConnectionState) {
+                                case 'checking':
+                                    alertDiv
+                                        .addClass('alert-info')
+                                        .html('<em class="fa fa-spinner fa-spin"></em> ' + "{{ 'ConnectingToPeer'|get_lang }}");
+                                    break;
+                                case 'connected':
+                                    //no break
+                                case 'completed':
+                                    alertDiv
+                                        .addClass('alert-success')
+                                        .html('<em class="fa fa-commenting"></em> ' + "{{ 'ConnectionEstablished'|get_lang }}");
+                                    break;
+                                case 'disconnected':
+                                    alertDiv
+                                        .addClass('alert-info')
+                                        .html('<em class="fa fa-frown-o"></em> ' + "{{ 'Disconnected'|get_lang }}");
+                                    break;
+                                case 'failed':
+                                    alertDiv
+                                        .addClass('alert-danger')
+                                        .html('<em class="fa fa-times"></em> ' + "{{ 'ConnectionFailed'|get_lang }}");
+                                    break;
+                                case 'closed':
+                                    alertDiv
+                                        .addClass('alert-danger')
+                                        .html('<em class="fa fa-close"></em> ' + "{{ 'ConnectionClosed'|get_lang }}");
+                                    break;
+                            }
 
-                                $('#connection-status').html(alertDiv);
-                            });
-                        }
-                    });
-                    webRTC.on('videoRemoved', function (video, peer) {
-                        video.src = '';
-                    });
-                    webRTC.on('iceFailed', function (peer) {
-                        var alertDiv = $('<div>')
-                            .addClass('alert-danger')
-                            .html('<em class="fa fa-close"></em> ' + "{{ 'LocalConnectionFailed'|get_lang }}");
+                            $('#connection-status').html(alertDiv);
+                        });
+                    }
+                });
+                webRTC.on('videoRemoved', function (video, peer) {
+                    video.src = '';
+                });
+                webRTC.on('iceFailed', function (peer) {
+                    var alertDiv = $('<div>')
+                        .addClass('alert-danger')
+                        .html('<em class="fa fa-close"></em> ' + "{{ 'LocalConnectionFailed'|get_lang }}");
 
-                        $('#connection-status').html(alertDiv);
-                    });
-                    webRTC.on('connectivityError', function (peer) {
-                        var alertDiv = $('<div>')
-                            .addClass('alert-danger')
-                            .html('<em class="fa fa-close"></em> ' + "{{ 'RemoteConnectionFailed'|get_lang }}");
+                    $('#connection-status').html(alertDiv);
+                });
+                webRTC.on('connectivityError', function (peer) {
+                    var alertDiv = $('<div>')
+                        .addClass('alert-danger')
+                        .html('<em class="fa fa-close"></em> ' + "{{ 'RemoteConnectionFailed'|get_lang }}");
 
-                        $('#connection-status').html(alertDiv);
-                    });
-                };
+                    $('#connection-status').html(alertDiv);
+                });
+            };
 
-                if (!isCompatible) {
-                    notifyNotSupport();
+            if (!isCompatible) {
+                notifyNotSupport();
 
-                    $('#chat-video-panel').remove();
-                    return;
-                }
-
-                $('#messages').remove();
-
-                startVideoChat();
-
-                window.onbeforeunload = function () {
-                    return "{{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}";
-                };
+                $('#chat-video-panel').remove();
+                return;
             }
-        };
 
-        $(document).on('ready', function () {
-            VideoChat.init();
-        });
-    })();
+            $('#messages').remove();
+
+            startVideoChat();
+
+            window.onbeforeunload = function () {
+                return "{{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}";
+            };
+        }
+    };
+
+    $(document).on('ready', function () {
+        VideoChat.init();
+    });
+})();
 </script>

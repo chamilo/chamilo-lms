@@ -108,8 +108,21 @@ class LearningCalendarPlugin extends Plugin
         ";
         Database::query($sql);
 
+        $sql = "
+            CREATE TABLE IF NOT EXISTS learning_calendar_control_point(
+              id int not null AUTO_INCREMENT primary key,
+              user_id int(11) not null,
+              control_date date not null,
+              control_value int not null,
+              created_at datetime not null,
+              updated_at datetime not null
+            )
+        ";
+        Database::query($sql);
+
         $extraField = new ExtraField('lp_item');
         $params = [
+            'display_text' => $this->get_lang('LearningCalendarOneDayMarker'),
             'variable' => 'calendar',
             'visible_to_self' => 1,
             'changeable' => 1,
@@ -240,6 +253,10 @@ class LearningCalendarPlugin extends Plugin
     public function getCalendarsEventsByDate($calendarInfo, $start, $end, $type = 0, $getCount = false)
     {
         if (empty($calendarInfo)) {
+            if ($getCount) {
+                return 0;
+            }
+
             return [];
         }
 
@@ -503,9 +520,11 @@ class LearningCalendarPlugin extends Plugin
             ];
 
             Database::insert('learning_calendar_user', $params);
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -780,6 +799,19 @@ class LearningCalendarPlugin extends Plugin
     }
 
     /**
+     * @param array $htmlHeadXtra
+     */
+    public function setJavaScript(&$htmlHeadXtra)
+    {
+        $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
+        $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
+        $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.canvasOverlay.js');
+        $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.pointLabels.js');
+
+        $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
+    }
+
+    /**
      * @param int   $userId
      * @param array $courseAndSessionList
      *
@@ -795,7 +827,54 @@ class LearningCalendarPlugin extends Plugin
             $html .= '<br />';
             $html .= $this->get_lang('NumberDaysAccumulatedInLp').$stats['completed'];
             $html .= '<br />';
-            $html .= $this->get_lang('NumberDaysInRetard').' '.$stats['diff'];
+            $html .= $this->get_lang('NumberDaysInRetard').' '.($stats['completed'] - $stats['user_event_count']);
+        }
+
+        $controlList = $this->getControlPointsToPlot($userId);
+
+        if (!empty($controlList)) {
+            $listToString = json_encode($controlList);
+            $date = $this->get_lang('Date');
+            $controlPoint = $this->get_lang('NumberOfDays');
+
+            $html .= '<div id="control_point_chart"></div>';
+            $html .= '<script>
+                $(document).ready(function(){
+                    var cosPoints = '.$listToString.';
+                    var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
+                        //animate: !$.jqplot.use_excanvas,                      
+                        series:[{
+                            showMarker:true,
+                            pointLabels: { show:true },
+                        }],
+                        axes:{
+                            xaxis:{
+                                label: "'.$date.'",
+                                renderer: $.jqplot.DateAxisRenderer,
+                                tickOptions:{formatString: "%Y-%m-%d"},
+                                tickInterval: \'30 day\',                                
+                            },
+                            yaxis:{
+                                label: "'.$controlPoint.'",
+                                max: 20,
+                                min: -20,    
+                            }
+                        },
+                        canvasOverlay: {
+                            show: true,
+                            objects: [{
+                                horizontalLine: {
+                                    name: \'0 mark\',
+                                    y: 0,
+                                    lineWidth: 2,
+                                    color: \'rgb(f, f, f)\',
+                                    shadow: false
+                                }
+                            }]
+                        },                     
+                  });
+                });
+            </script>';
         }
 
         $html = Display::panel($html, $this->get_lang('LearningCalendar'));
@@ -973,7 +1052,7 @@ class LearningCalendarPlugin extends Plugin
     /**
      * @param array $calendarInfo
      */
-    public function protectCalendar($calendarInfo = [])
+    public function protectCalendar(array $calendarInfo)
     {
         $allow = api_is_platform_admin() || api_is_teacher();
 
@@ -988,5 +1067,89 @@ class LearningCalendarPlugin extends Plugin
                 }
             }
         }
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getControlPoints($userId)
+    {
+        $userId = (int) $userId;
+        $sql = "SELECT control_date, control_value FROM learning_calendar_control_point 
+                WHERE user_id = $userId ORDER BY control_date";
+        $result = Database::query($sql);
+        $list = Database::store_result($result, 'ASSOC');
+
+        return $list;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getControlPointsToPlot($userId)
+    {
+        $list = $this->getControlPoints($userId);
+        $points = [];
+        foreach ($list as $item) {
+            $points[] = [$item['control_date'], $item['control_value']];
+        }
+
+        return $points;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $value
+     */
+    public function addControlPoint($userId, $value)
+    {
+        $userId = (int) $userId;
+        $value = (int) $value;
+        $local = api_get_local_time();
+        $date = substr($local, 0, 10);
+
+        $sql = "SELECT id FROM learning_calendar_control_point 
+                WHERE user_id = $userId AND control_date = '$date'";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result)) {
+            $params = [
+                'control_value' => $value,
+                'updated_at' => api_get_utc_datetime(),
+            ];
+            $data = Database::fetch_array($result);
+            $id = $data['id'];
+            Database::update('learning_calendar_control_point', $params, ['id = ?' => $id]);
+        } else {
+            $params = [
+                'user_id' => $userId,
+                'control_date' => $date,
+                'control_value' => $value,
+                'created_at' => api_get_utc_datetime(),
+                'updated_at' => api_get_utc_datetime(),
+            ];
+            Database::insert('learning_calendar_control_point', $params);
+        }
+    }
+
+    /**
+     * @param FormValidator $form
+     */
+    public function getAddUserToCalendarForm(FormValidator &$form)
+    {
+        $calendars = $this->getCalendars(0, 1000, '');
+
+        if (empty($calendars)) {
+            echo Display::return_message(get_lang('NoData'), 'warning');
+            exit;
+        }
+        $calendars = array_column($calendars, 'title', 'id');
+        $calendars = array_map('strip_tags', $calendars);
+
+        $form->addSelect('calendar_id', get_lang('Calendar'), $calendars, ['disable_js' => true]);
     }
 }

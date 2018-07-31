@@ -768,6 +768,7 @@ If you have issues with files taking a long time to download, make sure you reco
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
     rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;

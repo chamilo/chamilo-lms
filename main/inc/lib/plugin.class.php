@@ -523,7 +523,7 @@ class Plugin
             return true;
         }
 
-        //Add an icon in the table tool list
+        // Add an icon in the table tool list
         $this->createLinkToCourseTool($plugin_name, $courseId);
     }
 
@@ -537,7 +537,7 @@ class Plugin
      */
     public function uninstall_course_fields($courseId)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
 
         if (empty($courseId)) {
             return false;
@@ -581,8 +581,8 @@ class Plugin
     public function install_course_fields_in_all_courses($add_tool_link = true)
     {
         // Update existing courses to add plugin settings
-        $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses ORDER BY id";
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->install_course_fields($row['id'], $add_tool_link);
@@ -595,8 +595,8 @@ class Plugin
     public function uninstall_course_fields_in_all_courses()
     {
         // Update existing courses to add conference settings
-        $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table
                 ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {

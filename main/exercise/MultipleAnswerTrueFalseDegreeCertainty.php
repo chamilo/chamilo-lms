@@ -530,7 +530,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             'DegreeOfCertaintyVerySure',
         ];
         $html .= '<ul class="chart-legend">';
-        foreach ($legendTitle as $i => $item){
+        foreach ($legendTitle as $i => $item) {
             $html .= '<li><i class="fa fa-square square_color'.$i.'" aria-hidden="true"></i> '.get_lang($item).'</li>';
         }
         $html .= '</ul>';
@@ -601,8 +601,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $returnHeight = false,
         $groupCategoriesByBracket = false,
         $numberOfQuestions = 0
-    )
-    {
+    ) {
         $topAndBottomMargin = 10;
         $colorList = [
             self::LEVEL_DARKRED,
@@ -643,10 +642,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             strpos($title, 'votre dernier résultat à ce test') > 0
         ) ? 100 : 80;
 
-
         $html .= '<div class="row-chart">';
         $html .= '<h4 class="chart-title">'.$titleDisplay.'</h4>';
-
 
         $nbResponsesInc = 0;
         if (isset($scoreList[4])) {
@@ -670,7 +667,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $IgnoranceAnswers = sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng);
         $CorrectAnswers = sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor);
 
-
         $html .= '<div class="chart-grid">';
 
         $explainHistoList = null;
@@ -693,17 +689,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
             $sizeBar = ($scoreOnBottom * $sizeRatio * 2).'px;';
 
-            if ($i == 0 ) {
+            if ($i == 0) {
                 $html .= '<div class="item">';
                 $html .= '<div class="panel-certaint" style="min-height:'.$verticalLineHeight.'px; position: relative;">';
                 $html .= '<div class="answers-title">'.$IncorrectAnswers.'</div>';
                 $html .= '<ul class="certaint-list-two">';
-            } else if($i == 3){
+            } elseif ($i == 3) {
                 $html .= '<div class="item">';
                 $html .= '<div class="panel-certaint" style="height:'.$verticalLineHeight.'px;  position: relative;">';
                 $html .= '<div class="answers-title">'.$CorrectAnswers.'</div>';
                 $html .= '<ul class="certaint-list-two">';
-            } else if($i==2){
+            } elseif ($i == 2) {
                 $html .= '<div class="item">';
                 $html .= '<div class="panel-certaint" style="height:'.$verticalLineHeight.'px;  position: relative;">';
                 $html .= '<div class="answers-title">'.$IgnoranceAnswers.'</div>';
@@ -726,7 +722,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $html .= '</div>';
         $html .= '</div>';
-
 
         if ($returnHeight) {
             return [$html, $verticalLineHeight];
@@ -760,8 +755,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $returnHeight = false,
         $groupCategoriesByBracket = false,
         $numberOfQuestions = 0
-    )
-    {
+    ) {
         $topAndBottomMargin = 10;
         $colorList = [
             self::LEVEL_DARKRED,

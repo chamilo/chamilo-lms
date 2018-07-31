@@ -751,7 +751,7 @@ $ToolIntro = "Textos de introducción";
 $UploadError = "Error de envío, revise tamaño máximo del archivo y los permisos del directorio.";
 $DocumentsWillBeAddedToo = "Los documentos también serán añadidos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar una lección que contenga ejercicios, tendrá que  asegurarse de que estos ejercicios han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista de ejercicios.";
-$ArchivesDirectoryNotWriteableContactAdmin = "El directorio \"archive\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
+$ArchivesDirectoryNotWriteableContactAdmin = "El directorio \"app/cache/\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
 $DestinationCourse = "Curso de destino";
 $ConvertToMultipleAnswer = "Convertir a respuesta múltiple";
 $CasMainActivateComment = "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS";
@@ -8250,4 +8250,5 @@ $CannotAnonymizeUserX = "No se han podido anonimizar los datos del usuario %s. P
 $NoPermissionToAnonymizeUserX = "No tiene los permisos necesarios para anonimizar el usuario %s. Se tratan de los mismos permisos necesarios para eliminar usuarios.";
 $Anonymize = "Anonimizar";
 $XQuestions = "%d preguntas";
-?>
+$WebFolderRefreshSucceeded = "Los estilos y archivos estáticos de la carpeta web/ han sido actualizados.";
+$WebFolderRefreshFailed = "Los estilos y archivos estáticos de la carpeta web/ no han podido ser actualizados, probablemente debido a un problema de permisos. Asegúrese que el usuario sistema de su servidor web tenga los permisos suficientes para escribir en esta carpeta.";

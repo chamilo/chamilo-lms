@@ -740,7 +740,7 @@ $ToolIntro = "Introduction";
 $UploadError = "l'upload n'a pas fonctionné, veuillez vérifier les limites de taille de fichiers autorisée et les permissions de vos répertoires.";
 $DocumentsWillBeAddedToo = "Les documents seront également ajoutés";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si vous désirez exporter un cours contenant des tests, il est nécessaire d'inclure ces tests dans l'export en les sélectionnant dans la liste des tests.";
-$ArchivesDirectoryNotWriteableContactAdmin = "Le répertoire d'archives, utilisé par cet outil, ne dispose pas des accès en écriture. Veuillez contacter l'administrateur de la plateforme à ce sujet.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Le répertoire app/cache/, utilisé par cet outil, ne dispose pas des accès en écriture. Veuillez contacter l'administrateur de la plateforme à ce sujet.";
 $DestinationCourse = "Cours de destination";
 $ConvertToMultipleAnswer = "Convertir en question à réponses multiples (QRM)";
 $CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
@@ -8158,4 +8158,5 @@ $CannotAnonymizeUserX = "Impossible d'anonymiser les données de l'utilisateur %
 $NoPermissionToAnonymizeUserX = "Vous n'avez pas les permissions pour anonymiser l'utilisateur %s. Il s'agit des mêmes permissions que pour la suppression d'utilisateurs.";
 $Anonymize = "Anonymiser";
 $XQuestions = "%d questions";
-?>
+$WebFolderRefreshSucceeded = "Les styles et fichiers statiques du répertoire web/ on été mis à jour.";
+$WebFolderRefreshFailed = "Les styles et fichiers statiques du répertoire web/ n'ont pas pu être mis à jour, probablement à cause de problèmes de permissions. Assurez-vous que l'utilisateur système de votre serveur web puisse écrire dans le répertoire web/.";

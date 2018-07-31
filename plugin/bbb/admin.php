@@ -1,11 +1,13 @@
 <?php
+/* For license terms, see /license.txt */
+
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
  *
  * @package chamilo.plugin.bigbluebutton
  */
-use Chamilo\UserBundle\Entity\User;
-
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 
@@ -43,13 +45,12 @@ if ($form->validate()) {
 $meetings = $bbb->getMeetings(0, 0, 0, true, $dateRange);
 
 foreach ($meetings as &$meeting) {
-    $participants = $bbb->findMeetingParticipants($meeting['id']);
+    $participants = $bbb->findConnectedMeetingParticipants($meeting['id']);
 
     foreach ($participants as $meetingParticipant) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
-        $meeting['participants'][] = $participant->getCompleteName()
-            .' ('.$participant->getEmail().')';
+        $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
     }
 }
 
@@ -104,7 +105,7 @@ $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
-$content = $tpl->fetch('bbb/admin.tpl');
+$content = $tpl->fetch('bbb/view/admin.tpl');
 
 if ($meetings) {
     $actions = Display::toolbarButton(

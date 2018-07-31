@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /* To show the plugin course icons you need to add these icons:
  * main/img/icons/22/plugin_name.png
  * main/img/icons/64/plugin_name.png
@@ -8,12 +9,19 @@
 /**
  * Videoconference plugin with BBB
  */
-//namespace Chamilo\Plugin\BBB;
+
 /**
  * Class BBBPlugin
  */
 class BBBPlugin extends Plugin
 {
+    const INTERFACE_FLASH = 0;
+    const INTERFACE_HTML5 = 1;
+
+    const LAUNCH_TYPE_DEFAULT = 0;
+    const LAUNCH_TYPE_SET_BY_TEACHER = 1;
+    const LAUNCH_TYPE_SET_BY_STUDENT = 2;
+
     public $isCoursePlugin = true;
 
     // When creating a new course this settings are added to the course
@@ -34,7 +42,7 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.6',
+            '2.7',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
@@ -54,6 +62,21 @@ class BBBPlugin extends Plugin
                         STUDENT_BOSS => get_lang('StudentBoss')
                     ],
                     'attributes' => ['multiple' => 'multiple']
+                ],
+                'interface' => [
+                    'type' => 'select',
+                    'options' => [
+                        self::INTERFACE_FLASH => 'Flash',
+                        self::INTERFACE_HTML5 => 'HTML5',
+                    ]
+                ],
+                'launch_type' => [
+                    'type' => 'select',
+                    'options' => [
+                        self::LAUNCH_TYPE_DEFAULT => 'Default',
+                        self::LAUNCH_TYPE_SET_BY_TEACHER => 'Set by teacher',
+                        self::LAUNCH_TYPE_SET_BY_STUDENT => 'Set by student',
+                    ]
                 ]
             ]
         );
@@ -92,8 +115,7 @@ class BBBPlugin extends Plugin
      */
     public function install()
     {
-        $table = Database::get_main_table('plugin_bbb_meeting');
-        $sql = "CREATE TABLE IF NOT EXISTS $table (
+        $sql = "CREATE TABLE IF NOT EXISTS plugin_bbb_meeting (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
                 group_id INT unsigned NOT NULL DEFAULT 0,
@@ -113,7 +135,8 @@ class BBBPlugin extends Plugin
                 voice_bridge INT NOT NULL DEFAULT 1,
                 access_url INT NOT NULL DEFAULT 1,
                 video_url TEXT NULL,
-                has_video_m4v TINYINT NOT NULL DEFAULT 0
+                has_video_m4v TINYINT NOT NULL DEFAULT 0,
+                interface INT NOT NULL DEFAULT 0                
                 )";
         Database::query($sql);
 
@@ -122,8 +145,9 @@ class BBBPlugin extends Plugin
                 id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 meeting_id int NOT NULL,
                 participant_id int(11) NOT NULL,
-                in_at datetime NOT NULL,
-                out_at datetime NOT NULL
+                in_at datetime,
+                out_at datetime,
+                interface int NOT NULL DEFAULT 0
             );"
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';
@@ -190,7 +214,9 @@ class BBBPlugin extends Plugin
             'bbb_plugin_host',
             'bbb_plugin_salt',
             'max_users_limit',
-            'global_conference_allow_roles'
+            'global_conference_allow_roles',
+            'interface',
+            'launch_type',
         ];
 
         foreach ($variables as $variable) {
@@ -224,5 +250,50 @@ class BBBPlugin extends Plugin
 
         // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
+    }
+
+    /**
+     * Return an array with URL
+     *
+     * @param string $conferenceUrl
+     *
+     * @return array
+     */
+    public function getUrlInterfaceLinks($conferenceUrl)
+    {
+        $urlList[] = $this->getFlashUrl($conferenceUrl);
+        $urlList[] = $this->getHtmlUrl($conferenceUrl);
+
+        return $urlList;
+    }
+
+    /**
+     * @param string $conferenceUrl
+     *
+     * @return array
+     */
+    public function getFlashUrl($conferenceUrl)
+    {
+        $data = [
+            'text' => $this->get_lang('EnterConferenceFlash'),
+            'url' => $conferenceUrl . '&interface=' . self::INTERFACE_FLASH,
+            'icon' => 'resources/img/64/videoconference_flash.png'
+        ];
+        return $data;
+    }
+
+    /**
+     * @param string $conferenceUrl
+     *
+     * @return array
+     */
+    public function getHtmlUrl($conferenceUrl)
+    {
+        $data = [
+            'text' => $this->get_lang('EnterConferenceHTML5'),
+            'url' => $conferenceUrl . '&interface=' . self::INTERFACE_HTML5,
+            'icon' => 'resources/img/64/videoconference_html5.png'
+        ];
+        return $data;
     }
 }

@@ -37,16 +37,16 @@
             customDayRenderer: function(e) {
                 $(e).parent().css('background-color', 'green');
             },
-            clickDay: function(e) {
-                var dateString = moment(e.date).format("YYYY-MM-DD");
-                $.ajax({
-                    type: "GET",
-                    url: "{{ ajax_url }}&a=toggle_day&start_date="+dateString+"&end_date=",
-                    success: function(returnValue) {
-                        getEvents(e);
-                    }
-                });
-            },
+            {#clickDay: function(e) {#}
+                {#var dateString = moment(e.date).format("YYYY-MM-DD");#}
+                {#$.ajax({#}
+                    {#type: "GET",#}
+                    {#url: "{{ ajax_url }}&a=toggle_day&start_date="+dateString+"&end_date=",#}
+                    {#success: function(returnValue) {#}
+                        {#getEvents(e);#}
+                    {#}#}
+                {#});#}
+            {#},#}
             selectRange: function(e) {
                 var startString = moment(e.startDate).format("YYYY-MM-DD");
                 var endString = moment(e.endDate).format("YYYY-MM-DD");

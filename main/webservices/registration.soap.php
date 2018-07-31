@@ -4644,6 +4644,9 @@ function WSSubscribeUserToCourse($params)
             $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
             if (empty($courseCode)) {
+                if ($debug) {
+                    error_log('WSSubscribeUserToCourse course not found');
+                }
                 // Course was not found
                 $resultValue = 0;
             } else {
@@ -4900,17 +4903,35 @@ function WSGetUserFromUsername($params)
     $result = [];
 
     // Get user id
-    $user_data = api_get_user_info($params['username']);
+    $user_data = api_get_user_info_from_username($params['username']);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
         $result['user_id'] = '';
         $result['firstname'] = '';
         $result['lastname'] = '';
+
+        if ($debug) {
+            error_log('User not found :(');
+        }
     } else {
         $result['user_id'] = $user_data['user_id'];
         $result['firstname'] = $user_data['firstname'];
         $result['lastname'] = $user_data['lastname'];
+        $result['email'] = $user_data['email'];
+
+        // Get extra fields
+        $fieldValue = new ExtraFieldValue('user');
+        $extra = $fieldValue->getAllValuesByItem(
+            $result['user_id']
+        );
+
+        $result['extra'] = $extra;
+
+        if ($debug) {
+            error_log('User found :) return value '.print_r($result, 1));
+        }
+
     }
 
     return $result;

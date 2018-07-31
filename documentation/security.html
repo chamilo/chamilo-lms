@@ -122,6 +122,9 @@ This will prevent direct access to your settings and make it seem totally the sa
   &lt;Directory /var/www/URL/app/upload&gt;
     php_admin_value engine Off
   &lt;/Directory&gt;
+  &lt;Directory /var/www/URL/app/Resources/public/css>
+    php_admin_value engine Off
+  &lt;/Directory&gt;
   &lt;Directory /var/www/URL/main/default_course_document/images&gt;
     php_admin_value engine Off
   &lt;/Directory&gt;
@@ -138,7 +141,7 @@ This will prevent direct access to your settings and make it seem totally the sa
         rules would have to be at the top of your location rules to take the
         highest priority:
         <pre>
-  location ~ ^/app/(cache|courses|home|logs|upload)/.*\.ph(p[3457]?|t|tml|ar)$ {
+  location ~ ^/app/(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$ {
     deny all;
   }
   location ~ ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$ {

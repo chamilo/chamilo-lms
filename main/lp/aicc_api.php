@@ -385,7 +385,7 @@ function addListeners(){
     }
     //assign event handlers to objects
     if(lms_lp_type==1 || lms_item_type=='asset'){
-        logit_lms('Dokeos LP or asset',2);
+        logit_lms('Chamilo LP or asset',2);
         // If this path is a Chamilo learnpath, then start manual save
         // when something is loaded in there.
         var myelem = document.getElementById('content_id');

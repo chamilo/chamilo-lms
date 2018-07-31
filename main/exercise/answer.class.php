@@ -55,7 +55,7 @@ class Answer
      */
     public function __construct($questionId, $course_id = 0, $exercise = null)
     {
-        $this->questionId = intval($questionId);
+        $this->questionId = (int) $questionId;
         $this->answer = [];
         $this->correct = [];
         $this->comment = [];
@@ -220,7 +220,7 @@ class Answer
 
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $questionId = intval($this->questionId);
+        $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
                 WHERE c_id = {$this->course_id} AND id = $questionId";
@@ -365,7 +365,7 @@ class Answer
     public function selectAnswerByAutoId($auto_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $auto_id = intval($auto_id);
+        $auto_id = (int) $auto_id;
         $sql = "SELECT id, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
         $rs = Database::query($sql);
@@ -483,7 +483,7 @@ class Answer
         }
         $row = Database::fetch_array($res);
 
-        return $row['type'];
+        return (int) $row['type'];
     }
 
     /**

@@ -9,7 +9,7 @@
 RewriteEngine on
 
 # Prevent execution of PHP from directories used for different types of uploads
-RedirectMatch 403 ^/app/(cache|courses|home|logs|upload)/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/app/(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$

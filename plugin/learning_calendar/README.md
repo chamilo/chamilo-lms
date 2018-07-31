@@ -1,2 +1,2 @@
-## Learning path calendar
+## Learning calendar
 

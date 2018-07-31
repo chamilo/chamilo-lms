@@ -784,19 +784,25 @@ function display_requirements(
 
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
-    $timezone = checkPhpSettingExists("date.timezone");
-    if (!$timezone) {
-        echo "<div class='alert alert-warning'>".
-            Display::return_icon(
-                'warning.png',
-                get_lang('Warning'),
-                '',
-                ICON_SIZE_MEDIUM,
-                true,
-                false,
-                false
-            ).
-            get_lang("DateTimezoneSettingNotSet")."</div>";
+    if (phpversion() < '7.0') {
+        // If PHP < 7.0, then an undefined date.timezone would trigger a
+        // warning, so ask for it to be defined. Above 7.0, date.timezone
+        // defaults to UTC and does not trigger warnings.
+        // See http://php.net/manual/en/migration70.other-changes.php
+        $timezone = checkPhpSettingExists("date.timezone");
+        if (!$timezone) {
+            echo "<div class='alert alert-warning'>".
+                Display::return_icon(
+                    'warning.png',
+                    get_lang('Warning'),
+                    '',
+                    ICON_SIZE_MEDIUM,
+                    true,
+                    false,
+                    false
+                ).
+                get_lang("DateTimezoneSettingNotSet")."</div>";
+        }
     }
 
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';

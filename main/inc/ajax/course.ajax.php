@@ -125,7 +125,7 @@ switch ($action) {
         }
         break;
     case 'search_course':
-        if (api_is_teacher()) {
+        if (api_is_teacher() || api_is_platform_admin()) {
             if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
                 //if session is defined, lets find only courses of this session
                 $courseList = SessionManager::get_course_list_by_session_id(

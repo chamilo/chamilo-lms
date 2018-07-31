@@ -492,7 +492,7 @@ function api_get_local_time(
     }
 
     if (is_numeric($time)) {
-        $time = intval($time);
+        $time = (int) $time;
         if ($return_null_if_invalid_date) {
             if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
                 return null;
@@ -1077,9 +1077,9 @@ function api_utf8_decode($string, $to_encoding = null)
 }
 
 /**
- * Converts a given string into the system ecoding (or platform character set).
- * When $from encoding is omited on UTF-8 platforms then language dependent encoding
- * is guessed/assumed. On non-UTF-8 platforms omited $from encoding is assumed as UTF-8.
+ * Converts a given string into the system encoding (or platform character set).
+ * When $from encoding is omitted on UTF-8 platforms then language dependent encoding
+ * is guessed/assumed. On non-UTF-8 platforms omitted $from encoding is assumed as UTF-8.
  * When the parameter $check_utf8_validity is true the function checks string's
  * UTF-8 validity and decides whether to try to convert it or not.
  * This function is useful for problem detection or making workarounds.

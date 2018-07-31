@@ -2551,22 +2551,22 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getPersonalData($em)
     {
-        $d = $this->_toArray($em);
-        foreach ($d as $key => $value) {
+        $data = $this->_toArray($em);
+        foreach ($data as $key => $value) {
             switch ($key) {
                 case 'password':
-                    $d[$key] = get_lang('EncryptedData');
+                    $data[$key] = get_lang('EncryptedData');
                     break;
                 case 'salt':
-                    $d[$key] = get_lang('RandomData');
+                    $data[$key] = get_lang('RandomData');
                     break;
             }
             if (empty($value)) {
-                $d[$key] = get_lang('NoData');
+                $data[$key] = get_lang('NoData');
             }
 
         }
-        return $d;
+        return $data;
     }
 
     /**

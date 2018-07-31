@@ -6246,7 +6246,16 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
  */
 function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter(
+    // Some non-properly encoded file names can cause the whole file to be
+    // skipped when uploaded. Avoid this by detecting the encoding and
+    // converting to UTF-8, setting the source as ASCII (a reasonably
+    // limited characters set) if nothing could be found (BT#
+    $encoding = api_detect_encoding($filename);
+    if (empty($encoding)) {
+        $encoding = 'ASCII';
+    }
+    $filename = api_to_system_encoding($filename, $encoding);
+    $url = URLify::filter(
         $filename,
         250,
         '',
@@ -6256,6 +6265,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         false,
         $treat_spaces_as_hyphens
     );
+    return $url;
 }
 
 /**

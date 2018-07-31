@@ -1,3 +1,15 @@
+<style type="text/css">
+    .conference .url{
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+    .conference .share{
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+</style>
 <div class ="row">
 {% if bbb_status == true %}
     <div class ="col-md-12" style="text-align:center">
@@ -6,37 +18,53 @@
             {% if show_client_options %}
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="well">
-                            {{ enter_conference_links.0 }}
-                            <br />
-                            <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
-                            <div class="form-inline">
-                                <div class="form-group">
-                                    <input id="share_button_flash" type="text"
-                                           style="width:300px"
-                                           class="form-control" readonly value="{{ conference_url }}&inteface=0">
-
-                                    <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn-default">
-                                        <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
-                                    </button>
+                        <div class="panel panel-default conference">
+                            <div class="panel-body">
+                                <div class="url">
+                                    <a class="btn btn-default" href="{{ enter_conference_links.0.url }}">
+                                        <img src="{{ enter_conference_links.0.icon }}" /><br>
+                                        {{ enter_conference_links.0.text }}
+                                    </a>
+                                </div>
+                                <div class="share">
+                                    {{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input id="share_button_flash" type="text"
+                                               style="width:300px"
+                                               class="form-control" readonly value="{{ conference_url }}&inteface=0">
+                                        <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn-default">
+                                            <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="well">
-                            {{ enter_conference_links.1 }}
-                            <br />
-                            <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
-                            <div class="form-inline">
-                                <div class="form-group">
-                                    <input id="share_button_html" type="text"
-                                       style="width:300px"
-                                       class="form-control" readonly value="{{ conference_url }}&inteface=1">
+                        <div class="panel panel-default conference">
+                            <div class="panel-body">
+                                <div class="url">
+                                    <a class="btn btn-default" href="{{ enter_conference_links.1.url }}">
+                                        <img src="{{ enter_conference_links.1.icon }}" /><br>
+                                        {{ enter_conference_links.1.text }}
+                                    </a>
+                                </div>
+                                <div class="share">
+                                    {{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input id="share_button_html" type="text"
+                                               style="width:300px"
+                                               class="form-control" readonly value="{{ conference_url }}&inteface=1">
 
-                                    <button onclick="copyTextToClipBoard('share_button_html');" class="btn btn-default">
-                                        <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
-                                    </button>
+                                        <button onclick="copyTextToClipBoard('share_button_html');" class="btn btn-default">
+                                            <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -193,7 +193,8 @@ if ($action != 'export') {
         }
 
         function getFCK(vals, marksid) {
-            var f = document.getElementById('myform');
+            var f = document.getElementById('form-email');
+
             var m_id = marksid.split(',');
             for (var i = 0; i < m_id.length; i++) {
                 var oHidn = document.createElement("input");

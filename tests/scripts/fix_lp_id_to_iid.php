@@ -20,6 +20,8 @@ $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $sessions = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION));
 if (!empty($sessions)) {
     $sessions = array_column($sessions, 'id');
+    // Add session_id = 0
+    $sessions[] = 0;
 } else {
     $sessions = [0];
 }

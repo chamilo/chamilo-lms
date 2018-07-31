@@ -2547,22 +2547,23 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Serialize the whole entity to an array
      * @param EntityManager $em
+     * @param array $substitutionTerms Substitute terms for some elements
      * @return array $values
      */
-    public function getPersonalData($em)
+    public function getPersonalData($em, $substitutionTerms = [])
     {
         $data = $this->_toArray($em);
         foreach ($data as $key => $value) {
             switch ($key) {
                 case 'password':
-                    $data[$key] = get_lang('EncryptedData');
+                    $data[$key] = $substitutionTerms[$key];
                     break;
                 case 'salt':
-                    $data[$key] = get_lang('RandomData');
+                    $data[$key] = $substitutionTerms[$key];
                     break;
             }
             if (empty($value)) {
-                $data[$key] = get_lang('NoData');
+                $data[$key] = $substitutionTerms['empty'];
             }
 
         }

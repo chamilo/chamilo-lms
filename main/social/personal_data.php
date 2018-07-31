@@ -21,7 +21,12 @@ $userId = api_get_user_id();
 $entityManager = Database::getManager();
 /** @var User $user */
 $user = api_get_user_entity($userId);
-$properties = $user->getPersonalData($entityManager);
+$substitutionTerms = [
+    'password' => get_lang('EncryptedData'),
+    'salt' => get_lang('RandomData'),
+    'empty' => get_lang('NoData'),
+];
+$properties = $user->getPersonalData($entityManager, $substitutionTerms);
 
 if (!empty($_GET['export'])) {
     $jsonProperties = json_encode($properties);

@@ -160,6 +160,14 @@ foreach ($treatmentTypes as $id => $item) {
     }
     $personalData['treatment'][$item]['content'] = $legalTermContent;
 }
+$officerName = api_get_configuration_value('data_protection_officer_name');
+$officerRole = api_get_configuration_value('data_protection_officer_role');
+$officerEmail = api_get_configuration_value('data_protection_officer_email');
+if (!empty($officerName)) {
+    $personalData['officer_name'] = $officerName;
+    $personalData['officer_role'] = $officerRole;
+    $personalData['officer_email'] = $officerEmail;
+}
 
 $tpl = new Template(null);
 if ($actions) {

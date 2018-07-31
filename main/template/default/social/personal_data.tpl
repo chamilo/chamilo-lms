@@ -58,6 +58,18 @@
                 {% endfor %}
             </div>
         </div>
+        {% if personal_data.officer_name %}
+            <div class="panel personal-data-responsible">
+                <div class="panel-title">{{ 'PersonalDataOfficerName' | get_lang }}</div>
+                <div class="personal-data-responsible-description">
+                    <a href="mailto:{{ personal_data.officer_email }}">{{ personal_data.officer_name }}</a>
+                </div>
+                <div class="panel-title">{{ 'PersonalDataOfficerRole' | get_lang }}</div>
+                <div class="personal-data-responsible-description">
+                    {{ personal_data.officer_role }}
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

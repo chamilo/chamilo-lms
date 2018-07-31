@@ -924,6 +924,14 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // GDPR: European's General Data Protection Rules activation option
 // Set to true to automatically enable a new personal data page inside the social network menu
 // $_configuration['enable_gdpr'] = false;
+// GDPR requires users to be informed of the Data Protection Officer name and contact point
+// These can only be defined here for now, but will be moved to web settings in the future.
+// Name of the person or organization that is responsible for the treatment of personal info
+//$_configuration['data_protection_officer_name'] = '';
+// A description of the role of the DP Officer in this context
+//$_configuration['data_protection_officer_role'] = '';
+// An e-mail address where to contact the data protection officer for queries
+//$_configuration['data_protection_officer_email'] = '';
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

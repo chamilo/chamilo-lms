@@ -152,12 +152,12 @@ class Certificate extends Model
         if (!empty($path_info) && isset($path_info)) {
             $this->certification_user_path = $path_info.'certificate/';
             $this->certification_web_user_path = $web_path_info.'certificate/';
-
+            $mode = api_get_permissions_for_new_directories();
             if (!is_dir($path_info)) {
-                mkdir($path_info, 0777, true);
+                mkdir($path_info, $mode, true);
             }
             if (!is_dir($this->certification_user_path)) {
-                mkdir($this->certification_user_path, 0777);
+                mkdir($this->certification_user_path, $mode);
             }
         }
     }

@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
+
 /**
  * @package chamilo.messages
  */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\UserBundle\Repository\UserRepository;
-use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
 
 api_block_anonymous_users();
 if (!api_get_configuration_value('enable_gdpr')) {

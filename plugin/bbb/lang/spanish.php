@@ -65,7 +65,7 @@ $strings['global_conference_allow_roles'] = 'El enlace para la videoconferencia 
 $strings['CreatedAt'] = 'Creado el';
 
 $strings['interface'] = 'Interfaz';
-$strings['launch_type'] = 'Tipo de lanzamiento de interfaces';
+$strings['launch_type'] = 'Elección de la interfaz en el lanzamiento';
 $strings['EnterConferenceFlash'] = 'Ingresar a la conferencia (con Flash)';
 $strings['EnterConferenceHTML5'] = 'Ingresar a la conferencia (con HTML5)';
 $strings['ParticipantsWillUseSameInterface'] = 'Los participantes usarán la misma interfaz que Ud';

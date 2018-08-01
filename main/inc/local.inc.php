@@ -355,8 +355,31 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $uData['salt']
                 );
 
+                $checkUserFromExternalWebservice = false;
+                // If user can't connect directly to chamilo then check the webservice setting
+                if ($validPassword === false) {
+                    // Use external webservice to
+                    $options = api_get_configuration_value('webservice_validation');
+                    if (!empty($options) && isset($options['options']) && !empty($options['options'])) {
+                        $options = $options['options'];
+                        $soapclient = new nusoap_client($options['wsdl']);
+                        $function = $options['check_login_function'];
+                        $params = [
+                            'login' => $uData['username'],
+                            'password' => $password
+                        ];
+                        $result = $soapclient->call($function, [serialize($params)]);
+                        if ($error = $soapclient->getError()) {
+                            error_log('error');
+                            error_log(print_r($error, 1));
+                        } elseif ((int) $result === 1) {
+                            $checkUserFromExternalWebservice = true;
+                        }
+                    }
+                }
+
                 // Check the user's password
-                if (($validPassword || $cas_login) &&
+                if (($validPassword || $cas_login || $checkUserFromExternalWebservice) &&
                     (trim($login) == $uData['username'])
                 ) {
                     // Means that the login was loaded in a different page than index.php

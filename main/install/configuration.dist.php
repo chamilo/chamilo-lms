@@ -931,6 +931,15 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
 
+// Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
+// to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
+/*$_configuration['webservice_validation'] = [
+    'options' => [
+        'wsdl' => 'https://example.com/soap?wsdl',
+        'check_login_function' => 'myWebServiceFunctionToLogin'
+    ]
+];*/
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

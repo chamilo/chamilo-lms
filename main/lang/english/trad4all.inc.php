@@ -8230,4 +8230,4 @@ $Anonymize = "Anonymize";
 $XQuestions = "%d questions";
 $WebFolderRefreshSucceeded = "The styles and assets in the web/ folder have been refreshed.";
 $WebFolderRefreshFailed = "The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server.";
-?>
+

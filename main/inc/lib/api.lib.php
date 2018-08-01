@@ -2963,9 +2963,9 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $user_id = intval($user_id);
-    $session_id = intval($session_id);
-    $courseId = intval($courseId);
+    $user_id = (int) $user_id;
+    $session_id = (int) $session_id;
+    $courseId = (int) $courseId;
 
     $sql = "SELECT DISTINCT session.id
             FROM $session_table
@@ -2995,7 +2995,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     $userId = api_get_user_id();
 
     if (!empty($session_id)) {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
     } else {
         $session_id = api_get_session_id();
     }
@@ -3006,7 +3006,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     }
 
     if (!empty($courseId)) {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
     } else {
         $courseId = api_get_course_int_id();
     }
@@ -3117,7 +3117,7 @@ function api_is_invitee()
  */
 function api_is_session_in_category($session_id, $category_name)
 {
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
     $category_name = Database::escape_string($category_name);
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -4427,7 +4427,7 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
 {
     $course_info = api_get_course_info($course_code);
     $tool = Database::escape_string($tool);
-    $ref = intval($ref);
+    $ref = (int) $ref;
 
     // Definition of tables.
     $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4435,7 +4435,7 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
     $sessionId = (int) $sessionId;
     $sessionCondition = " AND session_id = $sessionId ";
     if (empty($sessionId)) {
-        $sessionCondition = " AND (session_id = 0 OR session_id IS NULL) ";
+        $sessionCondition = ' AND (session_id = 0 OR session_id IS NULL) ';
     }
     $sql = "SELECT id FROM $tableItemProperty
             WHERE
@@ -6246,7 +6246,16 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
  */
 function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter(
+    // Some non-properly encoded file names can cause the whole file to be
+    // skipped when uploaded. Avoid this by detecting the encoding and
+    // converting to UTF-8, setting the source as ASCII (a reasonably
+    // limited characters set) if nothing could be found (BT#
+    $encoding = api_detect_encoding($filename);
+    if (empty($encoding)) {
+        $encoding = 'ASCII';
+    }
+    $filename = api_to_system_encoding($filename, $encoding);
+    $url = URLify::filter(
         $filename,
         250,
         '',
@@ -6256,6 +6265,8 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         false,
         $treat_spaces_as_hyphens
     );
+
+    return $url;
 }
 
 /**
@@ -7223,41 +7234,55 @@ function api_get_jquery_libraries_js($libraries)
 }
 
 /**
- * Returns the course's URL.
+ * Returns the URL to the course or session, removing the complexity of the URL
+ * building piece by piece.
  *
  * This function relies on api_get_course_info()
  *
- * @param   string  The course code - optional (takes it from session if not given)
- * @param   int     The session id  - optional (takes it from session if not given)
- * @param int $session_id
+ * @param string $courseCode The course code - optional (takes it from context if not given)
+ * @param int    $sessionId  The session ID  - optional (takes it from context if not given)
+ * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
- * @return string|null The URL of the course or null if something does not work
+ * @return string The URL to a course, a session, or empty string if nothing works e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *
  * @author  Julio Montoya <gugli100@gmail.com>
  */
-function api_get_course_url($course_code = null, $session_id = null)
+function api_get_course_url($courseCode = null, $sessionId = null, $groupId = null)
 {
-    if (empty($course_code)) {
-        $course_info = api_get_course_info();
+    $courseDirectory = '';
+    $url = '';
+    // If courseCode not set, get context or []
+    if (empty($courseCode)) {
+        $courseInfo = api_get_course_info();
     } else {
-        $course_info = api_get_course_info($course_code);
-    }
-    if (empty($session_id)) {
-        $session_url = '?id_session='.api_get_session_id();
-    } else {
-        $session_url = '?id_session='.intval($session_id);
-    }
-    /*
-    if (empty($group_id)) {
-        $group_url = '&gidReq='.api_get_group_id();
-    } else {
-        $group_url = '&gidReq='.intval($group_id);
-    }*/
-    if (!empty($course_info['path'])) {
-        return api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php'.$session_url;
+        $courseInfo = api_get_course_info($courseCode);
     }
 
-    return null;
+    // If course defined, get directory, otherwise keep empty string
+    if (!empty($courseInfo['directory'])) {
+        $courseDirectory = $courseInfo['directory'];
+    }
+
+    // If sessionId not set, get context or 0
+    if (empty($sessionId)) {
+        $sessionId = api_get_session_id();
+    }
+
+    // If groupId not set, get context or 0
+    if (empty($groupId)) {
+        $groupId = api_get_group_id();
+    }
+
+    // Build the URL
+    if (!empty($courseDirectory)) {
+        // directory not empty, so we do have a course
+        $url = api_get_path(WEB_COURSE_PATH).$courseDirectory.'/index.php?id_session='.$sessionId.'&gidReq='.$groupId;
+    } elseif (!empty($sessionId) && api_get_configuration_value('remove_session_url') !== true) {
+        // if the course was unset and the session was set, send directly to the session
+        $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+    }
+    // if not valid combination was found, return an empty string
+    return $url;
 }
 
 /**
@@ -7455,7 +7480,7 @@ function api_get_locked_settings()
  */
 function api_user_is_login($user_id = null)
 {
-    $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
+    $user_id = empty($user_id) ? api_get_user_id() : (int) $user_id;
 
     return $user_id && !api_is_anonymous();
 }
@@ -8506,7 +8531,7 @@ function api_is_student_boss()
 function api_is_excluded_user_type($checkDB = false, $userId = 0)
 {
     if ($checkDB) {
-        $userId = empty($userId) ? api_get_user_id() : intval($userId);
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
         if ($userId == 0) {
             return true;

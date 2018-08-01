@@ -221,6 +221,7 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    $fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
@@ -246,7 +247,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if (isset($value['error']) && $value['error'] == 0) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
                         $crop->crop($params['extra_'.$field_variable.'_crop_result']);
@@ -264,6 +265,7 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
+                    $fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
@@ -287,13 +289,13 @@ class ExtraFieldValue extends Model
                             break;
                     }
 
-                    $cleanedName = api_replace_dangerous_char($value['name']);
-                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if (isset($value['error']) && $value['error'] == 0) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
+                        $cleanedName = api_replace_dangerous_char($value['name']);
+                        $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                         moveUploadedFile($value, $fileDir.$fileName);
 
                         $new_params = [

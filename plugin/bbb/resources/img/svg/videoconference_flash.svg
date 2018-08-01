@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 33.866666 33.866668"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (unknown)"
+   sodipodi:docname="videoconference_flash.svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1680">
+      <stop
+         style="stop-color:#ffe88e;stop-opacity:1;"
+         offset="0"
+         id="stop1676" />
+      <stop
+         style="stop-color:#ffe88e;stop-opacity:0;"
+         offset="1"
+         id="stop1678" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1668"
+       inkscape:collect="always">
+      <stop
+         id="stop1664"
+         offset="0"
+         style="stop-color:#ad0000;stop-opacity:1" />
+      <stop
+         id="stop1666"
+         offset="1"
+         style="stop-color:#f03737;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2460">
+      <stop
+         style="stop-color:#bb0000;stop-opacity:1"
+         offset="0"
+         id="stop2456" />
+      <stop
+         style="stop-color:#ec3232;stop-opacity:1"
+         offset="1"
+         id="stop2458" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1668"
+       id="linearGradient2462"
+       x1="16.727715"
+       y1="284.77112"
+       x2="16.727715"
+       y2="266.64716"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2460"
+       id="linearGradient2470"
+       x1="28.580872"
+       y1="287.96329"
+       x2="28.580872"
+       y2="277.84299"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2519"
+       x="-0.020552492"
+       width="1.041105"
+       y="-0.0289836"
+       height="1.0579672">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.25927001"
+         id="feGaussianBlur2521" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1680"
+       id="linearGradient1682"
+       x1="-0.63847286"
+       y1="271.38345"
+       x2="7.0625629"
+       y2="283.27271"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="137.28651"
+     inkscape:cy="31.290536"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-263.13332)">
+    <rect
+       style="opacity:0;fill:#abfaff;fill-opacity:1;stroke:none;stroke-width:0.71147865;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect2553"
+       width="33.866665"
+       height="33.866665"
+       x="3.1582752e-09"
+       y="263.13333"
+       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/64/videoconference_flash.png"
+       inkscape:export-xdpi="48"
+       inkscape:export-ydpi="48" />
+    <g
+       id="g1984"
+       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/64/videoconference_flash.png"
+       inkscape:export-xdpi="48"
+       inkscape:export-ydpi="48">
+      <g
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         style="opacity:0.5;fill:#333333;filter:url(#filter2519)"
+         transform="matrix(1.033576,0,0,1.0310555,-0.27797462,-8.5225467)"
+         id="g2489">
+        <path
+           inkscape:connector-curvature="0"
+           id="path2485"
+           d="m 25.935038,279.09892 5.855173,-3.90345 v 15.61379 l -5.855173,-3.90345 z"
+           style="fill:#333333;fill-opacity:1;stroke-width:0.97586221" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path2487"
+           d="m 24.934867,279.09892 v 7.80689 c 0,2.15568 -1.747769,3.90345 -3.903449,3.90345 H 5.4176225 c -2.1556796,0 -3.9034489,-1.74777 -3.9034489,-3.90345 v -7.80689 c 0,-2.15568 1.7477693,-3.90345 3.9034489,-3.90345 h 9.7586225 c 0,-1.07833 0.873397,-1.95173 1.951724,-1.95173 v -1.95172 H 6.3934848 c -0.5396519,0 -0.9758623,-0.43621 -0.9758623,-0.97586 0,-0.53966 0.4362104,-0.97587 0.9758623,-0.97587 H 18.103832 c 0.539651,0 0.975862,0.43621 0.975862,0.97587 v 2.92758 c 1.078328,0 1.951724,0.8734 1.951724,1.95173 2.15568,0 3.903449,1.74777 3.903449,3.90345 z"
+           style="fill:#333333;fill-opacity:1;stroke-width:0.97586221" />
+      </g>
+      <g
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         transform="matrix(1.033576,0,0,1.033576,-0.51968757,-9.9364024)"
+         id="g2477">
+        <path
+           style="fill:url(#linearGradient2470);fill-opacity:1;stroke-width:0.97586221"
+           d="m 25.935038,279.09892 5.855173,-3.90345 v 15.61379 l -5.855173,-3.90345 z"
+           id="path2263"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:url(#linearGradient2462);fill-opacity:1;stroke-width:0.97586221"
+           d="m 24.934867,279.09892 v 7.80689 c 0,2.15568 -1.747769,3.90345 -3.903449,3.90345 H 5.4176225 c -2.1556796,0 -3.9034489,-1.74777 -3.9034489,-3.90345 v -7.80689 c 0,-2.15568 1.7477693,-3.90345 3.9034489,-3.90345 h 9.7586225 c 0,-1.07833 0.873397,-1.95173 1.951724,-1.95173 v -1.95172 H 6.3934848 c -0.5396519,0 -0.9758623,-0.43621 -0.9758623,-0.97586 0,-0.53966 0.4362104,-0.97587 0.9758623,-0.97587 H 18.103832 c 0.539651,0 0.975862,0.43621 0.975862,0.97587 v 2.92758 c 1.078328,0 1.951724,0.8734 1.951724,1.95173 2.15568,0 3.903449,1.74777 3.903449,3.90345 z"
+           id="path2261"
+           inkscape:connector-curvature="0" />
+      </g>
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         sodipodi:nodetypes="csscc"
+         inkscape:connector-curvature="0"
+         style="opacity:0.7;fill:#9c1300;fill-opacity:1;stroke-width:1.00862777"
+         d="m 25.252393,278.53354 v 8.06902 c 0,2.22806 -1.806453,4.03451 -4.034512,4.03451 H 5.079837 c 11.391015,-1.7019 17.402266,-2.12976 20.172556,-12.10353 z"
+         id="path2356" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         inkscape:connector-curvature="0"
+         style="fill:#ab0a01;fill-opacity:1;stroke-width:1.00862777"
+         d="m 21.389761,279.89888 c 0,-0.55777 -0.450856,-1.00863 -1.008628,-1.00863 h -4.034511 c -0.557771,0 -1.008627,0.45086 -1.008627,1.00863 0,0.55777 0.450856,1.00862 1.008627,1.00862 h 4.034511 c 0.557772,0 1.008628,-0.45085 1.008628,-1.00862 z"
+         id="path2434" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         id="path2207"
+         d="m 21.217881,279.54217 c 0,-0.55777 -0.450856,-1.00863 -1.008627,-1.00863 h -4.034511 c -0.557772,0 -1.008628,0.45086 -1.008628,1.00863 0,0.55777 0.450856,1.00862 1.008628,1.00862 h 4.034511 c 0.557771,0 1.008627,-0.45085 1.008627,-1.00862 z"
+         style="fill:#ffffff;stroke-width:1.00862777"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path2430"
+         d="m 26.291487,284.38104 6.050875,3.79017 8.96e-4,2.468 -6.051766,-4.03451 z"
+         style="opacity:0.7;fill:#a20d00;fill-opacity:1;stroke:none;stroke-width:0.27346697px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         sodipodi:nodetypes="ccsc"
+         inkscape:connector-curvature="0"
+         id="path2432"
+         d="m 16.141917,274.71969 h 4.20274 c 0.0129,-0.99533 -1.095516,-1.3931 -2.138799,-1.39021 -1.40938,0.004 -2.038277,0.59352 -2.063941,1.39021 z"
+         style="opacity:0.6;fill:#ac0b02;fill-opacity:1;stroke:none;stroke-width:0.24197747px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         inkscape:connector-curvature="0"
+         id="rect2451"
+         d="m 5.2273919,269.72519 c 0.2058204,0.52195 0.5953864,0.73877 0.8213089,0.73877 H 17.426583 v -0.73877 z"
+         style="opacity:0.6;fill:#ad0c03;fill-opacity:1;stroke:none;stroke-width:1.04796004;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         inkscape:connector-curvature="0"
+         id="path2479"
+         d="m 32.611328,273.98828 -6.599609,4.39844 v 0.14648 8.21485 l 6.599609,4.40039 z m -0.546875,1.02149 v 15.11718 l -5.503906,-3.66992 v -7.77734 z"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9c1300;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.54693401;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         id="path1674"
+         d="m 1.0453253,286.60256 v -8.06902 c 0,-2.22806 1.806453,-4.03451 4.034512,-4.03451 H 21.217881 c -11.3910147,1.7019 -17.4022657,2.12976 -20.1725557,12.10353 z"
+         style="opacity:0.5;fill:url(#linearGradient1682);fill-opacity:1;stroke-width:1.00862777"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="csscc" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         inkscape:connector-curvature="0"
+         id="path2481"
+         d="m 6.0878906,268.17383 c -0.7051347,0 -1.28125,0.5761 -1.28125,1.28125 0,0.70513 0.5761121,1.2832 1.28125,1.2832 H 16.910156 v 1.58399 c -1.010704,0.1395 -1.761677,0.89199 -1.902344,1.90234 H 5.0800781 c -2.3758718,0 -4.30859372,1.93272 -4.30859372,4.30859 v 8.07032 c 0,2.37587 1.93272192,4.30664 4.30859372,4.30664 H 21.21875 c 2.375872,0 4.306641,-1.93077 4.306641,-4.30664 v -8.07032 c 0,-2.3142 -1.842033,-4.17671 -4.132813,-4.27343 -0.124647,-1.02913 -0.894024,-1.79603 -1.917969,-1.9375 v -2.86719 c 0,-0.70515 -0.578069,-1.28125 -1.283203,-1.28125 z m 0,0.54687 H 18.191406 c 0.410407,0 0.736328,0.32396 0.736328,0.73438 v 3.30078 h 0.273438 c 0.96687,0 1.74414,0.77726 1.74414,1.74414 v 0.27344 h 0.273438 c 2.080246,0 3.759766,1.67952 3.759766,3.75976 v 8.07032 c 0,2.08024 -1.67952,3.75976 -3.759766,3.75976 H 5.0800781 c -2.0802456,0 -3.7617187,-1.67952 -3.7617187,-3.75976 v -8.07032 c 0,-2.08024 1.6814731,-3.75976 3.7617187,-3.75976 H 15.439453 V 274.5 c 0,-0.96688 0.777271,-1.74414 1.744141,-1.74414 h 0.273437 v -2.56445 H 6.0878906 c -0.4104046,0 -0.734375,-0.32593 -0.734375,-0.73633 0,-0.41042 0.3239671,-0.73438 0.734375,-0.73438 z"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9c1300;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.54693401;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <g
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_flash.png"
+         transform="matrix(0.03254278,0,0,0.03254278,-6.6373643e-5,274.37654)"
+         style="enable-background:new"
+         id="形状_1_2_">
+        <g
+           id="形状_1_1_">
+          <g
+             id="g1935">
+            <path
+               id="path1933"
+               style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd"
+               d="M 360.478,162.082 V 115.396 C 208.547,119.891 254.603,335.028 144.275,340.232 v 46.685 c 72.696,-2.188 101.252,-54.152 124.335,-112.438 h 63.695 v -46.642 h -46.02 c 16.378,-33.651 30.595,-63.699 74.193,-65.755 z"
+               inkscape:connector-curvature="0" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

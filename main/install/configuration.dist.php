@@ -642,7 +642,7 @@ $_configuration['score_grade_model'] = [
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
 
-// Skills can only visible for admins, teachers (related to a user via a course),
+// Skills can only be visible for admins, teachers (related to a user via a course),
 // and HRM users (if related to a user).
 // $_configuration['allow_private_skills'] = false;
 // Additional gradebook dependencies BT#13099
@@ -848,8 +848,8 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 */
 //$_configuration['allow_portfolio_tool'] = false;
 
-// Disable average and best columns in gradebook see BT#14126
-//$_configuration['disable_gradebook_stats'] = false;
+// Enable best score column in gradebook. Previously called disable_gradebook_stats
+//$_configuration['gradebook_enable_best_score'] = false;
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;
@@ -930,6 +930,28 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Teachers can CRUD classes
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
+
+// GDPR: European's General Data Protection Rules activation option
+// Set to true to automatically enable a new personal data page inside the social network menu
+// $_configuration['enable_gdpr'] = false;
+
+// GDPR requires users to be informed of the Data Protection Officer name and contact point
+// These can only be defined here for now, but will be moved to web settings in the future.
+// Name of the person or organization that is responsible for the treatment of personal info
+//$_configuration['data_protection_officer_name'] = '';
+// A description of the role of the DP Officer in this context
+//$_configuration['data_protection_officer_role'] = '';
+// An e-mail address where to contact the data protection officer for queries
+//$_configuration['data_protection_officer_email'] = '';
+
+// Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
+// to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
+/*$_configuration['webservice_validation'] = [
+    'options' => [
+        'wsdl' => 'https://example.com/soap?wsdl',
+        'check_login_function' => 'myWebServiceFunctionToLogin'
+    ]
+];*/
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

@@ -22,35 +22,41 @@ class ScormQuestion extends Question
     public $answer;
 
     /**
+     * ScormQuestion constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
      * Returns the HTML + JS flow corresponding to one question.
      *
      * @param int  $questionId The question ID
      * @param bool $standalone (ie including XML tag, DTD declaration, etc)
-     * @param int  $js_id      The JavaScript ID for this question.
+     * @param int  $jsId       The JavaScript ID for this question.
      *                         Due to the nature of interactions, we must have a natural sequence for
      *                         questions in the generated JavaScript.
      *
      * @return string|array
      */
-    public static function export_question(
+    public function exportQuestionToScorm(
         $questionId,
-        $standalone = true,
-        $js_id
+        $jsId
     ) {
-        $question = new ScormQuestion();
-        $qst = $question->read($questionId);
-        if (!$qst) {
+        $question = self::read($questionId);
+        if (!$question) {
             return '';
         }
-        $question->id = $qst->id;
-        $question->js_id = $js_id;
-        $question->type = $qst->type;
-        $question->question = $qst->question;
-        $question->description = $qst->description;
-        $question->weighting = $qst->weighting;
-        $question->position = $qst->position;
-        $question->picture = $qst->picture;
-        $assessmentItem = new ScormAssessmentItem($question, $standalone);
+        $this->id = $question->id;
+        $this->js_id = $jsId;
+        $this->type = $question->type;
+        $this->question = $question->question;
+        $this->description = $question->description;
+        $this->weighting = $question->weighting;
+        $this->position = $question->position;
+        $this->picture = $question->picture;
+        $assessmentItem = new ScormAssessmentItem($this);
 
         return $assessmentItem->export();
     }
@@ -188,7 +194,14 @@ class ScormQuestion extends Question
     public function getQuestionJS()
     {
         $weight = $this->selectWeighting();
-        $js = 'questions.push('.$this->js_id.');'."\n";
+        $js = '
+            questions.push('.$this->js_id.');
+            $(document).ready(function() {         
+                if (exerciseInfo.randomAnswers == true) {
+                    $("#question_'.$this->js_id.'").shuffleRows();                    
+                } 
+            });';
+        $js .= "\n";
 
         switch ($this->type) {
             case ORAL_EXPRESSION:

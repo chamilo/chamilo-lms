@@ -193,7 +193,7 @@ $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 
 // Default URL
-$url = Display::url(
+$urlList[] = Display::url(
     $plugin->get_lang('EnterConference'),
     $conferenceUrl,
     ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
@@ -201,10 +201,12 @@ $url = Display::url(
 
 $type = $plugin->get('launch_type');
 $warningIntefaceMessage = '';
+$showClientOptions = false;
 
 switch ($type) {
     case BBBPlugin::LAUNCH_TYPE_DEFAULT:
-        $url = Display::url(
+        $urlList = [];
+        $urlList[] = Display::url(
             $plugin->get_lang('EnterConference'),
             $conferenceUrl.'&interface='.$plugin->get('interface'),
             ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
@@ -212,8 +214,9 @@ switch ($type) {
         break;
     case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
         if ($conferenceManager) {
-            $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
+            $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
             $warningIntefaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
+            $showClientOptions = true;
         } else {
             $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
             switch ($meetingInfo['interface']) {
@@ -228,12 +231,14 @@ switch ($type) {
         break;
     case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
         if ($conferenceManager) {
-            $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
+            $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
+            $showClientOptions = true;
         } else {
             if ($meetingExists) {
                 $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
                 $meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
-                $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
+                $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
+                $showClientOptions = true;
 
                 /*if (empty($meetinUserInfo)) {
                     $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
@@ -253,10 +258,11 @@ switch ($type) {
         break;
 }
 
-$tpl->assign('enter_conference_links', $url);
+$tpl->assign('enter_conference_links', $urlList);
 $tpl->assign('warning_inteface_msg', $warningIntefaceMessage);
+$tpl->assign('show_client_options', $showClientOptions);
 
-$listing_tpl = 'bbb/listing.tpl';
+$listing_tpl = 'bbb/view/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
 $actionLinks = '';
 if (api_is_platform_admin()) {

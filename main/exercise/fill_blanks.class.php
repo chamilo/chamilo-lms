@@ -80,7 +80,7 @@ class FillBlanks extends Question
                         updateBlanks();
                     });
                 }
-            });                        
+            });
             
             function updateBlanks()
             {                
@@ -91,7 +91,7 @@ class FillBlanks extends Question
                 } else {
                     answer = CKEDITOR.instances["answer"].getData();
                 }
-                                
+                
                 // disable the save button, if not blanks have been created
                 $("button").attr("disabled", "disabled");
                 $("#defineoneblank").show();      
@@ -101,9 +101,9 @@ class FillBlanks extends Question
                 fields += "<label class=\"col-sm-2 control-label\"></label>";
                 fields += "<div class=\"col-sm-8\">";
                 fields += "<table class=\"data_table\">";
-                fields += "<tr><th style=\"width:220px\">'.get_lang("WordTofind").'</th>";
-                fields += "<th style=\"width:50px\">'.get_lang("QuestionWeighting").'</th>";
-                fields += "<th>'.get_lang("BlankInputSize").'</th></tr>";
+                fields += "<tr><th style=\"width:220px\">'.get_lang('WordTofind').'</th>";
+                fields += "<th style=\"width:50px\">'.get_lang('QuestionWeighting').'</th>";
+                fields += "<th>'.get_lang('BlankInputSize').'</th></tr>";
 
                 if (blanks != null) {
                     for (var i=0; i < blanks.length; i++) {
@@ -163,8 +163,7 @@ class FillBlanks extends Question
                         if (id) {
                             var sizeInputId = id.replace("samplesize", "sizeofinput");                            
                             var sizeInputId = sizeInputId.replace("[", "\\\[");
-                            var sizeInputId = sizeInputId.replace("]", "\\\]");                       
-                                                         
+                            var sizeInputId = sizeInputId.replace("]", "\\\]");                                                         
                             $("#"+sizeInputId).val(data.width);                        
                             d.outerWidth(data.width+"px");
                         }
@@ -179,8 +178,7 @@ class FillBlanks extends Question
                 }
             }
 
-            window.onload = updateBlanks;
-            
+            window.onload = updateBlanks;            
             String.prototype.hashCode = function() {
                 var hash = 0, i, chr, len;
                 if (this.length === 0) return hash;
@@ -250,6 +248,7 @@ class FillBlanks extends Question
                 outTxt = outTxt.replace(/&nbsp;/g, " ");
                 outTxt = outTxt.replace(/^ +/, "");
                 outTxt = outTxt.replace(/ +$/, "");
+                
                 return outTxt;
             }
 
@@ -441,7 +440,7 @@ class FillBlanks extends Question
                 $answer .= $form->getSubmitValue('weighting['.$i.']');
                 // not the last word, add ","
                 if ($i != $nb - 1) {
-                    $answer .= ",";
+                    $answer .= ',';
                 }
                 // calculate the global weighting for the question
                 $this->weighting += (float) $form->getSubmitValue('weighting['.$i.']');
@@ -454,7 +453,7 @@ class FillBlanks extends Question
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
                 // not the last word, add ","
                 if ($i != $nb - 1) {
-                    $answer .= ",";
+                    $answer .= ',';
                 }
             }
         }
@@ -470,7 +469,7 @@ class FillBlanks extends Question
             5 %...%
             6 $...$
          */
-        $answer .= ":".$form->getSubmitValue('select_separator');
+        $answer .= ':'.$form->getSubmitValue('select_separator');
 
         // Allow answers order switches
         $is_multiple = $form->getSubmitValue('multiple_answer');
@@ -490,7 +489,7 @@ class FillBlanks extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
-                <th>'.get_lang("Answer").'</th>
+                <th>'.get_lang('Answer').'</th>
             </tr>';
 
         return $header;
@@ -505,6 +504,7 @@ class FillBlanks extends Question
      * @param array  $listAnswersInfo
      * @param bool   $displayForStudent
      * @param int    $inBlankNumber
+     * @param string $labelId
      *
      * @return string
      */
@@ -516,12 +516,16 @@ class FillBlanks extends Question
         $answer,
         $listAnswersInfo,
         $displayForStudent,
-        $inBlankNumber
+        $inBlankNumber,
+        $labelId = ''
     ) {
         $inTabTeacherSolution = $listAnswersInfo['words'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
 
-        $labelId = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
+        if (empty($labelId)) {
+            $labelId = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
+        }
+
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
             case self::FILL_THE_BLANK_MENU:
                 $selected = '';
@@ -749,7 +753,7 @@ class FillBlanks extends Question
         }
 
         // Take the complete string except after the last '::'
-        $listDetails = explode(":", $listArobaseSplit[0]);
+        $listDetails = explode(':', $listArobaseSplit[0]);
 
         // < number of item after the ::[score]:[size]:[separator_id]@ , here there are 3
         if (count($listDetails) < 3) {
@@ -832,9 +836,9 @@ class FillBlanks extends Question
             $listAnswerResults['words_with_bracket'] = $listBrackets;
 
             // if we are in student view, we've got 3 times :::::: for common words
-            $commonWords = api_preg_replace("/::::::/", "::", $commonWords);
+            $commonWords = api_preg_replace("/::::::/", '::', $commonWords);
         }
-        $listAnswerResults['common_words'] = explode("::", $commonWords);
+        $listAnswerResults['common_words'] = explode('::', $commonWords);
 
         return $listAnswerResults;
     }
@@ -864,7 +868,7 @@ class FillBlanks extends Question
      *               )
      *               )
      */
-    public static function getFillTheBlankTabResult(
+    public static function getFillTheBlankResult(
         $testId,
         $questionId,
         $studentsIdList,
@@ -992,7 +996,7 @@ class FillBlanks extends Question
             $result .= $separatorStart.$listWithStudentAnswer['student_score'][$i].$separatorEnd;
         }
         $result .= $listWithStudentAnswer['common_words'][$i];
-        $result .= "::";
+        $result .= '::';
         // add the system string
         $result .= $listWithStudentAnswer['system_string'];
 
@@ -1133,7 +1137,7 @@ class FillBlanks extends Question
         $listResults = [];
         $allowedSeparator = self::getAllowedSeparator();
         foreach ($allowedSeparator as $part) {
-            $listResults[] = $part[0]."...".$part[1];
+            $listResults[] = $part[0].'...'.$part[1];
         }
 
         return $listResults;
@@ -1267,11 +1271,11 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_MENU:
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span class='correct-answer'><strong>".$listPossibleAnswers[0]."</strong>";
-                $correctAnswerHtml .= " (";
+                $correctAnswerHtml .= ' (';
                 for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {
-                        $correctAnswerHtml .= " | ";
+                        $correctAnswerHtml .= ' | ';
                     }
                 }
                 $correctAnswerHtml .= ")</span>";
@@ -1299,7 +1303,7 @@ class FillBlanks extends Question
         $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
         $result .= "<span class='feedback-separator'>|</span>";
         $result .= $correctAnswerHtml;
-        $result .= "</span>";
+        $result .= '</span>';
 
         return $result;
     }
@@ -1409,7 +1413,7 @@ class FillBlanks extends Question
     private static function trimOption($text)
     {
         $text = trim($text);
-        $text = preg_replace("/\s+/", " ", $text);
+        $text = preg_replace("/\s+/", ' ', $text);
 
         return $text;
     }

@@ -2806,6 +2806,14 @@ class CourseRestorer
 
                         $item['item_type'] = $item['item_type'] == 'dokeos_chapter' ? 'dir' : $item['item_type'];
 
+                        $masteryScore = $item['mastery_score'];
+                        // If item is a chamilo quiz, then use the max score as mastery_score
+                        if ($item['item_type'] == 'quiz') {
+                            if (empty($masteryScore)) {
+                                $masteryScore = $item['max_score'];
+                            }
+                        }
+
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'lp_id' => self::DBUTF8($new_lp_id),
@@ -2816,7 +2824,7 @@ class CourseRestorer
                             'description' => self::DBUTF8($item['description']),
                             'min_score' => self::DBUTF8($item['min_score']),
                             'max_score' => self::DBUTF8($item['max_score']),
-                            'mastery_score' => self::DBUTF8($item['mastery_score']),
+                            'mastery_score' => self::DBUTF8($masteryScore),
                             'parent_item_id' => self::DBUTF8($item['parent_item_id']),
                             'previous_item_id' => self::DBUTF8($item['previous_item_id']),
                             'next_item_id' => self::DBUTF8($item['next_item_id']),

@@ -45,7 +45,7 @@ function wsConvertPpt($pptData)
     //$perms = api_get_permissions_for_new_directories();
     // Set permissions the most permissively possible: these files will
     // be deleted below and we need a parallel process to be able to write them
-    $perms = 0777;
+    $perms = api_get_permissions_for_new_directories();
     pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, $perms);
 
     $file = base64_decode($fileData);

@@ -117,6 +117,8 @@ class FlatViewTable extends SortableTable
         array_shift($headerName);
         // Removing last name
         array_shift($headerName);
+        // Removing username
+        array_shift($headerName);
 
         $pre_result = $new_result = [];
         foreach ($user_results as $result) {

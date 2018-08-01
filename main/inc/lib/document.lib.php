@@ -139,7 +139,7 @@ class DocumentManager
             'movie' => 'video/x-sgi-movie',
             'mp2' => 'audio/mpeg',
             'mp3' => 'audio/mpeg',
-            'mp4' => 'video/mpeg4-generic',
+            'mp4' => 'video/mp4',
             'mpa' => 'audio/mpeg',
             'mpe' => 'video/mpeg',
             'mpeg' => 'video/mpeg',
@@ -258,12 +258,12 @@ class DocumentManager
             return $mime_types;
         }
 
-        //get the extension of the file
+        // Get the extension of the file
         $extension = explode('.', $filename);
 
-        //$filename will be an array if a . was found
+        // $filename will be an array if a . was found
         if (is_array($extension)) {
-            $extension = strtolower($extension[sizeof($extension) - 1]);
+            $extension = strtolower($extension[count($extension) - 1]);
         } else {
             //file without extension
             $extension = 'empty';
@@ -273,6 +273,7 @@ class DocumentManager
         if (isset($mime_types[$extension])) {
             return $mime_types[$extension];
         }
+
         //else return octet-stream
         return 'application/octet-stream';
     }
@@ -349,7 +350,9 @@ class DocumentManager
             // Commented to avoid double caching declaration when playing with IE and HTTPS
             //header('Cache-Control: no-cache, must-revalidate');
             //header('Pragma: no-cache');
+
             $contentType = self::file_get_mime_type($filename);
+
             switch ($contentType) {
                 case 'text/html':
                     if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
@@ -379,11 +382,13 @@ class DocumentManager
 
             header('Content-type: '.$contentType);
             header('Content-Length: '.$len);
-            $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if (strpos($user_agent, 'msie')) {
+            $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+            if (strpos($userAgent, 'msie')) {
                 header('Content-Disposition: ; filename= '.$filename);
             } else {
-                header('Content-Disposition: inline; filename= '.$filename);
+                //header('Content-Disposition: inline');
+                header('Content-Disposition: inline;');
             }
 
             if ($fixLinksHttpToHttps) {
@@ -1854,6 +1859,7 @@ class DocumentManager
         $user_info = api_get_user_info($user_id);
         $first_name = $user_info['firstname'];
         $last_name = $user_info['lastname'];
+        $username = $user_info['username'];
         $official_code = $user_info['official_code'];
 
         // Teacher information
@@ -1889,6 +1895,7 @@ class DocumentManager
         $info_to_replace_in_content_html = [
             $first_name,
             $last_name,
+            $username,
             $organization_name,
             $portal_name,
             $teacher_first_name,
@@ -1908,6 +1915,7 @@ class DocumentManager
         $tags = [
             '((user_firstname))',
             '((user_lastname))',
+            '((user_username))',
             '((gradebook_institution))',
             '((gradebook_sitename))',
             '((teacher_firstname))',
@@ -3129,7 +3137,12 @@ class DocumentManager
 
         }*/
         //$type = "video/$extension";
-        $html = '<video id="myvideo"  src="'.$file.'" controls '.$type.'">';
+        //$fileInfo = parse_url($file);
+        //$type = self::file_get_mime_type(basename($fileInfo['path']));
+
+        $html = '<video id="myvideo" controls>';
+        $html .= '<source src="'.$file.'" >';
+        $html .= '</video>';
 
         return $html;
     }

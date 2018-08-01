@@ -128,7 +128,7 @@ abstract class Question
      */
     public static function read($id, $course_id = null)
     {
-        $id = intval($id);
+        $id = (int) $id;
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
         } else {
@@ -498,8 +498,8 @@ abstract class Question
 
             // update or add category for a question
             foreach ($category_list as $category_id) {
-                $category_id = intval($category_id);
-                $question_id = intval($this->id);
+                $category_id = (int) $category_id;
+                $question_id = (int) $this->id;
                 $sql = "SELECT count(*) AS nb
                         FROM $table
                         WHERE
@@ -1329,14 +1329,14 @@ abstract class Question
         $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-        $id = intval($this->id);
+        $id = (int) $this->id;
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order 
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = ".intval($id)."";
+                    WHERE c_id = $course_id AND question_id = ".intval($id);
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1865,7 +1865,7 @@ abstract class Question
     public static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $params['question_id'] = intval($question_id);
+        $params['question_id'] = (int) $question_id;
         $params['name'] = $name;
         $params['position'] = $position;
         $params['c_id'] = $course_id;

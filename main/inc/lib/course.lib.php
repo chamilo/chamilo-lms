@@ -572,13 +572,12 @@ class CourseManager
             return false; //detected possible SQL injection
         }
 
-        $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
         $userCourseCategoryId = intval($userCourseCategoryId);
 
-        if (empty($user_id) || empty($course_code)) {
+        if (empty($user_id) || empty($courseCode)) {
             return false;
         }
 
@@ -621,7 +620,7 @@ class CourseManager
             Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_COURSE_CODE,
-                $course_code,
+                $courseCode,
                 api_get_utc_datetime(),
                 api_get_user_id(),
                 $courseId,
@@ -649,7 +648,7 @@ class CourseManager
             Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_COURSE_CODE,
-                $course_code,
+                $courseCode,
                 api_get_utc_datetime(),
                 api_get_user_id(),
                 $courseId

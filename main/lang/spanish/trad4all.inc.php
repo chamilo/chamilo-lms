@@ -8252,4 +8252,3 @@ $Anonymize = "Anonimizar";
 $XQuestions = "%d preguntas";
 $WebFolderRefreshSucceeded = "Los estilos y archivos estáticos de la carpeta web/ han sido actualizados.";
 $WebFolderRefreshFailed = "Los estilos y archivos estáticos de la carpeta web/ no han podido ser actualizados, probablemente debido a un problema de permisos. Asegúrese que el usuario sistema de su servidor web tenga los permisos suficientes para escribir en esta carpeta.";
-?>

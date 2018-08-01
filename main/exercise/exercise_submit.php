@@ -848,11 +848,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 
     Display::display_header(null, 'Exercises');
 } else {
-    $htmlHeadXtra[] = "
-    <style>
-    body { background: none;}
-    </style>
-    ";
+    $htmlHeadXtra[] = "<style> body { background: none;} </style> ";
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
 }
@@ -863,9 +859,11 @@ $show_quiz_edition = $objExercise->added_in_lp();
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+            Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="#">'.
+            Display::return_icon('settings_na.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
 }
@@ -1025,7 +1023,10 @@ if (!empty($error)) {
     echo Display::return_message($error, 'error', false);
 } else {
     if (!empty($exercise_sound)) {
-        echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound')."\" /></a>";
+        echo "<a 
+            href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" 
+            target=\"_blank\">";
+        echo "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound')."\" /></a>";
     }
     // Get number of hotspot questions for javascript validation
     $number_of_hotspot_questions = 0;
@@ -1059,10 +1060,6 @@ if (!empty($error)) {
         }
     }
 
-    if ($number_of_hotspot_questions > 0) {
-        //$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
-    }
-
     $saveIcon = Display::return_icon(
         'save.png',
         get_lang('Saved'),
@@ -1085,8 +1082,7 @@ if (!empty($error)) {
             return;
         }
         
-        var calledUpdateDuration = false;
-        
+        var calledUpdateDuration = false;        
         function updateDuration() {
             if (calledUpdateDuration === false) {
                 var saveDurationUrl = "'.$saveDurationUrl.'";

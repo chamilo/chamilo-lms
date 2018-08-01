@@ -180,13 +180,11 @@ class ExerciseLib
                     false,
                     $config
                 );
-                $form->setDefaults(
-                    ["choice[".$questionId."]" => $fck_content]
-                );
+                $form->setDefaults(["choice[".$questionId."]" => $fck_content]);
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
-                if (api_get_setting('enable_record_audio') == 'true') {
+                if (api_get_setting('enable_record_audio') === 'true') {
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId;
                     if (!empty($exercise_stat_info)) {
@@ -273,8 +271,7 @@ class ExerciseLib
                                      } 
                                 }  
                               
-                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);
-                                
+                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);                                
                                 if (ThisChecked == 'No' && AlreadySearched == -1) { 
                                     ShowAlert = ShowAlert + ThisRadio;
                                 }     
@@ -299,7 +296,7 @@ class ExerciseLib
                         RadioValidator(question_id, answer_id);
                     }
                     
-                    $( document ).ready(function() {
+                    $(document).ready(function() {
                         var ShowAlert = '';
                         var typeRadioB = '';
                         var question_id = $('input[name=question_id]').val();
@@ -318,8 +315,7 @@ class ExerciseLib
                                     }
                                 }
                                 
-                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);
-                                
+                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);                                
                                 if (ThisChecked == 'No' && AlreadySearched == -1) { 
                                     ShowAlert = ShowAlert + ThisRadio;
                                 }
@@ -690,7 +686,7 @@ class ExerciseLib
                                         }
                                     }
 
-                                    if ($item["name"] == "True" || $item["name"] == "False") {
+                                    if ($item['name'] == 'True' || $item['name'] == 'False') {
                                         $s .= Display::tag('td',
                                             Display::input('radio',
                                                 'choice['.$questionId.']['.$numAnswer.']',
@@ -859,7 +855,7 @@ class ExerciseLib
                                     // may be "" if student viewed the question, but did not fill the blanks
                                     $correctItem = $studentAnswerList[$i];
                                 }
-                                $attributes['style'] = "width:".$listAnswerInfo['input_size'][$i]."px";
+                                $attributes['style'] = 'width:'.$listAnswerInfo['input_size'][$i].'px';
                                 $answer .= FillBlanks::getFillTheBlankHtml(
                                     $current_item,
                                     $questionId,
@@ -880,7 +876,7 @@ class ExerciseLib
                                 // display the common words
                                 $answer .= $listAnswerInfo['common_words'][$i];
                                 // display the blank word
-                                $attributes['style'] = "width:".$listAnswerInfo['input_size'][$i]."px";
+                                $attributes['style'] = 'width:'.$listAnswerInfo['input_size'][$i].'px';
                                 $answer .= FillBlanks::getFillTheBlankHtml(
                                     $current_item,
                                     $questionId,
@@ -1134,7 +1130,6 @@ class ExerciseLib
                                     if ($answerCorrect != $chosen['answer']) {
                                         continue;
                                     }
-
                                     $selectedValue = $chosen['answer'];
                                 }
                             }
@@ -1260,7 +1255,7 @@ HTML;
                                 if (!$freeze) {
                                     $s .= "
                                         <script>
-                                            $(document).on('ready', function () {
+                                            $(document).on('ready', function() {
                                                 jsPlumb.ready(function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
@@ -1367,10 +1362,8 @@ HTML;
 
             // destruction of the Answer object
             unset($objAnswerTmp);
-
             // destruction of the Question object
             unset($objQuestionTmp);
-
             if ($origin == 'export') {
                 return $s;
             }
@@ -1426,13 +1419,13 @@ HTML;
                 if (!empty($answers_hotspot)) {
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     foreach ($answers_hotspot as $value) {
-                        $answerList .= "<li>";
+                        $answerList .= '<li>';
                         if ($freeze) {
                             $answerList .= '<span class="hotspot-color-'.$hotspotColor
                                 .' fa fa-square" aria-hidden="true"></span>'.PHP_EOL;
                         }
                         $answerList .= $value;
-                        $answerList .= "</li>";
+                        $answerList .= '</li>';
                         $hotspotColor++;
                     }
                 }
@@ -1463,7 +1456,6 @@ HTML;
                                 });
                         </script>
                     ";
-
                     return;
                 }
             }
@@ -1488,7 +1480,7 @@ HOTSPOT;
             $s .= "<div class=\"col-sm-8 col-md-9\">
                    <div class=\"hotspot-image\"></div>
                     <script>
-                        $(document).on('ready', function () {
+                        $(document).on('ready', function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
                                 exerciseId: $exe_id,
@@ -1648,7 +1640,7 @@ HOTSPOT;
         $lp_item_id = 0
     ) {
         $course_id = api_get_course_int_id();
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT expired_time FROM $table
                 WHERE c_id = $course_id AND id = $exercise_id";
@@ -1714,9 +1706,9 @@ HOTSPOT;
         $lp_id = 0,
         $lp_item_id = 0
     ) {
-        $exercise_id = intval($exercise_id);
-        $lp_id = intval($lp_id);
-        $lp_item_id = intval($lp_item_id);
+        $exercise_id = (int) $exercise_id;
+        $lp_id = (int) $lp_id;
+        $lp_item_id = (int) $lp_item_id;
 
         return
             api_get_course_int_id().'_'.
@@ -1902,7 +1894,7 @@ HOTSPOT;
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
         );
         $exercisePath = Database::escape_string($exercisePath);
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $sql = "SELECT * FROM $table
                 WHERE
@@ -2183,9 +2175,7 @@ HOTSPOT;
                     $hotpotatoe_where
                     $sqlWhereOption
                     AND user.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
-                ORDER BY
-                    tth.c_id ASC,
-                    tth.exe_date DESC";
+                ORDER BY tth.c_id ASC, tth.exe_date DESC";
         }
 
         if (empty($sql)) {
@@ -2341,14 +2331,11 @@ HOTSPOT;
                     // we filter the results if we have the permission to
                     $result_disabled = 0;
                     if (isset($results[$i]['results_disabled'])) {
-                        $result_disabled = intval(
-                            $results[$i]['results_disabled']
-                        );
+                        $result_disabled = (int) $results[$i]['results_disabled'];
                     }
                     if ($result_disabled == 0) {
                         $my_res = $results[$i]['exe_result'];
                         $my_total = $results[$i]['exe_weighting'];
-
                         $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
                         $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
 
@@ -2375,10 +2362,7 @@ HOTSPOT;
                                     $results[$i]['exe_user_id'],
                                     $teacher_id_list
                                 )) {
-                                    $actions .= Display::return_icon(
-                                        'teacher.png',
-                                        get_lang('Teacher')
-                                    );
+                                    $actions .= Display::return_icon('teacher.png', get_lang('Teacher'));
                                 }
                             }
                             $revisedLabel = '';
@@ -2719,7 +2703,7 @@ HOTSPOT;
 
             // Print HotPotatoes test results.
             if (is_array($hpresults)) {
-                for ($i = 0; $i < sizeof($hpresults); $i++) {
+                for ($i = 0; $i < count($hpresults); $i++) {
                     $hp_title = GetQuizName($hpresults[$i][3], $documentPath);
                     if ($hp_title == '') {
                         $hp_title = basename($hpresults[$i][3]);
@@ -2994,7 +2978,7 @@ HOTSPOT;
 
         foreach ($model['score_list'] as $item) {
             $i = api_number_format($item['score_to_qualify'] / 100 * $weight, 2);
-            $label = ExerciseLib::getModelStyle($item, $i);
+            $label = self::getModelStyle($item, $i);
             $attributes = [
                 'class' => $item['css_class'],
             ];
@@ -3012,7 +2996,7 @@ HOTSPOT;
     public static function getJsCode()
     {
         // Filling the scores with the right colors.
-        $models = ExerciseLib::getCourseScoreModel();
+        $models = self::getCourseScoreModel();
         $cssListToString = '';
         if (!empty($models)) {
             $cssList = array_column($models['score_list'], 'css_class');
@@ -3850,7 +3834,7 @@ EOT;
             $listStudentsId[] = $listStudentInfo['user_id'];
         }
 
-        $listFillTheBlankResult = FillBlanks::getFillTheBlankTabResult(
+        $listFillTheBlankResult = FillBlanks::getFillTheBlankResult(
             $exercise_id,
             $question_id,
             $listStudentsId,
@@ -3918,7 +3902,7 @@ EOT;
                 $listStudentsId[] = $listStudentInfo['user_id'];
             }
 
-            $listFillTheBlankResult = FillBlanks::getFillTheBlankTabResult(
+            $listFillTheBlankResult = FillBlanks::getFillTheBlankResult(
                 $exercise_id,
                 $question_id,
                 $listStudentsId,
@@ -4617,7 +4601,7 @@ EOT;
                 $comnt = null;
                 if ($show_results) {
                     $comnt = Event::get_comments($exeId, $questionId);
-                    $teacherAudio = ExerciseLib::getOralFeedbackAudio(
+                    $teacherAudio = self::getOralFeedbackAudio(
                         $exeId,
                         $questionId,
                         api_get_user_id()
@@ -4628,7 +4612,7 @@ EOT;
                     }
 
                     if (!empty($comnt)) {
-                        echo ExerciseLib::getFeedbackText($comnt);
+                        echo self::getFeedbackText($comnt);
                     }
 
                     if ($teacherAudio) {

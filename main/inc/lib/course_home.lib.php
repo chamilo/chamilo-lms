@@ -132,10 +132,10 @@ class CourseHome
         foreach ($all_tools as &$tool) {
             if ($tool['image'] == 'scormbuilder.gif') {
                 // check if the published learnpath is visible for student
-                $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+                $lpId = self::getPublishedLpIdFromLink($tool['link']);
                 if (!api_is_allowed_to_edit(null, true) &&
                     !learnpath::is_lp_visible_for_student(
-                        $published_lp_id,
+                        $lpId,
                         api_get_user_id(),
                         api_get_course_id(),
                         api_get_session_id()
@@ -338,11 +338,11 @@ class CourseHome
             foreach ($all_tools_list as &$tool) {
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // check if the published learnpath is visible for student
-                    $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+                    $lpId = self::getPublishedLpIdFromLink($tool['link']);
 
                     if (!api_is_allowed_to_edit(null, true) &&
                         !learnpath::is_lp_visible_for_student(
-                            $published_lp_id,
+                            $lpId,
                             api_get_user_id(),
                             api_get_course_id(),
                             api_get_session_id()
@@ -644,34 +644,35 @@ class CourseHome
                 }
             }
 
-            if ($temp_row['image'] == 'scormbuilder.gif') {
-                $lp_id = self::get_published_lp_id_from_link($temp_row['link']);
-                $lp = new learnpath(
-                    api_get_course_id(),
-                    $lp_id,
-                    $userId
-                );
-                $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
+            switch ($temp_row['image']) {
+                case 'scormbuilder.gif':
+                    $lpId = self::getPublishedLpIdFromLink($temp_row['link']);
+                    $lp = new learnpath(
+                        api_get_course_id(),
+                        $lpId,
+                        $userId
+                    );
+                    $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
 
-                $add = learnpath::is_lp_visible_for_student(
-                    $lp_id,
-                    $userId,
-                    api_get_course_id(),
-                    api_get_session_id()
-                );
-                if ($path) {
-                    $temp_row['custom_image'] = $path;
-                }
-            }
-
-            if ($temp_row['image'] === 'lp_category.gif') {
-                $lpCategory = self::getPublishedLpCategoryFromLink(
-                    $temp_row['link']
-                );
-                $add = learnpath::categoryIsVisibleForStudent(
-                    $lpCategory,
-                    $user
-                );
+                    $add = learnpath::is_lp_visible_for_student(
+                        $lpId,
+                        $userId,
+                        api_get_course_id(),
+                        api_get_session_id()
+                    );
+                    if ($path) {
+                        $temp_row['custom_image'] = $path;
+                    }
+                    break;
+                case 'lp_category.gif':
+                    $lpCategory = self::getPublishedLpCategoryFromLink(
+                        $temp_row['link']
+                    );
+                    $add = learnpath::categoryIsVisibleForStudent(
+                        $lpCategory,
+                        $user
+                    );
+                    break;
             }
 
             if ($add) {
@@ -839,13 +840,13 @@ class CourseHome
                 $tool['original_link'] = $tool['link'];
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // check if the published learnpath is visible for student
-                    $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+                    $lpId = self::getPublishedLpIdFromLink($tool['link']);
                     if (api_is_allowed_to_edit(null, true)) {
                         $studentview = true;
                     }
                     if (!api_is_allowed_to_edit(null, true) &&
                         !learnpath::is_lp_visible_for_student(
-                            $published_lp_id,
+                            $lpId,
                             api_get_user_id(),
                             api_get_course_id(),
                             api_get_session_id()
@@ -1197,18 +1198,18 @@ class CourseHome
      *
      * @return int Learning path id
      */
-    public static function get_published_lp_id_from_link($published_lp_link)
+    public static function getPublishedLpIdFromLink($link)
     {
-        $lp_id = 0;
-        $param_lp_id = strstr($published_lp_link, 'lp_id=');
-        if (!empty($param_lp_id)) {
-            $a_param_lp_id = explode('=', $param_lp_id);
-            if (isset($a_param_lp_id[1])) {
-                $lp_id = intval($a_param_lp_id[1]);
+        $lpId = 0;
+        $param = strstr($link, 'lp_id=');
+        if (!empty($param)) {
+            $paramList = explode('=', $param);
+            if (isset($paramList[1])) {
+                $lpId = (int) $paramList[1];
             }
         }
 
-        return $lp_id;
+        return $lpId;
     }
 
     /**

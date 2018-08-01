@@ -10,10 +10,9 @@ use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -488,7 +487,6 @@ class UserRepository extends EntityRepository
         if (empty($lastLogin)) {
             $login = $this->getLastLogin($user);
             $lastLogin = $login->getLoginDate();
-
         }
         $user->setLastLogin($lastLogin);
 

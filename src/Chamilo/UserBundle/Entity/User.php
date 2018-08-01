@@ -285,7 +285,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @var ArrayCollection
-     *  ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $extraFields;
 
@@ -746,7 +746,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     {
         return $this->salt;
     }
-
 
     /**
      * @param ArrayCollection $classes

@@ -32,12 +32,11 @@ class LegalRepository extends EntityRepository
     /**
      * Get the latest version of terms of the given type and language.
      *
-     * @param int $typeId The type of terms:
-     *                    0 for general text,
-     *                    1 for general HTML link,
-     *                    101 for private data collection,
-     *                    etc - see personal_data.php
-     *
+     * @param int $typeId     The type of terms:
+     *                        0 for general text,
+     *                        1 for general HTML link,
+     *                        101 for private data collection,
+     *                        etc - see personal_data.php
      * @param int $languageId The Id of the language
      *
      * @return array The terms for those type and language

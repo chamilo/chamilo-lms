@@ -8160,4 +8160,3 @@ $Anonymize = "Anonymiser";
 $XQuestions = "%d questions";
 $WebFolderRefreshSucceeded = "Les styles et fichiers statiques du répertoire web/ on été mis à jour.";
 $WebFolderRefreshFailed = "Les styles et fichiers statiques du répertoire web/ n'ont pas pu être mis à jour, probablement à cause de problèmes de permissions. Assurez-vous que l'utilisateur système de votre serveur web puisse écrire dans le répertoire web/.";
-?>

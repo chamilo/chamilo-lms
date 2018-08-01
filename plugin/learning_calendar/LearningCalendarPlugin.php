@@ -617,7 +617,6 @@ class LearningCalendarPlugin extends Plugin
             $color = isset($typeList[$row['type']]) ? $typeList[$row['type']] : $typeList[self::EVENT_TYPE_FREE];
             $event['borderColor'] = $color;
             $event['backgroundColor'] = $color;
-
             $event['editable'] = false;
             $event['sent_to'] = get_lang('Me');
             $event['type'] = 'personal';
@@ -785,7 +784,12 @@ class LearningCalendarPlugin extends Plugin
                 ON (v.c_id = l.c_id AND v.lp_id = l.iid AND iv.lp_view_id = v.iid)
                 INNER JOIN extra_field_values e 
                 ON (e.item_id = i.iid AND value = 1 AND field_id = ".$fieldInfo['id'].")
-                WHERE v.user_id = $userId AND status = 'completed' $courseSessionConditionToString";
+                WHERE                 
+                    v.user_id = $userId AND 
+                    status = 'completed' 
+                    $courseSessionConditionToString
+                GROUP BY iv.view_count
+               ";
 
         $result = Database::query($sql);
 
@@ -807,7 +811,6 @@ class LearningCalendarPlugin extends Plugin
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.canvasOverlay.js');
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.pointLabels.js');
-
         $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
     }
 
@@ -1077,8 +1080,10 @@ class LearningCalendarPlugin extends Plugin
     public function getControlPoints($userId)
     {
         $userId = (int) $userId;
-        $sql = "SELECT control_date, control_value FROM learning_calendar_control_point 
-                WHERE user_id = $userId ORDER BY control_date";
+        $sql = "SELECT control_date, control_value 
+                FROM learning_calendar_control_point 
+                WHERE user_id = $userId 
+                ORDER BY control_date";
         $result = Database::query($sql);
         $list = Database::store_result($result, 'ASSOC');
 
@@ -1112,7 +1117,8 @@ class LearningCalendarPlugin extends Plugin
         $local = api_get_local_time();
         $date = substr($local, 0, 10);
 
-        $sql = "SELECT id FROM learning_calendar_control_point 
+        $sql = "SELECT id 
+                FROM learning_calendar_control_point 
                 WHERE user_id = $userId AND control_date = '$date'";
         $result = Database::query($sql);
 

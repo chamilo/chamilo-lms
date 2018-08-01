@@ -642,7 +642,7 @@ $_configuration['score_grade_model'] = [
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
 
-// Skills can only visible for admins, teachers (related to a user via a course),
+// Skills can only be visible for admins, teachers (related to a user via a course),
 // and HRM users (if related to a user).
 // $_configuration['allow_private_skills'] = false;
 // Additional gradebook dependencies BT#13099
@@ -942,6 +942,15 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 //$_configuration['data_protection_officer_role'] = '';
 // An e-mail address where to contact the data protection officer for queries
 //$_configuration['data_protection_officer_email'] = '';
+
+// Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
+// to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
+/*$_configuration['webservice_validation'] = [
+    'options' => [
+        'wsdl' => 'https://example.com/soap?wsdl',
+        'check_login_function' => 'myWebServiceFunctionToLogin'
+    ]
+];*/
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email

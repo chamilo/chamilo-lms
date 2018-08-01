@@ -157,12 +157,11 @@ class ScormExercise
     public function exportQuestions()
     {
         $js = $html = '';
-
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
 
         $em = Database::getManager();
-        // Export cquiz
+        // Export cquiz data
         /** @var CQuiz $exercise */
         $exercise = $em->find('ChamiloCourseBundle:CQuiz', $this->exercise->iId);
         $exercise->setDescription('');
@@ -173,8 +172,9 @@ class ScormExercise
         $js .= "var exerciseInfo = JSON.parse('".$jsonContent."');\n";
 
         $counter = 0;
+        $scormQuestion = new ScormQuestion();
         foreach ($this->exercise->selectQuestionList() as $q) {
-            list($jstmp, $htmltmp) = ScormQuestion::exportQuestion($q, $counter);
+            list($jstmp, $htmltmp) = $scormQuestion->exportQuestionToScorm($q, $counter);
             $js .= $jstmp."\n";
             $html .= $htmltmp."\n";
             $counter++;

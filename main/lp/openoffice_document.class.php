@@ -67,6 +67,9 @@ abstract class OpenofficeDocument extends learnpath
             $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name']);
         }
 
+        $dirMode = api_get_permissions_for_new_directories();
+        $fileMode = api_get_permissions_for_new_files();
+
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
 
         /*
@@ -123,9 +126,9 @@ abstract class OpenofficeDocument extends learnpath
             // Call to the function implemented by child.
             $cmd .= $this->add_command_parameters();
             // To allow openoffice to manipulate docs.
-            @chmod($this->base_work_dir, 0777);
-            @chmod($this->base_work_dir.$this->created_dir, 0777);
-            @chmod($this->base_work_dir.$this->file_path, 0777);
+            @chmod($this->base_work_dir, $dirMode);
+            @chmod($this->base_work_dir.$this->created_dir, $dirMode);
+            @chmod($this->base_work_dir.$this->file_path, $fileMode);
 
             $locale = $this->original_locale; // TODO: Improve it because we're not sure this locale is present everywhere.
             putenv('LC_ALL='.$locale);
@@ -163,7 +166,7 @@ abstract class OpenofficeDocument extends learnpath
                 foreach ($result['images'] as $image => $img_data) {
                     $image_path = $this->base_work_dir.$this->created_dir;
                     @file_put_contents($image_path.'/'.$image, base64_decode($img_data));
-                    @chmod($image_path.'/'.$image, 0777);
+                    @chmod($image_path.'/'.$image, $fileMode);
                 }
             }
 

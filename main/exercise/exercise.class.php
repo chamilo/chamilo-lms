@@ -3890,10 +3890,7 @@ class Exercise
                         // insert the student result in the track_e_attempt table, field answer
                         // $answer is the answer like in the c_quiz_answer table for the question
                         // student data are choice[]
-                        $listCorrectAnswers = FillBlanks::getAnswerInfo(
-                            $answer
-                        );
-
+                        $listCorrectAnswers = FillBlanks::getAnswerInfo($answer);
                         $switchableAnswerSet = $listCorrectAnswers['switchable'];
                         $answerWeighting = $listCorrectAnswers['weighting'];
                         // user choices is an array $choice
@@ -4013,9 +4010,7 @@ class Exercise
                                 }
                             }
                         }
-                        $answer = FillBlanks::getAnswerInStudentAttempt(
-                            $listCorrectAnswers
-                        );
+                        $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);
                     }
                     break;
                 case CALCULATED_ANSWER:

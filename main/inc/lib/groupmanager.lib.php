@@ -2341,7 +2341,7 @@ class GroupManager
 
                 $group_name2 = '';
                 if (api_get_configuration_value('extra')) {
-                    $group_name2 = '<a href="suivi_group_space.php?cidReq='.api_get_course_id().'&gidReq='
+                    $group_name2 = '<a href="group_space_tracking.php?cidReq='.api_get_course_id().'&gidReq='
                         .$this_group['id'].'">'.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
                 }
 

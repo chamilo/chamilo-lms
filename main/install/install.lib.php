@@ -2808,11 +2808,11 @@ function fixLpId($connection, $debug)
         error_log('Fix lp.id lp.iids');
     }
 
-    $sql = "SELECT id, title, code FROM course";
+    $sql = 'SELECT id, title, code FROM course';
     $result = $connection->query($sql);
     $courses = $result->fetchAll();
 
-    $sql = "SELECT id FROM session";
+    $sql = 'SELECT id FROM session';
     $result = $connection->query($sql);
     $sessions = $result->fetchAll();
 
@@ -2822,6 +2822,7 @@ function fixLpId($connection, $debug)
 
     if (!empty($sessions)) {
         $sessions = array_column($sessions, 'id');
+        $sessions[] = 0;
     } else {
         $sessions = [0];
     }

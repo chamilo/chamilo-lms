@@ -101,7 +101,7 @@ class learnpath
      * Also builds the list of items into $this->items.
      *
      * @param string $course  Course code
-     * @param int    $lp_id
+     * @param int    $lp_id   c_lp.iid
      * @param int    $user_id
      */
     public function __construct($course, $lp_id, $user_id)

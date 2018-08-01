@@ -508,9 +508,14 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Get the last login from the track_e_login table.
+     * This might be different from user.last_login in the case of legacy users
+     * as user.last_login was only implemented in 1.10 version with a default
+     * value of NULL (not the last record from track_e_login).
      * @param User $user
      *
      * @return null|TrackELogin
+     * @throws \Exception
      */
     public function getLastLogin(User $user)
     {

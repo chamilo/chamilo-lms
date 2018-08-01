@@ -37,7 +37,7 @@ class ScormAnswerFillInBlanks extends Answer
             $attributes['style'] = 'width:'.$listAnswerInfo['input_size'][$i].'px';
             $answer .= FillBlanks::getFillTheBlankHtml(
                 $this->questionJSId,
-                $this->questionJSId+1,
+                $this->questionJSId + 1,
                 '',
                 $attributes,
                 $answer,

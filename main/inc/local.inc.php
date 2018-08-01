@@ -366,7 +366,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         $function = $options['check_login_function'];
                         $params = [
                             'login' => $uData['username'],
-                            'password' => $password
+                            'password' => $password,
                         ];
                         $result = $soapclient->call($function, [serialize($params)]);
                         if ($error = $soapclient->getError()) {

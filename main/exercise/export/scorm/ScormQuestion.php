@@ -27,7 +27,6 @@ class ScormQuestion extends Question
     public function __construct()
     {
         parent::__construct();
-
     }
 
     /**
@@ -35,7 +34,7 @@ class ScormQuestion extends Question
      *
      * @param int  $questionId The question ID
      * @param bool $standalone (ie including XML tag, DTD declaration, etc)
-     * @param int  $jsId      The JavaScript ID for this question.
+     * @param int  $jsId       The JavaScript ID for this question.
      *                         Due to the nature of interactions, we must have a natural sequence for
      *                         questions in the generated JavaScript.
      *

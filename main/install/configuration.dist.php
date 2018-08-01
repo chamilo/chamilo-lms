@@ -642,7 +642,7 @@ $_configuration['score_grade_model'] = [
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
 
-// Skills can only visible for admins, teachers (related to a user via a course),
+// Skills can only be visible for admins, teachers (related to a user via a course),
 // and HRM users (if related to a user).
 // $_configuration['allow_private_skills'] = false;
 // Additional gradebook dependencies BT#13099

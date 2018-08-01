@@ -7,20 +7,17 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 //use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+//use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\UserInterface;
-//use Symfony\Component\Security\Core\User\UserInterface;
 use Sonata\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Doctrine\Common\Util\Inflector;
-use Doctrine\ORM\Mapping\ClassMetadata as ORMMeta;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -288,7 +285,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @var ArrayCollection
-     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     *  ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $extraFields;
 
@@ -436,11 +433,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackELogin", mappedBy="loginUserId", orphanRemoval=true, cascade={"persist"}, fetch="EXTRA_LAZY")
-     */
-    private $logins;
 
     /**
      * Constructor.
@@ -526,7 +518,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getEncoderName()
     {
-        return "legacy_encoder";
+        return 'legacy_encoder';
     }
 
     /**
@@ -543,6 +535,30 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getDropBoxReceivedFiles()
     {
         return $this->dropBoxReceivedFiles;
+    }
+
+    /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxSentFiles($value)
+    {
+        $this->dropBoxSentFiles = $value;
+    }
+
+    /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxReceivedFiles($value)
+    {
+        $this->dropBoxReceivedFiles = $value;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
     }
 
     /**
@@ -652,6 +668,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @param $value
+     */
+    public function setPortals($value)
+    {
+        $this->portals = $value;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getCurriculumItems()
@@ -721,6 +745,15 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getSalt()
     {
         return $this->salt;
+    }
+
+
+    /**
+     * @param ArrayCollection $classes
+     */
+    public function setClasses($classes)
+    {
+        $this->classes = $classes;
     }
 
     /**
@@ -1446,9 +1479,10 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         // If not last_login has been registered in the user table
         // (for users without login after version 1.10), get the last login
         // from the track_e_login table
-        if (empty($this->lastLogin)) {
+        /*if (empty($this->lastLogin)) {
             return $this->getExtendedLastLogin();
-        }
+        }*/
+
         return $this->lastLogin;
     }
 
@@ -1463,7 +1497,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * {@inheritdoc}
      */
-    public function setExtraFields($extraFields)
+    public function setExtraFieldList($extraFields)
     {
         $this->extraFields = new ArrayCollection();
         foreach ($extraFields as $extraField) {
@@ -1471,6 +1505,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         }
 
         return $this;
+    }
+
+    public function setExtraFields($extraFields)
+    {
+        $this->extraFields = $extraFields;
     }
 
     /**
@@ -1557,6 +1596,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getSessionCourseSubscriptions()
     {
         return $this->sessionCourseSubscriptions;
+    }
+
+    public function setSessionCourseSubscriptions($value)
+    {
+        $this->sessionCourseSubscriptions = $value;
     }
 
     /**
@@ -2277,6 +2321,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this;
     }
 
+    /**
+     * @param bool $boolean
+     *
+     * @return $this|UserInterface
+     */
     public function setSuperAdmin($boolean)
     {
         if (true === $boolean) {
@@ -2330,6 +2379,9 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this->groups ?: $this->groups = new ArrayCollection();
     }
 
+    /**
+     * @return array
+     */
     public function getGroupNames()
     {
         $names = [];
@@ -2340,11 +2392,21 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $names;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function hasGroup($name)
     {
         return in_array($name, $this->getGroupNames());
     }
 
+    /**
+     * @param GroupInterface $group
+     *
+     * @return $this
+     */
     public function addGroup(GroupInterface $group)
     {
         if (!$this->getGroups()->contains($group)) {
@@ -2485,106 +2547,16 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * Get a list of properties in this entity
-     * @param EntityManager $em
-     * @param int $recursionDepth Up to how deep we want to get the data
-     * @return array
+     * Get sessionAsGeneralCoach.
+     *
+     * @param ArrayCollection $value
+     *
+     * @return $this
      */
-    protected function _toArray($em, $recursionDepth = 0)
+    public function setSessionAsGeneralCoach($value)
     {
-        // This method is borrowed from https://github.com/borisguery/bgylibrary/blob/master/library/Bgy/Doctrine/EntitySerializer.php
-        $className = get_class($this);
-        $metadata = $em->getClassMetadata($className);
-        $maxRecursionDepth = 5;
+        $this->sessionAsGeneralCoach = $value;
 
-        $data = [];
-
-        foreach ($metadata->fieldMappings as $field => $mapping) {
-            $value = $metadata->reflFields[$field]->getValue($this);
-            $field = Inflector::tableize($field);
-            if ($value instanceof \Datetime) {
-                $data[$field] = (array)$value;
-            } elseif (is_object($value)) {
-                $data[$field] = (string)$value;
-            } else {
-                $data[$field] = $value;
-            }
-        }
-
-        foreach ($metadata->associationMappings as $field => $mapping) {
-            $key = Inflector::tableize($field);
-            if ($mapping['isCascadeDetach']) {
-                $data[$key] = $metadata->reflFields[$field]->getValue($this);
-                if (null !== $data[$key]) {
-                    $data[$key] = $this->_toArray($data[$key], $recursionDepth + 1);
-                }
-            } elseif ($mapping['isOwningSide'] && $mapping['type'] & ORMMeta::TO_ONE) {
-                if (null !== $metadata->reflFields[$field]->getValue($this)) {
-                    if ($recursionDepth < $maxRecursionDepth) {
-                        $recursionDepth++;
-                        $data[$key] = $this->_toArray(
-                            $metadata->reflFields[$field]->getValue($this),
-                            $recursionDepth
-                        );
-                        $recursionDepth--;
-                    } else {
-                        $data[$key] = $em->getUnitOfWork()
-                            ->getEntityIdentifier(
-                                $metadata->reflFields[$field]
-                                    ->getValue($this)
-                                );
-                    }
-                } else {
-                    // In some case the relationship may not exist, but we want
-                    // to know about it
-                    $data[$key] = null;
-                }
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Serialize the whole entity to an array
-     * @param EntityManager $em
-     * @param array $substitutionTerms Substitute terms for some elements
-     * @return array $values
-     */
-    public function getPersonalData($em, $substitutionTerms = [])
-    {
-        $data = $this->_toArray($em);
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'password':
-                    $data[$key] = $substitutionTerms[$key];
-                    break;
-                case 'salt':
-                    $data[$key] = $substitutionTerms[$key];
-                    break;
-            }
-            if (empty($value)) {
-                $data[$key] = $substitutionTerms['empty'];
-            }
-
-        }
-        return $data;
-    }
-
-    /**
-     * Get last login (used only if user.last_login is empty)
-     * @return \DateTime Last login date for this user
-     */
-    public function getExtendedLastLogin()
-    {
-        $lastLoginString = 0;
-        $lastLoginDateTime = new \DateTime();
-        foreach ($this->logins as $login) {
-            $loginDate = api_get_local_time($login->getLoginDate());
-            if ($loginDate > $lastLoginString) {
-                $lastLoginString = $loginDate;
-                $lastLoginDateTime = $login->getLoginDate();
-            }
-        }
-        return $lastLoginDateTime;
+        return $this;
     }
 }

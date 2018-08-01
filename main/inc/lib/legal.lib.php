@@ -380,4 +380,28 @@ class LegalManager
             $extraFieldValue->delete($value['id']);
         }
     }
+
+    /**
+     * @return array
+     */
+    public static function getTreatmentTypeList()
+    {
+        return  [
+            101 => 'collection',
+            102 => 'recording',
+            103 => 'organization',
+            104 => 'structure',
+            105 => 'conservation',
+            106 => 'adaptation',
+            107 => 'extraction',
+            108 => 'consultation',
+            109 => 'usage',
+            110 => 'communication',
+            111 => 'interconnection',
+            112 => 'limitation',
+            113 => 'deletion',
+            114 => 'destruction',
+            115 => 'profiling',
+        ];
+    }
 }

@@ -6,9 +6,14 @@ namespace Chamilo\UserBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -430,5 +435,100 @@ class UserRepository extends EntityRepository
             ->getResult();
 
         return $hrmList;
+    }
+
+    /**
+     * Serialize the whole entity to an array.
+     *
+     * @param int   $userId
+     * @param array $substitutionTerms Substitute terms for some elements
+     *
+     * @return array $values
+     */
+    public function getPersonalDataToJson($userId, array $substitutionTerms)
+    {
+        /** @var User $user */
+        $user = $this->find($userId);
+
+        $user->setPassword($substitutionTerms['password']);
+        $user->setSalt($substitutionTerms['salt']);
+        $noDataLabel = $substitutionTerms['empty'];
+
+        // Dummy content
+        $user->setDateOfBirth(null);
+        $user->setBiography($noDataLabel);
+        $user->setFacebookData($noDataLabel);
+        $user->setFacebookName($noDataLabel);
+        $user->setFacebookUid($noDataLabel);
+        $user->setImageName($noDataLabel);
+        $user->setTwoStepVerificationCode($noDataLabel);
+        $user->setGender($noDataLabel);
+        $user->setGplusData($noDataLabel);
+        $user->setGplusName($noDataLabel);
+        $user->setGplusUid($noDataLabel);
+        $user->setLocale($noDataLabel);
+        $user->setTimezone($noDataLabel);
+        $user->setTwitterData($noDataLabel);
+        $user->setTwitterName($noDataLabel);
+        $user->setTwitterUid($noDataLabel);
+        $user->setWebsite($noDataLabel);
+        $user->setToken($noDataLabel);
+        $user->setCourses([]);
+        $user->setClasses([]);
+        $user->setDropBoxSentFiles([]);
+        $user->setDropBoxReceivedFiles([]);
+        $user->setGroups([]);
+        $user->setCurriculumItems([]);
+        $user->setPortals([]);
+        $user->setExtraFields([]);
+        $user->setSessionCourseSubscriptions([]);
+        $user->setSessionAsGeneralCoach([]);
+
+        $lastLogin = $user->getLastLogin();
+        if (empty($lastLogin)) {
+            $login = $this->getLastLogin($user);
+            $lastLogin = $login->getLoginDate();
+
+        }
+        $user->setLastLogin($lastLogin);
+
+        $dateNormalizer = new GetSetMethodNormalizer();
+
+        $callback = function ($dateTime) {
+            return $dateTime instanceof \DateTime
+                ? $dateTime->format(\DateTime::ISO8601)
+                : '';
+        };
+        $dateNormalizer->setCallbacks(['createdAt' => $callback, 'lastLogin' => $callback]);
+
+        $normalizers = [$dateNormalizer];
+        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
+
+        $jsonContent = $serializer->serialize($user, 'json');
+
+        return $jsonContent;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return null|TrackELogin
+     */
+    public function getLastLogin(User $user)
+    {
+        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:TrackELogin');
+        $qb = $repo->createQueryBuilder('l');
+
+        $login = $qb
+            ->select('l')
+            ->where(
+                $qb->expr()->eq('l.loginUserId', $user->getId())
+            )
+            ->setMaxResults(1)
+            ->orderBy('l.loginDate', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $login;
     }
 }

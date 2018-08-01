@@ -32,8 +32,12 @@
                 {{ personal_data.permissions.label }}
                 <ul>
                 {% if personal_data.permissions.accepted %}
-                        <li>{{ 'CurrentStatus' | get_lang }}: {{ personal_data.permissions.icon }} ({{ 'LegalAgreementAccepted' | get_lang }})</li>
-                        <li>{{ 'Date' | get_lang }}: {{ personal_data.permissions.date }}</li>
+                    <li>
+                        {{ 'CurrentStatus' | get_lang }}: {{ personal_data.permissions.icon }} ({{ 'LegalAgreementAccepted' | get_lang }})
+                    </li>
+                    <li>
+                        {{ 'Date' | get_lang }}: {{ personal_data.permissions.date }}
+                    </li>
                 {% endif %}
                 <li>{{ personal_data.permissions.button }}</li>
                 </ul>

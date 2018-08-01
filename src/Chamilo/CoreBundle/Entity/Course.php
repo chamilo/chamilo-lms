@@ -310,18 +310,18 @@ class Course
     /**
      * @return ArrayCollection
      */
-    public function getNotebooks()
+    /*public function getNotebooks()
     {
         return $this->notebooks;
-    }
+    }*/
 
     /**
      * @return ArrayCollection
      */
-    public function getItems()
+    /*public function getItems()
     {
         return $this->items;
-    }
+    }*/
 
     /**
      * @return ArrayCollection

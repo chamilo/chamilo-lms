@@ -63,3 +63,9 @@ $strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has be
 $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';
 $strings['global_conference_allow_roles'] = "Globaler Konferenz-Link nur für diese Benutzerrollen sichtbar";
 $strings['CreatedAt'] = "Erstellt am";
+
+$strings['interface'] = 'Benutzeroberfläche';
+$strings['launch_type'] = 'Client-Starttyp';
+$strings['EnterConferenceFlash'] = 'Videokonferenz eingeben (Flash-Client)';
+$strings['EnterConferenceHTML5'] = 'Videokonferenz eingeben (HTML5-Client)';
+$strings['ParticipantsWillUseSameInterface'] = 'Die Teilnehmer verwenden dieselbe Benutzeroberfläche wie Sie';

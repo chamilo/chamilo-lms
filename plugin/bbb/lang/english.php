@@ -1,9 +1,5 @@
 <?php
-/**
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
- */
+/* License: see /license.txt */
 // Needed in order to show the plugin title
 $strings['plugin_title'] = "Videoconference";
 $strings['plugin_comment'] = "Add a videoconference room in a Chamilo course using BigBlueButton (BBB)";
@@ -69,7 +65,7 @@ $strings['global_conference_allow_roles'] = "Global conference link only visible
 $strings['CreatedAt'] = 'Created at';
 
 $strings['interface'] = 'Interface';
-$strings['launch_type'] = 'Launch type';
+$strings['launch_type'] = 'Client launch type';
 $strings['EnterConferenceFlash'] = 'Enter the videoconference (Flash client)';
 $strings['EnterConferenceHTML5'] = 'Enter the videoconference (HTML5 client)';
 $strings['ParticipantsWillUseSameInterface'] = 'Participants will use the same interface as you';

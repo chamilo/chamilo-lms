@@ -65,11 +65,8 @@ $strings['global_conference_allow_roles'] = "Visibilité du lien de vidéo conf�
 $strings['CreatedAt'] = "Créé à";
 
 $strings['interface'] = 'Interface';
-$strings['launch_type'] = 'Type de lancement du client';
+$strings['launch_type'] = 'Type d\'interface au lancement';
 $strings['EnterConferenceFlash'] = 'Entrer dans la salle de conférence (Flash)';
 $strings['EnterConferenceHTML5'] = 'Entrer dans la salle de conférence (HTML5)';
 $strings['ParticipantsWillUseSameInterface'] = 'Les apprenants utiliseront la même interface que vous';
-
-$strings['interface'] = "Interface par défaut";
-$strings['launch_type'] = "Choix d'interface au lancement";
 

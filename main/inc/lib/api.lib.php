@@ -2406,10 +2406,8 @@ function get_status_from_code($status_code)
     switch ($status_code) {
         case STUDENT:
             return get_lang('Student', '');
-        case TEACHER:
-            return get_lang('Teacher', '');
         case COURSEMANAGER:
-            return get_lang('Manager', '');
+            return get_lang('Teacher', '');
         case SESSIONADMIN:
             return get_lang('SessionsAdmin', '');
         case DRH:

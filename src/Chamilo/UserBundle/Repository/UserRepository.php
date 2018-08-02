@@ -526,6 +526,10 @@ class UserRepository extends EntityRepository
             'gplusUid',
             'token',
             'website',
+            'plainPassword',
+            'completeNameWithUsername',
+            'completeName',
+            'completeNameWithClasses',
         ];
 
         $dateNormalizer->setIgnoredAttributes($ignore);

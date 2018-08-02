@@ -47,13 +47,14 @@ if ($checker) {
     if (empty($userServiceSale)) {
         // Instance a new template : No page tittle, No header, No footer
         $tpl = new Template(null, false, false);
+        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php';
         $content = sprintf(
             Display::return_message(
-                $plugin->get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'),
+                get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'),
                 'normal',
                 false
             ),
-            api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php'
+            '<a href="'.$url.'">'. $url .'</a>'
         );
         $tpl->assign('content', $content);
         $tpl->display_blank_template();

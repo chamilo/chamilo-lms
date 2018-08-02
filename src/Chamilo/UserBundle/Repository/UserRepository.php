@@ -491,7 +491,6 @@ class UserRepository extends EntityRepository
         $items = $extraFieldValues->getAllValuesByItem($userId);
         $user->setExtraFields($items);
 
-
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {
             $login = $this->getLastLogin($user);

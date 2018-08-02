@@ -26,10 +26,9 @@ $substitutionTerms = [
 $propertiesToJson = UserManager::getRepository()->getPersonalDataToJson($userId, $substitutionTerms);
 
 if (!empty($_GET['export'])) {
-    //$jsonProperties = json_encode($properties);
     $filename = md5(mt_rand(0, 1000000)).'.json';
     $path = api_get_path(SYS_ARCHIVE_PATH).$filename;
-    $writeResult = file_put_contents($path, $jsonProperties);
+    $writeResult = file_put_contents($path, $propertiesToJson);
     if ($writeResult !== false) {
         DocumentManager::file_send_for_download($path, true, $filename);
         exit;

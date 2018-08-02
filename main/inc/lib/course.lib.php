@@ -736,10 +736,10 @@ class CourseManager
      * @author Hugues Peeters
      * @author Roan Embrechts
      *
-     * @param int    $user_id    the id of the user
-     * @param string $courseCode the course code
-     * @param int    $status     (optional) The user's status in the course
-     * @param int    $userCourseCategoryId The user category in which this subscription will be classified
+     * @param int    $user_id                the id of the user
+     * @param string $courseCode             the course code
+     * @param int    $status                 (optional) The user's status in the course
+     * @param int    $userCourseCategoryId   The user category in which this subscription will be classified
      * @param bool   $checkTeacherPermission
      *
      * @return false|string true if subscription succeeds, boolean false otherwise
@@ -6645,6 +6645,37 @@ class CourseManager
     }
 
     /**
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public static function hasPicture(Course $course)
+    {
+        return file_exists(api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png');
+    }
+
+    /**
+     * Get the course picture path.
+     *
+     * @param Course $course
+     * @param bool   $fullSize
+     *
+     * @return null|string
+     */
+    public static function getPicturePath(Course $course, $fullSize = false)
+    {
+        if (!self::hasPicture($course)) {
+            return null;
+        }
+
+        if ($fullSize) {
+            return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+        }
+
+        return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png';
+    }
+
+    /**
      * Check if a specific access-url-related setting is a problem or not.
      *
      * @param array  $_configuration The $_configuration array
@@ -6710,36 +6741,5 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
-    }
-
-    /**
-     * @param Course $course
-     *
-     * @return bool
-     */
-    public static function hasPicture(Course $course)
-    {
-        return file_exists(api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png');
-    }
-
-    /**
-     * Get the course picture path.
-     *
-     * @param Course $course
-     * @param bool   $fullSize
-     *
-     * @return null|string
-     */
-    public static function getPicturePath(Course $course, $fullSize = false)
-    {
-        if (!self::hasPicture($course)) {
-            return null;
-        }
-
-        if ($fullSize) {
-            return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
-        }
-
-        return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png';
     }
 }

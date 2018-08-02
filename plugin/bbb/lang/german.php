@@ -72,4 +72,3 @@ $strings['ParticipantsWillUseSameInterface'] = 'Die Teilnehmer verwenden dieselb
 $strings['SetByDefault'] = 'Auf die Standardbenutzeroberfläche einstellen';
 $strings['SetByTeacher'] = 'Set von Lehrer';
 $strings['SetByStudent'] = 'Set von Teilnehmer';
-

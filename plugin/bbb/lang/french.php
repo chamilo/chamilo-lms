@@ -72,4 +72,3 @@ $strings['ParticipantsWillUseSameInterface'] = 'Les apprenants utiliseront la m√
 $strings['SetByDefault'] = 'Lancement de l\'interface par d√©faut';
 $strings['SetByTeacher'] = 'Choisi par le professeur';
 $strings['SetByStudent'] = 'Choisi par l\'apprenant';
-

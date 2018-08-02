@@ -2877,14 +2877,12 @@ class Skill extends Model
     }
 
     /**
-     *
      * Get the icon (badge image) URL.
      *
      * @param SkillEntity $skill
      * @param bool        $getSmall Optional. Allow get the small image
      *
      * @return string
-     *
      */
     public static function getWebIconPath(SkillEntity $skill, $getSmall = false)
     {

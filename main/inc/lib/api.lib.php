@@ -271,6 +271,8 @@ define('LOG_WORK_DATA', 'work_data_array');
 define('LOG_MY_FOLDER_PATH', 'path');
 define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 
+define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
+
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
 //used when login_is_email setting is true

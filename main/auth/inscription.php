@@ -888,11 +888,18 @@ if ($form->validate()) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
-                $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+                $conditionToSave = (int) $cond_array[0].':'. (int) $cond_array[1].':'.$time;
                 UserManager::update_extra_field_value(
                     $user_id,
                     'legal_accept',
-                    $condition_to_save
+                    $conditionToSave
+                );
+
+                Event::addEvent(
+                    LOG_TERM_CONDITION_ACCEPTED,
+                    LOG_USER_OBJECT,
+                    api_get_user_info(),
+                    api_get_utc_datetime()
                 );
 
                 $bossList = UserManager::getStudentBossList($user_id);

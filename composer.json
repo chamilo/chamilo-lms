@@ -78,6 +78,7 @@
         "symfony/annotations-pack": "^1.0",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/apache-pack": "^1.0",
+        "symfony/var-dumper": "4.0.*",
 
         "twig/extensions": "^1.5",
         "white-october/pagerfanta-bundle": "^1.1",
@@ -100,12 +101,12 @@
         "sonata-project/page-bundle": "~3.0",
         "sonata-project/seo-bundle": "~2.0",
         "sonata-project/user-bundle": "~4.0",
-        "sonata-project/formatter-bundle": "dev-master",
+        "sonata-project/formatter-bundle": "~3.0",
 
         "stephpy/timeline-bundle": "~3.0",
         "stof/doctrine-extensions-bundle": "~1.0",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
-        "sylius/resource-bundle": "dev-master",
+        "sylius/resource-bundle": "~1.2",
         "sylius/resource": "dev-master",
         "sylius/registry": "dev-master",
 

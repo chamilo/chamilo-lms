@@ -12,7 +12,7 @@
             association mapping  : http://www.doctrine-project.org/projects/orm/2.0/docs/reference/association-mapping/en
     -->
     <entity
-            name="Chamilo\MediaBundle\Entity\GalleryItem"
+            name="Chamilo\MediaBundle\Entity\GalleryHasMedia"
             table="media__gallery_media"
     >
 

@@ -2,7 +2,7 @@ sonata_media:
     class:
         media: Chamilo\MediaBundle\Entity\Media
         gallery: Chamilo\MediaBundle\Entity\Gallery
-        gallery_item: Chamilo\MediaBundle\Entity\GalleryItem
+        gallery_has_media: Chamilo\MediaBundle\Entity\GalleryHasMedia
         category: Chamilo\ClassificationBundle\Entity\Category
     db_driver: doctrine_orm # | doctrine_mongodb
     default_context: default

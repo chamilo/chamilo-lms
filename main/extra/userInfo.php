@@ -283,7 +283,7 @@ if ($displayMode == "viewDefEdit") {
             "<table width=\"80%\" border=\"0\">",
             "<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
             "<td align=\"left\">", get_lang('Name'), "</td>\n",
-            "<td width=\"100px\" align=\"left\">", get_lang('Horaire'), "</td>\n";
+            "<td width=\"100px\" align=\"left\">", get_lang('Schedule'), "</td>\n";
         echo "</tr>\n",
             "<tr align=\"center\">",
             "<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",

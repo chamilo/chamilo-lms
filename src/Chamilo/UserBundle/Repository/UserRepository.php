@@ -482,7 +482,11 @@ class UserRepository extends EntityRepository
         $user->setGroups([]);
         $user->setCurriculumItems([]);
         $user->setPortals([]);
-        $user->setExtraFields([]);
+
+        $extraFieldValues = new \ExtraFieldValue('user');
+        $items = $extraFieldValues->getAllValuesByItem($userId);
+        $user->setExtraFields($items);
+
         $user->setSessionCourseSubscriptions([]);
         $user->setSessionAsGeneralCoach([]);
 
@@ -529,7 +533,14 @@ class UserRepository extends EntityRepository
                 ? $dateTime->format(\DateTime::ISO8601)
                 : '';
         };
-        $dateNormalizer->setCallbacks(['createdAt' => $callback, 'lastLogin' => $callback]);
+        $dateNormalizer->setCallbacks(
+            [
+                'createdAt' => $callback,
+                'lastLogin' => $callback,
+                'registrationDate' => $callback,
+                'memberSince' => $callback,
+            ]
+        );
 
         $normalizers = [$dateNormalizer];
         $serializer = new Serializer($normalizers, [new JsonEncoder()]);

@@ -70,6 +70,14 @@ $properties = json_decode($propertiesToJson);
 
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
+        if ($key === 'extraFields') {
+            $personalDataContent .= '<li>'.$key.': </li><ul>';
+            foreach ($value as $subValue) {
+                $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+            }
+            $personalDataContent .= '</ul>';
+        }
+
         /*foreach ($value as $subValue) {
             foreach ($subValue as $subSubValue) {
                 var_dump($subSubValue);

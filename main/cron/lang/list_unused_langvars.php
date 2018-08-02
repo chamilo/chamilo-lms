@@ -7,7 +7,7 @@
 /**
  * Includes and declarations.
  */
-die();
+//die();
 require_once __DIR__.'/../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
@@ -32,32 +32,74 @@ echo count($defined_terms)." terms were found in language files<br />";
 $usedTerms = [];
 $l = strlen(api_get_path(SYS_PATH));
 $files = getAllPhpFiles(api_get_path(SYS_PATH));
+$files[] = api_get_path(SYS_PATH).'main/install/data.sql';
 // Browse files
 foreach ($files as $file) {
     //echo 'Analyzing '.$file."<br />";
     $shortFile = substr($file, $l);
     //echo 'Analyzing '.$shortFile."<br />";
     $lines = file($file);
+    $isDataSQL = false;
+    if (substr($file, -21) === 'main/install/data.sql') {
+        $isDataSQL = true;
+    }
     // Browse lines inside file $file
     foreach ($lines as $line) {
-        $myTerms = [];
-        $res = preg_match_all('/get_lang\(\'(\\w*)\'\)/', $line, $myTerms);
-        if ($res > 0) {
-            foreach ($myTerms[1] as $term) {
-                if (substr($term, 0, 4) == 'lang') {
-                    $term = substr($term, 4);
-                }
-                $usedTerms[$term] = $shortFile;
-            }
-        } else {
+        if ($isDataSQL) {
+            // Check main/install/data.sql
+            // Should recognize stuff like
+            // INSERT INTO settings_current (variable, type, category, selected_value, title, comment) VALUES ('enable_profile_user_address_geolocalization', 'radio', 'User', 'false', 'EnableProfileUsersAddressGeolocalizationTitle', 'EnableProfileUsersAddressGeolocalizationComment');
+            // INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'true', 'Yes');
+            // ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
             $res = 0;
-            $res = preg_match_all('/\{[\'"](\\w*)[\'"]\|get_lang\}/', $line, $myTerms);
+            $myTerms = [];
+            $res = preg_match_all('/\'(\w*)\',/', $line, $myTerms);
             if ($res > 0) {
                 foreach ($myTerms[1] as $term) {
                     if (substr($term, 0, 4) == 'lang') {
                         $term = substr($term, 4);
                     }
                     $usedTerms[$term] = $shortFile;
+                }
+
+            }
+        } else {
+            $myTerms = [];
+            $res = preg_match_all('/get_lang\(\'(\\w*)\'\)/', $line, $myTerms);
+            if ($res > 0) {
+                foreach ($myTerms[1] as $term) {
+                    if (substr($term, 0, 4) == 'lang') {
+                        $term = substr($term, 4);
+                    }
+                    $usedTerms[$term] = $shortFile;
+                }
+            } else {
+                $res = 0;
+                $myTerms = [];
+                // Should catch:
+                // {{ 'CopyTextToClipboard' | get_lang }}
+                // {{ "HelloX" | get_lang | format(show_user_info.user_info.complete_name) }}
+                // {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                $res = preg_match_all('/\{\s*[\'"](\w*)[\'"]\s*\|\s*get_lang\s*(\|\s*\w*(\s*\([\w_\.,\s]*\))?\s*)?\}/', $line, $myTerms);
+                if ($res > 0) {
+                    foreach ($myTerms[1] as $term) {
+                        if (substr($term, 0, 4) == 'lang') {
+                            $term = substr($term, 4);
+                        }
+                        $usedTerms[$term] = $shortFile;
+                    }
+                }
+                // {{ display.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}
+                // {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
+                $myTerms = [];
+                $res = preg_match_all('/\{\s*[\w\.]*\([\'"](\w*)[\'"]\s*\|\s*get_lang\s*(,\s*[\w_\.,\s\|\'"]*\s*)?\)\s*\}/', $line, $myTerms);
+                if ($res > 0) {
+                    foreach ($myTerms[1] as $term) {
+                        if (substr($term, 0, 4) == 'lang') {
+                            $term = substr($term, 4);
+                        }
+                        $usedTerms[$term] = $shortFile;
+                    }
                 }
             }
         }

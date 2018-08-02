@@ -736,11 +736,11 @@ class CourseManager
      * @author Hugues Peeters
      * @author Roan Embrechts
      *
-     * @param int    $user_id              the id of the user
-     * @param string $courseCode           the course code
-     * @param int    $status               (optional) The user's status in the course
-     * @param int    $userCourseCategoryId
-     * @param   int The user category in which this subscription will be classified
+     * @param int    $user_id    the id of the user
+     * @param string $courseCode the course code
+     * @param int    $status     (optional) The user's status in the course
+     * @param int    $userCourseCategoryId The user category in which this subscription will be classified
+     * @param bool   $checkTeacherPermission
      *
      * @return false|string true if subscription succeeds, boolean false otherwise
      * @assert ('', '') === false
@@ -749,7 +749,8 @@ class CourseManager
         $user_id,
         $courseCode,
         $status = STUDENT,
-        $userCourseCategoryId = 0
+        $userCourseCategoryId = 0,
+        $checkTeacherPermission = true
     ) {
         $debug = false;
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -789,7 +790,7 @@ class CourseManager
             return false; // The user has been subscribed to the course.
         }
 
-        if (!api_is_course_admin()) {
+        if ($checkTeacherPermission && !api_is_course_admin()) {
             // Check in advance whether subscription is allowed or not for this course.
             $sql = "SELECT code, visibility FROM $course_table
                     WHERE id = $courseId AND subscribe = '".SUBSCRIBE_NOT_ALLOWED."'";

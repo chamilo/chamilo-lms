@@ -547,7 +547,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
                 'TermsAndConditions'
             ).'</a>'
         );
-        $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('legal_accept', get_lang('WeNeedYouToAcceptOurTreatmentOfYourData'), 'required');
     } else {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);

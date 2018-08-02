@@ -8184,11 +8184,15 @@ $Driver = "Pilote";
 $UploadTmpDirInfo = "Le répertoire d'upload temporaire est un espace sur le serveur où les fichiers sont déposés temporairement avant d'être traités par PHP.";
 $GenerateCustomReport = "Générer un rapport personnalisé";
 $ToDo = "À faire";
+$PleaseEnterURL = "Veuillez introduire l'URL";
 $IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere = "Si vous souhaitez obtenir le certificat et/ou les compétences associés à ce cours, il est nécessaire d'acquérir le droit au certificat. Vous pouvez visualiser le catalogue de services ici: %s";
 $SubSkill = "Sous-compétence";
 $AddMultipleUsersToCalendar = "Ajouter plusieurs utilisateurs au calendrier";
 $UpdateCalendar = "Mettre le calendrier à jour";
 $ControlPoint = "Point de contrôle";
+$MessageQuestionCertainty = "Suivez les instructions ci-dessous pour visualiser vos résultats pour le test %s:<br /><br />
+1. Connectez-vous à la plateforme (utilisateur/mot de passe) sur: %s<br />
+2. Suivez le lien suivant: %s<br />";
 $SessionMinDuration = "Durée minimum de session";
 $CanNotTranslate = "Impossible de traduire";
 $AddSkills = "Ajouter compétences";
@@ -8200,4 +8204,7 @@ $DependsOnGradebook = "Dépend du cahier de note";
 $ThisGradebookDoesntHaveDependencies = "Ce cahier de notes n'a aucune dépendance";
 $CourseIntroductionsAllImportedSuccessfully = "Les introductions ont toutes été importées avec succès";
 $FilterSessions = "Filtrer sessions";
+$ScoreModel = "Modèle d'évaluation";
+$SyncDatabaseWithSchema = "Synchroniser la base de données avec le schéma";
+$SkillRelCourses = "Associations cours-compétences";
 ?>

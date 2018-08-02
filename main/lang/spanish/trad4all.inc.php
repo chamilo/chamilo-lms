@@ -8276,11 +8276,15 @@ $Driver = "Piloto";
 $UploadTmpDirInfo = "La carpeta de subida temporal es un espacio en el servidor donde los archivos son subidos antes de ser filtrados y tratados por PHP.";
 $GenerateCustomReport = "Generar reporte personalizado";
 $ToDo = "Por hacer";
+$PleaseEnterURL = "Ingrese la URL";
 $IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere = "Si desea obtener el certificado y/o la competencia de este curso, necesita adquirir el derecho a certificado. Puede visitar el catálogo de servicios aquí: %s";
 $SubSkill = "Sub-competencia";
 $AddMultipleUsersToCalendar = "Agregar múltiples usuarios al calendario";
 $UpdateCalendar = "Actualizar calendario";
 $ControlPoint = "Punto de control";
+$MessageQuestionCertainty = "Siga las instrucciones a continuación para ver sus resultados de la prueba '%s' a detalle:<br /><br />
+1. Conéctese a la plataforma (con login/constraseña) en: %s<br />
+2. De click en el enlace siguiente: Ms<br />";
 $SessionMinDuration = "Duración mín de sesión";
 $CanNotTranslate = "No se pudo traducir";
 $AddSkills = "Agregar competencias";
@@ -8292,4 +8296,7 @@ $DependsOnGradebook = "Depende de la evaluación";
 $ThisGradebookDoesntHaveDependencies = "Esta evaluación no tiene dependencia";
 $CourseIntroductionsAllImportedSuccessfully = "Todas las introducciones de cursos fueron importadas exitosamente.";
 $FilterSessions = "Filtrar sesiones";
+$ScoreModel = "Modelo de evaluación";
+$SyncDatabaseWithSchema = "Sincronizar la base de datos con el esquema";
+$SkillRelCourses = "Asociaciones cursos-competencias";
 ?>

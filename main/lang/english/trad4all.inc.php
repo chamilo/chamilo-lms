@@ -8254,11 +8254,15 @@ $Driver = "Driver";
 $UploadTmpDirInfo = "The temporary upload directory is a space on the server where files are uploaded before being filtered and treated by PHP.";
 $GenerateCustomReport = "Generate custom report";
 $ToDo = "To do";
+$PleaseEnterURL = "Please enter the URL";
 $IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere = "If you want to get the certificate and/or skills associated with this course, you need to buy the certificate service. You can go to the services catalog by clicking this link: %s";
 $SubSkill = "Sub-skill";
 $AddMultipleUsersToCalendar = "Add multiple users to calendar";
 $UpdateCalendar = "Update calendar";
 $ControlPoint = "Control point";
+$MessageQuestionCertainty = "Please follow the instructions below to check your results for test %s.<br /><br />
+1. Connect to the platform (username/password) at: %s<br />
+2. Click the following link: %s<br />";
 $SessionMinDuration = "Session min duration";
 $CanNotTranslate = "Could not translate";
 $AddSkills = "Add skills";
@@ -8270,4 +8274,7 @@ $DependsOnGradebook = "Depends on gradebook";
 $ThisGradebookDoesntHaveDependencies = "This gradebook has no dependency";
 $CourseIntroductionsAllImportedSuccessfully = "Course introductions all imported successfully.";
 $FilterSessions = "Filter sessions";
+$ScoreModel = "Score model";
+$SyncDatabaseWithSchema = "Synchronize the database with the schema";
+$SkillRelCourses = "Courses-Skills associations";
 ?>

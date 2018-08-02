@@ -215,6 +215,7 @@ class Database
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
         $connection->executeQuery('SET sql_mode = "";');
+        $connection->executeQuery('SET SESSION sql_mode = ""');
 
         if ($returnConnection) {
             return $connection;

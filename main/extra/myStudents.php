@@ -2219,7 +2219,7 @@ if (empty($_GET['details'])) {
     <!-- line about exercises -->
     <table class="data_table">
         <tr>
-            <th><?php echo get_lang('Exercices'); ?></th>
+            <th><?php echo get_lang('Exercises'); ?></th>
             <th><?php echo get_lang('LearningPath'); ?></th>
             <th><?php echo get_lang('AvgCourseScore').' '.Display:: return_icon(
                         'info3.gif',
@@ -2234,7 +2234,7 @@ if (empty($_GET['details'])) {
 
         $csv_content[] = [];
     $csv_content[] = [
-            get_lang('Exercices'),
+            get_lang('Exercises'),
             get_lang('LearningPath'),
             get_lang('AvgCourseScore'),
             get_lang('Attempts'),

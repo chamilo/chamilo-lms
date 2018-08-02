@@ -27,23 +27,23 @@ class LegalManager
      */
     public static function add($language, $content, $type, $changes)
     {
-        $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
         $type = (int) $type;
         $time = time();
 
         if ($last['content'] != $content) {
-            $version = (int) self::get_last_condition_version($language);
+            $version = self::getLastVersion($language);
             $version++;
             $params = [
                 'language_id' => $language,
                 'content' => $content,
                 'changes' => $changes,
                 'type' => $type,
-                'version' => (int) $version,
+                'version' => $version,
                 'date' => $time,
             ];
-            Database::insert($legal_table, $params);
+            Database::insert($legalTable, $params);
 
             return true;
         } elseif ($last['type'] != $type && $language == $last['language_id']) {
@@ -54,7 +54,7 @@ class LegalManager
                 'type' => $type,
                 'date' => $time,
             ];
-            Database::update($legal_table, $params, ['id => ?' => $id]);
+            Database::update($legalTable, $params, ['id = ?' => $id]);
 
             return true;
         } else {
@@ -68,9 +68,9 @@ class LegalManager
     public static function delete($id)
     {
         /*
-        $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $id = (int) $id;
-        $sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
+        $sql = "DELETE FROM $legalTable WHERE id = '".$id."'";
         */
     }
 
@@ -79,9 +79,9 @@ class LegalManager
      *
      * @param int $language language id
      *
-     * @return array all the info of a Term and condition
+     * @return int
      */
-    public static function get_last_condition_version($language)
+    public static function getLastVersion($language)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $language = (int) $language;
@@ -91,7 +91,7 @@ class LegalManager
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
-            return $row['version'];
+            return (int) $row['version'];
         } else {
             return 0;
         }

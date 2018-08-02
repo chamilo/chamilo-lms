@@ -2488,6 +2488,18 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAchievedSkills($value)
+    {
+        $this->achievedSkills = $value;
+
+        return $this;
+    }
+
+    /**
      * Check if the user has the skill.
      *
      * @param Skill $skill The skill
@@ -2550,4 +2562,26 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCommentedUserSkills()
+    {
+        return $this->commentedUserSkills;
+    }
+
+    /**
+     * @param mixed $commentedUserSkills
+     *
+     * @return User
+     */
+    public function setCommentedUserSkills($commentedUserSkills)
+    {
+        $this->commentedUserSkills = $commentedUserSkills;
+
+        return $this;
+    }
+
+
 }

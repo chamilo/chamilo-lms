@@ -482,13 +482,15 @@ class UserRepository extends EntityRepository
         $user->setGroups([]);
         $user->setCurriculumItems([]);
         $user->setPortals([]);
+        $user->setSessionCourseSubscriptions([]);
+        $user->setSessionAsGeneralCoach([]);
+        $user->setAchievedSkills([]);
+        $user->setCommentedUserSkills([]);
 
         $extraFieldValues = new \ExtraFieldValue('user');
         $items = $extraFieldValues->getAllValuesByItem($userId);
         $user->setExtraFields($items);
 
-        $user->setSessionCourseSubscriptions([]);
-        $user->setSessionAsGeneralCoach([]);
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {

@@ -26,105 +26,105 @@ class CTool
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="link", type="string", length=255, nullable=false)
      */
-    private $link;
+    protected $link;
 
     /**
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
-    private $image;
+    protected $image;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
-    private $visibility;
+    protected $visibility;
 
     /**
      * @var string
      *
      * @ORM\Column(name="admin", type="string", length=255, nullable=true)
      */
-    private $admin;
+    protected $admin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
      */
-    private $address;
+    protected $address;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="added_tool", type="boolean", nullable=true)
      */
-    private $addedTool;
+    protected $addedTool;
 
     /**
      * @var string
      *
      * @ORM\Column(name="target", type="string", length=20, nullable=false)
      */
-    private $target;
+    protected $target;
 
     /**
      * @var string
      *
      * @ORM\Column(name="category", type="string", length=20, nullable=false, options={"default" = "authoring"})
      */
-    private $category;
+    protected $category;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="custom_icon", type="string", length=255, nullable=true)
      */
-    private $customIcon;
+    protected $customIcon;
 
     /**
      * @return int

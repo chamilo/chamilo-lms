@@ -64,8 +64,12 @@ $strings['MaxUsersInConferenceRoom'] = 'Nombre max d\'utilisateurs simultanés d
 $strings['global_conference_allow_roles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
 $strings['CreatedAt'] = "Créé à";
 
-$strings['interface'] = 'Interface';
+$strings['interface'] = 'Interface par défaut';
 $strings['launch_type'] = 'Type d\'interface au lancement';
 $strings['EnterConferenceFlash'] = 'Entrer dans la salle de conférence (Flash)';
 $strings['EnterConferenceHTML5'] = 'Entrer dans la salle de conférence (HTML5)';
 $strings['ParticipantsWillUseSameInterface'] = 'Les apprenants utiliseront la même interface que vous';
+$strings['SetByDefault'] = 'Lancement de l\'interface par défaut';
+$strings['SetByTeacher'] = 'Choisi par le professeur';
+$strings['SetByStudent'] = 'Choisi par l\'apprenant';
+

@@ -69,3 +69,7 @@ $strings['launch_type'] = 'Wahl der Benutzeroberfläche beim Start';
 $strings['EnterConferenceFlash'] = 'Videokonferenz starten (Flash-Client)';
 $strings['EnterConferenceHTML5'] = 'Videokonferenz starten (HTML5-Client)';
 $strings['ParticipantsWillUseSameInterface'] = 'Die Teilnehmer verwenden dieselbe Benutzeroberfläche wie Sie';
+$strings['SetByDefault'] = 'Auf die Standardbenutzeroberfläche einstellen';
+$strings['SetByTeacher'] = 'Set von Lehrer';
+$strings['SetByStudent'] = 'Set von Teilnehmer';
+

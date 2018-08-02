@@ -64,11 +64,11 @@ $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference r
 $strings['global_conference_allow_roles'] = "Global conference link only visible for this user roles";
 $strings['CreatedAt'] = 'Created at';
 
-$strings['interface'] = 'Interface';
-$strings['launch_type'] = 'Client launch type';
+$strings['interface'] = 'Default Interface';
+$strings['launch_type'] = 'Client launch choice';
 $strings['EnterConferenceFlash'] = 'Enter the videoconference (Flash client)';
 $strings['EnterConferenceHTML5'] = 'Enter the videoconference (HTML5 client)';
 $strings['ParticipantsWillUseSameInterface'] = 'Participants will use the same interface as you';
 $strings['SetByStudent'] = 'Set by student';
 $strings['SetByTeacher'] = 'Set by teacher';
-$strings['SetByDefault'] = 'Default';
+$strings['SetByDefault'] = 'Set to default interface';

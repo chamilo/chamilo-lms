@@ -653,5 +653,11 @@ if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);
-    file_put_contents($file, $contents);
+    if (PHP_SAPI === 'cli') {
+        // In CLI mode, the '.$file.' file does not get written on disk to avoid permissions issues.
+    } elseif (!is_writable($file)) {
+        error_log('Error: '.$file.' could not be written. Please check permissions. The web server must be able to write there.');
+    } else {
+        @file_put_contents($file, $contents);
+    }
 }

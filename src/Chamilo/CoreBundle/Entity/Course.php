@@ -38,6 +38,15 @@ class Course
     const HIDDEN = 4;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -82,22 +91,13 @@ class Course
     protected $issuedSkills;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
@@ -108,161 +108,161 @@ class Course
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
      */
-    private $directory;
+    protected $directory;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_language", type="string", length=20, nullable=true, unique=false)
      */
-    private $courseLanguage;
+    protected $courseLanguage;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="category_code", type="string", length=40, nullable=true, unique=false)
      */
-    private $categoryCode;
+    protected $categoryCode;
 
     /**
      * @var bool
      * @Assert\NotBlank()
      * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
      */
-    private $visibility;
+    protected $visibility;
 
     /**
      * @var int
      *
      * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
      */
-    private $showScore;
+    protected $showScore;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
      */
-    private $tutorName;
+    protected $tutorName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
      */
-    private $visualCode;
+    protected $visualCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
-    private $departmentName;
+    protected $departmentName;
 
     /**
      * @var string
      * @Assert\Url()
      * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
      */
-    private $departmentUrl;
+    protected $departmentUrl;
 
     /**
      * @var int
      *
      * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
      */
-    private $diskQuota;
+    protected $diskQuota;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
      */
-    private $lastVisit;
+    protected $lastVisit;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_edit", type="datetime", nullable=true, unique=false)
      */
-    private $lastEdit;
+    protected $lastEdit;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=true, unique=false)
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
-    private $expirationDate;
+    protected $expirationDate;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="subscribe", type="boolean", nullable=true, unique=false)
      */
-    private $subscribe;
+    protected $subscribe;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="unsubscribe", type="boolean", nullable=true, unique=false)
      */
-    private $unsubscribe;
+    protected $unsubscribe;
 
     /**
      * @var string
      *
      * @ORM\Column(name="registration_code", type="string", length=255, nullable=true, unique=false)
      */
-    private $registrationCode;
+    protected $registrationCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="legal", type="text", nullable=true, unique=false)
      */
-    private $legal;
+    protected $legal;
 
     /**
      * @var int
      *
      * @ORM\Column(name="activate_legal", type="integer", nullable=true, unique=false)
      */
-    private $activateLegal;
+    protected $activateLegal;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="add_teachers_to_sessions_courses", type="boolean", nullable=true)
      */
-    private $addTeachersToSessionsCourses;
+    protected $addTeachersToSessionsCourses;
 
     /**
      * @var int
      *
      * @ORM\Column(name="course_type_id", type="integer", nullable=true, unique=false)
      */
-    private $courseTypeId;
+    protected $courseTypeId;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\NotebookBundle\Entity\CNotebook", mappedBy="course")
@@ -280,7 +280,7 @@ class Course
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    private $room;
+    protected $room;
 
     /**
      * Constructor.
@@ -296,7 +296,7 @@ class Course
      */
     public function __toString()
     {
-        return strval($this->getTitle());
+        return (string) $this->getTitle();
     }
 
     /**

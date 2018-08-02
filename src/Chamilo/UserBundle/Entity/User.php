@@ -264,7 +264,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     protected $groups;
 
-    //private $isActive;
+    //protected $isActive;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user").
@@ -285,7 +285,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @var ArrayCollection
-     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $extraFields;
 

@@ -38,7 +38,7 @@ class AccessUrlRelCourse
      */
     public function __toString()
     {
-        return strval('-');
+        return '-';
     }
 
     /**

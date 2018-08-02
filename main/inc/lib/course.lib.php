@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -6708,5 +6709,36 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public static function hasPicture(Course $course)
+    {
+        return file_exists(api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png');
+    }
+
+    /**
+     * Get the course picture path.
+     *
+     * @param Course $course
+     * @param bool   $fullSize
+     *
+     * @return null|string
+     */
+    public static function getPicturePath(Course $course, $fullSize = false)
+    {
+        if (!self::hasPicture($course)) {
+            return null;
+        }
+
+        if ($fullSize) {
+            return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+        }
+
+        return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png';
     }
 }

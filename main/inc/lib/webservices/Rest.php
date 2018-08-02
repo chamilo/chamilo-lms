@@ -220,7 +220,7 @@ class Rest extends WebService
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'directory' => $course->getDirectory(),
-                'urlPicture' => $course->getPicturePath(true),
+                'urlPicture' => CourseManager::getPicturePath($course, true),
                 'teachers' => $teachers,
             ];
         }
@@ -247,7 +247,7 @@ class Rest extends WebService
             'title' => $this->course->getTitle(),
             'code' => $this->course->getCode(),
             'directory' => $this->course->getDirectory(),
-            'urlPicture' => $this->course->getPicturePath(true),
+            'urlPicture' => CourseManager::getPicturePath($this->course, true),
             'teachers' => $teachers,
             'tools' => array_map(
                 function ($tool) {

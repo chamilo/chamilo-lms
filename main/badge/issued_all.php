@@ -58,7 +58,7 @@ $skillInfo = [
     'short_code' => $skill->getShortCode(),
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
-    'badge_image' => $skill->getWebIconPath(),
+    'badge_image' => Skill::getWebIconPath($skill),
     'courses' => [],
 ];
 
@@ -86,7 +86,7 @@ foreach ($userSkills as $index => $skillIssue) {
         'user_id' => $skillIssue->getUser()->getId(),
         'user_complete_name' => $skillIssue->getUser()->getCompleteName(),
         'skill_id' => $skillIssue->getSkill()->getId(),
-        'skill_badge_image' => $skillIssue->getSkill()->getWebIconPath(),
+        'skill_badge_image' => Skill::getWebIconPath($skillIssue->getSkill()),
         'skill_name' => $skillIssue->getSkill()->getName(),
         'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
         'skill_description' => $skillIssue->getSkill()->getDescription(),

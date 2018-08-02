@@ -2545,7 +2545,8 @@ class Skill extends Model
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=search_skills_in_course&course_id='.$courseId.'&session_id='.$sessionId;
+        $url = api_get_path(WEB_AJAX_PATH).
+            'skill.ajax.php?a=search_skills_in_course&course_id='.$courseId.'&session_id='.$sessionId;
         $form->addSelectAjax(
             'skills',
             get_lang('Skills'),
@@ -2873,5 +2874,32 @@ class Skill extends Model
         }
 
         return true;
+    }
+
+    /**
+     *
+     * Get the icon (badge image) URL.
+     *
+     * @param SkillEntity $skill
+     * @param bool        $getSmall Optional. Allow get the small image
+     *
+     * @return string
+     *
+     */
+    public static function getWebIconPath(SkillEntity $skill, $getSmall = false)
+    {
+        if ($getSmall) {
+            if (empty($skill->getIcon())) {
+                return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
+            }
+
+            return api_get_path(WEB_UPLOAD_PATH).'badges/'.sha1($skill->getName()).'-small.png';
+        }
+
+        if (empty($skill->getIcon())) {
+            return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+        }
+
+        return api_get_path(WEB_UPLOAD_PATH)."badges/{$skill->getIcon()}";
     }
 }

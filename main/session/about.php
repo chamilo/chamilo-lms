@@ -121,7 +121,7 @@ foreach ($sessionCourses as $sessionCourse) {
     $courses[] = [
         'course' => $sessionCourse,
         'description' => $courseDescription,
-        'image' => $sessionCourse->getPicturePath(true),
+        'image' => CourseManager::getPicturePath($sessionCourse, true),
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,

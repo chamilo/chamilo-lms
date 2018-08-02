@@ -380,13 +380,13 @@ class SkillRelUser
      */
     public function getAssertionUrl()
     {
-        $url = api_get_path(WEB_CODE_PATH)."badge/assertion.php?";
+        $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
 
         $url .= http_build_query([
-            'user' => $this->user->getId(),
-            'skill' => $this->skill->getId(),
-            'course' => $this->course ? $this->course->getId() : 0,
-            'session' => $this->session ? $this->session->getId() : 0,
+            'user' => $this->getUser()->getId(),
+            'skill' => $this->getSkill()->getId(),
+            'course' => $this->course ? $this->getCourse()->getId() : 0,
+            'session' => $this->session ? $this->getSession()->getId() : 0,
         ]);
 
         return $url;

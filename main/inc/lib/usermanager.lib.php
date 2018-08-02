@@ -526,7 +526,7 @@ class UserManager
                     } else {
                         $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
                         if ($sendToInbox) {
-                            $adminList = UserManager::get_all_administrators();
+                            $adminList = self::get_all_administrators();
                             $senderId = 1;
                             if (!empty($adminList)) {
                                 $adminInfo = current($adminList);
@@ -5904,8 +5904,8 @@ SQL;
             // Filling session variables with new data
             Session::write('_uid', $userId);
             Session::write('_user', $userInfo);
-            Session::write('is_platformAdmin', (bool) UserManager::is_admin($userId));
-            Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
+            Session::write('is_platformAdmin', (bool) self::is_admin($userId));
+            Session::write('is_allowedCreateCourse', $userInfo['status'] == 1);
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
 
@@ -6065,26 +6065,29 @@ SQL;
         }
         $em = Database::getManager();
         $user = api_get_user_entity($userId);
-        $uniqueId = uniqid('anon');
-        $user->setFirstname($uniqueId);
-        $user->setLastname($uniqueId);
-        $user->setBiography('');
-        $user->setAddress('');
-        $user->setCurriculumItems(null);
-        $user->setDateOfBirth(null);
-        $user->setCompetences('');
-        $user->setDiplomas('');
-        $user->setOpenarea('');
-        $user->setTeach('');
-        $user->setProductions(null);
-        $user->setOpenid('');
-        $user->setEmailCanonical($uniqueId.'@example.com');
-        $user->setEmail($uniqueId.'@example.com');
-        $user->setUsername($uniqueId);
-        $user->setUsernameCanonical($uniqueId);
-        $user->setPhone('');
-        $user->setOfficialCode('');
-        UserManager::deleteUserPicture($userId);
+        $uniqueId = uniqid('anon', true);
+        $user
+            ->setFirstname($uniqueId)
+            ->setLastname($uniqueId)
+            ->setBiography('')
+            ->setAddress('')
+            ->setCurriculumItems(null)
+            ->setDateOfBirth(null)
+            ->setCompetences('')
+            ->setDiplomas('')
+            ->setOpenarea('')
+            ->setTeach('')
+            ->setProductions(null)
+            ->setOpenid('')
+            ->setEmailCanonical($uniqueId.'@example.com')
+            ->setEmail($uniqueId.'@example.com')
+            ->setUsername($uniqueId)
+            ->setUsernameCanonical($uniqueId)
+            ->setPhone('')
+            ->setOfficialCode('')
+        ;
+
+        self::deleteUserPicture($userId);
         // The IP address is a border-case personal data, as it does
         // not directly allow for personal identification (it is not
         // a completely safe value in most countries - the IP could

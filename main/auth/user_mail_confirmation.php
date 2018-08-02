@@ -9,7 +9,6 @@ if (!ctype_alnum($token)) {
     $token = '';
 }
 
-/** @var \Chamilo\UserBundle\Entity\User $user */
 $user = UserManager::getManager()->findUserByConfirmationToken($token);
 
 if ($user) {
@@ -28,13 +27,23 @@ if ($user) {
     if (!empty($_GET['s'])) {
         $sessionId = (int) $_GET['s'];
     }
+
     // Get URL to a course, to a session, or an empty string
     $courseUrl = api_get_course_url($courseCode, $sessionId);
     if (!empty($courseUrl)) {
         $url = $courseUrl;
     }
 
-    Display::addFlash(Display::return_message(get_lang('UserConfirmedNowYouCanLogInThePlatform'), 'success'));
+    Event::addEvent(
+        LOG_USER_CONFIRMED_EMAIL,
+        LOG_USER_OBJECT,
+        api_get_user_info($user->getId()),
+        api_get_utc_datetime()
+    );
+
+    Display::addFlash(
+        Display::return_message(get_lang('UserConfirmedNowYouCanLogInThePlatform'), 'success')
+    );
     header('Location: '.$url);
     exit;
 } else {

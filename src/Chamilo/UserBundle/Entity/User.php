@@ -685,10 +685,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @param $items
+     *
+     * @return $this
      */
     public function setCurriculumItems($items)
     {
         $this->curriculumItems = $items;
+
+        return $this;
     }
 
     /**
@@ -749,10 +753,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @param ArrayCollection $classes
+     *
+     * @return $this
      */
     public function setClasses($classes)
     {
         $this->classes = $classes;
+
+        return $this;
     }
 
     /**

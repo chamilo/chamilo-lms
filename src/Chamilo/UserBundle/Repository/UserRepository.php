@@ -492,6 +492,10 @@ class UserRepository extends EntityRepository
 
         $dateNormalizer = new GetSetMethodNormalizer();
 
+        $dateNormalizer->setCircularReferenceHandler(function ($object) {
+            return get_class($object);
+        });
+
         $callback = function ($dateTime) {
             return $dateTime instanceof \DateTime
                 ? $dateTime->format(\DateTime::ISO8601)

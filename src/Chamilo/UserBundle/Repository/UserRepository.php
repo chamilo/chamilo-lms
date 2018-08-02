@@ -455,12 +455,12 @@ class UserRepository extends EntityRepository
 
         // Dummy content
         $user->setDateOfBirth(null);
-        $user->setBiography($noDataLabel);
+        //$user->setBiography($noDataLabel);
         $user->setFacebookData($noDataLabel);
         $user->setFacebookName($noDataLabel);
         $user->setFacebookUid($noDataLabel);
-        $user->setImageName($noDataLabel);
-        $user->setTwoStepVerificationCode($noDataLabel);
+        //$user->setImageName($noDataLabel);
+        //$user->setTwoStepVerificationCode($noDataLabel);
         $user->setGender($noDataLabel);
         $user->setGplusData($noDataLabel);
         $user->setGplusName($noDataLabel);
@@ -472,6 +472,9 @@ class UserRepository extends EntityRepository
         $user->setTwitterUid($noDataLabel);
         $user->setWebsite($noDataLabel);
         $user->setToken($noDataLabel);
+
+        //$courses = $user->getCourses();
+
         $user->setCourses([]);
         $user->setClasses([]);
         $user->setDropBoxSentFiles([]);
@@ -486,7 +489,9 @@ class UserRepository extends EntityRepository
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {
             $login = $this->getLastLogin($user);
-            $lastLogin = $login->getLoginDate();
+            if ($login) {
+                $lastLogin = $login->getLoginDate();
+            }
         }
         $user->setLastLogin($lastLogin);
 
@@ -495,6 +500,29 @@ class UserRepository extends EntityRepository
         $dateNormalizer->setCircularReferenceHandler(function ($object) {
             return get_class($object);
         });
+
+        $ignore = [
+            'twoStepVerificationCode',
+            'biography',
+            'dateOfBirth',
+            'gender',
+            'facebookData',
+            'facebookName',
+            'facebookUid',
+            'gplusData',
+            'gplusName',
+            'gplusUid',
+            'locale',
+            'timezone',
+            'twitterData',
+            'twitterName',
+            'twitterUid',
+            'gplusUid',
+            'token',
+            'website',
+        ];
+
+        $dateNormalizer->setIgnoredAttributes($ignore);
 
         $callback = function ($dateTime) {
             return $dateTime instanceof \DateTime
@@ -516,10 +544,12 @@ class UserRepository extends EntityRepository
      * This might be different from user.last_login in the case of legacy users
      * as user.last_login was only implemented in 1.10 version with a default
      * value of NULL (not the last record from track_e_login).
+     *
      * @param User $user
      *
-     * @return null|TrackELogin
      * @throws \Exception
+     *
+     * @return null|TrackELogin
      */
     public function getLastLogin(User $user)
     {

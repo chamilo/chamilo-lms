@@ -36,7 +36,7 @@ class SessionRelCourse
     protected $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
@@ -46,7 +46,7 @@ class SessionRelCourse
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * Constructor.

@@ -6019,9 +6019,13 @@ class Exercise
 
         $array = [];
         if (!empty($user_data)) {
+            $userFullName = $user_data['complete_name'];
+            if (api_is_teacher() || api_is_platform_admin(true, true)) {
+                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.$user_data['complete_name'].'</a>';
+            }
             $array[] = [
                 'title' => get_lang('Name'),
-                'content' => $user_data['complete_name'],
+                'content' => $userFullName,
             ];
             $array[] = [
                 'title' => get_lang('Username'),

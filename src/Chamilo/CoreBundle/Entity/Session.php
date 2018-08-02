@@ -1165,20 +1165,20 @@ class Session
     /**
      * @return int
      */
-    public function getPosition()
+    /*public function getPosition()
     {
         return $this->position;
-    }
+    }*/
 
     /**
      * @param int $position
      *
      * @return Session
      */
-    public function setPosition($position)
+    /*public function setPosition($position)
     {
         $this->position = $position;
 
         return $this;
-    }
+    }*/
 }

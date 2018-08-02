@@ -770,6 +770,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Order sessions
 // Requires DB change: ALTER TABLE session ADD COLUMN position INT DEFAULT 0;
 // Requires edit Entity Session: src/Chamilo/CoreBundle/Entity/Session.php uncomment "position" variable.
+// Requires uncomment the position get and set
 //$_configuration['session_list_order'] = false;
 
 // Show skills as a hierarchical table

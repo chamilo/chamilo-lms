@@ -11,6 +11,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+
 if (!api_get_configuration_value('enable_gdpr')) {
     api_not_allowed(true);
 }
@@ -160,6 +161,12 @@ if ($actions) {
     $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }
 
+$termLink = '';
+if (api_get_setting('allow_terms_conditions') === 'true') {
+    $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
+    $termLink = Display::url($url, $url);
+}
+
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') === 'true') {
@@ -170,5 +177,6 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
+$tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');
 $tpl->display($socialLayout);

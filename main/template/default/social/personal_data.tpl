@@ -1,4 +1,5 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
+{% import 'macro/macro.tpl'|get_template as display %}
 
 {% block content %}
 <div class="row">
@@ -73,6 +74,10 @@
                     {{ personal_data.officer_role }}
                 </div>
             </div>
+        {% endif %}
+
+        {% if term_link %}
+            {{ display.panel('TermsAndConditions'|get_lang, term_link ) }}
         {% endif %}
     </div>
 </div>

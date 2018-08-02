@@ -39,14 +39,12 @@ $actions = Display::url(
 
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 
-
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $socialMenuBlock);
 } else {
     $tpl->assign('social_menu_block', '');
-
 }
 $tpl->assign('term', $term);
 

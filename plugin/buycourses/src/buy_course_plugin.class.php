@@ -2193,6 +2193,30 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * @param Session $session
+     *
+     * @return array
+     */
+    public function getBuyCoursePluginPrice(Session $session)
+    {
+        // start buycourse validation
+        // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+        $isThisCourseInSale = $this->buyCoursesForGridCatalogValidator($session->getId(), self::PRODUCT_TYPE_SESSION);
+        $return = [];
+
+        if ($isThisCourseInSale) {
+            // set the Price label
+            $return['html'] = $isThisCourseInSale['html'];
+            // set the Buy button instead register.
+            if ($isThisCourseInSale['verificator']) {
+                $return['buy_button'] = $this->returnBuyCourseButton($session->getId(), self::PRODUCT_TYPE_SESSION);
+            }
+        }
+        // end buycourse validation
+        return $return;
+    }
+
+    /**
      * Filter the registered courses for show in plugin catalog.
      *
      * @return array
@@ -2518,29 +2542,4 @@ class BuyCoursesPlugin extends Plugin
             ['id = ?' => (int) $serviceSaleId]
         );
     }
-
-    /**
-     * @param Session $session
-     *
-     * @return array
-     */
-    public function getBuyCoursePluginPrice(Session $session)
-    {
-        // start buycourse validation
-        // display the course price and buy button if the buycourses plugin is enabled and this course is configured
-        $isThisCourseInSale = $this->buyCoursesForGridCatalogValidator($session->getId(), self::PRODUCT_TYPE_SESSION);
-        $return = [];
-
-        if ($isThisCourseInSale) {
-            // set the Price label
-            $return['html'] = $isThisCourseInSale['html'];
-            // set the Buy button instead register.
-            if ($isThisCourseInSale['verificator']) {
-                $return['buy_button'] = $this->returnBuyCourseButton($session->getId(), self::PRODUCT_TYPE_SESSION);
-            }
-        }
-        // end buycourse validation
-        return $return;
-    }
-
 }

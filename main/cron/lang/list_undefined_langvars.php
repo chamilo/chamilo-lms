@@ -25,12 +25,17 @@ foreach ($list as $entry) {
 // get only the array keys (the language variables defined in language files)
 $defined_terms = array_flip(array_keys($terms));
 $terms = null;
+$hidePlugins = !empty($_GET['hidePlugins']);
 
 // now get all terms found in all PHP files of Chamilo (this takes some time and memory)
 $undefined_terms = [];
 $l = strlen(api_get_path(SYS_PATH));
 $files = getAllPhpFiles(api_get_path(SYS_PATH));
 foreach ($files as $file) {
+    $isPlugin = preg_match('#/plugin/#', $file);
+    if ($isPlugin && $hidePlugins) {
+        continue;
+    }
     //echo 'Analyzing '.$file."<br />";
     $shortfile = substr($file, $l);
     $lines = file($file);
@@ -64,11 +69,14 @@ if (count($undefined_terms) < 1) {
 } else {
     echo "The following terms were nowhere to be found: <br />\n<table>";
 }
+$i = 1;
 foreach ($undefined_terms as $term => $file) {
-    echo "<tr><td>$term</td><td>in $file";
-    if (substr($file, 0, 7) == 'plugin/') {
+    $isPlugin = substr($file, 0, 7) == 'plugin/';
+    echo "<tr><td>$i</td><td>$term</td><td>in $file";
+    if ($isPlugin) {
         echo " <span style=\"color: #00ff00;\">(this one should be taken care of by the plugin's language files)</span>";
     }
     echo "</td></tr>\n";
+    $i++;
 }
 echo "</table>\n";

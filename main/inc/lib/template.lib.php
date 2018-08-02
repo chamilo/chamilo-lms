@@ -1374,6 +1374,8 @@ class Template
      */
     private function getWebPaths()
     {
+        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
+        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
         return [
             'web' => api_get_path(WEB_PATH),
             'web_url' => api_get_web_url(),
@@ -1388,8 +1390,8 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
-            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_query_vars' => api_htmlentities($queryString),
+            'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
             'web_rel_code' => api_get_path(REL_CODE_PATH),
         ];

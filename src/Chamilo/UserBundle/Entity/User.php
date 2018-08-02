@@ -2582,6 +2582,4 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
         return $this;
     }
-
-
 }

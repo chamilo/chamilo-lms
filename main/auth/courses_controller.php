@@ -930,7 +930,8 @@ class CoursesController
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
             }
 
-            $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
+            $plugin = \BuyCoursesPlugin::create();
+            $isThisSessionOnSale = $plugin->getBuyCoursePluginPrice($session);
 
             $sessionsBlock = [
                 'id' => $session->getId(),

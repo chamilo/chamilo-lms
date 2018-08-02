@@ -32,20 +32,20 @@ class Portfolio
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      * @ORM\Column(name="content", type="text")
      */
-    private $content;
+    protected $content;
 
     /**
      * @var User
@@ -53,7 +53,7 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $user;
+    protected $user;
 
     /**
      * @var Course
@@ -61,7 +61,7 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $course = null;
+    protected $course = null;
 
     /**
      * @var Session
@@ -69,28 +69,28 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $session = null;
+    protected $session = null;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime")
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="update_date", type="datetime")
      */
-    private $updateDate;
+    protected $updateDate;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
      */
-    private $isVisible = true;
+    protected $isVisible = true;
 
     /**
      * @var \Chamilo\CoreBundle\Entity\PortfolioCategory
@@ -98,7 +98,7 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioCategory", inversedBy="items")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $category;
+    protected $category;
 
     /**
      * Portfolio constructor.

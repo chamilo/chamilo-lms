@@ -10,23 +10,10 @@
         </div>
     </div>
     <div class="col-md-9">
-        <div class="panel">
-            <div class="panel-title">{{ 'PersonalDataIntroductionTitle' | get_lang }}</div>
-            <div class="personal-data-intro-description">
-                {{ 'PersonalDataIntroductionText' | get_lang }}
-            </div>
-        </div>
-        <div class="panel personal-data-raw">
-            <div class="panel-title">{{ 'PersonalDataKeptOnYou' | get_lang }}</div>
-            <div class="export-button pull-right">
-                <a href="personal_data.php?export=1">
-                    {{ personal_data.data_export_icon }}
-                </a>
-            </div>
-            <div class="personal-data-raw-description">
-                {{ personal_data.data }}
-            </div>
-        </div>
+        {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
+
+        {{ display.panel('PersonalDataKeptOnYou' | get_lang, personal_data.data) }}
+
         <div class="panel personal-data-permissions">
             <div class="panel-title">{{ 'PersonalDataPermissionsYouGaveUs' | get_lang }}</div>
             <div class="personal-data-raw-data">
@@ -44,12 +31,12 @@
                 </ul>
             </div>
         </div>
-        <div class="panel personal-data-responsible">
-            <div class="panel-title">{{ 'PersonalDataResponsibleOrganizationTitle' | get_lang }}</div>
-            <div class="personal-data-responsible-description">
-            {{ personal_data.responsible }}
-            </div>
-        </div>
+
+        {% if personal_data.responsible %}
+            {{ display.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}
+        {% endif %}
+
+        {% if personal_data.treatment %}
         <div class="panel personal-data-treatment">
             <div class="panel-title">{{ 'PersonalDataTreatmentTitle' | get_lang }}</div>
             <div class="personal-data-treatment-description">
@@ -63,6 +50,7 @@
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
         {% if personal_data.officer_name %}
             <div class="panel personal-data-responsible">
                 <div class="panel-title">{{ 'PersonalDataOfficerName' | get_lang }}</div>

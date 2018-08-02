@@ -57,8 +57,6 @@ if ($allowSocial) {
 
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('PersonalDataReport')];
 
-$actions = '';
-
 // LEFT CONTENT
 $socialMenuBlock = '';
 if ($allowSocial) {
@@ -157,9 +155,13 @@ if (!empty($officerName)) {
 }
 
 $tpl = new Template(null);
-if ($actions) {
-    $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
-}
+
+$actions = Display::url(
+    Display::return_icon('excel.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'social/personal_data.php?export=1'
+);
+
+$tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 
 $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {

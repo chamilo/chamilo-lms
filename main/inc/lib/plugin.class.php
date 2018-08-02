@@ -216,6 +216,11 @@ class Plugin
             $options = null;
             if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
                 $attributes = isset($type['attributes']) ? $type['attributes'] : [];
+                if (!empty($type['options']) && isset($type['translate_options']) && $type['translate_options']) {
+                    foreach ($type['options'] as $key => &$optionName) {
+                        $optionName = $this->get_lang($optionName);
+                    }
+                }
                 $options = $type['options'];
                 $type = $type['type'];
             }

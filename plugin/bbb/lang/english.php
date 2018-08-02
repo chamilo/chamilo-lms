@@ -69,3 +69,6 @@ $strings['launch_type'] = 'Client launch type';
 $strings['EnterConferenceFlash'] = 'Enter the videoconference (Flash client)';
 $strings['EnterConferenceHTML5'] = 'Enter the videoconference (HTML5 client)';
 $strings['ParticipantsWillUseSameInterface'] = 'Participants will use the same interface as you';
+$strings['SetByStudent'] = 'Set by student';
+$strings['SetByTeacher'] = 'Set by teacher';
+$strings['SetByDefault'] = 'Default';

@@ -73,10 +73,11 @@ class BBBPlugin extends Plugin
                 'launch_type' => [
                     'type' => 'select',
                     'options' => [
-                        self::LAUNCH_TYPE_DEFAULT => 'Default',
-                        self::LAUNCH_TYPE_SET_BY_TEACHER => 'Set by teacher',
-                        self::LAUNCH_TYPE_SET_BY_STUDENT => 'Set by student',
-                    ]
+                        self::LAUNCH_TYPE_DEFAULT => 'SetByDefault',
+                        self::LAUNCH_TYPE_SET_BY_TEACHER => 'SetByTeacher',
+                        self::LAUNCH_TYPE_SET_BY_STUDENT => 'SetByStudent',
+                    ],
+                    'translate_options' => true, // variables will be translated using the plugin->get_lang
                 ]
             ]
         );

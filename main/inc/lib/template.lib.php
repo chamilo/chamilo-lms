@@ -1845,8 +1845,9 @@ class Template
                         $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
                     }
 
-                    if (!empty($course->getPicturePath(true))) {
-                        $socialMeta .= '<meta property="og:image" content="'.$course->getPicturePath(true).'" />'."\n";
+                    $picture = CourseManager::getPicturePath($course, true);
+                    if (!empty($picture)) {
+                        $socialMeta .= '<meta property="og:image" content="'.$picture.'" />'."\n";
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath();
                     }

@@ -414,7 +414,7 @@ if ($displayMode == "viewDefEdit") {
             }
         }
     } else {
-        Display::display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
+        Display::return_message(get_lang('ThisStudentIsSubscribeThroughASession'), 'normal');
     }
 
     if (api_get_setting('allow_user_headings') == 'true' && $allowedToEditDef) {
@@ -442,7 +442,7 @@ if ($displayMode == "viewDefEdit") {
             }
             // Edit command
             if ($allowedToEditContent) {
-                echo "<br><br>\n",
+                echo "<br /><br />\n",
                     "<a href=\"".api_get_self()."?".api_get_cidreq(
                     )."&editContent=", $thisCat['catId'], "&uInfo=", $userIdViewed, "\">",
                 "<img src=\"../img/edit.gif\" border=\"0\" alt=\"edit\">",

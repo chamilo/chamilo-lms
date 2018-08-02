@@ -70,7 +70,7 @@ function edit_cat_def($id, $title, $comment, $nbline)
     $comment = Database::escape_string(trim($comment));
     $nbline = strval(intval($nbline));
 
-    $sql = "UPDATE ".$TBL_USERINFO_DEF." SET
+    $sql = "UPDATE $TBL_USERINFO_DEF SET
             title       = '$title',
             comment     = '$comment',
             line_count  = '$nbline'
@@ -105,7 +105,7 @@ function remove_cat_def($id, $force = false)
     if ((0 == (int) $id || $id == "ALL") || !is_bool($force)) {
         return false;
     }
-    $sqlCondition = " WHERE id = '$id'";
+    $sqlCondition = " WHERE id = $id";
     if (!$force) {
         $sql = "SELECT * FROM $TBL_USERINFO_CONTENT $sqlCondition";
         $result = Database::query($sql);
@@ -140,7 +140,7 @@ function move_cat_rank($id, $direction) // up & down.
         return false;
     }
 
-    $sql = "SELECT rank FROM $TBL_USERINFO_DEF WHERE id = '$id'";
+    $sql = "SELECT rank FROM $TBL_USERINFO_DEF WHERE id = $id";
     $result = Database::query($sql);
 
     if (Database::num_rows($result) < 1) {
@@ -185,7 +185,7 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
     }
 
     // this request find the 2 line to be switched (on rank value)
-    $sql = "SELECT id, rank FROM ".$TBL_USERINFO_DEF." 
+    $sql = "SELECT id, rank FROM $TBL_USERINFO_DEF 
             WHERE rank $compOp $rank
             ORDER BY rank $sort LIMIT 2";
 
@@ -198,9 +198,9 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
     $thisCat = Database::fetch_array($result);
     $nextCat = Database::fetch_array($result);
 
-    $sql1 = "UPDATE ".$TBL_USERINFO_DEF." SET rank ='".$nextCat['rank'].
+    $sql1 = "UPDATE $TBL_USERINFO_DEF SET rank ='".$nextCat['rank'].
         "' WHERE id = '".$thisCat['id']."'";
-    $sql2 = "UPDATE ".$TBL_USERINFO_DEF." SET rank ='".$thisCat['rank'].
+    $sql2 = "UPDATE $TBL_USERINFO_DEF SET rank ='".$thisCat['rank'].
         "' WHERE id = '".$nextCat['id']."'";
 
     Database::query($sql1);
@@ -220,26 +220,28 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
  */
 function update_user_course_properties($user_id, $course_code, $properties, $horaire_name, $course_id)
 {
-    global $tbl_coursUser,$_user;
+    global $tbl_coursUser, $_user;
     $sqlChangeStatus = "";
-    $user_id = strval(intval($user_id)); //filter integer
+    $user_id = (int) $user_id; //filter integer
     $course_code = Database::escape_string($course_code);
+    $course_id = (int) $course_id;
+    $horaire_name = Database::escape_string($horaire_name);
+    $status = Database::escape_string($properties['status']);
+    $tutor = Database::escape_string($properties['tutor']);
     if ($user_id != $_user['user_id']) {
-        $sqlChangeStatus = "status     = '".Database::escape_string($properties['status'])."',";
+        $sqlChangeStatus = "status = '$status',";
     }
 
     $sql = "UPDATE $tbl_coursUser
-            SET     ".$sqlChangeStatus."
-                is_tutor        = '".Database::escape_string($properties['tutor'])."'
-            WHERE   
-                user_id         = '".$user_id."' AND     
-                c_id     = '".$course_id."'";
+            SET $sqlChangeStatus 
+                is_tutor = '$tutor'
+            WHERE user_id = $user_id AND c_id = $course_id";
     Database::query($sql);
     //update official-code: Horaire
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $sql2 = "UPDATE $table_user
-             SET official_code   = '".$horaire_name."'
-             WHERE   user_id         = '".$user_id."'";
+             SET official_code = '$horaire_name'
+             WHERE user_id = $user_id";
     Database::query($sql2);
     //on récupère l'horaire
     $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
@@ -247,9 +249,9 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
     $jour = 0;
     $sql3 = "SELECT date FROM $TABLECALDATES 
              WHERE 
-                horaire_name = '".$horaire_name."' AND 
+                horaire_name = '$horaire_name' AND 
                 status = 'C' AND    
-                c_id = '".$course_id."' 
+                c_id = $course_id 
              ORDER BY date ";
     $result3 = Database::query($sql3);
 
@@ -258,13 +260,13 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
     }
 
     //on efface ce qui est déjà inscrit
-    $sql4 = "DELETE FROM ".$tbl_personal_agenda."
-         WHERE user = '".$user_id."' 
+    $sql4 = "DELETE FROM $tbl_personal_agenda
+         WHERE user = $user_id 
          AND text = 'Pour le calendrier, ne pas effacer'";
     Database::query($sql4);
 
-    $sql = "DELETE FROM ".$tbl_personal_agenda."
-         WHERE user = '".$user_id."' AND title = 'Examen*'";
+    $sql = "DELETE FROM $tbl_personal_agenda
+         WHERE user = $user_id AND title = 'Examen*'";
     Database::query($sql);
     //à chaque date dans l'horaire
     while ($res3 = Database::fetch_array($result3)) {
@@ -274,12 +276,12 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
         $jour = $jour + 1;
         //on réinsère le nouvel horaire
         $sql = "INSERT ".$tbl_personal_agenda." (user,title,text,date) 
-                VALUES ('".$user_id."','".$jour."','Pour le calendrier, ne pas effacer','".$date."')";
+                VALUES ($user_id, $jour, 'Pour le calendrier, ne pas effacer', '$date')";
         Database::query($sql);
         // pour les inscrire examens dans agenda
         $sql5 = "SELECT date FROM $TABLECALDATES 
-                  WHERE horaire_name = '".$horaire_name."' AND status = 'E'
-                  AND    c_id = '".$course_id."' 
+                  WHERE horaire_name = '$horaire_name' AND status = 'E'
+                  AND    c_id = '$course_id' 
                   ORDER BY date 
                   ";
         $result5 = Database::query($sql5);
@@ -290,7 +292,7 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
         $date = $res5['date'];
         $date = api_get_utc_datetime($date);
         //on réinsère le nouvel horaire
-        $sql7 = "INSERT ".$tbl_personal_agenda." (user,title,date) VALUES  ('".$user_id."','Examen*','".$date."')";
+        $sql7 = "INSERT $tbl_personal_agenda (user, title, date) VALUES  ($user_id, 'Examen*', '$date')";
         Database::query($sql7);
     }
 }
@@ -315,8 +317,8 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
     if (empty($user_ip)) {
         $user_ip = $_SERVER['REMOTE_ADDR'];
     }
-    $definition_id = strval(intval($definition_id));
-    $user_id = strval(intval($user_id));
+    $definition_id = (int) $definition_id;
+    $user_id = (int) $user_id;
     $content = Database::escape_string(trim($content));
     $user_ip = Database::escape_string(trim($user_ip));
 
@@ -327,9 +329,9 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
     }
 
     // Do not create if already exist
-    $sql = "SELECT id FROM ".$TBL_USERINFO_CONTENT."
+    $sql = "SELECT id FROM $TBL_USERINFO_CONTENT
             WHERE   definition_id   = '$definition_id'
-            AND     user_id         = '$user_id'";
+            AND     user_id         = $user_id";
 
     $result = Database::query($sql);
 
@@ -337,10 +339,10 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
         return false;
     }
 
-    $sql = "INSERT INTO ".$TBL_USERINFO_CONTENT." SET
+    $sql = "INSERT INTO $TBL_USERINFO_CONTENT SET
             content         = '$content',
-            definition_id   = '$definition_id',
-            user_id         = '$user_id',
+            definition_id   = $definition_id,
+            user_id         = $user_id,
             editor_ip       = '$user_ip',
             edition_time    = now()";
 
@@ -365,8 +367,8 @@ function fill_new_cat_content($definition_id, $user_id, $content = "", $user_ip 
 function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = "")
 {
     global $TBL_USERINFO_CONTENT;
-    $definition_id = strval(intval($definition_id));
-    $user_id = strval(intval($user_id));
+    $definition_id = (int) $definition_id;
+    $user_id = (int) $user_id;
     $content = Database::escape_string(trim($content));
     if (empty($user_ip)) {
         $user_ip = $_SERVER['REMOTE_ADDR'];
@@ -381,11 +383,11 @@ function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = ""
         return cleanout_cat_content($user_id, $definition_id);
     }
 
-    $sql = "UPDATE ".$TBL_USERINFO_CONTENT." SET
+    $sql = "UPDATE $TBL_USERINFO_CONTENT SET
             content         = '$content',
             editor_ip       = '$user_ip',
             edition_time    = now()
-            WHERE definition_id = '$definition_id' AND user_id = '$user_id'";
+            WHERE definition_id = $definition_id AND user_id = $user_id";
 
     Database::query($sql);
 
@@ -406,15 +408,15 @@ function edit_cat_content($definition_id, $user_id, $content = "", $user_ip = ""
 function cleanout_cat_content($user_id, $definition_id)
 {
     global $TBL_USERINFO_CONTENT;
-    $user_id = strval(intval($user_id));
-    $definition_id = strval(intval($definition_id));
+    $user_id = (int) $user_id;
+    $definition_id = (int) $definition_id;
 
     if (0 == $user_id || 0 == $definition_id) {
         return false;
     }
 
-    $sql = "DELETE FROM ".$TBL_USERINFO_CONTENT."
-            WHERE user_id = '$user_id'  AND definition_id = '$definition_id'";
+    $sql = "DELETE FROM $TBL_USERINFO_CONTENT
+            WHERE user_id = $user_id AND definition_id = $definition_id";
 
     Database::query($sql);
 
@@ -437,10 +439,11 @@ function get_course_user_info($user_id)
     $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
     $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
+    $user_id = (int) $user_id;
     $sql = "SELECT  cat.id catId,   cat.title,
                     cat.comment ,   content.content
-            FROM    ".$TBL_USERINFO_DEF." cat LEFT JOIN ".$TBL_USERINFO_CONTENT." content
-            ON cat.id = content.definition_id   AND content.user_id = '$user_id'
+            FROM    $TBL_USERINFO_DEF cat LEFT JOIN $TBL_USERINFO_CONTENT content
+            ON cat.id = content.definition_id AND content.user_id = $user_id
             ORDER BY cat.rank, content.id";
 
     $result = Database::query($sql);
@@ -468,8 +471,9 @@ function get_course_user_info($user_id)
  */
 function get_main_user_info($user_id, $courseCode)
 {
-    $user_id = strval(intval($user_id));
+    $user_id = (int) $user_id;
     $courseCode = Database::escape_string($courseCode);
+    $courseId = api_get_course_int_id($courseCode);
     if (0 == $user_id) {
         return false;
     }
@@ -481,8 +485,8 @@ function get_main_user_info($user_id, $courseCode)
                     cu.status status, cu.is_tutor as tutor_id
             FROM    $table_user u, $table_course_user cu
             WHERE   u.user_id = cu.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-            AND     u.user_id = '$user_id'
-            AND     cu.c_id = '$c_id'";
+            AND     u.user_id = $user_id
+            AND     cu.c_id = $courseId";
 
     $result = Database::query($sql);
 
@@ -512,15 +516,15 @@ function get_cat_content($userId, $catId)
     $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
     $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
-    $userId = strval(intval($userId));
-    $catId = strval(intval($catId));
+    $userId = (int) $userId;
+    $catId = (int) $catId;
     $sql = "SELECT  cat.id catId,   cat.title,
                     cat.comment ,   cat.line_count,
                     content.id contentId,   content.content
             FROM    $TBL_USERINFO_DEF cat LEFT JOIN $TBL_USERINFO_CONTENT content
             ON cat.id = content.definition_id
-            AND content.user_id = '$userId'
-            WHERE cat.id = '$catId' ";
+            AND content.user_id = $userId
+            WHERE cat.id = $catId ";
     $result = Database::query($sql);
 
     if (Database::num_rows($result) > 0) {
@@ -545,10 +549,10 @@ function get_cat_content($userId, $catId)
  */
 function get_cat_def($catId)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
+    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
 
-    $catId = strval(intval($catId));
-    $sql = "SELECT id, title, comment, line_count, rank FROM ".$TBL_USERINFO_DEF." WHERE id = '$catId'";
+    $catId = (int) $catId;
+    $sql = "SELECT id, title, comment, line_count, rank FROM $TBL_USERINFO_DEF WHERE id = $catId";
 
     $result = Database::query($sql);
 
@@ -574,10 +578,10 @@ function get_cat_def($catId)
  */
 function get_cat_def_list()
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
+    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
 
     $sql = "SELECT  id catId,   title,  comment , line_count
-            FROM  ".$TBL_USERINFO_DEF."
+            FROM  $TBL_USERINFO_DEF
             ORDER BY rank";
 
     $result = Database::query($sql);

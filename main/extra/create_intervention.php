@@ -15,7 +15,7 @@ $level = isset($_POST['level']) ? Database::escape_string($_POST['level']) : '';
 $ex_user_id = isset($_POST['ex_user_id']) ? Database::escape_string($_POST['ex_user_id']) : '';
 
 $sql = "INSERT INTO $table (exe_user_id,c_id,level,exe_date,inter_coment)
-        VALUES ('$ex_user_id','0','$level','$date', '$comment')";
+        VALUES ($ex_user_id, 0, '$level', '$date', '$comment')";
 Database::query($sql);
 header("location: myStudents.php?student=$ex_user_id");
 exit;

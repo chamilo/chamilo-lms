@@ -212,7 +212,7 @@ while ($resulta = Database::fetch_array($result)) {
     $sqlexam = "SELECT  mod_no
                  FROM $tbl_stats_exercices
                  WHERE exe_user_id = '$user_in_groupe'
-                AND c_id = '0' AND (score_ex = 'SU' || score_rep1 = 'SU' || score_rep2 ='SU')
+                AND c_id = 0 AND (score_ex = 'SU' || score_rep1 = 'SU' || score_rep2 ='SU')
                 ORDER BY mod_no ASC";
     $resultexam = Database::query($sqlexam);
     while ($a_exam = Database::fetch_array($resultexam)) {

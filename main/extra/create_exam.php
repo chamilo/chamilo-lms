@@ -16,8 +16,8 @@ $score_rep1 = isset($_GET['score_rep1']) ? Database::escape_string($_GET['score_
 $score_rep2 = isset($_GET['score_rep2']) ? Database::escape_string($_GET['score_rep2']) : '';
 $coment = isset($_GET['coment']) ? Database::escape_string($_GET['coment']) : '';
 
-$sql = "INSERT INTO $table (exe_user_id,c_id,mod_no,score_ex,score_rep1,score_rep2,coment)
-        VALUES ('$ex_user_id','0','$mod_no','$score_ex', '$score_rep1', '$score_rep2', '$coment')";
+$sql = "INSERT INTO $table (exe_user_id, c_id, mod_no, score_ex, score_rep1, score_rep2, coment)
+        VALUES ($ex_user_id, 0, '$mod_no', '$score_ex', '$score_rep1', '$score_rep2', '$coment')";
 Database::query($sql);
 header("location: myStudents.php?student=$ex_user_id");
 exit;

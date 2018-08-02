@@ -15,9 +15,9 @@ $view = $_REQUEST['view'];
 Display::display_header($nameTools, "Tracking");
 
 $title = isset($_POST['title']) ? $_POST['title'] : "";
-$je = isset($_POST['je']) ? $_POST['je'] : "";
-$me = isset($_POST['me']) ? $_POST['me'] : "";
-$ye = isset($_POST['ye']) ? $_POST['ye'] : "";
+$je = isset($_POST['je']) ? Security::remove_XSS($_POST['je']) : "";
+$me = isset($_POST['me']) ? Security::remove_XSS($_POST['me']) : "";
+$ye = isset($_POST['ye']) ? Security::remove_XSS($_POST['ye']) : "";
 
 foreach ($_POST as $index => $valeur) {
     $$index = Database::escape_string(trim($valeur));

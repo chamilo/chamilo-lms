@@ -52,15 +52,14 @@ $student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : '';
                 </td>
                 <td><input type=text name=score_rep1 size=1 value=".$a_exam['score_rep1']."></td>
                 <td><input type=text name=score_rep2 size=1 value=".$a_exam['score_rep2']."></td>
-            "; ?>
-            <td><textarea name="coment" cols="65" rows="2"><?php echo $coment; ?></textarea><br></td>
-            <INPUT type=hidden name=ex_idd value= <?php echo "$exe_id"; ?>/>
-            <INPUT type=hidden name=student_id value= <?php echo "$student_idd"; ?>/>
-            <td>
-                <input type="submit" value="Sauvegarder" name="B1">
-            </td>
+                <td><textarea name=\"coment\" cols=\"65\" rows=\"2\">$coment</textarea><br /></td>
+                <INPUT type=hidden name=ex_idd value=\"$exe_id\" />
+                <INPUT type=hidden name=student_id value=\"$student_idd\" />
+                <td>
+                    <input type=\"submit\" value=\"".get_lang('Save')."\" name=\"B1\">
+                </td>
             </tr>
-            <?php
+            ";
         }
         ?>
     </table>

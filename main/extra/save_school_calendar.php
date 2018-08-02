@@ -41,10 +41,10 @@ foreach ($_POST as $index => $valeur) {
         $num = $a_exam['cal_day_num'];
         $c_date = $a_exam['cal_date'];
         echo "
-                <td><input type=text  name=d_cal_date size=8 value=".$c_date."></td>
-                <td><input type=text name=d_number size=5 value=".$num."></td>
-                <td><input type=text  name=d_title size=8 value=".$name."></td>
-                <td><input  name=d_id size=8 value=".$id."></td>";
+            <td><input type=text  name=d_cal_date size=8 value=".$c_date."></td>
+            <td><input type=text name=d_number size=5 value=".$num."></td>
+            <td><input type=text  name=d_title size=8 value=".$name."></td>
+            <td><input  name=d_id size=8 value=".$id."></td>";
         if ($i % $nbcol == ($nbcol - 1)) {
             echo "</tr>";
         }

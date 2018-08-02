@@ -145,12 +145,12 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
 }
 
 $session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
-$student_id = intval($_GET['student']);
+$student_id = (int) $_GET['student'];
 
 // Action behaviour
 $check = Security::check_token('get');
 
-if (!empty($_GET['student'])) { // infos about user
+if (!empty($student_id)) { // infos about user
     $info_user = api_get_user_info($student_id);
 }
 if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, $_user['user_id'])) {
@@ -184,10 +184,9 @@ $info_user['name'] = api_get_person_name($info_user['firstname'], $info_user['la
     <?php
     $sqlexam = "SELECT *
                  FROM $tbl_stats_exercices
-                 WHERE exe_user_id = ".$_GET['student']."
-                 AND c_id = '0' AND mod_no != '0'
-                 ORDER BY mod_no ASC
-                             ";
+                 WHERE exe_user_id = $student_id
+                 AND c_id = 0 AND mod_no != '0'
+                 ORDER BY mod_no ASC";
     $resultexam = Database::query($sqlexam);
     while ($a_exam = Database::fetch_array($resultexam)) {
         //$ex_id = $a_exam['ex_id'];
@@ -197,27 +196,26 @@ $info_user['name'] = api_get_person_name($info_user['firstname'], $info_user['la
         $score_rep2 = $a_exam['score_rep2'];
         $coment = stripslashes($a_exam['coment']);
         echo "
-            <tr><center>
+            <tr>
                 <td> ".$a_exam['mod_no']."
                 </td>
-            <td><center>
+                <td>
                     ".$a_exam['score_ex']."
                 </td>
-            <td><center>
+                <td>
                     ".$a_exam['score_rep1']."
                 </td>
-                <td><center>
+                <td>
                     ".$a_exam['score_rep2']."
                 </td>
-                <td>$coment
-
+                <td>
+                    $coment
+                </td>
+            </tr>
             ";
         $exe_idd = $a_exam['exe_id'];
-        $student_id = $_GET['student']; ?>
-        </tr>
-        <?php
     }
-    ?>
+?>
 </table>
 </form>
 <strong><?php echo get_lang('imprime_sommaire'); ?> </strong>

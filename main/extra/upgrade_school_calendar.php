@@ -24,8 +24,10 @@ foreach ($_POST as $index => $valeur) {
 ?>
 <?php echo get_lang('edit_save'); ?>
 <?php
-$sql4 = "UPDATE set_module SET cal_day_num='$d_number' WHERE id = '$d_id' ";
+$d_id = (int) $d_id;
+$d_number = (int) $d_number;
+$sql4 = "UPDATE set_module SET cal_day_num = $d_number WHERE id = $d_id ";
 Database::query($sql4);
-print_r(unserialize($_POST['aaa']));
+print_r(unserialize(Security::remove_XSS($_POST['aaa'])));
 
 Display::display_footer();

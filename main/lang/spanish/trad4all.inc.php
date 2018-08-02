@@ -8252,3 +8252,8 @@ $Anonymize = "Anonimizar";
 $XQuestions = "%d preguntas";
 $WebFolderRefreshSucceeded = "Los estilos y archivos estáticos de la carpeta web/ han sido actualizados.";
 $WebFolderRefreshFailed = "Los estilos y archivos estáticos de la carpeta web/ no han podido ser actualizados, probablemente debido a un problema de permisos. Asegúrese que el usuario sistema de su servidor web tenga los permisos suficientes para escribir en esta carpeta.";
+$CopyTextToClipboard = "Copiar Texto";
+$WeNeedYouToAcceptOurTreatmentOfYourData = "Necesitamos que acepte nuestro tratamiento de sus datos para poder brindarle este servicio. Si desea registrar una cuenta, acepte los términos y haga clic en Enviar. Si no acepta, no trataremos datos personales sobre usted.";
+$NoTermsAndConditionsAvailable = "Ninguna condición de uso disponible";
+$Skype = "Skype";
+?>

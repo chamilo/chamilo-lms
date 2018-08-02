@@ -6370,7 +6370,7 @@ $OnlyLettersAndNumbers = "Seulement lettres (a-z) et chiffres (0-9)";
 $HideCoursesInSessionsTitle = "Cacher les cours dans les sessions";
 $HideCoursesInSessionsComment = "Lorsque les sessions apparaîssent sur la page des cours, cacher la liste des cours au sein des sessions (seulement montrer les cours au sein de l'écran spécifique aux sessions).";
 $ShowGroupsToUsersTitle = "Montrer les classes aux apprenants";
-$ShowGroupsToUsersComment = "Montrer les classes aux utilisateurs. La fonctionnalité de classes permet d'inscrire/désinscrir des goupes d'utilisateurs à une session ou un cours directement, réduisant ainsi la charge administrative pour les inscriptions. Lorsque cette fonctionnalité est sélectionnée, les utilisateurs peuvent voir à quelle classe ils appartiennent à partir de leur interface de réseau social.";
+$ShowGroupsToUsersComment = "Montrer les classes aux utilisateurs. La fonctionnalité de classes permet d'inscrire/désinscrire des groupes d'utilisateurs à une session ou un cours directement, réduisant ainsi la charge administrative pour les inscriptions. Lorsque cette fonctionnalité est sélectionnée, les utilisateurs peuvent voir à quelle classe ils appartiennent à partir de leur interface de réseau social.";
 $ExerciseWillBeActivatedFromXToY = "L'exercice sera disponible du %s au %s";
 $ExerciseAvailableFromX = "Exercice disponible à partir du %s";
 $ExerciseAvailableUntilX = "Exercice disponible jusqu'au %s";
@@ -8160,3 +8160,8 @@ $Anonymize = "Anonymiser";
 $XQuestions = "%d questions";
 $WebFolderRefreshSucceeded = "Les styles et fichiers statiques du répertoire web/ on été mis à jour.";
 $WebFolderRefreshFailed = "Les styles et fichiers statiques du répertoire web/ n'ont pas pu être mis à jour, probablement à cause de problèmes de permissions. Assurez-vous que l'utilisateur système de votre serveur web puisse écrire dans le répertoire web/.";
+$CopyTextToClipboard = "Copier le texte";
+$WeNeedYouToAcceptOurTreatmentOfYourData = "Nous avons besoin que vous acceptiez notre traitement de vos données afin de vous fournir ce service. Si vous souhaitez créer un compte, veuillez en accepter les termes et cliquer sur Envoyer. Si vous n'acceptez pas, aucune donnée personnelle ne sera traitée par nous à votre sujet.";
+$NoTermsAndConditionsAvailable = "Aucune condition d'utilisation disponible";
+$Skype = "Skype";
+?>

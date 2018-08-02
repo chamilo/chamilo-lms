@@ -8230,4 +8230,8 @@ $Anonymize = "Anonymize";
 $XQuestions = "%d questions";
 $WebFolderRefreshSucceeded = "The styles and assets in the web/ folder have been refreshed.";
 $WebFolderRefreshFailed = "The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server.";
-
+$CopyTextToClipboard = "Copy text";
+$WeNeedYouToAcceptOurTreatmentOfYourData = "We need you to accept our treatment of your data in order to provide you with this service. If you want to register an account, please accept the terms and click Submit. If you don't accept, no personal data will be treated by us about you.";
+$NoTermsAndConditionsAvailable = "No terms and conditions available";
+$Skype = "Skype";
+?>

@@ -54,7 +54,7 @@ if (count($errors) != 0) {
 } elseif ($_POST['formSent']) {
     Display::addFlash(
         Display::return_message(
-            get_lang('CourseIntroductionsAllImportesSuccessfully'),
+            get_lang('CourseIntroductionsAllImportedSuccessfully'),
             'confirmation',
             false
         )

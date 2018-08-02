@@ -1307,14 +1307,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         // message sended to the student
         $message = get_lang('Dear').' '.$recipientName.",<br /><br />";
-        $message .= get_lang('MessageQuestionCertainty');
         $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
             .api_get_cidreq()
             ."&id=$exeId'>";
         $exerciseTitle = $objExercise->title;
-        $message = str_replace('%exerTitle', $exerciseTitle, $message);
-        $message = str_replace('%webPath', api_get_path(WEB_PATH), $message);
-        $message = str_replace('%s', $exerciseLink, $message);
+        
+        $message .= sprintf(
+            get_lang('MessageQuestionCertainty'),
+            $exerciseTitle,
+            api_get_path(WEB_PATH),
+            $exerciseLink
+        );
 
         // show histogram
         $message .= self::displayStudentsChartResults($exeId, $objExercise);

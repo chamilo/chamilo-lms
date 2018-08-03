@@ -69,9 +69,9 @@ class Usergroup
     /**
      * @var string
      *
-     * ORM\Column(name="author_id", type="integer", nullable=true)
+     * @ORM\Column(name="author_id", type="integer", nullable=true)
      */
-    //protected $authorId;
+    protected $authorId;
 
     /**
      * @var int

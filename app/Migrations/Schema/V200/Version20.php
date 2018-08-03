@@ -579,6 +579,11 @@ class Version20 extends AbstractMigrationChamilo
         if (!$table->hasColumn('autolaunch')) {
             $this->addSql('ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0 NOT NULL');
         }
+
+        $table = $schema->getTable('usergroup');
+        if (!$table->hasColumn('author_id')) {
+            $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
+        }
     }
 
     /**

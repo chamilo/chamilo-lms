@@ -3,11 +3,14 @@
 
 namespace Chamilo\CoreBundle\Form;
 
-use Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class CurriculumItemType.
+ * @package Chamilo\CoreBundle\Form
+ */
 class CurriculumItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

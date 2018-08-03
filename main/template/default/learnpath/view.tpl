@@ -146,11 +146,21 @@
 
     $(document).on('ready', function () {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+            // Fix an issue where you cannot scroll below first screen in
+            // learning paths on Apple devices
             document.getElementById('wrapper-iframe')
                 .setAttribute(
                     'style',
                     'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
                 );
+            // Fix another issue whereby buttons do not react to click below
+            // second screen in learning paths on Apple devices
+            document.getElementById('content-id')
+                .setAttribute(
+                    'style',
+                    'overflow: auto;'
+                );
+
         }
 
         {% if lp_mode == 'embedframe' %}

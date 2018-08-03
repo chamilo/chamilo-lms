@@ -27,35 +27,35 @@ class CStudentPublicationRelDocument
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
-    private $workId;
+    protected $workId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="document_id", type="integer", nullable=false)
      */
-    private $documentId;
+    protected $documentId;
 
     /**
      * Set workId.

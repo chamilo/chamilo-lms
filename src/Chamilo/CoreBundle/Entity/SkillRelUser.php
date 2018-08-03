@@ -25,49 +25,50 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelUser
 {
     /**
-     * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
-     */
-    protected $comments;
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
+     */
+    protected $comments;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private $user;
+    protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false)
      */
-    private $skill;
+    protected $skill;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)
      */
-    private $acquiredSkillAt;
+    protected $acquiredSkillAt;
 
     /**
      * @var int
      *
      * @ORM\Column(name="assigned_by", type="integer", nullable=false)
      */
-    private $assignedBy;
+    protected $assignedBy;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
-    private $course;
+    protected $course;
 
     /**
      * @var Session
@@ -75,7 +76,7 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    private $session;
+    protected $session;
 
     /**
      * @var Level
@@ -83,21 +84,21 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Level")
      * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
      */
-    private $acquiredLevel;
+    protected $acquiredLevel;
 
     /**
      * @var string
      *
      * @ORM\Column(name="argumentation", type="text")
      */
-    private $argumentation;
+    protected $argumentation;
 
     /**
      * @var int
      *
      * @ORM\Column(name="argumentation_author_id", type="integer")
      */
-    private $argumentationAuthorId;
+    protected $argumentationAuthorId;
 
     /**
      * SkillRelUser constructor.
@@ -342,54 +343,15 @@ class SkillRelUser
     {
         $source = '';
 
-        if ($this->session && $this->session->getId() != 0) {
-            $source .= "[{$this->session->getName()}] ";
+        if ($this->session && $this->getSession()->getId() != 0) {
+            $source .= "[{$this->getSession()->getName()}] ";
         }
 
         if ($this->course) {
-            $source .= $this->course->getTitle();
+            $source .= $this->getCourse()->getTitle();
         }
 
         return $source;
-    }
-
-    /**
-     * Get the URL for the issue.
-     *
-     * @return string
-     */
-    public function getIssueUrl()
-    {
-        return api_get_path(WEB_PATH)."badge/{$this->id}";
-    }
-
-    /**
-     * Get the URL for the All issues page.
-     *
-     * @return string
-     */
-    public function getIssueUrlAll()
-    {
-        return api_get_path(WEB_PATH)."skill/{$this->skill->getId()}/user/{$this->user->getId()}";
-    }
-
-    /**
-     * Get the URL for the assertion.
-     *
-     * @return string
-     */
-    public function getAssertionUrl()
-    {
-        $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
-
-        $url .= http_build_query([
-            'user' => $this->getUser()->getId(),
-            'skill' => $this->getSkill()->getId(),
-            'course' => $this->course ? $this->getCourse()->getId() : 0,
-            'session' => $this->session ? $this->getSession()->getId() : 0,
-        ]);
-
-        return $url;
     }
 
     /**

@@ -26,91 +26,91 @@ class CLpIvInteraction
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
-    private $lpIvId;
+    protected $lpIvId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="interaction_id", type="string", length=255, nullable=false)
      */
-    private $interactionId;
+    protected $interactionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="interaction_type", type="string", length=255, nullable=false)
      */
-    private $interactionType;
+    protected $interactionType;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weighting", type="float", precision=10, scale=0, nullable=false)
      */
-    private $weighting;
+    protected $weighting;
 
     /**
      * @var string
      *
      * @ORM\Column(name="completion_time", type="string", length=16, nullable=false)
      */
-    private $completionTime;
+    protected $completionTime;
 
     /**
      * @var string
      *
      * @ORM\Column(name="correct_responses", type="text", nullable=false)
      */
-    private $correctResponses;
+    protected $correctResponses;
 
     /**
      * @var string
      *
      * @ORM\Column(name="student_response", type="text", nullable=false)
      */
-    private $studentResponse;
+    protected $studentResponse;
 
     /**
      * @var string
      *
      * @ORM\Column(name="result", type="string", length=255, nullable=false)
      */
-    private $result;
+    protected $result;
 
     /**
      * @var string
      *
      * @ORM\Column(name="latency", type="string", length=16, nullable=false)
      */
-    private $latency;
+    protected $latency;
 
     /**
      * Set orderId.

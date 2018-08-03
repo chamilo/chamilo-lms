@@ -12,24 +12,7 @@
     <div class="col-md-9">
         {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
         {{ display.panel('PersonalDataKeptOnYou' | get_lang, personal_data.data) }}
-
-        <div class="panel personal-data-permissions">
-            <div class="panel-title">{{ 'PersonalDataPermissionsYouGaveUs' | get_lang }}</div>
-            <div class="personal-data-raw-data">
-                {{ personal_data.permissions.label }}
-                <ul>
-                {% if personal_data.permissions.accepted %}
-                    <li>
-                        {{ 'CurrentStatus' | get_lang }}: {{ personal_data.permissions.icon }} ({{ 'LegalAgreementAccepted' | get_lang }})
-                    </li>
-                    <li>
-                        {{ 'Date' | get_lang }}: {{ personal_data.permissions.date }}
-                    </li>
-                {% endif %}
-                <li>{{ personal_data.permissions.button }}</li>
-                </ul>
-            </div>
-        </div>
+        {{ display.panel('PersonalDataPermissionsYouGaveUs' | get_lang, permission) }}
 
         {% if personal_data.responsible %}
             {{ display.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}

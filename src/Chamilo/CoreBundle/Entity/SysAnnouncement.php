@@ -18,63 +18,63 @@ class SysAnnouncement
      *
      * @ORM\Column(name="date_start", type="datetime", nullable=false)
      */
-    private $dateStart;
+    protected $dateStart;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_end", type="datetime", nullable=false)
      */
-    private $dateEnd;
+    protected $dateEnd;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_teacher", type="boolean", nullable=false)
      */
-    private $visibleTeacher;
+    protected $visibleTeacher;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_student", type="boolean", nullable=false)
      */
-    private $visibleStudent;
+    protected $visibleStudent;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_guest", type="boolean", nullable=false)
      */
-    private $visibleGuest;
+    protected $visibleGuest;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lang", type="string", length=70, nullable=true)
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var int
@@ -83,7 +83,7 @@ class SysAnnouncement
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set dateStart.

@@ -139,6 +139,7 @@ class langstats
                 return $this->db->lastInsertRowID();
             }
         }
+
         return true;
     }
 

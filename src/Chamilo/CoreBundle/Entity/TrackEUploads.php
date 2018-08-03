@@ -26,42 +26,42 @@ class TrackEUploads
      *
      * @ORM\Column(name="upload_user_id", type="integer", nullable=true)
      */
-    private $uploadUserId;
+    protected $uploadUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
-    private $uploadDate;
+    protected $uploadDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="upload_cours_id", type="string", length=40, nullable=false)
      */
-    private $uploadCoursId;
+    protected $uploadCoursId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="upload_work_id", type="integer", nullable=false)
      */
-    private $uploadWorkId;
+    protected $uploadWorkId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
      */
-    private $uploadSessionId;
+    protected $uploadSessionId;
 
     /**
      * @var int
@@ -70,7 +70,7 @@ class TrackEUploads
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $uploadId;
+    protected $uploadId;
 
     /**
      * Set uploadUserId.

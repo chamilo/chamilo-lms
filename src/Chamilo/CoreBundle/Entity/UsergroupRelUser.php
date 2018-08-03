@@ -50,7 +50,7 @@ class UsergroupRelUser
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * Get id.

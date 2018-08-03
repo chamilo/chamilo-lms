@@ -29,49 +29,49 @@ class CForumNotification
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_id", type="integer")
      */
-    private $forumId;
+    protected $forumId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_id", type="integer")
      */
-    private $threadId;
+    protected $threadId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_id", type="integer")
      */
-    private $postId;
+    protected $postId;
 
     /**
      * Set id.

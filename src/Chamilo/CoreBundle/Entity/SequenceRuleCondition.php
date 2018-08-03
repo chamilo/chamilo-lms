@@ -20,19 +20,19 @@ class SequenceRuleCondition
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
-    private $rule;
+    protected $rule;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
      */
-    private $condition;
+    protected $condition;
 
     /**
      * Get id.

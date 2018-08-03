@@ -20,42 +20,42 @@ class Block
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      *
      * @ORM\Column(name="controller", type="string", length=100, nullable=false)
      */
-    private $controller;
+    protected $controller;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * Set name.

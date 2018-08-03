@@ -31,21 +31,21 @@ class SequenceResource
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="type", type="integer")
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="resource_id", type="integer")
      */
-    private $resourceId;
+    protected $resourceId;
 
     /**
      * Get id.

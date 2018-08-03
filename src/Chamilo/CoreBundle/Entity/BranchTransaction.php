@@ -20,7 +20,7 @@ class BranchTransaction
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Room
@@ -28,70 +28,70 @@ class BranchTransaction
      * @ORM\ManyToOne(targetEntity="BranchTransactionStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-    private $branchTransactionStatus;
+    protected $branchTransactionStatus;
 
     /**
      * @var int
      *
      * @ORM\Column(name="transaction_id", type="bigint", nullable=false, unique=false)
      */
-    private $externalTransactionId;
+    protected $externalTransactionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="action", type="string", length=20, nullable=true, unique=false)
      */
-    private $action;
+    protected $action;
 
     /**
      * @var string
      *
      * @ORM\Column(name="item_id", type="string", length=255, nullable=true, unique=false)
      */
-    private $itemId;
+    protected $itemId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="origin", type="string", length=255, nullable=true, unique=false)
      */
-    private $origin;
+    protected $origin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="dest_id", type="string", length=255, nullable=true, unique=false)
      */
-    private $destId;
+    protected $destId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="external_info", type="string", length=255, nullable=true, unique=false)
      */
-    private $externalInfo;
+    protected $externalInfo;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="time_insert", type="datetime", nullable=false, unique=false)
      */
-    private $timeInsert;
+    protected $timeInsert;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="time_update", type="datetime", nullable=false, unique=false)
      */
-    private $timeUpdate;
+    protected $timeUpdate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="failed_attempts", type="integer", nullable=false, unique=false)
      */
-    private $failedAttempts;
+    protected $failedAttempts;
 
     /**
      * @var BranchSync
@@ -99,7 +99,7 @@ class BranchTransaction
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
      */
-    private $branch;
+    protected $branch;
 
     /**
      * Set id.

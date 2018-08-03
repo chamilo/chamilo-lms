@@ -26,56 +26,56 @@ class CThematic
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    private $displayOrder;
+    protected $displayOrder;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set title.

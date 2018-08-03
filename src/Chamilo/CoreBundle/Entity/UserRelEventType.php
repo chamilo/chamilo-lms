@@ -22,21 +22,21 @@ class UserRelEventType
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="event_type_name", type="string", length=255, nullable=false)
      */
-    private $eventTypeName;
+    protected $eventTypeName;
 
     /**
      * Set userId.

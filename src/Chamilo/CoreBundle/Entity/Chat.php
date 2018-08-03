@@ -23,42 +23,42 @@ class Chat
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="from_user", type="integer", nullable=true)
      */
-    private $fromUser;
+    protected $fromUser;
 
     /**
      * @var int
      *
      * @ORM\Column(name="to_user", type="integer", nullable=true)
      */
-    private $toUser;
+    protected $toUser;
 
     /**
      * @var string
      *
      * @ORM\Column(name="message", type="text", nullable=false)
      */
-    private $message;
+    protected $message;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="sent", type="datetime", nullable=false)
      */
-    private $sent;
+    protected $sent;
 
     /**
      * @var int
      *
      * @ORM\Column(name="recd", type="integer", nullable=false)
      */
-    private $recd;
+    protected $recd;
 
     /**
      * Get id.

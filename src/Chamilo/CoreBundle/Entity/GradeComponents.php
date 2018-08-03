@@ -20,35 +20,35 @@ class GradeComponents
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="percentage", type="string", length=255, nullable=false)
      */
-    private $percentage;
+    protected $percentage;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="acronym", type="string", length=255, nullable=false)
      */
-    private $acronym;
+    protected $acronym;
 
     /**
      * @var int
      *
      * @ORM\Column(name="grade_model_id", type="integer", nullable=false)
      */
-    private $gradeModelId;
+    protected $gradeModelId;
 
     /**
      * Set percentage.

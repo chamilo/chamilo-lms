@@ -18,28 +18,28 @@ class GradebookResult
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
      */
-    private $evaluationId;
+    protected $evaluationId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    private $score;
+    protected $score;
 
     /**
      * @var int
@@ -48,7 +48,7 @@ class GradebookResult
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set userId.

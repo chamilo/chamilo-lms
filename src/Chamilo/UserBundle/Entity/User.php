@@ -271,9 +271,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     protected $curriculumItems;
 
-    /*
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
-     *
      */
     protected $portals;
 

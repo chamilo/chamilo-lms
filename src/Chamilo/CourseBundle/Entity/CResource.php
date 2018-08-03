@@ -25,49 +25,49 @@ class CResource
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="source_type", type="string", length=50, nullable=true)
      */
-    private $sourceType;
+    protected $sourceType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="source_id", type="integer", nullable=true)
      */
-    private $sourceId;
+    protected $sourceId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="resource_type", type="string", length=50, nullable=true)
      */
-    private $resourceType;
+    protected $resourceType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="resource_id", type="integer", nullable=true)
      */
-    private $resourceId;
+    protected $resourceId;
 
     /**
      * Set sourceType.

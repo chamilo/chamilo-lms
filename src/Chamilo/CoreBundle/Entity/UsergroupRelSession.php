@@ -20,21 +20,21 @@ class UsergroupRelSession
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
-    private $usergroupId;
+    protected $usergroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set usergroupId.

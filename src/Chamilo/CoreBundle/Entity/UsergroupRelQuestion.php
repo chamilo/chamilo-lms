@@ -20,35 +20,35 @@ class UsergroupRelQuestion
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
-    private $usergroupId;
+    protected $usergroupId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="coefficient", type="float", precision=6, scale=2, nullable=true)
      */
-    private $coefficient;
+    protected $coefficient;
 
     /**
      * Set cId.

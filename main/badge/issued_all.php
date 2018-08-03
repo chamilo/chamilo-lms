@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\UserBundle\Entity\User;
+use SkillRelUser as SkillRelUserManager;
 
 /**
  * Show information about all issued badges with same skill by user.
@@ -14,8 +15,8 @@ use Chamilo\UserBundle\Entity\User;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
-$skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
+$userId = isset($_GET['user']) ? (int) $_GET['user'] : 0;
+$skillId = isset($_GET['skill']) ? (int) $_GET['skill'] : 0;
 
 if (!$userId || !$skillId) {
     api_not_allowed(true);
@@ -26,7 +27,6 @@ Skill::isAllowed($userId);
 $em = Database::getManager();
 $user = api_get_user_entity($userId);
 $skill = $em->find('ChamiloCoreBundle:Skill', $skillId);
-
 $currentUserId = api_get_user_id();
 
 if (!$user || !$skill) {
@@ -80,7 +80,10 @@ foreach ($userSkills as $index => $skillIssue) {
         'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
         'acquired_level' => $currentSkillLevel,
         'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
-        'argumentation_author_name' => api_get_person_name($argumentationAuthor['firstname'], $argumentationAuthor['lastname']),
+        'argumentation_author_name' => api_get_person_name(
+            $argumentationAuthor['firstname'],
+            $argumentationAuthor['lastname']
+        ),
         'argumentation' => $skillIssue->getArgumentation(),
         'source_name' => $skillIssue->getSourceName(),
         'user_id' => $skillIssue->getUser()->getId(),
@@ -91,7 +94,7 @@ foreach ($userSkills as $index => $skillIssue) {
         'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
         'skill_description' => $skillIssue->getSkill()->getDescription(),
         'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
-        'badge_assertion' => $skillIssue->getAssertionUrl(),
+        'badge_assertion' => SkillRelUserManager::getAssertionUrl($skillIssue),
         'comments' => [],
         'feedback_average' => $skillIssue->getAverage(),
     ];
@@ -156,7 +159,7 @@ foreach ($userSkills as $index => $skillIssue) {
     $formAcquiredLevel = new FormValidator(
         'acquired_level'.$skillIssue->getId(),
         'post',
-        $skillIssue->getIssueUrlAll()
+        SkillRelUserManager::getIssueUrlAll($skillIssue)
     );
     $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
     $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
@@ -172,14 +175,14 @@ foreach ($userSkills as $index => $skillIssue) {
         $em->persist($skillIssue);
         $em->flush();
 
-        header("Location: ".$skillIssue->getIssueUrlAll());
+        header('Location: '.SkillRelUserManager::getIssueUrlAll($skillIssue));
         exit;
     }
 
     $form = new FormValidator(
         'comment'.$skillIssue->getId(),
         'post',
-        $skillIssue->getIssueUrlAll()
+        SkillRelUserManager::getIssueUrlAll($skillIssue)
     );
     $form->addTextarea('comment', get_lang('NewComment'), ['rows' => 4]);
     $form->applyFilter('comment', 'trim');
@@ -207,7 +210,7 @@ foreach ($userSkills as $index => $skillIssue) {
         $em->persist($skillUserComment);
         $em->flush();
 
-        header("Location: ".$skillIssue->getIssueUrlAll());
+        header('Location: '.SkillRelUserManager::getIssueUrlAll($skillIssue));
         exit;
     }
 

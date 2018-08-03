@@ -35,7 +35,7 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-$lp_id = !empty($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
+$lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
@@ -60,8 +60,8 @@ $visibility = api_get_item_visibility(
     $sessionId
 );
 
-if (!api_is_allowed_to_edit(false, true, false, false) &&
-    intval($visibility) == 0
+if ($visibility === 0 &&
+    !api_is_allowed_to_edit(false, true, false, false)
 ) {
     api_not_allowed(true);
 }
@@ -113,7 +113,7 @@ if (!$is_allowed_to_edit) {
     }
 }
 
-$platform_theme = api_get_setting('stylesheets'); // Platform's css.
+$platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
 $ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
 $htmlHeadXtra[] = '<script>
@@ -309,9 +309,9 @@ if (!empty($_REQUEST['exeId']) &&
     $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id = intval($_GET['lp_item_id']);
+    $safe_item_id = (int) $_GET['lp_item_id'];
     $safe_id = $lp_id;
-    $safe_exe_id = intval($_REQUEST['exeId']);
+    $safe_exe_id = (int) $_REQUEST['exeId'];
 
     if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))

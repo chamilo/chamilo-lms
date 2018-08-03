@@ -20,28 +20,28 @@ class SettingsOptions
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=true)
      */
-    private $variable;
+    protected $variable;
 
     /**
      * @var string
      *
      * @ORM\Column(name="value", type="string", length=255, nullable=true)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
      *
      * @ORM\Column(name="display_text", type="string", length=255, nullable=false)
      */
-    private $displayText;
+    protected $displayText;
 
     /**
      * Set variable.

@@ -18,28 +18,28 @@ class CourseType
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="translation_var", type="string", length=40, nullable=true)
      */
-    private $translationVar;
+    protected $translationVar;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="props", type="text", nullable=true)
      */
-    private $props;
+    protected $props;
 
     /**
      * @var int
@@ -48,7 +48,7 @@ class CourseType
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set name.

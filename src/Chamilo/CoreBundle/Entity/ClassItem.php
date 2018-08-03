@@ -18,14 +18,14 @@ class ClassItem
      *
      * @ORM\Column(name="code", type="string", length=40, nullable=true)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var int
@@ -34,7 +34,7 @@ class ClassItem
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set code.

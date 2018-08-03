@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelCourse
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Course", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
@@ -24,14 +33,6 @@ class AccessUrlRelCourse
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @return string

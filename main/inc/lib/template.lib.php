@@ -1376,6 +1376,7 @@ class Template
     {
         $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
         $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
+
         return [
             'web' => api_get_path(WEB_PATH),
             'web_url' => api_get_web_url(),

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use SkillRelUser as SkillRelUserManager;
 
 /**
  * Show information about the issued badge.
@@ -107,7 +108,7 @@ $skillIssueInfo = [
     'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
     'skill_description' => $skillIssue->getSkill()->getDescription(),
     'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
-    'badge_assertion' => $skillIssue->getAssertionUrl(),
+    'badge_assertion' => SkillRelUserManager::getAssertionUrl($skillIssue),
     'comments' => [],
     'feedback_average' => $skillIssue->getAverage(),
 ];
@@ -120,7 +121,6 @@ $skillId = $skillIssueInfo['skill_id'];
 /** @var SkillRelUserComment $comment */
 foreach ($skillIssueComments as $comment) {
     $commentDate = api_get_local_time($comment->getFeedbackDateTime());
-
     $skillIssueInfo['comments'][] = [
         'text' => $comment->getFeedbackText(),
         'value' => $comment->getFeedbackValue(),
@@ -157,7 +157,6 @@ if (!$profile) {
 
 if ($profile) {
     $profileId = $profile->getId();
-
     $levels = $skillLevelRepo->findBy([
         'profile' => $profileId,
     ]);
@@ -168,7 +167,6 @@ if ($profile) {
     }
 
     ksort($profileLevels); // Sort the array by Position.
-
     foreach ($profileLevels as $profileLevel) {
         $profileId = key($profileLevel);
         $acquiredLevel[$profileId] = $profileLevel[$profileId];
@@ -193,7 +191,7 @@ if ($showLevels && $allowToEdit) {
         $entityManager->flush();
         Display::addFlash(Display::return_message(get_lang('Saved')));
 
-        header("Location: ".$skillIssue->getIssueUrl());
+        header('Location: '.SkillRelUserManager::getIssueUrl($skillIssue));
         exit;
     }
 }
@@ -226,7 +224,7 @@ if ($form->validate() && $allowComment && $allowToEdit) {
     $entityManager->flush();
     Display::addFlash(Display::return_message(get_lang('Added')));
 
-    header("Location: ".$skillIssue->getIssueUrl());
+    header('Location: '.SkillRelUserManager::getIssueUrl($skillIssue));
     exit;
 }
 

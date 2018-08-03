@@ -18,28 +18,28 @@ class SharedSurveyQuestionOption
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
-    private $surveyId;
+    protected $surveyId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="option_text", type="text", nullable=false)
      */
-    private $optionText;
+    protected $optionText;
 
     /**
      * @var int
      *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
-    private $sort;
+    protected $sort;
 
     /**
      * @var int
@@ -48,7 +48,7 @@ class SharedSurveyQuestionOption
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $questionOptionId;
+    protected $questionOptionId;
 
     /**
      * Set questionId.

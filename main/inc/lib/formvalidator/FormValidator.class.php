@@ -296,12 +296,19 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     * @param bool   $required
      *
      * @return HTML_QuickForm_textarea
      */
-    public function addTextarea($name, $label, $attributes = [])
+    public function addTextarea($name, $label, $attributes = [], $required = false)
     {
-        return $this->addElement('textarea', $name, $label, $attributes);
+        $element = $this->addElement('textarea', $name, $label, $attributes);
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        return $element;
     }
 
     /**

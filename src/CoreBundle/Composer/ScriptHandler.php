@@ -95,6 +95,15 @@ class ScriptHandler
             __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',
             __DIR__.'/../../../../main/exercice',
+            // js files
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/docs',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/nuget',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/grunt',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/test-infra',
+            __DIR__.'/../../../../web/assets/bootstrap/grunt',
+            __DIR__.'/../../../../web/assets/bootstrap/nuget',
+            __DIR__.'/../../../../web/assets/bootstrap/docs',
+            __DIR__.'/../../../../web/assets/bootstrap/test-infra',
         ];
 
         return $paths;
@@ -196,6 +205,17 @@ class ScriptHandler
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php',
+            __DIR__.'/../../../../src/Chamilo/UserBundle/Entity/Repository/UserRepository.php',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/Gemfile',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/Gemfile.lock',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/Gruntfile.js',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/package.js',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/package.json',
+            __DIR__.'/../../../../web/assets/bootstrap/Gemfile',
+            __DIR__.'/../../../../web/assets/bootstrap/Gemfile.lock',
+            __DIR__.'/../../../../web/assets/bootstrap/Gruntfile.js',
+            __DIR__.'/../../../../web/assets/bootstrap/package.js',
+            __DIR__.'/../../../../web/assets/bootstrap/package.json',
         ];
 
         return $files;
@@ -209,7 +229,16 @@ class ScriptHandler
     {
         $appCss = __DIR__.'/../../../../app/Resources/public/css/';
         $newPath = __DIR__.'/../../../../web/css/';
-        $cssFiles = ['base.css', 'chat.css', 'editor.css', 'markdown.css', 'print.css', 'responsive.css', 'scorm.css'];
+        $cssFiles = [
+            'base.css',
+            'chat.css',
+            'document.css',
+            'editor_content.css',
+            'markdown.css',
+            'print.css',
+            'responsive.css',
+            'scorm.css',
+        ];
 
         $fs = new Filesystem();
 

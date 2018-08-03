@@ -6160,8 +6160,9 @@ SQL;
     /**
      * @param int $userId
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public static function anonymizeUserWithVerification($userId)
     {
@@ -6193,6 +6194,53 @@ SQL;
             } else {
                 $message = Display::return_message(
                     sprintf(get_lang('NoPermissionToAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
+                    'error'
+                );
+            }
+        }
+
+        return $message;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @throws Exception
+     *
+     * @return string
+     */
+    public static function deleteUserWithVerification($userId)
+    {
+        $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+        $deleteUserAvailable = api_get_configuration_value('deny_delete_users');
+
+        $message = '';
+
+        if (api_is_platform_admin() ||
+            ($allowDelete && api_is_session_admin())
+        ) {
+            $userToUpdateInfo = api_get_user_info($userId);
+            $currentUserId = api_get_user_id();
+
+            if ($userToUpdateInfo && $deleteUserAvailable &&
+                api_global_admin_can_edit_admin($userId, null, $allowDelete)
+            ) {
+                if ($userId != $currentUserId &&
+                    UserManager::delete_user($userId)
+                ) {
+                    $message = Display::return_message(
+                        get_lang('UserDeleted').': '.$userToUpdateInfo['complete_name_with_username'],
+                        'confirmation'
+                    );
+                } else {
+                    $message = Display::return_message(
+                        get_lang('CannotDeleteUserBecauseOwnsCourse'),
+                        'error'
+                    );
+                }
+            } else {
+                $message = Display::return_message(
+                    get_lang('CannotDeleteUser'),
                     'error'
                 );
             }
@@ -6297,51 +6345,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return string
-     * @throws Exception
-     */
-    public static function deleteUserWithVerification($userId)
-    {
-        $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
-        $deleteUserAvailable = api_get_configuration_value('deny_delete_users');
-
-        $message = '';
-
-        if (api_is_platform_admin() ||
-            ($allowDelete && api_is_session_admin())
-        ) {
-            $userToUpdateInfo = api_get_user_info($userId);
-            $currentUserId = api_get_user_id();
-
-            if ($userToUpdateInfo && $deleteUserAvailable &&
-                api_global_admin_can_edit_admin($userId, null, $allowDelete)
-            ) {
-                if ($userId != $currentUserId &&
-                    UserManager::delete_user($userId)
-                ) {
-                    $message = Display::return_message(
-                        get_lang('UserDeleted').': '.$userToUpdateInfo['complete_name_with_username'],
-                        'confirmation'
-                    );
-                } else {
-                    $message = Display::return_message(
-                        get_lang('CannotDeleteUserBecauseOwnsCourse'),
-                        'error'
-                    );
-                }
-            } else {
-                $message = Display::return_message(
-                    get_lang('CannotDeleteUser'),
-                    'error'
-                );
-            }
-        }
-
-        return $message;
     }
 }

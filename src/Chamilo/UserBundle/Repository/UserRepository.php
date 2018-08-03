@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\TrackELogin;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -538,7 +537,6 @@ class UserRepository extends EntityRepository
         $extraFieldValues = new \ExtraFieldValue('user');
         $items = $extraFieldValues->getAllValuesByItem($userId);
         $user->setExtraFields($items);
-
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {

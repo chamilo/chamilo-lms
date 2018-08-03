@@ -557,7 +557,6 @@ if (api_is_platform_admin()) {
     $blocks['data_privacy']['extra'] = null;
     $blocks['data_privacy']['search_form'] = null;
 
-
     /* Chamilo.org */
     $blocks['chamilo']['icon'] = Display::return_icon(
         'platform.png',

@@ -19,9 +19,6 @@ api_protect_admin_script();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-
-
-
 /**
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
@@ -142,10 +139,6 @@ function prepare_user_sql_query($getCount)
             $keyword_admin
             $keyword_extra_value
         ";
-
-
-
-
 
         if (isset($keywordListValues['keyword_active']) &&
             !isset($keywordListValues['keyword_inactive'])
@@ -383,7 +376,7 @@ function modify_filter($user_id, $url_params, $row)
         '</a>';
 
     if ($user_id != api_get_user_id()) {
-    $result .= ' <a href="'.api_get_self().'?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
+        $result .= ' <a href="'.api_get_self().'?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
             api_htmlentities(get_lang("ConfirmYourChoice"))
         )."'".')) return false;">'.
         Display::return_icon(
@@ -405,7 +398,6 @@ function modify_filter($user_id, $url_params, $row)
             ICON_SIZE_SMALL
         ).
         '</a>&nbsp;';
-
 
     if ($is_admin) {
         $result .= Display::return_icon(

@@ -275,7 +275,6 @@ define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
 define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
 
-
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
 //used when login_is_email setting is true
@@ -3877,10 +3876,10 @@ function convert_sql_date($last_post_datetime)
  * the only one that is actually from the session, in case there are results from
  * session 0 *AND* session n).
  *
- * @param array  $_course Course properties array (result of api_get_course_info())
- * @param string $tool    Tool (learnpath, document, etc)
- * @param int    $id      The item ID in the given tool
- * @param int    $session The session ID (optional)
+ * @param array  $_course  Course properties array (result of api_get_course_info())
+ * @param string $tool     Tool (learnpath, document, etc)
+ * @param int    $id       The item ID in the given tool
+ * @param int    $session  The session ID (optional)
  * @param int    $user_id
  * @param string $type
  * @param string $group_id

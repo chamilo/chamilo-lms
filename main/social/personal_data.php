@@ -154,7 +154,6 @@ switch ($action) {
         break;
 }
 
-
 $propertiesToJson = UserManager::getRepository()->getPersonalDataToJson($userId, $substitutionTerms);
 
 if (!empty($_GET['export'])) {
@@ -268,11 +267,11 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         $permitionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br />';
         $permitionBlock .= $formToString;
 
-        /*$permitionBlock .= Display::url(
-            get_lang('DeleteLegal'),
-            api_get_self().'?action=delete_legal&user_id='.$userId,
-            ['class' => 'btn btn-danger btn-xs']
-        );*/
+    /*$permitionBlock .= Display::url(
+        get_lang('DeleteLegal'),
+        api_get_self().'?action=delete_legal&user_id='.$userId,
+        ['class' => 'btn btn-danger btn-xs']
+    );*/
     } else {
         // @TODO add action handling for button
         $permitionBlock .= Display::url(
@@ -284,7 +283,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 } else {
     $permitionBlock .= get_lang('NoTermsAndConditionsAvailable');
 }
-
 
 //Build the final array to pass to template
 $personalData = [];

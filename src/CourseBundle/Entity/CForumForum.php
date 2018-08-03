@@ -135,9 +135,9 @@ class CForumForum
     /**
      * @var string
      *
-     * @ORM\Column(name="forum_group_public_protected", type="string", length=20, nullable=true)
+     * @ORM\Column(name="forum_group_public_private", type="string", length=20, nullable=true)
      */
-    protected $forumGroupPublicprotected;
+    protected $forumGroupPublicPrivate;
 
     /**
      * @var int
@@ -508,27 +508,23 @@ class CForumForum
     }
 
     /**
-     * Set forumGroupPublicprotected.
-     *
-     * @param string $forumGroupPublicprotected
-     *
-     * @return CForumForum
+     * @return string
      */
-    public function setForumGroupPublicprotected($forumGroupPublicprotected)
+    public function getForumGroupPublicPrivate(): string
     {
-        $this->forumGroupPublicprotected = $forumGroupPublicprotected;
-
-        return $this;
+        return $this->forumGroupPublicPrivate;
     }
 
     /**
-     * Get forumGroupPublicprotected.
+     * @param string $forumGroupPublicPrivate
      *
-     * @return string
+     * @return $this
      */
-    public function getForumGroupPublicprotected()
+    public function setForumGroupPublicPrivate(string $forumGroupPublicPrivate)
     {
-        return $this->forumGroupPublicprotected;
+        $this->forumGroupPublicPrivate = $forumGroupPublicPrivate;
+
+        return $this;
     }
 
     /**

@@ -46,12 +46,6 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
 
 api_protect_admin_script(true);
 
-// Blocks the possibility to delete a user
-$deleteUserAvailable = true;
-if (api_get_configuration_value('deny_delete_users')) {
-    $deleteUserAvailable = false;
-}
-
 trimVariables();
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -870,40 +864,10 @@ if (!empty($action)) {
                 }
                 break;
             case 'delete_user':
-                $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
-                if (api_is_platform_admin() ||
-                    ($allowDelete && api_is_session_admin())
-                ) {
-                    $userToUpdate = $_GET['user_id'];
-                    $userToUpdateInfo = api_get_user_info($userToUpdate);
-                    $currentUserId = api_get_user_id();
-
-                    if ($userToUpdateInfo && $deleteUserAvailable &&
-                        api_global_admin_can_edit_admin($_GET['user_id'], null, $allowDelete)
-                    ) {
-                        if ($userToUpdate != $currentUserId &&
-                            UserManager::delete_user($_GET['user_id'])
-                        ) {
-                            $message = Display::return_message(
-                                get_lang('UserDeleted').': '.$userToUpdateInfo['complete_name_with_username'],
-                                'confirmation'
-                            );
-                        } else {
-                            $message = Display::return_message(
-                                get_lang('CannotDeleteUserBecauseOwnsCourse'),
-                                'error'
-                            );
-                        }
-                    } else {
-                        $message = Display::return_message(
-                            get_lang('CannotDeleteUser'),
-                            'error'
-                        );
-                    }
-                    Display::addFlash($message);
-                    header('Location: '.api_get_self());
-                    exit;
-                }
+                $message = UserManager::deleteUserWithVerification($_GET['user_id']);
+                Display::addFlash($message);
+                header('Location: '.api_get_self());
+                exit;
                 break;
             case 'delete':
                 if (api_is_platform_admin()) {
@@ -984,39 +948,10 @@ if (!empty($action)) {
                 }
                 break;
             case 'anonymize':
-                if (api_is_platform_admin() ||
-                    ($allowDelete && api_is_session_admin())
-                ) {
-                    $userToUpdate = (int) $_GET['user_id'];
-                    $userToUpdateInfo = api_get_user_info($userToUpdate);
-                    $currentUserId = api_get_user_id();
-
-                    if ($userToUpdateInfo &&
-                        api_global_admin_can_edit_admin($userToUpdate, null, $allowDelete)
-                    ) {
-                        if ($userToUpdate != $currentUserId &&
-                            UserManager::anonymize($userToUpdate)
-                        ) {
-                            $message = Display::return_message(
-                                sprintf(get_lang('UserXAnonymized'), $userToUpdateInfo['complete_name_with_username']),
-                                'confirmation'
-                            );
-                        } else {
-                            $message = Display::return_message(
-                                sprintf(get_lang('CannotAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
-                                'error'
-                            );
-                        }
-                    } else {
-                        $message = Display::return_message(
-                            sprintf(get_lang('NoPermissionToAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
-                            'error'
-                        );
-                    }
-                    Display::addFlash($message);
-                    header('Location: '.api_get_self());
-                    exit;
-                }
+                $message = UserManager::anonymizeUserWithVerification($_GET['user_id']);
+                Display::addFlash($message);
+                header('Location: '.api_get_self());
+                exit;
                 break;
         }
         Security::clear_token();

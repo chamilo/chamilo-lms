@@ -2621,4 +2621,20 @@ class MessageManager
 
         return $row['count'];
     }
+
+    /**
+     * @param int    $senderId
+     * @param string $subject
+     * @param string $message
+     */
+    public static function sendMessageToAllAdminUsers(
+        $senderId,
+        $subject,
+        $message
+    ) {
+        $admins = UserManager::get_all_administrators();
+        foreach ($admins as $admin) {
+            self::send_message_simple($admin['user_id'], $subject, $message, $senderId);
+        }
+    }
 }

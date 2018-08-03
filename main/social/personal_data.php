@@ -17,6 +17,7 @@ if (!api_get_configuration_value('enable_gdpr')) {
 }
 
 $userId = api_get_user_id();
+$userInfo = api_get_user_info();
 
 $substitutionTerms = [
     'password' => get_lang('EncryptedData'),
@@ -24,26 +25,134 @@ $substitutionTerms = [
     'empty' => get_lang('NoData'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$formToString = '';
 
-/*switch ($action) {
-    case 'delete_legal':
-        $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+if (api_get_setting('allow_terms_conditions') === 'true') {
+    $form = new FormValidator('term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
+    $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement')));
+    $form->addTextarea('explanation', get_lang('ExplanationDeleteLegal'), [], true);
+    $form->addButtonSave(get_lang('DeleteLegal'));
+    $form->addHidden('action', 'delete_legal');
+    $formToString = $form->returnForm();
+}
+
+switch ($action) {
+    case 'send_legal':
+        $language = api_get_interface_language();
+        $language = api_get_language_id($language);
+        $terms = LegalManager::get_last_condition($language);
+        if (!$terms) {
+            //look for the default language
+            $language = api_get_setting('platformLanguage');
+            $language = api_get_language_id($language);
+            $terms = LegalManager::get_last_condition($language);
+        }
+
+        $legalAcceptType = $terms['version'].':'.$terms['language_id'].':'.time();
+        UserManager::update_extra_field_value(
             $userId,
-            'legal_accept'
+            'legal_accept',
+            $legalAcceptType
         );
-        $result = $extraFieldValue->delete($value['id']);
-
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
 
         Event::addEvent(
-            LOG_USER_REMOVED_LEGAL_ACCEPT,
+            LOG_TERM_CONDITION_ACCEPTED,
             LOG_USER_OBJECT,
-            api_get_user_info()
+            api_get_user_info($userId),
+            api_get_utc_datetime()
         );
+
+        $bossList = UserManager::getStudentBossList($userId);
+        if (!empty($bossList)) {
+            $bossList = array_column($bossList, 'boss_id');
+            $currentUserInfo = api_get_user_info($userId);
+            foreach ($bossList as $bossId) {
+                $subjectEmail = sprintf(
+                    get_lang('UserXSignedTheAgreement'),
+                    $currentUserInfo['complete_name']
+                );
+                $contentEmail = sprintf(
+                    get_lang('UserXSignedTheAgreementTheY'),
+                    $currentUserInfo['complete_name'],
+                    api_get_local_time($time)
+                );
+
+                MessageManager::send_message_simple(
+                    $bossId,
+                    $subjectEmail,
+                    $contentEmail,
+                    $user_id
+                );
+            }
+        }
+
+        Display::addFlash(Display::return_message(get_lang('Saved')));
         break;
-}*/
+    case 'delete_legal':
+        if ($form->validate()) {
+            $explanation = $form->getSubmitValue('explanation');
+
+            UserManager::create_extra_field(
+                'request_for_legal_agreement_consent_removal',
+                1, //text
+                        'Request for legal agreement consent removal',
+                ''
+            );
+
+            UserManager::update_extra_field_value(
+                $userId,
+                'request_for_legal_agreement_consent_removal',
+                1
+            );
+
+            UserManager::create_extra_field(
+                'request_for_legal_agreement_consent_removal_justification',
+                1, //text
+                'Request for legal agreement consent removal justification',
+                ''
+            );
+
+            UserManager::update_extra_field_value(
+                $userId,
+                'request_for_legal_agreement_consent_removal_justification',
+                $explanation
+            );
+
+            $extraFieldValue = new ExtraFieldValue('user');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $userId,
+                'legal_accept'
+            );
+            $result = $extraFieldValue->delete($value['id']);
+
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+
+            Event::addEvent(
+                LOG_USER_REMOVED_LEGAL_ACCEPT,
+                LOG_USER_OBJECT,
+                $userInfo
+            );
+
+            $url = api_get_path(WEB_CODE_PATH).'admin/';
+            $link = Display::url($url, $url);
+            $subject = get_lang('RequestForLegalConsentRemoval');
+            $content = sprintf(
+                get_lang('TheUserXAskRemovalWithJustifactionYGoHere'),
+                $userInfo['complete_name'],
+                $explanation,
+                $link
+            );
+
+            $email = api_get_configuration_value('data_protection_officer_email');
+            if (!empty($email)) {
+                api_mail_html('', $email, $subject, $content);
+            } else {
+                MessageManager::sendMessageToAllAdminUsers(api_get_user_id(), $subject, $content);
+            }
+        }
+        break;
+}
 
 
 $propertiesToJson = UserManager::getRepository()->getPersonalDataToJson($userId, $substitutionTerms);
@@ -143,45 +252,43 @@ foreach ($properties as $key => $value) {
 $personalDataContent .= '</ul>';
 
 // Check terms acceptation
-$termsAndConditionsAcceptance = [];
-$termsAndConditionsAcceptance['accepted'] = false;
+$permitionBlock = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $userId,
         'legal_accept'
     );
-    $termsAndConditionsAcceptance['icon'] = Display::return_icon('accept_na.png', get_lang('NotAccepted'));
+    $permitionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-        $termsAndConditionsAcceptance['accepted'] = true;
-        $termsAndConditionsAcceptance['icon'] = Display::return_icon('accept.png', get_lang('LegalAgreementAccepted'));
-        $termsAndConditionsAcceptance['date'] = api_get_local_time($legalTime);
-        // @TODO add action handling for button
-        $termsAndConditionsAcceptance['button'] = Display::url(
+        $permitionBlock = get_lang('CurrentStatus').': '.
+            Display::return_icon('accept.png', get_lang('LegalAgreementAccepted')).get_lang('LegalAgreementAccepted').
+            '<br />';
+        $permitionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br />';
+        $permitionBlock .= $formToString;
+
+        /*$permitionBlock .= Display::url(
             get_lang('DeleteLegal'),
             api_get_self().'?action=delete_legal&user_id='.$userId,
             ['class' => 'btn btn-danger btn-xs']
-        );
+        );*/
     } else {
         // @TODO add action handling for button
-        $termsAndConditionsAcceptance['button'] = Display::url(
+        $permitionBlock .= Display::url(
             get_lang('SendLegal'),
             api_get_self().'?action=send_legal&user_id='.$userId,
             ['class' => 'btn btn-primary btn-xs']
         );
     }
-    $termsAndConditionsAcceptance['label'] = get_lang('LegalAccepted');
 } else {
-    $termsAndConditionsAcceptance['label'] = get_lang('NoTermsAndConditionsAvailable');
+    $permitionBlock .= get_lang('NoTermsAndConditionsAvailable');
 }
+
 
 //Build the final array to pass to template
 $personalData = [];
 $personalData['data'] = $personalDataContent;
-$icon = Display::return_icon('export_excel.png', get_lang('Export'), null, ICON_SIZE_MEDIUM);
-$personalData['data_export_icon'] = $icon;
-$personalData['permissions'] = $termsAndConditionsAcceptance;
 //$personalData['responsible'] = api_get_setting('personal_data_responsible_org');
 
 $em = Database::getManager();
@@ -233,6 +340,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
+$tpl->assign('permission', $permitionBlock);
 $tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');
 $tpl->display($socialLayout);

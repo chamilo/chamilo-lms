@@ -130,7 +130,7 @@ class UniqueAnswer extends Question
             );
         }
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if (isset($answer->correct[$i]) && $answer->correct[$i]) {

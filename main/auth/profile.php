@@ -398,7 +398,7 @@ function is_profile_editable()
 /**
  * Upload a submitted user production.
  *
- * @param   $user_id User id
+ * @param $user_id User id
  *
  * @return The filename of the new production or FALSE if the upload has failed
  */

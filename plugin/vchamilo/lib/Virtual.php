@@ -475,8 +475,8 @@ class Virtual
     /**
      * Backups a database for having a snapshot.
      *
-     * @param   $vchamilo      object        The Vchamilo object
-     * @param   $outputfilerad string        The output SQL file radical
+     * @param $vchamilo      object        The Vchamilo object
+     * @param $outputfilerad string        The output SQL file radical
      *
      * @return bool if TRUE, dumping database was a success, otherwise FALSE
      */

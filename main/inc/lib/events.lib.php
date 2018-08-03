@@ -455,7 +455,7 @@ class Event
      * @param    int    Position
      * @param    int Exercise ID (from c_quiz)
      * @param    bool update results?
-     * @param   $fileName string  Filename (for audio answers - using nanogong)
+     * @param $fileName string  Filename (for audio answers - using nanogong)
      * @param    int User ID The user who's going to get this score. Default value of null means "get from context".
      * @param    int Course ID (from the "id" column of course table). Default value of null means "get from context".
      * @param    int Session ID (from the session table). Default value of null means "get from context".

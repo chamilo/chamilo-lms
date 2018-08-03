@@ -759,7 +759,7 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
     $workDir = (substr($workDir, -1, 1) == '/' ? $workDir : $workDir.'/');
     $checkDirName = $desiredDirName;
     while (file_exists($workDir.$checkDirName)) {
-        $counter += 1;
+        $counter++;
         $checkDirName = $desiredDirName.$counter;
     }
 

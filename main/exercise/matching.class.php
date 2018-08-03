@@ -88,12 +88,12 @@ class Matching extends Question
         }
 
         if (empty($matches)) {
-            for ($i = 1; $i <= $nb_options; ++$i) {
+            for ($i = 1; $i <= $nb_options; $i++) {
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
         } else {
-            for ($i = $counter; $i <= $nb_options; ++$i) {
+            for ($i = $counter; $i <= $nb_options; $i++) {
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
@@ -130,7 +130,7 @@ class Matching extends Question
             'Height' => '125',
         ];
 
-        for ($i = 1; $i <= $nb_matches; ++$i) {
+        for ($i = 1; $i <= $nb_matches; $i++) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
@@ -193,7 +193,7 @@ class Matching extends Question
             );
         }
 
-        for ($i = 1; $i <= $nb_options; ++$i) {
+        for ($i = 1; $i <= $nb_options; $i++) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
@@ -251,14 +251,14 @@ class Matching extends Question
         $objAnswer = new Answer($this->id);
 
         // Insert the options
-        for ($i = 1; $i <= $nb_options; ++$i) {
+        for ($i = 1; $i <= $nb_options; $i++) {
             $position++;
             $option = $form->getSubmitValue('option['.$i.']');
             $objAnswer->createAnswer($option, 0, '', 0, $position);
         }
 
         // Insert the answers
-        for ($i = 1; $i <= $nb_matches; ++$i) {
+        for ($i = 1; $i <= $nb_matches; $i++) {
             $position++;
             $answer = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');

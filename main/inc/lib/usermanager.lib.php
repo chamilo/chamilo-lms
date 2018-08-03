@@ -2211,7 +2211,7 @@ class UserManager
     /**
      * Returns an array with the user's productions.
      *
-     * @param   $user_id User id
+     * @param $user_id User id
      *
      * @return array An array containing the user's productions
      */

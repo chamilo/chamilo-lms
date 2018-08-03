@@ -105,14 +105,14 @@ class UniqueAnswerNoOption extends Question
                     $nb_answers--;
                 }
             }
-            for ($k = 1; $k <= $nb_answers; ++$k) {
+            for ($k = 1; $k <= $nb_answers; $k++) {
                 if ($answer->position[$k] != '666') {
                     $new_list[$count] = $count;
                     $count++;
                 }
             }
         } else {
-            for ($k = 1; $k <= $nb_answers; ++$k) {
+            for ($k = 1; $k <= $nb_answers; $k++) {
                 $new_list[$k] = $k;
             }
         }

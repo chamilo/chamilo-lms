@@ -436,7 +436,7 @@ class FillBlanks extends Question
         if ($nb > 0) {
             $answer .= '::';
             // weighting
-            for ($i = 0; $i < $nb; ++$i) {
+            for ($i = 0; $i < $nb; $i++) {
                 // enter the weighting of word $i
                 $answer .= $form->getSubmitValue('weighting['.$i.']');
                 // not the last word, add ","
@@ -449,7 +449,7 @@ class FillBlanks extends Question
 
             // input width
             $answer .= ":";
-            for ($i = 0; $i < $nb; ++$i) {
+            for ($i = 0; $i < $nb; $i++) {
                 // enter the width of input for word $i
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
                 // not the last word, add ","

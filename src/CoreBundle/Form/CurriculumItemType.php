@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class CurriculumItemType.
+ *
  * @package Chamilo\CoreBundle\Form
  */
 class CurriculumItemType extends AbstractType

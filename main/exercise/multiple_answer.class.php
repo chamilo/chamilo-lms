@@ -80,7 +80,7 @@ class MultipleAnswer extends Question
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];

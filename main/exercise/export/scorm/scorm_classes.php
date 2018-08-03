@@ -1144,7 +1144,7 @@ class ScormSection
             list($jstmp, $htmltmp) = ScormQuestion::export_question($q, false, $js_id);
             $js .= $jstmp."\n";
             $html .= $htmltmp."\n";
-            ++$js_id;
+            $js_id++;
         }
 
         return [$js, $html];

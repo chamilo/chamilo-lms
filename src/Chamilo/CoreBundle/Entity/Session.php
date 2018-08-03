@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -411,7 +412,7 @@ class Session
     {
         if ($this->getCourses()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("course", $course)
+                Criteria::expr()->eq('course', $course)
             );
             $relation = $this->getCourses()->matching($criteria);
 
@@ -508,14 +509,14 @@ class Session
     public function getUserInCourse(User $user, Course $course, $status = null)
     {
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("course", $course)
+            Criteria::expr()->eq('course', $course)
         )->andWhere(
-            Criteria::expr()->eq("user", $user)
+            Criteria::expr()->eq('user', $user)
         );
 
         if (!is_null($status)) {
             $criteria->andWhere(
-                Criteria::expr()->eq("status", $status)
+                Criteria::expr()->eq('status', $status)
             );
         }
 
@@ -527,7 +528,7 @@ class Session
      *
      * @param string $name
      *
-     * @return Session
+     * @return $this
      */
     public function setName($name)
     {
@@ -551,7 +552,7 @@ class Session
      *
      * @param string $description
      *
-     * @return Groups
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -919,11 +920,7 @@ class Session
     {
         $now = new \Datetime('now');
 
-        if ($now > $this->getAccessStartDate()) {
-            return true;
-        }
-
-        return false;
+        return $now > $this->getAccessStartDate();
     }
 
     /**
@@ -1021,11 +1018,11 @@ class Session
     {
         if ($this->getUserCourseSubscriptions()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
+                Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
-                Criteria::expr()->eq("course", $subscription->getCourse())
+                Criteria::expr()->eq('course', $subscription->getCourse())
             )->andWhere(
-                Criteria::expr()->eq("session", $subscription->getSession())
+                Criteria::expr()->eq('session', $subscription->getSession())
             );
             $relation = $this->getUserCourseSubscriptions()->matching($criteria);
 
@@ -1085,8 +1082,8 @@ class Session
     /**
      * Get user from course by status.
      *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     * @param int                               $status
+     * @param Course $course
+     * @param int    $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
@@ -1094,10 +1091,10 @@ class Session
     {
         $criteria = Criteria::create()
             ->where(
-                Criteria::expr()->eq("course", $course)
+                Criteria::expr()->eq('course', $course)
             )
             ->andWhere(
-                Criteria::expr()->eq("status", $status)
+                Criteria::expr()->eq('status', $status)
             );
 
         return $this->userCourseSubscriptions->matching($criteria);

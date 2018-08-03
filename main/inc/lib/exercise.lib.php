@@ -4670,7 +4670,9 @@ EOT;
                         ['class' => 'question-panel']
                     );
                 } else {
-                    if (!$show_only_score) {
+                    // $show_all_but_expected_answer should not happen at
+                    // the same time as $show_results
+                    if ($show_results && !$show_only_score) {
                         $exercise_content .= Display::div(
                             Display::panel($question_content),
                             ['class' => 'question-panel']

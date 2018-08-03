@@ -12,6 +12,7 @@
 
     <!-- Import the entire unused code rule set -->
     <rule ref="rulesets/cleancode.xml">
+        <exclude name="BooleanArgumentFlag" />
         <exclude name="StaticAccess" />
     </rule>
 

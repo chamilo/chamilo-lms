@@ -7,7 +7,9 @@ checks:
   file-lines:
     enabled: false
   method-complexity:
-    enabled: false
+    enabled: true
+    config:
+      threshold: 20
   method-count:
     enabled: false
   method-lines:
@@ -19,6 +21,11 @@ checks:
     enabled: false
 
 plugins:
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php"
+
   fixme:
     enabled: true
     config:
@@ -29,12 +36,14 @@ plugins:
   phpcodesniffer:
     enabled: true
     config:
-      standard: "PSR1,PSR2"
+      standard: "Symfony2"
       file_extensions: "php"
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:
         enabled: false
       PSR1 Files SideEffects FoundWithSymbols:
+        enabled: false
+      Squiz Strings ConcatenationSpacing PaddingFound:
         enabled: false
 
   phpmd:
@@ -106,6 +115,9 @@ exclude_patterns:
   - plugin/bbb/lib/bbb_api.php
   - plugin/ims_lti/OAuthSimple.php
   - plugin/sepe/src/wsse/
+  - plugin/test2pdf/class/
+  - plugin/jcapture/lib/
+  - plugin/jcapture/src/
   - tests/
   - vendor/
   - web/

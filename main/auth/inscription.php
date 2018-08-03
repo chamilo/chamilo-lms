@@ -898,7 +898,7 @@ if ($form->validate()) {
                 Event::addEvent(
                     LOG_TERM_CONDITION_ACCEPTED,
                     LOG_USER_OBJECT,
-                    api_get_user_info(),
+                    api_get_user_info($user_id),
                     api_get_utc_datetime()
                 );
 

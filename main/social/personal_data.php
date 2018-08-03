@@ -24,6 +24,28 @@ $substitutionTerms = [
     'empty' => get_lang('NoData'),
 ];
 
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
+/*switch ($action) {
+    case 'delete_legal':
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $userId,
+            'legal_accept'
+        );
+        $result = $extraFieldValue->delete($value['id']);
+
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
+
+        Event::addEvent(
+            LOG_USER_REMOVED_LEGAL_ACCEPT,
+            LOG_USER_OBJECT,
+            api_get_user_info()
+        );
+        break;
+}*/
+
+
 $propertiesToJson = UserManager::getRepository()->getPersonalDataToJson($userId, $substitutionTerms);
 
 if (!empty($_GET['export'])) {
@@ -70,12 +92,36 @@ $properties = json_decode($propertiesToJson);
 
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
-        if ($key === 'extraFields') {
-            $personalDataContent .= '<li>'.$key.': </li><ul>';
-            foreach ($value as $subValue) {
-                $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
-            }
-            $personalDataContent .= '</ul>';
+        switch ($key) {
+            case 'extraFields':
+                $personalDataContent .= '<li>'.$key.': </li><ul>';
+                foreach ($value as $subValue) {
+                    $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                }
+                $personalDataContent .= '</ul>';
+                break;
+            case 'portals':
+            case 'achievedSkills':
+            case 'sessionAsGeneralCoach':
+            case 'classes':
+            case 'courses':
+                $personalDataContent .= '<li>'.$key.': </li><ul>';
+                foreach ($value as $subValue) {
+                    $personalDataContent .= '<li>'.$subValue.'</li>';
+                }
+                $personalDataContent .= '</ul>';
+                break;
+            case 'sessionCourseSubscriptions':
+                $personalDataContent .= '<li>'.$key.': </li><ul>';
+                foreach ($value as $session => $courseList) {
+                    $personalDataContent .= '<li>'.$session.'<ul>';
+                    foreach ($courseList as $course) {
+                        $personalDataContent .= '<li>'.$course.'</li>';
+                    }
+                    $personalDataContent .= '</ul>';
+                }
+                $personalDataContent .= '</ul>';
+                break;
         }
 
         /*foreach ($value as $subValue) {

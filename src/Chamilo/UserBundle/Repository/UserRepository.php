@@ -3,10 +3,15 @@
 
 namespace Chamilo\UserBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\TrackELogin;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -442,7 +447,7 @@ class UserRepository extends EntityRepository
      * @param int   $userId
      * @param array $substitutionTerms Substitute terms for some elements
      *
-     * @return array $values
+     * @return string
      */
     public function getPersonalDataToJson($userId, array $substitutionTerms)
     {
@@ -473,23 +478,67 @@ class UserRepository extends EntityRepository
         $user->setWebsite($noDataLabel);
         $user->setToken($noDataLabel);
 
-        //$courses = $user->getCourses();
+        $courses = $user->getCourses();
+        $list = [];
+        /** @var CourseRelUser $course */
+        foreach ($courses as $course) {
+            $list[] = $course->getCourse()->getCode();
+        }
+        $user->setCourses($list);
 
-        $user->setCourses([]);
-        $user->setClasses([]);
+        $classes = $user->getClasses();
+        $list = [];
+        /** @var UsergroupRelUser $class */
+        foreach ($classes as $class) {
+            $list[] = $class->getUsergroup()->getName();
+        }
+        $user->setClasses($list);
+
+        $collection = $user->getSessionCourseSubscriptions();
+        $list = [];
+        /** @var SessionRelCourseRelUser $item */
+        foreach ($collection as $item) {
+            $list[$item->getSession()->getName()][] = $item->getCourse()->getCode();
+        }
+        $user->setSessionCourseSubscriptions($list);
+
         $user->setDropBoxSentFiles([]);
         $user->setDropBoxReceivedFiles([]);
         $user->setGroups([]);
         $user->setCurriculumItems([]);
-        $user->setPortals([]);
-        $user->setSessionCourseSubscriptions([]);
-        $user->setSessionAsGeneralCoach([]);
-        $user->setAchievedSkills([]);
+
+        $portals = $user->getPortals();
+
+        $list = [];
+        /** @var AccessUrlRelUser $portal */
+        foreach ($portals as $portal) {
+            $portalInfo = \UrlManager::get_url_data_from_id($portal->getAccessUrlId());
+            $list[] = $portalInfo['url'];
+        }
+        $user->setPortals($list);
+
+        $coachList = $user->getSessionAsGeneralCoach();
+        $list = [];
+        /** @var Session $session */
+        foreach ($coachList as $session) {
+            $list[] = $session->getName();
+        }
+        $user->setSessionAsGeneralCoach($list);
+
+        $skillRelUserList = $user->getAchievedSkills();
+        $list = [];
+        /** @var SkillRelUser $skillRelUser */
+        foreach ($skillRelUserList as $skillRelUser) {
+            $list[] = $skillRelUser->getSkill()->getName();
+        }
+        $user->setAchievedSkills($list);
+
         $user->setCommentedUserSkills([]);
 
         $extraFieldValues = new \ExtraFieldValue('user');
         $items = $extraFieldValues->getAllValuesByItem($userId);
         $user->setExtraFields($items);
+
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {
@@ -501,7 +550,6 @@ class UserRepository extends EntityRepository
         $user->setLastLogin($lastLogin);
 
         $dateNormalizer = new GetSetMethodNormalizer();
-
         $dateNormalizer->setCircularReferenceHandler(function ($object) {
             return get_class($object);
         });

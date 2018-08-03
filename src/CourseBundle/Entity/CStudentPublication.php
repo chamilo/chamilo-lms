@@ -28,189 +28,189 @@ class CStudentPublication
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
      *
      * @ORM\Column(name="url_correction", type="string", length=255, nullable=true)
      */
-    private $urlCorrection;
+    protected $urlCorrection;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title_correction", type="string", length=255, nullable=true)
      */
-    private $titleCorrection;
+    protected $titleCorrection;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=255, nullable=true)
      */
-    private $author;
+    protected $author;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=true)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="accepted", type="boolean", nullable=true)
      */
-    private $accepted;
+    protected $accepted;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_group_id", type="integer", nullable=false)
      */
-    private $postGroupId;
+    protected $postGroupId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="sent_date", type="datetime", nullable=true)
      */
-    private $sentDate;
+    protected $sentDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
-    private $filetype;
+    protected $filetype;
 
     /**
      * @var int
      *
      * @ORM\Column(name="has_properties", type="integer", nullable=false)
      */
-    private $hasProperties;
+    protected $hasProperties;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="view_properties", type="boolean", nullable=true)
      */
-    private $viewProperties;
+    protected $viewProperties;
 
     /**
      * @var float
      *
      * @ORM\Column(name="qualification", type="float", precision=6, scale=2, nullable=false)
      */
-    private $qualification;
+    protected $qualification;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
      */
-    private $dateOfQualification;
+    protected $dateOfQualification;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="qualificator_id", type="integer", nullable=false)
      */
-    private $qualificatorId;
+    protected $qualificatorId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weight", type="float", precision=6, scale=2, nullable=false)
      */
-    private $weight;
+    protected $weight;
 
     /**
      * @var Session
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="studentPublications")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private $session;
+    protected $session;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)
      */
-    private $allowTextAssignment;
+    protected $allowTextAssignment;
 
     /**
      * @var int
      *
      * @ORM\Column(name="contains_file", type="integer", nullable=false)
      */
-    private $containsFile;
+    protected $containsFile;
 
     /**
      * @var int
      *
      * @ORM\Column(name="document_id", type="integer", nullable=false)
      */
-    private $documentId;
+    protected $documentId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="filesize", type="integer", nullable=true)
      */
-    private $fileSize;
+    protected $fileSize;
 
     /**
      * Set url.

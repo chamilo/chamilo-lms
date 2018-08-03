@@ -20,35 +20,35 @@ class SkillRelSkill
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
-    private $skillId;
+    protected $skillId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
-    private $level;
+    protected $level;
 
     /**
      * Set id.

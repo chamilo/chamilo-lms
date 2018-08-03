@@ -215,7 +215,7 @@ class SequenceRepository extends EntityRepository
      *
      * @return array
      */
-    private function findSessionFromVerticesEdges(Vertices $verticesEdges)
+    protected function findSessionFromVerticesEdges(Vertices $verticesEdges)
     {
         $sessionVertices = [];
         foreach ($verticesEdges as $supVertex) {

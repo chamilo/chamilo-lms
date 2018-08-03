@@ -18,35 +18,35 @@ class SpecificFieldValues
      *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
      */
-    private $toolId;
+    protected $toolId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
-    private $refId;
+    protected $refId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
-    private $fieldId;
+    protected $fieldId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var int
@@ -55,7 +55,7 @@ class SpecificFieldValues
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set courseCode.

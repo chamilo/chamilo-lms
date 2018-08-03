@@ -39,98 +39,98 @@ class AccessUrl
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", unique=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false, unique=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false, unique=false)
      */
-    private $createdBy;
+    protected $createdBy;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
-    private $tms;
+    protected $tms;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="url_type", type="boolean", nullable=true)
      */
-    private $urlType;
+    protected $urlType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="limit_courses", type="integer", nullable=true, unique=false)
      */
-    private $limitCourses;
+    protected $limitCourses;
 
     /**
      * @var int
      *
      * @ORM\Column(name="limit_active_courses", type="integer", nullable=true, unique=false)
      */
-    private $limitActiveCourses;
+    protected $limitActiveCourses;
 
     /**
      * @var int
      *
      * @ORM\Column(name="limit_sessions", type="integer", nullable=true, unique=false)
      */
-    private $limitSessions;
+    protected $limitSessions;
 
     /**
      * @var int
      *
      * @ORM\Column(name="limit_users", type="integer", nullable=true, unique=false)
      */
-    private $limitUsers;
+    protected $limitUsers;
 
     /**
      * @var int
      *
      * @ORM\Column(name="limit_teachers", type="integer", nullable=true, unique=false)
      */
-    private $limitTeachers;
+    protected $limitTeachers;
 
     /**
      * @var int
      *
      * @ORM\Column(name="limit_disk_space", type="integer", nullable=true, unique=false)
      */
-    private $limitDiskSpace;
+    protected $limitDiskSpace;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true, unique=false)
      */
-    private $email;
+    protected $email;
 
     /**
      * Constructor.

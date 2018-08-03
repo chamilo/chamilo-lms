@@ -105,7 +105,7 @@ class ResourceNode
      */
     protected $updatedAt;
 
-    //private $pathForCreationLog = '';
+    //protected $pathForCreationLog = '';
 
     /**
      * Constructor.

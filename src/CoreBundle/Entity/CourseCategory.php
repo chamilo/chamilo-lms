@@ -34,55 +34,55 @@ class CourseCategory
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var int
      *
      * @ORM\Column(name="tree_pos", type="integer", nullable=true)
      */
-    private $treePos;
+    protected $treePos;
 
     /**
      * @var int
      *
      * @ORM\Column(name="children_count", type="smallint", nullable=true)
      */
-    private $childrenCount;
+    protected $childrenCount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="auth_course_child", type="string", length=40, nullable=true)
      */
-    private $authCourseChild;
+    protected $authCourseChild;
 
     /**
      * @var string
      *
      * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
      */
-    private $authCatChild;
+    protected $authCatChild;
 
     /**
      * Constructor.

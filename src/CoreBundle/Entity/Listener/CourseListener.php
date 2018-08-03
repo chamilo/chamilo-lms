@@ -92,7 +92,7 @@ class CourseListener
      *
      * @throws \Exception
      */
-    private function checkLimit($repo, Course $course, AccessUrl $url)
+    protected function checkLimit($repo, Course $course, AccessUrl $url)
     {
         $limit = $url->getLimitCourses();
 

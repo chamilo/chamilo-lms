@@ -24,42 +24,42 @@ class TrackEDownloads
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $downId;
+    protected $downId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="down_user_id", type="integer", nullable=true)
      */
-    private $downUserId;
+    protected $downUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="down_date", type="datetime", nullable=false)
      */
-    private $downDate;
+    protected $downDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="down_doc_path", type="string", length=255, nullable=false)
      */
-    private $downDocPath;
+    protected $downDocPath;
 
     /**
      * @var int
      *
      * @ORM\Column(name="down_session_id", type="integer", nullable=false)
      */
-    private $downSessionId;
+    protected $downSessionId;
 
     /**
      * Set downUserId.

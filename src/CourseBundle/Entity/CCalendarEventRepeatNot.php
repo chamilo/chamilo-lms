@@ -25,28 +25,28 @@ class CCalendarEventRepeatNot
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_id", type="integer")
      */
-    private $calId;
+    protected $calId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_date", type="integer")
      */
-    private $calDate;
+    protected $calDate;
 
     /**
      * Set cId.

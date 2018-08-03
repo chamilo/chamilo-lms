@@ -46,7 +46,7 @@ class SessionRelCourse
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * Constructor.

@@ -27,77 +27,77 @@ class TrackEAttempt
      *
      * @ORM\Column(name="exe_id", type="integer", nullable=true)
      */
-    private $exeId;
+    protected $exeId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    private $answer;
+    protected $answer;
 
     /**
      * @var string
      *
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    private $teacherComment;
+    protected $teacherComment;
 
     /**
      * @var float
      *
      * @ORM\Column(name="marks", type="float", precision=6, scale=2, nullable=false)
      */
-    private $marks;
+    protected $marks;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
-    private $tms;
+    protected $tms;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @var int
@@ -106,7 +106,7 @@ class TrackEAttempt
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set exeId.

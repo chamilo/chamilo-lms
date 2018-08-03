@@ -26,56 +26,56 @@ class TrackEDefault
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $defaultId;
+    protected $defaultId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="default_user_id", type="integer", nullable=false)
      */
-    private $defaultUserId;
+    protected $defaultUserId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="default_date", type="datetime", nullable=true)
      */
-    private $defaultDate;
+    protected $defaultDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_event_type", type="string", length=255, nullable=false)
      */
-    private $defaultEventType;
+    protected $defaultEventType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_value_type", type="string", length=255, nullable=false)
      */
-    private $defaultValueType;
+    protected $defaultValueType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_value", type="text", nullable=false)
      */
-    private $defaultValue;
+    protected $defaultValue;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set defaultUserId.

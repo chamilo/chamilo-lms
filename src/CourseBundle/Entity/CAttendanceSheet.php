@@ -27,35 +27,35 @@ class CAttendanceSheet
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="presence", type="boolean", nullable=false)
      */
-    private $presence;
+    protected $presence;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attendance_calendar_id", type="integer")
      */
-    private $attendanceCalendarId;
+    protected $attendanceCalendarId;
 
     /**
      * Set presence.

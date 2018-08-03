@@ -20,28 +20,28 @@ class UserGroupRelUserGroup
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="subgroup_id", type="integer", nullable=false)
      */
-    private $subgroupId;
+    protected $subgroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * Set groupId.

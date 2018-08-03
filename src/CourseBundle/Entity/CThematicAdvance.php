@@ -27,63 +27,63 @@ class CThematicAdvance
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thematic_id", type="integer", nullable=false)
      */
-    private $thematicId;
+    protected $thematicId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
-    private $attendanceId;
+    protected $attendanceId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
      */
-    private $startDate;
+    protected $startDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="duration", type="integer", nullable=false)
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="done_advance", type="boolean", nullable=false)
      */
-    private $doneAdvance;
+    protected $doneAdvance;
 
     /**
      * @var Room
@@ -91,7 +91,7 @@ class CThematicAdvance
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    private $room;
+    protected $room;
 
     /**
      * Set thematicId.

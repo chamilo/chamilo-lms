@@ -20,14 +20,14 @@ class SequenceRule
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * Get id.

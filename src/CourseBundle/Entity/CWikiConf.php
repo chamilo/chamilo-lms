@@ -26,112 +26,112 @@ class CWikiConf
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="page_id", type="integer")
      */
-    private $pageId;
+    protected $pageId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="task", type="text", nullable=false)
      */
-    private $task;
+    protected $task;
 
     /**
      * @var string
      *
      * @ORM\Column(name="feedback1", type="text", nullable=false)
      */
-    private $feedback1;
+    protected $feedback1;
 
     /**
      * @var string
      *
      * @ORM\Column(name="feedback2", type="text", nullable=false)
      */
-    private $feedback2;
+    protected $feedback2;
 
     /**
      * @var string
      *
      * @ORM\Column(name="feedback3", type="text", nullable=false)
      */
-    private $feedback3;
+    protected $feedback3;
 
     /**
      * @var string
      *
      * @ORM\Column(name="fprogress1", type="string", length=3, nullable=false)
      */
-    private $fprogress1;
+    protected $fprogress1;
 
     /**
      * @var string
      *
      * @ORM\Column(name="fprogress2", type="string", length=3, nullable=false)
      */
-    private $fprogress2;
+    protected $fprogress2;
 
     /**
      * @var string
      *
      * @ORM\Column(name="fprogress3", type="string", length=3, nullable=false)
      */
-    private $fprogress3;
+    protected $fprogress3;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_size", type="integer", nullable=true)
      */
-    private $maxSize;
+    protected $maxSize;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_text", type="integer", nullable=true)
      */
-    private $maxText;
+    protected $maxText;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_version", type="integer", nullable=true)
      */
-    private $maxVersion;
+    protected $maxVersion;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="startdate_assig", type="datetime", nullable=true)
      */
-    private $startdateAssig;
+    protected $startdateAssig;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="enddate_assig", type="datetime", nullable=true)
      */
-    private $enddateAssig;
+    protected $enddateAssig;
 
     /**
      * @var int
      *
      * @ORM\Column(name="delayedsubmit", type="integer", nullable=false)
      */
-    private $delayedsubmit;
+    protected $delayedsubmit;
 
     /**
      * Set task.

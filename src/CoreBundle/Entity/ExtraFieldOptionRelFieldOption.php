@@ -51,7 +51,7 @@ class ExtraFieldOptionRelFieldOption
      *
      * @ORM\Column(name="field_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldId;
+    protected $fieldId;
 
     /**
      * Get id.

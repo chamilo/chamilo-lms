@@ -20,14 +20,14 @@ class BranchTransactionStatus
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true, unique=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * Get id.

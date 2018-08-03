@@ -18,70 +18,70 @@ class SharedSurvey
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    private $subtitle;
+    protected $subtitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    private $author;
+    protected $author;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var string
      *
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    private $template;
+    protected $template;
 
     /**
      * @var string
      *
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    private $intro;
+    protected $intro;
 
     /**
      * @var string
      *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    private $surveythanks;
+    protected $surveythanks;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var int
@@ -90,7 +90,7 @@ class SharedSurvey
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $surveyId;
+    protected $surveyId;
 
     /**
      * Set code.

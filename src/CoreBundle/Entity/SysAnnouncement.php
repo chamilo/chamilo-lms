@@ -20,91 +20,91 @@ class SysAnnouncement
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_start", type="datetime", nullable=false)
      */
-    private $dateStart;
+    protected $dateStart;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_end", type="datetime", nullable=false)
      */
-    private $dateEnd;
+    protected $dateEnd;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_teacher", type="boolean", nullable=false)
      */
-    private $visibleTeacher;
+    protected $visibleTeacher;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_student", type="boolean", nullable=false)
      */
-    private $visibleStudent;
+    protected $visibleStudent;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_guest", type="boolean", nullable=false)
      */
-    private $visibleGuest;
+    protected $visibleGuest;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
      */
-    private $visibleDrh;
+    protected $visibleDrh;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_session_admin", type="boolean", nullable=false)
      */
-    private $visibleSessionAdmin;
+    protected $visibleSessionAdmin;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible_boss", type="boolean", nullable=false)
      */
-    private $visibleBoss;
+    protected $visibleBoss;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lang", type="string", length=70, nullable=true)
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * SysAnnouncement constructor.

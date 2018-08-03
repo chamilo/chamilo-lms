@@ -25,55 +25,55 @@ class Language
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
      */
-    private $originalName;
+    protected $originalName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="english_name", type="string", length=255, nullable=true)
      */
-    private $englishName;
+    protected $englishName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="isocode", type="string", length=10, nullable=true)
      */
-    private $isocode;
+    protected $isocode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="dokeos_folder", type="string", length=250, nullable=true)
      */
-    private $dokeosFolder;
+    protected $dokeosFolder;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="available", type="boolean", nullable=false)
      */
-    private $available;
+    protected $available;
 
     /**
      * @var \Chamilo\CoreBundle\Entity\Language
      * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
      */
-    private $subLanguages;
+    protected $subLanguages;
 
     /**
      * Language constructor.

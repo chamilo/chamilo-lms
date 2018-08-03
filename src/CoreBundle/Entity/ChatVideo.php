@@ -29,35 +29,35 @@ class ChatVideo
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="from_user", type="integer", nullable=false)
      */
-    private $fromUser;
+    protected $fromUser;
 
     /**
      * @var int
      *
      * @ORM\Column(name="to_user", type="integer", nullable=false)
      */
-    private $toUser;
+    protected $toUser;
 
     /**
      * @var string
      *
      * @ORM\Column(name="room_name", type="string", nullable=false)
      */
-    private $roomName;
+    protected $roomName;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="datetime", type="datetime", nullable=false)
      */
-    private $datetime;
+    protected $datetime;
 
     /**
      * Set fromUser.

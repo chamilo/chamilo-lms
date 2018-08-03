@@ -25,56 +25,56 @@ class CStudentPublicationAssignment
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="expires_on", type="datetime", nullable=true)
      */
-    private $expiresOn;
+    protected $expiresOn;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="ends_on", type="datetime", nullable=true)
      */
-    private $endsOn;
+    protected $endsOn;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
      */
-    private $addToCalendar;
+    protected $addToCalendar;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="enable_qualification", type="boolean", nullable=false)
      */
-    private $enableQualification;
+    protected $enableQualification;
 
     /**
      * @var int
      *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
-    private $publicationId;
+    protected $publicationId;
 
     /**
      * Set expiresOn.

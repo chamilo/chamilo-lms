@@ -17,35 +17,35 @@ class SearchEngineRef
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="searchEngineRefs")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $course;
+    protected $course;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
      */
-    private $toolId;
+    protected $toolId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ref_id_high_level", type="integer", nullable=false)
      */
-    private $refIdHighLevel;
+    protected $refIdHighLevel;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ref_id_second_level", type="integer", nullable=true)
      */
-    private $refIdSecondLevel;
+    protected $refIdSecondLevel;
 
     /**
      * @var int
      *
      * @ORM\Column(name="search_did", type="integer", nullable=false)
      */
-    private $searchDid;
+    protected $searchDid;
 
     /**
      * @var int
@@ -54,7 +54,7 @@ class SearchEngineRef
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set course.

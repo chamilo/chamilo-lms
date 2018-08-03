@@ -30,60 +30,60 @@ class SessionRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private $session;
+    protected $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    protected $user;
 
     /**
      * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var int
      *
      * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
      */
-    private $movedTo;
+    protected $movedTo;
 
     /**
      * @var int
      *
      * @ORM\Column(name="moved_status", type="integer", nullable=true, unique=false)
      */
-    private $movedStatus;
+    protected $movedStatus;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
-    private $movedAt;
+    protected $movedAt;
 
     /**
      * @var \DateTime
      * @ORM\Column(name="registered_at", type="datetime", nullable=false, unique=false)
      */
-    private $registeredAt;
+    protected $registeredAt;
 
     /**
      * Constructor.

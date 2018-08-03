@@ -26,49 +26,49 @@ class GradebookCertificate
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
-    private $catId;
+    protected $catId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score_certificate", type="float", precision=10, scale=0, nullable=false)
      */
-    private $scoreCertificate;
+    protected $scoreCertificate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path_certificate", type="text", nullable=true)
      */
-    private $pathCertificate;
+    protected $pathCertificate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
-    private $downloadedAt;
+    protected $downloadedAt;
 
     /**
      * Set catId.

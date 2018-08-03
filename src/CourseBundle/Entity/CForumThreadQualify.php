@@ -26,63 +26,63 @@ class CForumThreadQualify
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_id", type="integer", nullable=false)
      */
-    private $threadId;
+    protected $threadId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false)
      */
-    private $qualify;
+    protected $qualify;
 
     /**
      * @var int
      *
      * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
      */
-    private $qualifyUserId;
+    protected $qualifyUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
-    private $qualifyTime;
+    protected $qualifyTime;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set userId.

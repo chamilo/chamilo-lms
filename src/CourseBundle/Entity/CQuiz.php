@@ -26,209 +26,209 @@ class CQuiz
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="sound", type="string", length=255, nullable=true)
      */
-    private $sound;
+    protected $sound;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="type", type="boolean", nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="random", type="integer", nullable=false)
      */
-    private $random;
+    protected $random;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="random_answers", type="boolean", nullable=false)
      */
-    private $randomAnswers;
+    protected $randomAnswers;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var int
      *
      * @ORM\Column(name="results_disabled", type="integer", nullable=false)
      */
-    private $resultsDisabled;
+    protected $resultsDisabled;
 
     /**
      * @var string
      *
      * @ORM\Column(name="access_condition", type="text", nullable=true)
      */
-    private $accessCondition;
+    protected $accessCondition;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_attempt", type="integer", nullable=false)
      */
-    private $maxAttempt;
+    protected $maxAttempt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
-    private $endTime;
+    protected $endTime;
 
     /**
      * @var int
      *
      * @ORM\Column(name="feedback_type", type="integer", nullable=false)
      */
-    private $feedbackType;
+    protected $feedbackType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="expired_time", type="integer", nullable=false)
      */
-    private $expiredTime;
+    protected $expiredTime;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="propagate_neg", type="integer", nullable=false)
      */
-    private $propagateNeg;
+    protected $propagateNeg;
 
     /**
      * @var bool
      * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
      */
-    private $saveCorrectAnswers;
+    protected $saveCorrectAnswers;
 
     /**
      * @var int
      *
      * @ORM\Column(name="review_answers", type="integer", nullable=false)
      */
-    private $reviewAnswers;
+    protected $reviewAnswers;
 
     /**
      * @var int
      *
      * @ORM\Column(name="random_by_category", type="integer", nullable=false)
      */
-    private $randomByCategory;
+    protected $randomByCategory;
 
     /**
      * @var string
      *
      * @ORM\Column(name="text_when_finished", type="text", nullable=true)
      */
-    private $textWhenFinished;
+    protected $textWhenFinished;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_category_name", type="integer", nullable=false)
      */
-    private $displayCategoryName;
+    protected $displayCategoryName;
 
     /**
      * @var int
      *
      * @ORM\Column(name="pass_percentage", type="integer", nullable=true)
      */
-    private $passPercentage;
+    protected $passPercentage;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
      */
-    private $questionSelectionType;
+    protected $questionSelectionType;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="hide_question_title", type="boolean", nullable=true)
      */
-    private $hideQuestionTitle;
+    protected $hideQuestionTitle;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="show_previous_button", type="boolean", nullable=true, options={"default":1})
      */
-    private $showPreviousButton;
+    protected $showPreviousButton;
 
     /**
      * @var string
      *
      * @ORM\Column(name="notifications", type="string", length=255, nullable=true)
      */
-    private $notifications;
+    protected $notifications;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="auto_launch", type="boolean", nullable=true, options={"default":0})
      */
-    private $autoLaunch;
+    protected $autoLaunch;
 
     /**
      * CQuiz constructor.

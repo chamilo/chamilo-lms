@@ -56,28 +56,28 @@ class SessionRelCourseRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $visibility;
+    protected $visibility;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var int
      *
      * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $legalAgreement;
+    protected $legalAgreement;
 
     /**
      * Constructor.

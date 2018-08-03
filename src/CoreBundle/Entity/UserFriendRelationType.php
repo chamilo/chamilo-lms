@@ -20,14 +20,14 @@ class UserFriendRelationType
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=20, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * Set title.

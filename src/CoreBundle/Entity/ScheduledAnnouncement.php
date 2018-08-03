@@ -20,49 +20,49 @@ class ScheduledAnnouncement
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=false, unique=false)
      */
-    private $subject;
+    protected $subject;
 
     /**
      * @var string
      *
      * @ORM\Column(name="message", type="text", unique=false)
      */
-    private $message;
+    protected $message;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    private $date;
+    protected $date;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="sent", type="boolean")
      */
-    private $sent;
+    protected $sent;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * Constructor.

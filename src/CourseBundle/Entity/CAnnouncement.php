@@ -26,63 +26,63 @@ class CAnnouncement
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="end_date", type="date", nullable=true)
      */
-    private $endDate;
+    protected $endDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    private $displayOrder;
+    protected $displayOrder;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="email_sent", type="boolean", nullable=true)
      */
-    private $emailSent;
+    protected $emailSent;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set title.

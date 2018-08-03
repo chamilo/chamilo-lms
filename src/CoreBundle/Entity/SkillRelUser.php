@@ -46,39 +46,39 @@ class SkillRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private $user;
+    protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false)
      */
-    private $skill;
+    protected $skill;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)
      */
-    private $acquiredSkillAt;
+    protected $acquiredSkillAt;
 
     /**
      * @var int
      *
      * @ORM\Column(name="assigned_by", type="integer", nullable=false)
      */
-    private $assignedBy;
+    protected $assignedBy;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
-    private $course;
+    protected $course;
 
     /**
      * @var Session
@@ -86,7 +86,7 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    private $session;
+    protected $session;
 
     /**
      * @var Level
@@ -94,21 +94,21 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Level")
      * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
      */
-    private $acquiredLevel;
+    protected $acquiredLevel;
 
     /**
      * @var string
      *
      * @ORM\Column(name="argumentation", type="text")
      */
-    private $argumentation;
+    protected $argumentation;
 
     /**
      * @var int
      *
      * @ORM\Column(name="argumentation_author_id", type="integer")
      */
-    private $argumentationAuthorId;
+    protected $argumentationAuthorId;
 
     /**
      * SkillRelUser constructor.

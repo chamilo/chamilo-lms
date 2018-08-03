@@ -26,49 +26,49 @@ class CRolePermissions
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="default_perm", type="boolean", nullable=false)
      */
-    private $defaultPerm;
+    protected $defaultPerm;
 
     /**
      * @var int
      *
      * @ORM\Column(name="role_id", type="integer")
      */
-    private $roleId;
+    protected $roleId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tool", type="string", length=250)
      */
-    private $tool;
+    protected $tool;
 
     /**
      * @var string
      *
      * @ORM\Column(name="action", type="string", length=50)
      */
-    private $action;
+    protected $action;
 
     /**
      * Set defaultPerm.

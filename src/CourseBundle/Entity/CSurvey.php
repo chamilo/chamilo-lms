@@ -27,223 +27,223 @@ class CSurvey
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="survey_id", type="integer")
      */
-    private $surveyId;
+    protected $surveyId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    private $subtitle;
+    protected $subtitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=20, nullable=true)
      */
-    private $author;
+    protected $author;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="avail_from", type="date", nullable=true)
      */
-    private $availFrom;
+    protected $availFrom;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="avail_till", type="date", nullable=true)
      */
-    private $availTill;
+    protected $availTill;
 
     /**
      * @var string
      *
      * @ORM\Column(name="is_shared", type="string", length=1, nullable=true)
      */
-    private $isShared;
+    protected $isShared;
 
     /**
      * @var string
      *
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    private $template;
+    protected $template;
 
     /**
      * @var string
      *
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    private $intro;
+    protected $intro;
 
     /**
      * @var string
      *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    private $surveythanks;
+    protected $surveythanks;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="invited", type="integer", nullable=false)
      */
-    private $invited;
+    protected $invited;
 
     /**
      * @var int
      *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
-    private $answered;
+    protected $answered;
 
     /**
      * @var string
      *
      * @ORM\Column(name="invite_mail", type="text", nullable=false)
      */
-    private $inviteMail;
+    protected $inviteMail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="reminder_mail", type="text", nullable=false)
      */
-    private $reminderMail;
+    protected $reminderMail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
      */
-    private $mailSubject;
+    protected $mailSubject;
 
     /**
      * @var string
      *
      * @ORM\Column(name="anonymous", type="string", length=10, nullable=false)
      */
-    private $anonymous;
+    protected $anonymous;
 
     /**
      * @var string
      *
      * @ORM\Column(name="access_condition", type="text", nullable=true)
      */
-    private $accessCondition;
+    protected $accessCondition;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="shuffle", type="boolean", nullable=false)
      */
-    private $shuffle;
+    protected $shuffle;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="one_question_per_page", type="boolean", nullable=false)
      */
-    private $oneQuestionPerPage;
+    protected $oneQuestionPerPage;
 
     /**
      * @var string
      *
      * @ORM\Column(name="survey_version", type="string", length=255, nullable=false)
      */
-    private $surveyVersion;
+    protected $surveyVersion;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="survey_type", type="integer", nullable=false)
      */
-    private $surveyType;
+    protected $surveyType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="show_form_profile", type="integer", nullable=false)
      */
-    private $showFormProfile;
+    protected $showFormProfile;
 
     /**
      * @var string
      *
      * @ORM\Column(name="form_fields", type="text", nullable=false)
      */
-    private $formFields;
+    protected $formFields;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="visible_results", type="integer", nullable=true)
      */
-    private $visibleResults;
+    protected $visibleResults;
 
     /**
      * @var bool
      * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
      */
-    private $isMandatory = false;
+    protected $isMandatory = false;
 
     /**
      * Set code.

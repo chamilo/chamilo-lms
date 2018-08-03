@@ -30,112 +30,112 @@ class CourseRequest
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="directory", type="string", length=40, nullable=true)
      */
-    private $directory;
+    protected $directory;
 
     /**
      * @var string
      *
      * @ORM\Column(name="db_name", type="string", length=40, nullable=true)
      */
-    private $dbName;
+    protected $dbName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_language", type="string", length=20, nullable=true)
      */
-    private $courseLanguage;
+    protected $courseLanguage;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="category_code", type="string", length=40, nullable=true)
      */
-    private $categoryCode;
+    protected $categoryCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true)
      */
-    private $tutorName;
+    protected $tutorName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="visual_code", type="string", length=40, nullable=true)
      */
-    private $visualCode;
+    protected $visualCode;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="request_date", type="datetime", nullable=false)
      */
-    private $requestDate;
+    protected $requestDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="objetives", type="text", nullable=true)
      */
-    private $objetives;
+    protected $objetives;
 
     /**
      * @var string
      *
      * @ORM\Column(name="target_audience", type="text", nullable=true)
      */
-    private $targetAudience;
+    protected $targetAudience;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var int
      *
      * @ORM\Column(name="info", type="integer", nullable=false)
      */
-    private $info;
+    protected $info;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exemplary_content", type="integer", nullable=false)
      */
-    private $exemplaryContent;
+    protected $exemplaryContent;
 
     /**
      * Constructor.

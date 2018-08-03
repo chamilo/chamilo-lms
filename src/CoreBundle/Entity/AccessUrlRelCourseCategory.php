@@ -20,21 +20,21 @@ class AccessUrlRelCourseCategory
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer")
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="course_category_id", type="integer")
      */
-    private $courseCategoryId;
+    protected $courseCategoryId;
 
     /**
      * Set accessUrlId.

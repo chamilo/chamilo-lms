@@ -18,35 +18,35 @@ class HookCall
      *
      * @ORM\Column(name="hook_event_id", type="integer", nullable=false)
      */
-    private $hookEventId;
+    protected $hookEventId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hook_observer_id", type="integer", nullable=false)
      */
-    private $hookObserverId;
+    protected $hookObserverId;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="type", type="boolean", nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hook_order", type="integer", nullable=false)
      */
-    private $hookOrder;
+    protected $hookOrder;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    private $enabled;
+    protected $enabled;
 
     /**
      * @var int
@@ -55,7 +55,7 @@ class HookCall
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set hookEventId.

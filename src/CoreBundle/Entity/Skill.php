@@ -51,63 +51,63 @@ class Skill
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
      */
-    private $shortCode;
+    protected $shortCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="icon", type="string", length=255, nullable=false)
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @var string
      *
      * @ORM\Column(name="criteria", type="text", nullable=true)
      */
-    private $criteria;
+    protected $criteria;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false, options={"default": 1})
      */
-    private $status;
+    protected $status;
 
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * Constructor.

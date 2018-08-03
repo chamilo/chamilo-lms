@@ -18,42 +18,42 @@ class CourseModule
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="link", type="string", length=255, nullable=false)
      */
-    private $link;
+    protected $link;
 
     /**
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=100, nullable=true)
      */
-    private $image;
+    protected $image;
 
     /**
      * @var int
      *
      * @ORM\Column(name="row", type="integer", nullable=false)
      */
-    private $row;
+    protected $row;
 
     /**
      * @var int
      *
      * @ORM\Column(name="column", type="integer", nullable=false)
      */
-    private $column;
+    protected $column;
 
     /**
      * @var string
      *
      * @ORM\Column(name="position", type="string", length=20, nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var int
@@ -62,7 +62,7 @@ class CourseModule
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set name.

@@ -26,35 +26,35 @@ class TrackStoredValues
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="sco_id", type="integer", nullable=false)
      */
-    private $scoId;
+    protected $scoId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_id", type="string", length=40, nullable=false)
      */
-    private $courseId;
+    protected $courseId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="sv_key", type="string", length=64, nullable=false)
      */
-    private $svKey;
+    protected $svKey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="sv_value", type="text", nullable=false)
      */
-    private $svValue;
+    protected $svValue;
 
     /**
      * @var int
@@ -63,7 +63,7 @@ class TrackStoredValues
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set userId.

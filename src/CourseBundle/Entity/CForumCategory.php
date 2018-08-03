@@ -26,56 +26,56 @@ class CForumCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
      */
-    private $catTitle;
+    protected $catTitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cat_comment", type="text", nullable=true)
      */
-    private $catComment;
+    protected $catComment;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cat_order", type="integer", nullable=false)
      */
-    private $catOrder;
+    protected $catOrder;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cat_id", type="integer")
      */
-    private $catId;
+    protected $catId;
 
     /**
      * Set catTitle.

@@ -23,49 +23,49 @@ class TrackCourseRanking
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
-    private $urlId;
+    protected $urlId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="accesses", type="integer", nullable=false)
      */
-    private $accesses;
+    protected $accesses;
 
     /**
      * @var int
      *
      * @ORM\Column(name="total_score", type="integer", nullable=false)
      */
-    private $totalScore;
+    protected $totalScore;
 
     /**
      * @var int
      *
      * @ORM\Column(name="users", type="integer", nullable=false)
      */
-    private $users;
+    protected $users;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var int
@@ -74,7 +74,7 @@ class TrackCourseRanking
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set cId.

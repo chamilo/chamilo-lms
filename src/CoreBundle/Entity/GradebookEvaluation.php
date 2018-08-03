@@ -20,83 +20,83 @@ class GradebookEvaluation
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookEvaluations")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $course;
+    protected $course;
 
     /**
      * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
-    private $weight;
+    protected $weight;
 
     /**
      * @var float
      *
      * @ORM\Column(name="max", type="float", precision=10, scale=0, nullable=false)
      */
-    private $max;
+    protected $max;
 
     /**
      * @var int
      *
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=40, nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * Set name.

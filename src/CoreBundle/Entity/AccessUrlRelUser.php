@@ -30,7 +30,7 @@ class AccessUrlRelUser
      * @ORM\GeneratedValue
      * @ORM\Column(name="id", type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @return string

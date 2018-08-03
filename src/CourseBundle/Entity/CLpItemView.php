@@ -30,98 +30,98 @@ class CLpItemView
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_item_id", type="integer", nullable=false)
      */
-    private $lpItemId;
+    protected $lpItemId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_view_id", type="integer", nullable=false)
      */
-    private $lpViewId;
+    protected $lpViewId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
-    private $viewCount;
+    protected $viewCount;
 
     /**
      * @var int
      *
      * @ORM\Column(name="start_time", type="integer", nullable=false)
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @var int
      *
      * @ORM\Column(name="total_time", type="integer", nullable=false)
      */
-    private $totalTime;
+    protected $totalTime;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
      */
-    private $score;
+    protected $score;
 
     /**
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=32, nullable=false, options={"default":"not attempted"})
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string
      *
      * @ORM\Column(name="suspend_data", type="text", nullable=true)
      */
-    private $suspendData;
+    protected $suspendData;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lesson_location", type="text", nullable=true)
      */
-    private $lessonLocation;
+    protected $lessonLocation;
 
     /**
      * @var string
      *
      * @ORM\Column(name="core_exit", type="string", length=32, nullable=false, options={"default":"none"})
      */
-    private $coreExit;
+    protected $coreExit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="max_score", type="string", length=8, nullable=true)
      */
-    private $maxScore;
+    protected $maxScore;
 
     /**
      * CLpItemView constructor.

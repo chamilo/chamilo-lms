@@ -25,77 +25,77 @@ class CCourseSetting
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=false)
      */
-    private $variable;
+    protected $variable;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subkey", type="string", length=255, nullable=true)
      */
-    private $subkey;
+    protected $subkey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    private $category;
+    protected $category;
 
     /**
      * @var string
      *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
-    private $subkeytext;
+    protected $subkeytext;
 
     /**
      * Set variable.

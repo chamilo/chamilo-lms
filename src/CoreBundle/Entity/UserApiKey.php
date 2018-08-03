@@ -20,63 +20,63 @@ class UserApiKey
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="api_key", type="string", length=32, nullable=false)
      */
-    private $apiKey;
+    protected $apiKey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="api_service", type="string", length=10, nullable=false)
      */
-    private $apiService;
+    protected $apiService;
 
     /**
      * @var string
      *
      * @ORM\Column(name="api_end_point", type="text", nullable=true)
      */
-    private $apiEndPoint;
+    protected $apiEndPoint;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_date", type="datetime", nullable=true)
      */
-    private $createdDate;
+    protected $createdDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="validity_start_date", type="datetime", nullable=true)
      */
-    private $validityStartDate;
+    protected $validityStartDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="validity_end_date", type="datetime", nullable=true)
      */
-    private $validityEndDate;
+    protected $validityEndDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * Set userId.

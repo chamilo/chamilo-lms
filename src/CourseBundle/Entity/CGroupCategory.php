@@ -25,126 +25,126 @@ class CGroupCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="doc_state", type="boolean", nullable=false)
      */
-    private $docState;
+    protected $docState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
      */
-    private $calendarState;
+    protected $calendarState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="work_state", type="boolean", nullable=false)
      */
-    private $workState;
+    protected $workState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
      */
-    private $announcementsState;
+    protected $announcementsState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="forum_state", type="boolean", nullable=false)
      */
-    private $forumState;
+    protected $forumState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
      */
-    private $wikiState;
+    protected $wikiState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="chat_state", type="boolean", nullable=false)
      */
-    private $chatState;
+    protected $chatState;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_student", type="integer", nullable=false)
      */
-    private $maxStudent;
+    protected $maxStudent;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="self_reg_allowed", type="boolean", nullable=false)
      */
-    private $selfRegAllowed;
+    protected $selfRegAllowed;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="self_unreg_allowed", type="boolean", nullable=false)
      */
-    private $selfUnregAllowed;
+    protected $selfUnregAllowed;
 
     /**
      * @var int
      *
      * @ORM\Column(name="groups_per_user", type="integer", nullable=false)
      */
-    private $groupsPerUser;
+    protected $groupsPerUser;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    private $displayOrder;
+    protected $displayOrder;
 
     /**
      * @var int
      *
      * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
      */
-    private $docAccess;
+    protected $docAccess;
 
     /**
      * Set title.

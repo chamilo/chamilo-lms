@@ -26,40 +26,40 @@ class SkillRelUserComment
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", inversedBy="comments")
      * @ORM\JoinColumn(name="skill_rel_user_id", referencedColumnName="id")
      */
-    private $skillRelUser;
+    protected $skillRelUser;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="commentedUserSkills")
      * @ORM\JoinColumn(name="feedback_giver_id", referencedColumnName="id")
      */
-    private $feedbackGiver;
+    protected $feedbackGiver;
 
     /**
      * @var string
      *
      * @ORM\Column(name="feedback_text", type="text")
      */
-    private $feedbackText;
+    protected $feedbackText;
 
     /**
      * @var int
      *
      * @ORM\Column(name="feedback_value", type="integer", nullable=true, options={"default":1})
      */
-    private $feedbackValue;
+    protected $feedbackValue;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feedback_datetime", type="datetime")
      */
-    private $feedbackDateTime;
+    protected $feedbackDateTime;
 
     /**
      * Get id.

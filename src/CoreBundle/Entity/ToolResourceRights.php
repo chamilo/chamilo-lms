@@ -40,7 +40,7 @@ class ToolResourceRights
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @return string

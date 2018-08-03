@@ -51,77 +51,77 @@ class CItemProperty
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tool", type="string", length=100, nullable=false)
      */
-    private $tool;
+    protected $tool;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
      */
-    private $insertDate;
+    protected $insertDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
-    private $lasteditDate;
+    protected $lasteditDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ref", type="integer", nullable=false)
      */
-    private $ref;
+    protected $ref;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastedit_type", type="string", length=100, nullable=false)
      */
-    private $lasteditType;
+    protected $lasteditType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lastedit_user_id", type="integer", nullable=true)
      */
-    private $lasteditUserId;
+    protected $lasteditUserId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
-    private $visibility;
+    protected $visibility;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_visible", type="datetime", nullable=true)
      */
-    private $startVisible;
+    protected $startVisible;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="end_visible", type="datetime", nullable=true)
      */
-    private $endVisible;
+    protected $endVisible;
 
     /**
      * CItemProperty constructor.

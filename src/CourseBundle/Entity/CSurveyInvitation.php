@@ -27,84 +27,84 @@ class CSurveyInvitation
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="survey_invitation_id", type="integer")
      */
-    private $surveyInvitationId;
+    protected $surveyInvitationId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="survey_code", type="string", length=20, nullable=false)
      */
-    private $surveyCode;
+    protected $surveyCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user", type="string", length=250, nullable=false)
      */
-    private $user;
+    protected $user;
 
     /**
      * @var string
      *
      * @ORM\Column(name="invitation_code", type="string", length=250, nullable=false)
      */
-    private $invitationCode;
+    protected $invitationCode;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
      */
-    private $invitationDate;
+    protected $invitationDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="reminder_date", type="datetime", nullable=false)
      */
-    private $reminderDate;
+    protected $reminderDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
-    private $answered;
+    protected $answered;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="answered_at", type="datetime", nullable=true)
      */
-    private $answeredAt;
+    protected $answeredAt;
 
     /**
      * Set surveyCode.

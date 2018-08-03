@@ -39,7 +39,7 @@ class CourseRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
@@ -49,42 +49,42 @@ class CourseRelUser
      * @deprecated
      * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_tutor", type="boolean", nullable=true, unique=false)
      */
-    private $tutor;
+    protected $tutor;
 
     /**
      * @var int
      *
      * @ORM\Column(name="sort", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $sort;
+    protected $sort;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_course_cat", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $userCourseCat;
+    protected $userCourseCat;
 
     /**
      * @var int
      *
      * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $legalAgreement;
+    protected $legalAgreement;
 
     /**
      * Constructor.

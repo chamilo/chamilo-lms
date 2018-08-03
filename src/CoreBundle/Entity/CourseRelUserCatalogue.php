@@ -39,14 +39,14 @@ class CourseRelUserCatalogue
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * Constructor.

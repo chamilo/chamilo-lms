@@ -31,7 +31,7 @@ class AccessUrlRelSession
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * Get id.

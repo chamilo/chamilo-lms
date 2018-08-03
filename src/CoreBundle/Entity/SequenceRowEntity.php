@@ -20,41 +20,41 @@ class SequenceRowEntity
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer")
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="row_id", type="integer")
      */
-    private $rowId;
+    protected $rowId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceTypeEntity")
      * @ORM\JoinColumn(name="sequence_type_entity_id", referencedColumnName="id")
      */
-    private $type;
+    protected $type;
 
     /**
      * Get id.

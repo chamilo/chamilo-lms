@@ -27,56 +27,56 @@ class CDropboxPost
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
-    private $feedbackDate;
+    protected $feedbackDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    private $feedback;
+    protected $feedback;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
-    private $catId;
+    protected $catId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="file_id", type="integer")
      */
-    private $fileId;
+    protected $fileId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="dest_user_id", type="integer")
      */
-    private $destUserId;
+    protected $destUserId;
 
     /**
      * Set feedbackDate.

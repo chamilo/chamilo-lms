@@ -23,42 +23,42 @@ class TrackEAccess
      *
      * @ORM\Column(name="access_user_id", type="integer", nullable=true)
      */
-    private $accessUserId;
+    protected $accessUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
      */
-    private $accessDate;
+    protected $accessDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
      */
-    private $accessTool;
+    protected $accessTool;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_session_id", type="integer", nullable=false)
      */
-    private $accessSessionId;
+    protected $accessSessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    private $userIp;
+    protected $userIp;
 
     /**
      * @var int
@@ -67,7 +67,7 @@ class TrackEAccess
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $accessId;
+    protected $accessId;
 
     /**
      * Set accessUserId.

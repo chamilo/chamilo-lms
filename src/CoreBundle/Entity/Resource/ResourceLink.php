@@ -69,9 +69,9 @@ class ResourceLink implements ResourceInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="private", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="protected", type="boolean", nullable=true, unique=false)
      */
-    protected $private;
+    protected $protected;
 
     /**
      * @var bool
@@ -149,17 +149,17 @@ class ResourceLink implements ResourceInterface
     /**
      * @return bool
      */
-    public function isPrivate()
+    public function isprotected()
     {
-        return $this->private;
+        return $this->protected;
     }
 
     /**
-     * @param bool $private
+     * @param bool $protected
      */
-    public function setPrivate($private)
+    public function setprotected($protected)
     {
-        $this->private = $private;
+        $this->protected = $protected;
     }
 
     /**

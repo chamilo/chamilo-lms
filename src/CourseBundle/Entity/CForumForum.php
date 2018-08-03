@@ -25,175 +25,175 @@ class CForumForum
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_id", type="integer")
      */
-    private $forumId;
+    protected $forumId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="forum_title", type="string", length=255, nullable=false)
      */
-    private $forumTitle;
+    protected $forumTitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="forum_comment", type="text", nullable=true)
      */
-    private $forumComment;
+    protected $forumComment;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_threads", type="integer", nullable=true)
      */
-    private $forumThreads;
+    protected $forumThreads;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_posts", type="integer", nullable=true)
      */
-    private $forumPosts;
+    protected $forumPosts;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_last_post", type="integer", nullable=true)
      */
-    private $forumLastPost;
+    protected $forumLastPost;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_category", type="integer", nullable=true)
      */
-    private $forumCategory;
+    protected $forumCategory;
 
     /**
      * @var int
      *
      * @ORM\Column(name="allow_anonymous", type="integer", nullable=true)
      */
-    private $allowAnonymous;
+    protected $allowAnonymous;
 
     /**
      * @var int
      *
      * @ORM\Column(name="allow_edit", type="integer", nullable=true)
      */
-    private $allowEdit;
+    protected $allowEdit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="approval_direct_post", type="string", length=20, nullable=true)
      */
-    private $approvalDirectPost;
+    protected $approvalDirectPost;
 
     /**
      * @var int
      *
      * @ORM\Column(name="allow_attachments", type="integer", nullable=true)
      */
-    private $allowAttachments;
+    protected $allowAttachments;
 
     /**
      * @var int
      *
      * @ORM\Column(name="allow_new_threads", type="integer", nullable=true)
      */
-    private $allowNewThreads;
+    protected $allowNewThreads;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_view", type="string", length=20, nullable=true)
      */
-    private $defaultView;
+    protected $defaultView;
 
     /**
      * @var string
      *
      * @ORM\Column(name="forum_of_group", type="string", length=20, nullable=true)
      */
-    private $forumOfGroup;
+    protected $forumOfGroup;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="forum_group_public_private", type="string", length=20, nullable=true)
+     * @ORM\Column(name="forum_group_public_protected", type="string", length=20, nullable=true)
      */
-    private $forumGroupPublicPrivate;
+    protected $forumGroupPublicprotected;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_order", type="integer", nullable=true)
      */
-    private $forumOrder;
+    protected $forumOrder;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="forum_image", type="string", length=255, nullable=false)
      */
-    private $forumImage;
+    protected $forumImage;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
-    private $endTime;
+    protected $endTime;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_id", type="integer", options={"unsigned":true})
      */
-    private $lpId;
+    protected $lpId;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
-    private $moderated;
+    protected $moderated;
 
     /**
      * Set forumTitle.
@@ -508,27 +508,27 @@ class CForumForum
     }
 
     /**
-     * Set forumGroupPublicPrivate.
+     * Set forumGroupPublicprotected.
      *
-     * @param string $forumGroupPublicPrivate
+     * @param string $forumGroupPublicprotected
      *
      * @return CForumForum
      */
-    public function setForumGroupPublicPrivate($forumGroupPublicPrivate)
+    public function setForumGroupPublicprotected($forumGroupPublicprotected)
     {
-        $this->forumGroupPublicPrivate = $forumGroupPublicPrivate;
+        $this->forumGroupPublicprotected = $forumGroupPublicprotected;
 
         return $this;
     }
 
     /**
-     * Get forumGroupPublicPrivate.
+     * Get forumGroupPublicprotected.
      *
      * @return string
      */
-    public function getForumGroupPublicPrivate()
+    public function getForumGroupPublicprotected()
     {
-        return $this->forumGroupPublicPrivate;
+        return $this->forumGroupPublicprotected;
     }
 
     /**

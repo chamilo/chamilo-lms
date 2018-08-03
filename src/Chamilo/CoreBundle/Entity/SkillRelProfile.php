@@ -20,21 +20,21 @@ class SkillRelProfile
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
-    private $skillId;
+    protected $skillId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="profile_id", type="integer", nullable=false)
      */
-    private $profileId;
+    protected $profileId;
 
     /**
      * Set skillId.

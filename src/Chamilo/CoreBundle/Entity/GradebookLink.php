@@ -20,70 +20,70 @@ class GradebookLink
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
-    private $refId;
+    protected $refId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
-    private $weight;
+    protected $weight;
 
     /**
      * @var int
      *
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * Set type.

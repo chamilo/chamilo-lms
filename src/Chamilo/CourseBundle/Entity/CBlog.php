@@ -26,56 +26,56 @@ class CBlog
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer")
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="blog_name", type="string", length=250, nullable=false)
      */
-    private $blogName;
+    protected $blogName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="blog_subtitle", type="string", length=250, nullable=true)
      */
-    private $blogSubtitle;
+    protected $blogSubtitle;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
-    private $dateCreation;
+    protected $dateCreation;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=false)
      */
-    private $visibility;
+    protected $visibility;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set blogName.

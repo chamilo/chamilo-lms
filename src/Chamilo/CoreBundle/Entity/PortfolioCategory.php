@@ -31,21 +31,21 @@ class PortfolioCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = null;
+    protected $description = null;
 
     /**
      * @var User
@@ -53,21 +53,21 @@ class PortfolioCategory
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $user;
+    protected $user;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
      */
-    private $isVisible = true;
+    protected $isVisible = true;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
      */
-    private $items;
+    protected $items;
 
     /**
      * PortfolioCategory constructor.

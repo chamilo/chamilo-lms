@@ -25,35 +25,35 @@ class GradebookScoreLog
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
      */
-    private $score;
+    protected $score;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="registered_at", type="datetime", nullable=false)
      */
-    private $registeredAt;
+    protected $registeredAt;
 
     /**
      * Get the category id.

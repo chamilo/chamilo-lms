@@ -25,56 +25,56 @@ class CAttendanceSheetLog
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
-    private $attendanceId;
+    protected $attendanceId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
-    private $lasteditDate;
+    protected $lasteditDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastedit_type", type="string", length=200, nullable=false)
      */
-    private $lasteditType;
+    protected $lasteditType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
      */
-    private $lasteditUserId;
+    protected $lasteditUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="calendar_date_value", type="datetime", nullable=true)
      */
-    private $calendarDateValue;
+    protected $calendarDateValue;
 
     /**
      * Set attendanceId.

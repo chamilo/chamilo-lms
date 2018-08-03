@@ -26,98 +26,98 @@ class CQuizAnswer
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id_auto", type="integer", options={"unsigned": true, "default": null})
      */
-    private $idAuto;
+    protected $idAuto;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    private $answer;
+    protected $answer;
 
     /**
      * @var int
      *
      * @ORM\Column(name="correct", type="integer", nullable=true)
      */
-    private $correct;
+    protected $correct;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var float
      *
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
-    private $ponderation;
+    protected $ponderation;
 
     /**
      * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var string
      *
      * @ORM\Column(name="hotspot_coordinates", type="text", nullable=true)
      */
-    private $hotspotCoordinates;
+    protected $hotspotCoordinates;
 
     /**
      * @var string
      *
      * @ORM\Column(name="hotspot_type", type="string", length=40, nullable=true)
      */
-    private $hotspotType;
+    protected $hotspotType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="destination", type="text", nullable=true)
      */
-    private $destination;
+    protected $destination;
 
     /**
      * @var string
      *
      * @ORM\Column(name="answer_code", type="string", length=10, nullable=true)
      */
-    private $answerCode;
+    protected $answerCode;
 
     public function __construct()
     {

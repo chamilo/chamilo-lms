@@ -18,28 +18,28 @@ class TrackEOpen
      *
      * @ORM\Column(name="open_remote_host", type="text", nullable=false)
      */
-    private $openRemoteHost;
+    protected $openRemoteHost;
 
     /**
      * @var string
      *
      * @ORM\Column(name="open_agent", type="text", nullable=false)
      */
-    private $openAgent;
+    protected $openAgent;
 
     /**
      * @var string
      *
      * @ORM\Column(name="open_referer", type="text", nullable=false)
      */
-    private $openReferer;
+    protected $openReferer;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="open_date", type="datetime", nullable=false)
      */
-    private $openDate;
+    protected $openDate;
 
     /**
      * @var int
@@ -48,7 +48,7 @@ class TrackEOpen
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $openId;
+    protected $openId;
 
     /**
      * Set openRemoteHost.

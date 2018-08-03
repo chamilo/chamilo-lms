@@ -20,28 +20,28 @@ class Tag
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tag", type="string", length=255, nullable=false)
      */
-    private $tag;
+    protected $tag;
 
     /**
      * @var int
      *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
-    private $fieldId;
+    protected $fieldId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="count", type="integer", nullable=false)
      */
-    private $count;
+    protected $count;
 
     /**
      * Set tag.

@@ -27,77 +27,77 @@ class CAttendance
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    protected $active;
 
     /**
      * @var string
      *
      * @ORM\Column(name="attendance_qualify_title", type="string", length=255, nullable=true)
      */
-    private $attendanceQualifyTitle;
+    protected $attendanceQualifyTitle;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attendance_qualify_max", type="integer", nullable=false)
      */
-    private $attendanceQualifyMax;
+    protected $attendanceQualifyMax;
 
     /**
      * @var float
      *
      * @ORM\Column(name="attendance_weight", type="float", precision=6, scale=2, nullable=false)
      */
-    private $attendanceWeight;
+    protected $attendanceWeight;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * Set name.

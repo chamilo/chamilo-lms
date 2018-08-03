@@ -33,98 +33,98 @@ class CForumPost
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_id", type="integer")
      */
-    private $postId;
+    protected $postId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
      */
-    private $postTitle;
+    protected $postTitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="post_text", type="text", nullable=true)
      */
-    private $postText;
+    protected $postText;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_id", type="integer", nullable=true)
      */
-    private $threadId;
+    protected $threadId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_id", type="integer", nullable=true)
      */
-    private $forumId;
+    protected $forumId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="poster_id", type="integer", nullable=true)
      */
-    private $posterId;
+    protected $posterId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="poster_name", type="string", length=100, nullable=true)
      */
-    private $posterName;
+    protected $posterName;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=true)
      */
-    private $postDate;
+    protected $postDate;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="post_notification", type="boolean", nullable=true)
      */
-    private $postNotification;
+    protected $postNotification;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
      */
-    private $postParentId;
+    protected $postParentId;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * Set postTitle.

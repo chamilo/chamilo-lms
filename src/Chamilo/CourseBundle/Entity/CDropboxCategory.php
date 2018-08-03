@@ -26,56 +26,56 @@ class CDropboxCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cat_id", type="integer")
      */
-    private $catId;
+    protected $catId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cat_name", type="text", nullable=false)
      */
-    private $catName;
+    protected $catName;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="received", type="boolean", nullable=false)
      */
-    private $received;
+    protected $received;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="sent", type="boolean", nullable=false)
      */
-    private $sent;
+    protected $sent;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set catName.

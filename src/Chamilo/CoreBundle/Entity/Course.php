@@ -1181,7 +1181,7 @@ class Course
      *
      * @return bool
      */
-    private function hasSubscription(CourseRelUser $subscription)
+    protected function hasSubscription(CourseRelUser $subscription)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -1206,7 +1206,7 @@ class Course
      * @param string $role
      * @param string $status
      */
-    private function addUser(User $user, $relationType, $role, $status)
+    protected function addUser(User $user, $relationType, $role, $status)
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);

@@ -27,42 +27,42 @@ class CAttendanceCalendar
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
-    private $attendanceId;
+    protected $attendanceId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_time", type="datetime", nullable=false)
      */
-    private $dateTime;
+    protected $dateTime;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="done_attendance", type="boolean", nullable=false)
      */
-    private $doneAttendance;
+    protected $doneAttendance;
 
     /**
      * Set attendanceId.

@@ -30,28 +30,28 @@ class SessionCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_start", type="date", nullable=true, unique=false)
      */
-    private $dateStart;
+    protected $dateStart;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
      */
-    private $dateEnd;
+    protected $dateEnd;
 
     /**
      * @return string

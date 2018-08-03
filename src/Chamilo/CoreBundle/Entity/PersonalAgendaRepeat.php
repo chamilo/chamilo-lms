@@ -18,28 +18,28 @@ class PersonalAgendaRepeat
      *
      * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
      */
-    private $calType;
+    protected $calType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_end", type="integer", nullable=true)
      */
-    private $calEnd;
+    protected $calEnd;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
      */
-    private $calFrequency;
+    protected $calFrequency;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
      */
-    private $calDays;
+    protected $calDays;
 
     /**
      * @var int
@@ -48,7 +48,7 @@ class PersonalAgendaRepeat
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $calId;
+    protected $calId;
 
     /**
      * Set calType.

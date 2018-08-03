@@ -25,77 +25,77 @@ class CNotebook
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="notebook_id", type="integer")
      */
-    private $notebookId;
+    protected $notebookId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course", type="string", length=40, nullable=false)
      */
-    private $course;
+    protected $course;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=false)
      */
-    private $updateDate;
+    protected $updateDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * Set userId.

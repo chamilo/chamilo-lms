@@ -27,49 +27,49 @@ class Notification
      *
      * @ORM\Column(name="dest_user_id", type="integer", nullable=false)
      */
-    private $destUserId;
+    protected $destUserId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="dest_mail", type="string", length=255, nullable=true)
      */
-    private $destMail;
+    protected $destMail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var int
      *
      * @ORM\Column(name="send_freq", type="smallint", nullable=true)
      */
-    private $sendFreq;
+    protected $sendFreq;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
-    private $sentAt;
+    protected $sentAt;
 
     /**
      * @var int
@@ -78,7 +78,7 @@ class Notification
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set destUserId.

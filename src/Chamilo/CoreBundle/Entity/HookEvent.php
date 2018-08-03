@@ -18,14 +18,14 @@ class HookEvent
      *
      * @ORM\Column(name="class_name", type="string", length=255, nullable=true)
      */
-    private $className;
+    protected $className;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
@@ -34,7 +34,7 @@ class HookEvent
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set className.

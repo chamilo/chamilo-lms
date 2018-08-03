@@ -20,14 +20,14 @@ class SpecificField
      *
      * @ORM\Column(name="code", type="string", length=1, nullable=false)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var int
@@ -36,7 +36,7 @@ class SpecificField
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set code.

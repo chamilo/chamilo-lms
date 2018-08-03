@@ -25,56 +25,56 @@ class CWikiDiscuss
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
-    private $publicationId;
+    protected $publicationId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="userc_id", type="integer", nullable=false)
      */
-    private $usercId;
+    protected $usercId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var string
      *
      * @ORM\Column(name="p_score", type="string", length=255, nullable=true)
      */
-    private $pScore;
+    protected $pScore;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="dtime", type="datetime", nullable=false)
      */
-    private $dtime;
+    protected $dtime;
 
     /**
      * Set publicationId.

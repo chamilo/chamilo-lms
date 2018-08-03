@@ -18,35 +18,35 @@ class EventEmailTemplate
      *
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    private $message;
+    protected $message;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
      */
-    private $subject;
+    protected $subject;
 
     /**
      * @var string
      *
      * @ORM\Column(name="event_type_name", type="string", length=255, nullable=true)
      */
-    private $eventTypeName;
+    protected $eventTypeName;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="activated", type="boolean", nullable=false)
      */
-    private $activated;
+    protected $activated;
 
     /**
      * @var int
      *
      * @ORM\Column(name="language_id", type="integer", nullable=true)
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @var int
@@ -55,7 +55,7 @@ class EventEmailTemplate
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set message.

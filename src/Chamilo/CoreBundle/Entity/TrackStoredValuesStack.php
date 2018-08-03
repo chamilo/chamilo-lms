@@ -28,49 +28,49 @@ class TrackStoredValuesStack
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="sco_id", type="integer", nullable=false)
      */
-    private $scoId;
+    protected $scoId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="stack_order", type="integer", nullable=false)
      */
-    private $stackOrder;
+    protected $stackOrder;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_id", type="string", length=40, nullable=false)
      */
-    private $courseId;
+    protected $courseId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="sv_key", type="string", length=64, nullable=false)
      */
-    private $svKey;
+    protected $svKey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="sv_value", type="text", nullable=false)
      */
-    private $svValue;
+    protected $svValue;
 
     /**
      * Set userId.

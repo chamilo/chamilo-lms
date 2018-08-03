@@ -26,56 +26,56 @@ class CUserinfoContent
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="definition_id", type="integer", nullable=false)
      */
-    private $definitionId;
+    protected $definitionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="editor_ip", type="string", length=39, nullable=true)
      */
-    private $editorIp;
+    protected $editorIp;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="edition_time", type="datetime", nullable=true)
      */
-    private $editionTime;
+    protected $editionTime;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    private $content;
+    protected $content;
 
     /**
      * Set userId.

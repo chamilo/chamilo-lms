@@ -28,63 +28,63 @@ class CLpView
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_id", type="integer", nullable=false)
      */
-    private $lpId;
+    protected $lpId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
-    private $viewCount;
+    protected $viewCount;
 
     /**
      * @var int
      *
      * @ORM\Column(name="last_item", type="integer", nullable=false)
      */
-    private $lastItem;
+    protected $lastItem;
 
     /**
      * @var int
      *
      * @ORM\Column(name="progress", type="integer", nullable=true)
      */
-    private $progress;
+    protected $progress;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set lpId.

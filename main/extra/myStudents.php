@@ -64,7 +64,6 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $this_section = SECTION_COURSES;
 }
 
-
 $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
@@ -592,7 +591,7 @@ if (!empty($studentId)) {
                         <td align="right">
                             <?php
                             echo get_lang('Score').' ';
-                            Display:: display_icon(
+        Display:: display_icon(
                                 'info3.gif',
                                 get_lang('ScormAndLPTestTotalAverage'),
                                 ['align' => 'absmiddle', 'hspace' => '3px']

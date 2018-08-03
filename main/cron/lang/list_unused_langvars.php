@@ -61,7 +61,6 @@ foreach ($files as $file) {
                     }
                     $usedTerms[$term] = $shortFile;
                 }
-
             }
         } else {
             $myTerms = [];

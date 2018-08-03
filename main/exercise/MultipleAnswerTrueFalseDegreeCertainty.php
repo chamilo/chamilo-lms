@@ -1311,7 +1311,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .api_get_cidreq()
             ."&id=$exeId'>";
         $exerciseTitle = $objExercise->title;
-        
+
         $message .= sprintf(
             get_lang('MessageQuestionCertainty'),
             $exerciseTitle,

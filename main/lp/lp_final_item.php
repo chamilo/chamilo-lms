@@ -54,7 +54,7 @@ if ($checker) {
                 'normal',
                 false
             ),
-            '<a href="'.$url.'">'. $url .'</a>'
+            '<a href="'.$url.'">'.$url.'</a>'
         );
         $tpl->assign('content', $content);
         $tpl->display_blank_template();

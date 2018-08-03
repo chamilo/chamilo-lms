@@ -14,55 +14,55 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseModule
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="link", type="string", length=255, nullable=false)
-     */
-    private $link;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="string", length=100, nullable=true)
-     */
-    private $image;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="row", type="integer", nullable=false)
-     */
-    private $row;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="column", type="integer", nullable=false)
-     */
-    private $column;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="position", type="string", length=20, nullable=false)
-     */
-    private $position;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    protected $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="link", type="string", length=255, nullable=false)
+     */
+    protected $link;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=100, nullable=true)
+     */
+    protected $image;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="row", type="integer", nullable=false)
+     */
+    protected $row;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="column", type="integer", nullable=false)
+     */
+    protected $column;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="position", type="string", length=20, nullable=false)
+     */
+    protected $position;
 
     /**
      * Set name.

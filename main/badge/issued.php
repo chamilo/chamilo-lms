@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
-use \SkillRelUser as SkillRelUserManager;
+use SkillRelUser as SkillRelUserManager;
 
 /**
  * Show information about the issued badge.

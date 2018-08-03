@@ -12,6 +12,7 @@ use Fhaculty\Graph\Vertex;
 
 /**
  * Class SkillProfile.
+ *
  * @todo break the file in different classes
  *
  * @package chamilo.library
@@ -623,13 +624,11 @@ class SkillRelUser extends Model
      * @param SkillRelUserEntity $skillIssue
      *
      * @return string
-     *
      */
     public static function getIssueUrl(SkillRelUserEntity $skillIssue)
     {
         return api_get_path(WEB_PATH)."badge/{$skillIssue->getId()}";
     }
-
 
     /**
      * Get the URL for the All issues page.
@@ -645,6 +644,7 @@ class SkillRelUser extends Model
 
     /**
      * Get the URL for the assertion.
+     *
      * @param SkillRelUserEntity $skillIssue
      *
      * @return string

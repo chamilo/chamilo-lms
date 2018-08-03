@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CourseBundle\Entity\CStudentPublication;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;

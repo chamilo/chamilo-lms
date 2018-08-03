@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\UserBundle\Entity\User;
-use \SkillRelUser as SkillRelUserManager;
+use SkillRelUser as SkillRelUserManager;
 
 /**
  * Show information about all issued badges with same skill by user.

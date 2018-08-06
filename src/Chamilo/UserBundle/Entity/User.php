@@ -2415,6 +2415,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this;
     }
 
+    /**
+     * @param string $role
+     *
+     * @return $this|UserInterface
+     */
     public function addRole($role)
     {
         $role = strtoupper($role);

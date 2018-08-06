@@ -503,7 +503,7 @@ class UserRepository extends EntityRepository
 
         $user->setDropBoxSentFiles([]);
         $user->setDropBoxReceivedFiles([]);
-        $user->setGroups([]);
+        //$user->setGroups([]);
         $user->setCurriculumItems([]);
 
         $portals = $user->getPortals();
@@ -575,6 +575,7 @@ class UserRepository extends EntityRepository
             'completeNameWithUsername',
             'completeName',
             'completeNameWithClasses',
+            'salt',
         ];
 
         $dateNormalizer->setIgnoredAttributes($ignore);

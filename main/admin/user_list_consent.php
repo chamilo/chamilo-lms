@@ -630,7 +630,6 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(11, 'modify_filter');
 $table->set_column_filter(10, 'requestTypeFilter');
 
-
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];
 if (api_is_platform_admin() &&

@@ -6222,7 +6222,6 @@ SQL;
 
         // Cannot delete myself.
         if ($userId == $currentUserId) {
-
             return $message;
         }
 

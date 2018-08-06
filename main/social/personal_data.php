@@ -243,10 +243,13 @@ foreach ($properties as $key => $value) {
                 $personalDataContent .= '</ul>';
                 break;
             case 'portals':
+            case 'roles':
             case 'achievedSkills':
             case 'sessionAsGeneralCoach':
             case 'classes':
             case 'courses':
+            case 'groupNames':
+            case 'groups':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 foreach ($value as $subValue) {
                     $personalDataContent .= '<li>'.$subValue.'</li>';
@@ -263,6 +266,9 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '</ul>';
                 }
                 $personalDataContent .= '</ul>';
+                break;
+            default:
+                //var_dump($key);
                 break;
         }
 

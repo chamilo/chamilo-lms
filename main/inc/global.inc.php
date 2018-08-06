@@ -647,15 +647,18 @@ $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
 if (!empty($language_interface)) {
     $file = api_get_path(SYS_PUBLIC_PATH).'build/main.'.$language_interface.'.js';
 }
+
 // if portal is in test mode always generate the file
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);
-    if (!is_writable($file)) {
-        error_log('Error: '.$file.' could not be written. Please check permissions. The web server must be able to write there.');
+    if (is_writable($file)) {
+        file_put_contents($file, $contents);
     } else {
-        @file_put_contents($file, $contents);
+        error_log(
+            'Error: '.$file.' could not be written. Please check permissions. The web server must be able to write there.'
+        );
     }
 }

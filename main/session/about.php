@@ -1,11 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\UserBundle\Entity\User;
-use ChamiloSession as Session;
 
 /**
  * Session about page
@@ -24,6 +26,7 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
+/** @var Session $session */
 $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
 if (!$session) {
@@ -35,6 +38,7 @@ $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrd
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = UserManager::getRepository();
+/** @var SequenceRepository $sequenceResourceRepo */
 $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([
@@ -46,6 +50,7 @@ $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 $sessionValues = new ExtraFieldValue('session');
 
+/** @var Course $sessionCourse */
 foreach ($sessionCourses as $sessionCourse) {
     $courseTags = [];
 
@@ -87,8 +92,16 @@ foreach ($sessionCourses as $sessionCourse) {
             ]
         );
 
-    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssessment = '';
+    $courseDescription = '';
+    $courseObjectives = '';
+    $courseTopics = '';
+    $courseMethodology = '';
+    $courseMaterial = '';
+    $courseResources = '';
+    $courseAssessment = '';
     $courseCustom = [];
+
+    /** @var CCourseDescription $descriptionTool */
     foreach ($courseDescriptionTools as $descriptionTool) {
         switch ($descriptionTool->getDescriptionType()) {
             case CCourseDescription::TYPE_DESCRIPTION:
@@ -206,8 +219,8 @@ if ($checker) {
         BuyCoursesPlugin::PRODUCT_TYPE_SESSION
     );
     if ($sessionIsPremium) {
-        Session::write('SessionIsPremium', true);
-        Session::write('sessionId', $sessionId);
+        ChamiloSession::write('SessionIsPremium', true);
+        ChamiloSession::write('sessionId', $sessionId);
     }
 }
 
@@ -216,7 +229,9 @@ $redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
 $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
 $coursesCount = count($coursesInThisSession);
-$redirectToSession = $coursesCount == 1 && $redirectToSession ? $redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
+$redirectToSession = $coursesCount == 1 && $redirectToSession
+    ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
+    : $redirectToSession;
 
 $template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);

@@ -275,6 +275,8 @@ define('LOG_TERM_CONDITION_ACCEPTED', 'term_condition_accepted');
 define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
 
+define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
+
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
 //used when login_is_email setting is true
@@ -6622,7 +6624,7 @@ function api_get_tools_lists($my_tool = null)
  */
 function api_check_term_condition($userId)
 {
-    if (api_get_setting('allow_terms_conditions') == 'true') {
+    if (api_get_setting('allow_terms_conditions') === 'true') {
         // Check if exists terms and conditions
         if (LegalManager::count() == 0) {
             return true;
@@ -6638,10 +6640,10 @@ function api_check_term_condition($userId)
             $result = $data['value'];
             $user_conditions = explode(':', $result);
             $version = $user_conditions[0];
-            $lang_id = $user_conditions[1];
-            $real_version = LegalManager::get_last_version($lang_id);
+            $langId = $user_conditions[1];
+            $realVersion = LegalManager::get_last_version($langId);
 
-            return $version >= $real_version;
+            return $version >= $realVersion;
         }
 
         return false;

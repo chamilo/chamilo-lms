@@ -29,12 +29,18 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $formToString = '';
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
-    $form = new FormValidator('term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
+    $form = new FormValidator('delete_term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
     $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement')));
     $form->addTextarea('explanation', get_lang('ExplanationDeleteLegal'), [], true);
-    $form->addButtonSave(get_lang('DeleteLegal'));
     $form->addHidden('action', 'delete_legal');
+    $form->addButtonSave(get_lang('DeleteLegal'));
     $formToString = $form->returnForm();
+
+    $formDelete = new FormValidator('delete_account', 'post', api_get_self().'?action=delete_account&user_id='.$userId);
+    $formDelete->addTextarea('explanation', get_lang('ExplanationDeleteAccount'), [], true);
+    $formDelete->addHidden('action', 'delete_account');
+    $formDelete->addButtonDelete(get_lang('DeleteAccount'));
+    $formToString .= $formDelete->returnForm();
 }
 
 switch ($action) {
@@ -73,7 +79,7 @@ switch ($action) {
                     $currentUserInfo['complete_name']
                 );
                 $contentEmail = sprintf(
-                    get_lang('UserXSignedTheAgreementTheY'),
+                    get_lang('UserXSignedTheAgreementTheDateY'),
                     $currentUserInfo['complete_name'],
                     api_get_local_time($time)
                 );
@@ -86,31 +92,60 @@ switch ($action) {
                 );
             }
         }
-
         Display::addFlash(Display::return_message(get_lang('Saved')));
+        break;
+    case 'delete_account':
+        if ($formDelete->validate()) {
+            $explanation = $formDelete->getSubmitValue('explanation');
+            UserManager::createDataPrivacyExtraFields();
+
+            UserManager::update_extra_field_value(
+                $userId,
+                'request_for_delete_account',
+                1
+            );
+            UserManager::update_extra_field_value(
+                $userId,
+                'request_for_delete_account_justification',
+                $explanation
+            );
+
+
+            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Event::addEvent(
+                LOG_USER_DELETE_ACCOUNT_REQUEST,
+                LOG_USER_OBJECT,
+                $userInfo
+            );
+
+            $url = api_get_path(WEB_CODE_PATH).'admin/';
+            $link = Display::url($url, $url);
+            $subject = get_lang('RequestForDeleteAccount');
+            $content = sprintf(
+                get_lang('TheUserXAskDeleteAccountWithJustifactionXGoHereX'),
+                $userInfo['complete_name'],
+                $explanation,
+                $link
+            );
+
+            $email = api_get_configuration_value('data_protection_officer_email');
+            if (!empty($email)) {
+                api_mail_html('', $email, $subject, $content);
+            } else {
+                MessageManager::sendMessageToAllAdminUsers(api_get_user_id(), $subject, $content);
+            }
+        }
         break;
     case 'delete_legal':
         if ($form->validate()) {
             $explanation = $form->getSubmitValue('explanation');
 
-            UserManager::create_extra_field(
-                'request_for_legal_agreement_consent_removal',
-                1, //text
-                        'Request for legal agreement consent removal',
-                ''
-            );
+            UserManager::createDataPrivacyExtraFields();
 
             UserManager::update_extra_field_value(
                 $userId,
                 'request_for_legal_agreement_consent_removal',
                 1
-            );
-
-            UserManager::create_extra_field(
-                'request_for_legal_agreement_consent_removal_justification',
-                1, //text
-                'Request for legal agreement consent removal justification',
-                ''
             );
 
             UserManager::update_extra_field_value(
@@ -119,14 +154,14 @@ switch ($action) {
                 $explanation
             );
 
-            $extraFieldValue = new ExtraFieldValue('user');
+            /*$extraFieldValue = new ExtraFieldValue('user');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable(
                 $userId,
                 'legal_accept'
             );
-            $result = $extraFieldValue->delete($value['id']);
+            $result = $extraFieldValue->delete($value['id']);*/
 
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+            Display::addFlash(Display::return_message(get_lang('Sent')));
 
             Event::addEvent(
                 LOG_USER_REMOVED_LEGAL_ACCEPT,
@@ -138,7 +173,7 @@ switch ($action) {
             $link = Display::url($url, $url);
             $subject = get_lang('RequestForLegalConsentRemoval');
             $content = sprintf(
-                get_lang('TheUserXAskRemovalWithJustifactionYGoHere'),
+                get_lang('TheUserXAskRemovalWithJustifactionXGoHereX'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link

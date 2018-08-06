@@ -12,7 +12,6 @@
     <div class="col-md-9">
         {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
         {{ display.panel('PersonalDataKeptOnYou' | get_lang, personal_data.data) }}
-        {{ display.panel('PersonalDataPermissionsYouGaveUs' | get_lang, permission) }}
 
         {% if personal_data.responsible %}
             {{ display.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}
@@ -49,6 +48,8 @@
         {% if term_link %}
             {{ display.panel('TermsAndConditions'|get_lang, term_link ) }}
         {% endif %}
+
+        {{ display.panel('PersonalDataPermissionsYouGaveUs' | get_lang, permission) }}
     </div>
 </div>
 {% endblock %}

@@ -19,6 +19,9 @@ api_protect_admin_script();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
+$extraFields = UserManager::createDataPrivacyExtraFields();
+Session::write('data_privacy_extra_fields', $extraFields);
+
 /**
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
@@ -36,11 +39,11 @@ function prepare_user_sql_query($getCount)
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
-        $sql .= "SELECT u.id AS col0, u.official_code AS col2, ";
+        $sql .= 'SELECT u.id AS col0, u.official_code AS col2, ';
         if (api_is_western_name_order()) {
-            $sql .= "u.firstname AS col3, u.lastname AS col4, ";
+            $sql .= 'u.firstname AS col3, u.lastname AS col4, ';
         } else {
-            $sql .= "u.lastname AS col3, u.firstname AS col4, ";
+            $sql .= 'u.lastname AS col3, u.firstname AS col4, ';
         }
 
         $sql .= " u.username AS col5,
@@ -50,7 +53,8 @@ function prepare_user_sql_query($getCount)
                     u.id AS col9,
                     u.registration_date AS col10,
                     u.expiration_date AS exp,
-                    u.password
+                    u.password,
+                    v.field_id
                 FROM $user_table u";
     }
 
@@ -61,16 +65,13 @@ function prepare_user_sql_query($getCount)
                   ON (u.id=url_rel_user.user_id)";
     }
 
-    $extraFieldId = UserManager::create_extra_field(
-        'request_for_legal_agreement_consent_removal',
-        1, //text
-        'Request for legal agreement consent removal',
-        ''
-    );
+    $extraFields = Session::read('data_privacy_extra_fields');
+    $extraFieldId = $extraFields['delete_legal'];
+    $extraFieldIdDeleteAccount = $extraFields['delete_account_extra_field'];
 
     $extraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $sql .= " INNER JOIN $extraFieldValue v
-              ON (u.id = v.item_id AND field_id = $extraFieldId) ";
+              ON (u.id = v.item_id AND (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount)) ";
 
     $keywordList = [
         'keyword_firstname',
@@ -157,71 +158,11 @@ function prepare_user_sql_query($getCount)
         $sql .= " AND u.creator_id = ".api_get_user_id();
     }
 
-    $variables = Session::read('variables_to_show', []);
-    if (!empty($variables)) {
-        $extraField = new ExtraField('user');
-        $extraFieldResult = [];
-        $extraFieldHasData = [];
-        foreach ($variables as $variable) {
-            if (isset($_GET['extra_'.$variable])) {
-                if (is_array($_GET['extra_'.$variable])) {
-                    $values = $_GET['extra_'.$variable];
-                } else {
-                    $values = [$_GET['extra_'.$variable]];
-                }
-
-                if (empty($values)) {
-                    continue;
-                }
-
-                $info = $extraField->get_handler_field_info_by_field_variable(
-                    $variable
-                );
-
-                if (empty($info)) {
-                    continue;
-                }
-
-                foreach ($values as $value) {
-                    if (empty($value)) {
-                        continue;
-                    }
-                    if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                        $result = $extraField->getAllUserPerTag(
-                            $info['id'],
-                            $value
-                        );
-                        $result = empty($result) ? [] : array_column(
-                            $result,
-                            'user_id'
-                        );
-                    } else {
-                        $result = UserManager::get_extra_user_data_by_value(
-                            $variable,
-                            $value
-                        );
-                    }
-                    $extraFieldHasData[] = true;
-                    if (!empty($result)) {
-                        $extraFieldResult = array_merge(
-                            $extraFieldResult,
-                            $result
-                        );
-                    }
-                }
-            }
-        }
-
-        if (!empty($extraFieldHasData)) {
-            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
-        }
-    }
-
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_get_multiple_access_url()
     ) {
-        $sql .= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+        $sql .= " AND url_rel_user.access_url_id = ".api_get_current_access_url_id();
     }
 
     return $sql;
@@ -260,8 +201,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $direction = 'ASC';
     }
     $column = (int) $column;
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
 
@@ -300,6 +241,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[6],
             $user[7],
             api_get_local_time($user[9]),
+            $user[12],
             $user[0],
         ];
     }
@@ -333,6 +275,18 @@ function user_filter($name, $params, $row)
     return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';
 }
 
+function requestTypeFilter($fieldId, $url_params, $row)
+{
+    $extraFields = Session::read('data_privacy_extra_fields');
+    $extraFieldId = $extraFields['delete_legal'];
+
+    if ($fieldId == $extraFieldId) {
+        return get_lang('DeleteLegal');
+    } else {
+        return get_lang('DeleteAccount');
+    }
+}
+
 /**
  * Build the modify-column of the table.
  *
@@ -354,7 +308,7 @@ function modify_filter($user_id, $url_params, $row)
         Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
 
     $result .= Display::url(
-        get_lang('SendMessage'),
+        Display::return_icon('message_new.png'),
         api_get_path(WEB_CODE_PATH).'messages/new_message.php?send_to_user='.$user_id
     );
     $result .= '&nbsp;&nbsp;';
@@ -365,7 +319,7 @@ function modify_filter($user_id, $url_params, $row)
     $result .= '&nbsp;&nbsp;';
 
     $result .= ' <a href="'.api_get_self().'?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
-            api_htmlentities(get_lang("ConfirmYourChoice"))
+            api_htmlentities(get_lang('ConfirmYourChoice'))
         )."'".')) return false;">'.
         Display::return_icon(
             'anonymous.png',
@@ -377,7 +331,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($user_id != api_get_user_id()) {
         $result .= ' <a href="'.api_get_self().'?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
-            api_htmlentities(get_lang("ConfirmYourChoice"))
+            api_htmlentities(get_lang('ConfirmYourChoice'))
         )."'".')) return false;">'.
         Display::return_icon(
             'delete.png',
@@ -485,11 +439,11 @@ function status_filter($status)
 }
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
-    $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => 'user_list_consent.php', 'name' => get_lang('UserList')];
     $tool_name = get_lang('SearchUsers');
 } else {
-    $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
     $tool_name = get_lang('UserList');
 }
 
@@ -568,7 +522,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang("SearchUsers"),
+        'aria-label' => get_lang('SearchUsers'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -660,14 +614,16 @@ $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('Active'), true, 'width="15px"');
 $table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
-$table->set_header(10, get_lang('Action'), false, 'width="220px"');
+$table->set_header(10, get_lang('RequestType'), true, 'width="15px"');
+$table->set_header(11, get_lang('Action'), false, 'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(10, 'modify_filter');
+$table->set_column_filter(10, 'requestTypeFilter');
+$table->set_column_filter(11, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];

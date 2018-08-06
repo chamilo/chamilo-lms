@@ -21,7 +21,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
@@ -30,13 +30,11 @@ $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 if (!$session) {
     api_not_allowed(true);
 }
-
 $courses = [];
 $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
-/** @var UserRepository $userRepo */
-$userRepo = $em->getRepository('ChamiloUserBundle:User');
+$userRepo = UserManager::getRepository();
 $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([
@@ -123,7 +121,7 @@ foreach ($sessionCourses as $sessionCourse) {
     $courses[] = [
         'course' => $sessionCourse,
         'description' => $courseDescription,
-        'image' => $sessionCourse->getPicturePath(true),
+        'image' => CourseManager::getPicturePath($sessionCourse, true),
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
@@ -230,7 +228,7 @@ $template->assign(
 );
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
-$template->assign('is_premiun', $sessionIsPremium);
+$template->assign('is_premium', $sessionIsPremium);
 $layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);
 //$template->assign('header', $session->getName());

@@ -46,7 +46,7 @@ if (!empty($usergroup_list)) {
     }
 }
 
-Display::display_header($tool_name, 'Classes');
+Display::display_header('', 'Classes');
 
 echo $content;
 

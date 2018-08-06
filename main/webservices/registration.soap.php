@@ -4644,13 +4644,16 @@ function WSSubscribeUserToCourse($params)
             $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
             if (empty($courseCode)) {
+                if ($debug) {
+                    error_log('WSSubscribeUserToCourse course not found');
+                }
                 // Course was not found
                 $resultValue = 0;
             } else {
                 if ($debug) {
                     error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
                 }
-                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false);
+                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false, false);
                 if ($result) {
                     $resultValue = 1;
                     if ($debug) {
@@ -4658,7 +4661,7 @@ function WSSubscribeUserToCourse($params)
                     }
                 } else {
                     if ($debug) {
-                        error_log('WSSubscribeUserToCourse NOT subscribed: ');
+                        error_log('WSSubscribeUserToCourse NOT subscribed.');
                     }
                 }
             }
@@ -4764,8 +4767,9 @@ function WSSubscribeUserToCourseSimple($params)
             if ($debug) {
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
-            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status)) {
-                $result = 'User was not registered possible reasons: User already registered to the course, Course visibility doesnt allow user subscriptions ';
+            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status, false, false)) {
+                $result = 'User was not registered possible reasons: User already registered to the course, 
+                           Course visibility doesnt allow user subscriptions ';
                 if ($debug) {
                     error_log($result);
                 }
@@ -4870,11 +4874,27 @@ $server->wsdl->addComplexType(
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
+
+// Prepare output params, in this case will return an array
+$server->wsdl->addComplexType(
+    'UserWithExtraFields',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
+        'firstname' => ['name' => 'firstname', 'type' => 'xsd:string'],
+        'lastname' => ['name' => 'lastname', 'type' => 'xsd:string'],
+        'extra_fields' => ['name' => 'extra_fields', 'type' => 'xsd:string'],
+    ]
+);
+
 // Register the method to expose
 $server->register(
     'WSGetUserFromUsername', // method name
     ['GetUserFromUsername' => 'tns:GetUserArgUsername'], // input params
-    ['return' => 'tns:User'], // output parameters
+    ['return' => 'tns:UserWithExtraFields'], // output parameters
     'urn:WSRegistration', // namespace
     'urn:WSRegistration#WSGetUserFromUsername', // soapaction
     'rpc', // style
@@ -4897,20 +4917,120 @@ function WSGetUserFromUsername($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
+    // Get user id
+    $user_data = api_get_user_info_from_username($params['username']);
+
+    $result = [];
+    $result['user_id'] = '';
+    $result['firstname'] = '';
+    $result['lastname'] = '';
+    $result['extra_fields'] = '';
+
+    if (empty($user_data)) {
+        // If user was not found, there was a problem
+        if ($debug) {
+            error_log('User not found :(');
+        }
+    } else {
+        $result['user_id'] = $user_data['user_id'];
+        $result['firstname'] = $user_data['firstname'];
+        $result['lastname'] = $user_data['lastname'];
+        $result['email'] = $user_data['email'];
+
+        // Get extra fields
+        $fieldValue = new ExtraFieldValue('user');
+        $extra = $fieldValue->getAllValuesByItem($result['user_id']);
+        $result['extra_fields'] = json_encode($extra);
+
+        if ($debug) {
+            error_log('User found :) return value '.print_r($result, 1));
+        }
+    }
+
+    return $result;
+}
+
+$server->wsdl->addComplexType(
+    'GetUserArgUsernameWithOriginal',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'username' => ['name' => 'username', 'type' => 'xsd:string'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
+);
+// Register the method to expose
+$server->register(
+    'WSUpdateUserOriginalIdFromUsername', // method name
+    ['WSUpdateUserOriginalIdFromUsername' => 'tns:GetUserArgUsernameWithOriginal'], // input params
+    ['return' => 'tns:User'], // output parameters
+    'urn:WSRegistration', // namespace
+    'urn:WSRegistration#WSGetUserFromUsername', // soapaction
+    'rpc', // style
+    'encoded', // use
+    'This service get user information by username'            // documentation
+);
+
+// define the method WSGetUserFromUsername
+function WSUpdateUserOriginalIdFromUsername($params)
+{
+    global $debug;
+    if ($debug) {
+        error_log('WSUpdateUserOriginalIdFromUsername');
+    }
+    if ($debug) {
+        error_log('$params: '.print_r($params, 1));
+    }
+
+    if (!WSHelperVerifyKey($params)) {
+        return returnError(WS_ERROR_SECRET_KEY);
+    }
+
     $result = [];
 
     // Get user id
-    $user_data = api_get_user_info($params['username']);
+    $user_data = api_get_user_info_from_username($params['username']);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
         $result['user_id'] = '';
         $result['firstname'] = '';
         $result['lastname'] = '';
+
+        if ($debug) {
+            error_log('User not found :(');
+        }
     } else {
         $result['user_id'] = $user_data['user_id'];
         $result['firstname'] = $user_data['firstname'];
         $result['lastname'] = $user_data['lastname'];
+        $result['email'] = $user_data['email'];
+
+        $resultUpdate = UserManager::update_extra_field_value(
+            $user_data['user_id'],
+            $params['original_user_id_name'],
+            $params['original_user_id_value']
+        );
+
+        $fieldValue = new ExtraFieldValue('user');
+        $extraList = $fieldValue->getAllValuesByItem(
+            $result['user_id']
+        );
+
+        $result['extra'] = $extraList;
+
+        if ($debug) {
+            if ($resultUpdate) {
+                error_log('User updated :) ');
+            } else {
+                error_log('User not updated :(');
+            }
+            error_log('$result: '.print_r($result, 1));
+        }
     }
 
     return $result;

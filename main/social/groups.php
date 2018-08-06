@@ -172,13 +172,11 @@ foreach ($results as $result) {
     $html .= '<div class="members-groups">'.$members.'</div>';
     if ($result['description'] != '') {
         $html .= '<div class="description-groups">'.cut($result['description'], 100, true).'</div>';
-    } else {
-        $html .= '';
     }
-    //Avoiding my groups
-
+    // Avoiding my groups
     if (!in_array($id, $my_group_list)) {
-        $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
+        $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
+            get_lang('JoinGroup').'</a> ';
     }
 
     $html .= '<div class="group-actions" >'.$join_url.'</div>';
@@ -237,9 +235,10 @@ if (is_array($results) && count($results) > 0) {
         } else {
             $html .= '';
         }
-        //Avoiding my groups
+        // Avoiding my groups
         if (!in_array($id, $my_group_list)) {
-            $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
+            $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
+                get_lang('JoinGroup').'</a> ';
         }
 
         $html .= '<div class="group-actions" >'.$join_url.'</div>';
@@ -270,11 +269,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
                 );
             }
             if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-                $create_group_item = '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+                $create_group_item =
+                    '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                     get_lang('CreateASocialGroup').'</a>';
             } else {
                 if (api_is_allowed_to_edit(null, true)) {
-                    $create_group_item = '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+                    $create_group_item =
+                        '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                         get_lang('CreateASocialGroup').'</a>';
                 }
             }
@@ -322,11 +323,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
         $my_group_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
     }
     if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-        $create_group_item = '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+        $create_group_item =
+            '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
             get_lang('CreateASocialGroup').'</a>';
     } else {
         if (api_is_allowed_to_edit(null, true)) {
-            $create_group_item = '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+            $create_group_item =
+                '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                 get_lang('CreateASocialGroup').'</a>';
         }
     }

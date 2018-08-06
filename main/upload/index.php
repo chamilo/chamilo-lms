@@ -22,7 +22,7 @@ $_course = api_get_course_info();
 
 $htmlHeadXtra[] = "<script>
 function check_unzip() {
-	if(document.upload.unzip.checked){
+	if (document.upload.unzip.checked) {
         document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
         document.upload.if_exists[2].disabled=true;
@@ -62,14 +62,6 @@ if (isset($_REQUEST['tool'])) {
  * Process.
  */
 Event::event_access_tool(TOOL_UPLOAD);
-
-/**
- *	Prepare the header.
- */
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script>
-	var myUpload = new upload(0);
-</script>';
 
 /**
  * Now call the corresponding display script, the current script acting like a controller.

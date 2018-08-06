@@ -41,7 +41,7 @@ function get_zip_files_in_garbage()
  */
 $nameTools = get_lang('FileUpload');
 $interbreadcrumb[] = [
-    "url" => api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?action=list?".api_get_cidreq(),
+    "url" => api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?action=list&".api_get_cidreq(),
     "name" => get_lang("ToolLearnpath"),
 ];
 

@@ -52,7 +52,7 @@ function save() {
 	rs_id = $("#rs_id").val();
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
+		beforeSend: function(myObject) {
 		$("div#confirmation").html("<img src=\"'.api_get_path(WEB_LIBRARY_PATH).'javascript/indicator.gif\" />"); },
 		type: "POST",
 		url: "update_report.php",

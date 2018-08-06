@@ -1056,13 +1056,15 @@ class ExtraFieldValue extends Model
     public function getAllValuesForAnItem($itemId, $visibleToSelf = null, $visibleToOthers = null)
     {
         $em = Database::getManager();
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $qb */
         $qb = $em->createQueryBuilder();
         $qb = $qb->select('fv')
             ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
             ->join('fv.field', 'f')
             ->where(
                 $qb->expr()->eq('fv.itemId', ':item')
+            )
+            ->andWhere(
+                $qb->expr()->eq('f.extraFieldType', ':extra_field_type')
             );
 
         if (is_bool($visibleToSelf)) {
@@ -1079,6 +1081,7 @@ class ExtraFieldValue extends Model
 
         $fieldValues = $qb
             ->setParameter('item', $itemId)
+            ->setParameter('extra_field_type', $this->getExtraField()->getExtraFieldType())
             ->getQuery()
             ->getResult();
 

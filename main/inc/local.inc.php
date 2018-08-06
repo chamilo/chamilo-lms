@@ -1193,7 +1193,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                 }
                 if ($redirect && !api_is_platform_admin()) {
                     $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                    header("Location:".$url);
+                    header('Location:'.$url);
                     exit;
                 }
             }
@@ -1213,8 +1213,8 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
         $cuData = null;
         if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
             $cuData = Database::fetch_array($result, 'ASSOC');
-            $is_courseAdmin = (bool) ($cuData['status'] == 1);
-            $is_courseTutor = (bool) ($cuData['is_tutor'] == 1);
+            $is_courseAdmin = $cuData['status'] == 1;
+            $is_courseTutor = $cuData['is_tutor'] == 1;
             $is_courseMember = true;
         }
 
@@ -1229,8 +1229,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
             // I'm not the teacher of the course
             if ($is_courseAdmin == false) {
                 // This user has no status related to this course
-                // The user is subscribed in a session? The user is a Session coach a Session admin ?
-
+                // The user is subscribed in a session? The user is a Session coach a Session admin?
                 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
                 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1285,7 +1284,6 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
                         if (Database::num_rows($result)) {
                             $row = Database::fetch_array($result, 'ASSOC');
-
                             $session_course_status = $row['status'];
 
                             switch ($session_course_status) {

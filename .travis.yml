@@ -93,7 +93,9 @@ before_install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
-  #- curl $VHOST_URL
+  # Check the result of index.php and check if main.js is build in travis
+  - curl $VHOST_URL
+  - ls -la web/build
 
 script:
   - whereis google-chrome-stable

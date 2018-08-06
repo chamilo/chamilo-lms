@@ -6250,6 +6250,31 @@ SQL;
     }
 
     /**
+     * @return array
+     */
+    public static function createDataPrivacyExtraFields()
+    {
+        $extraFieldId = self::create_extra_field(
+            'request_for_legal_agreement_consent_removal',
+            1, //text
+            'Request for legal agreement consent removal',
+            ''
+        );
+
+        $extraFieldIdDeleteAccount = self::create_extra_field(
+            'request_for_delete_account',
+            1, //text
+            'Request for delete user account',
+            ''
+        );
+
+        return [
+            'delete_account_extra_field' => $extraFieldIdDeleteAccount,
+            'delete_legal' => $extraFieldId,
+        ];
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -6345,30 +6370,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    /**
-     * @return array
-     */
-    public static function createDataPrivacyExtraFields()
-    {
-        $extraFieldId = self::create_extra_field(
-            'request_for_legal_agreement_consent_removal',
-            1, //text
-            'Request for legal agreement consent removal',
-            ''
-        );
-
-        $extraFieldIdDeleteAccount = self::create_extra_field(
-            'request_for_delete_account',
-            1, //text
-            'Request for delete user account',
-            ''
-        );
-
-        return [
-            'delete_account_extra_field' => $extraFieldIdDeleteAccount,
-            'delete_legal' => $extraFieldId
-        ];
     }
 }

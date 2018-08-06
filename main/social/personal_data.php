@@ -110,7 +110,6 @@ switch ($action) {
                 $explanation
             );
 
-
             Display::addFlash(Display::return_message(get_lang('Saved')));
             Event::addEvent(
                 LOG_USER_DELETE_ACCOUNT_REQUEST,

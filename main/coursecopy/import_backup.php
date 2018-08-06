@@ -271,5 +271,4 @@ if (!isset($_POST['action'])) {
     Session::erase('backup_file');
 }
 
-
 Display::display_footer();

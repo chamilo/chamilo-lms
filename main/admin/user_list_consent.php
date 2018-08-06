@@ -312,11 +312,16 @@ function modify_filter($user_id, $url_params, $row)
         api_get_path(WEB_CODE_PATH).'messages/new_message.php?send_to_user='.$user_id
     );
     $result .= '&nbsp;&nbsp;';
-    $result .= Display::url(
-        get_lang('RemoveTerms'),
-        api_get_self().'?user_id='.$user_id.'&action=delete_terms&sec_token='.$token
-    );
-    $result .= '&nbsp;&nbsp;';
+    $extraFields = Session::read('data_privacy_extra_fields');
+    $extraFieldId = $extraFields['delete_legal'];
+
+    if ($row[10] == $extraFieldId) {
+        $result .= Display::url(
+            get_lang('RemoveTerms'),
+            api_get_self().'?user_id='.$user_id.'&action=delete_terms&sec_token='.$token
+        );
+        $result .= '&nbsp;&nbsp;';
+    }
 
     $result .= ' <a href="'.api_get_self().'?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
             api_htmlentities(get_lang('ConfirmYourChoice'))
@@ -622,8 +627,9 @@ $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(10, 'requestTypeFilter');
 $table->set_column_filter(11, 'modify_filter');
+$table->set_column_filter(10, 'requestTypeFilter');
+
 
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];

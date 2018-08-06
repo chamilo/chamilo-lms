@@ -95,6 +95,7 @@ before_install:
   # Check the result of index.php and check if main.js is build in travis
   - curl $VHOST_URL
   - ls -la web/build
+  - sudo cat /var/log/apache2/$VHOST_URL-error.log
 
 script:
   - whereis google-chrome-stable
@@ -104,7 +105,7 @@ script:
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-  # - sudo cat /var/log/apache2/$VHOST_URL-error.log
+
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 

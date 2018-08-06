@@ -71,7 +71,11 @@ function prepare_user_sql_query($getCount)
 
     $extraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $sql .= " INNER JOIN $extraFieldValue v
-              ON (u.id = v.item_id AND (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount)) ";
+              ON (
+                    u.id = v.item_id AND 
+                    (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount) AND
+                    v.value = 1
+              ) ";
 
     $keywordList = [
         'keyword_firstname',

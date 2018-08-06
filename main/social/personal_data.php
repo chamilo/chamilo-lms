@@ -99,6 +99,19 @@ switch ($action) {
             $explanation = $formDelete->getSubmitValue('explanation');
             UserManager::createDataPrivacyExtraFields();
 
+            // Remove delete agreement if it was sent:
+            UserManager::update_extra_field_value(
+                $userId,
+                'request_for_legal_agreement_consent_removal',
+                ''
+            );
+
+            UserManager::update_extra_field_value(
+                $userId,
+                'request_for_legal_agreement_consent_removal_justification',
+                ''
+            );
+
             UserManager::update_extra_field_value(
                 $userId,
                 'request_for_delete_account',

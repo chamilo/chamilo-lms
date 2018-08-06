@@ -20,6 +20,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true, true);
+api_set_more_memory_and_time_limits();
 
 $xajax = new xajax();
 $xajax->registerFunction('searchCourses');
@@ -32,6 +33,8 @@ if (!api_is_coach()) {
     api_not_allowed(true);
 }
 
+$action = isset($_POST['action']) ? $_POST['action'] : '';
+
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info_by_id($courseId);
 $courseCode = $courseInfo['code'];
@@ -40,8 +43,6 @@ $sessionId = api_get_session_id();
 if (empty($courseCode) || empty($sessionId)) {
     api_not_allowed(true);
 }
-
-api_set_more_memory_and_time_limits();
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('CopyCourse');
@@ -58,7 +59,6 @@ $tbl_session_rel_course_rel_user = Database::get_main_table(
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
-/* FUNCTIONS */
 /**
  * @param string $name
  */
@@ -128,8 +128,7 @@ function displayForm()
             get_lang('CopyCourseFromSessionToSessionExplanation')
     );
 
-    $html .= '<form name="formulaire" method="post" action="'.api_get_self(
-        ).'?'.api_get_cidreq().'" >';
+    $html .= '<form name="formulaire" method="post" action="'.api_get_self().'?'.api_get_cidreq().'" >';
     $html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%">';
 
     // Source
@@ -199,7 +198,7 @@ function searchCourses($idSession, $type)
     $courseCode = api_get_course_id();
 
     if (!empty($type)) {
-        $idSession = intval($idSession);
+        $idSession = (int) $idSession;
         $courseList = SessionManager::get_course_list_by_session_id($idSession);
 
         $return .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" >';
@@ -235,8 +234,6 @@ function searchCourses($idSession, $type)
 }
 
 $xajax->processRequests();
-
-/* HTML head extra */
 
 $htmlHeadXtra[] = $xajax->getJavascript(
     api_get_path(WEB_LIBRARY_PATH).'xajax/'
@@ -283,14 +280,14 @@ Display::display_header($nameTools);
 
 /* MAIN CODE */
 
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
+if (($action === 'course_select_form') ||
     (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
 ) {
     $destinationCourse = $destinationSession = '';
     $originCourse = api_get_course_id();
     $originSession = api_get_session_id();
 
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if ($action === 'course_select_form') {
         $destinationCourse = $_POST['destination_course'];
         $destinationSession = $_POST['destination_session'];
         $course = CourseSelectForm::get_posted_course(

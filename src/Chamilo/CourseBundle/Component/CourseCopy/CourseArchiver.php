@@ -251,7 +251,7 @@ class CourseArchiver
      */
     public static function importUploadedFile($file)
     {
-        $new_filename = uniqid('').'.zip';
+        $new_filename = uniqid('import_file', true).'.zip';
         $new_dir = self::getBackupDir();
         if (!is_dir($new_dir)) {
             $fs = new Filesystem();

@@ -153,9 +153,7 @@ class CourseRestorer
         $this->destination_course_id = $course_info['real_id'];
 
         // Getting first teacher (for the forums)
-        $teacher_list = CourseManager::get_teacher_list_from_course_code(
-            $course_info['code']
-        );
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
 
         if (!empty($teacher_list)) {

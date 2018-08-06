@@ -20,6 +20,7 @@ $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_global_admin_script();
 api_protect_limit_for_session_admin();
+api_set_more_memory_and_time_limits();
 
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
@@ -28,8 +29,7 @@ if (!api_is_allowed_to_edit() && !api_is_session_admin()) {
     api_not_allowed(true);
 }
 
-api_set_more_memory_and_time_limits();
-
+$action = isset($_POST['action']) ? $_POST['action'] : '';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $nameTools = get_lang('CopyCourse');
@@ -163,7 +163,7 @@ function search_courses($id_session, $type)
     $return = null;
 
     if (!empty($type)) {
-        $id_session = intval($id_session);
+        $id_session = (int) $id_session;
         if ($type == 'origin') {
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
             $temp_course_list = [];
@@ -279,10 +279,7 @@ if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items'
 
 /*  MAIN CODE  */
 if (Security::check_token('post') && (
-        (
-            isset($_POST['action']) &&
-            $_POST['action'] == 'course_select_form'
-        ) || (
+        ($action === 'course_select_form') || (
             isset($_POST['copy_option']) &&
             $_POST['copy_option'] == 'full_copy'
         )
@@ -291,7 +288,7 @@ if (Security::check_token('post') && (
     // Clear token
     Security::clear_token();
     $destination_course = $origin_course = $destination_session = $origin_session = '';
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if ($action === 'course_select_form') {
         $destination_course = $_POST['destination_course'];
         $origin_course = $_POST['origin_course'];
         $destination_session = $_POST['destination_session'];

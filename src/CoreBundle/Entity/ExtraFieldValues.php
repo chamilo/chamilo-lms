@@ -16,7 +16,7 @@ use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
  *         @ORM\Index(name="idx_efv_fiii", columns={"field_id", "item_id"}),
  *     }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldValuesRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository")
  * @ORM\MappedSuperclass
  */
 class ExtraFieldValues // extends BaseAttributeValue

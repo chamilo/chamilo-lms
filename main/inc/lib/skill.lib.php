@@ -5,7 +5,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
 use Chamilo\SkillBundle\Entity\SkillRelCourse;
 use Chamilo\SkillBundle\Entity\SkillRelItem;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
+use Chamilo\UserBundle\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;

@@ -90,7 +90,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     public function getConfiguration()
     {
         if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            /** @var \Chamilo\CoreBundle\Entity\Repository\UserRepository $repository */
+            /** @var \Chamilo\CoreBundle\Repository\UserRepository $repository */
             /*$repository = $this->connector->entityManager->getRepository('Chamilo\UserBundle\Entity\User');
             $courses = $repository->getCourses($this->connector->user);*/
 

@@ -42,7 +42,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *  }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  *
  * @ORM\AttributeOverrides({
  *     @ORM\AttributeOverride(name="username",

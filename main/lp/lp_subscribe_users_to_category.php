@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
-use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpCategoryUser;
 use Chamilo\UserBundle\Entity\User;

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Templates.
  *
  * @ORM\Table(name="templates")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\TemplatesRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\TemplatesRepository")
  */
 class Templates
 {

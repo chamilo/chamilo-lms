@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Doctrine\ORM\EntityRepository;
@@ -12,7 +12,7 @@ use Fhaculty\Graph\Vertex;
  * Class SequenceRepository
  * The functions inside this class should return an instance of QueryBuilder.
  *
- * @package Chamilo\CoreBundle\Entity\Repository
+ * @package Chamilo\CoreBundle\Repository
  */
 class SequenceRepository extends EntityRepository
 {

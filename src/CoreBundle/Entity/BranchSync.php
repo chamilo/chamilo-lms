@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * BranchSync.
  *
  * @ORM\Table(name="branch_sync")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\BranchSyncRepository")
  * @Gedmo\Tree(type="nested")
  */
 class BranchSync

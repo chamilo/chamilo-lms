@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="tree_pos", columns={"tree_pos"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\CourseCategoryRepository")
  */
 class CourseCategory
 {
@@ -32,12 +32,11 @@ class CourseCategory
      */
     protected $id;
 
-
     /**
      * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
      */
     protected $children;
-   
+
     /**
      * @var string
      *

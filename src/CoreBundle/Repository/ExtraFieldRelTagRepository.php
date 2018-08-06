@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Doctrine\ORM\EntityRepository;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * ExtraFieldRelTagRepository.
  *
- * @package Chamilo\CoreBundle\Entity\Repository
+ * @package Chamilo\CoreBundle\Repository
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */

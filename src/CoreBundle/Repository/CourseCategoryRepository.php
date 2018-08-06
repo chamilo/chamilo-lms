@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -9,7 +9,7 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * Class CCourseCategoryRepository.
  *
- * @package Chamilo\CoreBundle\Entity\Repository
+ * @package Chamilo\CoreBundle\Repository
  */
 class CourseCategoryRepository extends EntityRepository
 {

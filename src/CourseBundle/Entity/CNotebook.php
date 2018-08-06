@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CNotebookRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CNotebookRepository")
  */
 class CNotebook
 {

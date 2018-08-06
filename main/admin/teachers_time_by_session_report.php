@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Doctrine\Common\Collections\Criteria;
 
 /**

@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="field_item_tag", columns={"field_id", "item_id", "tag_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldRelTagRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository")
  */
 class ExtraFieldRelTag
 {

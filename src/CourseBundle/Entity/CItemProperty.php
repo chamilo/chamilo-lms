@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CItemProperty.
  *
  * @ORM\Table(name="c_item_property", indexes={@ORM\Index(name="idx_item_property_toolref", columns={"tool", "ref"})})
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ItemPropertyRepository")
  */
 class CItemProperty
 {

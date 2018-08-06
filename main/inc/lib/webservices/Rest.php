@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
-use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
+use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
 
 /**

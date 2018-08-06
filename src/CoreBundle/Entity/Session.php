@@ -25,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      }
  * )
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SessionListener"})
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SessionRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SessionRepository")
  */
 class Session
 {

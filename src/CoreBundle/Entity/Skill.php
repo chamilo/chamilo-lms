@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Skill.
  *
  * @ORM\Table(name="skill")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SkillRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SkillRepository")
  */
 class Skill
 {

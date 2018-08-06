@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
+use Chamilo\UserBundle\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 

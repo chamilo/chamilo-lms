@@ -33,7 +33,6 @@ class AccessUrlRelSession
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
-   
 
     /**
      * Get id.

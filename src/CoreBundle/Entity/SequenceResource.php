@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class SequenceResource.
  *
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SequenceRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SequenceRepository")
  * @ORM\Table(name="sequence_resource")
  */
 class SequenceResource

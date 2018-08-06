@@ -75,7 +75,7 @@ chamilo_course:
 #        parameter:
 #            classes:
 #                model: Chamilo\CourseBundle\Entity\CCourseSetting
-#                repository: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+#                repository: Chamilo\CourseBundle\Repository\CCourseSettingRepository
 
 doctrine_cache:
     providers:

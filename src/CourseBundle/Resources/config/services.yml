@@ -68,12 +68,12 @@ services:
             - '@form.factory'
 
     chamilo_course.repository.parameter:
-        class: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+        class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
         factory: ['@doctrine', getRepository]
         arguments: [Chamilo\CourseBundle\Entity\CCourseSetting]
 
 #    chamilo_settings.repository.parameter:
-#        class: Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository
+#        class: Chamilo\CoreBundle\Repository\SettingsCurrentRepository
 #        factory: ["@doctrine", getRepository]
 #        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
 

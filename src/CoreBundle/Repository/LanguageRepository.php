@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
 /**
  * Class LanguageRepository.
  *
- * @package Chamilo\CoreBundle\Entity\Repository
+ * @package Chamilo\CoreBundle\Repository
  */
 class LanguageRepository extends EntityRepository
 {

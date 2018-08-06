@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     options={"row_format":"DYNAMIC"},
  *     indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})}
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\LanguageRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\LanguageRepository")
  */
 class Language
 {

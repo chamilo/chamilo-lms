@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 
 /**
  * This script allows professors and administrative staff to create course sites.

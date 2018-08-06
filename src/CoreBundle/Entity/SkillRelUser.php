@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SkillRelUser
 {
-
     /**
      * @var int
      *

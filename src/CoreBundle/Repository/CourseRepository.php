@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\Common\Collections\Criteria;
@@ -13,7 +13,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  * Class CourseRepository
  * The functions inside this class must return an instance of QueryBuilder.
  *
- * @package Chamilo\CoreBundle\Entity\Repository
+ * @package Chamilo\CoreBundle\Repository
  */
 class CourseRepository extends EntityRepository
 {

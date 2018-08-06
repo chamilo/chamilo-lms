@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * GradebookLink.
  *
  * @ORM\Table(name="gradebook_link")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\GradebookLinkRepository")
+ * @ORM\Entity
  */
 class GradebookLink
 {

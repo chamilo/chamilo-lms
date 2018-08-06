@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;

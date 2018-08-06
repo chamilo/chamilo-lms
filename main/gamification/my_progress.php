@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\TrackECourseAccessRepository;
+use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
 
 /**
  * See the progress for a user when the gamification mode is active.

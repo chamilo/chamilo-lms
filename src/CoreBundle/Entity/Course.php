@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\CourseRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\CourseRepository")
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
 class Course
@@ -1303,7 +1303,7 @@ class Course
     public function getIssuedSkills()
     {
         return $this->issuedSkills;
-    }   
+    }
 
     /**
      * @param CourseRelUser $subscription

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -11,7 +11,7 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * SessionRepository.
  *
- * @package Chamilo\CoreBundle\Entity\Repository
+ * @package Chamilo\CoreBundle\Repository
  *
  * @author  Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author  Julio Montoya <gugli100@gmail.com>

@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_csp_u", columns={"user_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationRepository")
  */
 class CStudentPublication
 {

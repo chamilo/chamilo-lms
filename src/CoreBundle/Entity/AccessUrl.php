@@ -9,11 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  * AccessUrl.
  *
  * @ORM\Table(name="access_url")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\AccessUrlRepository")
  */
 class AccessUrl
 {
-   /**
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
@@ -41,7 +41,6 @@ class AccessUrl
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected $sessionCategory;
-  
 
     /**
      * @var string

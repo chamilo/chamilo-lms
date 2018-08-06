@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ExtraField.
  *
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldOptionsRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository")
  * @ORM\Table(name="extra_field_options")
  *
  * @ORM\MappedSuperclass

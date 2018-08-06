@@ -142,7 +142,9 @@
                             </div>
                         {% endif %}
                         <div class="course-description">
-                            {{ course_data.description.getContent }}
+                            {% for description in course_data.description %}
+                                {{ description.content }}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -169,72 +171,84 @@
                             <h3 class="sub-title">{{ "CourseInformation"|get_lang }}</h3>
                             <div class="course-information read-more-area">
                                 {% if course_data.objectives %}
-                                    <div class="topics">
-                                        <h4 class="title-info"><em
-                                                    class="fa fa-book"></em> {{ course_data.objectives.getTitle }}</h4>
-                                        <div class="content-info">
-                                            {{ course_data.objectives.getContent }}
+                                    {% for objectives in course_data.objectives %}
+                                        <div class="topics">
+                                            <h4 class="title-info"><em
+                                                        class="fa fa-book"></em> {{ objectives.title }}</h4>
+                                            <div class="content-info">
+                                                {{ objectives.content }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if course_data.topics %}
-                                    <div class="topics">
-                                        <h4 class="title-info"><em
-                                                    class="fa fa-book"></em> {{ course_data.topics.getTitle }}</h4>
-                                        <div class="content-info">
-                                            {{ course_data.topics.getContent }}
+                                    {% for topics in course_data.topics %}
+                                        <div class="topics">
+                                            <h4 class="title-info"><em
+                                                        class="fa fa-book"></em> {{ topics.title }}</h4>
+                                            <div class="content-info">
+                                                {{ topics.content }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if course_data.methodology %}
-                                    <div class="topics">
-                                        <h4 class="title-info"><em
-                                                    class="fa fa-book"></em> {{ course_data.methodology.getTitle }}</h4>
-                                        <div class="content-info">
-                                            {{ course_data.methodology.getContent }}
+                                    {% for methodology in course_data.methodology %}
+                                        <div class="topics">
+                                            <h4 class="title-info"><em
+                                                        class="fa fa-book"></em> {{ methodology.title }}</h4>
+                                            <div class="content-info">
+                                                {{ methodology.content }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if course_data.material %}
-                                    <div class="topics">
-                                        <h4 class="title-info"><em
-                                                    class="fa fa-book"></em> {{ course_data.material.getTitle }}</h4>
-                                        <div class="content-info">
-                                            {{ course_data.material.getContent }}
+                                    {% for material in course_data.material %}
+                                        <div class="topics">
+                                            <h4 class="title-info"><em
+                                                        class="fa fa-book"></em> {{ material.title }}</h4>
+                                            <div class="content-info">
+                                                {{ material.content }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if course_data.resources %}
-                                    <div class="topics">
-                                        <h4 class="title-info"><em
-                                                    class="fa fa-book"></em> {{ course_data.resources.getTitle }}</h4>
-                                        <div class="content-info">
-                                            {{ course_data.resources.getContent }}
+                                    {% for resources in course_data.resources %}
+                                        <div class="topics">
+                                            <h4 class="title-info"><em
+                                                        class="fa fa-book"></em> {{ resources.title }}</h4>
+                                            <div class="content-info">
+                                                {{ resources.content }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if course_data.assessment %}
-                                    <div class="topics">
-                                        <h4 class="title-info"><em
-                                                    class="fa fa-book"></em> {{ course_data.assessment.getTitle }}</h4>
-                                        <div class="content-info">
-                                            {{ course_data.assessment.getContent }}
+                                    {% for assessment in course_data.assessment %}
+                                        <div class="topics">
+                                            <h4 class="title-info"><em
+                                                        class="fa fa-book"></em> {{ assessment.title }}</h4>
+                                            <div class="content-info">
+                                                {{ assessment.content }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if course_data.custom %}
                                     {% for custom in course_data.custom %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.getTitle }}
+                                            <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.title }}
                                             </h4>
                                             <div class="content-info">
-                                                {{ custom.getContent }}
+                                                {{ custom.content }}
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -271,10 +285,14 @@
                                                 </div>
                                             {% endif %}
                                             {% for coach_extra_field in coach.extra_fields %}
-                                                <dl class="coach-extrafield">
-                                                    <dt class="extrafield_dt dt_{{ coach_extra_field.value.getField().getVariable() }}">{{ coach_extra_field.value.getField().getDisplayText() }}</dt>
-                                                    <dd class="extrafield_dd dd_{{ coach_extra_field.value.getField().getVariable() }}">{{ coach_extra_field.value.getValue() }}</dd>
-                                                </dl>
+                                                {% set coach_field = coach_extra_field.value.field %}
+                                                {% set coach_field_value = coach_extra_field.value.value %}
+                                                {% if not coach_field_value is empty %}
+                                                    <dl class="coach-extrafield">
+                                                        <dt class="extrafield_dt dt_{{ coach_field.variable }}">{{ coach_field.displayText }}</dt>
+                                                        <dd class="extrafield_dd dd_{{ coach_field.variable }}">{{ coach_extra_field.value.value }}</dd>
+                                                    </dl>
+                                                {% endif %}
                                             {% endfor %}
                                         </div>
                                     {% endfor %}

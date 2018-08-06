@@ -95,7 +95,6 @@ before_install:
   # Check the result of index.php and check if main.js is build in travis
   - curl $VHOST_URL
   - ls -la web/build
-  - sudo ls /var/log/apache2/
 
 script:
   - whereis google-chrome-stable
@@ -108,6 +107,9 @@ script:
 
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
+after_failure:
+  - sudo apache2ctl -M
+  - sudo cat /var/log/apache2/error.log
 
 # configure notifications (email, IRC, campfire etc)
 notifications:

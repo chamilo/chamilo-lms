@@ -638,14 +638,19 @@ define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 
 // Create web/build/main.js
-if (!is_dir(api_get_path(SYS_PUBLIC_PATH).'build')) {
-    mkdir(api_get_path(SYS_PUBLIC_PATH).'build');
+$webBuildPath = api_get_path(SYS_PUBLIC_PATH).'build/';
+if (!is_dir($webBuildPath)) {
+    if (!mkdir($webBuildPath, api_get_permissions_for_new_directories())) {
+        error_log(
+            'Error: '.$webBuildPath.' could not be written. Please check permissions.'
+        );
+    }
 }
 
 // Load template layout/main.js.tpl and save it into web/build/main.js
-$file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
+$file = $webBuildPath.'main.js';
 if (!empty($language_interface)) {
-    $file = api_get_path(SYS_PUBLIC_PATH).'build/main.'.$language_interface.'.js';
+    $file = $webBuildPath.'main.'.$language_interface.'.js';
 }
 
 // if portal is in test mode always generate the file
@@ -654,7 +659,7 @@ if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);
-    if (is_writable($file)) {
+    if (is_writable($webBuildPath)) {
         file_put_contents($file, $contents);
     } else {
         error_log(

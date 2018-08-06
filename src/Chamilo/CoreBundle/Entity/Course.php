@@ -1108,14 +1108,6 @@ class Course
     }
 
     /**
-     * @return string
-     */
-    public function getAbsoluteSysCoursePath()
-    {
-        return realpath(__DIR__.'/../../../app/courses/'.$this->getDirectory()).'/';
-    }
-
-    /**
      * @return bool
      */
     public function isActive()

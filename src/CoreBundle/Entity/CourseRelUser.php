@@ -22,6 +22,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseRelUser
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -32,14 +41,6 @@ class CourseRelUser
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
 
     /**
      * @var int
@@ -47,14 +48,14 @@ class CourseRelUser
      * @todo use status instead of this
      *
      * @deprecated
-     * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     protected $relationType;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
     protected $status;
 
@@ -68,21 +69,21 @@ class CourseRelUser
     /**
      * @var int
      *
-     * @ORM\Column(name="sort", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="sort", type="integer", nullable=true, unique=false)
      */
     protected $sort;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="user_course_cat", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="user_course_cat", type="integer", nullable=true, unique=false)
      */
     protected $userCourseCat;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
      */
     protected $legalAgreement;
 
@@ -99,7 +100,7 @@ class CourseRelUser
      */
     public function __toString()
     {
-        return strval($this->getCourse()->getCode());
+        return (string) $this->getCourse()->getCode();
     }
 
     /**

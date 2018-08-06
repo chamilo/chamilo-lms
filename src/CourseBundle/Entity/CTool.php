@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CTool
 {
     protected $originalImage;
+
     /**
      * @var int
      *

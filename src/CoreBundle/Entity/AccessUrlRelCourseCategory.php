@@ -41,7 +41,7 @@ class AccessUrlRelCourseCategory
      *
      * @param int $accessUrlId
      *
-     * @return AccessUrlRelSession
+     * @return $this
      */
     public function setAccessUrlId($accessUrlId)
     {
@@ -71,7 +71,7 @@ class AccessUrlRelCourseCategory
     /**
      * @param int $courseCategoryId
      *
-     * @return AccessUrlRelCourseCategory
+     * @return $this
      */
     public function setCourseCategoryId($courseCategoryId)
     {

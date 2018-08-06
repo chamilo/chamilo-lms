@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseModule
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
@@ -54,15 +63,6 @@ class CourseModule
      * @ORM\Column(name="position", type="string", length=20, nullable=false)
      */
     protected $position;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Set name.

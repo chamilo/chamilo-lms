@@ -24,6 +24,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SkillRelUser
 {
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
     /**
      * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
      */
@@ -38,15 +48,6 @@ class SkillRelUser
      * @ORM\Column(name="validation_status", type="integer")
      */
     protected $validationStatus;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})

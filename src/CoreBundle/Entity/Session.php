@@ -39,6 +39,15 @@ class Session
     const COACH = 2;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
@@ -75,15 +84,6 @@ class Session
      * @var AccessUrl
      */
     protected $currentUrl;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
 
     /**
      * @var string
@@ -382,11 +382,11 @@ class Session
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
+                Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
-                Criteria::expr()->eq("session", $subscription->getSession())
+                Criteria::expr()->eq('session', $subscription->getSession())
             )->andWhere(
-                Criteria::expr()->eq("relationType", $subscription->getRelationType())
+                Criteria::expr()->eq('relationType', $subscription->getRelationType())
             );
 
             $relation = $this->getUsers()->matching($criteria);
@@ -435,7 +435,7 @@ class Session
     {
         if ($this->getCourses()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("course", $course)
+                Criteria::expr()->eq('course', $course)
             );
             $relation = $this->getCourses()->matching($criteria);
 
@@ -551,7 +551,7 @@ class Session
      *
      * @param string $name
      *
-     * @return Session
+     * @return $this
      */
     public function setName($name)
     {
@@ -575,7 +575,7 @@ class Session
      *
      * @param string $description
      *
-     * @return Session
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -1071,11 +1071,11 @@ class Session
     {
         if ($this->getUserCourseSubscriptions()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
+                Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
-                Criteria::expr()->eq("course", $subscription->getCourse())
+                Criteria::expr()->eq('course', $subscription->getCourse())
             )->andWhere(
-                Criteria::expr()->eq("session", $subscription->getSession())
+                Criteria::expr()->eq('session', $subscription->getSession())
             );
             $relation = $this->getUserCourseSubscriptions()->matching($criteria);
 
@@ -1146,8 +1146,8 @@ class Session
     /**
      * Get user from course by status.
      *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     * @param int                               $status
+     * @param Course $course
+     * @param int    $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
@@ -1155,33 +1155,13 @@ class Session
     {
         $criteria = Criteria::create()
             ->where(
-                Criteria::expr()->eq("course", $course)
+                Criteria::expr()->eq('course', $course)
             )
             ->andWhere(
-                Criteria::expr()->eq("status", $status)
+                Criteria::expr()->eq('status', $status)
             );
 
         return $this->userCourseSubscriptions->matching($criteria);
-    }
-
-    public function getBuyCoursePluginPrice()
-    {
-        // start buycourse validation
-        // display the course price and buy button if the buycourses plugin is enabled and this course is configured
-        $plugin = \BuyCoursesPlugin::create();
-        $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-        $return = [];
-
-        if ($isThisCourseInSale) {
-            // set the Price label
-            $return['html'] = $isThisCourseInSale['html'];
-            // set the Buy button instead register.
-            if ($isThisCourseInSale['verificator']) {
-                $return['buy_button'] = $plugin->returnBuyCourseButton($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-            }
-        }
-        // end buycourse validation
-        return $return;
     }
 
     /**

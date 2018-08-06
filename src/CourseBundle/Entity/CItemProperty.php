@@ -15,6 +15,22 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CItemProperty
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $iid;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=true)
+     */
+    protected $id;
+
     /** //, inversedBy="users",
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
@@ -44,21 +60,6 @@ class CItemProperty
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     protected $session;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string

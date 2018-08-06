@@ -39,6 +39,15 @@ class Course
     const HIDDEN = 4;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -136,15 +145,6 @@ class Course
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
      */
     protected $sharedSurveys;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
 
     /**
      * @var string
@@ -365,7 +365,7 @@ class Course
      */
     public function __toString()
     {
-        return strval($this->getTitle());
+        return (string) $this->getTitle();
     }
 
     /**
@@ -712,6 +712,14 @@ class Course
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleAndCode()
+    {
+        return $this->getTitle().' ('.$this->getCode().')';
     }
 
     /**
@@ -1295,37 +1303,7 @@ class Course
     public function getIssuedSkills()
     {
         return $this->issuedSkills;
-    }
-
-    /**
-     * Check if the course has a picture.
-     *
-     * @return bool
-     */
-    public function hasPicture()
-    {
-        return file_exists(api_get_path(SYS_COURSE_PATH).$this->directory.'/course-pic85x85.png');
-    }
-
-    /**
-     * Get the course picture path.
-     *
-     * @param bool $fullSize
-     *
-     * @return null|string
-     */
-    public function getPicturePath($fullSize = false)
-    {
-        if (!$this->hasPicture()) {
-            return null;
-        }
-
-        if ($fullSize) {
-            return api_get_path(WEB_COURSE_PATH).$this->directory.'/course-pic.png';
-        }
-
-        return api_get_path(WEB_COURSE_PATH).$this->directory.'/course-pic85x85.png';
-    }
+    }   
 
     /**
      * @param CourseRelUser $subscription
@@ -1336,11 +1314,11 @@ class Course
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
+                Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
-                Criteria::expr()->eq("status", $subscription->getStatus())
+                Criteria::expr()->eq('status', $subscription->getStatus())
             )->andWhere(
-                Criteria::expr()->eq("relationType", $subscription->getRelationType())
+                Criteria::expr()->eq('relationType', $subscription->getRelationType())
             );
 
             $relation = $this->getUsers()->matching($criteria);

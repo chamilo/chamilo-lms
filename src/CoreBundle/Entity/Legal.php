@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Legal.
  *
  * @ORM\Table(name="legal")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\LegalRepository")
  */
 class Legal
 {

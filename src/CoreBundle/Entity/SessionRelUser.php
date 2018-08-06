@@ -23,6 +23,7 @@ class SessionRelUser
         0 => 'student',
         1 => 'drh',
     ];
+
     /**
      * @var int
      *
@@ -30,7 +31,7 @@ class SessionRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
@@ -90,7 +91,7 @@ class SessionRelUser
      */
     public function __construct()
     {
-        $this->moved_to = null;
+        $this->movedTo = null;
         $this->movedStatus = null;
         $this->movedAt = null;
         $this->registeredAt = new \DateTime('now', new \DateTimeZone('UTC'));

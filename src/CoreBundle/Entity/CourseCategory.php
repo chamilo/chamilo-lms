@@ -24,10 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseCategory
 {
     /**
-     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
-     */
-    protected $children;
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -36,6 +32,12 @@ class CourseCategory
      */
     protected $id;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
+     */
+    protected $children;
+   
     /**
      * @var string
      *

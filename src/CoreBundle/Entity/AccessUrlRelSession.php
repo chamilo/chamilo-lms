@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelSession
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    protected $id;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
@@ -24,14 +33,7 @@ class AccessUrlRelSession
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
-    protected $id;
+   
 
     /**
      * Get id.

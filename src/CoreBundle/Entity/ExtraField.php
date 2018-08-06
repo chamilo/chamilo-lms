@@ -7,353 +7,353 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
-  * Class ExtraField.
-  *
-  * @ORM\Entity
-  * @ORM\Table(name="extra_field")
-  *
-  * @ORM\MappedSuperclass
-  */
- class ExtraField // extends BaseAttribute
- {
-     const USER_FIELD_TYPE = 1;
-     const COURSE_FIELD_TYPE = 2;
-     const SESSION_FIELD_TYPE = 3;
-     const QUESTION_FIELD_TYPE = 4;
-     const CALENDAR_FIELD_TYPE = 5;
-     const LP_FIELD_TYPE = 6;
-     const LP_ITEM_FIELD_TYPE = 7;
-     const SKILL_FIELD_TYPE = 8;
-     const WORK_FIELD_TYPE = 9;
-     const CAREER_FIELD_TYPE = 10;
-     const USER_CERTIFICATE = 11;
-     const SURVEY_FIELD_TYPE = 12;
-     const SCHEDULED_ANNOUNCEMENT = 13;
+ * Class ExtraField.
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="extra_field")
+ *
+ * @ORM\MappedSuperclass
+ */
+class ExtraField // extends BaseAttribute
+{
+    const USER_FIELD_TYPE = 1;
+    const COURSE_FIELD_TYPE = 2;
+    const SESSION_FIELD_TYPE = 3;
+    const QUESTION_FIELD_TYPE = 4;
+    const CALENDAR_FIELD_TYPE = 5;
+    const LP_FIELD_TYPE = 6;
+    const LP_ITEM_FIELD_TYPE = 7;
+    const SKILL_FIELD_TYPE = 8;
+    const WORK_FIELD_TYPE = 9;
+    const CAREER_FIELD_TYPE = 10;
+    const USER_CERTIFICATE = 11;
+    const SURVEY_FIELD_TYPE = 12;
+    const SCHEDULED_ANNOUNCEMENT = 13;
 
-     /**
-      * @var int
-      *
-      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-      * @ORM\Id
-      * @ORM\GeneratedValue
-      */
-     protected $id;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
 
-     /**
-      * @var int
-      *
-      * @ORM\Column(name="extra_field_type", type="integer", nullable=false, unique=false)
-      */
-     protected $extraFieldType;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="extra_field_type", type="integer", nullable=false, unique=false)
+     */
+    protected $extraFieldType;
 
-     /**
-      * @var int
-      *
-      * @ORM\Column(name="field_type", type="integer", nullable=false, unique=false)
-      */
-     protected $fieldType;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="field_type", type="integer", nullable=false, unique=false)
+     */
+    protected $fieldType;
 
-     /**
-      * @var string
-      *
-      * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
-      */
-     protected $variable;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
+     */
+    protected $variable;
 
-     /**
-      * @var string
-      *
-      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
-      */
-     protected $displayText;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
+     */
+    protected $displayText;
 
-     /**
-      * @var string
-      *
-      * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
-      */
-     protected $defaultValue;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
+     */
+    protected $defaultValue;
 
-     /**
-      * @var int
-      *
-      * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
-      */
-     protected $fieldOrder;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
+     */
+    protected $fieldOrder;
 
-     /**
-      * @var bool
-      *
-      * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
-      */
-     protected $visibleToSelf;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
+     */
+    protected $visibleToSelf;
 
-     /**
-      * @var bool
-      *
-      * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
-      */
-     protected $visibleToOthers;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
+     */
+    protected $visibleToOthers;
 
-     /**
-      * @var bool
-      *
-      * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
-      */
-     protected $changeable;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
+     */
+    protected $changeable;
 
-     /**
-      * @var bool
-      *
-      * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
-      */
-     protected $filter;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
+     */
+    protected $filter;
 
-     /**
-      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
-      */
-     protected $options;
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
+     */
+    protected $options;
 
-     /**
-      * @var \DateTime
-      *
-      * @Gedmo\Timestampable(on="create")
-      * @ORM\Column(name="created_at", type="datetime")
-      */
-     protected $createdAt;
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
 
-     /**
-      * ExtraField constructor.
-      */
-     public function __construct()
-     {
-         //parent::__construct();
-         $this->visibleToOthers = false;
-         $this->visibleToSelf = false;
-     }
+    /**
+     * ExtraField constructor.
+     */
+    public function __construct()
+    {
+        //parent::__construct();
+        $this->visibleToOthers = false;
+        $this->visibleToSelf = false;
+    }
 
-     /**
-      * Get id.
-      *
-      * @return int
-      */
-     public function getId()
-     {
-         return $this->id;
-     }
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-     /**
-      * @return int
-      */
-     public function getExtraFieldType()
-     {
-         return $this->extraFieldType;
-     }
+    /**
+     * @return int
+     */
+    public function getExtraFieldType()
+    {
+        return $this->extraFieldType;
+    }
 
-     /**
-      * @param int $extraFieldType
-      *
-      * @return $this
-      */
-     public function setExtraFieldType($extraFieldType)
-     {
-         $this->extraFieldType = $extraFieldType;
+    /**
+     * @param int $extraFieldType
+     *
+     * @return $this
+     */
+    public function setExtraFieldType($extraFieldType)
+    {
+        $this->extraFieldType = $extraFieldType;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return int
-      */
-     public function getFieldType()
-     {
-         return $this->fieldType;
-     }
+    /**
+     * @return int
+     */
+    public function getFieldType()
+    {
+        return $this->fieldType;
+    }
 
-     /**
-      * @param int $fieldType
-      *
-      * @return $this
-      */
-     public function setFieldType($fieldType)
-     {
-         $this->fieldType = $fieldType;
+    /**
+     * @param int $fieldType
+     *
+     * @return $this
+     */
+    public function setFieldType($fieldType)
+    {
+        $this->fieldType = $fieldType;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return string
-      */
-     public function getVariable()
-     {
-         return $this->variable;
-     }
+    /**
+     * @return string
+     */
+    public function getVariable()
+    {
+        return $this->variable;
+    }
 
-     /**
-      * @param string $variable
-      *
-      * @return $this
-      */
-     public function setVariable($variable)
-     {
-         $this->variable = $variable;
+    /**
+     * @param string $variable
+     *
+     * @return $this
+     */
+    public function setVariable($variable)
+    {
+        $this->variable = $variable;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @param bool $translated Optional. Whether translate the display text
-      *
-      * @return string
-      */
-     public function getDisplayText($translated = true)
-     {
-         if ($translated) {
-             return \ExtraField::translateDisplayName($this->variable, $this->displayText);
-         }
+    /**
+     * @param bool $translated Optional. Whether translate the display text
+     *
+     * @return string
+     */
+    public function getDisplayText($translated = true)
+    {
+        if ($translated) {
+            return \ExtraField::translateDisplayName($this->variable, $this->displayText);
+        }
 
-         return $this->displayText;
-     }
+        return $this->displayText;
+    }
 
-     /**
-      * @param string $displayText
-      *
-      * @return $this
-      */
-     public function setDisplayText($displayText)
-     {
-         $this->displayText = $displayText;
+    /**
+     * @param string $displayText
+     *
+     * @return $this
+     */
+    public function setDisplayText($displayText)
+    {
+        $this->displayText = $displayText;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return string
-      */
-     public function getDefaultValue()
-     {
-         return $this->defaultValue;
-     }
+    /**
+     * @return string
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
 
-     /**
-      * @param string $defaultValue
-      *
-      * @return $this
-      */
-     public function setDefaultValue($defaultValue)
-     {
-         $this->defaultValue = $defaultValue;
+    /**
+     * @param string $defaultValue
+     *
+     * @return $this
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return int
-      */
-     public function getFieldOrder()
-     {
-         return $this->fieldOrder;
-     }
+    /**
+     * @return int
+     */
+    public function getFieldOrder()
+    {
+        return $this->fieldOrder;
+    }
 
-     /**
-      * @param int $fieldOrder
-      *
-      * @return $this
-      */
-     public function setFieldOrder($fieldOrder)
-     {
-         $this->fieldOrder = $fieldOrder;
+    /**
+     * @param int $fieldOrder
+     *
+     * @return $this
+     */
+    public function setFieldOrder($fieldOrder)
+    {
+        $this->fieldOrder = $fieldOrder;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return bool
-      */
-     public function isChangeable()
-     {
-         return $this->changeable;
-     }
+    /**
+     * @return bool
+     */
+    public function isChangeable()
+    {
+        return $this->changeable;
+    }
 
-     /**
-      * @param bool $changeable
-      *
-      * @return $this
-      */
-     public function setChangeable($changeable)
-     {
-         $this->changeable = $changeable;
+    /**
+     * @param bool $changeable
+     *
+     * @return $this
+     */
+    public function setChangeable($changeable)
+    {
+        $this->changeable = $changeable;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return bool
-      */
-     public function isFilter()
-     {
-         return $this->filter;
-     }
+    /**
+     * @return bool
+     */
+    public function isFilter()
+    {
+        return $this->filter;
+    }
 
-     /**
-      * @param bool $filter
-      *
-      * @return $this
-      */
-     public function setFilter($filter)
-     {
-         $this->filter = $filter;
+    /**
+     * @param bool $filter
+     *
+     * @return $this
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return bool
-      */
-     public function isVisibleToSelf()
-     {
-         return $this->visibleToSelf;
-     }
+    /**
+     * @return bool
+     */
+    public function isVisibleToSelf()
+    {
+        return $this->visibleToSelf;
+    }
 
-     /**
-      * @param bool $visibleToSelf
-      *
-      * @return ExtraField
-      */
-     public function setVisibleToSelf($visibleToSelf)
-     {
-         $this->visibleToSelf = $visibleToSelf;
+    /**
+     * @param bool $visibleToSelf
+     *
+     * @return ExtraField
+     */
+    public function setVisibleToSelf($visibleToSelf)
+    {
+        $this->visibleToSelf = $visibleToSelf;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return bool
-      */
-     public function isVisibleToOthers()
-     {
-         return $this->visibleToOthers;
-     }
+    /**
+     * @return bool
+     */
+    public function isVisibleToOthers()
+    {
+        return $this->visibleToOthers;
+    }
 
-     /**
-      * @param bool $visibleToOthers
-      *
-      * @return ExtraField
-      */
-     public function setVisibleToOthers($visibleToOthers)
-     {
-         $this->visibleToOthers = $visibleToOthers;
+    /**
+     * @param bool $visibleToOthers
+     *
+     * @return ExtraField
+     */
+    public function setVisibleToOthers($visibleToOthers)
+    {
+        $this->visibleToOthers = $visibleToOthers;
 
-         return $this;
-     }
+        return $this;
+    }
 
-     /**
-      * @return string
-      */
-     public function getTypeToString()
-     {
-         switch ($this->type) {
+    /**
+     * @return string
+     */
+    public function getTypeToString()
+    {
+        switch ($this->type) {
             case \ExtraField::FIELD_TYPE_TEXT:
             case \ExtraField::FIELD_TYPE_TEXTAREA:
                 return 'text';
@@ -363,5 +363,5 @@ use Gedmo\Mapping\Annotation as Gedmo;
             default:
                 return 'text';
         }
-     }
- }
+    }
+}

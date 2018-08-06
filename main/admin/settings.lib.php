@@ -585,6 +585,7 @@ function uploadStylesheet($values, $picture)
                     $result = true;
                 } else {
                     $extraction_path = $cssToUpload.$style_name.'/';
+                    $mode = api_get_permissions_for_new_directories();
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
                         if (substr($entry, -1) == '/') {
@@ -597,7 +598,7 @@ function uploadStylesheet($values, $picture)
                         if (strpos($entry_without_first_dir, '/') !== false) {
                             if (!is_dir($extraction_path.dirname($entry_without_first_dir))) {
                                 // Create it.
-                                @mkdir($extraction_path.dirname($entry_without_first_dir), $mode = 0777, true);
+                                @mkdir($extraction_path.dirname($entry_without_first_dir), $mode, true);
                             }
                         }
 

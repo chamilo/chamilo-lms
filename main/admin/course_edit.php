@@ -229,7 +229,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
             }
         }
 
-        $groupName = 'session_coaches['.$sessionId.']';
+        $groupName = 'session_coaches_'.$sessionId;
         $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
         $coachId = 'coaches_by_session_'.$sessionId;
         $platformTeacherName = 'platform_teachers_by_session';
@@ -397,17 +397,21 @@ if ($form->validate()) {
 
     // Updating teachers
     if ($addTeacherToSessionCourses) {
-        // Updating session coaches
-        $sessionCoaches = $course['session_coaches'];
-        if (!empty($sessionCoaches)) {
-            foreach ($sessionCoaches as $sessionId => $teacherInfo) {
-                $coachesToSubscribe = $teacherInfo['coaches_by_session'];
-                SessionManager::updateCoaches(
-                    $sessionId,
-                    $courseId,
-                    $coachesToSubscribe,
-                    true
-                );
+        foreach ($coursesInSession as $session) {
+            $sessionId = $session['id'];
+            // Updating session coaches
+            $sessionCoaches = isset($course['session_coaches_'.$sessionId]) ? $course['session_coaches_'.$sessionId] : [];
+
+            if (!empty($sessionCoaches)) {
+                foreach ($sessionCoaches as $teacherInfo) {
+                    $coachesToSubscribe = isset($teacherInfo['coaches_by_session']) ? $teacherInfo['coaches_by_session'] : [];
+                    SessionManager::updateCoaches(
+                        $sessionId,
+                        $courseId,
+                        $coachesToSubscribe,
+                        true
+                    );
+                }
             }
         }
 
@@ -422,18 +426,18 @@ if ($form->validate()) {
         // Normal behaviour
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);
 
-        // Updating session coaches
-        $sessionCoaches = isset($course['session_coaches']) ? $course['session_coaches'] : [];
-        if (!empty($sessionCoaches)) {
-            foreach ($sessionCoaches as $sessionId => $coachesToSubscribe) {
-                if (!empty($coachesToSubscribe)) {
-                    SessionManager::updateCoaches(
-                        $sessionId,
-                        $courseId,
-                        $coachesToSubscribe,
-                        true
-                    );
-                }
+        foreach ($coursesInSession as $session) {
+            $sessionId = $session['id'];
+            // Updating session coaches
+            $sessionCoaches = isset($course['session_coaches_'.$sessionId]) ? $course['session_coaches_'.$sessionId] : [];
+
+            if (!empty($sessionCoaches)) {
+                SessionManager::updateCoaches(
+                    $sessionId,
+                    $courseId,
+                    $sessionCoaches,
+                    true
+                );
             }
         }
     }

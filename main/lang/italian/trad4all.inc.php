@@ -7656,4 +7656,5 @@ $LastXDays = "Ultimi %s giorni";
 $ExportBadges = "Esporta i badge";
 $LanguagesDisableAllExceptDefault = "Abilita solo la lingua d default della piattaforma";
 $ThereAreUsersUsingThisLanguagesDisableItManually = "Alcuni utenti usano questa lingua: è necessario disabilitarla manualmente";
+$ExportToChamiloFormat = "Esporta un Modulo didattico";
 ?>

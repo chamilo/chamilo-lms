@@ -46,12 +46,6 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
 
 api_protect_admin_script(true);
 
-// Blocks the possibility to delete a user
-$deleteUserAvailable = true;
-if (api_get_configuration_value('deny_delete_users')) {
-    $deleteUserAvailable = false;
-}
-
 trimVariables();
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -76,7 +70,7 @@ $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(myObject) {
             $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.$url.'",
@@ -92,7 +86,7 @@ function load_course_list (div_course,my_user_id) {
 function load_session_list(div_session, my_user_id) {
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(myObject) {
             $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.$urlSession.'",
@@ -119,7 +113,7 @@ function active_user(element_div) {
     if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
+            beforeSend: function(myObject) {
                 $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
@@ -440,6 +434,8 @@ function get_number_of_users()
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
  *
+ * @return array Users list
+ *
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -517,7 +513,9 @@ function email_filter($email)
 /**
  * Returns a mailto-link.
  *
- * @param string $email An email-address
+ * @param string $email  An email-address
+ * @param array  $params Deprecated
+ * @param array  $row
  *
  * @return string HTML-code with a mailto-link
  */
@@ -532,6 +530,8 @@ function user_filter($name, $params, $row)
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
+ * @throws Exception
  *
  * @return string Some HTML-code with modify-buttons
  */
@@ -731,6 +731,21 @@ function modify_filter($user_id, $url_params, $row)
                 ICON_SIZE_SMALL
             ).
             '</a>';
+
+        if ($user_id != api_get_user_id() &&
+            !$user_is_anonymous &&
+            api_global_admin_can_edit_admin($user_id)
+        ) {
+            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
+                Display::return_icon(
+                    'anonymous.png',
+                    get_lang('Anonymize'),
+                    [],
+                    ICON_SIZE_SMALL
+                ).
+                '</a>';
+        }
+
         $deleteAllowed = !api_get_configuration_value('deny_delete_users');
         if ($deleteAllowed) {
             if ($user_id != api_get_user_id() &&
@@ -740,13 +755,13 @@ function modify_filter($user_id, $url_params, $row)
                 // you cannot lock yourself out otherwise you could disable all the accounts
                 // including your own => everybody is locked out and nobody can change it anymore.
                 $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
-                Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).
-                '</a>';
+                    Display::return_icon(
+                        'delete.png',
+                        get_lang('Delete'),
+                        [],
+                        ICON_SIZE_SMALL
+                    ).
+                    '</a>';
             } else {
                 $result .= Display::return_icon(
                     'delete_na.png',
@@ -855,55 +870,25 @@ if (!empty($action)) {
                 }
                 break;
             case 'delete_user':
-                $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
-                if (api_is_platform_admin() ||
-                    ($allowDelete && api_is_session_admin())
-                ) {
-                    $user_to_delete = $_GET['user_id'];
-                    $userToDeleteInfo = api_get_user_info($user_to_delete);
-                    $current_user_id = api_get_user_id();
-
-                    if ($userToDeleteInfo && $deleteUserAvailable &&
-                        api_global_admin_can_edit_admin($_GET['user_id'], null, $allowDelete)
-                    ) {
-                        if ($user_to_delete != $current_user_id &&
-                            UserManager::delete_user($_GET['user_id'])
-                        ) {
-                            $message = Display::return_message(
-                                get_lang('UserDeleted').': '.$userToDeleteInfo['complete_name_with_username'],
-                                'confirmation'
-                            );
-                        } else {
-                            $message = Display::return_message(
-                                get_lang('CannotDeleteUserBecauseOwnsCourse'),
-                                'error'
-                            );
-                        }
-                    } else {
-                        $message = Display::return_message(
-                            get_lang('CannotDeleteUser'),
-                            'error'
-                        );
-                    }
-                    Display::addFlash($message);
-                    header('Location: '.api_get_self());
-                    exit;
-                }
+                $message = UserManager::deleteUserWithVerification($_GET['user_id']);
+                Display::addFlash($message);
+                header('Location: '.api_get_self());
+                exit;
                 break;
             case 'delete':
                 if (api_is_platform_admin()) {
                     $number_of_selected_users = count($_POST['id']);
-                    $number_of_deleted_users = 0;
+                    $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
                             if ($user_id != $_user['user_id']) {
                                 if (UserManager::delete_user($user_id)) {
-                                    $number_of_deleted_users++;
+                                    $number_of_affected_users++;
                                 }
                             }
                         }
                     }
-                    if ($number_of_selected_users == $number_of_deleted_users) {
+                    if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
                             get_lang('SelectedUsersDeleted'),
                             'confirmation'
@@ -915,6 +900,64 @@ if (!empty($action)) {
                         );
                     }
                 }
+                break;
+            case 'disable':
+                if (api_is_platform_admin()) {
+                    $number_of_selected_users = count($_POST['id']);
+                    $number_of_affected_users = 0;
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $user_id) {
+                            if ($user_id != $_user['user_id']) {
+                                if (UserManager::disable($user_id)) {
+                                    $number_of_affected_users++;
+                                }
+                            }
+                        }
+                    }
+                    if ($number_of_selected_users == $number_of_affected_users) {
+                        $message = Display::return_message(
+                            get_lang('SelectedUsersDisabled'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('SomeUsersNotDisabled'),
+                            'error'
+                        );
+                    }
+                }
+                break;
+            case 'enable':
+                if (api_is_platform_admin()) {
+                    $number_of_selected_users = count($_POST['id']);
+                    $number_of_affected_users = 0;
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $user_id) {
+                            if ($user_id != $_user['user_id']) {
+                                if (UserManager::enable($user_id)) {
+                                    $number_of_affected_users++;
+                                }
+                            }
+                        }
+                    }
+                    if ($number_of_selected_users == $number_of_affected_users) {
+                        $message = Display::return_message(
+                            get_lang('SelectedUsersEnabled'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('SomeUsersNotEnabled'),
+                            'error'
+                        );
+                    }
+                }
+                break;
+            case 'anonymize':
+                $message = UserManager::anonymizeUserWithVerification($_GET['user_id']);
+                Display::addFlash($message);
+                header('Location: '.api_get_self());
+                exit;
                 break;
         }
         Security::clear_token();
@@ -1059,13 +1102,15 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
+$actionsList = [];
 if (api_is_platform_admin() &&
     !api_get_configuration_value('deny_delete_users')
 ) {
-    $table->set_form_actions(['delete' => get_lang('DeleteFromPlatform')]);
-} else {
-    $table->set_form_actions(['none' => get_lang('NoActionAvailable')]);
+    $actionsList['delete'] = get_lang('DeleteFromPlatform');
 }
+$actionsList['disable'] = get_lang('Disable');
+$actionsList['enable'] = get_lang('Enable');
+$table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';

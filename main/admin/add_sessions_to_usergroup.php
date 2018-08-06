@@ -9,6 +9,11 @@ $cidReset = true;
 // including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$usergroup = new UserGroup();
+$data = $usergroup->get($id);
+$usergroup->protectScript($data);
+
 $xajax = new xajax();
 
 //$xajax->debugOn();
@@ -17,14 +22,12 @@ $xajax->registerFunction('search_usergroup_sessions');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
+// setting breadcrumbs
 api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
-
-// Database Table Definitions
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeClassToSessions');
@@ -37,18 +40,14 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
-
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
-
     destination = document.getElementById("elements_in");
-
     for (i=0;i<destination.length;i++) {
         if(destination.options[i].text == content) {
                 return false;
         }
     }
-
     destination.options[destination.length] = new Option(content,code);
     destination.selectedIndex = -1;
     sortOptions(destination.options);
@@ -63,13 +62,13 @@ function remove_item(origin) {
 }
 
 function display_advanced_search () {
-        if ($("#advancedSearch").css("display") == "none") {
-                $("#advancedSearch").css("display","block");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
-        } else {
-                $("#advancedSearch").css("display","none");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
-        }
+    if ($("#advancedSearch").css("display") == "none") {
+        $("#advancedSearch").css("display","block");
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
+    } else {
+        $("#advancedSearch").css("display","none");
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
+    }
 }
 
 function validate_filter() {
@@ -82,8 +81,6 @@ function validate_filter() {
 $form_sent = 0;
 $errorMsg = '';
 $sessions = [];
-$usergroup = new UserGroup();
-$id = intval($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];
@@ -97,9 +94,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         exit;
     }
 }
-$data = $usergroup->get($id);
 $session_list_in = $usergroup->get_sessions_by_usergroup($id);
-$session_list = SessionManager::get_sessions_list([], ['name']);
+
+$onlyThisSessionList = [];
+if ($usergroup->allowTeachers()) {
+    $userId = api_get_user_id();
+    $sessionList = SessionManager::getSessionsFollowedByUser($userId, COURSEMANAGER);
+    if (!empty($sessionList)) {
+        $onlyThisSessionList = array_column($sessionList, 'id');
+    }
+}
+$session_list = SessionManager::get_sessions_list([], ['name'], null, null, 0, $onlyThisSessionList);
 $elements_not_in = $elements_in = [];
 
 if (!empty($session_list)) {
@@ -112,10 +117,9 @@ if (!empty($session_list)) {
     }
 }
 
-$ajax_search = $add_type == 'unique' ? true : false;
+$ajax_search = $add_type === 'unique' ? true : false;
 
-//checking for extra field with filter on
-
+// checking for extra field with filter on
 function search_usergroup_sessions($needle, $type)
 {
     global $elements_in;
@@ -165,7 +169,8 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="usergroups.php">'.
+    Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.
     Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).' '.get_lang('AdvancedSearch').'</span></a>';
 echo '</div>';
@@ -223,7 +228,13 @@ if (!empty($errorMsg)) {
       } else {
           ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_not_in', 'size' => '15px'], false); ?>
+          <?php echo Display::select(
+              'elements_not_in_name',
+              $elements_not_in,
+              '',
+              ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_not_in', 'size' => '15px'],
+              false
+          ); ?>
       </div>
     <?php
       }
@@ -254,7 +265,13 @@ if (!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('elements_in_name[]', $elements_in, '', ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'], false);
+echo Display::select(
+    'elements_in_name[]',
+    $elements_in,
+    '',
+    ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'],
+    false
+);
     unset($sessionUsersList);
 ?>
  </td>
@@ -331,7 +348,6 @@ function loadUsersInSelect(select) {
     xhr_object.onreadystatechange = function() {
         if(xhr_object.readyState == 4) {
             document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-            //alert(xhr_object.responseText);
         }
     }
 }

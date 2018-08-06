@@ -25,11 +25,7 @@ $nameTools = get_lang('SpecialExports');
 $export = '';
 $querypath = '';
 
-// include additional libraries
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 0);
-}
+api_set_more_memory_and_time_limits();
 
 // Displaying the header
 Display::display_header($nameTools);

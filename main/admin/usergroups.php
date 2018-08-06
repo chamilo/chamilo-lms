@@ -5,15 +5,17 @@
  *  @package chamilo.admin
  */
 $cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true);
-api_protect_limit_for_session_admin();
 
-//Add the JS needed to use the jqgrid
+$usergroup = new UserGroup();
+$usergroup->protectScript();
+
+// Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
-// setting breadcrumbs
+
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 if ($action == 'add') {
@@ -25,22 +27,11 @@ if ($action == 'add') {
 } else {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Classes')];
 }
-
-// The header.
-Display::display_header();
-
-// Tool name
-if ($action == 'add') {
-    $tool = 'Add';
-    $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Group')];
-}
-if ($action == 'edit') {
-    $tool = 'Modify';
-    $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Group')];
-}
+// setting breadcrumbs
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+$userGroupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 // jqgrid will use this URL to do the selects
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
@@ -60,16 +51,23 @@ $column_model = [
     ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left'],
     ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left'],
     ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center'],
-    ['name' => 'actions', 'index' => 'actions', 'width' => '20', 'align' => 'center', 'sortable' => 'false', 'formatter' => 'action_formatter'],
+    [
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '20',
+        'align' => 'center',
+        'sortable' => 'false',
+        'formatter' => 'action_formatter',
+    ],
 ];
 
-//Autowidth
+// Autowidth
 $extra_params['autowidth'] = 'true';
-//height auto
+// Height auto
 $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'name';
 $extra_params['sortorder'] = 'desc';
-//With this function we can add actions to the jgrid
+// With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
     .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('user_to_class.png', get_lang('SubscribeUsersToClass'), null, ICON_SIZE_MEDIUM).'</a>'
@@ -79,118 +77,141 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL).'</a>\';
 }';
 
-?>
-<script>
-$(function() {
-<?php
-    // grid definition see the $usergroup>display() function
-    echo Display::grid_js(
-        'usergroups',
-        $url,
-        $columns,
-        $column_model,
-        $extra_params,
-        [],
-        $action_links,
-        true
-    );
-?>
-});
-</script>
-<?php
-
-$usergroup = new UserGroup();
 $usergroup->showGroupTypeSetting = true;
+$content = '';
+
 // Action handling: Adding a note
-if ($action == 'add') {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
-        api_not_allowed();
-    }
+switch ($action) {
+    case 'add':
+        $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 
-    $form = new FormValidator(
-        'usergroup',
-        'post',
-        api_get_self().'?action='.$action
-    );
-    $usergroup->setForm($form, 'add');
-
-    // Setting the defaults
-    $form->setDefaults(['visibility' => 2]);
-
-    // The validation or display
-    if ($form->validate()) {
-        $values = $form->exportValues();
-        $res = $usergroup->save($values);
-        if ($res) {
-            echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
-        } else {
-            echo Display::return_message(
-                Security::remove_XSS($values['name']).': '.
-                get_lang('AlreadyExists'),
-                'warning'
-            );
+        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+            api_not_allowed();
         }
+        $form = new FormValidator(
+            'usergroup',
+            'post',
+            api_get_self().'?action='.$action
+        );
+        $usergroup->setForm($form, 'add');
 
-        $usergroup->display();
-    } else {
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.
+        // Setting the defaults
+        $form->setDefaults(['visibility' => 2]);
+
+        // The validation or display
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $res = $usergroup->save($values);
+            if ($res) {
+                Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'confirmation'));
+            } else {
+                Display::addFlash(Display::return_message(
+                    Security::remove_XSS($values['name']).': '.
+                    get_lang('AlreadyExists'),
+                    'warning'
+                ));
+            }
+            header('Location: '.api_get_self());
+            exit;
+        } else {
+            $content .= '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '</div>';
-        $token = Security::get_token();
-        $form->addElement('hidden', 'sec_token');
-        $form->setConstants(['sec_token' => $token]);
-        $form->display();
-    }
-} elseif ($action == 'edit' && is_numeric($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $form = new FormValidator(
-        'usergroup',
-        'post',
-        api_get_self().'?action='.$action.'&id='.$id
-    );
-    $defaults = $usergroup->get($id);
-    $usergroup->setForm($form, 'edit', $defaults);
-
-    // Setting the form elements
-    $form->addElement('hidden', 'id', $id);
-
-    // Setting the defaults
-    $form->setDefaults($defaults);
-
-    // The validation or display.
-    if ($form->validate()) {
-        $values = $form->getSubmitValues();
-        $res = $usergroup->update($values);
-        if ($res) {
-            echo Display::return_message(get_lang('Updated'), 'confirmation');
-        } else {
-            echo Display::return_message(
-                Security::remove_XSS($values['name']).': '.
-                get_lang('AlreadyExists'),
-                'warning'
-            );
+            $content .= '</div>';
+            $token = Security::get_token();
+            $form->addElement('hidden', 'sec_token');
+            $form->setConstants(['sec_token' => $token]);
+            $content .= $form->returnForm();
         }
+        break;
+    case 'edit':
+        $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 
-        $usergroup->display();
-    } else {
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon(
-            'back.png',
-            get_lang('Back'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-        echo '</div>';
-        $form->display();
-    }
-} elseif ($action == 'delete' && is_numeric($_GET['id'])) {
-    $res = $usergroup->delete($_GET['id']);
-    if ($res) {
-        echo Display::return_message(get_lang('Deleted'), 'confirmation');
-    }
-    $usergroup->display();
-} else {
-    $usergroup->display();
+        $defaults = $usergroup->get($userGroupId);
+        $usergroup->protectScript($defaults);
+
+        $form = new FormValidator(
+            'usergroup',
+            'post',
+            api_get_self().'?action='.$action.'&id='.$userGroupId
+        );
+
+        $usergroup->setForm($form, 'edit', $defaults);
+
+        // Setting the form elements
+        $form->addElement('hidden', 'id', $userGroupId);
+
+        // Setting the defaults
+        $form->setDefaults($defaults);
+
+        // The validation or display.
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $res = $usergroup->update($values);
+            if ($res) {
+                Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation'));
+            } else {
+                Display::addFlash(Display::return_message(
+                    Security::remove_XSS($values['name']).': '.
+                    get_lang('AlreadyExists'),
+                    'warning'
+                ));
+            }
+            header('Location: '.api_get_self());
+            exit;
+        } else {
+            $content .= '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'">'.Display::return_icon(
+                'back.png',
+                get_lang('Back'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
+            $content .= '</div>';
+            $content .= $form->returnForm();
+        }
+        break;
+    case 'delete':
+        $defaults = $usergroup->get($userGroupId);
+        $usergroup->protectScript($defaults);
+        $res = $usergroup->delete($userGroupId);
+        if ($res) {
+            Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
+        }
+        header('Location: '.api_get_self());
+        exit;
+        break;
+    default:
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Classes')];
+        $content = $usergroup->returnGrid();
+        break;
 }
-Display :: display_footer();
+
+// The header.
+Display::display_header();
+
+?>
+    <script>
+        $(function() {
+            <?php
+            // grid definition see the $usergroup>display() function
+            echo Display::grid_js(
+                'usergroups',
+                $url,
+                $columns,
+                $column_model,
+                $extra_params,
+                [],
+                $action_links,
+                true
+            );
+            ?>
+        });
+    </script>
+<?php
+
+echo $content;
+
+Display::display_footer();

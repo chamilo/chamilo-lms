@@ -10,6 +10,11 @@ $cidReset = true;
 // Including some necessary files.
 require_once __DIR__.'/../inc/global.inc.php';
 
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$usergroup = new UserGroup();
+$data = $usergroup->get($id);
+$usergroup->protectScript($data);
+
 $xajax = new xajax();
 $xajax->registerFunction('search');
 
@@ -17,9 +22,6 @@ $xajax->registerFunction('search');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions.
-api_protect_admin_script(true);
-
-// Setting breadcrumbs.
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
@@ -48,8 +50,6 @@ function remove_item(origin) {
 $form_sent = 0;
 $errorMsg = '';
 $sessions = [];
-$usergroup = new UserGroup();
-$id = intval($_GET['id']);
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
@@ -97,8 +97,17 @@ if (!empty($filters) && !empty($filterData)) {
     }
 }
 
-$data = $usergroup->get($id);
 $course_list_in = $usergroup->get_courses_by_usergroup($id, true);
+
+$onlyThisCourseList = [];
+if ($usergroup->allowTeachers()) {
+    $userId = api_get_user_id();
+    $courseList = CourseManager::getCoursesFollowedByUser($userId, COURSEMANAGER);
+    if (!empty($courseList)) {
+        $onlyThisCourseList = array_column($courseList, 'id');
+    }
+}
+
 $course_list = CourseManager::get_courses_list(
     0,
     0,
@@ -108,11 +117,11 @@ $course_list = CourseManager::get_courses_list(
     null,
     api_get_current_access_url_id(),
     false,
-    $conditions
+    $conditions,
+    $onlyThisCourseList
 );
 
 $elements_not_in = $elements_in = [];
-
 foreach ($course_list_in as $course) {
     $elements_in[$course['id']] = $course['title']." (".$course['visual_code'].")";
 }

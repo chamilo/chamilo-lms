@@ -36,14 +36,31 @@ if ($form->validate()) {
         opcache_reset();
     }
 
+    $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
+    if (file_exists($file)) {
+        unlink($file);
+    }
+    $dir = api_get_path(SYS_PUBLIC_PATH).'build';
+    $files = scandir($dir);
+    foreach ($files as $file) {
+        if (preg_match('/main\..*\.js/', $file)) {
+            unlink($dir.'/'.$file);
+        }
+    }
+
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $htaccess = @file_get_contents($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);
+    if (false === $result) {
+        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));
+    } else {
+        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
+    }
     try {
         \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
-        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
+        Display::addFlash(Display::return_message(get_lang('WebFolderRefreshSucceeded')));
     } catch (Exception $e) {
-        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('WebFolderRefreshFailed'), 'error'));
         error_log($e->getMessage());
     }
 

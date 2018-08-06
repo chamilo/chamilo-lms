@@ -327,14 +327,29 @@ $returnParams = $extraField->addElements(
     [],
     true
 );
-$jquery_ready_content = $returnParams['jquery_ready_content'];
+$jqueryReadyContent = $returnParams['jquery_ready_content'];
+
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
-    '.$jquery_ready_content.'
+    '.$jqueryReadyContent.'
 });
 </script>';
+
+// Freeze user conditions, admin cannot updated them
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $element->freeze();
+        }
+    }
+}
 
 // Submit button
 $form->addButtonSave(get_lang('Save'));
@@ -373,7 +388,7 @@ if ($form->validate()) {
 
         $picture_uri = $user_data['picture_uri'];
         if (isset($user['delete_picture']) && $user['delete_picture']) {
-            $picture_uri = UserManager::delete_user_picture($user_id);
+            $picture_uri = UserManager::deleteUserPicture($user_id);
         } elseif (!empty($picture['name'])) {
             $picture_uri = UserManager::update_user_picture(
                 $user_id,

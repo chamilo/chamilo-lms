@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Repository\LegalRepository;
+
 /**
  * Sessions list script.
  *
@@ -8,24 +10,32 @@
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
+
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $tool_name = get_lang('TermsAndConditions');
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 $parameters['sec_token'] = Security::get_token();
 
 // action menu
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">';
-echo Display::return_icon('edit.png', get_lang('EditTermsAndConditions')).get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
+echo Display::return_icon(
+    'edit.png',
+    get_lang('EditTermsAndConditions')
+);
+echo get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
-$legal_count = LegalManager::count();
+$em = Database::getManager();
+/** @var LegalRepository $legalTermsRepo */
+$legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
+$legalCount = $legalTermsRepo->countAllActiveLegalTerms();
 $languages = api_get_languages();
-$available_languages = count($languages);
-if ($legal_count != $available_languages) {
+$available_languages = count($languages['folder']);
+if ($legalCount != $available_languages) {
     echo Display::return_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'), 'warning');
 }
 

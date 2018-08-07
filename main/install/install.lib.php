@@ -576,6 +576,8 @@ function get_config_param($param, $updatePath = '')
  */
 function get_config_param_from_db($param = '')
 {
+    $param = Database::escape_string($param);
+
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -1965,8 +1967,11 @@ function lockSettings()
     $access_url_locked_settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     foreach ($access_url_locked_settings as $setting) {
-        $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
-        Database::query($sql);
+        Database::update(
+            $table,
+            ['access_url_locked' => 1],
+            ['variable = ?' => $setting]
+        );
     }
 }
 
@@ -1979,12 +1984,17 @@ function updateDirAndFilesPermissions()
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
-    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."'
-              WHERE variable  = 'permissions_for_new_directories'";
-    Database::query($sql);
+    Database::update(
+        $table,
+        ['selected_value' => '0'.decoct($permissions_for_new_directories)],
+        ['variable = ?' => 'permissions_for_new_directories']
+    );
 
-    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
-    Database::query($sql);
+    Database::update(
+        $table,
+        ['selected_value' => '0'.decoct($permissions_for_new_files)],
+        ['variable = ?' => 'permissions_for_new_files']
+    );
 
     if (isset($_SESSION['permissions_for_new_directories'])) {
         unset($_SESSION['permissions_for_new_directories']);
@@ -2150,11 +2160,14 @@ function installSettings(
         'allow_registration_as_teacher' => $allowTeacherSelfRegistration,
     ];
 
+    $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
     foreach ($settings as $variable => $value) {
-        $sql = "UPDATE settings_current
-                SET selected_value = '$value'
-                WHERE variable = '$variable'";
-        Database::query($sql);
+        Database::update(
+            $tblSettings,
+            ['selected_value' => $value],
+            ['variable = ?' => $variable]
+        );
     }
     installProfileSettings($installationProfile);
 }
@@ -3190,8 +3203,11 @@ function finishInstallation(
     );
 
     // Set default language
-    $sql = "UPDATE language SET available = 1 WHERE dokeos_folder = '$languageForm'";
-    Database::query($sql);
+    Database::update(
+        Database::get_main_table(TABLE_MAIN_LANGUAGE),
+        ['available' => 1],
+        ['dokeos_folder = ?' => $languageForm]
+    );
 
     // Install settings
     installSettings(
@@ -3282,14 +3298,21 @@ function installProfileSettings($installationProfile = '')
     if (!empty($params->parent)) {
         installProfileSettings($params->parent);
     }
+
+    $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
     foreach ($settings as $id => $param) {
-        $sql = "UPDATE settings_current
-                SET selected_value = '".$param->selected_value."'
-                WHERE variable = '".$param->variable."'";
+        $conditions = ['variable = ? ' => $param->variable];
+
         if (!empty($param->subkey)) {
-            $sql .= " AND subkey='".$param->subkey."'";
+            $conditions['AND subkey = ? '] = $param->subkey;
         }
-        Database::query($sql);
+
+        Database::update(
+            $tblSettings,
+            ['selected_value' => $param->selected_value],
+            $conditions
+        );
     }
 
     return true;

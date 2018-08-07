@@ -14,9 +14,12 @@ class Html_Quickform_Rule_MinText extends HTML_QuickForm_Rule
      * @param int $count The minimum number of characters that the text should contain
      * @return boolean True if text has the minimum number of chars required
      */
-    function validate($text, $count)
+    public function validate($text, $count)
     {
-        $checkMinText = create_function('$a,$b', 'return strlen(utf8_decode($a)) >= $b;');
+        $checkMinText = function($a, $b) {
+            return strlen(utf8_decode($a)) >= $b;
+        };
+
         return $checkMinText($text, $count);
     }
 }

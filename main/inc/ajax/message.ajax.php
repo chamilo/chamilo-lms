@@ -96,9 +96,7 @@ switch ($action) {
             break;
         }
 
-        /** @var UserRepository $repo */
-        $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
-
+        $repo = UserManager::getRepository();
         $users = $repo->findUsersToSendMessage(
             api_get_user_id(),
             $_REQUEST['q'],

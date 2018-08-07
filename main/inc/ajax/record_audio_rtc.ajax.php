@@ -6,12 +6,17 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../global.inc.php';
 
 // Add security from Chamilo
-api_protect_course_script();
 api_block_anonymous_users();
 
 $courseInfo = api_get_course_info();
 /** @var string $tool document or exercise */
 $tool = isset($_REQUEST['tool']) ? $_REQUEST['tool'] : '';
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
+
+if ($type == 'document') {
+    api_protect_course_script();
+}
+
 $userId = api_get_user_id();
 
 if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
@@ -33,57 +38,64 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
 }
 
 $file = isset($_FILES['audio_blob']) ? $_FILES['audio_blob'] : [];
+$file['file'] = $file;
 $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 
-$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-$saveDir = $dirBaseDocuments.$audioDir;
+switch ($type) {
+    case 'document':
+        $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        $saveDir = $dirBaseDocuments.$audioDir;
+        if (!is_dir($saveDir)) {
+            mkdir($saveDir, api_get_permissions_for_new_directories(), true);
+        }
+        $uploadedDocument = DocumentManager::upload_document(
+            $file,
+            $audioDir,
+            $file['name'],
+            null,
+            0,
+            'overwrite',
+            false,
+            in_array($tool, ['document', 'exercise'])
+        );
 
-if (!is_dir($saveDir)) {
-    mkdir($saveDir, api_get_permissions_for_new_directories(), true);
-}
+        $error = empty($uploadedDocument) || !is_array($uploadedDocument);
 
-$file['file'] = $file;
+        if (!$error) {
+            $newDocId = $uploadedDocument['id'];
+            $courseId = $uploadedDocument['c_id'];
 
-$uploadedDocument = DocumentManager::upload_document(
-    $file,
-    $audioDir,
-    $file['name'],
-    null,
-    0,
-    'overwrite',
-    false,
-    in_array($tool, ['document', 'exercise'])
-);
+            /** @var learnpath $lp */
+            $lp = Session::read('oLP');
+            $lpItemId = isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : null;
+            if (!empty($lp) && empty($lpItemId)) {
+                $lp->set_modified_on();
 
-$error = empty($uploadedDocument) || !is_array($uploadedDocument);
+                $lpItem = new learnpathItem($lpItemId);
+                $lpItem->add_audio_from_documents($newDocId);
+            }
 
-if (!$error) {
-    $newDocId = $uploadedDocument['id'];
-    $courseId = $uploadedDocument['c_id'];
+            $data = DocumentManager::get_document_data_by_id($newDocId, $courseInfo['code']);
 
-    /** @var learnpath $lp */
-    $lp = Session::read('oLP');
-    $lpItemId = isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : null;
-    if (!empty($lp) && empty($lpItemId)) {
-        $lp->set_modified_on();
+            if ($tool === 'exercise') {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'error' => $error,
+                    'message' => Display::getFlashToString(),
+                    'fileUrl' => $data['document_url'],
+                ]);
 
-        $lpItem = new learnpathItem($lpItemId);
-        $lpItem->add_audio_from_documents($newDocId);
-    }
+                Display::cleanFlashMessages();
+                exit;
+            }
 
-    $data = DocumentManager::get_document_data_by_id($newDocId, $courseInfo['code']);
+            echo $data['document_url'];
+        }
 
-    if ($tool === 'exercise') {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'error' => $error,
-            'message' => Display::getFlashToString(),
-            'fileUrl' => $data['document_url'],
-        ]);
+        break;
+    case 'message':
+        Session::write('current_audio_id', $file['name']);
+        api_upload_file('audio_message', $file, api_get_user_id());
 
-        Display::cleanFlashMessages();
-        exit;
-    }
-
-    echo $data['document_url'];
+        break;
 }

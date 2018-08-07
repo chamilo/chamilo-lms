@@ -22,12 +22,12 @@ switch ($_REQUEST['action']) {
         $courseChatUtils->keepUserAsConnected();
         $courseChatUtils->disconnectInactiveUsers();
 
-        $friend = isset($_REQUEST['friend']) ? intval($_REQUEST['friend']) : 0;
+        $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
         $filePath = $courseChatUtils->getFileName(true, $friend);
         $newFileSize = file_exists($filePath) ? filesize($filePath) : 0;
-        $oldFileSize = isset($_GET['size']) ? intval($_GET['size']) : -1;
+        $oldFileSize = isset($_GET['size']) ? (int) $_GET['size'] : -1;
         $newUsersOnline = $courseChatUtils->countUsersOnline();
-        $oldUsersOnline = isset($_GET['users_online']) ? intval($_GET['users_online']) : 0;
+        $oldUsersOnline = isset($_GET['users_online']) ? (int) $_GET['users_online'] : 0;
 
         $json = [
             'status' => true,
@@ -50,7 +50,7 @@ switch ($_REQUEST['action']) {
         ];
         break;
     case 'reset':
-        $friend = isset($_REQUEST['friend']) ? intval($_REQUEST['friend']) : 0;
+        $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
 
         $json = [
             'status' => true,
@@ -58,7 +58,7 @@ switch ($_REQUEST['action']) {
         ];
         break;
     case 'write':
-        $friend = isset($_REQUEST['friend']) ? intval($_REQUEST['friend']) : 0;
+        $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
         $writed = $courseChatUtils->saveMessage($_POST['message'], $friend);
 
         $json = [

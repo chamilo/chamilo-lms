@@ -5,7 +5,7 @@ build:
                 override:
                     - php-scrutinizer-run
     resources:
-        cpus: 8
+        cpus: 2
     environment:
         php:
             ini:

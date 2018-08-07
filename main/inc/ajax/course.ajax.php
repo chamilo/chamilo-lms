@@ -276,7 +276,7 @@ switch ($action) {
     case 'search_exercise_by_course':
         if (api_is_platform_admin()) {
             $course = api_get_course_info_by_id($_GET['course_id']);
-            $session_id = (!empty($_GET['session_id'])) ? intval($_GET['session_id']) : 0;
+            $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
             $exercises = ExerciseLib::get_all_exercises(
                 $course,
                 $session_id,
@@ -310,8 +310,8 @@ switch ($action) {
 
             $sql_query = sprintf(
                 $sql,
-                intval($_GET['course_id']),
-                intval($_GET['session_id']),
+                (int) $_GET['course_id'],
+                (int) $_GET['session_id'],
                 '%'.Database::escape_string($_GET['q']).'%'
             );
             $result = Database::query($sql_query);
@@ -330,7 +330,7 @@ switch ($action) {
         }
         break;
     case 'display_sessions_courses':
-        $sessionId = intval($_GET['session']);
+        $sessionId = (int) $_GET['session'];
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $coursesData = SessionManager::get_course_list_by_session_id($sessionId);
 

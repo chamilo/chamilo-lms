@@ -71,7 +71,7 @@ switch ($action) {
         exit;
         break;
     case 'set_status':
-        $status = isset($_REQUEST['status']) ? intval($_REQUEST['status']) : 0;
+        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
         $chat->setUserStatus($status);
         break;
     case 'create_room':

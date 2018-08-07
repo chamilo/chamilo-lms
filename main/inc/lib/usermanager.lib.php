@@ -331,7 +331,7 @@ class UserManager
             // value of 0000...
             if (api_get_setting('account_valid_duration') != '') {
                 $expirationDate = new DateTime($currentDate);
-                $days = intval(api_get_setting('account_valid_duration'));
+                $days = (int) api_get_setting('account_valid_duration');
                 $expirationDate->modify('+'.$days.' day');
             }
         } else {
@@ -1639,8 +1639,8 @@ class UserManager
         }
 
         if (is_numeric($limit_from) && is_numeric($limit_from)) {
-            $limit_from = intval($limit_from);
-            $limit_to = intval($limit_to);
+            $limit_from = (int) $limit_from;
+            $limit_to = (int) $limit_to;
             $sql .= " LIMIT $limit_from, $limit_to";
         }
         $sql_result = Database::query($sql);
@@ -2379,7 +2379,7 @@ class UserManager
             $sqlf .= " AND visible_to_self = 1 ";
         }
         if (!is_null($field_filter)) {
-            $field_filter = intval($field_filter);
+            $field_filter = (int) $field_filter;
             $sqlf .= " AND filter = $field_filter ";
         }
         $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
@@ -3928,8 +3928,8 @@ class UserManager
         // database table definition
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-        $field_id = intval($field_id);
-        $limit = intval($limit);
+        $field_id = (int) $field_id;
+        $limit = (int) $limit;
         // all the information of the field
         $sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv
                 INNER JOIN $table_user_tag ut
@@ -3962,8 +3962,8 @@ class UserManager
         // database table definition
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-        $field_id = intval($field_id);
-        $user_id = intval($user_id);
+        $field_id = (int) $field_id;
+        $user_id = (int) $user_id;
 
         // all the information of the field
         $sql = "SELECT ut.id, tag, count
@@ -3997,8 +3997,8 @@ class UserManager
         // database table definition
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-        $field_id = intval($field_id);
-        $user_id = intval($user_id);
+        $field_id = (int) $field_id;
+        $user_id = (int) $user_id;
 
         // all the information of the field
         $sql = "SELECT ut.id, tag,count FROM $table_user_tag ut
@@ -4045,7 +4045,7 @@ class UserManager
     {
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $tag = Database::escape_string($tag);
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         //with COLLATE latin1_bin to select query in a case sensitive mode
         $sql = "SELECT id FROM $table_user_tag
                 WHERE tag LIKE '$tag' AND field_id = $field_id";
@@ -4070,8 +4070,8 @@ class UserManager
     public static function get_tag_id_from_id($tag_id, $field_id)
     {
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
-        $tag_id = intval($tag_id);
-        $field_id = intval($field_id);
+        $tag_id = (int) $tag_id;
+        $field_id = (int) $field_id;
         $sql = "SELECT id FROM $table_user_tag
                 WHERE id = '$tag_id' AND field_id = $field_id";
         $result = Database::query($sql);
@@ -4101,8 +4101,8 @@ class UserManager
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
         $tag = trim(Database::escape_string($tag));
-        $user_id = intval($user_id);
-        $field_id = intval($field_id);
+        $user_id = (int) $user_id;
+        $field_id = (int) $field_id;
 
         $tag_id = self::get_tag_id($tag, $field_id);
 
@@ -4525,9 +4525,9 @@ class UserManager
     {
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 
-        $friend_id = intval($friend_id);
-        $my_user_id = intval($my_user_id);
-        $relation_type = intval($relation_type);
+        $friend_id = (int) $friend_id;
+        $my_user_id = (int) $my_user_id;
+        $relation_type = (int) $relation_type;
 
         $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
                 WHERE
@@ -4590,7 +4590,7 @@ class UserManager
     ) {
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_message = Database::get_main_table(TABLE_MESSAGE);
-        $friend_id = intval($friend_id);
+        $friend_id = (int) $friend_id;
 
         if ($real_removed) {
             $extra_condition = '';
@@ -4651,13 +4651,13 @@ class UserManager
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $tblUserRelUser = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tblUserRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $orderBy = null;
         if (api_is_western_name_order()) {
-            $orderBy .= " ORDER BY firstname, lastname ";
+            $orderBy .= ' ORDER BY firstname, lastname ';
         } else {
-            $orderBy .= " ORDER BY lastname, firstname ";
+            $orderBy .= ' ORDER BY lastname, firstname ';
         }
 
         $sql = "SELECT u.id, username, u.firstname, u.lastname
@@ -4765,12 +4765,12 @@ class UserManager
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $limitCondition = '';
 
         if (isset($from) && isset($numberItems)) {
-            $from = intval($from);
-            $numberItems = intval($numberItems);
+            $from = (int) $from;
+            $numberItems = (int) $numberItems;
             $limitCondition = "LIMIT $from, $numberItems";
         }
 

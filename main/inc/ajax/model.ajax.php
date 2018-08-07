@@ -281,7 +281,7 @@ switch ($action) {
             exit;
         }
         $userId = api_get_user_id();
-        $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+        $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
         $courseCodeList = [];
         $userIdList = [];
         $sessionIdList = [];
@@ -1576,9 +1576,9 @@ switch ($action) {
         */
         break;
     case 'get_exercise_progress':
-        $sessionId = intval($_GET['session_id']);
-        $courseId = intval($_GET['course_id']);
-        $exerciseId = intval($_GET['exercise_id']);
+        $sessionId = (int) $_GET['session_id'];
+        $courseId = (int) $_GET['course_id'];
+        $exerciseId = (int) $_GET['exercise_id'];
         $date_from = $_GET['date_from'];
         $date_to = $_GET['date_to'];
 
@@ -1613,8 +1613,8 @@ switch ($action) {
     case 'get_session_lp_progress':
         $sessionId = 0;
         if (!empty($_GET['session_id']) && !empty($_GET['course_id'])) {
-            $sessionId = intval($_GET['session_id']);
-            $courseId = intval($_GET['course_id']);
+            $sessionId = (int) $_GET['session_id'];
+            $courseId = (int) $_GET['course_id'];
             $course = api_get_course_info_by_id($courseId);
         }
 

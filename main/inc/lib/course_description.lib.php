@@ -84,7 +84,7 @@ class CourseDescription
             true,
             true
         );
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_id ?: api_get_course_int_id();
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id $condition_session
 		        ORDER BY id ";

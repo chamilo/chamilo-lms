@@ -624,7 +624,7 @@ class IndexManager
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = [];
                         if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-                            $course_details[] = $course['visual_code'];
+                            $course_details[] = '('.$course['visual_code'].')';
                         }
                         if (api_get_setting('display_teacher_in_courselist') === 'true') {
                             $course_details[] = CourseManager::getTeacherListFromCourseCodeToString($course['code']);
@@ -669,7 +669,7 @@ class IndexManager
                     }
                     $course_details = [];
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-                        $course_details[] = $course['visual_code'];
+                        $course_details[] = '('.$course['visual_code'].')';
                     }
                     if (api_get_setting('display_teacher_in_courselist') === 'true') {
                         if (!empty($course['tutor_name'])) {
@@ -783,7 +783,7 @@ class IndexManager
      *
      * @return string
      */
-    public function show_right_block(
+    public function showRightBlock(
         $title,
         $content,
         $id = '',
@@ -843,7 +843,7 @@ class IndexManager
                 <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.
                 $search_btn.' </button>
                 </div></form>';
-            $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
+            $html .= $this->showRightBlock(get_lang('Search'), $search_content, 'search_block');
         }
 
         return $html;
@@ -852,15 +852,30 @@ class IndexManager
     /**
      * @return string
      */
-    public function return_classes_block()
+    public function returnClassesBlock()
     {
         if (api_get_setting('show_groups_to_users') !== 'true') {
             return '';
         }
 
-        $usergroup = new UserGroup();
-        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
         $items = [];
+
+        $usergroup = new UserGroup();
+        if (api_is_platform_admin()) {
+            $items[] = [
+                'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
+                'title' => get_lang('AddClasses'),
+            ];
+        } else {
+            if (api_is_teacher() && $usergroup->allowTeachers()) {
+                $items[] = [
+                    'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php',
+                    'title' => get_lang('ClassList'),
+                ];
+            }
+        }
+
+        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
         if (!empty($usergroup_list)) {
             foreach ($usergroup_list as $group_id) {
                 $data = $usergroup->get($group_id);
@@ -870,14 +885,8 @@ class IndexManager
                 ];
             }
         }
-        if (api_is_platform_admin()) {
-            $items[] = [
-                'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
-                'title' => get_lang('AddClasses'),
-            ];
-        }
 
-        $html = self::show_right_block(
+        $html = $this->showRightBlock(
             get_lang('Classes'),
             self::returnRightBlockItems($items),
             'classes_block'
@@ -904,7 +913,7 @@ class IndexManager
                 <img class="img-circle" title="'.get_lang('EditProfile').'" src="'.$userPicture.'"></a>';
             }
 
-            $html = self::show_right_block(
+            $html = $this->showRightBlock(
                 null,
                 $content,
                 'user_image_block',
@@ -929,7 +938,7 @@ class IndexManager
         $items = [];
         $userGroup = new UserGroup();
         //  @todo Add a platform setting to add the user image.
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_message_tool') === 'true') {
             // New messages.
             $number_of_new_messages = MessageManager::getCountNewMessages();
             // New contact invitations.
@@ -1086,7 +1095,7 @@ class IndexManager
 
             if (SessionManager::allowToManageSessions()) {
                 $items[] = [
-                    'class' => 'add-course',
+                    'class' => 'add-session',
                     'icon' => Display::return_icon('session.png', get_lang('AddSession')),
                     'link' => 'main/session/session_add.php',
                     'title' => get_lang('AddSession'),
@@ -1515,7 +1524,7 @@ class IndexManager
                                 }
 
                                 if ($showAllSessions) {
-                                    if ($allowed_time < $session_now && $allowedEndTime == false) {
+                                    if ($allowed_time < $session_now && $allowedEndTime === false) {
                                         $markAsOld = true;
                                     }
                                     if ($allowed_time > $session_now && $endSessionToTms > $session_now) {
@@ -1528,7 +1537,7 @@ class IndexManager
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
                                     // Read only and accessible.
                                     $atLeastOneCourseIsVisible = true;
-                                    if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                    if (api_get_setting('hide_courses_in_sessions') === 'false') {
                                         $courseUserHtml = CourseManager::get_logged_user_course_html(
                                             $course,
                                             $session_id,
@@ -1595,7 +1604,7 @@ class IndexManager
                             }
 
                             // No courses to show.
-                            if ($atLeastOneCourseIsVisible == false) {
+                            if ($atLeastOneCourseIsVisible === false) {
                                 if (empty($html_courses_session)) {
                                     continue;
                                 }
@@ -1606,8 +1615,6 @@ class IndexManager
                                     'id' => $session_id,
                                 ];
                                 $session_box = Display::getSessionTitleBox($session_id);
-                                $actions = api_get_path(WEB_CODE_PATH).
-                                    'session/resume_session.php?id_session='.$session_id;
                                 $coachId = $session_box['id_coach'];
                                 $extraFieldValue = new ExtraFieldValue('session');
                                 $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -1629,7 +1636,7 @@ class IndexManager
                                 $params['date'] = $session_box['dates'];
                                 $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                                 $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
-                                $params['edit_actions'] = $actions;
+                                $params['show_actions'] = SessionManager::cantEditSession($session_id);
                                 $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
                                 $params['description'] = $session_box['description'];
                                 $params['visibility'] = $session_box['visibility'];
@@ -1764,7 +1771,7 @@ class IndexManager
                                     $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
                                     $sessionParams[0]['title'] = $session_box['title'];
                                     $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
-                                    $sessionParams[0]['show_actions'] = api_is_platform_admin();
+                                    $sessionParams[0]['show_actions'] = SessionManager::cantEditSession($session_id);
                                     $sessionParams[0]['courses'] = $html_courses_session;
                                     $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
                                     $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
@@ -1834,7 +1841,7 @@ class IndexManager
 
                             $this->tpl->assign('session_category', $categoryParams);
                             $sessions_with_category .= $this->tpl->fetch(
-                                "{$this->tpl->templateFolder}/user_portal/session_category.tpl"
+                                $this->tpl->get_template('user_portal/session_category.tpl')
                             );
                         }
                     }

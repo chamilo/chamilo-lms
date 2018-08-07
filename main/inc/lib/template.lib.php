@@ -177,6 +177,10 @@ class Template
                 'name' => 'get_template',
                 'callable' => 'Template::findTemplateFilePath',
             ],
+            [
+                'name' => 'date_to_time_ago',
+                'callable' => 'Display::dateToStringAgoAndLongDate',
+            ],
         ];
 
         foreach ($filters as $filter) {

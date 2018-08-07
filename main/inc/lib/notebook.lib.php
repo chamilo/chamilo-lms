@@ -122,8 +122,8 @@ class NotebookManager
                 title				AS note_title,
                 description 		AS note_comment,
                 session_id			AS session_id
-               FROM $table
-               WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
+                FROM $table
+                WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
             return [];
@@ -200,7 +200,6 @@ class NotebookManager
 
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
-
         $course_id = api_get_course_int_id();
 
         $sql = "DELETE FROM $table

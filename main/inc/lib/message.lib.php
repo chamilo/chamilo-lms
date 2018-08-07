@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -238,6 +239,7 @@ class MessageManager
             'update_date' => $now,
         ];
         $id = Database::insert($table, $params);
+
         if ($id) {
             return true;
         }
@@ -253,12 +255,25 @@ class MessageManager
     public static function getMessagesAboutUser($aboutUserInfo)
     {
         if (!empty($aboutUserInfo)) {
-            $criteria = [
+            $table = Database::get_main_table(TABLE_MESSAGE);
+            $sql = 'SELECT id FROM '.$table.'
+                    WHERE 
+                      user_receiver_id = '.$aboutUserInfo['id'].' AND 
+                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'                    
+                    ';
+            $result = Database::query($sql);
+            $messages = [];
+            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
+            while ($row = Database::fetch_array($result)) {
+                $message = $repo->find($row['id']);
+                $messages[] = $message;
+            }
+            /*$criteria = [
                 'userReceiverId' => $aboutUserInfo['id'],
                 'msgStatus' => MESSAGE_STATUS_CONVERSATION,
             ];
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
-            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);
+            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);*/
 
             return $messages;
         }
@@ -267,21 +282,95 @@ class MessageManager
     }
 
     /**
+     * @param array $userInfo
+     *
+     * @return string
+     */
+    public static function getMessagesAboutUserToString($userInfo)
+    {
+        $messages = self::getMessagesAboutUser($userInfo);
+        $html = '';
+        if (!empty($messages)) {
+            /** @var Message $message */
+            foreach ($messages as $message) {
+                $tag = 'message_'.$message->getId();
+                $tagAccordion = 'accordion_'.$message->getId();
+                $tagCollapse = 'collapse_'.$message->getId();
+                $date = Display::dateToStringAgoAndLongDate(
+                    $message->getSendDate()
+                );
+                $localTime = api_get_local_time(
+                    $message->getSendDate(),
+                    null,
+                    null,
+                    false,
+                    false
+                );
+                $senderId = $message->getUserSenderId();
+                $senderInfo = api_get_user_info($senderId);
+                $html .= Display::panelCollapse(
+                    $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
+                    $message->getContent().'<br />'.$date.'<br />'.get_lang(
+                        'Author'
+                    ).': '.$senderInfo['complete_name_with_message_link'],
+                    $tag,
+                    null,
+                    $tagAccordion,
+                    $tagCollapse,
+                    false
+                );
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param int    $senderId
+     * @param int    $receiverId
+     * @param string $subject
+     * @param string $message
+     *
+     * @return bool
+     */
+    public static function messageWasAlreadySent($senderId, $receiverId, $subject, $message)
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $senderId = (int) $senderId;
+        $receiverId = (int) $receiverId;
+        $subject = Database::escape_string($subject);
+        $message = Database::escape_string($message);
+
+        $sql = "SELECT * FROM $table
+                WHERE 
+                    user_sender_id = $senderId AND
+                    user_receiver_id = $receiverId AND 
+                    title = '$subject' AND 
+                    content = '$message' AND
+                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")                    
+                ";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
      * Sends a message to a user/group.
      *
      * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array  $attachments      files array($_FILES) (optional)
-     * @param array  $fileCommentList  about attachment files (optional)
-     * @param int    $group_id         (optional)
-     * @param int    $parent_id        (optional)
-     * @param int    $editMessageId    id for updating the message (optional)
-     * @param int    $topic_id         (optional) the default value is the current user_id
+     * @param array  $attachments         files array($_FILES) (optional)
+     * @param array  $fileCommentList     about attachment files (optional)
+     * @param int    $group_id            (optional)
+     * @param int    $parent_id           (optional)
+     * @param int    $editMessageId       id for updating the message (optional)
+     * @param int    $topic_id            (optional) the default value is the current user_id
      * @param int    $sender_id
      * @param bool   $directMessage
      * @param int    $forwardId
      * @param array  $smsParameters
+     * @param bool   $checkCurrentAudioId
      *
      * @return bool
      */
@@ -298,7 +387,8 @@ class MessageManager
         $sender_id = 0,
         $directMessage = false,
         $forwardId = 0,
-        $smsParameters = []
+        $smsParameters = [],
+        $checkCurrentAudioId = false
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $group_id = (int) $group_id;
@@ -339,6 +429,26 @@ class MessageManager
                 }
                 $attachmentList[] = $attachment;
                 $counter++;
+            }
+        }
+
+        if ($checkCurrentAudioId) {
+            // Add the audio file as an attachment
+            $audioId = Session::read('current_audio_id');
+            if (!empty($audioId)) {
+                $file = api_get_uploaded_file('audio_message', api_get_user_id(), $audioId);
+                if (!empty($file)) {
+                    $audioAttachment = [
+                        'name' => basename($file),
+                        'comment' => 'audio_message',
+                        'size' => filesize($file),
+                        'tmp_name' => $file,
+                        'error' => 0,
+                        'type' => DocumentManager::file_get_mime_type(basename($file)),
+                    ];
+                    // create attachment from audio message
+                    $attachmentList[] = $audioAttachment;
+                }
             }
         }
 
@@ -393,7 +503,7 @@ class MessageManager
 
             // Forward also message attachments
             if (!empty($forwardId)) {
-                $attachments = MessageManager::getAttachmentList($forwardId);
+                $attachments = self::getAttachmentList($forwardId);
                 foreach ($attachments as $attachment) {
                     if (!empty($attachment['file_source'])) {
                         $file = [
@@ -1181,14 +1291,14 @@ class MessageManager
     public static function showMessageBox($messageId, $source = 'inbox')
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $messageId = intval($messageId);
+        $messageId = (int) $messageId;
 
         if ($source == 'outbox') {
             if (isset($messageId) && is_numeric($messageId)) {
                 $query = "SELECT * FROM $table
                           WHERE
                             user_sender_id = ".api_get_user_id()." AND
-                            id = ".$messageId." AND
+                            id = $messageId AND
                             msg_status = ".MESSAGE_STATUS_OUTBOX;
                 $result = Database::query($query);
             }
@@ -1854,22 +1964,29 @@ class MessageManager
      *
      * @return array
      */
-    public static function get_links_message_attachment_files($messageId, $type = '')
+    public static function getAttachmentLinkList($messageId, $type = '')
     {
         $files = self::getAttachmentList($messageId);
         // get file attachments by message id
         $list = [];
         if ($files) {
-            $attach_icon = Display::return_icon('attachment.gif', '');
+            $attachIcon = Display::return_icon('attachment.gif', '');
             $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
             foreach ($files as $row_file) {
                 $archiveFile = $row_file['path'];
                 $filename = $row_file['filename'];
-                $filesize = format_file_size($row_file['size']);
-                $filecomment = Security::remove_XSS($row_file['comment']);
+                $size = format_file_size($row_file['size']);
+                $comment = Security::remove_XSS($row_file['comment']);
                 $filename = Security::remove_XSS($filename);
-                $list[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>
-                    &nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
+                $link = Display::url($filename, $archiveURL.$archiveFile);
+                $comment = !empty($comment) ? '&nbsp;-&nbsp;<i>'.$comment.'</i>' : '';
+
+                $attachmentLine = $attachIcon.'&nbsp;'.$link.'&nbsp;('.$size.')'.$comment;
+                if ($row_file['comment'] == 'audio_message') {
+                    $attachmentLine = '<audio src="'.$archiveURL.$archiveFile.'"/>';
+                }
+
+                $list[] = $attachmentLine;
             }
         }
 
@@ -2466,6 +2583,34 @@ class MessageManager
                 [],
                 false
             );
+        }
+    }
+
+    /**
+     * Clean audio messages already added in the message tool.
+     */
+    public static function cleanAudioMessage()
+    {
+        $audioId = Session::read('current_audio_id');
+        if (!empty($audioId)) {
+            api_remove_uploaded_file_by_id('audio_message', api_get_user_id(), $audioId);
+            Session::erase('current_audio_id');
+        }
+    }
+
+    /**
+     * @param int    $senderId
+     * @param string $subject
+     * @param string $message
+     */
+    public static function sendMessageToAllAdminUsers(
+        $senderId,
+        $subject,
+        $message
+    ) {
+        $admins = UserManager::get_all_administrators();
+        foreach ($admins as $admin) {
+            self::send_message_simple($admin['user_id'], $subject, $message, $senderId);
         }
     }
 

@@ -139,7 +139,7 @@ class DocumentManager
             'movie' => 'video/x-sgi-movie',
             'mp2' => 'audio/mpeg',
             'mp3' => 'audio/mpeg',
-            'mp4' => 'video/mpeg4-generic',
+            'mp4' => 'video/mp4',
             'mpa' => 'audio/mpeg',
             'mpe' => 'video/mpeg',
             'mpeg' => 'video/mpeg',
@@ -263,7 +263,7 @@ class DocumentManager
 
         //$filename will be an array if a . was found
         if (is_array($extension)) {
-            $extension = strtolower($extension[sizeof($extension) - 1]);
+            $extension = strtolower($extension[count($extension) - 1]);
         } else {
             //file without extension
             $extension = 'empty';
@@ -273,6 +273,7 @@ class DocumentManager
         if (isset($mime_types[$extension])) {
             return $mime_types[$extension];
         }
+
         //else return octet-stream
         return 'application/octet-stream';
     }
@@ -349,7 +350,9 @@ class DocumentManager
             // Commented to avoid double caching declaration when playing with IE and HTTPS
             //header('Cache-Control: no-cache, must-revalidate');
             //header('Pragma: no-cache');
+
             $contentType = self::file_get_mime_type($filename);
+
             switch ($contentType) {
                 case 'text/html':
                     if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
@@ -379,11 +382,13 @@ class DocumentManager
 
             header('Content-type: '.$contentType);
             header('Content-Length: '.$len);
-            $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if (strpos($user_agent, 'msie')) {
+            $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+            if (strpos($userAgent, 'msie')) {
                 header('Content-Disposition: ; filename= '.$filename);
             } else {
-                header('Content-Disposition: inline; filename= '.$filename);
+                //header('Content-Disposition: inline');
+                header('Content-Disposition: inline;');
             }
 
             if ($fixLinksHttpToHttps) {
@@ -1294,11 +1299,12 @@ class DocumentManager
     /**
      * Gets the document data with a given id.
      *
-     * @param int    $id           Document Id (id field in c_document table)
-     * @param string $course_code  Course code
-     * @param bool   $load_parents load folder parents
-     * @param int    $session_id   The session ID,
-     *                             0 if requires context *out of* session, and null to use global context
+     * @param int    $id            Document Id (id field in c_document table)
+     * @param string $course_code   Course code
+     * @param bool   $load_parents  load folder parents
+     * @param int    $session_id    The session ID,
+     *                              0 if requires context *out of* session, and null to use global context
+     * @param bool   $ignoreDeleted
      *
      * @return array document content
      */
@@ -1306,7 +1312,8 @@ class DocumentManager
         $id,
         $course_code,
         $load_parents = false,
-        $session_id = null
+        $session_id = null,
+        $ignoreDeleted = false
     ) {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -1315,14 +1322,18 @@ class DocumentManager
             return false;
         }
 
-        $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
+        $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $id = intval($id);
+        $id = (int) $id;
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
                 WHERE c_id = $course_id $sessionCondition AND id = $id";
+
+        if ($ignoreDeleted) {
+            $sql .= " AND path NOT LIKE '%_DELETED_%' ";
+        }
 
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
@@ -1848,6 +1859,7 @@ class DocumentManager
         $user_info = api_get_user_info($user_id);
         $first_name = $user_info['firstname'];
         $last_name = $user_info['lastname'];
+        $username = $user_info['username'];
         $official_code = $user_info['official_code'];
 
         // Teacher information
@@ -1883,6 +1895,7 @@ class DocumentManager
         $info_to_replace_in_content_html = [
             $first_name,
             $last_name,
+            $username,
             $organization_name,
             $portal_name,
             $teacher_first_name,
@@ -1902,6 +1915,7 @@ class DocumentManager
         $tags = [
             '((user_firstname))',
             '((user_lastname))',
+            '((user_username))',
             '((gradebook_institution))',
             '((gradebook_sitename))',
             '((teacher_firstname))',
@@ -2990,9 +3004,10 @@ class DocumentManager
     {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $session_id = intval($session_id);
-        $group_id = intval($group_id);
-        $course_id = intval($course_id);
+
+        $session_id = (int) $session_id;
+        $group_id = (int) $group_id;
+        $course_id = (int) $course_id;
 
         if (!$course_id) {
             $course_id = api_get_course_int_id();
@@ -3013,9 +3028,9 @@ class DocumentManager
                 INNER JOIN $TABLE_DOCUMENT AS docs
                 ON (docs.id = props.ref AND props.c_id = docs.c_id)
                 WHERE
-                    props.c_id 	= $course_id AND
-                    docs.c_id 	= $course_id AND
-                    props.tool 	= '".TOOL_DOCUMENT."' AND
+                    props.c_id = $course_id AND
+                    docs.c_id = $course_id AND
+                    props.tool = '".TOOL_DOCUMENT."' AND
                     props.visibility <> 2
                     $group_condition
                     $session_condition
@@ -3025,7 +3040,7 @@ class DocumentManager
         if ($result && Database::num_rows($result) != 0) {
             $row = Database::fetch_row($result);
 
-            return $row[0];
+            return (int) $row[0];
         } else {
             return 0;
         }
@@ -3122,7 +3137,12 @@ class DocumentManager
 
         }*/
         //$type = "video/$extension";
-        $html = '<video id="myvideo"  src="'.$file.'" controls '.$type.'">';
+        //$fileInfo = parse_url($file);
+        //$type = self::file_get_mime_type(basename($fileInfo['path']));
+
+        $html = '<video id="myvideo" controls>';
+        $html .= '<source src="'.$file.'" >';
+        $html .= '</video>';
 
         return $html;
     }
@@ -3315,7 +3335,7 @@ class DocumentManager
                     api_get_user_id()
                 );
 
-                if ($showInvisibleFiles == false) {
+                if ($showInvisibleFiles === false) {
                     if (!$is_visible) {
                         continue;
                     }
@@ -3336,7 +3356,7 @@ class DocumentManager
         } else {
             if (is_array($parentData)) {
                 $documents[$parentData['title']] = [
-                    'id' => intval($folderId),
+                    'id' => (int) $folderId,
                     'files' => $newResources,
                 ];
             }
@@ -3355,15 +3375,15 @@ class DocumentManager
         );
 
         $return .= $write_result;
-        if ($lp_id == false) {
-            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
+        if ($lp_id === false) {
+            $url = api_get_path(WEB_AJAX_PATH).
+                'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
             $return .= "<script>
             $('.doc_folder').click(function() {
                 var realId = this.id;
                 var my_id = this.id.split('_')[2];
                 var tempId = 'temp_'+my_id;
                 $('#res_'+my_id).show();
-
                 var tempDiv = $('#'+realId).find('#'+tempId);
                 if (tempDiv.length == 0) {
                     $.ajax({
@@ -3385,7 +3405,6 @@ class DocumentManager
                 $('.lp_resource').remove();
                 $('.document_preview_container').html('');
             });
-
             </script>";
         } else {
             //For LPs
@@ -3408,7 +3427,6 @@ class DocumentManager
                     image.attr('src', '".Display::returnIconPath('nolines_minus.gif')."');
                     $('#'+id).hide();
                     $('#'+tempId).show();
-
                     var tempDiv = $('#'+parentId).find('#'+tempId);
                     if (tempDiv.length == 0) {
                         $.ajax({
@@ -3489,7 +3507,7 @@ class DocumentManager
                     $return .= '</div>';
                     $return .= '</ul>';
                 } else {
-                    if ($resource['filetype'] == 'folder') {
+                    if ($resource['filetype'] === 'folder') {
                         $return .= self::parseFolder($folderId, $resource, $lp_id);
                     } else {
                         $return .= self::parseFile(
@@ -6774,10 +6792,16 @@ class DocumentManager
             'id' => $parentId,
             'deleteid' => $documentData['id'],
         ]);
+
         $btn = Display::url(
             $iconEn,
-            api_get_self()."?$courseParams&$urlDeleteParams",
-            ['onclick' => "return confirmation('$titleToShow');"]
+            '#',
+            [
+                'data-item-title' => $titleToShow,
+                'data-href' => api_get_self()."?$courseParams&$urlDeleteParams",
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
         );
 
         if (

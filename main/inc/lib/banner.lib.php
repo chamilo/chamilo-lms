@@ -201,6 +201,26 @@ function return_logo($theme = '')
 }
 
 /**
+ * Check if user have access to "who is online" page.
+ *
+ * @return bool
+ */
+function accessToWhoIsOnline()
+{
+    $user_id = api_get_user_id();
+    $course_id = api_get_course_int_id();
+    $access = false;
+    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
+        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
+    ) {
+        $access = true;
+    }
+
+    return $access;
+}
+
+/**
  * Return HTML string of a list as <li> items.
  *
  * @return string
@@ -208,19 +228,11 @@ function return_logo($theme = '')
 function returnNotificationMenu()
 {
     $courseInfo = api_get_course_info();
-    $course_id = 0;
-    if (!empty($courseInfo)) {
-        $course_id = $courseInfo['code'];
-    }
-
     $user_id = api_get_user_id();
     $sessionId = api_get_session_id();
     $html = '';
 
-    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
-        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
-    ) {
+    if (accessToWhoIsOnline()) {
         $number = getOnlineUsersCount();
         $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
 

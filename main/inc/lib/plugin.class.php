@@ -25,6 +25,7 @@ class Plugin
     public $isMailPlugin = false;
     // Adds icon in the course home
     public $addCourseTool = true;
+    public $hasPersonalEvents = false;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -215,6 +216,11 @@ class Plugin
             $options = null;
             if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
                 $attributes = isset($type['attributes']) ? $type['attributes'] : [];
+                if (!empty($type['options']) && isset($type['translate_options']) && $type['translate_options']) {
+                    foreach ($type['options'] as $key => &$optionName) {
+                        $optionName = $this->get_lang($optionName);
+                    }
+                }
                 $options = $type['options'];
                 $type = $type['type'];
             }
@@ -536,7 +542,7 @@ class Plugin
      */
     public function uninstall_course_fields($courseId)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
 
         if (empty($courseId)) {
             return false;
@@ -580,8 +586,8 @@ class Plugin
     public function install_course_fields_in_all_courses($add_tool_link = true)
     {
         // Update existing courses to add plugin settings
-        $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses ORDER BY id";
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->install_course_fields($row['id'], $add_tool_link);
@@ -594,8 +600,8 @@ class Plugin
     public function uninstall_course_fields_in_all_courses()
     {
         // Update existing courses to add conference settings
-        $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table
                 ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
@@ -684,6 +690,7 @@ class Plugin
             }
         }
 
+        $currentUrlId = api_get_current_access_url_id();
         $attributes = [
             'variable' => 'show_tabs',
             'subkey' => $subkey,
@@ -693,7 +700,7 @@ class Plugin
             'title' => $tabName,
             'comment' => $url,
             'subkeytext' => $subkeytext,
-            'access_url' => 1,
+            'access_url' => $currentUrlId,
             'access_url_changeable' => 1,
             'access_url_locked' => 0,
         ];
@@ -877,9 +884,19 @@ class Plugin
      *
      * @return string
      */
-    public function getToolIconVisibility()
+    public function getToolIconVisibilityPerUserStatus()
     {
         return '';
+    }
+
+    /**
+     * Default tool icon visibility.
+     *
+     * @return bool
+     */
+    public function isIconVisibleByDefault()
+    {
+        return true;
     }
 
     /**
@@ -909,6 +926,14 @@ class Plugin
     }
 
     /**
+     * @param bool $value
+     */
+    public function setHasPersonalEvents($value)
+    {
+        $this->hasPersonalEvents = $value;
+    }
+
+    /**
      * Add an link for a course tool.
      *
      * @param string $name     The tool name
@@ -928,7 +953,8 @@ class Plugin
             return null;
         }
 
-        $visibility = $this->getToolIconVisibility();
+        $visibilityPerStatus = $this->getToolIconVisibilityPerUserStatus();
+        $visibility = $this->isIconVisibleByDefault();
 
         $em = Database::getManager();
 
@@ -948,10 +974,10 @@ class Plugin
             $tool
                 ->setId($cToolId)
                 ->setCId($courseId)
-                ->setName($name.$visibility)
+                ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
-                ->setVisibility(true)
+                ->setVisibility($visibility)
                 ->setAdmin(0)
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)

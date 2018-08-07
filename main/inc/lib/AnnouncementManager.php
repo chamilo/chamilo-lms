@@ -439,8 +439,6 @@ class AnnouncementManager
         }
 
         //$toUser = $itemProperty->getToUser();
-        //$toUserId = !empty($toUser) ? $toUser->getId() : 0;
-        // The user id is always the current one.
         $toUserId = api_get_user_id();
         $content = self::parseContent(
             $toUserId,
@@ -456,7 +454,8 @@ class AnnouncementManager
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
 
-        if (api_is_allowed_to_edit(false, true)) {
+        $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
+        if (api_is_allowed_to_edit(false, true) && $allow) {
             $sent_to = self::sent_to('announcement', $id);
             $sent_to_form = self::sent_to_form($sent_to);
             $html .= Display::tag(
@@ -807,7 +806,7 @@ class AnnouncementManager
         $courseId = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $id = intval($id);
+        $id = (int) $id;
 
         $params = [
             'title' => $title,
@@ -825,7 +824,7 @@ class AnnouncementManager
 
         $id_attach = 0;
         if ($row_attach) {
-            $id_attach = intval($row_attach['id']);
+            $id_attach = (int) $row_attach['id'];
         }
 
         if (!empty($file)) {
@@ -1124,14 +1123,16 @@ class AnnouncementManager
             switch ($toGroup) {
                 // it was send to one specific user
                 case null:
-                    $to[] = "USER:".$row['to_user_id'];
+                    if (isset($row['to_user_id']) && !empty($row['to_user_id'])) {
+                        $to[] = 'USER:'.$row['to_user_id'];
+                    }
                     break;
                 // it was sent to everyone
                 case 0:
                     return 'everyone';
                     break;
                 default:
-                    $to[] = "GROUP:".$toGroup;
+                    $to[] = 'GROUP:'.$toGroup;
             }
         }
 

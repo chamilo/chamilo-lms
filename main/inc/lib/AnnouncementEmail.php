@@ -298,18 +298,30 @@ class AnnouncementEmail
         }
 
         foreach ($users as $user) {
-            if (!empty($this->logger)) {
-                $this->logger->addInfo('Announcement: #'.$this->announcement('id').'. Send email to user: #'.$user['user_id']);
-            }
             $message = $this->message($user['user_id']);
-            MessageManager::send_message_simple(
-                $user['user_id'],
-                $subject,
-                $message,
-                $senderId,
-                $sendToDrhUsers,
-                true
-            );
+            $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);
+            if ($wasSent === false) {
+                if (!empty($this->logger)) {
+                    $this->logger->addInfo(
+                        'Announcement: #'.$this->announcement('id').'. Send email to user: #'.$user['user_id']
+                    );
+                }
+                MessageManager::send_message_simple(
+                    $user['user_id'],
+                    $subject,
+                    $message,
+                    $senderId,
+                    $sendToDrhUsers,
+                    true
+                );
+            } else {
+                if (!empty($this->logger)) {
+                    $this->logger->addInfo(
+                        'Message "'.$subject.'" was already sent. Announcement: #'.$this->announcement('id').'. 
+                        User: #'.$user['user_id']
+                    );
+                }
+            }
 
             if (($counter % $batchSize) === 0) {
                 $em->flush();

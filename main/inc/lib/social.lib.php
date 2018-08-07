@@ -925,6 +925,7 @@ class SocialManager extends UserManager
         $sharedProfileIcon = Display::return_icon('sn-profile.png', get_lang('ViewMySharedProfile'));
         $searchIcon = Display::return_icon('sn-search.png', get_lang('Search'), null, ICON_SIZE_SMALL);
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
+        $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
 
         $html = '';
         $active = null;
@@ -1012,7 +1013,18 @@ class SocialManager extends UserManager
                     </li>
                 ';
             }
-            $links .= '</ul>';
+
+            if (api_get_configuration_value('enable_gdpr')) {
+                $active = $show == 'personal-data' ? 'active' : null;
+                $personalData = '
+                    <li class="personal-data-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
+                            '.$personalDataIcon.' '.get_lang('PersonalDataReport').'
+                        </a>
+                    </li>';
+                $links .= $personalData;
+                $links .= '</ul>';
+            }
 
             $html .= Display::panelCollapse(
                 get_lang('SocialNetwork'),
@@ -1904,7 +1916,7 @@ class SocialManager extends UserManager
         }
 
         $currentUserId = api_get_user_id();
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userRelationType = 0;
 
         $socialAvatarBlock = self::show_social_avatar_block(
@@ -2057,7 +2069,7 @@ class SocialManager extends UserManager
                     $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                     $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
-                    if (!empty($user_info_friend['user_is_online'])) {
+                    if (!empty($user_info_friend['user_is_online_in_chat'])) {
                         $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
                         $status = 1;
                     } else {

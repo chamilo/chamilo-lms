@@ -265,7 +265,8 @@ class ExerciseShowFunctions
         ];
         echo '<table class="data_table"><tr>';
         echo '<td class="text-center" width="5%">';
-        echo '<span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color:'.$hotspot_colors[$orderColor].'"></span>';
+        echo '<span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color:'.
+            $hotspot_colors[$orderColor].'"></span>';
         echo '</td>';
         echo '<td class="text-left" width="25%">';
         echo "$answerId - $answer";
@@ -389,7 +390,8 @@ class ExerciseShowFunctions
                 if ($hide_expected_answer) {
                     $color = '';
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.strip_tags($answerComment).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.
+                    Security::remove_XSS($answerComment).'</span>';
             }
             echo '</td>';
             if ($ans == 1) {
@@ -490,6 +492,91 @@ class ExerciseShowFunctions
             if ($ans == 1) {
                 $comm = Event::get_comments($id, $questionId);
             }
+        } else {
+            echo '<td>&nbsp;</td>';
+        }
+        echo '</tr>';
+    }
+
+    /**
+     * Display the answers to a multiple choice question.
+     *
+     * @param int    $feedbackType
+     * @param int    $studentChoice
+     * @param int    $studentChoiceDegree
+     * @param string $answer
+     * @param string $answerComment
+     * @param int    $answerCorrect
+     * @param int    $questionId
+     * @param bool   $inResultsDisabled
+     */
+    public static function displayMultipleAnswerTrueFalseDegreeCertainty(
+        $feedbackType,
+        $studentChoice,
+        $studentChoiceDegree,
+        $answer,
+        $answerComment,
+        $answerCorrect,
+        $questionId,
+        $inResultsDisabled
+    ) {
+        $hideExpectedAnswer = false;
+        if ($feedbackType == 0 && $inResultsDisabled == 2) {
+            $hideExpectedAnswer = true;
+        }
+
+        echo '<tr><td width="5%">';
+        $question = new MultipleAnswerTrueFalseDegreeCertainty();
+        $courseId = api_get_course_int_id();
+        $newOptions = Question::readQuestionOption($questionId, $courseId);
+
+        //Your choice
+        if (isset($newOptions[$studentChoice])) {
+            echo get_lang($newOptions[$studentChoice]['name']);
+        } else {
+            echo '-';
+        }
+        echo '</td><td width="5%">';
+
+        // Expected choice
+        if (!$hideExpectedAnswer) {
+            if (isset($newOptions[$answerCorrect])) {
+                echo get_lang($newOptions[$answerCorrect]['name']);
+            } else {
+                echo '-';
+            }
+        } else {
+            echo '-';
+        }
+
+        echo '</td><td width="20%">';
+        echo $answer;
+        echo '</td><td width="5%" style="text-align:center;">';
+        echo $newOptions[$studentChoiceDegree]['name'];
+        echo '</td>';
+
+        $degreeInfo = $question->getResponseDegreeInfo(
+            $studentChoice,
+            $answerCorrect,
+            $newOptions[$studentChoiceDegree]['position']
+        );
+
+        echo '
+            <td width="15%">
+                <div style="text-align:center;color: '.$degreeInfo['color'].';
+                    background-color: '.$degreeInfo['background-color'].';
+                    line-height:30px;height:30px;width: 100%;margin:auto;"
+                    title="'.$degreeInfo['description'].'">'.
+                    nl2br($degreeInfo['label']).
+                '</div>
+            </td>';
+
+        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            echo '<td width="20%">';
+            if (isset($newOptions[$studentChoice])) {
+                echo '<span style="font-weight: bold; color: black;">'.nl2br($answerComment).'</span>';
+            }
+            echo '</td>';
         } else {
             echo '<td>&nbsp;</td>';
         }

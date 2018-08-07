@@ -221,6 +221,7 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    $fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
@@ -246,7 +247,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if (isset($value['error']) && $value['error'] == 0) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
                         $crop->crop($params['extra_'.$field_variable.'_crop_result']);
@@ -264,6 +265,7 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
+                    $fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
@@ -287,13 +289,13 @@ class ExtraFieldValue extends Model
                             break;
                     }
 
-                    $cleanedName = api_replace_dangerous_char($value['name']);
-                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if (isset($value['error']) && $value['error'] == 0) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
+                        $cleanedName = api_replace_dangerous_char($value['name']);
+                        $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                         moveUploadedFile($value, $fileDir.$fileName);
 
                         $new_params = [
@@ -565,7 +567,7 @@ class ExtraFieldValue extends Model
      */
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $item_id = Database::escape_string($item_id);
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
@@ -647,8 +649,8 @@ class ExtraFieldValue extends Model
      */
     public function searchValuesByField($tag, $field_id, $limit = 10)
     {
-        $field_id = intval($field_id);
-        $limit = intval($limit);
+        $field_id = (int) $field_id;
+        $limit = (int) $limit;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $tag = Database::escape_string($tag);
@@ -692,7 +694,7 @@ class ExtraFieldValue extends Model
         $filterByVisibility = false,
         $visibility = 0
     ) {
-        $item_id = intval($item_id);
+        $item_id = (int) $item_id;
         $field_variable = Database::escape_string($field_variable);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
@@ -706,10 +708,10 @@ class ExtraFieldValue extends Model
                     sf.extra_field_type = $extraFieldType
                 ";
         if ($filterByVisibility) {
-            $visibility = intval($visibility);
+            $visibility = (int) $visibility;
             $sql .= " AND visible_to_self = $visibility ";
         }
-        $sql .= " ORDER BY id";
+        $sql .= ' ORDER BY id';
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -826,7 +828,7 @@ class ExtraFieldValue extends Model
      */
     public function getValuesByFieldId($fieldId)
     {
-        $fieldId = intval($fieldId);
+        $fieldId = (int) $fieldId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT s.* FROM {$this->table} s
@@ -853,16 +855,16 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItemAndField($itemId, $fieldId)
     {
-        $fieldId = intval($fieldId);
-        $itemId = intval($itemId);
+        $fieldId = (int) $fieldId;
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT s.* FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    field_id = '".$fieldId."' AND
-                    item_id = '$itemId' AND
+                    field_id = $fieldId AND
+                    item_id = $itemId AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY s.value";
         $result = Database::query($sql);
@@ -881,7 +883,7 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItem($itemId)
     {
-        $itemId = intval($itemId);
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id 
@@ -911,8 +913,8 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItemAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
-        $fieldId = intval($fieldId);
-        $itemId = intval($itemId);
+        $fieldId = (int) $fieldId;
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $fieldValue = Database::escape_string($fieldValue);
@@ -943,7 +945,7 @@ class ExtraFieldValue extends Model
      */
     public function delete_all_values_by_field_id($field_id)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     field_id = $field_id ";
@@ -959,8 +961,8 @@ class ExtraFieldValue extends Model
      */
     public function delete_values_by_handler_and_field_id($item_id, $field_id)
     {
-        $field_id = intval($field_id);
-        $item_id = intval($item_id);
+        $field_id = (int) $field_id;
+        $item_id = (int) $item_id;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
@@ -979,7 +981,7 @@ class ExtraFieldValue extends Model
      */
     public function deleteValuesByItem($itemId)
     {
-        $itemId = intval($itemId);
+        $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
@@ -1002,8 +1004,8 @@ class ExtraFieldValue extends Model
      */
     public function deleteValuesByHandlerAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
-        $itemId = intval($itemId);
-        $fieldId = intval($fieldId);
+        $itemId = (int) $itemId;
+        $fieldId = (int) $fieldId;
 
         $fieldData = $this->getExtraField()->get($fieldId);
         if ($fieldData) {
@@ -1054,13 +1056,15 @@ class ExtraFieldValue extends Model
     public function getAllValuesForAnItem($itemId, $visibleToSelf = null, $visibleToOthers = null)
     {
         $em = Database::getManager();
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $qb */
         $qb = $em->createQueryBuilder();
         $qb = $qb->select('fv')
             ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
             ->join('fv.field', 'f')
             ->where(
                 $qb->expr()->eq('fv.itemId', ':item')
+            )
+            ->andWhere(
+                $qb->expr()->eq('f.extraFieldType', ':extra_field_type')
             );
 
         if (is_bool($visibleToSelf)) {
@@ -1077,6 +1081,7 @@ class ExtraFieldValue extends Model
 
         $fieldValues = $qb
             ->setParameter('item', $itemId)
+            ->setParameter('extra_field_type', $this->getExtraField()->getExtraFieldType())
             ->getQuery()
             ->getResult();
 

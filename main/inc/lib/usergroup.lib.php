@@ -43,6 +43,9 @@ class UserGroup extends Model
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
         $this->useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($this->allowTeachers()) {
+            $this->columns[] = 'author_id';
+        }
     }
 
     /**
@@ -64,19 +67,124 @@ class UserGroup extends Model
     }
 
     /**
+     * @param int  $id
+     * @param bool $getCount
+     *
+     * @return array|int
+     */
+    public function getUserGroupUsers($id, $getCount = false)
+    {
+        $id = (int) $id;
+
+        if ($getCount) {
+            $select = 'COUNT(u.id) count ';
+        } else {
+            $select = ' u.* ';
+        }
+
+        if ($this->useMultipleUrl) {
+            $urlId = api_get_current_access_url_id();
+            $sql = "SELECT $select
+                    FROM ".$this->usergroup_rel_user_table." u
+                    INNER JOIN ".$this->access_url_rel_usergroup." a 
+                    ON (u.user_id = a.user_id)
+                    WHERE usergroup_id = $id AND access_url_id = $urlId ";
+        } else {
+            $sql = "SELECT $select
+                    FROM ".$this->usergroup_rel_user_table." u
+                    WHERE usergroup_id = $id";
+        }
+        $result = Database::query($sql);
+        if ($getCount) {
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+
+                return $row['count'];
+            }
+
+            return 0;
+        } else {
+            $list = [];
+            $showCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+            $calendarPlugin = null;
+            if ($showCalendar) {
+                $calendarPlugin = LearningCalendarPlugin::create();
+            }
+            $url = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?';
+            while ($data = Database::fetch_array($result)) {
+                $userId = $data['user_id'];
+                $userInfo = api_get_user_info($userId);
+                $data['name'] = $userInfo['complete_name_with_username'];
+
+                if ($showCalendar) {
+                    $calendar = $calendarPlugin->getUserCalendar($userId);
+                    $data['calendar_id'] = 0;
+                    $data['calendar'] = '';
+                    if (!empty($calendar)) {
+                        $calendarInfo = $calendarPlugin->getCalendar($calendar['calendar_id']);
+                        if ($calendarInfo) {
+                            $data['calendar_id'] = $calendar['calendar_id'];
+                            $data['calendar'] = Display::url(
+                                $calendarInfo['title'],
+                                $url.'&id='.$calendar['calendar_id']
+                            );
+                        }
+                    }
+
+                    $courseAndSessionList = Tracking::show_user_progress(
+                        $userId,
+                        0,
+                        '',
+                        true,
+                        true,
+                        true
+                    );
+
+                    $stats = $calendarPlugin->getUserStats($userId, $courseAndSessionList);
+                    $evaluations = $calendarPlugin->getGradebookEvaluationListToString($userId, $courseAndSessionList);
+                    $data['gradebook_items'] = $evaluations;
+                    $totalTime = 0;
+                    foreach ($courseAndSessionList as $sessionId => $course) {
+                        foreach ($course as $courseId) {
+                            $totalTime += Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
+                        }
+                    }
+
+                    $data['time_spent'] = api_time_to_hms($totalTime);
+                    $data['lp_day_completed'] = $stats['completed'];
+                    $data['days_diff'] = $stats['completed'] - $stats['user_event_count'];
+                }
+                $data['id'] = $data['user_id'];
+                $list[] = $data;
+            }
+
+            return $list;
+        }
+    }
+
+    /**
      * @param int $type
      *
      * @return int
      */
     public function get_count($type = -1)
     {
+        $authorCondition = '';
+        if ($this->allowTeachers()) {
+            if (!api_is_platform_admin()) {
+                $userId = api_get_user_id();
+                $authorCondition = " AND author_id = $userId";
+            }
+        }
+
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT count(u.id) as count FROM ".$this->table." u
                     INNER JOIN ".$this->access_url_rel_usergroup." a
-                        ON (u.id = a.usergroup_id)
-                    WHERE access_url_id = $urlId
+                    ON (u.id = a.usergroup_id)
+                    WHERE access_url_id = $urlId $authorCondition
             ";
+
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -88,13 +196,15 @@ class UserGroup extends Model
         } else {
             $typeCondition = '';
             if ($type != -1) {
-                $type = intval($type);
-                $typeCondition = " WHERE group_type = $type ";
+                $type = (int) $type;
+                $typeCondition = " AND group_type = $type ";
             }
 
             $sql = "SELECT count(a.id) as count
                     FROM {$this->table} a
+                    WHERE 1 =1 
                     $typeCondition
+                    $authorCondition
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -114,7 +224,7 @@ class UserGroup extends Model
     public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
     {
         if ($this->useMultipleUrl) {
-            $course_id = intval($course_id);
+            $course_id = (int) $course_id;
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT count(c.usergroup_id) as count
                     FROM {$this->usergroup_rel_course_table} c
@@ -133,7 +243,7 @@ class UserGroup extends Model
         } else {
             $typeCondition = '';
             if ($type != -1) {
-                $type = intval($type);
+                $type = (int) $type;
                 $typeCondition = " AND group_type = $type ";
             }
             $sql = "SELECT count(c.usergroup_id) as count
@@ -175,24 +285,48 @@ class UserGroup extends Model
     /**
      * Displays the title + grid.
      */
-    public function display()
+    public function returnGrid()
     {
         // action links
-        echo '<div class="actions">';
-        echo '<a href="../admin/index.php">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+        $html = '<div class="actions">';
+        if (api_is_platform_admin()) {
+            $html .= '<a href="../admin/index.php">'.
+                Display::return_icon(
+                    'back.png',
+                    get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ).
+                '</a>';
+        }
+
+        $html .= '<a href="'.api_get_self().'?action=add">'.
+            Display::return_icon('new_class.png', get_lang('AddClasses'), '', ICON_SIZE_MEDIUM).
             '</a>';
-        echo '<a href="'.api_get_self().'?action=add">'.
-            Display::return_icon('new_class.png', get_lang('AddClasses'), '', '32').
-            '</a>';
-        echo Display::url(
+        $html .= Display::url(
             Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
             'usergroup_import.php'
         );
-        echo Display::url(
+        $html .= Display::url(
             Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
             'usergroup_export.php'
         );
+        $html .= '</div>';
+        $html .= Display::grid_html('usergroups');
+
+        return $html;
+    }
+
+    /**
+     * Displays the title + grid.
+     */
+    public function displayToolBarUserGroupUsers()
+    {
+        // action links
+        echo '<div class="actions">';
+        echo '<a href="../admin/usergroups.php">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+            '</a>';
         echo '</div>';
         echo Display::grid_html('usergroups');
     }
@@ -300,7 +434,7 @@ class UserGroup extends Model
 
         $typeCondition = '';
         if ($type != -1) {
-            $type = intval($type);
+            $type = (int) $type;
             $typeCondition = " AND group_type = $type ";
         }
 
@@ -341,7 +475,7 @@ class UserGroup extends Model
     {
         $course_id = null;
         if (isset($options['course_id'])) {
-            $course_id = intval($options['course_id']);
+            $course_id = (int) $options['course_id'];
             unset($options['course_id']);
         }
 
@@ -351,7 +485,7 @@ class UserGroup extends Model
 
         $typeCondition = '';
         if ($type != -1) {
-            $type = intval($type);
+            $type = (int) $type;
             $typeCondition = " AND group_type = $type ";
         }
 
@@ -517,6 +651,7 @@ class UserGroup extends Model
             $this->usergroup_rel_user_table,
             $conditions
         );
+
         $array = [];
         if (!empty($results)) {
             foreach ($results as $row) {
@@ -620,10 +755,10 @@ class UserGroup extends Model
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id AND u.usergroup_id)";
+                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.usergroup_id)";
             $where = ['where' => ['user_id = ? AND access_url_id = ? ' => [$userId, $urlId]]];
         } else {
-            $from = $this->usergroup_rel_user_table." u ";
+            $from = $this->usergroup_rel_user_table.' u ';
             $where = ['where' => ['user_id = ?' => $userId]];
         }
 
@@ -926,9 +1061,18 @@ class UserGroup extends Model
         } else {
             $sql = "SELECT * FROM $this->table WHERE name = '".$name."'";
         }
+
         $res = Database::query($sql);
 
         return Database::num_rows($res) != 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowTeachers()
+    {
+        return api_get_configuration_value('allow_teachers_to_classes') === true;
     }
 
     /**
@@ -943,15 +1087,22 @@ class UserGroup extends Model
     {
         $sord = in_array(strtolower($sord), ['asc', 'desc']) ? $sord : 'desc';
 
-        $start = intval($start);
-        $limit = intval($limit);
+        $start = (int) $start;
+        $limit = (int) $limit;
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a ON (u.id = a.usergroup_id)";
             $where = [' access_url_id = ?' => $urlId];
         } else {
-            $from = $this->table." u ";
+            $from = $this->table.' u ';
             $where = [];
+        }
+
+        if ($this->allowTeachers()) {
+            if (!api_is_platform_admin()) {
+                $userId = api_get_user_id();
+                $where = [' author_id = ?' => $userId];
+            }
         }
 
         $result = Database::select(
@@ -985,7 +1136,10 @@ class UserGroup extends Model
                         ];
                         break;
                 }
-                $group['users'] = count($this->get_users_by_usergroup($group['id'], $roles));
+                $group['users'] = Display::url(
+                    count($this->get_users_by_usergroup($group['id'], $roles)),
+                    api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?id='.$group['id']
+                );
                 $new_result[] = $group;
             }
             $result = $new_result;
@@ -1014,15 +1168,21 @@ class UserGroup extends Model
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (u.id = a.usergroup_id)";
             $options = ['where' => ['access_url_id = ? ' => $urlId]];
+            if ($this->allowTeachers()) {
+                $options['where'] = [' author_id = ? ' => api_get_user_id()];
+            }
             $classes = Database::select('a.id, name, description', $from, $options);
         } else {
+            if ($this->allowTeachers()) {
+                $options['where'] = [' author_id = ? ' => api_get_user_id()];
+            }
             $classes = Database::select('id, name, description', $this->table, $options);
         }
 
         $result = [];
         if (!empty($classes)) {
             foreach ($classes as $data) {
-                $users = self::getUserListByUserGroup($data['id']);
+                $users = $this->getUserListByUserGroup($data['id']);
                 $userToString = null;
                 if (!empty($users)) {
                     $userNameList = [];
@@ -1094,6 +1254,9 @@ class UserGroup extends Model
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
         if ($groupExists == false) {
+            if ($this->allowTeachers()) {
+                $params['author_id'] = api_get_user_id();
+            }
             $id = parent::save($params, $show_query);
             if ($id) {
                 if ($this->useMultipleUrl) {
@@ -1616,7 +1779,7 @@ class UserGroup extends Model
             return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
         }
 
-        $id = intval($id);
+        $id = (int) $id;
         $group_table = Database::get_main_table(TABLE_USERGROUP);
         $sql = "SELECT picture FROM $group_table WHERE id = ".$id;
         $res = Database::query($sql);
@@ -1668,7 +1831,7 @@ class UserGroup extends Model
      */
     public function setGroupType($type)
     {
-        $this->groupType = intval($type);
+        $this->groupType = (int) $type;
     }
 
     /**
@@ -1845,18 +2008,25 @@ class UserGroup extends Model
      *
      * @author Julio Montoya
      *
-     * @param int $user_id
-     * @param int $group_id
+     * @param int $userId
+     * @param int $groupId
      *
      * @return bool true if success
      * */
-    public function delete_user_rel_group($user_id, $group_id)
+    public function delete_user_rel_group($userId, $groupId)
     {
+        $userId = (int) $userId;
+        $groupId = (int) $groupId;
+        if (empty($userId) || empty($groupId)) {
+            return false;
+        }
+
         $table = $this->usergroup_rel_user_table;
         $sql = "DELETE FROM $table
                 WHERE
-                    user_id = ".intval($user_id)." AND
-                    usergroup_id = ".intval($group_id)."  ";
+                    user_id = $userId AND
+                    usergroup_id = $groupId";
+
         $result = Database::query($sql);
 
         return $result;
@@ -2609,5 +2779,28 @@ class UserGroup extends Model
     public static function canLeave($groupInfo)
     {
         return $groupInfo['allow_members_leave_group'] == 1 ? true : false;
+    }
+
+    /**
+     * Check permissions and blocks the page.
+     *
+     * @param array $userGroupInfo
+     */
+    public function protectScript($userGroupInfo = [])
+    {
+        api_block_anonymous_users();
+
+        if (!api_is_platform_admin()) {
+            if ($this->allowTeachers() && api_is_teacher()) {
+                if (!empty($userGroupInfo)) {
+                    if ($userGroupInfo['author_id'] != api_get_user_id()) {
+                        api_not_allowed(true);
+                    }
+                }
+            } else {
+                api_protect_admin_script(true);
+                api_protect_limit_for_session_admin();
+            }
+        }
     }
 }

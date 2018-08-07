@@ -196,7 +196,7 @@ class TicketManager
 
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         foreach ($users as $userId) {
-            if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
+            if (self::userIsAssignedToCategory($userId, $categoryId) === false) {
                 $params = [
                     'category_id' => $categoryId,
                     'user_id' => $userId,
@@ -217,8 +217,8 @@ class TicketManager
     public static function userIsAssignedToCategory($userId, $categoryId)
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
-        $userId = intval($userId);
-        $categoryId = intval($categoryId);
+        $userId = (int) $userId;
+        $categoryId = (int) $categoryId;
         $sql = "SELECT * FROM $table 
                 WHERE category_id = $categoryId AND user_id = $userId";
         $result = Database::query($sql);
@@ -234,7 +234,7 @@ class TicketManager
     public static function getUsersInCategory($categoryId)
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $sql = "SELECT * FROM $table WHERE category_id = $categoryId";
         $result = Database::query($sql);
 
@@ -247,7 +247,7 @@ class TicketManager
     public static function deleteAllUserInCategory($categoryId)
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $sql = "DELETE FROM $table WHERE category_id = $categoryId";
         Database::query($sql);
     }
@@ -583,8 +583,8 @@ class TicketManager
         $ticketId,
         $userId
     ) {
-        $ticketId = intval($ticketId);
-        $userId = intval($userId);
+        $ticketId = (int) $ticketId;
+        $userId = (int) $userId;
 
         if (empty($ticketId)) {
             return false;
@@ -636,8 +636,8 @@ class TicketManager
         $status = 'NOL',
         $sendConfirmation = false
     ) {
-        $ticketId = intval($ticketId);
-        $userId = intval($userId);
+        $ticketId = (int) $ticketId;
+        $userId = (int) $userId;
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         if ($sendConfirmation) {
@@ -764,24 +764,26 @@ class TicketManager
      * @param int $number_of_items
      * @param $column
      * @param $direction
-     * @param int $userId
      *
      * @return array
      */
-    public static function get_tickets_by_user_id(
+    public static function getTicketsByCurrentUser(
         $from,
         $number_of_items,
         $column,
-        $direction,
-        $userId = 0
+        $direction
     ) {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $direction = !empty($direction) ? $direction : 'DESC';
-        $userId = !empty($userId) ? $userId : api_get_user_id();
+        $userId = api_get_user_id();
         $userInfo = api_get_user_info($userId);
+
+        if (empty($userInfo)) {
+            return [];
+        }
         $isAdmin = UserManager::is_admin($userId);
 
         if (!isset($_GET['project_id'])) {
@@ -995,11 +997,9 @@ class TicketManager
     }
 
     /**
-     * @param int $userId
-     *
      * @return int
      */
-    public static function get_total_tickets_by_user_id($userId = 0)
+    public static function getTotalTicketsCurrentUser()
     {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
@@ -1106,7 +1106,7 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return MessageAttachment
+     * @return false|MessageAttachment
      */
     public static function getTicketMessageAttachment($id)
     {
@@ -2428,6 +2428,7 @@ class TicketManager
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
         // Check if a role was set to the project
+        // Project 1 is considered the default and is accessible to all users
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
             if (in_array($userInfo['status'], $allowRoleList)) {
                 return true;

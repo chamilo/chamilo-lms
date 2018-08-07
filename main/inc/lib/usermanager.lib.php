@@ -6248,6 +6248,20 @@ SQL;
      */
     public static function createDataPrivacyExtraFields()
     {
+        self::create_extra_field(
+            'request_for_legal_agreement_consent_removal_justification',
+            1, //text
+            'Request for legal agreement consent removal justification	',
+            ''
+        );
+
+        self::create_extra_field(
+            'request_for_delete_account_justification',
+            1, //text
+            'Request for delete account justification',
+            ''
+        );
+
         $extraFieldId = self::create_extra_field(
             'request_for_legal_agreement_consent_removal',
             1, //text

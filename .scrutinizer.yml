@@ -4,6 +4,13 @@ build:
             tests:
                 override:
                     - php-scrutinizer-run
+    resources:
+        cpus: 8
+    environment:
+        php:
+            ini:
+                memory_limit: "-1"
+
 
 checks:
     php: true

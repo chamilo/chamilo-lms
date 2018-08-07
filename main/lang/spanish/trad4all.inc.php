@@ -8299,4 +8299,17 @@ $FilterSessions = "Filtrar sesiones";
 $ScoreModel = "Modelo de evaluación";
 $SyncDatabaseWithSchema = "Sincronizar la base de datos con el esquema";
 $SkillRelCourses = "Asociaciones cursos-competencias";
+$UserRequestWaitingForAction = "Un(a) usuario/a está esperando su intervención para un pedido de datos personales";
+$TheUserXIsWaitingForAnActionGoHereX = "El usuario/a %s está esperando una intervención suya sobre un pedido de datos personales.\n\nPara gestionar los pedidos de datos personales, puede seguir este enlace: %s";
+$RequestType = "Tipo de solicitud";
+$DeleteAccount = "Eliminar cuenta";
+$RequestDate = "Fecha de solicitud";
+$RemoveTerms = "Anular acuerdo de condiciones de uso";
+$InformationRightToBeForgottenLinkX = "Puede encontrar más información sobre el derecho al olvido en la página siguiente: %s";
+$ExplanationDeleteLegal = "Por favor indíquenos porqué desea eliminar su acuerda a nuestras condiciones de uso, para asegurar que lo podamos hacer de la mejor manera posible.";
+$ExplanationDeleteAccount = "Por favor indíquenos porqué desea que eliminemos su cuenta, para asegurar que lo podamos hacer de la mejor manera.";
+$WhyYouWantToDeleteYourLegalAgreement = "Puede solicitar a bajo la eliminación de su acuerdo a nuestras condiciones de uso o la eliminación de su cuenta.<br />
+En el caso de la eliminación de su acuerdo, tendrá que volver a aceptar nuestras condiciones en su próxima conexión, pues no nos es posible proveerle una experiencia personalizada sin al mismo tiempo gestionar algunos de sus datos personales.<br />
+En el caso de la eliminación completa de su cuenta, ésta será eliminada junta con todas sus suscripciones a cursos y toda la información relacionada con su cuenta.<br />
+Por favor seleccione la opción correspondiente con mucho cuidado. En ambos casos, su solicitud será revisada por uno de nuestros administradores, con el fin de evitar cualquier malentendimiento y/o pérdida definitiva de sus datos.";
 ?>

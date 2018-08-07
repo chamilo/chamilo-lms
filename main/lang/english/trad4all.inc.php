@@ -8277,4 +8277,14 @@ $FilterSessions = "Filter sessions";
 $ScoreModel = "Score model";
 $SyncDatabaseWithSchema = "Synchronize the database with the schema";
 $SkillRelCourses = "Courses-Skills associations";
+$UserRequestWaitingForAction = "A user is waiting for an action about his/her personal data request";
+$TheUserXIsWaitingForAnActionGoHereX = "The user %s is waiting for an action about it's personal data request. \n\n To manage personal data requests you can follow this link : %s";
+$RequestType = "Request type";
+$DeleteAccount = "Delete account";
+$RequestDate = "Request date";
+$RemoveTerms = "Remove legal agreement";
+$InformationRightToBeForgottenLinkX = "You can find more information about the user's right to be forgotten through the following page: %s";
+$ExplanationDeleteLegal = "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible.";
+$ExplanationDeleteAccount = "Explain in this box why you want your account deleted";
+$WhyYouWantToDeleteYourLegalAgreement = "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data.";
 ?>

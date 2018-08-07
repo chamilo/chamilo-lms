@@ -181,7 +181,7 @@ switch ($action) {
                 $userInfo
             );
 
-            $url = api_get_path(WEB_CODE_PATH).'admin/';
+            $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
             $link = Display::url($url, $url);
             $subject = get_lang('RequestForLegalConsentRemoval');
             $content = sprintf(

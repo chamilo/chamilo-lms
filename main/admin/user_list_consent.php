@@ -465,18 +465,7 @@ if (!empty($action)) {
     if ($check) {
         switch ($action) {
             case 'delete_terms':
-                $extraFieldValue = new ExtraFieldValue('user');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    $_GET['user_id'],
-                    'legal_accept'
-                );
-                $result = $extraFieldValue->delete($value['id']);
-
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    $_GET['user_id'],
-                    'request_for_legal_agreement_consent_removal'
-                );
-                $result = $extraFieldValue->delete($value['id']);
+                UserManager::cleanUserRequestsOfRemoval($_GET['user_id']);
 
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
                 header('Location: '.api_get_self());

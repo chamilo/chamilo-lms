@@ -4,14 +4,6 @@ build:
             tests:
                 override:
                     - php-scrutinizer-run
-                    - phpcs-run --config .php_cs
-
-    tests:
-        override:
-            command: "php -v"
-    dependencies:
-        override:
-            - "php -v"
 
 checks:
     php: true

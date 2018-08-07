@@ -23,9 +23,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 $_SESSION['this_section'] = $this_section;
 
-if (!(isset($_user['user_id']) && $_user['user_id']) ||
-    api_is_anonymous($_user['user_id'], true)
-) {
+if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
     api_not_allowed(true);
 }
 
@@ -363,87 +361,20 @@ if (is_profile_editable()) {
 } else {
     $form->freeze();
 }
-$form->setDefaults($user_data);
 
-/**
- * Is user auth_source is platform ?
- *
- * @return bool if auth_source is platform
- */
-function is_platform_authentication()
-{
-    $tab_user_info = api_get_user_info();
 
-    return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
-}
-
-/**
- * Can a user edit his/her profile?
- *
- * @return bool Editability of the profile
- */
-function is_profile_editable()
-{
-    if (isset($GLOBALS['profileIsEditable'])) {
-        return (bool) $GLOBALS['profileIsEditable'];
-    }
-
-    return true;
-}
-
-/*
-    PRODUCTIONS FUNCTIONS
-*/
-
-/**
- * Upload a submitted user production.
- *
- * @param $user_id User id
- *
- * @return The filename of the new production or FALSE if the upload has failed
- */
-function upload_user_production($user_id)
-{
-    $production_repository = UserManager::getUserPathById($user_id, 'system');
-
-    if (!file_exists($production_repository)) {
-        @mkdir($production_repository, api_get_permissions_for_new_directories(), true);
-    }
-    $filename = api_replace_dangerous_char($_FILES['production']['name']);
-    $filename = disable_dangerous_file($filename);
-
-    if (filter_extension($filename)) {
-        if (@move_uploaded_file($_FILES['production']['tmp_name'], $production_repository.$filename)) {
-            return $filename;
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $element->freeze();
         }
     }
-
-    return false; // this should be returned if anything went wrong with the upload
 }
 
-/**
- * Check current user's current password.
- *
- * @param    char    email
- *
- * @return bool true o false
- *
- * @uses \Gets user ID from global variable
- */
-function check_user_email($email)
-{
-    $user_id = api_get_user_id();
-    if ($user_id != strval(intval($user_id)) || empty($email)) {
-        return false;
-    }
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $email = Database::escape_string($email);
-    $sql = "SELECT * FROM $table_user
-            WHERE user_id='".$user_id."' AND email='".$email."'";
-    $result = Database::query($sql);
-
-    return Database::num_rows($result) != 0;
-}
+$form->setDefaults($user_data);
 
 $filtered_extension = false;
 
@@ -542,7 +473,7 @@ if ($form->validate()) {
         }
     } elseif (!empty($user_data['remove_picture'])) {
         // remove existing picture if asked
-        UserManager::delete_user_picture(api_get_user_id());
+        UserManager::deleteUserPicture(api_get_user_id());
         $user_data['picture_uri'] = '';
     }
 
@@ -719,6 +650,7 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
+        $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }
 
@@ -782,7 +714,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $normalImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
 
     $imageToShow = '<div id="image-message-container">';
-    $imageToShow .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
+    $imageToShow .= '<a class="expand-image pull-right" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
 
     $content = $imageToShow.$form->returnForm();

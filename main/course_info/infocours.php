@@ -7,11 +7,11 @@
  *
  * See ./inc/conf/course_info.conf.php for settings
  *
- * @todo Take those config settings into account in this script
+ * @todo    Take those config settings into account in this script
  *
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @author Roan Embrechts, refactoring and improved course visibility|subscribe|unsubscribe options
- * @author Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
+ * @author  Patrick Cool <patrick.cool@UGent.be>
+ * @author  Roan Embrechts, refactoring and improved course visibility|subscribe|unsubscribe options
+ * @author  Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
  *
  * @package chamilo.course_info
  */
@@ -28,7 +28,7 @@ define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository = $_course['path'];
-$is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
+$is_allowedToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 
@@ -52,9 +52,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     }
 }
 
-$categories = CourseCategory::getCategoriesCanBeAddedInCourse(
-    $_course['categoryCode']
-);
+$categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
 // Build the form
 $form = new FormValidator(
@@ -119,7 +117,7 @@ $group = [
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('No'), 2),
 ];
 
-$form->addGroup($group, '', [get_lang("ShowCourseInUserLanguage")]);
+$form->addGroup($group, '', [get_lang('ShowCourseInUserLanguage')]);
 
 $form->addText('department_name', get_lang('Department'), false);
 $form->applyFilter('department_name', 'html_filter');
@@ -127,6 +125,30 @@ $form->applyFilter('department_name', 'trim');
 
 $form->addText('department_url', get_lang('DepartmentUrl'), false);
 $form->applyFilter('department_url', 'html_filter');
+
+// Extra fields
+$extra_field = new ExtraField('course');
+
+$extraFieldAdminPermissions = false;
+$showOnlyTheseFields = ['tags', 'video_url', 'course_hours_duration'];
+$extra = $extra_field->addElements(
+    $form,
+    $courseId,
+    [],
+    false,
+    false,
+    $showOnlyTheseFields,
+    [],
+    false
+);
+
+//Tags ExtraField
+$htmlHeadXtra[] = '
+<script>
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
 
 // Picture
 $form->addFile(
@@ -171,7 +193,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
         null,
         ['id' => 'course_theme_id']
     );
-    $form->addGroup($group, '', [get_lang("Stylesheets")]);
+    $form->addGroup($group, '', [get_lang('Stylesheets')]);
 }
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
@@ -193,34 +215,11 @@ $form->addHtml('
 $form->addHtml('</div>');
 
 // COURSE ACCESS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-course-access">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-course-access" aria-expanded="false" aria-controls="collapse-course-access">
-');
-$form->addElement(
-    'html',
-    Display::return_icon('course.png', get_lang('CourseAccess')).' '.get_lang('CourseAccess')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-
-$form->addHtml('
-    <div id="collapse-course-access" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="heading-course-access">
-        <div class="panel-body">
-');
-
 $group = [];
 $group[] = $form->createElement(
     'radio',
     'visibility',
-    get_lang("CourseAccess"),
+    get_lang('CourseAccess'),
     get_lang('OpenToTheWorld'),
     COURSE_VISIBILITY_OPEN_WORLD
 );
@@ -239,6 +238,7 @@ $group[] = $form->createElement(
     get_lang('CourseVisibilityClosed'),
     COURSE_VISIBILITY_CLOSED
 );
+
 // The "hidden" visibility is only available to portal admins
 if (api_is_platform_admin()) {
     $group[] = $form->createElement(
@@ -249,79 +249,86 @@ if (api_is_platform_admin()) {
         COURSE_VISIBILITY_HIDDEN
     );
 }
-$form->addGroup($group, '', [get_lang("CourseAccess"), get_lang("CourseAccessConfigTip")]);
+
+$groupElement = $form->addGroup(
+    $group,
+    '',
+    [get_lang('CourseAccess'), get_lang('CourseAccessConfigTip')],
+    null,
+    null,
+    true
+);
 
 $url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
 $url = Display::url($url, $url);
-$form->addElement('label', get_lang('DirectLink'), sprintf(get_lang('CourseSettingsRegisterDirectLink'), $url));
+$label = $form->addLabel(get_lang('DirectLink'), sprintf(get_lang('CourseSettingsRegisterDirectLink'), $url), true);
 
-$group = [];
-$group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
-$form->addGroup($group, '', [get_lang("Subscription")]);
+$group2 = [];
+$group2[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
+$group2[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 
-$group = [];
-$group[] = $form->createElement(
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+
+$group3[] = $form->createElement(
     'radio',
     'unsubscribe',
     get_lang('Unsubscription'),
     get_lang('AllowedToUnsubscribe'),
     1
 );
-$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
-$form->addGroup($group, '', [get_lang("Unsubscription")]);
+$group3[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 
-$form->addText('course_registration_password', get_lang('CourseRegistrationPassword'), false, ['size' => '60']);
+$text = $form->createElement(
+    'text',
+    'course_registration_password',
+    get_lang('CourseRegistrationPassword'),
+    false,
+    ['size' => '60']
+);
 
-$form->addElement(
+$checkBoxActiveLegal = $form->createElement(
     'checkbox',
     'activate_legal',
     [null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')],
     get_lang('ActivateLegal')
 );
-$form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), ['rows' => 8]);
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+$textAreaLegal = $form->createElement('textarea', 'legal', get_lang('CourseLegalAgreement'), ['rows' => 8]);
 
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$elements = [
+    $groupElement,
+    $label,
+    get_lang('Subscription') => $group2,
+    get_lang('Unsubscription') => $group3,
+    $text,
+    $checkBoxActiveLegal,
+    $textAreaLegal,
+    $myButton,
+];
+
+$form->addPanelOption(
+    'course-access',
+    Display::return_icon('course.png', get_lang('CourseAccess')).' '.get_lang('CourseAccess'),
+    $elements
+);
 
 // Documents
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-documents">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-documents" aria-expanded="false" aria-controls="collapse-documents">
-');
-$form->addHtml(
-    Display::return_icon('folder.png', get_lang('Documents')).' '.get_lang('Documents')
-);
-$form->addHtml('
-                </a>
-            </h4>
-        </div>
-    ');
-$form->addHtml('
-    <div id="collapse-documents" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-documents">
-        <div class="panel-body">
-');
-
+$globalGroup = [];
 if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
     $group = [
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible'),
     ];
-    $form->addGroup($group, '', [get_lang('DocumentsDefaultVisibility')]);
+    $globalGroup[get_lang('DocumentsDefaultVisibility')] = $group;
 }
 
 $group = [
     $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
 ];
-$form->addGroup($group, '', [get_lang('ShowSystemFolders')]);
+
+$globalGroup[get_lang('ShowSystemFolders')] = $group;
+
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
 $group = [];
 $group[] = $form->createElement(
@@ -332,14 +339,15 @@ $group[] = $form->createElement(
     1
 );
 $group[] = $form->createElement('radio', 'enable_document_auto_launch', null, get_lang('Deactivate'), 0);
-$form->addGroup($group, '', [get_lang('DocumentAutoLaunch')]);
+$globalGroup[get_lang('DocumentAutoLaunch')] = $group;
 
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$globalGroup[] = $myButton;
+
+$form->addPanelOption(
+    'documents',
+    Display::return_icon('folder.png', get_lang('Documents')).' '.get_lang('Documents'),
+    $globalGroup
+);
 
 // EMAIL NOTIFICATIONS
 $form->addHtml('<div class="panel panel-default">');
@@ -498,26 +506,6 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
-// USER RIGHTS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-user-right">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-user-right" aria-expanded="false" aria-controls="collapse-user-right">
-');
-$form->addHtml(
-    Display::return_icon('user.png', get_lang('UserRights')).' '.get_lang('UserRights')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-user-right" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-user-right">
-        <div class="panel-body">
-');
 
 $group = [];
 $group[] = $form->createElement(
@@ -528,80 +516,64 @@ $group[] = $form->createElement(
     1
 );
 $group[] = $form->createElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
-$form->addGroup($group, '', [get_lang("AllowUserEditAgenda")]);
 
-$group = [];
-$group[] = $form->createElement(
+$group2 = [];
+$group2[] = $form->createElement(
     'radio',
     'allow_user_edit_announcement',
     get_lang('AllowUserEditAnnouncement'),
     get_lang('AllowUserEditAnnouncementActivate'),
     1
 );
-$group[] = $form->createElement(
+$group2[] = $form->createElement(
     'radio',
     'allow_user_edit_announcement',
     null,
     get_lang('AllowUserEditAnnouncementDeactivate'),
     0
 );
-$form->addGroup($group, '', [get_lang("AllowUserEditAnnouncement")]);
 
-$group = [];
-$group[] = $form->createElement(
+$group3 = [];
+$group3[] = $form->createElement(
     'radio',
     'allow_user_image_forum',
     get_lang('AllowUserImageForum'),
     get_lang('AllowUserImageForumActivate'),
     1
 );
-$group[] = $form->createElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
-$form->addGroup($group, '', [get_lang("AllowUserImageForum")]);
+$group3[] = $form->createElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
 
-$group = [];
-$group[] = $form->createElement(
+$group4 = [];
+$group4[] = $form->createElement(
     'radio',
     'allow_user_view_user_list',
     get_lang('AllowUserViewUserList'),
     get_lang('AllowUserViewUserListActivate'),
     1
 );
-$group[] = $form->createElement(
+$group4[] = $form->createElement(
     'radio',
     'allow_user_view_user_list',
     null,
     get_lang('AllowUserViewUserListDeactivate'),
     0
 );
-$form->addGroup($group, '', [get_lang("AllowUserViewUserList")]);
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
+$globalGroup = [
+    get_lang('AllowUserEditAgenda') => $group,
+    get_lang('AllowUserEditAnnouncement') => $group2,
+    get_lang('AllowUserImageForum') => $group3,
+    get_lang('AllowUserViewUserList') => $group4,
+    '' => $myButton,
+];
 // CHAT SETTINGS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-chat-settings">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-chat-settings" aria-expanded="false" aria-controls="collapse-chat-settings">
-');
-$form->addHtml(
-    Display::return_icon('chat.png', get_lang('ConfigChat'), '', ICON_SIZE_SMALL).' '.get_lang('ConfigChat')
+$form->addPanelOption(
+    'users',
+    Display::return_icon('user.png', get_lang('UserRights')).' '.get_lang('UserRights'),
+    $globalGroup
 );
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-chat-settings" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="heading-chat-settings">
-        <div class="panel-body">
-');
+
 
 $group = [];
 $group[] = $form->createElement(
@@ -612,14 +584,18 @@ $group[] = $form->createElement(
     1
 );
 $group[] = $form->createElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
-$form->addGroup($group, '', [get_lang("AllowOpenchatWindow")]);
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
 
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$globalGroup = [
+    get_lang('AllowOpenchatWindow') => $group,
+    '' => $myButton,
+];
+
+$form->addPanelOption(
+    'chat',
+    Display::return_icon('chat.png', get_lang('ConfigChat'), '', ICON_SIZE_SMALL).' '.get_lang('ConfigChat'),
+    $globalGroup
+);
 
 // LEARNING PATH
 $form->addHtml('<div class="panel panel-default">');
@@ -809,32 +785,6 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $form->addHtml('</div>');
 }
 
-// THEMATIC ADVANCE SETTINGS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-advance-settings">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-advance-settings" aria-expanded="false" aria-controls="collapse-advance-settings">
-');
-$form->addHtml(
-    Display::return_icon(
-        'course_progress.png',
-        get_lang('ThematicAdvanceConfiguration')
-    )
-    .' '
-    .get_lang('ThematicAdvanceConfiguration')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-advance-settings" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="heading-advance-settings">
-        <div class="panel-body">
-');
 
 $group = [];
 $group[] = $form->createElement(
@@ -865,37 +815,26 @@ $group[] = $form->createElement(
     get_lang('DoNotDisplayAnyAdvance'),
     0
 );
-$form->addGroup($group, '', [get_lang("InfoAboutAdvanceInsideHomeCourse")]);
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+
+$globalGroup = [
+    get_lang('InfoAboutAdvanceInsideHomeCourse') => $group,
+    '' => $myButton,
+];
+// Certificate settings
+$form->addPanelOption(
+    'thematic',
+    Display::return_icon(
+        'course_progress.png',
+        get_lang('ThematicAdvanceConfiguration')
+    )
+    .' '
+    .get_lang('ThematicAdvanceConfiguration'),
+    $globalGroup
+);
 
 // Certificate settings
-if (api_get_setting('allow_public_certificates') == 'true') {
-    $form->addHtml('<div class="panel panel-default">');
-    $form->addHtml('
-        <div class="panel-heading" role="tab" id="heading-certificate-settings">
-            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false"
-                   href="#collapse-certificate-settings" aria-controls="collapse-certificate-settings">
-    ');
-    $form->addHtml(
-        Display::return_icon('certificate.png', get_lang('Certificates')).' '.get_lang('Certificates')
-    );
-    $form->addHtml('
-                </a>
-            </h4>
-        </div>
-    ');
-    $form->addHtml('
-        <div id="collapse-certificate-settings" class="panel-collapse collapse" role="tabpanel"
-             aria-labelledby="heading-certificate-settings">
-            <div class="panel-body">
-    ');
-
+if (api_get_setting('allow_public_certificates') === 'true') {
     $group = [];
     $group[] = $form->createElement(
         'radio',
@@ -905,47 +844,60 @@ if (api_get_setting('allow_public_certificates') == 'true') {
         1
     );
     $group[] = $form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
-    $form->addGroup($group, '', [get_lang('AllowPublicCertificates')]);
-    $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-    $form->addHtml('
-            </div>
-        </div>
-    ');
-    $form->addHtml('</div>');
+    $myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+
+    $globalGroup = [
+        get_lang('AllowPublicCertificates') => $group,
+        '' => $myButton,
+    ];
+
+    $form->addPanelOption(
+        'certificate',
+        Display::return_icon('certificate.png', get_lang('Certificates')).' '.get_lang('Certificates'),
+        $globalGroup
+    );
 }
 
-// Forum settings
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-forum-settings">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-forum-settings" aria-expanded="false" aria-controls="collapse-forum-settings">
-');
-$form->addHtml(
-    Display::return_icon('forum.png', get_lang('Forum')).' '.get_lang('Forum')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-forum-settings" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="heading-forum-settings">
-        <div class="panel-body">
-');
 
 $group = [
     $form->createElement('radio', 'enable_forum_auto_launch', null, get_lang('RedirectToForumList'), 1),
     $form->createElement('radio', 'enable_forum_auto_launch', null, get_lang('Disabled'), 2),
 ];
-$form->addGroup($group, '', [get_lang('EnableForumAutoLaunch')]);
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+
+$globalGroup = [
+    get_lang('EnableForumAutoLaunch') => $group,
+    '' => $myButton,
+];
+
+$form->addPanelOption(
+    'forum',
+    Display::return_icon('forum.png', get_lang('Forum')).' '.get_lang('Forum'),
+    $globalGroup
+);
+
+// Student publication
+$group = [
+    $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
+    $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),
+];
+$group2 = [
+    $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
+];
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+
+$globalGroup = [
+    get_lang('DefaultUpload') => $group,
+    get_lang('StudentAllowedToDeleteOwnPublication') => $group2,
+    '' => $myButton,
+];
+
+$form->addPanelOption(
+    'student-publication',
+    Display::return_icon('work.png', get_lang('StudentPublications')).' '.get_lang('StudentPublications'),
+    $globalGroup
+);
 
 // Plugin course settings
 $appPlugin = new AppPlugin();
@@ -969,6 +921,7 @@ $values['unsubscribe'] = $_course['unsubscribe'];
 $values['course_registration_password'] = $all_course_information['registration_code'];
 $values['legal'] = $all_course_information['legal'];
 $values['activate_legal'] = $all_course_information['activate_legal'];
+$values['show_score'] = $all_course_information['show_score'];
 
 $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 
@@ -977,6 +930,10 @@ foreach ($courseSettings as $setting) {
     if ($result != '-1') {
         $values[$setting] = $result;
     }
+}
+// make sure new settings have a clear default value
+if (!isset($values['student_delete_own_publication'])) {
+    $values['student_delete_own_publication'] = 0;
 }
 $form->setDefaults($values);
 
@@ -1042,22 +999,6 @@ if ($form->validate() && is_settings_editable()) {
         unset($updateValues['pdf_export_watermark_path']);
     }
 
-    // Variables that will be saved in the TABLE_MAIN_COURSE table
-    $update_in_course_table = [
-        'title',
-        'course_language',
-        'category_code',
-        'department_name',
-        'department_url',
-        'visibility',
-        'subscribe',
-        'unsubscribe',
-        'tutor_name',
-        'course_registration_password',
-        'legal',
-        'activate_legal',
-    ];
-
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
     $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -1073,6 +1014,7 @@ if ($form->validate() && is_settings_editable()) {
         'legal' => $updateValues['legal'],
         'activate_legal' => $activeLegal,
         'registration_code' => $updateValues['course_registration_password'],
+        'show_score' => $updateValues['show_score'],
     ];
     Database::update($table_course, $params, ['id = ?' => $courseId]);
 
@@ -1086,6 +1028,9 @@ if ($form->validate() && is_settings_editable()) {
             api_get_course_int_id()
         );
     }
+    // update the extra fields
+    $courseFieldValue = new ExtraFieldValue('course');
+    $courseFieldValue->saveFieldValues($updateValues);
 
     $appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();

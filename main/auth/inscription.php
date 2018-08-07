@@ -37,10 +37,12 @@ if ($gMapsPlugin->get('enable_api') === 'true') {
     $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
 }
 
+$extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting('allow_registration') === 'false';
+$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
+    api_get_setting('allow_registration') === 'false';
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -54,9 +56,33 @@ if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = api_get_setting('platformLanguage');
 }
 
+$extraConditions = api_get_configuration_value('show_conditions_to_user');
+
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    // Create user extra fields for the conditions
+    $userExtraField = new ExtraField('user');
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
+        if ($exists == false) {
+            $params = [
+                'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'variable' => $condition['variable'],
+                'display_text' => $condition['display_text'],
+                'default_value' => '',
+                'visible_to_self' => true,
+                'visible_to_others' => false,
+                'changeable' => true,
+                'filter' => false,
+            ];
+            $userExtraField->save($params);
+        }
+    }
+}
+
 $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
 }
 
@@ -83,7 +109,9 @@ if (!empty($course_code_redirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
-if ($user_already_registered_show_terms === false && api_get_setting('allow_registration') === 'true') {
+if ($user_already_registered_show_terms === false &&
+    api_get_setting('allow_registration') !== 'false'
+) {
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         if (in_array('status', $allowedFields)) {
@@ -310,9 +338,10 @@ if ($user_already_registered_show_terms === false && api_get_setting('allow_regi
         in_array('extra_fields', $allowedFields)
     ) {
         $extraField = new ExtraField('user');
-        $extraFieldList = isset($allowedFields['extra_fields']) && is_array(
-            $allowedFields['extra_fields']
-        ) ? $allowedFields['extra_fields'] : [];
+        $extraFieldList = [];
+        if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
+            $extraFieldList = $allowedFields['extra_fields'];
+        }
         $returnParams = $extraField->addElements(
             $form,
             0,
@@ -321,6 +350,7 @@ if ($user_already_registered_show_terms === false && api_get_setting('allow_regi
             false,
             $extraFieldList
         );
+        $extraFieldsLoaded = true;
     }
 
     // CAPTCHA
@@ -475,7 +505,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 
 $showTerms = false;
 // Terms and conditions
-if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
+if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
@@ -517,7 +547,7 @@ if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registe
                 'TermsAndConditions'
             ).'</a>'
         );
-        $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('legal_accept', get_lang('WeNeedYouToAcceptOurTreatmentOfYourData'), 'required');
     } else {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
@@ -555,7 +585,16 @@ if ($allowDoubleValidation && $showTerms == false) {
     $form->addHtml('</div>');
     $formContainsSendButton = true;
 } else {
-    if (api_get_setting('allow_registration') === 'true' || $user_already_registered_show_terms || $showTerms) {
+    // In normal cases (without double validation), we check if the
+    // registration is allowed in any way or if the user is already registered
+    // but needs to confirm terms. If not, send not allowed message
+    if (
+        api_get_setting('allow_registration') === 'approval' ||
+        api_get_setting('allow_registration') === 'true' ||
+        api_get_setting('allow_registration') === 'confirmation' ||
+        $user_already_registered_show_terms ||
+        $showTerms
+    ) {
         $form->addButtonNext(get_lang('RegisterUser'));
         $formContainsSendButton = true;
     }
@@ -568,6 +607,31 @@ if (!$formContainsSendButton) {
 
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
+
+if ($extraConditions && $extraFieldsLoaded) {
+    // Set conditions as "required" and also change the labels
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $children = $element->getElements();
+            /** @var HTML_QuickForm_checkbox $child */
+            foreach ($children as $child) {
+                $child->setText(get_lang($condition['display_text']));
+            }
+            $form->setRequired($element);
+            if (!empty($condition['text_area'])) {
+                $element->setLabel(
+                    [
+                        '',
+                        //'<textarea rows="5" disabled cols="100%">'.get_lang($condition['text_area']).'</textarea>',
+                        '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.get_lang($condition['text_area']).'</div>',
+                    ]
+                );
+            }
+        }
+    }
+}
 
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
@@ -584,7 +648,7 @@ if ($form->validate()) {
         $values['official_code'] = api_strtoupper($values['username']);
     }
 
-    if (api_get_setting('login_is_email') == 'true') {
+    if (api_get_setting('login_is_email') === 'true') {
         $values['username'] = $values['email'];
     }
 
@@ -824,11 +888,18 @@ if ($form->validate()) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
-                $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
                 UserManager::update_extra_field_value(
                     $user_id,
                     'legal_accept',
-                    $condition_to_save
+                    $conditionToSave
+                );
+
+                Event::addEvent(
+                    LOG_TERM_CONDITION_ACCEPTED,
+                    LOG_USER_OBJECT,
+                    api_get_user_info($user_id),
+                    api_get_utc_datetime()
                 );
 
                 $bossList = UserManager::getStudentBossList($user_id);

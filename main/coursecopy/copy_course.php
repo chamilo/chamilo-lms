@@ -20,12 +20,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-    //ini_set('post_max_size', "512M");
-}
+api_set_more_memory_and_time_limits();
 
 // Breadcrumbs
 $interbreadcrumb[] = [
@@ -40,17 +35,17 @@ $this_section = SECTION_COURSES;
 Display::display_header(get_lang('CopyCourse'));
 echo Display::page_header(get_lang('CopyCourse'));
 
-/* MAIN CODE */
+$action = isset($_POST['action']) ? $_POST['action'] : '';
 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if (Security::check_token('post') && (
-    (isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
-    (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
+    ($action === 'course_select_form') ||
+    (isset($_POST['copy_option']) && $_POST['copy_option'] === 'full_copy')
     )
 ) {
     // Clear token
     Security::clear_token();
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if ($action === 'course_select_form') {
         $course = CourseSelectForm::get_posted_course('copy_course');
     } else {
         $cb = new CourseBuilder();
@@ -68,7 +63,7 @@ if (Security::check_token('post') && (
     );
 } elseif (Security::check_token('post') && (
         isset($_POST['copy_option']) &&
-        $_POST['copy_option'] == 'select_items'
+        $_POST['copy_option'] === 'select_items'
     )
 ) {
     // Clear token

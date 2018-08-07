@@ -114,13 +114,11 @@ if ($allowToEdit) {
 
                 $sendEmail = isset($values['add_announcement']) ? true : false;
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-
                 $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
                 $attachmentList = $sendAttachment ? $_FILES : null;
                 $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
                 $comment = isset($values['comment']) ? $values['comment'] : null;
                 $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
-
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
@@ -185,12 +183,10 @@ if ($allowToEdit) {
 
                 $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
                 $attachmentList = $sendAttachment ? $_FILES : null;
-                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
-
-                $comment = isset($values['comment']) ? $values['comment'] : null;
+                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : '';
+                $comment = isset($values['comment']) ? $values['comment'] : '';
 
                 // This is a sub event. Delete the current and create another BT#7803
-
                 if (!empty($event['parent_event_id'])) {
                     $agenda->deleteEvent($eventId);
 

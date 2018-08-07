@@ -15,15 +15,10 @@ $data = $usergroup->get($id);
 $usergroup->protectScript($data);
 
 $xajax = new xajax();
-
-//$xajax->debugOn();
 $xajax->registerFunction('search_usergroup_sessions');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-
-// setting breadcrumbs
-api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];

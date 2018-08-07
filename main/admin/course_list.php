@@ -338,8 +338,6 @@ if (isset($_POST['action'])) {
             if (count($course_codes) > 0) {
                 foreach ($course_codes as $course_code) {
                     CourseManager::delete_course($course_code);
-                    $obj_cat = new Category();
-                    $obj_cat->update_category_delete($course_code);
                 }
             }
 
@@ -409,8 +407,6 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $tool_name = get_lang('CourseList');
     if (isset($_GET['delete_course'])) {
         CourseManager::delete_course($_GET['delete_course']);
-        $obj_cat = new Category();
-        $obj_cat->update_category_delete($_GET['delete_course']);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
     }
     // Create a search-box

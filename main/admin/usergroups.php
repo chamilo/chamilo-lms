@@ -16,17 +16,6 @@ $usergroup->protectScript();
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
-if ($action == 'add') {
-    $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-} elseif ($action == 'edit') {
-    $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
-} else {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Classes')];
-}
 // setting breadcrumbs
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $userGroupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;

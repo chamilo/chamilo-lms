@@ -166,7 +166,7 @@ class CoursesController
         $data['content'] = $content;
         $data['error'] = $error;
         $data['catalogShowCoursesSessions'] = 0;
-        $showCoursesSessions = intval('catalog_show_courses_sessions');
+        $showCoursesSessions = (int) api_get_setting('catalog_show_courses_sessions');
         if ($showCoursesSessions > 0) {
             $data['catalogShowCoursesSessions'] = $showCoursesSessions;
         }
@@ -930,7 +930,8 @@ class CoursesController
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
             }
 
-            $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
+            $plugin = \BuyCoursesPlugin::create();
+            $isThisSessionOnSale = $plugin->getBuyCoursePluginPrice($session);
 
             $sessionsBlock = [
                 'id' => $session->getId(),

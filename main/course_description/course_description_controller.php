@@ -52,12 +52,28 @@ class CourseDescriptionController
             $data['descriptions'] = [$data['descriptions']];
         }
 
-        foreach ($data['descriptions'] as $description) {
+        // Prepare confirmation code for item deletion
+        global $htmlHeadXtra;
+        $htmlHeadXtra[] = "<script>
+        function confirmation(name) {
+            if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        </script>";
+
+        foreach ($data['descriptions'] as $id => $description) {
             if (!empty($description['content'])
                 && strpos($description['content'], '<iframe') !== false
                 && $browser['name'] == 'Chrome'
             ) {
                 header("X-XSS-Protection: 0");
+            }
+            // Add an escape version for the JS code of delete confirmation
+            if ($description) {
+                $data['descriptions'][$id]['title_js'] = addslashes($description['title']);
             }
         }
         $actions = null;

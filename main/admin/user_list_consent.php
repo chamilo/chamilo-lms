@@ -54,7 +54,8 @@ function prepare_user_sql_query($getCount)
                     u.registration_date AS col10,
                     u.expiration_date AS exp,
                     u.password,
-                    v.field_id
+                    v.field_id,
+                    v.updated_at
                 FROM $user_table u";
     }
 
@@ -246,6 +247,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[7],
             api_get_local_time($user[9]),
             $user[12],
+            Display::dateToStringAgoAndLongDate($user[13]),
             $user[0],
         ];
     }
@@ -624,14 +626,15 @@ $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('Active'), true, 'width="15px"');
 $table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
 $table->set_header(10, get_lang('RequestType'), true, 'width="15px"');
-$table->set_header(11, get_lang('Action'), false, 'width="220px"');
+$table->set_header(11, get_lang('RequestDate'), true, 'width="15px"');
+$table->set_header(12, get_lang('Action'), false, 'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(11, 'modify_filter');
+$table->set_column_filter(12, 'modify_filter');
 $table->set_column_filter(10, 'requestTypeFilter');
 
 // Only show empty actions bar if delete users has been blocked

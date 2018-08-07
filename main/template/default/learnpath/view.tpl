@@ -155,7 +155,7 @@
                 );
             // Fix another issue whereby buttons do not react to click below
             // second screen in learning paths on Apple devices
-            document.getElementById('content-id')
+            document.getElementById('content_id')
                 .setAttribute(
                     'style',
                     'overflow: auto;'

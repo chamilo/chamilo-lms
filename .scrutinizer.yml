@@ -1,10 +1,11 @@
 build:
     nodes:
         analysis:
-            project_setup:
-                override: true
             tests:
-                override: [php-scrutinizer-run]
+                override:
+                    - php-scrutinizer-run
+                    - phpcs-run --config .php_cs
+
     tests:
         override:
             command: "php -v"

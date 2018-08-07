@@ -6285,6 +6285,33 @@ SQL;
     }
 
     /**
+     * @param int $userId
+     */
+    public static function cleanUserRequestsOfRemoval($userId)
+    {
+        $userId = (int) $userId;
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extraFieldsToDelete = [
+            'legal_accept',
+            'request_for_legal_agreement_consent_removal',
+            'request_for_legal_agreement_consent_removal_justification',
+            'request_for_delete_account_justification', // just in case delete also this
+            'request_for_delete_account',
+        ];
+
+        foreach ($extraFieldsToDelete as $variable) {
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $userId,
+                $variable
+            );
+            if ($value && isset($value['id'])) {
+                $extraFieldValue->delete($value['id']);
+            }
+        }
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -6380,32 +6407,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    /**
-     * @param int $userId
-     */
-    public static function cleanUserRequestsOfRemoval($userId)
-    {
-        $userId = (int) $userId;
-
-        $extraFieldValue = new ExtraFieldValue('user');
-        $extraFieldsToDelete = [
-            'legal_accept',
-            'request_for_legal_agreement_consent_removal',
-            'request_for_legal_agreement_consent_removal_justification',
-            'request_for_delete_account_justification', // just in case delete also this
-            'request_for_delete_account',
-        ];
-
-        foreach ($extraFieldsToDelete as $variable) {
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $userId,
-                $variable
-            );
-            if ($value && isset($value['id'])) {
-                $extraFieldValue->delete($value['id']);
-            }
-        }
     }
 }

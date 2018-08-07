@@ -84,4 +84,3 @@ foreach ($urlList as $url) {
     }
     echo $message;
 }
-

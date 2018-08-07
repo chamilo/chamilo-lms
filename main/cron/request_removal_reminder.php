@@ -3,6 +3,10 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+if (PHP_SAPI != 'cli') {
+    exit('Run this script through the command line or comment this line in the code');
+}
+
 $urlList = UrlManager::get_url_data();
 
 $defaultSenderId = 1;
@@ -78,7 +82,6 @@ foreach ($urlList as $url) {
             $message .= "User ".$userInfo['complete_name_with_username']." is waiting for an action since $date \n";
         }
     }
-
     echo $message;
 }
 

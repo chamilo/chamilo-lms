@@ -180,9 +180,9 @@ if ($course_validation_feature) {
 
 // Course language.
 $languages = api_get_languages();
-if (count($languages) === 1) {
+if (count($languages['name']) === 1) {
     // If there's only one language available, there's no point in asking
-    $form->addElement('hidden', 'course_language', $languages[0]);
+    $form->addElement('hidden', 'course_language', $languages['folder'][0]);
 } else {
     $form->addSelectLanguage(
         'course_language',

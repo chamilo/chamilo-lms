@@ -46,9 +46,7 @@ if (empty($document_data)) {
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
 
-/*	Constants and variables */
-
-//path for svg-edit save
+// path for svg-edit save
 Session::write('draw_dir', Security::remove_XSS($dir));
 if ($dir == '/') {
     Session::write('draw_dir', '');
@@ -58,7 +56,6 @@ $dir = isset($dir) ? Security::remove_XSS($dir) : (isset($_POST['dir']) ? Securi
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting
-
 if (strstr($dir, '..')) {
     $dir = '/';
 }
@@ -76,14 +73,12 @@ if ($dir[strlen($dir) - 1] != '/') {
 }
 
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
 if (!is_dir($filepath)) {
     $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
     $dir = '/';
 }
 
 $groupId = api_get_group_id();
-
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
@@ -115,7 +110,6 @@ if (!($is_allowed_to_edit || $groupRights ||
     api_not_allowed(true);
 }
 
-/*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset($group)) {
@@ -149,17 +143,17 @@ echo '<a href="document.php?id='.$document_id.'">'.
 echo '</div>';
 
 if (api_browser_support('svg')) {
-    //automatic loading the course language
-    $svgedit_code_translation_table = ['' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn'];
+    // Automatic loading the course language
+    $translationList = ['' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn'];
     $langsvgedit = api_get_language_isocode();
-    $langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
+    $langsvgedit = isset($translationList[$langsvgedit]) ? $translationList[$langsvgedit] : $langsvgedit;
     $langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'javascript/svgedit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-    $svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?lang='.$langsvgedit; ?>
+    $svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?'.api_get_cidreq().'&lang='.$langsvgedit; ?>
     <script>
-        document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
+        document.write('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
         function resizeIframe() {
             var height = window.innerHeight -50;
-            //max lower size
+            // max lower size
             if (height<550) {
                 height=550;
             }

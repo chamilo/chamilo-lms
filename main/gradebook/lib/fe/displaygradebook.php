@@ -463,8 +463,19 @@ class DisplayGradebook
                     // Right icons
                     $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
-                    $actionsRight .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
+                    $courseCode = api_get_course_id();
+                    if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+                        api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
+                    ) {
+                        $actionsRight .= '<a href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/index.php?'.
+                            $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
+                    } else {
+                        $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).
+                            'document/document.php?curdirpath=/certificates&'.
+                            $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
+                            Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
+                    }
 
                     if (empty($categories)) {
                         $actionsRight .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.

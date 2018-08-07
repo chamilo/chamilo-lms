@@ -486,6 +486,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/qti2.php?'.api_get_cidreq().'">'.Display::return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.Display::return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+
     echo Display::url(
         Display::return_icon(
             'clean_all.png',
@@ -493,10 +494,12 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             '',
             ICON_SIZE_MEDIUM
         ),
-        '',
+        '#',
         [
-            'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-            'href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token,
+            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token,
+            'data-toggle' => 'modal',
+            'data-target' => '#confirm-delete',
         ]
     );
 }
@@ -672,7 +675,7 @@ if (!empty($exerciseList)) {
             $cut_title = $exercise->getCutTitle();
             $alt_title = '';
             if ($cut_title != $row['title']) {
-                $alt_title = ' title = "'.$row['title'].'" ';
+                $alt_title = ' title = "'.$exercise->getUnformattedTitle().'" ';
             }
 
             // Teacher only
@@ -936,7 +939,7 @@ if (!empty($exerciseList)) {
                             ),
                             '',
                             [
-                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
+                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
                             ]
                         );
@@ -1184,9 +1187,9 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
 $nbrActiveTests = 0;
 if (isset($attribute['path']) && is_array($attribute['path'])) {
     $hotpotatoes_exist = true;
-    while (list($key, $path) = each($attribute['path'])) {
+    foreach ($attribute['path'] as $key => $path) {
         $item = '';
-        list($a, $vis) = each($attribute['visibility']);
+        $vis = $attribute['visibility'][$key];
         $active = !empty($vis);
         $title = GetQuizName($path, $documentPath);
         if ($title == '') {

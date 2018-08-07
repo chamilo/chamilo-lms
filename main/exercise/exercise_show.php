@@ -19,7 +19,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $debug = false;
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
-$printHeaders = $origin == 'learnpath';
+$printHeaders = $origin === 'learnpath';
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
 
 if (empty($id)) {
@@ -64,6 +64,9 @@ if (empty($exerciseResult)) {
     $exerciseResult = Session::read('exerciseResult');
 }
 
+if (empty($choiceDegreeCertainty)) {
+    $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : null;
+}
 $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
 
 if (empty($choice)) {
@@ -81,7 +84,6 @@ if (empty($questionList)) {
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
@@ -105,7 +107,7 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
 }
 
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
-$maxEditors = intval(api_get_setting('exercise_max_ckeditors_in_page'));
+$maxEditors = (int) api_get_setting('exercise_max_ckeditors_in_page');
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
 
@@ -138,16 +140,17 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
+    'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = [
-    "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true),
+    'url' => 'overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
+    'name' => $objExercise->selectTitle(true),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
 
 $this_section = SECTION_COURSES;
+
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
@@ -165,11 +168,7 @@ if ($action != 'export') {
     if ($origin != 'learnpath') {
         Display::display_header('');
     } else {
-        $htmlHeadXtra[] = "
-    <style>
-    body { background: none;}
-    </style>
-    ";
+        $htmlHeadXtra[] = "<style>body { background: none; } </style>";
         Display::display_reduced_header();
     }
 
@@ -181,8 +180,8 @@ if ($action != 'export') {
     ]); ?>
     <script>
         <?php echo $scoreJsCode; ?>
+        var maxEditors = <?php echo $maxEditors; ?>;
 
-        var maxEditors = <?php echo intval($maxEditors); ?>;
         function showfck(sid, marksid) {
             $('#' + sid).toggleClass('hidden');
             $('#' + marksid).toggleClass('hidden');
@@ -194,7 +193,7 @@ if ($action != 'export') {
         }
 
         function getFCK(vals, marksid) {
-            var f = document.getElementById('myform');
+            var f = document.getElementById('form-email');
 
             var m_id = marksid.split(',');
             for (var i = 0; i < m_id.length; i++) {
@@ -321,11 +320,10 @@ $sql = "SELECT attempts.question_id, answer
             attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
-$questionListFromDatabase = [];
+$question_list_from_database = [];
 $exerciseResult = [];
-
 while ($row = Database::fetch_array($result)) {
-    $questionListFromDatabase[] = $row['question_id'];
+    $question_list_from_database[] = $row['question_id'];
     $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
@@ -339,16 +337,16 @@ if (!empty($track_exercise_info['data_tracking'])) {
     }
     // If for some reason data_tracking is empty we select the question list from db
     if (empty($questionList)) {
-        $questionList = $questionListFromDatabase;
+        $questionList = $question_list_from_database;
     }
 } else {
-    $questionList = $questionListFromDatabase;
+    $questionList = $question_list_from_database;
 }
 
 // Display the text when finished message if we are on a LP #4227
-$endOfMessage = $objExercise->selectTextWhenFinished();
-if (!empty($endOfMessage) && ($origin == 'learnpath')) {
-    echo Display::return_message($endOfMessage, 'normal', false);
+$end_of_message = $objExercise->selectTextWhenFinished();
+if (!empty($end_of_message) && ($origin === 'learnpath')) {
+    echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
 }
 
@@ -365,6 +363,7 @@ $counter = 1;
 $exercise_content = '';
 $category_list = [];
 $useAdvancedEditor = true;
+
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
@@ -428,10 +427,29 @@ foreach ($questionList as $questionId) {
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
             break;
+        case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
+            $choiceTmp = [];
+            $choiceTmp['choice'] = $choice;
+            $choiceTmp['choiceDegreeCertainty'] = $choiceDegreeCertainty;
+
+            $questionResult = $objExercise->manage_answer(
+                $id,
+                $questionId,
+                $choiceTmp,
+                'exercise_show',
+                [],
+                false,
+                true,
+                $show_results,
+                $objExercise->selectPropagateNeg()
+            );
+            $questionScore = $questionResult['score'];
+            $totalScore += $questionResult['score'];
+            break;
         case HOT_SPOT:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
                 echo '<table width="500" border="0"><tr>
-                    <td valign="top" align="center" style="padding-left:0px;" >
+                        <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
             }
             $question_result = $objExercise->manage_answer(
@@ -698,8 +716,8 @@ foreach ($questionList as $questionId) {
 
         $marksname = '';
         if ($isFeedbackAllowed && $action != 'export') {
-            $name = "fckdiv".$questionId;
-            $marksname = "marksName".$questionId;
+            $name = 'fckdiv'.$questionId;
+            $marksname = 'marksName'.$questionId;
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
@@ -757,6 +775,7 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
+
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
@@ -764,7 +783,6 @@ foreach ($questionList as $questionId) {
                 echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
                 echo '</div>';
             }
-
             echo '</div>';
         } else {
             $comnt = Event::get_comments($id, $questionId);
@@ -923,31 +941,46 @@ foreach ($questionList as $questionId) {
     $exercise_content .= Display::panel($question_content);
 } // end of large foreach on questions
 
-$total_score_text = '';
+$totalScoreText = '';
 
 //Total score
+$myTotalScoreTemp = $totalScore;
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
-        $total_score_text .= '<div class="question_row">';
-        $my_total_score_temp = $totalScore;
-        if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
-            $my_total_score_temp = 0;
+        $totalScoreText .= '<div class="question_row">';
+        if ($objExercise->selectPropagateNeg() == 0 && $myTotalScoreTemp < 0) {
+            $myTotalScoreTemp = 0;
         }
-        $total_score_text .= ExerciseLib::getTotalScoreRibbon(
-            $objExercise,
-            $my_total_score_temp,
-            $totalWeighting,
-            true,
-            $countPendingQuestions
-        );
-        $total_score_text .= '</div>';
+
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            $totalScoreText .= ExerciseLib::getQuestionDiagnosisRibbon(
+                $objExercise,
+                $myTotalScoreTemp,
+                $totalWeighting,
+                true
+            );
+        } else {
+            $totalScoreText .= ExerciseLib::getTotalScoreRibbon(
+                $objExercise,
+                $myTotalScoreTemp,
+                $totalWeighting,
+                true,
+                $countPendingQuestions
+            );
+        }
+
+        $totalScoreText .= '</div>';
     }
+}
+if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+    $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($id, $objExercise);
+    echo $chartMultiAnswer;
 }
 
 if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)) {
     // Adding total
     $category_list['total'] = [
-        'score' => $my_total_score_temp,
+        'score' => $myTotalScoreTemp,
         'total' => $totalWeighting,
     ];
     echo TestCategory::get_stats_table_by_attempt(
@@ -956,12 +989,12 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
-echo $total_score_text;
+echo $totalScoreText;
 echo $exercise_content;
 
 // only show "score" in bottom of page if there's exercise content
 if ($show_results) {
-    echo $total_score_text;
+    echo $totalScoreText;
 }
 
 if ($action == 'export') {
@@ -1008,7 +1041,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'course' => Security::remove_XSS($_GET['cidReq']),
         ]);
 
-        $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
+        $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);
         $emailForm->addHidden('lp_item_id', $learnpath_id);
         $emailForm->addHidden('lp_item_view_id', $lp_item_view_id);
         $emailForm->addHidden('student_id', $student_id);
@@ -1024,11 +1057,11 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         ]);
 
         $emailForm = new FormValidator(
-            'myform',
+            'form-email',
             'post',
             $formUrl,
             '',
-            ['id' => 'myform']
+            ['id' => 'form-email']
         );
     }
 
@@ -1038,13 +1071,13 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         get_lang('SendEmail'),
         ['onclick' => 'openEmailWrapper();']
     );
-    $emailForm->addHtml('<span id="email_content_wrapper" style="display:none">');
+    $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
     $emailForm->addHtmlEditor(
         'notification_content',
         get_lang('Content'),
         false
     );
-    $emailForm->addHtml('</span>');
+    $emailForm->addHtml('</div>');
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url
@@ -1106,7 +1139,7 @@ if ($origin != 'learnpath') {
     if (!isset($_GET['fb_type'])) {
         $lp_mode = Session::read('lp_mode');
         $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
-        $url .= http_build_url([
+        $url .= http_build_query([
             'action' => 'view',
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,

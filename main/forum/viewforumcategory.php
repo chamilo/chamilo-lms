@@ -164,14 +164,14 @@ if ($action != 'add') {
     $html = '';
     $html .= '<div class="category-forum">';
 
+    $session_displayed = '';
     if ((!isset($sessionId) || $sessionId == 0) &&
         !empty($forum_category['session_name'])
     ) {
         $session_displayed = ' ('.Security::remove_XSS($forum_category['session_name']).')';
-    } else {
-        $session_displayed = '';
     }
-    $forum_categories_list = '';
+
+    $forum_categories_list = [];
     $forumId = $forum_category['cat_id'];
     $forumTitle = $forum_category['cat_title'];
     $linkForumCategory = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.strval(intval($forumId));

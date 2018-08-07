@@ -36,7 +36,8 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 // Database table definitions.
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-$course_id = api_get_course_int_id();
+$course_id = $_course['real_id'];
+$sessionId = api_get_session_id();
 
 // Setting some variables.
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

@@ -13,8 +13,7 @@ if (!api_is_student_boss()) {
     api_protect_course_script(true);
 }
 
-set_time_limit(0);
-ini_set('max_execution_time', 0);
+api_set_more_memory_and_time_limits();
 
 //extra javascript functions for in html head:
 $htmlHeadXtra[] = "<script>
@@ -128,17 +127,24 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'export_all_certificates':
-        if (api_is_student_boss()) {
-            $userGroup = new UserGroup();
-            $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
+        $courseCode = api_get_course_id();
+        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+            api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
+        ) {
+            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1';
         } else {
-            $userList = [];
-            if (!empty($filterOfficialCodeGet)) {
-                $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
+            if (api_is_student_boss()) {
+                $userGroup = new UserGroup();
+                $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
+            } else {
+                $userList = [];
+                if (!empty($filterOfficialCodeGet)) {
+                    $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
+                }
             }
-        }
 
-        Category::exportAllCertificates($categoryId, $userList);
+            Category::exportAllCertificates($categoryId, $userList);
+        }
         header('Location: '.$url);
         exit;
         break;

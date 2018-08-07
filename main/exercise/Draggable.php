@@ -88,7 +88,7 @@ class Draggable extends Question
 
         $form->addRadio(
             'orientation',
-            get_lang('Orientation'),
+            get_lang('ChooseOrientation'),
             ['h' => get_lang('Horizontal'), 'v' => get_lang('Vertical')]
         );
 

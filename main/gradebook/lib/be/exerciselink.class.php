@@ -166,8 +166,9 @@ class ExerciseLink extends AbstractLink
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
      *
-     * @param int $stud_id student id (default: all students who have results -
-     *                     then the average is returned)
+     * @param int    $stud_id student id (default: all students who have results -
+     *                        then the average is returned)
+     * @param string $type
      *
      * @return array (score, max) if student is given
      *               array (sum of scores, number of scores) otherwise
@@ -260,7 +261,20 @@ class ExerciseLink extends AbstractLink
             $weight = 0;
             $sumResult = 0;
 
+            $studentList = $this->getStudentList();
+            $studentIdList = [];
+            if (!empty($studentList)) {
+                $studentIdList = array_column($studentList, 'user_id');
+            }
+
             while ($data = Database::fetch_array($scores, 'ASSOC')) {
+                // Only take into account users in the current student list.
+                if (!empty($studentIdList)) {
+                    if (!in_array($data['exe_user_id'], $studentIdList)) {
+                        continue;
+                    }
+                }
+
                 if (!isset($students[$data['exe_user_id']])) {
                     if ($data['exe_weighting'] != 0) {
                         $students[$data['exe_user_id']] = $data['exe_result'];
@@ -333,7 +347,7 @@ class ExerciseLink extends AbstractLink
      */
     public function get_name()
     {
-        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
+        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
         $data = $this->get_exercise_data();
 
@@ -436,18 +450,18 @@ class ExerciseLink extends AbstractLink
     {
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         if ($this->is_hp == 1) {
-            $tbl_exercise = Database::get_course_table(TABLE_DOCUMENT);
+            $table = Database::get_course_table(TABLE_DOCUMENT);
         } else {
-            $tbl_exercise = $this->get_exercise_table();
+            $table = $this->get_exercise_table();
         }
 
         $exerciseId = $this->get_ref_id();
 
-        if ($tbl_exercise == '') {
+        if ($table == '') {
             return false;
         } elseif (empty($this->exercise_data)) {
             if ($this->is_hp == 1) {
-                $sql = "SELECT * FROM $tbl_exercise ex
+                $sql = "SELECT * FROM $table ex
                         INNER JOIN $tableItemProperty ip
                         ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
                         WHERE
@@ -461,10 +475,11 @@ class ExerciseLink extends AbstractLink
                 $result = Database::query($sql);
                 $this->exercise_data = Database::fetch_array($result);
             } else {
-                $sql = 'SELECT * FROM '.$tbl_exercise.'
+                // Try with iid
+                $sql = 'SELECT * FROM '.$table.'
                         WHERE
                             c_id = '.$this->course_id.' AND
-                            id = '.$exerciseId;
+                            iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -472,10 +487,10 @@ class ExerciseLink extends AbstractLink
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
                     // Try wit iid
-                    $sql = 'SELECT * FROM '.$tbl_exercise.'
+                    $sql = 'SELECT * FROM '.$table.'
                             WHERE
                                 c_id = '.$this->course_id.' AND
-                                iid = '.$exerciseId;
+                                id = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

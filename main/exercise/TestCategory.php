@@ -35,7 +35,7 @@ class TestCategory
     public function getCategory($id, $courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $id = intval($id);
+        $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
                 WHERE id = $id AND c_id = ".$courseId;
@@ -801,7 +801,7 @@ class TestCategory
         }
         $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-bordered']);
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
         $table->setHeaderContents(0, 2, get_lang('RelativeScore'));

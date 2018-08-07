@@ -14,13 +14,15 @@ $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
-ob_start();
-
+api_block_anonymous_users();
 api_protect_course_script(true);
+
+ob_start();
 
 $course_code = api_get_course_id();
 $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
+$course_id = api_get_course_int_id();
 
 //make sure the destination for scripts is index.php instead of gradebook.php
 Category::setUrl('index.php');
@@ -30,6 +32,14 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '<script>
 var show_icon = "'.Display::returnIconPath('view_more_stats.gif').'";
 var hide_icon = "'.Display::returnIconPath('view_less_stats.gif').'";
+
+function confirmation() {
+	if (confirm("'.get_lang('DeleteAll').'?")) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 $(document).ready(function() {
     $("body").on("click", ".view_children", function() {
@@ -47,45 +57,13 @@ $(document).ready(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
-/*
-  var s1 = [["a",25]];
-  var s2 = [["a", 0], ["a", 10], ["a", 10], ["a", 5]];
-
-  var plot3 = $.jqplot("chart3", [s1, s2], {
-  colors: ["#000", "#fff"],
-    seriesDefaults: {
-      // make this a donut chart.
-      renderer:$.jqplot.DonutRenderer,
-      rendererOptions:{
-        // Donuts can be cut into slices like pies.
-        sliceMargin: 3 ,
-        // Pies and donuts can start at any arbitrary angle.
-        startAngle: -90,
-        showDataLabels: true,
-        // By default, data labels show the percentage of the donut/pie.
-        // You can show the data "value" or data "label" instead.
-        dataLabels: "value"
-
-      }
-    }
-  });*/
-
+    
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null || $(".actions:eq("+i+")").html().split("<TBODY></TBODY>").length==2) {
 			$(".actions:eq("+i+")").hide();
 		}
 	}
 });
-</script>';
-api_block_anonymous_users();
-$htmlHeadXtra[] = '<script type="text/javascript">
-function confirmation() {
-	if (confirm("'.get_lang('DeleteAll').'?")) {
-		return true;
-	} else {
-		return false;
-	}
-}
 </script>';
 
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -242,7 +220,6 @@ if (isset($_GET['movelink'])) {
     if ($move_form->validate()) {
         $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
-        unset($link);
         header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat.'&'.api_get_cidreq());
         exit;
     }
@@ -270,6 +247,7 @@ if (isset($_GET['visiblecat'])) {
         $filter_confirm_msg = false;
     }
 }
+
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
@@ -359,8 +337,6 @@ if (isset($_GET['visiblelink'])) {
     }
 }
 
-$course_id = api_get_course_int_id();
-
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
     $get_delete_link = intval($_GET['deletelink']);
@@ -402,7 +378,7 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.intval($_GET['movecat'])
-            : '&moveeval='.Security::remove_XSS($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.Security::remove_XSS($_GET['targetcat']).'">
+            : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'">
 			   <input type="submit" value="'.get_lang('Ok').'">
 			   </form>';
     $warning_message = get_lang('MoveWarning').'<br><br>'.$button;
@@ -425,6 +401,11 @@ switch ($action) {
         }
         break;
     case 'export_table':
+        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
+        if ($hidePdfReport) {
+            api_not_allowed(true);
+        }
+
         //table will be export below
         ob_start();
         break;
@@ -472,7 +453,12 @@ if (isset($_POST['action'])) {
                         }
                     }
                 }
-                $confirmation_message = get_lang('DeletedCategories').' : <b>'.$number_of_deleted_categories.'</b><br />'.get_lang('DeletedEvaluations').' : <b>'.$number_of_deleted_evaluations.'</b><br />'.get_lang('DeletedLinks').' : <b>'.$number_of_deleted_links.'</b><br /><br />'.get_lang('TotalItems').' : <b>'.$number_of_selected_items.'</b>';
+
+                $confirmation_message =
+                    get_lang('DeletedCategories').' : <b>'.$number_of_deleted_categories.'</b><br />'.
+                    get_lang('DeletedEvaluations').' : <b>'.$number_of_deleted_evaluations.'</b><br />'.
+                    get_lang('DeletedLinks').' : <b>'.$number_of_deleted_links.'</b><br /><br />'.
+                    get_lang('TotalItems').' : <b>'.$number_of_selected_items.'</b>';
                 $filter_confirm_msg = false;
                 break;
             case 'setvisible':
@@ -596,7 +582,6 @@ if (!isset($_GET['exportpdf'])) {
         $viewTitle = get_lang('ToolGradebook');
     }
 }
-
 // LOAD DATA & DISPLAY TABLE
 
 $is_platform_admin = api_is_platform_admin();
@@ -633,7 +618,14 @@ if (isset($_GET['studentoverview'])) {
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
-        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, ['justification' => 'center']);
+        $pdf->ezText(
+            get_lang('FlatView').' ('.api_convert_and_format_date(
+                null,
+                DATE_FORMAT_SHORT
+            ).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')',
+            12,
+            ['justification' => 'center']
+        );
         $pdf->line(50, 790, 550, 790);
         $pdf->line(50, 40, 550, 40);
         $pdf->ezSetY(750);
@@ -767,11 +759,14 @@ if (!empty($selectCat)) {
 }
 
 if (!api_is_allowed_to_edit(null, true)) {
-    $actionsLeft .= Display::url(
-        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
-        api_get_self().'?action=export_table',
-        ['class' => 'btn btn-default']
-    );
+    $allowButton = api_get_configuration_value('gradebook_hide_pdf_report_button') === false;
+    if ($allowButton) {
+        $actionsLeft .= Display::url(
+            Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
+            api_get_self().'?action=export_table&'.api_get_cidreq(),
+            ['class' => 'btn btn-default']
+        );
+    }
 }
 
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)) {
@@ -922,11 +917,17 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
+                $loadStats = [];
                 $teacher = api_is_allowed_to_edit(null, true);
-                if ($teacher) {
-                    $loadStats = false;
-                } else {
-                    $loadStats = api_get_configuration_value('disable_gradebook_stats') === false;
+
+                if (!$teacher) {
+                    if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+                        $loadStats = [1, 2, 3];
+                    } else {
+                        if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
+                            $loadStats = [2];
+                        }
+                    }
                 }
 
                 $gradebookTable = new GradebookTable(
@@ -948,22 +949,13 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                 } else {
                     if (empty($model)) {
-                        if ($loadStats) {
-                            $gradebookTable->td_attributes = [
-                                3 => 'class="text-right"',
-                                4 => 'class="text-center"',
-                                5 => 'class="text-center"',
-                                6 => 'class="text-center"',
-                                7 => 'class="text-center"',
-                            ];
-                        } else {
-                            $gradebookTable->td_attributes = [
-                                3 => 'class="text-right"',
-                                4 => 'class="text-center"',
-                                5 => 'class="text-center"',
-                                //6 => 'class="text-center"',
-                                //7 => 'class="text-center"',
-                            ];
+                        $gradebookTable->td_attributes = [
+                            3 => 'class="text-right"',
+                            4 => 'class="text-center"',
+                        ];
+
+                        for ($z = 5; $z < count($loadStats); $z++) {
+                            $gradebookTable->td_attributes[$z] = 'class="text-center"';
                         }
                     } else {
                         $gradebookTable->td_attributes = [
@@ -978,7 +970,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $table = $gradebookTable->return_table();
-                $graph = $gradebookTable->getGraph();
+
+                $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
+                $graph = '';
+                if ($allowGraph) {
+                    $graph = $gradebookTable->getGraph();
+                }
 
                 if ($action == 'export_table') {
                     ob_clean();

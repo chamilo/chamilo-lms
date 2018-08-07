@@ -12,8 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script();
-set_time_limit(0);
-ini_set('max_execution_time', 0);
+api_set_more_memory_and_time_limits();
 api_block_anonymous_users();
 
 GradebookUtils::block_students();

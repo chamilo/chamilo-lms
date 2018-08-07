@@ -519,7 +519,7 @@ if (is_array($forumCategories)) {
 }
 
 $tpl = new Template($nameTools);
-$tpl->assign('introduction_section', $introduction);
+$tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);

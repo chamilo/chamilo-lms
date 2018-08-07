@@ -34,6 +34,7 @@ class LearnpathList
      * @param bool   $check_publication_dates
      * @param int    $categoryId
      * @param bool   $ignoreCategoryFilter
+     * @param bool   $ignoreLpVisibility      get the list of LPs for reports
      */
     public function __construct(
         $user_id,
@@ -42,7 +43,8 @@ class LearnpathList
         $order_by = null,
         $check_publication_dates = false,
         $categoryId = null,
-        $ignoreCategoryFilter = false
+        $ignoreCategoryFilter = false,
+        $ignoreLpVisibility = false
     ) {
         $course_info = api_get_course_info($course_code);
 
@@ -90,7 +92,7 @@ class LearnpathList
         $categoryFilter = '';
         if ($ignoreCategoryFilter == false) {
             if (!empty($categoryId)) {
-                $categoryId = intval($categoryId);
+                $categoryId = (int) $categoryId;
                 $categoryFilter = " AND lp.categoryId = $categoryId";
             } else {
                 $categoryFilter = " AND (lp.categoryId = 0 OR lp.categoryId IS NULL) ";
@@ -129,11 +131,10 @@ class LearnpathList
                         )
                       ";
             $res2 = Database::query($sql2);
+            $pub = 'i';
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];
-            } else {
-                $pub = 'i';
             }
 
             // Check if visible.
@@ -145,14 +146,16 @@ class LearnpathList
             );
 
             // If option is not true then don't show invisible LP to user
-            if ($showBlockedPrerequisite !== true && !api_is_allowed_to_edit()) {
-                $lpVisibility = learnpath::is_lp_visible_for_student(
-                    $row->getId(),
-                    $user_id,
-                    $course_code
-                );
-                if ($lpVisibility === false) {
-                    continue;
+            if ($ignoreLpVisibility === false) {
+                if ($showBlockedPrerequisite !== true && !api_is_allowed_to_edit()) {
+                    $lpVisibility = learnpath::is_lp_visible_for_student(
+                        $row->getId(),
+                        $user_id,
+                        $course_code
+                    );
+                    if ($lpVisibility === false) {
+                        continue;
+                    }
                 }
             }
 

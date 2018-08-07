@@ -112,7 +112,7 @@ class learnpathItem
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
             } else {
-                $course_id = intval($course_id);
+                $course_id = (int) $course_id;
             }
             $sql = "SELECT * FROM $items_table
                     WHERE iid = $id";
@@ -365,7 +365,7 @@ class learnpathItem
         }
         $res = 1;
         if (!empty($this->attempt_id)) {
-            $res = intval($this->attempt_id);
+            $res = (int) $this->attempt_id;
         }
         if (self::DEBUG > 0) {
             error_log(
@@ -503,6 +503,7 @@ class learnpathItem
         }
         $path = $this->get_path();
         $type = $this->get_type();
+
         if (empty($path)) {
             if ($type == 'dir') {
                 return '';
@@ -1077,23 +1078,24 @@ class learnpathItem
                     case 'htm':
                     case 'shtml':
                     case 'css':
-                        $wanted_attributes = [
+                        $wantedAttributes = [
                             'src',
                             'url',
                             '@import',
                             'href',
                             'value',
                         ];
+
                         // Parse it for included resources.
-                        $file_content = file_get_contents($abs_path);
+                        $fileContent = file_get_contents($abs_path);
                         // Get an array of attributes from the HTML source.
                         $attributes = DocumentManager::parse_HTML_attributes(
-                            $file_content,
-                            $wanted_attributes
+                            $fileContent,
+                            $wantedAttributes
                         );
 
                         // Look at 'src' attributes in this file
-                        foreach ($wanted_attributes as $attr) {
+                        foreach ($wantedAttributes as $attr) {
                             if (isset($attributes[$attr])) {
                                 // Find which kind of path these are (local or remote).
                                 $sources = $attributes[$attr];
@@ -3587,7 +3589,7 @@ class learnpathItem
         }
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = intval($this->lp_id);
+        $lp_id = (int) $this->lp_id;
         $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
@@ -4501,7 +4503,7 @@ class learnpathItem
      */
     public function getForumThread($lpCourseId, $lpSessionId = 0)
     {
-        $lpSessionId = intval($lpSessionId);
+        $lpSessionId = (int) $lpSessionId;
         $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -4565,7 +4567,7 @@ class learnpathItem
         $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
         $forumThread = $threadRepo->findOneBy([
             'threadTitle' => "{$this->title} - {$this->db_id}",
-            'forumId' => intval($currentForumId),
+            'forumId' => (int) $currentForumId,
         ]);
 
         if (!$forumThread) {

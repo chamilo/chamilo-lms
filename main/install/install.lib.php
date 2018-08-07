@@ -19,7 +19,7 @@ use Sonata\PageBundle\Entity\PageManager;
  *   of older versions before upgrading.
  */
 
-/*      CONSTANTS */
+/* CONSTANTS */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
 /**
@@ -172,7 +172,15 @@ function checkAccessUrl()
  */
 function getPhpSetting($val)
 {
-    return ini_get($val) == '1' ? 'ON' : 'OFF';
+    $value = ini_get($val);
+    switch ($val) {
+        case 'display_errors':
+            global $originalDisplayErrors;
+            $value = $originalDisplayErrors;
+            break;
+    }
+
+    return $value == '1' ? 'ON' : 'OFF';
 }
 
 /**
@@ -412,19 +420,21 @@ function write_system_config_file($path)
     $fp = @fopen($path, 'w');
 
     if (!$fp) {
-        echo '<strong><font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
-                        <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
-                        You probably do not have write access on Chamilo root directory,
-                        i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
-                        Your problems can be related on two possible causes:<br />
-                        <ul>
-                          <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
-                          <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. If possible, try to switch it off.</li>
-                        </ul>
-                        <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
-                        Please go back to step 5.
-                        <p><input type="submit" name="step5" value="&lt; Back" /></p>
-                        </td></tr></table></form></body></html>';
+        echo '<strong>
+                <font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
+                <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
+                You probably do not have write access on Chamilo root directory,
+                i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
+                Your problems can be related on two possible causes:<br />
+                <ul>
+                  <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
+                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. 
+                  If possible, try to switch it off.</li>
+                </ul>
+                <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
+                Please go back to step 5.
+                <p><input type="submit" name="step5" value="&lt; Back" /></p>
+                </td></tr></table></form></body></html>';
         exit;
     }
 
@@ -738,7 +748,7 @@ function display_requirements(
     $updatePath = '',
     $update_from_version_8 = []
 ) {
-    global $_setting;
+    global $_setting, $originalMemoryLimit;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
@@ -920,7 +930,7 @@ function display_requirements(
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
-                <td class="requirements-value">'.compare_setting_values(ini_get('memory_limit'), REQUIRED_MIN_MEMORY_LIMIT).'</td>
+                <td class="requirements-value">'.compare_setting_values($originalMemoryLimit, REQUIRED_MIN_MEMORY_LIMIT).'</td>
             </tr>
           </table>';
     echo '  </div>';
@@ -933,9 +943,9 @@ function display_requirements(
 
     $course_attempt_name = '__XxTestxX__';
     $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
-
+    $fileToCreate = 'test.html';
     //Just in case
-    @unlink($course_dir.'/test.php');
+    @unlink($course_dir.'/'.$fileToCreate);
     @rmdir($course_dir);
 
     $perms_dir = [0777, 0755, 0775, 0770, 0750, 0700];
@@ -958,17 +968,17 @@ function display_requirements(
             if ($file_course_test_was_created == true) {
                 break;
             }
-            $r = @touch($course_dir.'/test.php', $perm);
+            $r = @touch($course_dir.'/'.$fileToCreate, $perm);
             if ($r === true) {
                 $fil_perm_verified = $perm;
-                if (check_course_script_interpretation($course_dir, $course_attempt_name, 'test.php')) {
+                if (checkCourseScriptCreation($course_dir, $course_attempt_name, $fileToCreate)) {
                     $file_course_test_was_created = true;
                 }
             }
         }
     }
 
-    @unlink($course_dir.'/test.php');
+    @unlink($course_dir.'/'.$fileToCreate);
     @rmdir($course_dir);
 
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
@@ -986,7 +996,7 @@ function display_requirements(
         $courseTestLabel = Display::label(get_lang('Warning'), 'warning');
         $courseTestLabel .= '<br />'.sprintf(
             get_lang('InstallWarningCouldNotInterpretPHP'),
-            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/test.php'
+            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$fileToCreate
         );
     }
 
@@ -1072,8 +1082,8 @@ function display_requirements(
     } else {
         $error = false;
         // First, attempt to set writing permissions if we don't have them yet
-        $perm = octdec('0770');
-        $perm_file = octdec('0770');
+        $perm = api_get_permissions_for_new_directories();
+        $perm_file = api_get_permissions_for_new_files();
         $notWritable = [];
 
         $checked_writable = api_get_path(SYS_APP_PATH);
@@ -1105,6 +1115,7 @@ function display_requirements(
         }
 
         // Second, if this fails, report an error
+
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
             $error = true; ?>
@@ -1134,17 +1145,15 @@ function display_requirements(
             api_get_path(SYS_PLUGIN_PATH).'skype/',
         ];
         $deprecatedToRemove = [];
-
         foreach ($deprecated as $deprecatedDirectory) {
             if (!is_dir($deprecatedDirectory)) {
                 continue;
             }
-
             $deprecatedToRemove[] = $deprecatedDirectory;
         }
 
-        if (count($deprecatedToRemove) > 0) {
-            $error = true; ?>
+        if (count($deprecatedToRemove) > 0) { 
+?>
             <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade'); ?></p>
             <ul>
                 <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {
@@ -1611,6 +1620,8 @@ function panel($content = null, $title = null, $id = null, $style = null)
  * @param string $formFieldName
  * @param string $parameterValue
  * @param string $displayWhenUpdate
+ *
+ * @return string
  */
 function display_configuration_parameter(
     $installType,
@@ -1678,7 +1689,13 @@ function display_configuration_settings_form(
 
     // Parameter 1: administrator's login
     $html = '';
-    $html .= display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('AdminLogin'),
+        'loginForm',
+        $loginForm,
+        $installType == 'update'
+    );
 
     // Parameter 2: administrator's password
     if ($installType != 'update') {
@@ -1687,7 +1704,12 @@ function display_configuration_settings_form(
 
     // Parameters 3 and 4: administrator's names
 
-    $html .= display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('AdminFirstName'),
+        'adminFirstName',
+        $adminFirstName
+    );
     $html .= display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
@@ -1894,8 +1916,6 @@ function get_countries_list_from_array($combo = false)
         "Yemen",
         "Zambia", "Zimbabwe",
     ];
-
-    $country_select = '';
     if ($combo) {
         $country_select = '<select class="selectpicker show-tick" id="country" name="country">';
         $country_select .= '<option value="">--- '.get_lang('SelectOne').' ---</option>';
@@ -1968,24 +1988,24 @@ function compare_setting_values($current_value, $wanted_value)
 }
 
 /**
- * @param $course_dir
- * @param $course_attempt_name
+ * @param string $course_dir
+ * @param string $course_attempt_name
  * @param string $file
  *
  * @return bool
  */
-function check_course_script_interpretation(
+function checkCourseScriptCreation(
     $course_dir,
     $course_attempt_name,
-    $file = 'test.php'
+    $file
 ) {
     $output = false;
     //Write in file
     $file_name = $course_dir.'/'.$file;
-    $content = '<?php echo "123"; exit;';
+    $content = '123';
 
     if (is_writable($file_name)) {
-        if ($handler = @fopen($file_name, "w")) {
+        if ($handler = @fopen($file_name, 'w')) {
             //write content
             if (fwrite($handler, $content)) {
                 $sock_errno = '';
@@ -2126,6 +2146,7 @@ function migrate($chamiloVersion, EntityManager $manager)
 {
     $debug = true;
     $connection = $manager->getConnection();
+
     $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($connection);
 
     // Table name that will store migrations log (will be created automatically,
@@ -2145,7 +2166,9 @@ function migrate($chamiloVersion, EntityManager $manager)
     foreach ($versions as $version) {
         $version->getMigration()->setEntityManager($manager);
     }
+
     $to = null; // if $to == null then schema will be migrated to latest version
+
     echo "<pre>";
     try {
         // Execute migration!
@@ -2165,6 +2188,7 @@ function migrate($chamiloVersion, EntityManager $manager)
                     $counter++;
                 }
             }
+
             echo "<br>DONE!<br>";
         }
 
@@ -2176,6 +2200,7 @@ function migrate($chamiloVersion, EntityManager $manager)
             return false;
         }
     }
+
     echo "</pre>";
 
     return false;
@@ -2266,7 +2291,6 @@ function fixIds(EntityManager $em)
 
         if (!empty($sql) && !empty($newId) && !empty($iid)) {
             $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
-
             $connection->executeQuery($sql);
         }
     }
@@ -2431,6 +2455,7 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseCode = $item['course_code'];
+        $categoryId = (int) $item['category_id'];
 
         $sql = "SELECT * FROM course WHERE code = '$courseCode'";
         $courseInfo = $connection->fetchAssoc($sql);
@@ -2467,7 +2492,7 @@ function fixIds(EntityManager $em)
             if (isset($data) && isset($data['iid'])) {
                 $newId = $data['iid'];
                 $sql = "UPDATE gradebook_link SET ref_id = $newId
-                        WHERE id = $iid";
+                        WHERE id = $iid AND course_code = '$courseCode' AND category_id = $categoryId ";
                 $connection->executeQuery($sql);
             }
         }
@@ -2480,9 +2505,7 @@ function fixIds(EntityManager $em)
     $sql = "SELECT * FROM groups";
     $result = $connection->executeQuery($sql);
     $groups = $result->fetchAll();
-
     $oldGroups = [];
-
     if (!empty($groups)) {
         foreach ($groups as $group) {
             if (empty($group['name'])) {
@@ -2740,6 +2763,216 @@ function fixIds(EntityManager $em)
 
     if ($debug) {
         error_log('Finish fixId function');
+    }
+
+    fixLpId($connection, true);
+}
+
+/**
+ * @param \Doctrine\DBAL\Connection $connection
+ * @param $debug
+ *
+ * @throws \Doctrine\DBAL\DBALException
+ */
+function fixLpId($connection, $debug)
+{
+    if ($debug) {
+        error_log('Fix lp.id lp.iids');
+    }
+
+    $sql = 'SELECT id, title, code FROM course';
+    $result = $connection->query($sql);
+    $courses = $result->fetchAll();
+
+    $sql = 'SELECT id FROM session';
+    $result = $connection->query($sql);
+    $sessions = $result->fetchAll();
+
+    $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
+    $tblCLpItem = Database::get_course_table(TABLE_LP_ITEM);
+    $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
+
+    if (!empty($sessions)) {
+        $sessions = array_column($sessions, 'id');
+        $sessions[] = 0;
+    } else {
+        $sessions = [0];
+    }
+
+    foreach ($courses as $course) {
+        $courseId = $course['id'];
+        $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId AND iid <> id ORDER by iid";
+        $result = $connection->query($sql);
+        if ($debug) {
+            error_log('-------------');
+            error_log("Entering Lps in course #$courseId");
+            error_log($sql);
+        }
+        $lpList = $result->fetchAll();
+        $myOnlyLpList = [];
+        if (!empty($lpList)) {
+            foreach ($lpList as $lpInfo) {
+                $oldId = $lpInfo['id'];
+                $sql = "SELECT * FROM $tblCLpItem WHERE c_id = $courseId AND lp_id = $oldId ORDER by iid";
+                $result = $connection->query($sql);
+                $items = $result->fetchAll();
+                $lpInfo['lp_list'] = $items;
+                $myOnlyLpList[] = $lpInfo;
+            }
+        }
+
+        if (!empty($myOnlyLpList)) {
+            foreach ($myOnlyLpList as $lpInfo) {
+                $lpIid = $lpInfo['iid'];
+                $oldId = $lpInfo['id'];
+                $items = $lpInfo['lp_list'];
+
+                if (empty($items)) {
+                    continue;
+                }
+                $itemList = [];
+                foreach ($items as $subItem) {
+                    $itemList[$subItem['id']] = $subItem['iid'];
+                }
+                $variablesToFix = [
+                    'parent_item_id',
+                    'next_item_id',
+                    'prerequisite',
+                    'previous_item_id',
+                ];
+
+                foreach ($sessions as $sessionId) {
+                    $correctLink = "lp/lp_controller.php?action=view&lp_id=$lpIid&id_session=$sessionId";
+                    $link = "newscorm/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
+                    $secondLink = "lp/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
+                    $sql = "UPDATE $toolTable 
+                        SET link = '$correctLink'
+                        WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
+                    $connection->query($sql);
+                    if ($debug) {
+                        //error_log("Fix wrong c_tool links");
+                        //error_log($sql);
+                    }
+                }
+
+                foreach ($items as $item) {
+                    $itemIid = $item['iid'];
+                    $itemId = $item['id'];
+                    foreach ($variablesToFix as $variable) {
+                        if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
+                            $newId = $itemList[$item[$variable]];
+                            $sql = "UPDATE $tblCLpItem SET $variable = $newId 
+                                    WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
+                            $connection->query($sql);
+                            if ($debug) {
+                                //error_log($sql);
+                            }
+                        }
+                    }
+
+                    if ($item['item_type'] == 'document' && !empty($item['path'])) {
+                        $oldDocumentId = $item['path'];
+                        $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $oldDocumentId";
+                        $result = $connection->query($sql);
+                        $document = $result->fetch();
+                        if (!empty($document)) {
+                            $newDocumentId = $document['iid'];
+                            if (!empty($newDocumentId)) {
+                                $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
+                                    WHERE iid = $itemIid AND c_id = $courseId";
+                                $connection->query($sql);
+                                if ($debug) {
+                                    //error_log("Fix document: ");
+                                    //error_log($sql);
+                                }
+                            }
+                        }
+                    }
+
+                    // c_lp_view
+                    $sql = "UPDATE c_lp_view SET last_item = $itemIid 
+                            WHERE c_id = $courseId AND last_item = $itemId AND lp_id = $oldId";
+                    $connection->query($sql);
+
+                    // c_lp_item_view
+                    $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid 
+                            WHERE c_id = $courseId AND lp_item_id = $itemId";
+                    $connection->query($sql);
+
+                    // Update track_exercises
+                    $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid 
+                            WHERE c_id = $courseId AND orig_lp_id = $oldId AND orig_lp_item_id = $itemId";
+                    $connection->query($sql);
+
+                    // c_forum_thread
+                    $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid 
+                            WHERE c_id = $courseId AND lp_item_id = $itemId";
+                    $connection->query($sql);
+
+                    // orig_lp_item_view_id
+                    $sql = "SELECT * FROM c_lp_view
+                            WHERE c_id = $courseId AND lp_id = $oldId";
+                    $result = $connection->query($sql);
+                    $itemViewList = $result->fetchAll();
+                    if ($itemViewList) {
+                        foreach ($itemViewList as $itemView) {
+                            $userId = $itemView['user_id'];
+                            $oldItemViewId = $itemView['id'];
+                            $newItemView = $itemView['iid'];
+
+                            if (empty($oldItemViewId)) {
+                                continue;
+                            }
+
+                            $sql = "UPDATE track_e_exercises 
+                                SET orig_lp_item_view_id = $newItemView 
+                                WHERE 
+                                  c_id = $courseId AND 
+                                  orig_lp_id = $oldId AND 
+                                  orig_lp_item_id = $itemIid AND 
+                                  orig_lp_item_view_id = $oldItemViewId AND 
+                                  exe_user_id = $userId                                       
+                                  ";
+                            $connection->query($sql);
+
+                            /*$sql = "UPDATE c_lp_item_view
+                                    SET lp_view_id = $newItemView
+                                    WHERE
+                                      lp_view_id = $oldItemViewId AND
+                                      c_id = $courseId
+                                  ";
+                            $connection->query($sql);*/
+                        }
+                    }
+
+                    $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
+                            WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
+                    $connection->query($sql);
+
+                    $sql = "UPDATE $tblCLpItem SET id = iid 
+                            WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
+                    $connection->query($sql);
+                }
+
+                $sql = "UPDATE c_lp_view SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
+                $connection->query($sql);
+
+                $sql = "UPDATE c_forum_forum SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
+                $connection->query($sql);
+
+                // Update track_exercises.
+                $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
+                        WHERE c_id = $courseId AND orig_lp_id = $oldId";
+                $connection->query($sql);
+
+                $sql = "UPDATE $tblCLp SET id = iid WHERE c_id = $courseId AND id = $oldId ";
+                $connection->query($sql);
+            }
+        }
+    }
+
+    if ($debug) {
+        error_log('END Fix lp.id lp.iids');
     }
 }
 

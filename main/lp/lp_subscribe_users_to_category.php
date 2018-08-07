@@ -53,6 +53,7 @@ $message = Display::return_message(get_lang('UserLpCategorySubscriptionDescripti
 // Building the form for Groups
 $form = new FormValidator('lp_edit', 'post', $url);
 $form->addElement('hidden', 'group_form', 1);
+$form->addLabel('', $message);
 
 // Group list
 $groupList = \CourseManager::get_group_list_of_course(
@@ -127,6 +128,7 @@ foreach ($subscribedUsersInCategory as $item) {
 // Building the form for Users
 $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
+$formUsers->addLabel('', $message);
 
 $userMultiSelect = $formUsers->addElement(
     'advmultiselect',

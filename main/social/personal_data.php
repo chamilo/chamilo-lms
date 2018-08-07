@@ -100,7 +100,7 @@ switch ($action) {
             UserManager::createDataPrivacyExtraFields();
 
             // Remove delete agreement if it was sent:
-            UserManager::update_extra_field_value(
+            /*UserManager::update_extra_field_value(
                 $userId,
                 'request_for_legal_agreement_consent_removal',
                 ''
@@ -110,7 +110,7 @@ switch ($action) {
                 $userId,
                 'request_for_legal_agreement_consent_removal_justification',
                 ''
-            );
+            );*/
 
             UserManager::update_extra_field_value(
                 $userId,
@@ -181,7 +181,7 @@ switch ($action) {
                 $userInfo
             );
 
-            $url = api_get_path(WEB_CODE_PATH).'admin/';
+            $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
             $link = Display::url($url, $url);
             $subject = get_lang('RequestForLegalConsentRemoval');
             $content = sprintf(

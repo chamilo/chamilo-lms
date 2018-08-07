@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
-use Chamilo\UserBundle\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
-use ChamiloSession as Session;
 
 /**
  * Session about page
@@ -25,16 +26,19 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
+/** @var Session $session */
 $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
 if (!$session) {
     api_not_allowed(true);
 }
+$htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 $courses = [];
 $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = UserManager::getRepository();
+/** @var SequenceRepository $sequenceResourceRepo */
 $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([
@@ -46,6 +50,7 @@ $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 $sessionValues = new ExtraFieldValue('session');
 
+/** @var Course $sessionCourse */
 foreach ($sessionCourses as $sessionCourse) {
     $courseTags = [];
 
@@ -75,46 +80,48 @@ foreach ($sessionCourses as $sessionCourse) {
         $coachesData[] = $coachData;
     }
 
-    $courseDescriptionTools = $em->getRepository('ChamiloCourseBundle:CCourseDescription')
-        ->findBy(
-            [
-                'cId' => $sessionCourse->getId(),
-                'sessionId' => 0,
-            ],
-            [
-                'id' => 'DESC',
-                'descriptionType' => 'ASC',
-            ]
-        );
+    $cd = new CourseDescription();
+    $cd->set_course_id($sessionCourse->getId());
+    $cd->set_session_id($session->getId());
+    $descriptionsData = $cd->get_description_data();
 
-    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssessment = '';
+    $courseDescription = [];
+    $courseObjectives = [];
+    $courseTopics = [];
+    $courseMethodology = [];
+    $courseMaterial = [];
+    $courseResources = [];
+    $courseAssessment = [];
     $courseCustom = [];
-    foreach ($courseDescriptionTools as $descriptionTool) {
-        switch ($descriptionTool->getDescriptionType()) {
-            case CCourseDescription::TYPE_DESCRIPTION:
-                $courseDescription = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_OBJECTIVES:
-                $courseObjectives = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_TOPICS:
-                $courseTopics = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_METHODOLOGY:
-                $courseMethodology = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_COURSE_MATERIAL:
-                $courseMaterial = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_RESOURCES:
-                $courseResources = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_ASSESSMENT:
-                $courseAssessment = $descriptionTool;
-                break;
-            case CCourseDescription::TYPE_CUSTOM:
-                $courseCustom[] = $descriptionTool;
-                break;
+
+    if (!empty($descriptionsData['descriptions'])) {
+        foreach ($descriptionsData['descriptions'] as $descriptionInfo) {
+            switch ($descriptionInfo['description_type']) {
+                case CCourseDescription::TYPE_DESCRIPTION:
+                    $courseDescription[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_OBJECTIVES:
+                    $courseObjectives[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_TOPICS:
+                    $courseTopics[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_METHODOLOGY:
+                    $courseMethodology[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_COURSE_MATERIAL:
+                    $courseMaterial[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_RESOURCES:
+                    $courseResources[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_ASSESSMENT:
+                    $courseAssessment[] = $descriptionInfo;
+                    break;
+                case CCourseDescription::TYPE_CUSTOM:
+                    $courseCustom[] = $descriptionInfo;
+                    break;
+            }
         }
     }
 
@@ -206,8 +213,8 @@ if ($checker) {
         BuyCoursesPlugin::PRODUCT_TYPE_SESSION
     );
     if ($sessionIsPremium) {
-        Session::write('SessionIsPremium', true);
-        Session::write('sessionId', $sessionId);
+        ChamiloSession::write('SessionIsPremium', true);
+        ChamiloSession::write('sessionId', $sessionId);
     }
 }
 
@@ -216,7 +223,9 @@ $redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
 $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
 $coursesCount = count($coursesInThisSession);
-$redirectToSession = $coursesCount == 1 && $redirectToSession ? $redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
+$redirectToSession = $coursesCount == 1 && $redirectToSession
+    ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
+    : $redirectToSession;
 
 $template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);

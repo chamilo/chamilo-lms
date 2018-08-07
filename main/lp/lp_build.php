@@ -44,7 +44,7 @@ if (api_is_in_gradebook()) {
         'name' => get_lang('ToolGradebook'),
     ];
 }
-$interbreadcrumb[] = ['url' => 'lp_controller.php?action=list?'.api_get_cidreq(), 'name' => get_lang('LearningPaths')];
+$interbreadcrumb[] = ['url' => 'lp_controller.php?action=list&'.api_get_cidreq(), 'name' => get_lang('LearningPaths')];
 $interbreadcrumb[] = ['url' => '#', "name" => $learnPath->get_name()];
 
 // Theme calls.

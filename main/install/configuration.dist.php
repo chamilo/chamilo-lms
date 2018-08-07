@@ -112,6 +112,16 @@ $_configuration['hosting_total_size_limit'] = 0;
  * don't need it. These settings are for simple Origin Pull CDNs and are
  * experimental. Enable only if you really know what you're doing.
  * This might conflict with multiple-access urls.
+ * Please note that recent browsers forbid the loading of resources from
+ * a different portal URL then where they are, due to CORS rules.
+ * To allow for CDN usage with different URLs, you need to specifically
+ * allow CORS Access-Control-Allow-Origin for your main Chamilo URL.
+ * This has to be done at the web server level, because Chamilo's PHP code
+ * doesn't change HTTP headers of all files served from the Chamilo directory.
+ * To do that on Apache, use
+ *   Header set Access-Control-Allow-Origin "http(s)://main-chamilo-url"
+ * in Nginx:
+ *   add_header 'Access-Control-Allow-Origin' 'http(s)://main-chamilo-url';.
  */
 // Set the following setting to true to start using the CDN
 $_configuration['cdn_enable'] = false;
@@ -374,7 +384,20 @@ $_configuration['agenda_colors'] = [
 */
 // ------
 //
-// Save some tool titles with HTML editor
+// Save some tool titles with HTML editor. Require DB changes:
+/*
+ALTER TABLE course_category CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_course_description CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_thematic CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_quiz CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE c_lp_category CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL;
+ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL;
+-- Only with allow_portfolio_tool enabled
+ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
+--
+*/
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
@@ -440,18 +463,28 @@ $_configuration['agenda_colors'] = [
 // X-Frame-Options tells the browser whether you want to allow your site to
 // be framed or not. By preventing a browser from framing your site you can
 // defend against attacks like clickjacking.
-// Recommended value "x-frame-options: SAMEORIGIN".
-//$_configuration['security_x_frame_options'] = 'x-frame-options: SAMEORIGIN';
+// If defining a URL here, it should define the URL(s) from which your content
+// should be visible, not the URLs from which your site accepts content.
+// For example, if your main URL (root_web above) is https://11.chamilo.org/,
+// then this setting should be: 'ALLOW-FROM https://11.chamilo.org'.
+// These headers only apply to pages where Chamilo is responsible of the HTTP
+// headers generation (i.e. ".php" files). It does not apply to static files.
+// If playing with this feature, make sure you also update your web server
+// configuration to add the right headers for static files. See CDN
+// configuration documentation above (search for "add_header") for more
+// information.
+// Recommended (strict) value for this setting, if enabled: "SAMEORIGIN".
+//$_configuration['security_x_frame_options'] = 'SAMEORIGIN';
 //
 // X-XSS-Protection sets the configuration for the cross-site scripting
 // filter built into most browsers.
-// Recommended value "X-XSS-Protection: 1; mode=block".
-//$_configuration['security_xss_protection'] = 'X-XSS-Protection: 1; mode=block';
+// Recommended value "1; mode=block".
+//$_configuration['security_xss_protection'] = '1; mode=block';
 //
 // X-Content-Type-Options stops a browser from trying to MIME-sniff the
 // content type and forces it to stick with the declared content-type. The only
-// valid value for this header is "X-Content-Type-Options: nosniff".
-//$_configuration['security_x_content_type_options'] = 'X-Content-Type-Options: nosniff';
+// valid value for this header is "nosniff".
+//$_configuration['security_x_content_type_options'] = 'nosniff';
 //
 // Referrer Policy is a new header that allows a site to control how much
 // information the browser includes with navigation away from a document
@@ -481,6 +514,10 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // Hide survey edition tools for all or some surveys.
 //Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked
 //$_configuration['hide_survey_edition'] = ['codes' => []];
+// Allows to set the date and time of availability for surveys. Requires DB changes:
+// ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL, CHANGE avail_till avail_till DATETIME DEFAULT NULL;
+// Requires change the Doctrine type from date to datime in CSurvey::$availFrom and CSurvey::$availTill
+//$_configuration['allow_survey_availability_datetime'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:
@@ -522,6 +559,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
 //$_configuration['private_messages_about_user'] = false;
+// Allow the messages to be visible for the students
+//$_configuration['private_messages_about_user_visible_to_user'] = false;
 // Allow send email notification per exercise
 //ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
 //$_configuration['allow_notification_setting_per_exercise'] = false;
@@ -603,7 +642,7 @@ $_configuration['score_grade_model'] = [
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
 
-// Skills can only visible for admins, teachers (related to a user via a course),
+// Skills can only be visible for admins, teachers (related to a user via a course),
 // and HRM users (if related to a user).
 // $_configuration['allow_private_skills'] = false;
 // Additional gradebook dependencies BT#13099
@@ -731,6 +770,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Order sessions
 // Requires DB change: ALTER TABLE session ADD COLUMN position INT DEFAULT 0;
 // Requires edit Entity Session: src/Chamilo/CoreBundle/Entity/Session.php uncomment "position" variable.
+// Requires uncomment the position get and set
 //$_configuration['session_list_order'] = false;
 
 // Show skills as a hierarchical table
@@ -800,17 +840,17 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 /*
 CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
-ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id);
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id) ON DELETE SET NULL;
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
 */
 //$_configuration['allow_portfolio_tool'] = false;
 
-// Disable average and best columns in gradebook see BT#14126
-//$_configuration['disable_gradebook_stats'] = false;
+// Enable best score column in gradebook. Previously called disable_gradebook_stats
+//$_configuration['gradebook_enable_best_score'] = false;
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;
@@ -833,15 +873,90 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Enable speed controller in video player
 // $_configuration['video_features'] = ['features' => ['speed']];
 
+// Disable token verification when sending a message
+// $_configuration['disable_token_in_new_message'] = false;
+
 // My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
 // $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
+
+// Allow set courses in session in read-only mode. Require DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, filter, created_at)
+VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1, 1, NOW());
+*/
+// $_configuration['session_courses_read_only_mode'] = false;
+
+// Allow SCORM packages when importing a course
+// $_configuration['allow_import_scorm_package_in_course_builder'] = false;
+
+// Hide announcement "sent to" label
+// $_configuration['hide_announcement_sent_to_users_info'] = false;
+
+// Hide gradebook graph
+// $_configuration['gradebook_hide_graph'] = false;
+
+// Hide gradebook "download report in PDF" button
+// $_configuration['gradebook_hide_pdf_report_button'] = false;
+
+// Show pending survey link in user menu
+// $_configuration['show_pending_survey_in_menu'] = false;
+
+// Show multiple conditions to user during sign up process
+// Example with a GDPR condition
+/*$_configuration['show_conditions_to_user'] = [
+    'conditions' => [
+        [
+            'variable' => 'gdpr', // internal extra field name
+            'display_text' => 'GDPRTitle', // checkbox title will be translated with get_lang('GDPRTitle')
+            'text_area' => 'GDPRTextArea', // this will be translated using get_lang('GDPRTextArea')
+        ],
+        [
+            'variable' => 'my_terms',
+            'display_text' => 'My test conditions',
+            'text_area' => 'This is a long text area, with lot of terms and conditions ... ',
+        ],
+    ],
+];*/
+
+// Hide LP item prerequisite label in the LP view
+//$_configuration['hide_accessibility_label_on_lp_item'] = true;
+
+// Round score in exercise category export
+//$_configuration['exercise_category_round_score_in_export'] = false;
+
+// Redirect index to url for logged in users
+// In this example the index.php will be redirected to user_portal.php for logged in users
+//$_configuration['redirect_index_to_url_for_logged_users'] = 'user_portal.php';
+
+// Teachers can CRUD classes
+// ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
+//$_configuration['allow_teachers_to_classes'] = false;
+
+// GDPR: European's General Data Protection Rules activation option
+// Set to true to automatically enable a new personal data page inside the social network menu
+// $_configuration['enable_gdpr'] = false;
+
+// GDPR requires users to be informed of the Data Protection Officer name and contact point
+// These can only be defined here for now, but will be moved to web settings in the future.
+// Name of the person or organization that is responsible for the treatment of personal info
+//$_configuration['data_protection_officer_name'] = '';
+// A description of the role of the DP Officer in this context
+//$_configuration['data_protection_officer_role'] = '';
+// An e-mail address where to contact the data protection officer for queries
+//$_configuration['data_protection_officer_email'] = '';
+
+// Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
+// to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
+/*$_configuration['webservice_validation'] = [
+    'options' => [
+        'wsdl' => 'https://example.com/soap?wsdl',
+        'check_login_function' => 'myWebServiceFunctionToLogin'
+    ]
+];*/
 
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
-// You need add a new option called "confirmation" to the registration settings
-//INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
-// ------ (End) Custom DB changes
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes

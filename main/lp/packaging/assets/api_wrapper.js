@@ -6,11 +6,13 @@
  * @author	Yannick Warnier  - inspired by the ADLNet documentation on SCORM content-side API
  * @package scorm.js
  */
+
 /**
  * Initialisation of the SCORM API section.
  * Find the SCO functions (startTimer, computeTime, etc in the second section)
  * Find the Chamilo-proper functions (checkAnswers, etc in the third section)
  */
+
 var _debug = true;
 var findAPITries = 0;
 var _apiHandle = null; //private variable
@@ -27,6 +29,8 @@ var _InvalidSetValue = 402;
 var _ElementIsReadOnly = 403;
 var _ElementIsWriteOnly = 404;
 var _IncorrectDataType = 405;
+var startTime;
+var exitPageStatus;
 
 /**
  * Gets the API handle right into the local API object and ensure there is only one.
@@ -78,11 +82,12 @@ function getAPI()
     }
     return MyAPI;
 }
+
 /**
  * Handles error codes (prints the error if it has a description)
  * @return	int	Error code from LMS's API
  */
-function ErrorHandler()
+function errorHandler()
 {
     if (API == null) {
         alert("Unable to locate the LMS's API. Cannot determine LMS error code");
@@ -96,17 +101,29 @@ function ErrorHandler()
                 errDescription += "\n";
                 errDescription += api.LMSGetDiagnostic(null);
             }
-            console.log(errDescription);
+            addDebug(errDescription);
         } else {
             var errDescription = API.LMSGetErrorString(errCode);
             if (_debug) {
                 errDescription += "\n";
                 errDescription += api.LMSGetDiagnostic(null);
             }
-            console.log(errDescription);
+            addDebug(errDescription);
         }
     }
     return errCode;
+}
+
+function addDebug(message) {
+    if (_debug && window.console) {
+        console.log(message);
+    }
+}
+
+function addDebugTable(message) {
+    if (_debug && window.console) {
+        console.table(message);
+    }
 }
 
 /**
@@ -119,9 +136,10 @@ function doLMSInitialize()
         alert(errMsgLocate + "\nLMSInitialize failed");
         return false;
     }
+
     var result = API.LMSInitialize("");
     if (result.toString() != "true") {
-        var err = ErrorHandler();
+        var err = errorHandler();
     }
     return result.toString();
 }
@@ -138,7 +156,7 @@ function doLMSFinish()
     } else {
         var result = API.LMSFinish('');
         if (result.toString() != "true") {
-            var err = ErrorHandler();
+            var err = errorHandler();
         }
     }
     return result.toString();
@@ -152,16 +170,18 @@ function doLMSGetValue(name)
 {
     if (API == null) {
         alert(errMsgLocate + "\nLMSGetValue was not successful.");
-        return "";
+        return '';
     } else {
         var value = API.LMSGetValue(name);
         var errCode = API.LMSGetLastError().toString();
         if (errCode != _NoError) {
             // an error was encountered so display the error description
             var errDescription = API.LMSGetErrorString(errCode);
-            alert("LMSGetValue(" + name + ") failed. \n" + errDescription);
-            return "";
+            addDebug("LMSGetValue(" + name + ") failed. \n" + errDescription)
+            return '';
         }
+
+        return value.toString();
     }
 }
 
@@ -179,7 +199,7 @@ function doLMSSetValue(name, value)
     } else {
         var result = API.LMSSetValue(name, value);
         if (result.toString() != "true") {
-            var err = ErrorHandler();
+            var err = errorHandler();
         }
     }
     return;
@@ -196,7 +216,7 @@ function doLMSCommit()
     } else {
         var result = API.LMSCommit("");
         if (result != "true") {
-            var err = ErrorHandler();
+            var err = errorHandler();
         }
     }
     return result.toString();
@@ -224,7 +244,7 @@ function doLMSGetErrorString(errorCode)
         alert(errMsgLocate + "\nLMSGetErrorString was not successful.");
     }
 
-   return API.LMSGetErrorString(errorCode).toString();
+    return API.LMSGetErrorString(errorCode).toString();
 }
 
 /**
@@ -236,15 +256,9 @@ function doLMSGetDiagnostic(errorCode)
         alert(errMsgLocate + "\nLMSGetDiagnostic was not successful.");
     }
 
-   return API.LMSGetDiagnostic(errorCode).toString();
+    return API.LMSGetDiagnostic(errorCode).toString();
 }
 
-/**
- * Second section. The SCO functions are located here (handle time and score messaging to SCORM API)
- * Initialisation
- */
-var startTime;
-var exitPageStatus;
 /**
  * Initialise page values
  */
@@ -379,18 +393,10 @@ function unloadPage(status)
 {
     if (!exitPageStatus)
     {
-           // doQuit( status );
+        // doQuit( status );
     }
 }
-/**
- * Third section - depending on Chamilo - check answers and set score
- */
-var questions = new Array();
-var questions_answers = new Array();
-var questions_answers_correct = new Array();
-var questions_types = new Array();
-var questions_score_max = new Array();
-var questions_answers_ponderation = new Array();
+
 /**
  * Checks the answers on the test formular page
  */
@@ -400,13 +406,10 @@ function checkAnswers(interrupted)
     var status = 'not attempted';
     var scoreMax = 0;
 
-    if (_debug) {
-        console.log('questions_answers_correct:');
-        console.log(questions_answers_correct);
-    }
+    addDebug('Number of questions: '+ questions.length);
 
     for (var i=0; i < questions.length; i++) {
-        if (questions[i] != undefined && questions[i] != null){
+        if (questions[i] != undefined && questions[i] != null) {
             var idQuestion = questions[i];
             var type = questions_types[idQuestion];
             var interactionScore = 0;
@@ -414,69 +417,45 @@ function checkAnswers(interrupted)
             var interactionCorrectResponses = '';
             var interactionType = '';
 
-            if (_debug) {
-                console.log('Type: ' +type);
-                console.log('idQuestion: ' +idQuestion);
-                console.log('questions_answers: ');
-                console.log(questions_answers[idQuestion]);
-                console.log('questions_answers_ponderation: ');
-                console.log(questions_answers_ponderation[idQuestion]);
-                console.log('questions_answers_correct: ');
-                console.log(questions_answers_correct[idQuestion]);
-            }
+            addDebug('idQuestion: ' +idQuestion + ', Type: ' +type);
+            addDebug('questions_answers: ');
+            addDebugTable(questions_answers[idQuestion]);
+            addDebug('questions_answers_ponderation: ');
+            addDebugTable(questions_answers_ponderation[idQuestion]);
+            addDebug('questions_answers_correct: ');
+            addDebugTable(questions_answers_correct[idQuestion]);
 
-            if (type == 'mcma') {
-                interactionType = 'choice';
-                var myScore = 0;
-                for(var j=0; j<questions_answers[idQuestion].length;j++) {
-                    var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-                    if (answer.checked) {
-                        interactionAnswers += idAnswer+'__|';// changed by isaac flores
-                        myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                    }
-                }
-                interactionScore = myScore;
-                scoreMax += questions_score_max[idQuestion];
-                if (_debug) {
-                    console.log("Score: "+myScore);
-                }
-            } else if (type == 'mcua') {
-                interactionType = 'choice';
-                var myScore = 0;
-                for (var j=0; j<questions_answers[idQuestion].length;j++) {
-                    var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
-                    if (answer.checked) {
-                        interactionAnswers += idAnswer;
-                        if (_debug) {
-                            console.log("idAnswer: "+idAnswer);
-                            console.log("questions_answers_correct: "+questions_answers_correct[idQuestion][idAnswer]);
-                        }
-                        if (questions_answers_correct[idQuestion][idAnswer] == idAnswer) {
-                            if (questions_answers_ponderation[idQuestion][idAnswer]) {
-                                myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                            } else {
-                                myScore++;
-                            }
+            switch (type) {
+                case 'mcma':
+                    interactionType = 'choice';
+                    var myScore = 0;
+                    for(var j = 0; j< questions_answers[idQuestion].length;j++) {
+                        var idAnswer = questions_answers[idQuestion][j];
+                        var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
+                        if (answer.checked) {
+                            interactionAnswers += idAnswer+'__|';// changed by isaac flores
+                            myScore += questions_answers_ponderation[idQuestion][idAnswer];
                         }
                     }
-                }
-                if (_debug) {
-                    console.log("Score: "+myScore);
-                }
-                interactionScore = myScore;
-                scoreMax += questions_score_max[idQuestion];
-            } else if (type == 'tf') {
-                interactionType = 'true-false';
-                var myScore = 0;
-                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
-                    var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_' + idQuestion + '_tf_' + (idAnswer));
-                    if (answer.checked.value) {
-                        interactionAnswers += idAnswer;
-                        for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
-                            if (questions_answers_correct[idQuestion][k] == idAnswer) {
+                    interactionScore = myScore;
+                    scoreMax += questions_score_max[idQuestion];
+                    addDebug("Score: "+myScore);
+                    break;
+                case 'mcua':
+                    interactionType = 'choice';
+                    var myScore = 0;
+                    for (var j = 0; j<questions_answers[idQuestion].length; j++) {
+                        var idAnswer = questions_answers[idQuestion][j];
+                        var elementId = 'question_'+(idQuestion)+'_unique_'+(idAnswer);
+                        var answer = document.getElementById(elementId);
+                        if (answer.checked) {
+                            addDebug('Element id # "'+ elementId +'" was checked');
+                            interactionAnswers += idAnswer;
+                            addDebug("List of correct answers: "+questions_answers_correct[idQuestion]);
+                            addDebug('Score for this answer: ' + questions_answers_ponderation[idQuestion][idAnswer]);
+                            addDebug("idAnswer: "+idAnswer);
+                            addDebug("Option selected: "+questions_answers_correct[idQuestion][idAnswer]);
+                            if (questions_answers_correct[idQuestion][idAnswer] == 1) {
                                 if (questions_answers_ponderation[idQuestion][idAnswer]) {
                                     myScore += questions_answers_ponderation[idQuestion][idAnswer];
                                 } else {
@@ -485,132 +464,166 @@ function checkAnswers(interrupted)
                             }
                         }
                     }
-                }
-                if (_debug) {
-                    console.log("Score: "+myScore);
-                }
-                interactionScore = myScore;
-                scoreMax += questions_score_max[idQuestion];
-            } else if (type == 'fib') {
-                interactionType = 'fill-in';
-                var myScore = 0;
-                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
-                    var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
-                    if (answer.value) {
-                        interactionAnswers += answer.value + '__|';//changed by isaac flores
-                        for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
-                            if (questions_answers_correct[idQuestion][k] == answer.value) {
-                                if (questions_answers_ponderation[idQuestion][idAnswer]) {
-                                    myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                                } else {
-                                    myScore++;
+                    addDebug("Score: "+myScore);
+                    interactionScore = myScore;
+                    scoreMax += questions_score_max[idQuestion];
+                    break;
+                case 'tf':
+                    interactionType = 'true-false';
+                    var myScore = 0;
+                    for (var j = 0; j < questions_answers[idQuestion].length; j++) {
+                        var idAnswer = questions_answers[idQuestion][j];
+                        var answer = document.getElementById('question_' + idQuestion + '_tf_' + (idAnswer));
+                        if (answer.checked.value) {
+                            interactionAnswers += idAnswer;
+                            for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
+                                if (questions_answers_correct[idQuestion][k] == idAnswer) {
+                                    if (questions_answers_ponderation[idQuestion][idAnswer]) {
+                                        myScore += questions_answers_ponderation[idQuestion][idAnswer];
+                                    } else {
+                                        myScore++;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (_debug) {
-                    console.log("Score: "+myScore);
-                }
-                interactionScore = myScore;
-                scoreMax += questions_score_max[idQuestion];
-            } else if (type == 'matching') {
-                interactionType = 'matching';
-                var myScore = 0;
-                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
-                    var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_' + (idQuestion) + '_matching_' + (idAnswer));
+                    addDebug("Score: "+  myScore);
+                    interactionScore = myScore;
+                    scoreMax += questions_score_max[idQuestion];
+                    break;
+                case 'fib':
+                    interactionType = 'fill-in';
+                    var myScore = 0;
+                    for (var j = 0; j < questions_answers[idQuestion].length; j++) {
+                        var idAnswer = questions_answers[idQuestion][j];
+                        var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
+                        if (answer.value) {
+                            interactionAnswers += answer.value + '__|';//changed by isaac flores
+                            for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
+                                if (questions_answers_correct[idQuestion][k] == answer.value) {
+                                    if (questions_answers_ponderation[idQuestion][idAnswer]) {
+                                        myScore += questions_answers_ponderation[idQuestion][idAnswer];
+                                    } else {
+                                        myScore++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    addDebug("Score: "+myScore);
+                    interactionScore = myScore;
+                    scoreMax += questions_score_max[idQuestion];
+                    break;
+                case 'matching':
+                    interactionType = 'matching';
+                    var myScore = 0;
+                    addDebug("List of correct answers: ");
+                    console.log(questions_answers_correct[idQuestion]);
+                    for (var j = 0; j < questions_answers[idQuestion].length; j++) {
+                        var idAnswer = questions_answers[idQuestion][j];
+                        var elementId = 'question_' + (idQuestion) + '_matching_' + (idAnswer);
+
+                        addDebug("---------idAnswer #"+idAnswer+'------------------');
+                        addDebug("Checking element #"+elementId);
+
+                        var answer = document.getElementById(elementId);
+
+                        if (answer && answer.value) {
+                            interactionAnswers += answer.value + '__|';//changed by isaac flores
+                            for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
+                                var left = questions_answers_correct[idQuestion][k][0];
+                                var right = questions_answers_correct[idQuestion][k][1];
+                                addDebug('Left ' + left);
+                                addDebug('Right ' + right);
+                                addDebug('answer.value ' + answer.value);
+
+                                if (right == idAnswer && left == answer.value) {
+                                    addDebug('Score for this answer: ' + questions_answers_ponderation[idQuestion][idAnswer]);
+                                    if (questions_answers_ponderation[idQuestion][idAnswer]) {
+                                        myScore += questions_answers_ponderation[idQuestion][idAnswer];
+                                    } else {
+                                        // myScore++;
+                                    }
+                                }
+                            }
+                        }
+                        addDebug("Partial score: "+myScore);
+                        addDebug("--------- end --- idAnswer #"+idAnswer+'------------------');
+                    }
+                    addDebug("Score: "+myScore);
+                    interactionScore = myScore;
+                    scoreMax += questions_score_max[idQuestion];
+                    break;
+                case 'free':
+                    //ignore for now as a score cannot be given
+                    interactionType = 'free';
+                    var answer = document.getElementById('question_'+(idQuestion)+'_free');
                     if (answer && answer.value) {
-                        interactionAnswers += answer.value + '__|';//changed by isaac flores
-                        for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
-                            var left = questions_answers_correct[idQuestion][k][0];
-                            var right = questions_answers_correct[idQuestion][k][1];
-                            if (left == idAnswer && right == answer.value) {
-                                if (questions_answers_ponderation[idQuestion][idAnswer]) {
-                                    myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                                } else {
-                                    myScore++;
-                                }
+                        interactionAnswers += answer.value
+                    }
+
+                    //interactionScore = questions_score_max[idQuestion];
+                    interactionScore = 0;
+                    scoreMax += questions_score_max[idQuestion];
+
+                    //interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
+                    //correct responses work by pattern, see SCORM Runtime Env Doc
+                    //interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
+                    break;
+                case 'hotspot':
+                    interactionType = 'sequencing';
+                    interactionScore = 0;
+                    //if(question_score && question_score[idQuestion]){
+                    //	interactionScore = question_score[idQuestion];
+                    //} //else, 0
+                    //interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
+                    //correct responses work by pattern, see SCORM Runtime Env Doc
+                    //for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+                    //{
+                    //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
+                    //}
+                    break;
+                case 'exact':
+                    interactionType = 'exact';
+                    interactionScore = 0;
+                    var real_answers = new Array();
+                    for (var j = 0; j < questions_answers[idQuestion].length; j++) {
+                        var idAnswer = questions_answers[idQuestion][j];
+                        var answer = document.getElementById('question_' + (idQuestion) + '_exact_' + (idAnswer));
+
+                        if (answer.checked == true) {
+                            interactionAnswers += idAnswer+', ';
+                            if (questions_answers_correct[idQuestion][idAnswer] != 0) {
+                                real_answers[j] = true;
+                            } else {
+                                real_answers[j] = false;
+                            }
+                        } else {
+                            if (questions_answers_correct[idQuestion][idAnswer] != 0) {
+                                real_answers[j] = false;
+                            } else {
+                                real_answers[j] = true;
                             }
                         }
                     }
-                }
-                if (_debug) {
-                    console.log("Score: "+myScore);
-                }
-                interactionScore = myScore;
-                scoreMax += questions_score_max[idQuestion];
-            } else if (type == 'free') {
-                //ignore for now as a score cannot be given
-                interactionType = 'free';
-                var answer = document.getElementById('question_'+(idQuestion)+'_free');
-                if (answer && answer.value) {
-                    interactionAnswers += answer.value
-                }
 
-                //interactionScore = questions_score_max[idQuestion];
-                interactionScore = 0;
-                scoreMax += questions_score_max[idQuestion];
-
-                //interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
-            } else if (type == 'hotspot') {
-                interactionType = 'sequencing';
-                interactionScore = 0;
-                //if(question_score && question_score[idQuestion]){
-                //	interactionScore = question_score[idQuestion];
-                //} //else, 0
-                //interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                //{
-                //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
-                //}
-            } else if (type == 'exact') {
-                interactionType = 'exact';
-                interactionScore = 0;
-                var real_answers = new Array();
-                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
-                    var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_' + (idQuestion) + '_exact_' + (idAnswer));
-
-                    if (answer.checked == true) {
-                        interactionAnswers += idAnswer+', ';
-                        if (questions_answers_correct[idQuestion][idAnswer] != 0) {
-                            real_answers[j] = true;
-                        } else {
-                            real_answers[j] = false;
-                        }
-                    } else {
-                        if (questions_answers_correct[idQuestion][idAnswer] != 0) {
-                            real_answers[j] = false;
-                        } else {
-                            real_answers[j] = true;
+                    var final_answer = true;
+                    for (var z = 0; z < real_answers.length; z++) {
+                        if (real_answers[z] == false) {
+                            final_answer = false;
                         }
                     }
-                }
-
-                var final_answer = true;
-                for (var z = 0; z < real_answers.length; z++) {
-                    if (real_answers[z] == false) {
-                        final_answer = false;
+                    interactionScore = 0;
+                    addDebug(real_answers);
+                    if (final_answer) {
+                        //getting only the first score where we save the weight of all the question
+                        interactionScore = questions_answers_ponderation[idQuestion][1];
                     }
-                }
-                interactionScore = 0;
-                console.log(real_answers);
-                if (final_answer) {
-                     //getting only the first score where we save the weight of all the question
-                     interactionScore = questions_answers_ponderation[idQuestion][1];
-                }
-                if (_debug) {
-                    console.log("Score: "+interactionScore);
-                }
-                scoreMax += questions_score_max[idQuestion];
+                    addDebug("Score: "+interactionScore);
+                    scoreMax += questions_score_max[idQuestion];
+                    break;
             }
             tmpScore += interactionScore;
-
             doLMSSetValue('cmi.interactions.'+idQuestion+'.id', 'Q'+idQuestion);
             doLMSSetValue('cmi.interactions.'+idQuestion+'.type', interactionType);
             doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response', interactionAnswers);
@@ -621,29 +634,81 @@ function checkAnswers(interrupted)
     doLMSSetValue('cmi.core.score.max', scoreMax);
     doLMSSetValue('cmi.core.score.raw', tmpScore);
 
-    //get status
+    // Get status
     var mastery_score = doLMSGetValue('cmi.student_data.mastery_score');
     if (mastery_score <= 0) {
         mastery_score = (scoreMax * 0.80);
     }
-    if (tmpScore > mastery_score) {
+    if (tmpScore >= mastery_score) {
         status = 'passed';
     } else {
         status = 'failed';
     }
 
-    if (_debug) {
-        console.log('student_score: ' + tmpScore);
-        console.log('mastery_score: ' + mastery_score);
-        console.log('cmi.core.score.max: ' + scoreMax);
-        console.log('cmi.core.lesson_status: ' + status);
-    }
-
+    addDebug('student_score: ' + tmpScore);
+    addDebug('mastery_score: ' + mastery_score);
+    addDebug('cmi.core.score.max: ' + scoreMax);
+    addDebug('cmi.core.lesson_status: ' + status);
     doLMSSetValue('cmi.core.lesson_status', status);
-
     if (interrupted && (status != 'completed') && (status != 'passed')) {
         doLMSSetValue('cmi.core.exit', 'suspended');
     }
 
     return false; //do not submit the form
+}
+
+(function($){
+    //Shuffle all rows, while keeping the first column
+    //Requires: Shuffle
+    $.fn.shuffleRows = function(){
+        return this.each(function(){
+            var main = $(/table/i.test(this.tagName) ? this.tBodies[0] : this);
+            var firstElem = [], counter=0;
+            main.children().each(function(){
+                firstElem.push(this.firstChild);
+            });
+            main.shuffle();
+            main.children().each(function(){
+                this.insertBefore(firstElem[counter++], this.firstChild);
+            });
+        });
+    }
+    /* Shuffle is required */
+    $.fn.shuffle = function() {
+        return this.each(function(){
+            var items = $(this).children();
+            return (items.length)
+                ? $(this).html($.shuffle(items))
+                : this;
+        });
+    }
+
+    $.shuffle = function(arr) {
+        for(
+            var j, x, i = arr.length; i;
+            j = parseInt(Math.random() * i),
+                x = arr[--i], arr[i] = arr[j], arr[j] = x
+        );
+        return arr;
+    }
+})(jQuery);
+
+/*
+* Assigns any event handler to any element
+* @param	object	Element on which the event is added
+* @param	string	Name of event
+* @param	string	Function to trigger on event
+* @param	boolean	Capture the event and prevent
+*/
+function addEvent(elm, evType, fn, useCapture)
+{
+    if (elm.addEventListener) {
+        elm.addEventListener(evType, fn, useCapture);
+        return true;
+    } else if(elm.attachEvent) {
+        var r = elm.attachEvent('on' + evType, fn);
+        return r;
+    } else {
+        elm['on' + evType] = fn;
+    }
 }

@@ -6,25 +6,23 @@ require_once __DIR__.'/../inc/global.inc.php';
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
+$course_id = api_get_course_int_id();
+$course_code = api_get_course_id();
+$sessionId = api_get_session_id();
+
+$this_section = SECTION_COURSES;
 if ($from == 'myspace') {
     $from_myspace = true;
     $this_section = "session_my_space";
-} else {
-    $this_section = SECTION_COURSES;
 }
 
 // Access restrictions.
-$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() ||
-    api_is_session_admin() || api_is_drh() || api_is_course_tutor();
+$is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
     exit;
 }
-
-$course_id = api_get_course_int_id();
-$course_code = api_get_course_id();
-$sessionId = api_get_session_id();
 
 // jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_group_reporting&course_id='.$course_id.'&session_id='.$sessionId;

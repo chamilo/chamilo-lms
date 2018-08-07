@@ -90,7 +90,7 @@ if (!empty($groupId)) {
 } else {
     if ($origin != 'learnpath') {
         if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir'
+            !empty($_GET['id']) || $display_upload_form || $action == 'create_dir'
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
@@ -110,9 +110,7 @@ if (!empty($groupId)) {
         if ($action == 'upload_form') {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
         }
-        if ($action == 'settings') {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditToolOptions')];
-        }
+
         if ($action == 'create_dir') {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateAssignment')];
         }
@@ -145,32 +143,6 @@ $content = null;
 
 // For teachers
 switch ($action) {
-    case 'settings':
-        //if posts
-        if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
-            updateSettings(
-                $courseInfo,
-                $_POST['show_score'],
-                $_POST['student_delete_own_publication']
-            );
-            Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
-            header('Location: '.$currentUrl);
-            exit;
-        }
-
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-
-        $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication') == 1 ? 1 : 0;
-        /*	Display of tool options */
-        $content = settingsForm(
-            [
-                'show_score' => $courseInfo['show_score'],
-                'student_delete_own_publication' => $studentDeleteOwnPublication,
-            ]
-        );
-        break;
     case 'add':
     case 'create_dir':
         if (!($is_allowed_to_edit || $isTutor)) {

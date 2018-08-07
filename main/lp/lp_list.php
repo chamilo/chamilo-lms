@@ -55,7 +55,7 @@ $sessionId = api_get_session_id();
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 
 /* Introduction section (editable by course admins) */
-$introductionSection = Display::return_introduction_section(
+$introduction = Display::return_introduction_section(
     TOOL_LEARNPATH,
     [
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH)
@@ -936,7 +936,7 @@ $template->assign('is_invitee', api_is_invitee());
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);
-$template->assign('introduction_section', $introductionSection);
+$template->assign('introduction', $introduction);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);

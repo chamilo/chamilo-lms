@@ -56,17 +56,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
         }
     }
 
-    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
-        if (empty($id)) {
-            // Options
-            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
-            $output .= Display::return_icon(
-                'settings.png',
-                get_lang('EditToolOptions'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-        }
+    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && $action == 'list') {
         $output .= '<a id="open-view-list" href="#">'.
             Display::return_icon(
                 'listwork.png',
@@ -82,45 +72,6 @@ function displayWorkActionLinks($id, $action, $isTutor)
         echo $output;
         echo '</div>';
     }
-}
-
-/**
- * Returns a form displaying all options for this tool.
- * These are
- * - make all files visible / invisible
- * - set the default visibility of uploaded files.
- *
- * @param $defaults
- *
- * @return string The HTML form
- */
-function settingsForm($defaults)
-{
-    $allowed = api_is_allowed_to_edit(null, true);
-    if (!$allowed) {
-        return;
-    }
-
-    $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&action=settings';
-    $form = new FormValidator('edit_settings', 'post', $url);
-    $form->addElement('hidden', 'changeProperties', 1);
-    $form->addElement('header', get_lang('EditToolOptions'));
-
-    $group = [
-        $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
-        $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),
-    ];
-    $form->addGroup($group, '', get_lang('DefaultUpload'));
-
-    $group = [
-        $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
-        $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
-    ];
-    $form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
-    $form->addButtonSave(get_lang('Save'));
-    $form->setDefaults($defaults);
-
-    return $form->returnForm();
 }
 
 /**
@@ -4722,64 +4673,6 @@ function getUploadDocumentType()
 }
 
 /**
- * @param array $courseInfo
- * @param bool  $showScore
- * @param bool  $studentDeleteOwnPublication
- *
- * @return bool
- */
-function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
-{
-    $showScore = (int) $showScore;
-    $courseId = api_get_course_int_id();
-    $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $table_course_setting = Database::get_course_table(TOOL_COURSE_SETTING);
-
-    if (empty($courseId)) {
-        return false;
-    }
-
-    $query = "UPDATE $main_course_table
-              SET show_score = '$showScore'
-              WHERE id = $courseId";
-    Database::query($query);
-
-    /**
-     * Course data are cached in session so we need to update both the database
-     * and the session data.
-     */
-    $courseInfo['show_score'] = $showScore;
-    Session::write('_course', $courseInfo);
-
-    // changing the tool setting: is a student allowed to delete his/her own document
-    // counting the number of occurrences of this setting (if 0 => add, if 1 => update)
-    $query = "SELECT * FROM $table_course_setting
-              WHERE
-                c_id = $courseId AND
-                variable = 'student_delete_own_publication'";
-
-    $result = Database::query($query);
-    $number_of_setting = Database::num_rows($result);
-
-    if ($number_of_setting == 1) {
-        $query = "UPDATE $table_course_setting SET
-                  value = '".Database::escape_string($studentDeleteOwnPublication)."'
-                  WHERE variable = 'student_delete_own_publication' AND c_id = $courseId";
-        Database::query($query);
-    } else {
-        $params = [
-            'c_id' => $courseId,
-            'variable' => 'student_delete_own_publication',
-            'value' => $studentDeleteOwnPublication,
-            'category' => 'work',
-        ];
-        Database::insert($table_course_setting, $params);
-    }
-
-    return true;
-}
-
-/**
  * @param int   $item_id
  * @param array $course_info
  *
@@ -5347,7 +5240,7 @@ function exportAllStudentWorkFromPublication(
     $expiresOn = null;
 
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>'.get_lang('ExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>'.get_lang('PostedExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 

@@ -18,6 +18,7 @@ cache:
     - $HOME/.composer/cache/files
 php:
   - 7.1
+  - 7.2
 
 env:
   global:

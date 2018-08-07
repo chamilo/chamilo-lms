@@ -645,7 +645,11 @@ $toolbarActions = Display::toolbarAction(
     [4, 4, 4]
 );
 
-$notice = Display::return_message(get_lang('InformationRightToBeForgottenText'), 'normal', false);
+$noticeMessage = sprintf(
+    get_lang('InformationRightToBeForgottenLinkX'),
+    '<a href="https://gdpr-info.eu/art-17-gdpr/">https://gdpr-info.eu/art-17-gdpr/</a>'
+);
+$notice = Display::return_message($noticeMessage, 'normal', false);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

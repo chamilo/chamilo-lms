@@ -83,7 +83,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - composer update
+  - composer update --prefer-dist
   - composer show
   # Install third party js/css libraries
   - yarn install

@@ -35,7 +35,9 @@ class Version110 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         // Use $schema->createTable
-        $this->addSql('set sql_mode=""');
+        $this->addSql('SET sql_mode = ""');
+        // In case this one didn't work, also try this
+        $this->addSql('SET SESSION sql_mode = ""');
 
         $connection = $this->connection;
 

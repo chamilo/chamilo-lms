@@ -712,6 +712,7 @@ class AddCourse
         );
 
         $now = api_get_utc_datetime();
+
         $files = [
             ['path' => '/shared_folder', 'title' => get_lang('UserFolders'), 'filetype' => 'folder', 'size' => 0],
             ['path' => '/chat_files', 'title' => get_lang('ChatFiles'), 'filetype' => 'folder', 'size' => 0],

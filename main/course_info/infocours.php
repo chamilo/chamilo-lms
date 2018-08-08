@@ -95,7 +95,6 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
                     <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addHtml($image);
-
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');

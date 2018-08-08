@@ -25,10 +25,13 @@ use Symfony\Component\Translation\Translator;
  *
  * @package chamilo.install
  */
+$originalDisplayErrors = ini_get('display_errors');
+$originalMemoryLimit = ini_get('memory_limit');
+
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
-//ini_set('memory_limit', -1);
-//ini_set('max_execution_time', 0);
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', 0);
 error_reporting(-1);
 
 require_once __DIR__.'/../../vendor/autoload.php';
@@ -39,10 +42,12 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
+
 require_once '../inc/lib/api.lib.php';
 require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
+ob_implicit_flush(true);
 
 // Defaults settings
 putenv("APP_LOCALE=en");

@@ -1220,12 +1220,12 @@ class Category implements GradebookItem
     ) {
         $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
         $course_code = Database::escape_string($course_code);
         $session_id = (int) $session_id;
 
-        $sql = "SELECT * FROM $tbl_grade_categories WHERE parent_id = 0";
+        $sql = "SELECT * FROM $table WHERE parent_id = 0";
 
         if (!api_is_allowed_to_edit()) {
             $sql .= ' AND visible = 1';
@@ -1262,7 +1262,7 @@ class Category implements GradebookItem
                 if (!empty($session_id)) {
                     $sql .= " AND session_id = ".$session_id;
                 } else {
-                    $sql .= "AND session_id IS NULL OR session_id=0";
+                    $sql .= 'AND session_id IS NULL OR session_id = 0';
                 }
             } else {
                 $sql .= ' AND course_code IN
@@ -1287,7 +1287,7 @@ class Category implements GradebookItem
 
         // course independent categories
         if (empty($course_code)) {
-            $cats = self::getIndependentCategoriesWithStudentResult(
+            $cats = $this->getIndependentCategoriesWithStudentResult(
                 0,
                 $stud_id,
                 $cats
@@ -1462,7 +1462,7 @@ class Category implements GradebookItem
                     $cat->get_name(),
                     $level + 1,
                 ];
-                $targets = self::add_subtree(
+                $targets = $this->add_subtree(
                     $targets,
                     $level + 1,
                     $cat->get_id(),
@@ -1471,14 +1471,14 @@ class Category implements GradebookItem
             }
         } else {
             // student
-            $cats = self::get_root_categories_for_student(api_get_user_id());
+            $cats = $this->get_root_categories_for_student(api_get_user_id());
             foreach ($cats as $cat) {
                 $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1,
                 ];
-                $targets = self::add_subtree(
+                $targets = $this->add_subtree(
                     $targets,
                     $level + 1,
                     $cat->get_id(),
@@ -1616,6 +1616,7 @@ class Category implements GradebookItem
                 $this->id,
                 api_is_allowed_to_edit() ? null : 1
             );
+
             /** @var Category $cat */
             foreach ($cats as $cat) {
                 if ($cat->hasEvaluationsWithStudentResults($studentId)) {
@@ -1694,7 +1695,7 @@ class Category implements GradebookItem
         if (isset($studentId)) {
             // Special case: this is the root
             if ($this->id == 0) {
-                return self::get_root_categories_for_student($studentId, $course_code, $session_id);
+                return $this->get_root_categories_for_student($studentId, $course_code, $session_id);
             } else {
                 return self::load(
                     null,

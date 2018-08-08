@@ -4080,7 +4080,7 @@ class learnpath
                         Database::query($sql_upd2);
                     }
                     // Update next item (new previous item).
-                    if ($next != 0) {
+                    if (!empty($next)) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous
                                      WHERE iid = $next";
                         if ($this->debug > 2) {

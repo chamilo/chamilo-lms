@@ -5401,11 +5401,16 @@ function copyr($source, $dest, $exclude = [], $copied_files = [])
     return true;
 }
 
-// TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
 /**
+ * @todo: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach.
+ * Documentation header to be added here.
+ *
  * @param string $pathname
  * @param string $base_path_document
  * @param int    $session_id
+ *
+ * @return mixed True if directory already exists, false if a file already exists at
+ *               the destination and null if everything goes according to plan
  */
 function copy_folder_course_session(
     $pathname,
@@ -6366,7 +6371,16 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
  */
 function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter(
+    // Some non-properly encoded file names can cause the whole file to be
+    // skipped when uploaded. Avoid this by detecting the encoding and
+    // converting to UTF-8, setting the source as ASCII (a reasonably
+    // limited characters set) if nothing could be found (BT#
+    $encoding = api_detect_encoding($filename);
+    if (empty($encoding)) {
+        $encoding = 'ASCII';
+    }
+    $filename = api_to_system_encoding($filename, $encoding);
+    $url = URLify::filter(
         $filename,
         250,
         '',
@@ -6376,6 +6390,8 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         false,
         $treat_spaces_as_hyphens
     );
+
+    return $url;
 }
 
 /**
@@ -6790,7 +6806,7 @@ function api_get_tool_information_by_name($name)
  */
 function api_is_global_platform_admin($user_id = null)
 {
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
@@ -7343,41 +7359,55 @@ function api_get_jquery_libraries_js($libraries)
 }
 
 /**
- * Returns the course's URL.
+ * Returns the URL to the course or session, removing the complexity of the URL
+ * building piece by piece.
  *
  * This function relies on api_get_course_info()
  *
- * @param   string  The course code - optional (takes it from session if not given)
- * @param   int     The session id  - optional (takes it from session if not given)
- * @param int $session_id
+ * @param string $courseCode The course code - optional (takes it from context if not given)
+ * @param int    $sessionId  The session ID  - optional (takes it from context if not given)
+ * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
- * @return string|null The URL of the course or null if something does not work
+ * @return string The URL to a course, a session, or empty string if nothing works e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *
  * @author  Julio Montoya <gugli100@gmail.com>
  */
-function api_get_course_url($course_code = null, $session_id = null)
+function api_get_course_url($courseCode = null, $sessionId = null, $groupId = null)
 {
-    if (empty($course_code)) {
-        $course_info = api_get_course_info();
+    $courseDirectory = '';
+    $url = '';
+    // If courseCode not set, get context or []
+    if (empty($courseCode)) {
+        $courseInfo = api_get_course_info();
     } else {
-        $course_info = api_get_course_info($course_code);
-    }
-    if (empty($session_id)) {
-        $session_url = '?id_session='.api_get_session_id();
-    } else {
-        $session_url = '?id_session='.intval($session_id);
-    }
-    /*
-    if (empty($group_id)) {
-        $group_url = '&gidReq='.api_get_group_id();
-    } else {
-        $group_url = '&gidReq='.intval($group_id);
-    }*/
-    if (!empty($course_info['path'])) {
-        return api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php'.$session_url;
+        $courseInfo = api_get_course_info($courseCode);
     }
 
-    return null;
+    // If course defined, get directory, otherwise keep empty string
+    if (!empty($courseInfo['directory'])) {
+        $courseDirectory = $courseInfo['directory'];
+    }
+
+    // If sessionId not set, get context or 0
+    if (empty($sessionId)) {
+        $sessionId = api_get_session_id();
+    }
+
+    // If groupId not set, get context or 0
+    if (empty($groupId)) {
+        $groupId = api_get_group_id();
+    }
+
+    // Build the URL
+    if (!empty($courseDirectory)) {
+        // directory not empty, so we do have a course
+        $url = api_get_path(WEB_COURSE_PATH).$courseDirectory.'/index.php?id_session='.$sessionId.'&gidReq='.$groupId;
+    } elseif (!empty($sessionId) && api_get_configuration_value('remove_session_url') !== true) {
+        // if the course was unset and the session was set, send directly to the session
+        $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+    }
+    // if not valid combination was found, return an empty string
+    return $url;
 }
 
 /**

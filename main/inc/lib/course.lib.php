@@ -189,15 +189,16 @@ class CourseManager
     /**
      * Returns a list of courses. Should work with quickform syntax.
      *
-     * @param int    $from           Offset (from the 7th = '6'). Optional.
-     * @param int    $howmany        Number of results we want. Optional.
-     * @param int    $orderby        The column we want to order it by. Optional, defaults to first column.
-     * @param string $orderdirection The direction of the order (ASC or DESC). Optional, defaults to ASC.
-     * @param int    $visibility     the visibility of the course, or all by default
-     * @param string $startwith      If defined, only return results for which the course *title* begins with this string
-     * @param string $urlId          The Access URL ID, if using multiple URLs
-     * @param bool   $alsoSearchCode An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param int    $from               Offset (from the 7th = '6'). Optional.
+     * @param int    $howmany            Number of results we want. Optional.
+     * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
+     * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
+     * @param int    $visibility         the visibility of the course, or all by default
+     * @param string $startwith          If defined, only return results for which the course *title* begins with this string
+     * @param string $urlId              The Access URL ID, if using multiple URLs
+     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes (not *only* titles)
      * @param array  $conditionsLike
+     * @param array  $onlyThisCourseList
      *
      * @return array
      */
@@ -210,7 +211,8 @@ class CourseManager
         $startwith = '',
         $urlId = null,
         $alsoSearchCode = false,
-        $conditionsLike = []
+        $conditionsLike = [],
+        $onlyThisCourseList = []
     ) {
         $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
 
@@ -219,25 +221,33 @@ class CourseManager
             $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
 
+        $visibility = (int) $visibility;
+
         if (!empty($startwith)) {
             $sql .= "WHERE (title LIKE '".Database::escape_string($startwith)."%' ";
             if ($alsoSearchCode) {
                 $sql .= "OR code LIKE '".Database::escape_string($startwith)."%' ";
             }
             $sql .= ') ';
-            if ($visibility !== -1 && $visibility == strval(intval($visibility))) {
+            if ($visibility !== -1) {
                 $sql .= " AND visibility = $visibility ";
             }
         } else {
             $sql .= "WHERE 1 ";
-            if ($visibility !== -1 && $visibility == strval(intval($visibility))) {
+            if ($visibility !== -1) {
                 $sql .= " AND visibility = $visibility ";
             }
         }
 
         if (!empty($urlId)) {
-            $urlId = intval($urlId);
+            $urlId = (int) $urlId;
             $sql .= " AND access_url_id = $urlId";
+        }
+
+        if (!empty($onlyThisCourseList)) {
+            $onlyThisCourseList = array_map('intval', $onlyThisCourseList);
+            $onlyThisCourseList = implode("','", $onlyThisCourseList);
+            $sql .= " AND course.id IN ('$onlyThisCourseList') ";
         }
 
         $allowedFields = [

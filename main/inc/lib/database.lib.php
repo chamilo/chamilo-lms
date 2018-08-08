@@ -304,6 +304,8 @@ class Database
 
             return $result[$row][$field];
         }
+
+        return false;
     }
 
     /**

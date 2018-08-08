@@ -14,7 +14,6 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script();
 api_set_more_memory_and_time_limits();
 api_block_anonymous_users();
-
 GradebookUtils::block_students();
 
 $cat_id = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;

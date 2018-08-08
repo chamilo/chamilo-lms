@@ -185,9 +185,14 @@ EOT;
      *
      * @return HTML_QuickForm_text
      */
-    public function addText($name, $label, $required = true, $attributes = [])
+    public function addText($name, $label, $required = true, $attributes = [], $createElement = false)
     {
-        $element = $this->addElement('text', $name, $label, $attributes);
+        if ($createElement) {
+            $element = $this->createElement('text', $name, $label, $attributes);
+        } else {
+            $element = $this->addElement('text', $name, $label, $attributes);
+        }
+
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
@@ -291,12 +296,19 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     * @param bool   $required
      *
      * @return HTML_QuickForm_textarea
      */
-    public function addTextarea($name, $label, $attributes = [])
+    public function addTextarea($name, $label, $attributes = [], $required = false)
     {
-        return $this->addElement('textarea', $name, $label, $attributes);
+        $element = $this->addElement('textarea', $name, $label, $attributes);
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        return $element;
     }
 
     /**
@@ -860,11 +872,20 @@ EOT;
     /**
      * @param string $label
      * @param string $text
+     * @param bool   $createElement
      *
-     * @return HTML_QuickForm_label
+     * @return HTML_QuickForm_Element
      */
-    public function addLabel($label, $text)
+    public function addLabel($label, $text, $createElement = false)
     {
+        if ($createElement) {
+            return $this->createElement(
+                'label',
+                $label,
+                $text
+            );
+        }
+
         return $this->addElement('label', $label, $text);
     }
 
@@ -915,6 +936,46 @@ EOT;
     public function addHtml($snippet)
     {
         $this->addElement('html', $snippet);
+    }
+
+    /**
+     * Draws a panel of options see the course_info/infocours.php page.
+     *
+     * @param string $name      internal name
+     * @param string $title     visible title
+     * @param array  $groupList list of group or elements
+     */
+    public function addPanelOption($name, $title, $groupList)
+    {
+        $this->addHtml('<div class="panel panel-default">');
+        $this->addHtml(
+            '
+            <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
+        '
+        );
+        $this->addHtml($title);
+        $this->addHtml('</a></h4></div>');
+        $this->addHtml('<div id="collapse-'.$name.'-settings" class="panel-collapse collapse" role="tabpanel"
+             aria-labelledby="heading-'.$name.'-settings">
+            <div class="panel-body">
+        ');
+
+        foreach ($groupList as $groupName => $group) {
+            // Add group array
+            if (!empty($groupName) && is_array($group)) {
+                $this->addGroup($group, '', $groupName);
+            }
+            // Add element
+            if ($group instanceof HTML_QuickForm_element) {
+                $this->addElement($group);
+            }
+        }
+
+        $this->addHtml('</div></div>');
+        $this->addHtml('</div>');
     }
 
     /**

@@ -1,4 +1,5 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script to switch all PHP files in Chamilo to a more Gettext-like syntax.
  *
@@ -56,14 +57,11 @@ foreach ($files as $file) {
                 if (substr($term, 0, 4) == 'lang') {
                     $term = substr($term, 4);
                 }
-                // Replace all variables by their English translation,
-                // except those translations larger than 120 characters
-                // as these would be impractical
-                if (!empty($terms[$term]) and strlen($terms[$term]) <= 120) {
-                    $translation = str_replace("'", "\\'", $terms[$term]);
+                if (!empty($terms[$term])) {
+                    $translation = $terms[$term];
                     $quotedTerm = $myTerms[1][0];
-                    echo "Doing sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                    system("sed -i \"s#$quotedTerm#'$translation'#g\" $file");
+                    //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
+                    system("sed -i \"s#$term#'$translation'#g\" $file");
                     $countReplaces++;
                 }
             }
@@ -76,14 +74,11 @@ foreach ($files as $file) {
                     if (substr($term, 0, 4) == 'lang') {
                         $term = substr($term, 4);
                     }
-                    // Replace all variables by their English translation,
-                    // except those translations larger than 120 characters
-                    // as these would be impractical
-                    if (!empty($terms[$term]) and strlen($terms[$term]) <= 120) {
-                        $translation = str_replace("'", "\\'", $terms[$term]);
+                    if (!empty($terms[$term])) {
+                        $translation = $terms[$term];
                         $quotedTerm = $myTerms[1][0];
-                        echo "Doing sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                        system("sed -i \"s#$quotedTerm#'$translation'#g\" $file");
+                        //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
+                        system("sed -i \"s#$term#'$translation'#g\" $file");
                         $countReplaces++;
                     }
                 }

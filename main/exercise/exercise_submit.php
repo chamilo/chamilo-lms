@@ -1265,7 +1265,8 @@ if (!empty($error)) {
                             url = url_extra;
                         }
 
-                        $("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\''.
+                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }

@@ -107,7 +107,6 @@ if ($content_type == 'text/html') {
 
     $content = $file_content;
     $mit = "function Finish(){";
-
     $js_content = "var SaveScoreVariable = 0; // This variable included by Dokeos System\n".
         "function mySaveScore() // This function included by Dokeos System\n".
 "{\n".

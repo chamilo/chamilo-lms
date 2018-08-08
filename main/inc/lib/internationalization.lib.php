@@ -351,8 +351,9 @@ function api_get_timezone()
  * @param bool  $returnNullIfInvalidDate if the date is not correct return null instead of the current date
  * @param bool  $returnObj
  *
- * @return string The DATETIME in UTC to be inserted in the DB,
- *                or null if the format of the argument is not supported
+ * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
+ *                         or null if the format of the argument is not supported
+ *                         or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -367,7 +368,7 @@ function api_get_utc_datetime(
             return null;
         }
         if ($returnObj) {
-            return $date = new DateTime(gmdate('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+            return new DateTime(gmdate('Y-m-d H:i:s'), new DateTimeZone('UTC'));
         }
 
         return gmdate('Y-m-d H:i:s');
@@ -431,7 +432,7 @@ function api_get_local_time(
     }
 
     if (is_numeric($time)) {
-        $time = intval($time);
+        $time = (int) $time;
         if ($return_null_if_invalid_date) {
             if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
                 return null;
@@ -1016,9 +1017,9 @@ function api_utf8_decode($string, $to_encoding = null)
 }
 
 /**
- * Converts a given string into the system ecoding (or platform character set).
- * When $from encoding is omited on UTF-8 platforms then language dependent encoding
- * is guessed/assumed. On non-UTF-8 platforms omited $from encoding is assumed as UTF-8.
+ * Converts a given string into the system encoding (or platform character set).
+ * When $from encoding is omitted on UTF-8 platforms then language dependent encoding
+ * is guessed/assumed. On non-UTF-8 platforms omitted $from encoding is assumed as UTF-8.
  * When the parameter $check_utf8_validity is true the function checks string's
  * UTF-8 validity and decides whether to try to convert it or not.
  * This function is useful for problem detection or making workarounds.

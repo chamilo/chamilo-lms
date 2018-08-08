@@ -29,7 +29,6 @@ if (!empty($groupId)) {
     ];
 }
 
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 $agenda = new Agenda($type);
 $events = $agenda->getEvents(
     null,

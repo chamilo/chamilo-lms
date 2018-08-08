@@ -792,13 +792,13 @@ class Rest extends WebService
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
                     'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
-                            'hash' => $this->encodeParams([
-                                'action' => 'course_learnpath',
-                                'lp_id' => $lpId,
-                                'course' => $this->course->getId(),
-                                'session' => $sessionId,
-                            ]),
+                        'hash' => $this->encodeParams([
+                            'action' => 'course_learnpath',
+                            'lp_id' => $lpId,
+                            'course' => $this->course->getId(),
+                            'session' => $sessionId,
                         ]),
+                    ]),
                 ];
             }
 

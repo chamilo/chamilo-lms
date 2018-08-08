@@ -127,7 +127,6 @@ class GradebookDataGenerator
             $row[] = $item->get_weight();
             $item->setStudentList($studentList);
 
-            //if (count($this->evals_links) > 0) {
             if (get_class($item) == 'Evaluation') {
                 // Items inside a category.
                 $resultColumn = $this->build_result_column(

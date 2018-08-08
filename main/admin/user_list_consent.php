@@ -314,7 +314,7 @@ function modify_filter($user_id, $url_params, $row)
         Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
 
     $result .= Display::url(
-        Display::return_icon('message_new.png'),
+        Display::return_icon('message_new.png', get_lang('SendMessage')),
         api_get_path(WEB_CODE_PATH).'messages/new_message.php?send_to_user='.$user_id
     );
     $result .= '&nbsp;&nbsp;';
@@ -323,7 +323,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($row[10] == $extraFieldId) {
         $result .= Display::url(
-            get_lang('RemoveTerms'),
+            Display::return_icon('lock.png', get_lang('RemoveTerms')),
             api_get_self().'?user_id='.$user_id.'&action=delete_terms&sec_token='.$token
         );
         $result .= '&nbsp;&nbsp;';

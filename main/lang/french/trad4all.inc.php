@@ -8214,11 +8214,15 @@ $RequestType = "Type de demande";
 $DeleteAccount = "Supprimer le compte";
 $RequestDate = "Date de la demande";
 $RemoveTerms = "Supprimer l'accord légal";
-$InformationRightToBeForgottenLinkX = "Vous trouverez plus d'information au sujet du droit à l'oubli de l'utilisateur/tric via le lien suivant: %s";
+$InformationRightToBeForgottenLinkX = "Vous trouverez plus d'information au sujet du droit à l'oubli des utilisateurs via le lien suivant: %s";
 $ExplanationDeleteLegal = "Merci de bien vouloir nous donner une brève explication sur la raison de votre demande de retrait des permissions que vous nous aviez précédemment donné afin que nous puissions procéder à la modification de la meilleure manière possible.";
 $ExplanationDeleteAccount = "Merci de bien vouloir nous donner une brève explication sur la raison de votre demande de suppression de votre compte, afin que nous puissions y procéder de la meilleure manière possible.";
 $WhyYouWantToDeleteYourLegalAgreement = "Ci-dessous, vous pouvez faire une demande de retrait de votre accord avec nos conditions d'utilisation ou de suppression de votre compte.<br />
 Dans le cas de l'accord avec nos conditions, une fois annulé, vous aurez à accepter à nouveau ces conditions lors de votre prochaine connexion afin d'accéder à notre plateforme, car il ne nous est pas possible de vous donner accès à une expérience personnalisée sans en même temps traiter vos données personnelles.<br />
 Dans le cas d'une demande de suppression de votre compte, celui-ci sera effectivement supprimé, incluant toutes vos souscriptions à des cours et toute l'information liée à votre compte. Veuillez sélectionner l'option correspondante avec soin. Dans les deux cas, l'un de nos administrateurs révisera votre demande avant de l'exécuter afin d'éviter quelque malentendu que ce soit et la perte définitive de vos données si ce n'était pas voulu.";
 $PersonalDataPrivacy = "Protection des données personnelles";
+$RequestForAccountDeletion = "Demande de suppression de compte";
+$TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de suppression de son compte, en expliquant que \\"%s\\". Traitez sa demande ici: %s";
+$TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de retrait de son accord aux termes d'utilisation, en expliquant que \\"%s\\". Traitez sa demande ici: %s";
+$RequestForLegalConsentWithdrawal = "Demande rétraction d'accord sur conditions d'utilisation";
 ?>

@@ -8288,4 +8288,8 @@ $ExplanationDeleteLegal = "Please tell us why you want to withdraw the rights yo
 $ExplanationDeleteAccount = "Explain in this box why you want your account deleted";
 $WhyYouWantToDeleteYourLegalAgreement = "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data.";
 $PersonalDataPrivacy = "Personal data protection";
+$RequestForAccountDeletion = "Request for account removal";
+$TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "User %s asked for the deletion of his/her account, explaining that \\"%s\\". You can process the request here: %s";
+$TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "User %s asked for the removal of his/her consent to our legal terms, explaining that \\"%s\\". You can process the request here: %s";
+$RequestForLegalConsentWithdrawal = "Request for consent withdrawal on legal terms";
 ?>

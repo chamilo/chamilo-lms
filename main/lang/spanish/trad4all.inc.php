@@ -8313,4 +8313,8 @@ En el caso de la eliminación de su acuerdo, tendrá que volver a aceptar nuestr
 En el caso de la eliminación completa de su cuenta, ésta será eliminada junta con todas sus suscripciones a cursos y toda la información relacionada con su cuenta.<br />
 Por favor seleccione la opción correspondiente con mucho cuidado. En ambos casos, su solicitud será revisada por uno de nuestros administradores, con el fin de evitar cualquier malentendimiento y/o pérdida definitiva de sus datos.";
 $PersonalDataPrivacy = "Protección de datos personales";
+$RequestForAccountDeletion = "Pedido de eliminación de cuenta";
+$TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "El usuario %s ha solicitado la eliminación de su cuenta, explicando que \\"%s\\". Puede gestionar esta solicitud aquí: %s";
+$TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "El usuario %s ha solicitado la eliminación de su acuerdo con nuestras condiciones de uso, explicando que \\"%s\\". Puede gestionar esta solicitud aquí: %s";
+$RequestForLegalConsentWithdrawal = "Pedido de retractación de condiciones de uso";
 ?>

@@ -8222,7 +8222,7 @@ Dans le cas de l'accord avec nos conditions, une fois annulé, vous aurez à acc
 Dans le cas d'une demande de suppression de votre compte, celui-ci sera effectivement supprimé, incluant toutes vos souscriptions à des cours et toute l'information liée à votre compte. Veuillez sélectionner l'option correspondante avec soin. Dans les deux cas, l'un de nos administrateurs révisera votre demande avant de l'exécuter afin d'éviter quelque malentendu que ce soit et la perte définitive de vos données si ce n'était pas voulu.";
 $PersonalDataPrivacy = "Protection des données personnelles";
 $RequestForAccountDeletion = "Demande de suppression de compte";
-$TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de suppression de son compte, en expliquant que \\"%s\\". Traitez sa demande ici: %s";
-$TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de retrait de son accord aux termes d'utilisation, en expliquant que \\"%s\\". Traitez sa demande ici: %s";
+$TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de suppression de son compte, en expliquant que \"%s\". Traitez sa demande ici: %s";
+$TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de retrait de son accord aux termes d'utilisation, en expliquant que \"%s\". Traitez sa demande ici: %s";
 $RequestForLegalConsentWithdrawal = "Demande rétraction d'accord sur conditions d'utilisation";
 ?>

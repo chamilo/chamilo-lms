@@ -2383,7 +2383,6 @@ class MySpace
                         $sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
                         $rs = Database::query($sql_select);
                         $user['create'] = Database::result($rs, 0, 0);
-                    // This should be the ID because the user exists.
                     } else {
                         $user['create'] = $is_session_avail;
                     }

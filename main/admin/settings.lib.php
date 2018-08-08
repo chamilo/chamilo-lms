@@ -1491,9 +1491,10 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         ['maxlength' => '5', 'aria-label' => get_lang($row['title'])]
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
-                    $default_values[$row['variable']] = $row['selected_value'];
 
-                // For platform character set selection: Conversion of the textfield to a select box with valid values.
+                    // For platform character set selection:
+                    // Conversion of the textfield to a select box with valid values.
+                    $default_values[$row['variable']] = $row['selected_value'];
                 } elseif ($row['variable'] == 'platform_charset') {
                     continue;
                 } else {

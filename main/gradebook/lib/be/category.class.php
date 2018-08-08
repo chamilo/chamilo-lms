@@ -1727,13 +1727,13 @@ class Category implements GradebookItem
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
                 // root
                 if ($this->id == 0) {
+                    // inside a course
                     return $this->get_root_categories_for_teacher(
                         api_get_user_id(),
                         $course_code,
                         $session_id,
                         false
                     );
-                // inside a course
                 } elseif (!empty($this->course_code)) {
                     return self::load(
                         null,
@@ -1745,6 +1745,7 @@ class Category implements GradebookItem
                         $order
                     );
                 } elseif (!empty($course_code)) {
+                    // course independent
                     return self::load(
                         null,
                         null,
@@ -1754,7 +1755,6 @@ class Category implements GradebookItem
                         $session_id,
                         $order
                     );
-                // course independent
                 } else {
                     return self::load(
                         null,

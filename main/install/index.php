@@ -39,9 +39,6 @@ require_once '../inc/lib/api.lib.php';
 require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
-
-/* INITIALIZATION SECTION */
-
 ob_implicit_flush(true);
 session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';

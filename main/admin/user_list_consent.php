@@ -323,7 +323,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($row[10] == $extraFieldId) {
         $result .= Display::url(
-            Display::return_icon('lock.png', get_lang('RemoveTerms')),
+            Display::return_icon('delete_terms.png', get_lang('RemoveTerms')),
             api_get_self().'?user_id='.$user_id.'&action=delete_terms&sec_token='.$token
         );
         $result .= '&nbsp;&nbsp;';

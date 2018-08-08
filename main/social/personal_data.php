@@ -255,6 +255,16 @@ foreach ($properties as $key => $value) {
                 }
                 $personalDataContent .= '</ul>';
                 break;
+            case 'dropBoxSentFiles':
+                foreach ($value as $category => $subValue) {
+                    $personalDataContent .= '<li>'.$category.': </li><ul>';
+                    foreach ($subValue as $subSubValue) {
+                        $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                    }
+                    $personalDataContent .= '</ul>';
+                }
+
+                break;
             case 'portals':
             case 'roles':
             case 'achievedSkills':

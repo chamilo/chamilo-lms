@@ -6826,4 +6826,40 @@ class DocumentManager
 
         return $btn;
     }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getAllDocumentCreatedByUser($userId)
+    {
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
+        $userId = (int) $userId;
+
+        $sql = "SELECT DISTINCT docs.path                  
+                FROM $tblItemProperty AS last
+                INNER JOIN $tblDocument AS docs
+                ON (
+                    docs.id = last.ref AND
+                    docs.c_id = last.c_id
+                )
+                WHERE                                
+                    last.tool = '".TOOL_DOCUMENT."' AND   
+                    last.insert_user_id = $userId AND
+                    docs.path NOT LIKE '%_DELETED_%'                     
+                ORDER BY docs.path
+                ";
+        $result = Database::query($sql);
+
+        $list = [];
+        if (Database::num_rows($result) != 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $list[] = $row['path'];
+            }
+        }
+
+        return $list;
+    }
 }

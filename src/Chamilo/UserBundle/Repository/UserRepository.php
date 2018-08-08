@@ -501,7 +501,40 @@ class UserRepository extends EntityRepository
         }
         $user->setSessionCourseSubscriptions($list);
 
-        $user->setDropBoxSentFiles([]);
+        $documents = \DocumentManager::getAllDocumentCreatedByUser($userId);
+
+        $friends = \SocialManager::get_friends($userId);
+        $friendList = [];
+        if (!empty($friends)) {
+            foreach ($friends as $friend) {
+                $friendList[] = $friend['user_info']['complete_name'];
+            }
+        }
+
+        $agenda = new \Agenda('personal');
+        $events = $agenda->getEvents('', '',  null, null, $userId, 'array');
+        $eventList = [];
+        if (!empty($events)) {
+            foreach ($events as $event) {
+                $eventList[] = $event['title'].' '.$event['start_date_localtime'].' / '.$event['end_date_localtime'];
+            }
+        }
+
+        /*$table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "SELECT exe_id, exe_result, exe_weighting
+                FROM $table
+                WHERE
+                    exe_user_id = $studentId AND
+                    c_id = $courseId AND
+                    exe_exo_id = ".$exercise['id']." AND
+                    session_id = $sessionId
+                ORDER BY exe_result DESC
+                LIMIT 1";*/
+
+        $user->setDropBoxSentFiles(
+            ['documents' => $documents, 'friends' => $friendList, 'agenda_events' => $eventList]
+        );
+
         $user->setDropBoxReceivedFiles([]);
         //$user->setGroups([]);
         $user->setCurriculumItems([]);

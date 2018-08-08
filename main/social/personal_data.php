@@ -132,9 +132,9 @@ switch ($action) {
 
             $url = api_get_path(WEB_CODE_PATH).'admin/';
             $link = Display::url($url, $url);
-            $subject = get_lang('RequestForDeleteAccount');
+            $subject = get_lang('RequestForAccountDeletion');
             $content = sprintf(
-                get_lang('TheUserXAskDeleteAccountWithJustifactionXGoHereX'),
+                get_lang('TheUserXAskedForAccountDeletionWithJustificationXGoHereX'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link
@@ -183,9 +183,9 @@ switch ($action) {
 
             $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
             $link = Display::url($url, $url);
-            $subject = get_lang('RequestForLegalConsentRemoval');
+            $subject = get_lang('RequestForLegalConsentWithdrawal');
             $content = sprintf(
-                get_lang('TheUserXAskRemovalWithJustifactionXGoHereX'),
+                get_lang('TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link

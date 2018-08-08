@@ -3,14 +3,14 @@ sudo: required
 language: php
 
 addons:
-  apt:
-    packages:
-      - apache2
-      - postfix
-      - libapache2-mod-fastcgi
-      - libappindicator1
-      - fonts-liberation
-  chrome: stable
+    apt:
+        packages:
+        - apache2
+        - postfix
+        - libapache2-mod-fastcgi
+        - libappindicator1
+        - fonts-liberation
+
 services:
     - mysql
 
@@ -74,7 +74,7 @@ before_install:
   - git clone https://github.com/chamilo/chash
   - cd chash
   - git log -1 # check chash version
-  - composer update
+  - composer install
   - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
   - sudo mv chash.phar /usr/local/bin/chash
@@ -83,8 +83,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - composer update --prefer-dist
-  - composer show
+  - travis_wait 30 composer install
   # Install third party js/css libraries
   - yarn install
   - ./node_modules/.bin/encore dev
@@ -93,7 +92,7 @@ before_install:
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions
-  - sudo chmod -R 777 var/cache var/log var/courses var/upload
+  - sudo chmod -R 777 var/cache var/log var/courses var/upload public
   # Check chamilo status
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
   # Permissions
@@ -102,6 +101,7 @@ before_install:
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   - curl $VHOST_URL
+  - ls -la public/build
 
 script:
   - whereis google-chrome-stable
@@ -111,7 +111,7 @@ script:
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-  # - sudo cat /var/log/apache2/$VHOST_URL-error.log
+
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 after_failure:

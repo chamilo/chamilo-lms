@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -24,6 +25,8 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+Session::erase('_gid');
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
@@ -161,14 +164,14 @@ if ($action != 'add') {
     $html = '';
     $html .= '<div class="category-forum">';
 
+    $session_displayed = '';
     if ((!isset($sessionId) || $sessionId == 0) &&
         !empty($forum_category['session_name'])
     ) {
         $session_displayed = ' ('.Security::remove_XSS($forum_category['session_name']).')';
-    } else {
-        $session_displayed = '';
     }
-    $forum_categories_list = '';
+
+    $forum_categories_list = [];
     $forumId = $forum_category['cat_id'];
     $forumTitle = $forum_category['cat_title'];
     $linkForumCategory = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.strval(intval($forumId));
@@ -253,8 +256,8 @@ if ($action != 'add') {
                 // 1.v it is a not a group forum (teacher and student)
                 // 2.v it is a group forum and it is public (teacher and student)
                 // 3. it is a group forum and it is private (always for teachers only if the user is member of the forum
-                // if the forum is private and it is a group forum and the user is not a member of the group forum then it cannot be displayed
-                //if (!($forum['forum_group_public_private']=='private' AND !is_null($forum['forum_of_group']) AND !in_array($forum['forum_of_group'], $groups_of_user))) {
+                // if the forum is private and it is a group forum and the user
+                // is not a member of the group forum then it cannot be displayed
                 $show_forum = false;
                 // SHOULD WE SHOW THIS PARTICULAR FORUM
                 // you are teacher => show forum
@@ -265,7 +268,8 @@ if ($action != 'add') {
                 } else {
                     // you are not a teacher
                     //echo 'student';
-                    // it is not a group forum => show forum (invisible forums are already left out see get_forums function)
+                    // it is not a group forum => show forum
+                    // (invisible forums are already left out see get_forums function)
                     if ($forum['forum_of_group'] == '0') {
                         //echo '-gewoon forum';
                         $show_forum = true;
@@ -341,7 +345,8 @@ if ($action != 'add') {
                     $html .= '<div class="row">';
                     $html .= '<div class="col-md-6">';
                     $html .= '<div class="col-md-3">';
-                    $html .= '<div class="number-post">'.$forum_image.'<p>'.$my_number_threads.' '.get_lang('ForumThreads').'</p></div>';
+                    $html .= '<div class="number-post">'.$forum_image.
+                        '<p>'.$my_number_threads.' '.get_lang('ForumThreads').'</p></div>';
                     $html .= '</div>';
 
                     $html .= '<div class="col-md-9">';
@@ -351,14 +356,12 @@ if ($action != 'add') {
                         null,
                         ICON_SIZE_MEDIUM
                     );
-                    $linkForum = '';
-                    $linkForum .= Display::tag(
+
+                    $linkForum = Display::tag(
                         'a',
                         $forum['forum_title'].$session_displayed,
                         [
-                            'href' => 'viewforum.php?'.api_get_cidreq()
-                                ."&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search="
-                                .Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
+                            'href' => 'viewforum.php?'.api_get_cidreq(true, false)."&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search=".Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
                             'class' => empty($forum['visibility']) ? 'text-muted' : null,
                         ]
                     );
@@ -393,22 +396,17 @@ if ($action != 'add') {
                     $html .= '</div>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-6">';
-
                     $iconEmpty = '';
-
                     // The number of topics and posts.
                     if ($forum['forum_of_group'] !== '0') {
-                        $newPost = '';
+                        $newPost = $iconEmpty;
                         if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                             $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        } else {
-                            $newPost = $iconEmpty;
                         }
                     } else {
+                        $newPost = $iconEmpty;
                         if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                             $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        } else {
-                            $newPost = $iconEmpty;
                         }
                     }
 

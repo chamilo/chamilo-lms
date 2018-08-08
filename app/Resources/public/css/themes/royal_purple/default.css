@@ -81,7 +81,7 @@ background: linear-gradient(to bottom, #f7a400 0%,#ff7400 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7a400', endColorstr='#ff7400',GradientType=0 ); /* IE6-9 */
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background-color: #FB8B00;
+  background-color: #FFFFFF;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;

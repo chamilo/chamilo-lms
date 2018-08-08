@@ -26,49 +26,49 @@ class CLinkCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="category_title", type="string", length=255, nullable=false)
      */
-    private $categoryTitle;
+    protected $categoryTitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    private $displayOrder;
+    protected $displayOrder;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set categoryTitle.

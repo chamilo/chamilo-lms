@@ -235,8 +235,12 @@ class SortableTable extends HTML_Table
             $params['spacesBeforeSeparator'] = '';
             $params['spacesAfterSeparator'] = '';
             $query_vars = array_keys($_GET);
-            $query_vars_needed = [$this->param_prefix.'column', $this->param_prefix.'direction', $this->param_prefix.'per_page'];
-            if (count($this->additional_parameters) > 0) {
+            $query_vars_needed = [
+                $this->param_prefix.'column',
+                $this->param_prefix.'direction',
+                $this->param_prefix.'per_page',
+            ];
+            if (!empty($this->additional_parameters) && count($this->additional_parameters) > 0) {
                 $query_vars_needed = array_merge(
                     $query_vars_needed,
                     array_keys($this->additional_parameters)
@@ -372,8 +376,6 @@ class SortableTable extends HTML_Table
     {
         $empty_table = false;
         if ($this->get_total_number_of_items() == 0) {
-            $cols = $this->getColCount();
-            //$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
             $message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
@@ -399,12 +401,9 @@ class SortableTable extends HTML_Table
             </style>';
 
             // @todo  This also must be moved
-
             // Show only navigations if there are more than 1 page
             $my_pager = $this->get_pager();
-
             $html .= '<div class="main-grid">';
-
             if ($my_pager->numPages() > 1) {
                 $html .= '<div class="sub-header">';
                 $html .= '<div class="grid_selectbox">'.$form.'</div>';
@@ -425,7 +424,6 @@ class SortableTable extends HTML_Table
         // Generation of style classes must be improved. Maybe we need a a table name to create style on the fly:
         // i.e: .whoisonline_table_grid_container instead of  .grid_container
         // where whoisonline is the table's name like drupal's template engine
-
         $html .= '<div class="grid_container">';
         if (is_array($items) && count($items) > 0) {
             foreach ($items as &$row) {
@@ -464,17 +462,12 @@ class SortableTable extends HTML_Table
         $grid_class = []
     ) {
         $empty_table = false;
-        $total = $this->get_total_number_of_items();
-
         if ($this->get_total_number_of_items() == 0) {
-            $cols = $this->getColCount();
-            //$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
             $message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
         $html = '';
-
         if (!$empty_table) {
             // If we show the pagination
             if (!$hide_navigation) {
@@ -647,9 +640,7 @@ class SortableTable extends HTML_Table
         $pager = $this->get_pager();
         $offset = $pager->getOffsetByPageId();
         $from = $offset[0] - 1;
-
         $table_data = $this->get_table_data($from, null, null, null, $sort);
-
         $new_table_data = [];
         if (is_array($table_data)) {
             foreach ($table_data as $index => &$row) {
@@ -684,7 +675,11 @@ class SortableTable extends HTML_Table
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
         $result[] = '<select name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
-        for ($nr = 10; $nr <= min(50, $total_number_of_items); $nr += 10) {
+        $list = [10, 20, 50, 100, 500, 1000];
+        foreach ($list as $nr) {
+            if ($total_number_of_items <= $nr) {
+                break;
+            }
             $result[] = '<option value="'.$nr.'" '.($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
         }
         // @todo no limits
@@ -748,6 +743,7 @@ class SortableTable extends HTML_Table
             $param['page_nr'] = $this->page_nr;
             $param['per_page'] = $this->per_page;
             $param['column'] = $column;
+            $link = $label;
             if ($sortable) {
                 $link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
                 foreach ($param as $key => &$value) {
@@ -758,10 +754,7 @@ class SortableTable extends HTML_Table
                 if ($this->column == $column) {
                     $link .= $this->direction == 'ASC' ? ' &#8595;' : ' &#8593;';
                 }
-            } else {
-                $link = $label;
             }
-
             $this->setHeaderContents(0, $column, $link);
 
             if (!is_null($td_attributes)) {
@@ -944,7 +937,6 @@ class SortableTable extends HTML_Table
     public function filter_data($row)
     {
         $url_params = $this->get_sortable_table_param_string().'&'.$this->get_additional_url_paramstring();
-
         foreach ($this->column_filters as $column => &$function) {
             $firstParam = isset($row[$column]) ? $row[$column] : 0;
             $row[$column] = call_user_func($function, $firstParam, $url_params, $row);

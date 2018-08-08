@@ -27,49 +27,49 @@ class CWikiMailcue
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="text", nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * Set type.
@@ -213,5 +213,25 @@ class CWikiMailcue
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CWikiMailcue
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
     }
 }

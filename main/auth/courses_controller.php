@@ -1,7 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\Tag;
 
 /**
  * Class CoursesController.
@@ -36,15 +39,12 @@ class CoursesController
      *
      * @param string $action
      * @param string $message confirmation message(optional)
-     * @param string $action
      */
-    public function courses_list($action, $message = '')
+    public function courseList($action, $message = '')
     {
         $data = [];
-        $user_id = api_get_user_id();
-
-        $data['user_courses'] = $this->model->get_courses_of_user($user_id);
-        $data['user_course_categories'] = $this->model->get_user_course_categories();
+        $data['user_courses'] = $this->model->get_courses_of_user(api_get_user_id());
+        $data['user_course_categories'] = CourseManager::get_user_course_categories(api_get_user_id());
         $data['courses_in_category'] = $this->model->get_courses_in_category();
         $data['action'] = $action;
         $data['message'] = $message;
@@ -64,19 +64,33 @@ class CoursesController
      * @param string $message confirmation message(optional)
      * @param string $error   error message(optional)
      */
-    public function categories_list($action, $message = '', $error = '')
+    public function categoryList($action, $message = '', $error = '')
     {
-        $data = [];
-        $data['user_course_categories'] = $this->model->get_user_course_categories();
-        $data['action'] = $action;
-        $data['message'] = $message;
-        $data['error'] = $error;
+        api_block_anonymous_users();
 
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('catalog_layout');
-        $this->view->set_template('categories_list');
-        $this->view->render();
+        $data = [];
+        $data['user_course_categories'] = CourseManager::get_user_course_categories(api_get_user_id());
+
+        $stok = Security::get_token();
+        $actions = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', '32'),
+            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses'
+        );
+        $actions = Display::toolbarAction('toolbar-forum', [$actions]);
+
+        $form = new FormValidator(
+            'create_course_category',
+            'post',
+            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=createcoursecategory'
+        );
+        $form->addHidden('sec_token', $stok);
+        $form->addText('title_course_category', get_lang('Name'));
+        $form->addButtonSave(get_lang('AddCategory'), 'create_course_category');
+
+        $tpl = new Template();
+        $tpl->assign('content', $form->returnForm());
+        $tpl->assign('actions', $actions);
+        $tpl->display_one_col_template();
     }
 
     /**
@@ -103,11 +117,11 @@ class CoursesController
         $limit = []
     ) {
         $data = [];
-        $browse_course_categories = $this->model->browse_course_categories();
-        $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);
+        $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
+        $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory($category_code);
         if ($action === 'display_random_courses') {
             // Random value is used instead limit filter
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(
+            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(
                 null,
                 12
             );
@@ -116,8 +130,8 @@ class CoursesController
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
             }
-            $limit = isset($limit) ? $limit : CourseCategory::getLimitArray();
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(
+            $limit = isset($limit) ? $limit : self::getLimitArray();
+            $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(
                 $category_code,
                 null,
                 $limit
@@ -152,7 +166,7 @@ class CoursesController
         $data['content'] = $content;
         $data['error'] = $error;
         $data['catalogShowCoursesSessions'] = 0;
-        $showCoursesSessions = intval('catalog_show_courses_sessions');
+        $showCoursesSessions = (int) api_get_setting('catalog_show_courses_sessions');
         if ($showCoursesSessions > 0) {
             $data['catalogShowCoursesSessions'] = $showCoursesSessions;
         }
@@ -181,13 +195,13 @@ class CoursesController
         $justVisible = false
     ) {
         $data = [];
-        $limit = !empty($limit) ? $limit : CourseCategory::getLimitArray();
-        $browse_course_categories = $this->model->browse_course_categories();
-        $data['countCoursesInCategory'] = $this->model->count_courses_in_category(
+        $limit = !empty($limit) ? $limit : self::getLimitArray();
+        $browse_course_categories = CoursesAndSessionsCatalog::getCourseCategories();
+        $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory(
             'ALL',
             $search_term
         );
-        $data['browse_courses_in_category'] = $this->model->search_courses(
+        $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::search_courses(
             $search_term,
             $limit,
             $justVisible
@@ -293,8 +307,8 @@ class CoursesController
                 )
             );
         }
-        $action = 'sortmycourses';
-        $this->courses_list($action);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses');
+        exit;
     }
 
     /**
@@ -316,7 +330,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -336,7 +350,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -355,7 +369,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -374,7 +388,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -392,7 +406,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -419,7 +433,7 @@ class CoursesController
         }
 
         if (!empty($search_term)) {
-            $this->search_courses($search_term, $message, $error);
+            CoursesAndSessionsCatalog::search_courses($search_term, $message, $error);
         } else {
             $this->courses_categories(
                 'subcribe',
@@ -444,7 +458,7 @@ class CoursesController
         $hiddenLinks = false,
         $limit = null
     ) {
-        $categories = $this->model->browse_course_categories();
+        $categories = CoursesAndSessionsCatalog::getCourseCategories();
         $html = '';
         if (!empty($categories)) {
             $action = 'display_courses';
@@ -567,7 +581,7 @@ class CoursesController
         $btnBing = false
     ) {
         if ($btnBing) {
-            $btnBing = 'btn-lg';
+            $btnBing = 'btn-lg btn-block';
         } else {
             $btnBing = 'btn-sm';
         }
@@ -584,7 +598,7 @@ class CoursesController
                 get_lang('CheckRequirements'),
                 $url,
                 'shield',
-                'default',
+                'info',
                 [
                     'class' => $btnBing.' ajax',
                     'data-title' => get_lang('CheckRequirements'),
@@ -700,9 +714,9 @@ class CoursesController
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-        $limit = isset($limit) ? $limit : CourseCategory::getLimitArray();
-        $countSessions = $this->model->countSessions($date);
-        $sessions = $this->model->browseSessions($date, $limit);
+        $limit = isset($limit) ? $limit : self::getLimitArray();
+        $countSessions = SessionManager::countSessionsByEndDate($date);
+        $sessions = CoursesAndSessionsCatalog::browseSessions($date, $limit);
 
         $pageTotal = intval(intval($countSessions) / $limit['length']);
         // Do NOT show pagination if only one page or less
@@ -754,7 +768,7 @@ class CoursesController
             'subscribe'
         );
 
-        $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
+        $sessions = CoursesAndSessionsCatalog::browseSessionsByTags($searchTag, $limit);
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         $tpl = new Template();
@@ -792,7 +806,7 @@ class CoursesController
         );
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
 
-        $sessions = $this->model->browseSessionsBySearch($q, $limit);
+        $sessions = CoursesAndSessionsCatalog::browseSessionsBySearch($q, $limit);
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         $tpl = new Template();
@@ -810,6 +824,21 @@ class CoursesController
         $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
 
         $tpl->display($contentTemplate);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLimitArray()
+    {
+        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
+
+        return [
+            'start' => ($pageCurrent - 1) * $pageLength,
+            'current' => $pageCurrent,
+            'length' => $pageLength,
+        ];
     }
 
     /**
@@ -854,13 +883,13 @@ class CoursesController
                 $sessionRelCourses = $sessionRelCourseRepo->findBy([
                     'session' => $session,
                 ]);
-
+                /** @var SessionRelCourse $sessionRelCourse */
                 foreach ($sessionRelCourses as $sessionRelCourse) {
                     $courseTags = $extraFieldRelTagRepo->getTags(
                         $tagsField,
                         $sessionRelCourse->getCourse()->getId()
                     );
-
+                    /** @var Tag $tag */
                     foreach ($courseTags as $tag) {
                         $sessionCourseTags[] = $tag->getTag();
                     }
@@ -871,6 +900,7 @@ class CoursesController
                 $sessionCourseTags = array_unique($sessionCourseTags);
             }
 
+            /** @var SequenceRepository $repo */
             $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
             $sequences = $repo->getRequirementsAndDependenciesWithinSequences(
                 $session->getId(),
@@ -900,7 +930,8 @@ class CoursesController
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
             }
 
-            $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
+            $plugin = \BuyCoursesPlugin::create();
+            $isThisSessionOnSale = $plugin->getBuyCoursePluginPrice($session);
 
             $sessionsBlock = [
                 'id' => $session->getId(),

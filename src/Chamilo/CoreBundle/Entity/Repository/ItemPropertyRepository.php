@@ -4,9 +4,10 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\UserBundle\Entity\Group;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -17,13 +18,13 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Get users subscribed to a item LP, Document, etc (item_property).
      *
-     * @param $tool learnpath | document | etc
-     * @param $itemId
+     * @param string  $tool    learnpath | document | etc
+     * @param int     $itemId
      * @param Course  $course
      * @param Session $session
      * @param Group   $group
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getUsersSubscribedToItem(
         $tool,
@@ -47,8 +48,8 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Get Groups subscribed to a item: LP, Doc, etc.
      *
-     * @param $tool learnpath | document | etc
-     * @param $itemId
+     * @param string  $tool    learnpath | document | etc
+     * @param int     $itemId
      * @param Course  $course
      * @param Session $session
      *
@@ -75,12 +76,12 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Subscribe groups to a LP, doc (itemproperty).
      *
-     * @param User $currentUser
-     * @param $tool learnpath | document | etc
+     * @param User    $currentUser
+     * @param string  $tool        learnpath | document | etc
      * @param Course  $course
      * @param Session $session
-     * @param $itemId
-     * @param array $newList
+     * @param int     $itemId
+     * @param array   $newList
      */
     public function subscribeGroupsToItem(
         $currentUser,
@@ -147,11 +148,12 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Unsubscribe groups to item.
      *
-     * @param $tool
+     * @param string  $tool
      * @param Course  $course
      * @param Session $session
-     * @param $itemId
-     * @param $groups
+     * @param int     $itemId
+     * @param array   $groups
+     * @param bool    $unsubscribeUserToo
      */
     public function unsubscribeGroupsToItem(
         $tool,
@@ -200,12 +202,12 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Subscribe users to a LP, doc (itemproperty).
      *
-     * @param User $currentUser
-     * @param $tool
+     * @param User    $currentUser
+     * @param string  $tool
      * @param Course  $course
      * @param Session $session
-     * @param $itemId
-     * @param array $newUserList
+     * @param int     $itemId
+     * @param array   $newUserList
      */
     public function subscribeUsersToItem(
         $currentUser,
@@ -275,11 +277,11 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Unsubscribe users to item.
      *
-     * @param $tool
+     * @param string  $tool
      * @param Course  $course
      * @param Session $session
-     * @param $itemId
-     * @param $usersToDelete
+     * @param int     $itemId
+     * @param array   $usersToDelete
      */
     public function unsubcribeUsersToItem(
         $tool,

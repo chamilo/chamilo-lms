@@ -190,7 +190,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mycredit = $mylpi->get_credit();
     $mylaunch_data = $mylpi->get_launch_data();
     $myinteractions_count = $mylpi->get_interactions_count();
-    $myobjectives_count = $mylpi->get_objectives_count();
+    //$myobjectives_count = $mylpi->get_objectives_count();
     $mycore_exit = $mylpi->get_core_exit();
 
     $return .=

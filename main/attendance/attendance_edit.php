@@ -40,14 +40,14 @@ $form->addHtmlEditor(
     false,
     false,
     [
-        'ToolbarSet' => 'TrainingDescription',
+        'ToolbarSet' => 'Basic',
         'Width' => '100%',
         'Height' => '200',
     ]
 );
 
-// Adavanced Parameters
-
+// Advanced Parameters
+$skillList = [];
 if (Gradebook::is_active()) {
     if (!empty($attendance_qualify_title) || !empty($attendance_weight)) {
         $form->addButtonAdvancedSettings('id_qualify');
@@ -57,7 +57,10 @@ if (Gradebook::is_active()) {
             'attendance_qualify_gradebook',
             '',
             get_lang('QualifyAttendanceGradebook'),
-            ['checked' => 'true', 'onclick' => 'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}']
+            [
+                'checked' => 'true',
+                'onclick' => 'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}',
+            ]
         );
         $form->addElement('html', '<div id="options_field" style="display:block">');
     } else {
@@ -83,6 +86,9 @@ if (Gradebook::is_active()) {
     );
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html', '</div>');
+
+    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
+
     $form->addElement('html', '</div>');
 }
 $form->addButtonUpdate(get_lang('Save'));
@@ -92,6 +98,7 @@ $default['title'] = Security::remove_XSS($title);
 $default['description'] = Security::remove_XSS($description, STUDENT);
 $default['attendance_qualify_title'] = $attendance_qualify_title;
 $default['attendance_weight'] = $attendance_weight;
+$default['skills'] = array_keys($skillList);
 
 $link_info = GradebookUtils::isResourceInCourseGradebook(
     api_get_course_id(),

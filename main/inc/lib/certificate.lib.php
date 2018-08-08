@@ -125,6 +125,7 @@ class Certificate extends Model
                     $updateCertificateData
                 );
                 $this->certificate_data['path_certificate'] = $path_certificate;
+
                 if ($this->isHtmlFileGenerated()) {
                     if (!empty($file_info)) {
                         //$text = $this->parse_certificate_variables($new_content_html['variables']);
@@ -151,12 +152,12 @@ class Certificate extends Model
         if (!empty($path_info) && isset($path_info)) {
             $this->certification_user_path = $path_info.'certificate/';
             $this->certification_web_user_path = $web_path_info.'certificate/';
-
+            $mode = api_get_permissions_for_new_directories();
             if (!is_dir($path_info)) {
-                mkdir($path_info, 0777, true);
+                mkdir($path_info, $mode, true);
             }
             if (!is_dir($this->certification_user_path)) {
-                mkdir($this->certification_user_path, 0777);
+                mkdir($this->certification_user_path, $mode);
             }
         }
     }
@@ -217,13 +218,12 @@ class Certificate extends Model
         }
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
-        $categoryId = 0;
+
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-            $categoryId = $this->certificate_data['cat_id'];
-            $my_category = Category::load($categoryId);
+            $my_category = Category::load($this->certificate_data['cat_id']);
         }
 
-        if (isset($my_category[0]) && !empty($categoryId) &&
+        if (isset($my_category[0]) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
             $courseInfo = api_get_course_info($my_category[0]->get_course_code());
@@ -456,24 +456,24 @@ class Certificate extends Model
     /**
      * Update user info about certificate.
      *
-     * @param int    $cat_id                category id
+     * @param int    $categoryId            category id
      * @param int    $user_id               user id
      * @param string $path_certificate      the path name of the certificate
      * @param bool   $updateCertificateData
      */
     public function updateUserCertificateInfo(
-        $cat_id,
+        $categoryId,
         $user_id,
         $path_certificate,
         $updateCertificateData = true
     ) {
-        if (!UserManager::is_user_certified($cat_id, $user_id) && $updateCertificateData) {
+        if (!UserManager::is_user_certified($categoryId, $user_id) && $updateCertificateData) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
             $sql = 'UPDATE '.$table.' SET 
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
-                    WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+                    WHERE cat_id="'.intval($categoryId).'" AND user_id="'.intval($user_id).'" ';
             Database::query($sql);
         }
     }
@@ -508,7 +508,7 @@ class Certificate extends Model
      */
     public function generateQRImage($text, $path)
     {
-        //Make sure HTML certificate is generated
+        // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             //L low, M - Medium, L large error correction
             return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
@@ -632,8 +632,6 @@ class Certificate extends Model
 
     /**
      * Shows the student's certificate (HTML file).
-     *
-     * @return bool
      */
     public function show()
     {
@@ -641,7 +639,16 @@ class Certificate extends Model
 
         $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
         if (file_exists($user_certificate)) {
-            $certificateContent = (string) file_get_contents($user_certificate);
+            // Needed in order to browsers don't add custom CSS
+            $certificateContent = '<!DOCTYPE html>';
+            $certificateContent .= (string) file_get_contents($user_certificate);
+
+            // Remove media=screen to be available when printing a document
+            $certificateContent = str_replace(
+                ' media="screen"',
+                '',
+                $certificateContent
+            );
 
             if ($this->user_id == api_get_user_id() && !empty($this->certificate_data)) {
                 $certificateId = $this->certificate_data['id'];
@@ -661,11 +668,9 @@ class Certificate extends Model
 
             echo $certificateContent;
 
-            return true;
+            return;
         }
         api_not_allowed(true);
-
-        return false;
     }
 
     /**
@@ -687,7 +692,6 @@ class Certificate extends Model
         }
 
         $userInfo = api_get_user_info($this->user_id);
-
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
         $termsValidationDate = '';
@@ -696,8 +700,8 @@ class Certificate extends Model
         }
 
         $sessions = SessionManager::get_sessions_by_user($this->user_id, false, true);
-        $sessionsApproved = [];
         $totalTimeInLearningPaths = 0;
+        $sessionsApproved = [];
         $coursesApproved = [];
         if ($sessions) {
             foreach ($sessions as $session) {
@@ -708,7 +712,7 @@ class Certificate extends Model
                     $gradebookCategories = Category::load(
                         null,
                         null,
-                        $courseInfo['code'],
+                        $courseCode,
                         null,
                         false,
                         $session['session_id']
@@ -790,10 +794,7 @@ class Certificate extends Model
         $tplContent->assign('skills', $skills);
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
-	$tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
-	$tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
-
-
+        $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 

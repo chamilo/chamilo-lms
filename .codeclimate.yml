@@ -1,30 +1,67 @@
-engines:
+version: "2"
+checks:
+  argument-count:
+    enabled: false
+  complex-logic:
+    enabled: false
+  file-lines:
+    enabled: false
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 20
+  method-count:
+    enabled: false
+  method-lines:
+    enabled: false
+  nested-control-flow:
+    config:
+      threshold: 20
+  return-statements:
+    enabled: false
+
+plugins:
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php"
+
   fixme:
     enabled: true
     config:
       strings:
       - FIXME
       - BUG
+
   phpcodesniffer:
     enabled: true
     config:
-    standard: "PSR1,PSR2"
+      standard: "Symfony2"
+      file_extensions: "php"
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:
         enabled: false
       PSR1 Files SideEffects FoundWithSymbols:
         enabled: false
+      Squiz Strings ConcatenationSpacing PaddingFound:
+        enabled: false
+
+  phpmd:
+    enabled: true
+    config:
+      file_extensions: "php"
+      rulesets: "codesize.xml"
+
+  sonar-php:
+    enabled: false
+    checks:
+      php:S1192:
+        enabled: false
 
   duplication:
     enabled: false
 
-ratings:
-  paths:
-  - '**.php'
-  - '**.js'
-  - '**.css'
-
-exclude_paths:
+exclude_patterns:
 - cli-config.php
 - app/cache/
 - app/logs/
@@ -50,11 +87,12 @@ exclude_paths:
 - main/inc/lib/mimetex/
 - main/inc/lib/nanogong/
 - main/inc/lib/nusoap/
+- main/inc/lib/opengraph/*
 - main/inc/lib/ppt2png/
+- main/inc/lib/phpseclib
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/
 - main/inc/lib/phpseclib/
-- main/inc/lib/portfolio.class.php
 - main/inc/lib/svg-edit/
 - main/inc/lib/swfobject/
 - main/inc/lib/wami-recorder/
@@ -67,12 +105,16 @@ exclude_paths:
 - plugin/buycourses/src/Requests/
 - plugin/buycourses/src/Requests.php
 - plugin/buycourses/src/paypalfunctions.php
+- plugin/vchamilo/cli/
 - plugin/kannelsms/vendor/
 - plugin/clockworksms/vendor/
 - plugin/pens/lib
 - plugin/bbb/lib/bbb_api.php
 - plugin/ims_lti/OAuthSimple.php
 - plugin/sepe/src/wsse/
+- plugin/test2pdf/class/
+- plugin/jcapture/lib/
+- plugin/jcapture/src/
 - tests/
 - vendor/
 - web/

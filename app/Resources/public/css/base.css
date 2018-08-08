@@ -6,7 +6,7 @@
         alex.aragon@beeznest.com
         angel.quiroz@beeznest.com
         julio.montoya@beeznest.com
-        yannik.warnier@beeznest.com
+        yannick.warnier@beeznest.com
     Version: 1.0
 */
 html{
@@ -235,24 +235,22 @@ header {
   filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);
 }
 .notification-panel .help a {
-    background-color:#879DAA;
-    border:1px solid #FFFFFF;
-    display:block;
-    margin-left:50px;
-    opacity:0.8;
-    width:65px;
-    padding: 6px 0 8px 6px;
-    border-radius: 10px 0 0 10px;
+  background-color:#879DAA;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
 }
 .notification-panel .report a {
-    background-color:#8fd400;
-    border:1px solid #FFFFFF;
-    display:block;
-    margin-left:50px;
-    opacity:0.8;
-    width:65px;
-    padding: 6px 0 8px 6px;
-    border-radius: 10px 0 0 10px;
+  background-color:#8fd400;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
 }
 .cookieUsageValidation {
     padding: 5px;
@@ -3969,9 +3967,6 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-#file-descrtiption.form-control{
-  width: 80%;
-}
 .session-course-edit .control{
   padding-top: 2em;
   padding-bottom: 2em;
@@ -5842,11 +5837,13 @@ footer{
   bottom: 0;
   left: 0px;
   margin-bottom: 0px;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   border-top: 1px solid #DCE4EC;
   background: #ffffff;
   width: 100%;
+}
+.bottom_actions_fixed .btn-primary{
+    font-size: 12px;
 }
 #toolshortcuts_horizontal{
     padding-top: 15px;
@@ -6181,6 +6178,38 @@ ul#toolnavbox-two li a.btn{
 .lp-accordion .panel-heading .tools-actions{
     position: relative;
     top: -30px;
+}
+a.panel-image:hover{
+    background-color: #f5f5f5;
+}
+a.panel-image{
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #DDD;
+    padding: 15px;
+    border-radius: 5px;
+}
+.files .panel-image .row{
+    margin-bottom: 0;
+}
+.file_name a{
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    padding-top: 15px;
+}
+.message-image-success,
+.message-image-danger{
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px;
+}
+#resource_tab #subtab #ul_subtab li a{
+    padding: 10px 15px;
+}
+.feeback-form .form-group .form-control{
+    width: 100%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
@@ -6857,8 +6886,297 @@ input.form-control[type="color"] {
 }
 
 .badge_sidebar_image_transparency{
-    opacity: 0.5;
+    opacity: 0.2;
 }
 
-/* Fixes bootstrap select long text options BT#14082 */
-div.dropdown-menu.open { width: 100%; } ul.dropdown-menu.inner>li>a { white-space: initial; }
+/* CSS FormValidator loader */
+@-moz-keyframes wobblebar-loader {
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
+}
+@-webkit-keyframes wobblebar-loader {
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
+}
+@keyframes wobblebar-loader {
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
+}
+/* :not(:required) hides this rule from IE9 and below */
+.wobblebar-loader:not(:required) {
+    background: #2E6DA4;
+    -moz-border-radius: 10.66667px;
+    -webkit-border-radius: 10.66667px;
+    border-radius: 10.66667px;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 228px;
+    height: 21.33333px;
+    position: relative;
+}
+.wobblebar-loader:not(:required)::after {
+    -moz-animation: wobblebar-loader 15000ms infinite ease;
+    -webkit-animation: wobblebar-loader 15000ms infinite ease;
+    animation: wobblebar-loader 15000ms infinite ease;
+    background: white;
+    display: block;
+    -moz-border-radius: 7.11111px;
+    -webkit-border-radius: 7.11111px;
+    border-radius: 7.11111px;
+    content: '';
+    position: absolute;
+    top: 3.55556px;
+    left: 4px;
+    width: 21.33333px;
+    height: 14.22222px;
+}
+.popover{
+    width:400px;
+}
+.popover-title{
+    text-align: left;
+}
+.popover-content {
+    max-width:400px;
+    display: inline-block;
+}
+.popover-content .popover-teacher{
+    display: block;
+    width: 50%;
+    float: left;
+}
+.popover-content .popover-teacher .ajax{
+    float: left;
+}
+.popover-content .popover-teacher .teachers-details{
+    text-align: left;
+}

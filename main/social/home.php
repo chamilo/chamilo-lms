@@ -66,7 +66,6 @@ if (api_get_setting('profile', 'picture') == 'true') {
                 $_FILES['picture']['tmp_name']
             )) {
                 $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
                 $sql = "UPDATE $table_user
                         SET 
                             picture_uri = '$new_picture' 
@@ -120,7 +119,8 @@ if (!empty($results)) {
         );
 
         $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
-        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
+        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
+            get_lang('SeeMore').'</a></div>';
         $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
         $groups_newest[] = [
             Display::url(
@@ -167,7 +167,8 @@ foreach ($results as $result) {
         GROUP_IMAGE_SIZE_BIG
     );
     $result['picture_uri'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
-    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
+    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">'.
+        get_lang('SeeMore').'</a></div>';
     $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
     $groups_pop[] = [
         Display::url($result['picture_uri'], $group_url),

@@ -28,10 +28,8 @@ if ($form->validate()) {
     if ($result) {
         $message = Display::return_message(
             sprintf(
-                get_lang(
-                    'UnsubscribeFromPlatformSuccess',
-                    $user_info['username']
-                )
+                get_lang('UnsubscribeFromPlatformSuccess'),
+                $user_info['username']
             )
         );
         $content = null;

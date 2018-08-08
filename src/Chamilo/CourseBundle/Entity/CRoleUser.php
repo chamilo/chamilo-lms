@@ -26,35 +26,35 @@ class CRoleUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="scope", type="string", length=20, nullable=false)
      */
-    private $scope;
+    protected $scope;
 
     /**
      * @var int
      *
      * @ORM\Column(name="role_id", type="integer")
      */
-    private $roleId;
+    protected $roleId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * Set scope.

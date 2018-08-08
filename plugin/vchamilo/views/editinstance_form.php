@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * Class ChamiloForm.
@@ -27,7 +28,6 @@ abstract class ChamiloForm
         $this->_customdata = $customdata;
 
         $attributes = ['style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')];
-        // $this->_form = new FormValidator($mode.'_instance', 'post', $returnurl, '', $attributes, true);
         $this->_form = new FormValidator(
             $mode.'_instance',
             'post',
@@ -212,7 +212,7 @@ abstract class ChamiloForm
                 $chamilo_val = true;
             }
 
-            $validated = ($internal_val and $chamilo_val and $file_val);
+            $validated = ($internal_val && $chamilo_val && $file_val);
         }
 
         return $validated;
@@ -429,7 +429,8 @@ class InstanceForm extends ChamiloForm
         );
 
         // Database name.
-        $form->addText('main_database',
+        $form->addText(
+            'main_database',
             [
                 $plugin->get_lang('maindatabase'),
                 $plugin->get_lang('DatabaseDescription'),
@@ -559,7 +560,6 @@ class InstanceForm extends ChamiloForm
         global $plugin;
 
         $errors = [];
-
         $tablename = Database::get_main_table('vchamilo');
         $vchamilo = Database::select(
             '*',

@@ -177,7 +177,8 @@ if (!isset($_POST['feedback']) && (
     $postAction == 'delete_received' ||
     $postAction == 'download_received' ||
     $postAction == 'delete_sent' ||
-    $postAction == 'download_sent')
+    $postAction == 'download_sent'
+)
 ) {
     $display_message = handle_multiple_actions();
     echo Display::return_message($display_message, 'normal');

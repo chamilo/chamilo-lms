@@ -27,175 +27,175 @@ class CLpItem
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_id", type="integer", nullable=false)
      */
-    private $lpId;
+    protected $lpId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="item_type", type="string", length=32, nullable=false)
      */
-    private $itemType;
+    protected $itemType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="text", nullable=false)
      */
-    private $ref;
+    protected $ref;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=511, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=511, nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path", type="text", nullable=false)
      */
-    private $path;
+    protected $path;
 
     /**
      * @var float
      *
      * @ORM\Column(name="min_score", type="float", precision=10, scale=0, nullable=false)
      */
-    private $minScore;
+    protected $minScore;
 
     /**
      * @var float
      *
      * @ORM\Column(name="max_score", type="float", precision=10, scale=0, nullable=true, options={"default":"100"})
      */
-    private $maxScore;
+    protected $maxScore;
 
     /**
      * @var float
      *
      * @ORM\Column(name="mastery_score", type="float", precision=10, scale=0, nullable=true)
      */
-    private $masteryScore;
+    protected $masteryScore;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_item_id", type="integer", nullable=false)
      */
-    private $parentItemId;
+    protected $parentItemId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="previous_item_id", type="integer", nullable=false)
      */
-    private $previousItemId;
+    protected $previousItemId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="next_item_id", type="integer", nullable=false)
      */
-    private $nextItemId;
+    protected $nextItemId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    private $displayOrder;
+    protected $displayOrder;
 
     /**
      * @var string
      *
      * @ORM\Column(name="prerequisite", type="text", nullable=true)
      */
-    private $prerequisite;
+    protected $prerequisite;
 
     /**
      * @var string
      *
      * @ORM\Column(name="parameters", type="text", nullable=true)
      */
-    private $parameters;
+    protected $parameters;
 
     /**
      * @var string
      *
      * @ORM\Column(name="launch_data", type="text", nullable=false)
      */
-    private $launchData;
+    protected $launchData;
 
     /**
      * @var string
      *
      * @ORM\Column(name="max_time_allowed", type="string", length=13, nullable=true)
      */
-    private $maxTimeAllowed;
+    protected $maxTimeAllowed;
 
     /**
      * @var string
      *
      * @ORM\Column(name="terms", type="text", nullable=true)
      */
-    private $terms;
+    protected $terms;
 
     /**
      * @var int
      *
      * @ORM\Column(name="search_did", type="integer", nullable=true)
      */
-    private $searchDid;
+    protected $searchDid;
 
     /**
      * @var string
      *
      * @ORM\Column(name="audio", type="string", length=250, nullable=true)
      */
-    private $audio;
+    protected $audio;
 
     /**
      * @var float
      *
      * @ORM\Column(name="prerequisite_min_score", type="float", precision=10, scale=0, nullable=true)
      */
-    private $prerequisiteMinScore;
+    protected $prerequisiteMinScore;
 
     /**
      * @var float
      *
      * @ORM\Column(name="prerequisite_max_score", type="float", precision=10, scale=0, nullable=true)
      */
-    private $prerequisiteMaxScore;
+    protected $prerequisiteMaxScore;
 
     /**
      * CLpItem constructor.

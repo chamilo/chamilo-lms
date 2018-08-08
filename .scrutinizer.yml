@@ -1,131 +1,31 @@
-# .scrutinizer.yml - see https://scrutinizer-ci.com/docs/guides/php/continuous-integration-deployment for doc
-# Excludes go for things do not contain code, are not managed well by Scrutinizer or are external libraries that
-# Chamilo includes but that we cannot update without patching upstream.
 build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override:
+                    - php-scrutinizer-run
+    tests:
+        override:
+            command: "php -v"
+    dependencies:
+        override:
+            - "php -v"
+    resources:
+        cpus: 1
     environment:
-        mysql: 5.5
         php:
-            version: 5.6.0
+            version: 7.1
             ini:
-                'date.timezone': 'US/Pacific'
-                'phar.readonly': false
-        hosts:
-            my.chamilodev.net: '127.0.0.1'
+                memory_limit: "-1"
+
+
 checks:
-    php:
-        no_trailing_whitespace: true
-        code_rating: true
-        duplication: true
-        fix_php_opening_tag: false
-        remove_php_closing_tag: true
-        one_class_per_file: true
-        side_effects_or_types: false
-        no_mixed_inline_html: false
-        require_braces_around_control_structures: true
-        php5_style_constructor: true
-        no_global_keyword: false
-        avoid_usage_of_logical_operators: false
-        psr2_class_declaration: true
-        no_underscore_prefix_in_properties: false
-        no_underscore_prefix_in_methods: false
-        blank_line_after_namespace_declaration: true
-        single_namespace_per_use: false
-        psr2_switch_declaration: true
-        psr2_control_structure_declaration: true
-        avoid_superglobals: false
-        security_vulnerabilities: false
-        no_exit: false
-        uppercase_constants: true
-        prefer_while_loop_over_for_loop: true
-        newline_at_end_of_file: true
-        line_length:
-            max_length: '120'
-        parameter_doc_comments: true
-        parameters_in_camelcaps: true
-        return_doc_comments: true
-        use_self_instead_of_fqcn: true
-        overriding_parameter: false
-        avoid_entity_manager_injection: false
-
-coding_style:
-    php:
-        indentation:
-            general:
-                use_tabs: false
-                size: 4
-            switch:
-                indent_case: true
-        spaces:
-            general:
-                linefeed_character: newline
-            around_operators:
-                concatenation: false
-        braces:
-            classes_functions:
-                class: new-line
-                function: new-line
-                closure: end-of-line
-            if:
-                opening: end-of-line
-            for:
-                opening: end-of-line
-            while:
-                opening: end-of-line
-            do_while:
-                opening: end-of-line
-            switch:
-                opening: end-of-line
-            try:
-                opening: end-of-line
-
-        upper_lower_casing:
-            keywords:
-                general: lower
-            constants:
-                true_false_null: lower
-
-#tools:
-#    php_mess_detector:
-#        enabled: true
-#        extensions:
-#            - php
-#        command: phpmd
-#        config:
-#            rulesets:
-#                - codesize
-
-#    php_analyzer:
-#        enabled: true
-#        filter:
-#            excluded_paths:
-#                - 'tests/*'
-#        extensions:
-#            - php
-#    php_code_sniffer:
-#        enabled: true
-#        config:
-#            standard: PSR2
-#        extensions:
-#            - php
-#        command: phpcs
-#        filter:
-#            excluded_paths:
-#                - 'tests/*'
-#    sensiolabs_security_checker:
-#        enabled: true
-#    php_pdepend:
-#        command: pdepend
-#        configuration_file:   ~
-#        suffixes:
-#            - php
-#        excluded_dirs:
-#            - 'vendor'
-#            - 'tests/*'
-#        enabled: true
-#    php_code_coverage: true
+    php: true
 
 filter:
-      excluded_paths:
+    excluded_paths:
         - 'cli-config.php'
         - 'app/cache/*'
         - 'app/logs/*'
@@ -141,7 +41,9 @@ filter:
         - 'main/auth/openid/*'
         - 'main/chat/emoji_strategy.php'
         - 'main/default_course_document'
+        - 'main/document/Wami.swf'
         - 'main/fonts/*'
+        - 'main/inc/ajax/Wami.swf'
         - 'main/inc/lib/browser/*'
         - 'main/inc/lib/freemindflashbrowser/*'
         - 'main/inc/lib/internationalization_database/*'
@@ -156,7 +58,6 @@ filter:
         - 'main/inc/lib/pear/*'
         - 'main/inc/lib/phpmailer/*'
         - 'main/inc/lib/phpseclib/*'
-        - 'main/inc/lib/portfolio.class.php'
         - 'main/inc/lib/svg-edit/*'
         - 'main/inc/lib/swfobject/*'
         - 'main/inc/lib/wami-recorder/*'
@@ -165,17 +66,20 @@ filter:
         - 'main/template/*'
         - 'main/img/*'
         - 'main/lang/*'
-        - 'main/default_course_document'
         - 'plugin/buycourses/src/Culqi/*'
         - 'plugin/buycourses/src/Requests/*'
         - 'plugin/buycourses/src/paypalfunctions.php'
         - 'plugin/buycourses/src/Requests.php'
+        - 'plugin/vchamilo/cli/*'
         - 'plugin/kannelsms/vendor/*'
         - 'plugin/clockworksms/vendor/*'
         - 'plugin/pens/lib/'
         - 'plugin/bbb/lib/bbb_api.php'
         - 'plugin/ims_lti/OAuthSimple.php'
         - 'plugin/sepe/src/wsse/*'
+        - 'plugin/test2pdf/class/*'
+        - 'plugin/jcapture/lib/*'
+        - 'plugin/jcapture/src/*'
         - 'tests/*'
         - 'vendor/*'
         - 'web/*'

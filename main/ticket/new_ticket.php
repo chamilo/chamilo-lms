@@ -2,18 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.plugin.ticket
+ * @package chamilo.ticket
  */
-$cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') != 'true') {
-    header('location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
+if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 'true') {
+    header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
 
 api_block_anonymous_users();
+
 $courseId = api_get_course_int_id();
 
 $htmlHeadXtra[] = '<script>
@@ -370,13 +369,19 @@ $form->addElement(
 );
 
 $sessionList = SessionManager::get_sessions_by_user($userId);
-$sessionListToSelect = [get_lang('Select')];
-//Course List
-foreach ($sessionList as $sessionInfo) {
-    $sessionListToSelect[$sessionInfo['session_id']] = $sessionInfo['session_name'];
+
+if (api_is_platform_admin() || !empty($sessionList)) {
+    $sessionListToSelect = [get_lang('Select')];
+    // Course List
+    foreach ($sessionList as $sessionInfo) {
+        $sessionListToSelect[$sessionInfo['session_id']] = $sessionInfo['session_name'];
+    }
+
+    $form->addSelect('session_id', get_lang('Session'), $sessionListToSelect, ['id' => 'session_id']);
+} else {
+    $form->addHidden('session_id', 0);
 }
 
-$form->addSelect('session_id', get_lang('Session'), $sessionListToSelect, ['id' => 'session_id']);
 $form->addSelect('course_id', get_lang('Course'), [], ['id' => 'course_id']);
 
 $courseInfo = api_get_course_info();

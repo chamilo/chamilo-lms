@@ -43,13 +43,11 @@ require_once __DIR__.'/functions.inc.php';
 
 $ldap_user = extldap_authenticate($login, $password);
 if ($ldap_user !== false) {
-    $em = Database::getManager();
     $chamilo_user = extldap_get_chamilo_user($ldap_user);
     //username is not on the ldap, we have to use $login variable
     $chamilo_user['username'] = $login;
     $chamilo_uid = external_add_user($chamilo_user);
-
-    $chamiloUser = $em->find('ChamiloUserBundle:User', $chamilo_uid);
+    $chamiloUser = api_get_user_entity($chamilo_uid);
 
     if ($chamiloUser) {
         $loginFailed = false;

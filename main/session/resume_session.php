@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @author Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
- */
-use Chamilo\CoreBundle\Entity\Promotion;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
+/**
+ * @author Bart Mollet, Julio Montoya lot of fixes
+ *
+ * @package chamilo.admin
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -55,7 +55,6 @@ $session = $sessionRepository->find($sessionId);
 $sessionCategory = $session->getCategory();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
 $url_id = api_get_current_access_url_id();
 
 switch ($action) {
@@ -159,6 +158,9 @@ if ($sessionInfo['nbr_courses'] == 0) {
     $courseItem = '';
     $courses = $sessionRepository->getCoursesOrderedByPosition($session);
 
+    $allowSkills = api_get_configuration_value('allow_skill_rel_items');
+
+    /** @var Course $course */
     foreach ($courses as $course) {
         // Select the number of users
         $numberOfUsers = SessionManager::getCountUsersInCourseSession(
@@ -167,8 +169,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         );
         // Get coachs of the courses in session
         $namesOfCoaches = [];
-        $coachSubscriptions = $session
-            ->getUserCourseSubscriptionsByStatus($course, Session::COACH)
+        $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH)
             ->forAll(function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
                 $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
 
@@ -210,14 +211,20 @@ if ($sessionInfo['nbr_courses'] == 0) {
             ).'</td>';
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
-        $courseItem .= '
-			<td>
-                <a href="'.$courseUrl.'">'.
-                Display::return_icon('course_home.gif', get_lang('Course')).'</a>
-                '.$orderButtons.'
-                <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
-                Display::return_icon('user.png', get_lang('Users'), '', ICON_SIZE_SMALL).'</a>
-                <a href="'.api_get_path(WEB_CODE_PATH).'user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
+        $courseItem .= '<td>';
+        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('Course')), $courseUrl);
+
+        if ($allowSkills) {
+            $courseItem .= Display::url(
+                Display::return_icon('skills.png', get_lang('Skills')),
+                api_get_path(WEB_CODE_PATH).'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
+            );
+        }
+
+        $courseItem .= $orderButtons;
+        $courseItem .= '<a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
+                Display::return_icon('user.png', get_lang('Users'), '', ICON_SIZE_SMALL).'</a>';
+        $courseItem .= '<a href="'.api_get_path(WEB_CODE_PATH).'user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
                 Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
                 <a href="'.api_get_path(WEB_CODE_PATH).'user/user_export.php?file_type=csv&course_session='.$course->getCode().':'.$sessionId.'&addcsvheader=1">'.
                 Display::return_icon('export_csv.png', get_lang('ExportUsersOfACourse'), null, ICON_SIZE_SMALL).'</a>
@@ -226,9 +233,9 @@ if ($sessionInfo['nbr_courses'] == 0) {
 				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course->getCode().''.$orig_param.'">'.
                 Display::return_icon('teacher.png', get_lang('ModifyCoach'), '', ICON_SIZE_SMALL).'</a>
 				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course->getCode().'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.
-            Display::return_icon('delete.png', get_lang('Delete')).'</a>
-			</td>
-		</tr>';
+            Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+
+        $courseItem .= '</td></tr>';
         $count++;
     }
     $courseListToShow .= $courseItem;
@@ -257,7 +264,8 @@ if (!empty($userList)) {
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));
-    $table->setHeaderContents(0, 2, get_lang('Actions'));
+    $table->setHeaderContents(0, 2, get_lang('RegistrationDate'));
+    $table->setHeaderContents(0, 3, get_lang('Actions'));
 
     $row = 1;
     foreach ($userList as $user) {
@@ -326,8 +334,11 @@ if (!empty($userList)) {
                 $status = get_lang('Student');
         }
 
+        $registered = !empty($user['registered_at']) ? Display::dateToStringAgoAndLongDate($user['registered_at']) : '';
+
         $table->setCellContents($row, 1, $status);
-        $table->setCellContents($row, 2, $link);
+        $table->setCellContents($row, 2, $registered);
+        $table->setCellContents($row, 3, $link);
         $row++;
     }
     $userListToShow .= $table->toHtml();

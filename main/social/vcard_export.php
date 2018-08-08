@@ -13,6 +13,7 @@ use JeroenDesloovere\VCard\VCard;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+api_protect_admin_script();
 
 if (isset($_REQUEST['userId'])) {
     $userId = intval($_REQUEST['userId']);

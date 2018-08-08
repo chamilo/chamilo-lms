@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 class PDF
 {
+    /** @var mPDF */
     public $pdf;
     public $custom_header = [];
     public $custom_footer = [];
@@ -32,9 +33,7 @@ class PDF
         $template = null
     ) {
         $this->template = $template;
-        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
-         * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
-         */
+        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF */
         if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
@@ -111,20 +110,6 @@ class PDF
 
         // Assignments
         $tpl->assign('pdf_content', $content);
-
-        $organization = ChamiloApi::getPlatformLogo();
-        // Use custom logo image.
-        $pdfLogo = api_get_setting('pdf_logo_header');
-        if ($pdfLogo === 'true') {
-            $visualTheme = api_get_visual_theme();
-            $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-            if (file_exists($img)) {
-                $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-                $organization = "<img src='$img'>";
-            }
-        }
-
-        $tpl->assign('organization', $organization);
 
         // Showing only the current teacher/admin instead the all teacher list name see BT#4080
         if (isset($this->params['show_real_course_teachers']) &&
@@ -318,7 +303,6 @@ class PDF
 
                 if (!empty($course_data['path'])) {
                     $document_html = str_replace('../', '', $document_html);
-                    $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
                     // Fix app/upload links convert web to system paths
                     $document_html = str_replace(
@@ -326,71 +310,12 @@ class PDF
                         api_get_path(SYS_UPLOAD_PATH),
                         $document_html
                     );
-
-                    $doc = new DOMDocument();
-                    $result = @$doc->loadHTML($document_html);
-
-                    // Fixing only images @todo do the same thing with other elements
-                    $elements = $doc->getElementsByTagName('img');
-                    $protocol = api_get_protocol();
-                    if (!empty($elements)) {
-                        foreach ($elements as $item) {
-                            $old_src = $item->getAttribute('src');
-
-                            if (strpos($old_src, $protocol) === false) {
-                                if (strpos($old_src, '/main/default_course_document') === false) {
-                                    $old_src_fixed = '';
-                                    if (strpos($old_src, '/main/img') === false) {
-                                        if (api_get_path(REL_PATH) != '/') {
-                                            $old_src_fixed = str_replace(
-                                                api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/',
-                                                '',
-                                                $old_src
-                                            );
-
-                                            // Try with the dirname if exists
-                                            if ($old_src_fixed == $old_src) {
-                                                if (file_exists($dirName.'/'.$old_src)) {
-                                                    $document_path = '';
-                                                    $old_src_fixed = $dirName.'/'.$old_src;
-                                                }
-                                            }
-                                        } else {
-                                            if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') !== false) {
-                                                $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
-                                            } else {
-                                                // Try with the dirname if exists
-                                                if (file_exists($dirName.'/'.$old_src)) {
-                                                    $document_path = '';
-                                                    $old_src_fixed = $dirName.'/'.$old_src;
-                                                } else {
-                                                    $document_path = '';
-                                                    $old_src_fixed = $old_src;
-                                                }
-                                            }
-                                        }
-
-                                        $new_path = $document_path.$old_src_fixed;
-                                    } else {
-                                        $new_path = $old_src;
-                                    }
-                                    $document_html = str_replace($old_src, $new_path, $document_html);
-                                }
-                            } else {
-                                //Check if this is a complete URL
-                                /*if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') === false) {
-
-                                } else {
-                                    $old_src_fixed = str_replace(api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
-                                    $new_path = $document_path.$old_src_fixed;
-                                    $document_html= str_replace($old_src, $new_path, $document_html);
-                                }*/
-                            }
-                        }
-                    }
                 }
 
-                api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
+                $document_html = self::fixImagesPaths($document_html, $course_data, $dirName);
+
+                // The library mPDF expects UTF-8 encoded input data.
+                api_set_encoding_html($document_html, 'UTF-8');
                 // TODO: Maybe it is better idea the title to be passed through
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
                 // $_GET[] too, as it is done with file name.
@@ -423,16 +348,17 @@ class PDF
     /**
      * Converts an html string to PDF.
      *
-     * @param string $document_html valid html
-     * @param string $css           CSS content of a CSS file
-     * @param string $pdf_name      pdf name
-     * @param string $course_code   course code
-     *                              (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode    the MPDF output mode can be:
+     * @param string $document_html  valid html
+     * @param string $css            CSS content of a CSS file
+     * @param string $pdf_name       pdf name
+     * @param string $course_code    course code
+     *                               (if you are using html that are located in the document tool you must provide this)
+     * @param string $outputMode     the MPDF output mode can be:
      * @param bool   $saveInFile
      * @param string $fileToSave
      * @param bool   $returnHtml
      * @param bool   $addDefaultCss
+     * @param bool   $completeHeader
      *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
@@ -450,7 +376,8 @@ class PDF
         $saveInFile = false,
         $fileToSave = null,
         $returnHtml = false,
-        $addDefaultCss = false
+        $addDefaultCss = false,
+        $completeHeader = true
     ) {
         $urlAppend = api_get_configuration_value('url_append');
 
@@ -466,15 +393,12 @@ class PDF
 
         // Formatting the pdf
         $course_data = api_get_course_info($course_code);
-
-        self::format_pdf($course_data);
-
+        self::format_pdf($course_data, $completeHeader);
         $document_html = preg_replace($clean_search, '', $document_html);
 
         //absolute path for frames.css //TODO: necessary?
         $absolute_css_path = api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/frames.css';
         $document_html = str_replace('href="./css/frames.css"', 'href="'.$absolute_css_path.'"', $document_html);
-
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
@@ -497,9 +421,19 @@ class PDF
                     $old_src = $item->getAttribute('src');
                     if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
-                            if (strpos($old_src, '/main/inc/lib/') === false) {
-                                $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
-                                $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
+                            if (strpos($old_src, '/main/inc/lib/') === false &&
+                                strpos($old_src, '/app/upload/') === false
+                            ) {
+                                $old_src_fixed = str_replace(
+                                    api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/',
+                                    '',
+                                    $old_src
+                                );
+                                $old_src_fixed = str_replace(
+                                    'courses/'.$course_data['path'].'/document/',
+                                    '',
+                                    $old_src_fixed
+                                );
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
                             }
@@ -515,23 +449,11 @@ class PDF
             api_get_path(SYS_CODE_PATH).'img/',
             $document_html
         );
-
-        //replace relative path by absolute path for resources
-        //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
-        //$document_html= str_replace('src="/', 'temp_template_path', $document_html);// before save src templates not apply
-        //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
-
-        //$src_http_www= 'src="'.api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
-        //$document_html= str_replace('src="',$src_http_www, $document_html);
-        //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
+        $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
         // The library mPDF expects UTF-8 encoded input data.
         api_set_encoding_html($document_html, 'UTF-8');
-        // TODO: Maybe it is better idea the title to be passed through
-        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
-        // $_GET[] too, as it is done with file name.
         // At the moment the title is retrieved from the html document itself.
-
         if ($returnHtml) {
             return "<style>$css</style>".$document_html;
         }
@@ -695,67 +617,16 @@ class PDF
      */
     public function set_footer()
     {
-        $this->pdf->defaultfooterfontsize = 12;   // in pts
-        $this->pdf->defaultfooterfontstyle = 'B';   // blank, B, I, or BI
-        $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
-        $platform_name = api_get_setting('Institution');
-        $left_content = $platform_name;
-        $center_content = '';
-        $right_content = '{PAGENO} / {nb}';
+        $this->pdf->defaultfooterfontsize = 12; // in pts
+        $this->pdf->defaultfooterfontstyle = 'B'; // blank, B, I, or BI
+        $this->pdf->defaultfooterline = 1; // 1 to include line below header/above footer
 
-        //@todo remove this and use a simpler way
-        $footer = [
-            'odd' => [
-                'L' => [
-                    'content' => $left_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000',
-                ],
-                'C' => [
-                    'content' => $center_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000',
-                ],
-                'R' => [
-                    'content' => $right_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000',
-                ],
-                'line' => 1,
-            ],
-            'even' => [
-                'L' => [
-                    'content' => $left_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000',
-                ],
-                'C' => [
-                    'content' => $center_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000',
-                ],
-                'R' => [
-                    'content' => $right_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000',
-                ],
-                'line' => 1,
-            ],
-        ];
-        // defines footer for Odd and Even Pages - placed at Outer margin see http://mpdf1.com/manual/index.php?tid=151&searchstring=setfooter
-        $this->pdf->SetFooter($footer);
+        $view = new Template('', false, false, false, true, false, false);
+        $template = $view->get_template('export/pdf_footer.tpl');
+        $footerHTML = $view->fetch($template);
+
+        $this->pdf->SetHTMLFooter($footerHTML, 'E'); //Even pages
+        $this->pdf->SetHTMLFooter($footerHTML, 'O'); //Odd pages
     }
 
     /**
@@ -770,7 +641,6 @@ class PDF
         $this->pdf->defaultheaderline = 1; // 1 to include line below header/above footer
 
         $userId = api_get_user_id();
-
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
 
@@ -796,10 +666,6 @@ class PDF
                     //$img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                     $organization = "<img src='$img'>";
                 }
-
-                // Do not show the teacher list see BT#4080 only the current teacher name
-                $user_info = api_get_user_info();
-                $teachers = $user_info['complete_name'];
             }
 
             $view = new Template('', false, false, false, true, false, false);
@@ -838,9 +704,6 @@ class PDF
      */
     public function format_pdf($course_data, $complete = true)
     {
-        if ($complete === false) {
-            error_log('Asked with no decoration');
-        }
         $course_code = null;
         if (!empty($course_data)) {
             $course_code = $course_data['code'];
@@ -853,7 +716,7 @@ class PDF
         */
         // TODO: To be read from the html document.
         $this->pdf->directionality = api_get_text_direction();
-        $this->pdf->useOnlyCoreFonts = false;
+        $this->pdf->useOnlyCoreFonts = true;
         // Use different Odd/Even headers and footers and mirror margins
         $this->pdf->mirrorMargins = 1;
 
@@ -862,7 +725,6 @@ class PDF
             // Adding watermark
             if (api_get_setting('pdf_export_watermark_enable') == 'true') {
                 $watermark_file = self::get_watermark($course_code);
-
                 if ($watermark_file) {
                     //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
                     $this->pdf->SetWatermarkImage($watermark_file);
@@ -989,5 +851,107 @@ class PDF
         );
 
         Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+    }
+
+    /**
+     * Fix images source paths to allow export to pdf.
+     *
+     * @param string $documentHtml
+     * @param array  $courseInfo
+     * @param string $dirName
+     *
+     * @return string
+     */
+    private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
+    {
+        $doc = new DOMDocument();
+        @$doc->loadHTML($documentHtml);
+
+        $elements = $doc->getElementsByTagName('img');
+
+        if (empty($elements)) {
+            return $doc->saveHTML();
+        }
+
+        $protocol = api_get_protocol();
+        $sysCodePath = api_get_path(SYS_CODE_PATH);
+        $sysCoursePath = api_get_path(SYS_COURSE_PATH);
+        $sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
+
+        $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
+
+        /** @var \DOMElement $element */
+        foreach ($elements as $element) {
+            $src = $element->getAttribute('src');
+            $src = trim($src);
+
+            if (strpos($src, $protocol) !== false) {
+                continue;
+            }
+
+            if (strpos($src, '/main/default_course_document') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/main/default_course_document', $sysCodePath.'default_course_document', $src)
+                );
+
+                continue;
+            }
+
+            if (strpos($src, '/main/img') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/main/img/', $sysCodePath.'img/', $src)
+                );
+
+                continue;
+            }
+
+            if (strpos($src, '/app/upload/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/app/upload/', $sysUploadPath, $src)
+                );
+
+                continue;
+            }
+
+            if (empty($courseInfo)) {
+                continue;
+            }
+
+            if (api_get_path(REL_PATH) != '/') {
+                $oldSrcFixed = str_replace(
+                    api_get_path(REL_PATH).'courses/'.$courseInfo['path'].'/document/',
+                    '',
+                    $src
+                );
+
+                // Try with the dirname if exists
+                if ($oldSrcFixed == $src) {
+                    if (file_exists($dirName.'/'.$src)) {
+                        $documentPath = '';
+                        $oldSrcFixed = $dirName.'/'.$src;
+                    }
+                }
+            } else {
+                if (strpos($src, 'courses/'.$courseInfo['path'].'/document/') !== false) {
+                    $oldSrcFixed = str_replace('courses/'.$courseInfo['path'].'/document/', '', $src);
+                } else {
+                    // Try with the dirname if exists
+                    if (file_exists($dirName.'/'.$src)) {
+                        $documentPath = '';
+                        $oldSrcFixed = $dirName.'/'.$src;
+                    } else {
+                        $documentPath = '';
+                        $oldSrcFixed = $src;
+                    }
+                }
+            }
+
+            $element->setAttribute('src', $documentPath.$oldSrcFixed);
+        }
+
+        return $doc->saveHTML();
     }
 }

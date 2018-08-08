@@ -22,126 +22,126 @@ class TrackEExercises
      *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
-    private $exeUserId;
+    protected $exeUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
-    private $exeDate;
+    protected $exeDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
      */
-    private $exeExoId;
+    protected $exeExoId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="exe_result", type="float", precision=6, scale=2, nullable=false)
      */
-    private $exeResult;
+    protected $exeResult;
 
     /**
      * @var float
      *
      * @ORM\Column(name="exe_weighting", type="float", precision=6, scale=2, nullable=false)
      */
-    private $exeWeighting;
+    protected $exeWeighting;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    private $userIp;
+    protected $userIp;
 
     /**
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string
      *
      * @ORM\Column(name="data_tracking", type="text", nullable=false)
      */
-    private $dataTracking;
+    protected $dataTracking;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
      */
-    private $startDate;
+    protected $startDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
      */
-    private $stepsCounter;
+    protected $stepsCounter;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="smallint", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="orig_lp_id", type="integer", nullable=false)
      */
-    private $origLpId;
+    protected $origLpId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="orig_lp_item_id", type="integer", nullable=false)
      */
-    private $origLpItemId;
+    protected $origLpItemId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exe_duration", type="integer", nullable=false)
      */
-    private $exeDuration;
+    protected $exeDuration;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
      */
-    private $expiredTimeControl;
+    protected $expiredTimeControl;
 
     /**
      * @var int
      *
      * @ORM\Column(name="orig_lp_item_view_id", type="integer", nullable=false)
      */
-    private $origLpItemViewId;
+    protected $origLpItemViewId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="questions_to_check", type="text", nullable=false)
      */
-    private $questionsToCheck;
+    protected $questionsToCheck;
 
     /**
      * @var int
@@ -150,7 +150,7 @@ class TrackEExercises
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $exeId;
+    protected $exeId;
 
     /**
      * Set exeUserId.

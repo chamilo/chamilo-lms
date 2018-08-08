@@ -29,91 +29,91 @@ class CDropboxFile
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="uploader_id", type="integer", nullable=false)
      */
-    private $uploaderId;
+    protected $uploaderId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=250, nullable=false)
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @var int
      *
      * @ORM\Column(name="filesize", type="integer", nullable=false)
      */
-    private $filesize;
+    protected $filesize;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=250, nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    private $author;
+    protected $author;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
-    private $uploadDate;
+    protected $uploadDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_upload_date", type="datetime", nullable=false)
      */
-    private $lastUploadDate;
+    protected $lastUploadDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
-    private $catId;
+    protected $catId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set uploaderId.
@@ -401,5 +401,25 @@ class CDropboxFile
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CDropboxFile
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
     }
 }

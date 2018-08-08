@@ -1,16 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	@author jmontoya
+ * @author jmontoya
  *
- *	@package chamilo.document
+ * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Protection
 api_protect_course_script(true);
 
-$noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 

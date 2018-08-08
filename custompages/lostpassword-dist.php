@@ -16,6 +16,9 @@ $rootWeb = api_get_path('WEB_PATH');
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<script type="text/javascript" src="<?php echo $rootWeb; ?>web/assets/jquery/dist/jquery.min.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="<?php echo $rootWeb; ?>web/assets/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="<?php echo $rootWeb; ?>web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// Handler pour la touche retour

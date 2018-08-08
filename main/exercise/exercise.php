@@ -79,11 +79,9 @@ Session::erase('duration_time');
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
 $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
-
 $hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
-
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : null;
@@ -97,6 +95,13 @@ if (api_is_in_gradebook()) {
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
     ];
+}
+
+$autoLaunchAvailable = false;
+if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
+    api_get_configuration_value('allow_exercise_auto_launch')
+) {
+    $autoLaunchAvailable = true;
 }
 
 $nameTools = get_lang('Exercises');
@@ -130,7 +135,7 @@ if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
         rmdir($temp_zip_dir);
         exit; //otherwise following clicks may become buggy
     } else {
-        $errorXmlExport = Display :: return_message(get_lang('ErrorWritingXMLFile'), 'error');
+        $errorXmlExport = Display::return_message(get_lang('ErrorWritingXMLFile'), 'error');
     }
 }
 
@@ -179,7 +184,7 @@ if ($is_allowedToEdit) {
                     if ($exercise_action_locked == false) {
                         $objExerciseTmp = new Exercise();
                         if ($objExerciseTmp->read($exeItem['id'])) {
-                            $quantity_results_deleted += $objExerciseTmp->clean_results(true);
+                            $quantity_results_deleted += $objExerciseTmp->cleanResults(true);
                         }
                     }
                 }
@@ -205,6 +210,14 @@ if ($is_allowedToEdit) {
         if ($objExerciseTmp->read($exerciseId)) {
             if ($check) {
                 switch ($choice) {
+                    case 'enable_launch':
+                        $objExerciseTmp->cleanCourseLaunchSettings();
+                        $objExerciseTmp->enableAutoLaunch();
+                        Display::addFlash(Display::return_message(get_lang('Updated')));
+                        break;
+                    case 'disable_launch':
+                        $objExerciseTmp->cleanCourseLaunchSettings();
+                        break;
                     case 'delete':
                         // deletes an exercise
                         if ($exercise_action_locked == false) {
@@ -289,7 +302,7 @@ if ($is_allowedToEdit) {
                     case 'clean_results':
                         //clean student results
                         if ($exercise_action_locked == false) {
-                            $quantity_results_deleted = $objExerciseTmp->clean_results(true);
+                            $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
                             echo Display::return_message(
                                 $title.': '.sprintf(
@@ -473,6 +486,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/qti2.php?'.api_get_cidreq().'">'.Display::return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.Display::return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+
     echo Display::url(
         Display::return_icon(
             'clean_all.png',
@@ -480,10 +494,12 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             '',
             ICON_SIZE_MEDIUM
         ),
-        '',
+        '#',
         [
-            'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-            'href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token,
+            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token,
+            'data-toggle' => 'modal',
+            'data-target' => '#confirm-delete',
         ]
     );
 }
@@ -659,7 +675,7 @@ if (!empty($exerciseList)) {
             $cut_title = $exercise->getCutTitle();
             $alt_title = '';
             if ($cut_title != $row['title']) {
-                $alt_title = ' title = "'.$row['title'].'" ';
+                $alt_title = ' title = "'.$exercise->getUnformattedTitle().'" ';
             }
 
             // Teacher only
@@ -737,7 +753,7 @@ if (!empty($exerciseList)) {
                 $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
                         WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
                 $sqlresult = Database::query($sql);
-                $rowi = Database :: result($sqlresult, 0, 0);
+                $rowi = intval(Database :: result($sqlresult, 0, 0));
 
                 if ($session_id == $row['session_id']) {
                     // Questions list
@@ -755,6 +771,32 @@ if (!empty($exerciseList)) {
                     // Exercise results
                     $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+
+                    // Auto launch
+                    if ($autoLaunchAvailable) {
+                        $autoLaunch = $exercise->getAutoLaunch();
+                        if (empty($autoLaunch)) {
+                            $actions .= Display::url(
+                                Display::return_icon(
+                                    'launch_na.png',
+                                    get_lang('Enable'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ),
+                                'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
+                        } else {
+                            $actions .= Display::url(
+                                Display::return_icon(
+                                    'launch.png',
+                                    get_lang('Disable'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ),
+                                'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
+                        }
+                    }
 
                     // Export
                     $actions .= Display::url(
@@ -897,7 +939,7 @@ if (!empty($exerciseList)) {
                             ),
                             '',
                             [
-                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
+                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
                             ]
                         );
@@ -1145,9 +1187,9 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
 $nbrActiveTests = 0;
 if (isset($attribute['path']) && is_array($attribute['path'])) {
     $hotpotatoes_exist = true;
-    while (list($key, $path) = each($attribute['path'])) {
+    foreach ($attribute['path'] as $key => $path) {
         $item = '';
-        list($a, $vis) = each($attribute['visibility']);
+        $vis = $attribute['visibility'][$key];
         $active = !empty($vis);
         $title = GetQuizName($path, $documentPath);
         if ($title == '') {

@@ -15,6 +15,7 @@ $nameTools = get_lang('VoiceRecord');
 
 api_protect_course_script();
 api_block_anonymous_users();
+api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
 $document_data = DocumentManager::get_document_data_by_id(
     $_GET['id'],
@@ -77,7 +78,6 @@ if (!is_dir($filepath)) {
 //groups //TODO: clean
 if (!empty($groupId)) {
     $interbreadcrumb[] = ["url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace')];
-    $noPHP_SELF = true;
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
@@ -153,6 +153,7 @@ $actions = Display::toolbarButton(
 $template = new Template($nameTools);
 $template->assign('directory', $wamidir);
 $template->assign('user_id', api_get_user_id());
+$template->assign('reload_page', 1);
 
 $layout = $template->get_template('document/record_audio.tpl');
 $content = $template->fetch($layout);

@@ -101,8 +101,15 @@ $(function() {
             //lock
             $(".checkbox_head_"+calendar_id).attr("disabled", true);
 
-            $(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
-            $(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF",      "border-left":"none","border-right":"none"});
+            $(".row_odd  td.checkboxes_col_"+calendar_id).css({
+                "opacity":"1",
+                "background-color":"#F9F9F9",   
+                "border-left":"none",
+                "border-right":"none"
+            });
+            $(".row_even td.checkboxes_col_"+calendar_id).css({
+                "opacity":"1","background-color":"#FFF",      "border-left":"none","border-right":"none"
+            });
             $(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
             $(this).attr("src","'.Display::returnIconPath('lock-closed.png').'");
             $(this).attr("title","'.get_lang('DateUnLock').'");
@@ -116,8 +123,20 @@ $(function() {
             $(".checkbox_head_"+calendar_id).attr("disabled", false);
             $(".checkbox_head_"+calendar_id).removeAttr("disabled");
 
-            $(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
-            $(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
+            $(".row_odd  td.checkboxes_col_"+calendar_id).css({
+                "opacity":"1",
+                "background-color":"#dcdcdc", 
+                "border-left":"1px #bbb solid", 
+                "border-right":"1px #bbb solid", 
+                "z-index":"1"
+            });
+            $(".row_even td.checkboxes_col_"+calendar_id).css({
+                "opacity":"1",
+                "background-color":"#eee", 
+                "border-left":"1px #bbb solid", 
+                "border-right":"1px #bbb solid", 
+                "z-index":"1"
+            });
 
             $(".checkboxes_col_"+calendar_id).mouseover(function() {
                 //$(".checkbox_head_"+calendar_id).removeAttr("opacity");
@@ -196,7 +215,9 @@ if ($action == 'attendance_edit') {
 if ($action == 'attendance_sheet_list' || $action == 'attendance_sheet_add') {
     $interbreadcrumb[] = ['url' => '#', 'name' => $attendance_data['name']];
 }
-if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' || $action == 'calendar_all_delete') {
+if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' ||
+    $action == 'calendar_all_delete'
+) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
         'name' => $attendance_data['name'],
@@ -247,6 +268,7 @@ switch ($action) {
     case 'attendance_delete':
         if ($allowToEdit) {
             $attendanceController->attendance_delete($attendance_id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
         } else {
             api_not_allowed(true);
         }

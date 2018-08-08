@@ -25,42 +25,42 @@ class TrackEOnline
      *
      * @ORM\Column(name="login_user_id", type="integer", nullable=false)
      */
-    private $loginUserId;
+    protected $loginUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
      */
-    private $loginDate;
+    protected $loginDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    private $userIp;
+    protected $userIp;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var int
@@ -69,7 +69,7 @@ class TrackEOnline
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $loginId;
+    protected $loginId;
 
     /**
      * Set loginUserId.

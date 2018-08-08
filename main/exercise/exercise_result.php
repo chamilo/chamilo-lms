@@ -40,7 +40,7 @@ if (empty($remind_list)) {
     $remind_list = isset($_REQUEST['remind_list']) ? $_REQUEST['remind_list'] : null;
 }
 
-$exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;
+$exe_id = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
 if (empty($objExercise)) {
     // Redirect to the exercise overview

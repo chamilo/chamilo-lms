@@ -20,28 +20,28 @@ class SequenceTypeEntity
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ent_table", type="string", length=255, nullable=false)
      */
-    private $entityTable;
+    protected $entityTable;
 
     /**
      * Get id.

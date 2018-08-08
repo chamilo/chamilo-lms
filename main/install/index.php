@@ -17,6 +17,9 @@ use ChamiloSession as Session;
  *
  * @package chamilo.install
  */
+$originalDisplayErrors = ini_get('display_errors');
+$originalMemoryLimit = ini_get('memory_limit');
+
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
 ini_set('memory_limit', -1);
@@ -36,9 +39,6 @@ require_once '../inc/lib/api.lib.php';
 require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
-
-/* INITIALIZATION SECTION */
-
 ob_implicit_flush(true);
 session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
@@ -103,7 +103,7 @@ $language_interface_initial_value = $install_language;
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
 
-// Enables the portablity layer and configures PHP for UTF-8
+// Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.
@@ -376,7 +376,7 @@ if ($encryptPassForm == '1') {
 
                 $.ajax({
                     contentType: "application/x-www-form-urlencoded",
-                    beforeSend: function(objeto) {},
+                    beforeSend: function(myObject) {},
                     type: "POST",
                     url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>install.ajax.php?a=send_contact_information",
                     beforeSend : function() {
@@ -575,7 +575,7 @@ if (@$_POST['step2']) {
         $passForm
     );
 } elseif (@$_POST['step5']) {
-    //STEP 6 : LAST CHECK BEFORE INSTALL ?>
+    //STEP 6 : LAST CHECK BEFORE INSTALL?>
     <div class="RequirementHeading">
        <h3><?php echo display_step_sequence().get_lang('LastCheck'); ?></h3>
     </div>

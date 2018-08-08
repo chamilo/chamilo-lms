@@ -52,7 +52,7 @@ $htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
     }
-    $(window).load(function () {
+    $(window).on("load", function () {
         setFocus();
     });
 </script>';
@@ -94,12 +94,14 @@ $form->addElement(
     '<div id="advanced_params_options" style="display:none">'
 );
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
+    $accessUrlId,
+    api_get_configuration_value('allow_base_course_category')
+);
 
 if ($countCategories >= 100) {
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
-
     $form->addElement(
         'select_ajax',
         'category_code',
@@ -108,7 +110,10 @@ if ($countCategories >= 100) {
         ['url' => $url]
     );
 } else {
-    $categories = $courseCategoriesRepo->findAllInAccessUrl($accessUrlId);
+    $categories = $courseCategoriesRepo->findAllInAccessUrl(
+        $accessUrlId,
+        api_get_configuration_value('allow_base_course_category')
+    );
     $categoriesOptions = [null => get_lang('None')];
 
     /** @var CourseCategory $category */
@@ -316,7 +321,7 @@ if ($form->validate()) {
             $params['course_category'] = $category_code;
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
-            $params['course_template'] = $course_values['course_template'];
+            $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
 
             include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
             $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course_language.'/trad4all.inc.php';

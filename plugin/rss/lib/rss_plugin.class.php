@@ -1,17 +1,19 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
- * Description of.
- *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
 class RssPlugin extends Plugin
 {
-    protected function __construct()
+    /**
+     * RssPlugin constructor.
+     */
+    public function __construct()
     {
-        parent::__construct('1.1', 'Laurent Opprecht', ['block_title' => 'text', 'rss' => 'text']);
+        parent::__construct('1.1', 'Laurent Opprecht, Julio Montoya', ['block_title' => 'text', 'rss' => 'text']);
     }
 
     /**

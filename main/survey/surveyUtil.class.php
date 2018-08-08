@@ -68,8 +68,8 @@ class SurveyUtil
     {
         $course_id = intval($course_id);
         // table definition
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $sql = "DELETE FROM $table_survey_answer
+        $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $sql = "DELETE FROM $table
 				WHERE
 				    c_id = $course_id AND
                     user = '".Database::escape_string($user)."' AND
@@ -329,8 +329,7 @@ class SurveyUtil
 
         // Actions bar
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
-            .'">'.
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'), '', ICON_SIZE_MEDIUM)
             .'</a>';
         if (isset($_GET['user'])) {
@@ -871,7 +870,7 @@ class SurveyUtil
 
         // Actions bar
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'">'
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
             .Display::return_icon(
                 'back.png',
                 get_lang('BackTo').' '.get_lang('ReportingOverview'),
@@ -1312,7 +1311,8 @@ class SurveyUtil
             // 2. there is a question filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter'])) || (
                 is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter']))
+                in_array($row['question_id'], $_POST['questions_filter'])
+            )
             ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
@@ -2415,6 +2415,7 @@ class SurveyUtil
         $_course = api_get_course_info();
         $sessionId = api_get_session_id();
 
+        // Replacing the **link** part with a valid link for the user
         $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?';
         $link .= 'id_session='.$sessionId.'&course='.$_course['code'].'&invitationcode='.$invitation_code;
 
@@ -2637,12 +2638,10 @@ class SurveyUtil
     /**
      * This function displays the form for searching a survey.
      *
-     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version January 2007
      *
-     * @todo use quickforms
      * @todo consider moving this to surveymanager.inc.lib.php
      */
     public static function display_survey_search_form()
@@ -2739,7 +2738,7 @@ class SurveyUtil
         if (api_get_configuration_value('allow_mandatory_survey')) {
             $table->set_header(9, get_lang('IsMandatory'));
             $table->set_header(10, get_lang('Modify'), false, 'width="150"');
-            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(8, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter');
         } else {
             $table->set_header(9, get_lang('Modify'), false, 'width="150"');
@@ -2777,8 +2776,6 @@ class SurveyUtil
         $table->set_header(2, get_lang('SurveyCode'));
         $table->set_header(3, get_lang('NumberOfQuestions'));
         $table->set_header(4, get_lang('Author'));
-        //$table->set_header(5, get_lang('Language'));
-        //$table->set_header(6, get_lang('Shared'));
         $table->set_header(5, get_lang('AvailableFrom'));
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
@@ -2787,7 +2784,7 @@ class SurveyUtil
         if (api_get_configuration_value('allow_mandatory_survey')) {
             $table->set_header(9, get_lang('Modify'), false, 'width="130"');
             $table->set_header(10, get_lang('Modify'), false, 'width="130"');
-            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(8, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter_for_coach');
         } else {
             $table->set_header(9, get_lang('Modify'), false, 'width="130"');
@@ -2830,9 +2827,13 @@ class SurveyUtil
      * @param int  $survey_id the id of the survey
      * @param bool $drh
      *
-     * @return string html code that are the actions that can be performed on any survey
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
+     * @return string html code that are the actions that can be performed on any survey
      *
      * @version January 2007
      */
@@ -2851,12 +2852,15 @@ class SurveyUtil
         }
 
         $survey_id = $survey->getSurveyId();
-        $return = '';
+        $actions = [];
         $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
+        $codePath = api_get_path(WEB_CODE_PATH);
+        $params = [];
+        parse_str(api_get_cidreq(), $params);
 
         $reportingLink = Display::url(
-            Display::return_icon('stats.png', get_lang('Reporting'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
+            Display::return_icon('statistics.png', get_lang('Reporting')),
+            $codePath.'survey/reporting.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
 
         if ($drh) {
@@ -2867,48 +2871,62 @@ class SurveyUtil
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
-            $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq()
-                .'&action=edit&survey_id='.$survey_id.'">'
-                .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)
-                .'</a>';
+            $actions[] = Display::url(
+                Display::return_icon('edit.png', get_lang('Edit')),
+                $codePath.'survey/create_new_survey.php?'
+                    .http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id])
+            );
             if (SurveyManager::survey_generation_hash_available()) {
-                $return .= Display::url(
-                    Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink'), '', ICON_SIZE_SMALL),
-                    api_get_path(WEB_CODE_PATH).'survey/generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq()
+                $actions[] = Display::url(
+                    Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink')),
+                    $codePath.'survey/generate_link.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
             }
-            $return .= Display::url(
-                Display::return_icon('copy.png', get_lang('DuplicateSurvey'), '', ICON_SIZE_SMALL),
-                'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq()
+            $actions[] = Display::url(
+                Display::return_icon('backup.png', get_lang('CopySurvey')),
+                $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
+            );
+            $actions[] = Display::url(
+                Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
+                $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
             );
 
-            $return .= ' <a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq()
-                .'&action=empty&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''
-                .addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'
-                .Display::return_icon('clean.png', get_lang('EmptySurvey'), '', ICON_SIZE_SMALL)
-                .'</a>&nbsp;';
+            $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
+            $actions[] = Display::url(
+                Display::return_icon('clean.png', get_lang('EmptySurvey')),
+                $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
+                [
+                    'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
+                ]
+            );
         }
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&survey_id='
-            .$survey_id.'">'
-            .Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_SMALL)
-            .'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='
-            .$survey_id.'">'
-            .Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_SMALL)
-            .'</a>&nbsp;';
-        $return .= $hideReportingButton ? '' : $reportingLink;
+        $actions[] = Display::url(
+            Display::return_icon('preview_view.png', get_lang('Preview')),
+            $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = Display::url(
+            Display::return_icon('mail_send.png', get_lang('Publish')),
+            $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = $hideReportingButton ? null : $reportingLink;
 
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
-            $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq()
-                .'&action=delete&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''
-                .addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'
-                .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL)
-                .'</a>&nbsp;';
+            $warning = addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES));
+            $actions[] = Display::url(
+                Display::return_icon('delete.png', get_lang('Delete')),
+                $codePath.'survey/survey_list.php?'
+                    .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
+                [
+                    'onclick' => "javascript: if(!confirm('".$warning."')) return false;",
+                ]
+            );
         }
 
-        return $return;
+        return implode(PHP_EOL, $actions);
     }
 
     /**
@@ -2919,21 +2937,29 @@ class SurveyUtil
     public static function modify_filter_for_coach($survey_id)
     {
         $survey_id = (int) $survey_id;
-        //$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&action=edit&survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-        //$return .= '<a href="survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-        //$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
-        //$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
-        $return = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq()
-            .'&survey_id='.$survey_id.'">'
-            .Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.
-            Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_SMALL)
-            .'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=empty&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''
-            .addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES)).'\')) return false;">'
-            .Display::return_icon('clean.png', get_lang('EmptySurvey'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+        $actions = [];
+        $codePath = api_get_path(WEB_CODE_PATH);
+        $params = [];
+        parse_str(api_get_cidreq(), $params);
+        $actions[] = Display::url(
+            Display::return_icon('preview_view.png', get_lang('Preview')),
+            $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $actions[] = Display::url(
+            Display::return_icon('mail_send.png', get_lang('Publish')),
+            $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
+        );
+        $warning = addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES));
+        $actions[] = Display::url(
+            Display::return_icon('clean.png', get_lang('EmptySurvey')),
+            $codePath.'survey/survey_list.php?'
+                .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
+            [
+                'onclick' => "javascript: if(!confirm('".$warning."')) return false;",
+            ]
+        );
 
-        return $return;
+        return implode(PHP_EOL, $actions);
     }
 
     /**
@@ -3049,6 +3075,8 @@ class SurveyUtil
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $_user = api_get_user_info();
 
+        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+
         // Searching
         $search_restriction = self::survey_search_restriction();
         if ($search_restriction) {
@@ -3071,17 +3099,16 @@ class SurveyUtil
                 survey.survey_id AS col0,
                 survey.title AS col1,
                 survey.code AS col2,
-                count(survey_question.question_id) AS col3,
-        "
-            .(api_is_western_name_order()
+                count(survey_question.question_id) AS col3, "
+                .(api_is_western_name_order()
                 ? "CONCAT(user.firstname, ' ', user.lastname)"
                 : "CONCAT(user.lastname, ' ', user.firstname)")
-            ."	AS col4,
+                ."	AS col4,
                 survey.avail_from AS col5,
                 survey.avail_till AS col6,
                 survey.invited AS col7,
                 survey.anonymous AS col8,
-                survey.survey_id AS col9,
+                survey.iid AS col9,
                 survey.session_id AS session_id,
                 survey.answered,
                 survey.invited
@@ -3120,8 +3147,14 @@ class SurveyUtil
             $array[2] = $survey[2].$session_img;
             $array[3] = $survey[3];
             $array[4] = $survey[4];
-            $array[5] = $survey[5];
-            $array[6] = $survey[6];
+            $array[5] = api_convert_and_format_date(
+                $survey[5],
+                $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+            );
+            $array[6] = api_convert_and_format_date(
+                $survey[6],
+                $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+            );
             $array[7] =
                 Display::url(
                     $survey['answered'],
@@ -3133,9 +3166,8 @@ class SurveyUtil
                     api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey[0].'&'
                         .api_get_cidreq()
                 );
-
-            $array[8] = $survey[8];
-
+            // Anon
+            $array[8] = $survey['col8'];
             if ($mandatoryAllowed) {
                 $efvMandatory = $efv->get_values_by_handler_and_field_variable(
                     $survey[9],
@@ -3143,9 +3175,11 @@ class SurveyUtil
                 );
 
                 $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
-                $array[10] = $survey[9];
+                // Survey id
+                $array[10] = $survey['col9'];
             } else {
-                $array[9] = $survey[9];
+                // Survey id
+                $array[9] = $survey['col9'];
             }
 
             if ($isDrh) {
@@ -3170,6 +3204,7 @@ class SurveyUtil
     public static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
+        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
         $survey_tree = new SurveyTree();
         //$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
         $last_version_surveys = $survey_tree->surveylist;
@@ -3225,6 +3260,15 @@ class SurveyUtil
         $res = Database::query($sql);
         $surveys = [];
         while ($survey = Database::fetch_array($res)) {
+            $survey['col5'] = api_convert_and_format_date(
+                $survey['col5'],
+                $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+            );
+            $survey['col6'] = api_convert_and_format_date(
+                $survey['col6'],
+                $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+            );
+
             if ($mandatoryAllowed) {
                 $survey['col10'] = $survey['col9'];
                 $efvMandatory = $efv->get_values_by_handler_and_field_variable(
@@ -3255,6 +3299,7 @@ class SurveyUtil
         $user_id = intval($user_id);
         $sessionId = api_get_session_id();
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
+        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -3283,7 +3328,9 @@ class SurveyUtil
         echo '</thead>';
         echo '<tbody>';
 
-        $now = api_get_utc_datetime();
+        /** @var \DateTime $now */
+        $now = api_get_utc_datetime(null, false, true);
+        $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
 
         $sql = "SELECT *
                 FROM $table_survey survey 
@@ -3296,8 +3343,8 @@ class SurveyUtil
                 )
 				WHERE
                     survey_invitation.user = $user_id AND                    
-                    survey.avail_from <= '".$now."' AND
-                    survey.avail_till >= '".$now."' AND
+                    survey.avail_from <= '$filterDate' AND
+                    survey.avail_till >= '$filterDate' AND
                     survey.c_id = $course_id AND
                     survey.session_id = $sessionId AND
                     survey_invitation.c_id = $course_id
@@ -3457,7 +3504,8 @@ class SurveyUtil
                     $get_lang_variables = false;
                     if (in_array(
                         $field_details[1],
-                        ['mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message'])
+                        ['mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message']
+                    )
                     ) {
                         $get_lang_variables = true;
                     }
@@ -3724,5 +3772,36 @@ class SurveyUtil
         $response = Database::affected_rows($result);
 
         return $response > 0;
+    }
+
+    /**
+     * Get the pending surveys for a user.
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getUserPendingInvitations($userId)
+    {
+        $now = api_get_utc_datetime(null, false, true);
+
+        $dql = "
+            SELECT s, si FROM ChamiloCourseBundle:CSurvey s
+            INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
+                WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
+            WHERE 
+                si.user = :user_id AND 
+                s.availFrom <= :now AND 
+                s.availTill >= :now AND 
+                si.answered = 0
+            ORDER BY s.availTill ASC
+        ";
+
+        $pendingSurveys = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['user_id' => $userId, 'now' => $now->format('Y-m-d')])
+            ->getResult();
+
+        return $pendingSurveys;
     }
 }

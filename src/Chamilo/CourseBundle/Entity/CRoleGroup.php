@@ -26,42 +26,42 @@ class CRoleGroup
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="role_id", type="integer", nullable=false)
      */
-    private $roleId;
+    protected $roleId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="scope", type="string", length=20, nullable=false)
      */
-    private $scope;
+    protected $scope;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer")
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * Set roleId.

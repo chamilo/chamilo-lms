@@ -708,7 +708,8 @@ function get_number_of_users()
     }
 
     foreach ($a_course_users as $o_course_user) {
-        if ((isset($_GET['keyword']) &&
+        if ((
+            isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $o_course_user['firstname'],
                     $o_course_user['lastname'],
@@ -836,7 +837,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
     );
 
     foreach ($a_course_users as $user_id => $o_course_user) {
-        if ((isset($_GET['keyword']) &&
+        if ((
+            isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $o_course_user['firstname'],
                     $o_course_user['lastname'],
@@ -1034,6 +1036,14 @@ function modify_filter($user_id, $row, $data)
                 $disabled = 'disabled';
             } else {
                 $disabled = '';
+            }
+
+            $allow = api_get_configuration_value('extra');
+            if ($allow) {
+                $result .= '<a href="'.
+                    api_get_path(WEB_CODE_PATH).'extra/userInfo.php?'.api_get_cidreq().'&editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.
+                    Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).
+                    '</a>&nbsp;';
             }
 
             if ($data['user_status_in_course'] == STUDENT) {

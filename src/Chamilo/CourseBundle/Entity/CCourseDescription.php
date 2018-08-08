@@ -29,56 +29,56 @@ class CCourseDescription
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
-    private $descriptionType;
+    protected $descriptionType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
-    private $progress;
+    protected $progress;
 
     /**
      * Set title.
@@ -246,5 +246,25 @@ class CCourseDescription
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CCourseDescription
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
     }
 }

@@ -41,7 +41,6 @@ function handleRegions()
     }
 
     $plugin_obj = new AppPlugin();
-    $possible_plugins = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
@@ -56,7 +55,6 @@ function handleRegions()
     echo '</tr>';
 
     /* We display all the possible plugins and the checkboxes */
-
     $plugin_region_list = [];
     $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach ($my_plugin_list as $plugin_item) {
@@ -82,9 +80,7 @@ function handleRegions()
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '</td><td>';
             $selected_plugins = $plugin_obj->get_areas_by_plugin($pluginName);
-
             $region_list = [];
-
             $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
             $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];
 
@@ -98,6 +94,7 @@ function handleRegions()
                     $region_list['course_tool_plugin'] = 'course_tool_plugin';
                 }
             }
+
             echo Display::select(
                 'plugin_'.$pluginName.'[]',
                 $region_list,
@@ -168,38 +165,41 @@ function handlePlugins()
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }*/
-
+    $installed = '';
+    $notInstalled = '';
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
             $plugin_info = [];
             require $plugin_info_file;
 
+            $pluginRow = '';
+
             if (in_array($pluginName, $installed_plugins)) {
-                echo '<tr class="row_selected">';
+                $pluginRow .= '<tr class="row_selected">';
             } else {
-                echo '<tr>';
+                $pluginRow .= '<tr>';
             }
-            echo '<td>';
+            $pluginRow .= '<td>';
             //Checkbox
             if (in_array($pluginName, $installed_plugins)) {
-                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
             } else {
-                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
             }
-            echo '</td><td>';
-            echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
-            echo '<p>'.$plugin_info['comment'].'</p>';
-            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
+            $pluginRow .= '</td><td>';
+            $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
+            $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
+            $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
-            echo '<div class="btn-group">';
+            $pluginRow .= '<div class="btn-group">';
             if (in_array($pluginName, $installed_plugins)) {
-                echo Display::url(
+                $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
                     ['class' => 'btn btn-default']
                 );
-                echo Display::url(
+                $pluginRow .= Display::url(
                     '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
                     'settings.php?category=Regions&name='.$pluginName,
                     ['class' => 'btn btn-default']
@@ -207,7 +207,7 @@ function handlePlugins()
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
-                echo Display::url(
+                $pluginRow .= Display::url(
                     "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
@@ -221,7 +221,7 @@ function handlePlugins()
 
             $readmeFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/README.md';
             if (file_exists($readmeFile)) {
-                echo Display::url(
+                $pluginRow .= Display::url(
                     "<em class='fa fa-file-text-o'></em> README.md",
                     api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
@@ -233,8 +233,14 @@ function handlePlugins()
                 );
             }
 
-            echo '</div>';
-            echo '</td></tr>';
+            $pluginRow .= '</div>';
+            $pluginRow .= '</td></tr>';
+
+            if (in_array($pluginName, $installed_plugins)) {
+                $installed .= $pluginRow;
+            } else {
+                $notInstalled .= $pluginRow;
+            }
         }
     }
     echo '</table>';
@@ -512,6 +518,10 @@ function uploadStylesheet($values, $picture)
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
+    if (empty($style_name) || is_array($style_name)) {
+        // The name of the uploaded stylesheet doesn't have the expected format
+        return $result;
+    }
     $cssToUpload = CSS_UPLOAD_PATH;
 
     // Check if a virtual instance vchamilo is used
@@ -572,6 +582,7 @@ function uploadStylesheet($values, $picture)
                     $result = true;
                 } else {
                     $extraction_path = $cssToUpload.$style_name.'/';
+                    $mode = api_get_permissions_for_new_directories();
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
                         if (substr($entry, -1) == '/') {
@@ -584,7 +595,7 @@ function uploadStylesheet($values, $picture)
                         if (strpos($entry_without_first_dir, '/') !== false) {
                             if (!is_dir($extraction_path.dirname($entry_without_first_dir))) {
                                 // Create it.
-                                @mkdir($extraction_path.dirname($entry_without_first_dir), $mode = 0777, true);
+                                @mkdir($extraction_path.dirname($entry_without_first_dir), $mode, true);
                             }
                         }
 
@@ -667,10 +678,8 @@ function storeRegions()
 function storePlugins()
 {
     $appPlugin = new AppPlugin();
-
     // Get a list of all current 'Plugins' settings
     $plugin_list = $appPlugin->read_plugins_from_path();
-
     $installed_plugins = [];
 
     foreach ($plugin_list as $plugin) {
@@ -999,7 +1008,7 @@ function getNumberOfTemplates()
  * @param int    $from            the start of the limit statement
  * @param int    $number_of_items the number of elements that have to be retrieved from the database
  * @param int    $column          the column that is
- * @param string $direction       the sorting direction (ASC or DESC�
+ * @param string $direction       the sorting direction (ASC or DESC)
  *
  * @return array
  *
@@ -1113,8 +1122,7 @@ function addEditTemplate()
         get_lang('Text'),
         true,
         true,
-        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400'],
-        true
+        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400']
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.
@@ -1442,7 +1450,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $row['category'] = 0;
                 }
                 if (isset($settings_by_access_list[$row['variable']]) &&
-                    is_array($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']])) {
+                    isset($settings_by_access_list[$row['variable']][$row['subkey']]) &&
+                    is_array($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']])
+                ) {
                     // We are sure that the other site have a selected value.
                     if ($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'] != '') {
                         $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'];
@@ -1478,9 +1488,10 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         ['maxlength' => '5', 'aria-label' => get_lang($row['title'])]
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
-                    $default_values[$row['variable']] = $row['selected_value'];
 
-                // For platform character set selection: Conversion of the textfield to a select box with valid values.
+                    // For platform character set selection:
+                    // Conversion of the textfield to a select box with valid values.
+                    $default_values[$row['variable']] = $row['selected_value'];
                 } elseif ($row['variable'] == 'platform_charset') {
                     continue;
                 } else {

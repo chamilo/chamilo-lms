@@ -1,7 +1,5 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{% extends 'layout/layout_1_col.tpl'|get_template %}
 {% block content %}
-
-{{ introduction_section }}
 
 {{ form_content }}
 

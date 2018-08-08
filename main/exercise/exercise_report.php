@@ -43,7 +43,10 @@ $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
 /* Constants and variables */
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss() || api_is_session_admin();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+    api_is_drh() ||
+    api_is_student_boss() ||
+    api_is_session_admin();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -53,14 +56,30 @@ $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
 
 $course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
+$sessionId = api_get_session_id();
 
 if (empty($exercise_id)) {
     api_not_allowed(true);
 }
 
-if (!$is_allowedToEdit && !$allowCoachFeedbackExercises) {
+$blockPage = true;
+if (empty($sessionId)) {
+    if ($is_allowedToEdit) {
+        $blockPage = false;
+    }
+} else {
+    if ($allowCoachFeedbackExercises && api_is_coach($sessionId, $course_id)) {
+        $blockPage = false;
+    } else {
+        if ($is_allowedToEdit) {
+            $blockPage = false;
+        }
+    }
+}
+
+if ($blockPage) {
     api_not_allowed(true);
 }
 
@@ -238,8 +257,6 @@ if (isset($_REQUEST['comments']) &&
             Display::addFlash(
                 Display::return_message(get_lang('MessageSent'))
             );
-            header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId);
-            exit;
         }
     }
 
@@ -320,7 +337,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
-        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
+        $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -404,7 +421,7 @@ if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
     if ($exerciseExists) {
         $interbreadcrumb[] = [
-            "url" => "admin.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
+            "url" => '#',
             "name" => $objExerciseTmp->selectTitle(true),
         ];
     }
@@ -440,7 +457,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     if ($check) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
-            $count = $objExerciseTmp->clean_results(
+            $count = $objExerciseTmp->cleanResults(
                 true,
                 $_GET['delete_before_date'].' 23:59:59'
             );
@@ -587,7 +604,14 @@ if ($is_allowedToEdit || $is_tutor) {
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
         ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
-        ['name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'],
+        [
+            'name' => 'login',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'hidden' => api_get_configuration_value('exercise_attempts_report_show_username') ? 'false' : 'true',
+        ],
         ['name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar
             'searchoptions' => [
@@ -789,7 +813,7 @@ $extra_params['height'] = 'auto';
                 // Format the date for confirm box
                 var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
                 var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
-                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')); ?>" + selectedDate)) {
+                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>" + selectedDate)) {
                     self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
                 }
             }

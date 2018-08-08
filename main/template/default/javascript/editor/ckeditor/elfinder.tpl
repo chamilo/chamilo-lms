@@ -1,5 +1,5 @@
-{% extends template ~ "/layout/no_layout.tpl" %}
+{% extends 'layout/no_layout.tpl'|get_template %}
 
 {% block body %}
-    {% include template ~ '/javascript/editor/elfinder_standalone.tpl' %}
+    {% include 'javascript/editor/elfinder_standalone.tpl'|get_template %}
 {% endblock %}

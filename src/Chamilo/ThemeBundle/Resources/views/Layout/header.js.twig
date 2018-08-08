@@ -116,7 +116,7 @@ $(document).ready(function() {
 
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
-        $(window).load(function(){
+        $(window).on("load", function () {
             $('input:-webkit-autofill').each(function(){
                 var text = $(this).val();
                 var name = $(this).attr('name');

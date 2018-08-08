@@ -25,70 +25,70 @@ class CBlogAttachment
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
-    private $size;
+    protected $size;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
-    private $postId;
+    protected $postId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="comment_id", type="integer", nullable=false)
      */
-    private $commentId;
+    protected $commentId;
 
     /**
      * Set path.

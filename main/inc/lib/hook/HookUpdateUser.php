@@ -25,8 +25,9 @@ class HookUpdateUser extends HookEvent implements HookUpdateUserEventInterface
      */
     public function notifyUpdateUser($type)
     {
-        /** @var \HookUpdateUserObserverInterface $observer */
         $this->eventData['type'] = $type;
+
+        /** @var HookUpdateUserObserverInterface $observer */
         foreach ($this->observers as $observer) {
             $observer->hookUpdateUser($this);
         }

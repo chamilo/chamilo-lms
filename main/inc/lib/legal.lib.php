@@ -20,30 +20,30 @@ class LegalManager
      *
      * @param int    $language language id
      * @param string $content  content
-     * @param int    $type     term and condition type (0 or 1)
+     * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
      * @param string $changes  explain changes
      *
      * @return bool success
      */
     public static function add($language, $content, $type, $changes)
     {
-        $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
-        $type = intval($type);
+        $type = (int) $type;
         $time = time();
 
         if ($last['content'] != $content) {
-            $version = intval(self::get_last_condition_version($language));
+            $version = self::getLastVersion($language);
             $version++;
             $params = [
                 'language_id' => $language,
                 'content' => $content,
                 'changes' => $changes,
                 'type' => $type,
-                'version' => intval($version),
+                'version' => $version,
                 'date' => $time,
             ];
-            Database::insert($legal_table, $params);
+            Database::insert($legalTable, $params);
 
             return true;
         } elseif ($last['type'] != $type && $language == $last['language_id']) {
@@ -54,7 +54,7 @@ class LegalManager
                 'type' => $type,
                 'date' => $time,
             ];
-            Database::update($legal_table, $params, ['id => ?' => $id]);
+            Database::update($legalTable, $params, ['id = ?' => $id]);
 
             return true;
         } else {
@@ -68,9 +68,9 @@ class LegalManager
     public static function delete($id)
     {
         /*
-        $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $id = intval($id);
-        $sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
+        $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $id = (int) $id;
+        $sql = "DELETE FROM $legalTable WHERE id = '".$id."'";
         */
     }
 
@@ -79,19 +79,19 @@ class LegalManager
      *
      * @param int $language language id
      *
-     * @return array all the info of a Term and condition
+     * @return int
      */
-    public static function get_last_condition_version($language)
+    public static function getLastVersion($language)
     {
-        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = Database::escape_string($language);
-        $sql = "SELECT version FROM $legal_conditions_table
-                WHERE language_id = '".$language."'
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $language = (int) $language;
+        $sql = "SELECT version FROM $table
+                WHERE language_id = $language
                 ORDER BY id DESC LIMIT 1 ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
-            return $row['version'];
+            return (int) $row['version'];
         } else {
             return 0;
         }
@@ -106,10 +106,10 @@ class LegalManager
      */
     public static function get_last_condition($language)
     {
-        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = Database::escape_string($language);
-        $sql = "SELECT * FROM $legal_conditions_table
-                WHERE language_id = '".$language."'
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $language = (int) $language;
+        $sql = "SELECT * FROM $table
+                WHERE language_id = $language
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
@@ -133,8 +133,8 @@ class LegalManager
     public static function hasVersion($language, $version)
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = intval($language);
-        $version = intval($version);
+        $language = (int) $language;
+        $version = (int) $version;
 
         if (empty($language)) {
             return false;
@@ -142,8 +142,8 @@ class LegalManager
 
         $sql = "SELECT version FROM $table
                 WHERE 
-                    language_id = '$language' AND 
-                    version = '$version'                
+                    language_id = $language AND 
+                    version = $version                
                 LIMIT 1 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -185,10 +185,10 @@ class LegalManager
      */
     public static function get_last_version($language)
     {
-        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = intval($language);
-        $sql = "SELECT version FROM $legal_conditions_table
-                WHERE language_id = '".$language."'
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $language = (int) $language;
+        $sql = "SELECT version FROM $table
+                WHERE language_id = '$language'
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
@@ -215,7 +215,9 @@ class LegalManager
         switch ($term_preview['type']) {
             case 0:
                 if (!empty($term_preview['content'])) {
-                    $preview = '<div class="legal-terms">'.$term_preview['content'].'</div><br />';
+                    $preview = '<div class="terms-conditions">
+                    <div id="legal-terms" class="scrollbar-inner">'.$term_preview['content'].'</div>
+                    </div>';
                 }
                 $preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
                 $courseInfo = api_get_course_info();
@@ -254,14 +256,14 @@ class LegalManager
      */
     public static function get_legal_data($from, $number_of_items, $column)
     {
-        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $lang_table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
-        $column = intval($column);
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+        $column = (int) $column;
 
         $sql = "SELECT version, original_name as language, content, changes, type, FROM_UNIXTIME(date)
-                FROM $legal_conditions_table 
+                FROM $table 
                 INNER JOIN $lang_table l
                 ON (language_id = l.id) 
                 ORDER BY language, version ASC 
@@ -293,9 +295,9 @@ class LegalManager
      */
     public static function count()
     {
-        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $sql = "SELECT count(*) as count_result
-                FROM $legal_conditions_table
+                FROM $table
                 ORDER BY id DESC ";
         $result = Database::query($sql);
         $url = Database::fetch_array($result, 'ASSOC');
@@ -306,19 +308,21 @@ class LegalManager
 
     /**
      * Get type of terms and conditions.
+     * Type 0 is HTML Text
+     * Type 1 is a link to a different terms and conditions page.
      *
      * @param int $legal_id
      * @param int $language_id
      *
-     * @return int The current type of terms and conditions
+     * @return mixed The current type of terms and conditions (int) or false on error
      */
     public static function get_type_of_terms_and_conditions($legal_id, $language_id)
     {
-        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $legal_id = intval($legal_id);
-        $language_id = intval($language_id);
-        $sql = 'SELECT type FROM '.$legal_conditions_table.'
-                WHERE id =  "'.$legal_id.'" AND language_id="'.$language_id.'"';
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $legal_id = (int) $legal_id;
+        $language_id = (int) $language_id;
+        $sql = "SELECT type FROM $table
+                WHERE id = $legal_id AND language_id = $language_id";
         $rs = Database::query($sql);
 
         return Database::result($rs, 0, 'type');
@@ -329,21 +333,17 @@ class LegalManager
      */
     public static function sendLegal($userId)
     {
-        $userInfo = api_get_user_info($userId);
         $subject = get_lang('SendTermsSubject');
-        $webPath = api_get_path(WEB_PATH);
-        $link = '<a href="'.$webPath.'courses/FORUMDAIDE/index.php">'.$webPath.'courses/FORUMDAIDE/index.php</a>';
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
-            $userInfo['firstName'],
-            $link
+            api_get_path(WEB_PATH)
         );
         MessageManager::send_message_simple($userId, $subject, $content);
         Display::addFlash(Display::return_message(get_lang('Sent')));
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
-        if ($value === false || $value[value] != 1) {
+        if ($value === false) {
             $extraFieldInfo = $extraFieldValue->getExtraField()->get_handler_field_info_by_field_variable('termactivated');
             if ($extraFieldInfo) {
                 $newParams = [
@@ -379,5 +379,29 @@ class LegalManager
         if ($value) {
             $extraFieldValue->delete($value['id']);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTreatmentTypeList()
+    {
+        return  [
+            101 => 'collection',
+            102 => 'recording',
+            103 => 'organization',
+            104 => 'structure',
+            105 => 'conservation',
+            106 => 'adaptation',
+            107 => 'extraction',
+            108 => 'consultation',
+            109 => 'usage',
+            110 => 'communication',
+            111 => 'interconnection',
+            112 => 'limitation',
+            113 => 'deletion',
+            114 => 'destruction',
+            115 => 'profiling',
+        ];
     }
 }

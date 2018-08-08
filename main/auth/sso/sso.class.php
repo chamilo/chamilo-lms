@@ -118,7 +118,8 @@ class sso
                 global $_configuration;
                 // Two possible authentication methods here: legacy using password
                 // and new using a temporary, session-fixed, tempkey
-                if (($sso['username'] == $uData['username']
+                if ((
+                    $sso['username'] == $uData['username']
                         && $sso['secret'] === sha1(
                             $uData['username'].
                             Session::read('tempkey').

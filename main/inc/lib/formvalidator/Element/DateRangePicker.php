@@ -172,6 +172,9 @@ class DateRangePicker extends HTML_QuickForm_text
                     $minDate
                     ranges: {
                          '".addslashes(get_lang('Today'))."': [moment(), moment()],
+                         '".addslashes(get_lang('Yesterday'))."': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],                                                  
+                         '".addslashes(get_lang('ThisMonth'))."': [moment().startOf('month'), moment().endOf('month')],
+                         '".addslashes(get_lang('LastMonth'))."': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],                      
                          '".addslashes(get_lang('ThisWeek'))."': [moment().weekday(1), moment().weekday(5)],
                          '".addslashes(get_lang('NextWeek'))."': [moment().weekday(8), moment().weekday(12)]
                     },

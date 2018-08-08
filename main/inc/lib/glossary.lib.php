@@ -26,13 +26,13 @@ class GlossaryManager
     public static function get_glossary_terms()
     {
         $glossary_data = [];
-        $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $sql_filter = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT glossary_id as id, name, description
-		        FROM $glossary_table
+		        FROM $table
 		        WHERE c_id = $course_id $sql_filter";
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
@@ -53,9 +53,10 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_id($glossary_id)
     {
-        $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT description FROM $glossary_table
+        $sql = "SELECT description 
+                FROM $table
                 WHERE c_id = $course_id  AND glossary_id =".intval($glossary_id);
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
@@ -78,11 +79,11 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_name($glossary_name)
     {
-        $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $sql_filter = api_get_session_condition($session_id);
-        $sql = 'SELECT * FROM '.$glossary_table.'
+        $sql = 'SELECT * FROM '.$table.'
 		        WHERE
 		            c_id = '.$course_id.' AND
 		            name LIKE trim("'.Database::escape_string($glossary_name).'")'.$sql_filter;
@@ -110,7 +111,7 @@ class GlossaryManager
         }
 
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
 
         // get the maximum display order of all the glossary items
         $max_glossary_item = self::get_max_glossary_item();
@@ -137,10 +138,10 @@ class GlossaryManager
                 'display_order' => $max_glossary_item + 1,
                 'session_id' => $session_id,
             ];
-            $id = Database::insert($t_glossary, $params);
+            $id = Database::insert($table, $params);
 
             if ($id) {
-                $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";
+                $sql = "UPDATE $table SET glossary_id = $id WHERE iid = $id";
                 Database::query($sql);
 
                 //insert into item_property
@@ -173,7 +174,7 @@ class GlossaryManager
     public static function update_glossary($values, $showMessage = true)
     {
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
 
         // check if the glossary term already exists
@@ -187,7 +188,7 @@ class GlossaryManager
 
             return false;
         } else {
-            $sql = "UPDATE $t_glossary SET
+            $sql = "UPDATE $table SET
                         name = '".Database::escape_string($values['name'])."',
                         description	= '".Database::escape_string($values['description'])."'
 					WHERE
@@ -226,9 +227,9 @@ class GlossaryManager
     public static function get_max_glossary_item()
     {
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-        $get_max = "SELECT MAX(display_order) FROM $t_glossary
+        $get_max = "SELECT MAX(display_order) FROM $table
                     WHERE c_id = $course_id ";
         $res_max = Database::query($get_max);
         if (Database::num_rows($res_max) == 0) {
@@ -253,10 +254,10 @@ class GlossaryManager
     public static function glossary_exists($term, $not_id = '')
     {
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT name FROM $t_glossary
+        $sql = "SELECT name FROM $table
                 WHERE
                     c_id = $course_id AND
                     name = '".Database::escape_string($term)."'";
@@ -275,7 +276,7 @@ class GlossaryManager
     /**
      * Get one specific glossary term data.
      *
-     * @param int $glossary_id ID of the flossary term
+     * @param int $glossary_id ID of the glossary term
      *
      * @return mixed Array(glossary_id,name,description,glossary_display_order) or false on error
      */
@@ -295,9 +296,10 @@ class GlossaryManager
                     ip.insert_date      as insert_date,
                     ip.lastedit_date    as update_date,
                     g.session_id
-                FROM $t_glossary g, $t_item_propery ip
-                WHERE
-                    g.glossary_id = ip.ref AND
+                FROM $t_glossary g 
+                INNER JOIN $t_item_propery ip
+                ON (g.glossary_id = ip.ref AND g.c_id = ip.c_id)
+                WHERE                    
                     tool = '".TOOL_GLOSSARY."' AND
                     g.glossary_id = '".intval($glossary_id)."' AND
                     g.c_id = ".api_get_course_int_id()." AND
@@ -322,7 +324,7 @@ class GlossaryManager
     public static function delete_glossary($glossary_id, $showMessage = true)
     {
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
         $glossaryInfo = self::get_glossary_information($glossary_id);
 
@@ -332,7 +334,7 @@ class GlossaryManager
 
         $glossary_id = (int) $glossary_id;
 
-        $sql = "DELETE FROM $t_glossary 
+        $sql = "DELETE FROM $table 
                 WHERE 
                     c_id = $course_id AND 
                     glossary_id='".$glossary_id."'";
@@ -393,26 +395,20 @@ class GlossaryManager
         // parameter for view type. Meanwhile, use this cheap trick.
         $view = self::getGlossaryView();
         // action links
-        //echo '<div class="actions">';
         $actionsLeft = '';
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.
                 Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        if (!api_is_anonymous()) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-                Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
-        }
-
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
-                Display::return_icon('import_csv.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (!api_is_anonymous()) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="export_opener" href="'.api_get_self().'?'.api_get_cidreq().'&action=export">'.
+                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (($view == 'table') || (!isset($view))) {
@@ -483,9 +479,9 @@ class GlossaryManager
      */
     public static function displayGlossaryList()
     {
-        $glossary_data = self::get_glossary_data(0, 1000, 0, 'ASC');
+        $glossaryList = self::get_glossary_data(0, 1000, 0, 'ASC');
         $content = '';
-        foreach ($glossary_data as $key => $glossary_item) {
+        foreach ($glossaryList as $key => $glossary_item) {
             $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
                 $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '', $glossary_item).'</div>';
@@ -676,16 +672,16 @@ class GlossaryManager
     public static function reorder_glossary()
     {
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $t_glossary
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id
                 ORDER by display_order ASC";
         $res = Database::query($sql);
 
         $i = 1;
         while ($data = Database::fetch_array($res)) {
-            $sql = "UPDATE $t_glossary SET display_order = $i
+            $sql = "UPDATE $table SET display_order = $i
                     WHERE c_id = $course_id AND glossary_id = '".intval($data['glossary_id'])."'";
             Database::query($sql);
             $i++;
@@ -701,7 +697,7 @@ class GlossaryManager
     public static function move_glossary($direction, $glossary_id)
     {
         // Database table definition
-        $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
+        $table = Database::get_course_table(TABLE_GLOSSARY);
 
         // sort direction
         if ($direction === 'up') {
@@ -711,7 +707,7 @@ class GlossaryManager
         }
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $t_glossary
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id
                 ORDER BY display_order $sortorder";
         $res = Database::query($sql);
@@ -728,9 +724,10 @@ class GlossaryManager
                 $found = true;
             }
         }
-        $sql1 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($next_display_order)."'
+
+        $sql1 = "UPDATE $table SET display_order = '".Database::escape_string($next_display_order)."'
                  WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($current_id)."'";
-        $sql2 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($current_display_order)."'
+        $sql2 = "UPDATE $table SET display_order = '".Database::escape_string($current_display_order)."'
                  WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($next_id)."'";
         Database::query($sql1);
         Database::query($sql2);
@@ -752,6 +749,7 @@ class GlossaryManager
         $template = new Template('', false, false, false, true, false, false);
         $layout = $template->get_template('glossary/export_pdf.tpl');
         $template->assign('items', $data);
+
         $html = $template->fetch($layout);
         $courseCode = api_get_course_id();
         $pdf = new PDF();
@@ -760,6 +758,8 @@ class GlossaryManager
 
     /**
      * Generate a PDF with all glossary terms and move file to documents.
+     *
+     * @return bool false if there's nothing in the glossary
      */
     public static function movePdfToDocuments()
     {
@@ -771,25 +771,76 @@ class GlossaryManager
             0,
             'ASC'
         );
-        $template = new Template('', false, false, false, true, false, false);
-        $layout = $template->get_template('glossary/export_pdf.tpl');
-        $template->assign('items', $data);
-        $fileName = get_lang('Glossary').'-'.api_get_local_time();
-        $signatures = ['Drh', 'Teacher', 'Date'];
 
-        $pdf = new PDF(
-            'A4-P',
-            'P',
-            [
-                'filename' => $fileName,
-                'pdf_title' => $fileName,
-                'add_signatures' => $signatures,
-            ]
+        if (!empty($data)) {
+            $template = new Template('', false, false, false, true, false, false);
+            $layout = $template->get_template('glossary/export_pdf.tpl');
+            $template->assign('items', $data);
+            $fileName = get_lang('Glossary').'-'.api_get_local_time();
+            $signatures = ['Drh', 'Teacher', 'Date'];
+
+            $pdf = new PDF(
+                'A4-P',
+                'P',
+                [
+                    'filename' => $fileName,
+                    'pdf_title' => $fileName,
+                    'add_signatures' => $signatures,
+                ]
+            );
+            $pdf->exportFromHtmlToDocumentsArea(
+                $template->fetch($layout),
+                $fileName,
+                $courseId
+            );
+
+            return true;
+        } else {
+            Display::addFlash(Display::return_message(get_lang('NothingToAdd')));
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $format
+     */
+    public static function exportToFormat($format)
+    {
+        if ($format == 'pdf') {
+            self::export_to_pdf();
+
+            return;
+        }
+
+        $data = GlossaryManager::get_glossary_data(
+            0,
+            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+            0,
+            'ASC'
         );
-        $pdf->exportFromHtmlToDocumentsArea(
-            $template->fetch($layout),
-            $fileName,
-            $courseId
-        );
+        usort($data, 'sorter');
+        $list = [];
+        $list[] = ['term', 'definition'];
+        $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');
+        foreach ($data as $line) {
+            $definition = $line[1];
+            if ($allowStrip) {
+                // htmlspecialchars_decode replace &#39 to '
+                // strip_tags remove HTML tags
+                $definition = htmlspecialchars_decode(strip_tags($definition), ENT_QUOTES);
+            }
+            $list[] = [$line[0], $definition];
+        }
+        $filename = 'glossary_course_'.api_get_course_id();
+
+        switch ($format) {
+            case 'csv':
+                Export::arrayToCsv($list, $filename);
+                break;
+            case 'xls':
+                Export::arrayToXls($list, $filename);
+                break;
+        }
     }
 }

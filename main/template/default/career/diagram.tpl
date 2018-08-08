@@ -1,28 +1,19 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
-
     <script>
         mxBasePath = '{{ _p.web_lib }}mxgraph/src/';
     </script>
-
     <script type="text/javascript" src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
-
     <script>
         // Overridden to define per-shape connection points
-        mxGraph.prototype.getAllConnectionConstraints = function(terminal, source)
-        {
-            if (terminal != null && terminal.shape != null)
-            {
-                if (terminal.shape.stencil != null)
-                {
-                    if (terminal.shape.stencil != null)
-                    {
+        mxGraph.prototype.getAllConnectionConstraints = function(terminal, source) {
+            if (terminal != null && terminal.shape != null) {
+                if (terminal.shape.stencil != null) {
+                    if (terminal.shape.stencil != null) {
                         return terminal.shape.stencil.constraints;
                     }
-                }
-                else if (terminal.shape.constraints != null)
-                {
+                } else if (terminal.shape.constraints != null) {
                     return terminal.shape.constraints;
                 }
             }
@@ -82,15 +73,16 @@
                     //var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
                     //var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
                     //var e1 = graph.insertEdge(parent, null, '', v1, v2);
-                    {% for vertex in vertex_list %}
-                        {{ vertex }}
-                    {% endfor %}
 
                     {% for vertex in group_list %}
                         {{ vertex }}
                     {% endfor %}
 
                     {% for vertex in subgroup_list %}
+                        {{ vertex }}
+                    {% endfor %}
+
+                    {% for vertex in vertex_list %}
                         {{ vertex }}
                     {% endfor %}
 

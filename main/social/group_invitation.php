@@ -186,7 +186,7 @@ if (is_array($members) && count($members) > 0) {
         $member['image'] = '<img class="img-circle" src="'.$image.'"  width="50px" height="50px"  />';
     }
 
-    $userList .= Display::return_sortable_grid(
+    $userList = Display::return_sortable_grid(
         'invitation_profile',
         [],
         $members,

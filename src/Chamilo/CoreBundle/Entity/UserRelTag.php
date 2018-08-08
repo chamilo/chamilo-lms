@@ -24,14 +24,14 @@ class UserRelTag
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="tag_id", type="integer", nullable=false)
      */
-    private $tagId;
+    protected $tagId;
 
     /**
      * @var int
@@ -40,7 +40,7 @@ class UserRelTag
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set userId.

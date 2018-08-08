@@ -20,21 +20,21 @@ class AccessUrlRelUserGroup
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer")
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="usergroup_id", type="integer")
      */
-    private $userGroupId;
+    protected $userGroupId;
 
     /**
      * Set accessUrlId.

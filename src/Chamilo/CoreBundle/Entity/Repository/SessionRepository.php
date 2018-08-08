@@ -23,7 +23,7 @@ class SessionRepository extends EntityRepository
      *
      * @param Session $session The session
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getCoursesOrderedByPosition(Session $session)
     {

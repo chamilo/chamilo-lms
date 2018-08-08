@@ -14,9 +14,15 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_TRACKING;
-
 api_block_anonymous_users();
+
+$is_allowedToTrack = api_is_platform_admin(true) || api_is_student_boss();
+
+if (!$is_allowedToTrack) {
+    api_not_allowed(true);
+}
+
+$this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),

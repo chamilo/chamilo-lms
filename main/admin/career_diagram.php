@@ -107,11 +107,16 @@ $tpl = new Template(get_lang('Diagram'));
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     $graph = unserialize($item['value']);
-    $html .= Career::renderDiagram($careerInfo, $graph);
+    $html .= Career::renderDiagramByColumn($graph, $tpl);
 } else {
     Display::addFlash(
         Display::return_message(
-        sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
-        'warning'
-    ));
+            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+            'warning'
+        )
+    );
 }
+
+$tpl->assign('content', $html);
+$layout = $tpl->get_template('career/diagram.tpl');
+$tpl->display($layout);

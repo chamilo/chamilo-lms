@@ -26,84 +26,84 @@ class CQuizQuestion
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="question", type="text", nullable=false)
      */
-    private $question;
+    protected $question;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var float
      *
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
-    private $ponderation;
+    protected $ponderation;
 
     /**
      * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var int
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="picture", type="string", length=50, nullable=true)
      */
-    private $picture;
+    protected $picture;
 
     /**
      * @var int
      *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
-    private $level;
+    protected $level;
 
     /**
      * @var string
      *
      * @ORM\Column(name="extra", type="string", length=255, nullable=true)
      */
-    private $extra;
+    protected $extra;
 
     /**
      * @var string
      *
      * @ORM\Column(name="question_code", type="string", length=10, nullable=true)
      */
-    private $questionCode;
+    protected $questionCode;
 
     /**
      * CQuizQuestion constructor.

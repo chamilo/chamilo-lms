@@ -1,16 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Ddeboer\DataImport\Reader\CsvReader;
-use Ddeboer\DataImport\Workflow;
-use Ddeboer\DataImport\Writer\ArrayWriter;
+use Ddeboer\DataImport\Reader\ExcelReader;
+use League\Csv\Reader;
 
 /**
  * Class Import
  * This class provides some functions which can be used when importing data from
  * external files into Chamilo.
  *
- * @package	 chamilo.library
+ * @package chamilo.library
  */
 class Import
 {
@@ -18,22 +17,11 @@ class Import
      * @param string $path
      * @param bool   $setFirstRowAsHeader
      *
-     * @return CsvReader
+     * @return array
      */
     public static function csv_reader($path, $setFirstRowAsHeader = true)
     {
-        if (empty($path)) {
-            return false;
-        }
-
-        $file = new \SplFileObject($path);
-        $csvReader = new CsvReader($file, ';');
-
-        if ($setFirstRowAsHeader) {
-            $csvReader->setHeaderRowNumber(0);
-        }
-
-        return $csvReader;
+        return self::csvToArray($path);
     }
 
     /**
@@ -54,19 +42,47 @@ class Import
      * @param string $filename the path to the CSV-file which should be imported
      *
      * @return array returns an array (in the system encoding) that contains all data from the CSV-file
-     *
-     * @deprecated use cvs_reader instead
      */
     public static function csvToArray($filename)
     {
-        $csvReader = self::csv_reader($filename);
-        $resultArray = [];
-        if ($csvReader) {
-            $workflow = new Workflow\StepAggregator($csvReader);
-            $writer = new ArrayWriter($resultArray);
-            $workflow->addWriter($writer)->process();
+        if (empty($filename)) {
+            return [];
         }
 
-        return $resultArray;
+        $reader = Reader::createFromPath($filename, 'r');
+        if ($reader) {
+            $reader->setDelimiter(';');
+            $reader->stripBom(true);
+            /*$contents = $reader->__toString();
+            if (!Utf8::isUtf8($contents)) {
+                // If file is not in utf8 try converting to ISO-8859-15
+                if ($reader->getStreamFilterMode() == 1) {
+                    $reader->appendStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
+                }
+            }*/
+
+            $iterator = $reader->fetchAssoc(0);
+
+            return iterator_to_array($iterator);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return array
+     */
+    public static function xlsToArray($filename)
+    {
+        if (empty($filename)) {
+            return [];
+        }
+
+        $file = new \SplFileObject($filename);
+        $reader = new ExcelReader($file, 0);
+
+        return $reader;
     }
 }

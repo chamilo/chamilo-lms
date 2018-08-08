@@ -47,7 +47,7 @@ $used_quota_bytes = $quota_bytes;
 if (!empty($session_list)) {
     foreach ($session_list as $session_data) {
         $quota_percentage = 0;
-        $quota_bytes = intval(DocumentManager::documents_total_space($course_id, null, $session_data['id']));
+        $quota_bytes = DocumentManager::documents_total_space($course_id, null, $session_data['id']);
         if (!empty($quota_bytes)) {
             $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
         }
@@ -67,7 +67,7 @@ if (!empty($group_list)) {
     foreach ($group_list as $group_data) {
         $quota_percentage = 0;
         $my_group_id = $group_data['id'];
-        $quota_bytes = intval(DocumentManager::documents_total_space($course_id, $my_group_id, 0));
+        $quota_bytes = DocumentManager::documents_total_space($course_id, $my_group_id, 0);
         if (!empty($quota_bytes)) {
             $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
         }
@@ -79,8 +79,8 @@ if (!empty($group_list)) {
     }
 }
 // Showing weight of documents uploaded by user
-$document_list = DocumentManager::get_all_document_data($_course);
-if (is_array($document_list)) {
+$document_list = DocumentManager::getAllDocumentData($_course);
+if (!empty($document_list)) {
     foreach ($document_list as $document_data) {
         if ($document_data['insert_user_id'] == api_get_user_id() && $document_data['filetype'] == 'file') {
             $quota_bytes += $document_data['size'];

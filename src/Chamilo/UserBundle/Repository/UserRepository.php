@@ -4,12 +4,20 @@
 namespace Chamilo\UserBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\TrackELogin;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -133,36 +141,35 @@ class UserRepository extends EntityRepository
     /**
      * Get a filtered list of user by status and (optionally) access url.
      *
-     * @todo not use status
-     *
      * @param string $query       The query to filter
      * @param int    $status      The status
      * @param int    $accessUrlId The access URL ID
      *
      * @return array
      */
-    public function searchUsersByStatus($query, $status, $accessUrlId = null)
+    public function searchUsersByStatus($query, $status, $accessUrlId = 0)
     {
-        $accessUrlId = intval($accessUrlId);
-
+        $accessUrlId = (int) $accessUrlId;
         $queryBuilder = $this->createQueryBuilder('u');
 
         if ($accessUrlId > 0) {
             $queryBuilder->innerJoin(
                 'ChamiloCoreBundle:AccessUrlRelUser',
                 'auru',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'u.id = auru.userId'
             );
         }
 
-        $queryBuilder->where('u.status = :status')
+        $queryBuilder
+            ->where('u.status = :status')
             ->andWhere('u.username LIKE :query OR u.firstname LIKE :query OR u.lastname LIKE :query')
             ->setParameter('status', $status)
             ->setParameter('query', "$query%");
 
         if ($accessUrlId > 0) {
-            $queryBuilder->andWhere('auru.accessUrlId = :url')
+            $queryBuilder
+                ->andWhere('auru.accessUrlId = :url')
                 ->setParameter(':url', $accessUrlId);
         }
 
@@ -175,13 +182,14 @@ class UserRepository extends EntityRepository
      * @param Session $session The session
      * @param Course  $course  The course
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
     {
         $queryBuilder = $this->createQueryBuilder('u');
 
-        $queryBuilder->select('u')
+        $queryBuilder
+            ->select('u')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourseRelUser',
                 'scu',
@@ -264,7 +272,7 @@ class UserRepository extends EntityRepository
     /**
      * Get the sessions admins for a user.
      *
-     * @param User $user The user
+     * @param User $user
      *
      * @return array
      */
@@ -290,8 +298,7 @@ class UserRepository extends EntityRepository
             )
             ->andWhere(
                 $queryBuilder->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
-            )
-        ;
+            );
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -299,7 +306,7 @@ class UserRepository extends EntityRepository
     /**
      * Get the student bosses for a user.
      *
-     * @param User $user The user
+     * @param User $user
      *
      * @return array
      */
@@ -322,6 +329,341 @@ class UserRepository extends EntityRepository
             );
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Find potential users to send a message.
+     *
+     * @param int    $currentUserId The current user ID
+     * @param string $search        The search text to filter the user list
+     * @param int    $limit         Optional. Sets the maximum number of results to retrieve
+     *
+     * @return mixed
+     */
+    public function findUsersToSendMessage($currentUserId, $search, $limit = 10)
+    {
+        $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
+        $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
+
+        if (api_get_setting('allow_social_tool') === 'true' &&
+            api_get_setting('allow_message_tool') === 'true'
+        ) {
+            // All users
+            if ($allowSendMessageToAllUsers === 'true' || api_is_platform_admin()) {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                        WITH U = R.user
+                        WHERE
+                            U.active = 1 AND
+                            U.status != 6  AND
+                            U.id != $currentUserId AND
+                            R.portal = $accessUrlId";
+            } else {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
+                        INNER JOIN ChamiloUserBundle:User AS U 
+                        WITH UF.friendUserId = U
+                        WHERE
+                            U.active = 1 AND
+                            U.status != 6 AND
+                            UF.relationType NOT IN(".USER_RELATION_TYPE_DELETED.", ".USER_RELATION_TYPE_RRHH.") AND
+                            UF.userId = $currentUserId AND
+                            UF.friendUserId != $currentUserId AND
+                            U = R.user AND
+                            R.portal = $accessUrlId";
+            }
+        } elseif (
+            api_get_setting('allow_social_tool') === 'false' &&
+            api_get_setting('allow_message_tool') === 'true'
+        ) {
+            if ($allowSendMessageToAllUsers === 'true') {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R 
+                        WITH U = R.user
+                        WHERE
+                            U.active = 1 AND
+                            U.status != 6  AND
+                            U.id != $currentUserId AND
+                            R.portal = $accessUrlId";
+            } else {
+                $time_limit = api_get_setting('time_limit_whosonline');
+                $online_time = time() - $time_limit * 60;
+                $limit_date = api_get_utc_datetime($online_time);
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        INNER JOIN ChamiloCoreBundle:TrackEOnline T 
+                        WITH U.id = T.loginUserId
+                        WHERE 
+                          U.active = 1 AND 
+                          T.loginDate >= '".$limit_date."'";
+            }
+        }
+
+        $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
+
+        return $this->getEntityManager()
+            ->createQuery($dql)
+            ->setMaxResults($limit)
+            ->setParameters(['search' => "%$search%"])
+            ->getResult();
+    }
+
+    /**
+     * Get the list of HRM who have assigned this user.
+     *
+     * @param int $userId
+     * @param int $urlId
+     *
+     * @return array
+     */
+    public function getAssignedHrmUserList($userId, $urlId)
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $hrmList = $qb
+            ->select('uru')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
+            ->where(
+                $qb->expr()->eq('auru.accessUrlId', $urlId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.userId', $userId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $hrmList;
+    }
+
+    /**
+     * Serialize the whole entity to an array.
+     *
+     * @param int   $userId
+     * @param array $substitutionTerms Substitute terms for some elements
+     *
+     * @return string
+     */
+    public function getPersonalDataToJson($userId, array $substitutionTerms)
+    {
+        /** @var User $user */
+        $user = $this->find($userId);
+
+        $user->setPassword($substitutionTerms['password']);
+        $user->setSalt($substitutionTerms['salt']);
+        $noDataLabel = $substitutionTerms['empty'];
+
+        // Dummy content
+        $user->setDateOfBirth(null);
+        //$user->setBiography($noDataLabel);
+        $user->setFacebookData($noDataLabel);
+        $user->setFacebookName($noDataLabel);
+        $user->setFacebookUid($noDataLabel);
+        //$user->setImageName($noDataLabel);
+        //$user->setTwoStepVerificationCode($noDataLabel);
+        $user->setGender($noDataLabel);
+        $user->setGplusData($noDataLabel);
+        $user->setGplusName($noDataLabel);
+        $user->setGplusUid($noDataLabel);
+        $user->setLocale($noDataLabel);
+        $user->setTimezone($noDataLabel);
+        $user->setTwitterData($noDataLabel);
+        $user->setTwitterName($noDataLabel);
+        $user->setTwitterUid($noDataLabel);
+        $user->setWebsite($noDataLabel);
+        $user->setToken($noDataLabel);
+
+        $courses = $user->getCourses();
+        $list = [];
+        /** @var CourseRelUser $course */
+        foreach ($courses as $course) {
+            $list[] = $course->getCourse()->getCode();
+        }
+        $user->setCourses($list);
+
+        $classes = $user->getClasses();
+        $list = [];
+        /** @var UsergroupRelUser $class */
+        foreach ($classes as $class) {
+            $list[] = $class->getUsergroup()->getName();
+        }
+        $user->setClasses($list);
+
+        $collection = $user->getSessionCourseSubscriptions();
+        $list = [];
+        /** @var SessionRelCourseRelUser $item */
+        foreach ($collection as $item) {
+            $list[$item->getSession()->getName()][] = $item->getCourse()->getCode();
+        }
+        $user->setSessionCourseSubscriptions($list);
+
+        $documents = \DocumentManager::getAllDocumentCreatedByUser($userId);
+
+        $friends = \SocialManager::get_friends($userId);
+        $friendList = [];
+        if (!empty($friends)) {
+            foreach ($friends as $friend) {
+                $friendList[] = $friend['user_info']['complete_name'];
+            }
+        }
+
+        $agenda = new \Agenda('personal');
+        $events = $agenda->getEvents('', '',  null, null, $userId, 'array');
+        $eventList = [];
+        if (!empty($events)) {
+            foreach ($events as $event) {
+                $eventList[] = $event['title'].' '.$event['start_date_localtime'].' / '.$event['end_date_localtime'];
+            }
+        }
+
+        /*$table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "SELECT exe_id, exe_result, exe_weighting
+                FROM $table
+                WHERE
+                    exe_user_id = $studentId AND
+                    c_id = $courseId AND
+                    exe_exo_id = ".$exercise['id']." AND
+                    session_id = $sessionId
+                ORDER BY exe_result DESC
+                LIMIT 1";*/
+
+        $user->setDropBoxSentFiles(
+            ['documents' => $documents, 'friends' => $friendList, 'agenda_events' => $eventList]
+        );
+
+        $user->setDropBoxReceivedFiles([]);
+        //$user->setGroups([]);
+        $user->setCurriculumItems([]);
+
+        $portals = $user->getPortals();
+
+        $list = [];
+        /** @var AccessUrlRelUser $portal */
+        foreach ($portals as $portal) {
+            $portalInfo = \UrlManager::get_url_data_from_id($portal->getAccessUrlId());
+            $list[] = $portalInfo['url'];
+        }
+        $user->setPortals($list);
+
+        $coachList = $user->getSessionAsGeneralCoach();
+        $list = [];
+        /** @var Session $session */
+        foreach ($coachList as $session) {
+            $list[] = $session->getName();
+        }
+        $user->setSessionAsGeneralCoach($list);
+
+        $skillRelUserList = $user->getAchievedSkills();
+        $list = [];
+        /** @var SkillRelUser $skillRelUser */
+        foreach ($skillRelUserList as $skillRelUser) {
+            $list[] = $skillRelUser->getSkill()->getName();
+        }
+        $user->setAchievedSkills($list);
+
+        $user->setCommentedUserSkills([]);
+
+        $extraFieldValues = new \ExtraFieldValue('user');
+        $items = $extraFieldValues->getAllValuesByItem($userId);
+        $user->setExtraFields($items);
+
+        $lastLogin = $user->getLastLogin();
+        if (empty($lastLogin)) {
+            $login = $this->getLastLogin($user);
+            if ($login) {
+                $lastLogin = $login->getLoginDate();
+            }
+        }
+        $user->setLastLogin($lastLogin);
+
+        $dateNormalizer = new GetSetMethodNormalizer();
+        $dateNormalizer->setCircularReferenceHandler(function ($object) {
+            return get_class($object);
+        });
+
+        $ignore = [
+            'twoStepVerificationCode',
+            'biography',
+            'dateOfBirth',
+            'gender',
+            'facebookData',
+            'facebookName',
+            'facebookUid',
+            'gplusData',
+            'gplusName',
+            'gplusUid',
+            'locale',
+            'timezone',
+            'twitterData',
+            'twitterName',
+            'twitterUid',
+            'gplusUid',
+            'token',
+            'website',
+            'plainPassword',
+            'completeNameWithUsername',
+            'completeName',
+            'completeNameWithClasses',
+            'salt',
+        ];
+
+        $dateNormalizer->setIgnoredAttributes($ignore);
+
+        $callback = function ($dateTime) {
+            return $dateTime instanceof \DateTime
+                ? $dateTime->format(\DateTime::ISO8601)
+                : '';
+        };
+        $dateNormalizer->setCallbacks(
+            [
+                'createdAt' => $callback,
+                'lastLogin' => $callback,
+                'registrationDate' => $callback,
+                'memberSince' => $callback,
+            ]
+        );
+
+        $normalizers = [$dateNormalizer];
+        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
+
+        $jsonContent = $serializer->serialize($user, 'json');
+
+        return $jsonContent;
+    }
+
+    /**
+     * Get the last login from the track_e_login table.
+     * This might be different from user.last_login in the case of legacy users
+     * as user.last_login was only implemented in 1.10 version with a default
+     * value of NULL (not the last record from track_e_login).
+     *
+     * @param User $user
+     *
+     * @throws \Exception
+     *
+     * @return null|TrackELogin
+     */
+    public function getLastLogin(User $user)
+    {
+        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:TrackELogin');
+        $qb = $repo->createQueryBuilder('l');
+
+        $login = $qb
+            ->select('l')
+            ->where(
+                $qb->expr()->eq('l.loginUserId', $user->getId())
+            )
+            ->setMaxResults(1)
+            ->orderBy('l.loginDate', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $login;
     }
 
     /**

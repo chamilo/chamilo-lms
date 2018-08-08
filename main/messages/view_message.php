@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.messages
  */
@@ -11,8 +12,8 @@ if (api_get_setting('allow_message_tool') != 'true') {
     api_not_allowed(true);
 }
 
-$allowSocial = api_get_setting('allow_social_tool') == 'true';
-$allowMessage = api_get_setting('allow_message_tool') == 'true';
+$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowMessage = api_get_setting('allow_message_tool') === 'true';
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
@@ -57,7 +58,7 @@ $message .= MessageManager::showMessageBox($messageId, $source);
 if (!empty($message)) {
     $social_right_content .= $message;
 } else {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 $tpl = new Template(get_lang('View'));
 // Block Social Avatar

@@ -25,56 +25,56 @@ class CBlogRating
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="rating_id", type="integer")
      */
-    private $ratingId;
+    protected $ratingId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="rating_type", type="string", length=40, nullable=false)
      */
-    private $ratingType;
+    protected $ratingType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
-    private $itemId;
+    protected $itemId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="rating", type="integer", nullable=false)
      */
-    private $rating;
+    protected $rating;
 
     /**
      * Set blogId.

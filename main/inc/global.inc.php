@@ -56,7 +56,6 @@ if (!isset($GLOBALS['_configuration'])) {
 }
 
 // Include the main Chamilo platform library file.
-
 require_once $_configuration['root_sys'].'main/inc/lib/api.lib.php';
 $passwordEncryption = api_get_configuration_value('password_encryption');
 
@@ -322,7 +321,6 @@ $configurationFiles = [
     'add_course.conf.php',
     'events.conf.php',
     'auth.conf.php',
-    'portfolio.conf.php',
 ];
 
 foreach ($configurationFiles as $file) {
@@ -634,6 +632,38 @@ $default_quota = api_get_setting('default_document_quotum');
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }
+
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
+
+// Create web/build/main.js
+$webBuildPath = api_get_path(SYS_PUBLIC_PATH).'build/';
+if (!is_dir($webBuildPath)) {
+    if (!mkdir($webBuildPath, api_get_permissions_for_new_directories())) {
+        error_log(
+            'Error: '.$webBuildPath.' could not be written. Please check permissions.'
+        );
+    }
+}
+
+// Load template layout/main.js.tpl and save it into web/build/main.js
+$file = $webBuildPath.'main.js';
+if (!empty($language_interface)) {
+    $file = $webBuildPath.'main.'.$language_interface.'.js';
+}
+
+// if portal is in test mode always generate the file
+if (!file_exists($file) || api_get_setting('server_type') === 'test') {
+    $template = new Template();
+    // Force use of default to avoid problems
+    $tpl = 'default/layout/main.js.tpl';
+    $contents = $template->fetch($tpl);
+    if (is_writable($webBuildPath)) {
+        file_put_contents($file, $contents);
+    } else {
+        error_log(
+            'Error: '.$file.' could not be written. Please check permissions. The web server must be able to write there.'
+        );
+    }
+}

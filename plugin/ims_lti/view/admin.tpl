@@ -10,15 +10,25 @@
             <tr>
                 <th>{{ 'Name'|get_lang }}</th>
                 <th>{{ 'LaunchUrl'|get_plugin_lang('ImsLtiPlugin') }}</th>
-                <th>{{ 'Actions'|get_lang }}</th>
+                <th class="text-center">{{ 'IsGlobal'|get_plugin_lang('ImsLtiPlugin') }}</th>
+                <th class="text-right">{{ 'Actions'|get_lang }}</th>
             </tr>
         </thead>
         <tbody>
             {% for tool in tools %}
                 <tr>
                     <td>{{ tool.name }}</td>
-                    <td>{{ tool.launch_url }}</td>
-                    <td>
+                    <td>{{ tool.launchUrl }}</td>
+                    <td class="text-center">
+                        {% if tool.isGlobal %}
+                            <span class="fa fa-check-square-o" aria-hidden="true"></span>
+                            <span class="sr-only">{{ 'Yes'|get_lang }}</span>
+                        {% else %}
+                            <span class="fa fa-square-o" aria-hidden="true"></span>
+                            <span class="sr-only">{{ 'No'|get_lang }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
                         <a href="{{ _p.web_plugin }}ims_lti/edit.php?{{ {'id': tool.id}|url_encode() }}" class="btn btn-success">
                             <span class="fa fa-edit fa-fw" aria-hidden="true"></span> {{ 'Edit'|get_lang }}
                         </a>

@@ -74,7 +74,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2eaebb', end
   background: #3A4751;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background-color: #FE9A2E; ;
+  background-color: #FFF; ;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;

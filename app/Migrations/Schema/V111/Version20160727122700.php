@@ -3,8 +3,8 @@
 
 namespace Application\Migrations\Schema\V111;
 
-use Application\Migrations\AbstractMigrationChamilo,
-    Doctrine\DBAL\Schema\Schema;
+use Application\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160727122700
@@ -13,7 +13,6 @@ use Application\Migrations\AbstractMigrationChamilo,
  */
 class Version20160727122700 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */

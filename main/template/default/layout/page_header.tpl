@@ -3,7 +3,7 @@
     {{ bug_notification }}
 </div>
 {% block topbar %}
-    {% include template ~ "/layout/topbar.tpl" %}
+    {% include 'layout/topbar.tpl'|get_template %}
 {% endblock %}
 <div class="extra-header">{{ header_extra_content }}</div>
 <header id="header-section" class="header-movil">
@@ -36,14 +36,11 @@
                                 {{ plugin_header_right }}
                             </div>
                         {% endif %}
-                        <script>
-                            $(document).on('ready', function () {
-                                $("#notifications").load("{{ _p.web_main }}inc/ajax/online.ajax.php?a=get_users_online");
-                            });
-                        </script>
                         <div class="section-notifications">
+                            {% if _u.logged == 1 %}
                             <ul id="notifications" class="nav nav-pills pull-right">
                             </ul>
+                            {% endif %}
                         </div>
                         {{ accessibility }}
                     </div>
@@ -53,6 +50,6 @@
     </div>
 </header>
 {% block menu %}
-    {% include template ~ "/layout/menu.tpl" %}
+    {% include 'layout/menu.tpl'|get_template %}
 {% endblock %}
-{% include template ~ "/layout/course_navigation.tpl" %}
+{% include 'layout/course_navigation.tpl'|get_template %}

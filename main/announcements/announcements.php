@@ -23,11 +23,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
-$ctok = Security::get_existing_token();
-$stok = Security::get_token();
+$token = Security::get_existing_token();
 
-$course_id = api_get_course_int_id();
-$_course = api_get_course_info_by_id($course_id);
+$courseId = api_get_course_int_id();
+$_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
 $sessionId = api_get_session_id();
 
@@ -41,7 +40,7 @@ $allowToEdit = (
 );
 
 $sessionId = api_get_session_id();
-$drhHasAccessToSessionContent = api_get_configuration_value('drh_can_access_all_session_content');
+$drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
 
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
@@ -65,31 +64,30 @@ $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $isTutor = false;
 if (!empty($group_id)) {
-    $group_properties = GroupManager:: get_group_properties($group_id);
+    $groupProperties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+        "name" => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 
     if ($allowToEdit === false) {
         // Check if user is tutor group
-        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties, $course_id);
+        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
         if ($isTutor) {
             $allowToEdit = true;
         }
     }
 }
 
-/*	Tracking	*/
+/* Tracking */
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 $announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'list';
-
 $announcement_number = AnnouncementManager::getNumberAnnouncements();
 
 $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
@@ -98,6 +96,10 @@ $searchFormToString = '';
 
 switch ($action) {
     case 'move':
+        if (!$allowToEdit) {
+            api_not_allowed(true);
+        }
+
         /* Move announcement up/down */
         if (!empty($_GET['down'])) {
             $thisAnnouncementId = intval($_GET['down']);
@@ -114,14 +116,13 @@ switch ($action) {
                 $sortDirection = 'ASC';
             }
 
-            $announcementInfo = AnnouncementManager::get_by_id($course_id, $thisAnnouncementId);
-
+            $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
                     FROM $tbl_announcement announcement,
                     $tbl_item_property itemproperty
                     WHERE
-                        announcement.c_id =  $course_id AND
-                        itemproperty.c_id =  $course_id AND
+                        announcement.c_id = $courseId AND
+                        itemproperty.c_id = $courseId AND
                         itemproperty.ref = announcement.id AND
                         itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
                         itemproperty.visibility <> 2
@@ -135,11 +136,10 @@ switch ($action) {
                     $nextAnnouncementId = $announcementId;
                     $nextAnnouncementOrder = $announcementOrder;
                     $sql = "UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'
-                            WHERE c_id = $course_id AND id = $thisAnnouncementId";
+                            WHERE c_id = $courseId AND id = $thisAnnouncementId";
                     Database::query($sql);
                     $sql = "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder'
-                            WHERE c_id = $course_id AND id =  $nextAnnouncementId";
-
+                            WHERE c_id = $courseId AND id =  $nextAnnouncementId";
                     Database::query($sql);
                     break;
                 }
@@ -276,14 +276,14 @@ switch ($action) {
         </script>';
 
         $count = AnnouncementManager::getAnnouncements(
-            $stok,
+            $token,
             $announcement_number,
             true
         );
 
         if (empty($count)) {
             $html = '';
-            if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+            if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
                 $html .= '<div id="no-data-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', [], 64);
@@ -347,6 +347,10 @@ switch ($action) {
                     api_not_allowed();
                 }
 
+                if (!$allowToEdit) {
+                    api_not_allowed(true);
+                }
+
                 if (!api_is_session_general_coach() ||
                     api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
@@ -369,8 +373,12 @@ switch ($action) {
             api_not_allowed(true);
         }
 
+        if (!$allowToEdit) {
+            api_not_allowed(true);
+        }
+
         // DISPLAY ADD ANNOUNCEMENT COMMAND
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
         $url = api_get_self().'?action='.$action.'&id='.$id.'&'.api_get_cidreq();
 
         $form = new FormValidator(
@@ -381,22 +389,20 @@ switch ($action) {
             ['enctype' => 'multipart/form-data']
         );
 
+        $form_name = get_lang('ModifyAnnouncement');
         if (empty($id)) {
             $form_name = get_lang('AddAnnouncement');
-        } else {
-            $form_name = get_lang('ModifyAnnouncement');
         }
-
         $interbreadcrumb[] = [
-            "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
-            "name" => $nameTools,
+            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
+            'name' => $nameTools,
         ];
 
         $nameTools = $form_name;
         $form->addHeader($form_name);
         $form->addButtonAdvancedSettings(
             'choose_recipients',
-            [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]
+            [get_lang('ChooseRecipients')]
         );
         $form->addHtml('<div id="choose_recipients_options" style="display:none;">');
 
@@ -416,7 +422,7 @@ switch ($action) {
             } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] === 'true') {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
-                $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
+                $since = isset($_GET['since']) ? (int) $_GET['since'] : 6;
 
                 // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(
@@ -456,7 +462,7 @@ switch ($action) {
             }
             $element = CourseManager::addUserGroupMultiSelect($form, []);
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties, []);
+            $element = CourseManager::addGroupMultiSelect($form, $groupProperties, []);
         }
 
         $form->addHtml('</div>');
@@ -466,11 +472,9 @@ switch ($action) {
             $announcement_to_modify = '';
         }
 
-        $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
-
+        $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
         if (isset($announcementInfo) && !empty($announcementInfo)) {
             $to = AnnouncementManager::load_edit_users('announcement', $id);
-
             $defaults = [
                 'title' => $announcementInfo['title'],
                 'content' => $announcementInfo['content'],
@@ -491,7 +495,6 @@ switch ($action) {
                 if (!isset($parts[1]) || empty($parts[1])) {
                     continue;
                 }
-
                 $form->addHtml("
                     <script>
                         $(document).on('ready', function () {
@@ -508,20 +511,19 @@ switch ($action) {
             'text',
             'title',
             get_lang('EmailTitle'),
-            ["onkeypress" => "return event.keyCode != 13;"]
+            ['onkeypress' => 'return event.keyCode != 13;']
         );
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = '';
         $tags = AnnouncementManager::getTags();
         foreach ($tags as $tag) {
-            $htmlTags .= "<b>".$tag."</b><br />";
+            $htmlTags .= "<b>$tag</b><br />";
         }
         $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
         $form->addElement('html', '<div id="tags_options" style="display:none">');
         $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
         $form->addElement('html', '</div>');
-
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
@@ -529,10 +531,9 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-
         $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
         $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
-        $form->addElement('hidden', 'sec_token', $stok);
+        $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
@@ -549,12 +550,12 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
-            $data['users'] = isset($data['users']) ? $data['users'] : ['everyone'];
+            $data['users'] = isset($data['users']) ? $data['users'] : [];
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
 
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
-                if ($ctok == $_POST['sec_token']) {
+                if (Security::check_token('post')) {
                     $file_comment = $_POST['file_comment'];
                     $file = $_FILES['user_upload'];
 
@@ -568,7 +569,7 @@ switch ($action) {
                         $sendToUsersInSession
                     );
 
-                    /*		MAIL FUNCTION	*/
+                    // Send mail
                     if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
                         AnnouncementManager::sendEmail(
                             api_get_course_info(),
@@ -585,12 +586,13 @@ switch ($action) {
                             'success'
                         )
                     );
+                    Security::clear_token();
                     header('Location: '.$homeUrl);
                     exit;
                 }
             } else {
                 // Insert mode
-                if ($ctok == $_POST['sec_token']) {
+                if (Security::check_token('post')) {
                     $file = $_FILES['user_upload'];
                     $file_comment = $data['file_comment'];
 
@@ -617,25 +619,28 @@ switch ($action) {
                             $sendToUsersInSession
                         );
                     }
-
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('AnnouncementAdded'),
-                            'success'
-                        )
-                    );
-
-                    /* MAIL FUNCTION */
-                    if (isset($data['email_ann']) && $data['email_ann']) {
-                        AnnouncementManager::sendEmail(
-                            api_get_course_info(),
-                            api_get_session_id(),
-                            $insert_id,
-                            $sendToUsersInSession
+                    if ($insert_id) {
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('AnnouncementAdded'),
+                                'success'
+                            )
                         );
+
+                        // Send mail
+                        if (isset($data['email_ann']) && $data['email_ann']) {
+                            AnnouncementManager::sendEmail(
+                                api_get_course_info(),
+                                api_get_session_id(),
+                                $insert_id,
+                                $sendToUsersInSession
+                            );
+                        }
+                        Security::clear_token();
+                        header('Location: '.$homeUrl);
+                        exit;
                     }
-                    header('Location: '.$homeUrl);
-                    exit;
+                    api_not_allowed(true);
                 } // end condition token
             }
         }
@@ -648,7 +653,7 @@ if (!empty($_GET['remind_inactive'])) {
 }
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-    //we are not in the learning path
+    // We are not in the learning path
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 

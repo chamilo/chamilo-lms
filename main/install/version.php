@@ -13,8 +13,8 @@
 /**
  * Variables used from the main/install/index.php.
  */
-$new_version = '1.11.6';
-$new_version_status = 'dev';
+$new_version = '1.11.8';
+$new_version_status = 'beta';
 $new_version_last_id = 0;
 $new_version_stable = false;
 $new_version_major = false;

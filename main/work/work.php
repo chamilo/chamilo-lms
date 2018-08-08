@@ -12,7 +12,6 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 
 $courseInfo = api_get_course_info();
-$course_id = $courseInfo['real_id'];
 $user_id = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
@@ -91,7 +90,7 @@ if (!empty($groupId)) {
 } else {
     if ($origin != 'learnpath') {
         if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir'
+            !empty($_GET['id']) || $display_upload_form || $action == 'create_dir'
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
@@ -111,9 +110,7 @@ if (!empty($groupId)) {
         if ($action == 'upload_form') {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
         }
-        if ($action == 'settings') {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditToolOptions')];
-        }
+
         if ($action == 'create_dir') {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateAssignment')];
         }
@@ -146,27 +143,6 @@ $content = null;
 
 // For teachers
 switch ($action) {
-    case 'settings':
-        //if posts
-        if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
-            updateSettings(
-                $courseInfo,
-                $_POST['show_score'],
-                $_POST['student_delete_own_publication']
-            );
-            Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
-            header('Location: '.$currentUrl);
-            exit;
-        }
-        $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication') == 1 ? 1 : 0;
-        /*	Display of tool options */
-        $content = settingsForm(
-            [
-                'show_score' => $courseInfo['show_score'],
-                'student_delete_own_publication' => $studentDeleteOwnPublication,
-            ]
-        );
-        break;
     case 'add':
     case 'create_dir':
         if (!($is_allowed_to_edit || $isTutor)) {
@@ -197,6 +173,8 @@ switch ($action) {
             );
 
             if ($result) {
+                Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $result);
+
                 $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
             } else {
                 $currentUrl = $addUrl;
@@ -226,7 +204,7 @@ switch ($action) {
         }
         break;
     case 'move':
-        /*	Move file form request */
+        // Move file form request
         if ($is_allowed_to_edit) {
             if (!empty($item_id)) {
                 $content = generateMoveForm(
@@ -339,7 +317,7 @@ switch ($action) {
 
         break;
     case 'list':
-        /*	Display list of student publications */
+        /* Display list of student publications */
         if (!empty($my_folder_data['description'])) {
             $content = '<div>'.
                 get_lang('Description').':'.Security::remove_XSS($my_folder_data['description'], STUDENT).

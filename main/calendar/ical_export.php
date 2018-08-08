@@ -90,7 +90,7 @@ if (!empty($event)) {
                 $s2 = $s;
                 if ($M2 > 60) {
                     $M2 = $M2 - 60;
-                    $h2 += 1;
+                    $h2++;
                 }
             } else {
                 list($y2, $m2, $d2, $h2, $M2, $s2) = preg_split('/[\s:-]/', $event['end_date']);
@@ -129,7 +129,7 @@ if (!empty($event)) {
                 $s2 = $s;
                 if ($M2 > 60) {
                     $M2 = $M2 - 60;
-                    $h2 += 1;
+                    $h2++;
                 }
             } else {
                 list($y2, $m2, $d2, $h2, $M2, $s2) = preg_split('/[\s:-]/', $event['end_date']);

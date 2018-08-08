@@ -1,4 +1,5 @@
 <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
+    {% if show_left_column == 1 %}
     <div id="learning_path_left_zone" class="sidebar-scorm">
         <div class="lp-view-zone-container">
             <div id="scorm-info">
@@ -65,13 +66,16 @@
             </div>
         {# TOC layout #}
         <div id="toc_id" class="scorm-body" name="toc_name">
-                {% include template ~ '/learnpath/scorm_list.tpl' %}
+                {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
         {# end TOC layout #}
         </div>
     </div>
     {# end left zone #}
+    {% endif %}
+
     <div id="lp_navigation_elem" class="navegation-bar">
+        {% if show_left_column == 1 %}
         <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
             {% if lp_mode == 'embedframe' %}
                 <span class="fa fa-compress" aria-hidden="true"></span>
@@ -81,33 +85,37 @@
                 <span class="sr-only">{{ 'Expand'|get_lang }}</span>
             {% endif %}
         </a>
+        {% endif %}
+
         <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
             <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
         </a>
         {{ navigation_bar }}
     </div>
-    {# <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div> #}
+
     {# right zone #}
-    <div id="learning_path_right_zone" class="content-scorm">
+    <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
         <div class="lp-view-zone-container">
             <div class="lp-view-tabs">
                 <div id="navTabsbar" class="nav-tabs-bar">
                     <ul id="navTabs" class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
+                                <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>
+                                <span class="sr-only">{{ 'Lesson'|get_lang }}</span>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
+                                <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span>
+                                <span class="sr-only">{{ 'Forum'|get_lang }}</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
-                        <div id="wrapper-iframe" style="width:100%; height:100%">
+                        <div id="wrapper-iframe">
                         {% if lp_mode == 'fullscreen' %}
                             <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% else %}
@@ -116,7 +124,6 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="lp-view-forum">
-
                     </div>
                 </div>
             </div>
@@ -139,11 +146,21 @@
 
     $(document).on('ready', function () {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+            // Fix an issue where you cannot scroll below first screen in
+            // learning paths on Apple devices
             document.getElementById('wrapper-iframe')
                 .setAttribute(
                     'style',
                     'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
                 );
+            // Fix another issue whereby buttons do not react to click below
+            // second screen in learning paths on Apple devices
+            document.getElementById('content_id')
+                .setAttribute(
+                    'style',
+                    'overflow: auto;'
+                );
+
         }
 
         {% if lp_mode == 'embedframe' %}
@@ -189,9 +206,7 @@
             } else {
                 $('#navTabsbar').hide();
             }
-
         });
-
         {% endif %}
 
         $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -227,7 +242,7 @@
         loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
         checkCurrentItemPosition({{ lp_current_item_id }});
 
-        {% if glossary_extra_tools in glossary_tool_availables %}
+        {% if glossary_extra_tools in glossary_tool_available_list %}
             // Loads the glossary library.
             (function () {
                 {% if show_glossary_in_documents == 'ismanual' %}

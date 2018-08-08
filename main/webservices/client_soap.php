@@ -3,20 +3,21 @@
 
 /*
  *
- * 1. This script creates users everytime the page is executed using the Chamilo Webservices
- * 2. The username is generated everytime with a random value from 0 to 1000
- * 3. The default user extra field (profile) is "uid" is created when calling the WSCreateUserPasswordCrypted for the first time, you can change this value.
- *    In this field your third party user_id will be registered. See the main/admin/user_fields.php to view the current user fields.
- * 4. You need to create manually a course called Test(with code TEST) After the user was created the new user will be added to this course via webservices.
-
+ * 1. This script creates users every time the page is executed using the Chamilo Webservices
+ * 2. The username is generated every time with a random value from 0 to 1000
+ * 3. The default user extra field (profile) is "uid" is created
+ *
+ * when calling the WSCreateUserPasswordCrypted for the first time, you can change this value.
+ * In this field your third party user_id will be registered.
+ * See the main/admin/user_fields.php to view the current user fields.
+ * 4. You need to create manually a course called Test(with code TEST)
+ * After the user was created the new user will be added to this course via webservices.
  *
  */
-
-exit; //Uncomment this in order to execute the page
-
+exit;
 require_once __DIR__.'/../inc/global.inc.php';
 // Create the client instance
-$url = api_get_path(WEB_CODE_PATH)."webservices/registration.soap.php?wsdl";
+$url = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
 //$url = api_get_path(WEB_CODE_PATH)."webservices/access_url.php?wsdl";
 
 global $_configuration;
@@ -62,7 +63,7 @@ $params = [
     'email' => 'jon@example.com',
     'loginname' => $generate_user_name,
     'password' => $generate_password, // encrypted using sha1
-    'encrypt_method' => 'sha1',
+    'encrypt_method' => 'bcrypt',
     'language' => 'english',
     'official_code' => 'official',
     'phone' => '00000000',
@@ -118,7 +119,7 @@ $params = [
     'secret_key' => $secret_key,
 ];
 
-$user_id = $client->call(
+$sessionId = $client->call(
     'WSCreateSession',
     ['createSession' => $params]
 );
@@ -146,6 +147,7 @@ $result = $client->call(
 $err = $client->getError();
 var_dump($result);
 var_dump($err);
+var_dump($user_id);
 
 if (!empty($user_id) && is_numeric($user_id)) {
     // 2. Get user info of the new user
@@ -169,20 +171,23 @@ if (!empty($user_id) && is_numeric($user_id)) {
         echo $result;
     }
 
-    //3. Updating user info
-
+    // 3. Updating user info
     $params = [
         'firstname' => 'Jon edited',
         'lastname' => 'Brion edited',
-        'status' => '5', // STUDENT
+        'status' => '5',
+        // STUDENT
         'email' => 'jon@example.com',
         'username' => $generate_user_name,
-        'password' => $generate_password, // encrypted using sha1
+        'password' => $generate_password,
+        // encrypted using sha1
         'encrypt_method' => 'sha1',
         'phone' => '00000000',
         'expiration_date' => '0000-00-00',
-        'original_user_id_name' => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
-        'original_user_id_value' => $random_user_id, // third party user id
+        'original_user_id_name' => $user_field,
+        // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
+        'original_user_id_value' => $random_user_id,
+        // third party user id
         'secret_key' => $secret_key,
         'extra' => [
             ['field_name' => 'ruc', 'field_value' => '666 edited'],
@@ -212,14 +217,13 @@ if (!empty($user_id) && is_numeric($user_id)) {
         'secret_key' => $secret_key,
     ];
 
-    //Disable user
+    // Disable user
     $result = $client->call('WSDisableUsers', ['user_ids' => $params]);
 
-    //Enable user
+    // Enable user
     $result = $client->call('WSEnableUsers', ['user_ids' => $params]);
 
-    //4 Creating course TEST123
-
+    // 4 Creating course TEST123
     $params = [
         'courses' => [
             [
@@ -236,7 +240,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
 
     $result = $client->call('WSCreateCourse', ['createCourse' => $params]);
 
-    //5 .Adding user to the course TEST. The course TEST must be created manually in Chamilo
+    // 5 .Adding user to the course TEST. The course TEST must be created manually in Chamilo
     echo '<h2>Trying to add user to a course called TEST via webservices</h2>';
 
     $course_info = api_get_course_info('TEST123');
@@ -258,8 +262,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
         echo $result;
     }
 
-    //4. Adding course Test to the Session Session1
-
+    // 4. Adding course Test to the Session Session1
     $course_id_list = [
         ['course_code' => 'TEST1'],
         ['course_code' => 'TEST2'],
@@ -280,15 +283,14 @@ if (!empty($user_id) && is_numeric($user_id)) {
 
     // ------------------------
     //Calling the WSSubscribeUserToCourse
-
     $course_array = [
         'original_course_id_name' => 'TEST',
         'original_course_id_value' => 'TEST',
     ];
 
     $user_array = [
-        'original_user_id_value' => $user_id,
-        'original_user_id_name' => 'name',
+        'original_user_id_value' => $random_user_id,
+        'original_user_id_name' => $user_field,
     ];
     $user_courses = [];
 
@@ -305,6 +307,17 @@ if (!empty($user_id) && is_numeric($user_id)) {
 
     $result = $client->call('WSSubscribeUserToCourse', ['subscribeUserToCourse' => $params]);
     var_dump($result);
+    $params = [
+        'secret_key' => $secret_key,
+        'ids' => [
+            'original_user_id_value' => $random_user_id,
+            'original_user_id_name' => $user_field,
+        ],
+    ];
+
+    // Delete user
+    $result = $client->call('WSDeleteUsers', ['user_ids' => $params]);
+    exit;
 } else {
     echo 'User was not created, activate the debug=true in the registration.soap.php file and see the error logs';
 }
@@ -347,7 +360,6 @@ $result = $client->call(
     'WSRemoveUserFromPortal',
     ['removeUserFromPortal' => ['course_id' => 20, 'portal_id' => 1, 'secret_key' => $secret_key]]
 );
-
 var_dump($user_id); exit;
 
 if ($client->fault) {

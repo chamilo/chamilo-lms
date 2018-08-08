@@ -18,6 +18,7 @@ class Version20160930144400 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20160930144400');
         $this->addSql('
             UPDATE track_e_hotspot h 
             SET h.hotspot_answer_id = (

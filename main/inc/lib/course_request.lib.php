@@ -167,7 +167,12 @@ class CourseRequestManager
 
         $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $sender_email_teacher = $user_info['mail'];
-        $recipient_name_admin = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $recipient_name_admin = api_get_person_name(
+            api_get_setting('administratorName'),
+            api_get_setting('administratorSurname'),
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $recipient_email_admin = api_get_setting('emailAdministrator');
 
         $userInfo = api_get_user_info($user_id);
@@ -197,7 +202,13 @@ class CourseRequestManager
         $email_body_teacher .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
         $email_body_teacher .= $email_body;
         $email_body_teacher .= "\n".get_lang('Formula', null, $email_language)."\n";
-        $email_body_teacher .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, null, $email_language)."\n";
+        $email_body_teacher .= api_get_person_name(
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                null,
+                $email_language
+            )."\n";
         $email_body_teacher .= get_lang('Manager', null, $email_language).' '.api_get_setting('siteName')."\n";
         $email_body_teacher .= get_lang('Phone', null, $email_language).': '.api_get_setting('administratorTelephone')."\n";
         $email_body_teacher .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
@@ -329,12 +340,14 @@ class CourseRequestManager
         }
 
         // @todo use entity
-        $sql = sprintf('UPDATE %s SET
+        $sql = sprintf(
+            'UPDATE %s SET
                 code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
                 course_language = "%s", title = "%s", description = "%s", category_code = "%s",
                 tutor_name = "%s", visual_code = "%s", request_date = "%s",
                 objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
-            WHERE id = '.$id, Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
+            WHERE id = '.$id,
+            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
             Database::escape_string($code),
             intval($user_id),
             Database::escape_string($directory),

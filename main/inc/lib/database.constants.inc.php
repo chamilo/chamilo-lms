@@ -57,7 +57,6 @@ define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 'gradebook_certificate');
 define('TABLE_MAIN_GRADEBOOK_SCORE_LOG', 'gradebook_score_log');
 
 // Profiling
-
 define('TABLE_EXTRA_FIELD', 'extra_field');
 define('TABLE_EXTRA_FIELD_OPTIONS', 'extra_field_options');
 define('TABLE_EXTRA_FIELD_VALUES', 'extra_field_values');
@@ -339,3 +338,12 @@ define('TABLE_TICKET_MESSAGE_ATTACHMENTS', 'ticket_message_attachments');
 define('TABLE_BRANCH', 'branch_sync');
 define('TABLE_BRANCH_TRANSACTION', 'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS', 'branch_transaction_status');
+
+// main/extra @todo after code is finished remove constants not used
+define('TABLE_CAL_DATE', 'cal_dates');
+define('TABLE_CAL_HORAIRE', 'cal_horaire');
+define('TABLE_CAL_TEMP', 'cal_temp');
+define('TABLE_STATISTIC_TRACK_E_EXERCICES_TEMP', 'track_e_exercices_temp');
+
+define('TABLE_USER_INFO_DEF', 'userinfo_def');
+define('TABLE_USER_INFO_CONTENT', 'userinfo_content');

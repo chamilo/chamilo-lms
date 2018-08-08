@@ -66,7 +66,7 @@ $htmlHeadXtra[] = '<script>
         if(confirm("'.get_lang('ConfirmYourChoice').'")) {
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
-                beforeSend: function(objeto) {
+                beforeSend: function(myObject) {
                     $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
                 },
                 type: "GET",
@@ -108,7 +108,7 @@ $htmlHeadXtra[] = '<script>
 
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
+			beforeSend: function(myObject) {
 				$("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
 			},
 			type: "POST",

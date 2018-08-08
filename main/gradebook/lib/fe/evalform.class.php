@@ -162,9 +162,7 @@ class EvalForm extends FormValidator
     {
         //extra field for check on maxvalue
         $this->addElement('header', get_lang('EditResult'));
-
         $renderer = &$this->defaultRenderer();
-
         // set new form template
         $form_template = '<form{attributes}>
                     <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}
@@ -211,7 +209,6 @@ class EvalForm extends FormValidator
         foreach ($results_and_users as $result_and_user) {
             $user = $result_and_user['user'];
             $result = $result_and_user['result'];
-
             $renderer = &$this->defaultRenderer();
             $this->addFloat(
                 'score['.$result->get_id().']',
@@ -285,7 +282,7 @@ class EvalForm extends FormValidator
 		   </form>'
         );
 
-        $tblusers = GradebookUtils::get_users_in_course($this->evaluation_object->get_course_code());
+        $users = GradebookUtils::get_users_in_course($this->evaluation_object->get_course_code());
         $nr_users = 0;
         //extra field for check on maxvalue
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
@@ -315,7 +312,7 @@ class EvalForm extends FormValidator
         }
 
         $firstUser = true;
-        foreach ($tblusers as $user) {
+        foreach ($users as $user) {
             $element_name = 'score['.$user[0].']';
             $scoreColumnProperties = ['maxlength' => 5];
             if ($firstUser) {

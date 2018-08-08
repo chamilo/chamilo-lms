@@ -20,7 +20,7 @@ class PersonalAgendaRepeatNot
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $calId;
+    protected $calId;
 
     /**
      * @var int
@@ -29,7 +29,7 @@ class PersonalAgendaRepeatNot
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $calDate;
+    protected $calDate;
 
     /**
      * Set calId.

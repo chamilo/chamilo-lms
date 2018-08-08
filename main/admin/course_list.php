@@ -17,6 +17,10 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 
 /**
  * Get the number of courses which will be displayed.
+ *
+ * @throws Exception
+ *
+ * @return int The number of matching courses
  */
 function get_number_of_courses()
 {
@@ -79,6 +83,8 @@ function get_number_of_courses()
  * @param int    $number_of_items
  * @param int    $column
  * @param string $direction
+ *
+ * @throws Exception
  *
  * @return array
  */
@@ -207,6 +213,8 @@ function get_course_data($from, $number_of_items, $column, $direction)
  * @param int    $column
  * @param string $direction
  *
+ * @throws Exception
+ *
  * @return array
  */
 function get_course_data_by_session($from, $number_of_items, $column, $direction)
@@ -330,10 +338,10 @@ if (isset($_POST['action'])) {
             if (count($course_codes) > 0) {
                 foreach ($course_codes as $course_code) {
                     CourseManager::delete_course($course_code);
-                    $obj_cat = new Category();
-                    $obj_cat->update_category_delete($course_code);
                 }
             }
+
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
             break;
     }
 }
@@ -399,8 +407,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $tool_name = get_lang('CourseList');
     if (isset($_GET['delete_course'])) {
         CourseManager::delete_course($_GET['delete_course']);
-        $obj_cat = new Category();
-        $obj_cat->update_category_delete($_GET['delete_course']);
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
     }
     // Create a search-box
     $form = new FormValidator(
@@ -437,7 +444,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         'session_name',
         get_lang('SearchCourseBySession'),
         null,
-        ['url' => $url]
+        ['id' => 'session_name', 'url' => $url]
     );
 
     if (!empty($sessionId)) {
@@ -480,7 +487,6 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         $(function() {
             $("#session_name").on("change", function() {
                 var sessionId = $(this).val();
-    
                 if (!sessionId) {
                     return;
                 }

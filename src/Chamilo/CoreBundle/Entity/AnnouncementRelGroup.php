@@ -20,7 +20,7 @@ class AnnouncementRelGroup
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var int
@@ -29,7 +29,7 @@ class AnnouncementRelGroup
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $announcementId;
+    protected $announcementId;
 
     /**
      * Set groupId.

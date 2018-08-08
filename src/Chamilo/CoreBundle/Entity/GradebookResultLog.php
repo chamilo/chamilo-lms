@@ -16,46 +16,46 @@ class GradebookResultLog
     /**
      * @var int
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="id_result", type="integer", nullable=false)
      */
-    private $idResult;
+    protected $idResult;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
      */
-    private $evaluationId;
+    protected $evaluationId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    private $score;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    protected $score;
 
     /**
      * Set idResult.

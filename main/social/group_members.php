@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 if (api_get_setting('allow_social_tool') != 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $this_section = SECTION_SOCIAL;
@@ -22,11 +22,11 @@ $user_role = '';
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
-    api_not_allowed();
+    api_not_allowed(true);
 } else {
     $group_info = $userGroup->get($group_id);
     if (empty($group_info)) {
-        api_not_allowed();
+        api_not_allowed(true);
     }
     $user_role = $userGroup->get_user_group_role(
         api_get_user_id(),
@@ -41,7 +41,7 @@ if (empty($group_id)) {
         ]
     )
     ) {
-        api_not_allowed();
+        api_not_allowed(true);
     }
 }
 
@@ -172,7 +172,7 @@ foreach ($users as $user) {
     }
 
     $userPicture = UserManager::getUserPicture($user['id']);
-    $user['image'] = '<img src="'.$userPicture.'"  width="50px" height="50px"  />';
+    $user['image'] = '<img src="'.$userPicture.'"  width="50px" height="50px" />';
     $new_member_list[] = $user;
 }
 if (count($new_member_list) > 0) {
@@ -183,7 +183,7 @@ if (count($new_member_list) > 0) {
         ['hide_navigation' => true, 'per_page' => 100],
         [],
         false,
-        [true, false, true, true, false, true, true]
+        [true, false, true, false, false, true, true]
     );
 }
 

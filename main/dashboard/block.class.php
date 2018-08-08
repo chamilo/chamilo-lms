@@ -18,25 +18,4 @@ class Block
     public function __construct()
     {
     }
-
-    /**
-     * Display small blocks, @todo it will be implemented for next version.
-     */
-    public function display_small()
-    {
-    }
-
-    /**
-     * Display larges blocks, @todo it will be implemented for next version.
-     */
-    public function display_large()
-    {
-    }
-
-    public function get_block_path()
-    {
-        $result = get_class($this);
-
-        return $result;
-    }
 }

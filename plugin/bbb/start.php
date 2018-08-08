@@ -19,6 +19,8 @@ $host = '';
 $salt = '';
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+$interface = isset($_GET['interface']) ? (int) $_GET['interface'] : 0;
+
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
 $conferenceManager = $bbb->isConferenceManager();
@@ -56,6 +58,8 @@ if ($bbb->pluginEnabled) {
 
             $meetingParams = [];
             $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
+            $meetingParams['interface'] = $interface;
+
             if ($bbb->meetingExists($meetingParams['meeting_name'])) {
                 $joinUrl = $bbb->joinMeeting($meetingParams['meeting_name']);
                 if ($joinUrl) {
@@ -69,7 +73,7 @@ if ($bbb->pluginEnabled) {
 
             $meetingInfo = $bbb->findMeetingByName($meetingParams['meeting_name']);
             if (!empty($meetingInfo) && $url) {
-                $bbb->saveParticipant($meetingInfo['id'], api_get_user_id());
+                $bbb->saveParticipant($meetingInfo['id'], api_get_user_id(), $interface);
                 $bbb->redirectToBBB($url);
             } else {
                 $url = $bbb->getListingUrl();

@@ -26,140 +26,140 @@ class CForumThread
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_id", type="integer")
      */
-    private $threadId;
+    protected $threadId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
      */
-    private $threadTitle;
+    protected $threadTitle;
 
     /**
      * @var int
      *
      * @ORM\Column(name="forum_id", type="integer", nullable=true)
      */
-    private $forumId;
+    protected $forumId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
      */
-    private $threadReplies;
+    protected $threadReplies;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_poster_id", type="integer", nullable=true)
      */
-    private $threadPosterId;
+    protected $threadPosterId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="thread_poster_name", type="string", length=100, nullable=true)
      */
-    private $threadPosterName;
+    protected $threadPosterName;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
      */
-    private $threadViews;
+    protected $threadViews;
 
     /**
      * @var int
      *
      * @ORM\Column(name="thread_last_post", type="integer", nullable=true)
      */
-    private $threadLastPost;
+    protected $threadLastPost;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="thread_date", type="datetime", nullable=true)
      */
-    private $threadDate;
+    protected $threadDate;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="thread_sticky", type="boolean", nullable=true)
      */
-    private $threadSticky;
+    protected $threadSticky;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="thread_title_qualify", type="string", length=255, nullable=true)
      */
-    private $threadTitleQualify;
+    protected $threadTitleQualify;
 
     /**
      * @var float
      *
      * @ORM\Column(name="thread_qualify_max", type="float", precision=6, scale=2, nullable=false)
      */
-    private $threadQualifyMax;
+    protected $threadQualifyMax;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="thread_close_date", type="datetime", nullable=true)
      */
-    private $threadCloseDate;
+    protected $threadCloseDate;
 
     /**
      * @var float
      *
      * @ORM\Column(name="thread_weight", type="float", precision=6, scale=2, nullable=false)
      */
-    private $threadWeight;
+    protected $threadWeight;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="thread_peer_qualify", type="boolean")
      */
-    private $threadPeerQualify;
+    protected $threadPeerQualify;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
      */
-    private $lpItemId;
+    protected $lpItemId;
 
     /**
      * Constructor.

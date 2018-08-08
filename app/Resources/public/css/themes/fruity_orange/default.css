@@ -78,14 +78,7 @@ color: #FFFFFF;
 background: #FF650D;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background: #ff670f; 
-background: -moz-linear-gradient(top, #ff670f 0%, #fc3200 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff670f), color-stop(100%,#fc3200));
-background: -webkit-linear-gradient(top, #ff670f 0%,#fc3200 100%);
-background: -o-linear-gradient(top, #ff670f 0%,#fc3200 100%);
-background: -ms-linear-gradient(top, #ff670f 0%,#fc3200 100%);
-background: linear-gradient(to bottom, #ff670f 0%,#fc3200 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff670f', endColorstr='#fc3200',GradientType=0 );
+  background: #FFFFFF;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;

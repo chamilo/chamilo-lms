@@ -1,0 +1,67 @@
+{% macro display(items, category_id, allow_edit, _c) %}
+    {% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
+    {% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
+    {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
+    {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
+    {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
+
+    <div class="panel-group" id="accordion-list-{{ category_id }}" role="tablist" aria-multiselectable="true">
+        {% for item in items %}
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading-item-{{ item.id }}">
+                    {% if allow_edit %}
+                        <div class="pull-right">
+                            <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                                {{ edit_img }}
+                            </a>
+                            {% if item.isVisible %}
+                                <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
+                                    {{ visible_img }}
+                                </a>
+                            {% else %}
+                                <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}">
+                                    {{ invisible_img }}
+                                </a>
+                            {% endif %}
+                            <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}"
+                               class="btn-delete">
+                                {{ delete_img }}
+                            </a>
+                        </div>
+                    {% endif %}
+                    <h5 class="panel-title">
+                        <a href="#collapse-{{ item.id }}" class="collapsed" role="button"
+                           data-parent="#accordion-list-{{ category_id }}"
+                           data-toggle="collapse" aria-expanded="false" aria-controls="collapse-{{ item.id }}">
+                            {{ item.title }}
+                        </a>
+                    </h5>
+                    {% if _c is empty %}
+                        {% if item.session %}
+                            <div class="clearfix">
+                                {{ 'Course'|get_lang ~ ': ' ~ item.session.name ~ ' (' ~ item.course.title ~ ')' }}
+                            </div>
+                        {% elseif not item.session and item.course %}
+                            <div class="clearfix">
+                                {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}<br>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div id="collapse-{{ item.id }}" class="panel-collapse collapse" role="tabpanel"
+                     aria-labelledby="heading-item-{{ item.id }}">
+                    <div class="panel-body">
+                        {{ item.content }}
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
+                    {% if item.creationDate != item.updateDate %}
+                        &centerdot;
+                        {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

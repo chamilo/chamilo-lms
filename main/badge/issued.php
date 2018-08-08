@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use SkillRelUser as SkillRelUserManager;
 
 /**
  * Show information about the issued badge.
@@ -13,17 +15,16 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
-$userId = isset($_REQUEST['user']) ? intval($_REQUEST['user']) : 0;
+$issue = isset($_REQUEST['issue']) ? (int) $_REQUEST['issue'] : 0;
+$userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
 
 if (empty($issue)) {
     api_not_allowed(true);
 }
 
 $entityManager = Database::getManager();
+/** @var SkillRelUser $skillIssue */
 $skillIssue = $entityManager->find('ChamiloCoreBundle:SkillRelUser', $issue);
-$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
 if (!$skillIssue) {
     Display::addFlash(
@@ -35,6 +36,9 @@ if (!$skillIssue) {
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
+$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
 $user = $skillIssue->getUser();
 $skill = $skillIssue->getSkill();
@@ -60,14 +64,16 @@ $skillInfo = [
     'short_code' => $skill->getShortCode(),
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
-    'badge_image' => $skill->getWebIconPath(),
+    'badge_image' => Skill::getWebIconPath($skill),
     'courses' => [],
 ];
+
+$titleContent = sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'));
 
 // Open Graph Markup
 $htmlHeadXtra[] = "
     <meta property='og:type' content='article' />
-    <meta property='og:title' content='".sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'))."' />
+    <meta property='og:title' content='".$titleContent."' />
     <meta property='og:url' content='".api_get_path(WEB_PATH)."badge/".$issue."' />
     <meta property='og:description' content='".$skillInfo['description']."' />
     <meta property='og:image' content='".$skillInfo['badge_image']."' />
@@ -84,25 +90,25 @@ if ($skillIssue->getAcquiredLevel()) {
     $currentSkillLevel = $skillLevelRepo->find(['id' => $skillIssue->getAcquiredLevel()])->getName();
 }
 
-$argumentationAuthor = api_get_user_info($skillIssue->getArgumentationAuthorId());
+$author = api_get_user_info($skillIssue->getArgumentationAuthorId());
 
 $skillIssueInfo = [
     'id' => $skillIssue->getId(),
     'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
     'acquired_level' => $currentSkillLevel,
     'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
-    'argumentation_author_name' => api_get_person_name($argumentationAuthor['firstname'], $argumentationAuthor['lastname']),
+    'argumentation_author_name' => $author['complete_name'],
     'argumentation' => $skillIssue->getArgumentation(),
     'source_name' => $skillIssue->getSourceName(),
     'user_id' => $skillIssue->getUser()->getId(),
     'user_complete_name' => $skillIssue->getUser()->getCompleteName(),
     'skill_id' => $skillIssue->getSkill()->getId(),
-    'skill_badge_image' => $skillIssue->getSkill()->getWebIconPath(),
+    'skill_badge_image' => Skill::getWebIconPath($skillIssue->getSkill()),
     'skill_name' => $skillIssue->getSkill()->getName(),
     'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
     'skill_description' => $skillIssue->getSkill()->getDescription(),
     'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
-    'badge_assertion' => $skillIssue->getAssertionUrl(),
+    'badge_assertion' => SkillRelUserManager::getAssertionUrl($skillIssue),
     'comments' => [],
     'feedback_average' => $skillIssue->getAverage(),
 ];
@@ -115,7 +121,6 @@ $skillId = $skillIssueInfo['skill_id'];
 /** @var SkillRelUserComment $comment */
 foreach ($skillIssueComments as $comment) {
     $commentDate = api_get_local_time($comment->getFeedbackDateTime());
-
     $skillIssueInfo['comments'][] = [
         'text' => $comment->getFeedbackText(),
         'value' => $comment->getFeedbackValue(),
@@ -125,7 +130,6 @@ foreach ($skillIssueComments as $comment) {
 }
 
 $acquiredLevel = [];
-
 $profile = $skillRepo->find($skillId)->getProfile();
 
 if (!$profile) {
@@ -153,17 +157,16 @@ if (!$profile) {
 
 if ($profile) {
     $profileId = $profile->getId();
-
     $levels = $skillLevelRepo->findBy([
         'profile' => $profileId,
     ]);
 
+    $profileLevels = [];
     foreach ($levels as $level) {
         $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();
     }
 
     ksort($profileLevels); // Sort the array by Position.
-
     foreach ($profileLevels as $profileLevel) {
         $profileId = key($profileLevel);
         $acquiredLevel[$profileId] = $profileLevel[$profileId];
@@ -188,7 +191,7 @@ if ($showLevels && $allowToEdit) {
         $entityManager->flush();
         Display::addFlash(Display::return_message(get_lang('Saved')));
 
-        header("Location: ".$skillIssue->getIssueUrl());
+        header('Location: '.SkillRelUserManager::getIssueUrl($skillIssue));
         exit;
     }
 }
@@ -221,7 +224,7 @@ if ($form->validate() && $allowComment && $allowToEdit) {
     $entityManager->flush();
     Display::addFlash(Display::return_message(get_lang('Added')));
 
-    header("Location: ".$skillIssue->getIssueUrl());
+    header('Location: '.SkillRelUserManager::getIssueUrl($skillIssue));
     exit;
 }
 
@@ -241,7 +244,7 @@ if ($allowExport) {
     $skills = $objSkill->get($skillId);
     $unbakedBadge = api_get_path(SYS_UPLOAD_PATH).'badges/'.$skills['icon'];
     if (!is_file($unbakedBadge)) {
-        $unbakedBadge = api_get_path(WEB_CODE_PATH).'img/icons/128/badges-default.png';
+        $unbakedBadge = api_get_path(SYS_CODE_PATH).'img/icons/128/badges-default.png';
     }
 
     $unbakedBadge = file_get_contents($unbakedBadge);

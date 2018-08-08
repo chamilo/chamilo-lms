@@ -20,21 +20,21 @@ class UsergroupRelCourse
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
-    private $usergroupId;
+    protected $usergroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
-    private $courseId;
+    protected $courseId;
 
     /**
      * Set usergroupId.

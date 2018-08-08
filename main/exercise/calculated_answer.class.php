@@ -209,7 +209,7 @@ class CalculatedAnswer extends Question
                 $auxFormula = $formula;
                 $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
                 if ($nb > 0) {
-                    for ($i = 0; $i < $nb; ++$i) {
+                    for ($i = 0; $i < $nb; $i++) {
                         $blankItem = $blanks[0][$i];
 
                         // take random float values when one or both edge values have a decimal point
@@ -248,13 +248,14 @@ class CalculatedAnswer extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-            <tr>
-                <th>'.get_lang('Answer').'</th>
-                <th>'.get_lang('YourChoice').'</th>
-                <th>'.get_lang('ExpectedChoice').'</th>
-                <th>'.get_lang('Status').'</th>
-            </tr>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
+        $header .= '</tr>';
 
         return $header;
     }

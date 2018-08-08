@@ -1,0 +1,11 @@
+body {background-repeat:no-repeat; margin:0; padding: 0;}
+td { font-family:arial, sans-serif; font-size:18px; }
+.logo {height: 150px; vertical-align: middle; }
+.seals { font-size: 16px; text-align:center;}
+.logo-seals { height: 100px; text-align:center; vertical-align: middle;}
+@page caraA { height: 210mm; margin:0; padding:0; page-break-before:always;} 
+.caraA {box-decoration-break: slice; page: caraA}
+@page caraB { background:#FFFFFF; }
+.caraB {box-decoration-break: slice; page: caraB}
+.contents-learnpath td {background: #FFFFFF; font-size: 12px; height: 160mm; vertical-align: top;}
+ol {margin: 0; padding:0;}

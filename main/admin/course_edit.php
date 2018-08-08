@@ -144,7 +144,10 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
+    $urlId,
+    api_get_configuration_value('allow_base_course_category')
+);
 if ($countCategories >= 100) {
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
@@ -163,7 +166,10 @@ if ($countCategories >= 100) {
     }
 } else {
     $courseInfo['category_code'] = $courseInfo['categoryCode'];
-    $categories = $courseCategoriesRepo->findAllInAccessUrl($urlId);
+    $categories = $courseCategoriesRepo->findAllInAccessUrl(
+        $urlId,
+        api_get_configuration_value('allow_base_course_category')
+    );
     $categoriesOptions = [null => get_lang('None')];
 
     /** @var CourseCategory $category */
@@ -223,7 +229,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
             }
         }
 
-        $groupName = 'session_coaches['.$sessionId.']';
+        $groupName = 'session_coaches_'.$sessionId;
         $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
         $coachId = 'coaches_by_session_'.$sessionId;
         $platformTeacherName = 'platform_teachers_by_session';
@@ -390,19 +396,22 @@ if ($form->validate()) {
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
 
     // Updating teachers
-
     if ($addTeacherToSessionCourses) {
-        // Updating session coaches
-        $sessionCoaches = $course['session_coaches'];
-        if (!empty($sessionCoaches)) {
-            foreach ($sessionCoaches as $sessionId => $teacherInfo) {
-                $coachesToSubscribe = $teacherInfo['coaches_by_session'];
-                SessionManager::updateCoaches(
-                    $sessionId,
-                    $courseId,
-                    $coachesToSubscribe,
-                    true
-                );
+        foreach ($coursesInSession as $session) {
+            $sessionId = $session['id'];
+            // Updating session coaches
+            $sessionCoaches = isset($course['session_coaches_'.$sessionId]) ? $course['session_coaches_'.$sessionId] : [];
+
+            if (!empty($sessionCoaches)) {
+                foreach ($sessionCoaches as $teacherInfo) {
+                    $coachesToSubscribe = isset($teacherInfo['coaches_by_session']) ? $teacherInfo['coaches_by_session'] : [];
+                    SessionManager::updateCoaches(
+                        $sessionId,
+                        $courseId,
+                        $coachesToSubscribe,
+                        true
+                    );
+                }
             }
         }
 
@@ -417,18 +426,18 @@ if ($form->validate()) {
         // Normal behaviour
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);
 
-        // Updating session coaches
-        $sessionCoaches = isset($course['session_coaches']) ? $course['session_coaches'] : [];
-        if (!empty($sessionCoaches)) {
-            foreach ($sessionCoaches as $sessionId => $coachesToSubscribe) {
-                if (!empty($coachesToSubscribe)) {
-                    SessionManager::updateCoaches(
-                        $sessionId,
-                        $courseId,
-                        $coachesToSubscribe,
-                        true
-                    );
-                }
+        foreach ($coursesInSession as $session) {
+            $sessionId = $session['id'];
+            // Updating session coaches
+            $sessionCoaches = isset($course['session_coaches_'.$sessionId]) ? $course['session_coaches_'.$sessionId] : [];
+
+            if (!empty($sessionCoaches)) {
+                SessionManager::updateCoaches(
+                    $sessionId,
+                    $courseId,
+                    $sessionCoaches,
+                    true
+                );
             }
         }
     }
@@ -440,9 +449,9 @@ if ($form->validate()) {
         Database::query($sql);
     }
 
-    $course_id = $courseInfo['real_id'];
-
-    Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+    $courseInfo = api_get_course_info($courseInfo['code']);
+    $message = Display::url($courseInfo['title'], $courseInfo['course_public_url']);
+    Display::addFlash(Display::return_message(get_lang('ItemUpdated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
         header('Location: course_list.php');

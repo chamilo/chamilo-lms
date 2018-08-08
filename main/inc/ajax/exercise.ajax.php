@@ -11,14 +11,15 @@ $debug = false;
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
-$course_id = api_get_course_int_id();
+
 if ($debug) {
-    error_log("-----------------");
+    error_log('-----------------------------------------------------');
     error_log("$action ajax call");
-    error_log("-----------------");
+    error_log('-----------------------------------------------------');
 }
 
-$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
+$course_id = api_get_course_int_id();
+$session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
@@ -34,7 +35,7 @@ switch ($action) {
 
         if (empty($exeId)) {
             if ($debug) {
-                error_log("Exe id not provided.");
+                error_log('Exe id not provided.');
             }
             exit;
         }
@@ -44,7 +45,7 @@ switch ($action) {
 
         if (empty($exerciseInSession)) {
             if ($debug) {
-                error_log("Exercise obj not provided.");
+                error_log('Exercise obj not provided.');
             }
             exit;
         }
@@ -85,7 +86,7 @@ switch ($action) {
 
         if ($attempt->getStatus() != 'incomplete') {
             if ($debug) {
-                error_log("Cannot update exercise is already completed.");
+                error_log('Cannot update exercise is already completed.');
             }
             exit;
         }
@@ -105,10 +106,6 @@ switch ($action) {
             ) {
                 $sessionTime = $previousTime[$key];
                 $duration = $sessionTime = $now - $sessionTime;
-                /*if ($debug) {
-                    error_log("Now in UTC: ".$nowObject->format('Y-m-d H:i:s'));
-                    error_log("Session time in UTC: ".api_get_utc_datetime($sessionTime));
-                }*/
                 if (!empty($durationFromObject)) {
                     $duration += $durationFromObject;
                 }
@@ -150,9 +147,9 @@ switch ($action) {
 
         // 1. Setting variables needed by jqgrid
         $action = $_GET['a'];
-        $exercise_id = intval($_GET['exercise_id']);
-        $page = intval($_REQUEST['page']); //page
-        $limit = intval($_REQUEST['rows']); //quantity of rows
+        $exercise_id = (int) $_GET['exercise_id'];
+        $page = (int) $_REQUEST['page']; //page
+        $limit = (int) $_REQUEST['rows']; //quantity of rows
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
@@ -169,7 +166,7 @@ switch ($action) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $minutes = intval($_REQUEST['minutes']);
+        $minutes = (int) $_REQUEST['minutes'];
         $now = time() - 60 * $minutes;
         $now = api_get_utc_datetime($now);
 
@@ -271,18 +268,20 @@ switch ($action) {
 
                 $response->rows[$i]['id'] = $row['exe_id'];
                 if (!empty($oExe->expired_time)) {
-                    $remaining = strtotime($row['start_date']) + ($oExe->expired_time * 60) - strtotime(api_get_utc_datetime(time()));
+                    $remaining = strtotime($row['start_date']) +
+                        ($oExe->expired_time * 60) -
+                        strtotime(api_get_utc_datetime(time()));
                     $h = floor($remaining / 3600);
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
                     $timeInfo = api_format_date(
-                        $row['start_date'],
-                        DATE_TIME_FORMAT_LONG
-                    ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
-                } else {
-                    $timeInfo = api_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
+                        ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
+                } else {
+                    $timeInfo = api_format_date(
+                        $row['start_date'],
+                        DATE_TIME_FORMAT_LONG
                     );
                 }
                 $array = [
@@ -313,7 +312,7 @@ switch ($action) {
                     [
                         'exercise_order' => $counter,
                         'session_id' => $session_id,
-                        'exercise_id' => intval($new_order_id),
+                        'exercise_id' => (int) $new_order_id,
                         'c_id' => $course_id,
                     ]
                 );
@@ -325,7 +324,7 @@ switch ($action) {
     case 'update_question_order':
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
-        $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
+        $exercise_id = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : null;
 
         if (empty($exercise_id)) {
             return Display::return_message(get_lang('Error'), 'error');
@@ -340,9 +339,7 @@ switch ($action) {
                     ['question_order' => $counter],
                     [
                         'question_id = ? AND c_id = ? AND exercice_id = ? ' => [
-                            intval(
-                                $new_order_id
-                            ),
+                            (int) $new_order_id,
                             $course_id,
                             $exercise_id,
                         ],
@@ -357,15 +354,34 @@ switch ($action) {
     case 'add_question_to_reminder':
         /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
-        if (empty($objExercise)) {
+        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
+
+        if (empty($objExercise) || empty($exeId)) {
             echo 0;
             exit;
         } else {
-            $objExercise->editQuestionToRemind(
-                $_REQUEST['exe_id'],
-                $_REQUEST['question_id'],
-                $_REQUEST['action']
-            );
+            $option = isset($_GET['option']) ? $_GET['option'] : '';
+            switch ($option) {
+                case 'add_all':
+                    $questionListInSession = Session::read('questionList');
+                    $objExercise->addAllQuestionToRemind(
+                        $exeId,
+                        $questionListInSession
+                    );
+                    break;
+                case 'remove_all':
+                    $objExercise->removeAllQuestionToRemind(
+                        $exeId
+                    );
+                    break;
+                default:
+                    $objExercise->editQuestionToRemind(
+                        $exeId,
+                        $_REQUEST['question_id'],
+                        $_REQUEST['action']
+                    );
+                    break;
+            }
         }
         break;
     case 'save_exercise_by_now':
@@ -380,25 +396,31 @@ switch ($action) {
             // Questions choices.
             $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
+            // certainty degree choice
+            $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty'])
+                ? $_REQUEST['choiceDegreeCertainty'] : null;
+
             // Hot spot coordinates from all questions.
             $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
 
             // There is a reminder?
-            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list']) ? array_keys($_REQUEST['remind_list']) : null;
+            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])
+                ? array_keys($_REQUEST['remind_list']) : null;
 
             // Needed in manage_answer.
-            $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 
             // Attempt id.
-            $exe_id = $_REQUEST['exe_id'];
+            $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
             if ($debug) {
-                error_log("exe_id = $exe_id");
+                error_log("exe_id = $exeId");
                 error_log("type = $type");
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
                 error_log("remind_list = ".print_r($remind_list, 1));
+                error_log("--------------------------------");
             }
 
             // Exercise information.
@@ -406,7 +428,7 @@ switch ($action) {
             $objExercise = Session::read('objExercise');
 
             // Question info.
-            $question_id = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
+            $question_id = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
             $question_list = Session::read('questionList');
 
             // If exercise or question is not set then exit.
@@ -424,24 +446,23 @@ switch ($action) {
             }
 
             // Getting information of the current exercise.
-            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
             $exercise_id = $exercise_stat_info['exe_exo_id'];
             $attemptList = [];
 
             // First time here we create an attempt (getting the exe_id).
             if (!empty($exercise_stat_info)) {
                 // We know the user we get the exe_id.
-                $exe_id = $exercise_stat_info['exe_id'];
+                $exeId = $exercise_stat_info['exe_id'];
                 $total_score = $exercise_stat_info['exe_result'];
 
                 // Getting the list of attempts
-                $attemptList = Event::getAllExerciseEventByExeId($exe_id);
+                $attemptList = Event::getAllExerciseEventByExeId($exeId);
             }
 
             // Updating Reminder algorithm.
             if ($objExercise->type == ONE_PER_PAGE) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
-
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
                     $new_list = [];
@@ -462,20 +483,19 @@ switch ($action) {
             }
 
             // No exe id? Can't save answer.
-            if (empty($exe_id)) {
+            if (empty($exeId)) {
                 // Fires an error.
                 echo 'error';
                 if ($debug) {
-                    error_log("exe_id is empty");
+                    error_log('exe_id is empty');
                 }
                 exit;
             }
 
-            Session::write('exe_id', $exe_id);
+            Session::write('exe_id', $exeId);
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
-
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
                     $objQuestionTmp = Question::read($my_question_id, $course_id);
@@ -503,6 +523,13 @@ switch ($action) {
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
+                $myChoiceDegreeCertainty = null;
+                if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    if (isset($choiceDegreeCertainty[$my_question_id])) {
+                        $myChoiceDegreeCertainty = $choiceDegreeCertainty[$my_question_id];
+                    }
+                }
+
                 // Getting free choice data.
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type == 'all') {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
@@ -521,10 +548,11 @@ switch ($action) {
                 ) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
+
                 if ($type == 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
-                        $exe_id,
+                        $exeId,
                         $my_question_id,
                         null,
                         'exercise_show',
@@ -543,18 +571,18 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
-                        error_log("delete_attempt exe_id : $exe_id, my_question_id: $my_question_id");
+                        error_log("delete_attempt exe_id : $exeId, my_question_id: $my_question_id");
                     }
                     Event::delete_attempt(
-                        $exe_id,
+                        $exeId,
                         api_get_user_id(),
                         $course_id,
                         $session_id,
                         $my_question_id
                     );
-                    if ($objQuestionTmp->type == HOT_SPOT) {
+                    if ($objQuestionTmp->type === HOT_SPOT) {
                         Event::delete_attempt_hotspot(
-                            $exe_id,
+                            $exeId,
                             api_get_user_id(),
                             $course_id,
                             $session_id,
@@ -570,18 +598,36 @@ switch ($action) {
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
-                $result = $objExercise->manage_answer(
-                    $exe_id,
-                    $my_question_id,
-                    $my_choice,
-                    'exercise_result',
-                    $hot_spot_coordinates,
-                    true,
-                    false,
-                    false,
-                    $objExercise->selectPropagateNeg(),
-                    $hotspot_delineation_result
-                );
+                if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                    $myChoiceTmp = [];
+                    $myChoiceTmp['choice'] = $my_choice;
+                    $myChoiceTmp['choiceDegreeCertainty'] = $myChoiceDegreeCertainty;
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $myChoiceTmp,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                } else {
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $my_choice,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                }
 
                 //  Adding the new score.
                 $total_score += $result['score'];
@@ -593,9 +639,8 @@ switch ($action) {
 
                 $duration = 0;
                 $now = time();
-
                 if ($type == 'all') {
-                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                 }
 
                 $key = ExerciseLib::get_time_control_key(
@@ -625,9 +670,8 @@ switch ($action) {
                 }
 
                 Session::write('duration_time', [$key => $now]);
-
                 Event::updateEventExercise(
-                    $exe_id,
+                    $exeId,
                     $objExercise->selectId(),
                     $total_score,
                     $total_weight,
@@ -644,17 +688,27 @@ switch ($action) {
                 // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
-                    error_log(" -- end question -- ");
+                    error_log("---------- end question ------------");
                 }
-            }
-            if ($debug) {
-                error_log(" ------ end ajax call ------- ");
             }
         }
 
+        if ($type == 'all') {
+            echo 'ok';
+            exit;
+        }
+
         if ($objExercise->type == ONE_PER_PAGE) {
+            if ($debug) {
+                error_log("result: one_per_page");
+                error_log(" ------ end ajax call ------- ");
+            }
             echo 'one_per_page';
             exit;
+        }
+        if ($debug) {
+            error_log("result: ok");
+            error_log(" ------ end ajax call ------- ");
         }
         echo 'ok';
         break;
@@ -675,17 +729,22 @@ switch ($action) {
 
         $objExercise = new Exercise();
         $objExercise->read($exerciseId);
-
         $objQuestion = Question::read($questionId);
 
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type == FILL_IN_BLANKS) {
+        if ($objQuestion->type === FILL_IN_BLANKS) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
                 });
             </script>';
         }
+
+        // Allows render MathJax elements in a ajax call
+        if (api_get_setting('include_asciimathml_script') === 'true') {
+            echo '<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]);</script>';
+        }
+
         ExerciseLib::showQuestion(
             $objExercise,
             $questionId,

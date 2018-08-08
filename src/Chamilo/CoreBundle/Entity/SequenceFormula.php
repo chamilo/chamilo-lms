@@ -20,19 +20,19 @@ class SequenceFormula
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
-    private $method;
+    protected $method;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
      */
-    private $variable;
+    protected $variable;
 
     /**
      * Get id.

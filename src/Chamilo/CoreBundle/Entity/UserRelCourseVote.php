@@ -22,35 +22,35 @@ class UserRelCourseVote
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
-    private $urlId;
+    protected $urlId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="vote", type="integer", nullable=false)
      */
-    private $vote;
+    protected $vote;
 
     /**
      * @var int
@@ -59,7 +59,7 @@ class UserRelCourseVote
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set cId.

@@ -1,21 +1,26 @@
 <?php
 /* For license terms, see /license.txt */
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$toolId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
-
-if (empty($toolId)) {
+if (!isset($_REQUEST['id'])) {
     api_not_allowed(true);
 }
 
-$plugin = ImsLtiPlugin::create();
-$tool = ImsLtiTool::fetch($toolId);
+$toolId = intval($_REQUEST['id']);
 
-if (empty($tool)) {
+$plugin = ImsLtiPlugin::create();
+$em = Database::getManager();
+
+/** @var ImsLtiTool $tool */
+$tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
+
+if (!$tool) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('NoTool'), 'error')
     );
@@ -26,12 +31,12 @@ if (empty($tool)) {
 
 $form = new FormValidator('ims_lti_edit_tool');
 $form->addText('name', get_lang('Name'));
-$form->addTextarea('description', get_lang('Description'));
-$form->addText('url', get_lang('Url'));
+$form->addTextarea('description', get_lang('Description'), ['rows' => 10]);
+$form->addText('url', $plugin->get_lang('LaunchUrl'));
 $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
 $form->addText('shared_secret', $plugin->get_lang('SharedSecret'));
 $form->addTextarea('custom_params', $plugin->get_lang('CustomParams'));
-$form->addButtonCreate($plugin->get_lang('AddExternalTool'));
+$form->addButtonSave(get_lang('Save'));
 $form->addHidden('id', $tool->getId());
 $form->setDefaults([
     'name' => $tool->getName(),
@@ -51,8 +56,10 @@ if ($form->validate()) {
         ->setLaunchUrl($formValues['url'])
         ->setConsumerKey($formValues['consumer_key'])
         ->setSharedSecret($formValues['shared_secret'])
-        ->setCustomParams($formValues['custom_params'])
-        ->save();
+        ->setCustomParams($formValues['custom_params']);
+
+    $em->persist($tool);
+    $em->flush();
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('ToolEdited'), 'success')

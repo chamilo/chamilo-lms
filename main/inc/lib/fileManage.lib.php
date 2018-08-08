@@ -63,9 +63,9 @@ function my_delete($file)
 
             return true;
         }
-    } else {
-        return false; // no file or directory to delete
     }
+
+    return false; // no file or directory to delete
 }
 
 /**
@@ -121,7 +121,8 @@ function folder_is_empty($in_folder)
     $folder_is_empty = 0;
     if (is_dir($in_folder)) {
         $tab_folder_content = scandir($in_folder);
-        if ((count($tab_folder_content) == 2 &&
+        if ((
+            count($tab_folder_content) == 2 &&
             in_array(".", $tab_folder_content) &&
             in_array("..", $tab_folder_content)
             ) ||
@@ -257,9 +258,9 @@ function move($source, $target, $forceMove = true, $moveContent = false)
 
             return true;
         }
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 /**
@@ -269,6 +270,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
  *
  * @param string $source      the path of the directory to move
  * @param string $destination the path of the new area
+ * @param bool   $move        Whether we want to remove the source at the end
  *
  * @return bool false on error
  */
@@ -345,27 +347,42 @@ function getextension($filename)
 }
 
 /**
- * Calculation size of a directory.
+ * Get a list of all PHP (.php) files in a given directory. Includes .tpl files.
  *
- * @returns integer size
+ * @param string $base_path     The base path in which to find the corresponding files
+ * @param bool   $includeStatic Include static .html, .htm and .css files
  *
- * @param string $root      path of dir to measure
- * @param bool   $recursive if true , include subdirectory in total
+ * @return array
  */
-function dirsize($root, $recursive = true)
+function getAllPhpFiles($base_path, $includeStatic = false)
 {
-    $dir = @opendir($root);
-    $size = 0;
-    while ($file = @readdir($dir)) {
-        if (!in_array($file, ['.', '..'])) {
-            if (is_dir($root.'/'.$file)) {
-                $size += $recursive ? dirsize($root.'/'.$file) : 0;
-            } else {
-                $size += @filesize($root.'/'.$file);
+    $list = scandir($base_path);
+    $files = [];
+    $extensionsArray = ['.php', '.tpl'];
+    if ($includeStatic) {
+        $extensionsArray[] = 'html';
+        $extensionsArray[] = '.htm';
+        $extensionsArray[] = '.css';
+    }
+    foreach ($list as $item) {
+        if (substr($item, 0, 1) == '.') {
+            continue;
+        }
+        $special_dirs = [api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH)];
+        if (in_array($base_path.$item.'/', $special_dirs)) {
+            continue;
+        }
+        if (is_dir($base_path.$item)) {
+            $files = array_merge($files, getAllPhpFiles($base_path.$item.'/', $includeStatic));
+        } else {
+            //only analyse php files
+            $sub = substr($item, -4);
+            if (in_array($sub, $extensionsArray)) {
+                $files[] = $base_path.$item;
             }
         }
     }
-    @closedir($dir);
+    $list = null;
 
-    return $size;
+    return $files;
 }

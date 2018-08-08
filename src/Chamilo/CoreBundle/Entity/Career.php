@@ -20,42 +20,42 @@ class Career
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * Get id.

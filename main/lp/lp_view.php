@@ -35,7 +35,7 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-$lp_id = !empty($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
+$lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
@@ -60,8 +60,8 @@ $visibility = api_get_item_visibility(
     $sessionId
 );
 
-if (!api_is_allowed_to_edit(false, true, false, false) &&
-    intval($visibility) == 0
+if ($visibility === 0 &&
+    !api_is_allowed_to_edit(false, true, false, false)
 ) {
     api_not_allowed(true);
 }
@@ -113,23 +113,61 @@ if (!$is_allowed_to_edit) {
     }
 }
 
-$platform_theme = api_get_setting('stylesheets'); // Platform's css.
+$platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
-
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
 $htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
 </script>';
+
+$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {
+$(document).ready(function() {    
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
+
+$allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
+if ($allowLpItemTip) {
+    $htmlHeadXtra[] = '<script>
+    $(document).ready(function() {    
+         $(".scorm_item_normal").qtip({
+            content: {
+                text: function(event, api) {
+                    var item = $(this);                 
+                    var itemId = $(this).attr("id");
+                    itemId = itemId.replace("toc_", "");
+                    var textToShow = "";
+                    $.ajax({
+                        type: "GET",
+                        url: "'.$ajaxUrl.'&item_id="+ itemId,            
+                        async: false                 
+                    })
+                    .then(function(content) {                    
+                        if (content == 1) {
+                            textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
+                            api.set("style.classes", "qtip-green qtip-shadow");                        
+                        } else {
+                            textToShow = content;                        
+                            api.set("style.classes", "qtip-red qtip-shadow");
+                        }
+                        
+                        return textToShow;
+                    });
+                    return textToShow;                
+                }
+            }
+        }); 
+    });
+    </script>';
+}
 
 // Impress js
 if ($lp->mode == 'impress') {
@@ -271,9 +309,9 @@ if (!empty($_REQUEST['exeId']) &&
     $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id = intval($_GET['lp_item_id']);
+    $safe_item_id = (int) $_GET['lp_item_id'];
     $safe_id = $lp_id;
-    $safe_exe_id = intval($_REQUEST['exeId']);
+    $safe_exe_id = (int) $_REQUEST['exeId'];
 
     if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
@@ -491,10 +529,7 @@ if ($fixLinkSetting) {
 }
 
 $template->assign('fix_link', $fixLink);
-$template->assign(
-    'glossary_tool_availables',
-    ['true', 'lp', 'exercise_and_lp']
-);
+$template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_lp']);
 
 // If the global gamification mode is enabled...
 $gamificationMode = api_get_setting('gamification_mode');
@@ -527,9 +562,11 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
-$template->assign('title_course', $lp->course_info['title']);
-// remove in ofaj
-//$template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
+    $template->assign('data_panel', $lp->getParentToc($get_toc_list));
+} else {
+    $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+}
 $template->assign('lp_id', $lp->lp_id);
 $template->assign('lp_current_item_id', $lp->get_current_item_id());
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));
@@ -542,17 +579,6 @@ $template->assign(
         ICON_SIZE_BIG
     )
 );
-
-// supprimer pour OFAJ
-//$template->assign('data_list', $lp->getListArrayToc($get_toc_list));
-$template->assign('lp_id', $lp->lp_id);
-$template->assign('lp_current_item_id', $lp->get_current_item_id());
-
-if (api_get_configuration_value('lp_new_style') === true && $lpType == 1) {
-    $template->assign('data_panel', $lp->getParentToc($get_toc_list));
-} else {
-    $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
-}
 
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);

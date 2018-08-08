@@ -93,7 +93,7 @@ class AddCourse
      * @return int
      * @assert (null,null) === false
      */
-    public static function prepare_course_repository($course_repository, $course_code)
+    public static function prepare_course_repository($course_repository)
     {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
@@ -378,7 +378,6 @@ class AddCourse
      * Sorts pictures by type (used?).
      *
      * @param array List of files (sthg like array(0=>array('png'=>1)))
-     * @param string File type
      * @param string $type
      *
      * @return array The received array without files not matching type
@@ -387,7 +386,7 @@ class AddCourse
     public static function sort_pictures($files, $type)
     {
         $pictures = [];
-        foreach ($files as $key => $value) {
+        foreach ($files as $value) {
             if (isset($value[$type]) && $value[$type] != '') {
                 $pictures[][$type] = $value[$type];
             }
@@ -438,16 +437,11 @@ class AddCourse
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $visible_for_all = 1;
         $visible_for_course_admin = 0;
-        $visible_for_platform_admin = 2;
-
         /*    Course tools  */
-
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, 1, '".TOOL_COURSE_DESCRIPTION."','course_description/','info.gif','".self::string2binary(
+            VALUES ($course_id, 1, '".TOOL_COURSE_DESCRIPTION."','course_description/index.php','info.gif','".self::string2binary(
                 api_get_setting(
                     'course_create_active_tools',
                     'course_description'
@@ -559,6 +553,29 @@ class AddCourse
                 api_get_setting('course_create_active_tools', 'notebook')
             )."','0','squaregrey.gif',0,'_self','interaction','0')"
         );
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $tId = Database::insert(
+                $tbl_course_homepage,
+                [
+                    'c_id' => $course_id,
+                    'name' => 'portfolio',
+                    'link' => 'portfolio/index.php',
+                    'image' => 'wiki_task.png',
+                    'visibility' => api_get_setting('course_create_active_tools', 'portfolio') == 'true' ? 1 : 0,
+                    'admin' => 0,
+                    'address' => 'squaregrey.gif',
+                    'added_tool' => 0,
+                    'target' => '_self',
+                    'category' => 'interaction',
+                    'session_id' => 0,
+                ]
+            );
+            Database::update(
+                $tbl_course_homepage,
+                ['id' => $tId],
+                ['iid = ?' => $tId]
+            );
+        }
 
         $setting = intval(self::string2binary(
             api_get_setting('course_create_active_tools', 'attendances')
@@ -568,11 +585,14 @@ class AddCourse
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
             VALUES ($course_id, 19, '".TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".$setting."','0','squaregrey.gif',0,'_self','authoring','0')"
         );
+
+        $setting = intval(self::string2binary(
+            api_get_setting('course_create_active_tools', 'course_progress')
+        ));
+
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, 20, '".TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".self::string2binary(
-                intval(api_get_setting('course_create_active_tools', 'course_progress'))
-            )."','0','squaregrey.gif',0,'_self','authoring','0')"
+            VALUES ($course_id, 20, '".TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".$setting."','0','squaregrey.gif',0,'_self','authoring','0')"
         );
 
         if (api_get_setting('search_enabled') === 'true') {
@@ -588,8 +608,10 @@ class AddCourse
         }
 
         $sql = "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                VALUES ($course_id, 24,'".TOOL_BLOGS."','blog/blog_admin.php','blog_admin.gif','".intval(self::string2binary(
-                api_get_setting('course_create_active_tools', 'blogs'))
+                VALUES ($course_id, 24,'".TOOL_BLOGS."','blog/blog_admin.php','blog_admin.gif','".intval(
+            self::string2binary(
+                api_get_setting('course_create_active_tools', 'blogs')
+        )
             )."','1','squaregrey.gif',0,'_self','admin','0')";
         Database::query($sql);
 
@@ -630,6 +652,8 @@ class AddCourse
             'display_info_advance_inside_homecourse' => ['default' => 1, 'category' => 'thematic_advance'],
             'email_alert_students_on_new_homework' => ['default' => 0, 'category' => 'work'],
             'enable_lp_auto_launch' => ['default' => 0, 'category' => 'learning_path'],
+            'enable_exercise_auto_launch' => ['default' => 0, 'category' => 'exercise'],
+            'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
             'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
                 'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',

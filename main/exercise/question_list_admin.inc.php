@@ -163,11 +163,11 @@ if (!$inATest) {
     echo '
         <div class="row hidden-xs">
             <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
-            <div class="col-sm-1"><strong>'.get_lang('Type').'</strong></div>
+            <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
             <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
-            <div class="col-sm-1"><strong>'.get_lang('Difficulty').'</strong></div>
-            <div class="col-sm-1"><strong>'.get_lang('MaximumScore').'</strong></div>
-            <div class="col-sm-2"><strong>'.get_lang('Actions').'</strong></div>
+            <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
+            <div class="col-sm-1 text-right"><strong>'.get_lang('MaximumScore').'</strong></div>
+            <div class="col-sm-2 text-right"><strong>'.get_lang('Actions').'</strong></div>
         </div>
         <div id="question_list">
     ';
@@ -213,8 +213,7 @@ if (!$inATest) {
                     ['class' => 'btn btn-default btn-sm']
                 );
                 $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered())
-                    ? Display::button(
-                        'edit',
+                    ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
                             get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
@@ -305,7 +304,7 @@ if (!$inATest) {
                                 <div class="question col-sm-5 col-xs-12">'
                                     .$questionName.'
                                 </div>
-                                <div class="type col-sm-1 col-xs-12">
+                                <div class="type text-center col-sm-1 col-xs-12">
                                     <span class="visible-xs-inline">'.get_lang('Type').' </span>'
                                     .$questionType.'
                                 </div>
@@ -313,15 +312,15 @@ if (!$inATest) {
                                     <span class="visible-xs-inline">'.get_lang('Category').' </span>'
                                     .cut($txtQuestionCat, 42).'
                                 </div>
-                                <div class="level col-sm-1 col-xs-6">
+                                <div class="level text-right col-sm-1 col-xs-6">
                                     <span class="visible-xs-inline">'.get_lang('Difficulty').' </span>'
                                     .$questionLevel.'
                                 </div>
-                                <div class="score col-sm-1 col-xs-6">
+                                <div class="score text-right col-sm-1 col-xs-6">
                                     <span class="visible-xs-inline">'.get_lang('Score').' </span>'
                                     .$questionScore.'
                                 </div>
-                                <div class="btn-actions col-sm-2 col-xs-6">
+                                <div class="btn-actions text-right col-sm-2 col-xs-6">
                                     <div class="edition">'.$btnActions.'</div>
                                 </div>
                             </div>

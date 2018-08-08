@@ -35,7 +35,10 @@ if (!empty($error_message)) {
 
 $form = new FormValidator(
     'import_sessions',
-    'post', api_get_self(), null, ['enctype' => 'multipart/form-data']
+    'post',
+    api_get_self(),
+    null,
+    ['enctype' => 'multipart/form-data']
 );
 
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));

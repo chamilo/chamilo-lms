@@ -1,6 +1,6 @@
 <?php
 /* License: see /license.txt */
-//Needed in order to show the plugin title
+// Needed in order to show the plugin title
 $strings['plugin_title'] = "Videoconferencia";
 $strings['plugin_comment'] = "Añade una sala de videoconferencia en los cursos de Chamilo con BigBlueButton (BBB)";
 
@@ -40,14 +40,18 @@ $strings['tool_enable_help'] = "Escoja si desea activar la herramienta de videoc
     Una vez activada, se mostrará como una herramienta adicional en todas las páginas principales de cursos, y los profesores podrán iniciar una conferencia en cualquier momento. Los estudiantes no podrían lanzar una conferencia, solo juntarse a una existente. Si no tiene un servidor de videoconferencia BigBlueButton, por favor <a target=\"_blank\" href=\"http://bigbluebutton.org/\">configure uno</a> antes de seguir, o pida una cotización a uno de los proveedores oficiales de Chamilo. BigBlueButton es una herramienta de software libre (y gratuita), pero su instalación requiere de competencias que quizás no sean inmediatamente disponibles para todos. Puede instalarla usted mismo o buscar ayuda profesional. Esta ayuda podría no obstante generar algunos costos (por lo menos el tiempo de la persona quien lo ayude). En el puro espíritu del software libre, le ofrecemos las herramientas para hacer su trabajo más simple, en la medida de nuestras posibilidades, y le recomendamos profesionales (los proveedores oficiales de Chamilo) para ayudarlo en caso esto fuera demasiado complicado.<br />";
 
 $strings['big_blue_button_welcome_message'] = 'Mensaje de bienvenida de BigBlueButton';
+$strings['enable_global_conference'] = 'Activar la conferencia global';
+$strings['enable_global_conference_per_user'] = 'Activar la conferencia global por usuario';
+$strings['enable_conference_in_course_groups'] = 'Activar las conferencias en grupos';
+$strings['enable_global_conference_link'] = 'Actvivar el enlace hacia la conferencia global desde la página principal';
+
 $strings['big_blue_button_record_and_store'] = 'Grabar las sesiones de videoconferencia.';
 $strings['bbb_enable_conference_in_groups'] = 'Activar la creación de videoconferencia en los grupos.';
-
-$strings['plugin_tool_bbb'] = 'Video';
-
+$strings['plugin_tool_bbb'] = 'Videoconferencia';
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'No hay grabaciones de sesiones de videoconferencia';
 $strings['NoRecording'] = 'No hay grabación';
 $strings['ClickToContinue'] = 'Hacer click para continuar';
+$strings['NoGroup'] = 'No hay grupo';
 $strings['UrlMeetingToShare'] = 'URL a compartir';
 
 $strings['AdminView'] = 'Vista para administradores';
@@ -57,3 +61,14 @@ $strings['MaxXUsersWarning'] = 'Esta sala de conferencia es limitada a un máxim
 $strings['MaxXUsersReached'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Por favor refresque la página en unos minutos para ver si un asiento se ha liberado, o espere la apertura de una nueva sala para poder participar.';
 $strings['MaxXUsersReachedManager'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Para aumentar el límite, contáctese con el administrador del portal.';
 $strings['MaxUsersInConferenceRoom'] = 'Número máximo de usuarios simultáneos en una sala de conferencia';
+$strings['global_conference_allow_roles'] = 'El enlace para la videoconferencia ';
+$strings['CreatedAt'] = 'Creado el';
+
+$strings['interface'] = 'Interfaz por defecto';
+$strings['launch_type'] = 'Elección de la interfaz en el lanzamiento';
+$strings['EnterConferenceFlash'] = 'Ingresar a la conferencia (con Flash)';
+$strings['EnterConferenceHTML5'] = 'Ingresar a la conferencia (con HTML5)';
+$strings['ParticipantsWillUseSameInterface'] = 'Los participantes usarán la misma interfaz que Ud';
+$strings['SetByDefault'] = 'Lanzamiento con la interfaz por defecto';
+$strings['SetByTeacher'] = 'Elegido por el profesor';
+$strings['SetByStudent'] = 'Elegido por el alumno';

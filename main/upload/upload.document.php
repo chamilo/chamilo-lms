@@ -15,7 +15,6 @@ $_course = api_get_course_info();
 $courseDir = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
-$noPHP_SELF = true;
 $max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
@@ -165,7 +164,7 @@ if (isset($_GET['createdir'])) {
     //show the form
     echo Display::return_message($new_folder_text, 'normal');
 } else {
-    //give them a link to create a directory ?>
+    //give them a link to create a directory?>
     <p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
             <?php echo Display::return_icon('new_folder.gif'); ?>

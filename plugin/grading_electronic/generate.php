@@ -101,9 +101,9 @@ try {
     $gradebook = $cats[0];
     /** @var \ExerciseLink $exerciseLink */
     /** commented until we get clear understanding of how to use the dates refs BT#12404
-    $exerciseLink = $gradebook->get_links()[0];
-    $exerciseId = $exerciseLink->get_ref_id();
-    $exerciseInfo = ExerciseLib::get_exercise_by_id($exerciseId, $course->getId());
+        $exerciseLink = $gradebook->get_links()[0];
+        $exerciseId = $exerciseLink->get_ref_id();
+        $exerciseInfo = ExerciseLib::get_exercise_by_id($exerciseId, $course->getId());
      */
     $dateStart = new DateTime($values['range_start'].' 00:00:00', new DateTimeZone('UTC'));
     $dateEnd = new DateTime($values['range_end'].' 23:59:59', new DateTimeZone('UTC'));
@@ -127,24 +127,24 @@ try {
             continue;
         }
         /** commented until we get clear understanding of how to use the dates refs BT#12404
-        $exerciseResult = Event::get_best_exercise_results_by_user(
-            $exerciseId,
-            $course->getId(),
-            $session ? $session->getId() : 0,
-            $student->getId()
-        );
-        $exerciseResult = current($exerciseResult);
+                $exerciseResult = Event::get_best_exercise_results_by_user(
+                    $exerciseId,
+                    $course->getId(),
+                    $session ? $session->getId() : 0,
+                    $student->getId()
+                );
+                $exerciseResult = current($exerciseResult);
 
-        if (!$exerciseResult) {
-            continue;
-        }
+                if (!$exerciseResult) {
+                    continue;
+                }
 
-        $attemptDate = new DateTime($exerciseResult['exe_date'], new DateTimeZone('UTC'));
-        $dateIsRange = $attemptDate >= $dateStart && $attemptDate <= $dateEnd;
+                $attemptDate = new DateTime($exerciseResult['exe_date'], new DateTimeZone('UTC'));
+                $dateIsRange = $attemptDate >= $dateStart && $attemptDate <= $dateEnd;
 
-        if (!$dateEnd) {
-            continue;
-        }
+                if (!$dateEnd) {
+                    continue;
+                }
          */
         $fieldStudent = $uFieldValue->get_values_by_handler_and_field_variable(
             $student->getId(),
@@ -159,11 +159,11 @@ try {
 
         /** old method to get the score
 
-        $score = Category::getCurrentScore(
-            $student->getId(),
-            $gradebook,
-            true
-        );
+                $score = Category::getCurrentScore(
+                    $student->getId(),
+                    $gradebook,
+                    true
+                );
          */
         $fileData[] = sprintf(
             "2 %sPASS%s %s %s",

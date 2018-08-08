@@ -50,7 +50,7 @@ $(window).on("load", function () {
     setFocus();
 });
 </script>';
-$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.api_get_cidreq();
 $htmlHeadXtra[] = '
 <script>
     /*
@@ -112,14 +112,13 @@ $htmlHeadXtra[] = '
         return in_parent_integer_id;
     }
 
-    $(function() {
+    $(function() {        
         $(".lp_resource").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"
             cursor: "move",
             connectWith: "#lp_item_list",
             placeholder: "ui-state-highlight", //defines the yellow highlight
-
             start: function(event, ui) {
                 $(ui.item).css("width", "160px");
                 $(ui.item).find(".item_data").attr("style", "");
@@ -137,11 +136,10 @@ $htmlHeadXtra[] = '
             update: function(event, ui) {
                 buildLPtree($("#lp_item_list"), 0);
                 var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-
                 $.post(
                     "'.$ajax_url.'",
                     order,
-                    function(reponse){
+                    function(reponse) {
                         $("#message").html(reponse);
                         order = "";
                         newOrderData = "";
@@ -168,27 +166,19 @@ $htmlHeadXtra[] = '
                             "type": type,
                             "title" : title
                         };
+                        
                         $.ajax({
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
                             async: false,
                             success: function(data) {
-                                if (data == -1) {
-                                } else {
-                                    $(".normal-message").hide();
-                                    $(ui.item).attr("id", data);
-                                    $(ui.item).addClass("lp_resource_element_new");
-                                    $(ui.item).find(".item_data").attr("style", "");
-                                    $(ui.item).addClass("record li_container");
-                                    $(ui.item).removeClass("lp_resource_element");
-                                    $(ui.item).removeClass("doc_resource");
-                                }
+                                $("#lp_item_list").html(data);
                             }
-                        });
+                        });                        
                     }
-                }//
-            }//end receive
+                }
+            } // End receive
         });
         processReceive = false;
     });
@@ -209,6 +199,7 @@ if ($refresh == 1) {
 }
 
 if ($debug > 0) {
+    error_log(' $refresh: '.$refresh);
     error_log(' $myrefresh: '.$myrefresh);
 }
 
@@ -255,6 +246,7 @@ if (!empty($lpObject)) {
 }
 if ($debug) {
     error_log('$lp_found: '.$lp_found);
+    error_log('$myrefresh_id: '.$myrefresh_id);
 }
 
 $course_id = api_get_course_int_id();
@@ -268,7 +260,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         if ($debug > 0) {
             error_log(' lp_id is defined');
         }
-        // Select the lp in the database and check which type it is (scorm/dokeos/aicc) to generate the
+        // Select the lp in the database and check which type it is (scorm/chamilo/aicc) to generate the
         // right object.
         if (!empty($_REQUEST['lp_id'])) {
             $lp_id = intval($_REQUEST['lp_id']);
@@ -352,7 +344,8 @@ if (isset($_SESSION['oLP'])) {
     // Reinitialises array used by javascript to update items in the TOC.
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+/*$studentView = api_is_student_view_active();
+if ($studentView) {
     if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
@@ -368,7 +361,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
             $_REQUEST['action'] = 'build';
         }
     }
-}
+}*/
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
@@ -773,6 +766,7 @@ switch ($action) {
                 $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
+                exit;
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
@@ -836,7 +830,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->scorm_export();
+            $_SESSION['oLP']->scormExport();
             exit();
         }
         break;
@@ -859,6 +853,21 @@ switch ($action) {
             exit;
         }
         break;
+    case 'export_to_course_build':
+        $allowExport = api_get_configuration_value('allow_lp_chamilo_export');
+        if (api_is_allowed_to_edit() && $allowExport) {
+            if (!$lp_found) {
+                require 'lp_list.php';
+            } else {
+                $result = $_SESSION['oLP']->exportToCourseBuildFormat($_GET['lp_id']);
+                if (!$result) {
+                    require 'lp_list.php';
+                }
+                exit;
+            }
+        }
+        require 'lp_list.php';
+        break;
     case 'delete':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -868,9 +877,7 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             $_SESSION['oLP']->delete(null, $_GET['lp_id'], 'remove');
-
             Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
-
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
             require 'lp_list.php';
@@ -882,7 +889,7 @@ switch ($action) {
         }
 
         learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
-
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: '.api_get_self().'?'.api_get_cidreq());
         exit;
     case 'toggle_visible':
@@ -895,6 +902,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             require 'lp_list.php';
         }
         break;
@@ -904,6 +912,7 @@ switch ($action) {
         }
 
         learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         require 'lp_list.php';
         break;
     case 'toggle_publish':
@@ -915,6 +924,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             require 'lp_list.php';
         }
         break;
@@ -1312,12 +1322,14 @@ switch ($action) {
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
+        exit;
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
+        exit;
         break;
     case 'toggle_seriousgame':
         // activate/deactive seriousgame_mode
@@ -1397,6 +1409,7 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
+        exit;
 
         break;
     case 'report':
@@ -1437,6 +1450,7 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
+        exit;
         break;
     case 'add_final_item':
         if (!$lp_found) {

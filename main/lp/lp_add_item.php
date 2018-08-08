@@ -46,30 +46,7 @@ if ($learnPath->get_lp_session_id() != api_get_session_id()) {
     exit;
 }
 
-$htmlHeadXtra[] = '<script>'.
-$learnPath->get_js_dropdown_array()."
-function load_cbo(id) {
-    if (!id) {
-        return false;
-    }
-
-    var cbo = document.getElementById('previous');
-    for(var i = cbo.length - 1; i > 0; i--) {
-        cbo.options[i] = null;
-    }
-
-    var k=0;
-    for(var i = 1; i <= child_name[id].length; i++){
-        var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-        option.style.paddingLeft = '40px';
-        cbo.options[i] = option;
-        k = i;
-    }
-
-    cbo.options[k].selected = true;
-    $('#previous').selectpicker('refresh');
-}
-
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."
 $(function() {
     if ($('#previous')) {
         if('parent is'+$('#idParent').val()) {
@@ -159,15 +136,12 @@ function confirmation(name) {
     }
 }
 
-jQuery(document).ready(function(){
+$(document).ready(function() {
     jQuery('.scrollbar-inner').scrollbar();
 
     $('#subtab ').on('click', 'a:first', function() {
         window.location.reload();
     });
-});
-
-$(document).ready(function() {
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {
@@ -195,7 +169,7 @@ $(document).ready(function() {
 });
 
 // document template for new document tab handler
-$(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
     var id = e.target.id;
     if (id == 'subtab2') {
         $('#frmModel').show();

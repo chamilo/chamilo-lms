@@ -85,16 +85,15 @@ if (empty($document_data)) {
 $group_properties = [];
 
 $htmlHeadXtra[] = '<script>
-
 function check_unzip() {
     if (document.upload.unzip.checked){
-        document.upload.if_exists[0].disabled=true;
+        //document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
-        document.upload.if_exists[2].disabled=true;
+        //document.upload.if_exists[2].disabled=true;
     } else {
-        document.upload.if_exists[0].checked=true;
-        document.upload.if_exists[0].disabled=false;
-        document.upload.if_exists[2].disabled=false;
+        document.upload.if_exists[2].checked=true;
+        //document.upload.if_exists[0].disabled=false;
+        //document.upload.if_exists[2].disabled=false;
     }
 }
 
@@ -120,6 +119,7 @@ if (!empty($groupId)) {
     } else {
         api_not_allowed(true);
     }
+    GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $group_properties, null, true);
 } elseif ($is_allowed_to_edit ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
 } else {
@@ -153,15 +153,20 @@ if (isset($_REQUEST['certificate'])) {
     $nameTools = get_lang('UplUploadDocument').$add_group_to_title;
 }
 
+$certificateLink = '';
+if ($is_certificate_mode) {
+    $certificateLink = '&certificate=true';
+}
+
 // Breadcrumbs
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
-        'url' => '../gradebook/index.php?'.api_get_cidreq(),
+        'url' => '../gradebook/index.php?'.api_get_cidreq().$certificateLink,
         'name' => get_lang('Gradebook'),
     ];
 } else {
     $interbreadcrumb[] = [
-        'url' => './document.php?id='.$document_id.'&'.api_get_cidreq(),
+        'url' => './document.php?id='.$document_id.'&'.api_get_cidreq().$certificateLink,
         'name' => get_lang('Documents'),
     ];
 }
@@ -173,7 +178,7 @@ if ($document_data) {
     } else {
         foreach ($document_data['parents'] as $document_sub_data) {
             $interbreadcrumb[] = [
-                'url' => $document_sub_data['document_url'],
+                'url' => $document_sub_data['document_url'].$certificateLink,
                 'name' => $document_sub_data['title'],
             ];
         }
@@ -199,8 +204,7 @@ if (!empty($_FILES)) {
         true
     );
 
-    $redirectUrl = api_get_self().'?'.api_get_cidreq();
-
+    $redirectUrl = api_get_self().'?'.api_get_cidreq().$certificateLink;
     if ($document_data) {
         $redirectUrl .= '&'.http_build_query(
             [
@@ -244,7 +248,7 @@ if (!$is_certificate_mode) {
     );
 }
 
-$action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
+$action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id.$certificateLink;
 
 $form = new FormValidator(
     'upload',
@@ -256,10 +260,10 @@ $form = new FormValidator(
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
-$course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
+$courseQuota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
 $label =
     get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
-    get_lang('DocumentQuota').': '.$course_quota;
+    get_lang('DocumentQuota').': '.$courseQuota;
 
 $form->addElement('file', 'file', [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title_file']);
@@ -280,12 +284,12 @@ $form->addElement(
 
 if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
-    $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
+    $supportedFormats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement(
         'checkbox',
         'index_document',
         '',
-        get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>'
+        get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supportedFormats.'</div>'
     );
     $form->addElement('html', '<br /><div class="sub-form">');
     $form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');

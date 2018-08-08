@@ -19,29 +19,6 @@ $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
-
-$checkPass = api_get_setting('allow_strength_pass_checker');
-if ($checkPass == 'true') {
-    $htmlHeadXtra[] = '
-    <script>
-    $(document).ready(function() {
-        $("#password").keypress(function() {
-            $("#password").each(function(index, value) {
-                var value = $(this).attr("value");
-                if (value == 0) {
-                    $("#password_progress").show();
-                    $(".password-verdict").show();
-                    $(".error-list").show();
-                } else {
-                    $("#password_progress").hide();
-                    $(".password-verdict").hide();
-                    $(".error-list").hide();
-                }
-            });
-        });
-    });
-    </script>';
-}
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '
@@ -246,15 +223,6 @@ $group[] = $form->createElement(
 $form->addGroup($group, 'password', get_lang('Password'));
 $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
-
-if ($checkPass) {
-    $passwordStrengthLabels = '
-        <div id="password-verdict"></div>
-        <div id="password-errors"></div>
-        <div id="password_progress" style="display:none"></div>
-    ';
-    $form->addElement('label', null, $passwordStrengthLabels);
-}
 
 // Status
 $status = [];

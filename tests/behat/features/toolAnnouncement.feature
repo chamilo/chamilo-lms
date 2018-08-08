@@ -11,7 +11,7 @@ Feature: Announcement tool
     When I fill in the following:
       | title   | Announcement test                       |
     And I press "choose_recipients"
-    And I select "John Doe" from "users-f"
+    And I select "John Doe" from "users"
     And I press "add"
     And I fill in ckeditor field "content" with "Announcement description"
     And I press "submit"

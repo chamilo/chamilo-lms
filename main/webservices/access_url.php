@@ -174,7 +174,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetPortals', // method name
+$server->register(
+    'WSGetPortals', // method name
     ['getPortals' => 'tns:getPortals'], // input parameters
     ['return' => 'tns:portalList'], // output parameters
     'urn:WSAccessUrl', // namespace
@@ -393,7 +394,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSAddCourseToPortal', // method name
+$server->register(
+    'WSAddCourseToPortal', // method name
     ['addCourseToPortal' => 'tns:addCourseToPortal'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSAccessUrl', // namespace
@@ -426,7 +428,8 @@ function WSAddCourseToPortal($params)
 }
 
 // Register the method to expose
-$server->register('WSRemoveCourseFromPortal', // method name
+$server->register(
+    'WSRemoveCourseFromPortal', // method name
     ['removeCourseFromPortal' => 'tns:addCourseToPortal'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSAccessUrl', // namespace

@@ -25,28 +25,28 @@ class COnlineConnected
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_connection", type="datetime", nullable=false)
      */
-    private $lastConnection;
+    protected $lastConnection;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * Set lastConnection.

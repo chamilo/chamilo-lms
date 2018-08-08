@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 	@package chamilo.admin
+ * @package chamilo.admin
  */
 /**
  * Code
@@ -83,8 +83,6 @@ function save_data($users_classes, $deleteUsersNotInList = false)
                      WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
             $res1 = Database::query($sql1);
             $obj1 = Database::fetch_object($res1);
-
-            $usergroup = new UserGroup();
             $id = $usergroup->get_id_by_name($user_class['ClassName']);
 
             if ($obj1 && $id) {
@@ -135,11 +133,12 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true);
+
+$usergroup = new UserGroup();
+$usergroup->protectScript();
 
 $tool_name = get_lang('AddUsersToAClass').' CSV';
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Set this option to true to enforce strict purification for usenames.
@@ -164,7 +163,7 @@ if ($form->validate()) {
     }
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (isset($return) && $return) {
     echo $return;
@@ -188,4 +187,4 @@ jdoe;class01
 adam;class01
 </pre>
 <?php
-Display :: display_footer();
+Display::display_footer();

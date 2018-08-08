@@ -6,13 +6,15 @@
         <div class="col-sm-8 col-md-7 col-lg-8">
             <div id="chat-tabs">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#all" aria-controls="all" role="tab" data-toggle="tab">{{ 'All'|get_lang }}</a>
-                    </li>
+                    {% if not restrict_to_coach %}
+                        <li role="presentation" class="active">
+                            <a href="#all" aria-controls="all" role="tab" data-toggle="tab">{{ 'All'|get_lang }}</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="all">
-                        <div class="course-chat chat-history" id="chat-history"></div>
+                    <div role="tabpanel" class="tab-pane active" id="{{ restrict_to_coach ? '' : 'all' }}">
+                        <div class="course-chat chat-history" id="{{ restrict_to_coach ? '' : 'chat-history' }}"></div>
                     </div>
                 </div>
             </div>
@@ -41,7 +43,8 @@
                                             <textarea id="chat-writer" name="message"></textarea>
                                         </div>
                                         <div class="col-sm-3">
-                                            <button id="chat-send-message" type="button" class="btn btn-primary">{{ 'Send'|get_lang }}</button>
+                                            <button id="chat-send-message" type="button" {{ restrict_to_coach ? 'disabled' : '' }}
+                                                    class="btn btn-primary">{{ 'Send'|get_lang }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -57,7 +60,7 @@
     </div>
 </div>
 <audio id="chat-alert">
-    <source src="{{ _p.web_main }}/chat/sound/notification.wav" type="audio/wav"></source>
+    <source src="{{ _p.web_main }}chat/sound/notification.wav" type="audio/wav"></source>
     <source src="{{ _p.web_main }}chat/sound/notification.ogg" type="audio/ogg"></source>
     <source src="{{ _p.web_main }}chat/sound/notification.mp3" type="audio/mpeg"></source>
 </audio>
@@ -70,23 +73,24 @@ $(document).on('ready', function () {
         currentFriend: 0,
         call: false,
         track: function () {
-            return $.get(ChChat._ajaxUrl, {
-                action: 'track',
-                size: ChChat._historySize,
-                users_online: ChChat.usersOnline,
-                friend: ChChat.currentFriend
-            })
-            .done(function (response) {
-                if (response.data.history) {
-                    ChChat._historySize = response.data.oldFileSize;
-                    ChChat.setHistory(response.data.history);
-                }
+            return $
+                .get(ChChat._ajaxUrl, {
+                    action: 'track',
+                    size: ChChat._historySize,
+                    users_online: ChChat.usersOnline,
+                    friend: ChChat.currentFriend
+                })
+                .done(function (response) {
+                    if (response.data.history) {
+                        ChChat._historySize = response.data.oldFileSize;
+                        ChChat.setHistory(response.data.history);
+                    }
 
-                if (response.data.userList) {
-                    ChChat.usersOnline = response.data.usersOnline;
-                    ChChat.setConnectedUsers(response.data.userList);
-                }
-            });
+                    if (response.data.userList) {
+                        ChChat.usersOnline = response.data.usersOnline;
+                        ChChat.setConnectedUsers(response.data.userList);
+                    }
+                });
         },
         setHistory: function (messageList) {
             var chatHistoryContainer = ChChat.currentFriend ? ('#chat-history-' + ChChat.currentFriend) : '#chat-history';
@@ -105,38 +109,39 @@ $(document).on('ready', function () {
                 var buttonStatus = user.isConnected ? 'success' : 'muted',
                     buttonTitle = user.isConnected ? '{{ 'StartAChat'|get_lang }}' : '{{ 'LeaveAMessage'|get_lang }}';
 
-                html += '<li class="col-xs-12 chat-user">' +
-                        '   <div>' +
-                        '       <img src="'+ user.image_url + '" alt="' + user.complete_name + '" class="img-circle user-image-chat"/>' +
-                        '       <ul class="list-unstyled">' +
-                        '           <li>' + user.complete_name;
+                html += '<li class="col-xs-12">' +
+                    '   <div class="chat-user" data-name="' + user.complete_name + '" data-user="' + user.id + '">' +
+                    '       <img src="' + user.image_url + '" alt="' + user.complete_name + '" class="img-circle user-image-chat"/>' +
+                    '       <ul class="list-unstyled">' +
+                    '           <li>' + user.complete_name;
 
                 if (user.id != {{ _u.user_id }}) {
                     html += '           <button type="button" class="btn btn-link btn-xs" title="' + buttonTitle + '" data-name="' + user.complete_name + '" data-user="' + user.id + '">' +
-                            '               <i class="fa fa-comments text-' + buttonStatus + '"></i><span class="sr-only">' + buttonTitle + '</span>' +
-                            '           </button>';
+                        '               <i class="fa fa-comments text-' + buttonStatus + '"></i><span class="sr-only">' + buttonTitle + '</span>' +
+                        '           </button>';
                 }
                 html += '           </li>' +
-                        '           <li><small>' + user.username + '</small></li>' +
-                        '       </ul>' +
-                        '   </div>' +
-                        '</li>';
+                    '           <li><small>' + user.username + '</small></li>' +
+                    '       </ul>' +
+                    '   </div>' +
+                    '</li>';
             });
 
             $('#chat-users').html(html);
         },
         onPreviewListener: function () {
-            $.post(ChChat._ajaxUrl, {
-                action: 'preview',
-                'message': $('textarea#chat-writer').val()
-            })
-            .done(function (response) {
-                if (!response.status) {
-                    return;
-                }
+            $
+                .post(ChChat._ajaxUrl, {
+                    action: 'preview',
+                    'message': $('textarea#chat-writer').val()
+                })
+                .done(function (response) {
+                    if (!response.status) {
+                        return;
+                    }
 
-                $('#html-preview').html(response.data.message);
-            });
+                    $('#html-preview').html(response.data.message);
+                });
         },
         onSendMessageListener: function (e) {
             e.preventDefault();
@@ -148,38 +153,40 @@ $(document).on('ready', function () {
             var self = this;
             self.disabled = true;
 
-            $.post(ChChat._ajaxUrl, {
-                action: 'write',
-                message: $('textarea#chat-writer').val(),
-                friend: ChChat.currentFriend
-            })
-            .done(function (response) {
-                self.disabled = false;
+            $
+                .post(ChChat._ajaxUrl, {
+                    action: 'write',
+                    message: $('textarea#chat-writer').val(),
+                    friend: ChChat.currentFriend
+                })
+                .done(function (response) {
+                    self.disabled = false;
 
-                if (!response.status) {
-                    return;
-                }
+                    if (!response.status) {
+                        return;
+                    }
 
-                $('textarea#chat-writer').val('');
-                $(".emoji-wysiwyg-editor").html('');
-            });
+                    $('textarea#chat-writer').val('');
+                    $(".emoji-wysiwyg-editor").html('');
+                });
         },
         onResetListener: function (e) {
             if (!confirm("{{ 'ConfirmReset'|get_lang }}")) {
                 e.preventDefault();
                 return;
             }
-            $.get(ChChat._ajaxUrl, {
-                action: 'reset',
-                friend: ChChat.currentFriend
-            })
-            .done(function (response) {
-                if (!response.status) {
-                    return;
-                }
+            $
+                .get(ChChat._ajaxUrl, {
+                    action: 'reset',
+                    friend: ChChat.currentFriend
+                })
+                .done(function (response) {
+                    if (!response.status) {
+                        return;
+                    }
 
-                ChChat.setHistory(response.data);
-            });
+                    ChChat.setHistory(response.data);
+                });
         },
         init: function () {
             ChChat.track().done(function () {
@@ -243,8 +250,8 @@ $(document).on('ready', function () {
         },
         template: function (shortname) {
             return '<img class="emojione" src="{{ _p.web_lib }}javascript/emojione/png/'
-                    + emojiStrategy[shortname].unicode
-                    + '.png"> :' + shortname + ':';
+                + emojiStrategy[shortname].unicode
+                + '.png"> :' + shortname + ':';
         },
         replace: function (shortname) {
             return ':' + shortname + ': ';
@@ -254,7 +261,7 @@ $(document).on('ready', function () {
     }], {});
 
     $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
-    $('#chat-users').on('click', 'button.btn', function (e) {
+    $('#chat-users').on('click', 'div.chat-user', function (e) {
         e.preventDefault();
         var jSelf = $(this),
             userId = parseInt(jSelf.data('user')) || 0;
@@ -270,6 +277,8 @@ $(document).on('ready', function () {
                 exists = true;
             }
         });
+
+        $('button#chat-send-message').prop('disabled', false);
 
         if (exists) {
             $('#chat-tab-' + userId).tab('show');

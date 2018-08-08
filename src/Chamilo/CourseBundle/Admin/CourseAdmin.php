@@ -137,9 +137,13 @@ class CourseAdmin extends Admin
                 ]
             )
             ->add('departmentUrl', 'url', ['required' => false])
-            ->add('urls', 'sonata_type_collection', [
+            ->add(
+                'urls',
+                'sonata_type_collection',
+                [
                     'cascade_validation' => true,
-                ], [
+                ],
+                [
                     'allow_delete' => true,
                     'by_reference' => false,
                     'edit' => 'inline',
@@ -151,7 +155,10 @@ class CourseAdmin extends Admin
                     'admin_code' => 'sonata.admin.access_url_rel_course',
                 ]
             )
-            ->add('users', 'sonata_type_collection', [
+            ->add(
+                'users',
+                'sonata_type_collection',
+                [
                     'cascade_validation' => true,
                 ],
                 [

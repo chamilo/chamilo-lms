@@ -20,26 +20,26 @@ class SequenceRuleMethod
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="method_order", type="integer")
      */
-    private $methodOrder;
+    protected $methodOrder;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
-    private $rule;
+    protected $rule;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
-    private $method;
+    protected $method;
 
     /**
      * Get id.

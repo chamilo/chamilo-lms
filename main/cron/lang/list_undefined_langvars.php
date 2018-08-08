@@ -8,7 +8,7 @@
  * Includes and declarations.
  */
 die();
-require_once '../../inc/global.inc.php';
+require_once __DIR__.'/../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
 /**
@@ -25,12 +25,17 @@ foreach ($list as $entry) {
 // get only the array keys (the language variables defined in language files)
 $defined_terms = array_flip(array_keys($terms));
 $terms = null;
+$hidePlugins = !empty($_GET['hidePlugins']);
 
 // now get all terms found in all PHP files of Chamilo (this takes some time and memory)
 $undefined_terms = [];
 $l = strlen(api_get_path(SYS_PATH));
-$files = get_all_php_files(api_get_path(SYS_PATH));
+$files = getAllPhpFiles(api_get_path(SYS_PATH));
 foreach ($files as $file) {
+    $isPlugin = preg_match('#/plugin/#', $file);
+    if ($isPlugin && $hidePlugins) {
+        continue;
+    }
     //echo 'Analyzing '.$file."<br />";
     $shortfile = substr($file, $l);
     $lines = file($file);
@@ -64,38 +69,14 @@ if (count($undefined_terms) < 1) {
 } else {
     echo "The following terms were nowhere to be found: <br />\n<table>";
 }
+$i = 1;
 foreach ($undefined_terms as $term => $file) {
-    echo "<tr><td>$term</td><td>in $file";
-    if (substr($file, 0, 7) == 'plugin/') {
+    $isPlugin = substr($file, 0, 7) == 'plugin/';
+    echo "<tr><td>$i</td><td>$term</td><td>in $file";
+    if ($isPlugin) {
         echo " <span style=\"color: #00ff00;\">(this one should be taken care of by the plugin's language files)</span>";
     }
     echo "</td></tr>\n";
+    $i++;
 }
 echo "</table>\n";
-
-function get_all_php_files($base_path)
-{
-    $list = scandir($base_path);
-    $files = [];
-    foreach ($list as $item) {
-        if (substr($item, 0, 1) == '.') {
-            continue;
-        }
-        $special_dirs = [api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH)];
-        if (in_array($base_path.$item.'/', $special_dirs)) {
-            continue;
-        }
-        if (is_dir($base_path.$item)) {
-            $files = array_merge($files, get_all_php_files($base_path.$item.'/'));
-        } else {
-            //only analyse php files
-            $sub = substr($item, -4);
-            if ($sub == '.php' or $sub == '.tpl') {
-                $files[] = $base_path.$item;
-            }
-        }
-    }
-    $list = null;
-
-    return $files;
-}

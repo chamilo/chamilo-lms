@@ -519,6 +519,8 @@ class GDWrapper extends ImageWrapper
                 break;
             case 'png':
                 $src = @imagecreatefrompng($this->path);
+                @imagealphablending($dest, false);
+                @imagesavealpha($dest, true);
                 @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
                 @imagepng($dest, $this->path);
                 break;

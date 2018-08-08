@@ -17,7 +17,8 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
     public function __construct()
     {
         parent::__construct(
-            'plugin/createdrupaluser/src/CreateDrupalUser.php', 'drupaluser'
+            'plugin/createdrupaluser/src/CreateDrupalUser.php',
+            'drupaluser'
         );
     }
 

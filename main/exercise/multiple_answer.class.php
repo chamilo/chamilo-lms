@@ -67,7 +67,7 @@ class MultipleAnswer extends Question
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
             }
         }
@@ -80,7 +80,7 @@ class MultipleAnswer extends Question
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
@@ -230,13 +230,14 @@ class MultipleAnswer extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-            <tr>
-                <th>'.get_lang("Choice").'</th>
-                <th>'.get_lang("ExpectedChoice").'</th>
-                <th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang("Status").'</th>';
-        $header .= '<th>'.get_lang("Comment").'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
+        $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
         return $header;

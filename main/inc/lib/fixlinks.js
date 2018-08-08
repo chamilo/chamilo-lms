@@ -42,7 +42,7 @@ $(document).ready(function() {
         var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
         var uniqid = randLetter + Date.now();
         var openerId = uniqid +'_opener';
-        var link = '<a id="'+openerId+'" class="generated" href="#">Open website.<img src="'+iconPath+'link-external.png "/></a>';
+        var link = '<a id="'+openerId+'" class="generated" href="#">Open website.<img width="16px" src="'+iconPath+'link-external.png "/></a>';
         var embed = $(this);
         var height = embed.attr('height');
         var width = embed.attr('width');
@@ -109,7 +109,7 @@ $(document).ready(function() {
             src = url+'&type=link&src='+src;
             src = src.replace('https', 'http');
             $(this).attr('href', src);
-            var myAnchor = $('<a><img src="'+iconPath+'link-external.png "/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+            var myAnchor = $('<a><img width="16px" src="'+iconPath+'link-external.png "/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
             $(this).after(myAnchor);
             $(this).after('-');
         }

@@ -42,7 +42,7 @@ class Matching extends Question
         if (isset($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-            if (!empty($answer->nbrAnswers) && count($answer->nbrAnswers) > 0) {
+            if ($answer->nbrAnswers > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
                     if (empty($correct)) {
@@ -65,7 +65,7 @@ class Matching extends Question
                 $nb_options++;
             }
         } elseif (!empty($this->id)) {
-            if (count($answer->nbrAnswers) > 0) {
+            if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
@@ -88,12 +88,12 @@ class Matching extends Question
         }
 
         if (empty($matches)) {
-            for ($i = 1; $i <= $nb_options; ++$i) {
+            for ($i = 1; $i <= $nb_options; $i++) {
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
         } else {
-            for ($i = $counter; $i <= $nb_options; ++$i) {
+            for ($i = $counter; $i <= $nb_options; $i++) {
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
@@ -130,7 +130,7 @@ class Matching extends Question
             'Height' => '125',
         ];
 
-        for ($i = 1; $i <= $nb_matches; ++$i) {
+        for ($i = 1; $i <= $nb_matches; $i++) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
@@ -193,7 +193,7 @@ class Matching extends Question
             );
         }
 
-        for ($i = 1; $i <= $nb_options; ++$i) {
+        for ($i = 1; $i <= $nb_options; $i++) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
@@ -251,14 +251,14 @@ class Matching extends Question
         $objAnswer = new Answer($this->id);
 
         // Insert the options
-        for ($i = 1; $i <= $nb_options; ++$i) {
+        for ($i = 1; $i <= $nb_options; $i++) {
             $position++;
             $option = $form->getSubmitValue('option['.$i.']');
             $objAnswer->createAnswer($option, 0, '', 0, $position);
         }
 
         // Insert the answers
-        for ($i = 1; $i <= $nb_matches; ++$i) {
+        for ($i = 1; $i <= $nb_matches; $i++) {
             $position++;
             $answer = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');
@@ -284,12 +284,16 @@ class Matching extends Question
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">';
-        $header .= '<tr>
-                <th>'.get_lang('ElementList').'</th>
-                <th>'.get_lang('YourChoice').'</th>
-                <th>'.get_lang('ExpectedChoice').'</th>
-                <th>'.get_lang('Status').'</th>
-              </tr>';
+        $header .= '<tr>';
+        $header .= '<th>'.get_lang('ElementList').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('Status').'</th>';
+        } else {
+            $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
+        }
+        $header .= '</tr>';
 
         return $header;
     }

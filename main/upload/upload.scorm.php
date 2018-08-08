@@ -38,5 +38,5 @@ if (api_get_setting('search_enabled') === 'true') {
     }
 }
 
-header('location: ../lp/lp_controller.php?action=list?'.api_get_cidreq());
+header('location: ../lp/lp_controller.php?action=list&'.api_get_cidreq());
 exit;

@@ -22,6 +22,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseRelUserCatalogue
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -32,21 +41,13 @@ class CourseRelUserCatalogue
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * Constructor.
@@ -60,7 +61,7 @@ class CourseRelUserCatalogue
      */
     public function __toString()
     {
-        return strval($this->getCourse()->getCode());
+        return (string) $this->getCourse()->getCode();
     }
 
     /**

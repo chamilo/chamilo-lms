@@ -267,9 +267,7 @@ if (isset($rows)) {
 
         echo "<tr>";
         echo "<td rowspan=\"3\" class=\"$leftclass\">";
-
         echo '<br /><b>'.api_convert_and_format_date($row['post_date'], DATE_TIME_FORMAT_LONG).'</b><br />';
-
         echo "</td>";
 
         // The post title

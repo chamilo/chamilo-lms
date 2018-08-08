@@ -10,6 +10,9 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
+
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $htmlHeadXtra[] = '
@@ -47,7 +50,7 @@ function setFocus() {
    $("#document_title").focus();
 }
 
-$(window).load(function () {
+$(window).on("load", function () {
 	setFocus();
 });
 
@@ -66,7 +69,7 @@ if ($is_certificate_mode) {
     $nameTools = get_lang('CreateDocument');
 }
 
-/*	Constants and variables */
+/* Constants and variables */
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 $courseCode = api_get_course_id();
@@ -114,8 +117,6 @@ if (empty($document_data)) {
     $folder_id = $document_data['id'];
     $dir = $document_data['path'];
 }
-
-/*	MAIN CODE */
 
 // Please, do not modify this dirname formatting
 if (strstr($dir, '..')) {
@@ -202,7 +203,6 @@ if (!$is_certificate_mode) {
             "url" => "../group/group_space.php?".api_get_cidreq(),
             "name" => get_lang('GroupSpace'),
         ];
-        $noPHP_SELF = true;
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
             api_not_allowed(true);
@@ -329,8 +329,7 @@ $form->addHtmlEditor(
     get_lang('Content'),
     true,
     true,
-    $editorConfig,
-    true
+    $editorConfig
 );
 
 // Comment-field
@@ -634,7 +633,6 @@ if ($form->validate()) {
 
     Display :: display_header($nameTools, "Doc");
     // actions
-
     // link back to the documents overview
     if ($is_certificate_mode) {
         $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.

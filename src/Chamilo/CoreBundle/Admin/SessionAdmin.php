@@ -44,9 +44,13 @@ class SessionAdmin extends AbstractAdmin
                 'choice',
                 ['choices' => Session::getStatusList()]
             )
-            ->add('courses', 'sonata_type_collection', [
+            ->add(
+                'courses',
+                'sonata_type_collection',
+                [
                     'cascade_validation' => true,
-                ], [
+                ],
+                [
                     'edit' => 'inline',
                     'inline' => 'table',
                     //'sortable'          => 'position',

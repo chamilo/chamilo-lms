@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Action controller for the upload process. The display scripts (web forms)
  * redirect
@@ -23,10 +24,6 @@ $form_style = '<style>
 #dynamic_div_waiter_container{float:left;}
 </style>';
 
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
-    var myUpload = new upload(0);
-</script>';
 $htmlHeadXtra[] = $form_style;
 
 if (api_get_setting('search_enabled') == 'true') {
@@ -51,7 +48,13 @@ if (isset($_POST['convert'])) {
                             foreach ($values as $value) {
                                 $value = trim($value);
                                 if (!empty($value)) {
-                                    add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_doc->lp_id, $value);
+                                    add_specific_field_value(
+                                        $specific_field['id'],
+                                        api_get_course_id(),
+                                        TOOL_LEARNPATH,
+                                        $o_doc->lp_id,
+                                        $value
+                                    );
                                 }
                             }
                         }
@@ -82,7 +85,8 @@ $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => 
 $nameTools = get_lang("WoogieConversionPowerPoint");
 Display :: display_header($nameTools);
 
-echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;">'.get_lang("WelcomeWoogieSubtitle").'</span><br>';
+echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;">'.
+    get_lang("WelcomeWoogieSubtitle").'</span><br>';
 $message = get_lang("WelcomeWoogieConverter");
 echo '<br />';
 $s_style = "border-width: 1px;
@@ -112,11 +116,13 @@ $s_style_error = "border-width: 1px;
          color: #000;";
 
 echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;">
-<img src="'.Display::returnIconPath('message_normal.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$message.'</div></div>';
+<img src="'.Display::returnIconPath('message_normal.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
+<div style="margin-left: 43px">'.$message.'</div></div>';
 
 if (!empty($errorMessage)) {
     echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;">
-    <img src="'.Display::returnIconPath('message_error.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
+    <img src="'.Display::returnIconPath('message_error.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
+    <div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
 
 $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"');

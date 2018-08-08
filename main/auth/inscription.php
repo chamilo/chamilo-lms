@@ -106,7 +106,6 @@ $(document).ready(function() {
 
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
-
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
 $isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
@@ -149,9 +148,8 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
 }
 
 $form = new FormValidator('registration');
-
 $user_already_registered_show_terms = false;
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
     // Ofaj change
     if (api_is_anonymous() === true) {
@@ -806,7 +804,7 @@ if ($form->validate()) {
         $values['official_code'] = api_strtoupper($values['username']);
     }
 
-    if (api_get_setting('login_is_email') == 'true') {
+    if (api_get_setting('login_is_email') === 'true') {
         $values['username'] = $values['email'];
     }
 
@@ -939,7 +937,7 @@ if ($form->validate()) {
             if (!empty($sessionToRedirect) && !$sessionPremiumChecker) {
                 $sessionInfo = api_get_session_info($sessionToRedirect);
                 if (!empty($sessionInfo)) {
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $sessionToRedirect,
                         [$user_id],
                         SESSION_VISIBLE_READ_ONLY,
@@ -1053,15 +1051,22 @@ if ($form->validate()) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
-                $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
                 UserManager::update_extra_field_value(
                     $user_id,
                     'legal_accept',
-                    $condition_to_save
+                    $conditionToSave
+                );
+
+                Event::addEvent(
+                    LOG_TERM_CONDITION_ACCEPTED,
+                    LOG_USER_OBJECT,
+                    api_get_user_info($user_id),
+                    api_get_utc_datetime()
                 );
 
                 $bossList = UserManager::getStudentBossList($user_id);
-                if ($bossList) {
+                if (!empty($bossList)) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
                     $followUpPath = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$currentUserInfo['id'];
@@ -1093,6 +1098,7 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
+    Session::write('_user', $_user);
 
     $userInfo = api_get_user_info($user_id);
     $_user['status'] = $userInfo['status'];

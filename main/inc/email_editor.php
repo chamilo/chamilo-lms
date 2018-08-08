@@ -66,7 +66,7 @@ $defaults = [
 $form->setDefaults($defaults);
 
 if ($form->validate()) {
-    $text = Security::remove_XSS($_POST['email_text'])."\n\n---\n".get_lang('EmailSentFromLMS')." ".api_get_path(WEB_PATH);
+    $text = Security::remove_XSS($_POST['email_text'])."\n\n---\n".get_lang('EmailSentFromLMS').' '.api_get_path(WEB_PATH);
     $email_administrator = Security::remove_XSS($_POST['dest']);
     $user_id = api_get_user_id();
     $title = Security::remove_XSS($_POST['email_title']);
@@ -79,12 +79,6 @@ if ($form->validate()) {
             $text,
             api_get_person_name($_user['firstname'], $_user['lastname']),
             $_user['mail']
-        );
-        UserManager::send_message_in_outbox(
-            $email_administrator,
-            $user_id,
-            $title,
-            $content
         );
     } else {
         api_mail_html(

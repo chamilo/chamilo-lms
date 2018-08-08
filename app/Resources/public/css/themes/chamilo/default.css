@@ -35,7 +35,7 @@ body {
 }
  
 a {
-  color: #0099FF;
+  color: #337AB7;
   text-decoration: none;
 }
 a:hover,
@@ -51,6 +51,9 @@ a:focus {
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
+}
+.navbar-nav > li{
+  margin-bottom: 0;
 }
 .navbar-collapse{
   overflow: hidden !important;

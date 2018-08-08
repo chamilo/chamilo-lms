@@ -5,7 +5,6 @@ namespace Application\Migrations\Schema\V111;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20160929120000
@@ -21,6 +20,7 @@ class Version20160929120000 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20160929120000');
         $this->addSql("ALTER TABLE c_tool ADD INDEX idx_ctool_name (name(20))");
     }
 

@@ -29,6 +29,15 @@ class SessionRelCourseRelUser
     ];
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
+    /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
@@ -44,7 +53,7 @@ class SessionRelCourseRelUser
 
     /**
      * @var Course
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
@@ -52,32 +61,23 @@ class SessionRelCourseRelUser
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
-    private $id;
+    protected $visibility;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
-    private $visibility;
+    protected $status;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
      */
-    private $status;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $legalAgreement;
+    protected $legalAgreement;
 
     /**
      * Constructor.

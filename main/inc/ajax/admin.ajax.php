@@ -156,7 +156,7 @@ function check_system_version()
         );
 
         // The number of sessions
-        $number_of_sessions = Statistics::countSessions();
+        $number_of_sessions = SessionManager::count_sessions(api_get_current_access_url_id());
         $packager = api_get_configuration_value('packager');
         if (empty($packager)) {
             $packager = 'chamilo';

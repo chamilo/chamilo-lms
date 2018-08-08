@@ -77,7 +77,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $numberAnswers = $answer->nbrAnswers;
             }
         }
@@ -122,7 +122,7 @@ class UniqueAnswerImage extends UniqueAnswer
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
-        for ($i = 1; $i <= $numberAnswers; ++$i) {
+        for ($i = 1; $i <= $numberAnswers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer->correct[$i]) {
@@ -370,16 +370,27 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->save($exercise);
     }
 
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * @param Exercise $exercise
+     * @param null     $counter
+     * @param null     $score
+     *
+     * @return string
+     */
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = '<table class="'.$this->question_table_class.'">
+        if ($exercise->showExpectedChoice()) {
+            $header = '<table class="'.$this->question_table_class.'">
 			<tr>
-				<th>'.get_lang("Choice").'</th>
-				<th>'.get_lang("ExpectedChoice").'</th>
-				<th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang('Status').'</th>';
-        $header .= '<th>'.get_lang('Comment').'</th>';
-        $header .= '</tr>';
+				<th>'.get_lang('Choice').'</th>
+				<th>'.get_lang('ExpectedChoice').'</th>
+				<th>'.get_lang('Answer').'</th>';
+            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th>'.get_lang('Comment').'</th>';
+            $header .= '</tr>';
+        } else {
+            $header = parent::return_header($exercise, $counter, $score);
+        }
 
         return $header;
     }

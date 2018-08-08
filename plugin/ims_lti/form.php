@@ -3,20 +3,25 @@
 
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require './OAuthSimple.php';
 
 api_protect_course_script();
 
-$toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
 $em = Database::getManager();
+
+/** @var ImsLtiTool $tool */
+$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : 0;
+
+if (!$tool) {
+    api_not_allowed(true);
+}
+
 /** @var ImsLtiPlugin $imsLtiPlugin */
 $imsLtiPlugin = ImsLtiPlugin::create();
 
-/** @var ImsLtiTool $tool */
-$tool = ImsLtiTool::fetch($toolId);
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var User $user */
@@ -33,6 +38,7 @@ $params = [
 
     'resource_link_id' => $tool->getId(),
     'resource_link_title' => $tool->getName(),
+    'resource_link_description' => $tool->getDescription(),
 
     'user_id' => $toolUserId,
     'roles' => api_is_teacher() ? 'Instructor' : 'Student',
@@ -55,8 +61,6 @@ $params = [
     'tool_consumer_instance_name' => $siteName,
     'tool_consumer_instance_url' => api_get_path(WEB_PATH),
     'tool_consumer_instance_contact_email' => api_get_setting('emailAdministrator'),
-
-    'resource_link_description' => 'A quick revision PowerPoint about the Water cycle. Make sure you\'re clear about it!',
 ];
 
 $oauth = new OAuthSimple(
@@ -75,16 +79,22 @@ $result = $oauth->sign(array(
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>title</title>
-    </head>
-    <body>
-        <form action="<?php echo $result['signed_url'] ?>" name="ltiLaunchForm" method="post" encType="application/x-www-form-urlencoded">
-            <input type="submit" value="Press to continue to external tool"/>
-        </form>
+<head>
+    <title>title</title>
+</head>
+<body>
+<form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post"
+      encType="application/x-www-form-urlencoded">
+    <?php
+    foreach ($result["parameters"] as $key => $values) { //Dump parameters
+        echo '<input type="hidden" name="'.$key.'" value="'.$values.'" />';
+    }
+    ?>
+    <input type="submit" value="Press to continue to external tool"/>
+</form>
 
-        <script language="javascript">
-            document.ltiLaunchForm.submit();
-        </script>
-    </body>
+<script language="javascript">
+    document.ltiLaunchForm.submit();
+</script>
+</body>
 </html>

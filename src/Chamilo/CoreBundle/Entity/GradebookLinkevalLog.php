@@ -18,56 +18,56 @@ class GradebookLinkevalLog
      *
      * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)
      */
-    private $idLinkevalLog;
+    protected $idLinkevalLog;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="text", nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var int
      *
      * @ORM\Column(name="weight", type="smallint", nullable=true)
      */
-    private $weight;
+    protected $weight;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=20, nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id_log", type="integer", nullable=false)
      */
-    private $userIdLog;
+    protected $userIdLog;
 
     /**
      * @var int
@@ -76,7 +76,7 @@ class GradebookLinkevalLog
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set idLinkevalLog.

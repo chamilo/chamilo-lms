@@ -20,28 +20,28 @@ class UserCourseCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var int
      *
      * @ORM\Column(name="sort", type="integer", nullable=true)
      */
-    private $sort;
+    protected $sort;
 
     /**
      * Set userId.

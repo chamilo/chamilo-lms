@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-9">
         {% if term %}
-            {{ display.panel('TermsAndConditions'|get_lang, term.content, term.date | api_get_local_time ) }}
+            {{ display.panel('TermsAndConditions'|get_lang, term.content, term.date_text ) }}
         {% endif %}
     </div>
 </div>

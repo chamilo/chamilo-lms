@@ -22,6 +22,16 @@ if (!$term) {
     $term = LegalManager::get_last_condition($language);
 }
 
+$term['date_text'] = get_lang('PublicationDate').': '.
+    api_get_local_time(
+        $term['date'],
+        null,
+        null,
+        false,
+        true,
+        true
+    );
+
 $socialMenuBlock = '';
 $allowSocial = api_get_setting('allow_social_tool') === 'true';
 

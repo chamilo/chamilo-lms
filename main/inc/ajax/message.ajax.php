@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
 
 $_dont_save_user_course_access = true;

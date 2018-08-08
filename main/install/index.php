@@ -42,7 +42,6 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
-
 require_once '../inc/lib/api.lib.php';
 require_once '../inc/lib/text.lib.php';
 

@@ -5,8 +5,8 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
-use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**

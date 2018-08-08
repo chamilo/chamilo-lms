@@ -505,7 +505,6 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
-
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -572,7 +571,6 @@ $form->addPanelOption(
     Display::return_icon('user.png', get_lang('UserRights')).' '.get_lang('UserRights'),
     $globalGroup
 );
-
 
 $group = [];
 $group[] = $form->createElement(
@@ -784,7 +782,6 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $form->addHtml('</div>');
 }
 
-
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -856,7 +853,6 @@ if (api_get_setting('allow_public_certificates') === 'true') {
         $globalGroup
     );
 }
-
 
 $group = [
     $form->createElement('radio', 'enable_forum_auto_launch', null, get_lang('RedirectToForumList'), 1),

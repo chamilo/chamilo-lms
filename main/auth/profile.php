@@ -362,7 +362,6 @@ if (is_profile_editable()) {
     $form->freeze();
 }
 
-
 $extraConditions = api_get_configuration_value('show_conditions_to_user');
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];

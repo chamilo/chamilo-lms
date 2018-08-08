@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 

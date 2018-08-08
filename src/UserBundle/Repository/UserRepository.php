@@ -364,7 +364,6 @@ class UserRepository extends EntityRepository
         ;
     }
 
-
     /**
      * Find potential users to send a message.
      *

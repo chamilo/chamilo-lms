@@ -1152,8 +1152,8 @@ function display_requirements(
             $deprecatedToRemove[] = $deprecatedDirectory;
         }
 
-        if (count($deprecatedToRemove) > 0) { 
-?>
+        if (count($deprecatedToRemove) > 0) {
+            ?>
             <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade'); ?></p>
             <ul>
                 <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {

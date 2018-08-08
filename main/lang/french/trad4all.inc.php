@@ -8220,4 +8220,5 @@ $ExplanationDeleteAccount = "Merci de bien vouloir nous donner une brève explic
 $WhyYouWantToDeleteYourLegalAgreement = "Ci-dessous, vous pouvez faire une demande de retrait de votre accord avec nos conditions d'utilisation ou de suppression de votre compte.<br />
 Dans le cas de l'accord avec nos conditions, une fois annulé, vous aurez à accepter à nouveau ces conditions lors de votre prochaine connexion afin d'accéder à notre plateforme, car il ne nous est pas possible de vous donner accès à une expérience personnalisée sans en même temps traiter vos données personnelles.<br />
 Dans le cas d'une demande de suppression de votre compte, celui-ci sera effectivement supprimé, incluant toutes vos souscriptions à des cours et toute l'information liée à votre compte. Veuillez sélectionner l'option correspondante avec soin. Dans les deux cas, l'un de nos administrateurs révisera votre demande avant de l'exécuter afin d'éviter quelque malentendu que ce soit et la perte définitive de vos données si ce n'était pas voulu.";
+$PersonalDataPrivacy = "Protection des données personnelles";
 ?>

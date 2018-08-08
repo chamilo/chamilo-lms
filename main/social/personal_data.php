@@ -304,37 +304,37 @@ foreach ($properties as $key => $value) {
 $personalDataContent .= '</ul>';
 
 // Check terms acceptation
-$permitionBlock = '';
+$permissionBlock = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $userId,
         'legal_accept'
     );
-    $permitionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
+    $permissionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-        $permitionBlock = get_lang('CurrentStatus').': '.
+        $permissionBlock = get_lang('CurrentStatus').': '.
             Display::return_icon('accept.png', get_lang('LegalAgreementAccepted')).get_lang('LegalAgreementAccepted').
             '<br />';
-        $permitionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br />';
-        $permitionBlock .= $formToString;
+        $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br />';
+        $permissionBlock .= $formToString;
 
-    /*$permitionBlock .= Display::url(
+    /*$permissionBlock .= Display::url(
         get_lang('DeleteLegal'),
         api_get_self().'?action=delete_legal&user_id='.$userId,
         ['class' => 'btn btn-danger btn-xs']
     );*/
     } else {
         // @TODO add action handling for button
-        $permitionBlock .= Display::url(
+        $permissionBlock .= Display::url(
             get_lang('SendLegal'),
             api_get_self().'?action=send_legal&user_id='.$userId,
             ['class' => 'btn btn-primary btn-xs']
         );
     }
 } else {
-    $permitionBlock .= get_lang('NoTermsAndConditionsAvailable');
+    $permissionBlock .= get_lang('NoTermsAndConditionsAvailable');
 }
 
 //Build the final array to pass to template
@@ -391,7 +391,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
-$tpl->assign('permission', $permitionBlock);
+$tpl->assign('permission', $permissionBlock);
 $tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');
 $tpl->display($socialLayout);

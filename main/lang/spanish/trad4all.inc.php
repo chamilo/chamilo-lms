@@ -8312,4 +8312,5 @@ $WhyYouWantToDeleteYourLegalAgreement = "Puede solicitar a bajo la eliminación 
 En el caso de la eliminación de su acuerdo, tendrá que volver a aceptar nuestras condiciones en su próxima conexión, pues no nos es posible proveerle una experiencia personalizada sin al mismo tiempo gestionar algunos de sus datos personales.<br />
 En el caso de la eliminación completa de su cuenta, ésta será eliminada junta con todas sus suscripciones a cursos y toda la información relacionada con su cuenta.<br />
 Por favor seleccione la opción correspondiente con mucho cuidado. En ambos casos, su solicitud será revisada por uno de nuestros administradores, con el fin de evitar cualquier malentendimiento y/o pérdida definitiva de sus datos.";
+$PersonalDataPrivacy = "Protección de datos personales";
 ?>

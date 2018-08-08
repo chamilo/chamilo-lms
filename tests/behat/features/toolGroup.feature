@@ -24,7 +24,6 @@ Feature: Group tool
     And I press "submit"
     Then I should see "group(s) has (have) been added"
 
-
   Scenario: Create document folder in group
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
     And I follow "Group 0001"
@@ -77,11 +76,9 @@ Feature: Group tool
     Then I should see "My folder in group"
     Then I follow "My folder in group"
     Then I follow "Delete"
-    And I confirm the popup
-    Then I should see "Document deleted"
-    Then I follow "Delete"
-    And I confirm the popup
-    Then I should see "Document deleted"
+    Then wait for the page to be loaded
+    Then I should see "Are you sure to delete"
+    Then I follow "delete_item"
 
   Scenario: Delete directory
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
@@ -90,5 +87,6 @@ Feature: Group tool
     And I follow "Documents"
     Then I should see "My folder in group"
     Then I follow "Delete"
-    And I confirm the popup
-    Then I should see "Document deleted"
+    Then wait for the page to be loaded
+    Then I should see "Are you sure to delete"
+    Then I follow "delete_item"

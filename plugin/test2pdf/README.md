@@ -2,6 +2,7 @@ Test2Pdf plugin
 ===============
 
 This plugin allows you to export questions from exercises to PDF
+
 Este plugin da la posibilidad de obtener en formato PDF aquellas preguntas tipos test en los ejercicios de un curso.
 
 Credits

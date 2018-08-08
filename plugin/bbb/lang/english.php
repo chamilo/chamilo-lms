@@ -1,9 +1,5 @@
 <?php
-/**
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
- */
+/* License: see /license.txt */
 // Needed in order to show the plugin title
 $strings['plugin_title'] = "Videoconference";
 $strings['plugin_comment'] = "Add a videoconference room in a Chamilo course using BigBlueButton (BBB)";
@@ -66,4 +62,13 @@ $strings['MaxXUsersReached'] = 'The limit of %s simultaneous users has been reac
 $strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has been reached for this conference room. To increase this limit, please contact the platform administrator.';
 $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';
 $strings['global_conference_allow_roles'] = "Global conference link only visible for this user roles";
-$strings['CreatedAt'] = "Created at";
+$strings['CreatedAt'] = 'Created at';
+
+$strings['interface'] = 'Default Interface';
+$strings['launch_type'] = 'Client launch choice';
+$strings['EnterConferenceFlash'] = 'Enter the videoconference (Flash client)';
+$strings['EnterConferenceHTML5'] = 'Enter the videoconference (HTML5 client)';
+$strings['ParticipantsWillUseSameInterface'] = 'Participants will use the same interface as you';
+$strings['SetByStudent'] = 'Set by student';
+$strings['SetByTeacher'] = 'Set by teacher';
+$strings['SetByDefault'] = 'Set to default interface';

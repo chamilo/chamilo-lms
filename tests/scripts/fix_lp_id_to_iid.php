@@ -7,9 +7,9 @@ exit;
 
 require_once '../../main/inc/global.inc.php';
 
-/** @var The course id $courseId */
+/** @var int $courseId */
 $onlyCourseId = 0;
-/** @var The LP id $lpId */
+/** @var int $lpId lp id */
 $lpId = 0;
 
 $courses = Database::select('id, title, code', Database::get_main_table(TABLE_MAIN_COURSE));
@@ -20,6 +20,8 @@ $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $sessions = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION));
 if (!empty($sessions)) {
     $sessions = array_column($sessions, 'id');
+    // Add session_id = 0
+    $sessions[] = 0;
 } else {
     $sessions = [0];
 }
@@ -34,6 +36,7 @@ foreach ($courses as $course) {
     $sql = "SELECT * FROM $tblCLp WHERE c_id = $courseId AND iid <> id ORDER by iid";
     echo 'Select all lps';
     var_dump($sql);
+    error_log($sql);
     $result = Database::query($sql);
 
     $myOnlyLpList = [];
@@ -43,8 +46,8 @@ foreach ($courses as $course) {
             $oldId = $lpInfo['id'];
             $sql = "SELECT * FROM $tblCLpItem 
                     WHERE c_id = $courseId AND lp_id = $oldId ORDER by iid";
-            echo "<h3>$sql</h3>";
-            echo "New lp.iid $lpIid / old lp.id $oldId";
+            //echo "<h3>$sql</h3>";
+            //echo "New lp.iid $lpIid / old lp.id $oldId";
             $items = Database::store_result(Database::query($sql),'ASSOC');
             $lpInfo['lp_list'] = $items;
             $myOnlyLpList[] = $lpInfo;
@@ -99,7 +102,7 @@ foreach ($courses as $course) {
                         $sql = "UPDATE $tblCLpItem SET $variable = $newId 
                                 WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                         Database::query($sql);
-                        var_dump($sql);
+                        //var_dump($sql);
                     }
                 }
 
@@ -114,7 +117,7 @@ foreach ($courses as $course) {
                             $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
                                     WHERE iid = $itemIid AND c_id = $courseId";
                             Database::query($sql);
-                            var_dump($sql);
+                            //var_dump($sql);
                         }
                     }
                 }
@@ -123,25 +126,25 @@ foreach ($courses as $course) {
                 $sql = "UPDATE c_lp_view SET last_item = $itemIid 
                         WHERE c_id = $courseId AND last_item = $itemId AND lp_id = $oldId";
                 Database::query($sql);
-                var_dump($sql);
+                //var_dump($sql);
 
                 // c_lp_item_view
                 $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid 
                         WHERE c_id = $courseId AND lp_item_id = $itemId ";
                 Database::query($sql);
-                var_dump($sql);
+                //var_dump($sql);
 
                 // Update track_exercises
                 $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid 
                         WHERE c_id = $courseId AND orig_lp_id = $oldId AND orig_lp_item_id = $itemId";
                 Database::query($sql);
-                var_dump($sql);
+                //var_dump($sql);
 
                 // c_forum_thread
                 $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid 
                         WHERE c_id = $courseId AND lp_item_id = $itemId";
                 Database::query($sql);
-                var_dump($sql);
+                //var_dump($sql);
 
                 // orig_lp_item_view_id
                 $sql = "SELECT * FROM c_lp_view
@@ -166,40 +169,42 @@ foreach ($courses as $course) {
                                   exe_user_id = $userId                                       
                                   ";
                         Database::query($sql);
-                        var_dump($sql);
+                        //var_dump($sql);
                     }
                 }
 
                 $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
                         WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                 Database::query($sql);
-                var_dump($sql);
+                //var_dump($sql);
 
                 $sql = "UPDATE $tblCLpItem SET id = iid 
                     WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                 Database::query($sql);
-                var_dump($sql);
+                //var_dump($sql);
             }
 
             $sql = "UPDATE c_lp_view SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
             Database::query($sql);
-            var_dump($sql);
+            //var_dump($sql);
 
             $sql = "UPDATE c_forum_forum SET lp_id = $lpIid WHERE c_id = $courseId AND lp_id = $oldId";
             Database::query($sql);
-            var_dump($sql);
+            //var_dump($sql);
 
             // Update track_exercises
             $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
                     WHERE c_id = $courseId AND orig_lp_id = $oldId";
             Database::query($sql);
-            var_dump($sql);
+            //var_dump($sql);
 
             $sql = "UPDATE $tblCLp SET id = iid WHERE c_id = $courseId AND id = $oldId ";
             Database::query($sql);
-            var_dump($sql);
+            //var_dump($sql);
         }
     }
 }
 
 echo 'finished';
+error_log('finished');
+

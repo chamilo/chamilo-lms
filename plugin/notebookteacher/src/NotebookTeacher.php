@@ -3,14 +3,13 @@
 
 use ChamiloSession as Session;
 
-require_once __DIR__.'/../config.php';
-
 /**
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
  *
  * @author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>, adaptation for the plugin
+ * @author Julio Montoya
  *
  * @package chamilo.library
  */
@@ -131,6 +130,7 @@ class NotebookTeacher
         if (!is_array($values) or empty($values['note_title'])) {
             return false;
         }
+
         // Database table definition
         $table = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
 
@@ -174,7 +174,6 @@ class NotebookTeacher
 
         // Database table definition
         $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
-
         $courseId = api_get_course_int_id();
 
         $sql = "DELETE FROM $tableNotebook
@@ -198,78 +197,38 @@ class NotebookTeacher
     {
         $plugin = NotebookTeacherPlugin::create();
         $userInfo = api_get_user_info();
+        $sortDirection = 'DESC';
+        $linkSortDirection = 'ASC';
+
         if (!isset($_GET['direction'])) {
             $sortDirection = 'ASC';
             $linkSortDirection = 'DESC';
         } elseif ($_GET['direction'] == 'ASC') {
             $sortDirection = 'ASC';
             $linkSortDirection = 'DESC';
-        } else {
-            $sortDirection = 'DESC';
-            $linkSortDirection = 'ASC';
         }
 
-        $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
+        $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+        $currentUrl = api_get_self().'?'.api_get_cidreq().'&student_id='.$studentId;
         $sessionId = api_get_session_id();
         $courseCode = api_get_course_id();
-        $active = isset($_GET['active']) ? $_GET['active'] : null;
-        $status = STUDENT;
-        $courseInfo = api_get_course_info();
-        $courseId = $courseInfo['real_id'];
-        $currentAccessUrlId = api_get_current_access_url_id();
-        $sortByfirstName = api_sort_by_first_name();
-        $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+        $courseId = api_get_course_int_id();
 
-        if (!empty($sessionId)) {
-            $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $tableUsers = Database::get_main_table(TABLE_MAIN_USER);
-            $isWesternNameOrder = api_is_western_name_order();
-            $sql = "SELECT DISTINCT
-                        user.user_id, ".($isWesternNameOrder
-                                ? "user.firstname, user.lastname"
-                                : "user.lastname, user.firstname")."
-                    FROM $tableSessionCourseUser as session_course_user,
-            $tableUsers as user ";
-            if (api_is_multiple_url_enabled()) {
-                $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
-            }
-            $sql .= " WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
-            $sql .= ' AND session_id = '.$sessionId;
-
-            if (api_is_multiple_url_enabled()) {
-                $sql .= " AND user.user_id = au.user_id AND access_url_id =  $currentAccessUrlId  ";
-            }
-
-            // only users no coaches/teachers
-            if ($type == COURSEMANAGER) {
-                $sql .= " AND session_course_user.status = 2 ";
-            } else {
-                $sql .= " AND session_course_user.status = 0 ";
-            }
-            $sql .= $sortByfirstName
-                ? ' ORDER BY user.firstname, user.lastname'
-                : ' ORDER BY user.lastname, user.firstname';
-
-            $rs = Database::query($sql);
-
-            $courseUsersList = [];
-            while ($row = Database::fetch_assoc($rs)) {
-                $courseUsersList[$row['user_id']] = $row;
-            }
-        } else {
-            $courseUsersList = CourseManager::get_user_list_from_course_code(
+        if (empty($sessionId)) {
+            $userList = CourseManager::get_user_list_from_course_code(
                 $courseCode,
                 0,
                 null,
                 null,
-                $status,
+                STUDENT
+            );
+        } else {
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $sessionId,
                 null,
-                false,
-                false,
                 null,
-                null,
-                null,
-                $active
+                0
             );
         }
 
@@ -278,8 +237,8 @@ class NotebookTeacher
         // Status
         $students = [];
         $students[] = $plugin->get_lang('AllStudent');
-        foreach ($courseUsersList as $key => $userItem) {
-            $students[$key] = $userItem['firstname'].' '.$userItem['lastname'];
+        foreach ($userList as $key => $userItem) {
+            $students[$key] = api_get_person_name($userItem['firstname'], $userItem['lastname']);
         }
 
         $form->addElement(
@@ -289,7 +248,7 @@ class NotebookTeacher
             $students,
             [
                 'id' => 'student_filter',
-                'onchange' => 'javascript: filter_student();',
+                'onchange' => 'javascript: studentFilter();',
             ]
         );
         $user_data = ['student_filter' => $studentId];
@@ -301,8 +260,8 @@ class NotebookTeacher
         echo '<div class="actions">';
         if (!api_is_drh()) {
             if (!api_is_anonymous()) {
-                if (api_get_session_id() == 0) {
-                    echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
+                if (empty($sessionId)) {
+                    echo '<a href="'.$currentUrl.'&action=addnote">'.
                         Display::return_icon(
                             'new_note.png',
                             get_lang('NoteAddNew'),
@@ -310,7 +269,7 @@ class NotebookTeacher
                             '32'
                         ).'</a>';
                 } elseif (api_is_allowed_to_session_edit(false, true)) {
-                    echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
+                    echo '<a href="'.$currentUrl.'&action=addnote">'.
                         Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
                 }
             } else {
@@ -319,22 +278,18 @@ class NotebookTeacher
             }
         }
 
-        echo '<a href="index.php?'.
-                api_get_cidreq().
-                '&action=changeview&view=creation_date&direction='.$linkSortDirection.'&student_id='.$studentId.'">'.
+        echo '<a href="'.$currentUrl.
+                '&action=changeview&view=creation_date&direction='.$linkSortDirection.'">'.
             Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32').'</a>';
-        echo '<a href="index.php?'.
-                api_get_cidreq().
-                '&action=changeview&view=update_date&direction='.$linkSortDirection.'&student_id='.$studentId.'">'.
+        echo '<a href="'.$currentUrl.
+                '&action=changeview&view=update_date&direction='.$linkSortDirection.'">'.
             Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32').'</a>';
-        echo '<a href="index.php?'.
-                api_get_cidreq().
-                '&action=changeview&view=title&direction='.$linkSortDirection.'&student_id='.$studentId.'">'.
+        echo '<a href="'.$currentUrl.
+                '&action=changeview&view=title&direction='.$linkSortDirection.'">'.
             Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32').'</a>';
 
         echo '</div>';
         echo '<div class="row">'.$selectStudent.'</div>';
-
         $view = Session::read('notebook_view');
         if (!isset($view) ||
             !in_array($view, ['creation_date', 'update_date', 'title'])
@@ -343,7 +298,6 @@ class NotebookTeacher
         }
 
         $view = Session::read('notebook_view');
-
         // Database table definition
         $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
         if ($view == 'creation_date' || $view == 'update_date') {
@@ -352,12 +306,9 @@ class NotebookTeacher
             $orderBy = " ORDER BY $view $sortDirection ";
         }
 
-        //condition for the session
-        $session_id = api_get_session_id();
-        $conditionSession = api_get_session_condition($session_id);
-
+        // condition for the session
+        $conditionSession = api_get_session_condition($sessionId);
         $condExtra = $view == 'update_date' ? " AND update_date <> ''" : " ";
-        $courseId = api_get_course_int_id();
 
         if ($studentId > 0) {
             // Only one student
@@ -378,11 +329,12 @@ class NotebookTeacher
                         $studentText = '';
                         if ($row['student_id'] > 0) {
                             $studentInfo = api_get_user_info($row['student_id']);
-                            $studentText = $studentInfo['complete_name'];
+                            $studentText = $studentInfo['complete_name_with_username'];
                         }
-                        echo Display::page_subheader($studentText);
+                        echo Display::page_subheader2($studentText);
                         $first = false;
                     }
+
                     // Validation when belongs to a session
                     $sessionImg = api_get_session_image($row['session_id'], $userInfo['status']);
                     $updateValue = '';
@@ -396,11 +348,11 @@ class NotebookTeacher
                     if (intval($row['user_id']) == api_get_user_id()) {
                         $actions = '<a href="'.
                                 api_get_self().'?'.
-                                api_get_cidreq().'action=editnote&notebook_id='.$row['id'].'">'.
+                                api_get_cidreq().'&student_id='.$studentId.'&action=editnote&notebook_id='.$row['id'].'">'.
                                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
                         $actions .= '<a href="'.
                                 api_get_self().
-                                '?action=deletenote&notebook_id='.$row['id'].
+                                '?action=deletenote&student_id='.$studentId.'&notebook_id='.$row['id'].
                                 '" onclick="return confirmation(\''.$row['title'].'\');">'.
                                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
                     }
@@ -416,7 +368,7 @@ class NotebookTeacher
             }
         } else {
             // All students
-            foreach ($courseUsersList as $key => $userItem) {
+            foreach ($userList as $key => $userItem) {
                 $studentId = $key;
                 $studentText = $userItem['firstname'].' '.$userItem['lastname'];
                 $conditionStudent = " AND student_id = $studentId";
@@ -445,6 +397,7 @@ class NotebookTeacher
                         $userInfo = api_get_user_info($row['user_id']);
                         $author = ', '.get_lang('Teacher').': '.$userInfo['complete_name'];
 
+                        $actions = '';
                         if (intval($row['user_id']) == api_get_user_id()) {
                             $actions = '<a href="'.api_get_self().
                                 '?action=editnote&notebook_id='.$row['id'].'&'.api_get_cidreq().'">'.
@@ -458,8 +411,6 @@ class NotebookTeacher
                                         '',
                                         ICON_SIZE_SMALL
                                     ).'</a>';
-                        } else {
-                            $actions = '';
                         }
 
                         echo Display::panel(
@@ -507,6 +458,7 @@ class NotebookTeacher
                                 '" onclick="return confirmation(\''.$row['title'].'\');">'.
                                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
                     }
+
                     echo Display::panel(
                         $row['description'],
                         $row['title'].$sessionImg.' <div class="pull-right">'.$actions.'</div>',
@@ -516,5 +468,64 @@ class NotebookTeacher
                 }
             }
         }
+    }
+
+    /**
+     * @param FormValidator $form
+     * @param int           $studentId
+     *
+     * @return FormValidator
+     */
+    public static function getForm($form, $studentId)
+    {
+        $sessionId = api_get_session_id();
+        $courseCode = api_get_course_id();
+        if (empty($sessionId)) {
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                0,
+                null,
+                null,
+                STUDENT
+            );
+        } else {
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $sessionId,
+                null,
+                null,
+                0
+            );
+        }
+
+        $students = ['' => ''];
+        foreach ($userList as $key => $userItem) {
+            $students[$key] = api_get_person_name($userItem['firstname'], $userItem['lastname']);
+        }
+
+        $form->addElement(
+            'select',
+            'student_id',
+            get_lang('Student'),
+            $students
+        );
+
+        $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
+        $form->addElement(
+            'html_editor',
+            'note_comment',
+            get_lang('NoteComment'),
+            null,
+            api_is_allowed_to_edit()
+                ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
+                : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
+        );
+
+        $form->addButtonCreate(get_lang('Save'), 'SubmitNote');
+
+        // Setting the rules
+        $form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
+
+        return $form;
     }
 }

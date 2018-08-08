@@ -7,9 +7,9 @@
         <table id="courses_table" class="data_table table">
             <tr class="row_odd">
                 <th class="th-header">{{ 'Exercise'|get_plugin_lang('Test2pdfPlugin') }}</th>
-                <th class="th-header ta-center">{{ 'DownloadOnlyQuestion'|get_plugin_lang('Test2pdfPlugin') }}</th>
-                <th class="th-header ta-center">{{ 'DownloadOnlyAnswer'|get_plugin_lang('Test2pdfPlugin') }}</th>
-                <th class="th-header ta-center">{{ 'DownloadAll'|get_plugin_lang('Test2pdfPlugin') }}</th>
+                <th class="th-header text-center">{{ 'DownloadOnlyQuestion'|get_plugin_lang('Test2pdfPlugin') }}</th>
+                <th class="th-header text-center">{{ 'DownloadOnlyAnswer'|get_plugin_lang('Test2pdfPlugin') }}</th>
+                <th class="th-header text-center">{{ 'DownloadAll'|get_plugin_lang('Test2pdfPlugin') }}</th>
             </tr>
             {% set i = 0 %}
 
@@ -20,13 +20,13 @@
                     &nbsp;&nbsp;&nbsp;<img src="{{ 'quiz.png'|icon(32) }}">
                     <strong>{{ item.title }}</strong>
                     </td>
-                    <td class="ta-center">
+                    <td class="text-center">
                     	<a target="_blank" href="download-pdf.php?type=question&c_id={{course_id}}&id_quiz={{item.id}}" title="{{ 'DownloadOnlyQuestion'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
                     </td>
-                    <td class="ta-center">
+                    <td class="text-center">
                     	<a target="_blank" href="download-pdf.php?type=answer&c_id={{course_id}}&id_quiz={{item.id}}" title="{{ 'DownloadOnlyAnswer'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
                     </td>
-                    <td class="ta-center">
+                    <td class="text-center">
                     	<a target="_blank" href="download-pdf.php?type=all&c_id={{course_id}}&id_quiz={{item.id}}" title="{{ 'DownloadAll'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
                     </td>
                 </tr>

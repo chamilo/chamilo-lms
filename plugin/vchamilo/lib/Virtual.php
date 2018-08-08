@@ -211,13 +211,12 @@ class Virtual
 
         try {
             $database = new \Database();
-            $database->connect(
+            $connection = $database->connect(
                 $dbParams,
                 $_configuration['root_sys'],
                 $_configuration['root_sys'],
                 true
             );
-            $connection = $database->getConnection();
         } catch (Exception $e) {
             echo 'Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ';
             die();
@@ -605,7 +604,8 @@ class Virtual
 
         // Scans the templates.
         if (!is_dir($tempDir)) {
-            mkdir($tempDir, 0777, true);
+            $mode = api_get_permissions_for_new_directories();
+            mkdir($tempDir, $mode, true);
         }
 
         $finder = new \Symfony\Component\Finder\Finder();
@@ -902,7 +902,7 @@ class Virtual
 
         try {
             $database = new \Database();
-            $database->connect(
+            $manager = $database->connect(
                 $dbParams,
                 api_get_configuration_value('root_sys'),
                 api_get_configuration_value('root_sys'),
@@ -910,12 +910,11 @@ class Virtual
                 true
             );
 
-            $manager = $database->getManager();
             if ($getManager) {
                 return $manager;
             }
 
-            return $database->getConnection();
+            return $manager->getConnection();
         } catch (Exception $e) {
             error_log($e->getMessage());
         }
@@ -1280,10 +1279,10 @@ class Virtual
         // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
         $absAlternateCourse = self::getConfig('vchamilo', 'course_real_root');
         $courseDir = $absAlternateCourse.'/'.$slug;
-
+        $mode = api_get_permissions_for_new_directories();
         if (!is_dir($courseDir)) {
             self::ctrace("Creating physical course dir in $courseDir");
-            mkdir($courseDir, 0777, true);
+            mkdir($courseDir, $mode, true);
             // initiate default index
             $indexFile = $courseDir.'/index.html';
             if ($indexFile) {
@@ -1316,7 +1315,7 @@ class Virtual
             self::ctrace("Making dir as $dir");
 
             if (!is_dir($dir)) {
-                if (!mkdir($dir, 0777, true)) {
+                if (!mkdir($dir, $mode, true)) {
                     self::ctrace("Error creating dir $dir \n");
                 }
             }

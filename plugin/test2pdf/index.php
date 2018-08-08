@@ -4,4 +4,4 @@
  * Show form.
  */
 require_once 'config.php';
-//require_once('src/index.test2pdf.php');
+require_once 'src/index.test2pdf.php';

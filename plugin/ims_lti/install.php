@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Install the MSI/LTI Plugin
  * @package chamilo.plugin.ims_lti

@@ -882,7 +882,7 @@ class BuyCoursesPlugin extends Plugin
                 $saleIsCompleted = CourseManager::subscribe_user($sale['user_id'], $course['code']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
-                SessionManager::subscribe_users_to_session(
+                SessionManager::subscribeUsersToSession(
                     $sale['product_id'],
                     [$sale['user_id']],
                     api_get_session_visibility($sale['product_id']),
@@ -2193,6 +2193,30 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * @param Session $session
+     *
+     * @return array
+     */
+    public function getBuyCoursePluginPrice(Session $session)
+    {
+        // start buycourse validation
+        // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+        $isThisCourseInSale = $this->buyCoursesForGridCatalogValidator($session->getId(), self::PRODUCT_TYPE_SESSION);
+        $return = [];
+
+        if ($isThisCourseInSale) {
+            // set the Price label
+            $return['html'] = $isThisCourseInSale['html'];
+            // set the Buy button instead register.
+            if ($isThisCourseInSale['verificator']) {
+                $return['buy_button'] = $this->returnBuyCourseButton($session->getId(), self::PRODUCT_TYPE_SESSION);
+            }
+        }
+        // end buycourse validation
+        return $return;
+    }
+
+    /**
      * Filter the registered courses for show in plugin catalog.
      *
      * @return array
@@ -2514,8 +2538,8 @@ class BuyCoursesPlugin extends Plugin
 
         return Database::update(
             $serviceSaleTable,
-            ['status' => intval($newStatus)],
-            ['id = ?' => intval($serviceSaleId)]
+            ['status' => (int) $newStatus],
+            ['id = ?' => (int) $serviceSaleId]
         );
     }
 }

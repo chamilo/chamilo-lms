@@ -125,6 +125,7 @@ switch ($action) {
 
         // Make template directory (files and SQL).
         $separator = DIRECTORY_SEPARATOR;
+        $dirMode = api_get_permissions_for_new_directories();
 
         $backupDir = api_get_path(SYS_PATH).'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$vhost->slug.$separator;
 
@@ -132,7 +133,7 @@ switch ($action) {
         $absolute_sqldir = $backupDir.'dump.sql';
 
         if (!is_dir($backupDir)) {
-            $result = mkdir($backupDir, 0777, true);
+            $result = mkdir($backupDir, $dirMode, true);
             if ($result) {
                 Display::addFlash(
                     Display::return_message('Directory created: '.$backupDir)
@@ -147,8 +148,8 @@ switch ($action) {
         if ($vchamilostep == 0) {
             // Create directories, if necessary.
             if (!is_dir($absolute_datadir)) {
-                mkdir($absolute_datadir, 0777, true);
-                mkdir($absolute_datadir.'/home', 0777, true);
+                mkdir($absolute_datadir, $dirMode, true);
+                mkdir($absolute_datadir.'/home', $dirMode, true);
             }
 
             if (empty($fullautomation)) {

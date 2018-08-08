@@ -219,8 +219,16 @@ class BigBlueButtonBN {
 		if (((isset($joinParams['createTime'])) && ($joinParams['createTime'] != ''))) {
 			$params .= '&createTime='.urlencode($joinParams['createTime']);
 		}
+
+		if (isset($joinParams['interface']) && (int) $joinParams['interface'] === BBBPlugin::INTERFACE_HTML5) {
+			$bbbHost = api_remove_trailing_slash(CONFIG_SERVER_URL_WITH_PROTOCOL);
+            $params .= '&redirectClient=true&clientURL='.$bbbHost.'/html5client/join';
+        }
+
 		// Return the URL:
-		return ($joinUrl.$params.'&checksum='.sha1("join".$params.$this->_securitySalt));
+		$url = $joinUrl.$params.'&checksum='.sha1('join'.$params.$this->_securitySalt);
+
+		return $url;
 	}
 
 	public function getEndMeetingURL($endParams) {

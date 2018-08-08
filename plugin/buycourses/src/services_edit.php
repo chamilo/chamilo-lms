@@ -19,7 +19,7 @@ if (!$serviceId) {
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
 $em = Database::getManager();
-$users = $em->getRepository('ChamiloUserBundle:User')->findAll();
+$users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -28,8 +28,8 @@ if (!empty($users)) {
 }
 
 api_protect_admin_script(true);
-//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
 $interbreadcrumb[] = [

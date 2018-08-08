@@ -1,7 +1,7 @@
 In order to run behat tests locally with the right support for browser
 and JS environments under Linux, you will need to:
 
-- Download Selenium Standalone Server v3.1.0
+- Download Selenium Standalone Server v3.*
 
 http://www.seleniumhq.org/download/
 

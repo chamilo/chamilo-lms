@@ -30,14 +30,14 @@ $formToString = '';
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $form = new FormValidator('delete_term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
-    $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement')));
-    $form->addTextarea('explanation', get_lang('ExplanationDeleteLegal'), [], true);
+    $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement'), 'normal', false));
+    $form->addTextarea('explanation', [get_lang('DeleteLegal'), get_lang('ExplanationDeleteLegal')], [], true);
     $form->addHidden('action', 'delete_legal');
     $form->addButtonSave(get_lang('DeleteLegal'));
     $formToString = $form->returnForm();
 
     $formDelete = new FormValidator('delete_account', 'post', api_get_self().'?action=delete_account&user_id='.$userId);
-    $formDelete->addTextarea('explanation', get_lang('ExplanationDeleteAccount'), [], true);
+    $formDelete->addTextarea('explanation', [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')], [], true);
     $formDelete->addHidden('action', 'delete_account');
     $formDelete->addButtonDelete(get_lang('DeleteAccount'));
     $formToString .= $formDelete->returnForm();
@@ -314,10 +314,10 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $permissionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-        $permissionBlock = get_lang('CurrentStatus').': '.
-            Display::return_icon('accept.png', get_lang('LegalAgreementAccepted')).get_lang('LegalAgreementAccepted').
+        $permissionBlock = '<h4>'.get_lang('CurrentStatus').'</h4>'.
+            get_lang('LegalAgreementAccepted').' '.Display::return_icon('accept.png', get_lang('LegalAgreementAccepted'), [], ICON_SIZE_TINY).
             '<br />';
-        $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br />';
+        $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br /><br />';
         $permissionBlock .= $formToString;
 
     /*$permissionBlock .= Display::url(
@@ -378,7 +378,7 @@ $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
-    $termLink = Display::url($url, $url);
+    $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
 }
 
 // Block Social Avatar

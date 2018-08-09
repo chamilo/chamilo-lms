@@ -14,12 +14,21 @@ api_block_anonymous_users();
 $language = api_get_interface_language();
 $language = api_get_language_id($language);
 $term = LegalManager::get_last_condition($language);
+$extraTerms = '';
 
 if (!$term) {
     // look for the default language
     $language = api_get_setting('platformLanguage');
     $language = api_get_language_id($language);
     $term = LegalManager::get_last_condition($language);
+    $termExtraFields = new ExtraFieldValue('terms_and_condition');
+    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+
+    foreach ($values as $value) {
+        //if ($value['variable'] === 'category') {
+        $extraTerms .= '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+        //}
+    }
 }
 
 $term['date_text'] = get_lang('PublicationDate').': '.
@@ -48,6 +57,8 @@ $actions = Display::url(
 );
 
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
+
+$tpl->assign('extra_terms', $extraTerms);
 
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');

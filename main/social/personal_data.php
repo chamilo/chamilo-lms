@@ -258,11 +258,15 @@ foreach ($properties as $key => $value) {
                 break;
             case 'dropBoxSentFiles':
                 foreach ($value as $category => $subValue) {
-                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'"><u>'.get_lang($category).'</u> &gt;</li><ul id="personal-data-list-'.$category.'_options" style="display:none;">';
+                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
+                    $personalDataContent .= '<u>'.get_lang($category).'</u> &gt;</li>';
+                    $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
                     foreach ($subValue as $subSubValue) {
                         if ($category === 'DocumentsAdded') {
-                            //die(print_r($subSubValue, 1));
-                            $documentLink = '<a href="'.$webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path.'">'.$subSubValue->code_path.'</a>';
+                            $documentLink = Display::url(
+                                $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path,
+                                $subSubValue->code_path
+                            );
                             $personalDataContent .= '<li>'.$documentLink.'</li>';
                         } else {
                             $personalDataContent .= '<li>'.$subSubValue.'</li>';

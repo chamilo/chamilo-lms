@@ -454,11 +454,8 @@ if (!CustomPages::enabled()) {
                     $termExtraFields = new ExtraFieldValue('terms_and_condition');
                     $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
                     foreach ($values as $value) {
-                        //if ($value['variable'] === 'category') {
                         echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
-                        //}
                     }
-
                 } else {
                     echo get_lang('ComingSoon');
                 }

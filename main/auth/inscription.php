@@ -536,6 +536,14 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $form->addHidden('legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addHidden('legal_info', $term_preview['id'].':'.$term_preview['language_id']);
 
+    $termExtraFields = new ExtraFieldValue('terms_and_condition');
+    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+    foreach ($values as $value) {
+        //if ($value['variable'] === 'category') {
+            $form->addLabel($value['display_text'], $value['value']);
+        //}
+    }
+
     if ($term_preview['type'] == 1) {
         $form->addElement(
             'checkbox',

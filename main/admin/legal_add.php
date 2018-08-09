@@ -30,24 +30,21 @@ if ($form->validate()) {
     if ($check) {
         $values = $form->getSubmitValues();
         $lang = $values['language'];
-        //language id
+        // language id
         $lang = api_get_language_id($lang);
-
+        $type = 0;
         if (isset($values['type'])) {
             $type = $values['type'];
-        } else {
-            $type = 0;
         }
+        $content = '';
         if (isset($values['content'])) {
             $content = $values['content'];
-        } else {
-            $content = '';
         }
+        $changes = '';
         if (isset($values['changes'])) {
             $changes = $values['changes'];
-        } else {
-            $changes = '';
         }
+
         $submit = $values['send'];
 
         $default['content'] = $content;
@@ -55,16 +52,19 @@ if ($form->validate()) {
             if ($submit == 'back') {
                 header('Location: legal_add.php');
                 exit;
-            } elseif ($submit == 'save') {
-                $insert_result = LegalManager::add($lang, $content, $type, $changes);
-                if ($insert_result) {
-                    $message = get_lang('TermAndConditionSaved');
+            } elseif ($submit === 'save') {
+                $id = LegalManager::add($lang, $content, $type, $changes);
+
+                if (!empty($id)) {
+                    $extraFieldValues = new ExtraFieldValue('terms_and_condition');
+                    $values['item_id'] = $id;
+                    $extraFieldValues->saveFieldValues($values);
+                    Display::addFlash(Display::return_message(get_lang('TermAndConditionSaved'), 'success'));
                 } else {
-                    $message = get_lang('TermAndConditionNotSaved');
+                    Display::addFlash(Display::return_message(get_lang('TermAndConditionNotSaved'), 'warning'));
                 }
                 Security::clear_token();
                 $tok = Security::get_token();
-                Display::addFlash(Display::return_message($message));
                 header('Location: legal_list.php?sec_token='.$tok);
                 exit();
             } elseif ($submit == 'preview') {
@@ -72,7 +72,7 @@ if ($form->validate()) {
                 $defaults['content'] = $content;
                 $defaults['changes'] = $changes;
                 $term_preview = $defaults;
-                $term_preview['type'] = intval($_POST['type']);
+                $term_preview['type'] = (int) $_POST['type'];
             } else {
                 $my_lang = $_POST['language'];
                 if (isset($_POST['language'])) {
@@ -103,6 +103,7 @@ $token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
 $defaults['sec_token'] = $token;
 $form->addElement('header', get_lang('DisplayTermsConditions'));
+$jqueryReady = '';
 
 if (isset($_POST['language'])) {
     $form->addElement('static', Security::remove_XSS($_POST['language']));
@@ -126,6 +127,21 @@ if (isset($_POST['language'])) {
         $form->addElement('label', get_lang('Preview'), $preview);
     }
 
+    $termId = isset($term_preview['id']) ? $term_preview['id'] : 0;
+    $extraField = new ExtraField('terms_and_condition');
+    $returnParams = $extraField->addElements(
+        $form,
+        $termId,
+        [],
+        false,
+        false,
+        [],
+        [],
+        true
+    );
+
+    $jqueryReady = $returnParams['jquery_ready_content'];
+
     // Submit & preview button
     $buttons = '<div class="row" align="center">
                 <div class="formw">
@@ -141,11 +157,19 @@ if (isset($_POST['language'])) {
 }
 
 $tool_name = get_lang('AddTermsAndConditions');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-Display :: display_header($tool_name);
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+
+// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+$htmlHeadXtra[] = '<script>
+$(document).ready(function(){
+    '.$jqueryReady.'
+});
+</script>';
+
+Display::display_header($tool_name);
 
 echo '<script>
-function sendlang(){
+function sendlang() {
 	document.addlegal.sec_token.value=\''.$token.'\';
 	document.addlegal.submit();
 }
@@ -154,9 +178,10 @@ function sendlang(){
 // action menu
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_list.php">'.
-    Display::return_icon('search.gif', get_lang('EditTermsAndConditions'), '').get_lang('AllVersions').'</a>';
+    Display::return_icon('search.gif', get_lang('EditTermsAndConditions'), '').
+    get_lang('AllVersions').'</a>';
 echo '</div>';
 
 $form->setDefaults($defaults);
 $form->display();
-Display :: display_footer();
+Display::display_footer();

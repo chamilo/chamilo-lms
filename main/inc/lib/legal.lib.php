@@ -23,7 +23,7 @@ class LegalManager
      * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
      * @param string $changes  explain changes
      *
-     * @return bool success
+     * @return int
      */
     public static function add($language, $content, $type, $changes)
     {
@@ -43,9 +43,8 @@ class LegalManager
                 'version' => $version,
                 'date' => $time,
             ];
-            Database::insert($legalTable, $params);
 
-            return true;
+            return Database::insert($legalTable, $params);
         } elseif ($last['type'] != $type && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
@@ -56,10 +55,10 @@ class LegalManager
             ];
             Database::update($legalTable, $params, ['id = ?' => $id]);
 
-            return true;
-        } else {
-            return false;
+            return $id;
         }
+
+        return 0;
     }
 
     /**

@@ -143,6 +143,9 @@ class ExtraField extends Model
             case 'scheduled_announcement':
                 $this->extraFieldType = EntityExtraField::SCHEDULED_ANNOUNCEMENT;
                 break;
+            case 'terms_and_condition':
+                $this->extraFieldType = EntityExtraField::TERMS_AND_CONDITION_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -176,6 +179,7 @@ class ExtraField extends Model
             'career',
             'user_certificate',
             'survey',
+            'terms_and_condition'
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -258,9 +262,9 @@ class ExtraField extends Model
         $conditions = Database::parse_conditions(['where' => $conditions]);
 
         if (empty($conditions)) {
-            $conditions .= " WHERE extra_field_type = ".$this->extraFieldType;
+            $conditions .= ' WHERE extra_field_type = '.$this->extraFieldType;
         } else {
-            $conditions .= " AND extra_field_type = ".$this->extraFieldType;
+            $conditions .= ' AND extra_field_type = '.$this->extraFieldType;
         }
 
         $sql = "SELECT * FROM $this->table
@@ -304,24 +308,26 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = self::translateDisplayName(
-                $row['variable'],
-                $row['display_text']
-            );
+            if ($row) {
+                $row['display_text'] = self::translateDisplayName(
+                    $row['variable'],
+                    $row['display_text']
+                );
 
-            // All the options of the field
-            $sql = "SELECT * FROM $this->table_field_options
+                // All the options of the field
+                $sql = "SELECT * FROM $this->table_field_options
                     WHERE field_id='".intval($row['id'])."'
                     ORDER BY option_order ASC";
-            $result = Database::query($sql);
-            while ($option = Database::fetch_array($result)) {
-                $row['options'][$option['id']] = $option;
-            }
+                $result = Database::query($sql);
+                while ($option = Database::fetch_array($result)) {
+                    $row['options'][$option['id']] = $option;
+                }
 
-            return $row;
-        } else {
-            return false;
+                return $row;
+            }
         }
+
+        return false;
     }
 
     /**
@@ -368,7 +374,7 @@ class ExtraField extends Model
      */
     public function getFieldInfoByFieldId($fieldId)
     {
-        $fieldId = intval($fieldId);
+        $fieldId = (int) $fieldId;
         $sql = "SELECT * FROM {$this->table}
                 WHERE
                     id = '$fieldId' AND
@@ -441,18 +447,10 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('FieldTypeVideoUrl');
         $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeOnlyLetters');
         $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('FieldTypeAlphanumeric');
-        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang(
-            'FieldTypeLettersSpaces'
-        );
-        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang(
-            'FieldTypeAlphanumericSpaces'
-        );
-        $types[self::FIELD_TYPE_GEOLOCALIZATION] = get_lang(
-            'Geolocalization'
-        );
-        $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang(
-            'GeolocalizationCoordinates'
-        );
+        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang('FieldTypeLettersSpaces');
+        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang('FieldTypeAlphanumericSpaces');
+        $types[self::FIELD_TYPE_GEOLOCALIZATION] = get_lang('Geolocalization');
+        $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang('GeolocalizationCoordinates');
         $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('FieldTypeSelectWithTextField');
         $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('FieldTypeTripleSelect');
 
@@ -481,7 +479,8 @@ class ExtraField extends Model
      *
      * @throws Exception
      *
-     * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers. Returns false if the form object was not given
+     * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers.
+     * Returns false if the form object was not given
      */
     public function addElements(
         $form,
@@ -502,7 +501,6 @@ class ExtraField extends Model
         $extraData = false;
         if (!empty($itemId)) {
             $extraData = self::get_handler_extra_data($itemId);
-
             if ($form) {
                 if (!empty($showOnlyTheseFields)) {
                     $setData = [];

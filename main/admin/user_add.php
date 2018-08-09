@@ -245,7 +245,7 @@ $form->addElement(
 );
 
 //drh list (display only if student)
-$display = isset($_POST['status']) && $_POST['status'] == STUDENT || !isset($_POST['status']) ? 'block' : 'none';
+$display = (isset($_POST['status']) && $_POST['status'] == STUDENT) || !isset($_POST['status']) ? 'block' : 'none';
 
 //@todo remove the drh list here. This code is unused
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
@@ -345,12 +345,12 @@ if ($form->validate()) {
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'];
-        $status = intval($user['status']);
+        $status = (int) $user['status'];
         $language = $user['language'];
         $picture = $_FILES['picture'];
-        $platform_admin = intval($user['admin']['platform_admin']);
-        $send_mail = intval($user['mail']['send_mail']);
-        $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
+        $platform_admin = (int) $user['admin']['platform_admin'];
+        $send_mail = (int) $user['mail']['send_mail'];
+        $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
         if (isset($extAuthSource) && count($extAuthSource) > 0 &&
             $user['password']['password_auto'] == '2'
@@ -368,14 +368,15 @@ if ($form->validate()) {
             $expiration_date = null;
         }
 
-        $active = intval($user['active']);
+        $active = (int) $user['active'];
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
 
         $extra = [];
         foreach ($user as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') { //an extra field
+            if (substr($key, 0, 6) == 'extra_') {
+                // An extra field
                 $extra[substr($key, 6)] = $value;
             }
         }

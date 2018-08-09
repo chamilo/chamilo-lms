@@ -598,8 +598,8 @@ class UserRepository extends EntityRepository
                 'IP: '.$item->getUserIp(),
                 'Start: '.$item->getExeDate()->format($dateFormat),
                 'Status: '.$item->getStatus(),
-                'Result: '.$item->getExeResult(),
-                'Weighting: '.$item->getExeWeighting(),
+               // 'Result: '.$item->getExeResult(),
+               // 'Weighting: '.$item->getExeWeighting(),
             ];
             $trackEExercises[] = implode(', ', $list);
         }
@@ -615,9 +615,9 @@ class UserRepository extends EntityRepository
             $list = [
                 'Attempt #'.$item->getExeId(),
                 'Course # '.$item->getCId(),
-                'Answer: '.$item->getAnswer(),
+                //'Answer: '.$item->getAnswer(),
                 'Session #'.$item->getSessionId(),
-                'Marks: '.$item->getMarks(),
+                //'Marks: '.$item->getMarks(),
                 'Position: '.$item->getPosition(),
                 'Date: '.$item->getTms()->format($dateFormat),
             ];
@@ -751,7 +751,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'Evaluation id# '.$item->getEvaluationId(),
-                'Score: '.$item->getScore(),
+                //'Score: '.$item->getScore(),
                 'Creation date: '.$item->getCreatedAt()->format($dateFormat),
             ];
             $gradebookResult[] = implode(', ', $list);

@@ -30,7 +30,7 @@ $extraField = new ExtraField('terms_and_condition');
 
 $types = LegalManager::getTreatmentTypeList();
 foreach ($types as $variable => $name) {
-    $label = 'PrivacyTerms'.ucfirst($name);
+    $label = 'PersonalData'.ucfirst($name).'Title';
     $params = [
         'variable' => $variable,
         'display_text' => $label,

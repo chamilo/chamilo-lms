@@ -14,7 +14,7 @@
             {{ display.panel('TermsAndConditions'|get_lang, term.content, term.date_text ) }}
         {% endif %}
 
-        {{ extra_terms }}
+
     </div>
 </div>
 {% endblock %}

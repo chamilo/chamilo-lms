@@ -515,7 +515,6 @@ class UserRepository extends EntityRepository
 
         $courses = $user->getCourses();
         $list = [];
-        $documentDir = [];
         $chatFiles = [];
         /** @var CourseRelUser $course */
         foreach ($courses as $course) {
@@ -526,9 +525,9 @@ class UserRepository extends EntityRepository
                 $fs = new Finder();
                 $fs->files()->in($documentDir);
                 foreach ($fs as $file) {
-//                    $data = file_get_contents($file->getRealPath());
-                    //$chatFiles[] = $file->getRealPath();
-                    $chatFiles[] = $file->getFilename();
+                    $chatFiles[] =
+                        $course->getCourse()->getDirectory().'/document/chat_files/'.$file->getFilename().' - '.
+                        get_lang('ContentNotAccessibleRequestFromDataPrivacyOfficer');
                 }
             }
         }

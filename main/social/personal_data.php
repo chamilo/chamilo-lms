@@ -249,6 +249,25 @@ $webCoursePath = api_get_path(WEB_COURSE_PATH);
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
         switch ($key) {
+            case 'classes':
+                foreach ($value as $category => $subValue) {
+                    $categoryName = 'Social group';
+                    if ($category == 0) {
+                        $categoryName = 'Class';
+                    }
+                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
+                    $personalDataContent .= '<u>'.$categoryName.'</u> &gt;</li>';
+                    $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
+                    if (empty($subValue)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($subValue as $subSubValue) {
+                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                        }
+                    }
+                    $personalDataContent .= '</ul>';
+                }
+                break;
             case 'extraFields':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 if (empty($value)) {
@@ -288,7 +307,6 @@ foreach ($properties as $key => $value) {
             case 'roles':
             case 'achievedSkills':
             case 'sessionAsGeneralCoach':
-            case 'classes':
             case 'courses':
             case 'groupNames':
             case 'groups':

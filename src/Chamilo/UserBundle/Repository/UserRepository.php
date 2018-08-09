@@ -46,6 +46,7 @@ use Chamilo\TicketBundle\Entity\Ticket;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -514,10 +515,22 @@ class UserRepository extends EntityRepository
 
         $courses = $user->getCourses();
         $list = [];
+        $documentDir = [];
+        $chatFiles = [];
         /** @var CourseRelUser $course */
         foreach ($courses as $course) {
             $list[] = $course->getCourse()->getCode();
+            $courseDir = api_get_path(SYS_COURSE_PATH).$course->getCourse()->getDirectory();
+            $documentDir = $courseDir.'/document/chat_files/';
+            if (is_dir($documentDir)) {
+                $fs = new Finder();
+                $fs->files()->in($documentDir);
+                foreach ($fs as $file) {
+                    $chatFiles[] = $file->getFilename();
+                }
+            }
         }
+
         $user->setCourses($list);
 
         $classes = $user->getClasses();
@@ -1144,6 +1157,7 @@ class UserRepository extends EntityRepository
                 'AttendanceResult' => $cAttendanceResult,
                 'Blog' => $cBlog,
                 'DocumentsAdded' => $documents,
+                'Chat' => $chatFiles,
                 'ForumPost' => $cForumPostList,
                 'ForumThread' => $cForumThreadList,
                 'TrackEExercises' => $trackEExercises,

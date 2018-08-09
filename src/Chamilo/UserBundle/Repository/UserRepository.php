@@ -501,7 +501,7 @@ class UserRepository extends EntityRepository
         }
         $user->setSessionCourseSubscriptions($list);
 
-        $documents = \DocumentManager::getAllDocumentCreatedByUser($userId);
+        $documents = \DocumentManager::getAllDocumentsCreatedByUser($userId);
 
         $friends = \SocialManager::get_friends($userId);
         $friendList = [];
@@ -532,7 +532,7 @@ class UserRepository extends EntityRepository
                 LIMIT 1";*/
 
         $user->setDropBoxSentFiles(
-            ['documents' => $documents, 'friends' => $friendList, 'agenda_events' => $eventList]
+            ['DocumentsAdded' => $documents, 'Friends' => $friendList, 'Events' => $eventList]
         );
 
         $user->setDropBoxReceivedFiles([]);

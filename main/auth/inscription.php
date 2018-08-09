@@ -540,7 +540,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
     foreach ($values as $value) {
         //if ($value['variable'] === 'category') {
-            $form->addLabel($value['display_text'], $value['value']);
+        $form->addLabel($value['display_text'], $value['value']);
         //}
     }
 

@@ -30,7 +30,7 @@ class ExtraField extends BaseAttribute
     const USER_CERTIFICATE = 11;
     const SURVEY_FIELD_TYPE = 12;
     const SCHEDULED_ANNOUNCEMENT = 13;
-    const TERMS_AND_CONDITION_TYPE= 14;
+    const TERMS_AND_CONDITION_TYPE = 14;
 
     /**
      * @var int

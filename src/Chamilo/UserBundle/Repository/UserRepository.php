@@ -512,7 +512,7 @@ class UserRepository extends EntityRepository
         }
 
         $agenda = new \Agenda('personal');
-        $events = $agenda->getEvents('', '',  null, null, $userId, 'array');
+        $events = $agenda->getEvents('', '', null, null, $userId, 'array');
         $eventList = [];
         if (!empty($events)) {
             foreach ($events as $event) {

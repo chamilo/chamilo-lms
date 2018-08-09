@@ -179,7 +179,7 @@ class ExtraField extends Model
             'career',
             'user_certificate',
             'survey',
-            'terms_and_condition'
+            'terms_and_condition',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -480,7 +480,7 @@ class ExtraField extends Model
      * @throws Exception
      *
      * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers.
-     * Returns false if the form object was not given
+     *                    Returns false if the form object was not given
      */
     public function addElements(
         $form,

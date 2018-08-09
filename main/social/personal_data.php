@@ -264,8 +264,8 @@ foreach ($properties as $key => $value) {
                     foreach ($subValue as $subSubValue) {
                         if ($category === 'DocumentsAdded') {
                             $documentLink = Display::url(
-                                $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path,
-                                $subSubValue->code_path
+                                $subSubValue->code_path,
+                                $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path
                             );
                             $personalDataContent .= '<li>'.$documentLink.'</li>';
                         } else {

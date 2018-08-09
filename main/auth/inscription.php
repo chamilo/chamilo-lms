@@ -447,9 +447,7 @@ if (!CustomPages::enabled()) {
                     $language = api_get_language_id($language);
                     $term_preview = LegalManager::get_last_condition($language);
                 }
-                $tool_name = get_lang('TermsAndConditions');
-                Display::display_header($tool_name);
-
+                Display::display_header(get_lang('TermsAndConditions'));
                 if (!empty($term_preview['content'])) {
                     echo $term_preview['content'];
                 } else {
@@ -709,7 +707,7 @@ if ($form->validate()) {
 
         // Update the extra fields
         $count_extra_field = count($extras);
-        if ($count_extra_field > 0 && is_integer($user_id)) {
+        if ($count_extra_field > 0 && is_int($user_id)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file

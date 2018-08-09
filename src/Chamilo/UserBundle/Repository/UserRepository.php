@@ -801,6 +801,21 @@ class UserRepository extends EntityRepository
             $cForumThreadList[] = implode(', ', $list);
         }
 
+        // CForumAttachment
+        /*$criteria = [
+            'threadPosterId' => $userId,
+        ];
+        $result = $em->getRepository('ChamiloCourseBundle:CForumAttachment')->findBy($criteria);
+        $cForumThreadList = [];
+        * @var CForumThread $item
+        foreach ($result as $item) {
+            $list = [
+                'Title: '.$item->getThreadTitle(),
+                'Creation date: '.$item->getThreadDate()->format($dateFormat),
+            ];
+            $cForumThreadList[] = implode(', ', $list);
+        }*/
+
         // cGroupRelUser
         $criteria = [
             'userId' => $userId,
@@ -873,7 +888,8 @@ class UserRepository extends EntityRepository
             $list = [
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$item->getSendDate()->format($dateFormat),
-                'To user# '.$item->getUserReceiverId(),
+                'To user # '.$item->getUserReceiverId(),
+                'Status'.$item->getMsgStatus(),
             ];
             $messageList[] = implode(', ', $list);
         }
@@ -919,6 +935,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'File #'.$item->getFileId(),
+                'Course #'.$item->getCId(),
             ];
             $cDropboxPerson[] = implode(', ', $list);
         }
@@ -1062,7 +1079,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'Feedback: '.$item->getFeedbackText(),
-                'Value: '. $item->getFeedbackValue(),
+                'Value: '.$item->getFeedbackValue(),
                 'Created at: '.$item->getFeedbackDateTime()->format($dateFormat),
             ];
             $skillRelUserComment[] = implode(', ', $list);
@@ -1079,7 +1096,7 @@ class UserRepository extends EntityRepository
             $list = [
                 'Course #'.$item->getCId(),
                 'Session #'.$item->getSessionId(),
-                'Vote: '. $item->getVote(),
+                'Vote: '.$item->getVote(),
             ];
             $userRelCourseVote[] = implode(', ', $list);
         }
@@ -1098,7 +1115,7 @@ class UserRepository extends EntityRepository
                 'EndPoint: '.$item->getApiEndPoint(),
                 'Validity start date: '.$item->getValidityEndDate()->format($dateFormat),
                 'Validity enddate: '.$item->getValidityStartDate()->format($dateFormat),
-                'Created at: '. $item->getCreatedDate()->format($dateFormat),
+                'Created at: '.$item->getCreatedDate()->format($dateFormat),
             ];
             $userApiKey[] = implode(', ', $list);
         }

@@ -386,21 +386,21 @@ class LegalManager
     public static function getTreatmentTypeList()
     {
         return  [
-            101 => 'collection',
-            102 => 'recording',
-            103 => 'organization',
-            104 => 'structure',
-            105 => 'conservation',
-            106 => 'adaptation',
-            107 => 'extraction',
-            108 => 'consultation',
-            109 => 'usage',
-            110 => 'communication',
-            111 => 'interconnection',
-            112 => 'limitation',
-            113 => 'deletion',
-            114 => 'destruction',
-            115 => 'profiling',
+            'privacy_terms_collection' => 'collection',
+            'privacy_terms_recording' => 'recording',
+            'privacy_terms_organization' => 'organization',
+            'privacy_terms_structure' => 'structure',
+            'privacy_terms_conservation' => 'conservation',
+            'privacy_terms_adaptation' => 'adaptation',
+            'privacy_terms_extraction' => 'extraction',
+            'privacy_terms_consultation' => 'consultation',
+            'privacy_terms_usage' => 'usage',
+            'privacy_terms_communication' => 'communication',
+            'privacy_terms_interconnection' => 'interconnection',
+            'privacy_terms_limitation' => 'limitation',
+            'privacy_terms_deletion' => 'deletion',
+            'privacy_terms_destruction' => 'destruction',
+            'privacy_terms_profiling' => 'profiling',
         ];
     }
 }

@@ -46,6 +46,7 @@ use Chamilo\TicketBundle\Entity\Ticket;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -514,10 +515,23 @@ class UserRepository extends EntityRepository
 
         $courses = $user->getCourses();
         $list = [];
+        $chatFiles = [];
         /** @var CourseRelUser $course */
         foreach ($courses as $course) {
             $list[] = $course->getCourse()->getCode();
+            $courseDir = api_get_path(SYS_COURSE_PATH).$course->getCourse()->getDirectory();
+            $documentDir = $courseDir.'/document/chat_files/';
+            if (is_dir($documentDir)) {
+                $fs = new Finder();
+                $fs->files()->in($documentDir);
+                foreach ($fs as $file) {
+                    $chatFiles[] =
+                        $course->getCourse()->getDirectory().'/document/chat_files/'.$file->getFilename().' - '.
+                        get_lang('ContentNotAccessibleRequestFromDataPrivacyOfficer');
+                }
+            }
         }
+
         $user->setCourses($list);
 
         $classes = $user->getClasses();
@@ -584,8 +598,8 @@ class UserRepository extends EntityRepository
                 'IP: '.$item->getUserIp(),
                 'Start: '.$item->getExeDate()->format($dateFormat),
                 'Status: '.$item->getStatus(),
-                'Result: '.$item->getExeResult(),
-                'Weighting: '.$item->getExeWeighting(),
+               // 'Result: '.$item->getExeResult(),
+               // 'Weighting: '.$item->getExeWeighting(),
             ];
             $trackEExercises[] = implode(', ', $list);
         }
@@ -601,9 +615,9 @@ class UserRepository extends EntityRepository
             $list = [
                 'Attempt #'.$item->getExeId(),
                 'Course # '.$item->getCId(),
-                'Answer: '.$item->getAnswer(),
+                //'Answer: '.$item->getAnswer(),
                 'Session #'.$item->getSessionId(),
-                'Marks: '.$item->getMarks(),
+                //'Marks: '.$item->getMarks(),
                 'Position: '.$item->getPosition(),
                 'Date: '.$item->getTms()->format($dateFormat),
             ];
@@ -737,7 +751,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'Evaluation id# '.$item->getEvaluationId(),
-                'Score: '.$item->getScore(),
+                //'Score: '.$item->getScore(),
                 'Creation date: '.$item->getCreatedAt()->format($dateFormat),
             ];
             $gradebookResult[] = implode(', ', $list);
@@ -800,6 +814,21 @@ class UserRepository extends EntityRepository
             ];
             $cForumThreadList[] = implode(', ', $list);
         }
+
+        // CForumAttachment
+        /*$criteria = [
+            'threadPosterId' => $userId,
+        ];
+        $result = $em->getRepository('ChamiloCourseBundle:CForumAttachment')->findBy($criteria);
+        $cForumThreadList = [];
+        * @var CForumThread $item
+        foreach ($result as $item) {
+            $list = [
+                'Title: '.$item->getThreadTitle(),
+                'Creation date: '.$item->getThreadDate()->format($dateFormat),
+            ];
+            $cForumThreadList[] = implode(', ', $list);
+        }*/
 
         // cGroupRelUser
         $criteria = [
@@ -873,7 +902,8 @@ class UserRepository extends EntityRepository
             $list = [
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$item->getSendDate()->format($dateFormat),
-                'To user# '.$item->getUserReceiverId(),
+                'To user # '.$item->getUserReceiverId(),
+                'Status'.$item->getMsgStatus(),
             ];
             $messageList[] = implode(', ', $list);
         }
@@ -919,6 +949,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'File #'.$item->getFileId(),
+                'Course #'.$item->getCId(),
             ];
             $cDropboxPerson[] = implode(', ', $list);
         }
@@ -1062,7 +1093,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'Feedback: '.$item->getFeedbackText(),
-                'Value: '. $item->getFeedbackValue(),
+                'Value: '.$item->getFeedbackValue(),
                 'Created at: '.$item->getFeedbackDateTime()->format($dateFormat),
             ];
             $skillRelUserComment[] = implode(', ', $list);
@@ -1079,7 +1110,7 @@ class UserRepository extends EntityRepository
             $list = [
                 'Course #'.$item->getCId(),
                 'Session #'.$item->getSessionId(),
-                'Vote: '. $item->getVote(),
+                'Vote: '.$item->getVote(),
             ];
             $userRelCourseVote[] = implode(', ', $list);
         }
@@ -1098,7 +1129,7 @@ class UserRepository extends EntityRepository
                 'EndPoint: '.$item->getApiEndPoint(),
                 'Validity start date: '.$item->getValidityEndDate()->format($dateFormat),
                 'Validity enddate: '.$item->getValidityStartDate()->format($dateFormat),
-                'Created at: '. $item->getCreatedDate()->format($dateFormat),
+                'Created at: '.$item->getCreatedDate()->format($dateFormat),
             ];
             $userApiKey[] = implode(', ', $list);
         }
@@ -1127,6 +1158,7 @@ class UserRepository extends EntityRepository
                 'AttendanceResult' => $cAttendanceResult,
                 'Blog' => $cBlog,
                 'DocumentsAdded' => $documents,
+                'Chat' => $chatFiles,
                 'ForumPost' => $cForumPostList,
                 'ForumThread' => $cForumThreadList,
                 'TrackEExercises' => $trackEExercises,

@@ -403,7 +403,7 @@ $legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
 // Get data about the treatment of data
 $treatmentTypes = LegalManager::getTreatmentTypeList();
 
-foreach ($treatmentTypes as $id => $item) {
+/*foreach ($treatmentTypes as $id => $item) {
     $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item).'Title');
     $legalTerm = $legalTermsRepo->findOneByTypeAndLanguage($id, api_get_language_id($user_language));
     $legalTermContent = '';
@@ -411,7 +411,8 @@ foreach ($treatmentTypes as $id => $item) {
         $legalTermContent = $legalTerm[0]['content'];
     }
     $personalData['treatment'][$item]['content'] = $legalTermContent;
-}
+}*/
+
 $officerName = api_get_configuration_value('data_protection_officer_name');
 $officerRole = api_get_configuration_value('data_protection_officer_role');
 $officerEmail = api_get_configuration_value('data_protection_officer_email');

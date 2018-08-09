@@ -526,6 +526,8 @@ class UserRepository extends EntityRepository
                 $fs = new Finder();
                 $fs->files()->in($documentDir);
                 foreach ($fs as $file) {
+//                    $data = file_get_contents($file->getRealPath());
+                    //$chatFiles[] = $file->getRealPath();
                     $chatFiles[] = $file->getFilename();
                 }
             }

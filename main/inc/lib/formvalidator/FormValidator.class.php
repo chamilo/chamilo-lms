@@ -885,6 +885,46 @@ EOT;
     }
 
     /**
+     * Draws a panel of options see the course_info/infocours.php page.
+     *
+     * @param string $name      internal name
+     * @param string $title     visible title
+     * @param array  $groupList list of group or elements
+     */
+    public function addPanelOption($name, $title, $groupList)
+    {
+        $this->addHtml('<div class="panel panel-default">');
+        $this->addHtml(
+            '
+            <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
+        '
+        );
+        $this->addHtml($title);
+        $this->addHtml('</a></h4></div>');
+        $this->addHtml('<div id="collapse-'.$name.'-settings" class="panel-collapse collapse" role="tabpanel"
+             aria-labelledby="heading-'.$name.'-settings">
+            <div class="panel-body">
+        ');
+
+        foreach ($groupList as $groupName => $group) {
+            // Add group array
+            if (!empty($groupName) && is_array($group)) {
+                $this->addGroup($group, '', $groupName);
+            }
+            // Add element
+            if ($group instanceof HTML_QuickForm_element) {
+                $this->addElement($group);
+            }
+        }
+
+        $this->addHtml('</div></div>');
+        $this->addHtml('</div>');
+    }
+
+    /**
      * Adds a HTML-editor to the form
      * @param string $name
      * @param string $label The label for the form-element

@@ -743,8 +743,8 @@ class Database
             $path.'src/Chamilo/SkillBundle/Entity',
             $path.'src/Chamilo/PluginBundle/Entity',
             // ofaj
-            $path.'src/Chamilo/FaqBundle/Entity',
-            $path.'src/Chamilo/ContactBundle/Entity',
+            //$path.'src/Chamilo/FaqBundle/Entity',
+            //$path.'src/Chamilo/ContactBundle/Entity',
 
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',

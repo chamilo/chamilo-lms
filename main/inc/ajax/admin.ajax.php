@@ -1,5 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use \Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
+use \Chamilo\CoreBundle\Entity\BranchSync;
+use \Doctrine\Common\Collections\Criteria;
+
 /**
  * Responses to AJAX calls.
  */
@@ -158,6 +163,16 @@ function check_system_version()
             $packager = 'chamilo';
         }
 
+        $uniqueId = '';
+        $entityManager = Database::getManager();
+        /** @var BranchSyncRepository $branch */
+        $repository = $entityManager->getRepository('ChamiloCoreBundle:BranchSync');
+        /** @var BranchSync $branch */
+        $branch = $repository->getTopBranch();
+        if (is_a($branch, '\Chamilo\CoreBundle\Entity\BranchSync')) {
+            $uniqueId = $branch->getUniqueId();
+        }
+
         $data = [
             'url' => api_get_path(WEB_PATH),
             'campus' => api_get_setting('siteName'),
@@ -179,6 +194,7 @@ function check_system_version()
             // the default config file (main/install/configuration.dist.php)
             // or in the installed config file. The default value is 'chamilo'
             'packager' => $packager,
+            'unique_id' => $uniqueId,
         ];
 
         $version = null;

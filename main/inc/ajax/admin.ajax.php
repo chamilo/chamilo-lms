@@ -108,13 +108,9 @@ function version_check()
 /**
  * Check if the current installation is up to date
  * The code is borrowed from phpBB and slighlty modified.
- *
- * @author The phpBB Group <support@phpbb.com> (the code)
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
- * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
- * @copyright (C) 2001 The phpBB Group
- *
  * @return string language string with some layout (color)
+ * @throws \Exception
+ * @throws \InvalidArgumentException
  */
 function check_system_version()
 {

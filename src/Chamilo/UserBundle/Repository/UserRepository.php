@@ -524,7 +524,8 @@ class UserRepository extends EntityRepository
         $list = [];
         /** @var UsergroupRelUser $class */
         foreach ($classes as $class) {
-            $list[] = $class->getUsergroup()->getName().' - '.$class->getUsergroup()->getGroupType();
+            $name = $class->getUsergroup()->getName();
+            $list[$class->getUsergroup()->getGroupType()][] = $name.' - Status: '.$class->getRelationType();
         }
         $user->setClasses($list);
 

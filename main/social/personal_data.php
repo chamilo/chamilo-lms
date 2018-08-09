@@ -244,6 +244,7 @@ if ($allowSocial) {
 // MAIN CONTENT
 $personalDataContent = '<ul>';
 $properties = json_decode($propertiesToJson);
+$webCoursePath = api_get_path(WEB_COURSE_PATH);
 
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
@@ -257,9 +258,15 @@ foreach ($properties as $key => $value) {
                 break;
             case 'dropBoxSentFiles':
                 foreach ($value as $category => $subValue) {
-                    $personalDataContent .= '<li>'.$category.': </li><ul>';
+                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'"><u>'.get_lang($category).'</u> &gt;</li><ul id="personal-data-list-'.$category.'_options" style="display:none;">';
                     foreach ($subValue as $subSubValue) {
-                        $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                        if ($category === 'DocumentsAdded') {
+                            //die(print_r($subSubValue, 1));
+                            $documentLink = '<a href="'.$webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path.'">'.$subSubValue->code_path.'</a>';
+                            $personalDataContent .= '<li>'.$documentLink.'</li>';
+                        } else {
+                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                        }
                     }
                     $personalDataContent .= '</ul>';
                 }

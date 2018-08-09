@@ -6830,33 +6830,40 @@ class DocumentManager
     /**
      * @param int $userId
      *
-     * @return array
+     * @return array Example [ 0 => ['code' => 'ABC', 'directory' => 'ABC0', 'path' => '/images/gallery/test.png', 'code_path' => 'ABC:/images/gallery/test.png'], 1 => ...]
      */
-    public static function getAllDocumentCreatedByUser($userId)
+    public static function getAllDocumentsCreatedByUser($userId)
     {
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $userId = (int) $userId;
 
-        $sql = "SELECT DISTINCT docs.path                  
+        $sql = "SELECT DISTINCT c.code, c.directory, docs.path
                 FROM $tblItemProperty AS last
                 INNER JOIN $tblDocument AS docs
                 ON (
                     docs.id = last.ref AND
-                    docs.c_id = last.c_id
+                    docs.c_id = last.c_id AND
+                    docs.filetype <> 'folder'
+                )
+                INNER JOIN $tblCourse as c
+                ON (
+                    docs.c_id = c.id
                 )
                 WHERE                                
                     last.tool = '".TOOL_DOCUMENT."' AND   
                     last.insert_user_id = $userId AND
                     docs.path NOT LIKE '%_DELETED_%'                     
-                ORDER BY docs.path
+                ORDER BY c.directory, docs.path
                 ";
         $result = Database::query($sql);
 
         $list = [];
         if (Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $list[] = $row['path'];
+                $row['code_path'] = $row['code'].':'.$row['path'];
+                $list[] = $row;
             }
         }
 

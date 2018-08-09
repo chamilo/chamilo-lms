@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
@@ -22,8 +23,10 @@ use Chamilo\CoreBundle\Entity\TrackELastaccess;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
+use Chamilo\CoreBundle\Entity\UserApiKey;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -521,7 +524,7 @@ class UserRepository extends EntityRepository
         $list = [];
         /** @var UsergroupRelUser $class */
         foreach ($classes as $class) {
-            $list[] = $class->getUsergroup()->getName();
+            $list[] = $class->getUsergroup()->getName().' - '.$class->getUsergroup()->getGroupType();
         }
         $user->setClasses($list);
 
@@ -1042,10 +1045,61 @@ class UserRepository extends EntityRepository
             $list = [
                 'Subject: '.$item->getSubject(),
                 'IP: '.$item->getIpAddress(),
-                'Status: '. $item->getStatus(),
+                'Status: '.$item->getStatus(),
                 'Creation date: '.$item->getInsertDateTime()->format($dateFormat),
             ];
             $ticketMessage[] = implode(', ', $list);
+        }
+
+        // SkillRelUserComment
+        $criteria = [
+            'feedbackGiver' => $userId,
+        ];
+        $result = $em->getRepository('ChamiloCoreBundle:SkillRelUserComment')->findBy($criteria);
+        $skillRelUserComment = [];
+        /** @var SkillRelUserComment $item */
+        foreach ($result as $item) {
+            $list = [
+                'Feedback: '.$item->getFeedbackText(),
+                'Value: '. $item->getFeedbackValue(),
+                'Created at: '.$item->getFeedbackDateTime()->format($dateFormat),
+            ];
+            $skillRelUserComment[] = implode(', ', $list);
+        }
+
+        // UserRelCourseVote
+        $criteria = [
+            'userId' => $userId,
+        ];
+        $result = $em->getRepository('ChamiloCoreBundle:UserRelCourseVote')->findBy($criteria);
+        $userRelCourseVote = [];
+        /** @var UserRelCourseVote $item */
+        foreach ($result as $item) {
+            $list = [
+                'Course #'.$item->getCId(),
+                'Session #'.$item->getSessionId(),
+                'Vote: '. $item->getVote(),
+            ];
+            $userRelCourseVote[] = implode(', ', $list);
+        }
+
+        // UserApiKey
+        $criteria = [
+            'userId' => $userId,
+        ];
+        $result = $em->getRepository('ChamiloCoreBundle:UserApiKey')->findBy($criteria);
+        $userApiKey = [];
+        /** @var UserApiKey $item */
+        foreach ($result as $item) {
+            $list = [
+                'ApiKey #'.$item->getApiKey(),
+                'Service: '.$item->getApiService(),
+                'EndPoint: '.$item->getApiEndPoint(),
+                'Validity start date: '.$item->getValidityEndDate()->format($dateFormat),
+                'Validity enddate: '.$item->getValidityStartDate()->format($dateFormat),
+                'Created at: '. $item->getCreatedDate()->format($dateFormat),
+            ];
+            $userApiKey[] = implode(', ', $list);
         }
 
         $user->setDropBoxSentFiles(
@@ -1064,6 +1118,9 @@ class UserRepository extends EntityRepository
                 'GradebookResult' => $gradebookResult,
                 'Downloads' => $trackEDownloads,
                 'UserCourseCategory' => $userCourseCategory,
+                'SkillRelUserComment' => $skillRelUserComment,
+                'UserRelCourseVote' => $userRelCourseVote,
+                'UserApiKey' => $userApiKey,
 
                 // courses
                 'AttendanceResult' => $cAttendanceResult,

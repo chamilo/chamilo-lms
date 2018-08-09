@@ -1049,6 +1049,11 @@ class ExtraField extends Model
                     $freezeElement = $field_details['visible_to_self'] == 0 || $field_details['changeable'] == 0;
                 }
 
+                $translatedDisplayText = get_lang($field_details['display_text'], true);
+                if (!empty($translatedDisplayText)) {
+                    $field_details['display_text'] = $translatedDisplayText;
+                }
+
                 switch ($field_details['field_type']) {
                     case self::FIELD_TYPE_TEXT:
                         $form->addElement(

@@ -153,6 +153,8 @@ class Database
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
                 'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
+                // ofaj
+                'ChamiloContactBundle' => 'Chamilo\ContactBundle\Entity',
                 'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity',
             ]
         );
@@ -177,6 +179,7 @@ class Database
             'Gedmo\Mapping\Annotation',
             $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
+
 
         Type::overrideType(
             Type::DATETIME,
@@ -739,6 +742,10 @@ class Database
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',
             $path.'src/Chamilo/PluginBundle/Entity',
+            // ofaj
+            $path.'src/Chamilo/FaqBundle/Entity',
+            $path.'src/Chamilo/ContactBundle/Entity',
+
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

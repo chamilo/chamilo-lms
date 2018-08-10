@@ -25,7 +25,9 @@ if (!$term) {
 $termExtraFields = new ExtraFieldValue('terms_and_condition');
 $values = $termExtraFields->getAllValuesByItem($term['id']);
 foreach ($values as $value) {
-    $term['content'] .= '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+    if (!empty($value['value'])) {
+        $term['content'] .= '<h3>'.get_lang($value['display_text']).'</h3><br />'.$value['value'].'<br />';
+    }
 }
 
 $term['date_text'] = get_lang('PublicationDate').': '.

@@ -93,6 +93,8 @@ switch ($action) {
             }
         }
         Display::addFlash(Display::return_message(get_lang('Saved')));
+        header('Location: '.api_get_self());
+        exit;
         break;
     case 'delete_account':
         if ($formDelete->validate()) {
@@ -146,6 +148,8 @@ switch ($action) {
             } else {
                 MessageManager::sendMessageToAllAdminUsers(api_get_user_id(), $subject, $content);
             }
+            header('Location: '.api_get_self());
+            exit;
         }
         break;
     case 'delete_legal':
@@ -197,6 +201,8 @@ switch ($action) {
             } else {
                 MessageManager::sendMessageToAllAdminUsers(api_get_user_id(), $subject, $content);
             }
+            header('Location: '.api_get_self());
+            exit;
         }
         break;
 }

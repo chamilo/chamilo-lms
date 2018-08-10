@@ -63,7 +63,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  * Returns a translated (localized) string, called by its ID.
  *
  * @param string $variable this is the ID (name) of the translated string to be retrieved
- * @param bool   $strict   If variable is not found, then: if false: returns variable name with or without brackets; true: returns ''
+ * @param bool   $returnEmptyIfNotFound   If variable is not found, then: if false: returns variable name with or without brackets; true: returns ''
  * @param string $language (optional)    Language ID. If it is omitted, the current interface language is assumed.
  *
  * @return string returns the requested string in the correspondent language
@@ -82,7 +82,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  *
  * @see http://translate.chamilo.org/
  */
-function get_lang($variable, $strict = false, $language = null)
+function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
 {
     // For serving some old hacks:
     // By manipulating this global variable the translation may
@@ -148,11 +148,11 @@ function get_lang($variable, $strict = false, $language = null)
             $langvar = $GLOBALS[$variable];
         } elseif (isset($GLOBALS["lang$variable"])) {
             $langvar = $GLOBALS["lang$variable"];
-        } elseif (!$strict) {
+        } elseif (!$returnEmptyIfNotFound) {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
     }
-    if (empty($langvar) || !is_string($langvar) && !$strict) {
+    if (empty($langvar) || !is_string($langvar) && !$returnEmptyIfNotFound) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
     $ret = $cache[$language][$variable] = $langvar;

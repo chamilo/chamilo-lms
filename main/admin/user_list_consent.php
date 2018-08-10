@@ -311,7 +311,7 @@ function modify_filter($user_id, $url_params, $row)
     $token = Security::getTokenFromSession();
     $result = '';
     $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-        Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
 
     $result .= Display::url(
         Display::return_icon('message_new.png', get_lang('SendMessage')),

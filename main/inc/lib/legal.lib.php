@@ -18,10 +18,10 @@ class LegalManager
     /**
      * Add a new Term and Condition.
      *
-     * @param int    $language language id
-     * @param string $content  content
-     * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
-     * @param string $changes  explain changes
+     * @param int    $language               language id
+     * @param string $content                content
+     * @param int    $type                   term and condition type (0 for HTML text or 1 for link to another page)
+     * @param string $changes                explain changes
      * @param array  $extraFieldValuesToSave
      *
      * @return int
@@ -95,7 +95,7 @@ class LegalManager
     }
 
     /**
-     * @param int $itemId
+     * @param int   $itemId
      * @param array $values
      *
      * @return bool

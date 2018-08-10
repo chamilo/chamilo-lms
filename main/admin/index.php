@@ -534,29 +534,31 @@ if (api_is_platform_admin()) {
         }
     }
 
-    // Data protection
-    $blocks['data_privacy']['icon'] = Display::return_icon(
-        'platform.png',
-        get_lang('Platform'),
-        [],
-        ICON_SIZE_MEDIUM,
-        false
-    );
-    $blocks['data_privacy']['label'] = api_ucfirst(get_lang('PersonalDataPrivacy'));
-    $blocks['data_privacy']['class'] = 'block-admin-platform';
-    $blocks['data_privacy']['editable'] = false;
+    if (!api_get_configuration_value('disable_gdpr')) {
 
-    $items = [];
+        // Data protection
+        $blocks['data_privacy']['icon'] = Display::return_icon(
+            'platform.png',
+            get_lang('Platform'),
+            [],
+            ICON_SIZE_MEDIUM,
+            false
+        );
+        $blocks['data_privacy']['label'] = api_ucfirst(get_lang('PersonalDataPrivacy'));
+        $blocks['data_privacy']['class'] = 'block-admin-platform';
+        $blocks['data_privacy']['editable'] = false;
 
-    $items[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php',
-        'label' => get_lang('UserList'),
-    ];
+        $items = [];
 
-    $blocks['data_privacy']['items'] = $items;
-    $blocks['data_privacy']['extra'] = null;
-    $blocks['data_privacy']['search_form'] = null;
+        $items[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php',
+            'label' => get_lang('UserList'),
+        ];
 
+        $blocks['data_privacy']['items'] = $items;
+        $blocks['data_privacy']['extra'] = null;
+        $blocks['data_privacy']['search_form'] = null;
+    }
     /* Chamilo.org */
     $blocks['chamilo']['icon'] = Display::return_icon(
         'platform.png',

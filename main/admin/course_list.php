@@ -177,15 +177,15 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $courseId = $course['id'];
 
         $actions = '<a href="course_information.php?code='.$courseCode.'">'.
-            Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
+            Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;'.
             '<a href="'.$coursePath.$course['directory'].'/index.php">'.
-            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
+            Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>&nbsp;'.
             '<a href="'.$path.'tracking/courseLog.php?'.api_get_cidreq_params($courseCode).'">'.
-            Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
+            Display::return_icon('statistics.png', get_lang('Tracking')).'</a>&nbsp;'.
             '<a href="'.$path.'admin/course_edit.php?id='.$courseId.'">'.
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>&nbsp;'.
             '<a href="'.$path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseCode).'">'.
-            Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
+            Display::return_icon('backup.png', get_lang('CreateBackup')).'</a>&nbsp;'.
             '<a href="'.$path.'admin/course_list.php?delete_course='.$courseCode.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
 

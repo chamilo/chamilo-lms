@@ -138,7 +138,6 @@ if (isset($_POST['language'])) {
 
     $form->addElement('radio', 'type', '', get_lang('HTMLText'), '0');
     $form->addElement('radio', 'type', '', get_lang('PageLink'), '1');
-    $form->addElement('textarea', 'changes', get_lang('ExplainChanges'), ['width' => '20']);
 
     $preview = LegalManager::show_last_condition($term_preview);
 
@@ -160,6 +159,8 @@ if (isset($_POST['language'])) {
     );
 
     $jqueryReady = $returnParams['jquery_ready_content'];
+
+    $form->addElement('textarea', 'changes', get_lang('ExplainChanges'), ['width' => '20']);
 
     // Submit & preview button
     $buttons = '<div class="row" align="center">

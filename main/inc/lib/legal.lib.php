@@ -33,7 +33,31 @@ class LegalManager
         $type = (int) $type;
         $time = time();
 
-        if ($last['content'] != $content) {
+        $changeList = [];
+
+        if (isset($last['id'])) {
+            $id = $last['id'];
+
+            // Check if extra fields changed
+            $extraFieldValue = new ExtraFieldValue('terms_and_condition');
+            $values = $extraFieldValue->getAllValuesByItem($id);
+            $oldValues = array_column($values, 'value', 'variable');
+            foreach ($extraFieldValuesToSave as $key => $value) {
+                if (is_numeric(strpos($key, 'extra_'))) {
+                    $replace = str_replace('extra_', '', $key);
+                    if (isset($oldValues[$replace])) {
+                        if ($value != $oldValues[$replace]) {
+                            $changeList[] = $replace;
+                        }
+                    } else {
+                        // It means there's a new extra field that was not included before.
+                        $changeList[] = $replace;
+                    }
+                }
+            }
+        }
+
+        if ($last['content'] != $content || !empty($changeList)) {
             $version = self::getLastVersion($language);
             $version++;
             $params = [
@@ -62,33 +86,6 @@ class LegalManager
             self::updateExtraFields($id, $extraFieldValuesToSave);
 
             return $id;
-        } elseif (isset($last['id']) && !empty($last['id'])) {
-            $id = $last['id'];
-            // Check if extra fields changed
-            $extraFieldValue = new ExtraFieldValue('terms_and_condition');
-            $values = $extraFieldValue->getAllValuesByItem($id);
-            $oldValues = array_column($values, 'value', 'variable');
-            $changeList = [];
-            foreach ($extraFieldValuesToSave as $key => $value) {
-                if (is_numeric(strpos($key, 'extra_'))) {
-                    $replace = str_replace('extra_', '', $key);
-                    if (isset($oldValues[$replace])) {
-                        if ($value != $oldValues[$replace]) {
-                            $changeList[] = $replace;
-                        }
-                    } else {
-                        // It means there's a new extra field that was not included before.
-                        $changeList[] = $replace;
-                    }
-                }
-            }
-
-            // Some extra fields were changed. We updated them.
-            if (!empty($changeList)) {
-                self::updateExtraFields($id, $extraFieldValuesToSave);
-
-                return $id;
-            }
         }
 
         return 0;

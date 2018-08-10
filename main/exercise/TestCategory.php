@@ -801,7 +801,7 @@ class TestCategory
         }
         $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
 
-        $table = new HTML_Table(['class' => 'table table-bordered']);
+        $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'category_results']);
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
         $table->setHeaderContents(0, 2, get_lang('RelativeScore'));

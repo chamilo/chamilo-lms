@@ -310,6 +310,77 @@ Feature: Exercise tool
     Then I should see "Exercise copied"
     And I should see "Exercise 1 - Copy"
 
+  Scenario: Import exercise to test questions categories
+    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    And I should see "Import quiz from Excel"
+    And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
+    When I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Exercise for Behat test"
+
+  Scenario: Try exercise with categorized questions as student
+    Given I am a student subscribed to session "Session Exercise"
+    And I am on "/user_portal.php"
+    And I follow "Session Exercise"
+    And wait for the page to be loaded
+    And I follow "tabs2"
+    And I follow "TEMP"
+    And I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Exercise for Behat test"
+    And I follow "Start test"
+    When wait for the page to be loaded
+    And I press "Next question"
+    And I check "oligarchy"
+    And I check "oligopoly"
+    And I check "timocracy"
+    And I check "autocracy"
+    And I press "Next question"
+    And I check the "semantics" radio button
+    And I press "Next question"
+    And I check the "RNASL" radio button
+    And I press "Next question"
+    And I check the "10" radio button
+    And I press "Next question"
+    And fill in the following:
+      | choice_id_6_0 | words  |
+      | choice_id_6_1 | fill   |
+      | choice_id_6_2 | blanks |
+    And I press "Next question"
+    And I select "A" from "choice_id_7_1"
+    And I select "B" from "choice_id_7_2"
+    And I select "C" from "choice_id_7_3"
+    And I press "Next question"
+    And I check "1"
+    And I press "Next question"
+    And I press "End test"
+    Then I should see "Score for the test: 190 / 190"
+    And I should see the table "#category_results":
+      | Categories    | Absolute score | Relative score |
+      | Categoryname2 | 50 / 70        | 71.43%         |
+      | Categoryname1 | 60 / 60        | 100%           |
+      | none          | 80 / 60        | 133.33%        |
+      | Total         | 190 / 190      | 100%           |
+
+  Scenario: Teacher see exercise results by categories
+    Given I am on "/user_portal.php"
+    And I follow "Session Exercise"
+    And wait for the page to be loaded
+    And I follow "tabs2"
+    And I follow "TEMP"
+    And I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Exercise for Behat test"
+    And I follow "Results and feedback"
+    Then I should see "Learner score"
+    And wait for the page to be loaded
+    And I follow "Grade activity"
+    Then I should see "Score for the test: 190 / 190"
+    And I should see the table "#category_results":
+      | Categories    | Absolute score | Relative score |
+      | Categoryname2 | 50 / 70        | 71.43%         |
+      | Categoryname1 | 60 / 60        | 100%           |
+      | none          | 80 / 60        | 133.33%        |
+      | Total         | 190 / 190      | 100%           |
+
   Scenario: Delete an exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Delete"

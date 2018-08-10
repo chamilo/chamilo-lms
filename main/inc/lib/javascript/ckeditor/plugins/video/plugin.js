@@ -179,7 +179,11 @@ var en = {
 		sourceVideo: 'Source video',
 		sourceType : 'Video type',
 		linkTemplate :  '<a href="%src%">%type%</a> ',
-		fallbackTemplate : 'Your browser doesn\'t support video.<br>Please download the file: %links%'
+		fallbackTemplate : 'Your browser doesn\'t support video.<br>Please download the file: %links%',
+		infoLabel: 'Information',
+		html360: 'Please do not add more than one 360° video on a single page.',
+    	video360: 'Enable 360° video player',
+    	video360stereo : 'Stereo video (1:1 aspect ratio)'
 	};
 
 var es = {
@@ -193,7 +197,11 @@ var es = {
 		sourceVideo: 'Archivo de video',
 		sourceType : 'Tipo',
 		linkTemplate :  '<a href="%src%">%type%</a> ',
-		fallbackTemplate : 'Su navegador no soporta VIDEO.<br>Por favor, descargue el fichero: %links%'
+		fallbackTemplate : 'Su navegador no soporta VIDEO.<br>Por favor, descargue el fichero: %links%',
+		infoLabel: 'Información',
+		html360: 'Por favor, no agregar más de un video 360° en una sola página.',
+		video360: 'Habilitar reproductor de video 360°',
+		video360stereo : 'Video estéreo (relación de aspecto 1:1)'
 	};
 
 	// v3

@@ -672,7 +672,6 @@ class UserRepository extends EntityRepository
             $trackEAccessList[] = implode(', ', $list);
         }
 
-
         // TrackEOnline
         $criteria = [
             'loginUserId' => $userId,

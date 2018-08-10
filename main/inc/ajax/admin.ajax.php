@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
-use \Chamilo\CoreBundle\Entity\BranchSync;
-use \Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
 
 /**
  * Responses to AJAX calls.
@@ -113,9 +112,11 @@ function version_check()
 /**
  * Check if the current installation is up to date
  * The code is borrowed from phpBB and slighlty modified.
- * @return string language string with some layout (color)
+ *
  * @throws \Exception
  * @throws \InvalidArgumentException
+ *
+ * @return string language string with some layout (color)
  */
 function check_system_version()
 {

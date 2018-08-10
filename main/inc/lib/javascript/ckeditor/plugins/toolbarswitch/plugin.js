@@ -29,25 +29,26 @@
 
 
 function switchMe(editor, callback) {
+    var origToolbar =  editor.config.toolbar;
+    var origSmallToolbar = editor.config.smallToolbar;
+    var origMaximizedToolbar = editor.config.maximizedToolbar;
+    var newToolbar = origToolbar == origSmallToolbar ? origMaximizedToolbar : origSmallToolbar;
 
-	var origCustomConfig = editor.config.customConfig;
-	var origContentCss = editor.config.contentsCss;
-	var origExtraPlugins = editor.config.extraPlugins;
+	var origConfig = editor.config,
+		newConfig = jQuery.extend(true, {}, origConfig);
 
-        var origMinToolbar = editor.config.toolbar_minToolbar;
-        var origMaxToolbar = editor.config.toolbar_maxToolbar;
+    newConfig.toolbar = newToolbar;
+    newConfig.on = {
+        instanceReady: function(e) {
+            if (typeof CKeditor_OnComplete !== 'undefined') {
+                CKeditor_OnComplete(e.editor);
+            }
+            if (callback) {
+                callback.call(null, e);
+            }
+        }
+    };
 
-	var origToolbar =  editor.config.toolbar;
-	var origSmallToolbar = editor.config.smallToolbar;
-	var origMaximizedToolbar = editor.config.maximizedToolbar;
-	var origStartupOutlineBlocks = editor.config.startupOutlineBlocks;
-	var newToolbar;
-	if (origToolbar == origSmallToolbar) {
-		newToolbar = origMaximizedToolbar;
-	} else {
-		newToolbar = origSmallToolbar;
-	}
-	
 	// Copy data to original text element before getting rid of the old editor
 	var data = editor.getData();
 	var domTextElement = editor.element.$;
@@ -57,27 +58,7 @@ function switchMe(editor, callback) {
 	var id = domTextElement.id;
 	editor.destroy(true);
 
-	CKEDITOR.replace(id, {
-		startupOutlineBlocks: origStartupOutlineBlocks,
-		customConfig : origCustomConfig,
-		contentsCss : origContentCss,
-		toolbar_minToolbar: origMinToolbar,
-		toolbar_maxToolbar: origMaxToolbar,
-		toolbar : newToolbar,
-		smallToolbar: origSmallToolbar,
-		maximizedToolbar: origMaximizedToolbar,
-		extraPlugins : origExtraPlugins,
-		on: {
-			instanceReady: function(e) {
-				if (typeof CKeditor_OnComplete !== 'undefined') {
-					CKeditor_OnComplete(e.editor);
-                                }
-				if (callback) {
-					callback.call(null, e);
-				}
-			}
-		}
-	});
+	CKEDITOR.replace(id, newConfig);
 }
 
 CKEDITOR.plugins.add('toolbarswitch', {

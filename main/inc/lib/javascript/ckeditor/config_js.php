@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 require_once __DIR__.'/../../../global.inc.php';
 
 $moreButtonsInMaximizedMode = false;
@@ -9,7 +11,18 @@ if (api_get_setting('more_buttons_maximized_mode') === 'true') {
 }
 
 $template = new Template();
-$template->setStyleMenuInCkEditor();
+$template->assign(
+    'bootstrap_css',
+    api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css'
+);
+$template->assign(
+    'font_awesome_css',
+    api_get_path(WEB_PUBLIC_PATH).'assets/fontawesome/css/font-awesome.min.css'
+);
+$template->assign(
+    'css_editor',
+    ChamiloApi::getEditorBlockStylePath()
+);
 $template->assign('moreButtonsInMaximizedMode', $moreButtonsInMaximizedMode);
 $courseId = api_get_course_int_id();
 $courseCondition = '';

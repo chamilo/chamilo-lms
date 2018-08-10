@@ -6716,6 +6716,51 @@ class CourseManager
     }
 
     /**
+     * @return int
+     */
+    public static function getCountOpenCourses()
+    {
+        $visibility = [
+            COURSE_VISIBILITY_REGISTERED,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_OPEN_WORLD,
+        ];
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT count(id) count 
+                FROM $table 
+                WHERE visibility IN (".implode(',', $visibility).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['count'];
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCountExercisesFromOpenCourse()
+    {
+        $visibility = [
+            COURSE_VISIBILITY_REGISTERED,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_OPEN_WORLD,
+        ];
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "SELECT count(e.iid) count 
+                FROM $table c INNER JOIN $tableExercise e
+                ON (c.id = e.c_id)
+                WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return (int) $row['count'];
+    }
+
+
+    /**
      * @param ToolChain $toolList
      */
     public static function setToolList($toolList)

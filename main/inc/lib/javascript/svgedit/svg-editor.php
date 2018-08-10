@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
@@ -12,10 +13,6 @@ require_once '../../../../inc/global.inc.php';//hack for Chamilo
 
 api_protect_course_script();
 api_block_anonymous_users();
-$drawDir = Session::read('draw_dir');
-if (empty($drawDir)) {
-    die();
-}
 $svgEditPath = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/';
 ?>
 <!DOCTYPE html>

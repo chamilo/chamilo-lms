@@ -13,7 +13,7 @@ window.RecordAudio = (function () {
             btnSave = rtcInfo.btnSaveId ? $(rtcInfo.btnSaveId) : null,
             tagAudio = $(rtcInfo.plyrPreviewId);
 
-        function saveAudio () {
+        function saveAudio() {
             var recordedBlob = recordRTC.getBlob();
 
             if (!recordedBlob) {
@@ -28,7 +28,7 @@ window.RecordAudio = (function () {
             formData.append('audio_dir', rtcInfo.directory);
 
             $.ajax({
-                url: _p.web_ajax + 'record_audio_rtc.ajax.php?tool=' + (!!txtName.length ? 'document' : 'exercise'),
+                url: _p.web_ajax + 'record_audio_rtc.ajax.php?type='+rtcInfo.type+'&tool=' + (!!txtName.length ? 'document' : 'exercise'),
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -44,8 +44,10 @@ window.RecordAudio = (function () {
                 }
             }).done(function (response) {
                 if (!!txtName.length) {
-                    window.location.reload();
-                    return;
+                    if (rtcInfo.reload_page == 1) {
+                        window.location.reload();
+                        return;
+                    }
                 }
 
                 $(response.message).insertAfter($(rtcInfo.blockId).find('.well'));
@@ -194,7 +196,8 @@ window.RecordAudio = (function () {
                 recordUrl: _p.web_ajax + 'record_audio_wami.ajax.php?' + $.param({
                     waminame: fileName + '.wav',
                     wamidir: wamiInfo.directory,
-                    wamiuserid: wamiInfo.userId
+                    wamiuserid: wamiInfo.userId,
+                    type: wamiInfo.type
                 }),
                 buttonUrl: _p.web_lib + 'wami-recorder/buttons.png',
                 buttonNoUrl: _p.web_img + 'blank.gif'

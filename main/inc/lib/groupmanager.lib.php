@@ -547,7 +547,7 @@ class GroupManager
     public static function get_group_properties($group_id, $useIid = false)
     {
         $course_id = api_get_course_int_id();
-        if (empty($group_id) || !is_integer(intval($group_id))) {
+        if (empty($group_id) || !is_int(intval($group_id))) {
             return null;
         }
 

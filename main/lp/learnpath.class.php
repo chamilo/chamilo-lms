@@ -3017,8 +3017,8 @@ class learnpath
     public static function get_objectives_count_from_db($lp_iv_id, $course_id)
     {
         $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
-        $course_id = intval($course_id);
-        $lp_iv_id = intval($lp_iv_id);
+        $course_id = (int) $course_id;
+        $lp_iv_id = (int) $lp_iv_id;
         $sql = "SELECT count(*) FROM $table
                 WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
         //@todo seems that this always returns 0
@@ -3170,7 +3170,7 @@ class learnpath
     public static function get_type_static($lp_id = 0)
     {
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = intval($lp_id);
+        $lp_id = (int) $lp_id;
         $sql = "SELECT lp_type FROM $tbl_lp
                 WHERE iid = $lp_id";
         $res = Database::query($sql);
@@ -4912,8 +4912,9 @@ class learnpath
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
         if (empty($item_id)) {
-            $item_id = intval($_REQUEST['id']);
+            $item_id = (int) $_REQUEST['id'];
         }
+
         if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
@@ -5027,7 +5028,7 @@ class learnpath
                 error_log('New current item given is '.$item_id.'...', 0);
             }
             if (is_numeric($item_id)) {
-                $item_id = intval($item_id);
+                $item_id = (int) $item_id;
                 // TODO: Check in database here.
                 $this->last = $this->current;
                 $this->current = $item_id;
@@ -5217,7 +5218,7 @@ class learnpath
 
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
         // TODO: Make query secure agains XSS : use member attr instead of post var.
-        $lp_id = intval($_POST['lp_id']);
+        $lp_id = (int) $_POST['lp_id'];
         $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND lp_id = $lp_id";
         $result = Database::query($sql);
         $di = new ChamiloIndexer();
@@ -5449,7 +5450,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('In learnpath::set_use_max_score()', 0);
         }
-        $use_max_score = intval($use_max_score);
+        $use_max_score = (int) $use_max_score;
         $this->use_max_score = $use_max_score;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();

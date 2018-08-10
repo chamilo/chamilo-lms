@@ -20,6 +20,8 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
 		lang = editor.lang.image2_chamilo,
 		commonLang = editor.lang.common,
 
+		colorDialog = editor.plugins.colordialog,
+
 		lockResetStyle = 'margin-top:18px;width:40px;height:20px;',
 		lockResetHtml = new CKEDITOR.template(
 			'<div>' +
@@ -378,7 +380,7 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
 
 	return {
 		title: lang.title,
-		minWidth: 250,
+		minWidth: 270,
 		minHeight: 100,
 		onLoad: function() {
 			// Create a "global" reference to the document for this dialog instance.
@@ -552,6 +554,188 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
                             img.className += ' img-responsive ';
 							widget.setData( 'isResponsive', this.getValue() );
                         }
+					}
+				]
+			},
+			{
+				id: 'advanced',
+				label: lang.advanced,
+				hidden: false,
+				elements: [
+					{
+						type: 'vbox',
+						title: 'Border',
+						children: [
+							{
+								type: 'hbox',
+								widths: ['60%'],
+								children: [
+									{
+										id: 'borderWidth',
+										type: 'text',
+										label: lang.borderWidth,
+										width: '90%',
+										setup: function (widget) {
+											this.setValue(widget.data.borderWidth);
+										},
+										commit: function (widget) {
+											widget.setData(this.id, this.getValue());
+										}
+									},
+									{
+										type: 'html',
+										html: '<ul>' +
+										'<li>4px</li>' +
+										'<li>1.2rem</li>' +
+										'<li>2px 1.5em</li>' +
+										'<li>1px 2em 1.5cm</li>' +
+										'<li>1px 2em 0 4rem</li>' +
+										'</ul>'
+									}
+								]
+							},
+							{
+								type: 'hbox',
+								widths: ['60%'],
+								children: [
+									{
+										type: 'hbox',
+										widths: ['', '100%'],
+										children: [
+											{
+												id: 'borderColor',
+												type: 'text',
+												label: lang.borderColor,
+												setup: function (widget) {
+													this.setValue(widget.data.borderColor);
+												},
+												commit: function (widget) {
+													widget.setData(this.id, this.getValue());
+												}
+											},
+											colorDialog ? {
+												type: 'button',
+												id: 'btnBorderColorChoose',
+												label: 'Color',
+												onLoad: function() {
+													// Stick the element to the bottom (https://dev.ckeditor.com/ticket/5587)
+													this.getElement()
+														.getParent()
+														.setStyle('vertical-align', 'bottom');
+												},
+												onClick: function () {
+													editor.getColorFromDialog(function (color) {
+														if (color) {
+															this.getDialog()
+																.getContentElement('advanced', 'borderColor')
+																.setValue(color);
+														}
+
+														this.focus();
+													}, this);
+												}
+											} : {
+												type: 'html',
+												html: '&nbsp;'
+											}
+										]
+									},
+									{
+										id: 'borderStyle',
+										type: 'select',
+										label: lang.borderStyle,
+										items: [
+											[lang.borderStyleNone, 'none'],
+											[lang.borderStyleDotted, 'dotted'],
+											[lang.borderStyleDashed, 'dashed'],
+											[lang.borderStyleSolid, 'solid'],
+											[lang.borderStyleDouble, 'double'],
+											[lang.borderStyleGroove, 'groove'],
+											[lang.borderStyleRidge, 'ridge'],
+											[lang.borderStyleInset, 'inset'],
+											[lang.borderStyleOutset, 'outset']
+										],
+										'default': 'solid',
+										setup: function (widget) {
+											this.setValue(widget.data.borderStyle);
+										},
+										commit: function (widget) {
+											widget.setData(this.id, this.getValue());
+										}
+									}
+								]
+							},
+							{
+								type: 'hbox',
+								widths: ['60%'],
+								children: [
+									{
+										id: 'borderRadius',
+										type: 'text',
+										label: lang.borderRadius,
+										width: '90%',
+										setup: function (widget) {
+											this.setValue(widget.data.borderRadius);
+										},
+										commit: function (widget) {
+											widget.setData(this.id, this.getValue());
+										}
+									},
+									{
+										type: 'html',
+										html: '<ul>' +
+										'<li>30px</li>' +
+										'<li>25% 10%</li>' +
+										'<li>10% 30% 50% 70%</li>' +
+										'<li>10% / 50%</li>' +
+										'<li>10px 100px / 120px</li>' +
+										'<li>50% 20% / 10% 40%</li>' +
+										'</ul>'
+									}
+								]
+							},
+							{
+								type: 'hbox',
+								widths: ['', '100%'],
+								children: [
+									{
+										id: 'backgroundColor',
+										type: 'text',
+										label: lang.backgroundColor,
+										setup: function (widget) {
+											this.setValue(widget.data.backgroundColor);
+										},
+										commit: function (widget) {
+											widget.setData(this.id, this.getValue());
+										}
+									},
+									colorDialog ? {
+										type: 'button',
+										id: 'btnBackgroundColorChoose',
+										label: lang.color,
+										onLoad: function() {
+											this.getElement()
+												.getParent()
+												.setStyle('vertical-align', 'bottom');
+										},
+										onClick: function () {
+											editor.getColorFromDialog(function (color) {
+												if (color) {
+													this.getDialog()
+														.getContentElement('advanced', 'backgroundColor')
+														.setValue(color);
+												}
+
+												this.focus();
+											}, this);
+										}
+									} : {
+										type: 'html',
+										html: '&nbsp;'
+									}
+								]
+							}
+						]
 					}
 				]
 			},

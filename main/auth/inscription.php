@@ -447,11 +447,15 @@ if (!CustomPages::enabled()) {
                     $language = api_get_language_id($language);
                     $term_preview = LegalManager::get_last_condition($language);
                 }
-                $tool_name = get_lang('TermsAndConditions');
-                Display::display_header($tool_name);
-
+                Display::display_header(get_lang('TermsAndConditions'));
                 if (!empty($term_preview['content'])) {
                     echo $term_preview['content'];
+
+                    $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                    foreach ($values as $value) {
+                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    }
                 } else {
                     echo get_lang('ComingSoon');
                 }
@@ -537,6 +541,17 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     // Version and language
     $form->addHidden('legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addHidden('legal_info', $term_preview['id'].':'.$term_preview['language_id']);
+
+    // Show if only HTML type
+    if ($term_preview['type'] == '2') {
+        $termExtraFields = new ExtraFieldValue('terms_and_condition');
+        $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+        foreach ($values as $value) {
+            //if ($value['variable'] === 'category') {
+            $form->addLabel($value['display_text'], $value['value']);
+            //}
+        }
+    }
 
     if ($term_preview['type'] == 1) {
         $form->addElement(
@@ -709,7 +724,7 @@ if ($form->validate()) {
 
         // Update the extra fields
         $count_extra_field = count($extras);
-        if ($count_extra_field > 0 && is_integer($user_id)) {
+        if ($count_extra_field > 0 && is_int($user_id)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file

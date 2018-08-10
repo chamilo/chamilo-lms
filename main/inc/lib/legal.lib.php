@@ -18,21 +18,46 @@ class LegalManager
     /**
      * Add a new Term and Condition.
      *
-     * @param int    $language language id
-     * @param string $content  content
-     * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
-     * @param string $changes  explain changes
+     * @param int    $language               language id
+     * @param string $content                content
+     * @param int    $type                   term and condition type (0 for HTML text or 1 for link to another page)
+     * @param string $changes                explain changes
+     * @param array  $extraFieldValuesToSave
      *
-     * @return bool success
+     * @return int
      */
-    public static function add($language, $content, $type, $changes)
+    public static function add($language, $content, $type, $changes, $extraFieldValuesToSave = [])
     {
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
         $type = (int) $type;
         $time = time();
 
-        if ($last['content'] != $content) {
+        $changeList = [];
+
+        if (isset($last['id'])) {
+            $id = $last['id'];
+
+            // Check if extra fields changed
+            $extraFieldValue = new ExtraFieldValue('terms_and_condition');
+            $values = $extraFieldValue->getAllValuesByItem($id);
+            $oldValues = array_column($values, 'value', 'variable');
+            foreach ($extraFieldValuesToSave as $key => $value) {
+                if (is_numeric(strpos($key, 'extra_'))) {
+                    $replace = str_replace('extra_', '', $key);
+                    if (isset($oldValues[$replace])) {
+                        if ($value != $oldValues[$replace]) {
+                            $changeList[] = $replace;
+                        }
+                    } else {
+                        // It means there's a new extra field that was not included before.
+                        $changeList[] = $replace;
+                    }
+                }
+            }
+        }
+
+        if ($last['content'] != $content || !empty($changeList)) {
             $version = self::getLastVersion($language);
             $version++;
             $params = [
@@ -43,9 +68,12 @@ class LegalManager
                 'version' => $version,
                 'date' => $time,
             ];
-            Database::insert($legalTable, $params);
 
-            return true;
+            $id = Database::insert($legalTable, $params);
+
+            self::updateExtraFields($id, $extraFieldValuesToSave);
+
+            return $id;
         } elseif ($last['type'] != $type && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
@@ -55,11 +83,30 @@ class LegalManager
                 'date' => $time,
             ];
             Database::update($legalTable, $params, ['id = ?' => $id]);
+            self::updateExtraFields($id, $extraFieldValuesToSave);
 
-            return true;
-        } else {
+            return $id;
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param int   $itemId
+     * @param array $values
+     *
+     * @return bool
+     */
+    public static function updateExtraFields($itemId, $values)
+    {
+        if (empty($itemId)) {
             return false;
         }
+        $extraFieldValues = new ExtraFieldValue('terms_and_condition');
+        $values['item_id'] = $itemId;
+        $extraFieldValues->saveFieldValues($values);
+
+        return true;
     }
 
     /**
@@ -92,9 +139,9 @@ class LegalManager
         $row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
             return (int) $row['version'];
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**
@@ -148,9 +195,9 @@ class LegalManager
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -197,9 +244,9 @@ class LegalManager
             $version = explode(':', $version[0]);
 
             return $version[0];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -363,10 +410,7 @@ class LegalManager
     public static function deleteLegal($userId)
     {
         $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $userId,
-            'legal_accept'
-        );
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
         $result = $extraFieldValue->delete($value['id']);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -387,21 +431,21 @@ class LegalManager
     public static function getTreatmentTypeList()
     {
         return  [
-            101 => 'collection',
-            102 => 'recording',
-            103 => 'organization',
-            104 => 'structure',
-            105 => 'conservation',
-            106 => 'adaptation',
-            107 => 'extraction',
-            108 => 'consultation',
-            109 => 'usage',
-            110 => 'communication',
-            111 => 'interconnection',
-            112 => 'limitation',
-            113 => 'deletion',
-            114 => 'destruction',
-            115 => 'profiling',
+            'privacy_terms_collection' => 'collection',
+            'privacy_terms_recording' => 'recording',
+            'privacy_terms_organization' => 'organization',
+            'privacy_terms_structure' => 'structure',
+            'privacy_terms_conservation' => 'conservation',
+            'privacy_terms_adaptation' => 'adaptation',
+            'privacy_terms_extraction' => 'extraction',
+            'privacy_terms_consultation' => 'consultation',
+            'privacy_terms_usage' => 'usage',
+            'privacy_terms_communication' => 'communication',
+            'privacy_terms_interconnection' => 'interconnection',
+            'privacy_terms_limitation' => 'limitation',
+            'privacy_terms_deletion' => 'deletion',
+            'privacy_terms_destruction' => 'destruction',
+            'privacy_terms_profiling' => 'profiling',
         ];
     }
 }

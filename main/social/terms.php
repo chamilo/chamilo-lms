@@ -22,6 +22,24 @@ if (!$term) {
     $term = LegalManager::get_last_condition($language);
 }
 
+$termExtraFields = new ExtraFieldValue('terms_and_condition');
+$values = $termExtraFields->getAllValuesByItem($term['id']);
+foreach ($values as $value) {
+    if (!empty($value['value'])) {
+        $term['content'] .= '<h3>'.get_lang($value['display_text']).'</h3><br />'.$value['value'].'<br />';
+    }
+}
+
+$term['date_text'] = get_lang('PublicationDate').': '.
+    api_get_local_time(
+        $term['date'],
+        null,
+        null,
+        false,
+        true,
+        true
+    );
+
 $socialMenuBlock = '';
 $allowSocial = api_get_setting('allow_social_tool') === 'true';
 

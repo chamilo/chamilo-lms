@@ -184,7 +184,7 @@ function stopChatHeartBeat()
 
 function startChatHeartBeat()
 {
-    timer = setInterval('chatHeartbeat();', chatHeartbeatTime);
+    timer = setInterval(chatHeartbeat, chatHeartbeatTime);
 }
 
 /*

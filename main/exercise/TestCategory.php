@@ -801,7 +801,7 @@ class TestCategory
         }
         $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
 
-        $table = new HTML_Table(['class' => 'table table-bordered']);
+        $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'category_results']);
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
         $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
@@ -1254,6 +1254,7 @@ class TestCategory
      */
     public function displayCategories($courseId, $sessionId = 0)
     {
+        $sessionId = (int) $sessionId;
         $categories = $this->getCategories($courseId, $sessionId);
         $html = '';
         foreach ($categories as $category) {
@@ -1266,11 +1267,16 @@ class TestCategory
             $content .= '<div class="sectioncomment">';
             $content .= $category['description'];
             $content .= '</div>';
-            $links = '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
-                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-            $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
-            $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
-            $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+            $links = '';
+
+            if (!$sessionId) {
+                $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
+                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
+                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+                $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+            }
+
             $html .= Display::panel($content, $category['title'].$links);
         }
 

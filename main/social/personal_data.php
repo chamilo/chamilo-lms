@@ -30,14 +30,14 @@ $formToString = '';
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $form = new FormValidator('delete_term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
-    $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement')));
-    $form->addTextarea('explanation', get_lang('ExplanationDeleteLegal'), [], true);
+    $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement'), 'normal', false));
+    $form->addTextarea('explanation', [get_lang('DeleteLegal'), get_lang('ExplanationDeleteLegal')], [], true);
     $form->addHidden('action', 'delete_legal');
     $form->addButtonSave(get_lang('DeleteLegal'));
     $formToString = $form->returnForm();
 
     $formDelete = new FormValidator('delete_account', 'post', api_get_self().'?action=delete_account&user_id='.$userId);
-    $formDelete->addTextarea('explanation', get_lang('ExplanationDeleteAccount'), [], true);
+    $formDelete->addTextarea('explanation', [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')], [], true);
     $formDelete->addHidden('action', 'delete_account');
     $formDelete->addButtonDelete(get_lang('DeleteAccount'));
     $formToString .= $formDelete->returnForm();
@@ -132,9 +132,9 @@ switch ($action) {
 
             $url = api_get_path(WEB_CODE_PATH).'admin/';
             $link = Display::url($url, $url);
-            $subject = get_lang('RequestForDeleteAccount');
+            $subject = get_lang('RequestForAccountDeletion');
             $content = sprintf(
-                get_lang('TheUserXAskDeleteAccountWithJustifactionXGoHereX'),
+                get_lang('TheUserXAskedForAccountDeletionWithJustificationXGoHereX'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link
@@ -183,9 +183,9 @@ switch ($action) {
 
             $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
             $link = Display::url($url, $url);
-            $subject = get_lang('RequestForLegalConsentRemoval');
+            $subject = get_lang('RequestForLegalConsentWithdrawal');
             $content = sprintf(
-                get_lang('TheUserXAskRemovalWithJustifactionXGoHereX'),
+                get_lang('TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link
@@ -244,28 +244,79 @@ if ($allowSocial) {
 // MAIN CONTENT
 $personalDataContent = '<ul>';
 $properties = json_decode($propertiesToJson);
+$webCoursePath = api_get_path(WEB_COURSE_PATH);
 
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
         switch ($key) {
+            case 'classes':
+                foreach ($value as $category => $subValue) {
+                    $categoryName = 'Social group';
+                    if ($category == 0) {
+                        $categoryName = 'Class';
+                    }
+                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
+                    $personalDataContent .= '<u>'.$categoryName.'</u> &gt;</li>';
+                    $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
+                    if (empty($subValue)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($subValue as $subSubValue) {
+                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                        }
+                    }
+                    $personalDataContent .= '</ul>';
+                }
+                break;
             case 'extraFields':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
-                foreach ($value as $subValue) {
-                    $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                if (empty($value)) {
+                    $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                } else {
+                    foreach ($value as $subValue) {
+                        $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                    }
                 }
                 $personalDataContent .= '</ul>';
+                break;
+            case 'dropBoxSentFiles':
+                foreach ($value as $category => $subValue) {
+                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
+                    $personalDataContent .= '<u>'.get_lang($category).'</u> &gt;</li>';
+                    $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
+                    if (empty($subValue)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($subValue as $subSubValue) {
+                            if ($category === 'DocumentsAdded') {
+                                $documentLink = Display::url(
+                                    $subSubValue->code_path,
+                                    $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path
+                                );
+                                $personalDataContent .= '<li>'.$documentLink.'</li>';
+                            } else {
+                                $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                            }
+                        }
+                    }
+                    $personalDataContent .= '</ul>';
+                }
+
                 break;
             case 'portals':
             case 'roles':
             case 'achievedSkills':
             case 'sessionAsGeneralCoach':
-            case 'classes':
             case 'courses':
             case 'groupNames':
             case 'groups':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
-                foreach ($value as $subValue) {
-                    $personalDataContent .= '<li>'.$subValue.'</li>';
+                if (empty($subValue)) {
+                    $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                } else {
+                    foreach ($value as $subValue) {
+                        $personalDataContent .= '<li>'.$subValue.'</li>';
+                    }
                 }
                 $personalDataContent .= '</ul>';
                 break;
@@ -273,8 +324,12 @@ foreach ($properties as $key => $value) {
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 foreach ($value as $session => $courseList) {
                     $personalDataContent .= '<li>'.$session.'<ul>';
-                    foreach ($courseList as $course) {
-                        $personalDataContent .= '<li>'.$course.'</li>';
+                    if (empty($courseList)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($courseList as $course) {
+                            $personalDataContent .= '<li>'.$course.'</li>';
+                        }
                     }
                     $personalDataContent .= '</ul>';
                 }
@@ -304,37 +359,37 @@ foreach ($properties as $key => $value) {
 $personalDataContent .= '</ul>';
 
 // Check terms acceptation
-$permitionBlock = '';
+$permissionBlock = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $userId,
         'legal_accept'
     );
-    $permitionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
+    $permissionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-        $permitionBlock = get_lang('CurrentStatus').': '.
-            Display::return_icon('accept.png', get_lang('LegalAgreementAccepted')).get_lang('LegalAgreementAccepted').
+        $permissionBlock = '<h4>'.get_lang('CurrentStatus').'</h4>'.
+            get_lang('LegalAgreementAccepted').' '.Display::return_icon('accept.png', get_lang('LegalAgreementAccepted'), [], ICON_SIZE_TINY).
             '<br />';
-        $permitionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br />';
-        $permitionBlock .= $formToString;
+        $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br /><br />';
+        $permissionBlock .= $formToString;
 
-    /*$permitionBlock .= Display::url(
+    /*$permissionBlock .= Display::url(
         get_lang('DeleteLegal'),
         api_get_self().'?action=delete_legal&user_id='.$userId,
         ['class' => 'btn btn-danger btn-xs']
     );*/
     } else {
         // @TODO add action handling for button
-        $permitionBlock .= Display::url(
+        $permissionBlock .= Display::url(
             get_lang('SendLegal'),
             api_get_self().'?action=send_legal&user_id='.$userId,
             ['class' => 'btn btn-primary btn-xs']
         );
     }
 } else {
-    $permitionBlock .= get_lang('NoTermsAndConditionsAvailable');
+    $permissionBlock .= get_lang('NoTermsAndConditionsAvailable');
 }
 
 //Build the final array to pass to template
@@ -348,7 +403,7 @@ $legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
 // Get data about the treatment of data
 $treatmentTypes = LegalManager::getTreatmentTypeList();
 
-foreach ($treatmentTypes as $id => $item) {
+/*foreach ($treatmentTypes as $id => $item) {
     $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item).'Title');
     $legalTerm = $legalTermsRepo->findOneByTypeAndLanguage($id, api_get_language_id($user_language));
     $legalTermContent = '';
@@ -356,7 +411,8 @@ foreach ($treatmentTypes as $id => $item) {
         $legalTermContent = $legalTerm[0]['content'];
     }
     $personalData['treatment'][$item]['content'] = $legalTermContent;
-}
+}*/
+
 $officerName = api_get_configuration_value('data_protection_officer_name');
 $officerRole = api_get_configuration_value('data_protection_officer_role');
 $officerEmail = api_get_configuration_value('data_protection_officer_email');
@@ -378,7 +434,7 @@ $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
-    $termLink = Display::url($url, $url);
+    $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
 }
 
 // Block Social Avatar
@@ -391,7 +447,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
-$tpl->assign('permission', $permitionBlock);
+$tpl->assign('permission', $permissionBlock);
 $tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');
 $tpl->display($socialLayout);

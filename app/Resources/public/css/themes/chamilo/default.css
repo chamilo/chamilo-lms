@@ -103,11 +103,6 @@ a:focus {
 .panel-default{
   border-color: #ECF0F1;
 }
-.panel-default .panel-heading{
-  color: #2c3e50;
-  background-color:#ECF0F1;
-  border-color: #ECF0F1;
-}
 /* Jquery UI */
 .ui-accordion .ui-accordion-icons{
   padding-left: 0.2em;

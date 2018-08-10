@@ -8119,7 +8119,7 @@ $PersonalDataLimitationTitle = "Limitation des données personnelles";
 $PersonalDataDeletionTitle = "Effacement des donnée personnelles";
 $PersonalDataDestructionTitle = "Destruction des donnée personnelles";
 $PersonalDataProfilingTitle = "Profilage des donnée personnelles";
-$PersonalDataIntroductionText = "Nous respectons vos données personnelles! Cette page unit tous les aspects correspondants aux données personnelles que nous pourrions conserver à votre sujet, comment nous les traitons et ce que vous nous avez autorisé de faire avec, ainsi que qui nous sommes, dans un effort de correspondance à la majorité des lois de protection des données disponibles et applicables. Merci de llire l'information à votre disposition avec attention. Si vous avez des questions, merci de localiser nos données de contact ci-dessous et de nous y envoyer vos questions.";
+$PersonalDataIntroductionText = "Nous respectons vos données personnelles! Cette page unit tous les aspects correspondants aux données personnelles que nous pourrions conserver à votre sujet, comment nous les traitons et ce que vous nous avez autorisé de faire avec, ainsi que qui nous sommes, dans un effort de correspondance à la majorité des lois de protection des données disponibles et applicables. Merci de lire l'information à votre disposition avec attention. Si vous avez des questions, merci de localiser nos données de contact ci-dessous et de nous y envoyer vos questions.";
 $YourDegreeOfCertainty = "Votre degré de certitude";
 $DegreeOfCertaintyThatMyAnswerIsCorrect = "Degré de certitude que la réponse soit jugée correcte";
 $IncorrectAnswersX = "Réponses incorrectes: %s";
@@ -8225,4 +8225,6 @@ $RequestForAccountDeletion = "Demande de suppression de compte";
 $TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de suppression de son compte, en expliquant que \"%s\". Traitez sa demande ici: %s";
 $TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "L'utilisateur/trice %s a fait une demande de retrait de son accord aux termes d'utilisation, en expliquant que \"%s\". Traitez sa demande ici: %s";
 $RequestForLegalConsentWithdrawal = "Demande rétraction d'accord sur conditions d'utilisation";
+$Terms_and_conditionFields = "Champs de conditions d'utilisation";
+$ContentNotAccessibleRequestFromDataPrivacyOfficer = "Ce contenu ne vous est pas accessible en raison de règles d'accès liées au cours. Si vous avez besoin de ces données, merci de contacter le responsable de la protection des données tel que défini dans les termes de protection des données personnelles.";
 ?>

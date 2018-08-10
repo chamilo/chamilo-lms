@@ -1,0 +1,293 @@
+Pack and modif icons 48, 32, 22, 16 px by Juan Carlos Raña Trabado
+
+new_document 		modif mix nuvola crystal
+new_folder 		modif nuvola
+new_paint	 	modif nuvola
+back_folder 		modif nuvola
+back 			nuvola
+new_sound		modif nuvola
+disk_quota		crystal
+upload_file		modif mix nuvola crystal
+thumbnails		crystal
+thumbnails_na		modif crystal
+pack			nuvola
+slideshow		nuvola
+new_draw		nuvola
+new_draw_na		modif nuvola
+save_pack		nuvola
+settings		nuvola
+edit			nuvola
+edit_na			modif nuvola
+move			nuvola
+move_na			modif nuvola
+draw			nuvola
+paint			nuvola
+folder			nuvola
+upload_certificate	modif gnome
+new_certificate		modif gnome
+certificate_na		modif gnome
+new_recording		exquisite + nuvola
+microphone		exquisite
+--
+info	(except 64 px)  nuvola
+wizard			nuvola
+strategy		nuvola
+objective		nuvola
+laptop			nuvola
+teacher			nuvola
+assessment		nuvola
+--
+link	(=links 64px)	nuvola
+new_link		modif nuvola
+view_tree		nuvola
+view_none		nuvola
+--
+announce		nuvola
+new_announce		modif nuvola
+delete_announce		modif nuvola
+--
+learnpath		nuvola
+new_learnpath		modif nuvola
+import_scorm		modif nuvola
+import_powerpoint	modif mix crystal
+upload_audio		modif nuvola
+new_learningpaht_object modif nuvola
+build_learnpath		nuvola
+build_learnpath_na	modif nuvola
+add_learnpath_section	modif nuvola
+learnpath_section 	modif nuvola (16 px lp_dokeos_chapter.png and lp_dir.png into main/img/)
+view_left_right		nuvola
+move_learnpath		modif nuvola
+move_learnpath_na	modif nuvola
+scorms			nuvola 	     (and 22 px gif version for home page)
+scorms_na		modif nuvola (and 22 px gif version for home page)
+view_remove.png		nuvola
+view_remove_na.png	modif nuvola
+export_scorm		modif nuvola
+export_scorm_na		modif nuvola
+--
+new_glossary_term	modif mix nuvola crystal
+view_detailed		nuvola
+view_text		nuvola
+--
+new_exercice		modif nuvola
+import_hotpotatoes	modif mix nuvola
+import_qti2		modif mix nuvola crystal
+export_qti2		modif mix nuvola crystal
+new_question		modif mix nuvola chamilo
+preview_view		crystal
+settings_na		modif nuvola
+export_excel		modif mix crystal
+exercice_check		modif mix nuvola crystal
+exercice_uncheck	modif mix nuvola crystal
+--
+statistics		crystal
+stats			crystal
+percentage		nuvola
+pdf			crystal
+printer			nuvola
+gradebook		crystal       (and 22 px gif version for home page)
+gradebook_na		modif crystal (and 22 px gif version for home page)
+empty_evaluation	crystal
+no_empty_evaluation	modif crystal
+new_evaluation		modif crystal
+delete			nuvola
+import_evaluation	modif crystal
+export_evaluation	modif crystal
+evaluation_rate		modif crystal
+new_online_evaluation	modif nuvola
+certificate		gnome
+certificate_list	modif gnome
+--
+month			crystal (only 32 px)
+month_empty		modif crystal (only 32 px)
+7days			crystal (only 32 px)
+1day			crystal (only 32 px)
+calendar		crystal (only 32 px)
+appointments		crystal (only 32 px)
+event			nuvola
+new_event		modif nuvola
+import_calendar		modif crystal (only 32 px)
+calendar_normal		modif crystal (only 32 px)
+calendar_inverse	modif crystal (only 32 px)
+--
+forum				nuvola
+group				nuvola
+user	(=members 64 px)	modif nuvola
+new_user			modif nuvola
+new_group			modif nuvola
+new_forum			modif nuvola
+new_teacher			modif nuvola
+subscribe_course		modif nuvola
+subscribe_session		modif nuvola
+teacher_subscribe_course	modif nuvola
+user_subscribe_session		modif nuvola
+unsubscribe_course		modif nuvola
+unsubscribe_session		modif nuvola
+teacher_unsubscribe_course	modif nuvola
+teacher_unsubscribe_session	modif nuvola
+user_unsubscribe_course		modif nuvola
+teacher_unsubscribe_session	modif nuvola
+session				modif nuvola
+--
+chat				nuvola       (and 22 px gif version for home page)
+chat_na				modif nuvola (and 22 px gif version for home page)			
+--
+thread				nuvola
+search				nuvola
+new_forum			modif nuvola
+new_thread			modif nuvola
+reply_thread			modif nuvola
+--
+delete_na			modif nuvola
+warning				nuvola
+new_work			modif nuvola
+work				nuvola
+mail_send			crystal	(only 32 px)
+visible				juan carlos
+invisible			juan carlos
+--
+page				crystal
+history				tango
+discuss				crystal
+wiki				nuvola
+what_link_here			crystal
+--
+view_preview			crystal	(only 32 px)
+search				crystal (only 32 px)
+survey				crystal
+new_survey			modif crystal
+clean				tango
+--
+group_summary			modif nuvola
+--
+blog				modif nuvola
+new_blog			modif nuvola
+blog_tasks
+new_article			modif nuvola
+blog_admin_users		modif nuvola
+blog_admin			modif nuvola (and 22 px gif version for home page)
+blog_admin_na			modif nuvola (and 22 px gif version for home page)
+--
+course_progress	(=lessons_plans)gnome
+course_progress_na		modif gnome
+--
+mail				crystal
+--
+notes				nuvola
+new_note			modif nuvola
+notes_order_by_date_modif	modif crystal (only 32 px)
+notes_order_by_date_new	modif 	modif crystal (only 32 px)
+notes_order_by_title		modif crystal (only 32 px)
+--
+attendance			modif crystal
+new_attendance_list		modif crystal
+attendance_list			modif crystal
+attendance_calendar		modif crystal (only 32 px)
+add_calendar			modif crystal (only 32 px)
+add_event_calendar		modif crystal (only 32 px)
+clean_calendar			modif mix crystal tango (only 32 px)
+--
+lesson_plan			modif mix gnome crystal
+new_lesson_plan			modif mix nuvola gnome
+lesson_plan_calendar		modif mix gnome crystal
+skills				nuvola
+--
+new_user_event			modif crystal nuvola
+new_user_calendar		modif crystal nuvola (only 32 px)
+--
+course				nuvola
+course_home			crystal
+course move			modif nuvola
+--
+blocks				nuvola
+--
+social_network			nuvola
+create_group_social_network	modif nuvola
+add_user_fields			modif nuvola
+--
+new_course			modif nuvola
+new_session			modif nuvola
+course_request_pending		modif nuvola
+session_to_category		modif nuvola
+new_promotion			modif nuvola
+promotion			modif nuvola
+new_career			modif gnome
+career				gnome
+session_to_promotion		modif nuvola
+courses_to_session		modif nuvola
+class				modif mix gnome nuvola
+new_class			modif mix gnome nuvola
+user_to_class			modif mix gnome nuvola
+session_to_class		modif mix gnome nuvola
+course_to_class			modif mix gnome nuvola
+--
+platform			chamilo
+languages			crystal
+tools				nuvola
+stylesheets			nuvola
+upload_stylesheets		modif nuvola
+new_template			modif crystal
+security			nuvola
+ldap				nuvola
+plugins				crystal
+template			crystal
+timezone			nuvola
+tuning				nuvola
+html_editor			gnome			
+--
+new_platform_event		modif mix crystal chamilo
+agenda				nuvola
+--------------------------------------------------------
+up				crystal (only 22 px)
+down				crystal (only 22 px)
+up_na				modif crystal (only 22 px)
+down_na				modif crystal (only 22 px)
+wizard_na			modif nuvola
+lock				crystal (only 32 px)
+unlock				crystal (only 32 px)
+platform_init			crystal
+reload				nuvola
+reload_na			modif nuvola
+fill				nuvola
+accept				nuvola
+view_nofullscr			nuvola
+view_fullscreen			nuvola
+view_fullscreen_na		modif nuvola
+view_left_right_na		modif nuvola
+lp_publish			crystal (only 22 px)
+lp_publish_na			modif crystal (only 22 px)
+bug				crystal
+bug_na				modif crystal
+test_results			crystal
+duplicate_test			modif nuvola
+save				nuvola
+save_folder_zip			modif nuvola
+open_in_new_window		nuvola
+briefcase			modif tango
+new_dropbox_message		tango
+unsubscribe_course		modif nuvola
+unsubscribe_course_na		modif nuvola
+mime_text			crystal
+mime_code			crystal
+rate_work			modif mix crystal nuvola
+user_event			modif mix crystal nuvola
+platform_event			modif mix crystal nuvola chamilo
+languages_na			modif crystal
+new_language			modif crystal
+export_to_documents		modif nuvola
+messagebox_info			crystal (only 32 px)
+wiki_task			modif nuvola
+wiki_work			modif nuvola
+wiki_assignment			modif nuvola
+star				crystal			
+star_green			modif crystal
+menu				nuvola
+starthere (=info.png 64 px)	crystal
+copy				crystal
+scorm				nuvola
+scorm_builder			modif nuvola
+scormbuilder_na.png  		modif nuvola
+text2audio			modif nuvola
+audio				nuvola
+webcam				gnome

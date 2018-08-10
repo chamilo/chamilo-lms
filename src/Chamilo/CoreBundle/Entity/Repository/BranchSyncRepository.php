@@ -39,7 +39,8 @@ class BranchSyncRepository extends NestedTreeRepository
     }
 
     /**
-     * Gets the first branch with parent_id = NULL
+     * Gets the first branch with parent_id = NULL.
+     *
      * @return mixed
      */
     public function getTopBranch()

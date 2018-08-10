@@ -168,8 +168,9 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
  *                                    language value will be returned, for example 'french' instead of 'french_unicode'
  * @param bool $setParentLanguageName
  *
- * @return string the current language of the interface
  * @throws Exception
+ *
+ * @return string the current language of the interface
  */
 function api_get_interface_language(
     $purified = false,

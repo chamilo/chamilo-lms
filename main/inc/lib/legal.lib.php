@@ -18,21 +18,46 @@ class LegalManager
     /**
      * Add a new Term and Condition.
      *
-     * @param int    $language language id
-     * @param string $content  content
-     * @param int    $type     term and condition type (0 for HTML text or 1 for link to another page)
-     * @param string $changes  explain changes
+     * @param int    $language               language id
+     * @param string $content                content
+     * @param int    $type                   term and condition type (0 for HTML text or 1 for link to another page)
+     * @param string $changes                explain changes
+     * @param array  $extraFieldValuesToSave
      *
      * @return int
      */
-    public static function add($language, $content, $type, $changes)
+    public static function add($language, $content, $type, $changes, $extraFieldValuesToSave = [])
     {
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
         $type = (int) $type;
         $time = time();
 
-        if ($last['content'] != $content) {
+        $changeList = [];
+
+        if (isset($last['id'])) {
+            $id = $last['id'];
+
+            // Check if extra fields changed
+            $extraFieldValue = new ExtraFieldValue('terms_and_condition');
+            $values = $extraFieldValue->getAllValuesByItem($id);
+            $oldValues = array_column($values, 'value', 'variable');
+            foreach ($extraFieldValuesToSave as $key => $value) {
+                if (is_numeric(strpos($key, 'extra_'))) {
+                    $replace = str_replace('extra_', '', $key);
+                    if (isset($oldValues[$replace])) {
+                        if ($value != $oldValues[$replace]) {
+                            $changeList[] = $replace;
+                        }
+                    } else {
+                        // It means there's a new extra field that was not included before.
+                        $changeList[] = $replace;
+                    }
+                }
+            }
+        }
+
+        if ($last['content'] != $content || !empty($changeList)) {
             $version = self::getLastVersion($language);
             $version++;
             $params = [
@@ -44,7 +69,11 @@ class LegalManager
                 'date' => $time,
             ];
 
-            return Database::insert($legalTable, $params);
+            $id = Database::insert($legalTable, $params);
+
+            self::updateExtraFields($id, $extraFieldValuesToSave);
+
+            return $id;
         } elseif ($last['type'] != $type && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
@@ -54,11 +83,30 @@ class LegalManager
                 'date' => $time,
             ];
             Database::update($legalTable, $params, ['id = ?' => $id]);
+            self::updateExtraFields($id, $extraFieldValuesToSave);
 
             return $id;
         }
 
         return 0;
+    }
+
+    /**
+     * @param int   $itemId
+     * @param array $values
+     *
+     * @return bool
+     */
+    public static function updateExtraFields($itemId, $values)
+    {
+        if (empty($itemId)) {
+            return false;
+        }
+        $extraFieldValues = new ExtraFieldValue('terms_and_condition');
+        $values['item_id'] = $itemId;
+        $extraFieldValues->saveFieldValues($values);
+
+        return true;
     }
 
     /**
@@ -91,9 +139,9 @@ class LegalManager
         $row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
             return (int) $row['version'];
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**
@@ -147,9 +195,9 @@ class LegalManager
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -196,9 +244,9 @@ class LegalManager
             $version = explode(':', $version[0]);
 
             return $version[0];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -362,10 +410,7 @@ class LegalManager
     public static function deleteLegal($userId)
     {
         $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $userId,
-            'legal_accept'
-        );
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
         $result = $extraFieldValue->delete($value['id']);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));

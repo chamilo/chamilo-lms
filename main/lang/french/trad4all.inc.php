@@ -8227,4 +8227,11 @@ $TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "L'utilisateur/t
 $RequestForLegalConsentWithdrawal = "Demande rétraction d'accord sur conditions d'utilisation";
 $Terms_and_conditionFields = "Champs de conditions d'utilisation";
 $ContentNotAccessibleRequestFromDataPrivacyOfficer = "Ce contenu ne vous est pas accessible en raison de règles d'accès liées au cours. Si vous avez besoin de ces données, merci de contacter le responsable de la protection des données tel que défini dans les termes de protection des données personnelles.";
+$LearningCalendar = "Calendrier d'apprentissage";
+$ControlPointAdded = "Point de contrôle ajouté";
+$NumberDaysAccumulatedInCalendar = "Nombre de jours accumulés dans le calendrier";
+$DifferenceOfDaysAndCalendar = "Différence entre jours et calendrier";
+$SkillUserList = "Liste des compétences et utilisateurs";
+$CourseId = "ID de cours";
+$CareDetailView = "Vue détaillée de vie étudiante";
 ?>

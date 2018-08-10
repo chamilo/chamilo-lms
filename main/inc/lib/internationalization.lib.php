@@ -62,9 +62,9 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 /**
  * Returns a translated (localized) string, called by its ID.
  *
- * @param string $variable this is the ID (name) of the translated string to be retrieved
- * @param bool   $returnEmptyIfNotFound   If variable is not found, then: if false: returns variable name with or without brackets; true: returns ''
- * @param string $language (optional)    Language ID. If it is omitted, the current interface language is assumed.
+ * @param string $variable              this is the ID (name) of the translated string to be retrieved
+ * @param bool   $returnEmptyIfNotFound If variable is not found, then: if false: returns variable name with or without brackets; true: returns ''
+ * @param string $language              (optional)    Language ID. If it is omitted, the current interface language is assumed.
  *
  * @return string returns the requested string in the correspondent language
  *

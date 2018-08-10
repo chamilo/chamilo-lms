@@ -334,14 +334,16 @@ if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         // Delete selected courses
         case 'delete_courses':
-            $course_codes = $_POST['course'];
-            if (count($course_codes) > 0) {
-                foreach ($course_codes as $course_code) {
-                    CourseManager::delete_course($course_code);
+            if (!empty($_POST['course'])) {
+                $course_codes = $_POST['course'];
+                if (count($course_codes) > 0) {
+                    foreach ($course_codes as $course_code) {
+                        CourseManager::delete_course($course_code);
+                    }
                 }
-            }
 
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
             break;
     }
 }

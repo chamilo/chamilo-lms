@@ -870,7 +870,7 @@ if (!empty($action)) {
                 exit;
                 break;
             case 'delete':
-                if (api_is_platform_admin()) {
+                if (api_is_platform_admin() && !empty($_POST['id'])) {
                     $number_of_selected_users = count($_POST['id']);
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {

@@ -25,6 +25,26 @@ $term_preview = [
     'content' => '',
     'changes' => '',
 ];
+
+$extraField = new ExtraField('terms_and_condition');
+
+$types = LegalManager::getTreatmentTypeList();
+foreach ($types as $variable => $name) {
+    $label = 'PersonalData'.ucfirst($name).'Title';
+    $params = [
+        'variable' => $variable,
+        'display_text' => $label,
+        'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+        'default_value' => '',
+        'visible' => true,
+        'changeable' => true,
+        'filter' => true,
+        'visible_to_self' => true,
+        'visible_to_others' => true,
+    ];
+    $extraField->save($params);
+}
+
 if ($form->validate()) {
     $check = Security::check_token('post');
     if ($check) {
@@ -67,7 +87,7 @@ if ($form->validate()) {
                 $tok = Security::get_token();
                 header('Location: legal_list.php?sec_token='.$tok);
                 exit();
-            } elseif ($submit == 'preview') {
+            } elseif ($submit === 'preview') {
                 $defaults['type'] = $type;
                 $defaults['content'] = $content;
                 $defaults['changes'] = $changes;
@@ -128,7 +148,6 @@ if (isset($_POST['language'])) {
     }
 
     $termId = isset($term_preview['id']) ? $term_preview['id'] : 0;
-    $extraField = new ExtraField('terms_and_condition');
     $returnParams = $extraField->addElements(
         $form,
         $termId,

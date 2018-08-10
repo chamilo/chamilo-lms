@@ -249,10 +249,33 @@ $webCoursePath = api_get_path(WEB_COURSE_PATH);
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
         switch ($key) {
+            case 'classes':
+                foreach ($value as $category => $subValue) {
+                    $categoryName = 'Social group';
+                    if ($category == 0) {
+                        $categoryName = 'Class';
+                    }
+                    $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
+                    $personalDataContent .= '<u>'.$categoryName.'</u> &gt;</li>';
+                    $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
+                    if (empty($subValue)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($subValue as $subSubValue) {
+                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                        }
+                    }
+                    $personalDataContent .= '</ul>';
+                }
+                break;
             case 'extraFields':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
-                foreach ($value as $subValue) {
-                    $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                if (empty($value)) {
+                    $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                } else {
+                    foreach ($value as $subValue) {
+                        $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                    }
                 }
                 $personalDataContent .= '</ul>';
                 break;
@@ -261,15 +284,19 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
                     $personalDataContent .= '<u>'.get_lang($category).'</u> &gt;</li>';
                     $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
-                    foreach ($subValue as $subSubValue) {
-                        if ($category === 'DocumentsAdded') {
-                            $documentLink = Display::url(
-                                $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path,
-                                $subSubValue->code_path
-                            );
-                            $personalDataContent .= '<li>'.$documentLink.'</li>';
-                        } else {
-                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                    if (empty($subValue)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($subValue as $subSubValue) {
+                            if ($category === 'DocumentsAdded') {
+                                $documentLink = Display::url(
+                                    $subSubValue->code_path,
+                                    $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path
+                                );
+                                $personalDataContent .= '<li>'.$documentLink.'</li>';
+                            } else {
+                                $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                            }
                         }
                     }
                     $personalDataContent .= '</ul>';
@@ -280,13 +307,16 @@ foreach ($properties as $key => $value) {
             case 'roles':
             case 'achievedSkills':
             case 'sessionAsGeneralCoach':
-            case 'classes':
             case 'courses':
             case 'groupNames':
             case 'groups':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
-                foreach ($value as $subValue) {
-                    $personalDataContent .= '<li>'.$subValue.'</li>';
+                if (empty($subValue)) {
+                    $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                } else {
+                    foreach ($value as $subValue) {
+                        $personalDataContent .= '<li>'.$subValue.'</li>';
+                    }
                 }
                 $personalDataContent .= '</ul>';
                 break;
@@ -294,8 +324,12 @@ foreach ($properties as $key => $value) {
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 foreach ($value as $session => $courseList) {
                     $personalDataContent .= '<li>'.$session.'<ul>';
-                    foreach ($courseList as $course) {
-                        $personalDataContent .= '<li>'.$course.'</li>';
+                    if (empty($courseList)) {
+                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    } else {
+                        foreach ($courseList as $course) {
+                            $personalDataContent .= '<li>'.$course.'</li>';
+                        }
                     }
                     $personalDataContent .= '</ul>';
                 }
@@ -369,7 +403,7 @@ $legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
 // Get data about the treatment of data
 $treatmentTypes = LegalManager::getTreatmentTypeList();
 
-foreach ($treatmentTypes as $id => $item) {
+/*foreach ($treatmentTypes as $id => $item) {
     $personalData['treatment'][$item]['title'] = get_lang('PersonalData'.ucfirst($item).'Title');
     $legalTerm = $legalTermsRepo->findOneByTypeAndLanguage($id, api_get_language_id($user_language));
     $legalTermContent = '';
@@ -377,7 +411,8 @@ foreach ($treatmentTypes as $id => $item) {
         $legalTermContent = $legalTerm[0]['content'];
     }
     $personalData['treatment'][$item]['content'] = $legalTermContent;
-}
+}*/
+
 $officerName = api_get_configuration_value('data_protection_officer_name');
 $officerRole = api_get_configuration_value('data_protection_officer_role');
 $officerEmail = api_get_configuration_value('data_protection_officer_email');

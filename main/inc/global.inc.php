@@ -478,6 +478,15 @@ if (!empty($valid_languages)) {
         $language_interface = $user_language;
     }
 
+    // Load the user language, if user is entering in the terms and condition page
+    if (isset($_SESSION['term_and_condition']) && isset($_SESSION['term_and_condition']['user_id'])) {
+        $userTempId = $_SESSION['term_and_condition']['user_id'];
+        $userTempInfo = api_get_user_info($userTempId);
+        if (!empty($userTempInfo['language'])) {
+            $language_interface = $userTempInfo['language'];
+        }
+    }
+
     $allow = api_get_configuration_value('show_language_selector_in_menu');
     // Overwrite all lang configs and use the menu language
     if ($allow) {

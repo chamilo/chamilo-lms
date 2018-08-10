@@ -439,16 +439,6 @@ if (!CustomPages::enabled()) {
         if (isset($get)) {
             if (isset($get[0]) && $get[0] == 'legal') {
                 $language = api_get_interface_language();
-
-                $termAndCondition = Session::read('term_and_condition');
-                if (!empty($termAndCondition) && isset($termAndCondition['user_id'])) {
-                    $user_id = $termAndCondition['user_id'];
-                    $userInfo = api_get_user_info($user_id);
-                    if (!empty($userInfo['language'])) {
-                        $language = $userInfo['language'];
-                    }
-                }
-
                 $language = api_get_language_id($language);
                 $term_preview = LegalManager::get_last_condition($language);
                 if (!$term_preview) {
@@ -533,15 +523,6 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
 
     // Get user language ignoring the platform language
     $language = api_get_interface_language();
-    $termAndCondition = Session::read('term_and_condition');
-    if (!empty($termAndCondition) && isset($termAndCondition['user_id'])) {
-        $user_id = $termAndCondition['user_id'];
-        $userInfo = api_get_user_info($user_id);
-        if (!empty($userInfo['language'])) {
-            $language = $userInfo['language'];
-        }
-    }
-
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
 

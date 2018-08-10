@@ -5,16 +5,19 @@
 {% block topbar %}
     {% include 'layout/topbar.tpl'|get_template %}
 {% endblock %}
-<div class="extra-header">{{ header_extra_content }}</div>
-<header id="header-section" class="header-movil">
+
+{% if header_extra_content is not null %}
+    {{ header_extra_content }}
+{% endif %}
+
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-xs-12 col-md-3">
                 <div class="logo">
                     {{ logo }}
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-xs-12 col-md-9">
                 <div class="row">
                     <div class="col-sm-4">
                         {% if plugin_header_left is not null %}
@@ -48,8 +51,10 @@
             </div>
         </div>
     </div>
-</header>
+
+
 {% block menu %}
     {% include 'layout/menu.tpl'|get_template %}
 {% endblock %}
+
 {% include 'layout/course_navigation.tpl'|get_template %}

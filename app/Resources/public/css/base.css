@@ -9,50 +9,56 @@
         yannick.warnier@beeznest.com
     Version: 1.0
 */
+/* Sticky footer styles
+-------------------------------------------------- */
 html {
     position: relative;
     min-height: 100%;
 }
-
 body {
-    margin-bottom: 120px;
-    color: #29303b;
-    line-height: 24px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
-
-p {
-    margin: 0 0 20px;
-}
-
-.course ul li, .course ol li {
-    margin-bottom: 10px;
-}
-
-.navbar-nav li {
-    margin-bottom: 0;
-}
-
-/* Sticky footer style */
-.sticky-footer {
+.footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+    padding: 60px 15px 0;
+}
+.container .text-muted {
+    margin: 20px 0;
 }
 
-#content-section {
-    margin-bottom: 230px;
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
-/* End Sticky footer style */
+/*!
+ * IE10 viewport hack for Surface/desktop Windows 8 bug
+ * Copyright 2014-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/*
+ * See the Getting Started docs for more information:
+ * http://getbootstrap.com/getting-started/#support-ie10-width
+ */
+@-ms-viewport     { width: device-width; }
+@-o-viewport      { width: device-width; }
+@viewport         { width: device-width; }
+
 select {
     width: auto;
-}
-
-a.thumbnail:hover {
-    border: 1px solid #dddddd;
-    box-shadow: 0 4px 8px #C8C8C8;
 }
 
 /*------------------------------*/
@@ -6174,12 +6180,6 @@ div#chat-remote-video video {
 .grid-courses .items .image .hovered-course {
     opacity: 1;
     transition: all 0.3s ease 0s;
-}
-
-.hot-courses .grid-courses .items .title {
-    padding: 0;
-    font-weight: bold;
-    margin: 0;
 }
 
 .grid-courses .items .toolbar .info {

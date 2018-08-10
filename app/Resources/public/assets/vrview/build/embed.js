@@ -2935,7 +2935,7 @@ function ButtonManager(opt_root) {
   fsButton.src = this.ICONS.fullscreen;
   fsButton.title = 'Fullscreen mode';
   var s = fsButton.style;
-  s.bottom = 0;
+  s.bottom = '40px';
   s.right = 0;
   fsButton.addEventListener('click', this.createClickHandler_('fs'));
   root.appendChild(fsButton);
@@ -2946,7 +2946,7 @@ function ButtonManager(opt_root) {
   vrButton.src = this.ICONS.cardboard;
   vrButton.title = 'Virtual reality mode';
   var s = vrButton.style;
-  s.bottom = 0;
+  s.bottom = '40px';
   s.right = '48px';
   vrButton.addEventListener('click', this.createClickHandler_('vr'));
   root.appendChild(vrButton);
@@ -2999,7 +2999,7 @@ ButtonManager.prototype.setMode = function(mode, isVRCompatible) {
   }
   switch (mode) {
     case Modes.NORMAL:
-      this.fsButton.style.display = 'block';
+      this.fsButton.style.display = 'none';
       this.fsButton.src = this.ICONS.fullscreen;
       this.vrButton.style.display = (isVRCompatible ? 'block' : 'none');
       break;

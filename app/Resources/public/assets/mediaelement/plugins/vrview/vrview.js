@@ -370,7 +370,7 @@ Object.assign(MediaElementPlayer.prototype, {
 			}
 		});
 
-		t.addControlElement(button, 'vrview');
+		// t.addControlElement(button, 'vrview');
 
 		var url = media.getSrc(),
 		    mediaFiles = [{ src: url, type: mejs.Utils.getTypeFromFile(url) }],

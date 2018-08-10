@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h4>{{ "SystemAnnouncements" | get_lang }}</h4>
+    <h3>{{ "SystemAnnouncements" | get_lang }}</h3>
 </div>
 
 {% if not announcement is empty %}

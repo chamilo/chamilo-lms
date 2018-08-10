@@ -933,8 +933,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 //$_configuration['allow_teachers_to_classes'] = false;
 
 // GDPR: European's General Data Protection Rules activation option
-// Set to true to automatically enable a new personal data page inside the social network menu
-// $_configuration['enable_gdpr'] = false;
+// Set to true to disable the new personal data page inside the social network menu
+// $_configuration['disable_gdpr'] = true;
 
 // GDPR requires users to be informed of the Data Protection Officer name and contact point
 // These can only be defined here for now, but will be moved to web settings in the future.

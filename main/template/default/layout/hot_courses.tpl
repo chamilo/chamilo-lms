@@ -1,7 +1,7 @@
 {% if hot_courses is not null and hot_courses is not empty %}
 <section class="hot-courses">
     <div class="page-header">
-        <h4 class="hot-course-title">
+        <h3>
             {{ "HottestCourses"|get_lang}}
             {% if _u.is_admin %}
             <span class="pull-right">
@@ -12,7 +12,7 @@
                 </a>
             </span>
             {% endif %}
-        </h4>
+        </h3>
     </div>
     <div id="list-hot-courses" class="grid-courses">
         <div class="row">

@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (!api_get_configuration_value('enable_gdpr')) {
+if (api_get_configuration_value('disable_gdpr')) {
     api_not_allowed(true);
 }
 

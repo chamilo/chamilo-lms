@@ -223,7 +223,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             [
                 {
                     id : 'info',
-                    label: 'Information',
+                    label: lang.infoLabel,
                     elements :
                         [
                             {
@@ -384,19 +384,19 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                     elements: [
                         {
                             type : 'html',
-                            html : 'Multiple 360° video player can fails in one page.'
+                            html : lang.html360
                         },
                         {
                             type : 'checkbox',
                             id : '360video',
-                            label: 'Enable 360° video player',
+                            label: lang.video360,
                             commit : commitValue,
                             setup : loadValue
                         },
                         {
                             type : 'checkbox',
                             id : '360videostereo',
-                            label : 'Is a stereo video (1:1 aspect ratio)',
+                            label : lang.video360stereo,
                             'default': 'checked',
                             commit : commitValue,
                             setup : loadValue

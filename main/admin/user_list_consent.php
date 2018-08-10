@@ -633,8 +633,7 @@ if (api_is_platform_admin() &&
 ) {
     $actionsList['delete'] = get_lang('DeleteFromPlatform');
 }
-$actionsList['disable'] = get_lang('Disable');
-$actionsList['enable'] = get_lang('Enable');
+
 $table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();

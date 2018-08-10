@@ -591,7 +591,7 @@ class Session
      */
     public function getNbrCourses()
     {
-        return $this->nbrCourses;
+        return (int) $this->nbrCourses;
     }
 
     /**

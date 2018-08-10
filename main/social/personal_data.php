@@ -17,7 +17,11 @@ if (!api_get_configuration_value('enable_gdpr')) {
 }
 
 $userId = api_get_user_id();
-$userInfo = api_get_user_info();
+$userInfo = api_get_user_info($userId);
+
+if (empty($userInfo)) {
+    api_not_allowed(true);
+}
 
 $substitutionTerms = [
     'password' => get_lang('EncryptedData'),

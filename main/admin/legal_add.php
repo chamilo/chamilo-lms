@@ -73,12 +73,8 @@ if ($form->validate()) {
                 header('Location: legal_add.php');
                 exit;
             } elseif ($submit === 'save') {
-                $id = LegalManager::add($lang, $content, $type, $changes);
-
+                $id = LegalManager::add($lang, $content, $type, $changes, $values);
                 if (!empty($id)) {
-                    $extraFieldValues = new ExtraFieldValue('terms_and_condition');
-                    $values['item_id'] = $id;
-                    $extraFieldValues->saveFieldValues($values);
                     Display::addFlash(Display::return_message(get_lang('TermAndConditionSaved'), 'success'));
                 } else {
                     Display::addFlash(Display::return_message(get_lang('TermAndConditionNotSaved'), 'warning'));

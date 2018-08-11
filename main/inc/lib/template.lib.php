@@ -613,10 +613,11 @@ class Template
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
             'flag-icon-css/css/flag-icon.min.css',
+            'mediaelement/plugins/vrview/vrview.css',
         ];
 
         $features = api_get_configuration_value('video_features');
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'];
+        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
@@ -764,6 +765,7 @@ class Template
             $selectLink,
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
+            'mediaelement/plugins/vrview/vrview.js',
         ];
 
         $features = api_get_configuration_value('video_features');

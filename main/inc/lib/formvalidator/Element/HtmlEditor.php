@@ -59,9 +59,9 @@ class HtmlEditor extends HTML_QuickForm_textarea
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
                 if (strlen(trim($value)) == 0) {
-                    // TODO: To be considered whether here to be added DOCTYPE,
+                    // TODO: To be considered whether here to add
                     // language and character set declarations.
-                    $value = '<html><head><title></title></head><body></body></html>';
+                    $value = '<!DOCTYPE html><html><head><title></title></head><body></body></html>';
                     $this->setValue($value);
                 }
             }

@@ -871,7 +871,7 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0;
 
 // Enable speed controller in video player
-// $_configuration['video_features'] = ['features' => ['speed', 'vrview']];
+// $_configuration['video_features'] = ['features' => ['speed']];
 
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;

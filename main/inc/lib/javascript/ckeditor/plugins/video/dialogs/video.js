@@ -10,29 +10,10 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             value = generateId();
 
         if (value == '') {
-            // return;
+            return;
         }
 
-        switch (this.id) {
-            case '360video':
-                if (value) {
-                    videoNode.setAttribute( 'data-360video', 'true' );
-                } else {
-                    videoNode.removeAttribute( 'data-360video' );
-                }
-                break;
-            case '360videostereo':
-                if (videoNode.getAttribute( 'data-360video' ) === 'true') {
-                    if (!value) {
-                        videoNode.setAttribute( 'data-360video-stereo', 'false' );
-                    } else {
-                        videoNode.removeAttribute( 'data-360video-stereo' );
-                    }
-                }
-                break;
-            default:
-                videoNode.setAttribute( this.id, value);
-        }
+        videoNode.setAttribute( this.id, value);
 
         if ( !value )
             return;
@@ -62,18 +43,8 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 
     function loadValue( videoNode )
     {
-        if ( videoNode ) {
-            switch (this.id) {
-                case '360video':
-                    this.setValue(videoNode.getAttribute( 'data-360video' ) === 'true');
-                    break;
-                case '360videostereo':
-                    this.setValue(videoNode.getAttribute( 'data-360video-stereo' ) !== 'false');
-                    break;
-                default:
-                    this.setValue( videoNode.getAttribute( this.id ) );
-            }
-        }
+        if ( videoNode )
+            this.setValue( videoNode.getAttribute( this.id ) );
         else
         {
             if ( this.id == 'id')
@@ -223,7 +194,6 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             [
                 {
                     id : 'info',
-                    label: lang.infoLabel,
                     elements :
                         [
                             {
@@ -377,31 +347,6 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                     }]
                             }
                         ]
-                },
-                {
-                    id: '360',
-                    label: '360°',
-                    elements: [
-                        {
-                            type : 'html',
-                            html : lang.html360
-                        },
-                        {
-                            type : 'checkbox',
-                            id : '360video',
-                            label: lang.video360,
-                            commit : commitValue,
-                            setup : loadValue
-                        },
-                        {
-                            type : 'checkbox',
-                            id : '360videostereo',
-                            label : lang.video360stereo,
-                            'default': 'checked',
-                            commit : commitValue,
-                            setup : loadValue
-                        }
-                    ]
                 }
 
             ]

@@ -199,7 +199,7 @@ var es = {
   linkTemplate: '<a href="%src%">%type%</a> ',
   fallbackTemplate: 'Su navegador no soporta el tag video.<br>Por favor, descargue el fichero: %links%',
   infoLabel: 'Información',
-  html360: 'Esta funcionalidad (solo MP4) todavía se encuentra en modo BETA.<br />Solo funciona en páginas dinámicas, más no dentro de documentos<br />creados en la herramienta de documentos o visualizados a través<br />de las lecciones.<br />Por favor no colocar más de un vídeo 360° en una misma página<br />ya que puede provocar conflictos y bloquearlas todas.',
+  html360: 'Esta funcionalidad (sólo MP4) todavía se encuentra en modo BETA.<br />Sólo funciona en páginas dinámicas, mas no dentro de documentos<br />creados en la herramienta de documentos o visualizados a través<br />de las lecciones.<br />Por favor no colocar más de un vídeo 360° en una misma página<br />ya que puede provocar conflictos y bloquearlos todos.',
   video360: 'Habilitar reproductor de vídeo 360°',
   video360stereo: 'Vídeo estéreo (relación de aspecto 1:1)'
 };

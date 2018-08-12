@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.easy_extends.generator.bundle" class="Sonata\EasyExtendsBundle\Generator\BundleGenerator" public="true"/>
+        <service id="sonata.easy_extends.generator.orm" class="Sonata\EasyExtendsBundle\Generator\OrmGenerator" public="true"/>
+        <service id="sonata.easy_extends.generator.odm" class="Sonata\EasyExtendsBundle\Generator\OdmGenerator" public="true"/>
+        <service id="sonata.easy_extends.generator.phpcr" class="Sonata\EasyExtendsBundle\Generator\PHPCRGenerator" public="true"/>
+        <service id="sonata.easy_extends.generator.serializer" class="Sonata\EasyExtendsBundle\Generator\SerializerGenerator" public="true"/>
+    </services>
+</container>

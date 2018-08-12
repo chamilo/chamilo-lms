@@ -1,0 +1,62 @@
+{
+    "name": "sonata-project/exporter",
+    "type": "library",
+    "description": "Lightweight Exporter library",
+    "keywords": [
+        "export",
+        "csv",
+        "xls",
+        "data",
+        "client"
+    ],
+    "homepage": "https://github.com/sonata-project/Exporter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@gmail.com",
+            "homepage": "https://sonata-project.org/"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0"
+    },
+    "require-dev": {
+        "doctrine/dbal": "^2.5",
+        "doctrine/orm": "^2.4.5",
+        "matthiasnoback/symfony-config-test": "^2.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^1.0",
+        "propel/propel1": "^1.6",
+        "symfony/config": "^2.8 || ^3.2 || ^4.0",
+        "symfony/dependency-injection": "^2.8 || ^3.2 || ^4.0",
+        "symfony/http-foundation": "^2.8 || ^3.2 || ^4.0",
+        "symfony/http-kernel": "^2.8 || ^3.2 || ^4.0",
+        "symfony/phpunit-bridge": "^4.0",
+        "symfony/property-access": "^2.8 || ^3.2 || ^4.0",
+        "symfony/routing": "^2.8 || ^3.2 || ^4.0"
+    },
+    "suggest": {
+        "ext-curl": "*",
+        "propel/propel1": "^1.6",
+        "symfony/property-access": "To be able to export from database entities",
+        "symfony/routing": "To be able to export the routes of a Symfony app"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Exporter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Exporter\\Test\\": "tests/"
+        }
+    }
+}

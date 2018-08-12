@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.user.api.form.type.group" class="Sonata\UserBundle\Form\Type\ApiGroupType">
+            <tag name="form.type" alias="sonata_user_api_form_group"/>
+            <argument type="service" id="jms_serializer.metadata_factory"/>
+            <argument type="service" id="doctrine"/>
+            <argument>sonata_user_api_form_group</argument>
+            <argument>%sonata.user.admin.group.entity%</argument>
+            <argument>sonata_api_write</argument>
+        </service>
+        <service id="sonata.user.api.form.type.user" class="Sonata\UserBundle\Form\Type\ApiUserType">
+            <tag name="form.type" alias="sonata_user_api_form_user"/>
+            <argument type="service" id="jms_serializer.metadata_factory"/>
+            <argument type="service" id="doctrine"/>
+            <argument>sonata_user_api_form_user</argument>
+            <argument>%sonata.user.admin.user.entity%</argument>
+            <argument>sonata_api_write</argument>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Sonata\BlockBundle\Model\BaseBlock" exclusion-policy="all" xml-root-name="block">
+        <property name="name" type="string" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search"/>
+        <property name="type" type="string" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search"/>
+        <virtual-property name="settings" type="array" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" method="getSettings"/>
+        <property name="enabled" type="boolean" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search"/>
+        <property name="position" type="integer" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search"/>
+        <property name="parent" serialized-name="parent_id" type="sonata_page_block_id" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search"/>
+        <property name="page" serialized-name="page_id" type="sonata_page_page_id" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search"/>
+        <property name="createdAt" type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read,sonata_search"/>
+        <property name="updatedAt" type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read,sonata_search"/>
+    </class>
+</serializer>

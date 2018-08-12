@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.user.editable_role_builder" class="Sonata\UserBundle\Security\EditableRolesBuilder">
+            <argument/>
+            <argument/>
+            <argument type="service" id="sonata.admin.pool"/>
+            <argument>%security.role_hierarchy.roles%</argument>
+            <call method="setTranslator">
+                <argument type="service" id="translator"/>
+            </call>
+        </service>
+        <service id="sonata.user.form.type.security_roles" class="Sonata\UserBundle\Form\Type\SecurityRolesType">
+            <tag name="form.type" alias="sonata_security_roles"/>
+            <argument type="service" id="sonata.user.editable_role_builder"/>
+        </service>
+    </services>
+</container>

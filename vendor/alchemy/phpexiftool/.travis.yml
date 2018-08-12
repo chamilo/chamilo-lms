@@ -1,0 +1,20 @@
+language: php
+
+sudo: false
+
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.5
+      env: PREFER_LOWEST="--prefer-lowest"
+
+pre_install:
+  - phpenv config-rm xdebug.ini
+install:
+  - composer update --prefer-source --no-interaction $PREFER_LOWEST
+  - if [ -n "$PREFER_LOWEST" ];then composer update phpunit/phpunit --prefer-source --no-interaction --with-dependencies;fi

@@ -1,0 +1,15 @@
+{
+    "wordLength": "Hasło jest zbyt krótkie",
+    "wordNotEmail": "Hasło nie może być Twoim emailem",
+    "wordSimilarToUsername": "Hasło nie może zawierać nazwy użytkownika",
+    "wordTwoCharacterClasses": "Użyj innych klas znaków",
+    "wordRepetitions": "Zbyt wiele powtórzeń",
+    "wordSequences": "Hasło zawiera sekwencje",
+    "errorList": "Błędy:",
+    "veryWeak": "Bardzo słabe",
+    "weak": "Słabe",
+    "normal": "Normalne",
+    "medium": "Średnie",
+    "strong": "Silne",
+    "veryStrong": "Bardzo silne"
+}

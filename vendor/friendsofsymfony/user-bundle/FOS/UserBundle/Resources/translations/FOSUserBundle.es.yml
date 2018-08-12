@@ -1,0 +1,99 @@
+# Group
+group:
+    edit:
+        submit: Actualizar grupo
+    show:
+        name: Nombre de grupo
+    new:
+        submit: Crear grupo
+    flash:
+        updated: El grupo ha sido actualizado
+        created: El grupo ha sido creado
+        deleted: El grupo ha sido borrado
+
+# Security
+"Bad credentials": Nombre de usuario o Contraseña inválido
+
+# Since Symfony 2.6 the error message has changed
+"Bad credentials.": Nombre de usuario o Contraseña inválido.
+
+security:
+    login:
+        username: Nombre de usuario
+        password: Contraseña
+        remember_me: Recordar
+        submit: Entrar
+
+# Profile
+profile:
+    show:
+        username: Nombre de usuario
+        email: Email
+    edit:
+        submit: Actualizar usuario
+    flash:
+        updated: El perfil ha sido actualizado
+
+# Password change
+change_password:
+    submit: Cambiar contraseña
+    flash:
+        success: La contraseña se ha cambiado con éxito
+
+# Registration
+registration:
+    check_email: Se ha enviado un email a %email%. Contiene un enlace de activación que debes presionar para activar tu cuenta.
+    confirmed: Felicidades %username%, tu cuenta está ahora confirmada.
+    back: Volver a la página original.
+    submit: Registrar
+    flash:
+        user_created: El usuario se ha creado satisfactoriamente
+    email:
+        subject: Bienvenido %username%!
+        message: |
+            Hola %username%!
+
+            Para completar la validación de tu cuenta - por favor visita %confirmationUrl%
+
+            Atentamente,
+            el Equipo.
+
+# Password resetting
+resetting:
+    password_already_requested: La contraseña para este usuario ya ha sido solicitada dentro de las 24 horas.
+    check_email: Un email ha sido enviado a %email%. Contiene un enlace de activación que debes presionar para restablecer tu contraseña.
+    request:
+        invalid_username: El usuario o dirección de correo "%username%" no existe.
+        username: Nombre de usuario
+        submit: Restablecer contraseña
+    reset:
+        submit: Cambiar contraseña
+    flash:
+        success: La contraseña se ha cambiado con éxito
+    email:
+        subject: Bienvenido %username%!
+        message : |
+            Hola %username%!
+
+            Para restablecer tu contraseña - por favor visita %confirmationUrl%
+
+            Atentamente,
+            el Equipo.
+
+# Global strings
+layout:
+    logout: Salir
+    login: Entrar
+    register: Registrar
+    logged_in_as: Identificado como %username%
+
+# Form field labels
+form:
+    group_name: Nombre de grupo
+    username: Nombre de usuario
+    email: Email
+    current_password: Contraseña actual
+    password: Contraseña
+    password_confirmation: Repita la contraseña
+    new_password: Nueva contraseña
+    new_password_confirmation: Repita la contraseña

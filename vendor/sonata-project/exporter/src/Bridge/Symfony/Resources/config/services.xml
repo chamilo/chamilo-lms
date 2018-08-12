@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.exporter.writer.csv" class="Exporter\Writer\CsvWriter" public="false">
+            <argument>%sonata.exporter.writer.csv.filename%</argument>
+            <argument>%sonata.exporter.writer.csv.delimiter%</argument>
+            <argument>%sonata.exporter.writer.csv.enclosure%</argument>
+            <argument>%sonata.exporter.writer.csv.escape%</argument>
+            <argument>%sonata.exporter.writer.csv.show_headers%</argument>
+            <argument>%sonata.exporter.writer.csv.with_bom%</argument>
+        </service>
+        <service id="sonata.exporter.writer.json" class="Exporter\Writer\JsonWriter" public="false">
+            <argument>%sonata.exporter.writer.json.filename%</argument>
+        </service>
+        <service id="sonata.exporter.writer.xls" class="Exporter\Writer\XlsWriter" public="false">
+            <argument>%sonata.exporter.writer.xls.filename%</argument>
+            <argument>%sonata.exporter.writer.xls.show_headers%</argument>
+        </service>
+        <service id="sonata.exporter.writer.xml" class="Exporter\Writer\XmlWriter" public="false">
+            <argument>%sonata.exporter.writer.xml.filename%</argument>
+            <argument>%sonata.exporter.writer.xml.main_element%</argument>
+            <argument>%sonata.exporter.writer.xml.child_element%</argument>
+        </service>
+        <service id="sonata.exporter.exporter" class="Exporter\Exporter" public="true"/>
+    </services>
+</container>

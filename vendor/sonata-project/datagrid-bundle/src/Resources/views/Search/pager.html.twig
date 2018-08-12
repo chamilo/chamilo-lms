@@ -1,0 +1,39 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% block pager_links %}
+    <ul class="pagination{% if pager_class is defined %} {{ pager_class }}{% endif %}">
+        {% if datagrid.pager.page > 2  %}
+            <li><a href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({page: 1})) }}" title="{{ 'link_first_pager'|trans({}, 'SonataDatagridBundle') }}">&laquo;</a></li>
+        {% endif %}
+
+        {% if datagrid.pager.page != datagrid.pager.previouspage %}
+            <li><a href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({page: datagrid.pager.previouspage})) }}" title="{{ 'link_previous_pager'|trans({}, 'SonataDatagridBundle') }}">&lsaquo;</a></li>
+        {% endif %}
+
+        {# Set the number of pages to display in the pager #}
+        {% for page in datagrid.pager.getLinks(5) %}
+            {% if page == datagrid.pager.page %}
+                <li class="active"><a href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({page: page})) }}">{{ page }}</a></li>
+            {% else %}
+                <li><a href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({page: page})) }}">{{ page }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if datagrid.pager.page != datagrid.pager.nextpage %}
+            <li><a href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({page: datagrid.pager.nextpage})) }}" title="{{ 'link_next_pager'|trans({}, 'SonataDatagridBundle') }}">&rsaquo;</a></li>
+        {% endif %}
+
+        {% if datagrid.pager.page != datagrid.pager.lastpage and datagrid.pager.lastpage != datagrid.pager.nextpage %}
+            <li><a href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({page: datagrid.pager.lastpage})) }}" title="{{ 'link_last_pager'|trans({}, 'SonataDatagridBundle') }}">&raquo;</a></li>
+        {% endif %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.user.mongodb.user_manager" class="Sonata\UserBundle\Document\UserManager" public="false">
+            <argument type="service" id="security.encoder_factory"/>
+            <argument type="service" id="fos_user.util.username_canonicalizer"/>
+            <argument type="service" id="fos_user.util.email_canonicalizer"/>
+            <argument type="service" id="fos_user.document_manager"/>
+            <argument>%fos_user.model.user.class%</argument>
+        </service>
+        <service id="sonata.user.mongodb.group_manager" class="Sonata\UserBundle\Document\GroupManager" public="false">
+            <argument type="service" id="fos_user.document_manager"/>
+            <argument>%fos_user.model.group.class%</argument>
+        </service>
+    </services>
+</container>

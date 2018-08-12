@@ -1,0 +1,235 @@
+-- This script updates the databases structure before migrating the data from
+-- version 1.8.8 (or version 1.8.8.2, 1.8.8.4) to version 1.9.0
+-- it is intended as a standalone script, however, because of the multiple
+-- databases related difficulties, it should be parsed by a PHP script in
+-- order to connect to and update the right databases.
+-- There is one line per query, allowing the PHP function file() to read
+-- all lines separately into an array. The xxMAINxx-type markers are there
+-- to tell the PHP script which database we're talking about.
+-- By always using the keyword "TABLE" in the queries, we should be able
+-- to retrieve and modify the table name from the PHP script if needed, which
+-- will allow us to deal with the unique-database-type installations
+--
+-- This first part is for the main database
+
+-- Optimized version
+
+-- xxMAINxx
+
+DROP PROCEDURE IF EXISTS dropIndexIfExists;
+CREATE PROCEDURE dropIndexIfExists(in theTable varchar(128), in theIndexName varchar(128) ) BEGIN  IF((SELECT COUNT(*) AS index_exists FROM information_schema.statistics WHERE TABLE_SCHEMA = DATABASE() and table_name = theTable AND index_name = theIndexName) > 0) THEN SET @s = CONCAT('DROP INDEX `' , theIndexName , '` ON `' , theTable, '`');   PREPARE stmt FROM @s;   EXECUTE stmt; END IF; END;
+DROP PROCEDURE IF EXISTS AddColumnUnlessExists;
+CREATE PROCEDURE AddColumnUnlessExists( IN dbName tinytext,	IN tableName tinytext,	IN fieldName tinytext, IN fieldDef text) BEGIN IF NOT EXISTS (		SELECT * FROM information_schema.COLUMNS	WHERE column_name = fieldName	and table_name = tableName		and table_schema=dbName) THEN set @ddl=CONCAT('ALTER TABLE ',dbName,'.',tableName, ' ADD COLUMN ', fieldName, ' ',fieldDef); prepare stmt from @ddl;		execute stmt;	END IF;end;
+
+LOCK TABLES sys_calendar WRITE;
+call AddColumnUnlessExists(Database(), 'sys_calendar', 'all_day', 'INTEGER NOT NULL DEFAULT 0');
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS event_type (id int unsigned NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL, name_lang_var varchar(50) NOT NULL, desc_lang_var varchar(50) NOT NULL, extendable_variables varchar(255) NOT NULL, PRIMARY KEY (id));
+LOCK TABLES event_type WRITE;
+ALTER TABLE event_type ADD INDEX (name);
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS event_type_email_template (id int unsigned NOT NULL AUTO_INCREMENT, event_type_id int NOT NULL, language_id int NOT NULL, message text NOT NULL, subject varchar(60) NOT NULL, PRIMARY KEY (id));
+LOCK TABLES event_type_email_template WRITE;
+ALTER TABLE event_type_email_template ADD INDEX (language_id);
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS announcement_rel_group (group_id int NOT NULL, announcement_id int NOT NULL, PRIMARY KEY (group_id, announcement_id));
+CREATE TABLE IF NOT EXISTS group_rel_group ( id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, subgroup_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS chat (id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, from_user INTEGER, to_user INTEGER, message TEXT NOT NULL, sent DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', recd INTEGER UNSIGNED NOT NULL DEFAULT 0, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS user_rel_course_vote ( id int unsigned not null AUTO_INCREMENT PRIMARY KEY,  c_id int unsigned not null,  user_id int unsigned not null, session_id int unsigned not null default 0,  url_id int unsigned not null default 0, vote int unsigned not null default 0);
+CREATE TABLE IF NOT EXISTS grade_model (id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, description TEXT, default_lowest_eval_exclude TINYINT default null, default_external_eval_prefix VARCHAR(140) default null, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS grade_components (id INTEGER  NOT NULL AUTO_INCREMENT, percentage VARCHAR(255)  NOT NULL, title VARCHAR(255)  NOT NULL, acronym VARCHAR(255)  NOT NULL, grade_model_id INTEGER NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS event_email_template (  id int NOT NULL AUTO_INCREMENT,  message text,  subject varchar(255) DEFAULT NULL,  event_type_name varchar(255) DEFAULT NULL,  activated tinyint NOT NULL DEFAULT '0',  language_id int DEFAULT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS event_sent (  id int NOT NULL AUTO_INCREMENT,  user_from int NOT NULL,  user_to int DEFAULT NULL,  event_type_name varchar(100) DEFAULT NULL,  PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS user_rel_event_type (  id int NOT NULL AUTO_INCREMENT,  user_id int NOT NULL,  event_type_name varchar(255) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, short_code varchar(100) NOT NULL, description TEXT NOT NULL, access_url_id int NOT NULL, icon varchar(255) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_rel_gradebook ( id int NOT NULL AUTO_INCREMENT, gradebook_id int NOT NULL, skill_id int NOT NULL, type varchar(10) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_rel_skill (id int NOT NULL AUTO_INCREMENT, skill_id int NOT NULL, parent_id int NOT NULL, relation_type int NOT NULL, level int NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_rel_user ( id int NOT NULL AUTO_INCREMENT, user_id int NOT NULL, skill_id int NOT NULL, acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',assigned_by int NOT NULL,PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255)  NOT NULL, description TEXT  NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_rel_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, skill_id INTEGER  NOT NULL, profile_id INTEGER  NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS course_type (id int unsigned not null auto_increment primary key, name varchar(50) not null, translation_var char(40) default 'UndefinedCourseTypeLabel', description TEXT default '', props text default '');
+CREATE TABLE IF NOT EXISTS usergroup_rel_question (id int unsigned not null auto_increment primary key, c_id int unsigned not null, question_id int unsigned not null, usergroup_id int unsigned not null, coefficient float(6,2));
+CREATE TABLE IF NOT EXISTS track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT, c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);
+CREATE TABLE IF NOT EXISTS track_stored_values (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS track_stored_values_stack (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS track_e_attempt_coeff ( id int unsigned not null auto_increment primary key, attempt_id INT NOT NULL, marks_coeff float(6,2));
+
+LOCK TABLES track_stored_values WRITE, track_stored_values_stack WRITE, group_rel_group WRITE, course_rel_user WRITE, session_rel_course_rel_user WRITE, course WRITE, gradebook_category WRITE, gradebook_link WRITE, chat WRITE, track_course_ranking WRITE, user_rel_course_vote WRITE, user WRITE;
+
+call AddColumnUnlessExists(Database(), 'course_rel_user', 'legal_agreement', 'INTEGER DEFAULT 0');
+call AddColumnUnlessExists(Database(), 'session_rel_course_rel_user', 'legal_agreement', 'INTEGER DEFAULT 0');
+call AddColumnUnlessExists(Database(), 'course', 'legal', 'TEXT NOT NULL');
+call AddColumnUnlessExists(Database(), 'course', 'activate_legal', 'INT NOT NULL DEFAULT 0');
+call AddColumnUnlessExists(Database(), 'gradebook_category', 'locked', 'INT DEFAULT 0');
+call AddColumnUnlessExists(Database(), 'gradebook_category', 'default_lowest_eval_exclude', 'TINYINT default null');
+call AddColumnUnlessExists(Database(), 'gradebook_link', 'locked', 'INT DEFAULT 0');
+
+ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
+ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
+ALTER TABLE course MODIFY COLUMN disk_quota bigint unsigned DEFAULT NULL;
+ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
+
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+
+call dropIndexIfExists('chat','idx_chat_to_user');
+call dropIndexIfExists('chat','idx_chat_from_user');
+call dropIndexIfExists('group_rel_group','group_id');
+call dropIndexIfExists('group_rel_group','subgroup_id');
+call dropIndexIfExists('group_rel_group','relation_type');
+call dropIndexIfExists('track_course_ranking','idx_tcc_cid');
+call dropIndexIfExists('track_course_ranking','idx_tcc_sid');
+call dropIndexIfExists('track_course_ranking','idx_tcc_urlid');
+call dropIndexIfExists('track_course_ranking','idx_tcc_creation_date');
+call dropIndexIfExists('user_rel_course_vote','idx_ucv_cid');
+call dropIndexIfExists('user_rel_course_vote','idx_ucv_uid');
+call dropIndexIfExists('user_rel_course_vote','idx_ucv_cuid');
+
+ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
+ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
+ALTER TABLE group_rel_group ADD INDEX ( group_id );
+ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+ALTER TABLE group_rel_group ADD INDEX ( relation_type );
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_cid (c_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_sid (session_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_urlid (url_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cid (c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_uid (user_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+UNLOCK TABLES;
+
+LOCK TABLES settings_options WRITE, user_field WRITE, gradebook_evaluation WRITE, gradebook_category WRITE, settings_current WRITE, event_email_template WRITE, event_sent WRITE, user_rel_event_type WRITE, usergroup_rel_session WRITE, usergroup_rel_course WRITE, usergroup_rel_user WRITE, admin WRITE, reservation_category_rights WRITE, course WRITE, user_api_key WRITE;
+
+ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
+ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE usergroup_rel_session ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_course ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_user ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE admin ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE reservation_category_rights ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE course ADD COLUMN course_type_id int unsigned default 1;
+ALTER TABLE user_api_key ADD COLUMN api_end_point text DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN validity_start_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
+
+call dropIndexIfExists('event_email_template', 'event_name_index');
+call dropIndexIfExists('event_sent', 'event_name_index');
+call dropIndexIfExists('user_rel_event_type', 'event_name_index');
+
+ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
+ALTER TABLE event_email_template ADD INDEX event_name_index (event_type_name);
+ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
+ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
+
+UNLOCK TABLES;
+
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'already_logged_in','Already logged in',0,0), (1, 'update_type','Update script type',0,0), (1, 'google_calendar_url','Google Calendar URL',0,0), (1, 'user_chat_status','User chat status', 0, 0);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0), ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),('footer_extra_content', NULL, 'textarea', 'Tracking', '', 'FooterExtraContentTitle', 'FooterExtraContentComment', NULL, NULL,1), ('show_documents_preview', NULL, 'radio', 'Tools', 'false', 'ShowDocumentPreviewTitle', 'ShowDocumentPreviewComment', NULL, NULL, 1), ('htmlpurifier_wiki',NULL,'radio','Editor','false','HtmlPurifierWikiTitle','HtmlPurifierWikiComment',NULL,NULL, 0), ('cas_activate', NULL, 'radio', 'CAS', 'false', 'CasMainActivateTitle', 'CasMainActivateComment', NULL, NULL, 0), ('cas_server', NULL, 'textfield', 'CAS', '', 'CasMainServerTitle', 'CasMainServerComment', NULL, NULL, 0), ('cas_server_uri', NULL, 'textfield', 'CAS', '', 'CasMainServerURITitle', 'CasMainServerURIComment', NULL, NULL, 0), ('cas_port', NULL, 'textfield', 'CAS', '', 'CasMainPortTitle', 'CasMainPortComment', NULL, NULL, 0), ('cas_protocol', NULL, 'radio', 'CAS', '', 'CasMainProtocolTitle', 'CasMainProtocolComment', NULL, NULL, 0), ('cas_add_user_activate', NULL, 'radio', 'CAS', 'false', 'CasUserAddActivateTitle', 'CasUserAddActivateComment', NULL, NULL, 0), ('update_user_info_cas_with_ldap', NULL, 'radio', 'CAS', 'true', 'UpdateUserInfoCasWithLdapTitle', 'UpdateUserInfoCasWithLdapComment', NULL, NULL, 0), ('use_custom_pages', NULL, 'radio','Platform','false','UseCustomPagesTitle','UseCustomPagesComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_documents_preview', 'true', 'Yes'), ('show_documents_preview', 'false', 'No'), ('htmlpurifier_wiki', 'true', 'Yes'), ('htmlpurifier_wiki', 'false', 'No'), ('cas_activate', 'true', 'Yes'), ('cas_activate', 'false', 'No'), ('cas_protocol', 'CAS1', 'CAS1Text'), ('cas_protocol', 'CAS2', 'CAS2Text'), ('cas_protocol', 'SAML', 'SAMLText'), ('cas_add_user_activate', 'platform', 'casAddUserActivatePlatform'), ('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'), ('cas_add_user_activate', 'false', 'No'), ('use_custom_pages', 'true', 'Yes'), ('use_custom_pages', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('student_page_after_login', NULL, 'textfield', 'Platform', '', 'StudentPageAfterLoginTitle', 'StudentPageAfterLoginComment', NULL, NULL, 0), ('teacher_page_after_login', NULL, 'textfield', 'Platform', '', 'TeacherPageAfterLoginTitle', 'TeacherPageAfterLoginComment', NULL, NULL, 0), ('drh_page_after_login', NULL, 'textfield', 'Platform', '', 'DRHPageAfterLoginTitle', 'DRHPageAfterLoginComment', NULL, NULL, 0), ('sessionadmin_page_after_login', NULL, 'textfield', 'Session', '', 'SessionAdminPageAfterLoginTitle', 'SessionAdminPageAfterLoginComment', NULL, NULL, 0), ('student_autosubscribe', NULL, 'textfield', 'Platform', '', 'StudentAutosubscribeTitle', 'StudentAutosubscribeComment', NULL, NULL, 0), ('teacher_autosubscribe', NULL, 'textfield', 'Platform', '', 'TeacherAutosubscribeTitle', 'TeacherAutosubscribeComment', NULL, NULL, 0), ('drh_autosubscribe', NULL, 'textfield', 'Platform', '', 'DRHAutosubscribeTitle', 'DRHAutosubscribeComment', NULL, NULL, 0), ('sessionadmin_autosubscribe', NULL, 'textfield', 'Session', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0), ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1), ('show_tabs', 'custom_tab_2', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom2', 1), ('show_tabs', 'custom_tab_3', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom3', 1), ('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0), ('languagePriority2', NULL, 'radio', 'Languages', 'user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0), ('languagePriority3', NULL, 'radio', 'Languages', 'user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0), ('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang', 'LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority1','platform_lang','PlatformLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority1','user_profil_lang','UserLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority1','user_selected_lang','UserSelectedLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority1','course_lang','CourseLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority2','platform_lang','PlatformLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority2','user_profil_lang','UserLanguage')
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority2','user_selected_lang','UserSelectedLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority2','course_lang','CourseLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority3','platform_lang','PlatformLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority3','user_profil_lang','UserLanguage')
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority3','user_selected_lang','UserSelectedLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority3','course_lang','CourseLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority4','platform_lang','PlatformLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority4','user_profil_lang','UserLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority4','user_selected_lang','UserSelectedLanguage');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority4','course_lang','CourseLanguage');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('login_is_email','true','Yes'), ('login_is_email','false','No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('scorm_cumulative_session_time','true','Yes'), ('scorm_cumulative_session_time','false','No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0), ('allow_session_admins_to_manage_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1), ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0), ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0), ('ldap_description', NULL, 'radio', 'LDAP', NULL, 'LdapDescriptionTitle', 'LdapDescriptionComment', NULL, NULL, 0), ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkComment', NULL, NULL, 0), ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable_grade_model', 'true', 'Yes'), ('gradebook_enable_grade_model', 'false', 'No'), ('teachers_can_change_grade_model_settings', 'true', 'Yes'), ('teachers_can_change_grade_model_settings', 'false', 'No'), ('gradebook_locking_enabled', 'true', 'Yes'), ('gradebook_locking_enabled', 'false', 'No'), ('teachers_can_change_score_settings', 'true', 'Yes'), ('teachers_can_change_score_settings', 'false', 'No'), ('allow_users_to_change_email_with_no_password', 'true', 'Yes'), ('allow_users_to_change_email_with_no_password', 'false', 'No'), ('allow_session_admins_to_manage_all_sessions', 'true', 'Yes'), ('allow_session_admins_to_manage_all_sessions', 'false', 'No'), ('enable_help_link', 'true', 'Yes'), ('enable_help_link', 'false', 'No'), ('allow_hr_skills_management', 'true', 'Yes'), ('allow_hr_skills_management', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1), ('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1), ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1), ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0), ('enable_wami_record', NULL, 'radio', 'Tools', 'false', 'EnableWamiRecordTitle', 'EnableWamiRecordComment', NULL, NULL, 0), ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1), ('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'do_not_show', 'DoNotShow'), ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'), ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'), ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers'), ('allow_global_chat', 'true', 'Yes'), ('allow_global_chat', 'false', 'No'), ('courses_default_creation_visibility', '3', 'OpenToTheWorld'), ('courses_default_creation_visibility', '2', 'OpenToThePlatform'), ('courses_default_creation_visibility', '1', 'Private'), ('courses_default_creation_visibility', '0', 'CourseVisibilityClosed'), ('allow_browser_sniffer', 'true', 'Yes'), ('allow_browser_sniffer', 'false', 'No'), ('enable_wami_record', 'true', 'Yes'), ('enable_wami_record', 'false', 'No'), ('allow_public_certificates', 'true', 'Yes'), ('allow_public_certificates', 'false', 'No'), ('enable_iframe_inclusion', 'true', 'Yes'), ('enable_iframe_inclusion', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1), ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 1), ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_webcam_clip', NULL, 'radio', 'Tools', 'false', 'EnableWebCamClipTitle', 'EnableWebCamClipComment', NULL, NULL, 0), ('tool_visible_by_default_at_creation','documents','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Documents', 1), ('tool_visible_by_default_at_creation','learning_path','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'LearningPath', 1), ('tool_visible_by_default_at_creation','links','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Links', 1), ('tool_visible_by_default_at_creation','announcements','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Announcements', 1), ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1), ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1), ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1), ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_hot_courses', 'true', 'Yes'), ('show_hot_courses', 'false', 'No'), ('enable_webcam_clip', 'true', 'Yes'), ('enable_webcam_clip', 'false', 'No'), ('page_after_login', 'main/auth/courses.php', 'CourseCatalog'), ('activate_email_template', 'true', 'Yes'),('activate_email_template', 'false', 'No'), ('allow_skills_tool', 'true', 'Yes'), ('allow_skills_tool', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'true', 'Yes'), ('platform_unsubscribe_allowed', 'false', 'No');
+
+INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0), ('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0);
+INSERT INTO skill (name) VALUES ('Root');
+INSERT INTO skill_rel_skill VALUES(1, 1, 0, 0, 0);
+
+INSERT INTO course_type (id, name) VALUES (1, 'All tools');
+INSERT INTO course_type (id, name) VALUES (2, 'Entry exam');
+
+UPDATE settings_current SET category = 'Session' WHERE variable IN ('show_tutor_data', 'use_session_mode', 'add_users_by_coach', 'show_session_coach', 'show_session_data', 'allow_coach_to_edit_course_session','hide_courses_in_sessions', 'show_groups_to_users');
+UPDATE settings_current SET title = 'DatabaseVersion' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = 'true' WHERE variable = 'more_buttons_maximized_mode';
+
+UPDATE language SET english_name = 'basque' , dokeos_folder = 'basque' where english_name = 'euskera';
+UPDATE language SET english_name = 'turkish', dokeos_folder = 'turkish' where english_name = 'turkce';
+
+DELETE FROM settings_current WHERE variable = 'use_document_title';
+DELETE FROM settings_options WHERE variable = 'use_document_title';
+DELETE FROM settings_current WHERE variable = 'read_more_limit';
+DELETE FROM settings_current WHERE variable = 'user_order_by';
+DELETE FROM settings_options WHERE variable = 'user_order_by';
+
+DROP PROCEDURE IF EXISTS dropIndexIfExists;
+DROP PROCEDURE IF EXISTS AddColumnUnlessExists;
+
+-- Do not move this query
+UPDATE settings_current SET selected_value = '1.9.0.18715b' WHERE variable = 'chamilo_database_version';
+
+-- xxSTATSxx
+
+LOCK TABLES track_e_default WRITE, track_e_attempt WRITE, track_e_attempt_recording WRITE, track_e_hotpotatoes WRITE, track_e_exercices WRITE;
+
+ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
+ALTER TABLE track_e_default ADD COLUMN c_id INTEGER DEFAULT NULL;
+ALTER TABLE track_e_attempt_recording ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_attempt ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_hotpotatoes ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_default MODIFY COLUMN default_value TEXT;
+ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
+UNLOCK TABLES;
+
+-- xxUSERxx
+LOCK TABLES personal_agenda WRITE;
+ALTER TABLE personal_agenda ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
+UNLOCK TABLES;
+
+-- xxCOURSExx
+
+CREATE TABLE IF NOT EXISTS metadata (c_id INT NOT NULL, eid VARCHAR(250) NOT NULL, mdxmltext TEXT default '', md5 CHAR(32) default '', htmlcache1 TEXT default '', htmlcache2 TEXT default '', indexabletext TEXT default '', PRIMARY KEY (c_id, eid));
+ALTER TABLE {prefix}lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}lp_item_view MODIFY COLUMN suspend_data longtext;
+ALTER TABLE {prefix}quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}student_publication ADD COLUMN contains_file INT NOT NULL DEFAULT 1;
+ALTER TABLE {prefix}student_publication ADD COLUMN allow_text_assignment INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
+ALTER TABLE {prefix}quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
+ALTER TABLE {prefix}quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
+ALTER TABLE {prefix}quiz_answer ADD COLUMN answer_code char(10) default '';
+ALTER TABLE {prefix}quiz_question ADD COLUMN question_code char(10) default '';
+INSERT INTO {prefix}course_setting (variable, value, category) VALUES ('allow_public_certificates', 0, 'certificates');

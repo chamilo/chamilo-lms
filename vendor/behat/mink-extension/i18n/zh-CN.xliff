@@ -1,0 +1,157 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="global" source-language="en" target-language="zh-CN" datatype="plaintext">
+    <header />
+    <body>
+        <trans-unit id="i-am-on-page">
+            <source><![CDATA[/^(?:|I )am on "(?P<page>[^"]+)"$/]]></source>
+            <target><![CDATA[/^(?:|我)打开了“(?P<page>[^\s]+)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-go-to-page">
+            <source><![CDATA[/^(?:|I )go to "(?P<page>[^"]+)"$/]]></source>
+            <target><![CDATA[/^(?:|我)转到了“(?P<page>[^\s]+)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="reload-the-page">
+            <source><![CDATA[/^(?:|I )reload the page$/]]></source>
+            <target><![CDATA[/^(?:|我)重新刷新了该网页$/]]></target>
+        </trans-unit>
+        <trans-unit id="move-backward-one-page">
+            <source><![CDATA[/^(?:|I )move backward one page$/]]></source>
+            <target><![CDATA[/^(?:|我)后退了一页$/]]></target>
+        </trans-unit>
+        <trans-unit id="move-forward-one-page">
+            <source><![CDATA[/^(?:|I )move forward one page$/]]></source>
+            <target><![CDATA[/^(?:|我)前进了一页$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-press-button">
+            <source><![CDATA[/^(?:|I )press "(?P<button>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)点击了“(?P<button>(?:[^"]|\\")*)”按钮$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-follow-link">
+            <source><![CDATA[/^(?:|I )follow "(?P<link>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)点击了“(?P<link>(?:[^"]|\\")*)”链接$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-fill-in-field-with-value">
+            <source><![CDATA[/^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)在“(?P<field>(?:[^"]|\\")*)”文本框内填写了“(?P<value>(?:[^"]|\\")*)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-fill-in-value-for-field">
+            <source><![CDATA[/^(?:|I )fill in "(?P<value>(?:[^"]|\\")*)" for "(?P<field>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)内填写了“(?P<value>(?:[^"]|\\")*)”到“(?P<field>(?:[^"]|\\")*)”文本框$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-fill-in-the-following">
+            <source><![CDATA[/^(?:|I )fill in the following:$/]]></source>
+            <target><![CDATA[/^(?:|我)使用以下数据输入:$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-select-option-from-select">
+            <source><![CDATA[/^(?:|I )select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)在“(?P<select>(?:[^"]|\\")*)”选择框里面选择了“(?P<option>(?:[^"]|\\")*)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-additionally-select-option-from-select">
+            <source><![CDATA[/^(?:|I )additionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)在“(?P<select>(?:[^"]|\\")*)”选择框里面添加了“(?P<option>(?:[^"]|\\")*)”选择$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-check-option">
+            <source><![CDATA[/^(?:|I )check "(?P<option>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)选中了“(?P<option>(?:[^"]|\\")*)”选项$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-uncheck-option">
+            <source><![CDATA[/^(?:|I )uncheck "(?P<option>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)取消了“(?P<option>(?:[^"]|\\")*)”选项$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-attach-the-file-to-field">
+            <source><![CDATA[/^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)添加了文件“(?P<path>[^"]*)”到“(?P<field>(?:[^"]|\\")*)”文件选择框$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-see-text">
+            <source><![CDATA[/^(?:|I )should see "(?P<text>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)应该可以看见包含“(?P<text>(?:[^"]|\\")*)”的内容$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-response-should-contain">
+            <source><![CDATA[/^the response should contain "(?P<text>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^响应应该包含“(?P<text>(?:[^"]|\\")*)”的内容$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-not-see-text">
+            <source><![CDATA[/^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^(?:|我)应该不能看见包含“(?P<text>(?:[^"]|\\")*)”的内容$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-response-should-not-contain">
+            <source><![CDATA[/^the response should not contain "(?P<text>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^响应不应该包含“(?P<text>(?:[^"]|\\")*)”的内容$/]]></target>
+
+        </trans-unit>
+        <trans-unit id="the-field-should-contain-value">
+            <source><![CDATA[/^the "(?P<field>(?:[^"]|\\")*)" field should contain "(?P<value>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^“(?P<field>(?:[^"]|\\")*)”文本框应该包含值“(?P<value>(?:[^"]|\\")*)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-field-should-not-contain-value">
+            <source><![CDATA[/^the "(?P<field>(?:[^"]|\\")*)" field should not contain "(?P<value>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^“(?P<field>(?:[^"]|\\")*)”文本框应该不包含值“(?P<value>(?:[^"]|\\")*)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-checkbox-should-be-checked">
+            <source><![CDATA[/^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should be checked$/]]></source>
+            <target><![CDATA[/^“(?P<checkbox>(?:[^"]|\\")*)”选项框应该已经选中了$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-checkbox-should-not-be-checked">
+            <source><![CDATA[/^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should not be checked$/]]></source>
+            <target><![CDATA[/^“(?P<checkbox>(?:[^"]|\\")*)”选项框应该还没有选中$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-be-on-page">
+            <source><![CDATA[/^(?:|I )should be on "(?P<page>[^"]+)"$/]]></source>
+            <target><![CDATA[/^(?:|我)应该到了“(?P<page>[^\s]+)”$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-url-should-match">
+            <source><![CDATA[/^the (?i)url(?-i) should match (?P<pattern>"(?:[^"]|\\")*")$/]]></source>
+            <target><![CDATA[/^(?i)url(?-i) 应该匹配“(?P<pattern>"(?:[^"]|\\")*")”$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-element-should-contain">
+            <source><![CDATA[/^the "(?P<element>[^"]*)" element should contain "(?P<value>(?:[^"]|\\")*)"$/]]></source>
+            <target><![CDATA[/^“(?P<element>[^"]*)”元素应该包含“(?P<value>(?:[^"]|\\")*)”内容$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-see-text-in-element">
+            <source><![CDATA[/^(?:|I )should see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/]]></source>
+            <target><![CDATA[/^“(?P<element>[^"]*)”元素应该有“(?P<value>(?:[^"]|\\")*)”内容$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-not-see-text-in-element">
+            <source><![CDATA[/^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/]]></source>
+            <target><![CDATA[/^“(?P<element>[^"]*)”元素应该没有“(?P<value>(?:[^"]|\\")*)”内容$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-see-element">
+            <source><![CDATA[/^(?:|I )should see an? "(?P<element>[^"]*)" element$/]]></source>
+            <target><![CDATA[/^(?:|我)应该可以看见“(?P<element>[^"]*)”元素$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-not-see-element">
+            <source><![CDATA[/^(?:|I )should not see an? "(?P<element>[^"]*)" element$/]]></source>
+            <target><![CDATA[/^(?:|我)应该不能看见“(?P<element>[^"]*)”元素$/]]></target>
+        </trans-unit>
+        <trans-unit id="i-should-see-num-elements">
+            <source><![CDATA[/^(?:|I )should see (?P<num>\d+) "(?P<element>[^"]*)" elements?$/]]></source>
+            <target><![CDATA[/^(?:|我)应该可以看见 (?P<num>\d+) 个“(?P<element>[^"]*)”元素$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-response-status-code-should-be">
+            <source><![CDATA[/^the response status code should be (?P<code>\d+)$/]]></source>
+            <target><![CDATA[/^返回状态代码应该是 (?P<code>\d+)$/]]></target>
+        </trans-unit>
+        <trans-unit id="the-response-status-code-should-not-be">
+            <source><![CDATA[/^the response status code should not be (?P<code>\d+)$/]]></source>
+            <target><![CDATA[/^返回状态代码应该不是 (?P<code>\d+)$/]]></target>
+        </trans-unit>
+        <trans-unit id="print-last-response">
+            <source><![CDATA[/^print last response$/]]></source>
+            <target><![CDATA[/^打印最后一次响应$/]]></target>
+        </trans-unit>
+        <trans-unit id="show-last-response">
+            <source><![CDATA[/^show last response$/]]></source>
+            <target><![CDATA[/^显示最后一次响应$/]]></target>
+        </trans-unit>
+        <trans-unit id="-should-see-text-matching">
+            <source><![CDATA[/^(?:|I )should see text matching (?P<pattern>"(?:[^"]|\\")*")$/]]></source>
+            <target><![CDATA[/^(?:|我)应该可以看见文本内容匹配“(?P<pattern>"(?:[^"]|\\")*")”$/]]></target>
+
+        </trans-unit>
+        <trans-unit id="-should-not-see-text-matching">
+            <source><![CDATA[/^(?:|I )should not see text matching (?P<pattern>"(?:[^"]|\\")*")$/]]></source>
+            <target><![CDATA[/^(?:|我)应该可以看见文本内容不匹配“(?P<pattern>"(?:[^"]|\\")*")”$/]]></target>
+        </trans-unit>
+    </body>
+  </file>
+</xliff>

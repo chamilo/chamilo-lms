@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="sonata.user.block.breadcrumb_index.class">Sonata\UserBundle\Block\Breadcrumb\UserIndexBreadcrumbBlockService</parameter>
+        <parameter key="sonata.user.block.breadcrumb_profile.class">Sonata\UserBundle\Block\Breadcrumb\UserProfileBreadcrumbBlockService</parameter>
+    </parameters>
+    <services>
+        <service id="sonata.user.block.breadcrumb_index" class="%sonata.user.block.breadcrumb_index.class%">
+            <tag name="sonata.block"/>
+            <tag name="sonata.breadcrumb"/>
+            <argument>user_index</argument>
+            <argument>sonata.user.block.breadcrumb_index</argument>
+            <argument type="service" id="templating"/>
+            <argument type="service" id="knp_menu.menu_provider"/>
+            <argument type="service" id="knp_menu.factory"/>
+        </service>
+        <service id="sonata.user.block.breadcrumb_profile" class="%sonata.user.block.breadcrumb_profile.class%">
+            <tag name="sonata.block"/>
+            <tag name="sonata.breadcrumb"/>
+            <argument>user_profile</argument>
+            <argument>sonata.user.block.breadcrumb_profile</argument>
+            <argument type="service" id="templating"/>
+            <argument type="service" id="knp_menu.menu_provider"/>
+            <argument type="service" id="knp_menu.factory"/>
+        </service>
+    </services>
+</container>

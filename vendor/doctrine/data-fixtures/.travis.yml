@@ -1,0 +1,32 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php:
+  - 7.1
+  - 7.2
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
+
+services: mongodb
+
+before_install:
+  - pecl install -f mongodb
+
+before_script:
+  - composer self-update
+  - composer install --prefer-source
+  - composer config "platform.ext-mongo" "1.6.16"
+  - composer require alcaeus/mongo-php-adapter
+  - composer require doctrine/mongodb-odm
+  - composer require jackalope/jackalope-doctrine-dbal doctrine/phpcr-odm
+
+script:
+  - ./vendor/bin/phpunit -v

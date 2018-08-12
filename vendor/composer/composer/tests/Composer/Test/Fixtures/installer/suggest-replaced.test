@@ -1,0 +1,29 @@
+--TEST--
+Suggestions are not displayed for packages if they are replaced
+--COMPOSER--
+{
+    "repositories": [
+        {
+            "type": "package",
+            "package": [
+                { "name": "a/a", "version": "1.0.0", "suggest": { "b/b": "an obscure reason" }, "require": { "c/c": "*" } },
+                { "name": "c/c", "version": "1.0.0", "replace": { "b/b": "1.0.0" } }
+            ]
+        }
+    ],
+    "require": {
+        "a/a": "1.0.0",
+        "b/b": "1.0.0"
+    }
+}
+--RUN--
+install
+--EXPECT-OUTPUT--
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Writing lock file
+Generating autoload files
+
+--EXPECT--
+Installing c/c (1.0.0)
+Installing a/a (1.0.0)

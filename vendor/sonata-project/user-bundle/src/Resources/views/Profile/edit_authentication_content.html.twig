@@ -1,0 +1,16 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+<form action="{{ path('sonata_user_profile_edit_authentication') }}" method="POST" class="form-horizontal">
+    {{ form_widget(form) }}
+
+    <button type="submit" name="submit" class="btn btn-primary pull-right">{{ 'sonata_user_submit'|trans({}, 'SonataUserBundle') }}</button>
+</form>

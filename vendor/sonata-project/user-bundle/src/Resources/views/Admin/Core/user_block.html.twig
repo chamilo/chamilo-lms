@@ -1,0 +1,53 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% block user_block %}
+    {% if app.user %}
+        {% set _bg_class          = "bg-light-blue" %}
+        {% set _logout_uri        = url('sonata_user_admin_security_logout') %}
+        {% set _logout_text       = 'user_block_logout'|trans({}, 'SonataUserBundle') %}
+        {% set _profile_uri       = sonata_user.userAdmin.isGranted('EDIT', app.user) ? sonata_user.userAdmin.generateUrl('edit', {id: sonata_user.userAdmin.id(app.user)}) : sonata_user.userAdmin.generateUrl('show', {id: sonata_user.userAdmin.id(app.user)}) %}
+        {% set _profile_text      = 'user_block_profile'|trans({}, 'SonataUserBundle') %}
+        {% set _user_image        = sonata_user.defaultAvatar ? asset(sonata_user.defaultAvatar) : null %}
+        {# Customize this with your profile picture implementation, see below for example #}
+        {#{% set _user_image  = app.user.profilePicture|default(asset(sonata_user.defaultAvatar)) %}#}
+
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') and sonata_user.impersonating %}
+            {% set _bg_class    = "bg-light-green" %}
+            {% set _logout_uri  = url(sonata_user.impersonating.route, sonata_user.impersonating.parameters| merge({'_switch_user': '_exit'})) %}
+            {% set _logout_text = 'switch_user_exit'|trans({}, 'SonataUserBundle') %}
+        {% endif %}
+
+        <li class="user-header {{ _bg_class }}">
+            {% if _user_image %}
+                <img src="{{ _user_image }}" class="img-circle" alt="Avatar" />
+            {% endif %}
+            <p>{{ app.user }}</p>
+        </li>
+
+{#
+    Uncomment to add some information
+        <li class="user-body">
+
+        </li>
+#}
+
+        <li class="user-footer">
+            <div class="pull-left">
+                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {{ _profile_text }}</a>
+            </div>
+
+            <div class="pull-right">
+                <a href="{{ _logout_uri }}" class="btn btn-default btn-flat"><i class="fa fa-sign-out fa-fw"></i> {{ _logout_text }}</a>
+            </div>
+        </li>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<oembed>
+	<provider_url>http://www.youtube.com/</provider_url>
+	<thumbnail_url>http://i3.ytimg.com/vi/zGt3-fxOvug/hqdefault.jpg</thumbnail_url>
+	<title>JOHN CLEESE WCF</title>
+	<html>&lt;iframe width="480" height="270" src="http://www.youtube.com/embed/zGt3-fxOvug?fs=1&amp;feature=oembed" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</html>
+	<author_name>zeekomkommers</author_name>
+	<height>270</height>
+	<thumbnail_width>480</thumbnail_width>
+	<width>480</width>
+	<version>1.0</version>
+	<author_url>http://www.youtube.com/user/zeekomkommers</author_url>
+	<provider_name>YouTube</provider_name>
+	<type>video</type>
+	<thumbnail_height>360</thumbnail_height>
+</oembed>

@@ -1,0 +1,37 @@
+{
+  "name": "imageMap-resizer",
+  "version": "0.5.4",
+  "homepage": "https://github.com/davidjbradshaw/imagemap-resizer",
+  "authors": [
+    "David J. Bradshaw <dave@bradshaw.net>"
+  ],
+  "description": "Keep HTML Image Maps scaled to the size of an image. It detects the window being resized and updates the co-ordinates of the image map.",
+  "main": "js/imageMapResizer.min.js",
+  "keywords": [
+    "imagemap",
+    "resizer",
+    "responsive",
+    "RWD",
+    "fluid",
+    "resize",
+    "design"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "examples",
+    "*.md",
+    "AUTHORS.txt",
+    "grunt.js",
+    "gruntfile.js",
+    "package.json",
+    "bower.json"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
+}

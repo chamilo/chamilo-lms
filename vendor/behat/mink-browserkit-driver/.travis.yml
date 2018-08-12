@@ -1,0 +1,37 @@
+language: php
+
+sudo: false
+
+php: [5.4, 5.5, 5.6, 7.0, 7.1, hhvm]
+
+matrix:
+  include:
+    - php: 5.3
+      dist: precise
+    # Test against LTS versions
+    - php: 7.1
+      env: SYMFONY_VERSION='^2'
+    - php: 7.1
+      env: SYMFONY_VERSION='^3'
+    # Test against dev versions of dependencies
+    - php: 7.1
+      env: DEPENDENCIES='dev'
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+    - $HOME/symfony-bridge/.phpunit
+
+before_install:
+  - if [ "$DEPENDENCIES" = "dev" ]; then composer config minimum-stability dev; fi;
+  - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require -n --no-update symfony/lts=$SYMFONY_VERSION; fi;'
+
+install:
+  - composer install -n
+  - vendor/bin/simple-phpunit install
+
+script: vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

@@ -1,0 +1,38 @@
+language: php
+
+sudo: required
+
+services: []
+
+before_script:
+  - sudo apt-get update
+  - sudo apt-get install -y ffmpeg libavcodec-extra-53 openoffice.org openoffice.org-writer unoconv ghostscript gsfonts ufraw graphicsmagick libgraphicsmagick1-dev libfreetype6-dev libjpeg-dev libgif-dev libtiff-dev libdjvulibre-dev libwmf-dev libmagickcore-dev libmagickwand-dev libpng-dev xpdf libexpat-dev gettext zlib1g-dev build-essential libfaac-dev libmp3lame0 libx264-dev libvpx-dev libtheora-dev libvorbis-dev gpac dcraw ufraw
+  - sudo apt-get clean
+  - wget http://www.swftools.org/swftools-0.9.1.tar.gz
+  - sh -c "tar xzvf swftools-0.9.1.tar.gz && cd swftools-0.9.1 && ./configure && make && sudo make install"
+  - wget http://pecl.php.net/get/imagick-$IMAGICK_VERSION.tgz
+  - tar -xzf imagick-$IMAGICK_VERSION.tgz
+  - sh -c "cd imagick-$IMAGICK_VERSION && phpize && ./configure --with-imagick=/usr/local && make -j && sudo make install"
+  - echo "extension=imagick.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - composer self-update
+  - if [ "$TRAVIS_PHP_VERSION" = "5.3.3" ]; then composer config disable-tls true; fi
+  - composer update --prefer-source --no-interaction $LOW_DEPS
+
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.3.3
+      env: IMAGICK_VERSION="3.1.0RC2"
+    - php: 5.3.3
+      env: IMAGICK_VERSION="3.1.0RC2" LOW_DEPS="--prefer-lowest"
+    - php: 5.3
+      env: IMAGICK_VERSION="3.4.0RC3"
+    - php: 5.4
+      env: IMAGICK_VERSION="3.4.0RC3"
+    - php: 5.5
+      env: IMAGICK_VERSION="3.4.0RC3"
+    - php: 5.6
+      env: IMAGICK_VERSION="3.4.0RC3"
+    - php: 7.0
+      env: IMAGICK_VERSION="3.4.0RC3"

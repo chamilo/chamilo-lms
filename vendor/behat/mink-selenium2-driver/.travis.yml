@@ -1,0 +1,43 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+php: [5.3, 5.4, 5.5, 5.6, 7.0, hhvm]
+
+env:
+  - WEBDRIVER=selenium
+
+matrix:
+  allow_failures:
+    - env: 'WEBDRIVER=phantomjs'
+    - env: WEBDRIVER=phantomjs PHANTOM_VERSION=2
+  fast_finish: true
+  include:
+    - php: 5.5
+      env: WEBDRIVER=phantomjs
+    - php: 5.5
+      env: WEBDRIVER=phantomjs PHANTOM_VERSION=2
+
+before_script:
+  - export WEB_FIXTURES_HOST=http://localhost:8000
+  - export WEB_FIXTURES_BROWSER=firefox
+
+  - sh bin/run-"$WEBDRIVER".sh
+
+  - composer install --prefer-source
+
+  # Start a webserver for web fixtures. Force using PHP 5.6 to be able to run it on PHP 5.3 and HHVM jobs too
+  - ~/.phpenv/versions/5.6/bin/php -S localhost:8000 -t vendor/behat/mink/driver-testsuite/web-fixtures > /dev/null 2>&1 &
+
+script: phpunit -v --coverage-clover=coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+after_failure:
+  - cat /tmp/webdriver_output.txt

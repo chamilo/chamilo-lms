@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="sonata.block.service.container.class">Sonata\BlockBundle\Block\Service\ContainerBlockService</parameter>
+        <parameter key="sonata.block.service.empty.class">Sonata\BlockBundle\Block\Service\EmptyBlockService</parameter>
+        <parameter key="sonata.block.service.text.class">Sonata\BlockBundle\Block\Service\TextBlockService</parameter>
+        <parameter key="sonata.block.service.rss.class">Sonata\BlockBundle\Block\Service\RssBlockService</parameter>
+        <parameter key="sonata.block.service.menu.class">Sonata\BlockBundle\Block\Service\MenuBlockService</parameter>
+        <parameter key="sonata.block.service.template.class">Sonata\BlockBundle\Block\Service\TemplateBlockService</parameter>
+    </parameters>
+    <services>
+        <service id="sonata.block.service.container" class="%sonata.block.service.container.class%">
+            <tag name="sonata.block"/>
+            <argument>sonata.block.container</argument>
+            <argument type="service" id="templating"/>
+        </service>
+        <service id="sonata.block.service.empty" class="%sonata.block.service.empty.class%">
+            <tag name="sonata.block"/>
+            <argument>sonata.block.empty</argument>
+            <argument type="service" id="templating"/>
+        </service>
+        <service id="sonata.block.service.text" class="%sonata.block.service.text.class%">
+            <tag name="sonata.block"/>
+            <argument>sonata.block.text</argument>
+            <argument type="service" id="templating"/>
+        </service>
+        <service id="sonata.block.service.rss" class="%sonata.block.service.rss.class%">
+            <tag name="sonata.block"/>
+            <argument>sonata.block.rss</argument>
+            <argument type="service" id="templating"/>
+        </service>
+        <service id="sonata.block.service.menu" class="%sonata.block.service.menu.class%">
+            <tag name="sonata.block"/>
+            <argument>sonata.block.menu</argument>
+            <argument type="service" id="templating"/>
+            <argument type="service" id="knp_menu.menu_provider"/>
+            <argument type="service" id="sonata.block.menu.registry"/>
+        </service>
+        <service id="sonata.block.service.template" class="%sonata.block.service.template.class%">
+            <tag name="sonata.block"/>
+            <argument>sonata.block.template</argument>
+            <argument type="service" id="templating"/>
+        </service>
+    </services>
+</container>

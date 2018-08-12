@@ -109,7 +109,7 @@
     <div class="version" aria-role="article" aria-label="1.11.8">
     <a name="1.11.8"></a>
 
-    <h1>Chamilo 1.11.8 - Sayaxché,  10/08/2018</h1>
+    <h1>Chamilo 1.11.8 - Sayaxché,  12/08/2018</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.8 is a minor, bug fix and security fix release on top of 1.11.6 that contains a series of
         small new features, including first support for European RGPD. Given the security fixes it contains,
@@ -204,6 +204,16 @@
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-role="log" aria-live="off">
+            <li>[2018-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/45ff6b6d89a9096061a03f2326363241fce8170b">45ff6b6d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) WYSIWYG: Add documentation, declare BETA and add French translation to the VR/360° video viewer in Chamilo</li>
+            <li>[2018-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/1e9543a8e62b6213f79e1ed85887bb24b9006274">1e9543a8</a>) WYSIWYG: Add DOCTYPE html to HTML documents created through CKEditor</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/1629f2939d1ad6fdae21c4c6bb65bbe8ce8eed88">1629f293</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) Global: Enable VRView mediaelement plugin by default</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/23e808f5a1d2f767a3adedbe9d28394b8d4194a4">23e808f5</a>) Admin: Fix access to add sessions to category</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/af61622f47b0a1cface0da1385bb4fcef25d88f0">af61622f</a>) Admin: Remove notice when deleting batch of users or courses with no user/course selected</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/513e5b66ad6314c33e15830063be14ec259425cf">513e5b66</a>) Display: Remove use of (some) .gif icons</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/5421757f2758032fd03872363f832b7113d7664d">5421757f</a>) Display: Remove deprecated (and ugly) info3.png/svg</li>
+            <li>[2018-08-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/b767f1b364dcf897c3273a97217877c170a29b52">b767f1b3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) Global: Add vrview plugin for mediaelement</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/223dcb92f0ff00916f391396b92d44549e911581">223dcb92</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2628">GH#2628</a>) Privacy: Enable GDPR features by default and allow disabling it by setting disable_gdpr in configuration.php</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/cb8d4032f4f01b3c2071e4b407b25d776c3bce16">cb8d4032</a>) Internal: Rename $strict variable to $returnEmptyIfNotFound for better understandability in get_lang()</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/cb8d4032f4f01b3c2071e4b407b25d776c3bce16">cb8d4032</a>) Internal: Rename $strict variable to $returnEmptyIfNotFound for better understandability in get_lang()</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/7f822a138cc5b910ec5a456473579816e98e2244">7f822a13</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2554">GH#2554</a>) Internal: Load the user language instead of the platform language</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/8ad5ae32bef70d8808f7bf4f2435f3800c2afbda">8ad5ae32</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2554">GH#2554</a>) Internal: Load the user language instead of the platform language</li>
@@ -905,6 +915,9 @@
         </ul>
         <h3>Stylesheets and theming</h3>
         <ul aria-role="log" aria-live="off">
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/38e649ac17cf8c74dfe6b63af41e42c0f8cd1728">38e649ac</a>) Template: Fix footer</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c267e71b7f2c12f5434e9c9592181aa0e740617c">c267e71b</a>) Template: Update fix show_footer and show_header tpl</li>
+            <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/248d9d9a43cdadca731427898ef818d25388aacc">248d9d9a</a>) Template: Improvement of template layout and css structure</li>
             <li>[2018-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/a12959e2139e7ba23f5031ff4fbedb534c359077">a12959e2</a>) Template: Added the variable home_include in the tpl layout_2_col.tpl</li>
             <li>[2018-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/d6c5d52a485e55ab97c3fc86c02b391c1c4fe64a">d6c5d52a</a> - <a href="https://support.chamilo.org/issues/11338">CT#11338</a>) Template: Add template variable home_include when including static HTML page through main menu. Add parameter to return_home_page(). Add SECTION_INCLUDE constant</li>
             <li>[2018-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/4507d6b92bec3259b7b06c0f79e9028e79fdfc41">4507d6b9</a>) Template: Fix duplicate plugin_main_top condition in layout_2_col.tpl</li>

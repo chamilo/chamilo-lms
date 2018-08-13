@@ -1,15 +1,12 @@
-<footer class="sticky-footer"> <!-- start of #footer section -->
-    <div class="pre-footer">
-        {% if plugin_pre_footer is not null %}
-            <div id="plugin_pre_footer" class="text-center">
-                {{ plugin_pre_footer }}
-            </div>
-        {% endif %}
-    </div>
-    <div class="sub-footer">
-    <div class="container">
+<div class="container">
+    {% if plugin_pre_footer is not null %}
+        <div id="plugin_pre_footer">
+            {{ plugin_pre_footer }}
+        </div>
+    {% endif %}
+    <section class="sub-footer">
         <div class="row">
-            <div id="footer_left" class="col-md-9">
+            <div class="col-xs-12 col-md-4">
                 <div class="partners">
                     <a href="http://www.bosch-stiftung.de" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
@@ -25,7 +22,14 @@
                     </a>
                 </div>
             </div>
-            <div id="footer_right" class="col-md-3">
+            <div class="col-xs-12 col-md-4">
+                {% if plugin_footer_center is not null %}
+                    <div id="plugin_footer_center">
+                        {{ plugin_footer_center }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-md-4 text-right">
                 {% if session_teachers is not null %}
                     <div class="session-teachers">
                         {{ session_teachers }}
@@ -42,21 +46,19 @@
                     </div>
                 {% endif %}
                 <div id="software_name">
-	                <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
+                    <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
                     &copy; {{ "now"|date("Y") }}
                 </div>
                 <div id="mentions_legales">
                         <a href="{{_p.web}}{{ "MentionsLegalesLink" |get_lang }}" target="_blank">{{ "MentionsLegales" |get_lang }}</a> - <a href="{{_p.web}}{{ "CGULink" |get_lang }}" target="_blank">{{ "CGU" |get_lang }}</a>
-                </div>
-                &nbsp;
+                </div>                &nbsp;
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->
         <div class="extra-footer">
             {{ footer_extra_content }}
         </div>
-    </div><!-- end of #container -->
-    </div>
-</footer>
+    </section>
+</div>
 
 {# Global modal, load content by AJAX call to href attribute on anchor tag with 'ajax' class #}
 <div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">

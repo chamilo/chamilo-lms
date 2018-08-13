@@ -241,7 +241,7 @@ if ($enableLpExtraFields) {
     </script>';
 }
 
-$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."</sript>";
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00'
     ? api_get_local_time($publicated_on)

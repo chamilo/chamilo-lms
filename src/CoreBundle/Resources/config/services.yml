@@ -133,7 +133,7 @@ services:
         calls:
             - [setContainer, ['@service_container']]
         tags:
-            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10}
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 7}
             - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
@@ -144,8 +144,9 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
-            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 11}
+            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 4}
 
+# deprecated use
 #    chamilo_core.listener.legacy_login_listener:
 #        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
 #        arguments: ["@service_container", '@security.token_storage']

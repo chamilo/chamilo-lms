@@ -399,9 +399,9 @@ class Container
         \Database::setManager($em);
         \CourseManager::setEntityManager($em);
 
-        Container::setSettingsManager($container->get('chamilo.settings.manager'));
-        Container::setUserManager($container->get('fos_user.user_manager'));
-        Container::setSiteManager($container->get('sonata.page.manager.site'));
+        self::setSettingsManager($container->get('chamilo.settings.manager'));
+        self::setUserManager($container->get('fos_user.user_manager'));
+        self::setSiteManager($container->get('sonata.page.manager.site'));
 
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
         \CourseManager::setCourseManager($container->get('chamilo_core.entity.manager.course_manager'));
@@ -409,10 +409,10 @@ class Container
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
 
-        Container::$session = $container->get('session');
+        self::$session = $container->get('session');
 
         // Setting legacy properties.
-        Container::$dataDir = $container->get('kernel')->getDataDir();
-        Container::$courseDir = $container->get('kernel')->getDataDir();
+        self::$dataDir = $container->get('kernel')->getDataDir();
+        self::$courseDir = $container->get('kernel')->getDataDir();
     }
 }

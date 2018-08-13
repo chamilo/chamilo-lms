@@ -46,9 +46,7 @@ try {
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
     $kernel = new Chamilo\Kernel($env, true);
-    $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
-        'host_with_path_by_locale'
-    );
+    $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
 
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
@@ -255,7 +253,7 @@ try {
     }
 
     // Error reporting settings.
-    if (api_get_setting('server_type') == 'test') {
+    if (api_get_setting('server_type') === 'test') {
         ini_set('display_errors', '1');
         ini_set('html_errors', '1');
         error_reporting(-1);
@@ -517,7 +515,7 @@ try {
     }
 
     // include the local (contextual) parameters of this course or section
-    require __DIR__.'/local.inc.php';
+    //require_once __DIR__.'/local.inc.php';
     $_user = api_get_user_info();
 
     // The global variable $text_dir has been defined in the language file trad4all.inc.php.
@@ -599,9 +597,9 @@ try {
     // Forcing PclZip library to use a custom temporary folder.
     define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 } catch (Exception $e) {
-    var_dump($e->getMessage());
+    /*var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());
     echo $e->getTraceAsString();
-    exit;
+    exit;*/
 }

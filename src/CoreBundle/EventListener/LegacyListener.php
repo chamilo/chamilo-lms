@@ -100,6 +100,14 @@ class LegacyListener
                 $twig->addGlobal($index, $value);
             }
 
+            $userId = $session->get('_uid');
+            $userInfo = api_get_user_info($userId);
+            $userInfo['is_anonymous'] = false;
+            $session->set('_user', $userInfo);
+            $session->set('is_platformAdmin', \UserManager::is_admin($userId));
+            $session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
+
+
             $_admin = [
                 'email' => api_get_setting('emailAdministrator'),
                 'surname' => api_get_setting('administratorSurname'),
@@ -154,9 +162,7 @@ class LegacyListener
 		        </div>';
             }
 
-            if (api_get_setting('show_link_ticket_notification') == 'true' &&
-                $allow
-            ) {
+            if (api_get_setting('show_link_ticket_notification') === 'true' && $allow) {
                 // by default is project_id = 1
                 $defaultProjectId = 1;
                 $allow = \TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);

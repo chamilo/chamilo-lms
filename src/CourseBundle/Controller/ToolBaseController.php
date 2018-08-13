@@ -171,14 +171,14 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
 
                     $sessionHandler->set('_real_cid', $courseId);
                     $sessionHandler->set('_cid', $courseCode);
-                    $sessionHandler->set('_course', $courseInfo);
+                    //$sessionHandler->set('_course', $courseInfo);
                 } else {
                     $this->abort(404, $this->trans('Course not available'));
                 }
             } else {
                 $sessionHandler->remove('_real_cid');
                 $sessionHandler->remove('_cid');
-                $sessionHandler->remove('_course');
+                //$sessionHandler->remove('_course');
             }
         }
 

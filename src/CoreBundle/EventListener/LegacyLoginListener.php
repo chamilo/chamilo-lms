@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
  * Class LegacyLoginListener.
  * File not needed the real listener is LegacyListener.
  *
- * @deprecated
+ * @deprecated use LegacyListener
  *
  * @package Chamilo\CoreBundle\EventListener
  */

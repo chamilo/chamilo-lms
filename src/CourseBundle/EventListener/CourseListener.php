@@ -6,6 +6,8 @@ namespace Chamilo\CourseBundle\EventListener;
 use Chamilo\CoreBundle\Controller\LegacyController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -48,7 +50,7 @@ class CourseListener
             return;
         }
 
-        $sessionHandler = $event->getRequest()->getSession();
+        $sessionHandler = $request->getSession();
 
         $container = $this->container;
         $translator = $container->get('translator');
@@ -60,33 +62,39 @@ class CourseListener
             $courseCode = $courseCodeFromRequest;
         }
 
+        if (empty($courseCode)) {
+            if (!empty($request->get('cDir'))) {
+                $courseCode = $request->get('cDir');
+            }
+        }
+
         /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();
 
         $checker = $container->get('security.authorization_checker');
 
-        $user = $request->getUser();
-        var_dump(get_class($user));
-        var_dump(get_class($sessionHandler));
-        var_dump(get_class($event));
-
-        /*$user = $this->container->get('security.token_storage')->getToken()->getUser();
-        var_dump(get_class($user));*/
-        var_dump($courseCode);
         $alreadyVisited = $sessionHandler->get('course_already_visited');
 
         if (!empty($courseCode)) {
             /** @var Course $course */
             $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
+
             if ($course) {
                 $sessionHandler->set('courseObj', $course);
+                $courseInfo = api_get_course_info($courseCode);
+                $container->get('twig')->addGlobal('course', $course);
+
+                $sessionHandler->set('_real_cid', $course->getId());
+                $sessionHandler->set('_cid', $course->getCode());
+                $sessionHandler->set('_course', $courseInfo);
 
                 // Session
-                $sessionId = intval($request->get('id_session'));
+                $sessionId = (int) $request->get('id_session');
                 $session = null;
 
                 // Group
-                $groupId = intval($request->get('gidReq'));
+                $groupId = (int) $request->get('gidReq');
+
                 if (empty($sessionId)) {
                     // Check if user is allowed to this course
                     // See CourseVoter.php
@@ -156,7 +164,7 @@ class CourseListener
                     }
                 }
 
-                if (!$alreadyVisited ||
+                /*if (!$alreadyVisited ||
                     isset($alreadyVisited) && $alreadyVisited != $courseCode
                 ) {
                     // Course access events
@@ -171,12 +179,14 @@ class CourseListener
                     }
                     $coursesAlreadyVisited[$course->getCode()] = 1;
                     $sessionHandler->set('course_already_visited', $courseCode);
-                }
+                }*/
             } else {
-                throw new NotFoundHttpException(
-                    $translator->trans('CourseDoesNotExist')
-                );
+                throw new NotFoundHttpException($translator->trans('CourseDoesNotExist'));
             }
+
+            Container::setRequest($request);
+            Container::setContainer($container);
+            Container::setLegacyServices($container);
         }
     }
 
@@ -227,8 +237,8 @@ class CourseListener
             }
         }*/
 
-        $groupId = intval($request->get('gidReq'));
-        $sessionId = intval($request->get('id_session'));
+        $groupId = (int) $request->get('gidReq');
+        $sessionId = (int) $request->get('id_session');
         $cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
@@ -295,7 +305,7 @@ class CourseListener
             $controllerAction = $request->get('_controller');
             if (!in_array($controllerAction, $ignore)) {
                 //error_log('remove');
-                $this->removeCourseFromSession($request);
+                //$this->removeCourseFromSession($request);
             }
         }
     }

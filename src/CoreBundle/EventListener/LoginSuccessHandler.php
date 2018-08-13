@@ -46,14 +46,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user = $token->getUser();
         $userId = $user->getId();
         $session = $request->getSession();
-        $userInfo = api_get_user_info($user->getId());
-        $userInfo['is_anonymous'] = false;
+
+        //$userInfo = api_get_user_info($user->getId());
+        //$userInfo['is_anonymous'] = false;
 
         // Backward compatibility.
         //$ip = $request->getClientIp();
 
         // Setting user info.
-        $session->set('_user', $userInfo);
+        //$session->set('_user', $user);
 
         // Setting admin permissions for.
         if ($this->checker->isGranted('ROLE_ADMIN')) {
@@ -91,13 +92,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             }
         }
 
-        Session::write('_uid', $user->getId());
-        Session::write('_user', $userInfo);
-        Session::write('is_platformAdmin', (bool) \UserManager::is_admin($userId));
-        Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
+        $session->set('_uid', $user->getId());
+        //$session->set('_user', $userInfo);
+        //$session->set('is_platformAdmin', \UserManager::is_admin($userId));
+        //$session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
 
         // Redirecting to a course or a session.
-        if (api_get_setting('course.go_to_course_after_login') == 'true') {
+        if (api_get_setting('course.go_to_course_after_login') === 'true') {
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
             $my_session_list = [];

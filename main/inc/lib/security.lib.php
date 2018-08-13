@@ -309,7 +309,7 @@ class Security
             }
         }
 
-        if ($user_status == COURSEMANAGERLOWSECURITY) {
+        if ($user_status === COURSEMANAGERLOWSECURITY) {
             return $var; // No filtering.
         }
 

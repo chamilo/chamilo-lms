@@ -392,6 +392,7 @@ class Login
      */
     public static function init_course($course_id, $reset)
     {
+        return;
         global $is_platformAdmin;
         global $_user;
 

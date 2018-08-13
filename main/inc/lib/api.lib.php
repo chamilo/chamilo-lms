@@ -1979,7 +1979,7 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
     }
 
     if (!empty($url)) {
-        $url .= '&gradebook='.intval(api_is_in_gradebook());
+        $url .= '&gradebook='.(int) api_is_in_gradebook();
         $url .= '&origin='.$origin;
     }
 
@@ -2054,7 +2054,7 @@ function api_get_course_info($course_code = null, $strict = false)
         return $courseInfo;
     }
 
-    global $_course;
+    $_course = Session::read('_course');
     if ($_course == '-1') {
         $_course = [];
     }

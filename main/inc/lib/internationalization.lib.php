@@ -60,11 +60,11 @@ define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 /**
- * Returns a translated (localized) string, called by its identificator.
+ * Returns a translated (localized) string, called by its ID.
  *
- * @param string $variable this is the identificator (name) of the translated string to be retrieved
- * @param string $reserved this parameter has been reserved for future use
- * @param string $language (optional)    Language indentificator. If it is omited, the current interface language is assumed.
+ * @param string $variable              this is the ID (name) of the translated string to be retrieved
+ * @param bool   $returnEmptyIfNotFound If variable is not found, then: if false: returns variable name with or without brackets; true: returns ''
+ * @param string $language              (optional)    Language ID. If it is omitted, the current interface language is assumed.
  *
  * @return string returns the requested string in the correspondent language
  *
@@ -82,7 +82,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  *
  * @see http://translate.chamilo.org/
  */
-function get_lang($variable, $reserved = null, $language = null)
+function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
 {
     // For serving some old hacks:
     // By manipulating this global variable the translation may
@@ -141,17 +141,18 @@ function get_lang($variable, $reserved = null, $language = null)
     // - from a local variable after reloading the language files - on test server mode or when requested language
     // is different than the genuine interface language.
     $read_global_variables = $is_interface_language;
+    $langvar = '';
 
     if ($read_global_variables) {
         if (isset($GLOBALS[$variable])) {
             $langvar = $GLOBALS[$variable];
         } elseif (isset($GLOBALS["lang$variable"])) {
             $langvar = $GLOBALS["lang$variable"];
-        } else {
+        } elseif (!$returnEmptyIfNotFound) {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
     }
-    if (empty($langvar) || !is_string($langvar)) {
+    if (empty($langvar) || !is_string($langvar) && !$returnEmptyIfNotFound) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
     $ret = $cache[$language][$variable] = $langvar;
@@ -166,6 +167,8 @@ function get_lang($variable, $reserved = null, $language = null)
  * @param bool $purified              (optional)    When it is true, a purified (refined)
  *                                    language value will be returned, for example 'french' instead of 'french_unicode'
  * @param bool $setParentLanguageName
+ *
+ * @throws Exception
  *
  * @return string the current language of the interface
  */

@@ -310,13 +310,13 @@ if (count($sessions) > 0) {
             }
 
             $tools = Display::url(
-                Display::return_icon('statistics.gif', get_lang('Stats')),
+                Display::return_icon('statistics.png', get_lang('Stats')),
                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session='.$id_session.'&course='.$courseInfo['code']
             );
             $tools .= '&nbsp;<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.
-                Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+                Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
                 '<a href="'.$courseInfo['course_public_url'].'?id_session='.$id_session.'">'.
-                Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
+                Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>';
 
             if (!empty($my_course['status']) && $my_course['status'] == STUDENT) {
                 $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
@@ -423,14 +423,14 @@ if (Database::num_rows($res) > 0) {
         $courseToolInformation = null;
 
         $tools = Display::url(
-            Display::return_icon('statistics.gif', get_lang('Stats')),
+            Display::return_icon('statistics.png', get_lang('Stats')),
             api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session=0&course='.$courseCode
         );
 
         $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'">'.
-            Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+            Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
             '<a href="'.$courseInfo['course_public_url'].'">'.
-            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>'.
+            Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>'.
             '<a href="course_edit.php?id='.$course->c_id.'">'.
             Display::return_icon('edit.png', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {

@@ -92,7 +92,7 @@ class CourseChatUtils
         }
         $user = api_get_user_entity($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
-        $isMaster = (bool) api_is_course_admin();
+        $isMaster = api_is_course_admin();
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $basepath_chat = '/chat_files';
         $group_info = [];

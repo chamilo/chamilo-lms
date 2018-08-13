@@ -569,9 +569,9 @@ function modify_filter($user_id, $url_params, $row)
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
             $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-                        Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+                        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
         } else {
-            $result .= Display::return_icon('synthese_view_na.gif', get_lang('Info')).'&nbsp;&nbsp;';
+            $result .= Display::return_icon('info2_na.png', get_lang('Info')).'&nbsp;&nbsp;';
         }
     }
 
@@ -593,12 +593,12 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($current_user_status_label != $statusname[STUDENT]) {
         $result .= Display::return_icon(
-            'statistics_na.gif',
+            'statistics_na.png',
             get_lang('Reporting')
         ).'&nbsp;';
     } else {
         $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.
-            Display::return_icon('statistics.gif', get_lang('Reporting')).
+            Display::return_icon('statistics.png', get_lang('Reporting')).
             '</a>&nbsp;';
     }
 
@@ -870,7 +870,7 @@ if (!empty($action)) {
                 exit;
                 break;
             case 'delete':
-                if (api_is_platform_admin()) {
+                if (api_is_platform_admin() && !empty($_POST['id'])) {
                     $number_of_selected_users = count($_POST['id']);
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {

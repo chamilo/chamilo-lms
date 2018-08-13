@@ -8317,4 +8317,13 @@ $RequestForAccountDeletion = "Pedido de eliminación de cuenta";
 $TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "El usuario %s ha solicitado la eliminación de su cuenta, explicando que \"%s\". Puede gestionar esta solicitud aquí: %s";
 $TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "El usuario %s ha solicitado la eliminación de su acuerdo con nuestras condiciones de uso, explicando que \"%s\". Puede gestionar esta solicitud aquí: %s";
 $RequestForLegalConsentWithdrawal = "Pedido de retractación de condiciones de uso";
+$Terms_and_conditionFields = "Champs de conditions d'utilisation";
+$ContentNotAccessibleRequestFromDataPrivacyOfficer = "Este contenido no le es accesible directamente por reglas de accesos definidas por curso. Si necesita acceder a esta información, por favor contacte con nuestro oficial de protección de datos, tal como definido en nuestros términos de protección de datos personales.";
+$LearningCalendar = "Calendario de aprendizaje";
+$ControlPointAdded = "Punto de control añadido";
+$NumberDaysAccumulatedInCalendar = "Número de días acumulados en el calendario";
+$DifferenceOfDaysAndCalendar = "Diferencia entre días y calendario";
+$SkillUserList = "Lista de competencias y usuarios";
+$CourseId = "ID de curso";
+$CareDetailView = "Vista detallada de vida estudiantil";
 ?>

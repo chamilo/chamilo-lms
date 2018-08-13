@@ -8292,4 +8292,13 @@ $RequestForAccountDeletion = "Request for account removal";
 $TheUserXAskedForAccountDeletionWithJustificationXGoHereX = "User %s asked for the deletion of his/her account, explaining that \"%s\". You can process the request here: %s";
 $TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX = "User %s asked for the removal of his/her consent to our legal terms, explaining that \"%s\". You can process the request here: %s";
 $RequestForLegalConsentWithdrawal = "Request for consent withdrawal on legal terms";
+$Terms_and_conditionFields = "Terms and condition fields";
+$ContentNotAccessibleRequestFromDataPrivacyOfficer = "This content is not accessible to you directly because of course-related access rules. If you require access to that data, please contact the Data Privacy Officer as defined in our privacy terms.";
+$LearningCalendar = "Learning calendar";
+$ControlPointAdded = "Control point added";
+$NumberDaysAccumulatedInCalendar = "Number of days accumulated in calendar";
+$DifferenceOfDaysAndCalendar = "Difference between days and calendar";
+$SkillUserList = "Skills and users list";
+$CourseId = "Course ID";
+$CareDetailView = "Student care detail view";
 ?>

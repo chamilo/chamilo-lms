@@ -926,7 +926,7 @@ class ExtraFieldValue extends Model
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
-        $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id 
+        $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id, sf.display_text
                 FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)

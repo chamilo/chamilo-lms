@@ -311,7 +311,7 @@ function modify_filter($user_id, $url_params, $row)
     $token = Security::getTokenFromSession();
     $result = '';
     $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-        Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
 
     $result .= Display::url(
         Display::return_icon('message_new.png', get_lang('SendMessage')),
@@ -323,7 +323,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($row[10] == $extraFieldId) {
         $result .= Display::url(
-            Display::return_icon('lock.png', get_lang('RemoveTerms')),
+            Display::return_icon('delete_terms.png', get_lang('RemoveTerms')),
             api_get_self().'?user_id='.$user_id.'&action=delete_terms&sec_token='.$token
         );
         $result .= '&nbsp;&nbsp;';
@@ -633,8 +633,7 @@ if (api_is_platform_admin() &&
 ) {
     $actionsList['delete'] = get_lang('DeleteFromPlatform');
 }
-$actionsList['disable'] = get_lang('Disable');
-$actionsList['enable'] = get_lang('Enable');
+
 $table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();

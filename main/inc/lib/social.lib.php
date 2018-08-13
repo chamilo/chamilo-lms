@@ -121,8 +121,8 @@ class SocialManager extends UserManager
                 FROM '.$table.'
                 WHERE
                     relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
-                    friend_user_id<>'.($userId).' AND
-                    user_id='.($userId);
+                    friend_user_id<>'.$userId.' AND
+                    user_id='.$userId;
         $res = Database::query($sql);
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res, 'ASSOC');
@@ -239,8 +239,8 @@ class SocialManager extends UserManager
         $message_content
     ) {
         $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $user_id = intval($user_id);
-        $friend_id = intval($friend_id);
+        $user_id = (int) $user_id;
+        $friend_id = (int) $friend_id;
 
         //Just in case we replace the and \n and \n\r while saving in the DB
         $message_content = str_replace(["\n", "\n\r"], '<br />', $message_content);
@@ -313,9 +313,10 @@ class SocialManager extends UserManager
     public static function get_message_number_invitation_by_user_id($user_receiver_id)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
+        $user_receiver_id = (int) $user_receiver_id;
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$table.'
                 WHERE
-                    user_receiver_id='.intval($user_receiver_id).' AND
+                    user_receiver_id='.$user_receiver_id.' AND
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
@@ -372,6 +373,8 @@ class SocialManager extends UserManager
      */
     public static function getCountWallPostedMessages($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return 0;
         }
@@ -380,7 +383,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT COUNT(*) 
                 FROM '.$table.'
                 WHERE
-                    user_sender_id='.intval($userId).' AND
+                    user_sender_id='.$userId.' AND
                     (msg_status = '.MESSAGE_STATUS_WALL.' OR 
                     msg_status = '.MESSAGE_STATUS_WALL_POST.') AND 
                     parent_id = 0';
@@ -401,6 +404,8 @@ class SocialManager extends UserManager
      */
     public static function get_list_invitation_of_friends_by_user_id($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return [];
         }
@@ -409,7 +414,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT user_sender_id, send_date, title, content
                 FROM '.$table.'
                 WHERE
-                    user_receiver_id = '.intval($userId).' AND
+                    user_receiver_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $list = [];
@@ -431,6 +436,8 @@ class SocialManager extends UserManager
      */
     public static function get_list_invitation_sent_by_user_id($userId)
     {
+        $userId = (int) $userId;
+
         if (empty($userId)) {
             return [];
         }
@@ -439,7 +446,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT user_receiver_id, send_date,title,content
                 FROM '.$table.'
                 WHERE
-                    user_sender_id = '.intval($userId).' AND
+                    user_sender_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $list = [];
@@ -552,7 +559,7 @@ class SocialManager extends UserManager
         $table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $user_id = api_get_user_id();
         $sql = 'UPDATE '.$table.' SET relation_type='.((int) $type_qualify).'
-                WHERE user_id = '.((int) $user_id).' AND friend_user_id='.(int) $id_friend_qualify;
+                WHERE user_id = '.$user_id.' AND friend_user_id='.(int) $id_friend_qualify;
         Database::query($sql);
     }
 
@@ -730,7 +737,7 @@ class SocialManager extends UserManager
         ) {
             $result .= '<span class="title">'.$course_title.'<span>';
         } else {
-            $result .= $course_title." ".get_lang('CourseClosed');
+            $result .= $course_title.' '.get_lang('CourseClosed');
         }
 
         $result .= '</li>';
@@ -1014,7 +1021,7 @@ class SocialManager extends UserManager
                 ';
             }
 
-            if (api_get_configuration_value('enable_gdpr')) {
+            if (!api_get_configuration_value('disable_gdpr')) {
                 $active = $show == 'personal-data' ? 'active' : null;
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">
@@ -1435,7 +1442,7 @@ class SocialManager extends UserManager
      */
     public static function social_wrapper_div($content, $span_count)
     {
-        $span_count = intval($span_count);
+        $span_count = (int) $span_count;
         $html = '<div class="span'.$span_count.'">';
         $html .= '<div class="well_border">';
         $html .= $content;
@@ -1869,9 +1876,9 @@ class SocialManager extends UserManager
         curl_close($curl);
         if (!empty($response)) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1883,7 +1890,7 @@ class SocialManager extends UserManager
      */
     public static function deleteMessage($id)
     {
-        $id = intval($id);
+        $id = (int) $id;
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $statusMessage = MESSAGE_STATUS_WALL_DELETE;
         $sql = "UPDATE $tblMessage SET msg_status = '$statusMessage' WHERE id = '{$id}' ";
@@ -1929,10 +1936,7 @@ class SocialManager extends UserManager
         if ($currentUserId === $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         } else {
-            $userRelationType = self::get_relation_between_contacts(
-                $currentUserId,
-                $userId
-            );
+            $userRelationType = self::get_relation_between_contacts($currentUserId, $userId);
         }
 
         $vCardUserLink = Display::getVCardUserLink($userId);
@@ -1980,7 +1984,7 @@ class SocialManager extends UserManager
      */
     public static function listMyFriends($user_id, $link_shared, $show_full_profile)
     {
-        //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+        // SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
         $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
         $number_of_images = 30;
         $number_friends = count($friends);

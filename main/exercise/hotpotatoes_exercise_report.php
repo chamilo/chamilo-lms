@@ -96,7 +96,7 @@ $nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = ["url" => "exercise.php".api_get_cidreq(), "name" => get_lang('Exercises')];
+    $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
     $objExerciseTmp = new Exercise();
 } else {
     $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];

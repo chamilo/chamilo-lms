@@ -530,6 +530,12 @@ if (!CustomPages::enabled()) {
 
                 if (!empty($term_preview['content'])) {
                     echo $term_preview['content'];
+
+                    $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                    foreach ($values as $value) {
+                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    }
                 } else {
                     echo get_lang('ComingSoon');
                 }
@@ -607,19 +613,6 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                     $termActivated = !empty($value['value']) && $value['value'] == 1;
                 }
 
-                /*$extraFieldValue = new ExtraFieldValue('user');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'legal_accept');
-                $legalAccept = false;
-                if (isset($value['value'])) {
-                    list($legalId, $legalLanguageId, $legalTime) = explode(
-                        ':',
-                        $value['value']
-                    );
-                    if ($legalId) {
-                        $legalAccept = true;
-                    }
-                }*/
-
                 if ($termActivated === false) {
                     $blockButton = true;
                     Display::addFlash(
@@ -695,6 +688,14 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             } else {
                 $preview = LegalManager::show_last_condition($term_preview);
                 $form->addElement('label', null, $preview);
+
+                $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                foreach ($values as $value) {
+                    //if ($value['variable'] === 'category') {
+                    $form->addLabel($value['display_text'], $value['value']);
+                    //}
+                }
             }
         }
     }
@@ -872,7 +873,7 @@ if ($form->validate()) {
 
         // Update the extra fields
         $count_extra_field = count($extras);
-        if ($count_extra_field > 0 && is_integer($user_id)) {
+        if ($count_extra_field > 0 && is_int($user_id)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file
@@ -1241,7 +1242,8 @@ if ($form->validate()) {
     // Custom pages
     if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
         CustomPages::display(
-            CustomPages::REGISTRATION, ['form' => $form]
+            CustomPages::REGISTRATION,
+            ['form' => $form, 'content' => $content]
         );
     } else {
         if (!api_is_anonymous()) {

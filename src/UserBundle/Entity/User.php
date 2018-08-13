@@ -1867,4 +1867,15 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
         return true;
     }
+
+
+    /**
+     * @return string
+     */
+    public function getPictureLegacy()
+    {
+        $id = $this->id;
+
+        return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+    }
 }

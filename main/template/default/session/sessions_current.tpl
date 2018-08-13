@@ -1,9 +1,9 @@
 {% if hot_sessions %}
 <section id="sessions-current" class="grid-courses">
     <div class="page-header">
-        <h3>
+        <h4>
             {{ "HottestSessions"|get_lang}}
-        </h3>
+        </h4>
     </div>
     <div class="row">
         {% for session in hot_sessions %}

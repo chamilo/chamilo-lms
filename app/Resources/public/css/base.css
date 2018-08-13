@@ -7203,7 +7203,7 @@ div#chat-remote-video video {
     -webkit-border-radius: 4px;
     border: 1px solid #ECF0F1;
     margin-bottom: 20px;
-    min-height: 230px;
+    min-height: 250px;
 }
 
 #whoisonline .items-user-avatar .img-responsive {

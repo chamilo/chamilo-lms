@@ -362,6 +362,7 @@ if (is_profile_editable()) {
     $form->freeze();
 }
 
+// Student cannot modified their user conditions
 $extraConditions = api_get_configuration_value('show_conditions_to_user');
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];

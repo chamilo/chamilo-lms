@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use kigkonsult\iCalcreator\vcalendar;
+use kigkonsult\iCalcreator\vevent;
+
 /**
  * This file exclusively export calendar items to iCal or similar formats.
  *

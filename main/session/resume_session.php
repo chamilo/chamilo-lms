@@ -19,7 +19,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 
 if (empty($sessionId)) {
     api_not_allowed(true);
@@ -113,7 +113,7 @@ switch ($action) {
 }
 
 $sessionHeader = Display::page_header(
-    Display::return_icon('session.png', get_lang('Session')).' '.$sessionInfo['name'],
+    Display::return_icon('session.png', get_lang('Session')).' '.$session->getName(),
     null,
     'h3'
 );
@@ -149,7 +149,7 @@ $courseListToShow .= '<table id="session-list-course" class="data_table">
   <th width="25%">'.get_lang('Actions').'</th>
 </tr>';
 
-if ($sessionInfo['nbr_courses'] == 0) {
+if ($session->getNbrCourses() === 0) {
     $courseListToShow .= '<tr>
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';

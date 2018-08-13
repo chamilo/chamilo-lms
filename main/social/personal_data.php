@@ -12,12 +12,16 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (!api_get_configuration_value('enable_gdpr')) {
+if (api_get_configuration_value('disable_gdpr')) {
     api_not_allowed(true);
 }
 
 $userId = api_get_user_id();
-$userInfo = api_get_user_info();
+$userInfo = api_get_user_info($userId);
+
+if (empty($userInfo)) {
+    api_not_allowed(true);
+}
 
 $substitutionTerms = [
     'password' => get_lang('EncryptedData'),
@@ -93,6 +97,8 @@ switch ($action) {
             }
         }
         Display::addFlash(Display::return_message(get_lang('Saved')));
+        header('Location: '.api_get_self());
+        exit;
         break;
     case 'delete_account':
         if ($formDelete->validate()) {
@@ -146,6 +152,8 @@ switch ($action) {
             } else {
                 MessageManager::sendMessageToAllAdminUsers(api_get_user_id(), $subject, $content);
             }
+            header('Location: '.api_get_self());
+            exit;
         }
         break;
     case 'delete_legal':
@@ -197,6 +205,8 @@ switch ($action) {
             } else {
                 MessageManager::sendMessageToAllAdminUsers(api_get_user_id(), $subject, $content);
             }
+            header('Location: '.api_get_self());
+            exit;
         }
         break;
 }

@@ -521,6 +521,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
         }
     }
 
+    // Get user language ignoring the platform language
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);

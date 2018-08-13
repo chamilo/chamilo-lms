@@ -1021,7 +1021,7 @@ class SocialManager extends UserManager
                 ';
             }
 
-            if (api_get_configuration_value('enable_gdpr')) {
+            if (!api_get_configuration_value('disable_gdpr')) {
                 $active = $show == 'personal-data' ? 'active' : null;
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">

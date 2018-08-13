@@ -695,13 +695,17 @@ class Template
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
             'flag-icon-css/css/flag-icon.min.css',
+            'mediaelement/plugins/vrview/vrview.css',
         ];
 
         $features = api_get_configuration_value('video_features');
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'];
+        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
                 $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
                 $defaultFeatures[] = $feature;
             }
@@ -840,7 +844,7 @@ class Template
             }
         }
 
-        if (api_get_setting('accessibility_font_resize') == 'true') {
+        if (api_get_setting('accessibility_font_resize') === 'true') {
             $js_files[] = 'fontresize.js';
         }
 
@@ -850,6 +854,7 @@ class Template
             'jquery/dist/jquery.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
+            'jqueryui-touch-punch/jquery.ui.touch-punch.min.js',
             'moment/min/moment-with-locales.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
@@ -862,20 +867,24 @@ class Template
             $selectLink,
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
+            'mediaelement/plugins/vrview/vrview.js',
         ];
 
         $features = api_get_configuration_value('video_features');
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
                 $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
             }
         }
 
-        if (CHAMILO_LOAD_WYSIWYG == true) {
+        if (CHAMILO_LOAD_WYSIWYG === true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }
 
-        if (api_get_setting('include_asciimathml_script') == 'true') {
+        if (api_get_setting('include_asciimathml_script') === 'true') {
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
@@ -901,17 +910,41 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
 
-            $extra_headers = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
+            $extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
             //Adding jquery ui by default
-            $extra_headers .= api_get_jquery_ui_js();
-
-            //$extra_headers = '';
+            $extraHeaders .= api_get_jquery_ui_js();
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as &$this_html_head) {
-                    $extra_headers .= $this_html_head."\n";
+                    $extraHeaders .= $this_html_head."\n";
                 }
             }
-            $this->assign('extra_headers', $extra_headers);
+
+            $ajax = api_get_path(WEB_AJAX_PATH);
+            $courseId = api_get_course_id();
+            if (empty($courseId)) {
+                $courseLogoutCode = '
+                <script>
+                function courseLogout() {
+                }
+                </script>';
+            } else {
+                $courseLogoutCode = "
+                <script>
+                var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
+                function courseLogout() {                
+                    $.ajax({
+                        async : false,
+                        url: logOutUrl,
+                        success: function (data) {
+                            return 1;
+                        }
+                    });
+                }
+                </script>";
+            }
+
+            $extraHeaders .= $courseLogoutCode;
+            $this->assign('extra_headers', $extraHeaders);
         }
     }
 
@@ -932,8 +965,7 @@ class Template
                 $js_files[] = 'chat/js/chat.js';
             }
         }
-        $js_file_to_string = null;
-
+        $js_file_to_string = '';
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
@@ -1372,6 +1404,59 @@ class Template
     }
 
     /**
+     * Assign HTML code to the 'bug_notification' template variable for the side tabs to report issues.
+     *
+     * @return bool Always return true because there is always a string, even if empty
+     */
+    public function assignBugNotification()
+    {
+        //@todo move this in the template
+        $rightFloatMenu = '';
+        $iconBug = Display::return_icon(
+            'bug.png',
+            get_lang('ReportABug'),
+            [],
+            ICON_SIZE_LARGE
+        );
+        if (api_get_setting('show_link_bug_notification') === 'true' && $this->user_is_logged_in) {
+            $rightFloatMenu = '<div class="report">
+		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
+                    '.$iconBug.'
+                </a>
+		        </div>';
+        }
+
+        if (api_get_setting('show_link_ticket_notification') === 'true' &&
+            $this->user_is_logged_in
+        ) {
+            // by default is project_id = 1
+            $defaultProjectId = 1;
+            $iconTicket = Display::return_icon(
+                'help.png',
+                get_lang('Ticket'),
+                [],
+                ICON_SIZE_LARGE
+            );
+            $courseInfo = api_get_course_info();
+            $courseParams = '';
+            if (!empty($courseInfo)) {
+                $courseParams = api_get_cidreq();
+            }
+            $url = api_get_path(WEB_CODE_PATH).
+                'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+            $rightFloatMenu .= '<div class="help">
+                <a href="'.$url.'" target="_blank">
+                    '.$iconTicket.'
+                </a>
+            </div>';
+        }
+
+        $this->assign('bug_notification', $rightFloatMenu);
+
+        return true;
+    }
+
+    /**
      * Prepare the _c array for template files. The _c array contains
      * information about the current course.
      */
@@ -1434,6 +1519,9 @@ class Template
      */
     private function getWebPaths()
     {
+        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
+        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
+
         return [
             'web' => api_get_path(WEB_PATH),
             'web_url' => api_get_web_url(),
@@ -1448,9 +1536,10 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
-            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_query_vars' => api_htmlentities($queryString),
+            'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
+            'web_rel_code' => api_get_path(REL_CODE_PATH),
         ];
     }
 
@@ -1538,59 +1627,13 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-        $this->assign('favico', $this->getPortalIcon($this->theme));
+
+        $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
 
-        //@todo move this in the template
-        $rightFloatMenu = '';
-        $iconBug = Display::return_icon(
-            'bug.png',
-            get_lang('ReportABug'),
-            [],
-            ICON_SIZE_LARGE
-        );
-        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $rightFloatMenu = '<div class="report">
-		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
-                    '.$iconBug.'
-                </a>
-		        </div>';
-        }
+        $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
 
-        if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
-            // by default is project_id = 1
-            $iconTicket = Display::return_icon(
-                'help.png',
-                get_lang('Ticket'),
-                [],
-                ICON_SIZE_LARGE
-            );
-            $courseInfo = api_get_course_info();
-            $courseParams = '';
-            if (!empty($courseInfo)) {
-                $courseParams = api_get_cidreq();
-            }
-            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id=1&'.$courseParams;
-            $rightFloatMenu .= '<div class="help">
-		        <a href="'.$url.'" target="_blank">
-                    '.$iconTicket.'
-                </a>
-		    </div>';
-        }
-
-        $this->assign('bug_notification', $rightFloatMenu);
-
-        $resize = '';
-        if (api_get_setting('accessibility_font_resize') == 'true') {
-            $resize .= '<div class="resize_font">';
-            $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '</div>';
-            $resize .= '</div>';
-        }
-        $this->assign('accessibility', $resize);
+        $this->assignAccessibilityBlock(); //Prepare the 'accessibility' var for the template
 
         // Preparing values for the menu
 
@@ -1621,8 +1664,14 @@ class Template
         $this->assign('message_link', $message_link);
         $this->assign('message_url', $message_url);
 
-        // Certificate Link
+        $pendingSurveyLink = '';
+        $show = api_get_configuration_value('show_pending_survey_in_menu');
+        if ($show) {
+            $pendingSurveyLink = api_get_path(WEB_CODE_PATH).'survey/pending.php';
+        }
+        $this->assign('pending_survey_url', $pendingSurveyLink);
 
+        // Certificate Link
         $allow = api_get_configuration_value('hide_my_certificate_link');
         if ($allow === false) {
             $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
@@ -1879,5 +1928,185 @@ class Template
             header('Referrer-Policy: '.$setting);
         }
         // end of HTTP headers security block
+    }
+
+    /**
+     * Assign favicon to the 'favico' template variable.
+     *
+     * @return bool Always return true because there is always at least one correct favicon.ico
+     */
+    private function assignFavIcon()
+    {
+        // Default root chamilo favicon
+        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+
+        //Added to verify if in the current Chamilo Theme exist a favicon
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
+
+        //If exist pick the current chamilo theme favicon
+        if (is_file($favicoThemeUrl.'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $url_info = api_get_access_url($access_url_id);
+                $url = api_remove_trailing_slash(
+                    preg_replace('/https?:\/\//i', '', $url_info['url'])
+                );
+                $clean_url = api_replace_dangerous_char($url);
+                $clean_url = str_replace('/', '-', $clean_url);
+                $clean_url .= '/';
+                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+                //we create the new dir for the new sites
+                if (is_file($icon_real_homep.'favicon.ico')) {
+                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+                }
+            }
+        }
+
+        $this->assign('favico', $favico);
+
+        return true;
+    }
+
+    /**
+     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu).
+     *
+     * @return bool Always return true (even if empty string)
+     */
+    private function assignAccessibilityBlock()
+    {
+        $resize = '';
+        if (api_get_setting('accessibility_font_resize') == 'true') {
+            $resize .= '<div class="resize_font">';
+            $resize .= '<div class="btn-group">';
+            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '</div>';
+            $resize .= '</div>';
+        }
+        $this->assign('accessibility', $resize);
+
+        return true;
+    }
+
+    /**
+     * Assign HTML code to the 'social_meta' template variable (usually shown above top menu).
+     *
+     * @return bool Always return true (even if empty string)
+     */
+    private function assignSocialMeta()
+    {
+        $socialMeta = '';
+        $metaTitle = api_get_setting('meta_title');
+        if (!empty($metaTitle)) {
+            $socialMeta .= '<meta name="twitter:card" content="summary" />'."\n";
+            $metaSite = api_get_setting('meta_twitter_site');
+            if (!empty($metaSite)) {
+                $socialMeta .= '<meta name="twitter:site" content="'.$metaSite.'" />'."\n";
+                $metaCreator = api_get_setting('meta_twitter_creator');
+                if (!empty($metaCreator)) {
+                    $socialMeta .= '<meta name="twitter:creator" content="'.$metaCreator.'" />'."\n";
+                }
+            }
+
+            // The user badge page emits its own meta tags, so if this is
+            // enabled, ignore the global ones
+            $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
+            $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
+
+            if (!$userId && !$skillId) {
+                // no combination of user and skill ID has been defined,
+                // so print the normal or course-specific OpenGraph meta tags
+                // Check for a course ID
+                $courseId = api_get_course_int_id();
+                // Check session ID from session/id/about (see .htaccess)
+                $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+
+                if ($courseId != false) {
+                    // If we are inside a course (even if within a session), publish info about the course
+                    $course = api_get_course_entity($courseId);
+                    // @TODO: support right-to-left in title
+                    $socialMeta .= '<meta property="og:title" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_course_url($course->getCode()).'" />'."\n";
+
+                    $metaDescription = api_get_setting('meta_description');
+                    if (!empty($course->getDescription())) {
+                        $socialMeta .= '<meta property="og:description" content="'.$course->getDescription().'" />'."\n";
+                    } elseif (!empty($metaDescription)) {
+                        $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
+                    }
+
+                    $picture = CourseManager::getPicturePath($course, true);
+                    if (!empty($picture)) {
+                        $socialMeta .= '<meta property="og:image" content="'.$picture.'" />'."\n";
+                    } else {
+                        $socialMeta .= $this->getMetaPortalImagePath();
+                    }
+                } elseif ($sessionId !== 0) {
+                    // If we are on a session "about" screen, publish info about the session
+                    $em = Database::getManager();
+                    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+
+                    $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."session/{$session->getId()}/about/".'" />'."\n";
+
+                    $sessionValues = new ExtraFieldValue('session');
+                    $sessionImage = $sessionValues->get_values_by_handler_and_field_variable($session->getId(), 'image')['value'];
+                    $sessionImageSysPath = api_get_path(SYS_UPLOAD_PATH).$sessionImage;
+
+                    if (!empty($sessionImage) && is_file($sessionImageSysPath)) {
+                        $sessionImagePath = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
+                        $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
+                    } else {
+                        $socialMeta .= $this->getMetaPortalImagePath();
+                    }
+                } else {
+                    // Otherwise (not a course nor a session, nor a user, nor a badge), publish portal info
+                    $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
+
+                    $metaDescription = api_get_setting('meta_description');
+                    if (!empty($metaDescription)) {
+                        $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
+                    }
+                    $socialMeta .= $this->getMetaPortalImagePath();
+                }
+            }
+        }
+
+        $this->assign('social_meta', $socialMeta);
+
+        return true;
+    }
+
+    /**
+     * Get platform meta image tag (check meta_image_path setting, then use the logo).
+     *
+     * @return string The meta image HTML tag, or empty
+     */
+    private function getMetaPortalImagePath()
+    {
+        // Load portal meta image if defined
+        $metaImage = api_get_setting('meta_image_path');
+        $metaImageSysPath = api_get_path(SYS_PATH).$metaImage;
+        $metaImageWebPath = api_get_path(WEB_PATH).$metaImage;
+        $portalImageMeta = '';
+        if (!empty($metaImage)) {
+            if (is_file($metaImageSysPath)) {
+                $portalImageMeta = '<meta property="og:image" content="'.$metaImageWebPath.'" />'."\n";
+            }
+        } else {
+            $logo = ChamiloApi::getPlatformLogoPath($this->theme);
+            if (!empty($logo)) {
+                $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
+            }
+        }
+
+        return $portalImageMeta;
     }
 }

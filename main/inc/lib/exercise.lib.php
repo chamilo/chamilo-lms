@@ -1828,7 +1828,7 @@ HOTSPOT;
         );
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 
-        $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp
+        $sql = "SELECT *, thp.id AS thp_id FROM $TBL_TRACK_HOTPOTATOES thp
             JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
             WHERE thp.c_id = $courseId AND exe_name LIKE '$in_hotpot_path%'";
 
@@ -1853,7 +1853,7 @@ HOTSPOT;
             $actions = null;
 
             if ($apiIsAllowedToEdit) {
-                $url = $urlBase.$data['id'].'&path='.$data['exe_name'];
+                $url = $urlBase.$data['thp_id'].'&path='.$data['exe_name'];
                 $actions = Display::url(
                     Display::return_icon('delete.png', get_lang('Delete')),
                     $url

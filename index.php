@@ -21,6 +21,12 @@ if ($allow) {
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
+$includeFile = !empty($_GET['include']);
+if ($includeFile) {
+    $this_section = SECTION_INCLUDE;
+} elseif (api_get_configuration_value('plugin_redirection_enabled')) {
+    RedirectionPlugin::redirectUser(api_get_user_id());
+}
 
 $header_title = null;
 if (!api_is_anonymous()) {

@@ -9,7 +9,7 @@
         <div class="lp-view-zone-container">
             <div id="scorm-info" class="scorm-header">
                 <div id="panel-scorm" class="panel-body">
-                    <h1 class="title">{{ title_course }}</h1>
+                    <h1 class="title">{{ lp_title_scorm }}</h1>
                     {% if show_audio_player %}
                         <div id="lp_media_file" class="audio-scorm">
                             {{ media_player }}
@@ -73,7 +73,7 @@
             {# TOC layout #}
 
             <div id="toc_id" class="scorm-body" name="toc_name">
-                {% include 'default/learnpath/scorm_list.tpl' %}
+                {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
             {# end TOC layout #}
         </div>

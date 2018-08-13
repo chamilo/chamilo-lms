@@ -6,7 +6,7 @@
     {% endif %}
     <section class="sub-footer">
         <div class="row">
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-8">
                 <div class="partners">
                     <a href="http://www.bosch-stiftung.de" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
@@ -21,13 +21,6 @@
                         <img src="{{ _p.web_css_theme }}images/carlduisberg.png"/>
                     </a>
                 </div>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                {% if plugin_footer_center is not null %}
-                    <div id="plugin_footer_center">
-                        {{ plugin_footer_center }}
-                    </div>
-                {% endif %}
             </div>
             <div class="col-xs-12 col-md-4 text-right">
                 {% if session_teachers is not null %}

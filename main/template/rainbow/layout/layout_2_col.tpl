@@ -81,7 +81,7 @@
                 {% if profile_block %}
                     {{ display.collapseMenu('profile', 'Profile'|get_lang, profile_block) }}
                 {% endif %}
-
+                {% if section_name != 'section-mycampus' %}
                 <!-- BLOCK COURSE -->
                 {% if course_block %}
                     {{ display.collapseMenu('courses', 'Courses'|get_lang, course_block) }}
@@ -149,6 +149,7 @@
                 {% endif %}
                 {{ search_block }}
                 {{ classes_block }}
+                {% endif %}
 
                 {% if plugin_menu_bottom %}
                     {{ display.pluginSidebar('sidebar-bottom', plugin_menu_bottom) }}

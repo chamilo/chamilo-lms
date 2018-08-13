@@ -73,7 +73,7 @@
             {# TOC layout #}
 
             <div id="toc_id" class="scorm-body" name="toc_name">
-                {% include template ~ '/learnpath/scorm_list.tpl' %}
+                {% include 'default/learnpath/scorm_list.tpl' %}
             </div>
             {# end TOC layout #}
         </div>

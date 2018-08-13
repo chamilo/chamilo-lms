@@ -845,6 +845,7 @@ class Template
             }
 
             $extraHeaders .= $courseLogoutCode;
+
             $this->assign('extra_headers', $extraHeaders);
         }
     }

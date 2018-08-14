@@ -26,6 +26,13 @@ use Monolog\Logger;
  */
 class SessionManager
 {
+    // See BT#4871
+    public CONST SESSION_CHANGE_USER_REASON_SCHEDULE = 1;
+    public CONST SESSION_CHANGE_USER_REASON_CLASSROOM = 2;
+    public CONST SESSION_CHANGE_USER_REASON_LOCATION = 3;
+    public CONST SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;
+    public CONST DEFAULT_VISIBILITY = 4;  //SESSION_AVAILABLE
+
     public static $_debug = false;
 
     /**
@@ -9300,5 +9307,30 @@ SQL;
         } else {
             return -1;
         }
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
+    public static function getSessionChangeUserReason($id) : string
+    {
+        $reasons = self::getSessionChangeUserReasons();
+
+        return $reasons[$id] ?? '';
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSessionChangeUserReasons() : array
+    {
+        return array(
+            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChanged'),
+            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChanged'),
+            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChanged'),
+            //self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
+        );
     }
 }

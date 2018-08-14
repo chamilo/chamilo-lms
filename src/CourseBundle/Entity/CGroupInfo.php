@@ -162,6 +162,13 @@ class CGroupInfo
     protected $docAccess;
 
     /**
+     * @var Course
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="courses", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     */
+    protected $course;
+
+    /**
      * Set name.
      *
      * @param string $name

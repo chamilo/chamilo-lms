@@ -21,13 +21,15 @@ class PersonalDriver extends Driver implements DriverInterface
     {
         $userId = api_get_user_id();
         $dir = \UserManager::getUserPathById($userId, 'system');
+
         if (!empty($dir)) {
+            $permissions = api_get_permissions_for_new_directories();
             if (!is_dir($dir)) {
-                mkdir($dir);
+                mkdir($dir, $permissions, true);
             }
 
             if (!is_dir($dir.'my_files')) {
-                mkdir($dir.'my_files');
+                mkdir($dir.'my_files', $permissions);
             }
         }
     }

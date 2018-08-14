@@ -562,6 +562,8 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
+// ofaj
+$template->assign('title_course', $lp->course_info['title']);
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
     $template->assign('data_panel', $lp->getParentToc($get_toc_list));
 } else {
@@ -579,6 +581,10 @@ $template->assign(
         ICON_SIZE_BIG
     )
 );
+
+// Ofaj
+$template->assign('lp_id', $lp->lp_id);
+$template->assign('lp_current_item_id', $lp->get_current_item_id());
 
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);

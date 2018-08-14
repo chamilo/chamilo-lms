@@ -380,17 +380,21 @@ class LegalManager
      */
     public static function sendLegal($userId)
     {
+        $userInfo = api_get_user_info($userId);
         $subject = get_lang('SendTermsSubject');
+        $webPath = api_get_path(WEB_PATH);
+        $link = '<a href="'.$webPath.'courses/FORUMDAIDE/index.php">'.$webPath.'courses/FORUMDAIDE/index.php</a>';
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
-            api_get_path(WEB_PATH)
+            $userInfo['firstName'],
+            $link
         );
         MessageManager::send_message_simple($userId, $subject, $content);
         Display::addFlash(Display::return_message(get_lang('Sent')));
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
-        if ($value === false) {
+        if ($value === false || $value[value] != 1) {
             $extraFieldInfo = $extraFieldValue->getExtraField()->get_handler_field_info_by_field_variable('termactivated');
             if ($extraFieldInfo) {
                 $newParams = [

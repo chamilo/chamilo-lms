@@ -206,7 +206,8 @@
                 <!-- end block statistics -->
 
                 <!-- HOT COURSE -->
-                {% include template ~ "/layout/hot_courses.tpl" %}
+                {% include 'layout/hot_courses.tpl'|get_template %}
+
                 <!-- END HOT COURSE -->
                 <!-- CMS -->
 

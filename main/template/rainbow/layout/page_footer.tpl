@@ -1,10 +1,10 @@
-<div class="container">
+<div class="sub-footer">
     {% if plugin_pre_footer is not null %}
         <div id="plugin_pre_footer">
             {{ plugin_pre_footer }}
         </div>
     {% endif %}
-    <section class="sub-footer">
+    <section class="container">
         <div class="row">
             <div class="col-xs-12 col-md-8">
                 <div class="partners">

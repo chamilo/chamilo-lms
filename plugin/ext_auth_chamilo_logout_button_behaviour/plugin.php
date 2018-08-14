@@ -20,6 +20,9 @@ $plugin_info['comment'] = "If you use some other authentication than local Chami
 $plugin_info['version'] = '1.0';
 //the plugin author
 $plugin_info['author'] = 'Hubert Borderiou';
+
+return;
+
 //the plugin configuration
 $form = new FormValidator('eaclbb_form');
 $form->addElement("html", "<div class='normal-message'>Fill the text boxes below to overwrite the default values used in this plugin</div>");

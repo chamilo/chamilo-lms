@@ -26,7 +26,10 @@ $(document).ready( function() {
             {{ "HottestCourses"|get_lang}}
             {% if is_granted('ROLE_ADMIN') %}
             <span class="pull-right">
-                <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">
+                <a title="{{ "Hide"|get_lang }}"
+                   alt="{{ "Hide"|get_lang }}"
+                   href="{{ url('admin_settings') }}/search_settings?keyword=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting"
+                >
                     <i class="fa fa-eye" aria-hidden="true"></i>
                 </a>
             </span>

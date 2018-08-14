@@ -23,6 +23,9 @@ class ChamiloExtension extends \Twig_Extension
             new \Twig_SimpleFilter('icon', 'Template::get_icon_path'),
             new \Twig_SimpleFilter('img', 'Template::get_image'),
             new \Twig_SimpleFilter('api_get_local_time', 'api_get_local_time'),
+            new \Twig_SimpleFilter('api_is_allowed_to_edit', 'api_is_allowed_to_edit'),
+            new \Twig_SimpleFilter('format_date', 'Template::format_date'),
+            new \Twig_SimpleFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
         ];
     }
 

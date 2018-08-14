@@ -1432,6 +1432,10 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = [];
 
+    if (!isset($user['user_id'])) {
+        return [];
+    }
+
     $result['firstname'] = null;
     $result['lastname'] = null;
 

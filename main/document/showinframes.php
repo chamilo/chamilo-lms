@@ -169,7 +169,7 @@ header('Pragma: no-cache');
 $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
 // Only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
-if ($is_courseAdmin) {
+if (api_is_course_admin()) {
     $frameheight = 165;
 }
 

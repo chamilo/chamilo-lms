@@ -110,8 +110,10 @@ if (isset($_REQUEST['convertAnswer'])) {
     Session::write('objQuestion', $objQuestion);
 }
 $objAnswer = Session::read('objAnswer');
+$_course = api_get_course_info();
 
 // document path
+
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // picture path

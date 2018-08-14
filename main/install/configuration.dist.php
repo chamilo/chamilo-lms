@@ -847,6 +847,10 @@ ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_i
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
 */
+// In 1.11.8, before enabling this feature, you also need to:
+// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php
+//   and follow the instructions about the @ORM\Entity() line
+// - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;
 
 // Enable best score column in gradebook. Previously called disable_gradebook_stats

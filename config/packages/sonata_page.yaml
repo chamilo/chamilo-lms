@@ -49,6 +49,7 @@ sonata_page:
     ignore_routes:
         - home
         - edit_welcome
+        - edit_inscription
         - elfinder
         - login
         - logout

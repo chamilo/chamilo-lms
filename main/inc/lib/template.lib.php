@@ -190,6 +190,9 @@ class Template
                 $this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
             }
         }
+        /*$this->twig->addFunction(
+            new TwigFunction('sonata_page_render_container', [$this, 'renderContainer'], ['is_safe' => ['html']])
+        );*/
 
         $functions = [
             ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],

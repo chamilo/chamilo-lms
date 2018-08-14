@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  *	This script displays a form for registering new users.
  *
@@ -64,7 +66,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 }
 
 // ----- Ensuring availability of main files in the corresponding language -----
-if (api_is_multiple_url_enabled()) {
+/*if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
         $url_info = api_get_access_url($access_url_id);
@@ -151,26 +153,8 @@ if (!empty($action)) {
                 break;
         }
     }
-}
+}*/
 
-Display :: display_header($tool_name);
-
-echo Display::page_header($tool_name);
-
-// The following security condition has been removed, because it makes no sense here. See Bug #1846.
-//// Forbidden to self-register
-//if (api_get_setting('allow_registration') == 'false') {
-//    api_not_allowed();
-//}
-
-//api_display_tool_title($tool_name);
-if (api_get_setting('allow_registration') == 'approval') {
-    echo Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal');
-}
-//if openid was not found
-if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    echo Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'), 'warning');
-}
 
 $form = new FormValidator('registration');
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -351,70 +335,38 @@ if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid']
 
 $form->setDefaults($defaults);
 
-switch ($action) {
-    case 'edit_top':
-        if ($action == 'edit_top') {
-            $name = $topf;
-            $open = $home_top;
-        } else {
-            $name = $newsf;
-            $open = @(string) file_get_contents($homep.$newsf.'_'.$lang.$ext);
-            $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        }
+$tpl = new Template();
 
-        if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg, 'normal');
-        }
+$content = Display::page_header($tool_name);
 
-        $default = [];
-        $form = new FormValidator(
-            'configure_inscription_'.$action,
-            'post',
-            api_get_self().'?action='.$action,
-            '',
-            ['style' => 'margin: 0px;']
-        );
-        $renderer = &$form->defaultRenderer();
-        $renderer->setHeaderTemplate('');
-        $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-        $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
-        $renderer->setRequiredNoteTemplate('');
-        $form->addElement('hidden', 'formSent', '1');
-        $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-        $form->addHtmlEditor(
-            $name,
-            '',
-            true,
-            false,
-            [
-                'ToolbarSet' => 'PortalHomePage',
-                'Width' => '100%',
-                'Height' => '400',
-            ]
-        );
-        $form->addButtonSave(get_lang('Save'));
-        $form->setDefaults($default);
-        $form->display();
-        break;
-    default:
-        //Form of language
-        api_display_language_form();
-        echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
+// The following security condition has been removed, because it makes no sense here. See Bug #1846.
+//// Forbidden to self-register
+//if (api_get_setting('allow_registration') == 'false') {
+//    api_not_allowed();
+//}
 
-        $open = '';
-        if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-            $open = @(string) file_get_contents($homep.$topf.'_'.$lang.$ext);
-        } else {
-            $open = @(string) file_get_contents($homep.$topf.$ext);
-        }
-        $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        if (!empty($open)) {
-            echo '<div class="well_border">';
-            echo $open;
-            echo '</div>';
-        }
-        $form->display();
-        break;
+//api_display_tool_title($tool_name);
+if (api_get_setting('allow_registration') == 'approval') {
+    $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal');
+}
+//if openid was not found
+if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
+    $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'), 'warning');
 }
 
-Display :: display_footer();
+//Form of language
+//$content .= api_display_language_form();
+$content .= '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.
+    Display::return_icon('edit.gif', get_lang('Edit')).'</a> 
+    <a href="'.api_get_path(WEB_PUBLIC_PATH).'edit_inscription">'.get_lang('EditNotice').'</a>';
+
+$content .= $form->returnForm();
+
+$page = Container::getPage('inscription');
+
+$tpl->assign('page', $page);
+$tpl->assign('form', $content);
+
+$templateName = $tpl->get_template('auth/inscription_edit.html.twig');
+$tpl->display($templateName);
+

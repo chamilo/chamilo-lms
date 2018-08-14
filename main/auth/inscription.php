@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * This script displays a form for registering new users.
@@ -1128,6 +1129,9 @@ if ($form->validate()) {
         $tpl->assign('inscription_content', $content);
         $tpl->assign('form', $form->returnForm());
         $tpl->assign('hide_header', $hideHeaders);
+
+        $page = Container::getPage('inscription');
+        $tpl->assign('page', $page);
 
         $inscription = $tpl->get_template('auth/inscription.tpl');
         $tpl->display($inscription);

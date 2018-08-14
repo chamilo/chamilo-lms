@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\PageBundle\Entity\Block;
+use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
 use Sonata\UserBundle\Entity\UserManager;
@@ -414,5 +416,27 @@ class Container
         // Setting legacy properties.
         self::$dataDir = $container->get('kernel')->getDataDir();
         self::$courseDir = $container->get('kernel')->getDataDir();
+    }
+
+    /**
+     * Gets a sonata page
+     *
+     * @param string $slug
+     *
+     * @return Page
+     */
+    public static function getPage($slug)
+    {
+        $container = self::$container;
+        $siteSelector = $container->get('sonata.page.site.selector');
+        $site = $siteSelector->retrieve();
+
+        $pageManager = $container->get('sonata.page.manager.page');
+        // Parents only of homepage
+        $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => $slug];
+        /** @var Page $page */
+        $page = $pageManager->findOneBy($criteria);
+
+        return $page;
     }
 }

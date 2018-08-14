@@ -1,11 +1,14 @@
 {%
     extends hide_header == true
-    ? template ~ "/layout/blank.html.twig"
-    : template ~ "/layout/layout_1_col.html.twig"
+    ? '@ChamiloTheme/Layout/blank.html.twig'
+    : '@ChamiloTheme/Layout/layout_one_col.html.twig'
 %}
 
 {% block content %}
     {% autoescape false %}
+
+    {{ sonata_page_render_container('content', page) }}
+
     {{ inscription_header }}
     {{ inscription_content }}
     {{ form }}

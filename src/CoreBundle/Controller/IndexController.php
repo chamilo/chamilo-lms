@@ -13,6 +13,7 @@ use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sonata\PageBundle\Entity\PageManager;
 use Sonata\PageBundle\Model\Page;
 use Sylius\Component\Attribute\AttributeType\TextAttributeType;
 use Sylius\Component\Attribute\Model\AttributeValueInterface;
@@ -37,73 +38,32 @@ class IndexController extends BaseController
      *
      * @return Response
      */
-    public function editWelcomeAction(Request $request)
+    public function editWelcomeAction()
     {
-        $siteSelector = $this->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();
-        $em = $this->getDoctrine()->getManager();
-        $page = null;
-
-        $form = $this->createFormBuilder()
-            ->add('content', CKEditorType::class)
-            ->add('save', SubmitType::class, ['label' => 'Update'])
-            ->getForm();
-
-        $blockToEdit = null;
-        if ($site) {
-            $pageManager = $this->get('sonata.page.manager.page');
-            // Parents only of homepage
-            $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => 'welcome'];
-            /** @var Page $page */
-            $page = $pageManager->findOneBy($criteria);
-            if ($page) {
-                $blocks = $page->getBlocks();
-                /** @var Block $block */
-                foreach ($blocks as $block) {
-                    if ($block->getName() == 'Main content') {
-                        $code = $block->getSetting('code');
-                        if ($code == 'content') {
-                            $children = $block->getChildren();
-                            /** @var Block $child */
-                            foreach ($children as $child) {
-                                if ($child->getType() == 'sonata.formatter.block.formatter') {
-                                    $blockToEdit = $child;
-                                    break 2;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($blockToEdit) {
-            $form->setData(['content' => $blockToEdit->getSetting('content')]);
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid() && $blockToEdit) {
-            $data = $form->getData();
-            $content = $data['content'];
-            /** @var Block $blockToEdit */
-            $blockToEdit->setSetting('rawContent', $content);
-            $blockToEdit->setSetting('content', $content);
-            $em->merge($blockToEdit);
-            $em->flush();
-
-            $this->addFlash('success', $this->trans('Updated'));
-
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render(
-            '@ChamiloCore/Index/edit_welcome.html.twig',
-            [
-                'page' => $page,
-                'form' => $form->createView(),
-            ]
+        return $this->forward(
+            'Chamilo\PageBundle\Controller\PageController:createPage',
+            array('pageSlug' => 'welcome')
         );
+    }
+
+    /**
+     * The Chamilo index home page.
+     *
+     * @Route("/edit_inscription", name="edit_inscription")
+     * @Method({"GET|POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @return Response
+     */
+    public function editInscriptionAction()
+    {
+        $redirect = $this->generateUrl('legacy_main', ['name' => 'admin/configure_inscription.php']);
+
+        return $this->forward(
+            'Chamilo\PageBundle\Controller\PageController:createPage',
+            array('pageSlug' => 'inscription', 'redirect' => $redirect)
+        );
+
     }
 
     /**

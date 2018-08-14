@@ -107,8 +107,9 @@ class LegacyListener
             $isAdmin = false;
             $allowedCreateCourse = false;
             $userStatus = null;
-            if ($userObject !== null) {
-                $userId = $session->get('_uid');
+            $userId = $session->get('_uid');
+
+            if ($userObject !== null && !empty($userId)) {
                 $userInfo = api_get_user_info($userId);
                 $userStatus = $userInfo['status'];
                 $isAdmin = \UserManager::is_admin($userId);

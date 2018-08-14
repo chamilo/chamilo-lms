@@ -1,0 +1,16 @@
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
+
+{% block content %}
+    {% autoescape false %}
+
+        <div class="well">
+            {{ sonata_page_render_container('content', page) }}
+        </div>
+
+        {{ form }}
+
+    {% endautoescape %}
+{% endblock %}
+
+
+

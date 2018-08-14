@@ -45,7 +45,7 @@
         "ext-bcmath": "*",
         "twig/twig": "2.*",
         "doctrine/orm": "^2.6",
-        "doctrine/dbal": "~2.7",
+        "doctrine/dbal": "~2.8",
         "doctrine/data-fixtures": "~1.0@dev",
         "doctrine/doctrine-bundle": "^1.9",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
@@ -72,7 +72,7 @@
         "symfony/annotations-pack": "^1.0",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/apache-pack": "^1.0",
-        "symfony/var-dumper": "4.0.*",
+        "symfony/var-dumper": "^4.0",
 
         "twig/extensions": "^1.5",
         "white-october/pagerfanta-bundle": "^1.1",

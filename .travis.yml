@@ -83,7 +83,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - travis_wait 30 composer install
+  - composer install
   # Install third party js/css libraries
   - yarn install
   - ./node_modules/.bin/encore dev

@@ -497,9 +497,17 @@ table.lp_overview img {
 }
 #learning_path_toc .panel-default{
     background-color:#f5f5f5;
+    margin-top: 0;
+    border-radius: 0;
+}
+.scorm-title{
+    display: none;
+}
+#learning_path_toc .higher{
+    border-bottom: 1px solid #84bd00;
 }
 #learning_path_toc .panel-heading{
-    background: url('images/folder-item-closed.png') no-repeat 10px center #e1e1e1;
+    background: url('images/arrow-right.png') no-repeat 10px center #e1e1e1;
     padding-left: 30px;
 }
 .scorm_item_normal .sub-item a:last-child{

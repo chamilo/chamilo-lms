@@ -156,7 +156,7 @@ class CourseManager
                 $courseInfo = api_get_course_info_by_id($courseId);
 
                 if ($hook) {
-                    $hook->setEventData(['course_info' => $course_info]);
+                    $hook->setEventData(['course_info' => $courseInfo]);
                     $hook->notifyCreateCourse(HOOK_EVENT_TYPE_POST);
                 }
 
@@ -2332,7 +2332,7 @@ class CourseManager
                 rename($course_dir, $archive_dir);
             }
 
-            Category::deleteFromCourse($course['code']);
+            Category::deleteCategoryFromCourse($courseId);
 
             // Unsubscribe all users from the course
             $sql = "DELETE FROM $table_course_user WHERE c_id = $courseId";

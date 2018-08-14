@@ -1042,7 +1042,7 @@ class PageController
             }
         }
 
-        $load_directories_preview = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
+        $load_directories_preview = api_get_setting('document.show_documents_preview') === 'true' ? true : false;
         $sessions_with_no_category = $html;
 
         if (isset($session_categories) && !empty($session_categories)) {
@@ -1125,16 +1125,14 @@ class PageController
                                 $params['title'] = $session_link;
 
                                 $moved_status = \SessionManager::getSessionChangeUserReason(
-                                    isset($session['moved_status']) ? $session['moved_status'] : ''
+                                    $session['moved_status'] ?? ''
                                 );
                                 $moved_status = isset($moved_status) && !empty($moved_status) ? ' ('.$moved_status.')' : null;
 
                                 $params['subtitle'] = isset($session['coach_info']) ? $session['coach_info']['complete_name'] : null.$moved_status;
                                 //$params['dates'] = $session['date_message'];
 
-                                $params['dates'] = \SessionManager::parseSessionDates(
-                                    $session
-                                );
+                                $params['dates'] = \SessionManager::parseSessionDates($session);
                                 $params['right_actions'] = '';
                                 if (api_is_platform_admin()) {
                                     $params['right_actions'] .=

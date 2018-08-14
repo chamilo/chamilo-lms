@@ -120,14 +120,14 @@ class LegacyListener
             $session->set('is_platformAdmin', $isAdmin);
             $session->set('is_allowedCreateCourse', $allowedCreateCourse);
 
-            $_admin = [
+            $adminInfo = [
                 'email' => api_get_setting('emailAdministrator'),
                 'surname' => api_get_setting('administratorSurname'),
                 'name' => api_get_setting('administratorName'),
                 'telephone' => api_get_setting('administratorTelephone'),
             ];
 
-            $twig->addGlobal('_admin', $_admin);
+            $twig->addGlobal('_admin', $adminInfo);
 
             $theme = api_get_visual_theme();
             $twig->addGlobal('favico', \Template::getPortalIcon($theme));

@@ -5,8 +5,6 @@ namespace Chamilo\CourseBundle\EventListener;
 
 use Chamilo\CoreBundle\Controller\LegacyController;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;

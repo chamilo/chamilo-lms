@@ -100,13 +100,25 @@ class LegacyListener
                 $twig->addGlobal($index, $value);
             }
 
-            $userId = $session->get('_uid');
-            $userInfo = api_get_user_info($userId);
-            $userInfo['is_anonymous'] = false;
-            $session->set('_user', $userInfo);
-            $session->set('is_platformAdmin', \UserManager::is_admin($userId));
-            $session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
+            $userObject = $container->get('security.token_storage')->getToken()->getUser();
 
+            $userInfo = [];
+            $userInfo['is_anonymous'] = true;
+            $isAdmin = false;
+            $allowedCreateCourse = false;
+            $userStatus = null;
+            if ($userObject !== null) {
+                $userId = $session->get('_uid');
+                $userInfo = api_get_user_info($userId);
+                $userStatus = $userInfo['status'];
+                $isAdmin = \UserManager::is_admin($userId);
+                $userInfo['is_anonymous'] = false;
+                $allowedCreateCourse = $userStatus === 1;
+
+            }
+            $session->set('_user', $userInfo);
+            $session->set('is_platformAdmin', $isAdmin);
+            $session->set('is_allowedCreateCourse', $allowedCreateCourse);
 
             $_admin = [
                 'email' => api_get_setting('emailAdministrator'),
@@ -143,8 +155,6 @@ class LegacyListener
             }
             $twig->addGlobal('header_extra_content', $extraHeader);
 
-            $user = api_get_user_info();
-
             $rightFloatMenu = '';
             $iconBug = \Display::return_icon(
                 'bug.png',
@@ -153,8 +163,8 @@ class LegacyListener
                 ICON_SIZE_LARGE
             );
 
-            $allow = $user['status'] != ANONYMOUS;
-            if (api_get_setting('show_link_bug_notification') == 'true' && $allow) {
+            $allow = $userStatus !== ANONYMOUS;
+            if ($allow && api_get_setting('show_link_bug_notification') === 'true') {
                 $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '.$iconBug.'
@@ -162,7 +172,7 @@ class LegacyListener
 		        </div>';
             }
 
-            if (api_get_setting('show_link_ticket_notification') === 'true' && $allow) {
+            if ($allow && api_get_setting('show_link_ticket_notification') === 'true') {
                 // by default is project_id = 1
                 $defaultProjectId = 1;
                 $allow = \TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);

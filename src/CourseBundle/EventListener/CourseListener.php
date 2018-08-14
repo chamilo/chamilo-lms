@@ -92,9 +92,6 @@ class CourseListener
                 $sessionId = (int) $request->get('id_session');
                 $session = null;
 
-                // Group
-                $groupId = (int) $request->get('gidReq');
-
                 if (empty($sessionId)) {
                     // Check if user is allowed to this course
                     // See CourseVoter.php
@@ -135,32 +132,25 @@ class CourseListener
                     }
                 }
 
+                // Group
+                $groupId = (int) $request->get('gidReq');
+
                 if (!empty($groupId)) {
                     $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
+
+                    if (!$group) {
+                        throw new NotFoundHttpException($translator->trans('Group not found'));
+                    }
+
                     if ($course->hasGroup($group)) {
-                        if ($group) {
-                            // Check if user is allowed to this course-group
-                            // See GroupVoter.php
-                            if (false === $checker->isGranted(
-                                    GroupVoter::VIEW,
-                                    $group
-                                )
-                            ) {
-                                throw new AccessDeniedException(
-                                    $translator->trans(
-                                        'Unauthorised access to group'
-                                    )
-                                );
-                            }
-                        } else {
-                            throw new NotFoundHttpException(
-                                $translator->trans('Group not found')
-                            );
+                        // Check if user is allowed to this course-group
+                        // See GroupVoter.php
+                        if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
+                            throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
                         }
+                        $sessionHandler->set('_gid', $groupId);
                     } else {
-                        throw new AccessDeniedException(
-                            $translator->trans('Group does not exist in course')
-                        );
+                        throw new AccessDeniedException($translator->trans('Group does not exist in course'));
                     }
                 }
 
@@ -181,7 +171,7 @@ class CourseListener
                     $sessionHandler->set('course_already_visited', $courseCode);
                 }*/
             } else {
-                throw new NotFoundHttpException($translator->trans('CourseDoesNotExist'));
+                throw new NotFoundHttpException($translator->trans('Course does not exist'));
             }
 
             Container::setRequest($request);

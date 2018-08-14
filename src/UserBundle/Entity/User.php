@@ -542,6 +542,30 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxSentFiles($value)
+    {
+        $this->dropBoxSentFiles = $value;
+    }
+
+    /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxReceivedFiles($value)
+    {
+        $this->dropBoxReceivedFiles = $value;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getCourses()
@@ -624,6 +648,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
+     * @param $value
+     */
+    public function setPortals($value)
+    {
+        $this->portals = $value;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getCurriculumItems()
@@ -633,10 +665,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @param $items
+     *
+     * @return $this
      */
     public function setCurriculumItems($items)
     {
         $this->curriculumItems = $items;
+
+        return $this;
     }
 
     /**
@@ -693,6 +729,18 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getSalt()
     {
         return $this->salt;
+    }
+
+    /**
+     * @param ArrayCollection $classes
+     *
+     * @return $this
+     */
+    public function setClasses($classes)
+    {
+        $this->classes = $classes;
+
+        return $this;
     }
 
     /**
@@ -1377,22 +1425,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param string $imageName
-     */
-    public function setImageName($imageName)
-    {
-        $this->imageName = $imageName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImageName()
-    {
-        return $this->imageName;
-    }
-
-    /**
      * @return string
      */
     public function getSlug()
@@ -1445,7 +1477,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * {@inheritdoc}
      */
-    public function setExtraFields($extraFields)
+    public function setExtraFieldList($extraFields)
     {
         $this->extraFields = new ArrayCollection();
         foreach ($extraFields as $extraField) {
@@ -1453,6 +1485,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         }
 
         return $this;
+    }
+
+    public function setExtraFields($extraFields)
+    {
+        $this->extraFields = $extraFields;
     }
 
     /**
@@ -1539,6 +1576,13 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getSessionCourseSubscriptions()
     {
         return $this->sessionCourseSubscriptions;
+    }
+
+    public function setSessionCourseSubscriptions($value)
+    {
+        $this->sessionCourseSubscriptions = $value;
+
+        return $this;
     }
 
     /**
@@ -1768,6 +1812,18 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAchievedSkills($value)
+    {
+        $this->achievedSkills = $value;
+
+        return $this;
+    }
+
+    /**
      * Check if the user has the skill.
      *
      * @param Skill $skill The skill
@@ -1845,6 +1901,41 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     {
         return $this->sessionAsGeneralCoach;
     }
+
+    /**
+     * Get sessionAsGeneralCoach.
+     *
+     * @param ArrayCollection $value
+     *
+     * @return $this
+     */
+    public function setSessionAsGeneralCoach($value)
+    {
+        $this->sessionAsGeneralCoach = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCommentedUserSkills()
+    {
+        return $this->commentedUserSkills;
+    }
+
+    /**
+     * @param mixed $commentedUserSkills
+     *
+     * @return User
+     */
+    public function setCommentedUserSkills($commentedUserSkills)
+    {
+        $this->commentedUserSkills = $commentedUserSkills;
+
+        return $this;
+    }
+
 
     /**
      * @param UserInterface $user

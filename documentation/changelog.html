@@ -109,7 +109,7 @@
     <div class="version" aria-role="article" aria-label="1.11.8">
     <a name="1.11.8"></a>
 
-    <h1>Chamilo 1.11.8 - Sayaxché,  13/08/2018</h1>
+    <h1>Chamilo 1.11.8 - Sayaxché,  15/08/2018</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.8 is a minor, bug fix and security fix release on top of 1.11.6 that contains a series of
         small new features, including first support for European RGPD. Given the security fixes it contains,
@@ -151,11 +151,6 @@
             <li>[2018-05-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/87c4804c3304aaff2440baf3d656e6f1af2bac11">87c4804c</a> - <a href="https://task.beeznest.com/issues/14111">BT#14111</a>) Course homepage: if LP links are added, use the LP order</li>
             <li>[2018-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/43d53a73f6536f6b66ffcc002f1d0bb58253e994">43d53a73</a> - <a href="https://task.beeznest.com/issues/5776">BT#5776</a>) Learnpath: Add more prerequisite information if available when loading an item</li>
             <li>[2018-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/98efe2a62d1c07a9da84e3dbb006240fd6d1f920">98efe2a6</a>) Quiz: Add "certainty level" question type</li>
-            <li>[2018-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/57b88a5d4b4b182044219f0930aaedb0be5ff838">57b88a5d</a>) Template: Use SYS_TEMPLATE_PATH to find template file</li>
-            <li>[2018-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/da569547cd679b267faac7a8a55247fce150d35c">da569547</a>) Template: Add twig function to get template file inside template. This changes the way how template files are included or extended. Add twig filter to get template file inside template This changes the way how template files are included or extended</li>
-            <li>[2018-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/b99aaa338a0f8b4a60e9eb7a437d514bd276e7fe">b99aaa33</a>) Template: Add hot sessions block - sessions_current.tpl</li>
-            <li>[2018-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/d76db9c8481160f83c4fe1f450fe807fb490b88a">d76db9c8</a>) Template: Add dashboard TPL</li>
-            <li>[2018-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e13bb5130d8806119a319f2aabc772ff15540300">e13bb513</a>) Template: Add tpl index.tpl for myspace</li>
             <li>[2018-03-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/4b5f86c413bed7c28006f4a0ba4a33e9c0d90a1b">4b5f86c4</a> - <a href="https://task.beeznest.com/issues/11913">BT#11913</a>) Survey: Add pending surveys page</li>
             <li>[2018-03-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/d04996a32c2d4ad16ade984d3a86dda0a6779401">d04996a3</a> - <a href="https://task.beeznest.com/issues/14141">BT#14141</a>) Work: Add teacher comment to the notification</li>
             <li>[2018-03-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/b256c09001123d01154edff3eea8c6f0b8f096bb">b256c090</a> - <a href="https://task.beeznest.com/issues/14056">BT#14056</a>) Portfolio: Add Portfolio Tool. Requires DB changes</li>
@@ -204,6 +199,9 @@
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-role="log" aria-live="off">
+            <li>[2018-08-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/eb2483aa43f629a05f0bdd0b81da87a5e27e0e1c">eb2483aa</a>) WYSIWYG: Fix CKEditor bootstrap and chamilo styles loading</li>
+            <li>[2018-08-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/6d39dad4ecb87156774b520dce7f060e55eb0f60">6d39dad4</a>) Internal: Fix typo, add "getPictureLegacy" function</li>
+            <li>[2018-08-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/608059138023c31dd2fd1b32aa8602e7b09954bf">60805913</a> - <a href="https://task.beeznest.com/issues/14744">BT#14744</a>) Admin: Disable copy session course to the same course</li>
             <li>[2018-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/45ff6b6d89a9096061a03f2326363241fce8170b">45ff6b6d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) WYSIWYG: Add documentation, declare BETA and add French translation to the VR/360° video viewer in Chamilo</li>
             <li>[2018-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/1e9543a8e62b6213f79e1ed85887bb24b9006274">1e9543a8</a>) WYSIWYG: Add DOCTYPE html to HTML documents created through CKEditor</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/1629f2939d1ad6fdae21c4c6bb65bbe8ce8eed88">1629f293</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) Global: Enable VRView mediaelement plugin by default</li>
@@ -923,6 +921,11 @@
             <li>[2018-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/4507d6b92bec3259b7b06c0f79e9028e79fdfc41">4507d6b9</a>) Template: Fix duplicate plugin_main_top condition in layout_2_col.tpl</li>
             <li>[2018-04-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/55969b05960fb67f703e0e1dbf56af28b30b7385">55969b05</a> - <a href="https://task.beeznest.com/issues/11338">BT#11338</a>) Template: Add macros for twig in tpl</li>
             <li>[2018-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/1c1e68bba1b3fef89e8191f6fcdadecd16e84fb7">1c1e68bb</a> - <a href="https://task.beeznest.com/issues/11338">BT#11338</a>) Template: Add notice_block and help_block</li>
+            <li>[2018-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/57b88a5d4b4b182044219f0930aaedb0be5ff838">57b88a5d</a>) Template: Use SYS_TEMPLATE_PATH to find template file</li>
+            <li>[2018-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/da569547cd679b267faac7a8a55247fce150d35c">da569547</a>) Template: Add twig function to get template file inside template. This changes the way how template files are included or extended. Add twig filter to get template file inside template This changes the way how template files are included or extended</li>
+            <li>[2018-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/b99aaa338a0f8b4a60e9eb7a437d514bd276e7fe">b99aaa33</a>) Template: Add hot sessions block - sessions_current.tpl</li>
+            <li>[2018-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/d76db9c8481160f83c4fe1f450fe807fb490b88a">d76db9c8</a>) Template: Add dashboard TPL</li>
+            <li>[2018-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e13bb5130d8806119a319f2aabc772ff15540300">e13bb513</a>) Template: Add tpl index.tpl for myspace</li>
             <li>[2017-12-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/355066261c39f6eddff6c077935d8837d8af3a6f">35506626</a> - <a href="https://task.beeznest.com/issues/12835">BT#12835</a>) Template: Add template for document/webcam</li>
         </ul>
         <h3>Web services</h3>

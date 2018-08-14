@@ -584,6 +584,8 @@ class Version20 extends AbstractMigrationChamilo
         if (!$table->hasColumn('author_id')) {
             $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
         }
+
+        $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
     }
 
     /**

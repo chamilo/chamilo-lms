@@ -546,7 +546,7 @@ class Course
     public function hasTeacher(User $user)
     {
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("user", $user)
+            Criteria::expr()->eq('user', $user)
         );
 
         return $this->getTeachers()->matching($criteria)->count() > 0;
@@ -559,9 +559,9 @@ class Course
      */
     public function hasGroup(CGroupInfo $group)
     {
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("groups", $group)
-        );
+        /*$criteria = Criteria::create()->where(
+            Criteria::expr()->eq('groups', $group)
+        );*/
 
         return $this->getGroups()->contains($group);
     }

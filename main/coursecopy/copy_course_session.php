@@ -294,17 +294,22 @@ if (Security::check_token('post') && (
         $destination_session = $_POST['destination_session'];
         $origin_session = $_POST['origin_session'];
 
-        $course = CourseSelectForm::get_posted_course(
-            'copy_course',
-            $origin_session,
-            $origin_course
-        );
+        if ($course_code != $origin_course) {
+            $course = CourseSelectForm::get_posted_course(
+                'copy_course',
+                $origin_session,
+                $origin_course
+            );
 
-        $cr = new CourseRestorer($course);
-        //$cr->set_file_option($_POST['same_file_name_option']);
-        $cr->restore($destination_course, $destination_session);
-        echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
-        display_form();
+            $cr = new CourseRestorer($course);
+            //$cr->set_file_option($_POST['same_file_name_option']);
+            $cr->restore($destination_course, $destination_session);
+            echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
+            display_form();
+        } else {
+            echo Display::return_message(get_lang('PleaseSelectACourse'), 'confirm');
+            display_form();
+        }
     } else {
         $arr_course_origin = [];
         $arr_course_destination = [];
@@ -333,14 +338,20 @@ if (Security::check_token('post') && (
                 $course_code = $arr_course_origin[0];
                 $course_destinatination = $arr_course_destination[0];
 
-                $course_origin = api_get_course_info($course_code);
-                $cb = new CourseBuilder('', $course_origin);
-                $course = $cb->build($origin_session, $course_code, $with_base_content);
-                $cr = new CourseRestorer($course);
-                $cr->restore($course_destinatination, $destination_session);
+                if ($course_code != $course_destinatination) {
+                    $course_origin = api_get_course_info($course_code);
+                    $cb = new CourseBuilder('', $course_origin);
+                    $course = $cb->build($origin_session, $course_code, $with_base_content);
+                    $cr = new CourseRestorer($course);
+                    $cr->restore($course_destinatination, $destination_session);
+
+                    echo Display::return_message(get_lang('CopyFinished'), 'confirm');
+                    display_form();
+                } else {
+                    echo Display::return_message(get_lang('PleaseSelectACourse'), 'confirm');
+                    display_form();
+                }
             }
-            echo Display::return_message(get_lang('CopyFinished'), 'confirm');
-            display_form();
         } else {
             echo Display::return_message(get_lang('YouMustSelectACourseFromOriginalSession'), 'error');
             display_form();

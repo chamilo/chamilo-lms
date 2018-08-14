@@ -621,6 +621,9 @@ class Template
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
                 $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
                 $defaultFeatures[] = $feature;
             }
@@ -771,6 +774,9 @@ class Template
         $features = api_get_configuration_value('video_features');
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
                 $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
             }
         }

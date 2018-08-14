@@ -535,7 +535,6 @@ if (api_is_platform_admin()) {
     }
 
     if (!api_get_configuration_value('disable_gdpr')) {
-
         // Data protection
         $blocks['data_privacy']['icon'] = Display::return_icon(
             'platform.png',
@@ -549,7 +548,6 @@ if (api_is_platform_admin()) {
         $blocks['data_privacy']['editable'] = false;
 
         $items = [];
-
         $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php',
             'label' => get_lang('UserList'),

@@ -24,6 +24,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                 [
                     'allow_skills_tool' => 'true',
                     'allow_hr_skills_management' => 'true',
+                    'show_full_skill_name_on_skill_wheel' => 'false'
                 ]
             );
         $allowedTypes = [
@@ -40,6 +41,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('allow_skills_tool', YesNoType::class)
             ->add('allow_hr_skills_management', YesNoType::class)
+            ->add('show_full_skill_name_on_skill_wheel', YesNoType::class)
         ;
     }
 }

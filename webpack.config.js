@@ -19,7 +19,7 @@ Encore
     .addEntry('vendor', './assets/js/vendor.js')
     .addEntry('app', './assets/js/app.js')
     // read main.scss -> output as web/build/css/base.css
-    .addStyleEntry('css/base', './assets/css/main.scss')
+    .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/editor', './assets/css/editor.css')
     .addStyleEntry('css/print', './assets/css/print.css')
     .addStyleEntry('css/scorm', './assets/css/scorm.css')
@@ -33,7 +33,7 @@ Encore
     //.enableVersioning() // hashed filenames (e.g. main.abc123.js)
 ;
 
-var chamiloThemes = [
+var themes = [
     'academica',
     'baby_orange',
     'beach',
@@ -65,7 +65,7 @@ var chamiloThemes = [
 ];
 
 // Add Chamilo themes
-chamiloThemes.forEach(function (theme) {
+themes.forEach(function (theme) {
     Encore
         .addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
     ;

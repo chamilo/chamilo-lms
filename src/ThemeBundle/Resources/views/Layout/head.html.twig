@@ -38,7 +38,7 @@
 {% set message_link = '' %}
 
 <link rel="stylesheet" href="{{ asset('build/vendor.css') }}"/>
-<link rel="stylesheet" href="{{ asset('build/css/base.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/app.css') }}"/>
 <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
 <link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
 
@@ -83,7 +83,6 @@
                 {{ js }}
             {% endfor %}
         {% endautoescape %}
-        {#{% include '@ChamiloTheme/Layout/header.js.twig' %}#}
     {% endblock %}
 
     {#'@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'#}

@@ -11,7 +11,7 @@ require("webpack-jquery-ui/css");
 
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-require("bootstrap-sass");
+require("bootstrap");
 require("chosen-js");
 require("mediaelement");
 // require("font-awesome-webpack"); already added manually in main.scss

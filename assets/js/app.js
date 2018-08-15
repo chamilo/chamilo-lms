@@ -3,18 +3,19 @@ import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/pu
 
 Routing.setRoutingData(routes);
 
-var homeUrl = Routing.generate('home');
+var homePublicUrl = Routing.generate('home') + 'public/';
 var legacyIndex = Routing.generate('legacy_index');
-var main = Routing.generate('legacy_main', {'name' : 'statusonline.png'});
+var mainUrl = Routing.generate('legacy_main', {'name' : '/'});
 var webAjax = Routing.generate('web.ajax');
 
-/*console.log(homeUrl);
+console.log(homePublicUrl);
 console.log(legacyIndex);
-console.log(main);*/
+console.log(mainUrl);
+console.log(webAjax);
 
 var ajax_url = webAjax + 'chat.ajax.php';
-var online_button = '<img src="' + homeUrl + 'public/img/statusonline.png">';
-var offline_button = '<img src="' + homeUrl + 'public/img/statusoffline.png">';
+var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
+var offline_button = '<img src="' + homePublicUrl + 'img/statusoffline.png">';
 /*var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
 
@@ -336,7 +337,7 @@ $(function() {
         });
     });
 
-    $("#notifications").load(_p.web_ajax + "online.ajax.php?a=get_users_online");
+    $("#notifications").load(webAjax + "online.ajax.php?a=get_users_online");
 });
 
 $(window).resize(function() {
@@ -536,7 +537,7 @@ if (typeof CKEDITOR !== 'undefined') {
     plugins.forEach(function (plugin) {
         CKEDITOR.plugins.addExternal(
             plugin,
-            main + 'javascript/ckeditor/plugins/' + plugin + '/'
+            mainUrl + 'javascript/ckeditor/plugins/' + plugin + '/'
         );
     });
 
@@ -601,7 +602,8 @@ function doneResizing() {
     }
 }
 
-function addMainEvent(elm, evType, fn, useCapture) {
+function addMainEvent(elm, evType, fn, useCapture)
+{
     if (elm.addEventListener) {
         elm.addEventListener(evType, fn, useCapture);
         return true;

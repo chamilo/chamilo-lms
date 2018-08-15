@@ -1,6 +1,10 @@
 const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
-require('image-map-resizer');
+import 'image-map-resizer';
+import 'jquery.scrollbar';
+import 'jquery-ui/ui/widgets/datepicker';
+import 'jquery-ui/ui/widgets/tooltip';
+import 'chosen-js';
 
 Routing.setRoutingData(routes);
 
@@ -270,14 +274,14 @@ $(function() {
 
     // Mediaelement
     //if ( {{ show_media_element }} == 1) {
-        $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            pluginPath: _p.web + 'web/assets/mediaelement/build/',
-            //renderers: ['html5', 'flash_video', 'native_flv'],
-            features: ['{{ video_features }}'],
-            success: function(mediaElement, originalNode, instance) {
-            },
-            vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
-        });
+    //     $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+    //         pluginPath: _p.web + 'web/assets/mediaelement/build/',
+    //         //renderers: ['html5', 'flash_video', 'native_flv'],
+    //         features: ['{{ video_features }}'],
+    //         success: function(mediaElement, originalNode, instance) {
+    //         },
+    //         vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
+    //     });
     //}
 
     // Table highlight.

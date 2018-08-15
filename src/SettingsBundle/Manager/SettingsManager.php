@@ -284,7 +284,7 @@ class SettingsManager implements SettingsManagerInterface
             'show_default_folders' => 'Tools',
             'show_chat_folder' => 'Tools',
             'enabled_text2audio' => 'Tools',
-            'course_hide_tools' => 'Tools',
+            'course_hide_tools' => 'Course',
             'enabled_support_pixlr' => 'Tools',
             'show_groups_to_users' => 'Session',
             'accessibility_font_resize' => 'Platform',
@@ -664,6 +664,10 @@ class SettingsManager implements SettingsManagerInterface
 
         list($category, $name) = explode('.', $name);
         $settings = $this->load($category, $name);
+
+        if (!$settings) {
+            throw new \InvalidArgumentException(sprintf("Parameter '$name' not found in category '$category'"));
+        }
 
         return $settings->get($name);
     }

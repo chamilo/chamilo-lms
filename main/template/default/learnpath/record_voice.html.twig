@@ -19,20 +19,20 @@
             $('#record-audio-recordrtc').show();
 
             var mediaConstraints = {audio: true},
-                    recordRTC = null,
-                    btnStart = $('#btn-start-record'),
-                    btnStop = $('#btn-stop-record');
+                recordRTC = null,
+                btnStart = $('#btn-start-record'),
+                btnStop = $('#btn-stop-record');
 
             btnStart.on('click', function () {
                 navigator.getUserMedia = navigator.getUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.webkitGetUserMedia;
+                    navigator.mozGetUserMedia ||
+                    navigator.webkitGetUserMedia;
 
                 if (navigator.getUserMedia) {
                     navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
                 } else if (navigator.mediaDevices.getUserMedia) {
                     navigator.mediaDevices.getUserMedia(mediaConstraints)
-                            .then(successCallback).error(errorCallback);
+                        .then(successCallback).error(errorCallback);
                 }
 
                 function successCallback(stream) {
@@ -58,8 +58,8 @@
 
                 recordRTC.stopRecording(function (audioURL) {
                     var recordedBlob = recordRTC.getBlob(),
-                            fileName = Math.round(Math.random() * 99999999) + 99999999,
-                            fileExtension = '.' + recordedBlob.type.split('/')[1];
+                        fileName = Math.round(Math.random() * 99999999) + 99999999,
+                        fileExtension = '.' + recordedBlob.type.split('/')[1];
 
                     var formData = new FormData();
                     formData.append('audio-filename', fileName + fileExtension);
@@ -120,7 +120,7 @@
         $('#record-audio-recordrtc, #record-audio-wami').hide();
 
         var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
-                navigator.mediaDevices.getUserMedia;
+            navigator.mediaDevices.getUserMedia;
 
         if (webRTCIsEnabled) {
             useRecordRTC();

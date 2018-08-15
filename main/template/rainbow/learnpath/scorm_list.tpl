@@ -27,12 +27,7 @@
 </div>
 {% endif %}
 {% if data_panel is not empty %}
-<script type="text/javascript">
-    $('.status-heading').on("click", function() {
-        $(this).siblings().find(".panel-heading").removeClass("on");
-        $(this).find(".panel-heading").toggleClass("on");
-    });
-</script>
+
 <div id="learning_path_toc" class="scorm-collapse">
     <div class="scorm-title">
         <h4>
@@ -101,4 +96,11 @@
 
     </div>
 </div>
+    <script type="text/javascript">
+        $('.panel-heading a').click(function() {
+            $('.panel-heading').removeClass('active');
+            if(!$(this).closest('.panel').find('.panel-collapse').hasClass('in'))
+                $(this).parents('.panel-heading').addClass('active');
+        });
+    </script>
 {% endif %}

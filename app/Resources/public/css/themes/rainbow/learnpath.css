@@ -510,6 +510,13 @@ table.lp_overview img {
     background: url('images/arrow-right.png') no-repeat 10px center #e1e1e1;
     padding-left: 30px;
 }
+#learning_path_toc .panel-heading.active{
+    background: url('images/arrow-down.png') no-repeat 10px center #e1e1e1;
+    padding-left: 30px;
+}
+.scorm-collapse .panel-collapse .list li{
+    padding-left: 20px;
+}
 .scorm_item_normal .sub-item a:last-child{
     display: inline-block;
     width: 100%;

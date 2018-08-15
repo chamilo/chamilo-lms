@@ -29,7 +29,7 @@ class IndexController extends BaseController
     /**
      * The Chamilo index home page.
      *
-     * @Route("/", name="home")
+     * @Route("/", name="home", options={"expose"=true})
      * @Method({"GET", "POST"})
      *
      * @param string $type   courses|sessions|mycoursecategories

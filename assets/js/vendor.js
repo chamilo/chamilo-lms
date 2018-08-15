@@ -31,6 +31,7 @@ require('flag-icon-css/css/flag-icon.css');
 require("bootstrap-daterangepicker");
 require("bootstrap-daterangepicker/daterangepicker.scss");
 
+
 // doesn't work with webpack added directly in /public/libs folder
 /*
 require("fullcalendar");

@@ -4,12 +4,6 @@
 {% import "ChamiloThemeBundle:Macros:image.html.twig" as macro_image %}
 {% import 'ChamiloThemeBundle:Macros:headers.html.twig' as macro_headers %}
 <!doctype html>
-<!--[if lt IE 7 ]>
-<html lang="{{ app.request.locale }}" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>
-<html lang="{{ app.request.locale }}" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>
-<html lang="{{ app.request.locale }}" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>
 <html lang="{{ app.request.locale }}" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
@@ -40,7 +34,6 @@
         {% endblock %}
 
         <div class="extra-header">{{ header_extra_content }}</div>
-
         {% block chamilo_header %}
         <header>
             <div class="extra-header">

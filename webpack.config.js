@@ -15,8 +15,9 @@ Encore
      })
     .enableLessLoader()
     .autoProvidejQuery()
-    // read main.js     -> output as public/build/chamilo.js
-    .addEntry('chamilo', './assets/js/main.js')
+    // read main.js     -> output as public/build/vendor.js
+    .addEntry('vendor', './assets/js/vendor.js')
+    .addEntry('app', './assets/js/app.js')
     // read main.scss -> output as web/build/css/base.css
     .addStyleEntry('css/base', './assets/css/main.scss')
     .addStyleEntry('css/editor', './assets/css/editor.css')

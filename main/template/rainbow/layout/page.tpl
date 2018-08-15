@@ -64,11 +64,13 @@
             <!-- END CONTENT -->
 
             <!-- START FOOTER -->
-            <footer class="footer">
+
                 {% if show_footer == true %}
-                    {% include 'layout/page_footer.tpl'|get_template %}
+                    <footer class="footer">
+                        {% include 'layout/page_footer.tpl'|get_template %}
+                    </footer>
                 {% endif %}
-            </footer>
+
             <!-- END FOOTER -->
 
         </main>

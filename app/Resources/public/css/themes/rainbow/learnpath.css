@@ -520,6 +520,7 @@ table.lp_overview img {
 .scorm_item_normal .sub-item a:last-child{
     display: inline-block;
     width: 100%;
+    padding-right: 20px;
 }
 .scorm_item_normal.scorm_highlight .sub-item.item-quiz a{
     background: url("images/pencil-active.png") no-repeat right center;
@@ -553,6 +554,20 @@ table.lp_overview img {
     padding-left: 25px;
 }
 
+.attempts .attempts-status{
+    display: inline-block;
+    margin: 0;
+    padding: 10px 0;
+    list-style: none;
+    color: #162A83;
+}
+.attempts .details{
+    color: #162A83;
+    font-size: 11px;
+}
+.attempts .attempts-status li{
+    display: inline-block;
+}
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #learning_path_right_zone .lp-view-tabs .tab-content {

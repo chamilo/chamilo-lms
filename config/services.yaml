@@ -35,3 +35,4 @@ parameters:
     sonata_media.cdn.host: /public/uploads/media
     sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
     router.request_context.base_url: '%url_append%'
+    asset.request_context.base_path: '%router.request_context.base_url%'

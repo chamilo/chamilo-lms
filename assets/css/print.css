@@ -85,15 +85,15 @@ img {
 #contentfloatholder {/* also makes the right "sliding" tab  */
 	/*background: url(../pics/sidebar-r.gif) repeat-y 100% 0;
 background: url(../pics/bg_fountain.jpg) no-repeat 100% 0; */
-float: left;
+	float: left;
 	width: 100%;
 	position: relative;
 }
 #contentfloatholder:after {
 	/* this is for NN6 to clear floats */
-content: ".";
+	content: ".";
 	display: block;
-	height: 0px;
+	height: 0;
 	clear: both;
 	visibility: hidden;
 }
@@ -113,7 +113,7 @@ content: ".";
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {
-	margin-right: 0px;
+	margin-right: 0;
 }
 * html #center {
 	height: 1%;
@@ -169,13 +169,11 @@ content: ".";
 /* normal and error message-box */
 .normal-message, .error-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
+	margin: 10px auto 10px -250px;
 	width: 500px;
 	left: 50%;
 	right: 50%;
-	border-width: 1px;
-	border-style: solid;
+	border: 1px solid;
 	padding: 5px;
 }
 .normal-message {
@@ -261,7 +259,7 @@ dl.upload_option {
 /* styles for general formatting */
 .clear {
 	clear: both;
-	line-height: 0px;
+	line-height: 0;
 	height: 0;
 }
 p, blockquote, ol, ul {
@@ -275,8 +273,8 @@ h2 {
 }
 h3 {
 	font-size: 15px;
-	margin-top:0px;
-	padding-top:0px;
+	margin-top:0;
+	padding-top:0;
 }
 h4 {
 	font-size: 12px;
@@ -302,21 +300,21 @@ a:active {
 }
 input.link_alike {
 	background-color: #FFFFFF;
-	border-width: 0px;
+	border-width: 0;
 	color: #4171b5;
 	font-weight: bold;
 	text-align: left;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
 }
 input.link_alike:hover {
 	background-color: #FFFFFF;
-	border-width: 0px;
+	border-width: 0;
 	color: #FF0000;
 	font-weight: bold;
 	text-align: left;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
 }
 /* the following for the greyed out elements */
 a.nobold:link, a.nobold:visited, a.nobold:active {
@@ -509,7 +507,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	background-color: #fff;
 }
 .data_table td .highlight {
-    font-weight: bold;
+	font-weight: bold;
 }
 .data_table td {
 	padding: 5px;
@@ -520,23 +518,23 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 
 .data_table_no_border {
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 12px;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;    
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size: 12px;
+	margin-bottom: 15px;
+	margin-top: 8px;
+	text-align: left;
+	width: 100%;
 }
 
 .data_table_no_border td {
-    line-height: normal;
-    padding: 6px;
-    text-align: left;
-    vertical-align: middle;
+	line-height: normal;
+	padding: 6px;
+	text-align: left;
+	vertical-align: middle;
 }
 .data_table_no_border .highlight {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 /* admin page tool list definitions */
@@ -553,8 +551,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	float: left;
 	position: relative;
 	margin: 0;
-	padding: 0px;
-	padding-top: 8px;
+	padding: 8px 0 0;
 	background: #fff;
 }
 .home_news {
@@ -562,8 +559,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	float: right;
 	position: relative;
 	margin: 0;
-	padding: 0px;
-	padding-top: 8px;
+	padding: 8px 0 0;
 	background: #fff;
 }
 label.left {
@@ -663,7 +659,7 @@ div.system_announcement_content {
  * special print ccs classes						 *
  *****************************************************/
 
- a.full_url_print:after {
+a.full_url_print:after {
 	content: "(" attr(href) ")";
 	font-size: 75%;
 }
@@ -674,15 +670,15 @@ div.system_announcement_content {
 
 /* New print CSS */
 .pdf-header{
-    border-bottom: 1px solid #CCC;
-    margin-bottom: 100px;
+	border-bottom: 1px solid #CCC;
+	margin-bottom: 100px;
 }
 .pdf-header .logo a img{
-    width: 100px;
+	width: 100px;
 }
 table{
-    display: block;
-    width: 100%;
+	display: block;
+	width: 100%;
 }
 table th,
 table td {

@@ -75,8 +75,8 @@ See https://support.chamilo.org/issues/6976
     background-image: -ms-linear-gradient(top, #666, #999);
     background-image: -o-linear-gradient(top, #666, #999);
     background-image: linear-gradient(top, #666, #999);
-    margin-right: 0px;
-    padding: 10px 0px 10px 0px;
+    margin-right: 0;
+    padding: 10px 0 10px 0;
     text-decoration: none;
 }
 
@@ -149,10 +149,7 @@ See https://support.chamilo.org/issues/6976
 
 .level_3 {
     margin: 0 0.5em 0 60px;
-    padding-left: 30px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 5px;
+    padding: 5px 5px 5px 30px;
     line-height: 14px;
 }
 
@@ -313,6 +310,8 @@ See https://support.chamilo.org/issues/6976
 #scorm-info {
     padding: 0;
     background-color: #EBF3F5;
+    display: inline-block;
+    width: 100%;
 }
 
 #scorm-info .description-autor p {
@@ -345,6 +344,13 @@ See https://support.chamilo.org/issues/6976
 
 .scorm-title {
     padding: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+.scorm-body{
+    display: inline-block;
+    width: 100%;
 }
 
 .scorm-title h4 {
@@ -566,6 +572,7 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_normal.scorm_highlight.scorm_not_attempted {
     background: url(../../public/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
 }
+
 .scorm_item_normal.scorm_highlight.scorm_completed {
     background: url(../../public/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
 }
@@ -589,9 +596,11 @@ See https://support.chamilo.org/issues/6976
 .scorm-collapse-list .sub-item {
     padding-left: 20px;
 }
-.scorm_item_normal.scorm_highlight a{
+
+.scorm_item_normal.scorm_highlight a {
     color: #FFFFFF;
 }
+
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -649,16 +658,19 @@ See https://support.chamilo.org/issues/6976
         width: calc(100% - 465px);
     }
 }
+
 @media (min-width: 979px) and (max-width: 1024px) {
     #panel-scorm .image-avatar {
         display: none;
     }
 }
+
 @media (min-width: 768px) and (max-width: 978px) {
     #panel-scorm .image-avatar {
         display: none;
     }
 }
+
 @media (min-width: 480px) and (max-width: 767px) {
     #panel-scorm .image-avatar {
         display: none;

@@ -9,7 +9,7 @@ span.messagesmall {
 	font-style : italic;
 	color : Red;
 }
-/* newscorm/learnpath */ 
+/* newscorm/learnpath */
 
 div.lp_actions {
 	background:#F8F8F8;
@@ -152,12 +152,12 @@ table.lp_overview th.exercise {
 	width:50px;
 }
 table.lp_form input, table.lp_form select, table.lp_form textarea {
-/*	background:#F8F8F8;
-	border:1px solid #999999;
-	font-family:Arial, Verdana, Helvetica, sans-serif;
-	font-size:12px;
-	padding:1px 2px;
-	width:300px;*/
+	/*	background:#F8F8F8;
+        border:1px solid #999999;
+        font-family:Arial, Verdana, Helvetica, sans-serif;
+        font-size:12px;
+        padding:1px 2px;
+        width:300px;*/
 }
 table.lp_form td.radio input, table.lp_form td.exercise input {
 	width:auto;
@@ -166,7 +166,7 @@ table.lp_form .small_form {
 	background:#FFFFFF;
 }
 table.lp_form select {
-/*	padding:0;*/
+	/*	padding:0;*/
 }
 table.lp_form input.button {
 	width:75px;

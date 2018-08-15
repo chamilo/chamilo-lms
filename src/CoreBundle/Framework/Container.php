@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\PageBundle\Entity\Block;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
@@ -419,7 +418,7 @@ class Container
     }
 
     /**
-     * Gets a sonata page
+     * Gets a sonata page.
      *
      * @param string $slug
      *

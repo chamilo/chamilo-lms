@@ -119,7 +119,6 @@ class LegacyListener
                 $isAdmin = \UserManager::is_admin($userId);
                 $userInfo['is_anonymous'] = false;
                 $allowedCreateCourse = $userStatus === 1;
-
             }
             $session->set('_user', $userInfo);
             $session->set('is_platformAdmin', $isAdmin);

@@ -9122,6 +9122,31 @@ SQL;
     /**
      * @param int $id
      *
+     * @return string
+     */
+    public static function getSessionChangeUserReason($id): string
+    {
+        $reasons = self::getSessionChangeUserReasons();
+
+        return $reasons[$id] ?? '';
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSessionChangeUserReasons(): array
+    {
+        return [
+            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChanged'),
+            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChanged'),
+            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChanged'),
+            //self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
+        ];
+    }
+
+    /**
+     * @param int $id
+     *
      * @return bool
      */
     private static function allowed($id)
@@ -9307,30 +9332,5 @@ SQL;
         } else {
             return -1;
         }
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public static function getSessionChangeUserReason($id) : string
-    {
-        $reasons = self::getSessionChangeUserReasons();
-
-        return $reasons[$id] ?? '';
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSessionChangeUserReasons() : array
-    {
-        return array(
-            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChanged'),
-            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChanged'),
-            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChanged'),
-            //self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
-        );
     }
 }

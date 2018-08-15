@@ -6,13 +6,11 @@ namespace Chamilo\PageBundle\Controller;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -280,7 +278,7 @@ class PageController extends BaseController
     {
         return $this->forward(
             'Chamilo\PageBundle\Controller\PageController:createPage',
-            ['pageSlug' => $slug, 'redirect' => $this->generateUrl('edit_page', ['slug' => $slug ])]
+            ['pageSlug' => $slug, 'redirect' => $this->generateUrl('edit_page', ['slug' => $slug])]
         );
     }
 

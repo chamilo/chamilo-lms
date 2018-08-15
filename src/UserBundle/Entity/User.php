@@ -1936,7 +1936,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
-
     /**
      * @param UserInterface $user
      *

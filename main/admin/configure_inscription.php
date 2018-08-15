@@ -369,4 +369,3 @@ $tpl->assign('form', $content);
 
 $templateName = $tpl->get_template('auth/inscription_edit.html.twig');
 $tpl->display($templateName);
-

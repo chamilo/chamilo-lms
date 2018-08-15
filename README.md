@@ -7,6 +7,8 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/166/badge)](https://bestpractices.coreinfrastructure.org/projects/166)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/88e934aab2f34bb7a0397a6f62b078b2)](https://www.codacy.com/app/chamilo/chamilo-lms?utm_source=github.com&utm_medium=referral&utm_content=chamilo/chamilo-lms&utm_campaign=badger)
 
+Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under GNU/GPLv3+. It is or has been used by more than 20M people worldwide.
+
 ## Installation
 
 The installation instructions are located in the documentation here:

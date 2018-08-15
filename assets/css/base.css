@@ -369,10 +369,6 @@ select {
     vertical-align: middle;
 }
 
-input[type=checkbox], input[type=radio] {
-    margin: 3px 0 0;
-}
-
 .prerequisites input[type=radio] {
     height: 12px;
 }

@@ -30,7 +30,7 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * @param string $defaultLocale
      */
-    public function __construct($defaultLocale = 'en', $container)
+    public function __construct($defaultLocale, $container)
     {
         $this->defaultLocale = $defaultLocale;
         $this->container = $container;
@@ -55,23 +55,8 @@ class LocaleListener implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $courseCode = $request->get('course');
 
-        // Detect if the course was set with a cidReq:
-        if (empty($courseCode)) {
-            $courseCodeFromRequest = $request->get('cidReq');
-            $courseCode = $courseCodeFromRequest;
-        }
-
-        /** @var EntityManager $em */
-        $em = $container->get('doctrine')->getManager();
-
-        if (!empty($courseCode)) {
-            /** @var Course $course */
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
-        }
-
-        // try to see if the locale has been set as a _locale routing parameter
+        // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
         if ($locale = $request->attributes->get('_locale')) {
             $request->getSession()->set('_locale', $locale);
         } else {
@@ -92,11 +77,27 @@ class LocaleListener implements EventSubscriberInterface
             }
 
             // 3. Check course locale
-            /** @var Course $course */
-            if (!empty($course)) {
-                $courseLocale = $course->getCourseLanguage();
-                if (!empty($courseLocale)) {
-                    $locale = $courseLocale;
+            $courseCode = $request->get('course');
+
+            // Detect if the course was set with a cidReq:
+            if (empty($courseCode)) {
+                $courseCodeFromRequest = $request->get('cidReq');
+                $courseCode = $courseCodeFromRequest;
+            }
+
+            /** @var EntityManager $em */
+            $em = $container->get('doctrine')->getManager();
+
+            if (!empty($courseCode)) {
+                /** @var Course $course */
+                $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
+                // 3. Check course locale
+                /** @var Course $course */
+                if (!empty($course)) {
+                    $courseLocale = $course->getCourseLanguage();
+                    if (!empty($courseLocale)) {
+                        $locale = $courseLocale;
+                    }
                 }
             }
 
@@ -119,7 +120,7 @@ class LocaleListener implements EventSubscriberInterface
     {
         return [
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => [['onKernelRequest', 17]],
+            KernelEvents::REQUEST => [['onKernelRequest', 20]],
         ];
     }
 }

@@ -155,7 +155,6 @@ if (!empty($action)) {
     }
 }*/
 
-
 $form = new FormValidator('registration');
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $display_all_form = !isset($_SESSION['update_term_and_condition']['user_id']);
@@ -354,11 +353,12 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
     $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'), 'warning');
 }
 
+$url = api_get_path(WEB_PUBLIC_PATH).'internal_page/edit/inscription';
 //Form of language
 //$content .= api_display_language_form();
 $content .= '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.
     Display::return_icon('edit.gif', get_lang('Edit')).'</a> 
-    <a href="'.api_get_path(WEB_PUBLIC_PATH).'edit_inscription">'.get_lang('EditNotice').'</a>';
+    <a href="'.$url.'">'.get_lang('EditNotice').'</a>';
 
 $content .= $form->returnForm();
 

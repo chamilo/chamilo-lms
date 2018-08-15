@@ -2,7 +2,11 @@
 
 {% block chamilo_right_column %}
 
-Edit welcome!
+{{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
+
+Edit page '{{ page.slug }}' in '{{ page.site.locale }}'
+
+{{ sonata_page_render_container('content', page) }}
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_widget(form) }}

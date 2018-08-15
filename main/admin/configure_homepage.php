@@ -1122,7 +1122,7 @@ switch ($action) {
                 </div>
                 <div class="col-md-9">
                     <div class="actions">
-                        <a href="<?php echo $selfUrl; ?>?action=edit_top&language=<?php echo $languageGet; ?>">
+                        <a href="<?php echo api_get_path(WEB_PUBLIC_PATH); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
                             <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'), null, ICON_SIZE_SMALL).'&nbsp;'.get_lang('EditHomePage'); ?>
                         </a>
                     </div>

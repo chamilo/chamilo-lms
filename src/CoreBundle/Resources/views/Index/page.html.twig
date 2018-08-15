@@ -1,5 +1,5 @@
 {% if is_granted('ROLE_ADMIN') %}
-<a href="{{ url('edit_welcome') }}" >
+<a href="{{ url('edit_page', { 'slug': slug }) }}" >
     {{ "header.edit_page"|trans({}, 'SonataPageBundle') }}
 </a>
 {% endif %}

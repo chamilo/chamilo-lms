@@ -32,73 +32,6 @@ class IndexController extends BaseController
     /**
      * The Chamilo index home page.
      *
-     * @Route("/edit_welcome", name="edit_welcome")
-     * @Method({"GET|POST"})
-     * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @return Response
-     */
-    public function editWelcomeAction()
-    {
-        return $this->forward(
-            'Chamilo\PageBundle\Controller\PageController:createPage',
-            array('pageSlug' => 'welcome')
-        );
-    }
-
-    /**
-     * The Chamilo index home page.
-     *
-     * @Route("/edit_inscription", name="edit_inscription")
-     * @Method({"GET|POST"})
-     * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @return Response
-     */
-    public function editInscriptionAction()
-    {
-        $redirect = $this->generateUrl('legacy_main', ['name' => 'admin/configure_inscription.php']);
-
-        return $this->forward(
-            'Chamilo\PageBundle\Controller\PageController:createPage',
-            array('pageSlug' => 'inscription', 'redirect' => $redirect)
-        );
-
-    }
-
-    /**
-     * The Chamilo index home page.
-     *
-     * @Route("/welcome", name="welcome")
-     * @Method({"GET"})
-     *
-     * @return Response
-     */
-    public function welcomeAction()
-    {
-        $siteSelector = $this->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();
-        $page = null;
-        if ($site) {
-            $pageManager = $this->get('sonata.page.manager.page');
-            // Parents only of homepage
-            $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => 'welcome'];
-            /** @var Page $page */
-            $page = $pageManager->findOneBy($criteria);
-        }
-
-        return $this->render(
-            '@ChamiloCore/Index/welcome.html.twig',
-            [
-                'page' => $page,
-                'content' => 'welcome',
-            ]
-        );
-    }
-
-    /**
-     * The Chamilo index home page.
-     *
      * @Route("/", name="home")
      * @Method({"GET", "POST"})
      *
@@ -108,7 +41,7 @@ class IndexController extends BaseController
      *
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
@@ -184,13 +117,13 @@ class IndexController extends BaseController
      *
      * @return Response
      */
-    public function toggleStudentViewAction(Request $request)
+    public function toggleStudentViewAction(Request $request): Response
     {
         if (!api_is_allowed_to_edit(false, false, false, false)) {
             return '';
         }
         $studentView = $request->getSession()->get('studentview');
-        if (empty($studentView) || $studentView == 'studentview') {
+        if (empty($studentView) || $studentView === 'studentview') {
             $request->getSession()->set('studentview', 'teacherview');
 
             return 'teacherview';

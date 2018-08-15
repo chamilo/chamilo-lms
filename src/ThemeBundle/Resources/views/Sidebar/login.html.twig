@@ -1,23 +1,25 @@
-<div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="flag-icon flag-icon-{{ current_locale_iso }}"></span>
-        {{ current_locale_iso }}
-        <span class="caret">
-        </span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-        {% autoescape false %}
-            {% for index, locale in available_locales %}
-                <li>
-                    <a href="{{ app.request.attributes.get('_route') }}?_locale={{ index }}">
-                    <span class="flag-icon flag-icon-{{ index }}"></span>
-                    {{ locale }}
-                    </a>
-                </li>
-            {% endfor %}
-        {% endautoescape %}
-    </ul>
-</div>
+{{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
+
+{#<div class="btn-group">#}
+    {#<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">#}
+        {#<span class="flag-icon flag-icon-{{ current_locale_iso }}"></span>#}
+        {#{{ current_locale_iso }}#}
+        {#<span class="caret">#}
+        {#</span>#}
+    {#</button>#}
+    {#<ul class="dropdown-menu" role="menu">#}
+        {#{% autoescape false %}#}
+            {#{% for index, locale in available_locales %}#}
+                {#<li>#}
+                    {#<a href="{{ app.request.attributes.get('_route') }}?_locale={{ index }}">#}
+                    {#<span class="flag-icon flag-icon-{{ index }}"></span>#}
+                    {#{{ locale }}#}
+                    {#</a>#}
+                {#</li>#}
+            {#{% endfor %}#}
+        {#{% endautoescape %}#}
+    {#</ul>#}
+{#</div>#}
 <form class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post" name="formLogin" id="formLogin">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
     <fieldset>

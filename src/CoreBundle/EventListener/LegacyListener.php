@@ -100,7 +100,11 @@ class LegacyListener
                 $twig->addGlobal($index, $value);
             }
 
-            $userObject = $container->get('security.token_storage')->getToken()->getUser();
+            $token = $container->get('security.token_storage')->getToken();
+            $userObject = null;
+            if ($token !== null) {
+                $userObject = $container->get('security.token_storage')->getToken()->getUser();
+            }
 
             $userInfo = [];
             $userInfo['is_anonymous'] = true;

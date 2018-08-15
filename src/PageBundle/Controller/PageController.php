@@ -6,7 +6,10 @@ namespace Chamilo\PageBundle\Controller;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sonata\PageBundle\Entity\PageManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
@@ -57,15 +60,74 @@ class PageController extends BaseController
     }
 
     /**
+     * Creates a site if needed checking the host and locale.
+     * Creates a first root page.
+     * Creates a page if it doesn't exists.
+     * Updates the page if page exists.
+     *
      * @param string  $pageSlug
+     * @param string  $redirect
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function createPage($pageSlug, $redirect, Request $request)
     {
-        $siteSelector = $this->container->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();
+        $container = $this->container;
+        //$siteSelector = $container->get('sonata.page.site.selector');
+
+        $siteManager = $container->get('sonata.page.manager.site');
+        $host = $request->getHost();
+        $criteria = [
+            'locale' => $request->getLocale(),
+            'host' => $host,
+        ];
+        $site = $siteManager->findOneBy($criteria);
+        //$site = $siteSelector->retrieve();
+
+        if ($request->getLocale() !== $site->getLocale()) {
+            // Check if there's site for this locale
+            $siteManager = $container->get('sonata.page.manager.site');
+            $host = $request->getHost();
+            $criteria = [
+                'locale' => $request->getLocale(),
+                'host' => $host,
+            ];
+            $site = $siteManager->findOneBy($criteria);
+            if (!$site) {
+                // Create new site for this host and language
+                $site = $siteManager->create();
+                $site->setHost($host);
+                $site->setEnabled(true);
+                $site->setName($host.' in language '.$request->getLocale());
+                $site->setEnabledFrom(new \DateTime('now'));
+                $site->setEnabledTo(new \DateTime('+20 years'));
+                $site->setRelativePath('');
+                $site->setIsDefault(false);
+                $site->setLocale($request->getLocale());
+                $site = $siteManager->save($site);
+
+                // Create first root page
+
+                /** @var PageManager $pageManager */
+                $pageManager = $container->get('sonata.page.manager.page');
+                /** @var \Sonata\PageBundle\Model\Page $page */
+                $page = $pageManager->create();
+                $page->setSlug('homepage');
+                $page->setUrl('/');
+                $page->setName('homepage');
+                $page->setTitle('home');
+                $page->setEnabled(true);
+                $page->setDecorate(1);
+                $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
+                $page->setTemplateCode('default');
+                $page->setRouteName('homepage');
+                //$page->setParent($this->getReference('page-homepage'));
+                $page->setSite($site);
+                $pageManager->save($page);
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $page = null;
 
@@ -77,8 +139,15 @@ class PageController extends BaseController
         $blockToEdit = null;
         if ($site) {
             $pageManager = $this->get('sonata.page.manager.page');
-            // Parents only of homepage
-            $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => $pageSlug];
+
+            // Getting parent
+            $criteria = ['site' => $site, 'enabled' => true, 'parent' => null];
+            /** @var Page $page */
+            $parent = $pageManager->findOneBy($criteria);
+
+            // Check if a page exists for this site
+            $criteria = ['site' => $site, 'enabled' => true, 'parent' => $parent, 'slug' => $pageSlug];
+
             /** @var Page $page */
             $page = $pageManager->findOneBy($criteria);
             if ($page) {
@@ -101,10 +170,6 @@ class PageController extends BaseController
                 }
             } else {
                 $pageManager = $this->get('sonata.page.manager.page');
-
-                $criteria = ['site' => $site, 'enabled' => true, 'parent' => null, 'slug' => 'homepage'];
-                /** @var Page $page */
-                $parent = $pageManager->findOneBy($criteria);
 
                 $page = $pageManager->create();
                 $page->setSlug($pageSlug);
@@ -191,13 +256,71 @@ class PageController extends BaseController
             return $this->redirectToRoute('home');
         }
 
-        $template = $pageSlug.'_edit.html.twig';
-
         return $this->render(
-            '@ChamiloCore/Index/'.$template,
+            '@ChamiloCore/Index/page_edit.html.twig',
             [
                 'page' => $page,
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * The Chamilo index home page.
+     *
+     * @Route("/internal_page/edit/{slug}", name="edit_page")
+     * @Method({"GET|POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param string $slug
+     *
+     * @return Response
+     */
+    public function editPageAction($slug): Response
+    {
+        return $this->forward(
+            'Chamilo\PageBundle\Controller\PageController:createPage',
+            ['pageSlug' => $slug, 'redirect' => $this->generateUrl('edit_page', ['slug' => $slug ])]
+        );
+    }
+
+    /**
+     * @Route("/internal_page/{slug}")
+     *
+     * @param string  $slug
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function renderPageAction(string $slug, Request $request): Response
+    {
+        /*$siteSelector = $this->get('sonata.page.site.selector');
+        $site = $siteSelector->retrieve();*/
+
+        $container = $this->container;
+        $siteManager = $container->get('sonata.page.manager.site');
+        $host = $request->getHost();
+        $criteria = [
+            'locale' => $request->getLocale(),
+            'host' => $host,
+        ];
+        $site = $siteManager->findOneBy($criteria);
+
+        $page = null;
+        if ($site) {
+            $pageManager = $this->get('sonata.page.manager.page');
+            // Parents only of homepage
+            $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
+            /** @var Page $page */
+            $page = $pageManager->findOneBy($criteria);
+        }
+
+        return $this->render(
+            '@ChamiloCore/Index/page.html.twig',
+            [
+                'page' => $page,
+                'slug' => $slug,
+                'content' => 'welcome',
             ]
         );
     }

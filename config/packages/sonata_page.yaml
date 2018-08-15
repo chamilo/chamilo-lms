@@ -33,6 +33,7 @@ sonata_page:
         - ^/_profiler/(.*)
         - ^/userportal
         - ^/userportal/(.*)
+        - ^/internal_page/(.*)
         - ^/js/(.*)
         - ^/faq/(.*)
         - ^/faq
@@ -48,8 +49,7 @@ sonata_page:
         - sylius_flow(.*)
     ignore_routes:
         - home
-        - edit_welcome
-        - edit_inscription
+        - internal_page
         - elfinder
         - login
         - logout

@@ -6767,7 +6767,6 @@ class CourseManager
         return (int) $row['count'];
     }
 
-
     /**
      * @param ToolChain $toolList
      */

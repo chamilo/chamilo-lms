@@ -428,14 +428,27 @@ class Container
     public static function getPage($slug)
     {
         $container = self::$container;
-        $siteSelector = $container->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();
+        /*$siteSelector = $container->get('sonata.page.site.selector');
+        $site = $siteSelector->retrieve();*/
+        $siteManager = $container->get('sonata.page.manager.site');
+        $request = Container::getRequest();
+        $page = null;
+        if ($request) {
+            $host = $request->getHost();
+            $criteria = [
+                'locale' => $request->getLocale(),
+                'host' => $host,
+            ];
+            $site = $siteManager->findOneBy($criteria);
 
-        $pageManager = $container->get('sonata.page.manager.page');
-        // Parents only of homepage
-        $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1, 'slug' => $slug];
-        /** @var Page $page */
-        $page = $pageManager->findOneBy($criteria);
+            $pageManager = $container->get('sonata.page.manager.page');
+            // Parents only of homepage
+            $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
+            /** @var Page $page */
+            $page = $pageManager->findOneBy($criteria);
+
+            return $page;
+        }
 
         return $page;
     }

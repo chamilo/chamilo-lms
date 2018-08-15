@@ -1962,7 +1962,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * @return string
      */
-    public function getPictureLegacy() : string
+    public function getPictureLegacy(): string
     {
         $id = $this->id;
 

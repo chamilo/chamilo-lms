@@ -2,7 +2,7 @@
 
 {% block chamilo_right_column %}
     {% autoescape false %}
-        {{ render(controller('ChamiloCoreBundle:Index:welcome')) }}
+        {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'welcome'} )) }}
 
         {{ announcements_block }}
         {{ content }}

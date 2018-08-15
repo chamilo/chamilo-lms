@@ -2084,47 +2084,6 @@ class Display
     }
 
     /**
-     * @param array  $items
-     * @param string $type
-     * @param null   $id
-     *
-     * @return null|string
-     */
-    public static function generate_accordion($items, $type = 'jquery', $id = null)
-    {
-        $html = null;
-        if (!empty($items)) {
-            if (empty($id)) {
-                $id = api_get_unique_id();
-            }
-            if ($type == 'jquery') {
-                $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
-            } else {
-                $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
-            }
-
-            $count = 1;
-            foreach ($items as $item) {
-                $html .= '<div class="accordion-my-group">';
-                $html .= '<div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
-                            '.$item['title'].'
-                            </a>
-                          </div>';
-
-                $html .= '<div id="collapse'.$count.'" class="accordion-body">';
-                $html .= '<div class="accordion-my-inner">
-                            '.$item['content'].'
-                            </div>
-                          </div>';
-            }
-            $html .= '</div>';
-        }
-
-        return $html;
-    }
-
-    /**
      * @param array $buttons
      *
      * @return string

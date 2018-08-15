@@ -53,13 +53,6 @@ $(function() {
         });
     }
 
-    $(".accordion_jquery").accordion({
-        autoHeight: false,
-        active: false, // all items closed by default
-        collapsible: true,
-        header: ".accordion-heading"
-    });
-
     // Start modals
     // class='ajax' loads a page in a modal
     $('body').on('click', 'a.ajax', function(e) {

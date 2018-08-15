@@ -83,7 +83,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - travis_wait 20 composer install
+  - travis_wait 30 composer install
   # Install third party js/css libraries
   - yarn install
   - ./node_modules/.bin/encore dev
@@ -93,6 +93,8 @@ before_install:
   - php bin/console assets:install
   # Permissions
   - sudo chmod -R 777 var/cache var/log var/courses var/upload public
+  # Dump js routes
+  - bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   # Check chamilo status
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
   # Permissions

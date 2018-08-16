@@ -31,7 +31,7 @@ yarn install
 
 yarn run encore dev
 
-chmod -R 777 .env var public main/default_course_document/images/	
+chmod -R 777 .env app var public main/default_course_document/images/	
 
 ~~~~
 

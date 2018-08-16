@@ -602,3 +602,33 @@ function copyTextToClipBoard(elementId)
     /* Alert the copied text */
     //alert('Copied');
 }
+
+function setFrameReady(iframeName) {
+    $.frameReady(function () {
+        $(document).ready(function () {
+            $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+                pluginPath: '{{ _p.web }}web/assets/mediaelement/build/',
+                //renderers: ['html5', 'flash_video', 'native_flv'],
+                features: ['{{ video_features }}'],
+                success: function(mediaElement, originalNode, instance) {
+                },
+                vrPath: '{{ _p.web }}web/assets/vrview/build/vrview.js'
+            });
+        });
+    }, 'top.' + iframeName, {
+        load: [
+            {type: 'script', id: '_fr1', src: '{{ _p.web }}web/assets/jquery/dist/jquery.min.js'},
+            {type: 'script', id: '_fr7', src: '{{ _p.web }}web/assets/MathJax/MathJax.js?config=AM_HTMLorMML'},
+            {type: 'script', id: '_fr4', src: '{{ _p.web }}web/assets/jquery-ui/jquery-ui.min.js'},
+            {type: 'stylesheet', id: '_fr5', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'},
+            {type: 'stylesheet', id: '_fr6', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'},
+            {type: 'script', id: '_fr2', src: '{{ _p.web_lib }}javascript/jquery.highlight.js'},
+            {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_query }}'},
+            {type: 'script', id: '_media1', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelement-and-player.min.js'},
+            {type: 'stylesheet', id: '_media2', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelementplayer.min.css'},
+            {#{type: 'script', id: '_media3', src: '{{ _p.web_lib }}javascript/iframe-js-loader.js'},#}
+            {type: 'stylesheet', id: '_media4', src: '{{ _p.web }}web/assets/mediaelement/plugins/vrview/vrview.css'},
+            {type: 'script', id: '_media4', src: '{{ _p.web }}web/assets/mediaelement/plugins/vrview/vrview.js'},
+        ]
+    });
+}

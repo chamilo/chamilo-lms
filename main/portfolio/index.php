@@ -8,6 +8,10 @@ use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 
+// Make sure we void the course context if we are in the social network section
+if (empty($_GET['cidReq'])) {
+    $cidReset = true;
+}
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();

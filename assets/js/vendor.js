@@ -14,7 +14,8 @@ require("webpack-jquery-ui/css");
 require("bootstrap");
 require("chosen-js");
 require("mediaelement");
-// require("font-awesome-webpack"); already added manually in main.scss
+
+require('@fortawesome/fontawesome-free');
 
 require("qtip2");
 require("image-map-resizer");

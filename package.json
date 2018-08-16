@@ -14,14 +14,13 @@
     "webpack": "^3.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.2.0",
     "blueimp-file-upload": "^9.19.2",
     "bootstrap-daterangepicker": "^2.1.30",
     "bootstrap-select": "^1.12.4",
     "chosen-js": "^1.8.3",
     "cropper": "^4.0",
     "flag-icon-css": "^3.0",
-    "font-awesome": "^4.7",
-    "font-awesome-webpack": "^0.0.5-beta.2",
     "fs": "0.0.1-security",
     "fullcalendar": "3.1.0",
     "highlight.js": "^9.12.0",

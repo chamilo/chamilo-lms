@@ -16,6 +16,10 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-
+        <attribute-overrides>
+            <attribute-override name="hash">
+                <field column="hash" length="190" unique="true" type="string" />
+            </attribute-override>
+        </attribute-overrides>
     </entity>
 </doctrine-mapping>

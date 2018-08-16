@@ -12,10 +12,8 @@
         name="Chamilo\TimelineBundle\Entity\Timeline"
         table="timeline__timeline"
         repository-class="Doctrine\ORM\EntityRepository">
-
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-
     </entity>
 </doctrine-mapping>

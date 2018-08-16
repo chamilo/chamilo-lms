@@ -28,8 +28,9 @@ doctrine:
 #                alias: App
             gedmo_translatable:
                 type: annotation
-                prefix: Gedmo\Translatable\Entity
+                prefix: ChamiloCore\Entity\Translation
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+#                dir: "%kernel.root_dir%/src/CoreBundle/Entity"
                 alias: GedmoTranslatable # (optional) it will default to the name set for the mapping
                 is_bundle: false
             gedmo_translator:

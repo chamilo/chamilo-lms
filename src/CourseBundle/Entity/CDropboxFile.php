@@ -56,7 +56,7 @@ class CDropboxFile
     /**
      * @var string
      *
-     * @ORM\Column(name="filename", type="string", length=250, nullable=false)
+     * @ORM\Column(name="filename", type="string", length=190, nullable=false)
      */
     protected $filename;
 

@@ -10,7 +10,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 /**
  * Class Category.
  *
- * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Entity\CategoryRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Repository\CategoryRepository")
  * @ORM\Table(
  *     name="faq_category",
  *     indexes={@ORM\Index(name="is_active_idx", columns={"is_active"})}

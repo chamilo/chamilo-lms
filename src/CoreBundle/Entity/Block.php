@@ -43,7 +43,7 @@ class Block
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     * @ORM\Column(name="path", type="string", length=190, nullable=false)
      */
     protected $path;
 

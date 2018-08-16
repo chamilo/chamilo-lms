@@ -20,7 +20,7 @@ class HookObserver
     /**
      * @var string
      *
-     * @ORM\Column(name="class_name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
      */
     protected $className;
 

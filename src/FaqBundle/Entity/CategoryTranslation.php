@@ -15,6 +15,15 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *     name="faq_category_translation",
  *     options={"row_format":"DYNAMIC"}
  * )
+ * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(name="locale",
+ *         column=@ORM\Column(
+ *             name="locale",
+ *             type="string",
+ *             length=190
+ *         )
+ *     )
+ * })
  *
  * @package Chamilo\FaqBundle\Entity
  */
@@ -38,6 +47,15 @@ class CategoryTranslation
      */
     protected $slug;
 
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=190, nullable=false)
+     */
+    protected $locale;
+
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return (string) $this->headline;

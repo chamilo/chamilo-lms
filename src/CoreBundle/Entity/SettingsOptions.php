@@ -29,7 +29,7 @@ class SettingsOptions
     /**
      * @var string
      *
-     * @ORM\Column(name="variable", type="string", length=255, nullable=true)
+     * @ORM\Column(name="variable", type="string", length=190, nullable=true)
      */
     protected $variable;
 

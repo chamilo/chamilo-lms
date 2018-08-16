@@ -15,7 +15,13 @@
 {% include "@ChamiloTheme/Layout/head.html.twig" %}
 </head>
 {% endblock %}
-<body class="{{ section_name }}" {{ sonata_seo_html_attributes() }} >
+
+<body
+    class="{{ section_name }}"
+    {{ sonata_seo_html_attributes() }}
+    data-in-course="{{ course ? 'true' : 'false' }}"
+    data-course-code="{{ course ? course.code : '' }}"
+>
 <noscript>{{ "NoJavascript" | trans }}</noscript>
 
 {% block chamilo_wrap %}
@@ -32,7 +38,6 @@
             {% include "@ChamiloTheme/Layout/topbar.html.twig" %}
             {% endif %}
         {% endblock %}
-
         <div class="extra-header">{{ header_extra_content }}</div>
         {% block chamilo_header %}
         <header>
@@ -104,7 +109,6 @@
         <div id="top_main_content" class="container">
         {# course navigation links/shortcuts need to be activated by the admin #}
         {% include "@ChamiloTheme/Layout/course_navigation.html.twig" %}
-
             {#<header class="header">#}
                 {#{% block chamilo_logo %}#}
                 {#<a href="#" class="logo">#}
@@ -116,8 +120,6 @@
                 {#<!-- Header Navbar: style can be found in header.less -->#}
                 {#{% endblock %}#}
             {#</header>#}
-
-
         {% block page_content %}
         {% endblock %}
 
@@ -125,10 +127,8 @@
     </div> {# End page-wrap div #}
     {% block chamilo_footer %}
         {% include '@ChamiloTheme/Layout/footer.html.twig' %}
-        {% include '@ChamiloTheme/Layout/footer.js.twig' %}
     {% endblock %}
 {% endautoescape %}
 {% endblock %} {# End chamilo_wrap block #}
-
 </body>
 </html>

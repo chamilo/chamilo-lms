@@ -17,9 +17,9 @@ html {
 }
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
+    margin-bottom: 85px !important;
 }
-.footer {
+#footer-section.page-footer {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -34,11 +34,6 @@ body {
 #cm-content > .container {
     padding-bottom: 60px;
     margin-bottom: 10px;
-}
-
-.footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
 }
 
 /*!

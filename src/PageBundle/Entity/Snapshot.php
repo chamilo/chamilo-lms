@@ -7,6 +7,7 @@ use Sonata\PageBundle\Entity\BaseSnapshot;
 
 /**
  * Class Snapshot.
+ *
  * @package Chamilo\PageBundle\Entity
  */
 class Snapshot extends BaseSnapshot

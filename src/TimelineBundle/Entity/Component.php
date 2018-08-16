@@ -7,6 +7,7 @@ use Sonata\TimelineBundle\Entity\Component as BaseComponent;
 
 /**
  * Class Component.
+ *
  * @package Chamilo\TimelineBundle\Entity
  */
 class Component extends BaseComponent

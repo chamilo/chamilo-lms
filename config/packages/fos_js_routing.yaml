@@ -1,4 +1,3 @@
 fos_js_routing:
     request_context_base_url: '%url_append%'
     routes_to_expose: [home]
-

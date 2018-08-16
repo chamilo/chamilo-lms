@@ -7,6 +7,7 @@ use Sonata\PageBundle\Entity\BaseBlock;
 
 /**
  * Class Block.
+ *
  * @package Chamilo\PageBundle\Entity
  */
 class Block extends BaseBlock

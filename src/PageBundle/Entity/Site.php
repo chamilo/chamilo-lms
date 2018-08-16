@@ -7,6 +7,7 @@ use Sonata\PageBundle\Entity\BaseSite;
 
 /**
  * Class Site.
+ *
  * @package Chamilo\PageBundle\Entity
  */
 class Site extends BaseSite

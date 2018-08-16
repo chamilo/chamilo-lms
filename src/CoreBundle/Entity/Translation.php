@@ -4,12 +4,11 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
 
 /**
- * Gedmo\Translatable\Entity\Translation
+ * Gedmo\Translatable\Entity\Translation.
  *
  * @ORM\Table(
  *         name="ext_translations",
@@ -31,7 +30,6 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
  *         )
  *     )
  * })
- *
  */
 class Translation extends AbstractTranslation
 {

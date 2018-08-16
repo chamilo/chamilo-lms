@@ -7,6 +7,7 @@ use Sonata\TimelineBundle\Entity\Action as BaseAction;
 
 /**
  * Class Action.
+ *
  * @package Chamilo\TimelineBundle\Entity
  */
 class Action extends BaseAction

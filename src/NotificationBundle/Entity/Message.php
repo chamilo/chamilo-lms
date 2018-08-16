@@ -8,6 +8,7 @@ use Sonata\NotificationBundle\Entity\BaseMessage;
 
 /**
  * Class Message.
+ *
  * @package Chamilo\NotificationBundle\Entity
  */
 class Message extends BaseMessage

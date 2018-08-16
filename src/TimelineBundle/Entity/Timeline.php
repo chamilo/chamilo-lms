@@ -7,6 +7,7 @@ use Sonata\TimelineBundle\Entity\Timeline as BaseTimeline;
 
 /**
  * Class Timeline.
+ *
  * @package Chamilo\TimelineBundle\Entity
  */
 class Timeline extends BaseTimeline

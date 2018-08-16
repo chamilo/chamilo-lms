@@ -694,6 +694,18 @@ $userGroups = $userGroupManager->getNameListByUser(
                 }
 
                 // Ofaj
+                $bossList = Usermanager::getStudentBossList($student_id);
+                echo '<tr><td>';
+                echo get_lang('StudentBoss').' : ';
+                foreach ($bossList as $boss) {
+                    $bossInfo = api_get_user_info($boss['boss_id']);
+                    if ($bossInfo) {
+                        echo $bossInfo['complete_name_with_username'].'<br />';
+                    }
+                }
+                echo '</td></tr>';
+
+                echo '<tr><td>';
                 echo get_lang('Language').' : ';
                 $languageId = api_get_language_id($user_info['language']);
                 if ($languageId) {

@@ -19,6 +19,11 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+        <attribute-overrides>
+            <attribute-override name="slug">
+                <field column="slug" length="190" unique="true" type="string" />
+            </attribute-override>
+        </attribute-overrides>
         <options>
             <option name="row_format">DYNAMIC</option>
         </options>

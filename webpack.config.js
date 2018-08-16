@@ -14,11 +14,11 @@ Encore
          //resolveUrlLoader: false
      })
     .enableLessLoader()
-    .autoProvidejQuery()
-    // read main.js     -> output as public/build/vendor.js
+    .autoProvidejQuery() // not needed because in window.jQuery we set the $
+    // Reads the "assets/js/vendor.js" file and it will generate the file public/build/vendor.js file
     .addEntry('vendor', './assets/js/vendor.js')
     .addEntry('app', './assets/js/app.js')
-    // read main.scss -> output as web/build/css/base.css
+    // Reads app.scss -> output as web/build/css/base.css
     .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/editor', './assets/css/editor.css')
     .addStyleEntry('css/print', './assets/css/print.css')
@@ -66,8 +66,7 @@ var themes = [
 
 // Add Chamilo themes
 themes.forEach(function (theme) {
-    Encore
-        .addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
+    Encore.addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
     ;
 
     // Copy images from themes into public/build

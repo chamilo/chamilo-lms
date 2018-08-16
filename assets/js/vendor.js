@@ -30,15 +30,14 @@ require('bootstrap-select/dist/css/bootstrap-select.css');
 require('flag-icon-css/css/flag-icon.css');
 require("bootstrap-daterangepicker");
 require("bootstrap-daterangepicker/daterangepicker.scss");
-
+//require("readmore-js");
 
 // doesn't work with webpack added directly in /public/libs folder
 /*
 require("fullcalendar");
 require("pwstrength-bootstrap");
-require ("readmore-js");
+
 require("js-cookie");
 require("jquery-ui-timepicker-addon");
-//require("bootstrap-daterangepicker");
 require("ckeditor");
 */

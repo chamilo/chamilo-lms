@@ -1,13 +1,15 @@
+// Load symfony routes in order to use it in a js
 const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
+Routing.setRoutingData(routes);
+
 import 'image-map-resizer';
 import 'jquery.scrollbar';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/ui/widgets/tooltip';
 import 'chosen-js';
 
-Routing.setRoutingData(routes);
-
+// @todo rework url naming
 var homePublicUrl = Routing.generate('home') + 'public/';
 var legacyIndex = Routing.generate('legacy_index');
 var mainUrl = Routing.generate('legacy_main', {'name' : '/'});
@@ -28,9 +30,21 @@ var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
 $(function() {
-
-    addMainEvent(window, 'unload', courseLogout ,false);
-
+    var isInCourse = $("body").data("in-course");
+    if (isInCourse == true) {
+        var courseCode = $("body").data("course-code");
+        var logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
+        function courseLogout() {
+            $.ajax({
+                async: false,
+                url: logOutUrl,
+                success: function (data) {
+                    return 1;
+                }
+            });
+        }
+        addMainEvent(window, 'unload', courseLogout ,false);
+    }
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
     });
@@ -308,14 +322,14 @@ $(function() {
 
     var more = 'see more';
     var close = 'close';
-
-    $('.list-teachers').readmore({
-        speed: 75,
-        moreLink: '<a href="#">' + more + '</a>',
-        lessLink: '<a href="#">' + close + '</a>',
-        collapsedHeight: 35,
-        blockCSS: 'display: block; width: 100%;'
-    });
+    // readmore dont work with jquery3
+    // $('.list-teachers').readmore({
+    //     speed: 75,
+    //     moreLink: '<a href="#">' + more + '</a>',
+    //     lessLink: '<a href="#">' + close + '</a>',
+    //     collapsedHeight: 35,
+    //     blockCSS: 'display: block; width: 100%;'
+    // });
 
     $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');

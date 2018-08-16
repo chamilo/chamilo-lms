@@ -8,9 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Profile.
  *
- * @ORM\Table(
- *  name="skill_level_profile"
- * )
+ * @ORM\Table(name="skill_level_profile")
  * @ORM\Entity
  */
 class Profile

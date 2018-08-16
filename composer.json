@@ -67,7 +67,7 @@
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/translation": "^4.0",
         "symfony/twig-bundle": "^4.0",
-        "symfony/validator": "4.1.*",
+        "symfony/validator": "3.4.*",
         "symfony/yaml": "^4.0",
         "symfony/annotations-pack": "^1.0",
         "symfony/webpack-encore-pack": "^1.0",

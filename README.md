@@ -16,26 +16,28 @@ We assume you have already installed "yarn" and "composer" and you're installing
 not in a sub folder inside a domain.
 
 ~~~~
-
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
-
 cd chamilo2
-
 composer install (If composer asks to accept recipes, just press enter or "n")
-
 php bin/console assets:install
-
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
-
 yarn install
-
 yarn run encore dev
-
 chmod -R 777 .env app var public main/default_course_document/images/	
-
 ~~~~
 
 Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
+
+### Quick update
+
+If you have already installed it and just want to update it from Git, do:
+~~~~
+git pull origin master
+yarn install
+yarn encore dev
+composer update
+~~~~
+This will update the JS (yarn) and PHP (composer) dependencies.
 
 
 ## Installation guide (Dev environment, stable environment not yet available)

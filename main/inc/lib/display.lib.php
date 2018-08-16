@@ -2001,29 +2001,29 @@ class Display
     {
         switch ($type) {
             case 'success':
-                $class = 'label-success';
+                $class = 'success';
                 break;
             case 'warning':
-                $class = 'label-warning';
+                $class = 'warning';
                 break;
             case 'important':
             case 'danger':
-                $class = 'label-danger';
+                $class = 'danger';
                 break;
             case 'info':
-                $class = 'label-info';
+                $class = 'info';
                 break;
             case 'primary':
-                $class = 'label-primary';
+                $class = 'primary';
                 break;
             default:
-                $class = 'label-default';
+                $class = 'secondary';
                 break;
         }
 
         $html = '';
         if (!empty($content)) {
-            $html = '<span class="label '.$class.'">';
+            $html = '<span class="badge badge-'.$class.'">';
             $html .= $content;
             $html .= '</span>';
         }

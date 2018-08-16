@@ -27,6 +27,12 @@ class CategoryTranslation
     protected $name;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=190, nullable=false)
+     */
+    protected $locale;
+
+    /**
      * @return string
      */
     public function __toString()

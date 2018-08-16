@@ -24,10 +24,8 @@ a:focus {
 }
 
 .navbar-nav > li{
-  margin-bottom: 0;
 }
 .navbar-collapse{
-  overflow: hidden !important;
 }
 .navbar-default {
   background: #337AB7;

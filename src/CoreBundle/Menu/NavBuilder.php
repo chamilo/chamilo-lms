@@ -63,7 +63,7 @@ class NavBuilder implements ContainerAwareInterface
         $checker = $container->get('security.authorization_checker');
         $translator = $container->get('translator');
 
-        $menu = $factory->createItem('root');
+        $menu = $factory->createItem('root', ['class' => 'asdasdasd']);
         $menu->setChildrenAttribute('class', 'navbar-nav');
 
         $menu->addChild(

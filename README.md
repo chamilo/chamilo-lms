@@ -9,24 +9,49 @@
 
 Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under GNU/GPLv3+. It is or has been used by more than 20M people worldwide.
 
-## Installation
+## Quick install
 
-The installation instructions are located in the documentation here:
-[Installation](documentation/installation_guide.html)
+If you want a detail and explanation of all of the steps please read the "Install Guide".
+We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
+not in a sub folder inside a domain.
 
-## Upgrade
-The upgrade instructions are located in the documentation here:
- [Upgrade](app/Resources/docs/upgrade.md)
- 
-## Dev environment install guide
+~~~~
 
-The instructions above are meant only for stable versions. If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet), then please follow the instructions below. Please bear in mind that the development version is NOT COMPLETE at this time, and many features are just not working yet. This is because we are working on root components that require massive changes to the structure of the code, files and database. As such, to get a working version, you might need to completely uninstall and re-install from time to time. You've been warned.
+git clone https://github.com/chamilo/chamilo-lms.git chamilo2
+
+cd chamilo2
+
+composer install (If composer asks to accept recipes, just press enter or "n")
+
+php bin/console assets:install
+
+php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+
+yarn install
+
+yarn run encore dev
+
+chmod -R 777 .env var public main/default_course_document/images/	
+
+~~~~
+
+Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
+
+
+## Install guide (Dev environment, stable environment not yet available)
+
+The instructions above are meant only for stable versions. 
+If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet), 
+then please follow the instructions below. Please bear in mind that the development version is NOT COMPLETE at this time, 
+and many features are just not working yet. This is because we are working on root components that require massive changes to the structure of the code, files and database. As such, to get a working version, you might need to completely uninstall and re-install from time to time. You've been warned.
 
 First, apply the procedure described here: [Managing CSS and JavaScript in Chamilo](assets/README.md) (in particular, make sure you follow the given links to install all the necessary components on your computer).
 
 Then make sure your database supports large prefixes (see [this Stack Overflow thread](https://stackoverflow.com/questions/43379717/how-to-enable-large-index-in-mariadb-10/43403017#43403017) if you use MySQL < 5.7 or MariaDB < 10.2.2).
 
-Load the (your-domain)/main/install/ URL to start the installer (which is very similar to the installer in previous versions). If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully. Go back to the beginning of this section and try again.
+Load the (your-domain)/main/install/ URL to start the installer (which is very similar to the installer in previous versions). 
+If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully. 
+Go back to the beginning of this section and try again.
 
 Finally, if you are installing this development version in a subdirectory, you will need to add "folder" in configuration.php 
 once the installation process finished:
@@ -38,6 +63,11 @@ and in the ".env" file in the root folder:
 APP_URL_APPEND=the-folder
 ```
 
+## Upgrade
+The upgrade instructions are located in the documentation here:
+ [Upgrade](app/Resources/docs/upgrade.md)
+ 
+ 
 ## Changes from 1.x
 
 * app/Resources/public/assets moved to public/assets

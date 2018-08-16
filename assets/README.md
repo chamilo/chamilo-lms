@@ -3,9 +3,11 @@
 The folder "assets" will be processed by the js library Webpack Encore and the result
 will be saved in public/build folder.
 
-In order to accomplish this task, we first need to install yarn. Yarn is a JavaScript dependencies manager similar to Bower (that we also used for development in Chamilo 1.11.x), only that Bower seems to be deprecated now.
+In order to accomplish this task, we first need to install yarn. 
+Yarn is a JavaScript dependencies manager similar to Bower (that we also used for development in Chamilo 1.11.x), 
+only that Bower seems to be deprecated now.
 
-Follow the installation instructions here https://yarnpkg.com/en/docs/install
+Install yarn, follow the installation instructions here https://yarnpkg.com/en/docs/install
 
 After the installation run this command in the Chamilo root:
 

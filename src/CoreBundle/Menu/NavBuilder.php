@@ -64,13 +64,15 @@ class NavBuilder implements ContainerAwareInterface
         $translator = $container->get('translator');
 
         $menu = $factory->createItem('root');
-        $menu->setChildrenAttribute('class', 'nav navbar-nav');
+        $menu->setChildrenAttribute('class', 'navbar-nav');
+
         $menu->addChild(
             $translator->trans('Home'),
             [
                 'route' => 'legacy_index',
             ]
         );
+
 
         if ($checker && $checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
@@ -136,7 +138,6 @@ class NavBuilder implements ContainerAwareInterface
         }
 
         $categories = $container->get('doctrine')->getRepository('ChamiloFaqBundle:Category')->retrieveActive();
-        //$categories = $container->get('Chamilo\FaqBundle\Repository\CategoryRepository')->retrieveActive();
         if ($categories) {
             $faq = $menu->addChild(
                 'FAQ',
@@ -224,6 +225,13 @@ class NavBuilder implements ContainerAwareInterface
                     )->setAttribute('divider_append', true);
                 }
             }
+        }
+
+        // Set classes for the items
+        foreach ($menu->getChildren() as $child) {
+            $child
+                ->setLinkAttribute('class', 'nav-link')
+                ->setAttribute('class', 'nav-item');
         }
 
         return $menu;

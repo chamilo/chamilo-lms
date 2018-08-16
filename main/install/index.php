@@ -432,9 +432,6 @@ if ($encryptPassForm == '1') {
 <div id="page-install">
 <div id="main" class="container">
     <div class="row">
-        <div class="panel panel-default">
-        <div class="panel-body">
-
         <div class="col-md-8">
         <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
@@ -905,16 +902,10 @@ if (@$_POST['step2']) {
                 </a>
             </div>
         </div>
-        </div>
-        </div>
-        <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-12">
-                <div style="text-align: center;">
-                    <?php echo $poweredBy; ?>
-                </div>
+        <div class="col-md-12">
+            <div style="text-align: center;">
+                <?php echo $poweredBy; ?>
             </div>
-        </div>
         </div>
     </div>
   </div>

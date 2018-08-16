@@ -4,34 +4,21 @@
 namespace Chamilo\FaqBundle\Repository;
 
 use Chamilo\FaqBundle\Entity\Category;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Class CategoryRepository.
  *
  * @package Genj\FaqBundle\Entity
  */
-class CategoryRepository
+class CategoryRepository extends EntityRepository
 {
-    /** @var \Doctrine\Common\Persistence\ObjectRepository EN */
-    private $repository;
-
-    /**
-     * CategoryRepository constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->repository = $entityManager->getRepository(Category::class);
-    }
-
     /**
      * @return mixed
      */
     public function retrieveActive()
     {
-        $query = $this->repository->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
             ->where('c.isActive = :isActive')
             ->orderBy('c.rank', 'ASC')
             ->getQuery();
@@ -48,7 +35,7 @@ class CategoryRepository
      */
     public function retrieveActiveBySlug($slug)
     {
-        $query = $this->repository->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
             ->where('c.isActive = :isActive')
             ->andWhere('c.slug = :slug')
             ->orderBy('c.rank', 'ASC')
@@ -67,7 +54,7 @@ class CategoryRepository
      */
     public function getCategoryActiveBySlug($slug)
     {
-        $query = $this->repository->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
             ->join('c.translations', 't')
             ->where('c.isActive = :isActive')
             ->andWhere('t.slug = :slug')
@@ -84,7 +71,7 @@ class CategoryRepository
      */
     public function retrieveFirst()
     {
-        $query = $this->repository->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
             ->where('c.isActive = :isActive')
             ->orderBy('c.rank', 'ASC')
             ->setMaxResults(1)

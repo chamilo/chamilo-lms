@@ -4,27 +4,15 @@
 namespace Chamilo\FaqBundle\Repository;
 
 use Chamilo\FaqBundle\Entity\Question;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Class QuestionRepository.
  *
  * @package Genj\FaqBundle\Entity
  */
-class QuestionRepository
+class QuestionRepository extends EntityRepository
 {
-    private $repository;
-
-    /**
-     * QuestionRepository constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->repository = $entityManager->getRepository(Question::class);
-    }
-
     /**
      * @param string $categorySlug
      *
@@ -32,7 +20,7 @@ class QuestionRepository
      */
     public function retrieveFirstByCategorySlug($categorySlug)
     {
-        $query = $this->repository->createQueryBuilder('q')
+        $query = $this->createQueryBuilder('q')
             ->join('q.category', 'c')
             ->join('c.translations', 't')
             ->where('t.slug = :categorySlug')
@@ -52,7 +40,7 @@ class QuestionRepository
      */
     public function getQuestionBySlug($slug)
     {
-        $query = $this->repository->createQueryBuilder('q')
+        $query = $this->createQueryBuilder('q')
             ->join('q.translations', 't')
             ->where('t.slug = :slug')
             ->orderBy('q.rank', 'ASC')

@@ -11,7 +11,7 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 ## Quick install
 
-If you want a detail and explanation of all of the steps please read the "Install Guide".
+If you want a detail and explanation of all of the steps please read the "Installation Guide".
 We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
 not in a sub folder inside a domain.
 
@@ -38,7 +38,7 @@ chmod -R 777 .env app var public main/default_course_document/images/
 Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
 
 
-## Install guide (Dev environment, stable environment not yet available)
+## Installation guide (Dev environment, stable environment not yet available)
 
 The instructions above are meant only for stable versions. 
 If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet), 

@@ -3153,6 +3153,7 @@ function finishInstallationWithContainer(
     $site->setEnabledTo(new \DateTime('+20 years'));
     $site->setRelativePath('');
     $site->setIsDefault(true);
+    $site->setLocale('en');
     $siteManager->save($site);
 
     // Create home page

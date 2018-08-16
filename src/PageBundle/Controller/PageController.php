@@ -26,8 +26,10 @@ class PageController extends BaseController
      * @Route("/cms/page/latest/{number}")
      *
      * @param int $number
+     *
+     * @return Response
      */
-    public function getLatestPages($number)
+    public function getLatestPages($number): Response
     {
         $site = $this->container->get('sonata.page.site.selector')->retrieve();
 
@@ -80,50 +82,39 @@ class PageController extends BaseController
             'locale' => $request->getLocale(),
             'host' => $host,
         ];
+
         $site = $siteManager->findOneBy($criteria);
-        //$site = $siteSelector->retrieve();
+        // If site doesn't exists or the site has a different locale from request, create new one.
+        if (!$site || ($site && ($request->getLocale() !== $site->getLocale()))) {
+            // Create new site for this host and language
+            $site = $siteManager->create();
+            $site->setHost($host);
+            $site->setEnabled(true);
+            $site->setName($host.' in language '.$request->getLocale());
+            $site->setEnabledFrom(new \DateTime('now'));
+            $site->setEnabledTo(new \DateTime('+20 years'));
+            $site->setRelativePath('');
+            $site->setIsDefault(false);
+            $site->setLocale($request->getLocale());
+            $site = $siteManager->save($site);
 
-        if ($request->getLocale() !== $site->getLocale()) {
-            // Check if there's site for this locale
-            $siteManager = $container->get('sonata.page.manager.site');
-            $host = $request->getHost();
-            $criteria = [
-                'locale' => $request->getLocale(),
-                'host' => $host,
-            ];
-            $site = $siteManager->findOneBy($criteria);
-            if (!$site) {
-                // Create new site for this host and language
-                $site = $siteManager->create();
-                $site->setHost($host);
-                $site->setEnabled(true);
-                $site->setName($host.' in language '.$request->getLocale());
-                $site->setEnabledFrom(new \DateTime('now'));
-                $site->setEnabledTo(new \DateTime('+20 years'));
-                $site->setRelativePath('');
-                $site->setIsDefault(false);
-                $site->setLocale($request->getLocale());
-                $site = $siteManager->save($site);
-
-                // Create first root page
-
-                /** @var PageManager $pageManager */
-                $pageManager = $container->get('sonata.page.manager.page');
-                /** @var \Sonata\PageBundle\Model\Page $page */
-                $page = $pageManager->create();
-                $page->setSlug('homepage');
-                $page->setUrl('/');
-                $page->setName('homepage');
-                $page->setTitle('home');
-                $page->setEnabled(true);
-                $page->setDecorate(1);
-                $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-                $page->setTemplateCode('default');
-                $page->setRouteName('homepage');
-                //$page->setParent($this->getReference('page-homepage'));
-                $page->setSite($site);
-                $pageManager->save($page);
-            }
+            // Create first root page
+            /** @var PageManager $pageManager */
+            $pageManager = $container->get('sonata.page.manager.page');
+            /** @var \Sonata\PageBundle\Model\Page $page */
+            $page = $pageManager->create();
+            $page->setSlug('homepage');
+            $page->setUrl('/');
+            $page->setName('homepage');
+            $page->setTitle('home');
+            $page->setEnabled(true);
+            $page->setDecorate(1);
+            $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
+            $page->setTemplateCode('default');
+            $page->setRouteName('homepage');
+            //$page->setParent($this->getReference('page-homepage'));
+            $page->setSite($site);
+            $pageManager->save($page);
         }
 
         $em = $this->getDoctrine()->getManager();

@@ -41,33 +41,33 @@ class UserAdmin extends BaseUserAdmin
         $formMapper
             ->tab('User')
             ->with('General')
-            ->add('username')
-            ->add('email')
-            /*->add(
-                'plainPassword',
-                'text',
-                array(
-                    'required' => (!$this->getSubject() || is_null(
-                            $this->getSubject()->getId()
-                        )),
-                )
-            )*/
+                ->add('username')
+                ->add('email')
+                /*->add(
+                    'plainPassword',
+                    'text',
+                    array(
+                        'required' => (!$this->getSubject() || is_null(
+                                $this->getSubject()->getId()
+                            )),
+                    )
+                )*/
             ->end()
             ->with('Profile')
-            /*->add(
-                'dateOfBirth',
-                'sonata_type_date_picker',
-                array(
-                    'years' => range(1900, $now->format('Y')),
-                    'dp_min_date' => '1-1-1900',
-                    'dp_max_date' => $now->format('c'),
-                    'required' => false,
-                )
-            )*/
+                /*->add(
+                    'dateOfBirth',
+                    'sonata_type_date_picker',
+                    array(
+                        'years' => range(1900, $now->format('Y')),
+                        'dp_min_date' => '1-1-1900',
+                        'dp_max_date' => $now->format('c'),
+                        'required' => false,
+                    )
+                )*/
             ->add('firstname', null, ['required' => false])
             ->add('lastname', null, ['required' => false])
-            //->add('website', 'url', array('required' => false))
-            //->add('biography', 'text', array('required' => false))
+            ->add('website', 'url', array('required' => false))
+            ->add('biography', 'text', array('required' => false))
             /*->add(
                 'gender',
                 'sonata_user_gender',
@@ -90,10 +90,7 @@ class UserAdmin extends BaseUserAdmin
             ->end()*/
             ->end();
 
-        if ($this->getSubject() && !$this->getSubject()->hasRole(
-                'ROLE_SUPER_ADMIN'
-            )
-        ) {
+        if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
             $formMapper
                 ->tab('Security')
                 ->with('Status')
@@ -185,9 +182,8 @@ class UserAdmin extends BaseUserAdmin
             ->add('email')
             ->add('officialCode')
             ->add('groups')
-            ->add(
-                'active'
-            )//->add('registrationDate', 'sonata_type_filter_datetime', array('input_type' => 'timestamp'))
+            ->add('active')
+            //->add('registrationDate', 'doctrine_orm_datetime_range', array('input_type' => 'timestamp'))
         ;
     }
 }

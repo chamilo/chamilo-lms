@@ -3133,6 +3133,62 @@ function finishInstallationWithContainer(
     $manager->persist($accessUrl);
     $manager->flush();
 
+    // Creating fos_group (groups and roles)
+    $groupManager = $container->get('fos_user.group_manager');
+
+    $groups = [
+        [
+            'code' => 'ADMIN',
+            'title' => 'Administrators',
+            'roles' => ['ROLE_ADMIN'],
+        ],
+        [
+            'code' => 'STUDENT',
+            'title' => 'Students',
+            'roles' => ['ROLE_STUDENT'],
+        ],
+        [
+            'code' => 'TEACHER',
+            'title' => 'Teachers',
+            'roles' => ['ROLE_TEACHER'],
+        ],
+        [
+            'code' => 'RRHH',
+            'title' => 'Human resources manager',
+            'roles' => ['ROLE_RRHH'],
+        ],
+        [
+            'code' => 'SESSION_MANAGER',
+            'title' => 'Session',
+            'roles' => ['ROLE_SESSION_MANAGER'],
+        ],
+        [
+            'code' => 'QUESTION_MANAGER',
+            'title' => 'Question manager',
+            'roles' => ['ROLE_QUESTION_MANAGER'],
+        ],
+        [
+            'code' => 'STUDENT_BOSS',
+            'title' => 'Student boss',
+            'roles' => ['ROLE_STUDENT_BOSS'],
+        ],
+        [
+            'code' => 'INVITEE',
+            'title' => 'Invitee',
+            'roles' => ['ROLE_INVITEE'],
+        ],
+    ];
+
+    foreach ($groups as $groupData) {
+        $group = $groupManager->createGroup($groupData['title']);
+        $group->setCode($groupData['code']);
+        foreach ($groupData['roles'] as $role) {
+            $group->addRole($role);
+        }
+        $manager->persist($group);
+        $groupManager->updateGroup($group, true);
+    }
+
     // Creating settings
     $settingsManager->installSchemas($accessUrl);
 
@@ -3237,7 +3293,7 @@ function finishInstallationWithContainer(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.
-    @UserManager::create_user(
+    $userId = @UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,

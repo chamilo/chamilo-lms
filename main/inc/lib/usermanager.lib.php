@@ -354,6 +354,22 @@ class UserManager
         try {
             $userManager->updateUser($user);
             $userId = $user->getId();
+
+            // Add user to a group
+            $statusToGroup = [
+                COURSEMANAGER => 'TEACHER',
+                STUDENT => 'STUDENT',
+                DRH => 'RRHH',
+                SESSIONADMIN => 'SESSION_ADMIN',
+                STUDENT_BOSS => 'STUDENT_BOSS',
+                INVITEE => 'INVITEE',
+            ];
+
+            $group = Container::$container->get('fos_user.group_manager')->findGroupBy(['code' => $statusToGroup[$status]]);
+            if ($group) {
+                $user->addGroup($group);
+                $userManager->updateUser($user);
+            }
         } catch (Exception $e) {
             error_log($e->getMessage());
         }
@@ -5376,7 +5392,10 @@ class UserManager
                 Database::query($sql);
             }
 
-            $user->addRole('ROLE_SUPER_ADMIN');
+            $group = Container::$container->get('fos_user.group_manager')->findGroupBy(['code' => 'ADMIN']);
+            if ($group) {
+                $user->addGroup($group);
+            }
             self::getManager()->updateUser($user, true);
         }
     }

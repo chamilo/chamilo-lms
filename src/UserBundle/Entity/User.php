@@ -1739,6 +1739,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
+     * @return bool
+     */
+    public function getCredentialsExpired()
+    {
+        return $this->credentialsExpired;
+    }
+
+    /**
      * @param bool $boolean
      *
      * @return User
@@ -1750,11 +1758,24 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
+    /**
+     * @param $boolean
+     *
+     * @return $this|BaseUser
+     */
     public function setEnabled($boolean)
     {
         $this->enabled = (bool) $boolean;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getExpired()
+    {
+        return $this->expired;
     }
 
     /**
@@ -1783,6 +1804,19 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function getLocked(): bool
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @param $boolean
+     *
+     * @return $this
+     */
     public function setLocked($boolean)
     {
         $this->locked = $boolean;
@@ -1967,4 +2001,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
         return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
     }
+
+
 }

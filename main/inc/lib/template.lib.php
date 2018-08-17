@@ -677,7 +677,7 @@ class Template
 
     /**
      * Set theme, include mainstream CSS files.
-     *
+     * @deprecated
      * @see setCssCustomFiles() for additional CSS sheets
      */
     public function setCssFiles()

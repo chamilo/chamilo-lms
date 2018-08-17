@@ -7231,6 +7231,16 @@ function api_get_css($file, $media = 'screen')
     return '<link href="'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
+function api_get_bootstrap_and_font_awesome($returnOnlyPath = false)
+{
+    $url = api_get_path(WEB_PUBLIC_PATH).'build/css/bootstrap.css';
+    if ($returnOnlyPath) {
+        return $url;
+    }
+
+    return '<link href="'.$url.'" rel="stylesheet" type="text/css" />'."\n";
+}
+
 /**
  * Returns the js header to include the jquery library.
  */

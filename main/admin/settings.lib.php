@@ -1214,7 +1214,7 @@ function addEditTemplate()
             }
 
             // Store the information in the database (as insert or as update).
-            $bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
+            $bootstrap = api_get_bootstrap_and_font_awesome();
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 
             if ($_GET['action'] == 'add') {

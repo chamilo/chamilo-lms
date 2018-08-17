@@ -54,6 +54,7 @@
                                         {% endif %}
                                     </p>
                                     <br />
+                                    {#<p style="font-size: 16px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform_in_hours)}}</p><br />#}
                                     <p style="font-size: 16px;">
                                         {{ 'TimeSpentInLearningPaths' | get_lang | format (time_spent_in_lps_in_hours) }}
                                     </p>

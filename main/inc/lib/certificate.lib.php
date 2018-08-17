@@ -218,12 +218,13 @@ class Certificate extends Model
         }
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
-
+        $categoryId = 0;
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-            $my_category = Category::load($this->certificate_data['cat_id']);
+            $categoryId = $this->certificate_data['cat_id'];
+            $my_category = Category::load($categoryId);
         }
 
-        if (isset($my_category[0]) &&
+        if (isset($my_category[0]) && !empty($categoryId) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
             $courseInfo = api_get_course_info($my_category[0]->get_course_code());
@@ -795,6 +796,7 @@ class Certificate extends Model
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
+        $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 

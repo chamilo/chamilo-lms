@@ -15,7 +15,7 @@ namespace Chamilo\ThemeBundle\Model;
 class MenuItemModel implements MenuItemInterface
 {
     /**
-     * @var mixed
+     * @var string
      */
     protected $identifier;
 
@@ -60,17 +60,17 @@ class MenuItemModel implements MenuItemInterface
     protected $parent = null;
 
     public function __construct(
-        $id,
-        $label,
-        $route,
-        $routeArgs = [],
+        string $identifier = '',
+        $label = '',
+        $route = '',
+        array $routeArgs = [],
         $icon = false,
         $badge = false,
         $badgeColor = 'green'
     ) {
         $this->badge = $badge;
         $this->icon = $icon;
-        $this->identifier = $id;
+        $this->identifier = $identifier;
         $this->label = $label;
         $this->route = $route;
         $this->routeArgs = $routeArgs;

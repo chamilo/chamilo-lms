@@ -21,7 +21,7 @@ class SetupThemeListener
 
     protected $lteAdmin;
 
-    public function __construct($manager, $cssBase = null, $lteAdmin = null)
+    public function __construct(ThemeManager $manager, $cssBase = null, $lteAdmin = null)
     {
         $this->cssBase = $cssBase ?: 'bundles/avanzuadmintheme/';
         $this->lteAdmin = $lteAdmin ?: 'vendor/AdminLTE/css/';

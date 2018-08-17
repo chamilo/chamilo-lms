@@ -23,7 +23,7 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 
 .ck-article {
     color: #E95839;
-    background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
+    background: url(../../public/img/document/border-title.png) repeat-x 0 80%;
     font-weight: bold;
     margin-bottom: 10px;
     padding-bottom: 2%;
@@ -71,13 +71,13 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 }
 
 .ck-style1 {
-    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
+    background: url(../../public/img/document/hr-1.png) repeat-x 0 0;
     border: 0;
     height: 6px;
 }
 
 .ck-style2 {
-    background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
+    background: url(../../public/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
     height: 6px;
 }

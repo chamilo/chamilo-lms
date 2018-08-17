@@ -25,56 +25,56 @@ class CSurveyAnswer
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="answer_id", type="integer")
      */
-    private $answerId;
+    protected $answerId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
-    private $surveyId;
+    protected $surveyId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="option_id", type="text", nullable=false)
      */
-    private $optionId;
+    protected $optionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="value", type="integer", nullable=false)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user", type="string", length=250, nullable=false)
      */
-    private $user;
+    protected $user;
 
     /**
      * Set surveyId.

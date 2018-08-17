@@ -69,6 +69,7 @@ class ThematicController
                                     $action = 'thematic_details';
                                     $thematic_id = null;
                                 }
+                                Display::addFlash(Display::return_message(get_lang('Updated')));
                             }
                         } else {
                             $error = true;
@@ -84,17 +85,18 @@ class ThematicController
                     }
                     break;
                 case 'thematic_copy':
-                    //Copy a thematic to a session
+                    // Copy a thematic to a session
                     $thematic->copy($thematic_id);
                     $thematic_id = null;
                     $action = 'thematic_details';
                     break;
                 case 'thematic_delete_select':
-                    //Delete many thematics
+                    // Delete many thematics
                     if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic_ids = $_POST['id'];
                             $thematic->delete($thematic_ids);
+                            Display::addFlash(Display::return_message(get_lang('Deleted')));
                         }
                         $action = 'thematic_details';
                     }
@@ -104,6 +106,7 @@ class ThematicController
                     if (isset($thematic_id)) {
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic->delete($thematic_id);
+                            Display::addFlash(Display::return_message(get_lang('Deleted')));
                         }
                         $thematic_id = null;
                         $action = 'thematic_details';
@@ -457,9 +460,7 @@ class ThematicController
                     $data['default_thematic_plan_icon'] = $thematic->get_default_thematic_plan_icon();
                     $data['default_thematic_plan_question'] = $thematic->get_default_question();
                     $data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
-
                     // render to the view
-
                     $this->view->set_data($data);
                     $this->view->set_layout('layout');
                     $this->view->set_template('thematic_plan');
@@ -469,7 +470,6 @@ class ThematicController
         }
 
         $thematic_id = intval($_GET['thematic_id']);
-
         if ($action == 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
         }
@@ -522,7 +522,7 @@ class ThematicController
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = [];
-        $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
+        $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
 
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
@@ -533,15 +533,15 @@ class ThematicController
         }
 
         $thematic_id = intval($_REQUEST['thematic_id']);
-        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? intval($_REQUEST['thematic_advance_id']) : null;
+        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? (int) $_REQUEST['thematic_advance_id'] : null;
         $thematic_advance_data = [];
-
         switch ($action) {
             case 'thematic_advance_delete':
                 if (!empty($thematic_advance_id)) {
                     if (api_is_allowed_to_edit(null, true)) {
                         $thematic->thematic_advance_destroy($thematic_advance_id);
                     }
+                    Display::addFlash(Display::return_message(get_lang('Deleted')));
                     header('Location: index.php');
                     exit;
                 }

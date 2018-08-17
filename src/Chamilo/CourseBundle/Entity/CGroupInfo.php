@@ -26,133 +26,140 @@ class CGroupInfo
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="status", type="boolean", nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_student", type="integer", nullable=false)
      */
-    private $maxStudent;
+    protected $maxStudent;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="doc_state", type="boolean", nullable=false)
      */
-    private $docState;
+    protected $docState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
      */
-    private $calendarState;
+    protected $calendarState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="work_state", type="boolean", nullable=false)
      */
-    private $workState;
+    protected $workState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
      */
-    private $announcementsState;
+    protected $announcementsState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="forum_state", type="boolean", nullable=false)
      */
-    private $forumState;
+    protected $forumState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
      */
-    private $wikiState;
+    protected $wikiState;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="chat_state", type="boolean", nullable=false)
      */
-    private $chatState;
+    protected $chatState;
 
     /**
      * @var string
      *
      * @ORM\Column(name="secret_directory", type="string", length=255, nullable=true)
      */
-    private $secretDirectory;
+    protected $secretDirectory;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="self_registration_allowed", type="boolean", nullable=false)
      */
-    private $selfRegistrationAllowed;
+    protected $selfRegistrationAllowed;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="self_unregistration_allowed", type="boolean", nullable=false)
      */
-    private $selfUnregistrationAllowed;
+    protected $selfUnregistrationAllowed;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
+
+    /**
+     * @var int needed for setting['group_document_access']
+     *
+     * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
+     */
+    //protected $docAccess;
 
     /**
      * Set name.

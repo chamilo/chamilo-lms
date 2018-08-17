@@ -21,35 +21,7 @@ api_protect_course_script();
 $learnPath = Session::read('oLP');
 
 /* Header and action code */
-$htmlHeadXtra[] = '
-<script>'.$learnPath->get_js_dropdown_array().
-"
-    function load_cbo(id) {
-        if (!id) {
-            return false;
-        }
-
-        var cbo = document.getElementById('previous');
-
-        for(var i = cbo.length - 1; i > 0; i--) {
-            cbo.options[i] = null;
-        }
-
-        var k=0;
-
-        for(var i = 1; i <= child_name[id].length; i++){
-            var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-            option.style.paddingLeft = '20px';
-
-            cbo.options[i] = option;
-            k = i;
-        }
-
-        cbo.options[k].selected = true;
-        $('#previous').selectpicker('refresh');
-    }
-".
-'
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'
 $(document).on("ready", function() {
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates("content_lp");
@@ -58,7 +30,6 @@ $(document).on("ready", function() {
 </script>';
 
 /* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 
@@ -66,11 +37,9 @@ $isStudentView = isset($_REQUEST['isStudentView']) ? intval($_REQUEST['isStudent
 $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
-/* MAIN CODE */
-
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if (!$is_allowed_to_edit || $isStudentView) {
     error_log('New LP - User not authorized in lp_edit_item.php');
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
@@ -127,11 +96,9 @@ function confirmation(name) {
         return false;
     }
 }
-jQuery(document).ready(function(){
-    jQuery('.scrollbar-inner').scrollbar();
-});
 
 $(document).ready(function() {
+    jQuery('.scrollbar-inner').scrollbar();
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {
@@ -161,21 +128,23 @@ echo $learnPath->build_action_menu();
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
-$path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
-$path_item = Database::escape_string($path_item);
-$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-$sql_doc = "SELECT path FROM ".$tbl_doc."
-            WHERE c_id = $course_id AND id = '".$path_item."' ";
+$documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
+$documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), false, null, true);
+if (empty($documentInfo)) {
+    // Try with iid
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $sql = "SELECT path FROM $table
+            WHERE c_id = $course_id AND iid = $documentId AND path NOT LIKE '%_DELETED_%'";
+    $res_doc = Database::query($sql);
+    $path_file = Database::result($res_doc, 0, 0);
+} else {
+    $path_file = $documentInfo['path'];
+}
 
-$res_doc = Database::query($sql_doc);
-$path_file = Database::result($res_doc, 0, 0);
 $path_parts = pathinfo($path_file);
 
-if (Database::num_rows($res_doc) > 0 &&
-    isset($path_parts['extension']) && $path_parts['extension'] == 'html'
-) {
+if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] == 'html') {
     echo $learnPath->return_new_tree();
-
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
 } else {
@@ -191,7 +160,8 @@ if (isset($is_success) && $is_success === true) {
     $msg .= '</div>';
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
-    echo $learnPath->display_edit_item($_GET['id']);
+    $item = $learnPath->getItem($_GET['id']);
+    echo $learnPath->display_edit_item($item->getIid());
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';

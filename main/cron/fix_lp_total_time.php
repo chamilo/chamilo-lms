@@ -9,6 +9,8 @@ exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+opcache_reset();
+
 $maxSeconds = 5 * 60 * 60; // Check records higher than 5 hours
 $valueToUpdate = 1 * 60 * 60; // Update this abusive records with 1 hours
 $limit = 10; // Only fix first 10
@@ -34,7 +36,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     }
 
     $oldTotalTime = round($oldTotalTime / 3600, 2);
-    $report = "Previous total_time : ".round($oldTotalTime / 3600, 2)." hours";
+    $report = "Previous total_time : ".$oldTotalTime." hours";
     $report .= PHP_EOL;
     $report .= "New total_time: $valueToUpdate";
     $report .= PHP_EOL;

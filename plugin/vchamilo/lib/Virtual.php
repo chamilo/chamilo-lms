@@ -474,8 +474,8 @@ class Virtual
     /**
      * Backups a database for having a snapshot.
      *
-     * @param   $vchamilo      object        The Vchamilo object
-     * @param   $outputfilerad string        The output SQL file radical
+     * @param $vchamilo      object        The Vchamilo object
+     * @param $outputfilerad string        The output SQL file radical
      *
      * @return bool if TRUE, dumping database was a success, otherwise FALSE
      */
@@ -604,7 +604,8 @@ class Virtual
 
         // Scans the templates.
         if (!is_dir($tempDir)) {
-            mkdir($tempDir, 0777, true);
+            $mode = api_get_permissions_for_new_directories();
+            mkdir($tempDir, $mode, true);
         }
 
         $finder = new \Symfony\Component\Finder\Finder();
@@ -1278,10 +1279,10 @@ class Virtual
         // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
         $absAlternateCourse = self::getConfig('vchamilo', 'course_real_root');
         $courseDir = $absAlternateCourse.'/'.$slug;
-
+        $mode = api_get_permissions_for_new_directories();
         if (!is_dir($courseDir)) {
             self::ctrace("Creating physical course dir in $courseDir");
-            mkdir($courseDir, 0777, true);
+            mkdir($courseDir, $mode, true);
             // initiate default index
             $indexFile = $courseDir.'/index.html';
             if ($indexFile) {
@@ -1314,7 +1315,7 @@ class Virtual
             self::ctrace("Making dir as $dir");
 
             if (!is_dir($dir)) {
-                if (!mkdir($dir, 0777, true)) {
+                if (!mkdir($dir, $mode, true)) {
                     self::ctrace("Error creating dir $dir \n");
                 }
             }

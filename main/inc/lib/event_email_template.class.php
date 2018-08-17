@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class EventEmailTemplate.
+ * @deprecated
+ * Class EventEmailTemplate
  */
 class EventEmailTemplate extends Model
 {
@@ -43,7 +44,8 @@ class EventEmailTemplate extends Model
     public function display()
     {
         // action links
-        $content = Display::actions([
+        $content = Display::actions(
+            [
                 [
                     'url' => 'event_type.php',
                     'content' => Display::return_icon(

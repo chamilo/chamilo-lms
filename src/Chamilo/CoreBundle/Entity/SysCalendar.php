@@ -18,42 +18,42 @@ class SysCalendar
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
-    private $startDate;
+    protected $startDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
-    private $endDate;
+    protected $endDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
-    private $allDay;
+    protected $allDay;
 
     /**
      * @var int
@@ -62,7 +62,7 @@ class SysCalendar
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set title.

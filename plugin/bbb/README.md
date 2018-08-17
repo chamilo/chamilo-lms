@@ -28,23 +28,32 @@ ALTER TABLE plugin_bbb_meeting ADD access_url int NOT NULL DEFAULT 1;
 ```
 For version 2.5 you need execute these SQL queries
 ```sql
-CREATE TABLE plugin_bbb_room (
+CREATE TABLE IF NOT EXISTS plugin_bbb_room (
     id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     meeting_id int(10) unsigned NOT NULL,
     participant_id int(11) NOT NULL,
     in_at datetime NOT NULL,
-    out_at datetime NOT NULL,
-    FOREIGN KEY (meeting_id) REFERENCES plugin_bbb_meeting (id),
-    FOREIGN KEY (participant_id) REFERENCES user (id)
+    out_at datetime NOT NULL
 );
-ALTER TABLE plugin_bbb_meeting ADD video_url TEXT NULL;
-ALTER TABLE plugin_bbb_meeting ADD has_video_m4v TINYINT NOT NULL DEFAULT 0;
+ALTER TABLE plugin_bbb_meeting ADD COLUMN video_url TEXT NULL;
+ALTER TABLE plugin_bbb_meeting ADD COLUMN has_video_m4v TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE plugin_bbb_meeting ADD COLUMN user_id INT DEFAULT 0;
 ALTER TABLE plugin_bbb_meeting ADD COLUMN access_url INT DEFAULT 0;
+ALTER TABLE plugin_bbb_meeting ADD COLUMN remote_id char(30);
+ALTER TABLE plugin_bbb_meeting ADD COLUMN visibility TINYINT NOT NULL DEFAULT 1;
+ALTER TABLE plugin_bbb_meeting ADD COLUMN session_id INT DEFAULT 0;
 ```
 For version 2.6 (adding limits) you need execute these SQL queries
 ```sql
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked) VALUES ('bbb_max_users_limit', 'bbb', 'setting', 'Plugins', '3', 'bbb', null, null, null, 1, 1, 0);
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (2, 15, 'plugin_bbb_course_users_limit', 'MaxUsersInConferenceRoom', '0', 1, 1, 0, 1, null, '2017-05-28 01:19:32');
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (3, 15, 'plugin_bbb_session_users_limit', 'MaxUsersInConferenceRoom', null, 1, 1, 0, 1, null, '2017-05-28 01:19:32');
+```
+
+For version 2.7
+```sql
+ALTER TABLE plugin_bbb_meeting ADD COLUMN interface INT NOT NULL DEFAULT 0;
+ALTER TABLE plugin_bbb_room ADD COLUMN interface INT NOT NULL DEFAULT 0;
+ALTER TABLE plugin_bbb_room MODIFY COLUMN in_at datetime;
+ALTER TABLE plugin_bbb_room MODIFY COLUMN out_at datetime;
 ```

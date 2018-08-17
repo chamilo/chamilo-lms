@@ -159,7 +159,9 @@ class DependencyResolver implements DependencyResolverInterface
                     throw new \RuntimeException(
                         sprintf(
                             'Circular dependency [%s] depends on [%s] which itself depends on [%s]',
-                            $id, $dep, $id
+                            $id,
+                            $dep,
+                            $id
                         )
                     );
                 }

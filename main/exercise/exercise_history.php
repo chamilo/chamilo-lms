@@ -14,8 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
-// moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
-$show = (isset($_GET['show']) && $_GET['show'] == 'result') ? 'result' : 'test';
+$show = isset($_GET['show']) && $_GET['show'] === 'result' ? 'result' : 'test';
 
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);

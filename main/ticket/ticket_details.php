@@ -347,11 +347,7 @@ $bold = '';
 if ($ticket['ticket']['status_id'] == TicketManager::STATUS_CLOSE) {
     $bold = 'style = "font-weight: bold;"';
 }
-if ($isAdmin) {
-    $senderData = get_lang('AddedBy').' '.$ticket['ticket']['user_url'].' ('.$ticket['usuario']['complete_name_with_message_link'].').';
-} else {
-    $senderData = get_lang('AddedBy').' '.$ticket['usuario']['complete_name_with_message_link'].' ('.$ticket['usuario']['username'].').';
-}
+$senderData = get_lang('AddedBy').' '.$ticket['usuario']['complete_name_with_message_link'];
 
 echo '<table width="100%" >
         <tr>

@@ -26,7 +26,7 @@ class DashboardManager
 
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
-        $possibleplugins = self::getPossibleDashboardPluginsPath();
+        $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
         $table_cols = ['name', 'version', 'description'];
         echo Display::page_subheader(get_lang('DashboardPlugins'));
@@ -42,7 +42,7 @@ class DashboardManager
         $disabled_blocks_data = self::get_block_data_without_plugin();
 
         // We display all the possible enabled or disabled plugins
-        foreach ($possibleplugins as $testplugin) {
+        foreach ($possiblePlugins as $testplugin) {
             $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
             if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
                 $plugin_info = api_parse_info_file($plugin_info_file);
@@ -144,11 +144,11 @@ class DashboardManager
 
         // get all plugins path inside plugin directory
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
-        $possibleplugins = self::getPossibleDashboardPluginsPath();
+        $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
-        if (count($possibleplugins) > 0) {
-            $selected_plugins = array_intersect(array_keys($plugin_paths), $possibleplugins);
-            $not_selected_plugins = array_diff($possibleplugins, array_keys($plugin_paths));
+        if (count($possiblePlugins) > 0) {
+            $selected_plugins = array_intersect(array_keys($plugin_paths), $possiblePlugins);
+            $not_selected_plugins = array_diff($possiblePlugins, array_keys($plugin_paths));
 
             // get blocks id from not selected path
             $not_selected_blocks_id = [];
@@ -281,14 +281,14 @@ class DashboardManager
     public static function get_block_data_without_plugin()
     {
         $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
-        $possibleplugins = self::getPossibleDashboardPluginsPath();
+        $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
         // We check if plugin exists inside directory for updating active field
         $sql = "SELECT * FROM $tbl_block";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
-                if (!in_array($row['path'], $possibleplugins)) {
+                if (!in_array($row['path'], $possiblePlugins)) {
                     $active = 0;
                 } else {
                     $active = 1;
@@ -350,26 +350,26 @@ class DashboardManager
     {
         $enabled_dashboard_plugins = self::get_enabled_dashboard_blocks();
         $user_block_data = self::get_user_block_data($user_id);
-
+        $html = '';
         if (count($enabled_dashboard_plugins) > 0) {
-            echo '<div style="margin-top:20px">';
-            echo '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
-            echo '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
-            echo '<table class="data_table">';
-            echo '<tr>';
-            echo '<th width="5%">';
-            echo get_lang('Enabled');
-            echo '</th>';
-            echo '<th width="30%">';
-            echo get_lang('Name');
-            echo '</th>';
-            echo '<th width="40%">';
-            echo get_lang('Description');
-            echo '</th>';
-            echo '<th>';
-            echo get_lang('ColumnPosition');
-            echo '</th>';
-            echo '</tr>';
+            $html .= '<div style="margin-top:20px">';
+            $html .= '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
+            $html .= '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
+            $html .= '<table class="data_table">';
+            $html .= '<tr>';
+            $html .= '<th width="5%">';
+            $html .= get_lang('Enabled');
+            $html .= '</th>';
+            $html .= '<th width="30%">';
+            $html .= get_lang('Name');
+            $html .= '</th>';
+            $html .= '<th width="40%">';
+            $html .= get_lang('Description');
+            $html .= '</th>';
+            $html .= '<th>';
+            $html .= get_lang('ColumnPosition');
+            $html .= '</th>';
+            $html .= '</tr>';
 
             // We display all enabled plugins and the checkboxes
             foreach ($enabled_dashboard_plugins as $block) {
@@ -389,35 +389,37 @@ class DashboardManager
                         }
                     }
 
-                    echo '<tr>';
+                    $html .= '<tr>';
                     // checkboxes
-                    self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
-                    echo '<td>'.$block['name'].'</td>';
-                    echo '<td>'.$block['description'].'</td>';
-                    echo '<td>
+                    $html .= self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
+                    $html .= '<td>'.$block['name'].'</td>';
+                    $html .= '<td>'.$block['description'].'</td>';
+                    $html .= '<td>
                             <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 1 ? 'selected' : '').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 2 ? 'selected' : '').' >2</option>
                             </select>
                           </td>';
-                    echo '</tr>';
+                    $html .= '</tr>';
                 } else {
-                    echo Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, ['colspan' => '3']));
+                    $html .= Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, ['colspan' => '3']));
                 }
             }
 
-            echo '</table>';
-            echo '<div class="row"><div class="col-md-12">';
-            echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
+            $html .= '</table>';
+            $html .= '<div class="row"><div class="col-md-12">';
+            $html .= '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
                 get_lang('EnableDashboardBlock').'</button></form>';
-            echo '</div></div>';
+            $html .= '</div></div>';
         } else {
-            echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
+            $html .= '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
             if (api_is_platform_admin()) {
-                echo '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
+                $html .= '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
                     get_lang('ConfigureDashboardPlugin').'</a>';
             }
         }
+
+        return $html;
     }
 
     /**
@@ -437,9 +439,11 @@ class DashboardManager
             $checked = "checked";
         }
 
-        echo "<td align=\"center\">";
-        echo '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
-        echo "</td>";
+        $html = "<td align=\"center\">";
+        $html .= '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
+        $html .= "</td>";
+
+        return $html;
     }
 
     /**
@@ -536,7 +540,7 @@ class DashboardManager
      *
      * @return string links
      */
-    public static function get_links_for_styles_from_dashboard_plugins()
+    public static function getStyleSheet()
     {
         return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
     }

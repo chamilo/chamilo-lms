@@ -53,6 +53,7 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
 $forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
 
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
 // The next javascript script is to delete file by ajax
 $htmlHeadXtra[] = '<script>
 $(function () {
@@ -65,7 +66,7 @@ $(function () {
         if (confirm("'.get_lang('AreYouSureToDeleteJS').'", filename)) {
             $.ajax({
                 type: "POST",
-                url: "'.api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
                 dataType: "json",
                 success: function(data) {
                     if (data.error == false) {
@@ -102,7 +103,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     $get_id = isset($_GET['id']) ? intval($_GET['id']) : '';
     $forum_categories_list = get_forum_categories();
 
-    //Verify if forum category exists
+    // Verify if forum category exists
     if (empty($forum_categories_list)) {
         $get_content = 'forumcategory';
     }
@@ -118,10 +119,9 @@ function handle_forum_and_forumcategories($lp_id = null)
     if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') ||
         $post_submit_forum
     ) {
+        $inputvalues = [];
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums($get_id);
-        } else {
-            $inputvalues = [];
         }
         $content = show_add_forum_form($inputvalues, $lp_id);
     }
@@ -250,13 +250,12 @@ function show_add_forum_form($inputvalues = [], $lp_id)
     $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
 
     // The header for the form
+    $form_title = get_lang('AddForum');
     if (!empty($inputvalues)) {
         $form_title = get_lang('EditForum');
-    } else {
-        $form_title = get_lang('AddForum');
     }
-    $session_header = api_get_session_name();
-    $form->addElement('header', $form_title.$session_header);
+
+    $form->addElement('header', $form_title);
 
     // We have a hidden field if we are editing.
     if (!empty($inputvalues) && is_array($inputvalues)) {
@@ -391,6 +390,10 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         'filetype',
         ['jpg', 'jpeg', 'png', 'gif']
     );
+
+    //$forumId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM, $forumId);
+
     $form->addElement('html', '</div>');
 
     // The OK button
@@ -437,14 +440,24 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         $defaults['public_private_group_forum_group']['public_private_group_forum'] = isset($inputvalues['forum_group_public_private']) ? $inputvalues['forum_group_public_private'] : null;
         $defaults['group_forum'] = isset($inputvalues['forum_of_group']) ? $inputvalues['forum_of_group'] : null;
     }
+
+    // $defaults['skills'] = array_keys($skillList);
+
     $form->setDefaults($defaults);
     // Validation or display
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->getSubmitValues();
-            $return_message = store_forum($values);
-            Display::addFlash(Display::return_message($return_message, 'confirmation'));
+            $forumId = store_forum($values, '', true);
+            if ($forumId) {
+                // Skill::saveSkills($form, ITEM_TYPE_FORUM, $forumId);
+                if (isset($values['forum_id'])) {
+                    Display::addFlash(Display::return_message(get_lang('ForumEdited'), 'confirmation'));
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('ForumAdded'), 'confirmation'));
+                }
+            }
         }
         Security::clear_token();
     } else {
@@ -659,11 +672,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
-
+    $group_id = api_get_group_id();
     if (isset($values['group_id']) && !empty($values['group_id'])) {
         $group_id = $values['group_id'];
-    } else {
-        $group_id = api_get_group_id();
     }
     $groupInfo = [];
     if (!empty($group_id)) {
@@ -687,13 +698,11 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     }
 
     // Forum images
-    $image_moved = false;
     $has_attachment = false;
+    $image_moved = true;
     if (!empty($_FILES['picture']['name'])) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
-    } else {
-        $image_moved = true;
     }
 
     // Remove existing picture if it was requested.
@@ -777,6 +786,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         );
 
         $return_message = get_lang('ForumEdited');
+        $forumId = $values['forum_id'];
     } else {
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
@@ -805,31 +815,32 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             'forum_id' => 0,
         ];
 
-        $last_id = Database::insert($table_forums, $params);
-        if ($last_id > 0) {
-            $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $last_id";
+        $forumId = Database::insert($table_forums, $params);
+        if ($forumId > 0) {
+            $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $forumId";
             Database::query($sql);
 
             api_item_property_update(
                 $courseInfo,
                 TOOL_FORUM,
-                $last_id,
+                $forumId,
                 'ForumAdded',
                 api_get_user_id(),
                 $groupInfo
             );
 
             api_set_default_visibility(
-                $last_id,
+                $forumId,
                 TOOL_FORUM,
                 $group_id,
                 $courseInfo
             );
         }
         $return_message = get_lang('ForumAdded');
-        if ($returnId) {
-            return $last_id;
-        }
+    }
+
+    if ($returnId) {
+        return $forumId;
     }
 
     return $return_message;
@@ -926,6 +937,7 @@ function deleteForumCategoryThread($content, $id)
     if ($content == 'thread') {
         $tool_constant = TOOL_FORUM_THREAD;
         $return_message = get_lang('ThreadDeleted');
+        Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
     }
 
     api_item_property_update(
@@ -946,8 +958,10 @@ function deleteForumCategoryThread($content, $id)
 }
 
 /**
- * This function deletes a forum post. This separate function is needed because forum posts do not appear in the item_property table (yet)
- * and because deleting a post also has consequence on the posts that have this post as parent_id (they are also deleted).
+ * This function deletes a forum post. This separate function is needed because forum posts do not appear
+ * in the item_property table (yet)
+ * and because deleting a post also has consequence on the posts that have this post as parent_id
+ * (they are also deleted).
  * an alternative would be to store the posts also in item_property and mark this post as deleted (visibility = 2).
  * We also have to decrease the number of replies in the thread table.
  *
@@ -1054,7 +1068,7 @@ function check_if_last_post_of_thread($thread_id)
 }
 
 /**
- * @param string $content                   what is it that we want to make (in)visible: forum category, forum, thread, post
+ * @param string $content                   Type of content forum category, forum, thread, post
  * @param int    $id                        the id of the content we want to make invisible
  * @param int    $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
  * @param array  $additional_url_parameters
@@ -1149,9 +1163,9 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
  *
  * @param string $content what is it that we want to make (in)visible: forum category, forum, thread, post
  * @param int    $id      is the id of the item we want to display the icons for
- * @param $list is an array of all the items. All items in this list should have
- * an up and down icon except for the first (no up icon) and the last (no down icon)
- *          The key of this $list array is the id of the item.
+ * @param array  $list    is an array of all the items. All items in this list should have
+ *                        an up and down icon except for the first (no up icon) and the last (no down icon)
+ *                        The key of this $list array is the id of the item.
  *
  * @return string HTML
  */
@@ -1365,7 +1379,6 @@ function move_up_down($content, $direction, $id)
     $result = Database::query($sql);
     $found = false;
     while ($row = Database::fetch_array($result)) {
-        //echo $row[$id_column].'-';
         if ($found) {
             $next_id = $row[$id_column];
             $next_sort = $row[$sort_column];
@@ -1467,6 +1480,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                     $condition_session
                 ORDER BY forum_categories.cat_order ASC";
     }
+
     $result = Database::query($sql);
     $forum_categories_list = [];
     while ($row = Database::fetch_assoc($result)) {
@@ -2121,8 +2135,7 @@ function getPosts(
 
         $posterId = $post->getPosterId();
         if (!empty($posterId)) {
-            /** @var User $user */
-            $user = $em->find('ChamiloUserBundle:User', $posterId);
+            $user = api_get_user_entity($posterId);
             if ($user) {
                 $postInfo['user_id'] = $user->getUserId();
                 $postInfo['username'] = $user->getUsername();
@@ -2553,7 +2566,7 @@ function updateThread($values)
     // Simple update + set gradebook values to null
     $params = [
         'thread_title' => $values['thread_title'],
-        'thread_sticky' => isset($values['thread_sticky']),
+        'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
     ];
     $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
     Database::update($threadTable, $params, $where);
@@ -2696,8 +2709,8 @@ function store_thread(
         $visible = 1;
     }
     $clean_post_title = $values['post_title'];
-    // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
 
+    // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
     $lastThread = new CForumThread();
     $lastThread
         ->setCId($course_id)
@@ -2922,138 +2935,6 @@ function store_thread(
 }
 
 /**
- * This function displays the form that is used to UPDATE a Thread.
- *
- * @param array $currentForum
- * @param array $forumSetting
- * @param array $formValues
- *
- * @author José Loguercio <jose.loguercio@beeznest.com>
- *
- * @version february 2016, chamilo 1.10.4
- */
-function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
-{
-    $myThread = isset($_GET['thread']) ? intval($_GET['thread']) : '';
-    $myForum = isset($_GET['forum']) ? intval($_GET['forum']) : '';
-    $myGradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
-    $form = new FormValidator(
-        'thread',
-        'post',
-        api_get_self().'?'.http_build_query([
-            'forum' => $myForum,
-            'gradebook' => $myGradebook,
-            'thread' => $myThread,
-        ]).'&'.api_get_cidreq()
-    );
-
-    $form->addElement('header', get_lang('EditThread'));
-    $form->setConstants(['forum' => '5']);
-    $form->addElement('hidden', 'forum_id', $myForum);
-    $form->addElement('hidden', 'thread_id', $myThread);
-    $form->addElement('hidden', 'gradebook', $myGradebook);
-    $form->addElement('text', 'thread_title', get_lang('Title'));
-    $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
-    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
-
-    if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && ($myThread)) {
-        // Thread qualify
-        if (Gradebook::is_active()) {
-            //Loading gradebook select
-            GradebookUtils::load_gradebook_select_in_tool($form);
-            $form->addElement(
-                'checkbox',
-                'thread_qualify_gradebook',
-                '',
-                get_lang('QualifyThreadGradebook'),
-                [
-                    'id' => 'thread_qualify_gradebook',
-                ]
-            );
-        } else {
-            $form->addElement('hidden', 'thread_qualify_gradebook', false);
-        }
-
-        $form->addElement('html', '<div id="options_field" style="display:none">');
-        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
-        $form->applyFilter('numeric_calification', 'html_filter');
-        $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
-        $form->applyFilter('calification_notebook_title', 'html_filter');
-        $form->addElement(
-            'text',
-            'weight_calification',
-            get_lang('QualifyWeight'),
-            ['value' => '0.00', 'onfocus' => "javascript: this.select();"]
-        );
-        $form->applyFilter('weight_calification', 'html_filter');
-        $group = [];
-        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
-        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
-        $form->addGroup(
-            $group,
-            '',
-            [
-                get_lang('ForumThreadPeerScoring'),
-                get_lang('ForumThreadPeerScoringComment'),
-            ]
-        );
-        $form->addElement('html', '</div>');
-    }
-
-    if ($forumSetting['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
-        $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
-    }
-
-    $form->addElement('html', '</div>');
-
-    if (!empty($formValues)) {
-        $defaults['thread_qualify_gradebook'] = ($formValues['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0;
-        $defaults['thread_title'] = prepare4display($formValues['threadTitle']);
-        $defaults['thread_sticky'] = strval(intval($formValues['threadSticky']));
-        $defaults['thread_peer_qualify'] = intval($formValues['threadPeerQualify']);
-        $defaults['numeric_calification'] = $formValues['threadQualifyMax'];
-        $defaults['calification_notebook_title'] = $formValues['threadTitleQualify'];
-        $defaults['weight_calification'] = $formValues['threadWeight'];
-    } else {
-        $defaults['thread_qualify_gradebook'] = 0;
-        $defaults['numeric_calification'] = 0;
-        $defaults['calification_notebook_title'] = '';
-        $defaults['weight_calification'] = 0;
-        $defaults['thread_peer_qualify'] = 0;
-    }
-    $form->setDefaults(isset($defaults) ? $defaults : null);
-
-    $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
-
-    if ($form->validate()) {
-        $check = Security::check_token('post');
-        if ($check) {
-            $values = $form->exportValues();
-            if (isset($values['thread_qualify_gradebook']) &&
-                $values['thread_qualify_gradebook'] == '1' &&
-                empty($values['weight_calification'])
-            ) {
-                Display::display_error_message(
-                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.
-                    get_lang('Back').'</a>',
-                    false
-                );
-
-                return false;
-            }
-            Security::clear_token();
-
-            return $values;
-        }
-    } else {
-        $token = Security::get_token();
-        $form->addElement('hidden', 'sec_token');
-        $form->setConstants(['sec_token' => $token]);
-        $form->display();
-    }
-}
-
-/**
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
  *
  * @param array  $current_forum
@@ -3184,6 +3065,10 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addElement('html', '</div>');
     }
 
+    if ($action == 'newthread') {
+        Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
+    }
+
     if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
@@ -3217,9 +3102,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
         $defaults['post_text'] = prepare4display($form_values['post_text']);
-        $defaults['post_notification'] = strval(intval($form_values['post_notification']));
-        $defaults['thread_sticky'] = strval(intval($form_values['thread_sticky']));
-        $defaults['thread_peer_qualify'] = intval($form_values['thread_peer_qualify']);
+        $defaults['post_notification'] = (int) $form_values['post_notification'];
+        $defaults['thread_sticky'] = (int) $form_values['thread_sticky'];
+        $defaults['thread_peer_qualify'] = (int) $form_values['thread_peer_qualify'];
     } else {
         $defaults['thread_peer_qualify'] = 0;
     }
@@ -3291,6 +3176,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             switch ($action) {
                 case 'newthread':
                     $myThread = store_thread($current_forum, $values);
+                    Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $myThread);
                     break;
                 case 'quote':
                 case 'replythread':
@@ -3948,7 +3834,7 @@ function store_edit_post($forumInfo, $values)
         // Simple edit
         $params = [
             'thread_title' => $values['post_title'],
-            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
+            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
         ];
         $where = ['c_id = ? AND thread_id = ?' => [$course_id, $values['thread_id']]];
         Database::update($threadTable, $params, $where);
@@ -5573,7 +5459,10 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
             $email_body .= get_lang('ThreadCanBeFoundHere').': <br /> <a href="'.$thread_link.'">'.$thread_link."</a>\n";
 
             MessageManager::send_message_simple(
-                $value['user_id'], $subject, $email_body, $sender_id
+                $value['user_id'],
+                $subject,
+                $email_body,
+                $sender_id
             );
         }
     }
@@ -5609,7 +5498,7 @@ function get_notifications_of_user($user_id = 0, $force = false)
 
     if (!isset($_SESSION['forum_notification']) ||
         $_SESSION['forum_notification']['course'] != $course_id ||
-        $force = true
+        $force == true
     ) {
         $_SESSION['forum_notification']['course'] = $course_id;
 
@@ -5685,30 +5574,6 @@ function count_number_of_post_for_user_thread($thread_id, $user_id)
     }
 
     return $count;
-}
-
-/**
- * This function counts the number of user register in course.
- *
- * @param int $course_id Course ID
- *
- * @deprecated use CourseManager::get_users_count_in_course
- *
- * @return int the number of user register in course
- *
- * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
- *
- * @version octubre 2008, dokeos 1.8
- */
-function count_number_of_user_in_course($course_id)
-{
-    $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-    $sql = "SELECT * FROM $table
-            WHERE c_id ='".intval($course_id)."' ";
-    $result = Database::query($sql);
-
-    return count(Database::store_result($result));
 }
 
 /**
@@ -6289,7 +6154,7 @@ function clearAttachedFiles($postId = null, $courseId = null)
  *
  * @return array
  */
-function getAttachmentIdsByPostId($postId, $courseId = null)
+function getAttachmentIdsByPostId($postId, $courseId = 0)
 {
     $array = [];
     $courseId = intval($courseId);
@@ -6370,6 +6235,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 /**
  * @param array $current_forum
  * @param array $row
+ * @param bool  $addWrapper
  *
  * @return string
  */
@@ -6482,7 +6348,8 @@ function postIsEditableByStudent($forum, $post)
         if (is_null($post['status'])) {
             return true;
         } else {
-            return in_array($post['status'],
+            return in_array(
+                $post['status'],
                 [
                     CForumPost::STATUS_WAITING_MODERATION,
                     CForumPost::STATUS_REJECTED,

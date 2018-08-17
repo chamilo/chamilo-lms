@@ -63,14 +63,13 @@ class MultipleAnswerTrueFalse extends Question
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $correct = 0;
         $answer = null;
 
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
             }
         }
@@ -84,7 +83,7 @@ class MultipleAnswerTrueFalse extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $course_id);
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
 
             $renderer->setElementTemplate(
@@ -137,8 +136,6 @@ class MultipleAnswerTrueFalse extends Question
                 $defaults['comment['.$i.']'] = '';
                 $defaults['correct['.$i.']'] = '';
             }
-
-            $boxes_names[] = 'correct['.$i.']';
 
             $form->addHtmlEditor(
                 "answer[$i]",
@@ -312,14 +309,15 @@ class MultipleAnswerTrueFalse extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-		            <tr>
-                        <th width="10%">'.get_lang("Choice").'</th>
-                        <th width="15%">'.get_lang("ExpectedChoice").'</th>
-                        <th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang('Status').'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>
+            <th>'.get_lang('ExpectedChoice').'</th>
+            <th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
         if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $header .= '<th>'.get_lang("Comment").'</th>';
+            $header .= '<th>'.get_lang('Comment').'</th>';
         } else {
             $header .= '<th>&nbsp;</th>';
         }

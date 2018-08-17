@@ -35,6 +35,7 @@ class Answer
     public $new_hotspot_coordinates;
     public $new_hotspot_type;
     public $autoId;
+    /** @var int Number of answers in the question */
     public $nbrAnswers;
     public $new_nbrAnswers;
     public $new_destination; // id of the next question if feedback option is set to Directfeedback
@@ -54,7 +55,7 @@ class Answer
      */
     public function __construct($questionId, $course_id = 0, $exercise = null)
     {
-        $this->questionId = intval($questionId);
+        $this->questionId = (int) $questionId;
         $this->answer = [];
         $this->correct = [];
         $this->comment = [];
@@ -219,7 +220,7 @@ class Answer
 
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $questionId = intval($this->questionId);
+        $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
                 WHERE c_id = {$this->course_id} AND id = $questionId";
@@ -364,7 +365,7 @@ class Answer
     public function selectAnswerByAutoId($auto_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $auto_id = intval($auto_id);
+        $auto_id = (int) $auto_id;
         $sql = "SELECT id, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
         $rs = Database::query($sql);
@@ -482,7 +483,7 @@ class Answer
         }
         $row = Database::fetch_array($res);
 
-        return $row['type'];
+        return (int) $row['type'];
     }
 
     /**
@@ -844,7 +845,8 @@ class Answer
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
-            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
+            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
+            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
         ) {
             // Selecting origin options
             $origin_options = Question::readQuestionOption(
@@ -963,7 +965,8 @@ class Answer
 
                     $correct = $this->correct[$i];
                     if ($newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
-                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE
+                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
+                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
                     ) {
                         $correct = $fixed_list[intval($correct)];
                     }

@@ -87,7 +87,7 @@ class UniqueAnswer extends Question
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
             }
         }
@@ -130,7 +130,7 @@ class UniqueAnswer extends Question
             );
         }
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if (isset($answer->correct[$i]) && $answer->correct[$i]) {
@@ -415,12 +415,13 @@ class UniqueAnswer extends Question
         $score = null
     ) {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-			<tr>
-				<th>'.get_lang("Choice").'</th>
-				<th>'.get_lang("ExpectedChoice").'</th>
-				<th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang("Status").'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
         $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 

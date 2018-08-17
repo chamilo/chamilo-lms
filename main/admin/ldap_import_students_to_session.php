@@ -14,7 +14,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions
 api_protect_admin_script();
- require('../auth/ldap/authldap.php');
+ require '../auth/ldap/authldap.php';
 
 $annee_base = date('Y');
 

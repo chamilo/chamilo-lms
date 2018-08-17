@@ -71,7 +71,7 @@ $code = isset($code) ? $code : null;
         <h2 class="title-courses"><?php echo get_lang('CourseManagement'); ?></h2>
         <div class="search-courses">
             <div class="row">
-                <?php if ($showCourses) {
+<?php if ($showCourses) {
         ?>
                     <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
                         <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
@@ -97,8 +97,8 @@ $code = isset($code) ? $code : null;
         } ?>
                     </div>
                     <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
-                        <?php
-                        $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+<?php
+    $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $form = '<form action="'.$webAction.'" method="GET">';
         $form .= '<input type="hidden" name="action" value="'.$action.'">';
         $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
@@ -106,42 +106,47 @@ $code = isset($code) ? $code : null;
         $form .= '<div class="form-group">';
         $form .= '<label>'.get_lang('CourseCategories').'</label>';
         $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
-
         foreach ($browse_course_categories[0] as $category) {
             $categoryCode = $category['code'];
             $countCourse = $category['count_courses'];
+            if (empty($countCourse)) {
+                continue;
+            }
             $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
-                                .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
+                            .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
             if (!empty($browse_course_categories[$categoryCode])) {
                 foreach ($browse_course_categories[$categoryCode] as $subCategory) {
+                    if (empty($subCategory['count_courses'])) {
+                        continue;
+                    }
                     $subCategoryCode = $subCategory['code'];
-                    $form .= '<option '
-                                        .($subCategoryCode == $codeType
-                                            ? 'selected="selected" '
-                                            : '')
-                                        .' value="'.$subCategory['code'].'">---'.$subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
+                    $form .= '<option '.($subCategoryCode == $codeType
+                                        ? 'selected="selected" '
+                                        : '')
+                                    .' value="'.$subCategory['code'].'">---';
+                    echo $subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
                 }
             }
         }
         $form .= '</select>';
         $form .= '</div>';
         $form .= '</form>';
-        echo $form; ?>
-                    </div>
-                <?php
-    } ?>
-                <?php if ($showSessions) {
-        ?>
-                    <div class="col-md-4">
-                        <div class="return-catalog">
-                            <a class="btn btn-default btn-lg btn-block"
-                               href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
-                                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
-                            </a>
-                        </div>
-                    </div>
-                <?php
-    } ?>
+        echo $form;
+        echo '</div>';
+    }
+
+if ($showSessions) {
+    ?>
+    <div class="col-md-4">
+        <div class="return-catalog">
+            <a class="btn btn-default btn-lg btn-block"
+               href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
+            </a>
+        </div>
+    </div>
+<?php
+} ?>
             </div>
         </div>
     </div>
@@ -163,9 +168,17 @@ if ($showCourses && $action != 'display_sessions') {
             echo "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
         }
 
+        $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
         $user_id = api_get_user_id();
-        $categoryList = CourseManager::getCategoriesList();
+        $categoryListFromDatabase = CourseCategory::getCategories();
+
+        $categoryList = [];
+        if (!empty($categoryListFromDatabase)) {
+            foreach ($categoryListFromDatabase as $categoryItem) {
+                $categoryList[$categoryItem['code']] = $categoryItem['name'];
+            }
+        }
 
         if (!empty($browse_courses_in_category)) {
             echo '<div class="grid-courses row">';
@@ -203,7 +216,6 @@ if ($showCourses && $action != 'display_sessions') {
 
                 $separator = null;
                 $subscribeButton = return_register_button($course, $stok, $code, $searchTerm);
-
                 // Start buy course validation
                 // display the course price and buy button if the buycourses plugin is enabled and this course is configured
                 $plugin = BuyCoursesPlugin::create();
@@ -228,7 +240,10 @@ if ($showCourses && $action != 'display_sessions') {
                 // display course title and button bloc
                 $html .= '<div class="description">';
                 $html .= return_title($course, $userRegisteredInCourse);
-                $html .= return_teacher($course);
+
+                if ($showTeacher) {
+                    $html .= return_teacher($course);
+                }
 
                 // display button line
                 $html .= '<div class="toolbar row">';
@@ -264,7 +279,6 @@ if ($showCourses && $action != 'display_sessions') {
                 $html .= '</div>';
                 echo $html;
             }
-
             echo '</div>';
         } else {
             if (!isset($_REQUEST['subscribe_user_with_password']) &&
@@ -294,8 +308,8 @@ function returnThumbnail($course, $registeredUser)
 {
     $html = '';
     $title = cut($course['title'], 70);
-    $linkCourse = api_get_course_url($course['code']);
-
+    //$linkCourse = api_get_course_url($course['code']);
+    $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
@@ -315,15 +329,9 @@ function returnThumbnail($course, $registeredUser)
     }
 
     $html .= '<div class="image">';
-    if (!$registeredUser) {
-        $html .= '<img class="img-responsive"'
-                .' src="'.$courseMediumImage.'" '
-                .' alt="'.api_htmlentities($title).'"/>';
-    } else {
-        $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'">'
-                .'<img class="img-responsive" src="'.$courseMediumImage.'" '
-                .'alt="'.api_htmlentities($title).'"/></a>';
-    }
+    $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'">'
+            .'<img class="img-responsive" src="'.$courseMediumImage.'" '
+            .'alt="'.api_htmlentities($title).'"/></a>';
 
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
@@ -332,7 +340,7 @@ function returnThumbnail($course, $registeredUser)
     }
 
     $html .= '<div class="user-actions">';
-    $html .= return_description_button($course);
+    $html .= CourseManager::returnDescriptionButton($course);
     $html .= '</div></div>';
 
     return $html;
@@ -407,16 +415,10 @@ function return_teacher($courseInfo)
  */
 function return_title($course, $registeredUser)
 {
-    $linkCourse = api_get_course_url($course['code']);
-
+    //$linkCourse = api_get_course_url($course['code']);
+    $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
     $html = '<div class="block-title"><h4 class="title">';
-
-    if (!$registeredUser) {
-        $html .= $course['title'];
-    } else {
-        $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
-    }
-
+    $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
     $html .= '</h4></div>';
 
     if (api_get_configuration_value('hide_course_rating') === false) {
@@ -427,34 +429,6 @@ function return_title($course, $registeredUser)
             $course['point_info']
         );
         $html .= '<div class="ranking">'.$rating.'</div>';
-    }
-
-    return $html;
-}
-
-/**
- * Display the description button of a course in the course catalog.
- *
- * @param array $course
- *
- * @return string HTML string
- */
-function return_description_button($course)
-{
-    $title = $course['title'];
-    $html = '';
-    if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html = Display::url(
-            Display::returnFontAwesomeIcon('info-circle'),
-            api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
-            [
-                'class' => 'ajax btn btn-default btn-sm',
-                'data-title' => $title,
-                'title' => get_lang('Description'),
-                'aria-label' => get_lang('Description'),
-                'data-size' => 'lg',
-            ]
-        );
     }
 
     return $html;

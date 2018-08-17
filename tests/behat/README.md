@@ -17,7 +17,7 @@ Check the latest version at https://sites.google.com/a/chromium.org/chromedriver
 then adapt the following command to the latest version:
 
 ```
-cd /tmp && wget https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
+cd /tmp && wget https://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
 ### Chamilo configuration
@@ -49,5 +49,5 @@ cd tests/behat
 To run an specific feature:
 
 ```
-../../vendor/behat/behat/bin/behat features/createCourse.feature
+../../vendor/behat/behat/bin/behat features/course.feature
 ```

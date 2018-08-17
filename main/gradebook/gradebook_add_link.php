@@ -51,7 +51,8 @@ $typeform = new LinkForm(
 // if user selected a link type
 if ($typeform->validate() && isset($_GET['newtypeselected'])) {
     // reload page, this time with a parameter indicating the selected type
-    header('Location: '.api_get_self().'?selectcat='.$selectCat
+    header(
+        'Location: '.api_get_self().'?selectcat='.$selectCat
         .'&typeselected='.$typeform->exportValue('select_link')
         .'&course_code='.Security::remove_XSS($_GET['course_code']).'&'.api_get_cidreq()
     );

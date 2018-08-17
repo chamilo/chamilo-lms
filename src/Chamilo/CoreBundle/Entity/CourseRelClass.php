@@ -20,7 +20,7 @@ class CourseRelClass
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var int
@@ -29,7 +29,7 @@ class CourseRelClass
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $classId;
+    protected $classId;
 
     /**
      * Set courseCode.

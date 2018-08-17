@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   viewBox="0 0 5.8208332 5.8208335"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (unknown)"
+   sodipodi:docname="attempt-nocheck.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="20.297555"
+     inkscape:cx="19.523744"
+     inkscape:cy="10.327239"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-291.17915)">
+    <g
+       id="g1503"
+       inkscape:export-filename="/var/www/chamilo11/main/img/icons/22/attempt-nocheck.png"
+       inkscape:export-xdpi="97"
+       inkscape:export-ydpi="97">
+      <rect
+         y="291.17914"
+         x="6.3578284e-08"
+         height="5.8208332"
+         width="5.8208332"
+         id="rect1427"
+         style="opacity:0;fill:#ececec;fill-opacity:1;stroke:none;stroke-width:1.32122481;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1425"
+         d="m 4.5854911,295.48846 -0.2761771,0.27618 q -0.054036,0.054 -0.1320847,0.054 -0.07805,0 -0.1380887,-0.054 l -1.1287245,-1.13472 -1.1287239,1.13472 q -0.060039,0.054 -0.1380889,0.054 -0.07805,0 -0.1320846,-0.054 l -0.2761774,-0.27618 q -0.054035,-0.0539 -0.054035,-0.13208 0,-0.0781 0.054035,-0.13808 l 1.1347283,-1.12873 -1.1347283,-1.12874 q -0.054035,-0.06 -0.054035,-0.13808 0,-0.0781 0.054035,-0.13208 l 0.2761774,-0.27618 q 0.054035,-0.054 0.1320846,-0.054 0.07805,0 0.1380889,0.054 l 1.1287239,1.12872 1.1287245,-1.12872 q 0.060038,-0.054 0.1380887,-0.054 0.07805,0 0.1320847,0.054 l 0.2761771,0.27618 q 0.054036,0.0539 0.054036,0.13208 0,0.0781 -0.054036,0.13808 l -1.128724,1.12874 1.128724,1.12873 q 0.054036,0.06 0.054036,0.13808 0,0.0781 -0.054036,0.13208 z"
+         style="fill:#ff3019;stroke-width:0.00600386;fill-opacity:1" />
+    </g>
+  </g>
+</svg>

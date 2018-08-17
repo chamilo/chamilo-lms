@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.social
  *
@@ -11,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') != 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $group_id = intval($_GET['id']);
@@ -49,6 +50,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
         exit;
     }
 }
+
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id
@@ -82,7 +84,7 @@ if (isset($_POST['action'])) {
         );
     } else {
         if ($_POST['action'] == 'add_message_group' && !$is_member) {
-            api_not_allowed();
+            api_not_allowed(true);
         }
         $res = MessageManager::send_message(
             0,
@@ -99,7 +101,7 @@ if (isset($_POST['action'])) {
 
     // display error messages
     if (!$res) {
-        $social_right_content .= Display::return_message(get_lang('Error'), 'error');
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
     }
     $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
     if ($_POST['action'] == 'add_message_group') {

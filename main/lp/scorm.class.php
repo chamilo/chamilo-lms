@@ -63,13 +63,8 @@ class scorm extends learnpath
 
     /**
      * Possible SCO status: see CAM doc 2.3.2.5.1: passed, completed, browsed, failed, not attempted, incomplete.
-     */
-
-    /**
      * Prerequisites: see CAM doc 2.3.2.5.1 for pseudo-code.
-     */
-
-    /**
+     *
      * Parses an imsmanifest.xml file and puts everything into the $manifest array.
      *
      * @param	string	Path to the imsmanifest.xml file on the system.
@@ -289,7 +284,7 @@ class scorm extends learnpath
                                 '$iFrameHolder.html(iFrameTag);',
                             ];
                             $replace = [
-                                'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); ',
+                                'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img width="16px" src="'.Display::returnIconPath('link-external.png').'"></a>\'; $iFrameHolder.html(iFrameTag); ',
                             ];
                             $content = str_replace($find, $replace, $content);
                             file_put_contents($framePath, $content);
@@ -340,15 +335,15 @@ class scorm extends learnpath
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
 
-        $userId = intval($userId);
+        $userId = (int) $userId;
         if (empty($userId)) {
             $userId = api_get_user_id();
         }
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $userMaxScore = intval($userMaxScore);
-        $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);
+        $userMaxScore = (int) $userMaxScore;
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         foreach ($this->organizations as $id => $dummy) {
             $oOrganization = &$this->organizations[$id];
             // Prepare and execute insert queries:
@@ -472,13 +467,12 @@ class scorm extends learnpath
                 }
                 $title = Database::escape_string($item['title']);
                 $title = api_utf8_decode($title);
+                $max_score = (int) $item['max_score'];
 
-                $max_score = intval($item['max_score']);
-
-                if ($max_score == 0 || is_null($max_score) || $max_score == '') {
+                if ($max_score === 0) {
                     // If max score is not set The use_max_score parameter
                     // is check in order to use 100 (chamilo style) or '' (strict scorm)
-                    $max_score = "NULL";
+                    $max_score = 'NULL';
                     if ($userMaxScore) {
                         $max_score = 100;
                     }
@@ -547,11 +541,12 @@ class scorm extends learnpath
                     $courseid = api_get_course_id();
                     $ic_slide->addCourseId($courseid);
                     $ic_slide->addToolId(TOOL_LEARNPATH);
+                    // TODO: Unify with other lp types.
                     $xapian_data = [
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
-                        SE_DATA => ['lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => ''], // TODO: Unify with other lp types.
-                        SE_USER => (int) api_get_user_id(),
+                        SE_DATA => ['lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => ''],
+                        SE_USER => api_get_user_id(),
                     ];
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
@@ -607,7 +602,9 @@ class scorm extends learnpath
         $lpToCheck = null
     ) {
         if ($this->debug > 0) {
-            error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
+            error_log(
+                'In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method'
+            );
         }
 
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
@@ -646,8 +643,6 @@ class scorm extends learnpath
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
         $package_type = '';
-        $at_root = false;
-        $manifest = '';
         $manifest_list = [];
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
@@ -656,9 +651,7 @@ class scorm extends learnpath
                 $file = $thisContent['filename'];
                 $this->set_error_msg("File $file contains a PHP script");
             } elseif (stristr($thisContent['filename'], 'imsmanifest.xml')) {
-                //error_log('Found imsmanifest at '.$thisContent['filename'], 0);
                 if ($thisContent['filename'] == basename($thisContent['filename'])) {
-                    $at_root = true;
                 } else {
                     if ($this->debug > 2) {
                         error_log("New LP - subdir is now ".$this->subdir);
@@ -666,7 +659,6 @@ class scorm extends learnpath
                 }
                 $package_type = 'scorm';
                 $manifest_list[] = $thisContent['filename'];
-                $manifest = $thisContent['filename']; //just the relative directory inside scorm/
             }
             $realFileSize += $thisContent['size'];
         }
@@ -684,13 +676,10 @@ class scorm extends learnpath
 
         $this->subdir .= '/'.dirname($shortest_path); // Do not concatenate because already done above.
         $manifest = $shortest_path;
-        if ($this->debug > 1) {
-            error_log('New LP - Package type is now '.$package_type);
+        if ($this->debug) {
+            error_log("New LP - Package type is now: '$package_type'");
         }
         if ($package_type == '') {
-            if ($this->debug > 1) {
-                error_log('New LP - Package type is empty');
-            }
             Display::addFlash(
                 Display::return_message(get_lang('NotScormContent'))
             );
@@ -728,7 +717,6 @@ class scorm extends learnpath
         }
 
         /* Uncompressing phase */
-
         /*
             We need to process each individual file in the zip archive to
             - add it to the database
@@ -770,11 +758,6 @@ class scorm extends learnpath
                 }
                 while ($file = readdir($dir)) {
                     if ($file != '.' && $file != '..') {
-                        $filetype = 'file';
-                        if (is_dir($course_sys_dir.$new_dir.$file)) {
-                            $filetype = 'folder';
-                        }
-
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS SCORM-WISE, avoid that as much as possible!
                         //$safe_file = api_replace_dangerous_char($file, 'strict');
                         $find_str = ['\\', '.php', '.phtml'];

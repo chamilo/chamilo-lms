@@ -91,16 +91,6 @@ class Gradebook extends Model
     }
 
     /**
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function update($params)
-    {
-        return parent::update($params);
-    }
-
-    /**
      * @param int   $gradebook_id
      * @param array $skill_list
      * @param bool  $deleteSkillNotInList
@@ -179,8 +169,9 @@ class Gradebook extends Model
         if (!isset($header)) {
             $header = get_lang('Add');
         }
-        $form->addElement('header', '', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+
+        $form->addHeader($header);
         $form->addElement('hidden', 'id', $id);
 
         $skill = new Skill();
@@ -221,7 +212,8 @@ class Gradebook extends Model
     public function getSkillsByGradebook($gradebook_id)
     {
         $gradebook_id = intval($gradebook_id);
-        $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill
+        $sql = "SELECT skill.id, skill.name 
+                FROM {$this->table_skill} skill
                 INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
                 ON skill.id = skill_rel_gradebook.skill_id
                 WHERE skill_rel_gradebook.gradebook_id = $gradebook_id";

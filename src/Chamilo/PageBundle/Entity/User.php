@@ -489,7 +489,8 @@ class User extends BaseUser
             [
                 new Assert\Length(['min' => 5]),
                 // Alpha numeric + "_" or "-"
-                new Assert\Regex([
+                new Assert\Regex(
+                    [
                         'pattern' => '/^[a-z\-_0-9]+$/i',
                         'htmlPattern' => '/^[a-z\-_0-9]+$/i', ]
                 ),
@@ -499,7 +500,8 @@ class User extends BaseUser
                     'htmlPattern' => '/[a-z]{3}/i')
                 ),*/
                 // Min 2 numbers
-                new Assert\Regex([
+                new Assert\Regex(
+                    [
                         'pattern' => '/[0-9]{2}/',
                         'htmlPattern' => '/[0-9]{2}/', ]
                 ),

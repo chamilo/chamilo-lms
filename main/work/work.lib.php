@@ -47,26 +47,16 @@ function displayWorkActionLinks($id, $action, $isTutor)
         if (empty($id)) {
             $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
             $output .= Display::return_icon(
-                    'new_work.png',
-                    get_lang('CreateAssignment'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ).
-                '</a>';
+                'new_work.png',
+                get_lang('CreateAssignment'),
+                '',
+                ICON_SIZE_MEDIUM
+            );
+            $output .= '</a>';
         }
     }
 
-    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
-        if (empty($id)) {
-            // Options
-            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
-            $output .= Display::return_icon(
-                'settings.png',
-                get_lang('EditToolOptions'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-        }
+    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && $action == 'list') {
         $output .= '<a id="open-view-list" href="#">'.
             Display::return_icon(
                 'listwork.png',
@@ -77,63 +67,11 @@ function displayWorkActionLinks($id, $action, $isTutor)
             '</a>';
     }
 
-    if (api_is_allowed_to_edit(null, true) &&
-        $origin != 'learnpath' &&
-        api_is_allowed_to_session_edit(false, true)
-    ) {
-        // Delete all files
-        if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-            $message = get_lang('ConfirmYourChoiceDeleteAllfiles');
-        } else {
-            $message = get_lang('ConfirmYourChoice');
-        }
-    }
-
     if ($output != '') {
         echo '<div class="actions">';
         echo $output;
         echo '</div>';
     }
-}
-
-/**
- * Returns a form displaying all options for this tool.
- * These are
- * - make all files visible / invisible
- * - set the default visibility of uploaded files.
- *
- * @param $defaults
- *
- * @return string The HTML form
- */
-function settingsForm($defaults)
-{
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-    if (!$is_allowed_to_edit) {
-        return;
-    }
-
-    $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&action=settings';
-    $form = new FormValidator('edit_settings', 'post', $url);
-    $form->addElement('hidden', 'changeProperties', 1);
-    $form->addElement('header', get_lang('EditToolOptions'));
-
-    $group = [
-        $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
-        $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),
-    ];
-    $form->addGroup($group, '', get_lang('DefaultUpload'));
-
-    $group = [
-        $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
-        $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
-    ];
-    $form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
-    $form->addButtonSave(get_lang('Save'));
-    $form->setDefaults($defaults);
-
-    return $form->returnForm();
 }
 
 /**
@@ -145,14 +83,13 @@ function settingsForm($defaults)
 function get_work_data_by_path($path, $courseId = 0)
 {
     $path = Database::escape_string($path);
+    $courseId = intval($courseId);
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
-    } else {
-        $courseId = intval($courseId);
     }
 
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT *  FROM  ".$work_table."
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sql = "SELECT *  FROM $table
             WHERE url = '$path' AND c_id = $courseId ";
     $result = Database::query($sql);
     $return = [];
@@ -173,16 +110,13 @@ function get_work_data_by_path($path, $courseId = 0)
 function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
     $id = intval($id);
-
-    if (!empty($courseId)) {
-        $courseId = intval($courseId);
-    } else {
+    $courseId = intval($courseId);
+    if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
-
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $sessionCondition = null;
+    $sessionCondition = '';
     if (!empty($sessionId)) {
         $sessionCondition = api_get_session_condition($sessionId, true);
     }
@@ -261,15 +195,13 @@ function get_work_count_by_student($user_id, $work_id)
  *
  * @return array
  */
-function get_work_assignment_by_id($id, $courseId = null)
+function get_work_assignment_by_id($id, $courseId = 0)
 {
+    $courseId = intval($courseId);
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
-    } else {
-        $courseId = intval($courseId);
     }
     $id = intval($id);
-
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $sql = "SELECT * FROM $table
             WHERE c_id = $courseId AND publication_id = $id";
@@ -303,11 +235,12 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = $groupInfo['iid'];
+        }
     }
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
     $linkInfo = GradebookUtils::isResourceInCourseGradebook(
         api_get_course_id(),
         3,
@@ -330,7 +263,6 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     }
 
     $contains_file_query = '';
-
     // Get list from database
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
@@ -608,9 +540,6 @@ function showTeacherWorkGrid()
         ['name' => 'amount', 'index' => 'amount', 'width' => '110', 'align' => 'center', 'sortable' => 'false'],
         ['name' => 'actions', 'index' => 'actions', 'width' => '110', 'align' => 'left', 'sortable' => 'false'],
     ];
-
-    $token = null;
-
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
     $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
 
@@ -663,7 +592,8 @@ function showTeacherWorkGrid()
 function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 {
     $form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
-    $form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript: document.selector.submit();">';
+    $form .= get_lang('CurrentDirectory').' 
+             <select name="curdirpath" onchange="javascript: document.selector.submit();">';
     //group documents cannot be uploaded in the root
     if ($group_dir == '') {
         $form .= '<option value="/">/ ('.get_lang('Root').')</option>';
@@ -690,7 +620,7 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 }
 
 /**
- * Builds the form thats enables the user to
+ * Builds the form that enables the user to
  * move a document from one directory to another
  * This function has been copied from the document/document.inc.php library.
  *
@@ -722,19 +652,18 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $form->addHidden('item_id', $move_file);
     $form->addHidden('action', 'move_to');
 
-    //group documents cannot be uploaded in the root
+    // Group documents cannot be uploaded in the root
     if ($group_dir == '') {
-        if ($curdirpath != '/') {
-            //$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
-        }
         if (is_array($folders)) {
             foreach ($folders as $fid => $folder) {
                 //you cannot move a file to:
                 //1. current directory
                 //2. inside the folder you want to move
                 //3. inside a subfolder of the folder you want to move
-                if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-                    //$form .= '<option value="'.$fid.'">'.$folder.'</option>';
+                if (($curdirpath != $folder) &&
+                    ($folder != $move_file) &&
+                    (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')
+                ) {
                     $options[$fid] = $folder;
                 }
             }
@@ -744,7 +673,9 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
             $form .= '<option value="0">/ ('.get_lang('Root').')</option>';
         }
         foreach ($folders as $fid => $folder) {
-            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
+            if (($curdirpath != $folder) && ($folder != $move_file) &&
+                (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')
+            ) {
                 //cannot copy dir into his own subdir
                 $display_folder = substr($folder, strlen($group_dir));
                 $display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
@@ -768,21 +699,23 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
  * @author Bert Vanderkimpen
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
  *
- * @param string $base_work_dir  Base work dir (.../work)
+ * @param string $workDir        Base work dir (.../work)
  * @param string $desiredDirName complete path of the desired name
  *
  * @return string actual directory name if it succeeds, boolean false otherwise
  */
-function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
+function create_unexisting_work_directory($workDir, $desiredDirName)
 {
-    $nb = '';
-    $base_work_dir = (substr($base_work_dir, -1, 1) == '/' ? $base_work_dir : $base_work_dir.'/');
-    while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
-        $nb += 1;
+    $counter = 0;
+    $workDir = (substr($workDir, -1, 1) == '/' ? $workDir : $workDir.'/');
+    $checkDirName = $desiredDirName;
+    while (file_exists($workDir.$checkDirName)) {
+        $counter++;
+        $checkDirName = $desiredDirName.$counter;
     }
 
-    if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
-        return $desired_dir_name.$nb;
+    if (@mkdir($workDir.$checkDirName, api_get_permissions_for_new_directories())) {
+        return $checkDirName;
     } else {
         return false;
     }
@@ -816,18 +749,15 @@ function deleteDirWork($id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work';
     $work_data_url = $base_work_dir.$work_data['url'];
     $check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
-
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
-
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
 
     if (!empty($work_data['url'])) {
         if ($check) {
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
-
             if (!empty($consideredWorkingTime)) {
                 $fieldValue = new ExtraFieldValue('work');
                 $resultExtra = $fieldValue->getAllValuesForAnItem(
@@ -836,7 +766,6 @@ function deleteDirWork($id)
                 );
 
                 $workingTime = null;
-
                 foreach ($resultExtra as $field) {
                     $field = $field['value'];
                     if ($consideredWorkingTime == $field->getField()->getVariable()) {
@@ -847,7 +776,6 @@ function deleteDirWork($id)
                 }
 
                 $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
-
                 if (!empty($workingTime)) {
                     foreach ($courseUsers as $user) {
                         $userWorks = get_work_user_list(
@@ -866,7 +794,6 @@ function deleteDirWork($id)
                         if (count($userWorks) != 1) {
                             continue;
                         }
-
                         Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
                     }
                 }
@@ -907,6 +834,8 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
+            Skill::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
+
             Event::addEvent(
                 LOG_WORK_DIR_DELETE,
                 LOG_WORK_DATA,
@@ -921,14 +850,14 @@ function deleteDirWork($id)
                 $sessionId
             );
 
-            $link_info = GradebookUtils::isResourceInCourseGradebook(
+            $linkInfo = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 3,
                 $id,
                 api_get_session_id()
             );
-            $link_id = $link_info['id'];
-            if ($link_info !== false) {
+            $link_id = $linkInfo['id'];
+            if ($linkInfo !== false) {
                 GradebookUtils::remove_resource_from_course_gradebook($link_id);
             }
 
@@ -1011,7 +940,6 @@ function updateWorkUrl($id, $new_path, $parent_id)
 function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
-    $sessionId = intval($work_data['session_id']);
     $work_id = intval($work_data['iid']);
     $oldPath = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
@@ -1035,227 +963,45 @@ function updateDirName($work_data, $newPath)
 }
 
 /**
- * Return an array with all the folder's ids that are in the given path.
- *
- * @param   string Path of the directory
- *
- * @return array The list of ids of all the directories in the path
- *
- * @author  Julio Montoya
- *
- * @version April 2008
- */
-function get_parent_directories($id)
-{
-    $course_id = api_get_course_int_id();
-    $em = Database::getManager();
-
-    $directories = $em
-        ->getRepository('ChamiloCourseBundle:CStudentPublication')
-        ->findBy([
-            'cId' => $course_id,
-            'parentId' => $id,
-        ]);
-
-    $list_id = [];
-
-    foreach ($directories as $directory) {
-        $list_id[] = $directory->getId();
-    }
-
-    return $list_id;
-}
-
-/**
- * Transform an all directory structure (only directories) in an array.
- *
- * @param   string path of the directory
- *
- * @return array the directory structure into an array
- *
- * @author  Julio Montoya
- *
- * @version April 2008
- */
-function directory_to_array($directory)
-{
-    $array_items = [];
-    if ($handle = @opendir($directory)) {
-        while (false !== ($file = readdir($handle))) {
-            if ($file != '.' && $file != '..') {
-                if (is_dir($directory.'/'.$file)) {
-                    $array_items = array_merge($array_items, directory_to_array($directory.'/'.$file));
-                    $file = $directory.'/'.$file;
-                    $array_items[] = preg_replace("/\/\//si", '/', $file);
-                }
-            }
-        }
-        closedir($handle);
-    }
-
-    return $array_items;
-}
-
-/**
- * Insert into the DB of the course all the directories.
- *
- * @param string $base_work_dir path of the /work directory of the course
- *
- * @return mixed Int -1 on error, sql query result on success
- *
- * @author  Julio Montoya
- *
- * @version April 2008
- */
-function insert_all_directory_in_course_table($base_work_dir)
-{
-    $dir_to_array = directory_to_array($base_work_dir, true);
-    $only_dir = [];
-
-    for ($i = 0; $i < count($dir_to_array); $i++) {
-        $only_dir[] = substr($dir_to_array[$i], strlen($base_work_dir), strlen($dir_to_array[$i]));
-    }
-    $course_id = api_get_course_int_id();
-    $group_id = api_get_group_id();
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $groupIid = 0;
-    if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
-    }
-
-    for ($i = 0; $i < count($only_dir); $i++) {
-        $url = $only_dir[$i];
-
-        $params = [
-            'c_id' => $course_id,
-            'url' => $url,
-            'title' => '',
-            'description' => '',
-            'author' => '',
-            'active' => '1',
-            'accepted' => '1',
-            'filetype' => 'folder',
-            'post_group_id' => $groupIid,
-        ];
-
-        Database::insert($work_table, $params);
-    }
-}
-/**
- * This function displays the number of files contained in a directory.
- *
- * @param   string the path of the directory
- * @param   bool true if we want the total quantity of files
- * include in others child directories, false only  files in the directory
- *
- * @return array the first element is an integer with the number of files
- *               in the folder, the second element is the number of directories
- *
- * @author  Julio Montoya
- *
- * @version April 2008
- */
-function count_dir($path_dir, $recurse)
-{
-    $count = 0;
-    $count_dir = 0;
-    $d = dir($path_dir);
-    while ($entry = $d->Read()) {
-        if (!(($entry == '..') || ($entry == '.'))) {
-            if (is_dir($path_dir.'/'.$entry)) {
-                $count_dir++;
-                if ($recurse) {
-                    $count += count_dir($path_dir.'/'.$entry, $recurse);
-                }
-            } else {
-                $count++;
-            }
-        }
-    }
-    $return_array = [];
-    $return_array[] = $count;
-    $return_array[] = $count_dir;
-
-    return $return_array;
-}
-
-/**
  * returns all the javascript that is required for easily
  * validation when you create a work
  * this goes into the $htmlHeadXtra[] array.
  */
 function to_javascript_work()
 {
-    $js = '<script>
+    $js = '<script> 
         function updateDocumentTitle(value) {
-            var temp = value.indexOf("/");
+            var temp = value.indexOf("/");            
             //linux path
-            if(temp!=-1){
-                var temp=value.split("/");
+            if(temp != -1){
+                temp=value.split("/");
             } else {
-                var temp=value.split("\\\");
+                temp=value.split("\\\");
             }
-            document.getElementById("file_upload").value=temp[temp.length-1];
-            $("#contains_file_id").attr("value", 1);
-        }
-
-        function checkDate(month, day, year) {
-          var monthLength =
-            new Array(31,28,31,30,31,30,31,31,30,31,30,31);
-
-          if (!day || !month || !year)
-            return false;
-
-          // check for bisestile year
-          if (year/4 == parseInt(year/4))
-            monthLength[1] = 29;
-
-          if (month < 1 || month > 12)
-            return false;
-
-          if (day > monthLength[month-1])
-            return false;
-
-          return true;
-        }
-
-        function mktime() {
-
-            var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
-            d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972);
-
-            var dateManip = {
-                0: function(tt){ return d.setHours(tt); },
-                1: function(tt){ return d.setMinutes(tt); },
-                2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
-                3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
-                4: function(tt){ return d.setDate(tt+mb); },
-                5: function(tt){ return d.setYear(tt+ma); }
-            };
-
-            for( i = 0; i < argc; i++ ){
-                no = parseInt(argv[i]*1);
-                if (isNaN(no)) {
-                    return false;
-                } else {
-                    // arg is number, lets manipulate date object
-                    if(!dateManip[i](no)){
-                        // failed
-                        return false;
-                    }
+            
+            var fullFilename = temp[temp.length - 1];
+            var baseFilename = fullFilename;
+            
+            // get file extension
+            var fileExtension = "";
+            if (fullFilename.match(/\..+/)) {
+                fileInfo = fullFilename.match(/(.*)\.([^.]+)$/);
+                if (fileInfo.length > 1) {
+                    fileExtension = "."+fileInfo[fileInfo.length - 1];
+                    baseFilename = fileInfo[fileInfo.length - 2];
                 }
             }
-            return Math.floor(d.getTime()/1000);
+            
+            document.getElementById("file_upload").value = baseFilename;
+            document.getElementById("file_extension").value = fileExtension;                
+            $("#contains_file_id").attr("value", 1);
         }
-
         function setFocus() {
             $("#work_title").focus();
         }
 
         $(document).ready(function() {
             setFocus();
-
             var checked = $("#expiry_date").attr("checked");
             if (checked) {
                 $("#option2").show();                
@@ -1292,7 +1038,8 @@ function to_javascript_work()
  *
  * @return true if is found / false if not found
  */
-// TODO: The name of this function does not fit with the kind of information it returns. Maybe check_work_id() or is_work_id()?
+// TODO: The name of this function does not fit with the kind of information it returns.
+// Maybe check_work_id() or is_work_id()?
 function get_work_id($path)
 {
     $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -1749,7 +1496,7 @@ function getWorkListTeacher(
             //     Display::return_icon(
             //         'delete.png',
             //         get_lang('Delete'),
-            //         array(),
+            //         [],
             //         ICON_SIZE_SMALL
             //     ) . '</a>';
 
@@ -1791,8 +1538,32 @@ function get_work_user_list_from_documents(
         $select1 = " SELECT count(u.user_id) as count ";
         $select2 = " SELECT count(u.user_id) as count ";
     } else {
-        $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.parent_id, w.document_id document_id, w.id, qualification, qualificator_id";
-        $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, w.parent_id, d.id document_id, 0, 0, 0";
+        $select1 = " SELECT DISTINCT 
+                        u.firstname, 
+                        u.lastname, 
+                        u.user_id, 
+                        w.title,
+                        w.parent_id, 
+                        w.document_id document_id, 
+                        w.id, qualification, 
+                        qualificator_id, 
+                        w.sent_date,
+                        w.contains_file,
+                        w.url
+                    ";
+        $select2 = " SELECT DISTINCT 
+                        u.firstname, u.lastname,
+                        u.user_id, 
+                        d.title, 
+                        w.parent_id, 
+                        d.id document_id, 
+                        0, 
+                        0, 
+                        0,
+                        w.sent_date,
+                        w.contains_file,
+                        w.url                        
+                    ";
     }
 
     $documentTable = Database::get_course_table(TABLE_DOCUMENT);
@@ -1878,12 +1649,19 @@ function get_work_user_list_from_documents(
     $urlEdit = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq();
     $urlDelete = api_get_path(WEB_CODE_PATH).'work/work_list.php?action=delete&'.api_get_cidreq();
     $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq();
+    $urlDownload = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq();
 
     $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
     $addIcon = Display::return_icon('add.png', get_lang('Add'));
     $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
-    $viewIcon = Display::return_icon('rate_work.png', get_lang('CorrectAndRate'));
-    $allowEdition = api_get_course_setting('student_delete_own_publication');
+    $viewIcon = Display::return_icon('default.png', get_lang('View'));
+    $saveIcon = Display::return_icon(
+        'save.png',
+        get_lang('Save'),
+        [],
+        ICON_SIZE_SMALL
+    );
+    $allowEdition = api_get_course_setting('student_delete_own_publication') == 1;
 
     $workList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1895,7 +1673,7 @@ function get_work_user_list_from_documents(
         if (empty($documentId)) {
             $url = $urlEdit.'&item_id='.$row['id'].'&id='.$workId;
             $editLink = Display::url($editIcon, $url);
-            if ($allowEdition == false) {
+            if ($allowEdition != 1) {
                 $editLink = null;
             }
         } else {
@@ -1912,21 +1690,26 @@ function get_work_user_list_from_documents(
                 $url = $urlEdit.'&item_id='.$newWorkId.'&id='.$workId;
                 $editLink = Display::url($editIcon, $url);
 
-                if ($allowEdition == false) {
-                    $editLink = null;
+                if ($allowEdition != 1) {
+                    $editLink = '';
                 }
             }
         }
 
-        if ($allowEdition && !empty($itemId)) {
-            $deleteLink = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
-        } else {
-            $deleteLink = null;
+        $downloadLink = '';
+        // If URL is present then there's a file to download keep BC.
+        if ($row['contains_file'] || !empty($row['url'])) {
+            $downloadLink = Display::url($saveIcon, $urlDownload.'&id='.$row['id']).'&nbsp;';
         }
 
-        $viewLink = null;
+        $viewLink = '';
         if (!empty($itemId)) {
             $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
+        }
+
+        $deleteLink = '';
+        if ($allowEdition == 1 && !empty($itemId)) {
+            $deleteLink = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
         }
 
         $row['type'] = null;
@@ -1945,11 +1728,11 @@ function get_work_user_list_from_documents(
         }
 
         if (!empty($row['sent_date'])) {
-            $row['sent_date'] = api_get_local_time($row['sent_date']);
+            $row['sent_date'] = Display::dateToStringAgoAndLongDate($row['sent_date']);
         }
 
         if ($userId == $currentUserId) {
-            $row['actions'] = $viewLink.$editLink.$deleteLink;
+            $row['actions'] = $downloadLink.$viewLink.$editLink.$deleteLink;
         }
 
         if ($addLinkShowed) {
@@ -2220,17 +2003,11 @@ function get_work_user_list(
                 $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
 
                 // File name.
-                $link_to_download = null;
+                $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
-                    $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
+                    $linkToDownload = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
                 }
-
-                $send_to = Portfolio::share(
-                    'work',
-                    $work['id'],
-                    ['style' => 'white-space:nowrap;']
-                );
 
                 $feedback = '';
                 $count = getWorkCommentCount($item_id, $course_info);
@@ -2264,17 +2041,22 @@ function get_work_user_list(
                 $date = date_to_str_ago($work['sent_date']).' '.$work_date;
                 $work['formatted_date'] = $work_date.' '.$add_string;
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.$add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.
+                    $add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
                 $work['status'] = $hasCorrection;
                 $work['has_correction'] = $hasCorrection;
 
                 // Actions.
                 $action = '';
                 if (api_is_allowed_to_edit()) {
-                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.$rateIcon.'</a> ';
+                    $action .= '<a 
+                        href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" 
+                        title="'.get_lang('View').'">'.$rateIcon.'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
+                        $action .= '<a f
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" 
+                            title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
                     }
 
@@ -2334,7 +2116,12 @@ function get_work_user_list(
 
                     if ($locked) {
                         if ($qualification_exists) {
-                            $action .= Display::return_icon('edit_na.png', get_lang('CorrectAndRate'), [], ICON_SIZE_SMALL);
+                            $action .= Display::return_icon(
+                                'edit_na.png',
+                                get_lang('CorrectAndRate'),
+                                [],
+                                ICON_SIZE_SMALL
+                            );
                         } else {
                             $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
                         }
@@ -2400,7 +2187,7 @@ function get_work_user_list(
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }
                 $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
-                $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
+                $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
                 $work['correction'] = $correction;
                 $works[] = $work;
             }
@@ -2554,9 +2341,9 @@ function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 
  */
 function is_work_exist_by_url($url)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $url = Database::escape_string($url);
-    $sql = "SELECT id FROM $work_table WHERE url='$url'";
+    $sql = "SELECT id FROM $table WHERE url='$url'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $row = Database::fetch_row($result);
@@ -2734,14 +2521,12 @@ function get_list_users_without_publication($task_id, $studentId = 0)
  * @param int task id
  * @param int $studentId
  *
- * @return array
- *
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  * @author Julio Montoya <gugli100@gmail.com> Fixes
  */
 function display_list_users_without_publication($task_id, $studentId = null)
 {
-    global $origin;
+    $origin = api_get_origin();
     $table_header[] = [get_lang('LastName'), true];
     $table_header[] = [get_lang('FirstName'), true];
     $table_header[] = [get_lang('Email'), true];
@@ -2833,7 +2618,9 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $active = intval($active);
     $sessionCondition = api_get_session_condition($sessionId);
 
-    $sql = "SELECT w.* FROM $work w INNER JOIN $workRel rel ON (w.parent_id = rel.work_id)
+    $sql = "SELECT w.* FROM $work w 
+            INNER JOIN $workRel rel 
+            ON (w.parent_id = rel.work_id)
             WHERE
                 w.document_id = $documentId AND
                 w.parent_id = $workId AND
@@ -3054,9 +2841,7 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
         return true;
     }
 
-    if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
-        api_not_allowed(true);
-    }
+    return userIsSubscribedToWork($userId, $workId, $courseId);
 }
 
 /**
@@ -3342,6 +3127,7 @@ function getLastWorkStudentFromParent(
 /**
  * Get last work information from parent.
  *
+ * @param int   $userId
  * @param array $parentInfo
  * @param array $courseInfo
  * @param int   $sessionId
@@ -3577,6 +3363,10 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $parentWork['title']);
     $content = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work['title'], $url);
 
+    if (!empty($data['comment'])) {
+        $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
+    }
+
     if (!empty($userIdListToSend)) {
         foreach ($userIdListToSend as $userIdToSend) {
             MessageManager::send_message_simple(
@@ -3651,6 +3441,7 @@ function getWorkCommentForm($work, $workParent)
         }
     }
 
+    Skill::addSkillsToUserForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workParent['id'], $work['user_id'], $work['id']);
     $form->addHtmlEditor('comment', get_lang('Comment'), false);
     $form->addFile('attachment', get_lang('Attachment'));
     $form->addElement('hidden', 'id', $work['id']);
@@ -3731,11 +3522,17 @@ function getWorkDateValidationStatus($homework)
  */
 function setWorkUploadForm($form, $uploadFormType = 0)
 {
-    $form->addElement('header', get_lang('UploadADocument'));
-    $form->addElement('hidden', 'contains_file', 0, ['id' => 'contains_file_id']);
-    $form->addElement('hidden', 'active', 1);
-    $form->addElement('hidden', 'accepted', 1);
+    $form->addHeader(get_lang('UploadADocument'));
+    $form->addHidden('contains_file', 0, ['id' => 'contains_file_id']);
+    $form->addHidden('active', 1);
+    $form->addHidden('accepted', 1);
     $form->addElement('text', 'title', get_lang('Title'), ['id' => 'file_upload']);
+    $form->addElement(
+        'text',
+        'extension',
+        get_lang('FileExtension'),
+        ['id' => 'file_extension', 'readonly' => 'readonly']
+    );
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
     switch ($uploadFormType) {
@@ -3808,14 +3605,14 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     if (empty($filesize)) {
         return [
-            'error' => Display:: return_message(
+            'error' => Display::return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
             ),
         ];
     } elseif (!filter_extension($new_file_name)) {
         return [
-            'error' => Display:: return_message(
+            'error' => Display::return_message(
                 get_lang('UplUnableToSaveFileFilteredExtension'),
                 'error'
             ),
@@ -3828,7 +3625,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     if ($total_size > $course_max_space) {
         return [
-            'error' => Display :: return_message(get_lang('NoSpace'), 'error'),
+            'error' => Display::return_message(get_lang('NoSpace'), 'error'),
         ];
     }
 
@@ -3860,7 +3657,6 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         ];
     }
 
-    $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
     } else {
@@ -3871,7 +3667,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         'url' => $url,
         'filename' => $filename,
         'filesize' => $filesize,
-        'error' => null,
+        'error' => '',
     ];
 }
 
@@ -3886,10 +3682,9 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 function sendAlertToUsers($workId, $courseInfo, $session_id)
 {
     $user_list = [];
-    //$workData = get_work_assignment_by_id($workId, $courseInfo['real_id']);
     $workData = get_work_data_by_id($workId, $courseInfo['real_id'], $session_id);
-    //last value is to check this is not "just" an edit
-    //YW Tis part serve to send a e-mail to the tutors when a new file is sent
+    // last value is to check this is not "just" an edit
+    // YW Tis part serve to send a e-mail to the tutors when a new file is sent
     $send = api_get_course_setting('email_alert_manager_on_new_doc');
 
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_TEACHERS) {
@@ -3936,35 +3731,24 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
     }
 
     if ($send) {
-        $senderEmail = api_get_setting('emailAdministrator');
-        $senderName = api_get_person_name(
-            api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
         $subject = "[".api_get_setting('siteName')."] ".get_lang('SendMailBody')."\n ".get_lang('CourseName').": ".$courseInfo['name']."  ";
         foreach ($user_list as $user_data) {
             $to_user_id = $user_data['user_id'];
             $user_info = api_get_user_info($to_user_id);
             $message = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."\n";
-            $message .= get_lang('UserName')." : ".api_get_person_name($user_info['firstname'], $user_info['lastname'])."\n";
+            $message .= get_lang('UserName')." : ".$user_info['complete_name']."\n";
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
             $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
             $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
-            //$message .= $url;
-            MessageManager::send_message_simple($to_user_id, $subject, $message);
-            api_mail_html(
-                api_get_person_name(
-                    $user_info['firstname'].' '.$user_info['lastname'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                ),
-                $user_info['email'],
+            MessageManager::send_message_simple(
+                $to_user_id,
                 $subject,
                 $message,
-                $senderName,
-                $senderEmail
+                0,
+                false,
+                false,
+                [],
+                false
             );
         }
     }
@@ -3980,9 +3764,11 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
  */
 function checkExistingWorkFileName($filename, $workId)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $filename = Database::escape_string($filename);
-    $sql = "SELECT title FROM $work_table
+    $workId = (int) $workId;
+
+    $sql = "SELECT title FROM $table
             WHERE parent_id = $workId AND title = '$filename' AND active = 1";
     $result = Database::query($sql);
 
@@ -4016,13 +3802,24 @@ function processWorkForm(
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $courseId = $courseInfo['real_id'];
-    $groupId = intval($groupId);
-    $sessionId = intval($sessionId);
-    $userId = intval($userId);
+    $groupId = (int) $groupId;
+    $sessionId = (int) $sessionId;
+    $userId = (int) $userId;
 
-    $title = $values['title'];
-    $description = $values['description'];
-    $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']) : 0;
+    $extension = '';
+    if (isset($values['extension'])) {
+        $extension = $values['extension'];
+    } else {
+        $fileInfo = pathinfo($values['title']);
+        if (isset($fileInfo['extension']) && !empty($fileInfo['extension'])) {
+            $extension = '.'.$fileInfo['extension'];
+            $values['title'] = $fileInfo['filename'];
+        }
+    }
+
+    $title = $values['title'].$extension;
+    $description = isset($values['description']) ? $values['description'] : '';
+    $containsFile = isset($values['contains_file']) && !empty($values['contains_file']) ? (int) $values['contains_file'] : 0;
 
     $saveWork = true;
     $filename = null;
@@ -4031,7 +3828,8 @@ function processWorkForm(
     $workData = [];
     $message = null;
 
-    if ($values['contains_file']) {
+    if ($containsFile) {
+        $saveWork = false;
         if ($checkDuplicated) {
             if (checkExistingWorkFileName($file['name'], $workInfo['id'])) {
                 $saveWork = false;
@@ -4045,11 +3843,13 @@ function processWorkForm(
         }
 
         if (isset($result['error'])) {
+            $saveWork = false;
             if ($showFlashMessage) {
                 $message = $result['error'];
             }
-
-            $saveWork = false;
+            if (empty($result['error']) && isset($result['url']) && !empty($result['url'])) {
+                $saveWork = true;
+            }
         }
     }
 
@@ -4081,7 +3881,7 @@ function processWorkForm(
             'filetype' => 'file',
             'title' => $title,
             'description' => $description,
-            'contains_file' => $contains_file,
+            'contains_file' => $containsFile,
             'active' => $active,
             'accepted' => '1',
             'qualificator_id' => 0,
@@ -4181,7 +3981,7 @@ function processWorkForm(
                 }
             }
             $workData = get_work_data_by_id($workId);
-            if ($showFlashMessage) {
+            if ($workData && $showFlashMessage) {
                 Display::addFlash(Display::return_message(get_lang('DocAdd')));
             }
         }
@@ -4189,7 +3989,7 @@ function processWorkForm(
         if ($showFlashMessage) {
             Display::addFlash(
                 Display::return_message(
-                    $message ? $message : get_lang('IsNotPosibleSaveTheDocument'),
+                    $message ? $message : get_lang('ImpossibleToSaveTheDocument'),
                     'error'
                 )
             );
@@ -4222,8 +4022,9 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 {
     $em = Database::getManager();
 
-    $user_id = intval($user_id);
-    $groupId = intval($groupId);
+    $user_id = (int) $user_id;
+    $groupId = (int) $groupId;
+    $sessionId = (int) $sessionId;
 
     $groupIid = 0;
     $groupInfo = [];
@@ -4231,7 +4032,6 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
     }
-    $sessionId = (int) $sessionId;
     $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
@@ -4239,6 +4039,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $directory = api_replace_dangerous_char($formValues['new_dir']);
     $directory = disable_dangerous_file($directory);
+
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
     if (empty($created_dir)) {
@@ -4848,7 +4649,11 @@ function getFormWork($form, $defaults = [], $workId = 0)
         </script>';
 
     $form->addHtml('</div>');
+
+    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workId);
+
     if (!empty($defaults)) {
+        $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
     }
 
@@ -4868,70 +4673,16 @@ function getUploadDocumentType()
 }
 
 /**
- * @param array $courseInfo
- * @param bool  $showScore
- * @param bool  $studentDeleteOwnPublication
+ * @param int   $item_id
+ * @param array $course_info
  *
  * @return bool
  */
-function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
-{
-    $showScore = intval($showScore);
-    $courseId = api_get_course_int_id();
-    $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $table_course_setting = Database::get_course_table(TOOL_COURSE_SETTING);
-
-    if (empty($courseId)) {
-        return false;
-    }
-
-    $query = "UPDATE $main_course_table
-              SET show_score = '$showScore'
-              WHERE id = $courseId";
-    Database::query($query);
-
-    /**
-     * Course data are cached in session so we need to update both the database
-     * and the session data.
-     */
-    $_course['show_score'] = $showScore;
-    Session::write('_course', $courseInfo);
-
-    // changing the tool setting: is a student allowed to delete his/her own document
-
-    // counting the number of occurrences of this setting (if 0 => add, if 1 => update)
-    $query = "SELECT * FROM $table_course_setting
-              WHERE
-                c_id = $courseId AND
-                variable = 'student_delete_own_publication'";
-
-    $result = Database::query($query);
-    $number_of_setting = Database::num_rows($result);
-
-    if ($number_of_setting == 1) {
-        $query = "UPDATE ".$table_course_setting." SET
-                  value='".Database::escape_string($studentDeleteOwnPublication)."'
-                  WHERE variable = 'student_delete_own_publication' AND c_id = $courseId";
-        Database::query($query);
-    } else {
-        $params = [
-            'c_id' => $courseId,
-            'variable' => 'student_delete_own_publication',
-            'value' => $studentDeleteOwnPublication,
-            'category' => 'work',
-        ];
-        Database::insert($table_course_setting, $params);
-    }
-
-    return true;
-}
-
-/**
- * @param int   $item_id
- * @param array $course_info
- */
 function makeVisible($item_id, $course_info)
 {
+    if (empty($course_info) || empty($item_id)) {
+        return false;
+    }
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
     $item_id = intval($item_id);
@@ -4940,18 +4691,26 @@ function makeVisible($item_id, $course_info)
             WHERE c_id = $course_id AND id = $item_id";
     Database::query($sql);
     api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
+
+    return true;
 }
 
 /**
  * @param int   $item_id
  * @param array $course_info
+ *
+ * @return int
  */
 function makeInvisible($item_id, $course_info)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    if (empty($course_info) || empty($item_id)) {
+        return false;
+    }
+
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $item_id = intval($item_id);
     $course_id = $course_info['real_id'];
-    $sql = "UPDATE  ".$work_table."
+    $sql = "UPDATE $table
             SET accepted = 0
             WHERE c_id = $course_id AND id = '".$item_id."'";
     Database::query($sql);
@@ -4962,6 +4721,8 @@ function makeInvisible($item_id, $course_info)
         'invisible',
         api_get_user_id()
     );
+
+    return true;
 }
 
 /**
@@ -5028,7 +4789,6 @@ function showStudentList($workId)
         ],
     ];
     $token = null;
-
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student_list_overview&work_id='.$workId.'&'.api_get_cidreq();
 
     $columns = [
@@ -5250,16 +5010,16 @@ function getFile($id, $course_info, $download = true, $isCorrection = false)
  * Get the file contents for an assigment.
  *
  * @param int   $id
- * @param array $course_info
- * @param int Session ID
- * @param $correction
+ * @param array $courseInfo
+ * @param int   $sessionId
+ * @param bool  $correction
  *
  * @return array|bool
  */
-function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
+function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
 {
-    $id = intval($id);
-    if (empty($course_info) || empty($id)) {
+    $id = (int) $id;
+    if (empty($courseInfo) || empty($id)) {
         return false;
     }
     if (empty($sessionId)) {
@@ -5267,11 +5027,11 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
     }
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    if (!empty($courseInfo['real_id'])) {
+        $sql = "SELECT *
+                FROM $table
+                WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
 
-    if (!empty($course_info['real_id'])) {
-        $sql = 'SELECT *
-                FROM '.$table.'
-                WHERE c_id = '.$course_info['real_id'].' AND id = "'.$id.'"';
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -5297,11 +5057,15 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 return false;
             }
 
-            allowOnlySubscribedUser(
+            $isAllow = allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
-                $course_info['real_id']
+                $courseInfo['real_id']
             );
+
+            if (empty($isAllow)) {
+                return false;
+            }
 
             /*
             field show_score in table course :
@@ -5332,10 +5096,10 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             */
 
             $work_is_visible = $item_info['visibility'] == 1 && $row['accepted'] == 1;
-            $doc_visible_for_all = $course_info['show_score'] == 1;
+            $doc_visible_for_all = (int) $courseInfo['show_score'] === 0;
 
             $is_editor = api_is_allowed_to_edit(true, true, true);
-            $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
+            $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
 
             if ($is_editor ||
                 $student_is_owner_of_work ||
@@ -5444,7 +5208,6 @@ function exportAllStudentWorkFromPublication(
     }
 
     $workData = get_work_data_by_id($workId);
-
     if (empty($workData)) {
         return false;
     }
@@ -5477,7 +5240,7 @@ function exportAllStudentWorkFromPublication(
     $expiresOn = null;
 
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>'.get_lang('ExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>'.get_lang('PostedExpirationDate').'</strong>: '.api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 
@@ -5578,9 +5341,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
 
     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
     $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/';
-
     $zip = new PclZip($tempZipFile);
-
     $workPerUser = getWorkPerUser($userId);
 
     if (!empty($workPerUser)) {
@@ -5716,7 +5477,11 @@ function protectWork($courseInfo, $workId)
         api_not_allowed(true);
     }
 
-    allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    $isAllow = allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    if (empty($isAllow)) {
+        api_not_allowed(true);
+    }
+
     $groupInfo = GroupManager::get_group_properties($groupId);
 
     if (!empty($groupId)) {

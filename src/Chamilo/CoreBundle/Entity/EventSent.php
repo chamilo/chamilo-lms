@@ -20,28 +20,28 @@ class EventSent
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_from", type="integer", nullable=false)
      */
-    private $userFrom;
+    protected $userFrom;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_to", type="integer", nullable=true)
      */
-    private $userTo;
+    protected $userTo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="event_type_name", type="string", length=100, nullable=true)
      */
-    private $eventTypeName;
+    protected $eventTypeName;
 
     /**
      * Set userFrom.

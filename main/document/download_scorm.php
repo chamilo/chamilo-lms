@@ -21,6 +21,7 @@ if (!isset($_course)) {
     api_not_allowed(true);
 }
 
+/** @var learnpath $obj */
 $obj = Session::read('oLP');
 // If LP obj exists
 if (empty($obj)) {
@@ -57,7 +58,8 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $fixLinks = api_get_configuration_value('lp_replace_http_to_https');
     $result = DocumentManager::file_send_for_download($full_file_name, false, '', $fixLinks);
     if ($result === false) {
-        api_not_allowed(true);
+        api_not_allowed(true, get_lang('FileNotFound'), 404);
     }
+} else {
+    api_not_allowed(true, get_lang('FileNotFound'), 404);
 }
-exit;

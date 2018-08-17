@@ -18,42 +18,42 @@ class Templates
      *
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=250, nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ref_doc", type="integer", nullable=false)
      */
-    private $refDoc;
+    protected $refDoc;
 
     /**
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=250, nullable=false)
      */
-    private $image;
+    protected $image;
 
     /**
      * @var int
@@ -62,7 +62,7 @@ class Templates
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set title.

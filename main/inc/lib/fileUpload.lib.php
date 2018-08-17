@@ -242,11 +242,9 @@ function handle_uploaded_document(
     $uploadedFile['name'] = stripslashes($uploadedFile['name']);
     // Add extension to files without one (if possible)
     $uploadedFile['name'] = add_ext_on_mime($uploadedFile['name'], $uploadedFile['type']);
-
+    $sessionId = (int) $sessionId;
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
-    } else {
-        $sessionId = intval($sessionId);
     }
 
     $groupInfo = [];
@@ -278,7 +276,8 @@ function handle_uploaded_document(
             $sessionId,
             $groupId,
             $output,
-            $onlyUploadFile
+            $onlyUploadFile,
+            $whatIfFileExists
         );
     } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
@@ -373,27 +372,6 @@ function handle_uploaded_document(
                 $sessionId
             );
 
-            $documentList = DocumentManager::getDocumentByPathInCourse(
-                $courseInfo,
-                $filePath //$filePath
-            );
-
-            // This means that the path already exists in this course.
-            if (!empty($documentList) && $whatIfFileExists != 'overwrite') {
-                //$found = false;
-                // Checking if we are talking about the same course + session
-                /*foreach ($documentList as $document) {
-                    if ($document['session_id'] == $sessionId) {
-                        $found = true;
-                        break;
-                    }
-                }*/
-
-                //if ($found == false) {
-                $whatIfFileExists = 'rename';
-                //}
-            }
-
             // What to do if the target file exists
             switch ($whatIfFileExists) {
                 // Overwrite the file if it exists
@@ -483,11 +461,13 @@ function handle_uploaded_document(
 
                             // If the file is in a folder, we need to update all parent folders
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
+
                             // Display success message with extra info to user
                             if ($output) {
                                 Display::addFlash(
                                     Display::return_message(
-                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle.' '.get_lang('UplFileOverwritten'),
+                                        get_lang('UplUploadSucceeded').'<br /> '.
+                                        $documentTitle.' '.get_lang('UplFileOverwritten'),
                                         'confirmation',
                                         false
                                     )
@@ -624,7 +604,8 @@ function handle_uploaded_document(
                         if ($output) {
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('UplUploadSucceeded').'<br />'.get_lang('UplFileSavedAs').' '.$documentTitle,
+                                    get_lang('UplUploadSucceeded').'<br />'.
+                                    get_lang('UplFileSavedAs').' '.$documentTitle,
                                     'success',
                                     false
                                 )
@@ -646,12 +627,27 @@ function handle_uploaded_document(
                         return false;
                     }
                     break;
+                case 'nothing':
+                    $fileExists = file_exists($fullPath);
+                    if ($fileExists) {
+                        if ($output) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    $uploadPath.$cleanName.' '.get_lang('UplAlreadyExists'),
+                                    'warning',
+                                    false
+                                )
+                            );
+                        }
+                        break;
+                    }
+                    // no break
                 default:
                     // Only save the file if it doesn't exist or warn user if it does exist
                     if (file_exists($fullPath) && $docId) {
                         if ($output) {
                             Display::addFlash(
-                                Display::return_message($cleanName.' '.get_lang('UplAlreadyExists'), 'error', false)
+                                Display::return_message($cleanName.' '.get_lang('UplAlreadyExists'), 'warning', false)
                             );
                         }
                     } else {
@@ -1106,16 +1102,17 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  *
  * @param array  $courseInfo
  * @param array  $userInfo
- * @param array  $uploaded_file  - follows the $_FILES Structure
- * @param string $uploadPath     - destination of the upload.
- *                               This path is to append to $base_work_dir
- * @param string $base_work_dir  - base working directory of the module
- * @param int    $maxFilledSpace - amount of bytes to not exceed in the base
- *                               working directory
+ * @param array  $uploaded_file    - follows the $_FILES Structure
+ * @param string $uploadPath       - destination of the upload.
+ *                                 This path is to append to $base_work_dir
+ * @param string $base_work_dir    - base working directory of the module
+ * @param int    $maxFilledSpace   - amount of bytes to not exceed in the base
+ *                                 working directory
  * @param int    $sessionId
- * @param int    $groupId        group.id
- * @param bool   $output         Optional. If no output not wanted on success, set to false.
+ * @param int    $groupId          group.id
+ * @param bool   $output           Optional. If no output not wanted on success, set to false.
  * @param bool   $onlyUploadFile
+ * @param string $whatIfFileExists (only works if $onlyUploadFile is false)
  *
  * @return bool true if it succeeds false otherwise
  */
@@ -1129,7 +1126,8 @@ function unzip_uploaded_document(
     $sessionId = 0,
     $groupId = 0,
     $output = true,
-    $onlyUploadFile = false
+    $onlyUploadFile = false,
+    $whatIfFileExists = 'overwrite'
 ) {
     $zip = new PclZip($uploaded_file['tmp_name']);
 
@@ -1150,7 +1148,7 @@ function unzip_uploaded_document(
     $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
     mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
-    /*	Uncompress zip file*/
+    // Uncompress zip file
     // We extract using a callback function that "cleans" the path
     $zip->extract(
         PCLZIP_OPT_PATH,
@@ -1170,7 +1168,8 @@ function unzip_uploaded_document(
             $sessionId,
             $groupId,
             $output,
-            ['path' => $uploadPath]
+            ['path' => $uploadPath],
+            $whatIfFileExists
         );
     } else {
         // Copy result
@@ -1247,8 +1246,8 @@ function clean_up_path($path)
  * The list of extensions accepted/rejected can be found from
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include').
  *
- * @param	string 	filename passed by reference. The filename will be modified
- * if filter rules say so! (you can include path but the filename should look like 'abc.html')
+ * @param string $filename passed by reference. The filename will be modified
+ *                         if filter rules say so! (you can include path but the filename should look like 'abc.html')
  *
  * @return int 0 to skip file, 1 to keep file
  */
@@ -1313,9 +1312,10 @@ function filter_extension(&$filename)
  * @param string $comment
  * @param int    $readonly
  * @param bool   $saveVisibility
- * @param int    $group_id       group.id
- * @param int    $session_id     Session ID, if any
- * @param int    $userId         creator id
+ * @param int    $group_id         group.id
+ * @param int    $sessionId        Session ID, if any
+ * @param int    $userId           creator user id
+ * @param bool   $sendNotification
  *
  * @return int id if inserted document
  */
@@ -1328,14 +1328,15 @@ function add_document(
     $comment = null,
     $readonly = 0,
     $saveVisibility = true,
-    $group_id = null,
-    $session_id = 0,
-    $userId = 0
+    $group_id = 0,
+    $sessionId = 0,
+    $userId = 0,
+    $sendNotification = true
 ) {
-    $session_id = empty($session_id) ? api_get_session_id() : $session_id;
+    $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
 
-    $readonly = intval($readonly);
+    $readonly = (int) $readonly;
     $c_id = $courseInfo['real_id'];
     $params = [
         'c_id' => $c_id,
@@ -1345,7 +1346,7 @@ function add_document(
         'title' => $title,
         'comment' => $comment,
         'readonly' => $readonly,
-        'session_id' => $session_id,
+        'session_id' => $sessionId,
     ];
     $table = Database::get_course_table(TABLE_DOCUMENT);
     $documentId = Database::insert($table, $params);
@@ -1359,9 +1360,32 @@ function add_document(
                 TOOL_DOCUMENT,
                 $group_id,
                 $courseInfo,
-                $session_id,
+                $sessionId,
                 $userId
             );
+        }
+
+        $allowNotification = api_get_configuration_value('send_notification_when_document_added');
+        if ($sendNotification && $allowNotification) {
+            $courseTitle = $courseInfo['title'];
+            if (!empty($sessionId)) {
+                $sessionInfo = api_get_session_info($sessionId);
+                $courseTitle .= " ( ".$sessionInfo['name'].") ";
+            }
+
+            $url = api_get_path(WEB_CODE_PATH).
+                'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$documentId;
+            $link = Display::url(basename($title), $url, ['target' => '_blank']);
+            $userInfo = api_get_user_info($userId);
+
+            $message = sprintf(
+                get_lang('DocumentXHasBeenAddedToDocumentInYourCourseXByUserX'),
+                $link,
+                $courseTitle,
+                $userInfo['complete_name']
+            );
+            $subject = sprintf(get_lang('NewDocumentAddedToCourseX'), $courseTitle);
+            MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
         }
 
         return $documentId;
@@ -1453,25 +1477,6 @@ function item_property_update_on_folder($_course, $path, $user_id)
             }
         }
     }
-}
-
-/**
- * Returns the directory depth of the file.
- *
- * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
- *
- * @param	path+filename eg: /main/document/document.php
- *
- * @return The directory depth
- */
-function get_levels($filename)
-{
-    $levels = explode('/', $filename);
-    if (empty($levels[count($levels) - 1])) {
-        unset($levels[count($levels) - 1]);
-    }
-
-    return count($levels);
 }
 
 /**
@@ -1593,6 +1598,7 @@ function search_img_from_html($html_file)
  * @param string $title                   "folder2"
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
+ * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
  *
  * @return string actual directory name if it succeeds,
  *                boolean false otherwise
@@ -1607,7 +1613,8 @@ function create_unexisting_directory(
     $desired_dir_name,
     $title = '',
     $visibility = '',
-    $generateNewNameIfExists = false
+    $generateNewNameIfExists = false,
+    $sendNotification = true
 ) {
     $course_id = $_course['real_id'];
     $session_id = intval($session_id);
@@ -1692,7 +1699,8 @@ function create_unexisting_directory(
                     true,
                     $to_group_id,
                     $session_id,
-                    $user_id
+                    $user_id,
+                    $sendNotification
                 );
 
                 if ($document_id) {
@@ -1851,32 +1859,6 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 }
 
 /**
- * Creates a file containing an html redirection to a given url.
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- *
- * @param string $file_path
- * @param string $url
- */
-function create_link_file($file_path, $url)
-{
-    $file_content = '<html>'
-        .'<head>'
-        .'<meta http-equiv="refresh" content="1;url='.$url.'">'
-        .'</head>'
-        .'<body>'
-        .'</body>'
-        .'</html>';
-    if (file_exists($file_path)) {
-        if (!($fp = fopen($file_path, 'w'))) {
-            return false;
-        }
-
-        return fwrite($fp, $file_content);
-    }
-}
-
-/**
  * Checks the extension of a file, if it's .htm or .html
  * we use search_img_from_html to get all image paths in the file.
  *
@@ -1945,13 +1927,15 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
  *
  * @param array  $courseInfo
  * @param array  $userInfo
- * @param string $base_work_dir
- * @param string $folderPath
+ * @param string $base_work_dir    course document dir
+ * @param string $folderPath       folder to read
  * @param int    $sessionId
- * @param int    $groupId       group.id
+ * @param int    $groupId          group.id
  * @param bool   $output
  * @param array  $parent
- * @param string $uploadPath
+ * @param string $whatIfFileExists
+ *
+ * @return bool
  */
 function add_all_documents_in_folder_to_database(
     $courseInfo,
@@ -1961,7 +1945,8 @@ function add_all_documents_in_folder_to_database(
     $sessionId = 0,
     $groupId = 0,
     $output = false,
-    $parent = []
+    $parent = [],
+    $whatIfFileExists = 'overwrite'
 ) {
     if (empty($userInfo) || empty($courseInfo)) {
         return false;
@@ -1979,12 +1964,11 @@ function add_all_documents_in_folder_to_database(
                 continue;
             }
 
-            $parentPath = null;
-
+            $parentPath = '';
             if (!empty($parent) && isset($parent['path'])) {
                 $parentPath = $parent['path'];
                 if ($parentPath == '/') {
-                    $parentPath = null;
+                    $parentPath = '';
                 }
             }
 
@@ -2001,14 +1985,52 @@ function add_all_documents_in_folder_to_database(
                 );
 
                 if ($folderExists === true) {
-                    $documentId = DocumentManager::get_document_id($courseInfo, $completePath, $sessionId);
-                    if ($documentId) {
-                        $newFolderData = DocumentManager::get_document_data_by_id(
-                            $documentId,
-                            $courseInfo['code'],
-                            false,
-                            $sessionId
-                        );
+                    switch ($whatIfFileExists) {
+                        case 'overwrite':
+                            $documentId = DocumentManager::get_document_id($courseInfo, $completePath, $sessionId);
+                            if ($documentId) {
+                                $newFolderData = DocumentManager::get_document_data_by_id(
+                                    $documentId,
+                                    $courseInfo['code'],
+                                    false,
+                                    $sessionId
+                                );
+                            }
+                            break;
+                        case 'rename':
+                            $newFolderData = create_unexisting_directory(
+                                $courseInfo,
+                                $userId,
+                                $sessionId,
+                                $groupId,
+                                null,
+                                $base_work_dir,
+                                $completePath,
+                                null,
+                                null,
+                                true
+                            );
+                            break;
+                        case 'nothing':
+                            if ($output) {
+                                $documentId = DocumentManager::get_document_id($courseInfo, $completePath, $sessionId);
+                                if ($documentId) {
+                                    $folderData = DocumentManager::get_document_data_by_id(
+                                        $documentId,
+                                        $courseInfo['code'],
+                                        false,
+                                        $sessionId
+                                    );
+                                    Display::addFlash(
+                                        Display::return_message(
+                                            $folderData['path'].' '.get_lang('UplAlreadyExists'),
+                                            'warning'
+                                        )
+                                    );
+                                }
+                            }
+                            continue 2;
+                            break;
                     }
                 } else {
                     $newFolderData = create_unexisting_directory(
@@ -2034,7 +2056,8 @@ function add_all_documents_in_folder_to_database(
                     $sessionId,
                     $groupId,
                     $output,
-                    $newFolderData
+                    $newFolderData,
+                    $whatIfFileExists
                 );
             } else {
                 // Rename
@@ -2056,7 +2079,7 @@ function add_all_documents_in_folder_to_database(
                     $groupId,
                     null,
                     0,
-                    'overwrite',
+                    $whatIfFileExists,
                     $output,
                     false,
                     null,

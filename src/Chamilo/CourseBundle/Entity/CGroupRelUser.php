@@ -25,49 +25,49 @@ class CGroupRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string
      *
      * @ORM\Column(name="role", type="string", length=50, nullable=false)
      */
-    private $role;
+    protected $role;
 
     /**
      * Set userId.

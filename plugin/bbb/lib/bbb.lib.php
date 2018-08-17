@@ -64,6 +64,7 @@ class bbb
 
         $bbb_host = !empty($host) ? $host : $this->plugin->get('host');
         $bbb_salt = !empty($salt) ? $salt : $this->plugin->get('salt');
+
         $this->table = Database::get_main_table('plugin_bbb_meeting');
         $this->enableGlobalConference = $this->plugin->get('enable_global_conference') === 'true' ? true : false;
         $this->isGlobalConference = (bool) $isGlobalConference;
@@ -108,16 +109,22 @@ class bbb
             } else {
                 $this->userCompleteName = $userInfo['complete_name'];
             }
+
             $this->salt = $bbb_salt;
             $info = parse_url($bbb_host);
             $this->url = $bbb_host.'/bigbluebutton/';
+
             if (isset($info['scheme'])) {
                 $this->protocol = $info['scheme'].'://';
                 $this->url = str_replace($this->protocol, '', $this->url);
+                $urlWithProtocol = $bbb_host;
+            } else {
+                $urlWithProtocol = '://'.$bbb_host;
             }
 
             // Setting BBB api
             define('CONFIG_SECURITY_SALT', $this->salt);
+            define('CONFIG_SERVER_URL_WITH_PROTOCOL', $urlWithProtocol);
             define('CONFIG_SERVER_BASE_URL', $this->url);
 
             $this->api = new BigBlueButtonBN();
@@ -226,7 +233,7 @@ class bbb
             $extraValue = new ExtraFieldValue('course');
             $value = $extraValue->get_values_by_handler_and_field_id($this->courseId, $fieldId[0]['id']);
             if (!empty($value['value'])) {
-                $courseLimit = $value['value'];
+                $courseLimit = (int) $value['value'];
             }
         }
         if (!empty($this->sessionId)) {
@@ -237,7 +244,7 @@ class bbb
             $extraValue = new ExtraFieldValue('session');
             $value = $extraValue->get_values_by_handler_and_field_id($this->sessionId, $fieldId[0]['id']);
             if (!empty($value['value'])) {
-                $sessionLimit = $value['value'];
+                $sessionLimit = (int) $value['value'];
             }
         }
         if (!empty($sessionLimit)) {
@@ -245,7 +252,7 @@ class bbb
         } elseif (!empty($courseLimit)) {
             return $courseLimit;
         }
-        return $limit;
+        return (int) $limit;
     }
 
     /**
@@ -331,6 +338,14 @@ class bbb
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
 
+        // Check interface feature is installed
+        $interfaceFeature = $this->plugin->get('interface');
+        if ($interfaceFeature === false) {
+            if (isset($params['interface'])) {
+                unset($params['interface']);
+            }
+        }
+
         $id = Database::insert($this->table, $params);
 
         if ($id) {
@@ -393,34 +408,38 @@ class bbb
      * Save a participant in a meeting room
      * @param int $meetingId
      * @param int $participantId
+     * @param int $interface
+     *
      * @return false|int The last inserted ID. Otherwise return false
      */
-    public function saveParticipant($meetingId, $participantId)
+    public function saveParticipant($meetingId, $participantId, $interface = 0)
     {
+        $params = [
+            'meeting_id' => $meetingId,
+            'participant_id' => $participantId,
+            'in_at' => api_get_utc_datetime(),
+            'out_at' => api_get_utc_datetime()
+        ];
+
+        if ($this->plugin->get('interface') !== false) {
+            $params['interface'] = $interface;
+        }
+
         return Database::insert(
             'plugin_bbb_room',
-            [
-                'meeting_id' => $meetingId,
-                'participant_id' => $participantId,
-                'in_at' => api_get_utc_datetime(),
-                'out_at' => api_get_utc_datetime()
-            ]
+            $params
         );
     }
 
     /**
-     * Tells whether the given meeting exists and is running
-     * (using course code as name)
-     * @param string $meetingName Meeting name (usually the course code)
+     * @param string $meetingName
      *
-     * @return bool True if meeting exists, false otherwise
-     * @assert ('') === false
-     * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
+     * @return array
      */
-    public function meetingExists($meetingName)
+    public function getMeetingByName($meetingName)
     {
         if (empty($meetingName)) {
-            return false;
+            return [];
         }
 
         $courseId = api_get_course_int_id();
@@ -455,16 +474,27 @@ class bbb
             'first'
         );
 
-
         if ($this->debug) {
-            error_log("meeting_exists ".print_r($meetingData, 1));
+            error_log('meeting_exists '.print_r($meetingData, 1));
         }
 
-        if (empty($meetingData)) {
-            return false;
-        } else {
-            return true;
-        }
+        return $meetingData;
+    }
+
+    /**
+     * Tells whether the given meeting exists and is running
+     * (using course code as name)
+     * @param string $meetingName Meeting name (usually the course code)
+     *
+     * @return bool True if meeting exists, false otherwise
+     * @assert ('') === false
+     * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
+     */
+    public function meetingExists($meetingName)
+    {
+        $meetingData = $this->getMeetingByName($meetingName);
+
+        return !empty($meetingData);
     }
 
     /**
@@ -563,14 +593,15 @@ class bbb
 
         $url = false;
         if ($meetingInfoExists) {
-            $joinParams = array(
+            $joinParams = [
                 'meetingId' => $meetingData['remote_id'], //	-- REQUIRED - A unique id for the meeting
                 'username' => $this->userCompleteName, //-- REQUIRED - The name that will display for the user in the meeting
                 'password' => $pass, //-- REQUIRED - The attendee or moderator password, depending on what's passed here
                 //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                 'userID' => api_get_user_id(), //-- OPTIONAL - string
-                'webVoiceConf' => '' //	-- OPTIONAL - string
-            );
+                'webVoiceConf' => '', //	-- OPTIONAL - string
+                'interface' => $this->checkInterface($meetingData),
+            ];
             $url = $this->api->getJoinMeetingURL($joinParams);
             $url = $this->protocol.$url;
         }
@@ -685,16 +716,6 @@ class bbb
                      ),
                  );
             }
-        }
-
-        if ($this->isGlobalConferencePerUserEnabled()) {
-             $conditions = array(
-                 'where' => array(
-                     'user_id = ?' => array(
-                         $this->userId
-                     ),
-                 ),
-             );
         }
 
         if (!empty($dateRange)) {
@@ -844,18 +865,16 @@ class bbb
             $item['unpublish_url'] = $this->unPublishUrl($meetingBBB);
 
             if ($meetingDB['status'] == 1) {
-                $joinParams = array(
+                $joinParams = [
                     'meetingId' => $meetingDB['remote_id'], //-- REQUIRED - A unique id for the meeting
                     'username' => $this->userCompleteName, //-- REQUIRED - The name that will display for the user in the meeting
                     'password' => $pass, //-- REQUIRED - The attendee or moderator password, depending on what's passed here
                     'createTime' => '', //-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                     'userID' => '', //	-- OPTIONAL - string
-                    'webVoiceConf' => '' //	-- OPTIONAL - string
-                );
-                $item['go_url'] = '';
-                if (!empty($pass)) {
-                    $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
-                }
+                    'webVoiceConf' => '', //	-- OPTIONAL - string
+                    'interface' => $this->checkInterface($meetingDB),
+                ];
+                $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
             }
             $item = array_merge($item, $meetingDB, $meetingBBB);
 
@@ -865,6 +884,42 @@ class bbb
         }
 
         return $newMeetingList;
+    }
+
+    /**
+     * @param $meetingInfo
+     *
+     * @return int
+     */
+    public function checkInterface($meetingInfo)
+    {
+        $interface = BBBPlugin::LAUNCH_TYPE_DEFAULT;
+
+        $type = $this->plugin->get('launch_type');
+        switch ($type) {
+            case BBBPlugin::LAUNCH_TYPE_DEFAULT:
+                $interface = $this->plugin->get('interface');
+                break;
+            case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
+                if (isset($meetingInfo['interface'])) {
+                    $interface = $meetingInfo['interface'];
+                }
+                break;
+            case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
+                if (isset($meetingInfo['id'])) {
+                    $roomInfo = $this->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
+                    if (!empty($roomInfo) && isset($roomInfo['interface'])) {
+                        $interface = $roomInfo['interface'];
+                    } else {
+                        if (isset($_REQUEST['interface'])) {
+                            $interface = isset($_REQUEST['interface']) ? (int) $_REQUEST['interface'] : 0;
+                        }
+                    }
+                }
+                break;
+        }
+
+        return $interface;
     }
 
     /**
@@ -1345,6 +1400,7 @@ class bbb
     /**
      * Get the meeting info from DB by its name
      * @param string $name
+     *
      * @return array
      */
     public function findMeetingByName($name)
@@ -1360,16 +1416,33 @@ class bbb
     }
 
     /**
+     * Get the meeting info from DB by its name
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getMeeting($id)
+    {
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_meeting',
+            array('where' => array('id = ?' => $id)),
+            'first'
+        );
+
+        return $meetingData;
+    }
+
+    /**
      * @param int $meetingId
      * @return array
      */
-    public function findMeetingParticipants($meetingId)
+    public function findConnectedMeetingParticipants($meetingId)
     {
-        $em = Database::getManager();
         $meetingData = Database::select(
             '*',
             'plugin_bbb_room',
-            array('where' => array('meeting_id = ?' => intval($meetingId)))
+            array('where' => array('meeting_id = ? AND in_at IS NOT NULL' => $meetingId))
         );
         $participantIds = [];
         $return = [];
@@ -1384,13 +1457,35 @@ class bbb
             $return[] = [
                 'id' => $participantInfo['id'],
                 'meeting_id' => $participantInfo['meeting_id'],
-                'participant' => $em->find('ChamiloUserBundle:User', $participantInfo['participant_id']),
+                'participant' => api_get_user_entity($participantInfo['participant_id']),
                 'in_at' => $participantInfo['in_at'],
                 'out_at' => $participantInfo['out_at']
             ];
         }
 
         return $return;
+    }
+
+    /**
+     * @param int $meetingId
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getMeetingParticipantInfo($meetingId, $userId)
+    {
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_room',
+            array('where' => array('meeting_id = ? AND participant_id = ?' => [$meetingId, $userId])),
+            'first'
+        );
+
+        if ($meetingData) {
+            return $meetingData;
+        }
+
+        return [];
     }
 
     /**

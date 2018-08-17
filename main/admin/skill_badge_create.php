@@ -89,11 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$interbreadcrumb = [
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-        'name' => get_lang('Administration'),
-    ],
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('Administration'),
 ];
 $interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
 

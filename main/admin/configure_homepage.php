@@ -380,11 +380,11 @@ if (!empty($action)) {
             case 'edit_tabs':
             case 'insert_link':
             case 'edit_link':
-                $link_index = intval($_POST['link_index']);
-                $insert_where = intval($_POST['insert_where']);
+                $link_index = (isset($_POST['link_index']) ? intval($_POST['link_index']) : 0);
+                $insert_where = (isset($_POST['insert_where']) ? intval($_POST['insert_where']) : 0);
                 $link_name = trim(stripslashes($_POST['link_name']));
                 $link_url = trim(stripslashes($_POST['link_url']));
-                $add_in_tab = intval($_POST['add_in_tab']);
+                $add_in_tab = (isset($_POST['add_in_tab']) ? intval($_POST['add_in_tab']) : 0);
                 $link_html = trim(stripslashes($_POST['link_html']));
                 $filename = trim(stripslashes($_POST['filename']));
                 $target_blank = isset($_POST['target_blank']);
@@ -1010,10 +1010,10 @@ switch ($action) {
                 <div class="col-md-3">
 
                     <!-- login block -->
-                    <div id="login_block" class="panel panel-default">
+                    <div id="login-block" class="panel panel-default">
                         <div class="panel-body">
-                            <?php echo api_display_language_form(); ?>
-                            <form id="formLogin" class="form-horizontal">
+                            <?php echo api_display_language_form(false, true); ?>
+                            <form id="form-login" class="form-horizontal">
                                 <div class="input-group">
                                     <div class="input-group-addon"><em class="fa fa-user"></em></div>
                                     <input class="form-control" type="text" id="login" value="" disabled="disabled"/>

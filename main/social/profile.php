@@ -580,7 +580,7 @@ if ($show_full_profile) {
     }
 
     // Block Social User Feeds
-    $user_feeds = SocialManager::get_user_feeds($user_id);
+    $user_feeds = SocialManager::getUserRssFeed($user_id);
 
     if (!empty($user_feeds)) {
         $social_rss_block = Display::panel($user_feeds, get_lang('RSSFeeds'));

@@ -115,7 +115,8 @@ if (!empty($action)) {
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
                         ($current_forum_category && $current_forum_category['visibility'] == 0) ||
-                        $current_forum['visibility'] == 0)
+                        $current_forum['visibility'] == 0
+                    )
                 ) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
                     break;

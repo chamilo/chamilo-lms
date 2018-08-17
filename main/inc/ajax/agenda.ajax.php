@@ -120,7 +120,7 @@ switch ($action) {
             $DaysShort = api_get_week_days_short();
             $MonthsLong = api_get_months_long();
 
-            $user_id = intval($_REQUEST['user_id']);
+            $user_id = (int) $_REQUEST['user_id'];
             $my_course_list = CourseManager::get_courses_list_by_user_id($user_id, true);
             if (!is_array($my_course_list)) {
                 // this is for the special case if the user has no courses (otherwise you get an error)

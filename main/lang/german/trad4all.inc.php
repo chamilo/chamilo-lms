@@ -2219,7 +2219,7 @@ $AnnouncementModified = "Ankündigung wurde verändert";
 $AnnouncementAdded = "Ankündigung wurde hinzugefügt";
 $AnnouncementDeleted = "Ankündigung wurde gelöscht";
 $AnnouncementPublishedOn = "Veröffentlicht am";
-$AddAnnouncement = "Als Ankündigung hinzugefügt";
+$AddAnnouncement = "Ankündigung hinzufügen";
 $AnnouncementDeleteAll = "Liste der Ankündigungen löschen";
 $professorMessage = "Mitteilung vom Kursleiter";
 $EmailSent = "und per E-Mail an Kursteilnehmer gesendet";
@@ -5129,7 +5129,7 @@ $Assignment = "Ausarbeitungen";
 $ExpiryDateToSendWorkIs = "Abgabeschluss für Ausarbeitungen";
 $EnableExpiryDate = "Verspätete Abgabe ermöglichen (Sichtbar für Teilnehmer)";
 $EnableEndDate = "Letztse Abgabedatum aktivieren (Nicht sichtbar für Teilnehmer)";
-$IsNotPosibleSaveTheDocument = "Dokument speichern nicht möglich";
+$ImpossibleToSaveTheDocument = "Dokument speichern nicht möglich";
 $EndDateCannotBeBeforeTheExpireDate = "Das End-Datum kann nicht vor dem Ablaufdatum sein";
 $SelectAFilter = "Filter wählen";
 $FilterByNotExpired = "Sortiere nach nicht abgelaufen";
@@ -7859,9 +7859,7 @@ $TooManyRepetitions = "Zu viele Wiederholungen";
 $YourPasswordContainsSequences = "Ihr Passwort enthält Sequenzen";
 $PasswordVeryWeak = "Sehr schwach";
 $UserXHasBeenAssignedToBoss = "Der Schüler %s, die Ihnen zugeordnet";
-$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden Vormund für den Lernenden %s ernannt.
-
-Sie können sein Profil zugreifen hier:% s";
+$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden dem Teilnehmer %s als Tutor zugewiesen. Zum Profil: %s";
 $ShortName = "Kurzname";
 $Portal = "Portal";
 $CourseUserDocument = "Kursbenutzerdokument";
@@ -7971,5 +7969,18 @@ $NewPasswordRequirementMaxXLowercase = "Maximale %s Kleinbuchstaben";
 $NewPasswordRequirementMaxXUppercase = "Maximale %s Großbuchstaben";
 $NewPasswordRequirementMaxXNumeric = "Maximale %s numerische (0-9) Zeichen";
 $NewPasswordRequirementMaxXLength = "Maximale %s Zeichen insgesamt";
+$SendEmailToTeacherWhenStudentStartQuiz = "E-Mail an den Tutor senden, wenn der Lernende eine Übung startet";
+$SendEmailToTeacherWhenStudentEndQuiz = "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat, aber nur wenn er eine offene Frage beantwortet hat";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat, aber nur wenn er eine mündliche Frage beantwortet hat";
+$TempScoreXQuestionsNotCorrectedYet = "Temporäre Auswertung: %s offene Frage(n) noch nicht korrigiert.";
 $GoToSurvey = "Zur Umfrage";
+$OralExpressionHelpText = "Du kannst während der Aufnahme auf « Aufnahme anhalten » klicken. Wenn du nicht zufrieden bist, nimm dich erneut auf. Dies wird die vorherige Aufnahme überschreiben. Zufrieden? Um deine Aufnahme zu senden, klick einfach auf « Übung beenden ».";
+$MyGeneralCertificate = "Mein Zertifikat";
+$BossAlertMsgSentToUserXTitle = "Follow-up Nachricht über Lernende %s";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Hallo,<br/><br/>
+
+Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
+
+Die Nachricht ist an %s sichtbar";
 ?>

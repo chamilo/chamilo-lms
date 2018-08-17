@@ -28,20 +28,18 @@ $tool_name = get_lang('DelCourse');
 
 if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     CourseManager::delete_course($_course['sysCode']);
-    $obj_cat = new Category();
-    $obj_cat->update_category_delete($_course['sysCode']);
 
     // DELETE CONFIRMATION MESSAGE
     Session::erase('_cid');
     Session::erase('_real_cid');
-    $noPHP_SELF = true;
     $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
     $message .= get_lang('HasDel');
     $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
     $message .= '<p>'.get_lang('ByDel').'</p>';
-    $message .= '<p><a class="btn btn-primary" href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
+    $message .= '<p><a class="btn btn-primary" 
+        href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
         get_lang('No').'</a>&nbsp;<a class="btn btn-danger" href="'.api_get_self().'?delete=yes&'.api_get_cidreq().'">'.
         get_lang('Yes').'</a></p>';
     $interbreadcrumb[] = [

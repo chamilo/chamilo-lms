@@ -80,7 +80,8 @@ class ExerciseResult
                     exe_user_id as excruid,
                     te.exe_duration as duration,
                     te.orig_lp_id as orig_lp_id,
-                    tlm.name as lp_name
+                    tlm.name as lp_name,
+                    user.username
                 FROM $TBL_EXERCISES  AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te 
                 ON (te.exe_exo_id = ce.id)
@@ -110,7 +111,8 @@ class ExerciseResult
                         te.exe_duration as duration,
                         ce.results_disabled as exdisabled,
                         te.orig_lp_id as orig_lp_id,
-                        tlm.name as lp_name
+                        tlm.name as lp_name,
+                        user.username
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te 
                     ON (te.exe_exo_id = ce.id)
@@ -212,6 +214,7 @@ class ExerciseResult
                     }
                     $return[$i]['user_id'] = $results[$i]['excruid'];
                     $return[$i]['email'] = $results[$i]['exemail'];
+                    $return[$i]['username'] = $results[$i]['username'];
                 }
                 $return[$i]['title'] = $result['extitle'];
                 $return[$i]['start_date'] = api_get_local_time($result['exstart']);
@@ -256,6 +259,7 @@ class ExerciseResult
 
                             $return[$i]['user_id'] = $student['user_id'];
                             $return[$i]['email'] = $student['email'];
+                            $return[$i]['username'] = $student[$i]['username'];
                         }
                         $return[$i]['title'] = null;
                         $return[$i]['start_date'] = null;
@@ -332,6 +336,7 @@ class ExerciseResult
             $data .= get_lang('OfficialCode').';';
         }
 
+        $data .= get_lang('LoginName').';';
         $data .= get_lang('Email').';';
         $data .= get_lang('Groups').';';
 
@@ -379,6 +384,7 @@ class ExerciseResult
             }
 
             // Email
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['username']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
 
@@ -503,6 +509,7 @@ class ExerciseResult
                 $column++;
             }
 
+            $worksheet->setCellValueByColumnAndRow($column++, $line, get_lang('LoginName'));
             $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Email'));
             $column++;
         }
@@ -614,6 +621,15 @@ class ExerciseResult
                     $column++;
                 }
 
+                $worksheet->setCellValueByColumnAndRow(
+                    $column++,
+                    $line,
+                    api_html_entity_decode(
+                        strip_tags($row['username']),
+                        ENT_QUOTES,
+                        $charset
+                    )
+                );
                 $worksheet->setCellValueByColumnAndRow(
                     $column,
                     $line,

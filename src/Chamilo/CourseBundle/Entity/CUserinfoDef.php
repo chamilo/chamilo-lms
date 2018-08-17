@@ -25,49 +25,49 @@ class CUserinfoDef
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=80, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="line_count", type="boolean", nullable=false)
      */
-    private $lineCount;
+    protected $lineCount;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="rank", type="boolean", nullable=false)
      */
-    private $rank;
+    protected $rank;
 
     /**
      * Set title.

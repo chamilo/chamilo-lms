@@ -20,42 +20,42 @@ class SequenceCondition
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="mat_op", type="string")
      */
-    private $mathOperation;
+    protected $mathOperation;
 
     /**
      * @var string
      *
      * @ORM\Column(name="param", type="float")
      */
-    private $param;
+    protected $param;
 
     /**
      * @var string
      *
      * @ORM\Column(name="act_true", type="integer")
      */
-    private $actTrue;
+    protected $actTrue;
 
     /**
      * @var string
      *
      * @ORM\Column(name="act_false", type="string")
      */
-    private $actFalse;
+    protected $actFalse;
 
     /**
      * Get id.

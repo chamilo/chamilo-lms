@@ -82,6 +82,21 @@ hr{
 #course-block .list-group .list-group-item{
     float: left;
 }
+#form-login .form-group{
+    display: none;
+}
+#login_block .nav-pills {
+    margin-bottom: 0;
+    padding-top: 0;
+    margin-top: 0;
+}
+#form-login label{
+    display:none;
+}
+#form-login .input-group{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 .title{
     position: static;
     font-size: 25px;
@@ -121,6 +136,18 @@ hr{
 }
 .title-green a:hover{
     color: #666;
+}
+.teachers{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+.teachers li{
+    display: inline-block;
+}
+.course-items-session img{
+    display: inline-block;
 }
 .list-faq{
     border: 1px solid #e5e5e5;
@@ -690,9 +717,9 @@ footer #footer_right{
     color: #FFFFFF;
 }
 .hotspot-image{
-    margin: auto;
-    border: 2px solid #e3e3e3;
-    padding: 10px;
+    /*margin: auto;*/
+    /*border: 2px solid #e3e3e3;*/
+    /*padding: 10px;*/
 }
 .sidebar-well .well{
     border-radius: 0;
@@ -1156,12 +1183,12 @@ svg path{
     stroke-width: 2;
 }
 svg circle{
-    fill:rgb(255,255,255);
+    /*fill:rgb(255,255,255);
     stroke:rgb(132,189,0);
     stroke-width: 2;
     r: 10;
     cy:15;
-    cx:15;
+    cx:15;*/
 }
 .point_end ._jsPlumb_endpoint svg circle{
     fill:rgb(255,255,255);
@@ -1368,6 +1395,9 @@ svg circle{
     color: #70A42D;
     padding: 10px;
 }
+.exercise-overview .page-header img{
+    display: none;
+}
 .table.table-striped tr td .alert.alert-warning{
     border-top: none;
     padding-left: 0;
@@ -1568,6 +1598,7 @@ blockquote p {
 .session-teachers{
     display: none;
 }
+
 /* Large desktop */
 @media (min-width: 1200px) {
 

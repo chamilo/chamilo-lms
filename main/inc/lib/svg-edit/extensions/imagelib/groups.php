@@ -25,7 +25,7 @@ $group_disk_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document
 $group_web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
 
 //get all group files and folders
-$docs_and_folders = DocumentManager::get_all_document_data(
+$docs_and_folders = DocumentManager::getAllDocumentData(
     $course_info,
     $groupdirpath,
     $groupIid,
@@ -35,12 +35,12 @@ $docs_and_folders = DocumentManager::get_all_document_data(
 );
 
 // get all group filenames
-$array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
+$array_to_search = !empty($docs_and_folders) ? $docs_and_folders : array();
 
 if (count($array_to_search) > 0) {
-	while (list($key) = each($array_to_search)) {
-		$all_files[] = basename($array_to_search[$key]['path']);
-	}
+    while (list($key) = each($array_to_search)) {
+        $all_files[] = basename($array_to_search[$key]['path']);
+    }
 }
 
 //get all svg and png group files

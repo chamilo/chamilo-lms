@@ -74,5 +74,6 @@ api_add_setting(0, 'vchamilo_vcrontickperiod', 'vchamilo', 'setting', 'Plugins')
 // create root storage directory for templates
 global $_configuration;
 if (!is_dir($_configuration['root_sys'].'plugin/vchamilo/templates')) {
-    mkdir($_configuration['root_sys'].'plugin/vchamilo/templates', 0777, true);
+    $mode = api_get_permissions_for_new_directories();
+    mkdir($_configuration['root_sys'].'plugin/vchamilo/templates', $mode, true);
 }

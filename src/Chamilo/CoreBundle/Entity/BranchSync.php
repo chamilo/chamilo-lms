@@ -22,181 +22,181 @@ class BranchSync
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false, unique=false)
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="unique_id", type="string", length=50, nullable=false, unique=true)
      */
-    private $uniqueId;
+    protected $uniqueId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="branch_name", type="string", length=250, nullable=false, unique=false)
      */
-    private $branchName;
+    protected $branchName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="branch_ip", type="string", length=40, nullable=true, unique=false)
      */
-    private $branchIp;
+    protected $branchIp;
 
     /**
      * @var float
      *
      * @ORM\Column(name="latitude", type="decimal", nullable=true, unique=false)
      */
-    private $latitude;
+    protected $latitude;
 
     /**
      * @var float
      *
      * @ORM\Column(name="longitude", type="decimal", nullable=true, unique=false)
      */
-    private $longitude;
+    protected $longitude;
 
     /**
      * @var int
      *
      * @ORM\Column(name="dwn_speed", type="integer", nullable=true, unique=false)
      */
-    private $dwnSpeed;
+    protected $dwnSpeed;
 
     /**
      * @var int
      *
      * @ORM\Column(name="up_speed", type="integer", nullable=true, unique=false)
      */
-    private $upSpeed;
+    protected $upSpeed;
 
     /**
      * @var int
      *
      * @ORM\Column(name="delay", type="integer", nullable=true, unique=false)
      */
-    private $delay;
+    protected $delay;
 
     /**
      * @var string
      *
      * @ORM\Column(name="admin_mail", type="string", length=250, nullable=true, unique=false)
      */
-    private $adminMail;
+    protected $adminMail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="admin_name", type="string", length=250, nullable=true, unique=false)
      */
-    private $adminName;
+    protected $adminName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="admin_phone", type="string", length=250, nullable=true, unique=false)
      */
-    private $adminPhone;
+    protected $adminPhone;
 
     /**
      * @var int
      *
      * @ORM\Column(name="last_sync_trans_id", type="bigint", nullable=true, unique=false)
      */
-    private $lastSyncTransId;
+    protected $lastSyncTransId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_sync_trans_date", type="datetime", nullable=true, unique=false)
      */
-    private $lastSyncTransDate;
+    protected $lastSyncTransDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="last_sync_type", type="string", length=20, nullable=true, unique=false)
      */
-    private $lastSyncType;
+    protected $lastSyncType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
      */
-    private $sslPubKey;
+    protected $sslPubKey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="branch_type", type="string", length=250, nullable=true, unique=false)
      */
-    private $branchType;
+    protected $branchType;
 
     /**
      * @var int
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
-    private $lft;
+    protected $lft;
 
     /**
      * @var int
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
      */
-    private $rgt;
+    protected $rgt;
 
     /**
      * @var int
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
      */
-    private $lvl;
+    protected $lvl;
 
     /**
      * @var int
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
      */
-    private $root;
+    protected $root;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true, unique=false)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="BranchSync", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="BranchSync", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
      */
-    private $children;
+    protected $children;
 
     /**
      * Constructor.
@@ -758,6 +758,26 @@ class BranchSync
     public function setUniqueId($uniqueId)
     {
         $this->uniqueId = $uniqueId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return BranchSync
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
 
         return $this;
     }

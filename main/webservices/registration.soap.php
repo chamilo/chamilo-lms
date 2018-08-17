@@ -899,7 +899,7 @@ function WSCreateUsersPasswordCrypted($params)
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save the external system's id into user_field_value table.
-                        $res = UserManager::update_extra_field_value(
+                        UserManager::update_extra_field_value(
                             $r_check_user[0],
                             $extra_field_name,
                             $extra_field_value
@@ -1275,11 +1275,8 @@ function WSCreateUserPasswordCrypted($params)
     $debug = 1;
     if ($debug) {
         error_log('WSCreateUserPasswordCrypted');
-    }
-    if ($debug) {
         error_log(print_r($params, 1));
     }
-
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -1420,7 +1417,9 @@ function WSCreateUserPasswordCrypted($params)
         }
     } else {
         if ($debug) {
-            error_log("User not found with original_id = $original_user_id_value and original_name = $original_user_id_name");
+            error_log(
+                "User not found with original_id = $original_user_id_value and original_name = $original_user_id_name"
+            );
         }
     }
 
@@ -1468,6 +1467,9 @@ function WSCreateUserPasswordCrypted($params)
     Database::query($sql);
     $return = Database::insert_id();
     if ($return) {
+        if ($debug) {
+            error_log("New user created. user_id = $return");
+        }
         $sql = "UPDATE $table_user SET user_id = id WHERE id = $return";
         Database::query($sql);
 
@@ -1517,6 +1519,9 @@ function WSCreateUserPasswordCrypted($params)
         }
 
         return 0;
+    }
+    if ($debug) {
+        error_log("Return value: $return");
     }
 
     return $return;
@@ -2731,6 +2736,12 @@ $server->wsdl->addComplexType(
 
 function WSHelperActionOnUsers($params, $type)
 {
+    $debug = 1;
+    if ($debug) {
+        error_log("WSHelperActionOnUsers");
+        error_log(print_r($params, 1));
+    }
+
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -2746,12 +2757,19 @@ function WSHelperActionOnUsers($params, $type)
             $original_user_id['original_user_id_name']
         );
         if ($user_id > 0) {
-            if ($type == "delete") {
+            if ($debug) {
+                error_log("User found: $user_id");
+            }
+            if ($type == 'delete') {
                 $result = UserManager::delete_user($user_id);
             } elseif ($type == "disable") {
                 $result = UserManager::disable($user_id);
             } elseif ($type == "enable") {
                 $result = UserManager::enable($user_id);
+            }
+        } else {
+            if ($debug) {
+                error_log("User id not found: $user_id");
             }
         }
         $results[] = $result ? 1 : 0;
@@ -2782,7 +2800,7 @@ $server->register(
 
 function WSDeleteUsers($params)
 {
-    return WSHelperActionOnUsers($params, "delete");
+    return WSHelperActionOnUsers($params, 'delete');
 }
 
 /** WSDisableUsers */
@@ -4230,7 +4248,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSEditSession', // method name
+$server->register(
+    'WSEditSession', // method name
     ['editSession' => 'tns:editSession'], // input parameters
     ['return' => 'tns:results_editSession'], // output parameters
     'urn:WSRegistration', // namespace
@@ -4622,16 +4641,19 @@ function WSSubscribeUserToCourse($params)
                 $original_course_id['original_course_id_name']
             );
 
-            $courseCode = $courseInfo['code'];
+            $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
             if (empty($courseCode)) {
+                if ($debug) {
+                    error_log('WSSubscribeUserToCourse course not found');
+                }
                 // Course was not found
                 $resultValue = 0;
             } else {
                 if ($debug) {
                     error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
                 }
-                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false);
+                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false, false);
                 if ($result) {
                     $resultValue = 1;
                     if ($debug) {
@@ -4639,7 +4661,7 @@ function WSSubscribeUserToCourse($params)
                     }
                 } else {
                     if ($debug) {
-                        error_log('WSSubscribeUserToCourse NOT subscribed: ');
+                        error_log('WSSubscribeUserToCourse NOT subscribed.');
                     }
                 }
             }
@@ -4745,8 +4767,9 @@ function WSSubscribeUserToCourseSimple($params)
             if ($debug) {
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
-            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status)) {
-                $result = 'User was not registered possible reasons: User already registered to the course, Course visibility doesnt allow user subscriptions ';
+            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status, false, false)) {
+                $result = 'User was not registered possible reasons: User already registered to the course, 
+                           Course visibility doesnt allow user subscriptions ';
                 if ($debug) {
                     error_log($result);
                 }
@@ -4851,11 +4874,27 @@ $server->wsdl->addComplexType(
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
+
+// Prepare output params, in this case will return an array
+$server->wsdl->addComplexType(
+    'UserWithExtraFields',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
+        'firstname' => ['name' => 'firstname', 'type' => 'xsd:string'],
+        'lastname' => ['name' => 'lastname', 'type' => 'xsd:string'],
+        'extra_fields' => ['name' => 'extra_fields', 'type' => 'xsd:string'],
+    ]
+);
+
 // Register the method to expose
 $server->register(
     'WSGetUserFromUsername', // method name
     ['GetUserFromUsername' => 'tns:GetUserArgUsername'], // input params
-    ['return' => 'tns:User'], // output parameters
+    ['return' => 'tns:UserWithExtraFields'], // output parameters
     'urn:WSRegistration', // namespace
     'urn:WSRegistration#WSGetUserFromUsername', // soapaction
     'rpc', // style
@@ -4878,20 +4917,120 @@ function WSGetUserFromUsername($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
+    // Get user id
+    $user_data = api_get_user_info_from_username($params['username']);
+
+    $result = [];
+    $result['user_id'] = '';
+    $result['firstname'] = '';
+    $result['lastname'] = '';
+    $result['extra_fields'] = '';
+
+    if (empty($user_data)) {
+        // If user was not found, there was a problem
+        if ($debug) {
+            error_log('User not found :(');
+        }
+    } else {
+        $result['user_id'] = $user_data['user_id'];
+        $result['firstname'] = $user_data['firstname'];
+        $result['lastname'] = $user_data['lastname'];
+        $result['email'] = $user_data['email'];
+
+        // Get extra fields
+        $fieldValue = new ExtraFieldValue('user');
+        $extra = $fieldValue->getAllValuesByItem($result['user_id']);
+        $result['extra_fields'] = json_encode($extra);
+
+        if ($debug) {
+            error_log('User found :) return value '.print_r($result, 1));
+        }
+    }
+
+    return $result;
+}
+
+$server->wsdl->addComplexType(
+    'GetUserArgUsernameWithOriginal',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    [
+        'username' => ['name' => 'username', 'type' => 'xsd:string'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
+);
+// Register the method to expose
+$server->register(
+    'WSUpdateUserOriginalIdFromUsername', // method name
+    ['WSUpdateUserOriginalIdFromUsername' => 'tns:GetUserArgUsernameWithOriginal'], // input params
+    ['return' => 'tns:User'], // output parameters
+    'urn:WSRegistration', // namespace
+    'urn:WSRegistration#WSGetUserFromUsername', // soapaction
+    'rpc', // style
+    'encoded', // use
+    'This service get user information by username'            // documentation
+);
+
+// define the method WSGetUserFromUsername
+function WSUpdateUserOriginalIdFromUsername($params)
+{
+    global $debug;
+    if ($debug) {
+        error_log('WSUpdateUserOriginalIdFromUsername');
+    }
+    if ($debug) {
+        error_log('$params: '.print_r($params, 1));
+    }
+
+    if (!WSHelperVerifyKey($params)) {
+        return returnError(WS_ERROR_SECRET_KEY);
+    }
+
     $result = [];
 
     // Get user id
-    $user_data = api_get_user_info($params['username']);
+    $user_data = api_get_user_info_from_username($params['username']);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
         $result['user_id'] = '';
         $result['firstname'] = '';
         $result['lastname'] = '';
+
+        if ($debug) {
+            error_log('User not found :(');
+        }
     } else {
         $result['user_id'] = $user_data['user_id'];
         $result['firstname'] = $user_data['firstname'];
         $result['lastname'] = $user_data['lastname'];
+        $result['email'] = $user_data['email'];
+
+        $resultUpdate = UserManager::update_extra_field_value(
+            $user_data['user_id'],
+            $params['original_user_id_name'],
+            $params['original_user_id_value']
+        );
+
+        $fieldValue = new ExtraFieldValue('user');
+        $extraList = $fieldValue->getAllValuesByItem(
+            $result['user_id']
+        );
+
+        $result['extra'] = $extraList;
+
+        if ($debug) {
+            if ($resultUpdate) {
+                error_log('User updated :) ');
+            } else {
+                error_log('User not updated :(');
+            }
+            error_log('$result: '.print_r($result, 1));
+        }
     }
 
     return $result;
@@ -5345,7 +5484,7 @@ function WSSuscribeUsersToSession($params)
                     continue; // user_id is not active.
                 }
 
-                SessionManager::subscribe_users_to_session(
+                SessionManager::subscribeUsersToSession(
                     $sessionId,
                     [$user_id],
                     SESSION_VISIBLE_READ_ONLY,
@@ -5442,7 +5581,7 @@ function WSSubscribeUserToSessionSimple($params)
                 error_log($result);
             }
         } else {
-            SessionManager::subscribe_users_to_session(
+            SessionManager::subscribeUsersToSession(
                 $session_id,
                 [$user_id],
                 SESSION_VISIBLE_READ_ONLY,
@@ -5728,7 +5867,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSSuscribeCoursesToSession', // method name
+$server->register(
+    'WSSuscribeCoursesToSession', // method name
     ['subscribeCoursesToSession' => 'tns:subscribeCoursesToSession'], // input parameters
     ['return' => 'tns:results_subscribeCoursesToSession'], // output parameters
     'urn:WSRegistration', // namespace
@@ -6144,7 +6284,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSUpdateUserApiKey', // method name
+$server->register(
+    'WSUpdateUserApiKey', // method name
     ['userApiKey' => 'tns:userApiKey'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSRegistration', // namespace
@@ -6248,7 +6389,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSListSessions', // method name
+$server->register(
+    'WSListSessions', // method name
     ['input' => 'tns:session_arg'], // input parameters
     ['return' => 'tns:sessions'], // output parameters
     'urn:WSRegistration', // namespace
@@ -6665,7 +6807,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCreateGroup', // method name
+$server->register(
+    'WSCreateGroup', // method name
     ['createGroup' => 'tns:createGroup'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSRegistration', // namespace
@@ -6877,11 +7020,13 @@ $server->wsdl->addComplexType(
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
         'group_id' => ['name' => 'group_id', 'type' => 'xsd:string'],
+        'relation_type' => ['name' => 'relation_type', 'type' => 'xsd:string'],
     ]
 );
 
 // Register the method to expose
-$server->register('WSAddUserToGroup', // method name
+$server->register(
+    'WSAddUserToGroup', // method name
     ['addUserToGroup' => 'tns:addUserToGroup'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSRegistration', // namespace
@@ -6900,7 +7045,12 @@ function WSAddUserToGroup($params)
 
     $userGroup = new UserGroup();
 
-    return $userGroup->add_user_to_group($params['user_id'], $params['group_id']);
+    return $userGroup->subscribe_users_to_usergroup(
+        $params['group_id'],
+        [0 => $params['user_id']],
+        false,
+        $params['relation_type']
+    );
 }
 
 /* Add user to group Web Service end */

@@ -12,7 +12,6 @@ Feature: Exercise tool
     When I fill in the following:
       | category_name | Category 1 |
     And I fill in ckeditor field "category_description" with "Category 1 description"
-
     And I press "SubmitNote"
     Then I should see "Category added"
 
@@ -90,7 +89,7 @@ Feature: Exercise tool
     And I follow "Fill blanks or form"
     When I fill in the following:
       | questionName | Fill blanks |
-    Then I fill in ckeditor field "answer" with "Romeo and [Juliet]"
+    Then I fill in ckeditor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
     And I press "submitQuestion"
     Then I should see "Item added"
 
@@ -209,7 +208,6 @@ Feature: Exercise tool
     And I press "submitQuestion"
     Then I should see "Item added"
 
-
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
@@ -234,7 +232,6 @@ Feature: Exercise tool
     And I press "submitQuestion"
     Then I should see "Item added"
 
-
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
@@ -252,6 +249,18 @@ Feature: Exercise tool
     # Question 3
     Then I fill in the following:
       | choice_id_3_0 | Juliet |
+      | choice_id_3_1 | Hätten |
+      | choice_id_3_2 | möchte |
+      | choice_id_3_3 | wäre |
+      | choice_id_3_4 | können |
+      | choice_id_3_5 | Könnten |
+      | choice_id_3_6 | Ärger |
+      | choice_id_3_7 | voilà |
+      | choice_id_3_8 | müssen |
+      | choice_id_3_9 | l'été |
+      | choice_id_3_10 | cherchent à |
+      | choice_id_3_11 | Übung |
+    Then I fill in select bootstrap static by text "#choice_id_3_12" select "Ärger"
     And wait for the page to be loaded
     Then I press "Next question"
     # Question 4 - Matching
@@ -266,11 +275,13 @@ Feature: Exercise tool
     Then wait for the page to be loaded
     Then I press "Next question"
     # Question 7 - Exact answers combination
-    #Then I check radio button with label "Answer true"
+    Then I check "Answer true"
     Then I press "Next question"
+    Then wait for the page to be loaded
     # Question 8 - Unique answer with unknown
-    #@todo
+    And I check the "Answer true" radio button
     Then I press "Next question"
+    Then wait for the page to be loaded
     # Question 9 - Multiple answer true - false - dont know
     #@todo
     Then I press "Next question"
@@ -278,9 +289,9 @@ Feature: Exercise tool
     #@todo
     Then I press "Next question"
     # Question 11 - Global multiple answer
-    #Then I check radio button with label "Answer true"
+    Then I check "Answer true"
     Then I press "End test"
-    Then I should see "Score for the test: 41 / 105"
+    Then I should see "Score for the test: 83 / 117"
 
   Scenario: Check exercise result
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
@@ -290,7 +301,7 @@ Feature: Exercise tool
     Then I should see "Learner score"
     And wait for the page to be loaded
     And I follow "Grade activity"
-    Then I should see "Score for the test: 41 / 105"
+    Then I should see "Score for the test: 83 / 117"
 
   Scenario: Duplicate exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
@@ -298,6 +309,77 @@ Feature: Exercise tool
     And I confirm the popup
     Then I should see "Exercise copied"
     And I should see "Exercise 1 - Copy"
+
+  Scenario: Import exercise to test questions categories
+    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    And I should see "Import quiz from Excel"
+    And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
+    When I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Exercise for Behat test"
+
+  Scenario: Try exercise with categorized questions as student
+    Given I am a student subscribed to session "Session Exercise"
+    And I am on "/user_portal.php"
+    And I follow "Session Exercise"
+    And wait for the page to be loaded
+    And I follow "tabs2"
+    And I follow "TEMP"
+    And I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Exercise for Behat test"
+    And I follow "Start test"
+    When wait for the page to be loaded
+    And I press "Next question"
+    And I check "oligarchy"
+    And I check "oligopoly"
+    And I check "timocracy"
+    And I check "autocracy"
+    And I press "Next question"
+    And I check the "semantics" radio button
+    And I press "Next question"
+    And I check the "RNASL" radio button
+    And I press "Next question"
+    And I check the "10" radio button
+    And I press "Next question"
+    And fill in the following:
+      | choice_id_6_0 | words  |
+      | choice_id_6_1 | fill   |
+      | choice_id_6_2 | blanks |
+    And I press "Next question"
+    And I select "A" from "choice_id_7_1"
+    And I select "B" from "choice_id_7_2"
+    And I select "C" from "choice_id_7_3"
+    And I press "Next question"
+    And I check "1"
+    And I press "Next question"
+    And I press "End test"
+    Then I should see "Score for the test: 190 / 190"
+    And I should see the table "#category_results":
+      | Categories    | Absolute score | Relative score |
+      | Categoryname2 | 50 / 70        | 71.43%         |
+      | Categoryname1 | 60 / 60        | 100%           |
+      | none          | 80 / 60        | 133.33%        |
+      | Total         | 190 / 190      | 100%           |
+
+  Scenario: Teacher see exercise results by categories
+    Given I am on "/user_portal.php"
+    And I follow "Session Exercise"
+    And wait for the page to be loaded
+    And I follow "tabs2"
+    And I follow "TEMP"
+    And I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Exercise for Behat test"
+    And I follow "Results and feedback"
+    Then I should see "Learner score"
+    And wait for the page to be loaded
+    And I follow "Grade activity"
+    Then I should see "Score for the test: 190 / 190"
+    And I should see the table "#category_results":
+      | Categories    | Absolute score | Relative score |
+      | Categoryname2 | 50 / 70        | 71.43%         |
+      | Categoryname1 | 60 / 60        | 100%           |
+      | none          | 80 / 60        | 133.33%        |
+      | Total         | 190 / 190      | 100%           |
 
   Scenario: Delete an exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
@@ -314,3 +396,11 @@ Feature: Exercise tool
     Given I am on "/main/exercise/tests_category.php?cidReq=TEMP"
     And I follow "Delete"
     Then I should see "Category deleted"
+
+  Scenario: Import exercise from excel
+    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    Then I should see "Import quiz from Excel"
+    Then I attach the file "/main/exercise/quiz_template.xls" to "user_upload_quiz"
+    And I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Definition of oligarchy"

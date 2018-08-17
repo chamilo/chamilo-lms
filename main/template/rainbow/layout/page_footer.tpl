@@ -1,15 +1,12 @@
-<footer class="sticky-footer"> <!-- start of #footer section -->
-    <div class="pre-footer">
-        {% if plugin_pre_footer is not null %}
-            <div id="plugin_pre_footer" class="text-center">
-                {{ plugin_pre_footer }}
-            </div>
-        {% endif %}
-    </div>
-    <div class="sub-footer">
-    <div class="container">
+<div class="sub-footer">
+    {% if plugin_pre_footer is not null %}
+        <div id="plugin_pre_footer">
+            {{ plugin_pre_footer }}
+        </div>
+    {% endif %}
+    <section class="container">
         <div class="row">
-            <div id="footer_left" class="col-md-9">
+            <div class="col-xs-12 col-md-8">
                 <div class="partners">
                     <a href="http://www.bosch-stiftung.de" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
@@ -25,7 +22,7 @@
                     </a>
                 </div>
             </div>
-            <div id="footer_right" class="col-md-3">
+            <div class="col-xs-12 col-md-4 text-right">
                 {% if session_teachers is not null %}
                     <div class="session-teachers">
                         {{ session_teachers }}
@@ -42,23 +39,37 @@
                     </div>
                 {% endif %}
                 <div id="software_name">
-	                <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
+                    <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
                     &copy; {{ "now"|date("Y") }}
                 </div>
                 <div id="mentions_legales">
                         <a href="{{_p.web}}{{ "MentionsLegalesLink" |get_lang }}" target="_blank">{{ "MentionsLegales" |get_lang }}</a> - <a href="{{_p.web}}{{ "CGULink" |get_lang }}" target="_blank">{{ "CGU" |get_lang }}</a>
-                </div>
-                &nbsp;
+                </div>                &nbsp;
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->
         <div class="extra-footer">
             {{ footer_extra_content }}
         </div>
-    </div><!-- end of #container -->
+    </section>
+</div>
+
+{# Global modal, load content by AJAX call to href attribute on anchor tag with 'ajax' class #}
+<div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="global-modal-title">&nbsp;</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
     </div>
-</footer>
+</div>
 
-
+{# Expands an image modal #}
 <div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -71,17 +82,23 @@
         </div>
     </div>
 </div>
-{# Global modal, load content by AJAX call to href attribute on anchor tag with 'ajax' class #}
-<div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+
+{# Delete modal #}
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-title" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="global-modal-title">&nbsp;</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'Delete' | get_lang }}</h4>
             </div>
+
             <div class="modal-body">
+                <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Cancel' | get_lang }}</button>
+                <a id="delete_item" class="btn btn-danger btn-ok">{{ 'Delete' | get_lang }}</a>
             </div>
         </div>
     </div>

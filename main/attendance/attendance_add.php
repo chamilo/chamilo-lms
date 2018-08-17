@@ -36,7 +36,7 @@ $form->addHtmlEditor(
     get_lang('Description'),
     false,
     false,
-    ['ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150']
+    ['ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '150']
 );
 
 // Advanced Parameters
@@ -67,6 +67,9 @@ if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id(
     );
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html', '</div>');
+
+    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, 0);
+
     $form->addElement('html', '</div>');
 }
 $form->addButtonCreate(get_lang('Save'));

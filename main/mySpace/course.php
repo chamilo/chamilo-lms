@@ -15,6 +15,13 @@ $this_section = SECTION_TRACKING;
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 
 api_block_anonymous_users();
+
+$allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
+
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
@@ -58,7 +65,7 @@ Display :: display_header(get_lang('Courses'));
 $user_id = 0;
 $a_courses = [];
 $menu_items = [];
-if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
+if (api_is_platform_admin(true, true)) {
     $title = '';
     if (empty($sessionId)) {
         if (isset($_GET['user_id'])) {
@@ -261,7 +268,18 @@ function get_courses($from, $limit, $column, $direction)
         foreach ($courses as $data) {
             $courseCode = $data['code'];
             $courseInfo = api_get_course_info($courseCode);
-            $userList = CourseManager::get_user_list_from_course_code($data['code'], $sessionId);
+            if (empty($sessionId)) {
+                $userList = CourseManager::get_user_list_from_course_code($data['code']);
+            } else {
+                $userList = CourseManager::get_user_list_from_course_code(
+                    $data['code'],
+                    $sessionId,
+                    null,
+                    null,
+                    0
+                );
+            }
+
             $userIdList = [];
             if (!empty($userList)) {
                 foreach ($userList as $user) {

@@ -1,5 +1,23 @@
 ### Version History
 
+*4.2.9 (2018/03/27)*
+
+* Fixed typo in documentation (https://github.com/mediaelement/mediaelement/pull/2512) @moagggi
+* Added remainingTime getter (https://github.com/mediaelement/mediaelement/pull/2505) @Lewiscowles1986
+* Fixed iframe parameters formatting for Vimeo/Facebook (https://github.com/mediaelement/mediaelement/pull/2498) @skreutzer
+* Added Malay translation (https://github.com/mediaelement/mediaelement/pull/2490) @MuhdNurHidayat
+* Fixed `getComputedStyle` in Firefox (https://github.com/mediaelement/mediaelement/pull/2487) @pgrzeszczak-neducatio
+* Fixed documentation for React usage @rafa8626
+* Added LICENSE file @rafa8626
+* Added conditionals to avoid executing `fullscreen` methods in audio tags @rafa8626
+* Added conditionals to avoid triggering keyboard events if `enableKeyboard` is false @rafa8626 
+* Added missing conditionals when destroying media @rafa8626
+* Modified Malay language in the demo @rafa8626
+* Set empty source when destroying player to prevent #2499 @rafa8626
+* Added conditional to avoid setting duration when `media` has been destroyed @rafa8626
+* Replaced callback when seeking in paused media to achieve correct behavior @rafa8626  
+* Updated documentation about using `startLanguage` and `toggleCaptionsButtonWhenOnlyOne` (https://github.com/mediaelement/mediaelement/pull/2520) @dmdewey
+
 *4.2.8 (2018/01/16)*
 
 * Clarify effect of setting `toggleCaptionsButtonWhenOnlyOne` (https://github.com/mediaelement/mediaelement/pull/2471) @cjcolvar
@@ -27,7 +45,7 @@
 * Fixed issues related to duplicated calls when triggering error and fixed style for poster when error is displayed @rafa8626
 * Fixed issue with captions not being rendered inside video frame on any state @rafa8626
 * Integrated `destroy` method in `MediaElement` class @rafa8626
-* Added validation to modify `SoundCloud` iframe atributes when using `video` tag @rafa8626
+* Added validation to modify `SoundCloud` iframe attributes when using `video` tag @rafa8626
 * Fixed issue when checking for native dimensions of `video` element to set responsive dimensions correctly @rafa8626
 * Added missing workflow to make `loop` work correctly in YouTube according to documentation @rafa8626
 * Changed paths for `hls.js` and `flv.js` renderers to always be up-to-date @rafa8626

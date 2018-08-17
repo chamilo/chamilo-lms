@@ -21,7 +21,7 @@ class ExtraFieldValuesRepository extends EntityRepository
      * @param int $extraFieldType The type of extra field
      * @param int $itemId         The item ID
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array
      */
     public function getVisibleValues($extraFieldType, $itemId)
     {

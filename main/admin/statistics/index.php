@@ -14,22 +14,27 @@ api_protect_admin_script();
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin')];
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+$sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 
-if ($report) {
+if ($report == 'recentlogins') {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
     $htmlHeadXtra[] = '
-        <script>
-            $(document).ready(function() {
-                $.ajax({
-                    url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
-                    type: "POST",
-                    success: function(data) {
-                        Chart.defaults.global.responsive = true;
-                        var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
-                    }
-            });
+    <script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins&session_duration='.$sessionDuration.'",
+            type: "POST",
+            success: function(data) {
+                Chart.defaults.global.responsive = true;
+                var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+            }
         });
-        </script>';
+    });
+    </script>';
+}
+
+if ($report == 'user_session') {
+    $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
 $tool_name = get_lang('Statistics');
@@ -61,6 +66,10 @@ $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
 // system ...
 $tools[$strSystem]['report=activities'] = get_lang('ImportantActivities');
 
+if (api_is_global_platform_admin() && api_is_multiple_url_enabled()) {
+    $tools[$strSystem]['report=user_session'] = get_lang('PortalUserSessionStats');
+}
+
 // social ...
 $tools[$strSocial]['report=messagesent'] = get_lang('MessagesSent');
 $tools[$strSocial]['report=messagereceived'] = get_lang('MessagesReceived');
@@ -80,9 +89,106 @@ foreach ($tools as $section => $items) {
 echo '</tr></table>';
 
 $course_categories = Statistics::getCourseCategories();
-echo '<br/><br/>'; //@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
+//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
+echo '<br/><br/>';
 
 switch ($report) {
+    case 'user_session':
+        $form = new FormValidator('user_session', 'get');
+        $form->addDateRangePicker('range', get_lang('DateRange'), true);
+        $form->addHidden('report', 'user_session');
+        $form->addButtonSearch(get_lang('Search'));
+
+        $date = new DateTime($now);
+        $startDate = $date->format('Y-m-d').' 00:00:00';
+        $endDate = $date->format('Y-m-d').' 23:59:59';
+        $start = $startDate;
+        $end = $endDate;
+
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $start = $values['range_start'];
+            $end = $values['range_end'];
+        }
+        echo $form->returnForm();
+
+        $url = api_get_path(WEB_AJAX_PATH).'statistics.ajax.php?a=get_user_session&start='.$start.'&end='.$end;
+        $columns = [
+            'URL',
+            get_lang('Session'),
+            get_lang('Course'),
+            get_lang('CountUsers'),
+        ];
+
+        $columnModel = [
+            [
+                'name' => 'url',
+                'index' => 'url',
+                'width' => '120',
+                'align' => 'left',
+            ],
+            [
+                'name' => 'session',
+                'index' => 'session',
+                'width' => '180',
+                'align' => 'left',
+                'sortable' => 'false',
+            ],
+            [
+                'name' => 'course',
+                'index' => 'course',
+                'width' => '100',
+                'align' => 'left',
+                'sortable' => 'false',
+            ],
+            [
+                'name' => 'count',
+                'index' => 'count',
+                'width' => '50',
+                'align' => 'left',
+                'sortable' => 'false',
+            ],
+        ];
+        $extraParams['autowidth'] = 'true'; //use the width of the parent
+        $extraParams['height'] = 'auto'; //use the width of the parent
+        $actionLinks = '';
+        ?>
+        <script>
+            $(function() {
+                <?php
+                echo Display::grid_js(
+                    'user_session_grid',
+                    $url,
+                    $columns,
+                    $columnModel,
+                    $extraParams,
+                    [],
+                    $actionLinks,
+                    true
+                );
+                ?>
+
+                jQuery("#user_session_grid").jqGrid("navGrid","#user_session_grid_pager",{
+                    view:false,
+                    edit:false,
+                    add:false,
+                    del:false,
+                    search:false,
+                    excel:true
+                });
+
+                jQuery("#user_session_grid").jqGrid("navButtonAdd","#user_session_grid_pager", {
+                    caption:"",
+                    onClickButton : function () {
+                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"<?php echo $url; ?>&export_format=xls"});
+                    }
+                });
+            });
+        </script>
+        <?php
+        echo Display::grid_html('user_session_grid');
+
+        break;
     case 'courses':
         // total amount of courses
         foreach ($course_categories as $code => $name) {
@@ -123,9 +229,16 @@ switch ($report) {
         break;
     case 'recentlogins':
         echo '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        $form = new FormValidator('session_time', 'get', api_get_self().'?report=recentlogins&session_duration='.$sessionDuration);
+        $sessionTimeList = ['', 5 => 5, 15 => 15, 30 => 30, 60 => 60];
+        $form->addSelect('session_duration', [get_lang('SessionMinDuration'), get_lang('Minutes')], $sessionTimeList);
+        $form->addButtonSend(get_lang('Filter'));
+        $form->addHidden('report', 'recentlogins');
+        $form->display();
+
         echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
-        Statistics::printRecentLoginStats();
-        Statistics::printRecentLoginStats(true);
+        Statistics::printRecentLoginStats(false, $sessionDuration);
+        Statistics::printRecentLoginStats(true, $sessionDuration);
         break;
     case 'logins':
         Statistics::printLoginStats($_GET['type']);

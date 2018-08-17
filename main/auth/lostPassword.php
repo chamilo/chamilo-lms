@@ -53,7 +53,8 @@ if ($reset && $userId) {
 
 $form = new FormValidator('lost_password');
 $form->addHeader($tool_name);
-$form->addText('user',
+$form->addText(
+    'user',
     [
         get_lang('LoginOrEmailAddress'),
         get_lang('EnterEmailUserAndWellSendYouPassword'),
@@ -148,9 +149,8 @@ if ($form->validate()) {
     $userResetPasswordSetting = api_get_setting('user_reset_password');
 
     if ($userResetPasswordSetting === 'true') {
-        $userObj = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user['uid']);
-
-        Login::sendResetEmail($userObj, true);
+        $userObj = api_get_user_entity($user['uid']);
+        Login::sendResetEmail($userObj);
 
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
             CustomPages::display(
@@ -189,8 +189,6 @@ if (CustomPages::enabled() && CustomPages::exists(CustomPages::LOST_PASSWORD)) {
     exit;
 }
 
-$controller = new IndexManager($tool_name);
-$controller->set_login_form();
-$controller->tpl->assign('form', $form->returnForm());
-$template = $controller->tpl->get_template('auth/lost_password.tpl');
-$controller->tpl->display($template);
+$tpl = new Template(null);
+$tpl->assign('content', $form->toHtml());
+$tpl->display_one_col_template();

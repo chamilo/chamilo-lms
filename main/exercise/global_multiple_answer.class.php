@@ -58,7 +58,7 @@ class GlobalMultipleAnswer extends Question
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
             }
         }
@@ -78,7 +78,7 @@ class GlobalMultipleAnswer extends Question
         $scoreG = "0"; //Global
 
         /* boucle pour sauvegarder les donn�es dans le tableau defaults */
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             /* si la reponse est de type objet */
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
@@ -265,13 +265,15 @@ class GlobalMultipleAnswer extends Question
         $score = null
     ) {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
-        <tr>
-            <th>'.get_lang("Choice").'</th>
-            <th>'.get_lang("ExpectedChoice").'</th>
-            <th>'.get_lang("Answer").'</th>';
-        $header .= '<th>'.get_lang('Status').'</th>';
-        $header .= '<th>'.get_lang("Comment").'</th>';
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+
+        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        $header .= '<th>'.get_lang('Answer').'</th>';
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th>'.get_lang('Status').'</th>';
+        }
+        $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
         return $header;

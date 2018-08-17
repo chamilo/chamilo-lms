@@ -146,7 +146,6 @@ if (!$myCourseListAsCategory) {
     }
 
     // if teacher, session coach or admin, display the button to change te course view
-
     if ($displayMyCourseViewBySessionLink &&
         (
             api_is_drh() ||
@@ -213,7 +212,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
 
             // Session has many courses.
             if (isset($sessionInfo['session_id'])) {
-                $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$sessionInfo['session_id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionInfo['session_id'];
 
                 header('Location:'.$url);
                 exit;
@@ -226,10 +225,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
         $count_of_sessions == 0 &&
         $count_of_courses_no_sessions == 1
     ) {
-        $courses = CourseManager::get_courses_list_by_user_id(
-            $userId
-        );
-
+        $courses = CourseManager::get_courses_list_by_user_id($userId);
         if (!empty($courses) && isset($courses[0]) && isset($courses[0]['code'])) {
             $courseInfo = api_get_course_info_by_id($courses[0]['real_id']);
             if (!empty($courseInfo)) {
@@ -323,7 +319,7 @@ if (api_is_drh() || api_is_student_boss()) {
 }
 $block = '';
 if (!empty($diagnosis)) {
-    $block .= $controller->show_right_block(
+    $block .= $controller->showRightBlock(
         get_lang('Diagnostic'),
         '<ul class="list-group"><li class="list-group-item">'.$diagnosis.'</li></ul>',
         'diagnosis_block',
@@ -336,11 +332,12 @@ if (!empty($diagnosis)) {
 $controller->tpl->assign('diagnosis_block', $block);
 $controller->tpl->assign('profile_block', $controller->return_profile_block());
 $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
-$controller->tpl->assign('course_block', $controller->return_course_block());
-$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
-$controller->tpl->assign('search_block', $controller->return_search_block());
+// Ofaj
+//$controller->tpl->assign('course_block', $controller->return_course_block());
+//$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
+//$controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('notice_block', $controller->return_notice());
-$controller->tpl->assign('classes_block', $controller->return_classes_block());
+//$controller->tpl->assign('classes_block', $controller->returnClassesBlock());
 $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 
 $historyClass = '';

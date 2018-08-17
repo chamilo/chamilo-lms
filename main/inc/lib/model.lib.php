@@ -54,14 +54,15 @@ class Model
      */
     public function delete($id)
     {
-        if (empty($id) or $id != strval(intval($id))) {
+        if (empty($id) || $id != strval(intval($id))) {
             return false;
         }
         $params = ['id = ?' => $id];
         if ($this->is_course_model) {
-            $course_id = api_get_course_int_id();
-            $params = ['id = ? AND c_id = ?' => [$id, $course_id]];
+            $courseId = api_get_course_int_id();
+            $params = ['id = ? AND c_id = ?' => [$id, $courseId]];
         }
+
         // Database table definition
         $result = Database::delete($this->table, $params);
         if ($result != 1) {
@@ -202,10 +203,11 @@ class Model
      * Updates the obj in the database. The $params['id'] must exist in order to update a record.
      *
      * @param array $params
+     * @param bool  $showQuery
      *
      * @return bool
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
         $params = $this->clean_parameters($params);
 
@@ -231,7 +233,8 @@ class Model
                 $result = Database::update(
                     $this->table,
                     $params,
-                    ['id = ?' => $id]
+                    ['id = ?' => $id],
+                    $showQuery
                 );
                 if ($result) {
                     return true;

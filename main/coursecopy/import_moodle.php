@@ -18,11 +18,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-    api_set_memory_limit('256M');
-    ini_set('max_execution_time', 1800);
-}
+api_set_more_memory_and_time_limits();
 
 // Section for the tabs
 $this_section = SECTION_COURSES;
@@ -33,7 +29,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Maintenance'),
 ];
 
-$form = new FormValidator('import_moodle');
+$form = new FormValidator('import_moodle', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addFile('moodle_file', get_lang('MoodleFile'));
 $form->addButtonImport(get_lang('Import'));
 

@@ -22,7 +22,7 @@ $_course = api_get_course_info();
 
 $htmlHeadXtra[] = "<script>
 function check_unzip() {
-	if(document.upload.unzip.checked){
+	if (document.upload.unzip.checked) {
         document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
         document.upload.if_exists[2].disabled=true;
@@ -39,13 +39,10 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$noPHP_SELF = true;
-
 //what's the current path?
+$path = '/';
 if (isset($_REQUEST['curdirpath'])) {
     $path = $_REQUEST['curdirpath'];
-} else {
-    $path = '/';
 }
 
 $toolFromSession = Session::read('my_tool');
@@ -65,14 +62,6 @@ if (isset($_REQUEST['tool'])) {
  * Process.
  */
 Event::event_access_tool(TOOL_UPLOAD);
-
-/**
- *	Prepare the header.
- */
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script>
-	var myUpload = new upload(0);
-</script>';
 
 /**
  * Now call the corresponding display script, the current script acting like a controller.

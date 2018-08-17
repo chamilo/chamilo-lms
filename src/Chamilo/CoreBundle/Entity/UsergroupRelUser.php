@@ -23,7 +23,7 @@ class UsergroupRelUser
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
@@ -50,7 +50,7 @@ class UsergroupRelUser
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * Get id.
@@ -115,7 +115,7 @@ class UsergroupRelUser
      *
      * @param int $relationType
      *
-     * @return GroupRelUser
+     * @return $this
      */
     public function setRelationType($relationType)
     {

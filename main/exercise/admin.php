@@ -60,20 +60,6 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-/*  stripslashes POST data  */
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    foreach ($_POST as $key => $val) {
-        if (is_string($val)) {
-            $_POST[$key] = stripslashes($val);
-        } elseif (is_array($val)) {
-            foreach ($val as $key2 => $val2) {
-                $_POST[$key][$key2] = stripslashes($val2);
-            }
-        }
-        $GLOBALS[$key] = $_POST[$key];
-    }
-}
-
 if (empty($exerciseId)) {
     $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']) : '0';
 }
@@ -133,15 +119,6 @@ $picturePath = $documentPath.'/images';
 
 // audio path
 $audioPath = $documentPath.'/audio';
-
-// the 5 types of answers
-$aType = [
-    get_lang('UniqueSelect'),
-    get_lang('MultipleSelect'),
-    get_lang('FillBlanks'),
-    get_lang('Matching'),
-    get_lang('FreeAnswer'),
-];
 
 // tables used in the exercise tool
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
@@ -315,25 +292,6 @@ if ($modifyIn == 'thisExercise') {
         $modifyIn = 'allExercises';
     }
 }
-$htmlHeadXtra[] = '<script>
-function multiple_answer_true_false_onchange(variable) {
-    var result = variable.checked;
-    var id = variable.id;
-    var weight_id = "weighting_" + id;
-    var array_result=new Array();
-    array_result[1]="1";
-    array_result[0]= "-0.50";
-    array_result[-1]= "0";
-    if (result) {
-        result = 1;
-    } else {
-        result = 0;
-    }
-    document.getElementById(weight_id).value = array_result[result];
-}
-
-</script>';
-
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 

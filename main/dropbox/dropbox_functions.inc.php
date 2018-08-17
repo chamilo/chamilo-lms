@@ -633,7 +633,8 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     $options = [];
     $userGroup = new UserGroup();
     foreach ($complete_user_list_for_dropbox as $current_user) {
-        if (($dropbox_person->isCourseTutor
+        if ((
+            $dropbox_person->isCourseTutor
                 || $dropbox_person->isCourseAdmin
                 || $allowStudentToStudent == 'true'
                 || $current_user['status'] != 5                         // Always allow teachers.

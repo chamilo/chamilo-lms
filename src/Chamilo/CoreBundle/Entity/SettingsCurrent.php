@@ -23,91 +23,91 @@ class SettingsCurrent
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=true)
      */
-    private $variable;
+    protected $variable;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subkey", type="string", length=255, nullable=true)
      */
-    private $subkey;
+    protected $subkey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    private $category;
+    protected $category;
 
     /**
      * @var string
      *
      * @ORM\Column(name="selected_value", type="string", length=255, nullable=true)
      */
-    private $selectedValue;
+    protected $selectedValue;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var string
      *
      * @ORM\Column(name="scope", type="string", length=50, nullable=true)
      */
-    private $scope;
+    protected $scope;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
-    private $subkeytext;
+    protected $subkeytext;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url", type="integer", nullable=false, options={"default": 1 } )
      */
-    private $accessUrl;
+    protected $accessUrl;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_changeable", type="integer", nullable=false)
      */
-    private $accessUrlChangeable;
+    protected $accessUrlChangeable;
 
     /**
      * @var int
      *
      * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default": 0 } )
      */
-    private $accessUrlLocked = 0;
+    protected $accessUrlLocked = 0;
 
     /**
      * Set variable.

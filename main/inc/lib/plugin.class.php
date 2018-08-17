@@ -25,6 +25,7 @@ class Plugin
     public $isMailPlugin = false;
     // Adds icon in the course home
     public $addCourseTool = true;
+    public $hasPersonalEvents = false;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -90,7 +91,7 @@ class Plugin
         $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
 
-        if ($form = $this->get_settings_form()) {
+        if ($form = $this->getSettingsForm()) {
             $result['settings_form'] = $form;
 
             foreach ($this->fields as $name => $type) {
@@ -194,7 +195,7 @@ class Plugin
      *
      * @return FormValidator FormValidator-generated form
      */
-    public function get_settings_form()
+    public function getSettingsForm()
     {
         $result = new FormValidator($this->get_name());
 
@@ -215,6 +216,11 @@ class Plugin
             $options = null;
             if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
                 $attributes = isset($type['attributes']) ? $type['attributes'] : [];
+                if (!empty($type['options']) && isset($type['translate_options']) && $type['translate_options']) {
+                    foreach ($type['options'] as $key => &$optionName) {
+                        $optionName = $this->get_lang($optionName);
+                    }
+                }
                 $options = $type['options'];
                 $type = $type['type'];
             }
@@ -236,7 +242,7 @@ class Plugin
 
             switch ($type) {
                 case 'html':
-                    $result->addElement('html', $this->get_lang($name));
+                    $result->addHtml($this->get_lang($name));
                     break;
                 case 'wysiwyg':
                     $result->addHtmlEditor($name, $this->get_lang($name), false);
@@ -522,7 +528,7 @@ class Plugin
             return true;
         }
 
-        //Add an icon in the table tool list
+        // Add an icon in the table tool list
         $this->createLinkToCourseTool($plugin_name, $courseId);
     }
 
@@ -536,12 +542,12 @@ class Plugin
      */
     public function uninstall_course_fields($courseId)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
 
         if (empty($courseId)) {
             return false;
         }
-        $plugin_name = $this->get_name();
+        $pluginName = $this->get_name();
 
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -561,9 +567,14 @@ class Plugin
             }
         }
 
-        $plugin_name = Database::escape_string($plugin_name);
+        $pluginName = Database::escape_string($pluginName);
         $sql = "DELETE FROM $t_tool
-                WHERE c_id = $courseId AND name = '$plugin_name'";
+                WHERE c_id = $courseId AND 
+                (
+                  name = '$pluginName' OR
+                  name = '$pluginName:student' OR
+                  name = '$pluginName:teacher'  
+                )";
         Database::query($sql);
     }
 
@@ -575,8 +586,8 @@ class Plugin
     public function install_course_fields_in_all_courses($add_tool_link = true)
     {
         // Update existing courses to add plugin settings
-        $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses ORDER BY id";
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->install_course_fields($row['id'], $add_tool_link);
@@ -589,8 +600,8 @@ class Plugin
     public function uninstall_course_fields_in_all_courses()
     {
         // Update existing courses to add conference settings
-        $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table
                 ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
@@ -679,6 +690,7 @@ class Plugin
             }
         }
 
+        $currentUrlId = api_get_current_access_url_id();
         $attributes = [
             'variable' => 'show_tabs',
             'subkey' => $subkey,
@@ -688,8 +700,8 @@ class Plugin
             'title' => $tabName,
             'comment' => $url,
             'subkeytext' => $subkeytext,
-            'access_url' => 1,
-            'access_url_changeable' => 0,
+            'access_url' => $currentUrlId,
+            'access_url_changeable' => 1,
             'access_url_locked' => 0,
         ];
         $resp = Database::insert('settings_current', $attributes);
@@ -716,9 +728,9 @@ class Plugin
      */
     public function deleteTab($key)
     {
-        $t = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $sql = "SELECT *
-                FROM $t
+                FROM $table
                 WHERE variable = 'show_tabs'
                 AND subkey <> '$key'
                 AND subkey like 'custom_tab_%'
@@ -747,7 +759,6 @@ class Plugin
                     }
 
                     $attributes = ['subkey' => $newSubKey];
-
                     $this->updateTab($row['subkey'], $attributes);
                     $i++;
                 }
@@ -839,7 +850,11 @@ class Plugin
     {
         $settings = api_get_settings_params_simple(
             [
-                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => [$this->get_name(), 'Plugins', 'setting'],
+                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => [
+                    $this->get_name(),
+                    'Plugins',
+                    'setting',
+                ],
             ]
         );
         if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
@@ -859,6 +874,29 @@ class Plugin
     public function performActionsAfterConfigure()
     {
         return $this;
+    }
+
+    /**
+     * This function allows to change the visibility of the icon inside a course
+     * :student tool will be visible only for students
+     * :teacher tool will be visible only for teachers
+     * If nothing it's set then tool will be visible for both as a normal icon.
+     *
+     * @return string
+     */
+    public function getToolIconVisibilityPerUserStatus()
+    {
+        return '';
+    }
+
+    /**
+     * Default tool icon visibility.
+     *
+     * @return bool
+     */
+    public function isIconVisibleByDefault()
+    {
+        return true;
     }
 
     /**
@@ -888,6 +926,14 @@ class Plugin
     }
 
     /**
+     * @param bool $value
+     */
+    public function setHasPersonalEvents($value)
+    {
+        $this->hasPersonalEvents = $value;
+    }
+
+    /**
      * Add an link for a course tool.
      *
      * @param string $name     The tool name
@@ -907,6 +953,9 @@ class Plugin
             return null;
         }
 
+        $visibilityPerStatus = $this->getToolIconVisibilityPerUserStatus();
+        $visibility = $this->isIconVisibleByDefault();
+
         $em = Database::getManager();
 
         /** @var CTool $tool */
@@ -925,10 +974,10 @@ class Plugin
             $tool
                 ->setId($cToolId)
                 ->setCId($courseId)
-                ->setName($name)
+                ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
-                ->setVisibility(true)
+                ->setVisibility($visibility)
                 ->setAdmin(0)
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)

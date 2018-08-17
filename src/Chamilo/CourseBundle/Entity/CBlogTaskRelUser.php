@@ -27,42 +27,42 @@ class CBlogTaskRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer")
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="target_date", type="date", nullable=false)
      */
-    private $targetDate;
+    protected $targetDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="task_id", type="integer")
      */
-    private $taskId;
+    protected $taskId;
 
     /**
      * Set targetDate.

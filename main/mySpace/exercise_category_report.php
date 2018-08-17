@@ -39,8 +39,6 @@ $(document).ready( function() {
 });
 </script>';
 
-Display::display_header($nameTools);
-
 $form = new FormValidator('exercise', 'get');
 $form->addDatePicker('start_date', get_lang('StartDate'));
 if (empty($courseId)) {
@@ -54,47 +52,71 @@ if (empty($courseId)) {
     );
 } else {
     $courseInfo = api_get_course_info_by_id($courseId);
-    $form->addHidden('course_id', $courseId);
-    $form->addLabel(get_lang('Course'), $courseInfo['name']);
-    $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-        $courseInfo,
-        0,
-        $courseId,
-        true
-    );
+    if (!empty($courseInfo)) {
+        $form->addHidden('course_id', $courseId);
+        $courseLabel = Display::url(
+            $courseInfo['name'].' ('.$courseInfo['code'].')',
+            $courseInfo['course_public_url'],
+            ['target' => '_blank']
+        );
+        $form->addLabel(get_lang('Course'), $courseLabel);
+        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+            $courseInfo,
+            0,
+            $courseId,
+            true
+        );
 
-    if (!empty($exerciseList)) {
-        $options = [];
-        foreach ($exerciseList as $exercise) {
-            $options[$exercise['id']] = $exercise['title'];
+        if (!empty($exerciseList)) {
+            $options = [];
+            foreach ($exerciseList as $exercise) {
+                $options[$exercise['id']] = $exercise['title'];
+            }
+            $form->addSelect('exercise_id', get_lang('Exercises'), $options);
+        } else {
+            $form->addLabel(get_lang('Exercises'), Display::return_message(get_lang('NoExercises')));
         }
-        $form->addSelect('exercise_id', get_lang('Exercises'), $options);
     } else {
-        $form->addLabel(get_lang('Exercises'), Display::return_message(get_lang('NoExercises')));
+        Display::addFlash(Display::return_message(get_lang('CourseDoesNotExist'), 'warning'));
     }
 }
 
 $form->setDefaults($defaults);
 $form->addButtonSearch(get_lang('Search'));
 
+Display::display_header($nameTools);
 $form->display();
 
-if ($form->validate()) {
+$extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+
+if ($form->validate() && !empty($courseInfo)) {
     $values = $form->getSubmitValues();
-    $exerciseId = $values['exercise_id'];
+    $exerciseId = isset($values['exercise_id']) ? $values['exercise_id'] : 0;
     $startDate = Security::remove_XSS($values['start_date']);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.'&course_id='.$courseId.'&start_date='.$startDate;
+    $exportFilename = 'exercise_results_report_'.$exerciseId.'_'.$courseInfo['code'];
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.'&start_date='.$startDate.'&cidReq='.$courseInfo['code'].'&export_filename='.$exportFilename;
 
     $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
     $columns = [
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('LoginName'),
-        get_lang('Session'),
-        get_lang('StartDate'),
-        get_lang('EndDate'),
-        get_lang('Score'),
     ];
+
+    if (!empty($extraFields) && isset($extraFields['fields'])) {
+        $extraField = new ExtraField('user');
+        foreach ($extraFields['fields'] as $variable) {
+            $info = $extraField->get_handler_field_info_by_field_variable($variable);
+            if ($info) {
+                $columns[] = $info['display_text'];
+            }
+        }
+    }
+
+    $columns[] = get_lang('Session');
+    $columns[] = get_lang('SessionStartDate');
+    $columns[] = get_lang('StartDate');
+    $columns[] = get_lang('Score');
 
     if (!empty($categoryList)) {
         foreach ($categoryList as $categoryInfo) {
@@ -105,17 +127,75 @@ if ($form->validate()) {
 
     $columnModel = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
-        ['name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'],
-        ['name' => 'session', 'index' => 'session', 'width' => '40', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'],
+        [
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '50',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'search' => 'true',
+        ],
+        [
+            'name' => 'login',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'hidden' => 'true',
+        ],
+    ];
+
+    if (!empty($extraFields) && isset($extraFields['fields'])) {
+        $extraField = new ExtraField('user');
+        foreach ($extraFields['fields'] as $variable) {
+            $columnModel[] = [
+                'name' => $variable,
+                'index' => $variable,
+                'width' => '40',
+                'align' => 'left',
+                'search' => 'false',
+            ];
+        }
+    }
+
+    $columnModel[] = [
+        'name' => 'session',
+        'index' => 'session',
+        'width' => '40',
+        'align' => 'left',
+        'search' => 'false',
+    ];
+    $columnModel[] = [
+        'name' => 'session_access_start_date',
+        'index' => 'session_access_start_date',
+        'width' => '50',
+        'align' => 'center',
+        'search' => 'true',
+    ];
+    $columnModel[] = [
+        'name' => 'exe_date',
+        'index' => 'exe_date',
+        'width' => '60',
+        'align' => 'left',
+        'search' => 'true',
+    ];
+    $columnModel[] = [
+        'name' => 'score',
+        'index' => 'exe_result',
+        'width' => '50',
+        'align' => 'center',
+        'search' => 'true',
     ];
 
     if (!empty($categoryList)) {
         foreach ($categoryList as $categoryInfo) {
-            $columnModel[] = ['name' => 'category_'.$categoryInfo['id'], 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'];
+            $columnModel[] = [
+                'name' => 'category_'.$categoryInfo['id'],
+                'index' => 'category_'.$categoryInfo['id'],
+                'width' => '50',
+                'align' => 'center',
+                'search' => 'true',
+            ];
         }
     }
 
@@ -197,12 +277,11 @@ if ($form->validate()) {
         [
             'url' => '  ',
             'url_attributes' => ['id' => 'excel_export'],
-            'content' => Display::return_icon('export_excel.png'),
+            'content' => Display::return_icon('export_excel.png', get_lang('ExportExcel')),
         ],
     ];
 
     echo Display::actions($items);
-
     echo Display::grid_html('results');
 }
 

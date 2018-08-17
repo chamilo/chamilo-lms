@@ -118,7 +118,11 @@ foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
 
-$complete_user_list = GroupManager::fill_groups_list($current_group);
+$complete_user_list = CourseManager::get_user_list_from_course_code(
+    api_get_course_id(),
+    api_get_session_id()
+);
+
 $possible_users = [];
 $userGroup = new UserGroup();
 

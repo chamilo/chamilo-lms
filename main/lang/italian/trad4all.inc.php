@@ -5145,7 +5145,7 @@ $Assignment = "Compito";
 $ExpiryDateToSendWorkIs = "Termine di consegna";
 $EnableExpiryDate = "Abilita il termine di consegna";
 $EnableEndDate = "Abilita la data di chiusura";
-$IsNotPosibleSaveTheDocument = "Non è possibile salvare il documento";
+$ImpossibleToSaveTheDocument = "Non è possibile salvare il documento";
 $EndDateCannotBeBeforeTheExpireDate = "La data di chiusura non può precedere i termini di consegna";
 $SelectAFilter = "Seleziona un filtro";
 $FilterByNotExpired = "Entro i termini";
@@ -7656,4 +7656,5 @@ $LastXDays = "Ultimi %s giorni";
 $ExportBadges = "Esporta i badge";
 $LanguagesDisableAllExceptDefault = "Abilita solo la lingua d default della piattaforma";
 $ThereAreUsersUsingThisLanguagesDisableItManually = "Alcuni utenti usano questa lingua: è necessario disabilitarla manualmente";
+$ExportToChamiloFormat = "Esporta un Modulo didattico";
 ?>

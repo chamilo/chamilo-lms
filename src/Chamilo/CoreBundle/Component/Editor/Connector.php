@@ -37,15 +37,11 @@ class Connector
     public $drivers = [];
     public $driverList = [];
 
-    public function __construct(
-        /*EntityManager $entityManager,
-        array $paths,
-        Router $urlGenerator,
-        Translator $translator,
-        SecurityContext $security,*/
-        //$user,
-        //$course = null
-    ) {
+    /**
+     * Connector constructor.
+     */
+    public function __construct()
+    {
         $this->paths = [
             'root_sys' => api_get_path(SYS_PATH),
             'sys_root' => api_get_path(SYS_PATH), // just an alias
@@ -267,12 +263,12 @@ class Connector
         $opts = [
             //'debug' => true,
             'bind' => [
-                'upload rm' => [$this, 'manageCommands'],
+                'upload rm mkdir' => [$this, 'manageCommands'],
             ],
+            'sessionCloseEarlier' => false,
         ];
 
         $this->setDrivers();
-
         $opts['roots'] = $this->getRoots();
 
         return $opts;
@@ -336,7 +332,7 @@ class Connector
                 if (isset($args['target'])) {
                     $driverName = $elFinder->getVolumeDriverNameByTarget($args['target']);
                 }
-        
+
                 if (isset($args['targets'])) {
                     foreach ($args['targets'] as $target) {
                         $driverName = $elFinder->getVolumeDriverNameByTarget($target);

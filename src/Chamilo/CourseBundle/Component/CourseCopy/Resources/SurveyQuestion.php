@@ -64,7 +64,7 @@ class SurveyQuestion extends Resource
      * @param int    $sort
      * @param int    $shared_question_id
      * @param int    $max_value
-     * @param int    $is_required
+     * @param bool   $is_required
      */
     public function __construct(
         $id,

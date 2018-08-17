@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
+use ChamiloSession as Session;
+
 /**
  * Class ChamiloApi.
  *
@@ -250,5 +252,41 @@ class ChamiloApi
         $text = api_underscore_to_camel_case($text);
 
         return $prefix.$text;
+    }
+
+    /**
+     * Get the stylesheet path for HTML documents created with CKEditor.
+     *
+     * @return string
+     */
+    public static function getEditorDocStylePath()
+    {
+        $visualTheme = api_get_visual_theme();
+
+        $cssFile = api_get_path(SYS_CSS_PATH)."themes/$visualTheme/document.css";
+
+        if (is_file($cssFile)) {
+            return api_get_path(WEB_CSS_PATH)."themes/$visualTheme/document.css";
+        }
+
+        return api_get_path(WEB_CSS_PATH).'document.css';
+    }
+
+    /**
+     * Get the stylesheet path for HTML blocks created with CKEditor.
+     *
+     * @return string
+     */
+    public static function getEditorBlockStylePath()
+    {
+        $visualTheme = api_get_visual_theme();
+
+        $cssFile = api_get_path(SYS_CSS_PATH)."themes/$visualTheme/editor_content.css";
+
+        if (is_file($cssFile)) {
+            return api_get_path(WEB_CSS_PATH)."themes/$visualTheme/editor_content.css";
+        }
+
+        return api_get_path(WEB_CSS_PATH).'editor_content.css';
     }
 }

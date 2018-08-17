@@ -37,7 +37,7 @@ protectWork($courseInfo, $workId);
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -82,7 +82,8 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'
 echo '</div>';
 
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
+        Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
 }
 
 $check_qualification = intval($my_folder_data['qualification']);

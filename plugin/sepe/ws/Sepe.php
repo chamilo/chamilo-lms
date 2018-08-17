@@ -532,7 +532,8 @@ class Sepe
                     $documentNumberTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO : null;
                     $documentLetterTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF : null;
                     if (!empty($documentTypeTraining) || !empty($documentNumberTraining) || !empty($documentLetterTraining)) {
-                        $tmp_f = Database::query('
+                        $tmp_f = Database::query(
+                            '
                             SELECT id FROM '.$tableTutorsCompany.' 
                             WHERE
                                 document_type="'.$documentTypeTraining.'" AND 

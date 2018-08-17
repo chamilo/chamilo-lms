@@ -10,8 +10,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Register extends Basic
 {
-    public $plugins = [
-    ];
+    public $plugins = [];
 
     /**
      * Get the toolbar config.

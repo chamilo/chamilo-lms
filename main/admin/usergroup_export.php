@@ -9,11 +9,10 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$userGroup = new UserGroup();
+$userGroup->protectScript();
 
 $tool_name = get_lang('Export');
-
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 set_time_limit(0);
@@ -23,7 +22,6 @@ $form->addElement('header', $tool_name);
 $form->addButtonExport(get_lang('Export'));
 
 if ($form->validate()) {
-    $userGroup = new UserGroup();
     $header = [['id', 'name', 'description', 'users']];
     $data = $userGroup->getDataToExport();
     $data = array_merge($header, $data);
@@ -32,6 +30,6 @@ if ($form->validate()) {
     exit;
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 $form->display();
 Display::display_footer();

@@ -43,7 +43,9 @@ class CategoryAdmin extends Admin
             //->add('headline', null, array('identifier' => true))
             ->add('translations', null, ['identifier' => true])
             ->add('rank')
-            ->add('_action', 'actions',
+            ->add(
+                '_action',
+                'actions',
                 [
                     'actions' => [
                         //'show' => array(),

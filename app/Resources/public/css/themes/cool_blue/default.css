@@ -81,14 +81,7 @@ a:hover{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fe9700', endColorstr='#fd6800',GradientType=0 ); /* IE6-9 */
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-background: #fe9700; /* Old browsers */
-background: -moz-linear-gradient(top, #fe9700 0%, #fd6800 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fe9700), color-stop(100%,#fd6800)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #fe9700 0%,#fd6800 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #fe9700 0%,#fd6800 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #fe9700 0%,#fd6800 100%); /* IE10+ */
-background: linear-gradient(to bottom, #fe9700 0%,#fd6800 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fe9700', endColorstr='#fd6800',GradientType=0 ); /* IE6-9 */
+    background: #FFFFFF;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;

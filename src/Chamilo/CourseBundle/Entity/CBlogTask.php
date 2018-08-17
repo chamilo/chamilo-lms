@@ -25,56 +25,56 @@ class CBlogTask
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="task_id", type="integer")
      */
-    private $taskId;
+    protected $taskId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="color", type="string", length=10, nullable=false)
      */
-    private $color;
+    protected $color;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="system_task", type="boolean", nullable=false)
      */
-    private $systemTask;
+    protected $systemTask;
 
     /**
      * Set blogId.

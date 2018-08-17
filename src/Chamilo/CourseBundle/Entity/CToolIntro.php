@@ -25,35 +25,35 @@ class CToolIntro
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="string", nullable=false)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="intro_text", type="text", nullable=false)
      */
-    private $introText;
+    protected $introText;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer")
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set introText.

@@ -1,7 +1,8 @@
 {% if not categories is empty %}
     <div class="classic-courses">
         {% for category in categories %}
-            <div class="panel panel-default">
+            {% if category.courses %}
+                <div class="panel panel-default">
                 <div id="category-{{ category.id_category }}" class="panel-heading">
                     {{ category.title_category }}
                 </div>
@@ -95,6 +96,7 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
     </div>
 {% endif %}

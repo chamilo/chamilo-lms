@@ -117,6 +117,8 @@ class FlatViewTable extends SortableTable
         array_shift($headerName);
         // Removing last name
         array_shift($headerName);
+        // Removing username
+        array_shift($headerName);
 
         $pre_result = $new_result = [];
         foreach ($user_results as $result) {
@@ -148,7 +150,7 @@ class FlatViewTable extends SortableTable
                     if (!isset($resource_list[$key][$userResult])) {
                         $resource_list[$key][$userResult] = 0;
                     }
-                    $resource_list[$key][$userResult] += 1;
+                    $resource_list[$key][$userResult]++;
                     $key_list[] = $userResult;
                 }
 
@@ -417,7 +419,6 @@ class FlatViewTable extends SortableTable
 
         // step 1: generate columns: evaluations and links
         $header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
-
         $userRowSpan = false;
         foreach ($header_names as $item) {
             if (is_array($item)) {

@@ -1,5 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -8,11 +10,14 @@ api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
 
+$em = Database::getManager();
+
 $form = new FormValidator('ism_lti_create_tool');
 $form->addText('name', get_lang('Name'));
-$form->addText('base_url', get_lang('BaseUrl'));
+$form->addText('base_url', $plugin->get_lang('LaunchUrl'));
 $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
 $form->addText('shared_secret', $plugin->get_lang('SharedSecret'));
+$form->addTextarea('description', get_lang('Description'), ['rows' => 10]);
 $form->addTextarea('custom_params', $plugin->get_lang('CustomParams'));
 $form->addButtonCreate($plugin->get_lang('AddExternalTool'));
 
@@ -27,7 +32,10 @@ if ($form->validate()) {
         ->setConsumerKey($formValues['consumer_key'])
         ->setSharedSecret($formValues['shared_secret'])
         ->setCustomParams($formValues['custom_params'])
-        ->save();
+        ->setIsGlobal(true);
+
+    $em->persist($externalTool);
+    $em->flush();
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('ToolAdded'), 'success')

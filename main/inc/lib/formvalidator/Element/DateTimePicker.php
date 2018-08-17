@@ -37,6 +37,13 @@ class DateTimePicker extends HTML_QuickForm_text
             $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
+        $label = $this->getLabel();
+        if (is_array($label) && isset($label[0])) {
+            $label = $label[0];
+        }
+
+        $resetFieldX = sprintf(get_lang('ResetFieldX'), $label);
+
         return '
             <div class="input-group">
                 <span class="input-group-addon cursor-pointer">
@@ -45,9 +52,10 @@ class DateTimePicker extends HTML_QuickForm_text
                 <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
                 <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <span class="fa fa-times text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">'.get_lang('Reset').'</span>
+                    <button class="btn btn-default" type="button"
+                            title="'.$resetFieldX.'">
+                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
+                        <span class="sr-only">'.$resetFieldX.'</span>
                     </button>
                 </span>
             </div>
@@ -60,11 +68,7 @@ class DateTimePicker extends HTML_QuickForm_text
     public function setValue($value)
     {
         $value = substr($value, 0, 16);
-        $this->updateAttributes(
-            [
-                'value' => $value,
-            ]
-        );
+        $this->updateAttributes(['value' => $value]);
     }
 
     /**
@@ -75,9 +79,7 @@ class DateTimePicker extends HTML_QuickForm_text
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
-        $id = $this->getAttribute('id');
         $value = $this->getValue();
-
         if (empty($size)) {
             $sizeTemp = $this->getInputSize();
             if (empty($size)) {
@@ -99,10 +101,6 @@ class DateTimePicker extends HTML_QuickForm_text
             }
         }
 
-        if (!empty($value)) {
-            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
-        }
-
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
                 return '
@@ -114,7 +112,6 @@ class DateTimePicker extends HTML_QuickForm_text
 
                     {element}
                 </div>';
-                break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
@@ -141,10 +138,8 @@ class DateTimePicker extends HTML_QuickForm_text
                         <!-- END label_3 -->
                     </div>
                 </div>';
-                break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '{element}';
-                break;
         }
     }
 

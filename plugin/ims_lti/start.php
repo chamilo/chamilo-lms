@@ -1,23 +1,25 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
-
-$toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-if (empty($toolId)) {
-    api_not_allowed(true);
-}
 
 api_protect_course_script();
 
+$em = Database::getManager();
+
+/** @var ImsLtiTool $tool */
+$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : null;
+
+if (!$tool) {
+    api_not_allowed(true);
+}
+
 $imsLtiPlugin = ImsLtiPlugin::create();
 
-$tool = ImsLtiTool::fetch($toolId);
-
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../assets/css/style.css" type="text/css">';
-
-$template = new Template($imsLtiPlugin->get_title());
+$template = new Template($tool->getName());
+$template->assign('tool', $tool);
 $template->assign(
     'launch_url',
     api_get_path(WEB_PLUGIN_PATH).'ims_lti/form.php?'.http_build_query(['id' => $tool->getId()])

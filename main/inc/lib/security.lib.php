@@ -317,7 +317,8 @@ class Security
         if (!isset($purifier[$user_status])) {
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
             if (!file_exists($cache_dir)) {
-                mkdir($cache_dir, 0777);
+                $mode = api_get_permissions_for_new_directories();
+                mkdir($cache_dir, $mode);
             }
             $config = HTMLPurifier_Config::createDefault();
             $config->set('Cache.SerializerPath', $cache_dir);

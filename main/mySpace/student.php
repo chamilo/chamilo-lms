@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Student report.
+ * Report on students subscribed to courses I am teaching.
  *
  * @package chamilo.reporting
  */
@@ -9,15 +10,22 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
+$allowToTrack = api_is_platform_admin(true, true) ||
+    api_is_teacher() ||
+    api_is_student_boss();
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+}
+
 $nameTools = get_lang('Students');
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-
-api_block_anonymous_users();
-
 $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [
@@ -38,15 +46,16 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) &&
 
 function get_count_users()
 {
-    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-    $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
+    $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
+    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-    $count = SessionManager::getCountUserTracking(
+
+    return SessionManager::getCountUserTracking(
         $keyword,
         $active,
         $lastConnectionDate,
@@ -54,17 +63,15 @@ function get_count_users()
         null,
         api_is_student_boss() ? null : STUDENT
     );
-
-    return $count;
 }
 
 function get_users($from, $limit, $column, $direction)
 {
+    global $export_csv;
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-    $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -72,11 +79,10 @@ function get_users($from, $limit, $column, $direction)
     }
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
-
+    $column = 'u.user_id';
     $drhLoaded = false;
 
     if (api_is_drh()) {
-        $column = 'u.user_id';
         if (api_drh_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
@@ -97,7 +103,7 @@ function get_users($from, $limit, $column, $direction)
         }
     }
 
-    if ($drhLoaded == false) {
+    if ($drhLoaded === false) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             api_is_student_boss() ? null : STUDENT,
@@ -130,13 +136,18 @@ function get_users($from, $limit, $column, $direction)
             foreach ($courses as $course_code) {
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
-                if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $sessionId);
-                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
+
+                if (CourseManager::is_user_subscribed_in_course($student_id, $course_code, true)) {
+                    $avg_time_spent += Tracking::get_time_spent_on_the_course(
+                        $student_id,
+                        $courseId,
+                        $_GET['id_session']
+                    );
+                    $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
-                    $avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+                    $avg_student_progress += Tracking::get_avg_student_progress($student_id, $course_code);
                     $nb_courses_student++;
                 }
             }
@@ -253,7 +264,7 @@ if (api_is_drh()) {
         '#'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon("statistics.png", get_lang("CompanyReport"), [], ICON_SIZE_MEDIUM),
+        Display::return_icon("statistics.png", get_lang('CompanyReport'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php"
     );
     $actionsLeft .= Display::url(
@@ -267,8 +278,7 @@ if (api_is_drh()) {
     );
 }
 
-$actionsRight = '';
-$actionsRight .= Display::url(
+$actionsRight = Display::url(
     Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
     'javascript: void(0);',
     ['onclick' => 'javascript: window.print();']
@@ -346,8 +356,7 @@ if ($export_csv) {
 } else {
     Display::display_header($nameTools);
     echo $toolbar;
-    $page_title = get_lang('Students');
-    echo Display::page_subheader($page_title);
+    echo Display::page_subheader($nameTools);
     if (isset($active)) {
         if ($active) {
             $activeLabel = get_lang('ActiveUsers');

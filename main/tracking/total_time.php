@@ -6,9 +6,6 @@ use ChamiloSession as Session;
 /**
  * @package chamilo.tracking
  */
-$pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -21,22 +18,14 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
 
+$this_section = SECTION_COURSES;
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";
-} else {
-    $this_section = SECTION_COURSES;
+    $this_section = 'session_my_space';
 }
 
 // Access restrictions.
-$is_allowedToTrack =
-    api_is_platform_admin() ||
-    SessionManager::user_is_general_coach(api_get_user_id(), $session_id) ||
-    api_is_allowed_to_create_course() ||
-    api_is_session_admin() ||
-    api_is_drh() ||
-    api_is_course_tutor() ||
-    api_is_course_admin();
+$is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -47,7 +36,8 @@ if (!$is_allowedToTrack) {
 if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
-        // If the drh has been configured to be allowed to see all session content, give him access to the session courses
+        // If the drh has been configured to be allowed to see all session content,
+        // give him access to the session courses
         $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(
             api_get_user_id(),
             null
@@ -323,11 +313,17 @@ if (count($a_students) > 0) {
     $headers['login'] = get_lang('Login');
 
     $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['training_time'] = get_lang('TrainingTime');
 
     $table->set_header(5, get_lang('TotalLPTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('TotalLPTime'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
+        Display::return_icon('info3.gif', get_lang('TotalLPTime'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        false,
+        ['style' => 'width:110px;']
+    );
     $headers['total_time_lp'] = get_lang('TotalLPTime');
 
     $table->set_header(6, get_lang('FirstLoginInCourse'), false);

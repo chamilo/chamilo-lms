@@ -24,35 +24,35 @@ class UserRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="friend_user_id", type="integer", nullable=false)
      */
-    private $friendUserId;
+    protected $friendUserId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    private $relationType;
+    protected $relationType;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
-    private $lastEdit;
+    protected $lastEdit;
 
     /**
      * Set userId.

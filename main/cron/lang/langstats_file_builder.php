@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script generates a directory based on the English language variables
  * but only composed of the 10,000 (can be configured) most frequent words
@@ -8,9 +9,6 @@
  * (see langstats.php for more info).
  * When running the language_builder, please make sure this parameter is
  * set to 0 in the configuration.php file, otherwise it will take *ages*.
- */
-/**
- * Requires.
  */
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';
@@ -94,7 +92,9 @@ foreach ($list_files as $file) {
     $global_var += $local_var;
 }
 $terms_diff = count($global_var) - count($terms_in_limit);
-echo count($global_var)." terms found in English files (summing up to $words_found words). Some terms ($terms_diff in this case) might have appeared in two different files<br />";
+echo count(
+        $global_var
+    )." terms found in English files (summing up to $words_found words). Some terms ($terms_diff in this case) might have appeared in two different files<br />";
 /**
  * Display results.
  */

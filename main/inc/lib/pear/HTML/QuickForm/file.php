@@ -252,10 +252,16 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     public function getElementJS($param)
     {
         $id = $this->getAttribute('id');
-        $ratio = '16 / 9';
+        $ratio = 'aspectRatio: 16 / 9';
         if (!empty($param['ratio'])) {
-            $ratio = $param['ratio'];
+            $ratio = 'aspectRatio: '.$param['ratio'].',';
         }
+        $scalable = 'false';
+        if (!empty($param['scalable']) && $param['scalable'] != 'false') {
+            $ratio = '';
+            $scalable = $param['scalable'];
+        }
+        
         return '<script>
         $(document).ready(function() {
             var $inputFile = $(\'#'.$id.'\'),
@@ -283,14 +289,14 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $image
                     .cropper(\'destroy\')
                     .cropper({
-                        aspectRatio: '.$ratio.',
+                        '.$ratio.'
                         responsive : true,
                         center : false,
                         guides : false,
                         movable: false,
                         zoomable: false,
                         rotatable: false,
-                        scalable: false,
+                        scalable: '.$scalable.',
                         crop: function(e) {
                             // Output the result data for cropping image.
                             $input.val(e.x + \',\' + e.y + \',\' + e.width + \',\' + e.height);
@@ -351,7 +357,11 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             if (!empty($this->_attributes['crop_ratio'])) {
                 $ratio = $this->_attributes['crop_ratio'];
             }
-            $js = $this->getElementJS(array('ratio' => $ratio));
+            $scalable = 'false';
+            if (!empty($this->_attributes['crop_scalable'])) {
+                $scalable = $this->_attributes['crop_scalable'];
+            }
+            $js = $this->getElementJS(array('ratio' => $ratio, 'scalable' => $scalable));
         }
 
         if ($this->_flagFrozen) {

@@ -24,9 +24,6 @@ foreach ($list as $mail) {
     $mail = trim($mail);
     $sql = "SELECT user_id, official_code, firstname, lastname, email FROM $users WHERE email = '$mail'\n";
     $res = Database::query($sql);
-    if ($res === false) {
-        die(mysql_error());
-    }
     if (Database::num_rows($res) == 0) {
         $string .= 'No encontrado;'.$row['email'];
     } else {

@@ -17,9 +17,9 @@ class Asset extends Resource
     /**
      * Asset constructor.
      *
-     * @param int $id
-     * @param int $path
-     * @param $title
+     * @param int    $id
+     * @param int    $path
+     * @param string $title
      */
     public function __construct($id, $path, $title)
     {

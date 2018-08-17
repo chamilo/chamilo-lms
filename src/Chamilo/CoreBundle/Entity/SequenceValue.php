@@ -20,76 +20,76 @@ class SequenceValue
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
      * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
      */
-    private $entity;
+    protected $entity;
 
     /**
      * @var int
      *
      * @ORM\Column(name="advance", type="float")
      */
-    private $advance;
+    protected $advance;
 
     /**
      * @var int
      *
      * @ORM\Column(name="complete_items", type="integer")
      */
-    private $completeItems;
+    protected $completeItems;
 
     /**
      * @var int
      *
      * @ORM\Column(name="total_items", type="integer")
      */
-    private $totalItems;
+    protected $totalItems;
 
     /**
      * @var int
      *
      * @ORM\Column(name="success", type="boolean")
      */
-    private $success;
+    protected $success;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="success_date", type="datetime", nullable=true)
      */
-    private $successDate;
+    protected $successDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="available", type="boolean")
      */
-    private $available;
+    protected $available;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="available_start_date", type="datetime", nullable=true)
      */
-    private $availableStartDate;
+    protected $availableStartDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="available_end_date", type="datetime", nullable=true)
      */
-    private $availableEndDate;
+    protected $availableEndDate;
 
     /**
      * Get id.

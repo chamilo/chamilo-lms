@@ -355,6 +355,20 @@
 					alt: this.data.alt
 				} );
 
+				if (this.data.hasCaption) {
+					this.parts.image.setStyle('border-width', null);
+					this.parts.image.setStyle('border-style', null);
+					this.parts.image.setStyle('border-color', null);
+					this.parts.image.setStyle('border-radius', null);
+					this.parts.image.setStyle('background-color', null);
+				} else {
+					this.parts.image.setStyle('border-width', this.data.borderWidth);
+					this.parts.image.setStyle('border-style', this.data.borderStyle);
+					this.parts.image.setStyle('border-color', this.data.borderColor);
+					this.parts.image.setStyle('border-radius', this.data.borderRadius);
+					this.parts.image.setStyle('background-color', this.data.backgroundColor);
+				}
+
 				// If shifting non-captioned -> captioned, remove classes
 				// related to styles from <img/>.
 				if ( this.oldData && !this.oldData.hasCaption && this.data.hasCaption ) {
@@ -382,7 +396,12 @@
 						height: image.getAttribute( 'height' ) || '',
 						isResponsive: !!image.$.className.match(/img-responsive/i),
 						// Lock ratio is on by default (#10833).
-						lock: this.ready ? helpers.checkHasNaturalRatio( image ) : true
+						lock: this.ready ? helpers.checkHasNaturalRatio( image ) : true,
+						borderWidth: !this.parts.caption ? image.getStyle('border-width') : '',
+						borderStyle: !this.parts.caption ? image.getStyle('border-style') : 'solid',
+						borderColor: !this.parts.caption ? image.getStyle('border-color') : '',
+						borderRadius: !this.parts.caption ? image.getStyle('border-radius') : '',
+						backgroundColor: !this.parts.caption ? image.getStyle('background-color') : '',
 					};
 
 				// If we used 'a' in widget#parts definition, it could happen that
@@ -580,7 +599,8 @@
 					}
 
 					// Finally set display for figure.
-					if ( !alignClasses && el.is( 'figure' ) ) {
+					// if ( !alignClasses && el.is( 'figure' ) ) {
+					if ( el.is( 'figure' ) ) { // Force set display inline-block for figure regardless class
 						if ( newValue == 'center' )
 							el.setStyle( 'display', 'inline-block' );
 						else
@@ -1594,7 +1614,8 @@
 					match: centerWrapperChecker( editor )
 				},
 				img: {
-					attributes: '!src,alt,width,height'
+					attributes: '!src,alt,width,height',
+					styles: 'border-width,border-style,border-color,border-radius,background-color'
 				},
 				figure: {
 					classes: '!' + editor.config.image2_chamilo_captionedClass
@@ -1647,6 +1668,21 @@
 				},
 				responsive: {
 					requiredContent: 'img'
+				},
+				borderWidth: {
+					requiredContent: 'img{border-width}'
+				},
+				borderStyle: {
+					requiredContent: 'img{border-style}'
+				},
+				borderColor: {
+					requiredContent: 'img{border-color}'
+				},
+				borderRadius: {
+					requiredContent: 'img{border-radius}'
+				},
+				backgroundColor: {
+					requiredContent: 'img{background-color}'
 				}
 			};
 

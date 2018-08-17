@@ -23,11 +23,11 @@ if (is_object($objQuestion)) {
     // FORM CREATION
     $form = new FormValidator('question_admin_form', 'post', $action);
     if (isset($_GET['editQuestion'])) {
-        $class = "btn btn-default";
+        $class = 'btn btn-default';
         $text = get_lang('ModifyQuestion');
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
     } else {
-        $class = "btn btn-default";
+        $class = 'btn btn-default';
         $text = get_lang('AddQuestionToExercise');
         $type = $_REQUEST['answerType'];
     }

@@ -136,6 +136,10 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      */
     public function setIcon($icon)
     {
+        // Try and sanitize $icon in case it's an array (take the first element and consider it's a string)
+        if (is_array($icon)) {
+            $icon = @strval($icon[0]);
+        }
         $this->icon = !empty($icon) ? 'fa fa-'.$icon : null;
     }
 

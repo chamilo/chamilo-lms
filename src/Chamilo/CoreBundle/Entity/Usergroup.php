@@ -27,7 +27,7 @@ class Usergroup
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=false)
      */
     protected $name;
 
@@ -67,6 +67,13 @@ class Usergroup
     protected $visibility;
 
     /**
+     * @var string
+     *
+     * ORM\Column(name="author_id", type="integer", nullable=true)
+     */
+    //protected $authorId;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="allow_members_leave_group", type="integer")
@@ -94,6 +101,9 @@ class Usergroup
      */
     protected $users;
 
+    /**
+     * Usergroup constructor.
+     */
     public function __construct()
     {
         //$this->users = new ArrayCollection();

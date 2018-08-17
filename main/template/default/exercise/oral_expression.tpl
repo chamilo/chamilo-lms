@@ -1,12 +1,13 @@
-<div id="record-audio-recordrtc-{{ question_id }}" class="row text-center">
+
+<div id="record-audio-recordrtc-{{ question_id }}" class="row">
     <div class="col-sm-4 col-sm-offset-4">
-        <div class="form-group">
+        <div class="form-group text-center">
             <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
             <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
         </div>
     </div>
     <div class="col-sm-12">
-        <div class="form-group">
+        <div class="form-group text-center">
             <button class="btn btn-primary" type="button" id="btn-start-record-{{ question_id }}">
                 <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
             </button>
@@ -19,16 +20,22 @@
             <button class="btn btn-danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
                 <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
             </button>
+            <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}"
+                data-loadingtext="{{ 'Uploading'|get_lang }}"
+                disabled>
+                <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
+            </button>
             <button id="hide_description_{{ question_id }}" type="button" class="btn btn-default advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
                 <em class="fa fa-bars"></em> {{ 'AddText' | get_lang }}
             </button>
         </div>
-        <div class="form-group">
+        <div class="form-group text-center">
             <audio class="skip hidden center-block" controls id="record-preview-{{ question_id }}"></audio>
         </div>
         <div class="well">
             {{ 'OralExpressionHelpText' | get_lang }}
         </div>
+        <div class="record-message"></div>
     </div>
 </div>
 
@@ -54,5 +61,9 @@ $(document).on('ready', function () {
         directory: '{{ directory }}',
         userId: {{ user_id }}
     }, '{{ file_name }}');
+
+    if (0 === $('#hide_description_{{ question_id }}_options').length) {
+        $('#hide_description_{{ question_id }}').remove();
+    }
 });
 </script>

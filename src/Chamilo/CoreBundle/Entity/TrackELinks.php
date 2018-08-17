@@ -22,35 +22,35 @@ class TrackELinks
      *
      * @ORM\Column(name="links_user_id", type="integer", nullable=true)
      */
-    private $linksUserId;
+    protected $linksUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="links_date", type="datetime", nullable=false)
      */
-    private $linksDate;
+    protected $linksDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="links_link_id", type="integer", nullable=false)
      */
-    private $linksLinkId;
+    protected $linksLinkId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="links_session_id", type="integer", nullable=false)
      */
-    private $linksSessionId;
+    protected $linksSessionId;
 
     /**
      * @var int
@@ -59,7 +59,7 @@ class TrackELinks
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $linksId;
+    protected $linksId;
 
     /**
      * Set linksUserId.

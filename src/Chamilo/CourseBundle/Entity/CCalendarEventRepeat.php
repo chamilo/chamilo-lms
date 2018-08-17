@@ -25,49 +25,49 @@ class CCalendarEventRepeat
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_id", type="integer")
      */
-    private $calId;
+    protected $calId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
      */
-    private $calType;
+    protected $calType;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_end", type="integer", nullable=true)
      */
-    private $calEnd;
+    protected $calEnd;
 
     /**
      * @var int
      *
      * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
      */
-    private $calFrequency;
+    protected $calFrequency;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
      */
-    private $calDays;
+    protected $calDays;
 
     /**
      * Set calType.

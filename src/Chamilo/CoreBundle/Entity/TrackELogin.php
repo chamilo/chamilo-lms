@@ -20,28 +20,28 @@ class TrackELogin
      *
      * @ORM\Column(name="login_user_id", type="integer", nullable=false)
      */
-    private $loginUserId;
+    protected $loginUserId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
      */
-    private $loginDate;
+    protected $loginDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    private $userIp;
+    protected $userIp;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="logout_date", type="datetime", nullable=true)
      */
-    private $logoutDate;
+    protected $logoutDate;
 
     /**
      * @var int
@@ -50,7 +50,7 @@ class TrackELogin
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $loginId;
+    protected $loginId;
 
     /**
      * Set loginUserId.

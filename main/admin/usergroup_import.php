@@ -4,9 +4,9 @@
 /**
  *  This tool allows platform admins to add classes by uploading a CSV file.
  *
- *  @todo Add some langvars to DLTT
+ * @todo Add some langvars to DLTT
  *
- * 	@package chamilo.admin
+ * @package chamilo.admin
  */
 
 /**
@@ -82,14 +82,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions.
-api_protect_admin_script();
+$usergroup = new UserGroup();
+$usergroup->protectScript();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
-// Database Table Definitions
 // Setting the name of the tool.
 $tool_name = get_lang('ImportClassListCSV');
 
@@ -128,7 +126,7 @@ if ($form->validate()) {
 }
 
 // Displaying the header.
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 $form->display();
 ?>
@@ -140,4 +138,4 @@ $form->display();
 </pre>
 <?php
 // Displaying the footer.
-Display :: display_footer();
+Display::display_footer();

@@ -251,9 +251,9 @@ $(function() {
                             $('[name=\''+radio+'\']').val([item.value]);
                             break;
                         case '4': // simple select
-                        case '5': // multiple select                            
+                        case '5': // multiple select
                             var options = item.value.split(';');                            
-                            $('#'+fieldName+'').val(options);                             
+                            $('#'+fieldName+'').val(options);
                             $('#'+fieldName+'').selectpicker('render');
                             break;
                         case '8': // double

@@ -1,10 +1,15 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Application\Migrations\Schema\V111;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+/**
+ * Class Version20160405112100
+ * @package Application\Migrations\Schema\V111
+ */
 class Version20160405112100 extends AbstractMigrationChamilo
 {
     /**

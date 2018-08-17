@@ -11,6 +11,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $entityManager = Database::getManager();
+/** @var \Chamilo\CoreBundle\Entity\Skill $skill */
 $skill = $entityManager->find('ChamiloCoreBundle:Skill', $_GET['id']);
 
 if (!$skill) {
@@ -27,7 +28,7 @@ $skillInfo = [
     'short_code' => $skill->getShortCode(),
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
-    'badge_image' => $skill->getWebIconPath(),
+    'badge_image' => Skill::getWebIconPath($skill),
 ];
 
 $template = new Template();

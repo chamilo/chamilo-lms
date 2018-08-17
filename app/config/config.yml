@@ -42,7 +42,6 @@ imports:
 #    - { resource: @CmfBlogBundle/Resources/config/admin.yml }
 
     - { resource: ivory_ckeditor.yml }
-
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
@@ -289,3 +288,11 @@ knp_menu:
 sonata_doctrine_orm_admin:
     audit:
         force: false # Audits are set in the admin.yml files with audit:true
+
+sensio_framework_extra:
+    view:
+        annotations: true
+
+fos_rest:
+    access_denied_listener: true
+    exception: true # Activates the FOSRestBundle exception controller

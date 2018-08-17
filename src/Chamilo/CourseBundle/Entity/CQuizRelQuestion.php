@@ -27,35 +27,35 @@ class CQuizRelQuestion
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_order", type="integer", nullable=false)
      */
-    private $questionOrder;
+    protected $questionOrder;
 
     /**
      * @var int
      *
      * @ORM\Column(name="question_id", type="integer")
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="exercice_id", type="integer")
      */
-    private $exerciceId;
+    protected $exerciceId;
 
     /**
      * Set questionOrder.

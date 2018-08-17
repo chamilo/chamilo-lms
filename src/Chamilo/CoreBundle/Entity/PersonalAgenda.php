@@ -21,70 +21,70 @@ class PersonalAgenda
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user", type="integer", nullable=true)
      */
-    private $user;
+    protected $user;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="text", type="text", nullable=true)
      */
-    private $text;
+    protected $text;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    private $date;
+    protected $date;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="enddate", type="datetime", nullable=true)
      */
-    private $enddate;
+    protected $enddate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course", type="string", length=255, nullable=true)
      */
-    private $course;
+    protected $course;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
      */
-    private $parentEventId;
+    protected $parentEventId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
-    private $allDay;
+    protected $allDay;
 
     /**
      * @var string
      *
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
-    private $color;
+    protected $color;
 
     /**
      * Set user.

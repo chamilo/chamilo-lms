@@ -68,10 +68,7 @@ class SequenceResourceManager
     {
         $sequenceList = [];
         $entityManager = Database::getManager();
-
-        $gradebookCategoryRepo = $entityManager->getRepository(
-            'ChamiloCoreBundle:GradebookCategory'
-        );
+        $gradebookCategoryRepo = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
 
         foreach ($sequences as $sequenceId => $sequence) {
             $item = [
@@ -109,10 +106,8 @@ class SequenceResourceManager
                         }
                     }
                 }
-
                 $item['requirements'][$sessionRequired->getId()] = $itemSession;
             }
-
             $sequenceList[$sequenceId] = $item;
         }
 

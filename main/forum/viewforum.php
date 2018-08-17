@@ -49,6 +49,8 @@ $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
 $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
 
+$isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
+
 /* MAIN DISPLAY SECTION */
 
 $my_forum = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
@@ -56,7 +58,7 @@ $my_forum = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
 $current_forum = get_forum_information($my_forum);
 $isForumOpenByDateAccess = api_is_date_in_date_range($current_forum['start_time'], $current_forum['end_time']);
 
-if (!$isForumOpenByDateAccess) {
+if (!$isForumOpenByDateAccess && !$isAllowedToEdit) {
     if ($origin) {
         api_not_allowed();
     } else {
@@ -151,16 +153,14 @@ if ($origin == 'learnpath') {
 if (($my_action == 'invisible' || $my_action == 'visible') &&
     isset($_GET['content']) &&
     isset($_GET['id']) &&
-    api_is_allowed_to_edit(false, true) &&
-    api_is_allowed_to_session_edit(false, true)
+    $isAllowedToEdit
 ) {
     $message = change_visibility($_GET['content'], $_GET['id'], $_GET['action']);
 }
 // Locking and unlocking.
 if (($my_action == 'lock' || $my_action == 'unlock') &&
     isset($_GET['content']) && isset($_GET['id']) &&
-    api_is_allowed_to_edit(false, true) &&
-    api_is_allowed_to_session_edit(false, true)
+    $isAllowedToEdit
 ) {
     $message = change_lock_status($_GET['content'], $_GET['id'], $my_action);
 }
@@ -168,8 +168,7 @@ if (($my_action == 'lock' || $my_action == 'unlock') &&
 if ($my_action == 'delete' &&
     isset($_GET['content']) &&
     isset($_GET['id']) &&
-    api_is_allowed_to_edit(false, true) &&
-    api_is_allowed_to_session_edit(false, true)
+    $isAllowedToEdit
 ) {
     $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {
@@ -190,8 +189,7 @@ if ($my_action == 'delete' &&
 }
 // Moving.
 if ($my_action == 'move' && isset($_GET['thread']) &&
-    api_is_allowed_to_edit(false, true) &&
-    api_is_allowed_to_session_edit(false, true)
+    $isAllowedToEdit
 ) {
     $message = move_thread_form();
 }

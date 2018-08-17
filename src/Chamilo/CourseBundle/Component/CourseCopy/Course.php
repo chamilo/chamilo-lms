@@ -59,6 +59,8 @@ class Course
 
     /**
      * Add a resource from a given type to this course.
+     *
+     * @param $resource
      */
     public function add_resource(&$resource)
     {
@@ -92,7 +94,8 @@ class Course
 
     /**
      * Returns sample text based on the imported course content.
-     * This sample text is to be used for course language or encoding detection if there is missing (meta)data in the archive.
+     * This sample text is to be used for course language or encoding
+     * detection if there is missing (meta)data in the archive.
      *
      * @return string the resulting sample text extracted from some common resources' data fields
      */
@@ -283,7 +286,7 @@ class Course
                             $resource->question = api_to_system_encoding($resource->question, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             if (is_array($resource->answers) && count($resource->answers) > 0) {
-                                foreach ($resource->answers as $index => &$answer) {
+                                foreach ($resource->answers as &$answer) {
                                     $answer['answer'] = api_to_system_encoding($answer['answer'], $this->encoding);
                                     $answer['comment'] = api_to_system_encoding($answer['comment'], $this->encoding);
                                 }
@@ -337,10 +340,20 @@ class Course
     public static function serialize($course)
     {
         if (extension_loaded('igbinary')) {
-            return igbinary_serialize($course);
+            $serialized = igbinary_serialize($course);
         } else {
-            return serialize($course);
+            $serialized = serialize($course);
         }
+
+        // Compress
+        if (function_exists('gzdeflate')) {
+            $deflated = gzdeflate($serialized, 9);
+            if ($deflated !== false) {
+                $deflated = $serialized;
+            }
+        }
+
+        return $serialized;
     }
 
     /**
@@ -352,10 +365,20 @@ class Course
      */
     public static function unserialize($course)
     {
-        if (extension_loaded('igbinary')) {
-            return igbinary_unserialize($course);
-        } else {
-            return unserialize($course);
+        // Uncompress
+        if (function_exists('gzdeflate')) {
+            $inflated = @gzinflate($course);
+            if ($inflated !== false) {
+                $course = $inflated;
+            }
         }
+
+        if (extension_loaded('igbinary')) {
+            $unserialized = igbinary_unserialize($course);
+        } else {
+            $unserialized = unserialize($course);
+        }
+
+        return $unserialized;
     }
 }

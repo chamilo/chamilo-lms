@@ -25,37 +25,6 @@ class LearnpathLink extends AbstractLink
     }
 
     /**
-     * Generate an array of learnpaths that a teacher hasn't created a link for.
-     *
-     * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-     */
-    public function get_not_created_links()
-    {
-        return false;
-        if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
-        }
-
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $sql = 'SELECT id, name FROM '.$this->get_learnpath_table().' lp
-				WHERE c_id = '.$this->course_id.' AND id NOT IN '
-            .' (SELECT ref_id FROM '.$tbl_grade_links
-            .' WHERE type = '.LINK_LEARNPATH
-            ." AND course_code = '".$this->get_course_code()."'"
-            .') AND lp.session_id='.api_get_session_id().'';
-
-        $result = Database::query($sql);
-
-        $cats = [];
-        while ($data = Database::fetch_array($result)) {
-            $cats[] = [$data['id'], $data['name']];
-        }
-
-        return $cats;
-    }
-
-    /**
      * Generate an array of all learnpaths available.
      *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
@@ -63,7 +32,7 @@ class LearnpathLink extends AbstractLink
     public function get_all_links()
     {
         if (empty($this->course_code)) {
-            die('Error in get_not_created_links() : course code not set');
+            return [];
         }
 
         $session_id = api_get_session_id();
@@ -186,8 +155,10 @@ class LearnpathLink extends AbstractLink
     public function get_link()
     {
         $session_id = api_get_session_id();
-        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params($this->get_course_code(),
-                $session_id).'&gradebook=view';
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params(
+            $this->get_course_code(),
+                $session_id
+        ).'&gradebook=view';
 
         if (!api_is_allowed_to_edit() || $this->calc_score(api_get_user_id()) == null) {
             $url .= '&action=view&lp_id='.$this->get_ref_id();

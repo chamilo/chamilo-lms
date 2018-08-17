@@ -90,9 +90,25 @@ function cas_is_authenticated()
                         $chamilo_user = extldap_get_chamilo_user($ldapuser);
                         $chamilo_user['user_id'] = $tab_user_info['user_id'];
                         $chamilo_user['status'] = $tab_user_info['status'];
-                        UserManager::update_user($chamilo_user["user_id"], $chamilo_user["firstname"],
-                            $chamilo_user["lastname"], $login, null, null, $chamilo_user["email"],
-                            $chamilo_user["status"], '', '', '', '', 1, null, 0, null, '');
+                        UserManager::update_user(
+                            $chamilo_user["user_id"],
+                            $chamilo_user["firstname"],
+                            $chamilo_user["lastname"],
+                            $login,
+                            null,
+                            null,
+                            $chamilo_user["email"],
+                            $chamilo_user["status"],
+                            '',
+                            '',
+                            '',
+                            '',
+                            1,
+                            null,
+                            0,
+                            null,
+                            ''
+                        );
                     }
                 }
 

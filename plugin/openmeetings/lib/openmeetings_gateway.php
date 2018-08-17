@@ -49,6 +49,7 @@ class OpenMeetingsGateway
         if ($err) {
             error_log('Constructor error: '.$err);
             error_log('Debug: '.$this->rest->getDebug());
+
             exit();
         }
     }
@@ -232,6 +233,7 @@ class OpenMeetingsGateway
         if ($err) {
             error_log('Constructor error: '.$err);
             error_log('Debug: '.$this->rest->getDebug());
+
             exit();
         }
 

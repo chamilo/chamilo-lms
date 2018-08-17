@@ -252,7 +252,10 @@ if (is_array($forumCategories)) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit&content=forumcategory&id='.intval($idCategory)
                     .'">'.Display::return_icon(
-                        'edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL
+                        'edit.png',
+                        get_lang('Edit'),
+                        [],
+                        ICON_SIZE_SMALL
                     )
                     .'</a>';
 
@@ -260,11 +263,15 @@ if (is_array($forumCategories)) {
                     .'&action=delete&content=forumcategory&id='.intval($idCategory)
                     ."\" onclick=\"javascript:if(!confirm('"
                     .addslashes(api_htmlentities(
-                        get_lang('DeleteForumCategory'), ENT_QUOTES
+                        get_lang('DeleteForumCategory'),
+                        ENT_QUOTES
                     ))
                     ."')) return false;\">"
                     .Display::return_icon(
-                        'delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL
+                        'delete.png',
+                        get_lang('Delete'),
+                        [],
+                        ICON_SIZE_SMALL
                     )
                     .'</a>';
                 $tools .= return_visible_invisible_icon(
@@ -512,7 +519,7 @@ if (is_array($forumCategories)) {
 }
 
 $tpl = new Template($nameTools);
-$tpl->assign('introduction_section', $introduction);
+$tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
 $tpl->assign('form_content', $formContent);

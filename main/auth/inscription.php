@@ -106,7 +106,6 @@ $(document).ready(function() {
 
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
-
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
 $isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
@@ -149,9 +148,8 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
 }
 
 $form = new FormValidator('registration');
-
 $user_already_registered_show_terms = false;
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
     // Ofaj change
     if (api_is_anonymous() === true) {
@@ -532,6 +530,12 @@ if (!CustomPages::enabled()) {
 
                 if (!empty($term_preview['content'])) {
                     echo $term_preview['content'];
+
+                    $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                    foreach ($values as $value) {
+                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    }
                 } else {
                     echo get_lang('ComingSoon');
                 }
@@ -609,19 +613,6 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                     $termActivated = !empty($value['value']) && $value['value'] == 1;
                 }
 
-                /*$extraFieldValue = new ExtraFieldValue('user');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'legal_accept');
-                $legalAccept = false;
-                if (isset($value['value'])) {
-                    list($legalId, $legalLanguageId, $legalTime) = explode(
-                        ':',
-                        $value['value']
-                    );
-                    if ($legalId) {
-                        $legalAccept = true;
-                    }
-                }*/
-
                 if ($termActivated === false) {
                     $blockButton = true;
                     Display::addFlash(
@@ -697,6 +688,14 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             } else {
                 $preview = LegalManager::show_last_condition($term_preview);
                 $form->addElement('label', null, $preview);
+
+                $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                foreach ($values as $value) {
+                    //if ($value['variable'] === 'category') {
+                    $form->addLabel($value['display_text'], $value['value']);
+                    //}
+                }
             }
         }
     }
@@ -806,7 +805,7 @@ if ($form->validate()) {
         $values['official_code'] = api_strtoupper($values['username']);
     }
 
-    if (api_get_setting('login_is_email') == 'true') {
+    if (api_get_setting('login_is_email') === 'true') {
         $values['username'] = $values['email'];
     }
 
@@ -874,7 +873,7 @@ if ($form->validate()) {
 
         // Update the extra fields
         $count_extra_field = count($extras);
-        if ($count_extra_field > 0 && is_integer($user_id)) {
+        if ($count_extra_field > 0 && is_int($user_id)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file
@@ -939,7 +938,7 @@ if ($form->validate()) {
             if (!empty($sessionToRedirect) && !$sessionPremiumChecker) {
                 $sessionInfo = api_get_session_info($sessionToRedirect);
                 if (!empty($sessionInfo)) {
-                    SessionManager::subscribe_users_to_session(
+                    SessionManager::subscribeUsersToSession(
                         $sessionToRedirect,
                         [$user_id],
                         SESSION_VISIBLE_READ_ONLY,
@@ -1053,15 +1052,22 @@ if ($form->validate()) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
-                $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
                 UserManager::update_extra_field_value(
                     $user_id,
                     'legal_accept',
-                    $condition_to_save
+                    $conditionToSave
+                );
+
+                Event::addEvent(
+                    LOG_TERM_CONDITION_ACCEPTED,
+                    LOG_USER_OBJECT,
+                    api_get_user_info($user_id),
+                    api_get_utc_datetime()
                 );
 
                 $bossList = UserManager::getStudentBossList($user_id);
-                if ($bossList) {
+                if (!empty($bossList)) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
                     $followUpPath = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$currentUserInfo['id'];
@@ -1093,6 +1099,7 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
+    Session::write('_user', $_user);
 
     $userInfo = api_get_user_info($user_id);
     $_user['status'] = $userInfo['status'];
@@ -1235,7 +1242,8 @@ if ($form->validate()) {
     // Custom pages
     if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
         CustomPages::display(
-            CustomPages::REGISTRATION, ['form' => $form]
+            CustomPages::REGISTRATION,
+            ['form' => $form, 'content' => $content]
         );
     } else {
         if (!api_is_anonymous()) {

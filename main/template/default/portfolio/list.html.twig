@@ -1,0 +1,65 @@
+{% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
+{% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
+{% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
+{% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
+{% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
+
+{% import 'portfolio/items.html.twig'|get_template as items %}
+
+{% if not allow_edit %}
+    <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
+{% endif %}
+
+{{ items.display(uncategorized_items, 0, allow_edit, _c) }}
+
+{% for category in portfolio %}
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <h4 class="page-header">
+                <a href="#collapse-category-{{ category.id }}" role="button" data-toggle="collapse"
+                   aria-expanded="false" aria-controls="collapse-category-{{ category.id }}">
+                    {{ category.title }}
+                </a>
+
+                {% if allow_edit %}
+                    <div class="pull-right">
+                        <a href="{{ baseurl ~ {'action':'edit_category', 'id':category.id}|url_encode }}">
+                            {{ edit_img }}
+                        </a>
+                        {% if category.isVisible %}
+                            <a href="{{ baseurl ~ {'action':'hide_category', 'id':category.id}|url_encode }}">
+                                {{ visible_img }}
+                            </a>
+                        {% else %}
+                            <a href="{{ baseurl ~ {'action':'show_category', 'id':category.id}|url_encode }}">
+                                {{ invisible_img }}
+                            </a>
+                        {% endif %}
+                        <a href="{{ baseurl ~ {'action':'delete_category', 'id':category.id}|url_encode }}"
+                           class="btn-delete">
+                            {{ delete_img }}
+                        </a>
+                    </div>
+                {% endif %}
+            </h4>
+
+            <div>
+                {{ category.description }}
+            </div>
+
+            <div class="collapse" id="collapse-category-{{ category.id }}">
+                {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c) }}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<script>
+    $(document).on('ready', function () {
+        $('.btn-delete').on('click', function (e) {
+            if (!confirm('{{ 'NoteConfirmDelete'|get_lang }} ')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>

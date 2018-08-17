@@ -8,7 +8,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 api_protect_admin_script();
@@ -85,7 +84,6 @@ $paramsNoRole = 'field_id='.$field_id.'&type='.$extraField->type;
 $columns = [get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions')];
 
 $htmlHeadXtra[] = '<script>
-
     function setHidden(obj) {
         var name = $(obj).attr("name");
         var hiddenName = "hidden_" + name;
@@ -116,9 +114,7 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-// The header.
 Display::display_header($tool_name);
-
 echo Display::page_header($extraFieldInfo['display_text']);
 
 $obj = new ExtraFieldOption($type);

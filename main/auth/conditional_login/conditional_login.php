@@ -13,7 +13,8 @@ use ChamiloSession as Session;
 */
 /**
  * Please implements the functions of the $login_conditions array.
- * Each of these function will take a user array (user_id, username, password (crypted), auth_source, active, expiration_date).
+ * Each of these function will take a user array
+ * (user_id, username, password (crypted), auth_source, active, expiration_date).
  */
 $login_conditions = [];
 
@@ -54,6 +55,7 @@ function check_platform_legal_conditions($user)
         api_get_setting('load_term_conditions_section') === 'login'
     ) {
         $termAndConditionStatus = api_check_term_condition($user['user_id']);
+
         // @todo not sure why we need the login password and update_term_status
         if ($termAndConditionStatus === false) {
             Session::write('term_and_condition', ['user_id' => $user['user_id']]);

@@ -30,6 +30,3 @@
     });
 </script>
 <div id="elfinder"></div>
-
-
-

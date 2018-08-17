@@ -15,7 +15,6 @@ if (api_get_setting('allow_global_chat') == 'false') {
 if (api_is_anonymous()) {
     exit;
 }
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 // Course Chat
@@ -44,7 +43,6 @@ if ($chat->isChatBlockedByExercises()) {
     $chat->setUserStatus(0);
     exit;
 }
-
 switch ($action) {
     case 'chatheartbeat':
         $chat->heartbeat();
@@ -59,7 +57,7 @@ switch ($action) {
         $chat->startSession();
         break;
     case 'get_previous_messages':
-        $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+        $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
         $visibleMessages = isset($_REQUEST['visible_messages']) ? $_REQUEST['visible_messages'] : null;
         if (empty($userId)) {
             return '';
@@ -73,7 +71,7 @@ switch ($action) {
         exit;
         break;
     case 'set_status':
-        $status = isset($_REQUEST['status']) ? intval($_REQUEST['status']) : 0;
+        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
         $chat->setUserStatus($status);
         break;
     case 'create_room':

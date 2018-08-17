@@ -91,14 +91,7 @@ background: linear-gradient(to bottom, #fc8a00 0%,#ff6e00 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fc8a00', endColorstr='#ff6e00',GradientType=0 );
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background: #01a1ff;
-background: -moz-linear-gradient(top, #01a1ff 0%, #0266ef 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#01a1ff), color-stop(100%,#0266ef));
-background: -webkit-linear-gradient(top, #01a1ff 0%,#0266ef 100%);
-background: -o-linear-gradient(top, #01a1ff 0%,#0266ef 100%);
-background: -ms-linear-gradient(top, #01a1ff 0%,#0266ef 100%);
-background: linear-gradient(to bottom, #01a1ff 0%,#0266ef 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01a1ff', endColorstr='#0266ef',GradientType=0 );
+  background: #FFFFFF;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;
@@ -236,19 +229,23 @@ footer.bgfooter a:hover{
     background-image: url(images/user.png);
     background-position: 10px center;
     background-repeat: no-repeat;
+    padding-left: 40px;
 }
 #skill_block .panel-heading{
     background-image: url(images/star.png);
     background-position: 10px center;
     background-repeat: no-repeat;
+    padding-left: 40px;
 }
 #course_block .panel-heading{
     background-image: url(images/book.png);
     background-position: 10px center;
     background-repeat: no-repeat;
+    padding-left: 40px;
 }
 #help_block .panel-heading{
     background-image: url(images/rocket.png);
     background-position: 10px center;
     background-repeat: no-repeat;
+    padding-left: 40px;
 }

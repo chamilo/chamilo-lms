@@ -27,56 +27,56 @@ class CStudentPublicationComment
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
-    private $workId;
+    protected $workId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var string
      *
      * @ORM\Column(name="file", type="string", length=255, nullable=true)
      */
-    private $file;
+    protected $file;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
-    private $sentAt;
+    protected $sentAt;
 
     /**
      * Set workId.

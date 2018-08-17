@@ -20,7 +20,7 @@ class AccessUrlRelSession
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $accessUrlId;
+    protected $accessUrlId;
 
     /**
      * @var int
@@ -29,7 +29,7 @@ class AccessUrlRelSession
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set accessUrlId.

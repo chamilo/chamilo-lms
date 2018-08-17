@@ -1,5 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
  *
@@ -63,6 +67,19 @@ if (isset($_POST) && $is_error) {
     }
 
     switch ($type) {
+        case 'chamilo':
+            $filename = CourseArchiver::importUploadedFile(
+                $_FILES['user_file']['tmp_name']
+            );
+            if ($filename) {
+                $course = CourseArchiver::readCourse($filename, false);
+                $courseRestorer = new CourseRestorer($course);
+                // FILE_SKIP, FILE_RENAME or FILE_OVERWRITE
+                $courseRestorer->set_file_option(FILE_OVERWRITE);
+                $courseRestorer->restore();
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+            }
+            break;
         case 'scorm':
             $oScorm = new scorm();
             $manifest = $oScorm->import_package($_FILES['user_file'], $current_dir);

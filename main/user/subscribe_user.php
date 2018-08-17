@@ -59,18 +59,18 @@ $list_not_register_user = '';
 
 if (isset($_REQUEST['register'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
-    $message = $userInfo['complete_name'].' '.get_lang('AddedToCourse');
+    $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
 
     if ($type === COURSEMANAGER) {
         if (!empty($sessionId)) {
-            $result_simple_sub = SessionManager::set_coach_to_course_session(
+            SessionManager::set_coach_to_course_session(
                 $_REQUEST['user_id'],
                 $sessionId,
                 $courseInfo['real_id']
             );
             Display::addFlash(Display::return_message($message));
         } else {
-            $result_simple_sub = CourseManager:: subscribe_user(
+            CourseManager::subscribe_user(
                 $_REQUEST['user_id'],
                 $courseInfo['code'],
                 COURSEMANAGER
@@ -78,7 +78,7 @@ if (isset($_REQUEST['register'])) {
             Display::addFlash(Display::return_message($message));
         }
     } else {
-        $result_simple_sub = CourseManager:: subscribe_user(
+        CourseManager::subscribe_user(
             $_REQUEST['user_id'],
             $courseInfo['code']
         );
@@ -114,7 +114,7 @@ if (isset($_POST['action'])) {
                             $courseInfo['code']
                         );
                     }
-                    $message = $userInfo['complete_name'].' '.get_lang('AddedToCourse');
+                    $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
                     Display::addFlash(Display::return_message($message));
                 }
             }

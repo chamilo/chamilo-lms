@@ -18,17 +18,16 @@ $this_section = SECTION_COURSES;
 // Course protection
 api_protect_course_script(true);
 
-$id = intval($_GET['id']);
-
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $courseInfo = api_get_course_info();
 
-if (empty($courseInfo)) {
+if (empty($courseInfo) || empty($id)) {
     api_not_allowed(true);
 }
 
 $correction = isset($_REQUEST['correction']) ? true : false;
 $result = downloadFile($id, $courseInfo, $correction);
-if ($result == false) {
+if ($result === false) {
     api_not_allowed(true);
 }
 

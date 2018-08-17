@@ -20,7 +20,7 @@ class ClassUser
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $classId;
+    protected $classId;
 
     /**
      * @var int
@@ -29,7 +29,7 @@ class ClassUser
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $userId;
+    protected $userId;
 
     /**
      * Set classId.

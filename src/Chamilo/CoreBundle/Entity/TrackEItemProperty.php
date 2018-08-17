@@ -22,63 +22,63 @@ class TrackEItemProperty
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
-    private $courseId;
+    protected $courseId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="item_property_id", type="integer", nullable=false)
      */
-    private $itemPropertyId;
+    protected $itemPropertyId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @var int
      *
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
-    private $progress;
+    protected $progress;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
-    private $lasteditDate;
+    protected $lasteditDate;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
      */
-    private $lasteditUserId;
+    protected $lasteditUserId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * Set courseId.

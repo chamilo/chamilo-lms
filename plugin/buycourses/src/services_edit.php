@@ -19,7 +19,7 @@ if (!$serviceId) {
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
 $em = Database::getManager();
-$users = $em->getRepository('ChamiloUserBundle:User')->findAll();
+$users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -56,7 +56,7 @@ $formDefaultValues = [
 
 $form = new FormValidator('Services');
 $form->addText('name', $plugin->get_lang('ServiceName'));
-$form->addTextarea('description', $plugin->get_lang('Description'));
+$form->addHtmlEditor('description', $plugin->get_lang('Description'));
 $form->addElement(
     'number',
     'price',

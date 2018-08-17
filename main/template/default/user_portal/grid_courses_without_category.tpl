@@ -41,9 +41,11 @@
                             <div class="block-title">
                                 <h4 class="title" title="{{ item.title }}">
                                     {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                        {{ item.title_cut }} {{ item.code_course }}
+                                        {{ item.title_cut }}
+                                        <span class="code-title">{{ item.code_course }}</span>
                                     {% else %}
-                                        <a title="{{ item.title }}" href="{{ item.link }}">{{ item.title_cut }} {{ item.code_course }}</a>
+                                        <a title="{{ item.title }}" href="{{ item.link }}">{{ item.title_cut }}</a>
+                                        <span class="code-title">{{ item.code_course }}</span>
                                     {% endif %}
                                 </h4>
                             </div>

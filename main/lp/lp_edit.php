@@ -76,20 +76,19 @@ $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), tru
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
 
 // Hide toc frame
-$hide_toc_frame = $form->addElement(
+$form->addElement(
     'checkbox',
     'hide_toc_frame',
     null,
-    get_lang('HideTocFrame'),
-    ['onclick' => '$("#lp_layout_column").toggle()']
+    get_lang('HideTocFrame')
 );
+
 if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
         //LP theme picker
         $theme_select = $form->addElement('SelectTheme', 'lp_theme', get_lang('Theme'));
         $form->applyFilter('lp_theme', 'trim');
-
         $s_theme = $learnPath->get_theme();
         $theme_select->setSelected($s_theme); //default
     }
@@ -101,19 +100,19 @@ $form->addElement(
     'lp_author',
     get_lang('Author'),
     ['size' => 80],
-    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px']
+    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '200px']
 );
 $form->applyFilter('lp_author', 'html_filter');
 
 // LP image
 if (strlen($learnPath->get_preview_image()) > 0) {
-    $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$learnPath->get_preview_image().'>';
+    $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path()
+        .'/upload/learning_path/images/'.$learnPath->get_preview_image().'>';
     $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
 $label = ($learnPath->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
 $form->addElement('file', 'lp_preview_image', [$label, get_lang('ImageWillResizeMsg')]);
-
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
 
 // Search terms (only if search is activated).
@@ -143,7 +142,7 @@ $defaults['lp_encoding'] = Security::remove_XSS($learnPath->encoding);
 $defaults['lp_name'] = Security::remove_XSS($learnPath->get_name());
 $defaults['lp_author'] = Security::remove_XSS($learnPath->get_author());
 $defaults['hide_toc_frame'] = $hideTableOfContents;
-$defaults['category_id'] = intval($learnPath->getCategoryId());
+$defaults['category_id'] = $learnPath->getCategoryId();
 $defaults['accumulate_scorm_time'] = $learnPath->getAccumulateScormTime();
 
 $expired_on = $learnPath->expired_on;
@@ -241,6 +240,8 @@ if ($enableLpExtraFields) {
     });
     </script>';
 }
+
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."</script>";
 
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00'
     ? api_get_local_time($publicated_on)

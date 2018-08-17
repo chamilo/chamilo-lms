@@ -10,3 +10,8 @@ This should give you all you need to then launch
 `php gitlog.php > /tmp/changelog` 
 and then copy-paste it to the Chamilo changelog (it still requires a careful
 manual review, but it already saves *a lot* of time).
+
+Usage:
+ - `php gitlog.php -t` indicates the script has to return datestamps
+ - `php gitlog.php -max20170625` stops when reaching a date previous to this date
+ - `php gitlog.php [commit-hash]` stops when finding the given commit hash in the commits history

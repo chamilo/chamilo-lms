@@ -20,42 +20,42 @@ class GradeModel
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    private $defaultLowestEvalExclude;
+    protected $defaultLowestEvalExclude;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="default_external_eval", type="boolean", nullable=true)
      */
-    private $defaultExternalEval;
+    protected $defaultExternalEval;
 
     /**
      * @var string
      *
      * @ORM\Column(name="default_external_eval_prefix", type="string", length=140, nullable=true)
      */
-    private $defaultExternalEvalPrefix;
+    protected $defaultExternalEvalPrefix;
 
     /**
      * Set name.

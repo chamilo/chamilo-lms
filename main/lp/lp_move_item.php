@@ -22,39 +22,14 @@ $learnPath = Session::read('oLP');
 /* Header and action code */
 $htmlHeadXtra[] = '<script>'.
 $learnPath->get_js_dropdown_array().
-"
-    function load_cbo(id) {
-        if (!id) {
-            return false;
-        }
-
-        var cbo = document.getElementById('previous');
-
-        for(var i = cbo.length - 1; i > 0; i--) {
-            cbo.options[i] = null;
-        }
-
-        var k=0;
-
-        for(var i = 1; i <= child_name[id].length; i++) {
-            cbo.options[i] = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-            k=i;
-        }
-
-        cbo.options[k].selected = true;
-        $('#previous').selectpicker('refresh');
-    }
-".
-"\n".
 '$().ready(function() {'."\n".
   'if ($(\'#previous\')) {'."\n".
     'if(\'parent is\'+$(\'#idParent\').val()) {'.
       'load_cbo($(\'#idParent\').val());'."\n".
   '}}'."\n".
-'});</script>'."\n";
+'});</script>';
 
 /* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : '';
@@ -64,14 +39,11 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : '';
 /* MAIN CODE */
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
-
-$result = Database::query($sql);
-$therow = Database::fetch_array($result);
 
 /*
     Course admin section
@@ -91,7 +63,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => stripslashes("{$therow['name']}"),
+    'name' => stripslashes($learnPath->get_name()),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),

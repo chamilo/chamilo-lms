@@ -25,77 +25,77 @@ class CBlogComment
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="comment_id", type="integer")
      */
-    private $commentId;
+    protected $commentId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var int
      *
      * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
-    private $authorId;
+    protected $authorId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
-    private $dateCreation;
+    protected $dateCreation;
 
     /**
      * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    private $blogId;
+    protected $blogId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
-    private $postId;
+    protected $postId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="task_id", type="integer", nullable=true)
      */
-    private $taskId;
+    protected $taskId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_comment_id", type="integer", nullable=false)
      */
-    private $parentCommentId;
+    protected $parentCommentId;
 
     /**
      * Set title.

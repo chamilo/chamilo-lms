@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Debug\ExceptionHandler;
 
 /**
  * Class Database.
@@ -152,6 +153,8 @@ class Database
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
                 'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
+                // ofaj
+                'ChamiloContactBundle' => 'Chamilo\ContactBundle\Entity',
                 'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity',
             ]
         );
@@ -159,7 +162,8 @@ class Database
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
         $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-        // ofaj
+
+        // Registering Constraints
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
@@ -176,6 +180,7 @@ class Database
             $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
 
+
         Type::overrideType(
             Type::DATETIME,
             self::getUTCDateTimeTypeClass()
@@ -191,6 +196,7 @@ class Database
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
         $connection->executeQuery('SET sql_mode = "";');
+        $connection->executeQuery('SET SESSION sql_mode = ""');
 
         if ($returnConnection) {
             return $connection;
@@ -349,30 +355,44 @@ class Database
 
             return $result[$row][$field];
         }
+
+        return false;
     }
 
     /**
      * @param string $query
-     *
-     * @throws \Doctrine\DBAL\DBALException
      *
      * @return Statement
      */
     public static function query($query)
     {
         $connection = self::getManager()->getConnection();
-        if (api_get_setting('server_type') == 'test') {
+        $result = null;
+        try {
             $result = $connection->executeQuery($query);
-        } else {
-            try {
-                $result = $connection->executeQuery($query);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                api_not_allowed(false, get_lang('GeneralError'));
-            }
+        } catch (Exception $e) {
+            self::handleError($e);
         }
 
         return $result;
+    }
+
+    /**
+     * @param Exception $e
+     */
+    public static function handleError($e)
+    {
+        $debug = api_get_setting('server_type') == 'test';
+        if ($debug) {
+            // We use Symfony exception handler for better error information
+            $handler = new ExceptionHandler();
+            $handler->handle($e);
+            exit;
+        } else {
+            error_log($e->getMessage());
+            api_not_allowed(false, get_lang('GeneralError'));
+            exit;
+        }
     }
 
     /**
@@ -513,7 +533,7 @@ class Database
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
      *
-     * @param array  $columns
+     * @param mixed  $columns     array (or string if only one column)
      * @param string $table_name
      * @param array  $conditions
      * @param string $type_result
@@ -722,6 +742,10 @@ class Database
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',
             $path.'src/Chamilo/PluginBundle/Entity',
+            // ofaj
+            //$path.'src/Chamilo/FaqBundle/Entity',
+            //$path.'src/Chamilo/ContactBundle/Entity',
+
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

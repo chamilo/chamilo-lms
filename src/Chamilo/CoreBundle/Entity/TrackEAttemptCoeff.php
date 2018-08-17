@@ -20,21 +20,21 @@ class TrackEAttemptCoeff
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attempt_id", type="integer", nullable=false)
      */
-    private $attemptId;
+    protected $attemptId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="marks_coeff", type="float", precision=6, scale=2, nullable=true)
      */
-    private $marksCoeff;
+    protected $marksCoeff;
 
     /**
      * Set attemptId.

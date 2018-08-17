@@ -27,42 +27,42 @@ class CAttendanceResult
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $iid;
+    protected $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
-    private $cId;
+    protected $cId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
-    private $attendanceId;
+    protected $attendanceId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="score", type="integer", nullable=false)
      */
-    private $score;
+    protected $score;
 
     /**
      * Set userId.

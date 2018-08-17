@@ -43,7 +43,7 @@ class Attendance
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function get_number_of_attendances($active = -1)
+    public static function getNumberOfAttendances($active = -1)
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $session_id = api_get_session_id();
@@ -64,20 +64,17 @@ class Attendance
     /**
      * Get attendance list only the id, name and attendance_qualify_max fields.
      *
-     * @param string $course_id  course db name (optional)
-     * @param int    $session_id session id (optional)
+     * @param int $course_id  course db name (optional)
+     * @param int $session_id session id (optional)
      *
      * @return array attendances list
      */
-    public function get_attendances_list($course_id = '', $session_id = 0)
+    public function get_attendances_list($course_id = 0, $session_id = 0)
     {
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $data = [];
-
+        $table = Database::get_course_table(TABLE_ATTENDANCE);
+        $course_id = intval($course_id);
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
-        } else {
-            $course_id = intval($course_id);
         }
 
         $session_id = !empty($session_id) ? intval($session_id) : api_get_session_id();
@@ -85,11 +82,12 @@ class Attendance
 
         // Get attendance data
         $sql = "SELECT id, name, attendance_qualify_max
-                FROM $tbl_attendance
+                FROM $table
                 WHERE c_id = $course_id AND active = 1 $condition_session ";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+        $result = Database::query($sql);
+        $data = [];
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $data[$row['id']] = $row;
             }
         }

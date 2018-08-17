@@ -5,7 +5,6 @@ namespace Application\Migrations\Schema\V111;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20160713180000

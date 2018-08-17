@@ -20,105 +20,105 @@ class GradebookCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=true)
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
-    private $weight;
+    protected $weight;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
-    private $visible;
+    protected $visible;
 
     /**
      * @var int
      *
      * @ORM\Column(name="certif_min_score", type="integer", nullable=true)
      */
-    private $certifMinScore;
+    protected $certifMinScore;
 
     /**
      * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="document_id", type="integer", nullable=true)
      */
-    private $documentId;
+    protected $documentId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    private $locked;
+    protected $locked;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    private $defaultLowestEvalExclude;
+    protected $defaultLowestEvalExclude;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
      */
-    private $generateCertificates;
+    protected $generateCertificates;
 
     /**
      * @var int
      *
      * @ORM\Column(name="grade_model_id", type="integer", nullable=true)
      */
-    private $gradeModelId;
+    protected $gradeModelId;
 
     /**
      * @var bool
@@ -130,7 +130,7 @@ class GradebookCategory
      *      options={"default": 0 }
      * )
      */
-    private $isRequirement;
+    protected $isRequirement;
 
     /**
      * Set name.

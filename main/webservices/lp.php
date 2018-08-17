@@ -125,7 +125,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSImportLP', // method name
+$server->register(
+    'WSImportLP', // method name
     ['params' => 'tns:params'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSLP', // namespace
@@ -295,7 +296,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetLpList', // method name
+$server->register(
+    'WSGetLpList', // method name
     ['params' => 'tns:paramsGetLpList'], // input parameters
     ['return' => 'tns:lpList'], // output parameters
     'urn:WSLP', // namespace
@@ -316,10 +318,6 @@ function WSGetLpList($params)
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-
-    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathList.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'lp/learnpath.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathItem.class.php';
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];
@@ -395,7 +393,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSDeleteLp', // method name
+$server->register(
+    'WSDeleteLp', // method name
     ['params' => 'tns:paramsDeleteLp'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSLP', // namespace
@@ -416,10 +415,6 @@ function WSDeleteLp($params)
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-
-    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathList.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'lp/learnpath.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathItem.class.php';
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];
@@ -583,7 +578,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCreateLp', // method name
+$server->register(
+    'WSCreateLp', // method name
     ['params' => 'tns:paramsCreateLp'], // input parameters
     ['return' => 'xsd:string'], // output parameters
     'urn:WSLP', // namespace

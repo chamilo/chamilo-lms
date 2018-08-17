@@ -18,6 +18,7 @@ class Version20161028123400 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20161028123400');
         $iidColumn = $schema
             ->getTable('c_student_publication_comment')
             ->getColumn('iid');
@@ -32,10 +33,17 @@ class Version20161028123400 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('personal_agenda');
         if ($table->hasIndex('id')) {
+            $this->addSql('ALTER TABLE personal_agenda DROP INDEX id');
+            $this->addSql('ALTER TABLE personal_agenda DROP INDEX idx_personal_agenda_user');
+            $this->addSql('ALTER TABLE personal_agenda DROP INDEX idx_personal_agenda_parent');
             $this->addSql('ALTER TABLE personal_agenda modify id INT NOT NULL');
-            $this->addSql('ALTER TABLE personal_agenda DROP index id');
-            $this->addSql('ALTER TABLE personal_agenda DROP PRIMARY KEY');
+            if ($table->hasPrimaryKey()) {
+                $this->addSql('ALTER TABLE personal_agenda drop primary key ');
+            }
+
             $this->addSql('ALTER TABLE personal_agenda CHANGE id id INT AUTO_INCREMENT NOT NULL PRIMARY KEY');
+            $this->addSql('CREATE INDEX idx_personal_agenda_user ON personal_agenda (user)');
+            $this->addSql('CREATE INDEX idx_personal_agenda_parent ON personal_agenda (parent_event_id)');
         }
     }
 

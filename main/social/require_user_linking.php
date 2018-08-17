@@ -44,11 +44,14 @@ $form = new FormValidator('require_user_linking');
 $form->addUserAvatar('hrm', get_lang('DRH'), 'medium');
 $form->addSelectAjax(
     'users',
-    get_lang('Users'),
+    [get_lang('LinkMeToStudent'), get_lang('LinkMeToStudentComment')],
     $requestOptions,
-    ['multiple' => 'multiple', 'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
+    [
+        'multiple' => 'multiple',
+        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
+    ]
 );
-$form->addButtonSave(get_lang('Save'));
+$form->addButtonSave(get_lang('RequestLinkToStudent'));
 $form->setDefaults([
     'hrm' => $hrm,
     'users' => array_keys($requestOptions),
@@ -61,7 +64,7 @@ if ($form->validate()) {
         return (int) $userId != $hrm->getId();
     });
 
-    UserManager::clearHrmRequestsForUser($hrm);
+    UserManager::clearHrmRequestsForUser($hrm, $usersId);
     UserManager::requestUsersToHRManager($hrm->getId(), $usersId, false);
 
     Display::addFlash(
@@ -82,17 +85,20 @@ $content .= '<div class="row">';
 foreach ($usersAssigned as $userAssigned) {
     $userAssigned = api_get_user_info($userAssigned['user_id']);
     $userPicture = isset($userAssigned["avatar_medium"]) ? $userAssigned["avatar_medium"] : $userAssigned["avatar"];
+    $studentLink = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userAssigned['user_id'];
 
     $content .= '
         <div class="col-sm-4 col-md-3">
             <div class="media">
                 <div class="media-left">
     ';
+    $content .= '<a href="'.$studentLink.'">';
     $content .= Display::img($userPicture, $userAssigned['complete_name'], ['class' => 'media-object'], false);
+    $content .= '</a>';
     $content .= '
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">'.$userAssigned['complete_name'].'</h4>
+                    <h4 class="media-heading"><a href="'.$studentLink.'">'.$userAssigned['complete_name'].'</a></h4>
                     '.$userAssigned['username'].'
                 </div>
             </div>

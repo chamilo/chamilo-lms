@@ -12,16 +12,11 @@ require_once __DIR__.'/config.php';
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
-$htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js'
-);
-$htmlHeadXtra[] = "<script>var _p = {web_plugin: '".api_get_path(WEB_PLUGIN_PATH)."'}</script>";
-
-$tpl = new Template($tool_name);
+$htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
 
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
@@ -41,7 +36,7 @@ if ($conferenceManager) {
             }
             $courseInfo = api_get_course_info();
             $agenda = new Agenda('course');
-            $id = intval($_GET['id']);
+            $id = (int) $_GET['id'];
             $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
             $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url']);
 
@@ -91,12 +86,10 @@ if ($conferenceManager) {
 
             if (file_exists(__DIR__.'/config.vm.php')) {
                 require __DIR__.'/../../vendor/autoload.php';
-
                 require __DIR__.'/lib/vm/AbstractVM.php';
                 require __DIR__.'/lib/vm/VMInterface.php';
                 require __DIR__.'/lib/vm/DigitalOceanVM.php';
                 require __DIR__.'/lib/VM.php';
-
                 $config = require __DIR__.'/config.vm.php';
 
                 $vm = new VM($config);
@@ -129,7 +122,8 @@ if (!empty($meetings)) {
 $usersOnline = $bbb->getUsersOnlineInCurrentRoom();
 $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
-$meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
+$videoConferenceName = $bbb->getCurrentVideoConferenceName();
+$meetingExists = $bbb->meetingExists($videoConferenceName);
 $showJoinButton = false;
 
 // Only conference manager can see the join button
@@ -138,6 +132,7 @@ if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
     // Any user can see the "join button" BT#12620
     $userCanSeeJoinButton = true;
 }
+
 if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
@@ -160,7 +155,7 @@ if ($bbb->isGlobalConference() === false &&
                 window.location.replace(url+groupId);                
             });
         });
-</script>';
+        </script>';
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     $groupId = api_get_group_id();
@@ -197,11 +192,81 @@ $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 
-$listing_tpl = 'bbb/listing.tpl';
-$content = $tpl->fetch($listing_tpl);
+// Default URL
+$urlList[] = Display::url(
+    $plugin->get_lang('EnterConference'),
+    $conferenceUrl,
+    ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
+);
 
+$type = $plugin->get('launch_type');
+$warningIntefaceMessage = '';
+$showClientOptions = false;
+
+switch ($type) {
+    case BBBPlugin::LAUNCH_TYPE_DEFAULT:
+        $urlList = [];
+        $urlList[] = Display::url(
+            $plugin->get_lang('EnterConference'),
+            $conferenceUrl.'&interface='.$plugin->get('interface'),
+            ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
+        );
+        break;
+    case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
+        if ($conferenceManager) {
+            $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
+            $warningIntefaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
+            $showClientOptions = true;
+        } else {
+            $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
+            switch ($meetingInfo['interface']) {
+                case BBBPlugin::INTERFACE_FLASH:
+                    $url = $plugin->getFlashUrl($conferenceUrl);
+                    break;
+                case BBBPlugin::INTERFACE_HTML5:
+                    $url = $plugin->getHtmlUrl($conferenceUrl);
+                    break;
+            }
+        }
+        break;
+    case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
+        if ($conferenceManager) {
+            $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
+            $showClientOptions = true;
+        } else {
+            if ($meetingExists) {
+                $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
+                $meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
+                $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
+                $showClientOptions = true;
+
+                /*if (empty($meetinUserInfo)) {
+                    $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
+                } else {
+                    switch ($meetinUserInfo['interface']) {
+                        case BBBPlugin::INTERFACE_FLASH:
+                            $url = $plugin->getFlashUrl($conferenceUrl);
+                            break;
+                        case BBBPlugin::INTERFACE_HTML5:
+                            $url = $plugin->getHtmlUrl($conferenceUrl);
+                            break;
+                    }
+                }*/
+            }
+        }
+
+        break;
+}
+
+$tpl->assign('enter_conference_links', $urlList);
+$tpl->assign('warning_inteface_msg', $warningIntefaceMessage);
+$tpl->assign('show_client_options', $showClientOptions);
+
+$listing_tpl = 'bbb/view/listing.tpl';
+$content = $tpl->fetch($listing_tpl);
+$actionLinks = '';
 if (api_is_platform_admin()) {
-    $actionLinks = Display::toolbarButton(
+    $actionLinks .= Display::toolbarButton(
         $plugin->get_lang('AdminView'),
         api_get_path(WEB_PLUGIN_PATH).'bbb/admin.php',
         'list',

@@ -44,8 +44,13 @@ $rootWeb = api_get_path('WEB_PATH');
 <head>
 	<title>Custompage - login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <link rel="stylesheet" type="text/css" href="<?php echo $rootWeb; ?>web/assets/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $rootWeb; ?>web/assets/flag-icon-css/css/flag-icon.min.css" />
+
     <script type="text/javascript" src="<?php echo $rootWeb; ?>web/assets/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript">
+    <script type="text/javascript" src="<?php echo $rootWeb; ?>web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script>
 		$(document).ready(function() {
 			if (top.location != location) {
                 top.location.href = document.location.href;

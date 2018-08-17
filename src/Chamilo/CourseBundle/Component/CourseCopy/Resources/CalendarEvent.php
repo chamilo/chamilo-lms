@@ -73,7 +73,6 @@ class CalendarEvent extends Resource
         $this->start_date = $start_date;
         $this->end_date = $end_date;
         $this->all_day = $all_day;
-
         $this->attachment_path = $attachment_path;
         $this->attachment_filename = $attachment_filename;
         $this->attachment_size = $attachment_size;

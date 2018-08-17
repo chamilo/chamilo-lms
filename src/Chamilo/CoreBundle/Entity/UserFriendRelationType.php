@@ -18,7 +18,7 @@ class UserFriendRelationType
      *
      * @ORM\Column(name="title", type="string", length=20, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var int
@@ -27,7 +27,7 @@ class UserFriendRelationType
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * Set title.

@@ -1,7 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CChatConnected;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Michelf\MarkdownExtra;
 
@@ -75,12 +80,8 @@ class CourseChatUtils
     /**
      * Save a chat message in a HTML file.
      *
-     * @param string$message
-     * @param int $friendId
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @param string $message
+     * @param int    $friendId
      *
      * @return bool
      */
@@ -89,15 +90,13 @@ class CourseChatUtils
         if (empty($message)) {
             return false;
         }
-
-        $em = Database::getManager();
-        $user = $em->find('ChamiloUserBundle:User', $this->userId);
+        $user = api_get_user_entity($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
-        $isMaster = (bool) api_is_course_admin();
+        $isMaster = api_is_course_admin();
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $basepath_chat = '/chat_files';
         $group_info = [];
-        if (!$this->groupId) {
+        if ($this->groupId) {
             $group_info = GroupManager::get_group_properties($this->groupId);
             $basepath_chat = $group_info['directory'].'/chat_files';
         }
@@ -133,7 +132,20 @@ class CourseChatUtils
         $absoluteFilePath = $chat_path.$fileTitle;
 
         if (!file_exists($absoluteFilePath)) {
-            $doc_id = add_document($courseInfo, $filePath, 'file', 0, $fileTitle);
+            $doc_id = add_document(
+                $courseInfo,
+                $filePath,
+                'file',
+                0,
+                $fileTitle,
+                null,
+                0,
+                true,
+                0,
+                0,
+                0,
+                false
+            );
             $documentLogTypes = ['DocumentAdded', 'invisible'];
 
             foreach ($documentLogTypes as $logType) {
@@ -187,10 +199,8 @@ class CourseChatUtils
 
         fputs($fp, $fileContent);
         fclose($fp);
-
-        $chat_size = filesize($absoluteFilePath);
-
-        update_existing_document($courseInfo, $doc_id, $chat_size);
+        $size = filesize($absoluteFilePath);
+        update_existing_document($courseInfo, $doc_id, $size);
         item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
 
         return true;
@@ -199,7 +209,7 @@ class CourseChatUtils
     /**
      * Disconnect a user from course chats.
      *
-     * @param $userId
+     * @param int $userId
      */
     public static function exitChat($userId)
     {
@@ -225,7 +235,6 @@ class CourseChatUtils
     {
         $em = Database::getManager();
         $extraCondition = "AND ccc.toGroupId = {$this->groupId}";
-
         if (empty($this->groupId)) {
             $extraCondition = "AND ccc.sessionId = {$this->sessionId}";
         }
@@ -240,10 +249,9 @@ class CourseChatUtils
 
         $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
         $cd_count_time_seconds = $now->getTimestamp();
-
+        /** @var CChatConnected $connection */
         foreach ($connectedUsers as $connection) {
             $date_count_time_seconds = $connection->getLastConnection()->getTimestamp();
-
             if (strcmp($now->format('Y-m-d'), $connection->getLastConnection()->format('Y-m-d')) !== 0) {
                 continue;
             }
@@ -267,8 +275,6 @@ class CourseChatUtils
 
     /**
      * Keep registered to a user as connected.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function keepUserAsConnected()
     {
@@ -428,7 +434,6 @@ class CourseChatUtils
 
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-
         $chatPath = $document_path.'/chat_files/';
 
         if ($this->groupId) {
@@ -471,7 +476,20 @@ class CourseChatUtils
                 @mkdir($chat_path, api_get_permissions_for_new_directories());
                 // Save chat files document for group into item property
                 if ($this->groupId) {
-                    $doc_id = add_document($courseInfo, $basepath_chat, 'folder', 0, 'chat_files');
+                    $doc_id = add_document(
+                        $courseInfo,
+                        $basepath_chat,
+                        'folder',
+                        0,
+                        'chat_files',
+                        null,
+                        0,
+                        true,
+                        0,
+                        0,
+                        0,
+                        false
+                    );
                     api_item_property_update(
                         $courseInfo,
                         TOOL_DOCUMENT,
@@ -504,32 +522,47 @@ class CourseChatUtils
         if (!file_exists($chat_path.$filename_chat)) {
             @fclose(fopen($chat_path.$filename_chat, 'w'));
             if (!api_is_anonymous()) {
-                $doc_id = add_document($courseInfo, $basepath_chat.'/'.$filename_chat, 'file', 0, $filename_chat);
-                api_item_property_update(
+                $doc_id = add_document(
                     $courseInfo,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    'DocumentAdded',
-                    $this->userId,
-                    $group_info,
+                    $basepath_chat.'/'.$filename_chat,
+                    'file',
+                    0,
+                    $filename_chat,
                     null,
-                    null,
-                    null,
-                    $this->sessionId
+                    0,
+                    true,
+                    0,
+                    0,
+                    0,
+                    false
                 );
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    'invisible',
-                    $this->userId,
-                    $group_info,
-                    null,
-                    null,
-                    null,
-                    $this->sessionId
-                );
-                item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
+                if ($doc_id) {
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_DOCUMENT,
+                        $doc_id,
+                        'DocumentAdded',
+                        $this->userId,
+                        $group_info,
+                        null,
+                        null,
+                        null,
+                        $this->sessionId
+                    );
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_DOCUMENT,
+                        $doc_id,
+                        'invisible',
+                        $this->userId,
+                        $group_info,
+                        null,
+                        null,
+                        null,
+                        $this->sessionId
+                    );
+                    item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
+                }
             }
         }
 
@@ -560,7 +593,14 @@ class CourseChatUtils
                 $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html',
                 'file',
                 filesize($chat_path.$basename_chat.'-'.$i.'.log.html'),
-                $basename_chat.'-'.$i.'.log.html'
+                $basename_chat.'-'.$i.'.log.html',
+                null,
+                0,
+                true,
+                0,
+                0,
+                0,
+                false
             );
 
             api_item_property_update(
@@ -637,14 +677,12 @@ class CourseChatUtils
     /**
      * Get the number of users connected in chat.
      *
-     * @return mixed
+     * @return int
      */
     public function countUsersOnline()
     {
         $date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
         $date->modify('-5 seconds');
-
-        $extraCondition = null;
 
         if ($this->groupId) {
             $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
@@ -663,37 +701,67 @@ class CourseChatUtils
             ])
             ->getSingleScalarResult();
 
-        return intval($number);
+        return (int) $number;
     }
 
     /**
      * Get the users online data.
      *
-     * @return string
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return array
      */
     public function listUsersOnline()
     {
         $subscriptions = $this->getUsersSubscriptions();
         $usersInfo = [];
 
-        foreach ($subscriptions as $subscription) {
-            $user = $subscription->getUser();
-
-            $usersInfo[] = [
-                'id' => $user->getId(),
-                'firstname' => $user->getFirstname(),
-                'lastname' => $user->getLastname(),
-                'status' => !$this->sessionId ? $subscription->getStatus() : $user->getStatus(),
-                'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
-                'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-                'complete_name' => $user->getCompleteName(),
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'isConnected' => $this->userIsConnected($user->getId()),
-            ];
+        if ($this->groupId) {
+            /** @var User $groupUser */
+            foreach ($subscriptions as $groupUser) {
+                $usersInfo[] = $this->formatUser(
+                    $groupUser,
+                    $groupUser->getStatus()
+                );
+            }
+        } else {
+            /** @var CourseRelUser|SessionRelCourseRelUser $subscription */
+            foreach ($subscriptions as $subscription) {
+                $user = $subscription->getUser();
+                $usersInfo[] = $this->formatUser(
+                    $user,
+                    $this->sessionId ? $user->getStatus() : $subscription->getStatus()
+                );
+            }
         }
 
         return $usersInfo;
+    }
+
+    /**
+     * Format the user data to return it in the user list.
+     *
+     * @param User $user
+     * @param int  $status
+     *
+     * @return array
+     */
+    private function formatUser(User $user, $status)
+    {
+        return [
+            'id' => $user->getId(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'status' => $status,
+            'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
+            'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
+            'complete_name' => $user->getCompleteName(),
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'isConnected' => $this->userIsConnected($user->getId()),
+        ];
     }
 
     /**
@@ -708,20 +776,59 @@ class CourseChatUtils
     private function getUsersSubscriptions()
     {
         $em = Database::getManager();
+
+        if ($this->groupId) {
+            $students = $em
+                ->createQuery(
+                    'SELECT u FROM ChamiloUserBundle:User u
+                    INNER JOIN ChamiloCourseBundle:CGroupRelUser gru
+                        WITH u.id = gru.userId AND gru.cId = :course
+                    WHERE u.id != :user AND gru.groupId = :group'
+                )
+                ->setParameters(['course' => $this->courseId, 'user' => $this->userId, 'group' => $this->groupId])
+                ->getResult();
+            $tutors = $em
+                ->createQuery(
+                    'SELECT u FROM ChamiloUserBundle:User u
+                    INNER JOIN ChamiloCourseBundle:CGroupRelTutor grt
+                        WITH u.id = grt.userId AND grt.cId = :course
+                    WHERE u.id != :user AND grt.groupId = :group'
+                )
+                ->setParameters(['course' => $this->courseId, 'user' => $this->userId, 'group' => $this->groupId])
+                ->getResult();
+
+            return array_merge($tutors, $students);
+        }
+
+        /** @var Course $course */
         $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
 
         if ($this->sessionId) {
+            /** @var Session $session */
+            $session = $em->find('ChamiloCoreBundle:Session', $this->sessionId);
             $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
+            $userIsCoach = api_is_course_session_coach($this->userId, $course->getId(), $session->getId());
 
-            return $em
-                ->find('ChamiloCoreBundle:Session', $this->sessionId)
+            if (api_get_configuration_value('course_chat_restrict_to_coach')) {
+                if ($userIsCoach) {
+                    $criteria->andWhere(
+                        Criteria::expr()->eq('status', Session::STUDENT)
+                    );
+                } else {
+                    $criteria->andWhere(
+                        Criteria::expr()->eq('status', Session::COACH)
+                    );
+                }
+            }
+
+            $criteria->orderBy(['status' => Criteria::DESC]);
+
+            return $session
                 ->getUserCourseSubscriptions()
                 ->matching($criteria);
         }
 
-        return $em
-            ->find('ChamiloCoreBundle:Course', $course)
-            ->getUsers();
+        return $course->getUsers();
     }
 
     /**
@@ -735,8 +842,6 @@ class CourseChatUtils
     {
         $date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
         $date->modify('-5 seconds');
-
-        $extraCondition = null;
 
         if ($this->groupId) {
             $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
@@ -756,6 +861,6 @@ class CourseChatUtils
             ])
             ->getSingleScalarResult();
 
-        return intval($number);
+        return (int) $number;
     }
 }

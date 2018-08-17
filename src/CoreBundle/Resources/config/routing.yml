@@ -42,7 +42,6 @@ legacy_javascript:
     type: annotation
     prefix: /js
 
-
 legacy_plugin:
     path: /plugin/{name}
     defaults: {_controller: 'ChamiloCoreBundle:Legacy:plugin'}

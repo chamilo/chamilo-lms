@@ -13,11 +13,11 @@ if (api_get_setting('more_buttons_maximized_mode') === 'true') {
 $template = new Template();
 $template->assign(
     'bootstrap_css',
-    api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css'
+    api_get_bootstrap_and_font_awesome(true)
 );
 $template->assign(
     'font_awesome_css',
-    api_get_path(WEB_PUBLIC_PATH).'assets/fontawesome/css/font-awesome.min.css'
+    ''
 );
 $template->assign(
     'css_editor',

@@ -4,7 +4,8 @@
 namespace Chamilo\ThemeBundle\Theme;
 
 use Chamilo\FoundationBundle\Util\DependencyResolverInterface;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 
 /**
@@ -12,17 +13,13 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
  *
  * @package Chamilo\ThemeBundle\Theme
  */
-class ThemeManager
+class ThemeManager implements ContainerAwareInterface
 {
-    /** @var Container */
-    protected $container;
+    use ContainerAwareTrait;
 
     protected $stylesheets = [];
-
     protected $javascripts = [];
-
     protected $locations = [];
-
     protected $resolverClass;
 
     /**
@@ -31,9 +28,8 @@ class ThemeManager
      * @param $container
      * @param null $resolverClass
      */
-    public function __construct($container, $resolverClass = null)
+    public function __construct($resolverClass = null)
     {
-        $this->container = $container;
         $this->resolverClass = $resolverClass ?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
     }
 

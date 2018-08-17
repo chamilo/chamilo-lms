@@ -14,6 +14,17 @@ services:
         exclude: '../src/PageBundle/{Entity,Migrations,Tests}'
         public: true
 
+    Chamilo\ThemeBundle\:
+        autowire: true
+        resource: '../src/ThemeBundle/*'
+        exclude: '../src/ThemeBundle/{Entity,Migrations,Tests}'
+        public: true
+
+    Chamilo\ThemeBundle\Controller\ExceptionController:
+        public: true
+        arguments:
+            $debug: '%kernel.debug%'
+
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:

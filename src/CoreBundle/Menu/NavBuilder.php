@@ -57,7 +57,7 @@ class NavBuilder implements ContainerAwareInterface
      *
      * @return ItemInterface
      */
-    public function leftMenu(FactoryInterface $factory, array $options)
+    public function leftMenu(FactoryInterface $factory, array $options): ItemInterface
     {
         $container = $this->container;
         $checker = $container->get('security.authorization_checker');
@@ -72,7 +72,6 @@ class NavBuilder implements ContainerAwareInterface
                 'route' => 'legacy_index',
             ]
         );
-
 
         if ($checker && $checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
@@ -227,7 +226,7 @@ class NavBuilder implements ContainerAwareInterface
             }
         }
 
-        // Set classes for the items
+        // Set CSS classes for the items
         foreach ($menu->getChildren() as $child) {
             $child
                 ->setLinkAttribute('class', 'nav-link')

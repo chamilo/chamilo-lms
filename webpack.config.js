@@ -18,10 +18,18 @@ Encore
     .autoProvidejQuery() // not needed because in window.jQuery we set the $
     // Reads the "assets/js/vendor.js" file and it will generate the file public/build/vendor.js file
     .addEntry('app', './assets/js/app.js')
+    .addEntry('bootstrap', './assets/js/bootstrap.js')
     // Reads app.scss -> output as web/build/css/base.css
     .addStyleEntry('css/app', './assets/css/app.scss')
+    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
+
+    .addStyleEntry('css/chat', './assets/css/chat.css')
+    .addStyleEntry('css/document', './assets/css/document.css')
     .addStyleEntry('css/editor', './assets/css/editor.css')
+    .addStyleEntry('css/editor_content', './assets/css/editor_content.css')
+    .addStyleEntry('css/markdown', './assets/css/markdown.css')
     .addStyleEntry('css/print', './assets/css/print.css')
+    .addStyleEntry('css/responsive', './assets/css/responsive.css')
     .addStyleEntry('css/scorm', './assets/css/scorm.css')
 
     .enableSourceMaps(!Encore.isProduction())
@@ -66,13 +74,12 @@ var themes = [
 
 // Add Chamilo themes
 themes.forEach(function (theme) {
-    Encore.addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
-    ;
+    Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
 
     // Copy images from themes into public/build
     Encore.addPlugin(new copyWebpackPlugin([{
-        from: 'assets/css/themes/'+theme+'/images',
-        to: 'css/themes/'+theme+'/images'
+        from: 'assets/css/themes/' + theme + '/images',
+        to: 'css/themes/' + theme + '/images'
     },
     ]));
 });

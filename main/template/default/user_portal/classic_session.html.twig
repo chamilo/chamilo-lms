@@ -5,7 +5,7 @@
             <div class="panel-heading">
                 {% if row.course_list_session_style == 1 %}
                     {# Classic #}
-                    {% if remove_session_url == true %}
+                    {% if remove_session_url == 'true' %}
                         <a style="cursor:default">
                     {% else %}
                         <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">

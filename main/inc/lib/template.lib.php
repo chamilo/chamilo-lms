@@ -677,7 +677,7 @@ class Template
 
     /**
      * Set theme, include mainstream CSS files.
-     *
+     * @deprecated
      * @see setCssCustomFiles() for additional CSS sheets
      */
     public function setCssFiles()
@@ -985,38 +985,17 @@ class Template
     public static function getPortalIcon($theme)
     {
         // Default root chamilo favicon
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        $icon = '<link rel="shortcut icon" href="'.api_get_path(WEB_PUBLIC_PATH).'favicon.ico" type="image/x-icon" />';
 
         // Added to verify if in the current Chamilo Theme exist a favicon
-        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).'/themes/'.$theme.'/images/';
+        $themeUrl = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/';
 
         //If exist pick the current chamilo theme favicon
-        if (is_file($favicoThemeUrl.'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/favicon.ico" type="image/x-icon" />';
-        }
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
-                $url = api_remove_trailing_slash(
-                    preg_replace('/https?:\/\//i', '', $url_info['url'])
-                );
-                $clean_url = api_replace_dangerous_char($url);
-                $clean_url = str_replace('/', '-', $clean_url);
-                $clean_url .= '/';
-                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
-                //we create the new dir for the new sites
-                if (is_file($icon_real_homep.'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
-                }
-            }
+        if (is_file($themeUrl.'favicon.ico')) {
+            $icon = '<link rel="shortcut icon" href="'.api_get_path(WEB_PUBLIC_PATH).'build/css/themes/'.$theme.'/images/favicon.ico" type="image/x-icon" />';
         }
 
-        //var_dump(Container::$container->get('router')->generate('main', ['name' => '1']));
-        //var_dump(api_get_path(WEB_PATH));
-
-        return $favico;
+        return $icon;
     }
 
     /**

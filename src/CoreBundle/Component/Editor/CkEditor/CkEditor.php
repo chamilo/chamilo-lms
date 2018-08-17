@@ -56,8 +56,8 @@ class CkEditor extends Editor
     {
         $style = '';
         if (trim($this->value) == '<html><head><title></title></head><body></body></html>' || $this->value == '') {
-            $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
-            $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
+            $style = api_get_bootstrap_and_font_awesome();
+            //$style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 

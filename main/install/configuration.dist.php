@@ -359,10 +359,7 @@ $_configuration['tracking_columns'] = [
     ]
 ];
 */
-// Hide session link of course_block on index/userportal
-//$_configuration['remove_session_url']= false ;
-//
-//
+
 // ------ AGENDA CONFIGURATION SETTINGS
 // Shows a legend in the agenda tool
 /*

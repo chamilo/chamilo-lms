@@ -93,16 +93,17 @@
                 </div>
             </section>
 
-            <section id="menu-bar">
+
             {# menu #}
             {% block chamilo_menu %}
-                {# creatable variable is set by the sonata page #}
-                {% if not creatable %}
-                    {# course navigation links/shortcuts need to be activated by the admin #}
-                    {% include "@ChamiloTheme/Layout/menu.html.twig" %}
-                {% endif %}
+                <div id="menu-bar">
+                    {# creatable variable is set by the sonata page #}
+                    {% if not creatable %}
+                        {# course navigation links/shortcuts need to be activated by the admin #}
+                        {% include "@ChamiloTheme/Layout/menu.html.twig" %}
+                    {% endif %}
+                </div>
             {% endblock %}
-            </section>
         </header>
         {% endblock %}
 

@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -44,6 +45,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_days_after_coach_access' => '',
                     'session_days_before_coach_access' => '',
                     'show_session_description' => 'false',
+                    'remove_session_url' => 'false'
                 ]
             )
         ;
@@ -81,7 +83,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('prevent_session_admins_to_manage_all_users', YesNoType::class)
             ->add(
                 'session_course_ordering',
-                'text',
+                TextType::class,
                 [
                     'label' => 'SessionCourseOrderingTitle',
                     'help_block' => 'SessionCourseOrderingComment', ]
@@ -95,6 +97,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_days_after_coach_access')
             ->add('session_days_before_coach_access')
             ->add('show_session_description', YesNoType::class)
+            ->add('remove_session_url', YesNoType::class)
         ;
     }
 }

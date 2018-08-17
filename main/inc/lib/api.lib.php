@@ -7406,10 +7406,13 @@ function api_get_course_url($courseCode = null, $sessionId = null, $groupId = nu
     if (!empty($courseDirectory)) {
         // directory not empty, so we do have a course
         $url = api_get_path(WEB_COURSE_PATH).$courseDirectory.'/index.php?id_session='.$sessionId.'&gidReq='.$groupId;
-    } elseif (!empty($sessionId) && api_get_configuration_value('remove_session_url') !== true) {
+    } elseif (!empty($sessionId) &&
+        api_get_setting('session.remove_session_url') !== 'true'
+    ) {
         // if the course was unset and the session was set, send directly to the session
         $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
     }
+
     // if not valid combination was found, return an empty string
     return $url;
 }

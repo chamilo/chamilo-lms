@@ -2056,7 +2056,10 @@ function _api_get_person_name_convention($language, $type)
     static $conventions;
 
     $language = api_get_language_from_iso($language);
-    $language = $language->getEnglishName();
+    $languageName = 'english';
+    if (!empty($language)) {
+        $languageName = $language->getEnglishName();
+    }
 
     if (!isset($conventions)) {
         $file = __DIR__.'/internationalization_database/name_order_conventions.php';
@@ -2103,9 +2106,9 @@ function _api_get_person_name_convention($language, $type)
     }
     switch ($type) {
         case 'format':
-            return is_string($conventions[$language]['format']) ? $conventions[$language]['format'] : '%t %f %l';
+            return is_string($conventions[$languageName]['format']) ? $conventions[$languageName]['format'] : '%t %f %l';
         case 'sort_by':
-            return is_bool($conventions[$language]['sort_by']) ? $conventions[$language]['sort_by'] : true;
+            return is_bool($conventions[$languageName]['sort_by']) ? $conventions[$languageName]['sort_by'] : true;
     }
 
     return null;

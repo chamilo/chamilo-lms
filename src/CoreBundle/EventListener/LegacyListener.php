@@ -133,8 +133,9 @@ class LegacyListener
 
             $twig->addGlobal('_admin', $adminInfo);
 
-            $theme = api_get_visual_theme();
-            $twig->addGlobal('favico', \Template::getPortalIcon($theme));
+            // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
+            //$theme = api_get_visual_theme();
+            //$twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
             $extraFooter = trim(api_get_setting('footer_extra_content'));
             $twig->addGlobal('footer_extra_content', $extraFooter);

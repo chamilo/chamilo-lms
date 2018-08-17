@@ -39,14 +39,16 @@
 
 {# Files vendor.css is generated automatically by the css generated when reading vendor.js #}
 <link rel="stylesheet" href="{{ asset('build/vendor.css') }}"/>
-
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
 <link rel="stylesheet" href="{{ asset('build/css/app.css') }}"/>
 <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
 <link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
-
 {# File vendor.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
 <script src="{{ asset('build/vendor.js') }}"></script>
+{# Add third party js libraries that can't be loaded using webpack #}
+{% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}
+{# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
+<script src="{{ asset('build/app.js') }}"></script>
 
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}
@@ -54,9 +56,9 @@
     {#<script src="{{ asset_url }} "></script>#}
     {#{% endjavascripts %}#}
     {#<script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}" type="text/javascript"></script>#}
-    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    {#<script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>#}
     {#<script src="{{ url('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>#}
-    <script src="{{ url('legacy_index') ~ 'public/js/routing?callback=fos.Router.setData' }}"></script>
+    {#<script src="{{ path('legacy_index') ~ 'public/js/routing?callback=fos.Router.setData' }}"></script>#}
     {% block chamilo_header_js %}
         {# Loading legacy js using the $htmlHeadXtra array #}
         {% autoescape false %}
@@ -75,10 +77,4 @@
     {#<script type="text/javascript" src="{{ asset_url | replace({'/app_dev.php': ''}) }}"></script>#}
     {#{% endjavascripts %}#}
 {% endblock %}
-
-{# Add third party libraries that can't be loaded using webpack #}
-{% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}
-
-{# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-<script src="{{ asset('build/app.js') }}"></script>
 

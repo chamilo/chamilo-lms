@@ -7231,6 +7231,16 @@ function api_get_css($file, $media = 'screen')
     return '<link href="'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
+function api_get_bootstrap_and_font_awesome($returnOnlyPath = false)
+{
+    $url = api_get_path(WEB_PUBLIC_PATH).'build/css/bootstrap.css';
+    if ($returnOnlyPath) {
+        return $url;
+    }
+
+    return '<link href="'.$url.'" rel="stylesheet" type="text/css" />'."\n";
+}
+
 /**
  * Returns the js header to include the jquery library.
  */
@@ -7406,10 +7416,13 @@ function api_get_course_url($courseCode = null, $sessionId = null, $groupId = nu
     if (!empty($courseDirectory)) {
         // directory not empty, so we do have a course
         $url = api_get_path(WEB_COURSE_PATH).$courseDirectory.'/index.php?id_session='.$sessionId.'&gidReq='.$groupId;
-    } elseif (!empty($sessionId) && api_get_configuration_value('remove_session_url') !== true) {
+    } elseif (!empty($sessionId) &&
+        api_get_setting('session.remove_session_url') !== 'true'
+    ) {
         // if the course was unset and the session was set, send directly to the session
         $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
     }
+
     // if not valid combination was found, return an empty string
     return $url;
 }

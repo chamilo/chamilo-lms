@@ -20,9 +20,9 @@
     <services>
         <defaults autowire="true" />
 
-        <service id="Chamilo\ThemeBundle\Controller\ExceptionController" public="true">
-            <argument key="$debug">%kernel.debug%</argument>
-        </service>
+        <!--<service id="Chamilo\ThemeBundle\Controller\ExceptionController" public="true">-->
+            <!--<argument key="$debug">%kernel.debug%</argument>-->
+        <!--</service>-->
 
         <service id="chamilo_admin_theme.widget_extension.class" class="%chamilo_admin_theme.widget_extension.class%">
             <tag name="twig.extension" />

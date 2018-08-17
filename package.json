@@ -4,7 +4,7 @@
   "description": "E-learning and collaboration software",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.19",
+    "@symfony/webpack-encore": "0.20.*",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.1.3",
     "copy-webpack-plugin": "^4.3.1",

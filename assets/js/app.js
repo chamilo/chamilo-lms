@@ -12,7 +12,7 @@ import 'chosen-js';
 // @todo rework url naming
 var homePublicUrl = Routing.generate('home') + 'public/';
 var legacyIndex = Routing.generate('legacy_index');
-var mainUrl = Routing.generate('legacy_main', {'name' : '/'});
+var mainUrl = Routing.generate('web.main');
 var webAjax = Routing.generate('web.ajax');
 
 console.log(homePublicUrl);
@@ -442,7 +442,7 @@ function checkBrand() {
 }
 
 function setCheckbox(value, table_id) {
-    checkboxes = $("#"+table_id+" input:checkbox");
+    var checkboxes = $("#"+table_id+" input:checkbox");
     $.each(checkboxes, function(index, checkbox) {
         checkbox.checked = value;
         if (value) {
@@ -549,7 +549,7 @@ if (typeof CKEDITOR !== 'undefined') {
     plugins.forEach(function (plugin) {
         CKEDITOR.plugins.addExternal(
             plugin,
-            mainUrl + 'javascript/ckeditor/plugins/' + plugin + '/'
+            mainUrl + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
         );
     });
 
@@ -641,4 +641,14 @@ function copyTextToClipBoard(elementId)
     //alert('Copied');
 }
 
-
+// Expose functions to be use inside chamilo.
+// @todo check if there's a better way to expose functions.
+window.expandColumnToogle = expandColumnToogle;
+window.get_url_params = get_url_params;
+window.checkBrand = checkBrand;
+window.setCheckbox = setCheckbox;
+window.action_click = action_click;
+window.hideUnhide = hideUnhide;
+window.doneResizing = doneResizing;
+window.addMainEvent = addMainEvent;
+window.showTemplates = showTemplates;

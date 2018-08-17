@@ -3135,7 +3135,6 @@ function finishInstallationWithContainer(
 
     // Creating fos_group (groups and roles)
     $groupManager = $container->get('fos_user.group_manager');
-
     $groups = [
         [
             'code' => 'ADMIN',
@@ -3188,6 +3187,9 @@ function finishInstallationWithContainer(
         $manager->persist($group);
         $groupManager->updateGroup($group, true);
     }
+
+    $toolChain = $container->get('chamilo_course.tool_chain');
+    $toolChain->createTools($manager);
 
     // Creating settings
     $settingsManager->installSchemas($accessUrl);
@@ -3293,7 +3295,7 @@ function finishInstallationWithContainer(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.
-    $userId = @UserManager::create_user(
+    @UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,

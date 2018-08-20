@@ -1,8 +1,8 @@
 <div class="row">
     {% if errors is empty %}
-    <div class="col-md-12">
-        {{ form }}
-    </div>
+        <div class="col-md-12">
+            {{ form }}
+        </div>
     {% else %}
         <div class="col-md-6">
             {{ form }}

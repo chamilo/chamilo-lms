@@ -36,6 +36,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'enable_profile_user_address_geolocalization' => '',
                     'allow_show_skype_account' => '',
                     'allow_show_linkedin_url' => '',
+                    'is_editable' => 'true'
                 ]
             )
             ->setTransformer(
@@ -91,7 +92,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('enable_profile_user_address_geolocalization', YesNoType::class)
             ->add('allow_show_skype_account', YesNoType::class)
             ->add('allow_show_linkedin_url', YesNoType::class)
-
+            ->add('is_editable', YesNoType::class)
         ;
     }
 }

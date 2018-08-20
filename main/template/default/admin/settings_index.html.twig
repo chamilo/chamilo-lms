@@ -48,7 +48,7 @@
                 {#<div class="panel panel-default {{ block_item.class }}">#}
                 <div class="card">
                     <div class="card-header">
-                        {{ block_item.icon }} {{ block_item.label }}
+                        {{ block_item.icon|raw }} {{ block_item.label }}
                         {% if block_item.editable and _u.is_admin %}
                             <button type="button" class="btn btn-link btn-sm admin-edit-block float-right"
                                     data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
@@ -59,7 +59,7 @@
                     </div>
                     <div class="card-body">
                         <div style="display: block;">
-                            {{ block_item.search_form }}
+                            {{ block_item.search_form|raw }}
                         </div>
                         {% if block_item.items is not null %}
                             <div class="block-items-admin">
@@ -77,12 +77,12 @@
 
                         {% if block_item.extra is not null %}
                             <div>
-                                {{ block_item.extra }}
+                                {{ block_item.extra|raw }}
                             </div>
                         {% endif %}
 
                         {% if block_item.extraContent %}
-                            <div>{{ block_item.extraContent }}</div>
+                            <div>{{ block_item.extraContent|raw }}</div>
                         {% endif %}
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <h4 class="modal-title" id="modal-extra-title">{{ 'Blocks'|get_lang }}</h4>
                 </div>
                 <div class="modal-body">
-                    {{ extraDataForm }}
+                    {{ extraDataForm|raw }}
                 </div>
             </div>
         </div>

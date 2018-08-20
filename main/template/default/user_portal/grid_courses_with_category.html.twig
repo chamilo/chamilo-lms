@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div class="grid-courses">
     {% for category in courses.in_category %}
         {% set nameCategory = category.title_category %}
@@ -98,3 +99,4 @@
         </div>
     {% endfor %}
 </div>
+{% endautoescape %}

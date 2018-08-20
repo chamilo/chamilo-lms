@@ -28,5 +28,4 @@ $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
 $content = $tpl->fetch($add_course_tpl);
 
 $tpl->assign('content', $content);
-$template = $tpl->get_template('layout/layout_1_col.tpl');
-$tpl->display($template);
+$tpl->display_one_col_template();

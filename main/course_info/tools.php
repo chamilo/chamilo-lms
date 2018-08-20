@@ -162,5 +162,4 @@ switch ($action) {
 
 $tpl = new Template($toolName);
 $tpl->assign('content', $content);
-$template = $tpl->get_template('layout/layout_1_col.tpl');
-$tpl->display($template);
+$tpl->display_one_col_template();

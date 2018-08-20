@@ -427,5 +427,4 @@ if ($form->validate()) {
 
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
-$template = $tpl->get_template('layout/layout_1_col.tpl');
-$tpl->display($template);
+$tpl->display_one_col_template();

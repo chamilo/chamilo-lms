@@ -1946,9 +1946,8 @@ class SocialManager extends UserManager
         $template->assign('user', $userInfo);
         $template->assign('social_avatar_block', $socialAvatarBlock);
         $template->assign('profile_edition_link', $profileEditionLink);
-        //Added the link to export the vCard to the Template
-
-        //If not friend $show_full_profile is False and the user can't see Email Address and Vcard Download Link
+        // Added the link to export the vCard to the Template
+        // If not friend $show_full_profile is False and the user can't see Email Address and Vcard Download Link
         if ($show_full_profile) {
             $template->assign('vcard_user_link', $vCardUserLink);
         }
@@ -1966,11 +1965,6 @@ class SocialManager extends UserManager
         $template->assign('user_relation', $userRelationType);
         $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
         $template->assign('show_full_profile', $show_full_profile);
-
-        $inGroup = in_array($groupBlock, ['groups', 'group_edit', 'member_list']);
-        $template->assign('in_group', $inGroup);
-        $templateName = $template->get_template('social/user_block.tpl');
-        $template->assign('social_avatar_block', $template->fetch($templateName));
     }
 
     /**

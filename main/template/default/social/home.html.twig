@@ -5,9 +5,9 @@
 {% autoescape false %}
     <div class="row">
         <div class="col-md-3">
-            {{ social_avatar_block }}
+            {% include template ~ '/social/user_block.html.twig' %}
             <div class="social-network-menu">
-            {{ social_menu_block }}
+                {{ social_menu_block }}
             </div>
         </div>
         <div class="col-md-6">

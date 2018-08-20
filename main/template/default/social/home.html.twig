@@ -1,4 +1,5 @@
 {% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
 
 {% block content %}
 {% autoescape false %}
@@ -19,52 +20,21 @@
             {{ social_auto_extend_link }}
         </div>
         <div class="col-md-3">
-            <!-- Block chat list -->
-            <div class="chat-friends">
-                <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingOne">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#blocklistFriends" href="#listFriends" aria-expanded="true" aria-controls="listFriends">
-                                    {{ "SocialFriend" | get_lang }}
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                                {{ social_friend_block }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{ macro.panel("SocialFriend" | get_lang, social_friend_block ) }}
 
             <!-- Block session list -->
-            {% if session_list != null %}
-            <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
-                        <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#session-block" href="#sessionList" aria-expanded="true" aria-controls="sessionList">
-                               {{ "MySessions" | get_lang }}
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="sessionList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <ul class="list-group">
-                                {% for session in session_list %}
-                                <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
-                                    <img class="img-session" src="{{ session.image }}"/>
-                                    <span class="title">{{ session.name }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-             </div>
-             {% endif %}
+            {% set sessionList %}
+                <ul class="list-group">
+                    {% for session in session_list %}
+                        <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
+                            <img class="img-session" src="{{ session.image }}"/>
+                            <span class="title">{{ session.name }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endset %}
+
+            {{ macro.panel("MySessions" | get_lang, sessionList) }}
         </div>
     </div>
 {% endautoescape %}

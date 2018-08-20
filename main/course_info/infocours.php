@@ -349,26 +349,9 @@ $form->addPanelOption(
 );
 
 // EMAIL NOTIFICATIONS
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-email-notifications">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-               href="#collapse-email-notifications" aria-expanded="false" aria-controls="collapse-email-notifications">
-');
-$form->addHtml(
-    Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-email-notifications" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="heading-email-notifications">
-        <div class="panel-body">
-');
+
+$globalGroup = [];
+
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -391,7 +374,7 @@ $group[] = $form->createElement(
     get_lang('NewUserEmailAlertDisable'),
     0
 );
-$form->addGroup($group, '', [get_lang("NewUserEmailAlert")]);
+$globalGroup[get_lang('NewUserEmailAlert')] = $group;
 
 $group = [];
 $group[] = $form->createElement(
@@ -415,7 +398,8 @@ $group[] = $form->createElement(
     get_lang('NewHomeworkEmailAlertDisable'),
     0
 );
-$form->addGroup($group, '', [get_lang("NewHomeworkEmailAlert")]);
+$globalGroup[get_lang('NewHomeworkEmailAlert')] = $group;
+
 
 $group = [];
 $group[] = $form->createElement(
@@ -446,7 +430,8 @@ $group[] = $form->createElement(
     get_lang('WorkEmailAlertDeactivate'),
     0
 );
-$form->addGroup($group, '', [get_lang("WorkEmailAlert")]);
+
+$globalGroup[get_lang('WorkEmailAlert')] = $group;
 
 $group = [];
 $group[] = $form->createElement(
@@ -463,7 +448,8 @@ $group[] = $form->createElement(
     get_lang('DropboxEmailAlertDeactivate'),
     0
 );
-$form->addGroup($group, '', [get_lang("DropboxEmailAlert")]);
+
+$globalGroup[get_lang('DropboxEmailAlert')] = $group;
 
 // Exercises notifications
 $emailAlerts = ExerciseLib::getNotificationSettings();
@@ -478,7 +464,7 @@ foreach ($emailAlerts as $itemId => $label) {
     );
 }
 
-$form->addGroup($group, '', [get_lang('Exercises')]);
+$globalGroup[get_lang('Exercises')] = $group;
 
 $group = [];
 $group[] = $form->createElement(
@@ -495,15 +481,18 @@ $group[] = $form->createElement(
     get_lang('No'),
     2
 );
-$form->addGroup($group, '', [get_lang("EmailToTeachersWhenNewWorkFeedback")]);
 
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+$globalGroup[get_lang('EmailToTeachersWhenNewWorkFeedback')] = $group;
 
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+$globalGroup[] = $myButton;
+
+$form->addPanelOption(
+    'email-notifications',
+    Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications'),
+    $globalGroup
+);
+
 
 $group = [];
 $group[] = $form->createElement(
@@ -705,7 +694,7 @@ if ($exerciseInvisible === 'true' &&
             0
         ),
     ];
-    $form->addGroup($group, '', [get_lang("ExerciseInvisibleInSession")]);
+    $form->addGroup($group, '', [get_lang('ExerciseInvisibleInSession')]);
 }
 
 if (is_settings_editable()) {

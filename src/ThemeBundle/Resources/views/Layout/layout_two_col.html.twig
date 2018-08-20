@@ -6,75 +6,77 @@
 {#%}#}
 
 {% block page_content %}
-    {% autoescape false %}
-    {% if plugin_main_top %}
-    <div id="plugin_main_top" class="col-md-12">
-        {{ plugin_main_top }}
-    </div>
-    {% endif %}
-
-    {#  Left column #}
-    <div class="col-md-3">
-        {% if plugin_menu_top %}
-        <div id="plugin_menu_top">
-            {{ plugin_menu_top }}
+    <div class="row">
+        {% autoescape false %}
+        {% if plugin_main_top %}
+        <div id="plugin_main_top" class="col-md-12">
+            {{ plugin_main_top }}
         </div>
         {% endif %}
 
-        {% block chamilo_left_column %}
-            <section class="left_column">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    {# User avatar #}
-                    {{ render(controller('ChamiloThemeBundle:Sidebar:userPanel', {'pathInfo': pathInfo })) }}
-                {% endif %}
-                {# Login, Courses, Skills menu #}
-                {{ render(controller('ChamiloThemeBundle:Sidebar:leftMenu', {'request' : app.request, pathInfo: pathInfo })) }}
-            </section>
-        {% endblock %}
-        {% if plugin_menu_bottom %}
-            <div id="plugin_menu_bottom">
-                {{ plugin_menu_bottom }}
+        {#  Left column #}
+        <div class="col-md-3">
+            {% if plugin_menu_top %}
+            <div id="plugin_menu_top">
+                {{ plugin_menu_top }}
             </div>
-        {% endif %}
-    </div>
+            {% endif %}
 
-    {#  Right column #}
-    <div class="col-md-9">
-        {% if plugin_content_top %}
-            <div id="plugin_content_top">
-                {{ plugin_content_top }}
-            </div>
-        {% endif %}
-
-        {% block chamilo_breadcrumb %}
-            {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
-        {% endblock %}
-
-        {% block chamilo_messages %}
-            {# Flash messages #}
-            {% autoescape false %}
-                {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
-            {% endautoescape %}
-        {% endblock %}
-
-        {% block chamilo_right_column %}
-            {% block content %}
-            <section class="right_column">
-            {{ content }}
-            </section>
+            {% block chamilo_left_column %}
+                <section class="left_column">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {# User avatar #}
+                        {{ render(controller('ChamiloThemeBundle:Sidebar:userPanel', {'pathInfo': pathInfo })) }}
+                    {% endif %}
+                    {# Login, Courses, Skills menu #}
+                    {{ render(controller('ChamiloThemeBundle:Sidebar:leftMenu', {'request' : app.request, pathInfo: pathInfo })) }}
+                </section>
             {% endblock %}
-        {% endblock %}
-
-        {% if plugin_content_bottom %}
-        <div id="plugin_content_bottom">
-            {{plugin_content_bottom}}
+            {% if plugin_menu_bottom %}
+                <div id="plugin_menu_bottom">
+                    {{ plugin_menu_bottom }}
+                </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
 
-    {% if plugin_main_bottom %}
-    <div id="plugin_main_bottom" class="col-md-12">
-        {{ plugin_main_bottom }}
+        {#  Right column #}
+        <div class="col-md-9">
+            {% if plugin_content_top %}
+                <div id="plugin_content_top">
+                    {{ plugin_content_top }}
+                </div>
+            {% endif %}
+
+            {% block chamilo_breadcrumb %}
+                {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
+            {% endblock %}
+
+            {% block chamilo_messages %}
+                {# Flash messages #}
+                {% autoescape false %}
+                    {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
+                {% endautoescape %}
+            {% endblock %}
+
+            {% block chamilo_right_column %}
+                {% block content %}
+                <section class="right_column">
+                {{ content }}
+                </section>
+                {% endblock %}
+            {% endblock %}
+
+            {% if plugin_content_bottom %}
+            <div id="plugin_content_bottom">
+                {{plugin_content_bottom}}
+            </div>
+            {% endif %}
+        </div>
+
+        {% if plugin_main_bottom %}
+        <div id="plugin_main_bottom" class="col-md-12">
+            {{ plugin_main_bottom }}
+        </div>
     </div>
     {% endif %}
     {% endautoescape %}

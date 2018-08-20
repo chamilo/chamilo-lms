@@ -940,7 +940,7 @@ class SocialManager extends UserManager
             $show,
             ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
-            $links = '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav navbar-nav">';
             $active = $show == 'home' ? 'active' : null;
             $links .= '
                 <li class="home-icon '.$active.'">
@@ -1052,7 +1052,7 @@ class SocialManager extends UserManager
         }
 
         if ($show == 'shared_profile') {
-            $links = '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav navbar-nav">';
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $links .= '
@@ -1966,12 +1966,10 @@ class SocialManager extends UserManager
         $template->assign('user_relation', $userRelationType);
         $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
         $template->assign('show_full_profile', $show_full_profile);
+
+        $inGroup = in_array($groupBlock, ['groups', 'group_edit', 'member_list']);
+        $template->assign('in_group', $inGroup);
         $templateName = $template->get_template('social/user_block.tpl');
-
-        if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
-            $templateName = $template->get_template('social/group_block.tpl');
-        }
-
         $template->assign('social_avatar_block', $template->fetch($templateName));
     }
 

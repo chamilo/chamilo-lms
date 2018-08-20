@@ -28,34 +28,32 @@
     {% endif %}
 
     <section id="content-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-12">
-                    {% autoescape false %}
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                {% autoescape false %}
 
-                    {# Breadcrumb #}
-                    {% block chamilo_breadcrumb %}
-                    {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
-                    {% endblock %}
+                {# Breadcrumb #}
+                {% block chamilo_breadcrumb %}
+                {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
+                {% endblock %}
 
-                    {% if actions != '' %}
-                        <div class="actions">
-                            {{ actions }}
-                        </div>
-                    {% endif %}
+                {% if actions != '' %}
+                    <div class="actions">
+                        {{ actions }}
+                    </div>
+                {% endif %}
 
-                    {% block chamilo_messages %}
-                    {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
-                    {% endblock %}
+                {% block chamilo_messages %}
+                {% include '@ChamiloTheme/FlashMessage/render.html.twig' %}
+                {% endblock %}
 
-                    {# Content #}
-                    {% block content %}
-                    <section id="main_content">
-                        {{ content }}
-                    </section>
-                    {% endblock %}
-                    {% endautoescape %}
-                </div>
+                {# Content #}
+                {% block content %}
+                <section id="main_content">
+                    {{ content }}
+                </section>
+                {% endblock %}
+                {% endautoescape %}
             </div>
         </div>
     </section>

@@ -93,7 +93,6 @@
                 </div>
             </section>
 
-
             {# menu #}
             {% block chamilo_menu %}
                 <div id="menu-bar">
@@ -107,6 +106,7 @@
         </header>
         {% endblock %}
 
+        {#<div id="top_main_content" class="container">#}
         <div id="top_main_content" class="container">
         {# course navigation links/shortcuts need to be activated by the admin #}
         {% include "@ChamiloTheme/Layout/course_navigation.html.twig" %}
@@ -123,7 +123,6 @@
             {#</header>#}
         {% block page_content %}
         {% endblock %}
-
         </div> {# end top_main_content #}
     </div> {# End page-wrap div #}
     {% block chamilo_footer %}

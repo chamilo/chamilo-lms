@@ -119,6 +119,7 @@ class CourseDescriptionController
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
         $tpl->assign('actions', $actions);
         $tpl->assign('session_id', $session_id);
+        $tpl->assign('c_id', api_get_course_int_id());
         $templateName = $tpl->get_template('course_description/index.tpl');
         $content = $tpl->fetch($templateName);
         $tpl->assign('content', $content);

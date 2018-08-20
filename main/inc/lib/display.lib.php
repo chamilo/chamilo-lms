@@ -2449,8 +2449,9 @@ class Display
             $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
         }
 
-        $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+        //$title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+        $title = !empty($title) ? '<h4 class="card-header">'.$title.'</h4>'.$extra : '';
+        $footer = !empty($footer) ? '<div class="card-footer">'.$footer.'</div>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
 
@@ -2458,8 +2459,9 @@ class Display
             $id = " id='$id'";
         }
 
+        //<div '.$id.' class="panel panel-'.$style.'">
         return '
-            <div '.$id.' class="panel panel-'.$style.'">
+            <div '.$id.' class="card">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2472,13 +2474,13 @@ class Display
      *
      * @return string
      */
-    public static function contentPanel($content)
+    public static function contentPanel($content): string
     {
         if (empty($content)) {
             return '';
         }
 
-        return '<div class="panel-body">'.$content.'</div>';
+        return '<div class="card-text">'.$content.'</div>';
     }
 
     /**
@@ -2531,7 +2533,7 @@ class Display
             });
         }
 
-        $html = '<div id="'.$id.'" class="actions">';
+        $html = '<div id="'.$id.'" >';
         $html .= '<div class="row">';
 
         for ($i = 0; $i < $col; $i++) {
@@ -2628,31 +2630,26 @@ class Display
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
-
-            $html = <<<HTML
-                <div class="panel-group" id="$idAccordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default" id="$id">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
-                                <a class="$headerClass" role="button" data-toggle="collapse" data-parent="#$idAccordion" href="#$idCollapse" aria-expanded="$ariaExpanded" aria-controls="$idCollapse">$title</a>
-                            </h4>
-                        </div>
-                        <div id="$idCollapse" class="$contentClass" role="tabpanel">
-                            <div class="panel-body">$content</div>
-                        </div>
-                    </div>
+$html = <<<HTML
+            
+                <div class="card" id="$id">
+                    <div class="card-header">                        
+                        $title                        
+                    </div>                    
+                    <div class="card-body">$content</div>                    
                 </div>
+            
 HTML;
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
             }
-            $params['class'] = 'panel panel-default';
+            $params['class'] = 'card';
             $html = null;
             if (!empty($title)) {
-                $html .= '<div class="panel-heading">'.$title.'</div>'.PHP_EOL;
+                $html .= '<div class="card-header">'.$title.'</div>'.PHP_EOL;
             }
-            $html .= '<div class="panel-body">'.$content.'</div>'.PHP_EOL;
+            $html .= '<div class="card-body">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);
         }
 

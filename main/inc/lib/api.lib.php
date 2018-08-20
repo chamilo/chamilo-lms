@@ -2095,6 +2095,21 @@ function api_get_session_entity($id = 0)
 }
 
 /**
+ * @param int $id
+ *
+ * @return \Chamilo\CoreBundle\Entity\AccessUrl
+ */
+function api_get_url_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_current_access_url_id();
+    }
+
+    return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+}
+
+
+/**
  * Returns the current course info array.
 
  * Now if the course_code is given, the returned array gives info about that

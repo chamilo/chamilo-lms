@@ -6,9 +6,9 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\ToolChain;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
@@ -20,13 +20,15 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class CourseListener
 {
     protected $toolChain;
+    protected $settingsManager;
 
     /**
      * @param ToolChain $toolChain
      */
-    public function __construct(ToolChain $toolChain)
+    public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {
         $this->toolChain = $toolChain;
+        $this->settingsManager = $settingsManager;
     }
 
     /**
@@ -46,14 +48,14 @@ class CourseListener
     public function prePersist(Course $course, LifecycleEventArgs $args)
     {
         /** @var AccessUrlRelCourse $urlRelCourse */
-        $urlRelCourse = $course->getUrls()->first();
-        $url = $urlRelCourse->getUrl();
+        if ($course) {
+            $urlRelCourse = $course->getUrls()->first();
+            $url = $urlRelCourse->getUrl();
+            $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+            $this->checkLimit($repo, $course, $url);
+            $this->toolChain->addToolsInCourse($course, $this->settingsManager);
+        }
 
-        $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-
-        $this->checkLimit($repo, $course, $url);
-
-        $this->toolChain->addToolsInCourse($course);
         /*
         error_log('ddd');
         $course->setDescription( ' dq sdqs dqs dqs ');
@@ -72,11 +74,13 @@ class CourseListener
      */
     public function preUpdate(Course $course, LifecycleEventArgs $args)
     {
-        $url = $course->getCurrentUrl();
+        if ($course) {
+            $url = $course->getCurrentUrl();
 
-        $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+            $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
 
-        $this->checkLimit($repo, $course, $url);
+            $this->checkLimit($repo, $course, $url);
+        }
 
         /*if ($eventArgs->getEntity() instanceof User) {
             if ($eventArgs->hasChangedField('name') && $eventArgs->getNewValue('name') == 'Alice') {

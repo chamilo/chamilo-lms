@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Tool\BaseTool;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -104,22 +105,26 @@ class ToolChain
     }
 
     /**
-     * @param Course $course
+     * @param Course          $course
+     * @param SettingsManager $settingsManager
      *
      * @return Course
      */
-    public function addToolsInCourse(Course $course)
+    public function addToolsInCourse(Course $course, SettingsManager $settingsManager)
     {
         $tools = $this->getTools();
 
+        $toolVisibility = $settingsManager->getSetting('course.active_tools_on_create');
         /** @var BaseTool $tool */
         foreach ($tools as $tool) {
             $toolEntity = new CTool();
+            $visibility = in_array($tool->getName(), $toolVisibility) ? true : false;
+
             $toolEntity
                 ->setCId($course->getId())
                 ->setImage($tool->getImage())
                 ->setName($tool->getName())
-                ->setVisibility(1)
+                ->setVisibility($visibility)
                 ->setLink($tool->getLink())
                 ->setTarget($tool->getTarget())
                 ->setCategory($tool->getCategory());

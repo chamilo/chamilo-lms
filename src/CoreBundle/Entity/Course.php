@@ -442,10 +442,21 @@ class Course
     /**
      * @param AccessUrlRelCourse $url
      */
-    public function addUrls(AccessUrlRelCourse $url)
+    public function addUrlRelCourse(AccessUrlRelCourse $url)
     {
         $url->setCourse($this);
         $this->urls[] = $url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     */
+    public function addUrl(AccessUrl $url)
+    {
+        $urlRelCourse = new AccessUrlRelCourse();
+        $urlRelCourse->setCourse($this);
+        $urlRelCourse->setUrl($url);
+        $this->addUrlRelCourse($urlRelCourse);
     }
 
     /**

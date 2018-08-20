@@ -416,7 +416,8 @@ class Display
      * @param array $query_vars      Additional variables to add in the query-string
      * @param array $column_show     Array of binaries 1= show columns 0. hide a column
      * @param array $column_order    An array of integers that let us decide how the columns are going to be sort.
-     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
+     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the
+     *                               4th column
      * @param array $form_actions    Set optional forms actions
      *
      * @author Julio Montoya
@@ -1755,13 +1756,14 @@ class Display
 
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-            $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-                ExtraField::SESSION_FIELD_TYPE,
-                $session_id
-            );
+            $extraFieldValues = $fieldValuesRepo->getVisibleValues(ExtraField::SESSION_FIELD_TYPE, $session_id);
 
             $session['extra_fields'] = [];
+            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
             foreach ($extraFieldValues as $value) {
+                if (empty($value)) {
+                    continue;
+                }
                 $session['extra_fields'][] = [
                     'field' => [
                         'variable' => $value->getField()->getVariable(),
@@ -2447,8 +2449,9 @@ class Display
             $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
         }
 
-        $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+        //$title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+        $title = !empty($title) ? '<h4 class="card-header">'.$title.'</h4>'.$extra : '';
+        $footer = !empty($footer) ? '<div class="card-footer">'.$footer.'</div>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
 
@@ -2456,8 +2459,9 @@ class Display
             $id = " id='$id'";
         }
 
+        //<div '.$id.' class="panel panel-'.$style.'">
         return '
-            <div '.$id.' class="panel panel-'.$style.'">
+            <div '.$id.' class="card">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2470,13 +2474,13 @@ class Display
      *
      * @return string
      */
-    public static function contentPanel($content)
+    public static function contentPanel($content): string
     {
         if (empty($content)) {
             return '';
         }
 
-        return '<div class="panel-body">'.$content.'</div>';
+        return '<div class="card-text">'.$content.'</div>';
     }
 
     /**
@@ -2529,7 +2533,7 @@ class Display
             });
         }
 
-        $html = '<div id="'.$id.'" class="actions">';
+        $html = '<div id="'.$id.'" >';
         $html .= '<div class="row">';
 
         for ($i = 0; $i < $col; $i++) {
@@ -2626,31 +2630,26 @@ class Display
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
-
-            $html = <<<HTML
-                <div class="panel-group" id="$idAccordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default" id="$id">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
-                                <a class="$headerClass" role="button" data-toggle="collapse" data-parent="#$idAccordion" href="#$idCollapse" aria-expanded="$ariaExpanded" aria-controls="$idCollapse">$title</a>
-                            </h4>
-                        </div>
-                        <div id="$idCollapse" class="$contentClass" role="tabpanel">
-                            <div class="panel-body">$content</div>
-                        </div>
-                    </div>
+$html = <<<HTML
+            
+                <div class="card" id="$id">
+                    <div class="card-header">                        
+                        $title                        
+                    </div>                    
+                    <div class="card-body">$content</div>                    
                 </div>
+            
 HTML;
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
             }
-            $params['class'] = 'panel panel-default';
+            $params['class'] = 'card';
             $html = null;
             if (!empty($title)) {
-                $html .= '<div class="panel-heading">'.$title.'</div>'.PHP_EOL;
+                $html .= '<div class="card-header">'.$title.'</div>'.PHP_EOL;
             }
-            $html .= '<div class="panel-body">'.$content.'</div>'.PHP_EOL;
+            $html .= '<div class="card-body">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);
         }
 
@@ -2699,25 +2698,17 @@ HTML;
         }
 
         if (!empty($toolbar)) {
-            $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
+            $toolbar = '<div class="btn-group float-right">'.$toolbar.'</div>';
         }
 
-        return '<div id="user_card_'.$userInfo['id'].'" class="col-md-12">                    
-                    <div class="row">
-                        <div class="col-md-2">                            
-                            <img src="'.$userInfo['avatar'].'" class="img-responsive img-circle">
-                        </div>
-                        <div class="col-md-10">
-                           <p>'.$userInfo['complete_name'].'</p>
-                           <div class="row">
-                           <div class="col-md-2">
-                           '.$status.'
-                           </div>
-                           <div class="col-md-10">                           
-                           '.$toolbar.'
-                           </div>
-                           </div>
-                        </div>
+        return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">                    
+                    <img src="'.$userInfo['avatar'].'" class="rounded">
+                    <h3 class="card-title">'.$userInfo['complete_name'].'</h3>                    
+                    <div class="card-body">                       
+                       <div class="card-title">
+                       '.$status.'
+                       '.$toolbar.'
+                       </div> 
                     </div>
                     <hr />
               </div>';

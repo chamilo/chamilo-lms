@@ -104,7 +104,7 @@ sonata_admin:
 #                #icon:  '<i class="fa fa-play-circle"></i>'
 #                label_catalogue: SonataAdminBundle
 #                items:
-##                    - sonata.admin.course
+#                    - sonata.admin.course
 #                    - sonata.admin.course_category
 #                    - sonata.admin.course_request
 #                    - sonata.admin.c_group_info

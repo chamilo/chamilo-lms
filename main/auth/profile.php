@@ -80,7 +80,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
 EOF;
 }
 
-$tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
+$tool_name = api_get_setting('profile.is_editable') === 'true' ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
@@ -182,7 +182,7 @@ if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profi
 }
 
 // OPENID URL
-if (is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
+if (api_get_setting('profile.is_editable') === 'true' && api_get_setting('openid_authentication') == 'true') {
     $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
     if (api_get_setting('profile', 'openid') !== 'true') {
         $form->freeze('openid');
@@ -200,7 +200,8 @@ $form->applyFilter('phone', 'trim');
 $form->applyFilter('phone', 'html_filter');
 
 //  PICTURE
-if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
+if (api_get_setting('profile.is_editable') === 'true' &&
+    api_get_setting('profile', 'picture') === 'true') {
     $form->addFile(
         'picture',
         [
@@ -236,7 +237,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
 }
 
 // THEME
-if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
+if (api_get_setting('profile.is_editable') === 'true' && api_get_setting('user_selected_theme') === 'true') {
     $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
         $form->freeze('theme');
@@ -307,8 +308,8 @@ if (api_get_setting('extended_profile') === 'true') {
 }
 
 //    PASSWORD, if auth_source is platform
-if (is_platform_authentication() &&
-    is_profile_editable() &&
+if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
+    api_get_setting('profile.is_editable') === 'true' &&
     api_get_setting('profile', 'password') == 'true'
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
@@ -356,7 +357,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
     );
 }
 //    SUBMIT
-if (is_profile_editable()) {
+if (api_get_setting('profile.is_editable') === 'true') {
     $form->addButtonUpdate(get_lang('SaveSettings'), 'apply_change');
 } else {
     $form->freeze();
@@ -421,8 +422,8 @@ if ($form->validate()) {
     }
 
     $allow_users_to_change_email_with_no_password = true;
-    if (is_platform_authentication() &&
-        api_get_setting('allow_users_to_change_email_with_no_password') == 'false'
+    if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
+        api_get_setting('allow_users_to_change_email_with_no_password') === 'false'
     ) {
         $allow_users_to_change_email_with_no_password = false;
     }

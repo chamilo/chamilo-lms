@@ -92,6 +92,7 @@ class Template
             api_get_path(SYS_CODE_PATH).'template/overrides', // user defined templates
             api_get_path(SYS_CODE_PATH).'template', //template folder
             api_get_path(SYS_PLUGIN_PATH), // plugin folder
+            api_get_path(SYS_PATH).'src/ThemeBundle/Resources/views',
         ];
 
         $urlId = api_get_current_access_url_id();
@@ -132,10 +133,11 @@ class Template
             ];
         }
 
-        $this->twig = new Twig_Environment($loader, $options);
+        //$this->twig = new Twig_Environment($loader, $options);
+        $this->twig  = Container::getTwig();
 
         if ($isTestMode) {
-            $this->twig->addExtension(new Twig_Extension_Debug());
+            //$this->twig->addExtension(new Twig_Extension_Debug());
         }
 
         // Twig filters setup
@@ -185,11 +187,12 @@ class Template
 
         foreach ($filters as $filter) {
             if (is_array($filter)) {
-                $this->twig->addFilter(new Twig_SimpleFilter($filter['name'], $filter['callable']));
+                //$this->twig->addFilter(new Twig_SimpleFilter($filter['name'], $filter['callable']));
             } else {
-                $this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
+                //$this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
             }
         }
+
         /*$this->twig->addFunction(
             new TwigFunction('sonata_page_render_container', [$this, 'renderContainer'], ['is_safe' => ['html']])
         );*/
@@ -200,7 +203,7 @@ class Template
         ];
 
         foreach ($functions as $function) {
-            $this->twig->addFunction(new Twig_SimpleFunction($function['name'], $function['callable']));
+            //$this->twig->addFunction(new Twig_SimpleFunction($function['name'], $function['callable']));
         }
 
         // Setting system variables

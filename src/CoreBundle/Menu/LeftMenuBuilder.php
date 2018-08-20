@@ -156,7 +156,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
         $translator = $this->container->get('translator');
 
         if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
+            $menu->setChildrenAttribute('class', 'navbar-nav');
 
             $menu->addChild(
                 $translator->trans('Inbox'),
@@ -217,6 +217,13 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     ],
                 ]
             );
+        }
+
+        // Set CSS classes for the items
+        foreach ($menu->getChildren() as $child) {
+            $child
+                ->setLinkAttribute('class', 'nav-link')
+                ->setAttribute('class', 'nav-item');
         }
 
         return $menu;

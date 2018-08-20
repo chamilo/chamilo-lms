@@ -716,25 +716,21 @@ class IndexManager
     ) {
         $html = '';
         if (!empty($idAccordion)) {
-            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">';
+            /*$html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">';
             $html .= '<div class="panel panel-default" id="'.$id.'">';
             $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">';
             $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>';
             $html .= '</h4></div>';
             $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse in" role="tabpanel">';
             $html .= '<div class="panel-body">'.$content.'</div>';
-            $html .= '</div></div></div>';
+            $html .= '</div></div></div>';*/
+
+            $html = Display::panel($content, $title);
         } else {
-            if (!empty($id)) {
+            /*if (!empty($id)) {
                 $params['id'] = $id;
-            }
-            $params['class'] = 'panel panel-default';
-            $html = null;
-            if (!empty($title)) {
-                $html .= '<div class="panel-heading">'.$title.'</div>';
-            }
-            $html .= '<div class="panel-body">'.$content.'</div>';
-            $html = Display::div($html, $params);
+            }        */
+            $html = Display::panel($content, $title);
         }
 
         return $html;
@@ -1941,14 +1937,7 @@ class IndexManager
                 foreach ($listCoursesInSession[$userCategoryId]['courseInUserCatList'] as $i => $listCourse) {
                     // add course
                     $listCoursesAlreadyDisplayed[$listCourse['courseId']] = 1;
-                    if ($userCategoryId == 0) {
-                        $htmlCategory .= '<div class="panel panel-default">';
-                    } else {
-                        $htmlCategory .= '<div class="panel panel-default">';
-                    }
-                    $htmlCategory .= '<div class="panel-body">';
                     $coursesInfo = $listCourse['course'];
-
                     $htmlCategory .= self::getHtmlForCourse(
                         $coursesInfo,
                         $userCategoryId,
@@ -1981,8 +1970,8 @@ class IndexManager
                         $htmlSessionCategory .= $htmlSession;
                     }
                     $htmlSessionCategory .= '</div>'; // end session cat block
-                    $htmlCategory .= $htmlSessionCategory.'</div></div>';
-                    $htmlCategory .= ''; // end course block
+                    $htmlCategory .= Display::panel($htmlSessionCategory, '');
+
                 }
                 $userCategoryHtml .= $htmlCategory;
             }
@@ -1994,20 +1983,13 @@ class IndexManager
                 if ($listCourse['userCatId'] == $userCategoryId &&
                     !isset($listCoursesAlreadyDisplayed[$listCourse['id']])
                 ) {
-                    if ($userCategoryId != 0) {
-                        $htmlCategory .= '<div class="panel panel-default">';
-                    } else {
-                        $htmlCategory .= '<div class="panel panel-default">';
-                    }
-
-                    $htmlCategory .= '<div class="panel-body">';
-                    $htmlCategory .= self::getHtmlForCourse(
+                    $body = self::getHtmlForCourse(
                         $listCourse['course'],
                         $userCategoryId,
                         0,
                         $loadDirs
                     );
-                    $htmlCategory .= '</div></div>';
+                    $htmlCategory .= Display::panel($body, '');
                 }
             }
             $htmlCategory .= '';

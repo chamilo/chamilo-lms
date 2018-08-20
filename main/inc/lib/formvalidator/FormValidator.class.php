@@ -947,7 +947,7 @@ EOT;
      */
     public function addPanelOption($name, $title, $groupList)
     {
-        $this->addHtml('<div class="panel panel-default">');
+        /*$this->addHtml('<div class="panel panel-default">');
         $this->addHtml(
             '
             <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
@@ -975,6 +975,32 @@ EOT;
         }
 
         $this->addHtml('</div></div>');
+        $this->addHtml('</div>');*/
+
+        $this->addHtml('<div class="card">');
+        $this->addHtml(
+            '            
+                <h4 class="card-header">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
+        '
+        );
+        $this->addHtml($title);
+        $this->addHtml('</a></h4>');
+        $this->addHtml('<div class="card-body">');
+
+        foreach ($groupList as $groupName => $group) {
+            // Add group array
+            if (!empty($groupName) && is_array($group)) {
+                $this->addGroup($group, '', $groupName);
+            }
+            // Add element
+            if ($group instanceof HTML_QuickForm_element) {
+                $this->addElement($group);
+            }
+        }
+
+        $this->addHtml('</div>');
         $this->addHtml('</div>');
     }
 

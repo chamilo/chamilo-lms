@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% for row in session %}
     <div class="panel panel-default">
         {% if not row.show_simple_session_info %}
@@ -143,3 +144,4 @@
         {% endif %}
     </div>
 {% endfor %}
+{% endautoescape %}

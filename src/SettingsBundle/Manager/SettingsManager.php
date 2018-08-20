@@ -727,7 +727,13 @@ class SettingsManager implements SettingsManagerInterface
 
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
             if (array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+                if ($parameter === 'course_creation_use_template') {
+                    if (empty($parameters[$parameter])) {
+                        $parameters[$parameter] = null;
+                    }
+                } else {
+                    $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+                }
             }
         }
 

@@ -111,6 +111,7 @@ if (count($friends) == 0) {
 
     $friend_html = '<div id="whoisonline">';
     $friend_html .= '<div class="row">';
+    $friend_html .= '<div class="col-lg-12">';
     $number_friends = count($friends);
     $j = 0;
 
@@ -128,6 +129,7 @@ if (count($friends) == 0) {
             $j++;
         }
     }
+    $friend_html .= '</div>';
     $friend_html .= '</div>';
     $friend_html .= '</div>';
     $social_right_content .= $friend_html;

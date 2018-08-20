@@ -117,7 +117,7 @@ services:
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener
-        arguments: ['@chamilo_course.tool_chain']
+        arguments: ['@chamilo_course.tool_chain', '@chamilo.settings.manager']
         tags:
             - {name: doctrine.orm.entity_listener}
 

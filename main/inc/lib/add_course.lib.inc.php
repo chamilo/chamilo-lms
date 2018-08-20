@@ -4,6 +4,7 @@
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Tool\BaseTool;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class AddCourse.
@@ -421,9 +422,9 @@ class AddCourse
         $authorId = 0
     ) {
         if (is_null($fill_with_exemplary_content)) {
-            $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
+            $fill_with_exemplary_content = api_get_setting('example_material_course_creation') !== 'false';
         }
-        $course_id = intval($course_id);
+        $course_id = (int) $course_id;
 
         if (empty($course_id)) {
             return false;
@@ -446,11 +447,11 @@ class AddCourse
         $course = api_get_course_entity($course_id);
         $settingsManager = CourseManager::getCourseSettingsManager();
         $settingsManager->setCourse($course);
-        $toolList = CourseManager::getToolList();
-        $toolList = $toolList->getTools();
+        //$toolList = CourseManager::getToolList();
+        //$toolList = $toolList->getTools();
 
         /** @var BaseTool $tool */
-        foreach ($toolList as $tool) {
+       /* foreach ($toolList as $tool) {
             $toolName = $tool->getName();
             $visibility = self::string2binary(
                 api_get_setting_in_list('course.active_tools_on_create', $toolName)
@@ -475,12 +476,13 @@ class AddCourse
         $course->setTools($tools);
         $em->persist($course);
         $em->flush($course);
-        /** @var CTool $tool */
+
+
         foreach ($tools as $tool) {
             $tool->setId($tool->getIid());
             $em->refresh($course);
         }
-        $em->flush($course);
+        $em->flush($course);*/
 
         /*    Course tools  */
         /*
@@ -1228,12 +1230,9 @@ class AddCourse
             'platformLanguage'
         );
         $user_id = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
-        $department_name = isset($params['department_name']) ?
-            $params['department_name'] : null;
-        $department_url = isset($params['department_url']) ?
-            $params['department_url'] : null;
-        $disk_quota = isset($params['disk_quota']) ?
-            $params['disk_quota'] : null;
+        $department_name = isset($params['department_name']) ? $params['department_name'] : null;
+        $department_url = isset($params['department_url']) ? $params['department_url'] : null;
+        $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
 
         if (!isset($params['visibility'])) {
             $default_course_visibility = api_get_setting(
@@ -1249,14 +1248,12 @@ class AddCourse
         }
 
         $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
-        $unsubscribe = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
+        $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
         $status = isset($params['status']) ? $params['status'] : null;
 
-        $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $ok_to_register_course = true;
 
         // Check whether all the needed parameters are present.
@@ -1295,8 +1292,6 @@ class AddCourse
             $disk_quota = api_get_setting('default_document_quotum');
         }
 
-        $time = api_get_utc_datetime();
-
         if (stripos($department_url, 'http://') === false && stripos(
                 $department_url,
                 'https://'
@@ -1304,15 +1299,20 @@ class AddCourse
         ) {
             $department_url = 'http://'.$department_url;
         }
-        //just in case
+
+        // just in case
         if ($department_url == 'http://') {
             $department_url = '';
         }
         $course_id = 0;
 
         if ($ok_to_register_course) {
+            $courseManager = Container::$container->get('chamilo_core.entity.manager.course_manager');
+            /** @var \Chamilo\CoreBundle\Entity\Course $course */
+            $course = $courseManager->create();
+
             // Here we must add 2 fields.
-            $course_id = Database::insert(
+            /*$course_id = Database::insert(
                 $TABLECOURSE,
                 [
                     'code' => $code,
@@ -1335,7 +1335,37 @@ class AddCourse
                     'unsubscribe' => intval($unsubscribe),
                     'visual_code' => $visual_code,
                 ]
-            );
+            );*/
+
+            $urlId = 1;
+            if (api_get_current_access_url_id() !== -1) {
+                $urlId = api_get_current_access_url_id();
+            }
+
+            $url = api_get_url_entity($urlId);
+            $course
+                ->setCode($code)
+                ->setDirectory($directory)
+                ->setCourseLanguage($course_language)
+                ->setTitle($title)
+                ->setDescription(get_lang('CourseDescription'))
+                ->setCategoryCode($category_code)
+                ->setVisibility($visibility)
+                ->setShowScore(1)
+                ->setDiskQuota($disk_quota)
+                ->setCreationDate(new \DateTime())
+                ->setExpirationDate(new \DateTime($expiration_date))
+                //->setLastEdit()
+                ->setDepartmentName($department_name)
+                ->setDepartmentUrl($department_url)
+                ->setSubscribe($subscribe)
+                ->setUnsubscribe($unsubscribe)
+                ->setVisualCode($visual_code)
+                ->addUrl($url)
+            ;
+
+            $courseManager->save($course, true);
+            $course_id = $course->getId();
 
             if ($course_id) {
                 $sort = api_max_sort_value('0', api_get_user_id());
@@ -1384,7 +1414,8 @@ class AddCourse
                 }
 
                 // Adding the course to an URL.
-                if (api_is_multiple_url_enabled()) {
+                // Already added by when saving the entity
+                /*if (api_is_multiple_url_enabled()) {
                     $url_id = 1;
                     if (api_get_current_access_url_id() != -1) {
                         $url_id = api_get_current_access_url_id();
@@ -1392,7 +1423,7 @@ class AddCourse
                     UrlManager::add_course_to_url($course_id, $url_id);
                 } else {
                     UrlManager::add_course_to_url($course_id, 1);
-                }
+                }*/
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();
@@ -1405,12 +1436,10 @@ class AddCourse
                     $course_id
                 );
 
-                $send_mail_to_admin = api_get_setting(
-                    'send_email_to_admin_when_create_course'
-                );
+                $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 
                 // @todo Improve code to send to all current portal administrators.
-                if ($send_mail_to_admin == 'true') {
+                if ($send_mail_to_admin === 'true') {
                     $siteName = api_get_setting('siteName');
                     $recipient_email = api_get_setting('emailAdministrator');
                     $recipient_name = api_get_person_name(

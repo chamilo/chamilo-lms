@@ -4,11 +4,12 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CTool.
- *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *  name="c_tool",
  *  indexes={
@@ -191,7 +192,7 @@ class CTool
     {
         $metadata->addPropertyConstraint(
             'customIcon',
-            new Assert\File(['mimeTypes' => ["image/png"]])
+            new Assert\File(['mimeTypes' => ['image/png']])
         );
         $metadata->addPropertyConstraint(
             'customIcon',
@@ -526,5 +527,17 @@ class CTool
         $this->customIcon = $customIcon;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PostPersist()
+     */
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        // Update id with iid value
+        $em = $args->getEntityManager();
+        $this->setId($this->iid);
+        $em->persist($this);
+        $em->flush($this);
     }
 }

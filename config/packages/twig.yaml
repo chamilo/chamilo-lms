@@ -15,7 +15,6 @@ twig:
         news_list:
         messages_count:
         message_link:
-        is_profile_editable:
         administrator_name:
         execution_stats:
         course_session_block:

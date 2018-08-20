@@ -6,7 +6,7 @@ namespace Chamilo\PageBundle\Controller;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;

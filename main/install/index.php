@@ -118,7 +118,6 @@ $dbUsernameForm = 'root';
 $dbPassForm = '';
 $dbNameForm = 'chamilo';
 $dbPortForm = 3306;
-$allowSelfReg = '';
 $allowSelfReg = 'approval';
 $allowSelfRegProf = 1;
 $adminLastName = get_lang('DefaultInstallAdminLastname');
@@ -507,7 +506,7 @@ if (@$_POST['step2']) {
 } elseif (@$_POST['step4']) {
     //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
-    if ($installType == 'update') {
+    if ($installType === 'update') {
         $db_name = $dbNameForm;
 
         $database = connectToDatabase(
@@ -748,7 +747,7 @@ if (@$_POST['step2']) {
         if (!empty($f)) {
             ob_flush(); //#5565
         }
-        if ($installType == 'update') {
+        if ($installType === 'update') {
             $database = connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
@@ -773,10 +772,29 @@ if (@$_POST['step2']) {
                 '{{DATABASE_PASSWORD}}' => $dbPassForm,
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+                '{{APP_URL_APPEND}}' => $urlAppendPath,
             ];
 
             updateEnvFile($distFile, $envFile, $params);
             (new Dotenv())->load($envFile);
+
+            // Load Symfony Kernel
+            $kernel = new Kernel('dev', true);
+            $application = new Application($kernel);
+
+            // Create database
+            /*$input = new ArrayInput([]);
+            $command = $application->find('doctrine:schema:create');
+            $result = $command->run($input, new ConsoleOutput());*/
+
+            // No errors
+            //if ($result == 0) {
+                // Boot kernel and get the doctrine from Symfony container
+                $kernel->boot();
+                $containerDatabase = $kernel->getContainer();
+                $sysPath = api_get_path(SYS_PATH);
+                updateWithContainer($containerDatabase);
+            //}
         } else {
             set_file_folder_permissions();
             $database = connectToDatabase(
@@ -813,6 +831,7 @@ if (@$_POST['step2']) {
                 '{{DATABASE_PASSWORD}}' => $dbPassForm,
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+                '{{APP_URL_APPEND}}' => $urlAppendPath,
             ];
 
             updateEnvFile($distFile, $envFile, $params);

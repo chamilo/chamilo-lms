@@ -526,9 +526,6 @@ if ($show_full_profile) {
             $count_groups = count($results);
         }
 
-        $my_groups .= '<div class="panel panel-default">';
-        $my_groups .= '<div class="panel-heading">'.get_lang('MyGroups').' ('.$count_groups.') </div>';
-
         if ($i > $max_numbers_of_group) {
             if (api_get_user_id() == $user_id) {
                 $my_groups .= '<div class="box_shared_profile_group_actions">'
@@ -551,8 +548,7 @@ if ($show_full_profile) {
             $my_groups .= '</div>';
             $i++;
         }
-        $my_groups .= '</div>';
-        $social_group_info_block = $my_groups;
+        $social_group_info_block = Display::panel($my_groups, get_lang('MyGroups').' ('.$count_groups.')');
     }
 
     // Block Social Course

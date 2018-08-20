@@ -9,6 +9,7 @@ use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Doctrine\ORM\EntityManager;
 use Sonata\PageBundle\Entity\PageManager;
+use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 
 /**
  * Chamilo LMS
@@ -2155,7 +2156,9 @@ function migrate($chamiloVersion, EntityManager $manager)
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
     $config->setMigrationsNamespace('Application\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
-    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'app/Migrations/Schema/V'.$chamiloVersion);
+    $versionPath = api_get_path(SYS_PATH).'app/Migrations/Schema/V'.$chamiloVersion;
+    error_log("Reading files from dir: $versionPath");
+    $config->setMigrationsDirectory($versionPath);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
 
@@ -2989,6 +2992,216 @@ function updateEnvFile($distFile, $envFile, $params)
 }
 
 /**
+ * @param SymfonyContainer $container
+ * @param EntityManager $manager
+ */
+function installGroups($container, $manager)
+{
+    // Creating fos_group (groups and roles)
+    $groupManager = $container->get('fos_user.group_manager');
+    $groups = [
+        [
+            'code' => 'ADMIN',
+            'title' => 'Administrators',
+            'roles' => ['ROLE_ADMIN'],
+        ],
+        [
+            'code' => 'STUDENT',
+            'title' => 'Students',
+            'roles' => ['ROLE_STUDENT'],
+        ],
+        [
+            'code' => 'TEACHER',
+            'title' => 'Teachers',
+            'roles' => ['ROLE_TEACHER'],
+        ],
+        [
+            'code' => 'RRHH',
+            'title' => 'Human resources manager',
+            'roles' => ['ROLE_RRHH'],
+        ],
+        [
+            'code' => 'SESSION_MANAGER',
+            'title' => 'Session',
+            'roles' => ['ROLE_SESSION_MANAGER'],
+        ],
+        [
+            'code' => 'QUESTION_MANAGER',
+            'title' => 'Question manager',
+            'roles' => ['ROLE_QUESTION_MANAGER'],
+        ],
+        [
+            'code' => 'STUDENT_BOSS',
+            'title' => 'Student boss',
+            'roles' => ['ROLE_STUDENT_BOSS'],
+        ],
+        [
+            'code' => 'INVITEE',
+            'title' => 'Invitee',
+            'roles' => ['ROLE_INVITEE'],
+        ],
+    ];
+
+    foreach ($groups as $groupData) {
+        $criteria = ['code' => $groupData['code']];
+        $groupExists = $groupManager->findGroupBy($criteria);
+        if (!$groupExists) {
+            $group = $groupManager->createGroup($groupData['title']);
+            $group->setCode($groupData['code']);
+            foreach ($groupData['roles'] as $role) {
+                $group->addRole($role);
+            }
+            $manager->persist($group);
+            $groupManager->updateGroup($group, true);
+        }
+    }
+}
+
+/**
+ * @param SymfonyContainer $container
+ *
+ */
+function installPages($container)
+{
+    $siteManager = Container::getSiteManager();
+
+    // Create site
+    /** @var Chamilo\PageBundle\Entity\Site $site */
+    $site = $siteManager->create();
+    $site->setHost('localhost');
+    $site->setEnabled(true);
+    $site->setName('localhost');
+    $site->setEnabledFrom(new \DateTime('now'));
+    $site->setEnabledTo(new \DateTime('+20 years'));
+    $site->setRelativePath('');
+    $site->setIsDefault(true);
+    $site->setLocale('en');
+    $siteManager->save($site);
+
+    // Create home page
+    /** @var PageManager $pageManager */
+    $pageManager = $container->get('sonata.page.manager.page');
+    /** @var \Sonata\PageBundle\Model\Page $page */
+    $page = $pageManager->create();
+    $page->setSlug('homepage');
+    $page->setUrl('/');
+    $page->setName('homepage');
+    $page->setTitle('home');
+    $page->setEnabled(true);
+    $page->setDecorate(1);
+    $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
+    $page->setTemplateCode('default');
+    $page->setRouteName('homepage');
+    //$page->setParent($this->getReference('page-homepage'));
+    $page->setSite($site);
+    $pageManager->save($page);
+
+    // Create welcome page
+    $pageWelcome = $pageManager->create();
+    $pageWelcome->setSlug('welcome');
+    $pageWelcome->setUrl('/welcome');
+    $pageWelcome->setName('welcome');
+    $pageWelcome->setTitle('welcome');
+    $pageWelcome->setEnabled(true);
+    $pageWelcome->setDecorate(1);
+    $pageWelcome->setRequestMethod('GET');
+    $pageWelcome->setTemplateCode('default');
+    $pageWelcome->setRouteName('welcome');
+    $pageWelcome->setParent($page);
+    $pageWelcome->setSite($site);
+    $pageManager->save($pageWelcome);
+
+    // Creating page blocks
+    $templateManager = $container->get('sonata.page.template_manager');
+    $template = $templateManager->get('default');
+    $templateContainers = $template->getContainers();
+
+    $containers = [];
+    foreach ($templateContainers as $id => $area) {
+        $containers[$id] = [
+            'area' => $area,
+            'block' => false,
+        ];
+    }
+
+    // Create blocks for this page
+    $blockInteractor = $container->get('sonata.page.block_interactor');
+    $parentBlock = null;
+    foreach ($containers as $id => $area) {
+        if (false === $area['block'] && $templateContainers[$id]['shared'] === false) {
+            $block = $blockInteractor->createNewContainer(
+                [
+                    'page' => $pageWelcome,
+                    'name' => $templateContainers[$id]['name'],
+                    'code' => $id,
+                ]
+            );
+
+            if ($id === 'content' && $templateContainers[$id]['name'] == 'Main content') {
+                $parentBlock = $block;
+            }
+        }
+    }
+
+    // Create block in main content
+    $block = $container->get('sonata.page.manager.block');
+    /** @var \Sonata\BlockBundle\Model\Block $myBlock */
+    $myBlock = $block->create();
+    $myBlock->setType('sonata.formatter.block.formatter');
+    $myBlock->setSetting('format', 'richhtml');
+    $myBlock->setSetting('content', '');
+    $myBlock->setSetting('rawContent', '');
+    $myBlock->setSetting('template', '@SonataFormatter/Block/block_formatter.html.twig');
+    $myBlock->setParent($parentBlock);
+    $pageWelcome->addBlocks($myBlock);
+    $pageManager->save($pageWelcome);
+}
+
+/**
+ * @param SymfonyContainer $container
+ * @param EntityManager $manager
+ */
+function installSchemas($container, $manager)
+{
+    $settingsManager = Container::getSettingsManager();
+
+    $accessUrl = $manager->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+    if (!$accessUrl) {
+        // Creating AccessUrl
+        $accessUrl = new AccessUrl();
+        $accessUrl
+            ->setUrl('http://localhost/')
+            ->setDescription('')
+            ->setActive(1)
+        ;
+        $manager->persist($accessUrl);
+        $manager->flush();
+    }
+
+    // Install course tools (table "tool")
+    $toolChain = $container->get('chamilo_course.tool_chain');
+    $toolChain->createTools($manager);
+
+    // Installing schemas (filling settings_current table)
+    $settingsManager->installSchemas($accessUrl);
+}
+
+/**
+ * @param SymfonyContainer $container
+ */
+function updateWithContainer($container)
+{
+    Container::setContainer($container);
+    Container::setLegacyServices($container);
+
+    $manager = Database::getManager();
+
+    installGroups($container, $manager);
+    installSchemas($container, $manager);
+    installPages($container);
+}
+
+/**
  * After the schema was created (table creation), the function adds
  * admin/platform information.
  *
@@ -3033,8 +3246,6 @@ function finishInstallationWithContainer(
 
     $manager = Database::getManager();
     $connection = $manager->getConnection();
-    $siteManager = Container::getSiteManager();
-    $settingsManager = Container::getSettingsManager();
 
     $sql = getVersionTable();
 
@@ -3123,174 +3334,15 @@ function finishInstallationWithContainer(
         $i++;
     }
 
-    // Creating AccessUrl
-    $accessUrl = new AccessUrl();
-    $accessUrl
-        ->setUrl('http://localhost/')
-        ->setDescription('')
-        ->setActive(1)
-    ;
-    $manager->persist($accessUrl);
-    $manager->flush();
+    installGroups($container, $manager);
+    installSchemas($container, $manager);
+    installPages($container);
 
-    // Creating fos_group (groups and roles)
-    $groupManager = $container->get('fos_user.group_manager');
-    $groups = [
-        [
-            'code' => 'ADMIN',
-            'title' => 'Administrators',
-            'roles' => ['ROLE_ADMIN'],
-        ],
-        [
-            'code' => 'STUDENT',
-            'title' => 'Students',
-            'roles' => ['ROLE_STUDENT'],
-        ],
-        [
-            'code' => 'TEACHER',
-            'title' => 'Teachers',
-            'roles' => ['ROLE_TEACHER'],
-        ],
-        [
-            'code' => 'RRHH',
-            'title' => 'Human resources manager',
-            'roles' => ['ROLE_RRHH'],
-        ],
-        [
-            'code' => 'SESSION_MANAGER',
-            'title' => 'Session',
-            'roles' => ['ROLE_SESSION_MANAGER'],
-        ],
-        [
-            'code' => 'QUESTION_MANAGER',
-            'title' => 'Question manager',
-            'roles' => ['ROLE_QUESTION_MANAGER'],
-        ],
-        [
-            'code' => 'STUDENT_BOSS',
-            'title' => 'Student boss',
-            'roles' => ['ROLE_STUDENT_BOSS'],
-        ],
-        [
-            'code' => 'INVITEE',
-            'title' => 'Invitee',
-            'roles' => ['ROLE_INVITEE'],
-        ],
-    ];
-
-    foreach ($groups as $groupData) {
-        $group = $groupManager->createGroup($groupData['title']);
-        $group->setCode($groupData['code']);
-        foreach ($groupData['roles'] as $role) {
-            $group->addRole($role);
-        }
-        $manager->persist($group);
-        $groupManager->updateGroup($group, true);
-    }
-
-    $toolChain = $container->get('chamilo_course.tool_chain');
-    $toolChain->createTools($manager);
-
-    // Creating settings
-    $settingsManager->installSchemas($accessUrl);
-
-    // Inserting data
+    // Inserting default data
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
     $result->execute();
     $result->closeCursor();
-
-    // Create site
-
-    /** @var Chamilo\PageBundle\Entity\Site $site */
-    $site = $siteManager->create();
-    $site->setHost('localhost');
-    $site->setEnabled(true);
-    $site->setName('localhost');
-    $site->setEnabledFrom(new \DateTime('now'));
-    $site->setEnabledTo(new \DateTime('+20 years'));
-    $site->setRelativePath('');
-    $site->setIsDefault(true);
-    $site->setLocale('en');
-    $siteManager->save($site);
-
-    // Create home page
-    /** @var PageManager $pageManager */
-    $pageManager = $container->get('sonata.page.manager.page');
-    /** @var \Sonata\PageBundle\Model\Page $page */
-    $page = $pageManager->create();
-    $page->setSlug('homepage');
-    $page->setUrl('/');
-    $page->setName('homepage');
-    $page->setTitle('home');
-    $page->setEnabled(true);
-    $page->setDecorate(1);
-    $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-    $page->setTemplateCode('default');
-    $page->setRouteName('homepage');
-    //$page->setParent($this->getReference('page-homepage'));
-    $page->setSite($site);
-    $pageManager->save($page);
-
-    // Create welcome page
-    $pageWelcome = $pageManager->create();
-    $pageWelcome->setSlug('welcome');
-    $pageWelcome->setUrl('/welcome');
-    $pageWelcome->setName('welcome');
-    $pageWelcome->setTitle('welcome');
-    $pageWelcome->setEnabled(true);
-    $pageWelcome->setDecorate(1);
-    $pageWelcome->setRequestMethod('GET');
-    $pageWelcome->setTemplateCode('default');
-    $pageWelcome->setRouteName('welcome');
-    $pageWelcome->setParent($page);
-    $pageWelcome->setSite($site);
-
-    $pageManager->save($pageWelcome);
-
-    $templateManager = $container->get('sonata.page.template_manager');
-    $template = $templateManager->get('default');
-    $templateContainers = $template->getContainers();
-
-    $containers = [];
-    foreach ($templateContainers as $id => $area) {
-        $containers[$id] = [
-            'area' => $area,
-            'block' => false,
-        ];
-    }
-
-    // Create blocks for this page
-    $blockInteractor = $container->get('sonata.page.block_interactor');
-    $parentBlock = null;
-    foreach ($containers as $id => $area) {
-        if (false === $area['block'] && $templateContainers[$id]['shared'] === false) {
-            $block = $blockInteractor->createNewContainer(
-                [
-                    'page' => $pageWelcome,
-                    'name' => $templateContainers[$id]['name'],
-                    'code' => $id,
-                ]
-            );
-
-            if ($id === 'content' && $templateContainers[$id]['name'] == 'Main content') {
-                $parentBlock = $block;
-            }
-        }
-    }
-
-    // Create block in main content
-    $block = $container->get('sonata.page.manager.block');
-    /** @var \Sonata\BlockBundle\Model\Block $myBlock */
-    $myBlock = $block->create();
-    $myBlock->setType('sonata.formatter.block.formatter');
-    $myBlock->setSetting('format', 'richhtml');
-    $myBlock->setSetting('content', '');
-    $myBlock->setSetting('rawContent', '');
-    $myBlock->setSetting('template', '@SonataFormatter/Block/block_formatter.html.twig');
-    $myBlock->setParent($parentBlock);
-    $pageWelcome->addBlocks($myBlock);
-    $pageManager->save($pageWelcome);
 
     UserManager::setPasswordEncryption($encryptPassForm);
 
@@ -3629,10 +3681,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             $database->setManager($manager);
             // Migrate using the migration files located in:
             // src/Chamilo/CoreBundle/Migrations/Schema/V111
-            $result = migrate(
-                111,
-                $manager
-            );
+            $result = migrate(111, $manager);
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
@@ -3664,10 +3713,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             $database->setManager($manager);
             // Migrate using the migration files located in:
             // src/Chamilo/CoreBundle/Migrations/Schema/V111
-            $result = migrate(
-                200,
-                $manager
-            );
+            $result = migrate(200, $manager);
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
@@ -3675,7 +3721,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $connection->executeQuery($sql);
                 if ($processFiles) {
                     error_log('Update config files');
-                    $fromVersionShort = '1.10';
+                    $fromVersionShort = '1.11';
                     include __DIR__.'/update-files-1.11.0-2.0.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
                     include __DIR__.'/update-configuration.inc.php';

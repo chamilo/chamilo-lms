@@ -82,7 +82,7 @@ $social_menu_block = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
-    get_lang("SearchUsers")
+    get_lang('SearchUsers')
 );
 
 $results = $userGroup->get_groups_by_age(1, false);

@@ -1,15 +1,16 @@
 services:
-#    sonata.admin.course:
-#        class: Chamilo\CourseBundle\Admin\CourseAdmin
-#        tags:
-#            - { name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Course" }
-#        arguments:
-#            - ~
-#            - Chamilo\CoreBundle\Entity\Course
-#            - ~
-#        calls:
-#            - [ setTranslationDomain, [ChamiloCoreBundle]]
-#            - [ setToolChain, [@chamilo_course.tool_chain]]
+    sonata.admin.course:
+        class: Chamilo\CourseBundle\Admin\CourseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Course" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Course
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [ setToolChain, ['@chamilo_course.tool_chain']]
+
     sonata.admin.course_rel_user:
         class: Chamilo\CourseBundle\Admin\CourseRelUserAdmin
         tags:

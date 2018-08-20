@@ -21,6 +21,9 @@ class Version20 extends AbstractMigrationChamilo
     {
         // Use $schema->createTable
         $this->addSql('set sql_mode=""');
+        $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN access_url_id INT NOT NULL');
+        $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN user_id INT NOT NULL');
+
         $this->addSql('ALTER TABLE access_url_rel_user DROP PRIMARY KEY');
         $this->addSql('ALTER TABLE access_url_rel_session DROP PRIMARY KEY');
 
@@ -206,26 +209,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'LearningPath')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
-
-
-        $table = $schema->getTable('sys_announcement');
-        if (!$table->hasColumn('visible_drh')) {
-            $this->addSql(
-                "ALTER TABLE sys_announcement ADD COLUMN visible_drh INT DEFAULT 0;"
-            );
-        }
-
-        if (!$table->hasColumn('visible_session_admin')) {
-            $this->addSql(
-                "ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;"
-            );
-        }
-
-        if (!$table->hasColumn('visible_boss')) {
-            $this->addSql(
-                "ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;"
-            );
-        }
 
         $cSurvey = $schema->getTable('c_survey');
 

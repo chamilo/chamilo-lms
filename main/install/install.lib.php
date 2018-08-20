@@ -9,6 +9,7 @@ use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Doctrine\ORM\EntityManager;
 use Sonata\PageBundle\Entity\PageManager;
+use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 
 /**
  * Chamilo LMS
@@ -2155,7 +2156,9 @@ function migrate($chamiloVersion, EntityManager $manager)
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
     $config->setMigrationsNamespace('Application\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
-    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'app/Migrations/Schema/V'.$chamiloVersion);
+    $versionPath = api_get_path(SYS_PATH).'app/Migrations/Schema/V'.$chamiloVersion;
+    error_log("Reading files from dir: $versionPath");
+    $config->setMigrationsDirectory($versionPath);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
 
@@ -2989,150 +2992,11 @@ function updateEnvFile($distFile, $envFile, $params)
 }
 
 /**
- * After the schema was created (table creation), the function adds
- * admin/platform information.
- *
- * @param \Psr\Container\ContainerInterface $container
- * @param string                            $sysPath
- * @param string                            $encryptPassForm
- * @param string                            $passForm
- * @param string                            $adminLastName
- * @param string                            $adminFirstName
- * @param string                            $loginForm
- * @param string                            $emailForm
- * @param string                            $adminPhoneForm
- * @param string                            $languageForm
- * @param string                            $institutionForm
- * @param string                            $institutionUrlForm
- * @param string                            $siteName
- * @param string                            $allowSelfReg
- * @param string                            $allowSelfRegProf
- * @param string                            $installationProfile Installation profile, if any was provided
+ * @param SymfonyContainer $container
+ * @param EntityManager $manager
  */
-function finishInstallationWithContainer(
-    $container,
-    $sysPath,
-    $encryptPassForm,
-    $passForm,
-    $adminLastName,
-    $adminFirstName,
-    $loginForm,
-    $emailForm,
-    $adminPhoneForm,
-    $languageForm,
-    $institutionForm,
-    $institutionUrlForm,
-    $siteName,
-    $allowSelfReg,
-    $allowSelfRegProf,
-    $installationProfile = ''
-) {
-    $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-    Container::setContainer($container);
-    Container::setLegacyServices($container);
-
-    $manager = Database::getManager();
-    $connection = $manager->getConnection();
-    $siteManager = Container::getSiteManager();
-    $settingsManager = Container::getSettingsManager();
-
-    $sql = getVersionTable();
-
-    // Add version table
-    $connection->executeQuery($sql);
-
-    // Add tickets defaults
-    $ticketProject = new TicketProject();
-    $ticketProject
-        ->setId(1)
-        ->setName('Ticket System')
-        ->setInsertUserId(1);
-
-    $manager->persist($ticketProject);
-    $manager->flush();
-
-    $categories = [
-        get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
-        get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
-        get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
-        get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
-        get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-        get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation'),
-    ];
-
-    $i = 1;
-    foreach ($categories as $category => $description) {
-        // Online evaluation requires a course
-        $ticketCategory = new TicketCategory();
-        $ticketCategory
-            ->setId($i)
-            ->setName($category)
-            ->setDescription($description)
-            ->setProject($ticketProject)
-            ->setInsertUserId(1);
-
-        $isRequired = $i == 6;
-        $ticketCategory->setCourseRequired($isRequired);
-
-        $manager->persist($ticketCategory);
-        $manager->flush();
-
-        $i++;
-    }
-
-    // Default Priorities
-    $defaultPriorities = [
-        TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
-        TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
-        TicketManager::PRIORITY_LOW => get_lang('PriorityLow'),
-    ];
-
-    $i = 1;
-    foreach ($defaultPriorities as $code => $priority) {
-        $ticketPriority = new TicketPriority();
-        $ticketPriority
-            ->setId($i)
-            ->setName($priority)
-            ->setCode($code)
-            ->setInsertUserId(1);
-
-        $manager->persist($ticketPriority);
-        $manager->flush();
-        $i++;
-    }
-
-    $table = Database::get_main_table(TABLE_TICKET_STATUS);
-
-    // Default status
-    $defaultStatus = [
-        TicketManager::STATUS_NEW => get_lang('StatusNew'),
-        TicketManager::STATUS_PENDING => get_lang('StatusPending'),
-        TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
-        TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
-        TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded'),
-    ];
-
-    $i = 1;
-    foreach ($defaultStatus as $code => $status) {
-        $attributes = [
-            'id' => $i,
-            'code' => $code,
-            'name' => $status,
-        ];
-        Database::insert($table, $attributes);
-        $i++;
-    }
-
-    // Creating AccessUrl
-    $accessUrl = new AccessUrl();
-    $accessUrl
-        ->setUrl('http://localhost/')
-        ->setDescription('')
-        ->setActive(1)
-    ;
-    $manager->persist($accessUrl);
-    $manager->flush();
-
+function installGroups($container, $manager)
+{
     // Creating fos_group (groups and roles)
     $groupManager = $container->get('fos_user.group_manager');
     $groups = [
@@ -3179,27 +3043,27 @@ function finishInstallationWithContainer(
     ];
 
     foreach ($groups as $groupData) {
-        $group = $groupManager->createGroup($groupData['title']);
-        $group->setCode($groupData['code']);
-        foreach ($groupData['roles'] as $role) {
-            $group->addRole($role);
+        $criteria = ['code' => $groupData['code']];
+        $groupExists = $groupManager->findGroupBy($criteria);
+        if (!$groupExists) {
+            $group = $groupManager->createGroup($groupData['title']);
+            $group->setCode($groupData['code']);
+            foreach ($groupData['roles'] as $role) {
+                $group->addRole($role);
+            }
+            $manager->persist($group);
+            $groupManager->updateGroup($group, true);
         }
-        $manager->persist($group);
-        $groupManager->updateGroup($group, true);
     }
+}
 
-    // Install course tools (table "tool")
-    $toolChain = $container->get('chamilo_course.tool_chain');
-    $toolChain->createTools($manager);
-
-    // Installing schemas (filling settings_current table)
-    $settingsManager->installSchemas($accessUrl);
-
-    // Inserting data
-    $data = file_get_contents($sysPath.'main/install/data.sql');
-    $result = $manager->getConnection()->prepare($data);
-    $result->execute();
-    $result->closeCursor();
+/**
+ * @param SymfonyContainer $container
+ *
+ */
+function installPages($container)
+{
+    $siteManager = Container::getSiteManager();
 
     // Create site
     /** @var Chamilo\PageBundle\Entity\Site $site */
@@ -3291,6 +3155,194 @@ function finishInstallationWithContainer(
     $myBlock->setParent($parentBlock);
     $pageWelcome->addBlocks($myBlock);
     $pageManager->save($pageWelcome);
+}
+
+/**
+ * @param SymfonyContainer $container
+ * @param EntityManager $manager
+ */
+function installSchemas($container, $manager)
+{
+    $settingsManager = Container::getSettingsManager();
+
+    $accessUrl = $manager->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+    if (!$accessUrl) {
+        // Creating AccessUrl
+        $accessUrl = new AccessUrl();
+        $accessUrl
+            ->setUrl('http://localhost/')
+            ->setDescription('')
+            ->setActive(1)
+        ;
+        $manager->persist($accessUrl);
+        $manager->flush();
+    }
+
+    // Install course tools (table "tool")
+    $toolChain = $container->get('chamilo_course.tool_chain');
+    $toolChain->createTools($manager);
+
+    // Installing schemas (filling settings_current table)
+    $settingsManager->installSchemas($accessUrl);
+}
+
+/**
+ * @param SymfonyContainer $container
+ */
+function updateWithContainer($container)
+{
+    Container::setContainer($container);
+    Container::setLegacyServices($container);
+
+    $manager = Database::getManager();
+
+    installGroups($container, $manager);
+    installSchemas($container, $manager);
+    installPages($container);
+}
+
+/**
+ * After the schema was created (table creation), the function adds
+ * admin/platform information.
+ *
+ * @param \Psr\Container\ContainerInterface $container
+ * @param string                            $sysPath
+ * @param string                            $encryptPassForm
+ * @param string                            $passForm
+ * @param string                            $adminLastName
+ * @param string                            $adminFirstName
+ * @param string                            $loginForm
+ * @param string                            $emailForm
+ * @param string                            $adminPhoneForm
+ * @param string                            $languageForm
+ * @param string                            $institutionForm
+ * @param string                            $institutionUrlForm
+ * @param string                            $siteName
+ * @param string                            $allowSelfReg
+ * @param string                            $allowSelfRegProf
+ * @param string                            $installationProfile Installation profile, if any was provided
+ */
+function finishInstallationWithContainer(
+    $container,
+    $sysPath,
+    $encryptPassForm,
+    $passForm,
+    $adminLastName,
+    $adminFirstName,
+    $loginForm,
+    $emailForm,
+    $adminPhoneForm,
+    $languageForm,
+    $institutionForm,
+    $institutionUrlForm,
+    $siteName,
+    $allowSelfReg,
+    $allowSelfRegProf,
+    $installationProfile = ''
+) {
+    $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
+    Container::setContainer($container);
+    Container::setLegacyServices($container);
+
+    $manager = Database::getManager();
+    $connection = $manager->getConnection();
+
+    $sql = getVersionTable();
+
+    // Add version table
+    $connection->executeQuery($sql);
+
+    // Add tickets defaults
+    $ticketProject = new TicketProject();
+    $ticketProject
+        ->setId(1)
+        ->setName('Ticket System')
+        ->setInsertUserId(1);
+
+    $manager->persist($ticketProject);
+    $manager->flush();
+
+    $categories = [
+        get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
+        get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
+        get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
+        get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
+        get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
+        get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation'),
+    ];
+
+    $i = 1;
+    foreach ($categories as $category => $description) {
+        // Online evaluation requires a course
+        $ticketCategory = new TicketCategory();
+        $ticketCategory
+            ->setId($i)
+            ->setName($category)
+            ->setDescription($description)
+            ->setProject($ticketProject)
+            ->setInsertUserId(1);
+
+        $isRequired = $i == 6;
+        $ticketCategory->setCourseRequired($isRequired);
+
+        $manager->persist($ticketCategory);
+        $manager->flush();
+
+        $i++;
+    }
+
+    // Default Priorities
+    $defaultPriorities = [
+        TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
+        TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
+        TicketManager::PRIORITY_LOW => get_lang('PriorityLow'),
+    ];
+
+    $i = 1;
+    foreach ($defaultPriorities as $code => $priority) {
+        $ticketPriority = new TicketPriority();
+        $ticketPriority
+            ->setId($i)
+            ->setName($priority)
+            ->setCode($code)
+            ->setInsertUserId(1);
+
+        $manager->persist($ticketPriority);
+        $manager->flush();
+        $i++;
+    }
+
+    $table = Database::get_main_table(TABLE_TICKET_STATUS);
+
+    // Default status
+    $defaultStatus = [
+        TicketManager::STATUS_NEW => get_lang('StatusNew'),
+        TicketManager::STATUS_PENDING => get_lang('StatusPending'),
+        TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
+        TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
+        TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded'),
+    ];
+
+    $i = 1;
+    foreach ($defaultStatus as $code => $status) {
+        $attributes = [
+            'id' => $i,
+            'code' => $code,
+            'name' => $status,
+        ];
+        Database::insert($table, $attributes);
+        $i++;
+    }
+
+    installGroups($container, $manager);
+    installSchemas($container, $manager);
+    installPages($container);
+
+    // Inserting default data
+    $data = file_get_contents($sysPath.'main/install/data.sql');
+    $result = $manager->getConnection()->prepare($data);
+    $result->execute();
+    $result->closeCursor();
 
     UserManager::setPasswordEncryption($encryptPassForm);
 
@@ -3629,10 +3681,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             $database->setManager($manager);
             // Migrate using the migration files located in:
             // src/Chamilo/CoreBundle/Migrations/Schema/V111
-            $result = migrate(
-                111,
-                $manager
-            );
+            $result = migrate(111, $manager);
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
@@ -3664,10 +3713,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             $database->setManager($manager);
             // Migrate using the migration files located in:
             // src/Chamilo/CoreBundle/Migrations/Schema/V111
-            $result = migrate(
-                200,
-                $manager
-            );
+            $result = migrate(200, $manager);
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
@@ -3675,7 +3721,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $connection->executeQuery($sql);
                 if ($processFiles) {
                     error_log('Update config files');
-                    $fromVersionShort = '1.10';
+                    $fromVersionShort = '1.11';
                     include __DIR__.'/update-files-1.11.0-2.0.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
                     include __DIR__.'/update-configuration.inc.php';

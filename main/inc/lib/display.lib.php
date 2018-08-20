@@ -416,7 +416,8 @@ class Display
      * @param array $query_vars      Additional variables to add in the query-string
      * @param array $column_show     Array of binaries 1= show columns 0. hide a column
      * @param array $column_order    An array of integers that let us decide how the columns are going to be sort.
-     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
+     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the
+     *                               4th column
      * @param array $form_actions    Set optional forms actions
      *
      * @author Julio Montoya
@@ -1755,13 +1756,14 @@ class Display
 
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-            $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-                ExtraField::SESSION_FIELD_TYPE,
-                $session_id
-            );
+            $extraFieldValues = $fieldValuesRepo->getVisibleValues(ExtraField::SESSION_FIELD_TYPE, $session_id);
 
             $session['extra_fields'] = [];
+            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
             foreach ($extraFieldValues as $value) {
+                if (empty($value)) {
+                    continue;
+                }
                 $session['extra_fields'][] = [
                     'field' => [
                         'variable' => $value->getField()->getVariable(),

@@ -2847,6 +2847,7 @@ function api_get_setting_in_list($variable, $option)
 function api_get_plugin_setting($plugin, $variable)
 {
     $variableName = $plugin.'_'.$variable;
+
     $params = [
         'category = ? AND subkey = ? AND variable = ?' => [
             'Plugins',
@@ -2862,9 +2863,13 @@ function api_get_plugin_setting($plugin, $variable)
         'one'
     );
     if ($result) {
-        $result = $result['selected_value'];
+        $value = $result['selected_value'];
+        $serializedValue = @unserialize($result['selected_value'], []);
+        if ($serializedValue !== false) {
+            $value = $serializedValue;
+        }
 
-        return $result;
+        return $value;
     }
 
     return null;

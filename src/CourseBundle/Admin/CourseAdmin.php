@@ -141,7 +141,7 @@ class CourseAdmin extends AbstractAdmin
                 'urls',
                 'sonata_type_collection',
                 [
-                    'cascade_validation' => true,
+                    //'cascade_validation' => true,
                 ],
                 [
                     'allow_delete' => true,
@@ -159,7 +159,7 @@ class CourseAdmin extends AbstractAdmin
                 'users',
                 'sonata_type_collection',
                 [
-                    'cascade_validation' => true,
+                    //'cascade_validation' => true,
                 ],
                 [
                     'allow_delete' => true,

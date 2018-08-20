@@ -11,6 +11,7 @@ use Chamilo\CourseBundle\ToolChain;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -230,12 +231,12 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('allow_lp_return_link', YesNoType::class)
             ->add(
                 'course_creation_use_template',
-                'entity',
+                EntityType::class,
                 [
-                    //'choices' => $courses,
-                    'class' => 'Chamilo\CoreBundle\Entity\Course',
+                    'class' => Course::class,
                     'placeholder' => 'Choose ...',
                     'empty_data' => null,
+                    'data' => null,
                 ]
             )
             ->add('hide_scorm_export_link', YesNoType::class)

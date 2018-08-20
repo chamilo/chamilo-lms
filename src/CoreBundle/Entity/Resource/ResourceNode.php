@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceNode
 {
-    const PATH_SEPARATOR = '`';
+    public const PATH_SEPARATOR = '`';
 
     /**
      * @ORM\Id

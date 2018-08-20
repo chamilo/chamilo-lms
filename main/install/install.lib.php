@@ -3188,10 +3188,11 @@ function finishInstallationWithContainer(
         $groupManager->updateGroup($group, true);
     }
 
+    // Install course tools (table "tool")
     $toolChain = $container->get('chamilo_course.tool_chain');
     $toolChain->createTools($manager);
 
-    // Creating settings
+    // Installing schemas (filling settings_current table)
     $settingsManager->installSchemas($accessUrl);
 
     // Inserting data
@@ -3201,7 +3202,6 @@ function finishInstallationWithContainer(
     $result->closeCursor();
 
     // Create site
-
     /** @var Chamilo\PageBundle\Entity\Site $site */
     $site = $siteManager->create();
     $site->setHost('localhost');
@@ -3245,9 +3245,9 @@ function finishInstallationWithContainer(
     $pageWelcome->setRouteName('welcome');
     $pageWelcome->setParent($page);
     $pageWelcome->setSite($site);
-
     $pageManager->save($pageWelcome);
 
+    // Creating page blocks
     $templateManager = $container->get('sonata.page.template_manager');
     $template = $templateManager->get('default');
     $templateContainers = $template->getContainers();

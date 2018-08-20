@@ -1824,6 +1824,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
+    /**
+     * @param array $roles
+     *
+     * @return $this
+     */
     public function setRoles(array $roles)
     {
         $this->roles = [];
@@ -2001,6 +2006,4 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
         return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
     }
-
-
 }

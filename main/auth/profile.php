@@ -308,7 +308,7 @@ if (api_get_setting('extended_profile') === 'true') {
 }
 
 //    PASSWORD, if auth_source is platform
-if (is_platform_authentication() &&
+if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
     api_get_setting('profile.is_editable') === 'true' &&
     api_get_setting('profile', 'password') == 'true'
 ) {
@@ -422,8 +422,8 @@ if ($form->validate()) {
     }
 
     $allow_users_to_change_email_with_no_password = true;
-    if (is_platform_authentication() &&
-        api_get_setting('allow_users_to_change_email_with_no_password') == 'false'
+    if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
+        api_get_setting('allow_users_to_change_email_with_no_password') === 'false'
     ) {
         $allow_users_to_change_email_with_no_password = false;
     }

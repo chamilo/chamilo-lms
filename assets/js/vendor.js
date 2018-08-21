@@ -14,7 +14,7 @@ require("webpack-jquery-ui/css");
 require("bootstrap");
 require("chosen-js");
 require("mediaelement");
-
+require("multiselect-two-sides");
 require('@fortawesome/fontawesome-free');
 
 require("qtip2");

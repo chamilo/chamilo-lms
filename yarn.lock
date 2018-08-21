@@ -3461,7 +3461,7 @@ jquery.scrollbar@^0.2.11:
   version "0.2.11"
   resolved "https://registry.yarnpkg.com/jquery.scrollbar/-/jquery.scrollbar-0.2.11.tgz#e91bd4a97d83859463024d26e730dc36676ab59d"
 
-jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=2.0.0, jquery@^3.2.1, jquery@^3.3.1:
+jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=1.7, jquery@>=2.0.0, jquery@^3.2.1, jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -4067,6 +4067,12 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
+
+multiselect-two-sides@^2.5.5:
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/multiselect-two-sides/-/multiselect-two-sides-2.5.5.tgz#447053260f6a5b0b56e2130ac38f6dc10a417f07"
+  dependencies:
+    jquery ">=1.7"
 
 mxgraph@^3.9.3:
   version "3.9.3"

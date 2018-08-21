@@ -159,7 +159,7 @@ if (count($nosessionUsersList) == 0) {
     $social_right_content .= '<br />';
 }
 
-$form = new FormValidator('invitation', 'post', api_get_self().'?id='.$group_id);
+$form = new FormValidator('group_invitation', 'post', api_get_self().'?id='.$group_id);
 $form->addHidden('form_sent', 1);
 $form->addHidden('id', $group_id);
 

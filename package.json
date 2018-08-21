@@ -35,6 +35,7 @@
     "mathjax": "^2.7.4",
     "mediaelement": "^4.2.9",
     "moment": "^2.22",
+    "multiselect-two-sides": "^2.5.5",
     "mxgraph": "^3.9.3",
     "qtip2": "^3.0.3",
     "select2": "^4.0.6-rc.1",

@@ -240,7 +240,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 
     // My friends
     $friend_html = SocialManager::listMyFriendsBlock(
-        $user_id,
+        api_get_user_id(),
         '',
         ''
     );

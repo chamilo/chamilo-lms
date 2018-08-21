@@ -155,7 +155,8 @@
         "symfony/requirements-checker": "^1.1",
         "liip/theme-bundle": "^1.5",
         "a2lix/translation-form-bundle": "^3.0",
-        "lunetics/locale-bundle": "^2.6"
+        "lunetics/locale-bundle": "^2.6",
+        "oneup/uploader-bundle": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",

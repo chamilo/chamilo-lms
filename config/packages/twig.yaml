@@ -2,6 +2,7 @@ twig:
     debug: '%kernel.debug%'
     paths: ['%kernel.project_dir%/templates', '%kernel.project_dir%/main/template/']
     form_themes:
+        - 'bootstrap_4_layout.html.twig'
         - '@SonataFormatter/Form/formatter.html.twig'
     exception_controller: 'Chamilo\ThemeBundle\Controller\ExceptionController::showAction'
     globals:

@@ -1,0 +1,11 @@
+# Read the documentation: https://github.com/1up-lab/OneupUploaderBundle/blob/master/Resources/doc/index.md
+oneup_uploader:
+    mappings:
+        courses:
+            #frontend: dropzone # or any uploader you use in the frontend
+            frontend: blueimp
+            storage:
+                type: flysystem
+                filesystem: oneup_flysystem.courses_filesystem
+            root_folder: true
+#            namer: oneup_uploader.namer.urlsafe

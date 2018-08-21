@@ -38,6 +38,7 @@ sonata_page:
         - ^/faq/(.*)
         - ^/faq
         - ^/courses/(.*)
+        - ^/resource/(.*)
         - ^/front/editor
         - ^/contact(.*) # sonata admin
         - ^/cms/pages/latest

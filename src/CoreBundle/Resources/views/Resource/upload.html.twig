@@ -1,0 +1,11 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+  <script>
+      $(document).ready(function() {
+          $('#fileupload').fileupload({});
+      });
+  </script>
+
+  <input id="fileupload" type="file" name="files[]" data-url="{{ oneup_uploader_endpoint('courses') }}" multiple />
+{% endblock %}

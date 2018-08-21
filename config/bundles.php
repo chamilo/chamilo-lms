@@ -69,4 +69,5 @@ return [
     A2lix\TranslationFormBundle\A2lixTranslationFormBundle::class => ['all' => true],
     Lunetics\LocaleBundle\LuneticsLocaleBundle::class => ['all' => true],
     Ivory\CKEditorBundle\IvoryCKEditorBundle::class => ['all' => true],
+    Oneup\UploaderBundle\OneupUploaderBundle::class => ['all' => true],
 ];

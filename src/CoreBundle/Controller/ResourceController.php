@@ -27,9 +27,8 @@ class ResourceController extends BaseController
      */
     public function uploadFile(): Response
     {
-        $helper = $this->container->get('oneup_uploader.templating.uploader_helper');
-        $endpoint = $helper->endpoint('courses');
-
+        //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
+        //$endpoint = $helper->endpoint('courses');
         return $this->render(
             '@ChamiloCore/Resource/upload.html.twig',
             [

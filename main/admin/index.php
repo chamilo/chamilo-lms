@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use League\Flysystem\Filesystem;
 
 /**
  * Index page of the admin tools.
@@ -23,7 +24,9 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 $accessUrlId = 0;
-$adminExtraContentDir = api_get_path(SYS_APP_PATH)."home/admin/";
+/** @var Filesystem $fileSystem */
+$fileSystem = Container::$container->get('home_filesystem');
+$adminExtraContentDir = 'admin/';
 
 if (api_is_multiple_url_enabled()) {
     $accessUrlId = api_get_current_access_url_id();
@@ -32,7 +35,7 @@ if (api_is_multiple_url_enabled()) {
         $urlInfo = api_get_access_url($accessUrlId);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
         $cleanUrl = str_replace('/', '-', $url);
-        $adminExtraContentDir = api_get_path(SYS_APP_PATH)."home/$cleanUrl/admin/";
+        $adminExtraContentDir = "$cleanUrl/admin/";
     }
 }
 
@@ -82,8 +85,8 @@ $blocks['users']['class'] = 'block-admin-users';
 
 $usersBlockExtraFile = "{$adminExtraContentDir}block-admin-users_extra.html";
 
-if (file_exists($usersBlockExtraFile)) {
-    $blocks['users']['extraContent'] = file_get_contents($usersBlockExtraFile);
+if ($fileSystem->has($usersBlockExtraFile)) {
+    $blocks['users']['extraContent'] = $fileSystem->read($usersBlockExtraFile);
 }
 
 $search_form = '
@@ -148,8 +151,8 @@ if (api_is_platform_admin()) {
 
     $coursesBlockExtraFile = "{$adminExtraContentDir}block-admin-courses_extra.html";
 
-    if (file_exists($coursesBlockExtraFile)) {
-        $blocks['courses']['extraContent'] = file_get_contents($coursesBlockExtraFile);
+    if ($fileSystem->has($coursesBlockExtraFile)) {
+        $blocks['courses']['extraContent'] = $fileSystem->read($coursesBlockExtraFile);
     }
 
     $search_form = ' <form method="get" class="form-inline" action="course_list.php">
@@ -207,8 +210,8 @@ if (api_is_platform_admin()) {
 
     $platformBlockExtraFile = "{$adminExtraContentDir}block-admin-platform_extra.html";
 
-    if (file_exists($platformBlockExtraFile)) {
-        $blocks['platform']['extraContent'] = file_get_contents($platformBlockExtraFile);
+    if ($fileSystem->has($platformBlockExtraFile)) {
+        $blocks['platform']['extraContent'] = $fileSystem->read($platformBlockExtraFile);
     }
 
     $search_form = ' <form method="get" action="'.api_get_path(WEB_PUBLIC_PATH).'admin/settings/search_settings'.'" class="form-inline">
@@ -298,8 +301,8 @@ $blocks['sessions']['class'] = 'block-admin-sessions';
 
 $sessionsBlockExtraFile = "{$adminExtraContentDir}block-admin-sessions_extra.html";
 
-if (file_exists($sessionsBlockExtraFile)) {
-    $blocks['sessions']['extraContent'] = file_get_contents($sessionsBlockExtraFile);
+if ($fileSystem->has($sessionsBlockExtraFile)) {
+    $blocks['sessions']['extraContent'] = $fileSystem->read($sessionsBlockExtraFile);
 }
 
 if (api_is_platform_admin()) {
@@ -682,22 +685,7 @@ if (api_is_platform_admin()) {
         $extraData = array_map(['Security', 'remove_XSS'], $extraData);
 
         if (!empty($extraData['block'])) {
-            if (!is_dir($adminExtraContentDir)) {
-                mkdir(
-                    $adminExtraContentDir,
-                    api_get_permissions_for_new_directories(),
-                    true
-                );
-            }
-
-            if (!is_writable($adminExtraContentDir)) {
-                die;
-            }
-
-            $fullFilePath = $adminExtraContentDir.$extraData['block'];
-            $fullFilePath .= "_extra.html";
-
-            file_put_contents($fullFilePath, $extraData['extra_content']);
+            $fileSystem->put('admin/'.$extraData['block'].'_extra.html', $extraData['extra_content']);
 
             header('Location: '.api_get_self());
             exit;

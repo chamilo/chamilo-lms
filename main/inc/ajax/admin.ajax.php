@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\Repository\BranchSyncRepository;
+use Chamilo\CoreBundle\Framework\Container;
+use League\Flysystem\Filesystem;
 
 /**
  * Responses to AJAX calls.
@@ -43,34 +45,27 @@ switch ($action) {
             die;
         }
 
+        /** @var Filesystem $fileSystem */
+        $fileSystem = Container::$container->get('home_filesystem');
+        $dir = 'admin/';
+
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
 
-            if ($accessUrlId == -1) {
-                die;
+            if ($accessUrlId != -1) {
+                $urlInfo = api_get_access_url($accessUrlId);
+                $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+                $cleanUrl = str_replace('/', '-', $url);
+                $dir = "$cleanUrl/admin/";
             }
-
-            $urlInfo = api_get_access_url($accessUrlId);
-            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
-            $cleanUrl = str_replace('/', '-', $url);
-            $newUrlDir = api_get_path(SYS_APP_PATH)."home/$cleanUrl/admin/";
-        } else {
-            $newUrlDir = api_get_path(SYS_APP_PATH)."home/admin/";
         }
 
-        if (!file_exists($newUrlDir)) {
-            die;
+        $filePath = $dir.$blockName.'_extra.html';
+
+        if ($fileSystem->has($filePath)) {
+            echo $fileSystem->read($dir.$blockName.'_extra.html');
         }
 
-        if (!Security::check_abs_path("{$newUrlDir}{$blockName}_extra.html", $newUrlDir)) {
-            die;
-        }
-
-        if (!file_exists("{$newUrlDir}{$blockName}_extra.html")) {
-            die;
-        }
-
-        echo file_get_contents("{$newUrlDir}{$blockName}_extra.html");
         break;
 }
 

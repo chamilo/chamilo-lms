@@ -4,6 +4,10 @@ oneup_flysystem:
             local:
                 directory: '%kernel.project_dir%/var/courses'
 
+        home_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/home'
+
 #        s3.adapter:
 #              awss3v3:
 #                  client: s3_client # add service "s3_client"
@@ -16,3 +20,8 @@ oneup_flysystem:
             cache: ~
             alias: ~
             mount: ~
+
+        home:
+            adapter: home_adapter
+            visibility: private
+            alias: home_filesystem

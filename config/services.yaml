@@ -15,6 +15,9 @@ services:
         exclude: '../src/CoreBundle/{Entity,Migrations,Tests,Admin,Block,Component,Repository,Security,EventListener}'
         public: true
 
+    Chamilo\CoreBundle\Controller\ResourceUploaderController:
+        autowire: false
+
     Chamilo\PageBundle\:
         resource: '../src/PageBundle/*'
         exclude: '../src/PageBundle/{Entity,Migrations,Tests}'

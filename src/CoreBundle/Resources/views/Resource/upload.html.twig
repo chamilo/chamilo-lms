@@ -3,9 +3,19 @@
 {% block content %}
   <script>
       $(document).ready(function() {
-          $('#fileupload').fileupload({});
+          $('#fileupload').fileupload({
+              formData: {
+                  identifier: '{{ identifier }}',
+                  type: '{{ type }}'
+              }
+          });
       });
   </script>
 
-  <input id="fileupload" type="file" name="files[]" data-url="{{ oneup_uploader_endpoint('courses') }}" multiple />
+  <input id="fileupload"
+         type="file"
+         name="files[]"
+         data-url="{{ oneup_uploader_endpoint('courses') }}"
+         multiple
+  />
 {% endblock %}

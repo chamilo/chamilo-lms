@@ -3,9 +3,14 @@ oneup_uploader:
     mappings:
         courses:
             #frontend: dropzone # or any uploader you use in the frontend
-            frontend: blueimp
+            #frontend: blueimp
+            frontend: custom
             storage:
                 type: flysystem
                 filesystem: oneup_flysystem.courses_filesystem
             root_folder: true
+            custom_frontend:
+                class: Chamilo\CoreBundle\Controller\ResourceUploaderController
+                name: courses
+
 #            namer: oneup_uploader.namer.urlsafe

@@ -37,8 +37,8 @@ class CourseUploadListener
     {
         /** @var FlysystemFile $file */
         $file = $event->getFile();
-        $file->
-        error_log($file->getPathname());
+
+        error_log('CourseUploadListener:onUpload listener'.$file->getPathname());
 
         // If everything went fine
         $response = $event->getResponse();

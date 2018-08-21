@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div id="send-invitation-alert"></div>
-                {{ invitation_form }}
+                {{ invitation_form|raw }}
             </div>
             <div class="modal-footer">
                 <button type="button" id="btn-send-invitation" class="btn btn-primary">
@@ -21,7 +21,7 @@
 </div>
 
 <script>
-$(document).on('ready', function() {
+$(document).ready(function() {
     var $sendInvitationModal = $('#send-invitation-modal');
     var sendToUser = 0;
 

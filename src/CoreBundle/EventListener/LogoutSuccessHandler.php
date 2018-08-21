@@ -21,9 +21,9 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     protected $storage;
 
     /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param AuthorizationCheckerInterface  $checker
-     * @param TokenStorageInterface          $storage
+     * @param UrlGeneratorInterface         $urlGenerator
+     * @param AuthorizationCheckerInterface $checker
+     * @param TokenStorageInterface         $storage
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,

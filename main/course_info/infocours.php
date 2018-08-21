@@ -400,7 +400,6 @@ $group[] = $form->createElement(
 );
 $globalGroup[get_lang('NewHomeworkEmailAlert')] = $group;
 
-
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -492,7 +491,6 @@ $form->addPanelOption(
     Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications'),
     $globalGroup
 );
-
 
 $group = [];
 $group[] = $form->createElement(

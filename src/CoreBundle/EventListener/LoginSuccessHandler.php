@@ -24,7 +24,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param UrlGeneratorInterface         $urlGenerator
      * @param AuthorizationCheckerInterface $checker
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $checker) {
+    public function __construct(UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $checker)
+    {
         $this->router = $urlGenerator;
         $this->checker = $checker;
     }

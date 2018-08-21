@@ -66,8 +66,8 @@ class UserAdmin extends BaseUserAdmin
                 )*/
             ->add('firstname', null, ['required' => false])
             ->add('lastname', null, ['required' => false])
-            ->add('website', 'url', array('required' => false))
-            ->add('biography', 'text', array('required' => false))
+            ->add('website', 'url', ['required' => false])
+            ->add('biography', 'text', ['required' => false])
             /*->add(
                 'gender',
                 'sonata_user_gender',

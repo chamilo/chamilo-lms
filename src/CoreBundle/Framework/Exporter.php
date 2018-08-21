@@ -11,7 +11,8 @@ use Exporter\Writer\XmlWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * Class Exporter
+ * Class Exporter.
+ *
  * @package Chamilo\CoreBundle\Framework\Exporter
  */
 class Exporter

@@ -7,20 +7,17 @@ use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Route;
 
 class TwigListener implements EventSubscriberInterface
 {
+    use ContainerAwareTrait;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
-
-    use ContainerAwareTrait;
 
     /**
      * @param GetResponseEvent $event
@@ -51,5 +48,4 @@ class TwigListener implements EventSubscriberInterface
             KernelEvents::REQUEST => [['onKernelRequest', 15]],
         ];
     }
-
 }

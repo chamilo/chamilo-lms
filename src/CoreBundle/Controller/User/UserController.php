@@ -16,13 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package Chamilo\CoreBundle\Controller
  * @Route("/user")
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class UserController extends BaseController
 {
     /**
      * @Route("/me", methods={"GET"})
-     *
      */
     public function indexAction(Request $request)
     {
@@ -63,7 +63,6 @@ class UserController extends BaseController
 
     /**
      * @Route("/me/my_courses", methods={"GET"}, options={"expose"=true})
-     *
      */
     public function myCoursesAction()
     {
@@ -87,7 +86,6 @@ class UserController extends BaseController
 
     /**
      * @Route("/online", methods={"GET"})
-     *
      */
     public function onlineAction($app)
     {

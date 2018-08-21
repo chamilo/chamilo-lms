@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Tool\BaseTool;
-use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class AddCourse.
@@ -451,38 +451,38 @@ class AddCourse
         //$toolList = $toolList->getTools();
 
         /** @var BaseTool $tool */
-       /* foreach ($toolList as $tool) {
-            $toolName = $tool->getName();
-            $visibility = self::string2binary(
-                api_get_setting_in_list('course.active_tools_on_create', $toolName)
-            );
-            $toolObject = new CTool();
-            $toolObject
-                ->setName($tool->getName())
-                ->setCategory($tool->getCategory())
-                ->setLink($tool->getLink())
-                ->setImage($tool->getImage())
-                ->setVisibility($visibility)
-                ->setAddedTool(0)
-                ->setAdmin(0)
-                ->setTarget($tool->getTarget())
-            ;
-            $tools[] = $toolObject;
-            //$settings = $settingsManager->load($toolName);
-            //var_dump($settings);
-            //$settingsManager->save($settings);
-        }
+        /* foreach ($toolList as $tool) {
+             $toolName = $tool->getName();
+             $visibility = self::string2binary(
+                 api_get_setting_in_list('course.active_tools_on_create', $toolName)
+             );
+             $toolObject = new CTool();
+             $toolObject
+                 ->setName($tool->getName())
+                 ->setCategory($tool->getCategory())
+                 ->setLink($tool->getLink())
+                 ->setImage($tool->getImage())
+                 ->setVisibility($visibility)
+                 ->setAddedTool(0)
+                 ->setAdmin(0)
+                 ->setTarget($tool->getTarget())
+             ;
+             $tools[] = $toolObject;
+             //$settings = $settingsManager->load($toolName);
+             //var_dump($settings);
+             //$settingsManager->save($settings);
+         }
 
-        $course->setTools($tools);
-        $em->persist($course);
-        $em->flush($course);
+         $course->setTools($tools);
+         $em->persist($course);
+         $em->flush($course);
 
 
-        foreach ($tools as $tool) {
-            $tool->setId($tool->getIid());
-            $em->refresh($course);
-        }
-        $em->flush($course);*/
+         foreach ($tools as $tool) {
+             $tool->setId($tool->getIid());
+             $em->refresh($course);
+         }
+         $em->flush($course);*/
 
         /*    Course tools  */
         /*

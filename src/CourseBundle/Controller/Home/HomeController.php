@@ -347,7 +347,6 @@ class HomeController extends ToolBaseController
 
     /**
      * @Route("/{itemId}/edit", methods={"GET"})
-     *
      */
     public function editIconAction($itemId)
     {
@@ -389,7 +388,6 @@ class HomeController extends ToolBaseController
 
     /**
      * @Route("/{itemId}/delete", methods={"GET"})
-     *
      */
     public function deleteIconAction($itemId)
     {

@@ -2108,7 +2108,6 @@ function api_get_url_entity($id = 0)
     return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
 }
 
-
 /**
  * Returns the current course info array.
 

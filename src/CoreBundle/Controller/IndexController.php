@@ -4,17 +4,12 @@
 namespace Chamilo\CoreBundle\Controller;
 
 //use Chamilo\CoreBundle\Admin\CourseAdmin;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\PageController;
 use Chamilo\PageBundle\Entity\Block;
-use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sylius\Component\Attribute\AttributeType\TextAttributeType;
-use Sylius\Component\Attribute\Model\AttributeValueInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class IndexController

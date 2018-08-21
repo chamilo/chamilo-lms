@@ -23,7 +23,7 @@ class OnlineListener
 
     /**
      * @param TokenStorageInterface $context
-     * @param ObjectManager   $em
+     * @param ObjectManager         $em
      */
     public function __construct(TokenStorageInterface $context, ObjectManager $em)
     {

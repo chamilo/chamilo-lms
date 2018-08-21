@@ -789,12 +789,12 @@ if (@$_POST['step2']) {
 
             // No errors
             //if ($result == 0) {
-                // Boot kernel and get the doctrine from Symfony container
-                $kernel->boot();
-                $containerDatabase = $kernel->getContainer();
-                $sysPath = api_get_path(SYS_PATH);
-                updateWithContainer($containerDatabase);
-            //}
+            // Boot kernel and get the doctrine from Symfony container
+            $kernel->boot();
+            $containerDatabase = $kernel->getContainer();
+            $sysPath = api_get_path(SYS_PATH);
+            updateWithContainer($containerDatabase);
+        //}
         } else {
             set_file_folder_permissions();
             $database = connectToDatabase(

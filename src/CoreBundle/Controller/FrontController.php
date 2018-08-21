@@ -14,8 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FrontController.
+ *
  * @Route("/front")
+ *
  * @deprecated not used for now
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class FrontController extends Controller

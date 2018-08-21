@@ -18,7 +18,6 @@ class ProfileController extends BaseController
      * My files.
      *
      * @Route("/{username}/files", methods={"GET"})
-     *
      */
     public function fileAction($username)
     {
@@ -52,7 +51,6 @@ class ProfileController extends BaseController
      * Gets that rm.wav sound.
      *
      * @Route("/{username}/sounds/{file}", methods={"GET"})
-     *
      */
     public function getSoundAction()
     {

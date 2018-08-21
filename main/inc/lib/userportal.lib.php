@@ -1971,7 +1971,6 @@ class IndexManager
                     }
                     $htmlSessionCategory .= '</div>'; // end session cat block
                     $htmlCategory .= Display::panel($htmlSessionCategory, '');
-
                 }
                 $userCategoryHtml .= $htmlCategory;
             }

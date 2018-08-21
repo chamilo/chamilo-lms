@@ -725,7 +725,7 @@ if (api_is_platform_admin()) {
         get_lang('Save'),
         'submit_extra_content'
     );
-//var_dump($extraContentForm->returnForm());
+
     $tpl->assign('extraDataForm', $extraContentForm->returnForm());
 }
 

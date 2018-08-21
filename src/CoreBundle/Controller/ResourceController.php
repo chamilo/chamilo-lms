@@ -3,14 +3,15 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ResourceController
+ * Class ResourceController.
+ *
  * @author Julio Montoya <gugli100@gmail.com>.
  *
  * @Route("/resource")
@@ -51,7 +52,6 @@ class ResourceController extends BaseController
         try {
             /** @var Filesystem $fs */
             $fs = $this->container->get('oneup_flysystem.courses_filesystem');
-
 
             $path = $course.'/document/'.$file;
 

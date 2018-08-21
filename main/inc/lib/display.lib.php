@@ -2630,7 +2630,7 @@ class Display
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
-$html = <<<HTML
+            $html = <<<HTML
             
                 <div class="card" id="$id">
                     <div class="card-header">                        

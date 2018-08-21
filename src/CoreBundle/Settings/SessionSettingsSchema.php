@@ -45,7 +45,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_days_after_coach_access' => '',
                     'session_days_before_coach_access' => '',
                     'show_session_description' => 'false',
-                    'remove_session_url' => 'false'
+                    'remove_session_url' => 'false',
                 ]
             )
         ;

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CTool.
+ *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *  name="c_tool",

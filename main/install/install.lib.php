@@ -2993,7 +2993,7 @@ function updateEnvFile($distFile, $envFile, $params)
 
 /**
  * @param SymfonyContainer $container
- * @param EntityManager $manager
+ * @param EntityManager    $manager
  */
 function installGroups($container, $manager)
 {
@@ -3059,7 +3059,6 @@ function installGroups($container, $manager)
 
 /**
  * @param SymfonyContainer $container
- *
  */
 function installPages($container)
 {
@@ -3159,7 +3158,7 @@ function installPages($container)
 
 /**
  * @param SymfonyContainer $container
- * @param EntityManager $manager
+ * @param EntityManager    $manager
  */
 function installSchemas($container, $manager)
 {

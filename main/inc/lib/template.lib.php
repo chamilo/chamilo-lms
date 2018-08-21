@@ -134,7 +134,7 @@ class Template
         }
 
         //$this->twig = new Twig_Environment($loader, $options);
-        $this->twig  = Container::getTwig();
+        $this->twig = Container::getTwig();
 
         if ($isTestMode) {
             //$this->twig->addExtension(new Twig_Extension_Debug());
@@ -680,6 +680,7 @@ class Template
 
     /**
      * Set theme, include mainstream CSS files.
+     *
      * @deprecated
      * @see setCssCustomFiles() for additional CSS sheets
      */

@@ -2791,10 +2791,6 @@ span.form_error {
     margin: 2px;
 }
 
-form .row {
-    margin-bottom: 18px;
-}
-
 form .formw .freeze {
     display: block;
     padding-top: 8px;

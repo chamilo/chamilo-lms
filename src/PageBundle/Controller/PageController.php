@@ -6,8 +6,8 @@ namespace Chamilo\PageBundle\Controller;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+//use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
@@ -257,8 +257,7 @@ class PageController extends BaseController
     /**
      * The Chamilo index home page.
      *
-     * @Route("/internal_page/edit/{slug}", name="edit_page")
-     * @Method({"GET|POST"})
+     * @Route("/internal_page/edit/{slug}", methods={"GET", "POST"}, name="edit_page")
      * @Security("has_role('ROLE_ADMIN')")
      *
      * @param string $slug

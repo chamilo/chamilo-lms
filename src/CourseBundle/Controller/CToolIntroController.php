@@ -7,7 +7,6 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar\Introduction;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,6 +76,7 @@ class CToolIntroController extends ToolBaseController
 
     /**
      * @Route("/{tool}/create")
+     *
      * @Template("ChamiloCourseBundle:CToolIntro:create.html.twig")
      *
      * @return array
@@ -131,8 +131,8 @@ class CToolIntroController extends ToolBaseController
     }
 
     /**
-     * @Route("/{iid}/update/")
-     * @Method({"GET|POST"})
+     * @Route("/{iid}/update/", methods={"GET|POST"})
+     *
      * @Template("ChamiloCourseBundle:CToolIntro:update.html.twig")
      *
      * @return Response
@@ -186,8 +186,7 @@ class CToolIntroController extends ToolBaseController
     }
 
     /**
-     * @Route("/{iid}/delete")
-     * @Method({"GET"})
+     * @Route("/{iid}/delete", methods={"GET"})
      *
      * @param int     $iid
      * @param Request $request

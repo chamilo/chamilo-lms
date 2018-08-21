@@ -7,7 +7,6 @@ use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use CourseHome;
 use Display;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,8 +23,7 @@ class HomeController extends ToolBaseController
 {
     /**
      * @Route("/", name="course_home")
-     * @Route("/index.php")
-     * @Method({"GET"})
+     * @Route("/index.php", methods={"GET"})
      *
      * @param Request $request
      *
@@ -153,8 +151,7 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/show/{iconId}")
-     * @Method({"GET"})
+     * @Route("/show/{iconId}", methods={"GET"})
      *
      * @param $iconId
      *
@@ -176,8 +173,7 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/hide/{iconId}")
-     * @Method({"GET"})
+     * @Route("/hide/{iconId}", methods={"GET"})
      *
      * @param $iconId
      *
@@ -203,8 +199,7 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/delete/{iconId}")
-     * @Method({"GET"})
+     * @Route("/delete/{iconId}", methods={"GET"})
      *
      * @param $iconId
      *
@@ -227,8 +222,7 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/icon_list")
-     * @Method({"GET"})
+     * @Route("/icon_list", methods={"GET"})
      *
      * @param Request $request
      */
@@ -289,8 +283,7 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/{itemName}/add")
-     * @Method({"GET|POST"})
+     * @Route("/{itemName}/add", methods={"GET", "POST"})
      *
      * @param $itemName
      *
@@ -353,8 +346,8 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/{itemId}/edit")
-     * @Method({"GET"})
+     * @Route("/{itemId}/edit", methods={"GET"})
+     *
      */
     public function editIconAction($itemId)
     {
@@ -395,8 +388,8 @@ class HomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/{itemId}/delete")
-     * @Method({"GET"})
+     * @Route("/{itemId}/delete", methods={"GET"})
+     *
      */
     public function deleteIconAction($itemId)
     {

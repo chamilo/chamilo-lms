@@ -1,5 +1,4 @@
 # Legacy routes
-
 legacy_index:
     path: ../
 
@@ -9,38 +8,15 @@ legacy_main:
     requirements:
         name: .+
 
-core_controller:
-    resource: '@ChamiloCoreBundle/Controller/IndexController.php'
+# Controllers
+controllers:
+    resource: '../src/CoreBundle/Controller/'
     type: annotation
 
-userportal:
-    resource: '@ChamiloCoreBundle/Controller/UserPortalController.php'
-    type: annotation
-    prefix: /userportal
-
-sidebar_controller:
-    resource: '@ChamiloThemeBundle/Controller/SidebarController.php'
-    type: annotation
-
-front:
-    resource: '@ChamiloCoreBundle/Controller/FrontController.php'
-    type: annotation
-    prefix: /front
-
-user:
-    resource: '@ChamiloCoreBundle/Controller/User/UserController.php'
-    type: annotation
-    prefix: /user
-
-course:
-    resource: '@ChamiloCoreBundle/Controller/CourseController.php'
-    type: annotation
-    prefix: /course
-
-legacy_javascript:
-    resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
-    type: annotation
-    prefix: /js
+#legacy_javascript:
+#    resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
+#    type: annotation
+#    prefix: /js
 
 legacy_plugin:
     path: /plugin/{name}

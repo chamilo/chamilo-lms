@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class CourseController.
- *
+ * @Route("/course")
  * @package Chamilo\CoreBundle\Controller
  */
 class CourseController extends Controller

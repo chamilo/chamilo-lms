@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
 /**
@@ -21,13 +21,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     protected $checker;
 
     /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param AuthorizationChecker  $checker
+     * @param UrlGeneratorInterface         $urlGenerator
+     * @param AuthorizationCheckerInterface $checker
      */
-    public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        AuthorizationChecker $checker
-    ) {
+    public function __construct(UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $checker) {
         $this->router = $urlGenerator;
         $this->checker = $checker;
     }

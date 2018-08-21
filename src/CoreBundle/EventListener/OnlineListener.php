@@ -5,10 +5,10 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\UserBundle\Entity\User;
 use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class OnlineListener
@@ -22,10 +22,10 @@ class OnlineListener
     protected $em;
 
     /**
-     * @param SecurityContext $context
-     * @param EntityManager   $em
+     * @param TokenStorageInterface $context
+     * @param ObjectManager   $em
      */
-    public function __construct(SecurityContext $context, EntityManager $em)
+    public function __construct(TokenStorageInterface $context, ObjectManager $em)
     {
         $this->em = $em;
         $this->context = $context;

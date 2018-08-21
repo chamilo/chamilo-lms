@@ -26,11 +26,11 @@ services:
         arguments: ['%chamilo_core.entity.access_url%', '@doctrine']
         public: true
 
-    # Chamilo Twig extension
-    twig.extension.chamilo_extension:
-        class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
-        tags:
-            - {name: twig.extension}
+    # Chamilo Twig extension (already added with autowiring)
+#    twig.extension.chamilo_extension:
+#        class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
+#        tags:
+#            - {name: twig.extension}
 
     # Chamilo custom password encoder (depends on the password_encryption param)
     chamilo_user.security.encoder:

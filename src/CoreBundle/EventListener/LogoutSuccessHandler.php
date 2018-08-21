@@ -7,8 +7,8 @@ use Database;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 
 /**
@@ -22,13 +22,13 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
-     * @param AuthorizationChecker  $checker
-     * @param TokenStorage          $storage
+     * @param AuthorizationCheckerInterface  $checker
+     * @param TokenStorageInterface          $storage
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
-        AuthorizationChecker $checker,
-        TokenStorage $storage
+        AuthorizationCheckerInterface $checker,
+        TokenStorageInterface $storage
     ) {
         $this->router = $urlGenerator;
         $this->checker = $checker;

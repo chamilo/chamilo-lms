@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class LegacyLoginListener.
@@ -31,10 +31,10 @@ class LegacyLoginListener implements EventSubscriberInterface
     /**
      * LegacyLoginListener constructor.
      *
-     * @param $container
-     * @param TokenStorage $tokenStorage
+     * @param ContainerInterface    $container
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct($container, $tokenStorage)
+    public function __construct(ContainerInterface $container, TokenStorageInterface $tokenStorage)
     {
         $this->container = $container;
         $this->tokenStorage = $tokenStorage;

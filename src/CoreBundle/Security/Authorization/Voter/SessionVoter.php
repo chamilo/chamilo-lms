@@ -20,9 +20,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class SessionVoter extends Voter
 {
-    const VIEW = 'VIEW';
-    const EDIT = 'EDIT';
-    const DELETE = 'DELETE';
+    public const VIEW = 'VIEW';
+    public const EDIT = 'EDIT';
+    public const DELETE = 'DELETE';
 
     private $entityManager;
     private $courseManager;

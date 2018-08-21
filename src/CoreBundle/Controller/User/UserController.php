@@ -5,7 +5,6 @@ namespace Chamilo\CoreBundle\Controller\User;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class UserController.
  *
  * @package Chamilo\CoreBundle\Controller
- *
+ * @Route("/user")
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class UserController extends BaseController
 {
     /**
-     * @Route("/me")
-     * @Method({"GET"})
+     * @Route("/me", methods={"GET"})
+     *
      */
     public function indexAction(Request $request)
     {
@@ -42,8 +41,8 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("/{username}")
-     * @Method({"GET"})
+     * @Route("/{username}", methods={"GET"})
+     *
      * @Template("ChamiloCoreBundle:User:profile.html.twig")
      */
     public function profileAction($username)
@@ -63,8 +62,8 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("/me/my_courses", options={"expose"=true})
-     * @Method({"GET"})
+     * @Route("/me/my_courses", methods={"GET"}, options={"expose"=true})
+     *
      */
     public function myCoursesAction()
     {
@@ -87,8 +86,8 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("/online")
-     * @Method({"GET"})
+     * @Route("/online", methods={"GET"})
+     *
      */
     public function onlineAction($app)
     {

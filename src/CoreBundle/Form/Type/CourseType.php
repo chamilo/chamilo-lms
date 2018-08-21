@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Form\type;
+namespace Chamilo\CoreBundle\Form\Type;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Symfony\Component\Form\AbstractType;

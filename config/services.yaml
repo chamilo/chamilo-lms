@@ -9,6 +9,12 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
+
+    Chamilo\CoreBundle\:
+        resource: '../src/CoreBundle/*'
+        exclude: '../src/CoreBundle/{Entity,Migrations,Tests,Admin,Block,Component,Repository,Security,EventListener}'
+        public: true
+
     Chamilo\PageBundle\:
         resource: '../src/PageBundle/*'
         exclude: '../src/PageBundle/{Entity,Migrations,Tests}'

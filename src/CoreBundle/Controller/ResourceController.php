@@ -4,16 +4,38 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ResourceController
- * author Julio Montoya <gugli100@gmail.com>.
+ * @author Julio Montoya <gugli100@gmail.com>.
+ *
+ * @Route("/resource")
  *
  * @package Chamilo\CoreBundle\Controller
  */
 class ResourceController extends BaseController
 {
+    /**
+     * @Route("/upload", name="resource_upload", methods={"GET", "POST"}, options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function uploadFile(): Response
+    {
+        $helper = $this->container->get('oneup_uploader.templating.uploader_helper');
+        $endpoint = $helper->endpoint('courses');
+
+        return $this->render(
+            '@ChamiloCore/Resource/upload.html.twig',
+            [
+            ]
+        );
+    }
+
     /**
      * Gets a document from the courses/MATHS/document/file.jpg to the user.
      *
@@ -29,6 +51,8 @@ class ResourceController extends BaseController
         try {
             /** @var Filesystem $fs */
             $fs = $this->container->get('oneup_flysystem.courses_filesystem');
+
+
             $path = $course.'/document/'.$file;
 
             // Has folder
@@ -36,41 +60,13 @@ class ResourceController extends BaseController
                 return $this->abort();
             }
 
-            /** @var \League\Flysystem\Adapter\Local $adapter */
+            /** @var Local $adapter */
             $adapter = $fs->getAdapter();
             $filePath = $adapter->getPathPrefix().$path;
 
             return new BinaryFileResponse($filePath);
         } catch (\InvalidArgumentException $e) {
             return $this->abort();
-        }
-    }
-
-    /**
-     * Gets a document from the data/courses/MATHS/document/file.jpg to the user.
-     *
-     * @todo check permissions
-     *
-     * @param Application $app
-     * @param string      $courseCode
-     * @param string      $file
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
-     */
-    public function getCourseUploadFileAction(
-        $app,
-        $courseCode,
-        $file
-    ) {
-        try {
-            $file = $app['chamilo.filesystem']->getCourseUploadFile(
-                $courseCode,
-                $file
-            );
-
-            return $app->sendFile($file->getPathname());
-        } catch (\InvalidArgumentException $e) {
-            return $app->abort(404, 'File not found');
         }
     }
 

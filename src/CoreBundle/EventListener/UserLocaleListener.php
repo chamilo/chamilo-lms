@@ -3,9 +3,8 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
@@ -21,14 +20,12 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
  */
 class UserLocaleListener
 {
-    /**
-     * @var Session
-     */
+    /** @var SessionInterface */
     private $session;
     /** @var SettingsManager */
     private $settings;
 
-    public function __construct(Session $session, $settings)
+    public function __construct(SessionInterface $session, SettingsManager $settings)
     {
         $this->session = $session;
         $this->settings = $settings;

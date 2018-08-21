@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Controller\User;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,8 +17,8 @@ class ProfileController extends BaseController
     /**
      * My files.
      *
-     * @Route("/{username}/files")
-     * @Method({"GET"})
+     * @Route("/{username}/files", methods={"GET"})
+     *
      */
     public function fileAction($username)
     {
@@ -52,8 +51,8 @@ class ProfileController extends BaseController
     /**
      * Gets that rm.wav sound.
      *
-     * @Route("/{username}/sounds/{file}")
-     * @Method({"GET"})
+     * @Route("/{username}/sounds/{file}", methods={"GET"})
+     *
      */
     public function getSoundAction()
     {

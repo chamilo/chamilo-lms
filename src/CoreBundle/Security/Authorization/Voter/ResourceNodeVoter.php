@@ -25,11 +25,11 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
  */
 class ResourceNodeVoter extends Voter
 {
-    const VIEW = 'VIEW';
-    const CREATE = 'CREATE';
-    const EDIT = 'EDIT';
-    const DELETE = 'DELETE';
-    const EXPORT = 'EXPORT';
+    public const VIEW = 'VIEW';
+    public const CREATE = 'CREATE';
+    public const EDIT = 'EDIT';
+    public const DELETE = 'DELETE';
+    public const EXPORT = 'EXPORT';
 
     const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
     const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';

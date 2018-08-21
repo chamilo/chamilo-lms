@@ -1,15 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-/*
- * This file is part of the Sonata package.
- *
- * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Chamilo\CoreBundle\Framework\Exporter;
+namespace Chamilo\CoreBundle\Framework;
 
 use Exporter\Source\SourceIteratorInterface;
 use Exporter\Writer\CsvWriter;
@@ -18,6 +10,10 @@ use Exporter\Writer\XlsWriter;
 use Exporter\Writer\XmlWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * Class Exporter
+ * @package Chamilo\CoreBundle\Framework\Exporter
+ */
 class Exporter
 {
     /**

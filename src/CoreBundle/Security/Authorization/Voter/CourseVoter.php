@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -19,21 +20,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CourseVoter extends Voter
 {
-    const VIEW = 'VIEW';
-    const EDIT = 'EDIT';
-    const DELETE = 'DELETE';
+    public const VIEW = 'VIEW';
+    public const EDIT = 'EDIT';
+    public const DELETE = 'DELETE';
 
     private $entityManager;
     private $courseManager;
     private $container;
 
     /**
-     * @param EntityManager      $entityManager
-     * @param CourseManager      $courseManager
-     * @param ContainerInterface $container
+     * @param EntityManagerInterface $entityManager
+     * @param CourseManager          $courseManager
+     * @param ContainerInterface     $container
      */
     public function __construct(
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         CourseManager $courseManager,
         ContainerInterface $container
     ) {

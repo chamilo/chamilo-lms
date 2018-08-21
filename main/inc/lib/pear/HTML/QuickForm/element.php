@@ -609,8 +609,4 @@ class HTML_QuickForm_element extends HTML_Common
 
         return $this;
     }
-
-
-
-
 }

@@ -65,8 +65,4 @@ class HTML_QuickForm_header extends HTML_QuickForm_static
     {
         $renderer->renderHeader($this);
     } // end func accept
-
-    // }}}
-
-} //end class HTML_QuickForm_header
-?>
+}

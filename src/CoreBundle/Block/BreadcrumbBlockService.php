@@ -33,7 +33,8 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         parent::configureSettings($resolver);
 
         $resolver->setDefaults([
-            'menu_template' => 'SonataSeoBundle:Block:breadcrumb.html.twig',
+            //'menu_template' => 'SonataSeoBundle:Block:breadcrumb.html.twig',
+            'menu_template' => 'ChamiloThemeBundle:Breadcrumb:breadcrumb_legacy.html.twig',
             'include_homepage_link' => false,
             'context' => false,
         ]);
@@ -82,9 +83,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         }
 
         // Load legacy breadcrumbs
-        $oldBreadCrumb = $blockContext->getBlock()->getSetting(
-            'legacy_breadcrumb'
-        );
+        $oldBreadCrumb = $blockContext->getBlock()->getSetting('legacy_breadcrumb');
 
         if ($oldBreadCrumb) {
             foreach ($oldBreadCrumb as $data) {
@@ -98,6 +97,13 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
                     $menu->addChild($data['name'], ['uri' => $url]);
                 }
             }
+        }
+
+        // Set CSS classes for the items
+        foreach ($menu->getChildren() as $child) {
+            $child
+                //->setLinkAttribute('class', 'nav-link')
+                ->setAttribute('class', 'breadcrumb-item');
         }
 
         return $menu;

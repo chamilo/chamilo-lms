@@ -95,10 +95,7 @@ class HTML_QuickForm_hiddenselect extends HTML_QuickForm_select
         }
 
         return $strHtml;
-    } //end func toHtml
-
-    // }}}
-    // {{{ accept()
+    }
 
    /**
     * This is essentially a hidden element and should be rendered as one
@@ -107,7 +104,4 @@ class HTML_QuickForm_hiddenselect extends HTML_QuickForm_select
     {
         $renderer->renderHidden($this);
     }
-
-    // }}}
-} //end class HTML_QuickForm_hiddenselect
-?>
+}

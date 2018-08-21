@@ -7,10 +7,10 @@
  */
 class FormValidator extends HTML_QuickForm
 {
-    const LAYOUT_HORIZONTAL = 'horizontal';
-    const LAYOUT_INLINE = 'inline';
-    const LAYOUT_BOX = 'box';
-    const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    public const LAYOUT_HORIZONTAL = 'horizontal';
+    public const LAYOUT_INLINE = 'inline';
+    public const LAYOUT_BOX = 'box';
+    public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
 
     public $with_progress_bar = false;
     private $layout;
@@ -133,8 +133,8 @@ EOT;
     public function getDefaultElementTemplate()
     {
         return '
-            <div class="form-group {error_class}">
-                <label {label-for} class="col-sm-2 control-label {extra_label_class}" >
+            <div class="form-group row {error_class}">
+                <label {label-for} class="col-sm-2 col-form-label {extra_label_class}" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>

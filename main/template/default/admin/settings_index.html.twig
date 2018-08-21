@@ -1,3 +1,5 @@
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+
 <script>
     $(document).ready(function () {
         $.ajax({
@@ -45,47 +47,47 @@
         {% for block_item in blocks %}
             {% if block_item.items %}
                 <div id="tabs-{{ loop.index }}" class="settings-block col-md-6">
-                    {#<div class="panel panel-default {{ block_item.class }}">#}
-                    <div class="card">
-                        <div class="card-header">
-                            {{ block_item.icon|raw }} {{ block_item.label }}
-                            {% if block_item.editable and _u.is_admin %}
-                                <button type="button" class="btn btn-link btn-sm admin-edit-block float-right"
-                                        data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
-                                    <img src="{{ "edit.png"|icon(22) }}" width="22" height="22"
-                                         alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}"/>
-                                </button>
-                            {% endif %}
+                    {% set header %}
+                        {{ block_item.icon|raw }} {{ block_item.label }}
+                        {% if block_item.editable and _u.is_admin %}
+                            <button type="button" class="btn btn-link btn-sm admin-edit-block float-right"
+                                    data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
+                                <img src="{{ "edit.png"|icon(22) }}" width="22" height="22"
+                                     alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}"/>
+                            </button>
+                        {% endif %}
+                    {% endset %}
+
+                    {% set content %}
+                        <div style="display: block;">
+                            {{ block_item.search_form|raw }}
                         </div>
-                        <div class="card-body">
-                            <div style="display: block;">
-                                {{ block_item.search_form|raw }}
+                        {% if block_item.items is not null %}
+                            <div class="block-items-admin">
+                                <ul class="list-items-admin">
+                                    {% for url in block_item.items %}
+                                        <li>
+                                            <a href="{{ url.url }}">
+                                                {{ url.label }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
-                            {% if block_item.items is not null %}
-                                <div class="block-items-admin">
-                                    <ul class="list-items-admin">
-                                        {% for url in block_item.items %}
-                                            <li>
-                                                <a href="{{ url.url }}">
-                                                    {{ url.label }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
+                        {% endif %}
 
-                            {% if block_item.extra is not null %}
-                                <div>
-                                    {{ block_item.extra|raw }}
-                                </div>
-                            {% endif %}
+                        {% if block_item.extra is not null %}
+                            <div>
+                                {{ block_item.extra|raw }}
+                            </div>
+                        {% endif %}
 
-                            {% if block_item.extraContent %}
-                                <div>{{ block_item.extraContent|raw }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
+                        {% if block_item.extraContent %}
+                            <div>{{ block_item.extraContent|raw }}</div>
+                        {% endif %}
+                    {% endset %}
+
+                    {{ macro.panel(header, content) }}
                 </div>
             {% endif %}
         {% endfor %}

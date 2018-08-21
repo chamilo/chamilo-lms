@@ -78,7 +78,4 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
     {
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
-
-    // }}}
-} //end class HTML_QuickForm_submit
-?>
+}

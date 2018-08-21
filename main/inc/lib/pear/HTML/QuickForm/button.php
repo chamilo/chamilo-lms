@@ -235,8 +235,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
-                <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                <div class="form-group row {error_class}">
+                    <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>

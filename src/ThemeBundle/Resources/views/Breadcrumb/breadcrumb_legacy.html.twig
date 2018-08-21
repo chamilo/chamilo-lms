@@ -1,0 +1,9 @@
+{% extends '@KnpMenu/menu.html.twig' %}
+
+{% block list %}
+    {% spaceless %}
+        <nav aria-label="breadcrumb">
+            {{ parent() }}
+        </nav>
+    {% endspaceless %}
+{% endblock%}

@@ -23,7 +23,7 @@
         });
     });
 </script>
-
+{% autoescape false %}
 {{ form }}
 <h3 class="page-header">{{ report_title }}
     <small>{{ report_sub_title }}</small>
@@ -53,3 +53,4 @@
     {% endfor %}
     </tbody>
 </table>
+{% endautoescape %}

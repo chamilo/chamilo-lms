@@ -326,23 +326,35 @@ class SortableTable extends HTML_Table
             $html .= '<td>';
 
             if (count($this->form_actions) > 0) {
-                $html .= '<div class="btn-toolbar">';
-                $html .= '<div class="btn-group">';
-                $html .= '<a class="btn btn-default" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
-                $html .= '<a class="btn btn-default" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
-                $html .= '</div>';
-                $html .= '<div class="btn-group">
-                            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>';
-                $html .= '<ul class="dropdown-menu">';
+                $html .= '<div class="btn-group" role="group">';
+                $html .= '<a 
+                    class="btn btn-secondary" 
+                    href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" 
+                    onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
+                $html .= '<a 
+                    class="btn btn-secondary" 
+                    href="?'.$params.'" 
+                    onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+                $html .= '<div class="btn-group" role="group">
+                            <button 
+                                id="'.$table_id.'_actions" 
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                class="btn btn-secondary dropdown-toggle" 
+                                onclick="javascript:return false;">'.
+                                get_lang('Actions').'
+                            </button>
+                          ';
+                $html .= '<div class="dropdown-menu" aria-labelledby="'.$table_id.'_actions" >';
                 foreach ($this->form_actions as $action => &$label) {
-                    $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a></li>';
+                    $html .= '<a 
+                        class="dropdown-item" 
+                        data-action ="'.$action.'" 
+                        href="#" 
+                        onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a>';
                 }
-                $html .= '</ul>';
+                $html .= '</div>';
                 $html .= '</div>'; //btn-group
-                $html .= '</div>'; //toolbar
+                $html .= '</div>';
             } else {
                 $html .= $form;
             }

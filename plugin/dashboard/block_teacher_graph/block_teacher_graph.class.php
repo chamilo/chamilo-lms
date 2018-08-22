@@ -1,4 +1,9 @@
 <?php
+
+use CpChart\Cache as pCache;
+use CpChart\Data as pData;
+use CpChart\Image as pImage;
+
 /**
  * This file is part of teacher graph block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
@@ -11,13 +16,12 @@
 /**
  * required files for getting data.
  */
-use CpChart\Cache as pCache;
-use CpChart\Data as pData;
-use CpChart\Image as pImage;
+
 
 /**
  * This class is used like controller for teacher graph block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"), so dashboard controller will be instantiate it.
+ * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"),
+ * so dashboard controller will be instantiate it.
  *
  * @package chamilo.dashboard
  */
@@ -25,7 +29,6 @@ class BlockTeacherGraph extends Block
 {
     private $user_id;
     private $teachers;
-    private $path;
     private $permission = [DRH];
 
     /**
@@ -67,23 +70,12 @@ class BlockTeacherGraph extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 1;
         $data = [];
-        $teacher_information_graph = $this->get_teachers_information_graph();
-        $html = '
-                <div class="panel panel-default" id="intro">
-                    <div class="panel-heading">'.get_lang('TeachersInformationsGraph').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                        <em class="fa fa-times"></em>
-                        </a></div>
-                    </div>
-                    <div class="panel-body" align="center">
-                        <div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
-                        '.$teacher_information_graph.'
-                    </div>
-                </div>
-                ';
+        $html = $this->getBlockCard(
+            get_lang('TeachersInformationsGraph'),
+            $this->getContent()
+        );
 
         $data['column'] = $column;
         $data['content_html'] = $html;
@@ -96,7 +88,7 @@ class BlockTeacherGraph extends Block
      *
      * @return string content html
      */
-    public function get_teachers_information_graph()
+    public function getContent()
     {
         $teachers = $this->teachers;
         $graph = '';

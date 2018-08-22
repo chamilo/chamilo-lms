@@ -19,7 +19,6 @@ class BlockStudent extends Block
 {
     private $user_id;
     private $students;
-    private $path;
     private $permission = [DRH];
 
     /**
@@ -62,22 +61,12 @@ class BlockStudent extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 1;
         $data = [];
-        $student_content_html = $this->get_students_content_html_for_drh();
-        $html = '<div class="panel panel-default" id="intro">
-                    <div class="panel-heading">
-                        '.get_lang('StudentsInformationsList').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                            <em class="fa fa-times"></em>
-                        </a>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        '.$student_content_html.'
-                    </div>
-                    </div>';
+        $html = $this->getBlockCard(
+            get_lang('YourStudents'),
+            $this->getContent()
+        );
         $data['column'] = $column;
         $data['content_html'] = $html;
 
@@ -89,10 +78,9 @@ class BlockStudent extends Block
      *
      * @return string content html
      */
-    public function get_students_content_html_for_platform_admin()
+    public function getContent()
     {
         $students = $this->students;
-        $content = '<h4>'.get_lang('YourStudents').'</h4>';
         $students_table = null;
         if (count($students) > 0) {
             $students_table .= '<table class="data_table">';
@@ -148,12 +136,11 @@ class BlockStudent extends Block
             $students_table .= get_lang('ThereIsNoInformationAboutYourStudents');
         }
 
-        $content .= $students_table;
+        $content = $students_table;
 
         if (count($students) > 0) {
             $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=useroverview">'.get_lang('SeeMore').'</a></div>';
         }
-        //$content .= '</div>';
 
         return $content;
     }

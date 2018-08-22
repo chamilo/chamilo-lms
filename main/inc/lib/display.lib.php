@@ -2442,6 +2442,7 @@ class Display
      * @param string $extra
      * @param string $id
      * @param string $customColor
+     * @param string $rightAction
      *
      * @return string
      */
@@ -2452,15 +2453,19 @@ class Display
         $type = 'default',
         $extra = '',
         $id = '',
-        $customColor = ''
+        $customColor = '',
+        $rightAction = ''
     ) {
         $headerStyle = '';
         if (!empty($customColor)) {
             $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
         }
 
-        //$title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $title = !empty($title) ? '<h4 class="card-header">'.$title.'</h4>'.$extra : '';
+        if (!empty($rightAction)) {
+            $rightAction = '<span class="float-right">'.$rightAction.'</span>';
+        }
+
+        $title = !empty($title) ? '<h3 class="card-header">'.$title.' '.$rightAction.'</h3>'.$extra : '';
         $footer = !empty($footer) ? '<div class="card-footer">'.$footer.'</div>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
@@ -2469,7 +2474,6 @@ class Display
             $id = " id='$id'";
         }
 
-        //<div '.$id.' class="panel panel-'.$style.'">
         return '
             <div '.$id.' class="card">
                 '.$title.'

@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% if blocklist == '' %}
 <div id="columns">
     <div class="row">
@@ -19,3 +20,4 @@
 {% else %}
     {{ blocklist }}
 {% endif %}
+{% endautoescape %}

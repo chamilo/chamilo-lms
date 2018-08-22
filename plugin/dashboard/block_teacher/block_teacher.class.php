@@ -21,7 +21,6 @@ class BlockTeacher extends Block
 {
     private $user_id;
     private $teachers;
-    private $path;
     private $permission = [DRH];
 
     /**
@@ -65,24 +64,12 @@ class BlockTeacher extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 1;
         $data = [];
-        $teacher_content_html = $this->get_teachers_content_html_for_drh();
-        $html = '
-                <div class="panel panel-default" id="intro">
-                    <div class="panel-heading">
-                        '.get_lang('TeachersInformationsList').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                        <em class="fa fa-times"></em>
-                        </a></div>
-                    </div>
-                    <div class="panel-body">
-                        '.$teacher_content_html.'
-                    </div>
-                </div>
-                ';
-
+        $html = $this->getBlockCard(
+            get_lang('TeachersInformationsList'),
+            $this->getContent()
+        );
         $data['column'] = $column;
         $data['content_html'] = $html;
 
@@ -95,11 +82,9 @@ class BlockTeacher extends Block
      *
      * @return string content html
      */
-    public function get_teachers_content_html_for_platform_admin()
+    public function getContent()
     {
         $teachers = $this->teachers;
-        $content = '<h4>'.get_lang('YourTeachers').'</h4>';
-
         $teachers_table = null;
         if (count($teachers) > 0) {
             $teachers_table .= '<table class="data_table" width:"95%">';
@@ -139,7 +124,7 @@ class BlockTeacher extends Block
             $teachers_table .= get_lang('ThereIsNoInformationAboutYourTeachers');
         }
 
-        $content .= $teachers_table;
+        $content = $teachers_table;
 
         if (count($teachers) > 0) {
             $content .= '<div style="text-align:right;margin-top:10px;">
@@ -149,6 +134,9 @@ class BlockTeacher extends Block
         return $content;
     }
 
+    /**
+     * @return string
+     */
     public function get_teachers_content_html_for_drh()
     {
         $teachers = $this->teachers;

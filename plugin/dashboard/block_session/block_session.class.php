@@ -19,7 +19,6 @@ class BlockSession extends Block
 {
     private $user_id;
     private $sessions;
-    private $path;
     private $permission = [DRH, SESSIONADMIN];
 
     /**
@@ -62,25 +61,15 @@ class BlockSession extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 2;
         $data = [];
-        $content = $this->get_content_html();
-        $content_html = '<div class="panel panel-default" id="intro">
-                            <div class="panel-heading">
-                                '.get_lang('SessionsInformation').'
-                                <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                                <em class="fa fa-times"></em>
-                                </a></div>
-                            </div>
-                            <div class="panel-body">
-                            '.$content.'
-                            </div>
-                        </div>
-                ';
+        $html = $this->getBlockCard(
+            get_lang('YourSessionsList'),
+            $this->getContent()
+        );
 
         $data['column'] = $column;
-        $data['content_html'] = $content_html;
+        $data['content_html'] = $html;
 
         return $data;
     }
@@ -90,11 +79,10 @@ class BlockSession extends Block
      *
      * @return string content html
      */
-    public function get_content_html()
+    public function getContent()
     {
         $content = '';
         $sessions = $this->sessions;
-        $content .= '<h4>'.get_lang('YourSessionsList').'</h4>';
         if (count($sessions) > 0) {
             $sessions_table = '<table class="data_table" width:"95%">';
             $sessions_table .= '<tr>

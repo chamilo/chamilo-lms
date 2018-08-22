@@ -24,7 +24,6 @@ class BlockDaily extends Block
 {
     private $user_id;
     private $courses;
-    private $path;
     private $permission = [DRH];
 
     /**
@@ -72,27 +71,14 @@ class BlockDaily extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 2;
         $data = [];
-        $content = $this->get_content_html();
-        $html = '<div class="panel panel-default" id="intro">
-		                <div class="panel-heading">'.get_lang('GradebookAndAttendances').'
-		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(
-                api_htmlentities(
-                    get_lang('ConfirmYourChoice'),
-                    ENT_QUOTES,
-                    $charset
-                )
-            ).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                    <em class="fa fa-times"></em>
-                        </a></div>
-		                </div>
-		                <div class="panel-body">
-		                   '.$content.'
-		                </div>
-		            </div>
-				';
+
+        $html = $this->getBlockCard(
+            get_lang('GradebookAndAttendances'),
+            $this->getContent()
+        );
+
         $data['column'] = $column;
         $data['content_html'] = $html;
 
@@ -104,7 +90,7 @@ class BlockDaily extends Block
      *
      * @return string content html
      */
-    public function get_content_html()
+    public function getContent()
     {
         $course_data = $this->get_course_information_data();
         $content = '<h4>'.get_lang('YourCourseList').'</h4>';

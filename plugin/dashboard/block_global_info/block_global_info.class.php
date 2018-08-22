@@ -23,7 +23,6 @@ class BlockGlobalInfo extends Block
 {
     private $user_id;
     private $courses;
-    private $path;
     private $permission = [];
 
     /**
@@ -35,9 +34,6 @@ class BlockGlobalInfo extends Block
     {
         $this->user_id = $user_id;
         $this->path = 'block_global_info';
-        if ($this->is_block_visible_for_user($user_id)) {
-            //$this->courses = CourseManager::get_courses_followed_by_drh($user_id);
-        }
     }
 
     /**
@@ -68,21 +64,12 @@ class BlockGlobalInfo extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 2;
         $data = [];
-        $content = $this->get_content_html();
-        $html = '<div class="panel panel-default" id="intro">
-                    <div class="panel-heading">'.get_lang('GlobalPlatformInformation').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                        <em class="fa fa-times"></em>
-                        </a></div>
-                    </div>
-                    <div class="panel-body">
-                       '.$content.'
-                    </div>
-                </div>
-                ';
+        $html = $this->getBlockCard(
+            get_lang('GlobalPlatformInformation'),
+            $this->getContent()
+        );
         $data['column'] = $column;
         $data['content_html'] = $html;
 
@@ -94,10 +81,9 @@ class BlockGlobalInfo extends Block
      *
      * @return string content html
      */
-    public function get_content_html()
+    public function getContent()
     {
         $global_data = $this->get_global_information_data();
-        $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
         $data_table = null;
         if (!empty($global_data)) {
             $data_table = '<table class="table table-bordered">';
@@ -119,9 +105,8 @@ class BlockGlobalInfo extends Block
         } else {
             $data_table .= get_lang('ThereIsNoInformationAboutThePlatform');
         }
-        $content .= $data_table;
 
-        return $content;
+        return $data_table;
     }
 
     /**

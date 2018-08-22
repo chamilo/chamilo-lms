@@ -25,7 +25,6 @@ class BlockEvaluationGraph extends Block
     private $user_id;
     private $courses;
     private $sessions;
-    private $path;
     private $permission = [DRH, SESSIONADMIN];
 
     /**
@@ -73,20 +72,12 @@ class BlockEvaluationGraph extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 1;
         $data = [];
         $evaluations_base_courses_graph = $this->get_evaluations_base_courses_graph();
         $evaluations_courses_in_sessions_graph = $this->get_evaluations_courses_in_sessions_graph();
 
-        $html = '<div class="panel panel-default" id="intro">
-                    <div class="panel-heading">
-                        '.get_lang('EvaluationsGraph').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                        <em class="fa fa-times"></em>
-                        </a></div>
-                    </div>
-                    <div class="panel-body">';
+        $html = '';
         if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
             $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
         } else {
@@ -109,8 +100,11 @@ class BlockEvaluationGraph extends Block
                 }
             }
         }
-        $html .= '</div>
-                 </div>';
+
+        $html = $this->getBlockCard(
+            get_lang('EvaluationsGraph'),
+            $html
+        );
 
         $data['column'] = $column;
         $data['content_html'] = $html;

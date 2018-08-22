@@ -25,7 +25,6 @@ class BlockStudentGraph extends Block
 {
     private $user_id;
     private $students;
-    private $path;
     private $permission = [DRH];
 
     /**
@@ -72,23 +71,13 @@ class BlockStudentGraph extends Block
      */
     public function get_block()
     {
-        global $charset;
         $column = 1;
         $data = [];
-        $students_attendance_graph = $this->get_students_attendance_graph();
+        $html = $this->getBlockCard(
+            get_lang('StudentsInformationsGraph'),
+            $this->getContent()
+        );
 
-        $html = '<div class="panel panel-default" id="intro">
-                    <div class="panel-heading">
-                        '.get_lang('StudentsInformationsGraph').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                        <em class="fa fa-times"></em>
-                        </a></div>
-                    </div>
-                    <div class="panel-body" align="center">
-                        <div style="padding:10px;"><strong>'.get_lang('AttendancesFaults').'</strong></div>
-                        '.$students_attendance_graph.'
-                    </div>
-                </div>';
         $data['column'] = $column;
         $data['content_html'] = $html;
 
@@ -101,7 +90,7 @@ class BlockStudentGraph extends Block
      *
      * @return string img html
      */
-    public function get_students_attendance_graph()
+    public function getContent()
     {
         $students = $this->students;
         $attendance = new Attendance();

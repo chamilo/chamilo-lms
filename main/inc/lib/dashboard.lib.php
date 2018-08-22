@@ -239,8 +239,8 @@ class DashboardManager
                             $plugin_controller = Database::escape_string($plugin_info['controller']);
                         }
 
-                        $ins = "INSERT INTO $tbl_block(name, description, path, controller)
-                            VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
+                        $ins = "INSERT INTO $tbl_block(name, description, path, controller, active)
+                               VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller', 1)";
                         $result = Database::query($ins);
                         $affected_rows = Database::affected_rows($result);
                     }

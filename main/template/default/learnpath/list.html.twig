@@ -1,3 +1,4 @@
+{% autoescape false %}
 <script>
     function confirmation(name) {
         if (confirm("{{ "AreYouSureToDeleteJS"|get_lang }} \"" + name + "\" ?")) {
@@ -496,3 +497,4 @@
         </div>
     </div>
 {% endif %}
+{% endautoescape %}

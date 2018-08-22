@@ -1153,31 +1153,35 @@ class Display
         $i = 1;
         foreach ($headers as $item) {
             $active = '';
+            $selected = 'false';
             if ($i == 1) {
                 $active = ' active';
+                $selected = 'true';
             }
             $item = self::tag(
                 'a',
                 $item,
                 [
                     'href' => '#'.$id.'-'.$i,
-                    'role' => 'tab',
+                    'class' => 'nav-item nav-link '.$active,
+                    'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
-                    'id' => $id.$i,
+                    'role' => 'tab',
+                    'aria-controls' => 'aria_'.$id.$i,
+                    'aria-selected' => $selected
                 ]
             );
-            $ul_attributes['role'] = 'presentation';
-            $ul_attributes['class'] = $active;
-            $lis .= self::tag('li', $item, $ul_attributes);
+            $lis .= $item;
             $i++;
         }
+
         $ul = self::tag(
-            'ul',
+            'nav',
             $lis,
             [
-                'class' => 'nav nav-tabs tabs-margin',
-                'role' => 'tablist',
                 'id' => 'ul_'.$id,
+                'class' => 'nav nav-tabs',
+                'role' => 'tablist',
             ]
         );
 
@@ -1186,27 +1190,32 @@ class Display
         foreach ($items as $content) {
             $active = '';
             if ($i == 1) {
-                $active = ' active';
+                $active = ' show active';
             }
             $divs .= self::tag(
                 'div',
                 $content,
-                ['id' => $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel']
+                [
+                    'id' => $id.'-'.$i,
+                    'class' => 'tab-pane fade '.$active,
+                    'role' => 'tabpanel',
+                    'aria-labelledby' => $id.'-'.$i,
+                ]
             );
             $i++;
         }
 
         $attributes['id'] = $id;
-        $attributes['role'] = 'tabpanel';
-        $attributes['class'] = 'tab-wrapper';
+        $attributes['class'] = 'tab_wrapper';
 
-        $main_div = self::tag(
+        $html = self::tag(
             'div',
-            $ul.self::tag('div', $divs, ['class' => 'tab-content']),
+            $ul.
+            self::tag('div', $divs, ['class' => 'tab-content']),
             $attributes
         );
 
-        return $main_div;
+        return $html;
     }
 
     /**

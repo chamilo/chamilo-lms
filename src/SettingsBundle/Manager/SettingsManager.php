@@ -386,7 +386,7 @@ class SettingsManager implements SettingsManagerInterface
             'course_catalog_hide_private' => 'Platform',
             'catalog_show_courses_sessions' => 'Platform',
             'auto_detect_language_custom_pages' => 'Platform',
-            'lp_show_reduced_report' => 'Tools',
+            'lp_show_reduced_report' => 'Course',
             'allow_session_course_copy_for_teachers' => 'Session',
             'hide_logout_button' => 'Platform',
             'redirect_admin_to_courses_list' => 'Platform',

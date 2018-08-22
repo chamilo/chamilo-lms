@@ -36,7 +36,7 @@ if (!DocumentManager::get_document_id($_course, $path)) {
 $nameTools = get_lang('UplUploadDocument');
 $interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=".urlencode($path).'&'.api_get_cidreq(),
-    "name" => $langDocuments,
+    "name" => get_lang('Documents'),
 ];
 Display::display_header($nameTools, "Doc");
 //show the title

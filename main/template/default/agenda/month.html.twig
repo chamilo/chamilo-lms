@@ -1,3 +1,4 @@
+{% autoescape false %}
 <style>
 .fc-day-grid-event > .fc-content {
     white-space: normal;
@@ -789,3 +790,5 @@ $(document).ready(function() {
     {{ "Loading" | get_lang }}...
 </div>
 <div id="calendar"></div>
+
+{% endautoescape %}

@@ -2121,15 +2121,16 @@ class Display
      */
     public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
     {
-        $html = '<div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        $id = uniqid('dropdown', true);
+        $html = '<div class="btn-group" role="group">
+                <button id = "'.$id.'" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 '.$title.'
-                <span class="caret"></span></button>
-                <ul class="dropdown-menu '.($alignToRight ? 'dropdown-menu-right' : '').'">';
+                </button>
+                <div class="dropdown-menu aria-labelledby="'.$id.'" '.($alignToRight ? 'dropdown-menu-right' : '').'">';
         foreach ($elements as $item) {
-            $html .= self::tag('li', self::url($item['title'], $item['href']));
+            $html .= self::tag('li', self::url($item['title'], $item['href'], ['class' => 'dropdown-item']));
         }
-        $html .= '</ul>
+        $html .= '</div>
             </div>';
 
         return $html;

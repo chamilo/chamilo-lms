@@ -59,7 +59,7 @@ class ToolChain
     /**
      * @param BaseTool $tool
      */
-    public function addTool(BaseTool $tool)
+    public function addTool(BaseTool $tool): void
     {
         $this->tools[$tool->getName()] = $tool;
     }
@@ -67,7 +67,7 @@ class ToolChain
     /**
      * @return array
      */
-    public function getTools()
+    public function getTools(): array
     {
         return $this->tools;
     }
@@ -78,6 +78,26 @@ class ToolChain
     public function createTools(ObjectManager $manager)
     {
         $tools = $this->getTools();
+
+        /** @var BaseTool $tool */
+        foreach ($tools as $tool) {
+            $toolEntity = new Tool();
+            $toolEntity
+                ->setName($tool->getName())
+                ->setImage($tool->getImage())
+                ->setDescription($tool->getName().' - description')
+            ;
+            $this->setToolPermissions($toolEntity);
+            $manager->persist($toolEntity);
+            $manager->flush();
+        }
+    }
+
+    /**
+     * @param Tool $tool
+     */
+    public function setToolPermissions(Tool $tool)
+    {
         $toolResourceRight = new ToolResourceRights();
         $toolResourceRight
             ->setRole('ROLE_TEACHER')
@@ -90,18 +110,8 @@ class ToolChain
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;
 
-        /** @var BaseTool $tool */
-        foreach ($tools as $tool) {
-            $toolEntity = new Tool();
-            $toolEntity
-                ->setName($tool->getName())
-                ->setImage($tool->getImage())
-                ->setDescription($tool->getName().' - description')
-                ->addToolResourceRights($toolResourceRight)
-                ->addToolResourceRights($toolResourceRightReader)
-            ;
-            $manager->persist($toolEntity);
-        }
+        $tool->addToolResourceRights($toolResourceRight);
+        $tool->addToolResourceRights($toolResourceRightReader);
     }
 
     /**
@@ -118,7 +128,7 @@ class ToolChain
         /** @var BaseTool $tool */
         foreach ($tools as $tool) {
             $toolEntity = new CTool();
-            $visibility = in_array($tool->getName(), $toolVisibility) ? true : false;
+            $visibility = in_array($tool->getName(), $toolVisibility);
 
             $toolEntity
                 ->setCourse($course)

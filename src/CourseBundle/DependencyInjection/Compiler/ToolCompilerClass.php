@@ -25,13 +25,8 @@ class ToolCompilerClass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->getDefinition(
-            'chamilo_course.tool_chain'
-        );
-
-        $taggedServices = $container->findTaggedServiceIds(
-            'chamilo_course.tool'
-        );
+        $definition = $container->getDefinition('chamilo_course.tool_chain');
+        $taggedServices = $container->findTaggedServiceIds('chamilo_course.tool');
 
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall('addTool', [new Reference($id)]);

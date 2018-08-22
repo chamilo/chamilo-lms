@@ -13,14 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CCourseDescription
 {
-    const TYPE_DESCRIPTION = 1;
-    const TYPE_OBJECTIVES = 2;
-    const TYPE_TOPICS = 3;
-    const TYPE_METHODOLOGY = 4;
-    const TYPE_COURSE_MATERIAL = 5;
-    const TYPE_RESOURCES = 6;
-    const TYPE_ASSESSMENT = 7;
-    const TYPE_CUSTOM = 8;
+    public const TYPE_DESCRIPTION = 1;
+    public const TYPE_OBJECTIVES = 2;
+    public const TYPE_TOPICS = 3;
+    public const TYPE_METHODOLOGY = 4;
+    public const TYPE_COURSE_MATERIAL = 5;
+    public const TYPE_RESOURCES = 6;
+    public const TYPE_ASSESSMENT = 7;
+    public const TYPE_CUSTOM = 8;
 
     /**
      * @var int
@@ -48,7 +48,7 @@ class CCourseDescription
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="title", type="text", nullable=true)
      */
     protected $title;
 

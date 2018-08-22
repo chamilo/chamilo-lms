@@ -40,7 +40,7 @@ class CLpCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="name")
+     * @ORM\Column(name="name", type="text", nullable=false)
      */
     protected $name;
 

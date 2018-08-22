@@ -43,7 +43,7 @@ class CTool
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="text", nullable=false)
      */
     protected $name;
 
@@ -128,7 +128,7 @@ class CTool
      * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
 

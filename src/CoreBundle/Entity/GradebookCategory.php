@@ -132,6 +132,20 @@ class GradebookCategory
     protected $isRequirement;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="depends", type="text", nullable=true)
+     */
+    protected $depends;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="minimum_to_validate", type="integer", nullable=true)
+     */
+    protected $minimumToValidate;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="gradebooks_to_validate_in_dependence", type="integer", nullable=true)

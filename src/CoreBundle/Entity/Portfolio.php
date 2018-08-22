@@ -37,7 +37,7 @@ class Portfolio
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
     protected $title;
 
@@ -61,7 +61,7 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course = null;
+    protected $course;
 
     /**
      * @var Session
@@ -69,7 +69,7 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $session = null;
+    protected $session;
 
     /**
      * @var \DateTime

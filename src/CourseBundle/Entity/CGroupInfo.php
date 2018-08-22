@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -160,6 +161,13 @@ class CGroupInfo
      * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
      */
     protected $docAccess;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
+     */
+    protected $documentAccess;
 
     /**
      * @var Course
@@ -598,5 +606,25 @@ class CGroupInfo
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentAccess(): int
+    {
+        return $this->documentAccess;
+    }
+
+    /**
+     * @param int $documentAccess
+     *
+     * @return CGroupInfo
+     */
+    public function setDocumentAccess(int $documentAccess): CGroupInfo
+    {
+        $this->documentAccess = $documentAccess;
+
+        return $this;
     }
 }

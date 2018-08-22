@@ -36,7 +36,7 @@ class PortfolioCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="text", nullable=true)
      */
     protected $title;
 
@@ -45,7 +45,7 @@ class PortfolioCategory
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description = null;
+    protected $description;
 
     /**
      * @var User

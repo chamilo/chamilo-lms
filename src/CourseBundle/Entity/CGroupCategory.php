@@ -147,6 +147,13 @@ class CGroupCategory
     protected $docAccess;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
+     */
+    protected $documentAccess;
+
+    /**
      * Set title.
      *
      * @param string $title
@@ -529,4 +536,45 @@ class CGroupCategory
     {
         return $this->cId;
     }
+
+    /**
+     * @return int
+     */
+    public function getDocAccess(): int
+    {
+        return $this->docAccess;
+    }
+
+    /**
+     * @param int $docAccess
+     *
+     * @return CGroupCategory
+     */
+    public function setDocAccess(int $docAccess): CGroupCategory
+    {
+        $this->docAccess = $docAccess;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentAccess(): int
+    {
+        return $this->documentAccess;
+    }
+
+    /**
+     * @param int $documentAccess
+     *
+     * @return CGroupCategory
+     */
+    public function setDocumentAccess(int $documentAccess): CGroupCategory
+    {
+        $this->documentAccess = $documentAccess;
+
+        return $this;
+    }
+
 }

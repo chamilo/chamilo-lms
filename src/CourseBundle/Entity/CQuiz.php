@@ -45,7 +45,7 @@ class CQuiz
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
     protected $title;
 
@@ -226,7 +226,7 @@ class CQuiz
     /**
      * @var bool
      *
-     * @ORM\Column(name="auto_launch", type="boolean", nullable=true, options={"default":0})
+     * @ORM\Column(name="autolaunch", type="boolean", nullable=true, options={"default":0})
      */
     protected $autoLaunch;
 

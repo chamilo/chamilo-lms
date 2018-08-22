@@ -40,7 +40,7 @@ class CourseCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
+     * @ORM\Column(name="name", type="text", nullable=false)
      */
     protected $name;
 
@@ -84,6 +84,20 @@ class CourseCategory
      * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
      */
     protected $authCatChild;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     */
+    protected $image;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    protected $description;
 
     /**
      * Constructor.
@@ -314,4 +328,45 @@ class CourseCategory
     {
         return $this->authCatChild;
     }
+
+    /**
+     * @return string
+     */
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     *
+     * @return CourseCategory
+     */
+    public function setImage(string $image): CourseCategory
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return CourseCategory
+     */
+    public function setDescription(string $description): CourseCategory
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
 }

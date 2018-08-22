@@ -29,11 +29,12 @@ class CourseHome
         $all_tools = [];
 
         $course_id = api_get_course_int_id();
+        $studentView = api_is_student_view_active();
 
         switch ($cat) {
             case 'Basic':
                 $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND  a.link=t.link AND t.position="basic" ';
-                if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
+                if ((api_is_coach() || api_is_course_tutor()) && !$studentView) {
                     $condition_display_tools = ' WHERE 
                         a.c_id = '.$course_id.' AND 
                         a.link=t.link AND
@@ -265,10 +266,11 @@ class CourseHome
         $web_code_path = api_get_path(WEB_CODE_PATH);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $course_id = api_get_course_int_id();
+        $studentView = api_is_student_view_active();
         switch ($course_tool_category) {
             case TOOL_PUBLIC:
                 $condition_display_tools = ' WHERE c_id = '.$course_id.' AND visibility = 1 ';
-                if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
+                if ((api_is_coach() || api_is_course_tutor()) && !$studentView) {
                     $condition_display_tools = ' WHERE 
                         c_id = '.$course_id.' AND 
                         (visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'")) ';
@@ -509,6 +511,7 @@ class CourseHome
         );
 
         $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $studentView = api_is_student_view_active();
 
         $orderBy = ' ORDER BY id ';
         switch ($course_tool_category) {
@@ -516,7 +519,7 @@ class CourseHome
                 $conditions = ' WHERE visibility = 1 AND 
                                 (category = "authoring" OR category = "interaction" OR category = "plugin") AND 
                                 t.name <> "notebookteacher" ';
-                if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
+                if ((api_is_coach() || api_is_course_tutor()) && !$studentView) {
                     $conditions = ' WHERE (
                         visibility = 1 AND (
                             category = "authoring" OR 
@@ -631,7 +634,7 @@ class CourseHome
             if ($allowEditionInSession && !empty($sessionId)) {
                 // Checking if exist row in session
                 $criteria = [
-                    'cId' => $course_id,
+                    'course' => $course_id,
                     'name' => $temp_row['name'],
                     'sessionId' => $sessionId,
                 ];
@@ -895,7 +898,7 @@ class CourseHome
                         }
                     } elseif ($allowEditionInSession) {
                         $criteria = [
-                            'cId' => api_get_course_int_id(),
+                            'course' => api_get_course_int_id(),
                             'name' => $tool['name'],
                             'sessionId' => $session_id,
                         ];

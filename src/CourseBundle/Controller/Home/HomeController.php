@@ -229,9 +229,7 @@ class HomeController extends ToolBaseController
     public function iconListAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $repo = $this->getDoctrine()->getRepository(
-            'ChamiloCourseBundle:CTool'
-        );
+        $repo = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CTool');
 
         $sessionId = intval($request->get('id_session'));
         $itemsFromSession = [];
@@ -242,7 +240,7 @@ class HomeController extends ToolBaseController
             $query->where('s.cId  = :courseId AND s.sessionId = :sessionId')
                 ->setParameters(
                     [
-                        'courseId' => $this->getCourse()->getId(),
+                        'course' => $this->getCourse()->getId(),
                         'sessionId' => $sessionId,
                     ]
                 );

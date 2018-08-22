@@ -21,7 +21,7 @@ switch ($action) {
         $repository = $em->getRepository('ChamiloCourseBundle:CTool');
         if (api_is_allowed_to_edit(null, true)) {
             $criteria = [
-                'cId' => $course_id,
+                'course' => $course_id,
                 'sessionId' => 0,
                 'iid' => (int) $_GET['id'],
             ];

@@ -4637,7 +4637,7 @@ class learnpath
         $tool = $em->createQuery("
                 SELECT t FROM ChamiloCourseBundle:CTool t
                 WHERE
-                    t.cId = :course AND
+                    t.course = :course AND
                     t.link = :link1 AND
                     t.image = 'lp_category.gif' AND
                     t.link LIKE :link2
@@ -4793,7 +4793,7 @@ class learnpath
         $tools = $em
             ->createQuery("
                 SELECT t FROM ChamiloCourseBundle:CTool t
-                WHERE t.cId = :course AND 
+                WHERE t.course = :course AND 
                     t.name = :name AND
                     t.image = 'lp_category.gif' AND
                     t.link LIKE :link

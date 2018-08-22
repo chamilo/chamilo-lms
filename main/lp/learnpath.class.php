@@ -4627,6 +4627,10 @@ class learnpath
             return false;
         }
 
+        if (empty($courseId)) {
+            return false;
+        }
+
         $link = self::getCategoryLinkForTool($id);
 
         /** @var CTool $tool */
@@ -4640,7 +4644,7 @@ class learnpath
                     $sessionCondition
             ")
             ->setParameters([
-                'course' => (int) $courseId,
+                'course' => $courseId,
                 'link1' => $link,
                 'link2' => "$link%",
             ])
@@ -4657,7 +4661,7 @@ class learnpath
             $tool = new CTool();
             $tool
                 ->setCategory('authoring')
-                ->setCId($courseId)
+                ->setCourse(api_get_course_entity($courseId))
                 ->setName(strip_tags($category->getName()))
                 ->setLink($link)
                 ->setImage('lp_category.gif')

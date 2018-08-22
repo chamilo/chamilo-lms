@@ -963,17 +963,16 @@ class Plugin
             ->getRepository('ChamiloCourseBundle:CTool')
             ->findOneBy([
                 'name' => $name,
-                'cId' => $courseId,
+                'course' => $courseId,
             ]);
 
         if (!$tool) {
             $cToolId = AddCourse::generateToolId($courseId);
             $pluginName = $this->get_name();
-
             $tool = new CTool();
             $tool
                 ->setId($cToolId)
-                ->setCId($courseId)
+                ->setCourse(api_get_course_entity($courseId))
                 ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")

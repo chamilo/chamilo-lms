@@ -196,7 +196,7 @@ class ImsLtiPlugin extends Plugin
         $em = Database::getManager();
         $cTool = new CTool();
         $cTool
-            ->setCId($course->getId())
+            ->setCourse($course)
             ->setName($tool->getName())
             ->setLink($this->get_name().'/start.php?'.http_build_query(['id' => $tool->getId()]))
             ->setImage($this->get_name().'.png')

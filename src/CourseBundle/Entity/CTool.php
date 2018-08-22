@@ -41,13 +41,6 @@ class CTool
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
@@ -172,16 +165,20 @@ class CTool
 
     /**
      * @param Course $course
+     *
+     * @return $this
      */
-    public function setCourse($course)
+    public function setCourse(Course $course)
     {
         $this->course = $course;
+
+        return $this;
     }
 
     /**
      * @return Course
      */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
@@ -464,30 +461,6 @@ class CTool
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CTool
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

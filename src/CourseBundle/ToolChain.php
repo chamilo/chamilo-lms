@@ -121,7 +121,7 @@ class ToolChain
             $visibility = in_array($tool->getName(), $toolVisibility) ? true : false;
 
             $toolEntity
-                ->setCId($course->getId())
+                ->setCourse($course)
                 ->setImage($tool->getImage())
                 ->setName($tool->getName())
                 ->setVisibility($visibility)

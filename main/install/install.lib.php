@@ -710,20 +710,15 @@ function display_language_selection()
         </h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-        <div class="form-group">
-            <div class="col-sm-4">
-                <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
-            </div>
-            <div class="col-sm-6">
-                <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
-                    <em class="fa fa-forward"> </em>
-                    <?php echo get_lang('Next'); ?></button>
-            </div>
+        <div class="btn-group">
+            <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
+            <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
+                <em class="fa fa-forward"> </em>
+                <?php echo get_lang('Next'); ?>
+            </button>
         </div>
-
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
-
     </div>
     <div class="RequirementHeading">
         <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
@@ -1566,30 +1561,29 @@ function display_database_settings_form(
             <code><?php echo $database_exists_text; ?></code>
         </div>
     <?php endif; ?>
-   <div class="form-group">
-       <div class="col-sm-6">
-           <button type="submit" name="step2" class="btn btn-default pull-right" value="&lt; <?php echo get_lang('Previous'); ?>" >
-               <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
-           </button>
-       </div>
-      <div class="col-sm-6">
+
+   <div class="btn-group" role="group">
+       <button type="submit" name="step2"
+               class="btn btn-secondary pull-right" value="&lt; <?php echo get_lang('Previous'); ?>" >
+           <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
+       </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
        <?php if ($manager) {
         ?>
-           <button type="submit"  class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
+           <button type="submit" class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
     } else {
         ?>
-           <button disabled="disabled" type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
+           <button
+                   disabled="disabled"
+                   type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
     } ?>
-      </div>
    </div>
-
     <?php
 }
 
@@ -1849,14 +1843,10 @@ function display_configuration_settings_form(
     </div>';
 
     echo panel($html, get_lang('Platform'), 'platform'); ?>
-    <div class='form-group'>
-        <div class="col-sm-6">
-            <button type="submit" class="btn btn-default pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?></button>
-            <input type="hidden" name="is_executable" id="is_executable" value="-" />
-        </div>
-        <div class="col-sm-6">
-            <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?></button>
-        </div>
+    <div class='btn-group'>
+        <button type="submit" class="btn btn-secondary pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?></button>
+        <input type="hidden" name="is_executable" id="is_executable" value="-" />
+        <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?></button>
     </div>
 
     <?php

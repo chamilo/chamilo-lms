@@ -61,11 +61,15 @@ function save_data($skills)
 {
     if (is_array($skills)) {
         $parents = [];
+        $urlId = api_get_current_access_url_id();
         foreach ($skills as $index => $skill) {
             if (isset($parents[$skill['parent_id']])) {
                 $skill['parent_id'] = $parents[$skill['parent_id']];
             } else {
                 $skill['parent_id'] = 1;
+            }
+            if (empty($skill['access_url_id'])) {
+                $skill['access_url_id'] = $urlId;
             }
             $skill['a'] = 'add';
             $saved_id = $skill['id'];

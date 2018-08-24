@@ -6,17 +6,17 @@ hwi_oauth:
   resource_owners:
     github:
       type: github
-      client_id: '<client_id>'
-      client_secret: '<client_secret>'
+      client_id: '%env(GITHUB_ID)%'
+      client_secret: '%env(GITHUB_SECRET)%'
     facebook:
       type: facebook
-      client_id: '<client_id>'
-      client_secret: '<client_secret>'
+      client_id: '%env(FB_ID)%'
+      client_secret: '%env(FB_SECRET)%'
     google:
       type: google
-      client_id: '<client_id>'
-      client_secret: '<client_secret>'
-      scope: 'email profile'
+      client_id: '%env(GOOGLE_ID)%'
+      client_secret: '%env(GOOGLE_SECRET)%'
+      scope: "email profile"
     my_custom_oauth2:
       type: oauth2
       client_id: '<client_id>'

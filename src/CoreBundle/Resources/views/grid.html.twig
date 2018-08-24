@@ -1,34 +1,37 @@
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+
 {% extends 'APYDataGridBundle::blocks.html.twig' %}
 
 {% block grid_actions %}
     <div class="mass-actions">
         <div class="btn-group" role="group">
-        <span class="grid_massactions_helper">
-            <a class="btn btn-default" href="#"
-               onclick="return {{ grid.hash }}_markVisible(true);">{{ 'Select visible'|trans }}</a>
-            <a class="btn btn-default" href="#"
-               onclick="return {{ grid.hash }}_markVisible(false);">{{ 'Deselect visible'|trans }}</a>
-            <a class="btn btn-default" href="#"
-               onclick="return {{ grid.hash }}_markAll(true);">{{ 'Select all'|trans }}</a>
-            <a class="btn btn-default" href="#"
-               onclick="return {{ grid.hash }}_markAll(false);">{{ 'Deselect all'|trans }}</a>
-            <span class="mass-actions-selected"
-                  id="{{ grid.hash }}_mass_action_selected"></span>
-        </span>
+            {#<a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markVisible(true);">#}
+                {#{{ 'Select visible'|trans }}#}
+            {#</a>#}
+            {#<a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markVisible(false);">#}
+                {#{{ 'Deselect visible'|trans }}#}
+            {#</a>#}
+            <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markAll(true);">
+                {{ 'Select all'|trans }}
+            </a>
+            <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markAll(false);">
+                {{ 'Deselect all'|trans }}
+            </a>
+            <span class="mass-actions-selected" id="{{ grid.hash }}_mass_action_selected"></span>
         </div>
         {% spaceless %}
             <div style="float:right;" class="grid_massactions">
                 {{ 'Action'|trans }}
                 <input type="hidden" id="{{ grid.hash }}_mass_action_all"
-                       name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]"
-                       value="0"/>
+                   name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]"
+                   value="0"/>
                 <select name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]">
                     <option value="-1"></option>
                     {% for key, massAction in grid.massActions %}
                         <option value="{{ key }}">{{ massAction.title|trans }}</option>
                     {% endfor %}
                 </select>
-                <input type="submit" value="{{ 'Submit Action'|trans }}"/>
+                <input class="btn btn-secondary" type="submit" value="{{ 'Submit Action'|trans }}"/>
             </div>
         {% endspaceless %}
     </div>
@@ -39,7 +42,7 @@
     {% set actions = column.getActionsToRender(row) %}
     <div class="btn-group">
         {% for action in actions %}
-            {%  if action.attributes.form_delete is defined and action.attributes.form_delete %}
+            {% if action.attributes.form_delete is defined and action.attributes.form_delete %}
                 <div class="btn-group">
                 <form method="post" action="{{ url(action.route, column.routeParameters(row, action), false) }}">
                     <input type="hidden" name="_method" value="DELETE" />
@@ -49,8 +52,9 @@
                 </form>
                 </div>
             {% else %}
-                <a class="btn btn-default"
-                   href="{{ url(action.route, column.routeParameters(row, action), false) }}" target="{{ action.target }}"{% if action.confirm %} onclick="return confirm('{{ action.confirmMessage }}')"{% endif %}{% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
+                <a class="btn btn-secondary"
+                   href="{{ url(action.route, column.routeParameters(row, action), false) }}"
+                   target="{{ action.target }}"{% if action.confirm %} onclick="return confirm('{{ action.confirmMessage }}')"{% endif %}{% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
                 {{ action.title|trans }}
                 </a>
             {% endif %}
@@ -106,34 +110,25 @@
 
 {% block grid_search %}
     {% if grid.isFilterSectionVisible %}
-        <div class="col-md-2">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h4 class="box-title filter_legend inactive">Filters</h4>
-                </div>
-
-                <div class="box-body">
-                    <form id="{{ grid.hash }}_search"
-                          action="{{ grid.routeUrl }}" method="post">
-                        {% for column in grid.columns %}
-                            {% if column.isFilterable and column.type not in ['actions', 'massaction'] %}
-                                {% set columnTitle = grid.prefixTitle ~ column.title %}
-                                <div class="{{ cycle(['odd', 'even'], loop.index) }}">
-                                    <label>{{ columnTitle|trans }}</label>{{ grid_filter(column, grid, false)|raw }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        <div class="grid-search-action"><input type="submit"
-                                                               class="grid-search-submit"
-                                                               value="{{ 'Search'|trans }}"/><input
-                                    type="button" class="grid-search-reset"
-                                    value="{{ 'Reset'|trans }}"
-                                    onclick="return {{ grid.hash }}_reset();"/>
+    <div class="col-md-2">
+        {% set searchContent %}
+            <form id="{{ grid.hash }}_search" action="{{ grid.routeUrl }}" method="post">
+                {% for column in grid.columns %}
+                    {% if column.isFilterable and column.type not in ['actions', 'massaction'] %}
+                        {% set columnTitle = grid.prefixTitle ~ column.title %}
+                        <div class="{{ cycle(['odd', 'even'], loop.index) }}">
+                            <label>{{ columnTitle|trans }}</label>
+                            {{ grid_filter(column, grid, false)|raw }}
                         </div>
-                    </form>
+                    {% endif %}
+                {% endfor %}
+                <div class="grid-search-action">
+                    <input type="submit" class="grid-search-submit" value="{{ 'Search'|trans }}"/>
+                    <input type="button" class="grid-search-reset" value="{{ 'Reset'|trans }}" onclick="return {{ grid.hash }}_reset();"/>
                 </div>
-            </div>
-        </div>
-
+            </form>
+        {% endset %}
+        {{ macro.panel('Filters' | trans, searchContent) }}
+    </div>
     {% endif %}
 {% endblock grid_search %}

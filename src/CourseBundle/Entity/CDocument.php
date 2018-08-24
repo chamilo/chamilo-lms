@@ -3,9 +3,13 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * CDocument.
@@ -16,6 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
+ * @GRID\Source(columns="iid, id, title, filetype", filterable=false)
+ *
  * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CDocumentRepository")
  */
 class CDocument extends AbstractResource implements ResourceInterface
@@ -35,13 +41,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var string
@@ -86,11 +85,16 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $readonly;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $sessionId;
+    protected $course;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    protected $session;
 
     /**
      * CDocument constructor.
@@ -244,30 +248,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CDocument
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set id.
      *
      * @param int $id
@@ -292,27 +272,23 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CDocument
+     * @return Course
      */
-    public function setCId($cId)
+    public function getCourse(): Course
     {
-        $this->cId = $cId;
-
-        return $this;
+        return $this->course;
     }
 
     /**
-     * Get cId.
+     * @param Course $course
      *
-     * @return int
+     * @return CDocument
      */
-    public function getCId()
+    public function setCourse($course)
     {
-        return $this->cId;
+        $this->course = $course;
+
+        return $this;
     }
 
     /**
@@ -321,6 +297,41 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     *
+     * @return CDocument
+     */
+    public function setSession($session)
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PostPersist()
+     *
+     * @param LifecycleEventArgs $args
+     *
+     */
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        // Update id with iid value
+        $em = $args->getEntityManager();
+        $this->setId($this->iid);
+        $em->persist($this);
+        $em->flush($this);
     }
 
     // Resource classes
@@ -340,22 +351,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         return 'document';
     }
 
-    public function getName()
-    {
-    }
-
-    public function name()
-    {
-    }
-    public function isName()
-    {
-    }
-    public function hasName() {
-
-    }
-
     public function __get($a) {
 
     }
-
 }

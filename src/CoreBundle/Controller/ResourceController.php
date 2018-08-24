@@ -5,13 +5,16 @@ namespace Chamilo\CoreBundle\Controller;
 
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\ExcelExport;
+use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
@@ -19,6 +22,8 @@ use APY\DataGridBundle\Grid\Source\Entity;
 use FOS\RestBundle\View\View;
 use Sylius\Component\Resource\ResourceActions;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Sylius\Component\Resource\Exception\UpdateHandlingException;
 
 /**
  * Class ResourceController.
@@ -40,7 +45,7 @@ class ResourceController extends BaseResourceController implements CourseControl
     {
         $source = new Entity('ChamiloCourseBundle:CDocument');
 
-        /* @var $grid \APY\DataGridBundle\Grid\Grid */
+        /* @var Grid $grid */
         $grid = $this->get('grid');
 
         /*$tableAlias = $source->getTableAlias();
@@ -54,15 +59,20 @@ class ResourceController extends BaseResourceController implements CourseControl
         $repository = $this->repository;
         $course = $this->getCourse();
         $tool = $repository->getTool('document');
-        $resources = $repository->getResourceByCourse($course, $tool);
+
+        $parentId = $request->get('parent');
+        $parent = null;
+        if (!empty($parentId)) {
+            $parent = $this->repository->find($parentId);
+        }
+        $resources = $repository->getResourceByCourse($course, $tool, $parent);
 
         $source->setData($resources);
         $grid->setSource($source);
 
         //$grid->hideFilters();
-        $grid->setLimits(5);
+        $grid->setLimits(20);
         //$grid->isReadyForRedirect();
-
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
         /*$grid->getColumn('id')->manipulateRenderCell(
@@ -75,12 +85,14 @@ class ResourceController extends BaseResourceController implements CourseControl
             }
         );*/
 
+        $courseIdentifier = $course->getCode();
+
         if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
             $deleteMassAction = new MassAction(
                 'Delete',
                 'chamilo.controller.notebook:deleteMassAction',
                 true,
-                array('course' => $request->get('course'))
+                ['course' => $courseIdentifier]
             );
             $grid->addMassAction($deleteMassAction);
         }
@@ -92,9 +104,9 @@ class ResourceController extends BaseResourceController implements CourseControl
             'app_document_show',
             false,
             '_self',
-            ['class' => 'btn btn-default']
+            ['class' => 'btn btn-secondary']
         );
-        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
+        $myRowAction->setRouteParameters(['course' => $courseIdentifier, 'id']);
         $grid->addRowAction($myRowAction);
 
         if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
@@ -103,9 +115,9 @@ class ResourceController extends BaseResourceController implements CourseControl
                 'app_document_update',
                 false,
                 '_self',
-                ['class' => 'btn btn-info']
+                ['class' => 'btn btn-secondary']
             );
-            $myRowAction->setRouteParameters(array('course' => $course, 'id'));
+            $myRowAction->setRouteParameters(['course' => $courseIdentifier, 'id']);
             $grid->addRowAction($myRowAction);
 
             $myRowAction = new RowAction(
@@ -115,47 +127,54 @@ class ResourceController extends BaseResourceController implements CourseControl
                 '_self',
                 ['class' => 'btn btn-danger', 'form_delete' => true]
             );
-            $myRowAction->setRouteParameters(['course' => $course, 'id']);
+            $myRowAction->setRouteParameters(['course' => $courseIdentifier, 'id']);
             $grid->addRowAction($myRowAction);
         }
 
-        $grid->addExport(
-            new CSVExport(
-                $translation->trans('CSV Export'), 'export', ['course' => $course]
-            )
-        );
+        $grid->addExport(new CSVExport($translation->trans('CSV Export'), 'export', ['course' => $courseIdentifier]));
 
         $grid->addExport(
             new ExcelExport(
                 $translation->trans('Excel Export'),
                 'export',
-                ['course' => $course]
+                ['course' => $courseIdentifier]
             )
         );
 
-        return $grid->getGridResponse('ChamiloCoreBundle:Document:index.html.twig');
+        return $grid->getGridResponse('ChamiloCoreBundle:Document:index.html.twig', ['parent_id' => $parentId]);
     }
 
     /**
      * @param Request $request
+     * @param string  $fileType
      *
-     * @return RedirectResponse|Response
+     * @return null|\Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function createAction(Request $request): Response
+    public function createResource(Request $request, $fileType = 'file')
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::CREATE);
+        /** @var CDocument $newResource */
         $newResource = $this->newResourceFactory->create($configuration, $this->factory);
         $form = $this->resourceFormFactory->create($configuration, $newResource);
 
         $course = $this->getCourse();
         $session = $this->getSession();
-        $newResource->setCId($course->getId());
+        $newResource->setCourse($course);
+        $newResource->c_id = $course->getId();
+        $newResource->setFiletype($fileType);
         $form->setData($newResource);
 
+        $parentId = $request->get('parent');
+        $parent = null;
+        if (!empty($parentId)) {
+            /** @var CDocument $parent */
+            $parent = $this->repository->find($parentId);
+        }
+
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            /** @var \Chamilo\CourseBundle\Entity\CDocument $newResource */
+            /** @var CDocument $newResource */
             $newResource = $form->getData();
             $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
 
@@ -176,9 +195,9 @@ class ResourceController extends BaseResourceController implements CourseControl
                 $this->stateMachine->apply($configuration, $newResource);
             }
 
-            //$newResource->setCId($request->get('c_id'));
-            $sharedType = $form->get('shared')->getData();
-            $shareList = array();
+            //$sharedType = $form->get('shared')->getData();
+            $shareList = [];
+            $sharedType = 'this_course';
 
             switch ($sharedType) {
                 case 'this_course':
@@ -187,41 +206,37 @@ class ResourceController extends BaseResourceController implements CourseControl
                     }
                     // Default Chamilo behaviour:
                     // Teachers can edit and students can see
-                    $shareList = array(
-                        array(
+                    $shareList = [
+                        [
                             'sharing' => 'course',
                             'mask' => ResourceNodeVoter::getReaderMask(),
                             'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT,
                             'search' => $course->getId(),
-                        ),
-                        array(
+                        ],
+                        [
                             'sharing' => 'course',
                             'mask' => ResourceNodeVoter::getEditorMask(),
                             'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER,
                             'search' => $course->getId(),
-                        ),
-                    );
+                        ],
+                    ];
                     break;
                 case 'shared':
                     $shareList = $form->get('rights')->getData();
                     break;
                 case 'only_me':
-                    $shareList = array(
-                        array(
+                    $shareList = [
+                        [
                             'sharing' => 'user',
                             'only_me' => true,
-                        ),
-                    );
+                        ],
+                    ];
                     break;
             }
 
-
-            error_log(print_r($shareList, 1));
-
-
             /** @var ResourceRepository $repository */
             $repository = $this->repository;
-            $resourceNode = $repository->addResourceNode($newResource, $this->getUser());
+            $resourceNode = $repository->addResourceNode($newResource, $this->getUser(), $parent);
 
             // Loops all sharing options
             foreach ($shareList as $share) {
@@ -280,20 +295,38 @@ class ResourceController extends BaseResourceController implements CourseControl
             }
 
             $newResource
-                ->setCId($course->getId())
-                ->setPath('/a')
-                ->setFiletype('file')
-                ->setSize('12')
+                ->setCourse($course)
+                ->setFiletype($fileType)
+                ->setSession($session)
                 //->setTitle($title)
                 //->setComment($comment)
                 ->setReadonly(false)
-                ->setSessionId(0)
                 ->setResourceNode($resourceNode)
             ;
 
-            $this->repository->add($newResource);
+            $path = \URLify::filter($newResource->getTitle());
 
+            switch ($fileType) {
+                case 'folder':
+                    $newResource
+                        ->setPath($path)
+                        ->setSize(0)
+                    ;
+                    break;
+                case 'file':
+                    $newResource
+                        ->setPath($path)
+                        ->setSize(0)
+                    ;
+                    break;
+            }
+
+            $this->repository->add($newResource);
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
+
+            $newResource->setId($newResource->getIid());
+            $this->getDoctrine()->getManager()->persist($newResource);
+            $this->getDoctrine()->getManager()->flush();
 
             if (!$configuration->isHtmlRequest()) {
                 return $this->viewHandler->handle($configuration, View::create($newResource, Response::HTTP_CREATED));
@@ -302,12 +335,19 @@ class ResourceController extends BaseResourceController implements CourseControl
             $this->addFlash('success', 'saved');
 
             //$this->flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource);
-
             if ($postEvent->hasResponse()) {
                 return $postEvent->getResponse();
             }
 
-            return $this->redirectHandler->redirectToResource($configuration, $newResource);
+            return $this->redirectToRoute(
+                'app_document_show',
+                [
+                    'id' => $newResource->getIid(),
+                    'course' => $course->getCode(),
+                    'parent_id' => $parentId,
+                ]
+            );
+            //return $this->redirectHandler->redirectToResource($configuration, $newResource);
         }
 
         if (!$configuration->isHtmlRequest()) {
@@ -326,6 +366,8 @@ class ResourceController extends BaseResourceController implements CourseControl
                 'resource' => $newResource,
                 $this->metadata->getName() => $newResource,
                 'form' => $form->createView(),
+                'parent_id' => $parentId,
+                'file_type' => $fileType
             ])
             ->setTemplate($configuration->getTemplate(ResourceActions::CREATE . '.html'))
         ;
@@ -338,12 +380,32 @@ class ResourceController extends BaseResourceController implements CourseControl
      *
      * @return Response
      */
+    public function createAction(Request $request): Response
+    {
+        return $this->createResource($request, 'folder');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function createDocumentAction(Request $request): Response
+    {
+        return $this->createResource($request, 'file');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function showAction(Request $request): Response
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
         $this->isGrantedOr403($configuration, ResourceActions::SHOW);
 
-        /** @var AbstractResource $resource */
+        /** @var CDocument $resource */
         $resource = $this->findOr404($configuration);
         $resourceNode = $resource->getResourceNode();
 
@@ -383,6 +445,7 @@ class ResourceController extends BaseResourceController implements CourseControl
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
+        /** @var CDocument $resource */
         $resource = $this->findOr404($configuration);
         $resourceNode = $resource->getResourceNode();
 

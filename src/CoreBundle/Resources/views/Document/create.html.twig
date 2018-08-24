@@ -174,21 +174,26 @@
 
     <div class="box box-primary">
         <div class="box-header">
-            <h3 class="box-title">Create</h3>
+            <h3 class="box-title">{{'Create'|trans}}</h3>
         </div>
+        {% set create_url = path('app_document_create_document', {'course': course.code, 'parent': parent_id }) %}
+        {% if file_type == 'folder' %}
+            {% set create_url = path('app_document_create', {'course': course.code, 'parent': parent_id })  %}
+        {% endif %}
+
         <form method="post"
-              action="{{ path('app_document_create', {'c_id': course.id }) }}">
+              action="{{ create_url }}"
+        >
             <div class="box-body">
                 {{ form_start(form) }}
                 {{ form_row(form.title) }}
                 {{ form_row(form.comment) }}
                 {{ form_row(form.c_id) }}
-                {{ form_row(form.shared) }}
-
-                <ul id="rights" class="tags"
-                    data-prototype="{{ form_widget(form.rights.vars.prototype)|e }}">
-                </ul>
-
+                {{ form_row(form.filetype) }}
+                {#{{ form_row(form.shared) }}#}
+                {#<ul id="rights" class="tags"#}
+                    {#data-prototype="{{ form_widget(form.rights.vars.prototype)|e }}">#}
+                {#</ul>#}
                 {{ form_end(form) }}
             </div>
         </form>

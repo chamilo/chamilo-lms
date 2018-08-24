@@ -16,6 +16,7 @@ use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr\Join;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -30,10 +31,15 @@ class ResourceRepository extends EntityRepository
      *
      * @param AbstractResource $resource
      * @param User             $creator
+     * @param AbstractResource $parent
      *
      * @return ResourceNode
      */
-    public function addResourceNode(AbstractResource $resource, User $creator): ResourceNode
+    public function addResourceNode(
+        AbstractResource $resource,
+        User $creator,
+        AbstractResource $parent = null
+    ): ResourceNode
     {
         $resourceNode = new ResourceNode();
 
@@ -43,6 +49,10 @@ class ResourceRepository extends EntityRepository
             ->setName($resource->getResourceName())
             ->setCreator($creator)
             ->setTool($tool);
+
+        if ($parent !== null) {
+            $resourceNode->setParent($parent->getResourceNode());
+        }
 
         $this->getEntityManager()->persist($resourceNode);
         $this->getEntityManager()->flush();
@@ -126,7 +136,7 @@ class ResourceRepository extends EntityRepository
      * @param ResourceNode $resourceNode
      * @param array        $userList User id list
      */
-    public function addResourceToUserList(ResourceNode $resourceNode, $userList)
+    public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
     {
         $em = $this->getEntityManager();
 
@@ -227,16 +237,24 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Course $course
+     * @param Course           $course
+     * @param Tool             $tool
+     * @param AbstractResource $parent
+     *
      * @return ResourceLink
      */
-    public function getResourceByCourse(Course $course, Tool $tool)
+    public function getResourceByCourse(Course $course, Tool $tool, AbstractResource $parent = null)
     {
         $query = $this->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from('Chamilo\CoreBundle\Entity\Resource\ResourceNode', 'node')
             ->innerJoin('node.links', 'links')
-            ->innerJoin($this->getClassName(), 'resource')
+            ->innerJoin(
+                $this->getClassName(),
+                'resource',
+                Join::WITH,
+                'resource.course = links.course AND resource.resourceNode = node.id'
+            )
             ->where('node.tool = :tool')
             ->andWhere('links.course = :course')
             //->where('link.cId = ?', $course->getId())
@@ -247,8 +265,16 @@ class ResourceRepository extends EntityRepository
                     'tool' => $tool,
                     'course' => $course,
                 )
-            )
-            ->getQuery();
+            );
+
+        if ($parent !== null) {
+            $query->andWhere('node.parent = :parentId');
+            $query->setParameter('parentId', $parent->getResourceNode()->getId());
+        } else {
+            $query->andWhere('node.parent IS NULL');
+        }
+
+        $query = $query->getQuery();
 
         /*$query = $this->getEntityManager()->createQueryBuilder()
             ->select('notebook')

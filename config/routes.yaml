@@ -26,18 +26,57 @@ app_document:
     type: sylius.resource
 
 app_document_index:
-    path: /resource/documents/
+    path: /courses/{course}/resource/documents/
     methods: [GET,POST]
     defaults:
         _controller: app.controller.document:indexAction
         _sylius:
-            template: ChamiloCoreBundle:Document:show.html.twig # Use a custom template.
-#            repository:
-#                method: findForStore # Use a custom repository method.
-#                arguments: [$slug] # Pass the slug from the url to the repository.
+            template: ChamiloCoreBundle:Document:show.html.twig
+
+app_document_create:
+    path: /courses/{course}/resource/documents/new
+    methods: [GET,POST]
+    defaults:
+        _controller: app.controller.document:createAction
+        _sylius:
+            template: ChamiloCoreBundle:Document:create.html.twig
+            form: Chamilo\CoreBundle\Form\Type\DocumentType
+
+app_document_create_document:
+    path: /courses/{course}/resource/documents/new_document
+    methods: [GET,POST]
+    defaults:
+        _controller: app.controller.document:createDocumentAction
+        _sylius:
+            template: ChamiloCoreBundle:Document:create.html.twig
+            form: Chamilo\CoreBundle\Form\Type\DocumentType
+
+app_document_show:
+    path: /courses/{course}/resource/documents/{id}
+    methods: [GET]
+    defaults:
+        _controller: app.controller.document:showAction
+        _sylius:
+            template: ChamiloCoreBundle:Document:show.html.twig
+
+app_document_update:
+    path: /courses/{course}/resource/documents/{id}/edit
+    methods: [GET,PUT,PATCH]
+    defaults:
+        _controller: app.controller.document:updateAction
+        _sylius:
+            template: ChamiloCoreBundle:Document:update.html.twig
+            form: Chamilo\CoreBundle\Form\Type\DocumentType
+
+app_document_delete:
+    path: /courses/{course}/resource/documents/{id}
+    methods: [DELETE]
+    defaults:
+        _controller: app.controller.document:deleteAction
 
 
-#    type: sylius.resource_api
+
+
 
 #admin_dashboard:
 #    pattern: /administration/

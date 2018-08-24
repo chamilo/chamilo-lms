@@ -625,9 +625,17 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE course_category CHANGE auth_course_child auth_course_child VARCHAR(40) DEFAULT NULL');
 
         // WIP: Document - resource
+        $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+
         $this->addSql('ALTER TABLE c_document ADD resource_node_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_C9FA0CBD1BAD783F ON c_document (resource_node_id)');
+
+
+        $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+        $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
     }
 
     /**

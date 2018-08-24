@@ -109,7 +109,6 @@
         }
 
         /* Grid Search */
-
         .grid-search {
             border: 1px solid #D4E0EE;
             padding: 10px;
@@ -127,9 +126,14 @@
     </style>
     {% if is_granted('ROLE_CURRENT_COURSE_TEACHER') %}
         <div class="actions">
-            <a class="btn btn-default"
-               href="{{ url('app_document_create', { 'c_id': course.id }) }}">
+            <a class="btn btn-secondary"
+               href="{{ url('app_document_create', { 'course': course.code, 'parent': parent_id}) }}">
                 {{ 'Add' | trans }}
+            </a>
+
+            <a class="btn btn-secondary"
+               href="{{ url('app_document_create_document', { 'course': course.code, 'parent': parent_id }) }}">
+                {{ 'AddDocument' | trans }}
             </a>
         </div>
     {% endif %}
@@ -141,7 +145,5 @@
 
     {# ajax #}
     {#{{ grid_search(grid, 'APYDataGridBundle::blocks.html.twig') }}#}
-
     {#{{ grid(grid, 'APYDataGridBundle::blocks_js.jquery.html.twig') }}#}
-
 {% endblock %}

@@ -36,6 +36,7 @@ class CourseListener
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
+     *
      * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
@@ -203,6 +204,7 @@ class CourseListener
 
     /**
      * Once the onKernelRequest was fired, we check if the session object were set and we inject them in the controller.
+     *
      * @param FilterControllerEvent $event
      */
     public function onKernelController(FilterControllerEvent $event)

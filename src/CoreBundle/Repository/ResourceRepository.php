@@ -27,7 +27,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 class ResourceRepository extends EntityRepository
 {
     /**
-     * Creates a ResourceNode
+     * Creates a ResourceNode.
      *
      * @param AbstractResource $resource
      * @param User             $creator
@@ -220,6 +220,7 @@ class ResourceRepository extends EntityRepository
      * @param ResourceNode $resourceNode
      * @param Usergroup $group
      * @param ResourceRights $right
+     *
      * @return ResourceLink
      */
     public function addResourceToGroup(
@@ -296,7 +297,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param $tool
+     * @param string $tool
      *
      * @return Tool|null
      */

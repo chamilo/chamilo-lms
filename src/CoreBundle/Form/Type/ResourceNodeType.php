@@ -8,8 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ResourceNodeType
- * @package Chamilo\NotebookBundle\Form\Type
+ * Class ResourceNodeType.
+ *
+ * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceNodeType extends AbstractType
 {
@@ -23,9 +24,9 @@ class ResourceNodeType extends AbstractType
             ->add(
                 'links',
                 'collection',
-                array(
+                [
                     'type' => new ResourceLinkType(),
-                )
+                ]
             );
     }
 

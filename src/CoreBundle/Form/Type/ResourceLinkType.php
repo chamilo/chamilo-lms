@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ResourceLinkType
+ * Class ResourceLinkType.
  * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceLinkType extends AbstractType

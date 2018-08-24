@@ -15,6 +15,15 @@ use Doctrine\ORM\Mapping as ORM;
 class ToolResourceRights
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
@@ -33,14 +42,6 @@ class ToolResourceRights
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
     protected $tool;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
 
     /**
      * @return string
@@ -127,7 +128,7 @@ class ToolResourceRights
     {
         return [
             'Students' => 'ROLE_STUDENT',
-            'Teachers'=> 'ROLE_TEACHER',
+            'Teachers' => 'ROLE_TEACHER',
         ];
     }
 
@@ -141,7 +142,7 @@ class ToolResourceRights
 
         return [
             'Can read' => $readerMask,
-            'Can edit' => $editorMask ,
+            'Can edit' => $editorMask,
         ];
     }
 }

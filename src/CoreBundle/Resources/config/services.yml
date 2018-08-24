@@ -201,7 +201,7 @@ services:
         class: Chamilo\CoreBundle\EventListener\CourseUploadListener
         arguments: ['@doctrine.orm.entity_manager']
         tags:
-        - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }
+            - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
 
 #    chamilo_core.menu.simple_menu:
 #        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder

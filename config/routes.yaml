@@ -27,7 +27,7 @@ app_document:
 
 app_document_index:
     path: /courses/{course}/resource/documents/
-    methods: [GET,POST]
+    methods: [GET, POST]
     defaults:
         _controller: app.controller.document:indexAction
         _sylius:
@@ -35,7 +35,7 @@ app_document_index:
 
 app_document_create:
     path: /courses/{course}/resource/documents/new
-    methods: [GET,POST]
+    methods: [GET, POST]
     defaults:
         _controller: app.controller.document:createAction
         _sylius:
@@ -44,7 +44,7 @@ app_document_create:
 
 app_document_create_document:
     path: /courses/{course}/resource/documents/new_document
-    methods: [GET,POST]
+    methods: [GET, POST]
     defaults:
         _controller: app.controller.document:createDocumentAction
         _sylius:
@@ -61,7 +61,7 @@ app_document_show:
 
 app_document_update:
     path: /courses/{course}/resource/documents/{id}/edit
-    methods: [GET,PUT,PATCH]
+    methods: [GET, PUT, PATCH]
     defaults:
         _controller: app.controller.document:updateAction
         _sylius:
@@ -73,10 +73,6 @@ app_document_delete:
     methods: [DELETE]
     defaults:
         _controller: app.controller.document:deleteAction
-
-
-
-
 
 #admin_dashboard:
 #    pattern: /administration/

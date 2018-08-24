@@ -12,7 +12,7 @@ use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
- * Class CourseListener
+ * Class CourseListener.
  * Course entity listener, when a course is created/edited and when the tool chain is loaded.
  *
  * @package Chamilo\CoreBundle\EventListener

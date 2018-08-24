@@ -9,8 +9,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ResourceRightsType
- * @package Chamilo\NotebookBundle\Form\Type
+ * Class ResourceRightsType.
+ *
+ * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceRightsType extends AbstractType
 {

@@ -345,8 +345,8 @@ function ReplaceImgTag($content)
     $newcontent = $content;
     $matches = [];
     preg_match_all('(<img .*>)', $content, $matches);
-    while (list(, $match) = each($matches)) {
-        while (list(, $imageTag) = each($match)) {
+    foreach ($matches as $match) {
+        foreach ($match as $imageTag) {
             $imgname = GetSrcName($imageTag);
             if ($imgname != '') {
                 $prehref = $imgname;

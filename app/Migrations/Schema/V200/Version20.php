@@ -623,6 +623,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
 
         $this->addSql('ALTER TABLE course_category CHANGE auth_course_child auth_course_child VARCHAR(40) DEFAULT NULL');
+        $this->addSql('ALTER TABLE extra_field ADD description LONGTEXT DEFAULT NULL');
 
         // WIP: Document - resource
         $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');

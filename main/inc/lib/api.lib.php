@@ -2097,6 +2097,21 @@ function api_get_session_entity($id = 0)
 /**
  * @param int $id
  *
+ * @return \Chamilo\CourseBundle\Entity\CGroupInfo
+ */
+function api_get_group_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_group_id();
+    }
+
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id);
+}
+
+
+/**
+ * @param int $id
+ *
  * @return \Chamilo\CoreBundle\Entity\AccessUrl
  */
 function api_get_url_entity($id = 0)

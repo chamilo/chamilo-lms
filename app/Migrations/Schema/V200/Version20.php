@@ -555,7 +555,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL');
 
-
         $table = $schema->getTable('gradebook_category');
         if (!$table->hasColumn('gradebooks_to_validate_in_dependence')) {
             $this->addSql('ALTER TABLE gradebook_category ADD gradebooks_to_validate_in_dependence INT DEFAULT NULL');
@@ -622,6 +621,13 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
+
+        $this->addSql('ALTER TABLE course_category CHANGE auth_course_child auth_course_child VARCHAR(40) DEFAULT NULL');
+
+        // WIP: Document - resource
+        $this->addSql('ALTER TABLE c_document ADD resource_node_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_C9FA0CBD1BAD783F ON c_document (resource_node_id)');
     }
 
     /**

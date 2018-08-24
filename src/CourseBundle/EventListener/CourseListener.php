@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\ToolInterface;
 use Chamilo\CourseBundle\Event\CourseAccess;
 use Chamilo\CourseBundle\Event\SessionAccess;
@@ -25,6 +26,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class CourseListener.
+ * Sets the course and session objects in the controller that implements the CourseControllerInterface.
  *
  * @package Chamilo\CourseBundle\EventListener
  */
@@ -33,6 +35,7 @@ class CourseListener
     use ContainerAwareTrait;
 
     /**
+     * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
      * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
@@ -45,6 +48,15 @@ class CourseListener
         $request = $event->getRequest();
 
         if (!$request->hasPreviousSession()) {
+            return;
+        }
+
+        // Ignore debug
+        if ($request->attributes->get('_route') === '_wdt') {
+            return;
+        }
+
+        if ($request->attributes->get('_profiler') === '_wdt') {
             return;
         }
 
@@ -66,111 +78,115 @@ class CourseListener
             }
         }
 
+        $courseId = null;
+        if (empty($courseCode)) {
+            $courseId = $request->get('c_id');
+        }
+
         /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();
-
         $checker = $container->get('security.authorization_checker');
 
         $alreadyVisited = $sessionHandler->get('course_already_visited');
 
+        $course = null;
         if (!empty($courseCode)) {
             /** @var Course $course */
             $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
-
-            if ($course) {
-                $sessionHandler->set('courseObj', $course);
-                $courseInfo = api_get_course_info($courseCode);
-                $container->get('twig')->addGlobal('course', $course);
-
-                $sessionHandler->set('_real_cid', $course->getId());
-                $sessionHandler->set('_cid', $course->getCode());
-                $sessionHandler->set('_course', $courseInfo);
-
-                // Session
-                $sessionId = (int) $request->get('id_session');
-                $session = null;
-
-                if (empty($sessionId)) {
-                    // Check if user is allowed to this course
-                    // See CourseVoter.php
-                    if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                        throw new AccessDeniedException(
-                            $translator->trans(
-                                'Unauthorised access to course!'
-                            )
-                        );
-                    }
-                } else {
-                    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-                    if ($session) {
-                        $sessionHandler->set('sessionObj', $session);
-                        //$course->setCurrentSession($session);
-                        $session->setCurrentCourse($course);
-                        // Check if user is allowed to this course-session
-                        // See SessionVoter.php
-                        if (false === $checker->isGranted(
-                                SessionVoter::VIEW,
-                                $session
-                            )
-                        ) {
-                            throw new AccessDeniedException(
-                                $translator->trans(
-                                    'Unauthorised access to session!'
-                                )
-                            );
-                        }
-
-                        $sessionHandler->set('session_name', $session->getName());
-                        $sessionHandler->set('id_session', $session->getId());
-                        $sessionHandler->set('sessionObj', $session);
-                    } else {
-                        throw new NotFoundHttpException(
-                            $translator->trans('Session not found')
-                        );
-                    }
-                }
-
-                // Group
-                $groupId = (int) $request->get('gidReq');
-
-                if (!empty($groupId)) {
-                    $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
-
-                    if (!$group) {
-                        throw new NotFoundHttpException($translator->trans('Group not found'));
-                    }
-
-                    if ($course->hasGroup($group)) {
-                        // Check if user is allowed to this course-group
-                        // See GroupVoter.php
-                        if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                            throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
-                        }
-                        $sessionHandler->set('_gid', $groupId);
-                    } else {
-                        throw new AccessDeniedException($translator->trans('Group does not exist in course'));
-                    }
-                }
-
-                /*if (!$alreadyVisited ||
-                    isset($alreadyVisited) && $alreadyVisited != $courseCode
-                ) {
-                    // Course access events
-                    $dispatcher = $this->container->get('event_dispatcher');
-                    if (empty($sessionId)) {
-                        $dispatcher->dispatch('chamilo_course.course.access', new CourseAccess($user, $course));
-                    } else {
-                        $dispatcher->dispatch(
-                            'chamilo_course.course.access',
-                            new SessionAccess($user, $course, $session)
-                        );
-                    }
-                    $coursesAlreadyVisited[$course->getCode()] = 1;
-                    $sessionHandler->set('course_already_visited', $courseCode);
-                }*/
-            } else {
+            if ($course === null) {
                 throw new NotFoundHttpException($translator->trans('Course does not exist'));
             }
+        }
+
+        if ($course === null && !empty($courseId)) {
+            /** @var Course $course */
+            $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+            if ($course === null) {
+                throw new NotFoundHttpException($translator->trans('Course does not exist'));
+            }
+        }
+
+        if (!empty($course)) {
+            $sessionHandler->set('courseObj', $course);
+            $courseInfo = api_get_course_info($courseCode);
+            $container->get('twig')->addGlobal('course', $course);
+
+            $sessionHandler->set('_real_cid', $course->getId());
+            $sessionHandler->set('_cid', $course->getCode());
+            $sessionHandler->set('_course', $courseInfo);
+
+            // Session
+            $sessionId = (int) $request->get('id_session');
+            $session = null;
+
+            if (empty($sessionId)) {
+                // Check if user is allowed to this course
+                // See CourseVoter.php
+                if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
+                    throw new AccessDeniedException($translator->trans('Unauthorised access to course!'));
+                }
+            } else {
+                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                if ($session) {
+                    $sessionHandler->set('sessionObj', $session);
+                    //$course->setCurrentSession($session);
+                    $session->setCurrentCourse($course);
+                    // Check if user is allowed to this course-session
+                    // See SessionVoter.php
+                    if (false === $checker->isGranted(
+                            SessionVoter::VIEW,
+                            $session
+                        )
+                    ) {
+                        throw new AccessDeniedException($translator->trans('Unauthorised access to session!'));
+                    }
+
+                    $sessionHandler->set('session_name', $session->getName());
+                    $sessionHandler->set('id_session', $session->getId());
+                    $sessionHandler->set('sessionObj', $session);
+                } else {
+                    throw new NotFoundHttpException($translator->trans('Session not found'));
+                }
+            }
+
+            // Group
+            $groupId = (int) $request->get('gidReq');
+
+            if (!empty($groupId)) {
+                $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
+
+                if (!$group) {
+                    throw new NotFoundHttpException($translator->trans('Group not found'));
+                }
+
+                if ($course->hasGroup($group)) {
+                    // Check if user is allowed to this course-group
+                    // See GroupVoter.php
+                    if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
+                        throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
+                    }
+                    $sessionHandler->set('_gid', $groupId);
+                } else {
+                    throw new AccessDeniedException($translator->trans('Group does not exist in course'));
+                }
+            }
+
+            /*if (!$alreadyVisited ||
+                isset($alreadyVisited) && $alreadyVisited != $courseCode
+            ) {
+                // Course access events
+                $dispatcher = $this->container->get('event_dispatcher');
+                if (empty($sessionId)) {
+                    $dispatcher->dispatch('chamilo_course.course.access', new CourseAccess($user, $course));
+                } else {
+                    $dispatcher->dispatch(
+                        'chamilo_course.course.access',
+                        new SessionAccess($user, $course, $session)
+                    );
+                }
+                $coursesAlreadyVisited[$course->getCode()] = 1;
+                $sessionHandler->set('course_already_visited', $courseCode);
+            }*/
 
             Container::setRequest($request);
             Container::setContainer($container);
@@ -186,6 +202,7 @@ class CourseListener
     }
 
     /**
+     * Once the onKernelRequest was fired, we check if the session object were set and we inject them in the controller.
      * @param FilterControllerEvent $event
      */
     public function onKernelController(FilterControllerEvent $event)
@@ -201,19 +218,6 @@ class CourseListener
 
         /** @var ContainerInterface $container */
         $container = $this->container;
-
-        // Course
-        // The 'course' variable example "123" for this URL: courses/123/
-        $courseCode = $request->get('course');
-
-        // Detect if the course was set with a cidReq:
-        if (empty($courseCode)) {
-            $courseCodeFromRequest = $request->get('cidReq');
-            $courseCode = $courseCodeFromRequest;
-        }
-
-        /** @var Course $course */
-        $course = $sessionHandler->get('courseObj');
 
         /*if ($course) {
             $courseLanguage = $course->getCourseLanguage();
@@ -232,9 +236,9 @@ class CourseListener
         // This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&
             (
-                $controllerList[0] instanceof ToolInterface ||
-                $controllerList[0] instanceof LegacyController
-            ) && $cidReset == false
+                $controllerList[0] instanceof CourseControllerInterface
+                //|| $controllerList[0] instanceof LegacyController
+            ) && $cidReset === false
         ) {
             $controller = $controllerList[0];
 
@@ -243,7 +247,6 @@ class CourseListener
 
             // Sets the controller course/session in order to use:
             // $this->getCourse() $this->getSession() in controllers
-
             if ($course) {
                 $controller->setCourse($course);
 
@@ -268,7 +271,7 @@ class CourseListener
             $controllerNameParts = explode('.', $controllerActionParts[0]);
             $controllerName = $controllerActionParts[0];
 
-            $toolName = null;
+            /*$toolName = null;
             $toolAction = null;
             if (isset($controllerNameParts[1]) &&
                 $controllerNameParts[1] == 'controller'
@@ -276,13 +279,13 @@ class CourseListener
                 $toolName = $this->container->get($controllerName)->getToolName();
                 $action = str_replace('action', '', $controllerActionParts[1]);
                 $toolAction = $toolName.'.'.$action;
-            }
+            }*/
 
-            $container->get('twig')->addGlobal('tool.name', $toolName);
-            $container->get('twig')->addGlobal('tool.action', $toolAction);
+            //$container->get('twig')->addGlobal('tool.name', $toolName);
+            //$container->get('twig')->addGlobal('tool.action', $toolAction);
 
             $sessionHandler->set('_gid', $groupId);
-            $sessionHandler->set('is_allowed_in_course', true);
+            //$sessionHandler->set('is_allowed_in_course', true);
             $sessionHandler->set('id_session', $sessionId);
         } else {
             $ignore = [

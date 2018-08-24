@@ -18,6 +18,26 @@ sonata_admin_my_dashboard:
 sonata_user_admin_security_logout:
     path: /logout
 
+app_document:
+    resource: |
+        alias: app.document
+        path: /resource/documents
+        form: Chamilo\CoreBundle\Form\Type\DocumentType
+    type: sylius.resource
+
+app_document_index:
+    path: /resource/documents/
+    methods: [GET,POST]
+    defaults:
+        _controller: app.controller.document:indexAction
+        _sylius:
+            template: ChamiloCoreBundle:Document:show.html.twig # Use a custom template.
+#            repository:
+#                method: findForStore # Use a custom repository method.
+#                arguments: [$slug] # Pass the slug from the url to the repository.
+
+
+#    type: sylius.resource_api
 
 #admin_dashboard:
 #    pattern: /administration/

@@ -22,8 +22,11 @@ class CourseListener
     protected $toolChain;
     protected $settingsManager;
 
-    /**
-     * @param ToolChain $toolChain
+    /***
+     * CourseListener constructor.
+     *
+     * @param ToolChain       $toolChain
+     * @param SettingsManager $settingsManager
      */
     public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {

@@ -1,0 +1,10 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <form method="post"
+          action="{{ path('app_document_update', {'c_id': course.id, 'id' : resource.iid } ) }}">
+        <input type="hidden" name="_method" value="PUT"/>
+        {{ form_widget(form) }}
+    </form>
+
+{% endblock %}

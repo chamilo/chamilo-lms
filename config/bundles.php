@@ -70,4 +70,5 @@ return [
     Lunetics\LocaleBundle\LuneticsLocaleBundle::class => ['all' => true],
     Ivory\CKEditorBundle\IvoryCKEditorBundle::class => ['all' => true],
     Oneup\UploaderBundle\OneupUploaderBundle::class => ['all' => true],
+    APY\DataGridBundle\APYDataGridBundle::class => ['all' => true],
 ];

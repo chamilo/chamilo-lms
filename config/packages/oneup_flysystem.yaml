@@ -8,11 +8,10 @@ oneup_flysystem:
             local:
                 directory: '%kernel.project_dir%/var/home'
 
-#        s3.adapter:
-#              awss3v3:
-#                  client: s3_client # add service "s3_client"
-#                  bucket: ~
-#                  prefix: ~
+        upload_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/upload'
+
     filesystems:
         courses:
             adapter: courses_adapter
@@ -25,3 +24,6 @@ oneup_flysystem:
             adapter: home_adapter
             visibility: private
             alias: home_filesystem
+
+        upload:
+            adapter: upload_adapter

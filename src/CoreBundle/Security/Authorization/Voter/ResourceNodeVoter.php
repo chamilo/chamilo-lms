@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -31,9 +32,10 @@ class ResourceNodeVoter extends Voter
     public const DELETE = 'DELETE';
     public const EXPORT = 'EXPORT';
 
-    const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
-    const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
-    private $container;
+    public const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
+    public const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
+
+    protected $container;
 
     /**
      * Constructor.
@@ -48,7 +50,7 @@ class ResourceNodeVoter extends Voter
     /**
      * @return int
      */
-    public static function getReaderMask()
+    public static function getReaderMask(): int
     {
         $builder = new MaskBuilder();
         $builder
@@ -61,7 +63,7 @@ class ResourceNodeVoter extends Voter
     /**
      * @return int
      */
-    public static function getEditorMask()
+    public static function getEditorMask(): int
     {
         $builder = new MaskBuilder();
         $builder
@@ -74,7 +76,7 @@ class ResourceNodeVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -100,10 +102,9 @@ class ResourceNodeVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token): bool
     {
         $user = $token->getUser();
-
         // Make sure there is a user object (i.e. that the user is logged in)
         if (!$user instanceof UserInterface) {
             return false;
@@ -114,16 +115,17 @@ class ResourceNodeVoter extends Voter
 
         // Admins have access to everything
         if ($authChecker->isGranted('ROLE_ADMIN')) {
-            // return true;
+            return true;
         }
 
         // Check if I'm the owner
-        /*$creator = $resourceNode->getCreator();
-        if ($creator instanceof UserInterface &&
-            $user->getUsername() == $creator->getUsername()) {
+        $creator = $resourceNode->getCreator();
 
-            //return true;
-        }*/
+        if ($creator instanceof UserInterface &&
+            $user->getUsername() === $creator->getUsername()) {
+
+            return true;
+        }
 
         // Checking possible links connected to this resource
         $request = $this->container->get('request_stack')->getCurrentRequest();
@@ -143,7 +145,7 @@ class ResourceNodeVoter extends Voter
 
             // Check if resource was sent to the current user
             if ($linkUser instanceof UserInterface &&
-                $linkUser->getUsername() == $creator->getUsername()
+                $linkUser->getUsername() === $creator->getUsername()
             ) {
                 $linkFound = true;
                 break;
@@ -160,8 +162,8 @@ class ResourceNodeVoter extends Voter
                 $course = $this->container->get('chamilo_core.entity.manager.course_manager')->findOneByCode($courseCode);
                 if ($session instanceof Session &&
                     $course instanceof Course &&
-                    $linkCourse->getCode() == $course->getCode() &&
-                    $linkSession->getId() == $session->getId()
+                    $linkCourse->getCode() === $course->getCode() &&
+                    $linkSession->getId() === $session->getId()
                 ) {
                     $linkFound = true;
                     break;
@@ -172,7 +174,7 @@ class ResourceNodeVoter extends Voter
             if ($linkCourse instanceof Course && !empty($courseCode)) {
                 $course = $this->container->get('chamilo_core.manager.course')->findOneByCode($courseCode);
                 if ($course instanceof Course &&
-                    $linkCourse->getCode() == $course->getCode()
+                    $linkCourse->getCode() === $course->getCode()
                 ) {
                     $linkFound = true;
                     break;
@@ -254,6 +256,7 @@ class ResourceNodeVoter extends Voter
 
         foreach ($user->getRoles() as $role) {
             if ($acl->isAllowed($role, $resource, $askedMask)) {
+
                 //dump('passed');
                 return true;
             }

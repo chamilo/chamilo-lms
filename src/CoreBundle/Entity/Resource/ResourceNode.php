@@ -29,6 +29,13 @@ class ResourceNode
     protected $id;
 
     /**
+     * @Gedmo\TreePathSource
+     * @ORM\Column()
+     * @Assert\NotBlank()
+     */
+    protected $name;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
@@ -54,13 +61,6 @@ class ResourceNode
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
     protected $creator;
-
-    /**
-     * @Gedmo\TreePathSource
-     * @ORM\Column()
-     * @Assert\NotBlank()
-     */
-    protected $name;
 
     /**
      * @Gedmo\TreeParent
@@ -146,21 +146,33 @@ class ResourceNode
         return $this;
     }
 
+    /**
+     * @param \DateTime|null $updatedAt
+     */
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
+    /**
+     * @param \DateTime|null $createdAt
+     */
     public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
     }
 
+    /**
+     * @return mixed
+     */
     public function getCreatedAt()
     {
         return $this->createdAt;

@@ -3,139 +3,468 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Export\ExcelExport;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
+use Chamilo\CourseBundle\Controller\CourseControllerTrait;
+use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowAction;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Routing\Annotation\Route;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
+use APY\DataGridBundle\Grid\Source\Entity;
+use FOS\RestBundle\View\View;
+use Sylius\Component\Resource\ResourceActions;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 
 /**
  * Class ResourceController.
  *
  * @author Julio Montoya <gugli100@gmail.com>.
  *
- * @Route("/resource")
- *
  * @package Chamilo\CoreBundle\Controller
  */
-class ResourceController extends BaseController
+class ResourceController extends BaseResourceController implements CourseControllerInterface
 {
+    use CourseControllerTrait;
+
     /**
-     * Upload form
-     * @Route("/upload/{type}/{id}", name="resource_upload", methods={"GET", "POST"}, options={"expose"=true})
+     * @param Request $request
      *
      * @return Response
      */
-    public function uploadFile($type, $id): Response
+    public function indexAction(Request $request): Response
     {
-        //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
-        //$endpoint = $helper->endpoint('courses');
-        return $this->render(
-            '@ChamiloCore/Resource/upload.html.twig',
-            [
-                'identifier' => $id,
-                'type' => $type,
-            ]
-        );
-    }
+        $source = new Entity('ChamiloCourseBundle:CDocument');
 
-    /**
-     * Downloads the file courses/MATHS/document/file.jpg to the user.
-     * @Route("/download/{course}/", name="resource_download", methods={"GET"}, options={"expose"=true})
-     * @todo check permissions
-     *
-     * @param string $course
-     *
-     * @return \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    public function downloadFileAction(Request $request, $course)
-    {
-        try {
-            /** @var Filesystem $fs */
-            $fs = $this->container->get('oneup_flysystem.courses_filesystem');
-            $file = $request->get('file');
+        /* @var $grid \APY\DataGridBundle\Grid\Grid */
+        $grid = $this->get('grid');
 
-            $path = $course.'/document/'.$file;
-
-            // Has folder
-            if (!$fs->has($course)) {
-                return $this->abort();
+        /*$tableAlias = $source->getTableAlias();
+        $source->manipulateQuery(function (QueryBuilder $query) use ($tableAlias, $course) {
+                $query->andWhere($tableAlias . '.cId = '.$course->getId());
+                //$query->resetDQLPart('orderBy');
             }
+        );*/
 
-            // Has file
-            if (!$fs->has($path)) {
-                return $this->abort();
+        /** @var CDocumentRepository $repository */
+        $repository = $this->repository;
+        $course = $this->getCourse();
+        $tool = $repository->getTool('document');
+        $resources = $repository->getResourceByCourse($course, $tool);
+
+        $source->setData($resources);
+        $grid->setSource($source);
+
+        //$grid->hideFilters();
+        $grid->setLimits(5);
+        //$grid->isReadyForRedirect();
+
+        //$grid->setMaxResults(1);
+        //$grid->setLimits(2);
+        /*$grid->getColumn('id')->manipulateRenderCell(
+            function ($value, $row, $router) use ($course) {
+                //$router = $this->get('router');
+                return $router->generate(
+                    'chamilo_notebook_show',
+                    array('id' => $row->getField('id'), 'course' => $course)
+                );
             }
+        );*/
 
-            /** @var Local $adapter */
-            $adapter = $fs->getAdapter();
-            $filePath = $adapter->getPathPrefix().$path;
-
-            $response = new BinaryFileResponse($filePath);
-
-            // To generate a file download, you need the mimetype of the file
-            $mimeTypeGuesser = new FileinfoMimeTypeGuesser();
-
-            // Set the mimetype with the guesser or manually
-            if ($mimeTypeGuesser->isSupported()) {
-                // Guess the mimetype of the file according to the extension of the file
-                $response->headers->set('Content-Type', $mimeTypeGuesser->guess($filePath));
-            } else {
-                // Set the mimetype of the file manually, in this case for a text file is text/plain
-                $response->headers->set('Content-Type', 'text/plain');
-            }
-
-            $response->setContentDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                basename($filePath)
+        if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            $deleteMassAction = new MassAction(
+                'Delete',
+                'chamilo.controller.notebook:deleteMassAction',
+                true,
+                array('course' => $request->get('course'))
             );
-
-            return $response;
-
-        } catch (\InvalidArgumentException $e) {
-            return $this->abort();
+            $grid->addMassAction($deleteMassAction);
         }
+
+        $translation = $this->container->get('translator');
+
+        $myRowAction = new RowAction(
+            $translation->trans('View'),
+            'app_document_show',
+            false,
+            '_self',
+            ['class' => 'btn btn-default']
+        );
+        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
+        $grid->addRowAction($myRowAction);
+
+        if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            $myRowAction = new RowAction(
+                $translation->trans('Edit'),
+                'app_document_update',
+                false,
+                '_self',
+                ['class' => 'btn btn-info']
+            );
+            $myRowAction->setRouteParameters(array('course' => $course, 'id'));
+            $grid->addRowAction($myRowAction);
+
+            $myRowAction = new RowAction(
+                $translation->trans('Delete'),
+                'app_document_delete',
+                false,
+                '_self',
+                ['class' => 'btn btn-danger', 'form_delete' => true]
+            );
+            $myRowAction->setRouteParameters(['course' => $course, 'id']);
+            $grid->addRowAction($myRowAction);
+        }
+
+        $grid->addExport(
+            new CSVExport(
+                $translation->trans('CSV Export'), 'export', ['course' => $course]
+            )
+        );
+
+        $grid->addExport(
+            new ExcelExport(
+                $translation->trans('Excel Export'),
+                'export',
+                ['course' => $course]
+            )
+        );
+
+        return $grid->getGridResponse('ChamiloCoreBundle:Document:index.html.twig');
     }
 
     /**
-     * Gets a document in browser courses/MATHS/document/file.jpg to the user.
-     * @Route("/get/{course}/", name="resource_get", methods={"GET"}, options={"expose"=true})
-     * @todo check permissions
+     * @param Request $request
      *
-     * @param string $course
-     *
-     * @return \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return RedirectResponse|Response
      */
-    public function getFileAction(Request $request, $course)
+    public function createAction(Request $request): Response
     {
-        try {
-            /** @var Filesystem $fs */
-            $fs = $this->container->get('oneup_flysystem.courses_filesystem');
-            $file = $request->get('file');
+        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-            $path = $course.'/document/'.$file;
+        $this->isGrantedOr403($configuration, ResourceActions::CREATE);
+        $newResource = $this->newResourceFactory->create($configuration, $this->factory);
+        $form = $this->resourceFormFactory->create($configuration, $newResource);
 
-            // Has folder
-            if (!$fs->has($course)) {
-                return $this->abort();
+        $course = $this->getCourse();
+        $session = $this->getSession();
+        $newResource->setCId($course->getId());
+        $form->setData($newResource);
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            /** @var \Chamilo\CourseBundle\Entity\CDocument $newResource */
+            $newResource = $form->getData();
+            $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
+
+            if ($event->isStopped() && !$configuration->isHtmlRequest()) {
+                throw new HttpException($event->getErrorCode(), $event->getMessage());
+            }
+            if ($event->isStopped()) {
+                $this->flashHelper->addFlashFromEvent($configuration, $event);
+
+                if ($event->hasResponse()) {
+                    return $event->getResponse();
+                }
+
+                return $this->redirectHandler->redirectToIndex($configuration, $newResource);
             }
 
-            // Has file
-            if (!$fs->has($path)) {
-                return $this->abort();
+            if ($configuration->hasStateMachine()) {
+                $this->stateMachine->apply($configuration, $newResource);
             }
 
-            /** @var Local $adapter */
-            $adapter = $fs->getAdapter();
-            $filePath = $adapter->getPathPrefix().$path;
+            //$newResource->setCId($request->get('c_id'));
+            $sharedType = $form->get('shared')->getData();
+            $shareList = array();
 
-            return $this->file($filePath, null, ResponseHeaderBag::DISPOSITION_INLINE);
+            switch ($sharedType) {
+                case 'this_course':
+                    if (empty($course)) {
+                        break;
+                    }
+                    // Default Chamilo behaviour:
+                    // Teachers can edit and students can see
+                    $shareList = array(
+                        array(
+                            'sharing' => 'course',
+                            'mask' => ResourceNodeVoter::getReaderMask(),
+                            'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT,
+                            'search' => $course->getId(),
+                        ),
+                        array(
+                            'sharing' => 'course',
+                            'mask' => ResourceNodeVoter::getEditorMask(),
+                            'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER,
+                            'search' => $course->getId(),
+                        ),
+                    );
+                    break;
+                case 'shared':
+                    $shareList = $form->get('rights')->getData();
+                    break;
+                case 'only_me':
+                    $shareList = array(
+                        array(
+                            'sharing' => 'user',
+                            'only_me' => true,
+                        ),
+                    );
+                    break;
+            }
 
-        } catch (\InvalidArgumentException $e) {
-            return $this->abort();
+
+            error_log(print_r($shareList, 1));
+
+
+            /** @var ResourceRepository $repository */
+            $repository = $this->repository;
+            $resourceNode = $repository->addResourceNode($newResource, $this->getUser());
+
+            // Loops all sharing options
+            foreach ($shareList as $share) {
+                $idList = array();
+                if (isset($share['search'])) {
+                    $idList = explode(',', $share['search']);
+                }
+
+                $resourceRight = null;
+                if (isset($share['mask'])) {
+                    $resourceRight = new ResourceRights();
+                    $resourceRight
+                        ->setMask($share['mask'])
+                        ->setRole($share['role'])
+                    ;
+                }
+
+                // Build links
+                switch ($share['sharing']) {
+                    case 'everyone':
+                        $repository->addResourceToEveryone(
+                            $resourceNode,
+                            $resourceRight
+                        );
+                        break;
+                    case 'course':
+                        $repository->addResourceToCourse(
+                            $resourceNode,
+                            $course,
+                            $resourceRight
+                        );
+                        break;
+                    case 'session':
+                        $repository->addResourceToSession(
+                            $resourceNode,
+                            $course,
+                            $session,
+                            $resourceRight
+                        );
+                        break;
+                    case 'user':
+                        // Only for me
+                        if (isset($share['only_me'])) {
+                            error_log('only_me');
+                            $repository->addResourceOnlyToMe($resourceNode);
+                        } else {
+                            error_log('others');
+                            // To other users
+                            $repository->addResourceToUserList($resourceNode, $idList);
+                        }
+                        break;
+                    case 'group':
+                        // @todo
+                        break;
+                }
+            }
+
+            $newResource
+                ->setCId($course->getId())
+                ->setPath('/a')
+                ->setFiletype('file')
+                ->setSize('12')
+                //->setTitle($title)
+                //->setComment($comment)
+                ->setReadonly(false)
+                ->setSessionId(0)
+                ->setResourceNode($resourceNode)
+            ;
+
+            $this->repository->add($newResource);
+
+            $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
+
+            if (!$configuration->isHtmlRequest()) {
+                return $this->viewHandler->handle($configuration, View::create($newResource, Response::HTTP_CREATED));
+            }
+
+            $this->addFlash('success', 'saved');
+
+            //$this->flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource);
+
+            if ($postEvent->hasResponse()) {
+                return $postEvent->getResponse();
+            }
+
+            return $this->redirectHandler->redirectToResource($configuration, $newResource);
         }
+
+        if (!$configuration->isHtmlRequest()) {
+            return $this->viewHandler->handle($configuration, View::create($form, Response::HTTP_BAD_REQUEST));
+        }
+
+        $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource);
+        if ($initializeEvent->hasResponse()) {
+            return $initializeEvent->getResponse();
+        }
+
+        $view = View::create()
+            ->setData([
+                'configuration' => $configuration,
+                'metadata' => $this->metadata,
+                'resource' => $newResource,
+                $this->metadata->getName() => $newResource,
+                'form' => $form->createView(),
+            ])
+            ->setTemplate($configuration->getTemplate(ResourceActions::CREATE . '.html'))
+        ;
+
+        return $this->viewHandler->handle($configuration, $view);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function showAction(Request $request): Response
+    {
+        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
+        $this->isGrantedOr403($configuration, ResourceActions::SHOW);
+
+        /** @var AbstractResource $resource */
+        $resource = $this->findOr404($configuration);
+        $resourceNode = $resource->getResourceNode();
+
+        $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+
+        $view = View::create($resource);
+
+        if ($configuration->isHtmlRequest()) {
+            $view
+                ->setTemplate($configuration->getTemplate(ResourceActions::SHOW . '.html'))
+                ->setTemplateVar($this->metadata->getName())
+                ->setData([
+                    'configuration' => $configuration,
+                    'metadata' => $this->metadata,
+                    'resource' => $resource,
+                    $this->metadata->getName() => $resource,
+                ])
+            ;
+        }
+
+        return $this->viewHandler->handle($configuration, $view);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request): Response
+    {
+        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
+
+        $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
+        $resource = $this->findOr404($configuration);
+        $resourceNode = $resource->getResourceNode();
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+
+        $form = $this->resourceFormFactory->create($configuration, $resource);
+
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) && $form->handleRequest($request)->isValid()) {
+            $resource = $form->getData();
+
+            /** @var ResourceControllerEvent $event */
+            $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource);
+
+            if ($event->isStopped() && !$configuration->isHtmlRequest()) {
+                throw new HttpException($event->getErrorCode(), $event->getMessage());
+            }
+            if ($event->isStopped()) {
+                $this->flashHelper->addFlashFromEvent($configuration, $event);
+
+                if ($event->hasResponse()) {
+                    return $event->getResponse();
+                }
+
+                return $this->redirectHandler->redirectToResource($configuration, $resource);
+            }
+
+            try {
+                $this->resourceUpdateHandler->handle($resource, $configuration, $this->manager);
+            } catch (UpdateHandlingException $exception) {
+                if (!$configuration->isHtmlRequest()) {
+                    return $this->viewHandler->handle(
+                        $configuration,
+                        View::create($form, $exception->getApiResponseCode())
+                    );
+                }
+
+                $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
+
+                return $this->redirectHandler->redirectToReferer($configuration);
+            }
+
+            $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
+
+            if (!$configuration->isHtmlRequest()) {
+                $view = $configuration->getParameters()->get('return_content', false) ? View::create($resource, Response::HTTP_OK) : View::create(null, Response::HTTP_NO_CONTENT);
+
+                return $this->viewHandler->handle($configuration, $view);
+            }
+
+            $this->flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource);
+
+            if ($postEvent->hasResponse()) {
+                return $postEvent->getResponse();
+            }
+
+            return $this->redirectHandler->redirectToResource($configuration, $resource);
+        }
+
+        if (!$configuration->isHtmlRequest()) {
+            return $this->viewHandler->handle($configuration, View::create($form, Response::HTTP_BAD_REQUEST));
+        }
+
+        $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
+        if ($initializeEvent->hasResponse()) {
+            return $initializeEvent->getResponse();
+        }
+
+        $view = View::create()
+            ->setData([
+                'configuration' => $configuration,
+                'metadata' => $this->metadata,
+                'resource' => $resource,
+                $this->metadata->getName() => $resource,
+                'form' => $form->createView(),
+            ])
+            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE . '.html'))
+        ;
+
+        return $this->viewHandler->handle($configuration, $view);
     }
 }

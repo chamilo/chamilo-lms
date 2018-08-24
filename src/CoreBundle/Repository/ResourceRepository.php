@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
@@ -19,8 +19,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Class NotebookRepository
- * @package Chamilo\NotebookBundle\Entity
+ * Class ResourceRepository.
+ *
+ * @package Chamilo\CoreBundle\Entity
  */
 class ResourceRepository extends EntityRepository
 {
@@ -35,10 +36,13 @@ class ResourceRepository extends EntityRepository
     public function addResourceNode(AbstractResource $resource, User $creator): ResourceNode
     {
         $resourceNode = new ResourceNode();
+
+        $tool = $this->getTool($resource->getToolName());
+
         $resourceNode
-            ->setName($resource->getName())
+            ->setName($resource->getResourceName())
             ->setCreator($creator)
-            ->setTool($this->getTool());
+            ->setTool($tool);
 
         $this->getEntityManager()->persist($resourceNode);
         $this->getEntityManager()->flush();
@@ -51,7 +55,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceLink
      */
-    public function addResourceOnlyToMe(ResourceNode $resourceNode)
+    public function addResourceOnlyToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -70,7 +74,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceLink
      */
-    public function addResourceToEveryone(ResourceNode $resourceNode, ResourceRights $right)
+    public function addResourceToEveryone(ResourceNode $resourceNode, ResourceRights $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -124,15 +128,14 @@ class ResourceRepository extends EntityRepository
      */
     public function addResourceToUserList(ResourceNode $resourceNode, $userList)
     {
+        $em = $this->getEntityManager();
+
         if (!empty($userList)) {
             foreach ($userList as $userId) {
-                $toUser = $this->getEntityManager()->getRepository('ChamiloUserBundle:User')->find($userId);
+                $toUser = $em->getRepository('ChamiloUserBundle:User')->find($userId);
 
-                $resourceLink = $this->addResourceNodeToUser(
-                    $resourceNode,
-                    $toUser
-                );
-                $this->getEntityManager()->persist($resourceLink);
+                $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
+                $em->persist($resourceLink);
             }
         }
     }
@@ -143,7 +146,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceLink
      */
-    public function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser)
+    public function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -227,7 +230,7 @@ class ResourceRepository extends EntityRepository
      * @param Course $course
      * @return ResourceLink
      */
-    public function getResourceByCourse(Course $course)
+    public function getResourceByCourse(Course $course, Tool $tool)
     {
         $query = $this->getEntityManager()->createQueryBuilder()
             ->select('resource')
@@ -241,7 +244,7 @@ class ResourceRepository extends EntityRepository
             //->orderBy('node');
             ->setParameters(
                 array(
-                    'tool' => $this->getTool(),
+                    'tool' => $tool,
                     'course' => $course,
                 )
             )
@@ -267,13 +270,15 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @return Tool
+     * @param $tool
+     *
+     * @return Tool|null
      */
-    public function getTool()
+    public function getTool($tool)
     {
         return $this
             ->getEntityManager()
             ->getRepository('ChamiloCoreBundle:Tool')
-            ->findOneBy(['name' => $this->getToolName()]);
+            ->findOneBy(['name' => $tool]);
     }
 }

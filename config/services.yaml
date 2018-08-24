@@ -15,7 +15,14 @@ services:
         exclude: '../src/CoreBundle/{Entity,Migrations,Tests,Admin,Block,Component,Repository,Security,EventListener}'
         public: true
 
+    _instanceof:
+        Sylius\Bundle\ResourceBundle\Controller\ResourceController:
+            autowire: false
+
     Chamilo\CoreBundle\Controller\ResourceUploaderController:
+        autowire: false
+
+    Chamilo\CoreBundle\Controller\ResourceController:
         autowire: false
 
     Chamilo\PageBundle\:
@@ -33,6 +40,18 @@ services:
         public: true
         arguments:
             $debug: '%kernel.debug%'
+
+sylius_settings:
+    driver: doctrine/orm
+
+sylius_resource:
+    resources:
+        app.document:
+            templates: ChamiloCoreBundle:Document
+            classes:
+                controller: Chamilo\CoreBundle\Controller\ResourceController
+                model: Chamilo\CourseBundle\Entity\CDocument
+                repository: Chamilo\CoreBundle\Repository\ResourceRepository
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration

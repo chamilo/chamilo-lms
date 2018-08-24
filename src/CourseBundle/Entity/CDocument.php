@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,9 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CDocumentRepository")
  */
-class CDocument
+class CDocument extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -321,15 +323,39 @@ class CDocument
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CDocument
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
+    // Resource classes
 
-        return $this;
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
     }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function getToolName(): string
+    {
+        return 'document';
+    }
+
+    public function getName()
+    {
+    }
+
+    public function name()
+    {
+    }
+    public function isName()
+    {
+    }
+    public function hasName() {
+
+    }
+
+    public function __get($a) {
+
+    }
+
 }

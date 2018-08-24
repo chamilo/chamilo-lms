@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class FrontController.
+ * Class EditorController.
  *
  * @Route("/front")
  *
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @package Chamilo\CoreBundle\Controller
  */
-class FrontController extends Controller
+class EditorController extends Controller
 {
     /**
      * Get templates (left column when creating a document).

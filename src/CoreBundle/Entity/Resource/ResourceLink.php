@@ -224,23 +224,11 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @param User $user
      *
      * @return $this
      */
-    public function setUser(User $user)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -252,7 +240,7 @@ class ResourceLink implements ResourceInterface
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course = null)
     {
         $this->course = $course;
 
@@ -264,7 +252,7 @@ class ResourceLink implements ResourceInterface
      *
      * @return $this
      */
-    public function setSession(Session $session)
+    public function setSession(Session $session = null)
     {
         $this->session = $session;
 
@@ -284,7 +272,7 @@ class ResourceLink implements ResourceInterface
      *
      * @return $this
      */
-    public function setGroup(CGroupInfo $group)
+    public function setGroup(CGroupInfo $group = null)
     {
         $this->group = $group;
 
@@ -304,7 +292,7 @@ class ResourceLink implements ResourceInterface
      *
      * @return $this
      */
-    public function setUserGroup(Usergroup $group)
+    public function setUserGroup(Usergroup $group = null)
     {
         $this->userGroup = $group;
 

@@ -38,9 +38,9 @@ core_admin:
     prefix: /admin
 
 # Redirects /url/ to /url always located at the end
-remove_trailing_slash:
-    path: /{url}
-    defaults: {_controller: 'ChamiloCoreBundle:Redirecting:removeTrailingSlash'}
-    requirements:
-        url: .*/$
-        _method: GET
+#remove_trailing_slash:
+#    path: /{url}
+#    defaults: {_controller: 'ChamiloCoreBundle:Redirecting:removeTrailingSlash'}
+#    requirements:
+#        url: .*/$
+#        _method: GET

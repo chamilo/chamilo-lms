@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tool.
+ * ToolResourceRights.
  *
  * @ORM\Table(name="tool_resource_rights")
  * @ORM\Entity
@@ -115,7 +115,7 @@ class ToolResourceRights
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -123,25 +123,25 @@ class ToolResourceRights
     /**
      * @return array
      */
-    public static function getDefaultRoles()
+    public static function getDefaultRoles(): array
     {
         return [
-            'ROLE_STUDENT' => 'Students',
-            'ROLE_TEACHER' => 'Teachers',
+            'Students' => 'ROLE_STUDENT',
+            'Teachers'=> 'ROLE_TEACHER',
         ];
     }
 
     /**
      * @return array
      */
-    public static function getMaskList()
+    public static function getMaskList(): array
     {
         $readerMask = ResourceNodeVoter::getReaderMask();
         $editorMask = ResourceNodeVoter::getEditorMask();
 
         return [
-            $readerMask => 'Can read',
-            $editorMask => 'Can edit',
+            'Can read' => $readerMask,
+            'Can edit' => $editorMask ,
         ];
     }
 }

@@ -55,7 +55,6 @@
         "ezyang/htmlpurifier": "^4.10",
         "sensio/framework-extra-bundle": "^5.0",
         "sensiolabs/security-checker": "^4.1",
-
         "symfony/asset": "^4.0",
         "symfony/expression-language": "^4.0",
         "symfony/flex": "^1.0",
@@ -73,6 +72,8 @@
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/apache-pack": "^1.0",
         "symfony/var-dumper": "^4.0",
+
+        "apy/datagrid-bundle" : "dev-master",
 
         "twig/extensions": "^1.5",
         "white-october/pagerfanta-bundle": "^1.1",
@@ -100,9 +101,8 @@
         "stephpy/timeline-bundle": "~3.0",
         "stof/doctrine-extensions-bundle": "~1.0",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
-        "sylius/resource-bundle": "~1.2",
-        "sylius/resource": "1.2.*",
-        "sylius/registry": "1.2.*",
+        "sylius/resource-bundle": "1.2.*",
+
 
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "gedmo/doctrine-extensions": "~2.4",
@@ -188,10 +188,10 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
         ],
         "auto-scripts": {
-            "cache:clear": "symfony-cmd",
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
             "security-checker security:check": "script",
             "requirements-checker": "script",
+            "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
     }

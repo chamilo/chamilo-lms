@@ -1127,15 +1127,17 @@ ul.exercise-draggable-answer .touch-items:hover{
     background: none;
     border: none;
     border-radius: 0;
-    margin-bottom: 10px;
     min-height: 40px;
-
-    /* Extra */
     display: inline-block;
     width: 85%;
     margin-bottom: 0px;
 }
-
+.section-results .alert table{
+    width: 100% !important;
+}
+.question-result .page-header img{
+    display: none;
+}
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     background: #FFF;
     border: 1px solid #162a83;
@@ -1598,7 +1600,15 @@ blockquote p {
 .session-teachers{
     display: none;
 }
-
+.section-mycourses #skillList .table thead tr th{
+    border-bottom: 2px solid #84bd00;
+}
+.section-mycourses #skillList .table-bordered tbody tr td{
+    border: 1px solid #84bd00;
+}
+.section-mycourses #skillList .table .thumbnail{
+    border: none;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

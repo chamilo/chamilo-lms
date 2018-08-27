@@ -10,7 +10,6 @@
     {% endblock %}
 </head>
 <body>
-
 <!-- START MAIN -->
 <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
     <noscript>{{ "NoJavascript"|get_lang }}</noscript>

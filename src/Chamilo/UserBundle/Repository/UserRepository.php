@@ -578,10 +578,11 @@ class UserRepository extends EntityRepository
         $gradebookCertificate = [];
         /** @var GradebookCertificate $item */
         foreach ($result as $item) {
+            $createdAt = $item->getCreatedAt() ? $item->getCreatedAt()->format($dateFormat) : '';
             $list = [
                 'Score: '.$item->getScoreCertificate(),
                 'Path: '.$item->getPathCertificate(),
-                'Created at: '.$item->getCreatedAt()->format($dateFormat),
+                'Created at: '.$createdAt,
             ];
             $gradebookCertificate[] = implode(', ', $list);
         }
@@ -594,9 +595,10 @@ class UserRepository extends EntityRepository
         $trackEExercises = [];
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
+            $date = $item->getExeDate() ? $item->getExeDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
-                'Start: '.$item->getExeDate()->format($dateFormat),
+                'Start: '.$date,
                 'Status: '.$item->getStatus(),
                // 'Result: '.$item->getExeResult(),
                // 'Weighting: '.$item->getExeWeighting(),
@@ -612,6 +614,7 @@ class UserRepository extends EntityRepository
         $trackEAttempt = [];
         /** @var TrackEAttempt $item */
         foreach ($result as $item) {
+            $date = $item->getTms() ? $item->getTms()->format($dateFormat) : '';
             $list = [
                 'Attempt #'.$item->getExeId(),
                 'Course # '.$item->getCId(),
@@ -619,7 +622,7 @@ class UserRepository extends EntityRepository
                 'Session #'.$item->getSessionId(),
                 //'Marks: '.$item->getMarks(),
                 'Position: '.$item->getPosition(),
-                'Date: '.$item->getTms()->format($dateFormat),
+                'Date: '.$date,
             ];
             $trackEAttempt[] = implode(', ', $list);
         }
@@ -632,10 +635,12 @@ class UserRepository extends EntityRepository
         $trackECourseAccessList = [];
         /** @var TrackECourseAccess $item */
         foreach ($result as $item) {
+            $startDate = $item->getLoginCourseDate() ? $item->getLoginCourseDate()->format($dateFormat) : '';
+            $endDate = $item->getLogoutCourseDate() ? $item->getLogoutCourseDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
-                'Start: '.$item->getLoginCourseDate()->format($dateFormat),
-                'End: '.$item->getLogoutCourseDate()->format($dateFormat),
+                'Start: '.$startDate,
+                'End: '.$endDate,
             ];
             $trackECourseAccessList[] = implode(', ', $list);
         }
@@ -648,10 +653,12 @@ class UserRepository extends EntityRepository
         $trackELoginList = [];
         /** @var TrackELogin $item */
         foreach ($result as $item) {
+            $startDate = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
+            $endDate = $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
-                'Start: '.$item->getLoginDate()->format($dateFormat),
-                'End: '.$item->getLogoutDate()->format($dateFormat),
+                'Start: '.$startDate,
+                'End: '.$endDate,
             ];
             $trackELoginList[] = implode(', ', $list);
         }
@@ -664,10 +671,11 @@ class UserRepository extends EntityRepository
         $trackEAccessList = [];
         /** @var TrackEAccess $item */
         foreach ($result as $item) {
+            $date = $item->getAccessDate() ? $item->getAccessDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Tool: '.$item->getAccessTool(),
-                'End: '.$item->getAccessDate()->format($dateFormat),
+                'End: '.$date,
             ];
             $trackEAccessList[] = implode(', ', $list);
         }
@@ -680,9 +688,10 @@ class UserRepository extends EntityRepository
         $trackEOnlineList = [];
         /** @var TrackEOnline $item */
         foreach ($result as $item) {
+            $date = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
-                'Login date: '.$item->getLoginDate()->format($dateFormat),
+                'Login date: '.$date,
                 'Course # '.$item->getCId(),
                 'Session # '.$item->getSessionId(),
             ];
@@ -697,11 +706,12 @@ class UserRepository extends EntityRepository
         $trackEDefault = [];
         /** @var TrackEDefault $item */
         foreach ($result as $item) {
+            $date = $item->getDefaultDate() ? $item->getDefaultDate()->format($dateFormat) : '';
             $list = [
                 'Type: '.$item->getDefaultEventType(),
                 'Value: '.$item->getDefaultValue(),
                 'Value type: '.$item->getDefaultValueType(),
-                'Date: '.$item->getDefaultDate()->format($dateFormat),
+                'Date: '.$date,
                 'Course #'.$item->getCId(),
                 'Session # '.$item->getSessionId(),
             ];
@@ -716,11 +726,12 @@ class UserRepository extends EntityRepository
         $trackELastaccess = [];
         /** @var TrackELastaccess $item */
         foreach ($result as $item) {
+            $date = $item->getAccessDate() ? $item->getAccessDate()->format($dateFormat) : '';
             $list = [
                 'Course #'.$item->getCId(),
                 'Session # '.$item->getAccessSessionId(),
                 'Tool: '.$item->getAccessTool(),
-                'Access date: '.$item->getAccessDate()->format($dateFormat),
+                'Access date: '.$date,
             ];
             $trackELastaccess[] = implode(', ', $list);
         }
@@ -733,9 +744,10 @@ class UserRepository extends EntityRepository
         $trackEUploads = [];
         /** @var TrackEUploads $item */
         foreach ($result as $item) {
+            $date = $item->getUploadDate() ? $item->getUploadDate()->format($dateFormat) : '';
             $list = [
                 'Course #'.$item->getCId(),
-                'Uploaded at: '.$item->getUploadDate()->format($dateFormat),
+                'Uploaded at: '.$date,
                 'Upload id # '.$item->getUploadId(),
             ];
             $trackEUploads[] = implode(', ', $list);
@@ -748,10 +760,11 @@ class UserRepository extends EntityRepository
         $gradebookResult = [];
         /** @var GradebookResult $item */
         foreach ($result as $item) {
+            $date = $item->getCreatedAt() ? $item->getCreatedAt()->format($dateFormat) : '';
             $list = [
                 'Evaluation id# '.$item->getEvaluationId(),
                 //'Score: '.$item->getScore(),
-                'Creation date: '.$item->getCreatedAt()->format($dateFormat),
+                'Creation date: '.$date,
             ];
             $gradebookResult[] = implode(', ', $list);
         }
@@ -763,9 +776,10 @@ class UserRepository extends EntityRepository
         $trackEDownloads = [];
         /** @var TrackEDownloads $item */
         foreach ($result as $item) {
+            $date = $item->getDownDate() ? $item->getDownDate()->format($dateFormat) : '';
             $list = [
                 'File: '.$item->getDownDocPath(),
-                'Download at: '.$item->getDownDate()->format($dateFormat),
+                'Download at: '.$date,
             ];
             $trackEDownloads[] = implode(', ', $list);
         }
@@ -792,9 +806,10 @@ class UserRepository extends EntityRepository
         $cForumPostList = [];
         /** @var CForumPost $item */
         foreach ($result as $item) {
+            $date = $item->getPostDate() ? $item->getPostDate()->format($dateFormat) : '';
             $list = [
                 'Title: '.$item->getPostTitle(),
-                'Creation date: '.$item->getPostDate()->format($dateFormat),
+                'Creation date: '.$date,
             ];
             $cForumPostList[] = implode(', ', $list);
         }
@@ -807,9 +822,10 @@ class UserRepository extends EntityRepository
         $cForumThreadList = [];
         /** @var CForumThread $item */
         foreach ($result as $item) {
+            $date = $item->getThreadDate() ? $item->getThreadDate()->format($dateFormat) : '';
             $list = [
                 'Title: '.$item->getThreadTitle(),
-                'Creation date: '.$item->getThreadDate()->format($dateFormat),
+                'Creation date: '.$date,
             ];
             $cForumThreadList[] = implode(', ', $list);
         }
@@ -868,9 +884,10 @@ class UserRepository extends EntityRepository
         $cBlog = [];
         /** @var CBlogPost $item */
         foreach ($result as $item) {
+            $date = $item->getDateCreation() ? $item->getDateCreation()->format($dateFormat) : '';
             $list = [
                 'Title: '.$item->getTitle(),
-                'Date: '.$item->getDateCreation()->format($dateFormat),
+                'Date: '.$date,
             ];
             $cBlog[] = implode(', ', $list);
         }
@@ -898,9 +915,10 @@ class UserRepository extends EntityRepository
         $messageList = [];
         /** @var Message $item */
         foreach ($result as $item) {
+            $date = $item->getSendDate() ? $item->getSendDate()->format($dateFormat) : '';
             $list = [
                 'Title: '.$item->getTitle(),
-                'Sent date: '.$item->getSendDate()->format($dateFormat),
+                'Sent date: '.$date,
                 'To user # '.$item->getUserReceiverId(),
                 'Status'.$item->getMsgStatus(),
             ];
@@ -930,9 +948,10 @@ class UserRepository extends EntityRepository
         $cDropboxFile = [];
         /** @var CDropboxFile $item */
         foreach ($result as $item) {
+            $date = $item->getUploadDate() ? $item->getUploadDate()->format($dateFormat) : '';
             $list = [
                 'Title: '.$item->getTitle(),
-                'Uploaded date: '.$item->getUploadDate()->format($dateFormat),
+                'Uploaded date: '.$date,
                 'File: '.$item->getFilename(),
             ];
             $cDropboxFile[] = implode(', ', $list);
@@ -961,10 +980,11 @@ class UserRepository extends EntityRepository
         $cDropboxFeedback = [];
         /** @var CDropboxFeedback $item */
         foreach ($result as $item) {
+            $date = $item->getFeedbackDate() ? $item->getFeedbackDate()->format($dateFormat) : '';
             $list = [
                 'File #'.$item->getFileId(),
                 'Feedback: '.$item->getFeedback(),
-                'Date: '.$item->getFeedbackDate()->format($dateFormat),
+                'Date: '.$date,
             ];
             $cDropboxFeedback[] = implode(', ', $list);
         }
@@ -977,9 +997,10 @@ class UserRepository extends EntityRepository
         $cNotebook = [];
         /** @var CNotebook $item */
         foreach ($result as $item) {
+            $date = $item->getUpdateDate() ? $item->getUpdateDate()->format($dateFormat) : '';
             $list = [
                 'Title: '.$item->getTitle(),
-                'Date: '.$item->getUpdateDate()->format($dateFormat),
+                'Date: '.$date,
             ];
             $cNotebook[] = implode(', ', $list);
         }
@@ -1025,11 +1046,12 @@ class UserRepository extends EntityRepository
         $cStudentPublicationComment = [];
         /** @var CStudentPublicationComment $item */
         foreach ($result as $item) {
+            $date = $item->getSentAt() ? $item->getSentAt()->format($dateFormat) : '';
             $list = [
                 'Commment: '.$item->getComment(),
                 'File '.$item->getFile(),
                 'Course # '.$item->getCId(),
-                'Date: '.$item->getSentAt()->format($dateFormat),
+                'Date: '.$date,
             ];
             $cStudentPublicationComment[] = implode(', ', $list);
         }
@@ -1073,11 +1095,12 @@ class UserRepository extends EntityRepository
         $ticketMessage = [];
         /** @var \Chamilo\TicketBundle\Entity\Message $item */
         foreach ($result as $item) {
+            $date = $item->getInsertDateTime() ? $item->getInsertDateTime()->format($dateFormat) : '';
             $list = [
                 'Subject: '.$item->getSubject(),
                 'IP: '.$item->getIpAddress(),
                 'Status: '.$item->getStatus(),
-                'Creation date: '.$item->getInsertDateTime()->format($dateFormat),
+                'Creation date: '.$date,
             ];
             $ticketMessage[] = implode(', ', $list);
         }
@@ -1090,10 +1113,11 @@ class UserRepository extends EntityRepository
         $skillRelUserComment = [];
         /** @var SkillRelUserComment $item */
         foreach ($result as $item) {
+            $date = $item->getFeedbackDateTime() ? $item->getFeedbackDateTime()->format($dateFormat) : '';
             $list = [
                 'Feedback: '.$item->getFeedbackText(),
                 'Value: '.$item->getFeedbackValue(),
-                'Created at: '.$item->getFeedbackDateTime()->format($dateFormat),
+                'Created at: '.$date,
             ];
             $skillRelUserComment[] = implode(', ', $list);
         }
@@ -1122,13 +1146,17 @@ class UserRepository extends EntityRepository
         $userApiKey = [];
         /** @var UserApiKey $item */
         foreach ($result as $item) {
+            $validityStart = $item->getValidityStartDate() ? $item->getValidityStartDate()->format($dateFormat) : '';
+            $validityEnd = $item->getValidityEndDate() ? $item->getValidityEndDate()->format($dateFormat) : '';
+            $created = $item->getCreatedDate() ? $item->getCreatedDate()->format($dateFormat) : '';
+
             $list = [
                 'ApiKey #'.$item->getApiKey(),
                 'Service: '.$item->getApiService(),
                 'EndPoint: '.$item->getApiEndPoint(),
-                'Validity start date: '.$item->getValidityEndDate()->format($dateFormat),
-                'Validity enddate: '.$item->getValidityStartDate()->format($dateFormat),
-                'Created at: '.$item->getCreatedDate()->format($dateFormat),
+                'Validity start date: '.$validityStart,
+                'Validity enddate: '.$validityEnd,
+                'Created at: '.$created,
             ];
             $userApiKey[] = implode(', ', $list);
         }

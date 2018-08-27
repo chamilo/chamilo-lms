@@ -1085,6 +1085,11 @@ class ImportCsv
                 $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.':00';
                 $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.':00';
 
+                if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
+                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
+                    $errorFound = true;
+                }
+
                 // Check session dates
                 if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
                     $date = new \DateTime($sessionInfo['access_start_date']);
@@ -1098,11 +1103,6 @@ class ImportCsv
                         );
                         $errorFound = true;
                     }
-                }
-
-                if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
-                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
-                    $errorFound = true;
                 }
 
                 if ($errorFound == false) {

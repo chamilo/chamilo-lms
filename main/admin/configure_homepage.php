@@ -259,9 +259,6 @@ if (!empty($action)) {
                     }
                 }
 
-                if (EventsMail::check_if_using_class('portal_homepage_edited')) {
-                    EventsDispatcher::events('portal_homepage_edited', ['about_user' => api_get_user_id()]);
-                }
                 Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_top',

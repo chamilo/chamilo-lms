@@ -41,10 +41,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         api_get_path(CONFIGURATION_PATH).'profile.conf.php'
     );
     copy(
-        api_get_path(CONFIGURATION_PATH).'events.conf.dist.php',
-        api_get_path(CONFIGURATION_PATH).'events.conf.php'
-    );
-    copy(
         api_get_path(CONFIGURATION_PATH).'auth.conf.dist.php',
         api_get_path(CONFIGURATION_PATH).'auth.conf.php'
     );

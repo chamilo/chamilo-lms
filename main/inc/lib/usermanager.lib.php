@@ -476,96 +476,88 @@ class UserManager
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
 
-                /* MANAGE EVENT WITH MAIL */
-                if (EventsMail::check_if_using_class('user_registration')) {
-                    $values["about_user"] = $return;
-                    $values["password"] = $original_password;
-                    $values["send_to"] = [$return];
-                    $values["prior_lang"] = null;
-                    EventsDispatcher::events('user_registration', $values);
+                $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
+
+                $additionalParameters = [
+                    'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
+                    'userId' => $return,
+                    'mobilePhoneNumber' => $phoneNumber,
+                    'password' => $original_password,
+                ];
+
+                $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
+                if ($twoEmail === true) {
+                    $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
+                    $emailBody = $tplContent->fetch($layoutContent);
+
+                    api_mail_html(
+                        $recipient_name,
+                        $email,
+                        $emailSubject,
+                        $emailBody,
+                        $sender_name,
+                        $email_admin,
+                        null,
+                        null,
+                        null,
+                        $additionalParameters
+                    );
+
+                    $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
+                    $emailBody = $tplContent->fetch($layoutContent);
+
+                    api_mail_html(
+                        $recipient_name,
+                        $email,
+                        $emailSubject,
+                        $emailBody,
+                        $sender_name,
+                        $email_admin,
+                        null,
+                        null,
+                        null,
+                        $additionalParameters
+                    );
                 } else {
-                    $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
+                    $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
+                    if ($sendToInbox) {
+                        $adminList = self::get_all_administrators();
+                        $senderId = 1;
+                        if (!empty($adminList)) {
+                            $adminInfo = current($adminList);
+                            $senderId = $adminInfo['user_id'];
+                        }
 
-                    $additionalParameters = [
-                        'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
-                        'userId' => $return,
-                        'mobilePhoneNumber' => $phoneNumber,
-                        'password' => $original_password,
-                    ];
-
-                    $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
-                    if ($twoEmail === true) {
-                        $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
-                        $emailBody = $tplContent->fetch($layoutContent);
-
-                        api_mail_html(
-                            $recipient_name,
-                            $email,
+                        MessageManager::send_message_simple(
+                            $userId,
                             $emailSubject,
                             $emailBody,
-                            $sender_name,
-                            $email_admin,
-                            null,
-                            null,
-                            null,
-                            $additionalParameters
-                        );
-
-                        $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
-                        $emailBody = $tplContent->fetch($layoutContent);
-
-                        api_mail_html(
-                            $recipient_name,
-                            $email,
-                            $emailSubject,
-                            $emailBody,
-                            $sender_name,
-                            $email_admin,
-                            null,
-                            null,
-                            null,
-                            $additionalParameters
+                            $senderId
                         );
                     } else {
-                        $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
-                        if ($sendToInbox) {
-                            $adminList = self::get_all_administrators();
-                            $senderId = 1;
-                            if (!empty($adminList)) {
-                                $adminInfo = current($adminList);
-                                $senderId = $adminInfo['user_id'];
-                            }
-
-                            MessageManager::send_message_simple(
-                                $userId,
-                                $emailSubject,
-                                $emailBody,
-                                $senderId
-                            );
-                        } else {
-                            api_mail_html(
-                                $recipient_name,
-                                $email,
-                                $emailSubject,
-                                $emailBody,
-                                $sender_name,
-                                $email_admin,
-                                null,
-                                null,
-                                null,
-                                $additionalParameters
-                            );
-                        }
-                    }
-
-                    $notification = api_get_configuration_value('send_notification_when_user_added');
-                    if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
-                        foreach ($notification['admins'] as $adminId) {
-                            $emailSubjectToAdmin = get_lang('UserAdded').': '.api_get_person_name($firstName, $lastName);
-                            MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
-                        }
+                        api_mail_html(
+                            $recipient_name,
+                            $email,
+                            $emailSubject,
+                            $emailBody,
+                            $sender_name,
+                            $email_admin,
+                            null,
+                            null,
+                            null,
+                            $additionalParameters
+                        );
                     }
                 }
+
+                $notification = api_get_configuration_value('send_notification_when_user_added');
+                if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
+                    foreach ($notification['admins'] as $adminId) {
+                        $emailSubjectToAdmin = get_lang('UserAdded').': '.api_get_person_name($firstName, $lastName);
+                        MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
+                    }
+                }
+
 
                 if ($sendEmailToAllAdmins) {
                     $adminList = self::get_all_administrators();

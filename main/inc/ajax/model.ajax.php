@@ -731,10 +731,6 @@ switch ($action) {
         $obj = new Gradebook();
         $count = $obj->get_count();
         break;
-    case 'get_event_email_template':
-        $obj = new EventEmailTemplate();
-        $count = $obj->get_count();
-        break;
     case 'get_careers':
         $obj = new Career();
         $count = $obj->get_count();
@@ -1872,32 +1868,6 @@ switch ($action) {
         }
         $result = $new_result;
         break;
-    case 'get_event_email_template':
-        $columns = ['subject', 'event_type_name', 'language_id', 'activated', 'actions'];
-        if (!in_array($sidx, $columns)) {
-            $sidx = 'subject';
-        }
-        $result = Database::select(
-            '*',
-            $obj->table,
-            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
-        );
-        $new_result = [];
-        foreach ($result as $item) {
-            $language_info = api_get_language_info($item['language_id']);
-            $item['language_id'] = $language_info['english_name'];
-            $item['actions'] = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
-                api_get_path(WEB_CODE_PATH).'admin/event_type.php?action=edit&event_type_name='.$item['event_type_name']
-            );
-            $item['actions'] .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete')),
-                api_get_path(WEB_CODE_PATH).'admin/event_controller.php?action=delete&id='.$item['id']
-            );
-            $new_result[] = $item;
-        }
-        $result = $new_result;
-        break;
     case 'get_careers':
         $columns = ['name', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
@@ -2208,7 +2178,6 @@ $allowed_actions = [
     'get_work_user_list_all',
     'get_timelines',
     'get_grade_models',
-    'get_event_email_template',
     'get_user_skill_ranking',
     'get_extra_fields',
     'get_extra_field_options',

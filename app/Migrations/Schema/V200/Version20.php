@@ -637,6 +637,14 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
+
+        // Drop unused tables
+        $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type'];
+        foreach ($dropTables as $table) {
+            if ($schema->hasTable($table)) {
+                $schema->dropTable($table);
+            }
+        }
     }
 
     /**

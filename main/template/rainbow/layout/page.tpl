@@ -49,10 +49,9 @@
                 {% endif %}
             </header>
             <!-- END HEADER -->
-
             <!-- START CONTENT -->
             <section id="cm-content">
-                <div class="container">
+                <div class="container{{ fluid == true ? '-fluid':'' }}">
                     {% block breadcrumb %}
                         {{ breadcrumb }}
                     {% endblock %}

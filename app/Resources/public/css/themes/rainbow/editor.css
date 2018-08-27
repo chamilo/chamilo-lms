@@ -269,40 +269,7 @@ blockquote p {
     margin-left: auto;
     margin-right: auto;
 }
-.ck-parcours{
-    font-family: 'Verdana';
-    font-size: 18px;
-    font-weight: bold;
-    color: #162a83;
-}
-.ck-etape{
-    font-family: 'Verdana';
-    font-size: 14px;
-    font-weight: bold;
-    color: #162a83;
-}
-.ck-titre{
-    font-family: 'Verdana';
-    font-size: 30px;
-    color: #162a83;
-}
-.ck-texte{
-    font-family: 'Verdana';
-    font-size: 14px;
-    color: #162a83;
-    line-height: 25px;
-}
-.ck-source{
-    font-family: 'Verdana';
-    font-size: 12px;
-    color: #162a83;
-}
-.ck-consignes{
-    font-family: 'Verdana';
-    font-size: 14px;
-    font-weight: bold;
-    color: #162a83;
-}
+
 @media (max-width: 767px) {
     .img-responsive {
         display: block;

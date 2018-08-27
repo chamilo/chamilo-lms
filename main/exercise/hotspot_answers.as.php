@@ -96,13 +96,15 @@ if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_S
     $showOnlyScore = true;
     $showResults = true;
     if ($objExercise->attempts > 0) {
+        $lpId = $trackExerciseInfo['orig_lp_id'] ?? 0;
+        $lpItemId  = $trackExerciseInfo['orig_lp_item_id'] ?? 0;
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
             $objExercise->id,
             $courseId,
             api_get_session_id(),
-            $trackExerciseInfo['orig_lp_id'],
-            $trackExerciseInfo['orig_lp_item_id'],
+            $lpId,
+            $lpItemId,
             'desc'
         );
         $numberAttempts = count($attempts);

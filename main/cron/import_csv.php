@@ -1029,10 +1029,13 @@ class ImportCsv
                 }
 
                 if (empty($sessionId)) {
-                    $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
+                    $this->logger->addInfo("external_sessionID: $externalSessionId does not exists.");
                 }
                 $teacherId = null;
+                $sessionInfo = [];
                 if (!empty($sessionId) && !empty($courseInfo)) {
+                    $sessionInfo = api_get_session_info($sessionId);
+
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
                         $courseInfo['real_id']
@@ -1054,7 +1057,6 @@ class ImportCsv
                             $teacher = current($teachers);
                             $teacherId = $teacher['user_id'];
                         } else {
-                            $sessionInfo = api_get_session_info($sessionId);
                             $teacherId = $sessionInfo['id_coach'];
                         }
                     }
@@ -1080,13 +1082,26 @@ class ImportCsv
                 $startDateMonth = substr($date, 4, 2);
                 $startDateDay = substr($date, 6, 8);
 
-                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
-                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
+                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.':00';
+                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.':00';
+
+                // Check session dates
+                if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
+                    $date = new \DateTime($sessionInfo['access_start_date']);
+                    $interval = new \DateInterval('P7D');
+                    $date->sub($interval);
+                    if ($date->getTimestamp() > time()) {
+                        $this->logger->addInfo(
+                            "Calendar event # ".$row['external_calendar_itemID']." 
+                            in session [$externalSessionId] was not added 
+                            because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
+                        );
+                        $errorFound = true;
+                    }
+                }
 
                 if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
-                    $this->logger->addInfo(
-                        "Verify your dates:  '$startDate' : '$endDate' "
-                    );
+                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
                     $errorFound = true;
                 }
 
@@ -1107,7 +1122,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo("No events to add");
+                $this->logger->addInfo('No events to add');
 
                 return 0;
             }
@@ -1117,9 +1132,7 @@ class ImportCsv
             $externalEventId = null;
 
             $extraField = new ExtraField('calendar_event');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
                 $this->logger->addInfo(

@@ -1216,12 +1216,13 @@ class UserRepository extends EntityRepository
         $user->setCurriculumItems([]);
 
         $portals = $user->getPortals();
-
-        $list = [];
-        /** @var AccessUrlRelUser $portal */
-        foreach ($portals as $portal) {
-            $portalInfo = \UrlManager::get_url_data_from_id($portal->getAccessUrlId());
-            $list[] = $portalInfo['url'];
+        if (!empty($portals)) {
+            $list = [];
+            /** @var AccessUrlRelUser $portal */
+            foreach ($portals as $portal) {
+                $portalInfo = \UrlManager::get_url_data_from_id($portal->getAccessUrlId());
+                $list[] = $portalInfo['url'];
+            }
         }
         $user->setPortals($list);
 

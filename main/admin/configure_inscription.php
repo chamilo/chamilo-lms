@@ -183,9 +183,6 @@ if ($display_all_form) {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
     $form->addRule('email', get_lang('EmailWrong'), 'email');
-    if (api_get_setting('openid_authentication') == 'true') {
-        $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40, 'disabled' => 'disabled']);
-    }
 
     //	USERNAME
     $form->addElement('text', 'username', get_lang('UserName'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
@@ -328,10 +325,6 @@ if (!empty($_GET['phone'])) {
     $defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
 
-if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid'])) {
-    $defaults['openid'] = Security::remove_XSS($_GET['openid']);
-}
-
 $form->setDefaults($defaults);
 
 $tpl = new Template();
@@ -347,10 +340,6 @@ $content = Display::page_header($tool_name);
 //api_display_tool_title($tool_name);
 if (api_get_setting('allow_registration') == 'approval') {
     $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal');
-}
-//if openid was not found
-if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'), 'warning');
 }
 
 $url = api_get_path(WEB_PUBLIC_PATH).'internal_page/edit/inscription';

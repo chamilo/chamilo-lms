@@ -181,15 +181,6 @@ if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profi
     $form->addRule('email', get_lang('EmailWrong'), 'email');
 }
 
-// OPENID URL
-if (api_get_setting('profile.is_editable') === 'true' && api_get_setting('openid_authentication') == 'true') {
-    $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
-    if (api_get_setting('profile', 'openid') !== 'true') {
-        $form->freeze('openid');
-    }
-    $form->applyFilter('openid', 'trim');
-}
-
 //    PHONE
 $form->addElement('text', 'phone', get_lang('Phone'), ['size' => 20]);
 if (api_get_setting('profile', 'phone') !== 'true') {

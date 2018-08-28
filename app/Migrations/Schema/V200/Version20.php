@@ -639,7 +639,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
 
         // Drop unused tables
-        $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type'];
+        $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type', 'openid_association'];
         foreach ($dropTables as $table) {
             if ($schema->hasTable($table)) {
                 $schema->dropTable($table);

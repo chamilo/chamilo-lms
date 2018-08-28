@@ -166,9 +166,6 @@ if ($user_already_registered_show_terms === false &&
     }
 
     $form->addRule('email', get_lang('EmailWrong'), 'email');
-    if (api_get_setting('openid_authentication') === 'true') {
-        $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
-    }
 
     // USERNAME
     if (api_get_setting('login_is_email') != 'true') {
@@ -419,10 +416,6 @@ if (!empty($_GET['phone'])) {
     $defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
 
-if (api_get_setting('openid_authentication') === 'true' && !empty($_GET['openid'])) {
-    $defaults['openid'] = Security::remove_XSS($_GET['openid']);
-}
-
 $defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
@@ -501,11 +494,6 @@ if ($isNotAllowedHere) {
 
 if (api_get_setting('allow_registration') === 'approval') {
     $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
-}
-
-//if openid was not found
-if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
 }
 
 $showTerms = false;

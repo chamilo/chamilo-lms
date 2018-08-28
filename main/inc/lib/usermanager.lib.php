@@ -24,20 +24,20 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 class UserManager
 {
     // This constants are deprecated use the constants located in ExtraField
-    const USER_FIELD_TYPE_TEXT = 1;
-    const USER_FIELD_TYPE_TEXTAREA = 2;
-    const USER_FIELD_TYPE_RADIO = 3;
-    const USER_FIELD_TYPE_SELECT = 4;
-    const USER_FIELD_TYPE_SELECT_MULTIPLE = 5;
-    const USER_FIELD_TYPE_DATE = 6;
-    const USER_FIELD_TYPE_DATETIME = 7;
-    const USER_FIELD_TYPE_DOUBLE_SELECT = 8;
-    const USER_FIELD_TYPE_DIVIDER = 9;
-    const USER_FIELD_TYPE_TAG = 10;
-    const USER_FIELD_TYPE_TIMEZONE = 11;
-    const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
-    const USER_FIELD_TYPE_FILE = 13;
-    const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
+    public const USER_FIELD_TYPE_TEXT = 1;
+    public const USER_FIELD_TYPE_TEXTAREA = 2;
+    public const USER_FIELD_TYPE_RADIO = 3;
+    public const USER_FIELD_TYPE_SELECT = 4;
+    public const USER_FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const USER_FIELD_TYPE_DATE = 6;
+    public const USER_FIELD_TYPE_DATETIME = 7;
+    public const USER_FIELD_TYPE_DOUBLE_SELECT = 8;
+    public const USER_FIELD_TYPE_DIVIDER = 9;
+    public const USER_FIELD_TYPE_TAG = 10;
+    public const USER_FIELD_TYPE_TIMEZONE = 11;
+    public const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
+    public const USER_FIELD_TYPE_FILE = 13;
+    public const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
 
     private static $encryptionMethod;
 
@@ -558,7 +558,6 @@ class UserManager
                     }
                 }
 
-
                 if ($sendEmailToAllAdmins) {
                     $adminList = self::get_all_administrators();
 
@@ -997,36 +996,6 @@ class UserManager
         if ($r !== false) {
             Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $ids);
 
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Update user information with new openid.
-     *
-     * @param int    $user_id
-     * @param string $openid
-     *
-     * @return bool true if the user information was updated
-     * @assert (false,'') === false
-     * @assert (-1,'') === false
-     */
-    public static function update_openid($user_id, $openid)
-    {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        if ($user_id != strval(intval($user_id))) {
-            return false;
-        }
-        if ($user_id === false) {
-            return false;
-        }
-        $sql = "UPDATE $table_user SET
-                openid='".Database::escape_string($openid)."'";
-        $sql .= " WHERE id= $user_id";
-
-        if (Database::query($sql) !== false) {
             return true;
         }
 

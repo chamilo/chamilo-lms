@@ -211,7 +211,6 @@ class SettingsManager implements SettingsManagerInterface
             'platform_charset' => 'Languages',
             'noreply_email_address' => 'Platform',
             'survey_email_sender_noreply' => 'Course',
-            'openid_authentication' => 'Security',
             'gradebook_enable' => 'Gradebook',
             'gradebook_score_display_coloring' => 'Gradebook',
             'gradebook_score_display_custom' => 'Gradebook',

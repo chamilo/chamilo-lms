@@ -42,7 +42,6 @@ define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES', 'templates');
 define('TABLE_MAIN_SYSTEM_TEMPLATE', 'system_template');
-define('TABLE_MAIN_OPENID_ASSOCIATION', 'openid_association');
 define('TABLE_MAIN_COURSE_REQUEST', 'course_request');
 
 // Gradebook

@@ -151,11 +151,6 @@ if (api_get_setting('login_is_email') == 'true') {
     $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
-// OpenID
-if (api_get_setting('openid_authentication') == 'true') {
-    $form->addElement('text', 'openid', get_lang('OpenIDURL'));
-}
-
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 
@@ -457,12 +452,7 @@ if ($form->validate()) {
         if (isset($user['student_boss'])) {
             UserManager::subscribeUserToBossList($user_id, $user['student_boss']);
         }
-
-        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
-            $up = UserManager::update_openid($user_id, $user['openid']);
-        }
         $currentUserId = api_get_user_id();
-
         $userObj = api_get_user_entity($user_id);
 
         UserManager::add_user_as_admin($userObj);

@@ -51,7 +51,7 @@ class CourseListener
         if ($request->attributes->get('_route') === '_wdt') {
             return;
         }
-
+        // Ignore toolbar
         if ($request->attributes->get('_profiler') === '_wdt') {
             return;
         }
@@ -102,9 +102,15 @@ class CourseListener
             }
         }
 
+        global $cidReset;
+        if ($cidReset === true) {
+            $this->removeCourseFromSession($request);
+            return;
+        }
+
         if (!empty($course)) {
             $sessionHandler->set('courseObj', $course);
-            $courseInfo = api_get_course_info($courseCode);
+            $courseInfo = api_get_course_info($course->getCode());
             $container->get('twig')->addGlobal('course', $course);
 
             $sessionHandler->set('_real_cid', $course->getId());
@@ -228,7 +234,10 @@ class CourseListener
 
         $groupId = (int) $request->get('gidReq');
         $sessionId = (int) $request->get('id_session');
-        $cidReset = $sessionHandler->get('cid_reset', false);
+
+        // cidReset is set in the global.inc.php files
+        global $cidReset;
+        //$cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&

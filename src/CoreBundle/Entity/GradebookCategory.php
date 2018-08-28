@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,11 +38,12 @@ class GradebookCategory
     protected $description;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="gradeBookCategories")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
@@ -218,30 +220,6 @@ class GradebookCategory
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return GradebookCategory
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -548,6 +526,26 @@ class GradebookCategory
     public function setGradeBooksToValidateInDependence(int $value): GradebookCategory
     {
         $this->gradeBooksToValidateInDependence = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return GradebookCategory
+     */
+    public function setUser(User $user): GradebookCategory
+    {
+        $this->user = $user;
 
         return $this;
     }

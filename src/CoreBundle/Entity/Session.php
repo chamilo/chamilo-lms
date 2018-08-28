@@ -29,14 +29,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Session
 {
-    const VISIBLE = 1;
-    const READ_ONLY = 2;
-    const INVISIBLE = 3;
-    const AVAILABLE = 4;
+    public const VISIBLE = 1;
+    public const READ_ONLY = 2;
+    public const INVISIBLE = 3;
+    public const AVAILABLE = 4;
 
-    const STUDENT = 0;
-    const DRH = 1;
-    const COACH = 2;
+    public const STUDENT = 0;
+    public const DRH = 1;
+    public const COACH = 2;
 
     /**
      * @var int
@@ -49,18 +49,22 @@ class Session
 
     /**
      * @var ArrayCollection
+     *
+     * @ORM\OrderBy({"position" = "ASC"})
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     protected $courses;
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     protected $users;
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     protected $userCourseSubscriptions;
@@ -223,12 +227,14 @@ class Session
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="send_subscription_notification", type="boolean", nullable=false, options={"default":false})
      */
     protected $sendSubscriptionNotification;
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     protected $studentPublications;

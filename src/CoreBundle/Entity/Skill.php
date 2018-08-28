@@ -20,8 +20,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Skill
 {
-    const STATUS_DISABLED = 0;
-    const STATUS_ENABLED = 1;
+    public const STATUS_DISABLED = 0;
+    public const STATUS_ENABLED = 1;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
@@ -104,7 +104,9 @@ class Skill
 
     /**
      * @var \DateTime
+     *
      * @Gedmo\Timestampable(on="update")
+     *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     protected $updatedAt;
@@ -112,7 +114,7 @@ class Skill
     /**
      * Constructor.
      */
-    public function __constructor()
+    public function __construct()
     {
         $this->status = self::STATUS_ENABLED;
     }

@@ -20,8 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SessionRelCourseRelUser
 {
-    const STATUS_STUDENT = 0;
-    const STATUS_COURSE_COACH = 2;
+    public const STATUS_STUDENT = 0;
+    public const STATUS_COURSE_COACH = 2;
 
     public $statusList = [
         0 => 'student',
@@ -39,6 +39,7 @@ class SessionRelCourseRelUser
 
     /**
      * @var User
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
@@ -46,6 +47,7 @@ class SessionRelCourseRelUser
 
     /**
      * @var Session
+     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
@@ -53,6 +55,7 @@ class SessionRelCourseRelUser
 
     /**
      * @var Course
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
@@ -88,9 +91,9 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @return \Chamilo\UserBundle\Entity\User
+     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

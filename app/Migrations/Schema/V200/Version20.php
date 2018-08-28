@@ -441,7 +441,13 @@ class Version20 extends AbstractMigrationChamilo
             'ldap_description',
             'openid_authentication',
             //'platform_charset',
-            'shibboleth_description'
+            'shibboleth_description',
+            /*'sso_authentication',
+            'sso_authentication_domain',
+            'sso_authentication_auth_uri',
+            'sso_authentication_unauth_uri',
+            'sso_authentication_protocol',
+            'sso_force_redirect',*/
         ];
 
         foreach ($settings as $setting) {
@@ -637,6 +643,17 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
+
+        $this->addSql('ALTER TABLE access_url_rel_course_category CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE course_category_id course_category_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE access_url_rel_course_category ADD CONSTRAINT FK_3545C2A673444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
+        $this->addSql('ALTER TABLE access_url_rel_course_category ADD CONSTRAINT FK_3545C2A66628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id)');
+        $this->addSql('CREATE INDEX IDX_3545C2A673444FD5 ON access_url_rel_course_category (access_url_id)');
+        $this->addSql('CREATE INDEX IDX_3545C2A66628AD36 ON access_url_rel_course_category (course_category_id)');
+
+        $this->addSql('ALTER TABLE gradebook_category CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('DELETE FROM gradebook_category WHERE user_id IS NOT NULL AND user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('CREATE INDEX IDX_96A4C705A76ED395 ON gradebook_category (user_id)');
 
         // Drop unused tables
         $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type', 'openid_association'];

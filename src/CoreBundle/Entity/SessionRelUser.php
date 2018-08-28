@@ -82,6 +82,7 @@ class SessionRelUser
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="registered_at", type="datetime", nullable=false, unique=false)
      */
     protected $registeredAt;

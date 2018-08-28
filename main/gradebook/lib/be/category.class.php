@@ -582,7 +582,7 @@ class Category implements GradebookItem
             $category = new GradebookCategory();
             $category->setName($this->name);
             $category->setDescription($this->description);
-            $category->setUserId($this->user_id);
+            $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
             $category->setParentId($this->parent);
             $category->setWeight($this->weight);

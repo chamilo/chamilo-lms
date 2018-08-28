@@ -100,6 +100,11 @@ class CourseCategory
     protected $description;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="courseCategory", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $urls;
+
+    /**
      * Constructor.
      */
     public function __construct()

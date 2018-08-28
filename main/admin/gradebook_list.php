@@ -109,6 +109,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
             $courseId = isset($values['course_id']) ? $values['course_id'] : 0;
             $courseInfo = api_get_course_info_by_id($courseId);
+            $courseEntity = api_get_course_entity($courseId);
             $courseCode = $courseInfo['code'];
             $criteria = ['courseCode' => $courseCode];
             $exists = $repo->findBy($criteria);
@@ -124,8 +125,8 @@ switch ($action) {
                     ->setLocked(0)
                     ->setGenerateCertificates(0)
                     ->setIsRequirement(false)
-                    ->setCourseCode($courseCode)
-                    ->setUserId(api_get_user_id());
+                    ->setCourse($courseEntity)
+                    ->setUser(api_get_user_entity(api_get_user_id()));
                 $em->persist($category);
                 $em->flush();
                 if ($category->getId()) {

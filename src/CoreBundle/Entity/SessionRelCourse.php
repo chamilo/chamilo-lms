@@ -67,7 +67,7 @@ class SessionRelCourse
     }
 
     /**
-     * @param $session
+     * @param Session $session
      *
      * @return $this
      */

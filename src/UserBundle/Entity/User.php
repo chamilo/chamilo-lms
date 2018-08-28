@@ -81,12 +81,12 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  */
 class User extends BaseUser implements ThemeUser, EquatableInterface //implements ParticipantInterface, ThemeUser
 {
-    const COURSE_MANAGER = 1;
-    const TEACHER = 1;
-    const SESSION_ADMIN = 3;
-    const DRH = 4;
-    const STUDENT = 5;
-    const ANONYMOUS = 6;
+    public const COURSE_MANAGER = 1;
+    public const TEACHER = 1;
+    public const SESSION_ADMIN = 3;
+    public const DRH = 4;
+    public const STUDENT = 5;
+    public const ANONYMOUS = 6;
 
     /**
      * @var int
@@ -292,23 +292,23 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     protected $curriculumItems;
 
-    /*
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
-     *
      */
     protected $portals;
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      */
     protected $sessionAsGeneralCoach;
 
     /**
      * @var ArrayCollection
-     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
-    protected $extraFields;
+    //protected $extraFields;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
@@ -329,6 +329,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="feedbackGiver")
      */
     protected $commentedUserSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="user")
+     */
+    protected $gradeBookCategories;
 
     /**
      * @var string
@@ -353,6 +358,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var string
+     *
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
     private $pictureUri;

@@ -48,6 +48,15 @@ class Course
     protected $id;
 
     /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
+     */
+    protected $title;
+
+    /**
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -149,14 +158,6 @@ class Course
     /**
      * @var string
      *
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
-     */
-    protected $title;
-
-    /**
-     * @var string
      * @Gedmo\Slug(
      *      fields={"title"},
      *      updatable = false,
@@ -196,7 +197,9 @@ class Course
 
     /**
      * @var bool
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
      */
     protected $visibility;

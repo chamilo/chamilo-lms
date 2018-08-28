@@ -23,59 +23,57 @@ class AccessUrlRelCourseCategory
     protected $id;
 
     /**
-     * @var int
+     * @var AccessUrl
      *
-     * @ORM\Column(name="access_url_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="courseCategory", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $accessUrlId;
+    protected $url;
 
     /**
-     * @var int
+     * @var CourseCategory
      *
-     * @ORM\Column(name="course_category_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="urls", cascade={"persist"})
+     * @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")
      */
-    protected $courseCategoryId;
+    protected $courseCategory;
 
     /**
-     * Set accessUrlId.
-     *
-     * @param int $accessUrlId
-     *
-     * @return $this
+     * @return AccessUrl
      */
-    public function setAccessUrlId($accessUrlId)
+    public function getUrl(): AccessUrl
     {
-        $this->accessUrlId = $accessUrlId;
+        return $this->url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     *
+     * @return AccessUrlRelCourseCategory
+     */
+    public function setUrl(AccessUrl $url): AccessUrlRelCourseCategory
+    {
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get accessUrlId.
-     *
-     * @return int
+     * @return CourseCategory
      */
-    public function getAccessUrlId()
+    public function getCourseCategory(): CourseCategory
     {
-        return $this->accessUrlId;
+        return $this->courseCategory;
     }
 
     /**
-     * @return int
-     */
-    public function getCourseCategoryId()
-    {
-        return $this->courseCategoryId;
-    }
-
-    /**
-     * @param int $courseCategoryId
+     * @param CourseCategory $courseCategory
      *
-     * @return $this
+     * @return AccessUrlRelCourseCategory
      */
-    public function setCourseCategoryId($courseCategoryId)
+    public function setCourseCategory(CourseCategory $courseCategory): AccessUrlRelCourseCategory
     {
-        $this->courseCategoryId = $courseCategoryId;
+        $this->courseCategory = $courseCategory;
 
         return $this;
     }

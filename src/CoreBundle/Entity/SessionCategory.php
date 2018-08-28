@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class SessionCategory
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
@@ -23,14 +32,6 @@ class SessionCategory
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
     protected $session;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
 
     /**
      * @var string
@@ -64,11 +65,11 @@ class SessionCategory
     /**
      * Set url.
      *
-     * @param $url
+     * @param AccessUrl $url
      *
      * @return SessionCategory
      */
-    public function setUrl($url)
+    public function setUrl(AccessUrl $url)
     {
         $this->url = $url;
 
@@ -76,9 +77,9 @@ class SessionCategory
     }
 
     /**
-     * @return mixed
+     * @return AccessUrl
      */
-    public function getUrl()
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }

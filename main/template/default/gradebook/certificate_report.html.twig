@@ -1,3 +1,4 @@
+{% autoescape false %}
 <script>
 $(document).on('ready', function () {
     $('select#session').on('change', function () {
@@ -88,3 +89,5 @@ $(document).on('ready', function () {
 {% else %}
     <p class="alert alert-info">{{ 'NoResults' | get_lang }}</p>
 {% endif %}
+
+{% endautoescape %}

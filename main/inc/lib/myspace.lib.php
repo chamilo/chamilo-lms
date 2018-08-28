@@ -63,8 +63,8 @@ class MySpace
      */
     public static function getTopMenu()
     {
-        $menu_items = [];
-        $menu_items[] = Display::url(
+        $menuItems = [];
+        $menuItems[] = Display::url(
             Display::return_icon(
                 'stats.png',
                 get_lang('MyStats'),
@@ -73,7 +73,7 @@ class MySpace
             ),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
-        $menu_items[] = Display::url(
+        $menuItems[] = Display::url(
             Display::return_icon(
                 'teacher.png',
                 get_lang('TeacherInterface'),
@@ -82,7 +82,7 @@ class MySpace
             ),
             api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
         );
-        $menu_items[] = Display::url(
+        $menuItems[] = Display::url(
             Display::return_icon(
                 'star_na.png',
                 get_lang('AdminInterface'),
@@ -91,12 +91,12 @@ class MySpace
             ),
             '#'
         );
-        $menu_items[] = Display::url(
+        $menuItems[] = Display::url(
             Display::return_icon('quiz.png', get_lang('ExamTracking'), [], 32),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu = '';
-        foreach ($menu_items as $item) {
+        foreach ($menuItems as $item) {
             $menu .= $item;
         }
         $menu .= '<br />';

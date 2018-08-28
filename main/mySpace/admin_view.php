@@ -23,13 +23,13 @@ if (!$allowToTrack) {
 }
 
 if ($exportCSV) {
-    if ($display == 'user') {
+    if ($display === 'user') {
         MySpace::export_tracking_user_overview();
         exit;
-    } elseif ($display == 'session') {
+    } elseif ($display === 'session') {
         MySpace::export_tracking_session_overview();
         exit;
-    } elseif ($display == 'course') {
+    } elseif ($display === 'course') {
         MySpace::export_tracking_course_overview();
         exit;
     }

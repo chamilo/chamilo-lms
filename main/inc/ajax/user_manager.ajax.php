@@ -294,8 +294,8 @@ switch ($action) {
 
         if (api_is_multiple_url_enabled()) {
             $qb
-                ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'uru', Join::WITH, 'u.userId = uru.userId')
-                ->andWhere('uru.accessUrlId = '.$urlId);
+                ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'uru', Join::WITH, 'u.id = uru.user')
+                ->andWhere('uru.url = '.$urlId);
         }
 
         $qb

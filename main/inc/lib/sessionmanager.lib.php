@@ -3416,10 +3416,10 @@ class SessionManager
         $noCoach = false
     ) {
         // Definition of variables
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
-        $sessionId = !empty($sessionId) ? intval($sessionId) : api_get_session_id();
-        $courseId = !empty($courseId) ? intval($courseId) : api_get_course_id();
+        $sessionId = !empty($sessionId) ? (int) $sessionId : api_get_session_id();
+        $courseId = !empty($courseId) ? (int) $courseId : api_get_course_id();
 
         if (empty($sessionId) || empty($courseId) || empty($userId)) {
             return false;
@@ -3498,8 +3498,8 @@ class SessionManager
             return Database::affected_rows($result) > 0;
         }
 
-        $sql = "INSERT INTO $tblSessionRelCourseRelUser(session_id, c_id, user_id, status)
-                VALUES($sessionId, $courseId, $userId, 2)";
+        $sql = "INSERT INTO $tblSessionRelCourseRelUser(session_id, c_id, user_id, status, visibility)
+                VALUES($sessionId, $courseId, $userId, 2, 1)";
         $result = Database::query($sql);
 
         return Database::affected_rows($result) > 0;

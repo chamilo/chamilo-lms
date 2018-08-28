@@ -99,11 +99,15 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @param mixed $user
+     * @param $user
+     *
+     * @return $this
      */
     public function setUser($user)
     {
         $this->user = $user;
+
+        return $this;
     }
 
     /**
@@ -116,10 +120,14 @@ class SessionRelCourseRelUser
 
     /**
      * @param Session $session
+     *
+     * @return $this
      */
     public function setSession($session)
     {
         $this->session = $session;
+
+        return $this;
     }
 
     /**
@@ -132,10 +140,14 @@ class SessionRelCourseRelUser
 
     /**
      * @param Course $course
+     *
+     * @return $this
      */
     public function setCourse($course)
     {
         $this->course = $course;
+
+        return $this;
     }
 
     /**
@@ -201,7 +213,7 @@ class SessionRelCourseRelUser
      *
      * @param int $legalAgreement
      *
-     * @return SessionRelCourseRelUser
+     * @return $this
      */
     public function setLegalAgreement($legalAgreement)
     {
@@ -215,7 +227,7 @@ class SessionRelCourseRelUser
      *
      * @return int
      */
-    public function getLegalAgreement()
+    public function getLegalAgreement(): int
     {
         return $this->legalAgreement;
     }

@@ -29,14 +29,14 @@ class CourseCategoryRepository extends EntityRepository
                 'ChamiloCoreBundle:AccessUrlRelCourseCategory',
                 'a',
                 Join::WITH,
-                'c = a.courseCategoryId'
+                'c = a.courseCategory'
             )
-            ->where($qb->expr()->eq('a.accessUrlId', $accessUrl))
+            ->where($qb->expr()->eq('a.url', $accessUrl))
             ->orderBy('c.treePos', 'ASC')
            ;
 
         if ($allowBaseCategories) {
-            $qb->orWhere($qb->expr()->eq('a.accessUrlId', 1));
+            $qb->orWhere($qb->expr()->eq('a.url', 1));
         }
 
         $query = $qb->getQuery();
@@ -60,14 +60,14 @@ class CourseCategoryRepository extends EntityRepository
                 'ChamiloCoreBundle:AccessUrlRelCourseCategory',
                 'a',
                 Join::WITH,
-                'c = a.courseCategoryId'
+                'c = a.courseCategory'
             )
             ->where(
-                $qb->expr()->eq('a.accessUrlId', $accessUrl)
+                $qb->expr()->eq('a.url', $accessUrl)
             );
 
         if ($allowBaseCategories) {
-            $qb->orWhere($qb->expr()->eq('a.accessUrlId', 1));
+            $qb->orWhere($qb->expr()->eq('a.url', 1));
         }
 
         $count = $qb->getQuery()->getSingleScalarResult();

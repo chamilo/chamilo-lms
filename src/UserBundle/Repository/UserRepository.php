@@ -190,8 +190,8 @@ class UserRepository extends EntityRepository
             $queryBuilder->innerJoin(
                 'ChamiloCoreBundle:AccessUrlRelUser',
                 'auru',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'u.id = auru.userId'
+                Join::WITH,
+                'u.id = auru.user'
             );
         }
 
@@ -201,7 +201,7 @@ class UserRepository extends EntityRepository
             ->setParameter('query', "$query%");
 
         if ($accessUrlId > 0) {
-            $queryBuilder->andWhere('auru.accessUrlId = :url')
+            $queryBuilder->andWhere('auru.url = :url')
                 ->setParameter(':url', $accessUrlId);
         }
 
@@ -430,7 +430,7 @@ class UserRepository extends EntityRepository
                             U.active = 1 AND
                             U.status != 6  AND
                             U.id != $currentUserId AND
-                            R.portal = $accessUrlId";
+                            R.url = $accessUrlId";
             } else {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
@@ -443,7 +443,7 @@ class UserRepository extends EntityRepository
                             UF.userId = $currentUserId AND
                             UF.friendUserId != $currentUserId AND
                             U = R.user AND
-                            R.portal = $accessUrlId";
+                            R.url = $accessUrlId";
             }
         } elseif (
             api_get_setting('allow_social_tool') === 'false' &&
@@ -458,7 +458,7 @@ class UserRepository extends EntityRepository
                             U.active = 1 AND
                             U.status != 6  AND
                             U.id != $currentUserId AND
-                            R.portal = $accessUrlId";
+                            R.url = $accessUrlId";
             } else {
                 $time_limit = api_get_setting('time_limit_whosonline');
                 $online_time = time() - $time_limit * 60;
@@ -1228,7 +1228,7 @@ class UserRepository extends EntityRepository
             $list = [];
             /** @var AccessUrlRelUser $portal */
             foreach ($portals as $portal) {
-                $portalInfo = \UrlManager::get_url_data_from_id($portal->getAccessUrlId());
+                $portalInfo = \UrlManager::get_url_data_from_id($portal->getUrl()->getId());
                 $list[] = $portalInfo['url'];
             }
         }

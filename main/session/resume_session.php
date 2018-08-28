@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -156,12 +157,13 @@ if ($session->getNbrCourses() === 0) {
 } else {
     $count = 0;
     $courseItem = '';
-    $courses = $sessionRepository->getCoursesOrderedByPosition($session);
+    $courses = $session->getCourses();
 
     $allowSkills = api_get_configuration_value('allow_skill_rel_items');
 
-    /** @var Course $course */
-    foreach ($courses as $course) {
+    /** @var SessionRelCourse $sessionRelCourse */
+    foreach ($courses as $sessionRelCourse) {
+        $course = $sessionRelCourse->getCourse();
         // Select the number of users
         $numberOfUsers = SessionManager::getCountUsersInCourseSession(
             $course,

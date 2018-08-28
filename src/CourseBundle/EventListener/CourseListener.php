@@ -3,17 +3,12 @@
 
 namespace Chamilo\CourseBundle\EventListener;
 
-use Chamilo\CoreBundle\Controller\LegacyController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
-use Chamilo\CourseBundle\Controller\ToolInterface;
-use Chamilo\CourseBundle\Event\CourseAccess;
-use Chamilo\CourseBundle\Event\SessionAccess;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;

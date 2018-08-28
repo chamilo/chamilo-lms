@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -34,7 +35,7 @@ if (!$session) {
 }
 $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 $courses = [];
-$sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
+$sessionCourses = $session->getCourses();
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = UserManager::getRepository();
@@ -50,8 +51,9 @@ $courseValues = new ExtraFieldValue('course');
 $userValues = new ExtraFieldValue('user');
 $sessionValues = new ExtraFieldValue('session');
 
-/** @var Course $sessionCourse */
-foreach ($sessionCourses as $sessionCourse) {
+/** @var SessionRelCourse $sessionRelCourse */
+foreach ($sessionCourses as $sessionRelCourse) {
+    $sessionCourse = $sessionRelCourse->getCourse();
     $courseTags = [];
 
     if (!is_null($tagField)) {

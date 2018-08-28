@@ -1,5 +1,5 @@
 {% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
-{% import template ~ '/macro/macro.tpl' as display %}
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
 
 {% block content %}
 {% autoescape false %}
@@ -11,11 +11,11 @@
         </div>
     </div>
     <div class="col-md-9">
-        {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
-        {{ display.panel('PersonalDataKeptOnYou' | get_lang, personal_data.data) }}
+        {{ macro.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
+        {{ macro.panel('PersonalDataKeptOnYou' | get_lang, personal_data.data) }}
 
         {% if personal_data.responsible %}
-            {{ display.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}
+            {{ macro.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}
         {% endif %}
 
         {% if personal_data.treatment %}
@@ -47,10 +47,10 @@
         {% endif %}
 
         {% if term_link %}
-            {{ display.panel('TermsAndConditions'|get_lang, term_link ) }}
+            {{ macro.panel('TermsAndConditions'|get_lang, term_link ) }}
         {% endif %}
 
-        {{ display.panel('PersonalDataPermissionsYouGaveUs' | get_lang, permission) }}
+        {{ macro.panel('PersonalDataPermissionsYouGaveUs' | get_lang, permission) }}
     </div>
 </div>
 {% endautoescape %}

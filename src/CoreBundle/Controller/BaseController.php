@@ -5,10 +5,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
-use Knp\Menu\ItemInterface as MenuItemInterface;
-use Knp\Menu\Renderer\ListRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**

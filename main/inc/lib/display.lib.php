@@ -1168,7 +1168,7 @@ class Display
                     'data-toggle' => 'tab',
                     'role' => 'tab',
                     'aria-controls' => 'aria_'.$id.$i,
-                    'aria-selected' => $selected
+                    'aria-selected' => $selected,
                 ]
             );
             $lis .= $item;
@@ -1298,7 +1298,7 @@ class Display
      *
      * @param string $div_id       div id
      * @param string $url          url where the jqgrid will ask for data (if datatype = json)
-     * @param array  $column_names Visible columns (you should use get_lang).
+     * @param array  $column_names visible columns (you should use get_lang).
      *                             An array in which we place the names of the columns.
      *                             This is the text that appears in the head of the grid (Header layer).
      *                             Example: colname   {name:'date',     index:'date',   width:120, align:'right'},

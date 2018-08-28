@@ -24,12 +24,12 @@ class ResourceRightsType extends AbstractType
             ->add(
                 'role',
                 'choice',
-                array('choices' => ToolResourceRights::getDefaultRoles())
+                ['choices' => ToolResourceRights::getDefaultRoles()]
             )
             ->add(
                 'mask',
                 'choice',
-                array('choices' => ToolResourceRights::getMaskList())
+                ['choices' => ToolResourceRights::getMaskList()]
             );
     }
 
@@ -39,9 +39,9 @@ class ResourceRightsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceRights',
-            )
+            ]
         );
     }
 

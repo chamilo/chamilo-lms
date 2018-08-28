@@ -12,5 +12,4 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
  */
 class CDocumentRepository extends ResourceRepository
 {
-
 }

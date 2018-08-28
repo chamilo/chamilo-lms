@@ -576,5 +576,4 @@ class CGroupCategory
 
         return $this;
     }
-
 }

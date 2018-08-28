@@ -36,6 +36,7 @@ class Block
             ).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'"> 
                 <em class="fa fa-times"></em>
             </a>';
+
         return $closeLink;
     }
 

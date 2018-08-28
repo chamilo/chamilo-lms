@@ -368,5 +368,4 @@ class CourseCategory
 
         return $this;
     }
-
 }

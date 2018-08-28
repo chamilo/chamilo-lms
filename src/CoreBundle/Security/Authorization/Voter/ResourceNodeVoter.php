@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -123,7 +122,6 @@ class ResourceNodeVoter extends Voter
 
         if ($creator instanceof UserInterface &&
             $user->getUsername() === $creator->getUsername()) {
-
             return true;
         }
 
@@ -256,7 +254,6 @@ class ResourceNodeVoter extends Voter
 
         foreach ($user->getRoles() as $role) {
             if ($acl->isAllowed($role, $resource, $askedMask)) {
-
                 //dump('passed');
                 return true;
             }

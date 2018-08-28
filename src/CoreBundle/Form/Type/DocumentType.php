@@ -11,7 +11,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class DocumentType
+ * Class DocumentType.
+ *
  * @package Chamilo\CoreBundle\Form\Type
  */
 class DocumentType extends AbstractType

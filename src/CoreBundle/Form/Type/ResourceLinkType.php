@@ -4,14 +4,14 @@
 namespace Chamilo\CoreBundle\Form\Type;
 
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
-
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ResourceLinkType.
+ *
  * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceLinkType extends AbstractType
@@ -25,40 +25,40 @@ class ResourceLinkType extends AbstractType
             ->add(
                 'sharing',
                 ChoiceType::class,
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'everyone' => 'Everyone',
                         'course' => 'Course',
                         'user' => 'User',
                         'group' => 'Group',
-                    ),
-                    'attr' => array('class' => 'sharing_options'),
-                    'mapped' => false
-                )
+                    ],
+                    'attr' => ['class' => 'sharing_options'],
+                    'mapped' => false,
+                ]
             )
             ->add(
                 'search',
                 'hidden',
-                array(
-                    'attr' => array('class' => 'extra_hidden'),
-                    'mapped' => false
-                )
+                [
+                    'attr' => ['class' => 'extra_hidden'],
+                    'mapped' => false,
+                ]
             )
             ->add(
                 'role',
                 ChoiceType::class,
-                array(
+                [
                     'choices' => ToolResourceRights::getDefaultRoles(),
-                    'mapped' => false
-                )
+                    'mapped' => false,
+                ]
             )
             ->add(
                 'mask',
                 ChoiceType::class,
-                array(
+                [
                     'choices' => ToolResourceRights::getMaskList(),
-                    'mapped' => false
-                )
+                    'mapped' => false,
+                ]
             )/*->add(
                 'rights',
                 'collection',
@@ -76,9 +76,9 @@ class ResourceLinkType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceLink',
-            )
+            ]
         );
     }
 

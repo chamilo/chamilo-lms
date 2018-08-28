@@ -9,6 +9,7 @@ use Oneup\UploaderBundle\Uploader\File\FlysystemFile;
 
 /**
  * Class UploadListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class CourseUploadListener

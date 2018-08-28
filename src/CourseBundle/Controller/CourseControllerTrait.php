@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * Trait CourseControllerTrait.
- * Implements the functions defined by the CourseControllerInterface
+ * Implements the functions defined by the CourseControllerInterface.
  *
  * @package Chamilo\CourseBundle\Controller
  */

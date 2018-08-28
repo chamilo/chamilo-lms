@@ -3,13 +3,13 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\ORM\Mapping as ORM;
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDocument.
@@ -100,6 +100,10 @@ class CDocument extends AbstractResource implements ResourceInterface
      * CDocument constructor.
      */
     public function __construct()
+    {
+    }
+
+    public function __get($a)
     {
     }
 
@@ -323,7 +327,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      * @ORM\PostPersist()
      *
      * @param LifecycleEventArgs $args
-     *
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -349,9 +352,5 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function getToolName(): string
     {
         return 'document';
-    }
-
-    public function __get($a) {
-
     }
 }

@@ -17,6 +17,7 @@ $rules = [
     'yoda_style' => false,
     'phpdoc_to_comment' => false,
     'phpdoc_no_package' => false,
+    'phpdoc_annotation_without_dot' => false,
     'increment_style' => ['style' => 'post'],
     'no_useless_else' => false,
     //'no_php4_constructor' => true,

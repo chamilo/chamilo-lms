@@ -3,24 +3,14 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use APY\DataGridBundle\Grid\Action\MassAction;
-use APY\DataGridBundle\Grid\Action\RowAction;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
-use APY\DataGridBundle\Grid\Source\Entity;
-use FOS\RestBundle\View\View;
-use Sylius\Component\Resource\ResourceActions;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 
 /**
  * Class ResourceController.
@@ -34,7 +24,8 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 class ResourceDownloadController extends BaseController
 {
     /**
-     * Upload form
+     * Upload form.
+     *
      * @Route("/upload/{type}/{id}", name="resource_upload", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @return Response
@@ -54,7 +45,9 @@ class ResourceDownloadController extends BaseController
 
     /**
      * Downloads the file courses/MATHS/document/file.jpg to the user.
+     *
      * @Route("/download/{course}/", name="resource_download", methods={"GET"}, options={"expose"=true})
+     *
      * @todo check permissions
      *
      * @param string $course
@@ -104,7 +97,6 @@ class ResourceDownloadController extends BaseController
             );
 
             return $response;
-
         } catch (\InvalidArgumentException $e) {
             return $this->abort();
         }
@@ -112,7 +104,9 @@ class ResourceDownloadController extends BaseController
 
     /**
      * Gets a document in browser courses/MATHS/document/file.jpg to the user.
+     *
      * @Route("/get/{course}/", name="resource_get", methods={"GET"}, options={"expose"=true})
+     *
      * @todo check permissions
      *
      * @param string $course
@@ -143,7 +137,6 @@ class ResourceDownloadController extends BaseController
             $filePath = $adapter->getPathPrefix().$path;
 
             return $this->file($filePath, null, ResponseHeaderBag::DISPOSITION_INLINE);
-
         } catch (\InvalidArgumentException $e) {
             return $this->abort();
         }

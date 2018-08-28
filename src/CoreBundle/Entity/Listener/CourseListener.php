@@ -22,7 +22,7 @@ class CourseListener
     protected $toolChain;
     protected $settingsManager;
 
-    /***
+    /**
      * CourseListener constructor.
      *
      * @param ToolChain       $toolChain

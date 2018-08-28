@@ -4,18 +4,16 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\Group;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
@@ -39,8 +37,7 @@ class ResourceRepository extends EntityRepository
         AbstractResource $resource,
         User $creator,
         AbstractResource $parent = null
-    ): ResourceNode
-    {
+    ): ResourceNode {
         $resourceNode = new ResourceNode();
 
         $tool = $this->getTool($resource->getToolName());
@@ -134,7 +131,7 @@ class ResourceRepository extends EntityRepository
 
     /**
      * @param ResourceNode $resourceNode
-     * @param array        $userList User id list
+     * @param array        $userList     User id list
      */
     public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
     {
@@ -217,8 +214,8 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param Usergroup $group
+     * @param ResourceNode   $resourceNode
+     * @param Usergroup      $group
      * @param ResourceRights $right
      *
      * @return ResourceLink
@@ -262,10 +259,10 @@ class ResourceRepository extends EntityRepository
             //->where('node.cId = 0')
             //->orderBy('node');
             ->setParameters(
-                array(
+                [
                     'tool' => $tool,
                     'course' => $course,
-                )
+                ]
             );
 
         if ($parent !== null) {

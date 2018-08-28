@@ -50,7 +50,7 @@ plugins:
     enabled: true
     config:
       file_extensions: "php"
-      rulesets: "codesize.xml"
+      rulesets: "ruleset.xml"
 
   sonar-php:
     enabled: false

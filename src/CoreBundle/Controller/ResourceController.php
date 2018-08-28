@@ -3,27 +3,27 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
-use Chamilo\CourseBundle\Controller\CourseControllerTrait;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use APY\DataGridBundle\Grid\Action\MassAction;
-use APY\DataGridBundle\Grid\Action\RowAction;
+use FOS\RestBundle\View\View;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Component\Resource\Exception\UpdateHandlingException;
+use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
-use APY\DataGridBundle\Grid\Source\Entity;
-use FOS\RestBundle\View\View;
-use Sylius\Component\Resource\ResourceActions;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Sylius\Component\Resource\Exception\UpdateHandlingException;
 
 /**
  * Class ResourceController.
@@ -240,7 +240,7 @@ class ResourceController extends BaseResourceController implements CourseControl
 
             // Loops all sharing options
             foreach ($shareList as $share) {
-                $idList = array();
+                $idList = [];
                 if (isset($share['search'])) {
                     $idList = explode(',', $share['search']);
                 }
@@ -367,9 +367,9 @@ class ResourceController extends BaseResourceController implements CourseControl
                 $this->metadata->getName() => $newResource,
                 'form' => $form->createView(),
                 'parent_id' => $parentId,
-                'file_type' => $fileType
+                'file_type' => $fileType,
             ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::CREATE . '.html'))
+            ->setTemplate($configuration->getTemplate(ResourceActions::CREATE.'.html'))
         ;
 
         return $this->viewHandler->handle($configuration, $view);
@@ -421,7 +421,7 @@ class ResourceController extends BaseResourceController implements CourseControl
 
         if ($configuration->isHtmlRequest()) {
             $view
-                ->setTemplate($configuration->getTemplate(ResourceActions::SHOW . '.html'))
+                ->setTemplate($configuration->getTemplate(ResourceActions::SHOW.'.html'))
                 ->setTemplateVar($this->metadata->getName())
                 ->setData([
                     'configuration' => $configuration,
@@ -525,7 +525,7 @@ class ResourceController extends BaseResourceController implements CourseControl
                 $this->metadata->getName() => $resource,
                 'form' => $form->createView(),
             ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE . '.html'))
+            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE.'.html'))
         ;
 
         return $this->viewHandler->handle($configuration, $view);

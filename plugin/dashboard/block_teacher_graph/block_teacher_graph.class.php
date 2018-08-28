@@ -17,7 +17,6 @@ use CpChart\Image as pImage;
  * required files for getting data.
  */
 
-
 /**
  * This class is used like controller for teacher graph block plugin,
  * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"),

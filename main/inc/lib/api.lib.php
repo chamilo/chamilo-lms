@@ -2108,7 +2108,6 @@ function api_get_group_entity($id = 0)
     return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id);
 }
 
-
 /**
  * @param int $id
  *

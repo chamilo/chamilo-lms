@@ -3,14 +3,15 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Oneup\UploaderBundle\Controller\BlueimpController;
 use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ResourceUploaderController.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class ResourceUploaderController extends BlueimpController
@@ -37,7 +38,6 @@ class ResourceUploaderController extends BlueimpController
                     if ($type === 'course') {
                         $courseCode = $request->get('identifier');
                         $this->container->get('');
-
                     }
 
                     $chunked ?
@@ -47,9 +47,9 @@ class ResourceUploaderController extends BlueimpController
                     $this->errorHandler->addException($response, $e);
                 }
             }
-        } catch(UploadException $e) {
+        } catch (UploadException $e) {
             // return nothing
-            return new JsonResponse(array());
+            return new JsonResponse([]);
         }
 
         return $this->createSupportedJsonResponse($response->assemble());

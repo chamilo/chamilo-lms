@@ -7,6 +7,8 @@ doctrine:
         host: '%env(DATABASE_HOST)%'
         driver: 'pdo_mysql'
         charset: utf8mb4
+        options:
+            1002: "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))"
         default_table_options:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci

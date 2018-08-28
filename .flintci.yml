@@ -1,6 +1,6 @@
 services:
     phpcsfixer:
-        config_path: config/.php_cs
+        config_path: .php_cs
     yamllint:
         version: latest
         config_path: .yamllint_config

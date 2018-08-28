@@ -518,7 +518,6 @@ class Template
         $this->assign('show_header', $status);
 
         $show_toolbar = 0;
-
         if (self::isToolBarDisplayedForUser()) {
             $show_toolbar = 1;
         }
@@ -530,11 +529,11 @@ class Template
         $show_course_navigation_menu = null;
 
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if (api_get_setting('show_toolshortcuts') != 'false') {
+            if (api_get_setting('show_toolshortcuts') !== 'false') {
                 //Course toolbar
-                $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
+                $show_course_shortcut = CourseHome::getCourseToolBar();
             }
-            if (api_get_setting('show_navigation_menu') != 'false') {
+            if (api_get_setting('show_navigation_menu') !== 'false') {
                 //Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }

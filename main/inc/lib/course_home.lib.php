@@ -1426,7 +1426,7 @@ class CourseHome
      *
      * @return string
      */
-    public static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
+    public static function getCourseToolBar($orientation = SHORTCUTS_HORIZONTAL): string
     {
         $origin = api_get_origin();
         if ($origin === 'learnpath') {
@@ -1436,10 +1436,9 @@ class CourseHome
         $navigation_items = self::get_navigation_items(false);
         $html = '';
         if (!empty($navigation_items)) {
-            if ($orientation == SHORTCUTS_HORIZONTAL) {
-                $style_id = "toolshortcuts_horizontal";
-            } else {
-                $style_id = "toolshortcuts_vertical";
+            $style_id = 'toolshortcuts_vertical';
+            if ($orientation === SHORTCUTS_HORIZONTAL) {
+                $style_id = 'toolshortcuts_horizontal';
             }
             $html .= '<div id="'.$style_id.'">';
             foreach ($navigation_items as $key => $navigation_item) {

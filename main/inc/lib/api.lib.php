@@ -2132,36 +2132,35 @@ function api_get_url_entity($id = 0)
  *
  * @return array The course info as an array formatted by api_format_course_array, including category.name
  */
-function api_get_course_info_by_id($id = null)
+function api_get_course_info_by_id($id = 0)
 {
-    if (!empty($id)) {
-        $id = (int) $id;
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT
-                    course.*,
-                    course_category.code faCode,
-                    course_category.name faName
-                FROM $course_table
-                LEFT JOIN $course_cat_table
-                ON course.category_code = course_category.code
-                WHERE course.id = $id";
-        $result = Database::query($sql);
-        $_course = [];
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result);
-            $_course = api_format_course_array($row);
-        }
+    $id = (int) $id;
+    if (empty($id)) {
+        $course = Session::read('_course', []);
 
-        return $_course;
+        return $course;
     }
 
-    global $_course;
-    if ($_course == '-1') {
-        $_course = [];
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $sql = "SELECT
+                course.*,
+                course_category.code faCode,
+                course_category.name faName
+            FROM $course_table
+            LEFT JOIN $course_cat_table
+            ON course.category_code = course_category.code
+            WHERE course.id = $id";
+    $result = Database::query($sql);
+
+    if (Database::num_rows($result) > 0) {
+        $row = Database::fetch_array($result);
+        $course = api_format_course_array($row);
+
+        return $course;
     }
 
-    return $_course;
+    return [];
 }
 
 /**

@@ -22,13 +22,11 @@ use ChamiloSession as Session;
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore */
 $cidReset = true;
 
-// For HTML editor repository.
-if (isset($_SESSION['this_section'])) {
-    unset($_SESSION['this_section']);
-}
-
 /* Included libraries */
 require_once './main/inc/global.inc.php';
+
+// For HTML editor repository.
+Session::erase('this_section');
 
 $this_section = SECTION_COURSES;
 
@@ -261,19 +259,6 @@ if ($useCookieValidation === 'true') {
             }
             $controller->tpl->assign('displayCookieUsageWarning', true);
         }
-    }
-}
-
-//check for flash and message
-$sniff_notification = '';
-$some_activex = isset($_SESSION['sniff_check_some_activex']) ? $_SESSION['sniff_check_some_activex'] : null;
-$some_plugins = isset($_SESSION['sniff_check_some_plugins']) ? $_SESSION['sniff_check_some_plugins'] : null;
-
-if (!empty($some_activex) || !empty($some_plugins)) {
-    if (!preg_match("/flash_yes/", $some_activex) && !preg_match("/flash_yes/", $some_plugins)) {
-        $sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);
-        //js verification - To annoying of redirecting every time the page
-        $controller->tpl->assign('sniff_notification', $sniff_notification);
     }
 }
 

@@ -57,6 +57,7 @@ class Agenda
 
                 // Setting the course object if we are in a course
                 $courseInfo = api_get_course_info_by_id($courseId);
+
                 if (!empty($courseInfo)) {
                     $this->set_course($courseInfo);
                 }
@@ -64,7 +65,7 @@ class Agenda
                 // Check if teacher/admin rights.
                 $isAllowToEdit = api_is_allowed_to_edit(false, true);
                 // Check course setting.
-                if (api_get_course_setting('allow_user_edit_agenda') == '1'
+                if (api_get_course_setting('allow_user_edit_agenda') === '1'
                     && api_is_allowed_in_course()
                 ) {
                     $isAllowToEdit = true;

@@ -8347,8 +8347,10 @@ class Exercise
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
-                    // Always the last item
-                    $mediaList[999][] = $objQuestionTmp->id;
+                    if ($objQuestionTmp) {
+                        // Always the last item
+                        $mediaList[999][] = $objQuestionTmp->id;
+                    }
                 }
             }
         }

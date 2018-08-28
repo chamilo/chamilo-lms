@@ -2154,7 +2154,7 @@ class ExtraField extends Model
             $form->addElement('text', 'display_text', get_lang('Name'));
         }
 
-        $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addHtmlEditor('description', get_lang('Description'), false);
 
         // Field type
         $types = self::get_field_types();

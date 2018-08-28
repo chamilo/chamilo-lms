@@ -655,6 +655,10 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('CREATE INDEX IDX_96A4C705A76ED395 ON gradebook_category (user_id)');
 
+        $this->addSql('ALTER TABLE access_url_rel_usergroup CHANGE access_url_id access_url_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD573444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
+        $this->addSql('CREATE INDEX IDX_AD488DD573444FD5 ON access_url_rel_usergroup (access_url_id)');
+
         // Drop unused tables
         $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type', 'openid_association'];
         foreach ($dropTables as $table) {

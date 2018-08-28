@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,10 +37,12 @@ class AccessUrlRelUser
     protected $user;
 
     /**
+     * @var AccessUrl
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $portal;
+    protected $url;
 
     /**
      * @return string
@@ -50,34 +53,42 @@ class AccessUrlRelUser
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
+     *
+     * @return $this
      */
     public function setUser($user)
     {
         $this->user = $user;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return AccessUrl
      */
-    public function getPortal()
+    public function getUrl(): AccessUrl
     {
-        return $this->portal;
+        return $this->url;
     }
 
     /**
-     * @param mixed $portal
+     * @param AccessUrl $url
+     *
+     * @return AccessUrlRelUser
      */
-    public function setPortal($portal)
+    public function setUrl(AccessUrl $url): AccessUrlRelUser
     {
-        $this->portal = $portal;
+        $this->url = $url;
+
+        return $this;
     }
 }

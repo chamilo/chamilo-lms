@@ -47,11 +47,11 @@ class AccessUrlRelSession
     /**
      * Set url.
      *
-     * @param $url
+     * @param AccessUrl $url
      *
      * @return AccessUrlRelSession
      */
-    public function setUrl($url)
+    public function setUrl(AccessUrl $url)
     {
         $this->url = $url;
 

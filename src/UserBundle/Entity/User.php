@@ -1920,7 +1920,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $urlList = $this->getPortals();
         /** @var AccessUrlRelUser $item */
         foreach ($urlList as $item) {
-            if ($item->getPortal()->getId() == $url->getId()) {
+            if ($item->getUrl()->getId() === $url->getId()) {
                 $this->currentUrl = $url;
                 break;
             }

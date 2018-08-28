@@ -23,11 +23,12 @@ class AccessUrlRelUserGroup
     protected $id;
 
     /**
-     * @var int
+     * @var AccessUrl
      *
-     * @ORM\Column(name="access_url_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $accessUrlId;
+    protected $url;
 
     /**
      * @var int
@@ -35,30 +36,6 @@ class AccessUrlRelUserGroup
      * @ORM\Column(name="usergroup_id", type="integer")
      */
     protected $userGroupId;
-
-    /**
-     * Set accessUrlId.
-     *
-     * @param int $accessUrlId
-     *
-     * @return AccessUrlRelUserGroup
-     */
-    public function setAccessUrlId($accessUrlId)
-    {
-        $this->accessUrlId = $accessUrlId;
-
-        return $this;
-    }
-
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
-    }
 
     /**
      * @return int
@@ -96,6 +73,26 @@ class AccessUrlRelUserGroup
     public function setUserGroupId($userGroupId)
     {
         $this->userGroupId = $userGroupId;
+
+        return $this;
+    }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getUrl(): AccessUrl
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     *
+     * @return AccessUrlRelUserGroup
+     */
+    public function setUrl(AccessUrl $url): AccessUrlRelUserGroup
+    {
+        $this->url = $url;
 
         return $this;
     }

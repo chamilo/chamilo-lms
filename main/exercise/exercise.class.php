@@ -4731,6 +4731,7 @@ class Exercise
                                 $questionScore
                             );
                         } elseif ($answerType == HOT_SPOT) {
+                            $correctAnswerId = 0;
                             /**
                              * @var int
                              * @var TrackEHotspot $hotspot

@@ -8856,10 +8856,10 @@ function api_create_protected_dir($name, $parentDirectory)
  * @see             class.phpmailer.php
  */
 function api_mail_html(
-    $recipient_name,
-    $recipient_email,
+    $recipientName,
+    $recipientEmail,
     $subject,
-    $message,
+    $body,
     $senderName = '',
     $senderEmail = '',
     $extra_headers = [],
@@ -8867,32 +8867,6 @@ function api_mail_html(
     $embedded_image = false,
     $additionalParameters = []
 ) {
-    global $platform_email;
-
-    return;
-
-    $mail = new PHPMailer();
-    $mail->Mailer = $platform_email['SMTP_MAILER'];
-    $mail->Host = $platform_email['SMTP_HOST'];
-    $mail->Port = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
-    // Stay far below SMTP protocol 980 chars limit.
-    $mail->WordWrap = 200;
-
-    if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-        if (isset($platform_email['SMTP_SECURE'])) {
-            $mail->SMTPSecure = $platform_email['SMTP_SECURE'];
-        }
-    }
-    $mail->SMTPDebug = isset($platform_email['SMTP_DEBUG']) ? $platform_email['SMTP_DEBUG'] : 0;
-
-    // 5 = low, 1 = high
-    $mail->Priority = 3;
-    $mail->SMTPKeepAlive = true;
-
     // Default values
     $notification = new Notification();
     $defaultEmail = $notification->getDefaultPlatformSenderEmail();
@@ -8903,21 +8877,15 @@ function api_mail_html(
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
     // Reply to first
-    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
-        $mail->AddReplyTo(
-            $extra_headers['reply_to']['mail'],
-            $extra_headers['reply_to']['name']
-        );
-        // Errors to sender
-        $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
-        $mail->Sender = $extra_headers['reply_to']['mail'];
-        unset($extra_headers['reply_to']);
-    } else {
-        $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
+    $replyToName = '';
+    $replyToEmail = '';
+    if (isset($extra_headers['reply_to'])) {
+        $replyToEmail = $extra_headers['reply_to']['mail'];
+        $replyToName = $extra_headers['reply_to']['name'];
     }
 
     //If the SMTP configuration only accept one sender
-    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
+    /*if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
         $valid = PHPMailer::validateAddress($senderEmail);
@@ -8925,99 +8893,20 @@ function api_mail_html(
             //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
             $mail->Sender = $senderEmail;
         }
-    }
+    }*/
 
-    $mail->SetFrom($senderEmail, $senderName);
+    /*$mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
-    );
+    );*/
 
-    $list = api_get_configuration_value('send_all_emails_to');
-    if (!empty($list) && isset($list['emails'])) {
-        foreach ($list['emails'] as $email) {
-            //$mail->AddBCC($email);
-            $mail->AddAddress($email);
-        }
+
+    if (!api_valid_email($recipientEmail)) {
+        return 0;
     }
 
-    // Send embedded image.
-    if ($embedded_image) {
-        // Get all images html inside content.
-        preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
-        // Prepare new tag images.
-        $new_images_html = [];
-        $i = 1;
-        if (!empty($m[1])) {
-            foreach ($m[1] as $image_path) {
-                $real_path = realpath($image_path);
-                $filename = basename($image_path);
-                $image_cid = $filename.'_'.$i;
-                $encoding = 'base64';
-                $image_type = mime_content_type($real_path);
-                $mail->AddEmbeddedImage(
-                    $real_path,
-                    $image_cid,
-                    $filename,
-                    $encoding,
-                    $image_type
-                );
-                $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
-                $i++;
-            }
-        }
-
-        // Replace origin image for new embedded image html.
-        $x = 0;
-        if (!empty($m[0])) {
-            foreach ($m[0] as $orig_img) {
-                $message = str_replace($orig_img, $new_images_html[$x], $message);
-                $x++;
-            }
-        }
-    }
-
-    $mailView = new Template(null, false, false, false, false, false, false);
-
-    $noReply = api_get_setting('noreply_email_address');
-    if (!empty($noReply)) {
-        $message .= "<br />".get_lang('ThisIsAutomaticEmailNoReply');
-    }
-    $mailView->assign('content', $message);
-
-    if (isset($additionalParameters['link'])) {
-        $mailView->assign('link', $additionalParameters['link']);
-    }
-    $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
-    $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
-    $layout = $mailView->get_template('mail/mail.tpl');
-    $mail->Body = $mailView->fetch($layout);
-
-    // Attachment ...
-    if (!empty($data_file)) {
-        foreach ($data_file as $file_attach) {
-            if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
-                $mail->AddAttachment($file_attach['path'], $file_attach['filename']);
-            }
-        }
-    }
-
-    // Only valid addresses are accepted.
-    if (is_array($recipient_email)) {
-        foreach ($recipient_email as $dest) {
-            if (api_valid_email($dest)) {
-                $mail->AddAddress($dest, $recipient_name);
-            }
-        }
-    } else {
-        if (api_valid_email($recipient_email)) {
-            $mail->AddAddress($recipient_email, $recipient_name);
-        } else {
-            return 0;
-        }
-    }
-
-    if (is_array($extra_headers) && count($extra_headers) > 0) {
+    /*if (is_array($extra_headers) && count($extra_headers) > 0) {
         foreach ($extra_headers as $key => $value) {
             switch (strtolower($key)) {
                 case 'encoding':
@@ -9040,26 +8929,90 @@ function api_mail_html(
         if (!empty($extra_headers)) {
             $mail->AddCustomHeader($extra_headers);
         }
-    }
+    }*/
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
-    $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
+    //$mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
+    try {
+        $message = new \Swift_Message($subject);
 
-    // Send the mail message.
-    if (!$mail->Send()) {
-        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
-        if ($mail->SMTPDebug) {
-            error_log(
-                "Connection details :: ".
-                "Protocol: ".$mail->Mailer.' :: '.
-                "Host/Port: ".$mail->Host.':'.$mail->Port.' :: '.
-                "Authent/Open: ".($mail->SMTPAuth ? 'Authent' : 'Open').' :: '.
-                ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '').' :: '.
-                "Sender: ".$mail->Sender
-            );
+        $list = api_get_configuration_value('send_all_emails_to');
+        if (!empty($list) && isset($list['emails'])) {
+            foreach ($list['emails'] as $email) {
+                $message->addCc($email);
+            }
         }
 
-        return 0;
+        // Attachment ...
+        if (!empty($data_file)) {
+            foreach ($data_file as $file_attach) {
+                if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
+                    //$message->attach(Swift_Attachment::fromPath($file_attach['path'], $file_attach['filename']);
+                    $message->attach(
+                        Swift_Attachment::fromPath($file_attach['path'])->setFilename($file_attach['filename'])
+                    );
+                }
+            }
+        }
+
+        $noReply = api_get_setting('noreply_email_address');
+        $automaticEmailText = '';
+        if (!empty($noReply)) {
+            $automaticEmailText = '<br />'.get_lang('ThisIsAutomaticEmailNoReply');
+        }
+
+        $params = [
+            'content' => '',
+            'mail_header_style' => api_get_configuration_value('mail_header_style'),
+            'mail_content_style' => api_get_configuration_value('mail_content_style'),
+            'link' => $additionalParameters['link'] ?? '',
+            'automatic_email_text' => $automaticEmailText
+        ];
+
+        $paramsHtml = $paramsText = $params;
+
+        $paramsHtml['content'] = $body;
+        $paramsText['content'] = str_replace('<br />', "\n", api_html_entity_decode($body));
+
+        if (!empty($senderEmail)) {
+            $message->setFrom([$senderEmail => $senderName]);
+        }
+
+        if (!empty($recipientEmail)) {
+            $message->setTo([$recipientEmail => $recipientName]);
+        }
+
+        if (!empty($replyToEmail)) {
+            $message->setReplyTo([$replyToEmail => $replyToName]);
+        }
+
+        $message
+            ->setBody(
+                Container::getTwig()->render(
+                    'ChamiloCoreBundle:Mailer:Default/default.html.twig',
+                    $paramsHtml
+                ),
+                'text/html'
+            )
+            ->addPart(
+                Container::getTwig()->render(
+                    'ChamiloCoreBundle:Mailer:Default/default.text.twig',
+                    $paramsText
+                ),
+                'text/plain'
+            )
+            //->setEncoder(\Swift_Encoding::get8BitEncoding())
+        ;
+
+        $type = $message->getHeaders()->get('Content-Type');
+        $type->setCharset('utf-8');
+        //$type->setValue('text/html');
+
+        Container::getMailer()->send($message);
+
+        return true;
+    } catch (Exception $e) {
+        error_log($e->getMessage());
     }
 
     if (!empty($additionalParameters)) {
@@ -9069,12 +9022,6 @@ function api_mail_html(
             $smsPlugin->send($additionalParameters);
         }
     }
-
-    // Clear all the addresses.
-    $mail->ClearAddresses();
-
-    // Clear all attachments
-    $mail->ClearAttachments();
 
     return 1;
 }

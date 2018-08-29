@@ -1461,7 +1461,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
     $result['complete_name_with_username'] = $result['complete_name'];
 
-    if (!empty($user['username'])) {
+    if (!empty($user['username']) && !api_get_configuration_value('hide_username_with_complete_name')) {
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
     }
 

@@ -958,6 +958,13 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
     ]
 ];*/
 
+// Hide the username when showing the complete name for a user.
+// Example: using api_get_user_info()['complete_name_with_username'] or $user->getCompleteNameWithUsername()
+//$_configuration['hide_username_with_complete_name'] = false;
+
+// Hide the username in course chat
+//$_configuration['hide_username_in_course_chat'] = false;
+
 // ------ Custom DB changes (keep this at the end)
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

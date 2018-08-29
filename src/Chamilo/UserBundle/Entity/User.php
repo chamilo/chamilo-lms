@@ -793,6 +793,10 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     public function getCompleteNameWithUsername()
     {
+        if (api_get_configuration_value('hide_username_with_complete_name')) {
+            return $this->getCompleteName();
+        }
+
         return api_get_person_name($this->firstname, $this->lastname).' ('.$this->username.')';
     }
 

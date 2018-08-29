@@ -2578,7 +2578,7 @@ class Tracking
         if (!empty($sessionId)) {
             $conditions[] = " session_id = $sessionId ";
         } else {
-            $conditions[] = " (session_id = 0 OR session_id IS NULL) ";
+            $conditions[] = ' (session_id = 0 OR session_id IS NULL) ';
         }
 
         $conditionToString = implode('AND', $conditions);

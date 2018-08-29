@@ -6456,9 +6456,9 @@ function api_request_uri()
  */
 function api_get_current_access_url_id()
 {
-    $access_url_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $path = Database::escape_string(api_get_path(WEB_PATH));
-    $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
+    $sql = "SELECT id FROM $table WHERE url = '".$path."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $access_url_id = Database::result($result, 0, 0);

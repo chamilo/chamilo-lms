@@ -6,11 +6,14 @@
             url: "{{ ajax_url }}&a=get_events",
             success: function(response) {
                 for (var i = 0; i < response.length; i++) {
+                    var startDate = moment(response[i].start_date + " 13:00:00").toDate();
+                    var endDate = moment(response[i].end_date + " 13:00:00").toDate();
+
                     myData.push({
                         id: response[i].id,
                         title: response[i].title,
-                        startDate: new Date(response[i].start_date),
-                        endDate: new Date(response[i].end_date),
+                        startDate: startDate,
+                        endDate: endDate,
                         color: response[i].color
                     });
                 }

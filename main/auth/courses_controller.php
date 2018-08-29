@@ -924,7 +924,7 @@ class CoursesController
             }
 
             $coachId = $session->getGeneralCoach()->getId();
-            $coachName = $session->getGeneralCoach()->getCompleteName();
+            $coachName = UserManager::formatUserFullName($session->getGeneralCoach());
             $actions = null;
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();

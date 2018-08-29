@@ -461,7 +461,7 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $sessionData = $this->getSessionInfo($session->getId());
-            $sessionData['coach'] = $session->getGeneralCoach()->getCompleteName();
+            $sessionData['coach'] = UserManager::formatUserFullName($session->getGeneralCoach());
             $sessionData['enrolled'] = $this->getUserStatusForSession(
                 api_get_user_id(),
                 $session
@@ -483,7 +483,7 @@ class BuyCoursesPlugin extends Plugin
 
                 foreach ($userCourseSubscriptions as $userCourseSubscription) {
                     $user = $userCourseSubscription->getUser();
-                    $sessionCourseData['coaches'][] = $user->getCompleteName();
+                    $sessionCourseData['coaches'][] = UserManager::formatUserFullName($user);
                 }
 
                 $sessionData['courses'][] = $sessionCourseData;
@@ -536,7 +536,7 @@ class BuyCoursesPlugin extends Plugin
 
             foreach ($course->getTeachers() as $courseUser) {
                 $teacher = $courseUser->getUser();
-                $courseItem['teachers'][] = $teacher->getCompleteName();
+                $courseItem['teachers'][] = UserManager::formatUserFullName($teacher);
             }
 
             //check images
@@ -607,7 +607,7 @@ class BuyCoursesPlugin extends Plugin
         foreach ($courseTeachers as $teachers) {
             $user = $teachers->getUser();
             $teacher['id'] = $user->getId();
-            $teacher['name'] = $user->getCompleteName();
+            $teacher['name'] = UserManager::formatUserFullName($user);
             $courseInfo['teachers'][] = $teacher;
         }
 
@@ -697,7 +697,7 @@ class BuyCoursesPlugin extends Plugin
             foreach ($userCourseSubscriptions as $userCourseSubscription) {
                 $user = $userCourseSubscription->getUser();
                 $coaches['id'] = $user->getUserId();
-                $coaches['name'] = $user->getCompleteName();
+                $coaches['name'] = UserManager::formatUserFullName($user);
                 $sessionCourseData['coaches'][] = $coaches;
             }
 

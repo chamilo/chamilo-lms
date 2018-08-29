@@ -46,7 +46,7 @@ $userId = $user['user_id'];
 
 $currentUrl = api_get_self().'?user_id='.$userId;
 
-$tool_name = $userEntity->getCompleteName();
+$tool_name = UserManager::formatUserFullName($userEntity);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $csvContent = [];

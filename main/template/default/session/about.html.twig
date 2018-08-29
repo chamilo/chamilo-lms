@@ -11,7 +11,7 @@
             </p>
             {% if show_tutor %}
                 <p>
-                    <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>
+                    <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach|format_user_full_name }}</em>
                 </p>
             {% endif %}
 

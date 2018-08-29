@@ -278,7 +278,7 @@ if ($form->validate()) {
             Display::return_message(
                 sprintf(
                     get_lang('TheUserXHasAlreadyAchievedTheSkillY'),
-                    $user->getCompleteName(),
+                    UserManager::formatUserFullName($user),
                     $skill->getName()
                 ),
                 'warning'
@@ -337,7 +337,7 @@ if ($form->validate()) {
                     $subject = get_lang("StudentHadEnoughSkills");
                     $message = sprintf(
                         get_lang("StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX"),
-                        $user->getCompleteName(),
+                        UserManager::formatUserFullName($user),
                         $parentData['name'],
                         $link
                     );
@@ -359,7 +359,7 @@ if ($form->validate()) {
             sprintf(
                 get_lang('SkillXAssignedToUserY'),
                 $skill->getName(),
-                $user->getCompleteName()
+                UserManager::formatUserFullName($user)
             ),
             'success'
         )
@@ -369,7 +369,7 @@ if ($form->validate()) {
     exit;
 }
 
-$form->setDefaults(['user_name' => $user->getCompleteNameWithUsername()]);
+$form->setDefaults(['user_name' => UserManager::formatUserFullName($user, true)]);
 $form->freeze(['user_name']);
 
 if (api_is_drh()) {
@@ -390,7 +390,7 @@ if (api_is_drh()) {
     }
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
-        'name' => $user->getCompleteName(),
+        'name' => UserManager::formatUserFullName($user),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -403,7 +403,7 @@ if (api_is_drh()) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
-        'name' => $user->getCompleteName(),
+        'name' => UserManager::formatUserFullName($user),
     ];
 }
 

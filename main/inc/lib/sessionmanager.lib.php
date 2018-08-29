@@ -1965,7 +1965,7 @@ class SessionManager
                 $tplContent->assign('session_name', $session->getName());
                 $tplContent->assign(
                     'session_coach',
-                    $session->getGeneralCoach()->getCompleteName()
+                    UserManager::formatUserFullName($session->getGeneralCoach())
                 );
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'

@@ -103,7 +103,7 @@ $currentTeacher = api_get_user_entity(api_get_user_id());
 $form->addSelectAjax(
     'course_teachers',
     get_lang('CourseTeachers'),
-    [$currentTeacher->getId() => $currentTeacher->getCompleteNameWithUsername()],
+    [$currentTeacher->getId() => UserManager::formatUserFullName($currentTeacher, true)],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
         'id' => 'course_teachers',

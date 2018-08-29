@@ -103,7 +103,7 @@ $interbreadcrumb[] = [
 ];
 
 Display::display_header($tool_name);
-echo Display::page_header($session->getName().' - '.$user->getCompleteName());
+echo Display::page_header($session->getName().' - '.UserManager::formatUserFullName($user));
 ?>
 <div class="row">
     <div class="col-sm-8 col-sm-offset-2">

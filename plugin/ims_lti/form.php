@@ -45,7 +45,7 @@ $params = [
 
     'lis_person_name_given' => $user->getFirstname(),
     'lis_person_name_family' => $user->getLastname(),
-    'lis_person_name_full' => $user->getCompleteName(),
+    'lis_person_name_full' => UserManager::formatUserFullName($user),
     'lis_person_contact_email_primary' => $user->getEmail(),
 
     'context_id' => $course->getId(),

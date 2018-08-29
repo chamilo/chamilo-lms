@@ -2829,9 +2829,9 @@ function getStudentSubscribedToWork(
 }
 
 /**
- * @param int $userId
- * @param int $workId
- * @param int $courseId
+ * @param int  $userId
+ * @param int  $workId
+ * @param int  $courseId
  * @param bool $forceAccessForCourseAdmins
  *
  * @return bool

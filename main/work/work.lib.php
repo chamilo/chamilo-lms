@@ -2829,16 +2829,23 @@ function getStudentSubscribedToWork(
 }
 
 /**
- * @param int $userId
- * @param int $workId
- * @param int $courseId
+ * @param int  $userId
+ * @param int  $workId
+ * @param int  $courseId
+ * @param bool $forceAccessForCourseAdmins
  *
  * @return bool
  */
-function allowOnlySubscribedUser($userId, $workId, $courseId)
+function allowOnlySubscribedUser($userId, $workId, $courseId, $forceAccessForCourseAdmins = false)
 {
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
+    }
+
+    if ($forceAccessForCourseAdmins) {
+        if (api_is_course_admin() || api_is_coach()) {
+            return true;
+        }
     }
 
     return userIsSubscribedToWork($userId, $workId, $courseId);
@@ -4981,7 +4988,7 @@ function getWorkUserListData(
  */
 function downloadFile($id, $course_info, $isCorrection)
 {
-    return getFile($id, $course_info, true, $isCorrection);
+    return getFile($id, $course_info, true, $isCorrection, true);
 }
 
 /**
@@ -4989,12 +4996,13 @@ function downloadFile($id, $course_info, $isCorrection)
  * @param array $course_info
  * @param bool  $download
  * @param bool  $isCorrection
+ * @param bool  $forceAccessForCourseAdmins
  *
  * @return bool
  */
-function getFile($id, $course_info, $download = true, $isCorrection = false)
+function getFile($id, $course_info, $download = true, $isCorrection = false, $forceAccessForCourseAdmins = false)
 {
-    $file = getFileContents($id, $course_info, 0, $isCorrection);
+    $file = getFileContents($id, $course_info, 0, $isCorrection, $forceAccessForCourseAdmins);
     if (!empty($file) && is_array($file)) {
         return DocumentManager::file_send_for_download(
             $file['path'],
@@ -5013,10 +5021,11 @@ function getFile($id, $course_info, $download = true, $isCorrection = false)
  * @param array $courseInfo
  * @param int   $sessionId
  * @param bool  $correction
+ * @param bool  $forceAccessForCourseAdmins
  *
  * @return array|bool
  */
-function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
+function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, $forceAccessForCourseAdmins = false)
 {
     $id = (int) $id;
     if (empty($courseInfo) || empty($id)) {
@@ -5060,7 +5069,8 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false)
             $isAllow = allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
-                $courseInfo['real_id']
+                $courseInfo['real_id'],
+                $forceAccessForCourseAdmins
             );
 
             if (empty($isAllow)) {

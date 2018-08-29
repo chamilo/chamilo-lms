@@ -22,7 +22,7 @@
     "cropper": "^4.0",
     "flag-icon-css": "^3.0",
     "fs": "0.0.1-security",
-    "fullcalendar": "3.1.0",
+    "fullcalendar": "^3.0",
     "highlight.js": "^9.12.0",
     "image-map-resizer": "^1.0.7",
     "jquery": "^3.3.1",

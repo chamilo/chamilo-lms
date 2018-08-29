@@ -31,6 +31,11 @@ require('bootstrap-select/dist/css/bootstrap-select.css');
 require('flag-icon-css/css/flag-icon.css');
 require("bootstrap-daterangepicker");
 require("bootstrap-daterangepicker/daterangepicker.scss");
+require("fullcalendar/dist/fullcalendar.js");
+require("fullcalendar/dist/fullcalendar.css");
+require("fullcalendar/dist/gcal.js");
+require("fullcalendar/dist/locale-all.js");
+
 //require("readmore-js");
 
 // doesn't work with webpack added directly in /public/libs folder

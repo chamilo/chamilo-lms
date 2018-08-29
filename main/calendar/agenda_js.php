@@ -20,10 +20,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
-$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
+/*$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
-$htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
+$htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');*/
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
@@ -165,7 +165,6 @@ if ($type == 'course' && !empty($group_id)) {
 }
 
 $defaultView = api_get_setting('default_calendar_view');
-
 if (empty($defaultView)) {
     $defaultView = 'month';
 }

@@ -379,7 +379,7 @@ if (!empty($_REQUEST['exeId']) &&
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?origin=learnpath&id='.$safe_exe_id.'&'.api_get_cidreq();
+        $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
         if ($debug) {
             error_log('Calling URL: '.$src);
         }

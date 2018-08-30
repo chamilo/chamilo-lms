@@ -8833,12 +8833,9 @@ function api_create_protected_dir($name, $parentDirectory)
 }
 
 /**
- * Sends an HTML email using the phpmailer class (and multipart/alternative to downgrade gracefully)
+ * Sends an email
  * Sender name and email can be specified, if not specified
  * name and email of the platform admin are used.
- *
- * @author Bert Vanderkimpen ICT&O UGent
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
  *
  * @param string    name of recipient
  * @param string    email of recipient
@@ -8851,9 +8848,8 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param bool      True for attaching a embedded file inside content html (optional)
  * @param array     Additional parameters
  *
- * @return int true if mail was sent
+ * @return bool true if mail was sent
  *
- * @see             class.phpmailer.php
  */
 function api_mail_html(
     $recipientName,
@@ -8864,9 +8860,13 @@ function api_mail_html(
     $senderEmail = '',
     $extra_headers = [],
     $data_file = [],
-    $embedded_image = false,
+    $embeddedImage = false,
     $additionalParameters = []
 ) {
+    if (!api_valid_email($recipientEmail)) {
+        return false;
+    }
+
     // Default values
     $notification = new Notification();
     $defaultEmail = $notification->getDefaultPlatformSenderEmail();
@@ -8901,10 +8901,6 @@ function api_mail_html(
         str_replace('<br />', "\n", api_html_entity_decode($message))
     );*/
 
-
-    if (!api_valid_email($recipientEmail)) {
-        return 0;
-    }
 
     /*if (is_array($extra_headers) && count($extra_headers) > 0) {
         foreach ($extra_headers as $key => $value) {
@@ -8943,7 +8939,7 @@ function api_mail_html(
             }
         }
 
-        // Attachment ...
+        // Attachment
         if (!empty($data_file)) {
             foreach ($data_file as $file_attach) {
                 if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
@@ -9006,8 +9002,6 @@ function api_mail_html(
 
         $type = $message->getHeaders()->get('Content-Type');
         $type->setCharset('utf-8');
-        //$type->setValue('text/html');
-
         Container::getMailer()->send($message);
 
         return true;

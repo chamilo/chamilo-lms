@@ -1413,8 +1413,8 @@ class ImportCsv
                             if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
                                 $senderId = $coaches[0];
                             }
-                            $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
-                            $this->logger->addInfo("<<--SENDING MAIL-->>");
+                            $this->logger->addInfo("Announcement added: $announcementId in $info");
+                            $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
                             $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,

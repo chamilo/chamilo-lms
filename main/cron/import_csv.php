@@ -1413,6 +1413,10 @@ class ImportCsv
                         );
 
                         if ($announcementId) {
+                            $senderId = $this->defaultAdminId;
+                            if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
+                                $senderId = $coaches[0];
+                            }
                             $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
                             $this->logger->addInfo("<<--SENDING MAIL-->>");
                             $report['mail_sent']++;
@@ -1423,7 +1427,7 @@ class ImportCsv
                                 false,
                                 false,
                                 $this->logger,
-                                $this->defaultAdminId
+                                $senderId
                             );
                         } else {
                             $this->logger->addError(

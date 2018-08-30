@@ -949,7 +949,7 @@ $sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $sessionIdFromSession = api_get_session_id();
 $checkFromDatabase = false;
 // User change from session id
-if (!empty($sessionIdFromGet) && $sessionIdFromGet != $sessionIdFromSession) {
+if ((!empty($sessionIdFromGet) && $sessionIdFromGet != $sessionIdFromSession) || $cidReset) {
     $cidReset = true;
     $checkFromDatabase = true;
     Session::erase('session_name');

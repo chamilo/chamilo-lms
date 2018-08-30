@@ -8849,7 +8849,6 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param array     Additional parameters
  *
  * @return bool true if mail was sent
- *
  */
 function api_mail_html(
     $recipientName,

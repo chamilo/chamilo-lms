@@ -56,6 +56,12 @@ class CQuizQuestionCategory
     protected $description;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    protected $session;
+
+    /**
      * Set title.
      *
      * @param string $title

@@ -235,7 +235,7 @@ if (!empty($question_list)) {
                         $answer_id,
                         $question_id,
                         $exerciseId,
-                        $courseCode,
+                        api_get_course_int_id(),
                         $sessionId
                     );
                     $percentage = 0;

@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  * TrackEHotspot.
  *
  * @ORM\Table(name="track_e_hotspot", indexes={
- *     @ORM\Index(name="hotspot_course_code", columns={"hotspot_course_code"}),
  *     @ORM\Index(name="hotspot_user_id", columns={"hotspot_user_id"}),
  *     @ORM\Index(name="hotspot_exe_id", columns={"hotspot_exe_id"}),
  *     @ORM\Index(name="hotspot_question_id", columns={"hotspot_question_id"})
@@ -33,13 +32,6 @@ class TrackEHotspot
      * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
      */
     protected $hotspotUserId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hotspot_course_code", type="string", length=50, nullable=false)
-     */
-    protected $hotspotCourseCode;
 
     /**
      * @var int
@@ -105,30 +97,6 @@ class TrackEHotspot
     public function getHotspotUserId()
     {
         return $this->hotspotUserId;
-    }
-
-    /**
-     * Set hotspotCourseCode.
-     *
-     * @param string $hotspotCourseCode
-     *
-     * @return TrackEHotspot
-     */
-    public function setHotspotCourseCode($hotspotCourseCode)
-    {
-        $this->hotspotCourseCode = $hotspotCourseCode;
-
-        return $this;
-    }
-
-    /**
-     * Get hotspotCourseCode.
-     *
-     * @return string
-     */
-    public function getHotspotCourseCode()
-    {
-        return $this->hotspotCourseCode;
     }
 
     /**

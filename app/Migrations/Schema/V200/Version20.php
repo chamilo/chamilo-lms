@@ -143,7 +143,6 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE course_category CHANGE parent_id parent_id INT DEFAULT NULL;');
-
         $this->addSql('ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id);');
         $this->addSql('ALTER TABLE settings_current ADD CONSTRAINT FK_62F79C3B9436187B FOREIGN KEY (access_url) REFERENCES access_url (id);');
         $this->addSql('ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL;');
@@ -250,7 +249,7 @@ class Version20 extends AbstractMigrationChamilo
         $tables = [
             'shared_survey',
             'specific_field_values',
-            'templates'
+            'templates',
         ];
 
         foreach ($tables as $table) {
@@ -400,7 +399,7 @@ class Version20 extends AbstractMigrationChamilo
             'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
             //'show_toolshortcuts' => '',
-            'survey_email_sender_noreply'=> 'survey',
+            'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',
             'sessionadmin_autosubscribe' => 'registration',
             'sessionadmin_page_after_login' => 'registration',
@@ -410,7 +409,7 @@ class Version20 extends AbstractMigrationChamilo
             'icons_mode_svg' => 'display',
             'server_type' => 'platform',
             'show_official_code_whoisonline' => 'platform',
-            'show_terms_if_profile_completed' => 'ticket'
+            'show_terms_if_profile_completed' => 'ticket',
         ];
 
         foreach ($settings as $variable => $category) {
@@ -639,7 +638,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_C9FA0CBD1BAD783F ON c_document (resource_node_id)');
 
-
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
@@ -659,6 +657,45 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD573444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
         $this->addSql('CREATE INDEX IDX_AD488DD573444FD5 ON access_url_rel_usergroup (access_url_id)');
 
+        $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
+
+        // Update template
+        $this->addSql('DELETE FROM templates WHERE course_code NOT IN (SELECT code FROM course)');
+        $this->addSql('ALTER TABLE templates ADD c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+        $this->addSql('UPDATE templates SET c_id = (SELECT id FROM course WHERE code = course_code)');
+
+        $this->addSql('ALTER TABLE gradebook_result_log CHANGE id_result result_id INT NOT NULL');
+
+        $this->addSql('ALTER TABLE c_quiz_question_category ADD session_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+
+        // Drop unused columns
+        $dropColumnsAndIndex = [
+            'track_e_uploads' => ['columns' => ['upload_cours_id'], 'index' => ['upload_cours_id']],
+            'track_e_hotspot' => ['columns' => ['hotspot_course_code'], 'index' => ['hotspot_course_code']],
+            'templates' => ['columns' => ['course_code'], 'index' => []],
+        ];
+
+        foreach ($dropColumnsAndIndex as $tableName => $data) {
+            if ($schema->hasTable($tableName)) {
+                $indexList = $data['index'];
+                foreach ($indexList as $index) {
+                    if ($table->hasIndex($index)) {
+                        $table->dropIndex($index);
+                    }
+                }
+
+                $columns = $data['columns'];
+                $table = $schema->getTable($tableName);
+                foreach ($columns as $column) {
+                    if ($table->hasColumn($column)) {
+                        $table->dropColumn($column);
+                    }
+                }
+            }
+        }
+
         // Drop unused tables
         $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type', 'openid_association'];
         foreach ($dropTables as $table) {
@@ -666,6 +703,7 @@ class Version20 extends AbstractMigrationChamilo
                 $schema->dropTable($table);
             }
         }
+
     }
 
     /**

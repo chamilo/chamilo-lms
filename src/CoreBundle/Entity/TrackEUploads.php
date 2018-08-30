@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
- *      @ORM\Index(name="upload_cours_id", columns={"upload_cours_id"}),
  *      @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
  *  }
  * )
@@ -21,6 +20,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEUploads
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="upload_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $uploadId;
+
     /**
      * @var int
      *
@@ -62,15 +70,6 @@ class TrackEUploads
      * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
      */
     protected $uploadSessionId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="upload_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $uploadId;
 
     /**
      * Set uploadUserId.

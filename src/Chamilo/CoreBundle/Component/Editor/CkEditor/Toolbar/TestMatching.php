@@ -105,7 +105,7 @@ class TestMatching extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch'],
+            ['Source', 'Toolbarswitch'],
         ];
     }
 }

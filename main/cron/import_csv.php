@@ -1356,7 +1356,7 @@ class ImportCsv
                             api_format_date($end, TIME_NO_SEC_FORMAT).')';
                     } else {
                         $date = api_format_date($start, DATE_TIME_FORMAT_LONG_24H).' - '.
-                                api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
+                            api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
                     }
 
                     $sessionName = '';
@@ -1396,6 +1396,12 @@ class ImportCsv
                         $this->logger->addInfo(
                             "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
+
+                        $senderId = $this->defaultAdminId;
+                        if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
+                            $senderId = $coaches[0];
+                        }
+
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
@@ -1409,16 +1415,12 @@ class ImportCsv
                             null,
                             null,
                             false,
-                            $this->defaultAdminId
+                            $senderId
                         );
 
                         if ($announcementId) {
-                            $senderId = $this->defaultAdminId;
-                            if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
-                                $senderId = $coaches[0];
-                            }
-                            $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
-                            $this->logger->addInfo("<<--SENDING MAIL-->>");
+                            $this->logger->addInfo("Announcement added: $announcementId in $info");
+                            $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
                             $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,
@@ -1431,7 +1433,7 @@ class ImportCsv
                             );
                         } else {
                             $this->logger->addError(
-                                "Error when trying to add announcement with title ".$subject." here: $info"
+                                "Error when trying to add announcement with title $subject here: $info and SenderId = $senderId"
                             );
                         }
                     } else {

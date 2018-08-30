@@ -20,32 +20,32 @@ CKEDITOR.editorConfig = function (config) {
     ];
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
-        { 
+        {
             name : 'Titre',
             element : 'h2',
             attributes : { 'class': 'ck ck-titre' }
         },
-        { 
+        {
             name : 'Parcours',
             element : 'h4',
             attributes : { 'class': 'ck ck-parcours' }
         },
-        { 
+        {
             name : 'Etape',
             element : 'h5',
             attributes : { 'class': 'ck ck-etape' }
         },
-        { 
+        {
             name : 'Texte',
             element : 'p',
             attributes : { 'class': 'ck ck-texte' }
         },
-        { 
+        {
             name : 'Source',
             element : 'p',
             attributes : { 'class': 'ck ck-source' }
         },
-        { 
+        {
             name : 'Consignes',
             element : 'p',
             attributes : { 'class': 'ck ck-consignes' }
@@ -136,6 +136,7 @@ CKEDITOR.editorConfig = function (config) {
     config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
     config.videobrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
 
+    config.enterMode = CKEDITOR.ENTER_BR;
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
     // Option to set the "styles" menu

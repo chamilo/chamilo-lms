@@ -106,6 +106,7 @@ CKEDITOR.editorConfig = function (config) {
     config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
     config.videobrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
 
+    config.enterMode = CKEDITOR.ENTER_BR;
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
     // Option to set the "styles" menu

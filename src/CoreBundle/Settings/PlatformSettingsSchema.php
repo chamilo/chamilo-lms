@@ -56,6 +56,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
 //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
+                    'hide_username_with_complete_name' => 'false',
+                    'hide_username_in_course_chat' => 'false',
                 ]
             )
             ->setTransformer(
@@ -164,6 +166,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'help_block' => 'ShowTabsComment',
                 ]
             )
+            ->add('hide_username_with_complete_name', YesNoType::class)
+            ->add('hide_username_in_course_chat', YesNoType::class)
         ;
     }
 }

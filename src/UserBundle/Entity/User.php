@@ -774,6 +774,10 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function getCompleteNameWithUsername()
     {
+        if (api_get_setting('platform.hide_username_with_complete_name') === 'true') {
+            return $this->getCompleteName();
+        }
+
         return api_get_person_name($this->firstname, $this->lastname).' ('.$this->username.')';
     }
 

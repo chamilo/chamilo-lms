@@ -1392,6 +1392,12 @@ class ImportCsv
                         $this->logger->addInfo(
                             "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
+
+                        $senderId = $this->defaultAdminId;
+                        if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
+                            $senderId = $coaches[0];
+                        }
+
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
@@ -1405,14 +1411,10 @@ class ImportCsv
                             null,
                             null,
                             false,
-                            $this->defaultAdminId
+                            $senderId
                         );
 
                         if ($announcementId) {
-                            $senderId = $this->defaultAdminId;
-                            if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
-                                $senderId = $coaches[0];
-                            }
                             $this->logger->addInfo("Announcement added: $announcementId in $info");
                             $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
                             $report['mail_sent']++;

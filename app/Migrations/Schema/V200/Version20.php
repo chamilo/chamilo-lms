@@ -639,6 +639,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE UNIQUE INDEX UNIQ_C9FA0CBD1BAD783F ON c_document (resource_node_id)');
 
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
+        $this->addSql('UPDATE c_document SET session_id = null WHERE session_id = 0');
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
 

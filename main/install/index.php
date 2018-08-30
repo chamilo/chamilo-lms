@@ -353,7 +353,7 @@ if ($encryptPassForm == '1') {
             });
 
             $("#button_please_wait").hide();
-            $("button").addClass('btn btn-default');
+            $("button").addClass('btn btn-secondary');
 
             // Allow Chamilo install in IE
             $("button").click(function() {
@@ -702,7 +702,7 @@ if (@$_POST['step2']) {
     <table width="100%">
         <tr>
             <td>
-                <button type="submit" class="btn btn-default" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
+                <button type="submit" class="btn btn-secondary" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
                     <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
                 </button>
             </td>

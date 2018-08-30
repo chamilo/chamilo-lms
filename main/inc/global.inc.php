@@ -34,7 +34,6 @@ require_once __DIR__.'/../../public/legacy.php';
 // Check the PHP version
 api_check_php_version(__DIR__.'/');
 
-
 try {
     // Get settings from .env file created when installation Chamilo
     $envFile = __DIR__.'/../../.env';
@@ -55,7 +54,6 @@ try {
     $request->setBaseUrl($request->getRequestUri());
     $response = $kernel->handle($request);
     $container = $kernel->getContainer();
-
 
     if ($kernel->isInstalled()) {
         require_once $kernel->getConfigurationFile();

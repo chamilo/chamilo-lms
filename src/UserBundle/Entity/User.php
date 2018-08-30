@@ -305,12 +305,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $sessionAsGeneralCoach;
 
     /**
-     * @var ArrayCollection
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
-     */
-    //protected $extraFields;
-
-    /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
      */
     protected $resourceNodes;

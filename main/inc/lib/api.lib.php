@@ -8901,7 +8901,6 @@ function api_mail_html(
         str_replace('<br />', "\n", api_html_entity_decode($message))
     );*/
 
-
     /*if (is_array($extra_headers) && count($extra_headers) > 0) {
         foreach ($extra_headers as $key => $value) {
             switch (strtolower($key)) {
@@ -8962,7 +8961,7 @@ function api_mail_html(
             'mail_header_style' => api_get_configuration_value('mail_header_style'),
             'mail_content_style' => api_get_configuration_value('mail_content_style'),
             'link' => $additionalParameters['link'] ?? '',
-            'automatic_email_text' => $automaticEmailText
+            'automatic_email_text' => $automaticEmailText,
         ];
 
         $paramsHtml = $paramsText = $params;

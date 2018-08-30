@@ -1429,7 +1429,7 @@ class ImportCsv
                             );
                         } else {
                             $this->logger->addError(
-                                "Error when trying to add announcement with title ".$subject." here: $info"
+                                "Error when trying to add announcement with title $subject here: $info and SenderId = $senderId"
                             );
                         }
                     } else {

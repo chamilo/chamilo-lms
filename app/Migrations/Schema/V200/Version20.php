@@ -704,7 +704,6 @@ class Version20 extends AbstractMigrationChamilo
                 $schema->dropTable($table);
             }
         }
-
     }
 
     /**

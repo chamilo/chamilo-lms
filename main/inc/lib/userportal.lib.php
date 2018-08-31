@@ -6,8 +6,8 @@
  */
 class IndexManager
 {
-    const VIEW_BY_DEFAULT = 0;
-    const VIEW_BY_SESSION = 1;
+    public const VIEW_BY_DEFAULT = 0;
+    public const VIEW_BY_SESSION = 1;
 
     // An instance of the template engine
     // No need to initialize because IndexManager is not static,
@@ -1673,7 +1673,9 @@ class IndexManager
                                                 $session_id,
                                                 'session_course_item'
                                             );
-                                            $html_courses_session[] = $c[1];
+                                            if (isset($c[1])) {
+                                                $html_courses_session[] = $c[1];
+                                            }
                                         }
                                         $count_courses_session++;
                                         $count++;

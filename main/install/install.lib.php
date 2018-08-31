@@ -512,8 +512,8 @@ function get_language_folder_list()
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
  *
- * @param string $param the parameter of which the value is returned
- * @param   string  If we want to give the path rather than take it from POST
+ * @param  string $param      the parameter of which the value is returned
+ * @param  string $updatePath If we want to give the path rather than take it from POST
  *
  * @return string the value of the parameter
  *
@@ -1173,8 +1173,8 @@ function display_requirements(
                 <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
             </button>
             <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
-                echo 'disabled="disabled"';
-            } ?> >
+            echo 'disabled="disabled"';
+        } ?> >
                 <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
             </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -1595,8 +1595,7 @@ function display_database_settings_form(
                     echo get_lang('AlterTableWorks').' <strong>Ok</strong>';
                     echo '<br/ >';
                     echo get_lang('DropColumnWorks').' <strong>Ok</strong>';
-                }
-            ?>
+                } ?>
         </div>
     <?php else: ?>
         <div id="db_status" class="alert alert-danger">
@@ -1612,20 +1611,20 @@ function display_database_settings_form(
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
        <?php if ($manager) {
-        ?>
+                    ?>
            <button type="submit" class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
-    } else {
-        ?>
+                } else {
+                    ?>
            <button
                    disabled="disabled"
                    type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
-    } ?>
+                } ?>
    </div>
     <?php
 }

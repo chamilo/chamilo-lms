@@ -156,7 +156,8 @@
         "liip/theme-bundle": "^1.5",
         "a2lix/translation-form-bundle": "^3.0",
         "lunetics/locale-bundle": "^2.6",
-        "oneup/uploader-bundle": "^2.0"
+        "oneup/uploader-bundle": "^2.0",
+        "overblog/graphql-bundle": "^0.11.4"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",

@@ -64,6 +64,20 @@ if (empty($exerciseId)) {
     $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']) : '0';
 }
 
+/*  stripslashes POST data  */
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    foreach ($_POST as $key => $val) {
+        if (is_string($val)) {
+            $_POST[$key] = stripslashes($val);
+        } elseif (is_array($val)) {
+            foreach ($val as $key2 => $val2) {
+                $_POST[$key][$key2] = stripslashes($val2);
+            }
+        }
+        $GLOBALS[$key] = $_POST[$key];
+    }
+}
+
 $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
 
 if (empty($modifyAnswers)) {

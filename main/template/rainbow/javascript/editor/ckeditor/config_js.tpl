@@ -21,6 +21,36 @@ CKEDITOR.editorConfig = function (config) {
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
         {
+            name : 'Titre',
+            element : 'h2',
+            attributes : { 'class': 'ck ck-titre' }
+        },
+        {
+            name : 'Parcours',
+            element : 'h4',
+            attributes : { 'class': 'ck ck-parcours' }
+        },
+        {
+            name : 'Etape',
+            element : 'h5',
+            attributes : { 'class': 'ck ck-etape' }
+        },
+        {
+            name : 'Texte',
+            element : 'p',
+            attributes : { 'class': 'ck ck-texte' }
+        },
+        {
+            name : 'Source',
+            element : 'p',
+            attributes : { 'class': 'ck ck-source' }
+        },
+        {
+            name : 'Consignes',
+            element : 'p',
+            attributes : { 'class': 'ck ck-consignes' }
+        },
+        {
             name : 'Title 1',
             element : 'h1',
             attributes : { 'class': 'ck ck-title' }

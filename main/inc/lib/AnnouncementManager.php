@@ -29,6 +29,7 @@ class AnnouncementManager
     {
         $tags = [
             '((user_name))',
+            '((user_email))',
             '((user_firstname))',
             '((user_lastname))',
             '((user_official_code))',
@@ -93,8 +94,10 @@ class AnnouncementManager
         $data['user_firstname'] = '';
         $data['user_lastname'] = '';
         $data['user_official_code'] = '';
+        $data['user_email'] = '';
         if (!empty($readerInfo)) {
             $data['user_name'] = $readerInfo['username'];
+            $data['user_email'] = $readerInfo['email'];
             $data['user_firstname'] = $readerInfo['firstname'];
             $data['user_lastname'] = $readerInfo['lastname'];
             $data['user_official_code'] = $readerInfo['official_code'];

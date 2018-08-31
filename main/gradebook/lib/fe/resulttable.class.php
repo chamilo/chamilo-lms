@@ -173,12 +173,17 @@ class ResultTable extends SortableTable
     {
         $locked_status = $this->evaluation->get_locked();
         $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        $baseUrl = api_get_self().'?selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq();
         if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
             $edit_column = '';
             if ($allowMultipleAttempts) {
-                $edit_column .=
-                    '<a href="'.api_get_self().'?action=add_attempt&editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                    Display::return_icon('add.png', get_lang('AddAttempt'), '', '22').'</a>';
+                if (!empty($item['percentage_score'])) {
+                    $edit_column .=
+                        Display::url(
+                            Display::return_icon('add.png', get_lang('AddAttempt'), '', '22'),
+                            $baseUrl.'&action=add_attempt&editres='.$item['result_id']
+                        );
+                }
             }
             $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                 Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';

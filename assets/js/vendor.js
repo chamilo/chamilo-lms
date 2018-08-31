@@ -2,10 +2,6 @@ var moment = require("moment");
 require("moment/min/locales.min");
 global.moment = moment;
 
-var $ = require("jquery");
-// create global $ and jQuery variables
-window.jQuery = window.$ = global.$ = global.jQuery = $;
-
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 

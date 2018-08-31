@@ -342,7 +342,6 @@ if ($encryptPassForm == '1') {
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
 
-    <script type="text/javascript" src="../../public/build/vendor.js"></script>
     <script type="text/javascript" src="../../public/build/app.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {

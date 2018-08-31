@@ -1,5 +1,6 @@
 var Encore = require('@symfony/webpack-encore');
 var copyWebpackPlugin = require('copy-webpack-plugin');
+var webpack = require('webpack');
 
 Encore
     .setOutputPath('public/build/')
@@ -16,7 +17,6 @@ Encore
     .enableLessLoader()
     .autoProvidejQuery() // not needed because in window.jQuery we set the $
     // Reads the "assets/js/vendor.js" file and it will generate the file public/build/vendor.js file
-    .addEntry('vendor', './assets/js/vendor.js')
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
     // Reads app.scss -> output as web/build/css/base.css
@@ -83,6 +83,13 @@ themes.forEach(function (theme) {
     },
     ]));
 });
+
+Encore.addPlugin(
+    new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery'
+    })
+);
 
 var config = Encore.getWebpackConfig();
 module.exports = config;

@@ -43,8 +43,6 @@
 <link rel="stylesheet" href="{{ asset('build/css/app.css') }}"/>
 <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
 <link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
-{# File vendor.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-<script src="{{ asset('build/vendor.js') }}"></script>
 {# Add third party js libraries that can't be loaded using webpack #}
 {% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}

@@ -4284,7 +4284,7 @@ class CourseManager
         $now = date('Y-m-d h:i:s');
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
-        $course_visibility = $course_info['visibility'];
+        $course_visibility = (int) $course_info['visibility'];
 
         if ($course_visibility === COURSE_VISIBILITY_HIDDEN) {
             return '';

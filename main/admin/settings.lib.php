@@ -243,6 +243,9 @@ function handlePlugins()
             }
         }
     }
+
+    echo $installed;
+    echo $notInstalled;
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';

@@ -172,9 +172,15 @@ class ResultTable extends SortableTable
     private function build_edit_column($item)
     {
         $locked_status = $this->evaluation->get_locked();
+        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
         if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
-            //api_is_course_admin()
-            $edit_column = '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+            $edit_column = '';
+            if ($allowMultipleAttempts) {
+                $edit_column .=
+                    '<a href="'.api_get_self().'?action=add_attempt&editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                    Display::return_icon('add.png', get_lang('AddAttempt'), '', '22').'</a>';
+            }
+            $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                 Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
             $edit_column .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', '22').'</a>';

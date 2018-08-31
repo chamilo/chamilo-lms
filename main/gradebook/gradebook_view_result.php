@@ -54,9 +54,129 @@ if (isset($_GET['selecteval'])) {
     $iscourse = !empty(api_get_course_id());
 }
 
+$allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+
+if (isset($_GET['action'])) {
+    switch ($_GET['action']) {
+        case 'delete_attempt':
+            $result = Result::load($_GET['editres']);
+            if ($allowMultipleAttempts && !empty($result) && isset($result[0]) && api_is_allowed_to_edit()) {
+                /** @var Result $result */
+                $result = $result[0];
+                $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
+                $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+                if (isset($_GET['result_attempt_id'])) {
+                    $attemptId = (int) $_GET['result_attempt_id'];
+                    $sql = "DELETE FROM $table WHERE result_id = ".$result->get_id()." AND id = $attemptId";
+                    Database::query($sql);
+                    Display::addFlash(Display::return_message(get_lang('Deleted')));
+                }
+
+                header('Location: '.$url.'&action=add_attempt');
+                exit;
+            }
+            break;
+        case 'add_attempt':
+            $result = Result::load($_GET['editres']);
+            if ($allowMultipleAttempts && !empty($result) && isset($result[0]) && api_is_allowed_to_edit()) {
+                /** @var Result $result */
+                $result = $result[0];
+                $backUrl = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq();
+                $interbreadcrumb[] = [
+                    'url' => $backUrl,
+                    'name' => get_lang('Details'),
+                ];
+
+                /** @var Evaluation $evaluation */
+                $evaluation = $eval[0];
+
+                $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+                $now = api_get_utc_datetime();
+
+                $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
+                $form = new FormValidator('attempt', 'post', $url.'&action=add_attempt');
+                $form->addHeader(get_lang('AddResult'));
+                $form->addLabel(get_lang('CurrentScore'), $result->get_score());
+                $form->addTextarea('comment', get_lang('Comment'));
+                $form->addText('score', get_lang('Score'));
+                $form->addRule(
+                    'score',
+                    get_lang('ValueTooBig'),
+                    'max_numeric_length',
+                    $evaluation->get_max()
+                );
+                $form->addButtonSave(get_lang('Save'));
+                $sql = "SELECT * FROM $table WHERE result_id = ".$result->get_id().' ORDER BY created_at DESC';
+                $resultQuery = Database::query($sql);
+                $list = Database::store_result($resultQuery);
+
+                $htmlTable = new HTML_Table(['class' => 'data_table']);
+                $htmlTable->setHeaderContents(0, 0, get_lang('Score'));
+                $htmlTable->setHeaderContents(0, 1, get_lang('Comment'));
+                $htmlTable->setHeaderContents(0, 2, get_lang('CreatedAt'));
+                $htmlTable->setHeaderContents(0, 3, get_lang('Actions'));
+                $row = 1;
+                foreach ($list as $data) {
+                    $htmlTable->setCellContents($row, 0, $data['score']);
+                    $htmlTable->setCellContents($row, 1, $data['comment']);
+                    $htmlTable->setCellContents($row, 2, Display::dateToStringAgoAndLongDate($data['created_at']));
+                    $htmlTable->setCellContents(
+                        $row,
+                        3,
+                        Display::url(
+                            Display::return_icon('delete.png', get_lang('Delete')),
+                            $url.'&action=delete_attempt&result_attempt_id='.$data['id']
+                        )
+                    );
+                    $row++;
+                }
+                $form->addLabel(get_lang('Attempts'), $htmlTable->toHtml());
+
+                if ($form->validate()) {
+                    $values = $form->getSubmitValues();
+                    $newScore = $values['score'];
+                    $params = [
+                        'result_id' => $result->get_id(),
+                        'score' => $newScore,
+                        'comment' => $values['comment'],
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+
+                    Database::insert($table, $params);
+                    if ($newScore > $result->get_score()) {
+                        $result->set_score($newScore);
+                        $result->save();
+                    }
+                    Display::addFlash(Display::return_message(get_lang('Saved')));
+                    header('Location: '.api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq());
+                    exit;
+                }
+
+                Display::display_header();
+
+                $items[] = [
+                    'url' => $backUrl,
+                    'content' => Display::return_icon(
+                        'back.png',
+                        get_lang('Back'),
+                        [],
+                        ICON_SIZE_MEDIUM
+                    ),
+                ];
+
+                echo Display::actions($items);
+                $form->display();
+                Display::display_footer();
+                exit;
+            }
+            break;
+    }
+}
+
 if (isset($_GET['editres'])) {
     $edit_res_xml = Security::remove_XSS($_GET['editres']);
-    $resultedit = Result :: load($edit_res_xml);
+    $resultedit = Result::load($edit_res_xml);
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],

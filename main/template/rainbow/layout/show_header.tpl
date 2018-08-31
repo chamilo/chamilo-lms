@@ -52,7 +52,11 @@
 
     <!-- START CONTENT -->
     <section id="cm-content">
-        <div class="container">
+        {% if (section_name == 'section-exercise' or section_name == 'section-results') %}
+            <div class="container-fluid">
+        {% else %}
+            <div class="container">
+        {% endif %}
             {% block breadcrumb %}
                 {{ breadcrumb }}
             {% endblock %}

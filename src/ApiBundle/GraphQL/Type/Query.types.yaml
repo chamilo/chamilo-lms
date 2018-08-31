@@ -1,0 +1,8 @@
+Query:
+    type: object
+    config:
+        description: "GraphQL queries."
+        fields:
+            user:
+                description: "A registered user on the platform."
+                type: "String"

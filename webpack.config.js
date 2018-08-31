@@ -1,6 +1,7 @@
-var Encore = require('@symfony/webpack-encore');
-var copyWebpackPlugin = require('copy-webpack-plugin');
-var webpack = require('webpack');
+const Encore = require('@symfony/webpack-encore');
+const copyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 Encore
     .setOutputPath('public/build/')
@@ -32,6 +33,7 @@ Encore
     .addStyleEntry('css/responsive', './assets/css/responsive.css')
     .addStyleEntry('css/scorm', './assets/css/scorm.css')
 
+    .addPlugin(new UglifyJsPlugin())
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({
         $: 'jquery',

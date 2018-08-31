@@ -37,8 +37,6 @@
 {% set profile_link = '' %}
 {% set message_link = '' %}
 
-{# Files vendor.css is generated automatically by the css generated when reading vendor.js #}
-<link rel="stylesheet" href="{{ asset('build/vendor.css') }}"/>
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
 <link rel="stylesheet" href="{{ asset('build/css/app.css') }}"/>
 <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>

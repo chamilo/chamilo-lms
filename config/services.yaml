@@ -41,6 +41,14 @@ services:
         arguments:
             $debug: '%kernel.debug%'
 
+    Chamilo\ApiBundle\GraphQL\Resolver\:
+        resource: '../src/ApiBundle/GraphQL/Resolver'
+        tags: ['overblog_graphql.resolver']
+
+    Chamilo\ApiBundle\GraphQL\Mutation\:
+        resource: '../src/ApiBundle/GraphQL/Mutation'
+        tags: ['overblog_graphql.mutation']
+
 sylius_settings:
     driver: doctrine/orm
 

@@ -21,7 +21,6 @@ class Auth
      * @param string $password
      *
      * @return string
-     * @throws \Doctrine\ORM\ORMException
      */
     public function getUserToken($username, $password): string
     {
@@ -55,7 +54,7 @@ class Auth
      */
     public static function generateToken($userId): string
     {
-        $secret = api_get_configuration_value('security_key');
+        $secret = Container::$container->getParameter('secret');
         $time = time();
 
         $payload = [
@@ -76,7 +75,7 @@ class Auth
      */
     public static function getTokenData($token): array
     {
-        $secret = api_get_configuration_value('security_key');
+        $secret = Container::$container->getParameter('secret');
         $jwt = JWT::decode($token, $secret, ['HS384']);
 
         $data = (array) $jwt->data;

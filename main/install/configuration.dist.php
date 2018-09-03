@@ -966,7 +966,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 //$_configuration['hide_username_in_course_chat'] = false;
 
 // Allow multiple attempts in gradebook evaluations
-// CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, result_id INT NOT NULL, score VARCHAR(255), comment LONGTEXT DEFAULT NULL, created_at DATETIME, updated_at DATETIME, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, result_id INT NOT NULL, score DOUBLE, comment LONGTEXT DEFAULT NULL, created_at DATETIME, updated_at DATETIME, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 //$_configuration['gradebook_multiple_evaluation_attempts'] = false;
 
 // ------ Custom DB changes (keep this at the end)

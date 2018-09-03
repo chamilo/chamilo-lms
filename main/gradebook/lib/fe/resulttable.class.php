@@ -183,10 +183,14 @@ class ResultTable extends SortableTable
                             Display::return_icon('add.png', get_lang('AddAttempt'), '', '22'),
                             $baseUrl.'&action=add_attempt&editres='.$item['result_id']
                         );
+                } else {
+                    $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                        Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
                 }
+            } else {
+                $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                    Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
             }
-            $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
             $edit_column .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', '22').'</a>';
         }

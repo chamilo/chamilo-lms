@@ -138,6 +138,10 @@ select {
     margin-bottom: 10px;
 }
 
+#form-login .form-group small,  #form-login .form-group .form_required {
+    display: none;
+}
+
 #form-login label {
     display: none;
 }

@@ -612,9 +612,14 @@ class Template
             'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
-            'flag-icon-css/css/flag-icon.min.css',
             'mediaelement/plugins/vrview/vrview.css',
         ];
+
+        $hide = api_get_configuration_value('hide_flag_language_switcher');
+
+        if ($hide === false) {
+            $bowerCSSFiles[] = 'flag-icon-css/css/flag-icon.min.css';
+        }
 
         $features = api_get_configuration_value('video_features');
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];

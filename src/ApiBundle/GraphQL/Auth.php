@@ -6,7 +6,6 @@ namespace Chamilo\ApiBundle\GraphQL;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\UserBundle\Entity\User;
 use Firebase\JWT\JWT;
-use Overblog\GraphQLBundle\Error\UserError;
 
 /**
  * Class Auth
@@ -21,16 +20,15 @@ class Auth
      * @param string $password
      *
      * @return string
+     * @throws \Exception
      */
     public function getUserToken($username, $password): string
     {
-        $userRepo = Container::getEntityManager()->getRepository('ChamiloUserBundle:User');
-
         /** @var User $user */
-        $user = $userRepo->findOneByUsername($username);
+        $user = Container::getUserManager()->findUserBy(['username' => $username]);
 
         if (!$user) {
-            throw new UserError(get_lang('NoUser'));
+            throw new \Exception(get_lang('NoUser'));
         }
 
         $encoder = Container::$container->get('chamilo_user.security.encoder');
@@ -41,7 +39,7 @@ class Auth
         );
 
         if (!$isValid) {
-            throw new UserError(get_lang('InvalidId'));
+            throw new \Exception(get_lang('InvalidId'));
         }
 
         return self::generateToken($user->getId());
@@ -52,7 +50,7 @@ class Auth
      *
      * @return string
      */
-    public static function generateToken($userId): string
+    private static function generateToken($userId): string
     {
         $secret = Container::$container->getParameter('secret');
         $time = time();
@@ -69,11 +67,37 @@ class Auth
     }
 
     /**
+     * @param \ArrayObject $context
+     *
+     * @throws \Exception
+     */
+    public static function checkAuthorization(\ArrayObject $context): void
+    {
+        $header = Container::getRequest()->headers->get('Authorization');
+        $token = str_replace(['Bearer ', 'bearer '], '', $header);
+
+        if (empty($token)) {
+            throw new \Exception(get_lang('NotAllowed'));
+        }
+
+        $tokenData = Auth::getTokenData($token);
+
+        /** @var User $user */
+        $user = Container::getUserManager()->find($tokenData['user']);
+
+        if (!$user) {
+            throw new \Exception(get_lang('NotAllowed'));
+        }
+
+        $context->offsetSet('user', $user);
+    }
+
+    /**
      * @param string $token
      *
      * @return array
      */
-    public static function getTokenData($token): array
+    private static function getTokenData($token): array
     {
         $secret = Container::$container->getParameter('secret');
         $jwt = JWT::decode($token, $secret, ['HS384']);

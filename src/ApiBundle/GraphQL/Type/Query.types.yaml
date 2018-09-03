@@ -3,6 +3,35 @@ Query:
     config:
         description: "GraphQL queries."
         fields:
-            user:
+            viewer:
                 description: "A registered user on the platform."
+                type: "User"
+                resolve: "@=resolver('viewer', [context])"
+
+User:
+    type: object
+    config:
+        description: "Registered user."
+        fields:
+            id:
+                description: "The unique ID of the user."
+                type: "Int"
+            firstname:
                 type: "String"
+            lastname:
+                type: "String"
+            username:
+                type: "String"
+            email:
+                type: "String"
+            officialCode:
+                type: "String"
+            status:
+                type: "UserStatus"
+            picture:
+                type: "String"
+                args:
+                    size:
+                        type: "UserImageSize"
+                        defaultValue: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_SMALL")'
+                resolve: "@=resolver('user_picture', [args['size'], context])"

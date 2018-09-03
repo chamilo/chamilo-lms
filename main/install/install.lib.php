@@ -1563,12 +1563,6 @@ function display_database_settings_form(
                 $tableDropWorks = $schemaManager->tablesExist($table) === false;
             }
         } else {
-            $schemaManager = $manager->getConnection()->getSchemaManager();
-            $databases = $schemaManager->listDatabases();
-            if (in_array($dbNameForm, $databases)) {
-                $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-            }
-
             $manager = connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
@@ -1576,6 +1570,12 @@ function display_database_settings_form(
                 null,
                 $dbPortForm
             );
+
+            $schemaManager = $manager->getConnection()->getSchemaManager();
+            $databases = $schemaManager->listDatabases();
+            if (in_array($dbNameForm, $databases)) {
+                $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+            }
         }
     } catch (Exception $e) {
         $database_exists_text = $e->getMessage();

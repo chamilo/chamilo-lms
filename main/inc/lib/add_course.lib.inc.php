@@ -661,6 +661,7 @@ class AddCourse
             ],
             'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
+            'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
         ];
 
         $counter = 1;

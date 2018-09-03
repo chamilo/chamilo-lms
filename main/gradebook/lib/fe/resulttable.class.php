@@ -217,4 +217,54 @@ class ResultTable extends SortableTable
 
         return $edit_column;
     }
+
+    /**
+     * @param Result $result
+     * @param string $url
+     *
+     * @return string
+     *
+     */
+    public static function getResultAttemptTable($result, $url = '')
+    {
+        if (empty($result)) {
+
+            return '';
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+
+        $sql = "SELECT * FROM $table WHERE result_id = ".$result->get_id().' ORDER BY created_at DESC';
+        $resultQuery = Database::query($sql);
+        $list = Database::store_result($resultQuery);
+
+        $htmlTable = new HTML_Table(['class' => 'data_table']);
+        $htmlTable->setHeaderContents(0, 0, get_lang('Score'));
+        $htmlTable->setHeaderContents(0, 1, get_lang('Comment'));
+        $htmlTable->setHeaderContents(0, 2, get_lang('CreatedAt'));
+
+        if (!empty($url)) {
+            $htmlTable->setHeaderContents(0, 3, get_lang('Actions'));
+        }
+
+        $row = 1;
+        foreach ($list as $data) {
+            $htmlTable->setCellContents($row, 0, $data['score']);
+            $htmlTable->setCellContents($row, 1, $data['comment']);
+            $htmlTable->setCellContents($row, 2, Display::dateToStringAgoAndLongDate($data['created_at']));
+            if (!empty($url)) {
+                $htmlTable->setCellContents(
+                    $row,
+                    3,
+                    Display::url(
+                        Display::return_icon('delete.png', get_lang('Delete')),
+                        $url.'&action=delete_attempt&result_attempt_id='.$data['id']
+                    )
+                );
+            }
+            $row++;
+        }
+
+        return $htmlTable->toHtml();
+    }
 }

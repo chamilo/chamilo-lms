@@ -11,7 +11,7 @@ class DisplayGradebook
     /**
      * Displays the header for the result page containing the navigation tree and links.
      *
-     * @param $evalobj
+     * @param Evaluation $evalobj
      * @param $selectcat
      * @param $shownavbar 1=show navigation bar
      * @param $forpdf only output for pdf file
@@ -74,6 +74,17 @@ class DisplayGradebook
                     'h3',
                     get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT)
                 );
+
+                $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+                if ($allowMultipleAttempts) {
+                    $results = Result::load(null, api_get_user_id(), $evalobj->get_id());
+                    if (!empty($results)) {
+                        /** @var Result $resultData */
+                        foreach ($results as $resultData) {
+                            $student_score .=  ResultTable::getResultAttemptTable($resultData);
+                        }
+                    }
+                }
             }
         }
         $description = '';

@@ -8201,17 +8201,17 @@ class Exercise
                 '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
-            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
+
+            $msg = str_replace("#exercise#", $this->exercise, $msg);
+            $msg = str_replace("#firstName#", $user_info['firstname'], $msg);
+            $msg = str_replace("#lastName#", $user_info['lastname'], $msg);
+            $msg = str_replace("#mail#", $user_info['email'], $msg);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
-            $msg1 = str_replace("#url#", $url_email, $msg);
-            $mail_content = $msg1;
+            $msg = str_replace("#url#", $url_email, $msg);
             $subject = get_lang('OpenQuestionsAttempted');
 
             if (!empty($teachers)) {
@@ -8219,7 +8219,7 @@ class Exercise
                     MessageManager::send_message_simple(
                         $user_id,
                         $subject,
-                        $mail_content
+                        $msg
                     );
                 }
             }

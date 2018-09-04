@@ -335,7 +335,9 @@
             $('iframe#content_id').on('load', function () {
                 $.frameReady(
                     function () {
-
+                        $(document).ready(function () {
+                            $('video:not(.skip)').attr('preload', 'metadata');
+                        })
                     },
                     'top.content_name',
                     {

@@ -314,6 +314,10 @@ $(function() {
     });
 
     $("#notifications").load(_p.web_ajax + "online.ajax.php?a=get_users_online");
+
+    $(document).ready(function () {
+        $('video:not(.skip)').attr('preload', 'metadata');
+    })
 });
 
 $(window).resize(function() {

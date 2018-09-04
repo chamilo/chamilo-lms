@@ -2257,6 +2257,8 @@ class MessageManager
     /**
      * Get the data of the last received messages for a user.
      *
+     * @deprecated 2.0 Use Chamilo\CoreBundle\Repository\MessageRepository::getFromLastOneReceived
+     *
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
      *

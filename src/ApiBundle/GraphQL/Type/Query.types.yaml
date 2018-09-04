@@ -35,3 +35,41 @@ User:
                         type: "UserImageSize"
                         defaultValue: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_SMALL")'
                 resolve: "@=resolver('user_picture', [args['size'], context])"
+            messages:
+                description: 'Received messages for the user.'
+                type: '[UserMessage]'
+                args:
+                    lastId:
+                        description: 'Last received by the app message ID.'
+                        type: 'Int'
+                        defaultValue: 0
+                resolve: "@=resolver('user_messages', [value, args['lastId']])"
+
+UserMessage:
+    type: object
+    config:
+        description: 'Received message by user.'
+        fields:
+            id:
+                description: 'The unique ID of the message.'
+                type: 'Int'
+            title:
+                type: 'String'
+            content:
+                type: 'String'
+            sender:
+                type: 'User'
+                resolve: "@=resolver('message_sender', [value])"
+            sendDate:
+                type: 'String'
+            excerpt:
+                type: 'String'
+                args:
+                    length:
+                        description: 'The approximate desired length. 50 chars by default.'
+                        type: 'Int'
+                        defaultValue: 50
+                resolve: "@=resolver('message_excerpt', [value, args['length']])"
+            hasAttachments:
+                type: 'Boolean'
+                resolve: "@=resolver('message_has_attachments', [value])"

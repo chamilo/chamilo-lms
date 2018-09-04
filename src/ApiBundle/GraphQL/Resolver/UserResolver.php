@@ -3,9 +3,10 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
-use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
@@ -33,6 +34,7 @@ class UserResolver implements ResolverInterface, AliasedInterface
     {
         return [
             'resolveUserPicture' => 'user_picture',
+            'resolveUserMessages' => 'user_messages',
         ];
     }
 
@@ -55,5 +57,20 @@ class UserResolver implements ResolverInterface, AliasedInterface
         $url = Container::getAsset()->getUrl($path);
 
         return $url;
+    }
+
+    /**
+     * @param User $user
+     * @param int  $lastId
+     *
+     * @return array
+     */
+    public function resolveUserMessages(User $user, $lastId = 0): array
+    {
+        /** @var MessageRepository $messageRepo */
+        $messageRepo = Container::getEntityManager()->getRepository('ChamiloCoreBundle:Message');
+        $messages = $messageRepo->getFromLastOneReceived($user, (int) $lastId);
+
+        return $messages;
     }
 }

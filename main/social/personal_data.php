@@ -41,7 +41,12 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $formToString = $form->returnForm();
 
     $formDelete = new FormValidator('delete_account', 'post', api_get_self().'?action=delete_account&user_id='.$userId);
-    $formDelete->addTextarea('explanation', [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')], [], true);
+    $formDelete->addTextarea(
+        'explanation',
+        [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')],
+        [],
+        true
+    );
     $formDelete->addHidden('action', 'delete_account');
     $formDelete->addButtonDelete(get_lang('DeleteAccount'));
     $formToString .= $formDelete->returnForm();
@@ -105,19 +110,6 @@ switch ($action) {
             $explanation = $formDelete->getSubmitValue('explanation');
             UserManager::createDataPrivacyExtraFields();
 
-            // Remove delete agreement if it was sent:
-            /*UserManager::update_extra_field_value(
-                $userId,
-                'request_for_legal_agreement_consent_removal',
-                ''
-            );
-
-            UserManager::update_extra_field_value(
-                $userId,
-                'request_for_legal_agreement_consent_removal_justification',
-                ''
-            );*/
-
             UserManager::update_extra_field_value(
                 $userId,
                 'request_for_delete_account',
@@ -173,13 +165,6 @@ switch ($action) {
                 'request_for_legal_agreement_consent_removal_justification',
                 $explanation
             );
-
-            /*$extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $userId,
-                'legal_accept'
-            );
-            $result = $extraFieldValue->delete($value['id']);*/
 
             Display::addFlash(Display::return_message(get_lang('Sent')));
 

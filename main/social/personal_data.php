@@ -240,7 +240,7 @@ if ($allowSocial) {
 $personalDataContent = '<ul>';
 $properties = json_decode($propertiesToJson);
 $webCoursePath = api_get_path(WEB_COURSE_PATH);
-
+$showWarningMessage = false;
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
         switch ($key) {
@@ -282,6 +282,9 @@ foreach ($properties as $key => $value) {
                     if (empty($subValue)) {
                         $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                     } else {
+                        if (count($subValue) === 1000) {
+                            $showWarningMessage = true;
+                        }
                         foreach ($subValue as $subSubValue) {
                             if ($category === 'DocumentsAdded') {
                                 $documentLink = Display::url(
@@ -430,6 +433,10 @@ $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
     $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
+}
+
+if ($showWarningMessage) {
+    Display::addFlash(Display::return_message(get_lang('MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons')));
 }
 
 // Block Social Avatar

@@ -417,7 +417,8 @@ $(document).ready(function() {
                     content: onHoverInfo,
                     position: {
                         at: 'top center',
-                        my: 'bottom center'
+                        my: 'bottom center',
+                        viewport: $(window)
                     }
                 });
 			}
@@ -449,7 +450,8 @@ $(document).ready(function() {
                         content: onHoverInfo,
                         position: {
                             at: 'top center',
-                            my: 'bottom center'
+                            my: 'bottom center',
+                            viewport: $(window)
                         }
                     });
 

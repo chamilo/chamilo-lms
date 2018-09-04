@@ -204,8 +204,13 @@ $(document).ready(function() {
     });
 
     FC.views.CustomView = CustomView; // register our class with the view system
+    var height = '';
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        height = 'auto';
+    }
 
 	var calendar = $('#calendar').fullCalendar({
+        height: height,
 		header: {
 			left: 'today,prev,next',
 			center: 'title',

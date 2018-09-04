@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEHotspot
 {
+    use CourseTrait;
+
     /**
      * @var int
      *
@@ -34,11 +37,10 @@ class TrackEHotspot
     protected $hotspotUserId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $cId;
+    protected $course;
 
     /**
      * @var int
@@ -97,30 +99,6 @@ class TrackEHotspot
     public function getHotspotUserId()
     {
         return $this->hotspotUserId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return TrackEHotspot
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

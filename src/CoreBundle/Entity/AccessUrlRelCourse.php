@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessUrlRelCourse
 {
+    use CourseTrait;
+
     /**
      * @var int
      *
@@ -72,21 +75,5 @@ class AccessUrlRelCourse
     public function getUrl()
     {
         return $this->url;
-    }
-
-    /**
-     * @param Course $course
-     */
-    public function setCourse(Course $course)
-    {
-        $this->course = $course;
-    }
-
-    /**
-     * @return Course
-     */
-    public function getCourse()
-    {
-        return $this->course;
     }
 }

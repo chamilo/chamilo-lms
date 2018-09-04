@@ -37,13 +37,6 @@ class CGroupInfo
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
@@ -60,7 +53,7 @@ class CGroupInfo
     /**
      * @var int
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
     protected $categoryId;
 
@@ -171,6 +164,7 @@ class CGroupInfo
 
     /**
      * @var Course
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */

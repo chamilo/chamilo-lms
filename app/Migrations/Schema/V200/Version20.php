@@ -668,8 +668,16 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE gradebook_result_log CHANGE id_result result_id INT NOT NULL');
 
+        $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');
+
         $this->addSql('ALTER TABLE c_quiz_question_category ADD session_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+
+        $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+
+        $this->addSql('ALTER TABLE track_e_hotspot ADD CONSTRAINT FK_A89CC3B691D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+        $this->addSql('CREATE INDEX IDX_A89CC3B691D79BD3 ON track_e_hotspot (c_id)');
 
         // Drop unused columns
         $dropColumnsAndIndex = [

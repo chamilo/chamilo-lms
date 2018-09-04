@@ -2401,7 +2401,6 @@ class CourseManager
                     WHERE course_id = $courseId";
             Database::query($sql);
 
-
             $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
             Database::query($sql);
 
@@ -2420,8 +2419,6 @@ class CourseManager
             // delete extra course fields
             $extraFieldValues = new ExtraFieldValue('course');
             $extraFieldValues->deleteValuesByItem($courseId);
-
-
 
             // Add event to system log
             Event::addEvent(

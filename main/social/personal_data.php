@@ -373,11 +373,11 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br /><br />';
         $permissionBlock .= $formToString;
 
-        /*$permissionBlock .= Display::url(
-            get_lang('DeleteLegal'),
-            api_get_self().'?action=delete_legal&user_id='.$userId,
-            ['class' => 'btn btn-danger btn-xs']
-        );*/
+    /*$permissionBlock .= Display::url(
+        get_lang('DeleteLegal'),
+        api_get_self().'?action=delete_legal&user_id='.$userId,
+        ['class' => 'btn btn-danger btn-xs']
+    );*/
     } else {
         // @TODO add action handling for button
         $permissionBlock .= Display::url(

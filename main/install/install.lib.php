@@ -512,8 +512,8 @@ function get_language_folder_list()
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
  *
- * @param  string $param      the parameter of which the value is returned
- * @param  string $updatePath If we want to give the path rather than take it from POST
+ * @param string $param      the parameter of which the value is returned
+ * @param string $updatePath If we want to give the path rather than take it from POST
  *
  * @return string the value of the parameter
  *

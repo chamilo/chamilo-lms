@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Entity\Course;
 
 /**
- * Trait CourseTrait
+ * Trait CourseTrait.
  */
 trait CourseTrait
 {
@@ -30,4 +30,3 @@ trait CourseTrait
         return $this;
     }
 }
-

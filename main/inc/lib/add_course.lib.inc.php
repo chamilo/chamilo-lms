@@ -2,9 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Chamilo\CourseBundle\Tool\BaseTool;
 
 /**
  * Class AddCourse.
@@ -447,7 +445,6 @@ class AddCourse
         $course = api_get_course_entity($course_id);
         $settingsManager = CourseManager::getCourseSettingsManager();
         $settingsManager->setCourse($course);
-
 
         $alert = api_get_setting('email_alert_manager_on_new_quiz');
         if ($alert === 'true') {
@@ -936,7 +933,7 @@ class AddCourse
     }
 
     /**
-     * @param array   $courseInfo
+     * @param array $courseInfo
      * @param int   $counter
      * @param array $file
      * @param int   $authorId

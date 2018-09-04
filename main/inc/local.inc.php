@@ -944,12 +944,12 @@ if (!isset($_SESSION['login_as'])) {
     }
 }
 
-$sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : false;
 // if a session id has been given in url, we store the session if course was set:
 $sessionIdFromSession = api_get_session_id();
 $checkFromDatabase = false;
 // User change from session id
-if ((!empty($sessionIdFromGet) && $sessionIdFromGet != $sessionIdFromSession) || $cidReset) {
+if (($sessionIdFromGet !== false && $sessionIdFromGet !== $sessionIdFromSession) || $cidReset) {
     $cidReset = true;
     $checkFromDatabase = true;
     Session::erase('session_name');

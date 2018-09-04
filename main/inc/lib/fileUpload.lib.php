@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CDocument;
+
 /**
  * FILE UPLOAD LIBRARY.
  *
@@ -214,7 +216,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param bool   $treat_spaces_as_hyphens
  *
  * So far only use for unzip_uploaded_document function.
- * If no output wanted on success, set to false.
+ * If no output wanted on success, set to false
  *
  * @return string path of the saved file
  */
@@ -1335,22 +1337,50 @@ function add_document(
 ) {
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
-
+    $userEntity = api_get_user_entity($userId);
+    $courseEntity = api_get_course_entity(api_get_course_int_id());
+    $session = api_get_session_entity($sessionId);
     $readonly = (int) $readonly;
-    $c_id = $courseInfo['real_id'];
-    $params = [
-        'c_id' => $c_id,
-        'path' => $path,
-        'filetype' => $fileType,
-        'size' => $fileSize,
-        'title' => $title,
-        'comment' => $comment,
-        'readonly' => $readonly,
-        'session_id' => $sessionId,
-    ];
-    $table = Database::get_course_table(TABLE_DOCUMENT);
-    $documentId = Database::insert($table, $params);
+
+    $em = Database::getManager();
+    $documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
+
+    $document = new CDocument();
+    $document
+        ->setCourse($courseEntity)
+        ->setPath($path)
+        ->setFiletype($fileType)
+        ->setSize($fileSize)
+        ->setTitle($title)
+        ->setComment($comment)
+        ->setReadonly($readonly)
+        ->setSession($session)
+    ;
+
+    $em->persist($document);
+    $em->flush();
+
+    /*$resourceNode = $documentRepo->addResourceNode($document, $userEntity);
+    $document->setResourceNode($resourceNode);
+
+    $em->persist($document);
+    $em->flush();
+
+    $resourceRight = new \Chamilo\CoreBundle\Entity\Resource\ResourceRights();
+    $resourceRight->setMask(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::getEditorMask());
+    $resourceRight->setRole(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+
+    $documentRepo->addResourceToCourse($resourceNode, $courseEntity, $resourceRight);
+
+    $resourceRight = new \Chamilo\CoreBundle\Entity\Resource\ResourceRights();
+    $resourceRight->setMask(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::getReaderMask());
+    $resourceRight->setRole(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
+
+    $documentRepo->addResourceToCourse($resourceNode, $courseEntity, $resourceRight);*/
+
+    $documentId = $document->getIid();
     if ($documentId) {
+        $table = Database::get_course_table(TABLE_DOCUMENT);
         $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
         Database::query($sql);
 
@@ -1370,7 +1400,7 @@ function add_document(
             $courseTitle = $courseInfo['title'];
             if (!empty($sessionId)) {
                 $sessionInfo = api_get_session_info($sessionId);
-                $courseTitle .= " ( ".$sessionInfo['name'].") ";
+                $courseTitle .= ' ( '.$sessionInfo['name'].') ';
             }
 
             $url = api_get_path(WEB_CODE_PATH).

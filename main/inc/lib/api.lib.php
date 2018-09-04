@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\Course;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -2069,7 +2071,7 @@ function api_get_course_info($course_code = null, $strict = false)
 /**
  * @param int $courseId
  *
- * @return \Chamilo\CoreBundle\Entity\Course
+ * @return Course
  */
 function api_get_course_entity($courseId = 0)
 {
@@ -2083,7 +2085,7 @@ function api_get_course_entity($courseId = 0)
 /**
  * @param int $id
  *
- * @return \Chamilo\CoreBundle\Entity\Session
+ * @return SessionEntity
  */
 function api_get_session_entity($id = 0)
 {

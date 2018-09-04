@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
  *     @ORM\Index(name="idx_message_parent", columns={"parent_id"})
  * })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
  */
 class Message
 {

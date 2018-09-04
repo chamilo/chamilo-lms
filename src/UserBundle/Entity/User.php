@@ -449,6 +449,20 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     private $hrDeptId;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userSender")
+     */
+    private $sentMessages;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userReceiver")
+     */
+    private $receivedMessages;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -2009,5 +2023,25 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $id = $this->id;
 
         return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+    }
+
+    /**
+     * Get sentMessages
+     *
+     * @return ArrayCollection
+     */
+    public function getSentMessages()
+    {
+        return $this->sentMessages;
+    }
+
+    /**
+     * Get receivedMessages
+     *
+     * @return ArrayCollection
+     */
+    public function getReceivedMessages()
+    {
+        return $this->receivedMessages;
     }
 }

@@ -171,6 +171,10 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE session_category SET date_end = NULL WHERE date_end = "0000-00-00"');
 
         $table = $schema->getTable('message');
+
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
+
         if (!$table->hasIndex('idx_message_user_receiver_status')) {
             $this->addSql('CREATE INDEX idx_message_user_receiver_status ON message (user_receiver_id, msg_status)');
         }

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,18 +32,20 @@ class Message
     protected $id;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_sender_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sentMessages")
+     * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
-    protected $userSenderId;
+    protected $userSender;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_receiver_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="receivedMessages")
+     * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=false)
      */
-    protected $userReceiverId;
+    protected $userReceiver;
 
     /**
      * @var bool
@@ -101,51 +104,51 @@ class Message
     protected $votes;
 
     /**
-     * Set userSenderId.
+     * Set userSender.
      *
-     * @param int $userSenderId
+     * @param User $userSender
      *
      * @return Message
      */
-    public function setUserSenderId($userSenderId)
+    public function setUserSender(User $userSender)
     {
-        $this->userSenderId = $userSenderId;
+        $this->userSender = $userSender;
 
         return $this;
     }
 
     /**
-     * Get userSenderId.
+     * Get userSender.
      *
-     * @return int
+     * @return User
      */
-    public function getUserSenderId()
+    public function getUserSender()
     {
-        return $this->userSenderId;
+        return $this->userSender;
     }
 
     /**
-     * Set userReceiverId.
+     * Set userReceiver.
      *
-     * @param int $userReceiverId
+     * @param User $userReceiver
      *
      * @return Message
      */
-    public function setUserReceiverId($userReceiverId)
+    public function setUserReceiver(User $userReceiver)
     {
-        $this->userReceiverId = $userReceiverId;
+        $this->userReceiver = $userReceiver;
 
         return $this;
     }
 
     /**
-     * Get userReceiverId.
+     * Get userReceiver.
      *
-     * @return int
+     * @return User
      */
-    public function getUserReceiverId()
+    public function getUserReceiver()
     {
-        return $this->userReceiverId;
+        return $this->userReceiver;
     }
 
     /**

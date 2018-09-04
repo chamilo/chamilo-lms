@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -102,6 +103,21 @@ class Message
      * @ORM\Column(name="votes", type="integer", nullable=true)
      */
     protected $votes;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageAttachment", mappedBy="message")
+     */
+    protected $attachments;
+
+    /**
+     * Message constructor.
+     */
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
 
     /**
      * Set userSender.
@@ -351,5 +367,15 @@ class Message
     public function getVotes()
     {
         return $this->votes;
+    }
+
+    /**
+     * Get attachments.
+     *
+     * @return ArrayCollection
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
     }
 }

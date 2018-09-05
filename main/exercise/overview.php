@@ -83,12 +83,12 @@ if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
         Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
         api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
-} elseif (api_is_teacher()) {
-    $edit_link = Display::url(
+    $edit_link .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-        'exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
 }
+
 $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM);
 // Exercise name.
 

@@ -172,6 +172,9 @@ class Version20 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('message');
 
+        $this->addSql('DELETE FROM message WHERE user_sender_id IS NOT NULL AND user_sender_id <> "" AND user_sender_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id <> "" AND user_receiver_id NOT IN (SELECT id FROM user)');
+
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
 

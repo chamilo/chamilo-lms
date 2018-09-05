@@ -11,7 +11,7 @@ use ChamiloSession as Session;
  *
  * @author Toon Keppens
  */
-$modifyAnswers = intval($_GET['hotspotadmin']);
+$modifyAnswers = (int) $_GET['hotspotadmin'];
 
 if (!is_object($objQuestion)) {
     $objQuestion = Question::read($modifyAnswers);
@@ -30,7 +30,7 @@ if ($modifyIn) {
         echo '$modifyIn was set'."<br />\n";
     }
     // if the user has chosen to modify the question only in the current exercise
-    if ($modifyIn == 'thisExercise') {
+    if ($modifyIn === 'thisExercise') {
         // duplicates the question
         $questionId = $objQuestion->duplicate();
 
@@ -71,14 +71,13 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_c
 // the answer form has been submitted
 $submitAnswers = isset($_POST['submitAnswers']) ? true : false;
 $buttonBack = isset($_POST['buttonBack']) ? true : false;
-$nbrAnswers = isset($_POST['nbrAnswers']) ? intval($_POST['nbrAnswers']) : 0;
+$nbrAnswers = isset($_POST['nbrAnswers']) ? (int) $_POST['nbrAnswers'] : 0;
 
 if ($submitAnswers || $buttonBack) {
     if ($answerType == HOT_SPOT) {
         if ($debug > 0) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
         }
-
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             if ($debug > 0) {

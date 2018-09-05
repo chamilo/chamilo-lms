@@ -1029,7 +1029,7 @@ class ImportCsv
                 }
 
                 if (empty($sessionId)) {
-                    $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
+                    $this->logger->addInfo("external_sessionID: $externalSessionId does not exists.");
                 }
                 $teacherId = null;
                 $sessionInfo = [];
@@ -1082,13 +1082,11 @@ class ImportCsv
                 $startDateMonth = substr($date, 4, 2);
                 $startDateDay = substr($date, 6, 8);
 
-                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
-                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
+                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.':00';
+                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.':00';
 
                 if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
-                    $this->logger->addInfo(
-                        "Verify your dates:  '$startDate' : '$endDate' "
-                    );
+                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
                     $errorFound = true;
                 }
 
@@ -1124,7 +1122,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo("No events to add");
+                $this->logger->addInfo('No events to add');
 
                 return 0;
             }
@@ -1134,9 +1132,7 @@ class ImportCsv
             $externalEventId = null;
 
             $extraField = new ExtraField('calendar_event');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
                 $this->logger->addInfo(
@@ -1356,7 +1352,7 @@ class ImportCsv
                             api_format_date($end, TIME_NO_SEC_FORMAT).')';
                     } else {
                         $date = api_format_date($start, DATE_TIME_FORMAT_LONG_24H).' - '.
-                            api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
+                                api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
                     }
 
                     $sessionName = '';

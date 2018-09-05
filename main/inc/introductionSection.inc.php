@@ -32,6 +32,7 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
+$blogParam = isset($_GET['blog_id']) ? ('&blog_id='.(int) $_GET['blog_id']) : '';
 
 $introduction_section = '';
 
@@ -46,7 +47,7 @@ if (!empty($courseId)) {
     $form = new FormValidator(
         'introduction_text',
         'post',
-        api_get_self().'?'.api_get_cidreq()
+        api_get_self().'?'.api_get_cidreq().$blogParam
     );
 } else {
     $form = new FormValidator('introduction_text');
@@ -304,7 +305,7 @@ if ($intro_dispCommand) {
         $toolbar .= '<div class="toolbar-edit">';
         $toolbar .= '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
-            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().'&intro_cmdAdd=1">';
+            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
             $toolbar .= $textIntro.$editIconButton;
@@ -319,10 +320,10 @@ if ($intro_dispCommand) {
         $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty($courseId)) {
             $toolbar .=
-                '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
+                '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
             $toolbar .= $editIconButton;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         } else {

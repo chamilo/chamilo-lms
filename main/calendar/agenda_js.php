@@ -165,6 +165,7 @@ if ($type == 'course' && !empty($group_id)) {
 }
 
 $defaultView = api_get_setting('default_calendar_view');
+
 if (empty($defaultView)) {
     $defaultView = 'month';
 }

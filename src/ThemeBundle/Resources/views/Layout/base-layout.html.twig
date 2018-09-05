@@ -87,7 +87,21 @@
                                     {{ notification_menu }}
                                 </ul>
                             </div>
-                            {{ accessibility }}
+                            {% if chamilo_settings_get("display.accessibility_font_resize")  == 'true' %}
+                                <div class="resize_font">
+                                    <div class="btn-group">
+                                        <a title= "{{ 'DecreaseFontSize' | trans }}" href="#" class="decrease_font btn btn-default">
+                                            <em class="fa fa-font"></em>
+                                        </a>
+                                        <a title= "{{ 'ResetFontSize' | trans }}" href="#" class="reset_font btn btn-default">
+                                            <em class="fa fa-font"></em>
+                                        </a>
+                                        <a title= "{{ 'IncreaseFontSize' | trans }}" href="#" class="increase_font btn btn-default">
+                                            <em class="fa fa-font"></em>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

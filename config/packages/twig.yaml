@@ -10,13 +10,10 @@ twig:
         show_footer: true
         software_name: Chamilo
         version: 2
-        session_teachers:
-        teachers:
         news_counter:
         news_list:
         messages_count:
         message_link:
-        administrator_name:
         execution_stats:
         course_session_block:
         show_course_shortcut:

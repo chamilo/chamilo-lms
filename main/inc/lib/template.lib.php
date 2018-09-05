@@ -216,7 +216,7 @@ class Template
         $this->set_course_parameters();
 
         // Setting administrator variables
-        $this->setAdministratorParams();
+        //$this->setAdministratorParams();
         //$this->setCSSEditor();
 
         // Header and footer are showed by default
@@ -609,7 +609,7 @@ class Template
         $this->themeDir = self::getThemeDir($this->theme);
 
         // Setting app paths/URLs
-        $this->assign('_p', $this->getWebPaths());
+        //$this->assign('_p', $this->getWebPaths());
 
         // Here we can add system parameters that can be use in any template
         $_s = [
@@ -915,8 +915,8 @@ class Template
 
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
-
-            $extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
+            $extraHeaders = '';
+            //$extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
             //Adding jquery ui by default
             $extraHeaders .= api_get_jquery_ui_js();
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -1698,30 +1698,7 @@ class Template
      */
     private function set_footer_parameters()
     {
-        if (api_get_setting('show_administrator_data') === 'true') {
-            $firstName = api_get_setting('administratorName');
-            $lastName = api_get_setting('administratorSurname');
 
-            if (!empty($firstName) && !empty($lastName)) {
-                $name = api_get_person_name($firstName, $lastName);
-            } else {
-                $name = $lastName;
-                if (empty($lastName)) {
-                    $name = $firstName;
-                }
-            }
-
-            $adminName = '';
-            // Administrator name
-            if (!empty($name)) {
-                $adminName = get_lang('Manager').' : '.
-                    Display::encrypted_mailto_link(
-                        api_get_setting('emailAdministrator'),
-                        $name
-                    );
-            }
-            $this->assign('administrator_name', $adminName);
-        }
 
         // Loading footer extra content
         if (!api_is_platform_admin()) {
@@ -1732,72 +1709,8 @@ class Template
         }
 
         // Tutor name
-        if (api_get_setting('show_tutor_data') == 'true') {
-            // Course manager
-            $courseId = api_get_course_int_id();
-            $id_session = api_get_session_id();
-            if (!empty($courseId)) {
-                $tutor_data = '';
-                if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session(
-                        $id_session,
-                        $courseId
-                    );
-                    $email_link = [];
-                    foreach ($coachs_email as $coach) {
-                        $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
-                    }
-                    if (count($coachs_email) > 1) {
-                        $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 1) {
-                        $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 0) {
-                        $tutor_data .= '';
-                    }
-                }
-                $this->assign('session_teachers', $tutor_data);
-            }
-        }
 
-        if (api_get_setting('show_teacher_data') == 'true') {
-            // course manager
-            $courseId = api_get_course_int_id();
-            if (!empty($courseId)) {
-                $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
-                    $teachers_parsed = [];
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
-                        }
-                    }
-                    $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
-                        $label = get_lang('Teachers');
-                    }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
-                }
-                $this->assign('teachers', $teacher_data);
-            }
-        }
-    }
 
-    /**
-     * Set administrator variables.
-     */
-    private function setAdministratorParams()
-    {
-        $_admin = [
-            'email' => api_get_setting('emailAdministrator'),
-            'surname' => api_get_setting('administratorSurname'),
-            'name' => api_get_setting('administratorName'),
-            'telephone' => api_get_setting('administratorTelephone'),
-        ];
-
-        $this->assign('_admin', $_admin);
     }
 
     /**

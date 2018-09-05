@@ -103,6 +103,7 @@ class CourseListener
         }
 
         global $cidReset;
+
         if ($cidReset === true) {
             $this->removeCourseFromSession($request);
 

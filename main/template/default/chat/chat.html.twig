@@ -121,7 +121,7 @@
                             '           </button>';
                     }
                     html += '           </li>' +
-                            {% if chamilo_settings_get('platform.hide_username_in_course_chat') == 'false' %}
+                            {% if chamilo_settings_get('profile.hide_username_in_course_chat') == 'false' %}
                         '           <li><small>' + user.username + '</small></li>' +
                             {% else %}
                         '           <li>&nbsp;</li>' +

@@ -37,6 +37,8 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'allow_show_skype_account' => '',
                     'allow_show_linkedin_url' => '',
                     'is_editable' => 'true',
+                    'hide_username_with_complete_name' => 'false',
+                    'hide_username_in_course_chat' => 'false',
                 ]
             )
             ->setTransformer(
@@ -93,6 +95,8 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('allow_show_skype_account', YesNoType::class)
             ->add('allow_show_linkedin_url', YesNoType::class)
             ->add('is_editable', YesNoType::class)
+            ->add('hide_username_with_complete_name', YesNoType::class)
+            ->add('hide_username_in_course_chat', YesNoType::class)
         ;
     }
 }

@@ -44,6 +44,10 @@ User:
                         type: 'Int'
                         defaultValue: 0
                 resolve: "@=resolver('user_messages', [value, args['lastId'], context])"
+            courses:
+                description: 'Course list for the current user.'
+                type: '[Course]'
+                resolve: "@=resolver('user_courses', [value, context])"
 
 UserMessage:
     type: object
@@ -73,3 +77,30 @@ UserMessage:
             hasAttachments:
                 type: 'Boolean'
                 resolve: "@=resolver('message_has_attachments', [value])"
+
+Course:
+    type: object
+    config:
+        description: 'A course registered on the platform.'
+        fields:
+            id:
+                description: 'The unique ID of the course.'
+                type: 'Int'
+            title:
+                type: 'String'
+            code:
+                type: 'String'
+            categoryCode:
+                type: 'String'
+            picture:
+                type: 'String'
+                args:
+                    fullSize:
+                        description: 'It indicates whether to get the full-sized image.'
+                        type: 'Boolean'
+                        defaultValue: false
+                resolve: "@=resolver('course_picture', [value, args['fullSize']])"
+            teachers:
+                description: 'Teachers list in course.'
+                type: "[User]"
+                resolve: "@=resolver('course_teachers', [value])"

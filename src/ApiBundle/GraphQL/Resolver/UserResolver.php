@@ -3,6 +3,7 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
@@ -35,6 +36,7 @@ class UserResolver implements ResolverInterface, AliasedInterface
         return [
             'resolveUserPicture' => 'user_picture',
             'resolveUserMessages' => 'user_messages',
+            'resolveCourses' => 'user_courses',
         ];
     }
 
@@ -73,5 +75,39 @@ class UserResolver implements ResolverInterface, AliasedInterface
         $messages = $messageRepo->getFromLastOneReceived($user, (int) $lastId);
 
         return $messages;
+    }
+
+    /**
+     * @param User         $user
+     * @param \ArrayObject $context
+     *
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function resolveCourses(User $user, \ArrayObject $context)
+    {
+        /** @var User $contextUser */
+        $contextUser = $context['user'];
+
+        if ($user->getId() !== $contextUser->getId()) {
+            throw new UserError(get_lang('UserInfoDoesNotMatch'));
+        }
+
+        $courses = [];
+        $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());
+        $em = Container::getEntityManager();
+
+        foreach ($coursesInfo as $courseInfo) {
+            /** @var Course $course */
+            $course = $em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
+
+            if ($course) {
+                $courses[] = $course;
+            }
+        }
+
+        return $courses;
     }
 }

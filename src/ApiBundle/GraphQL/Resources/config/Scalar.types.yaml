@@ -1,0 +1,6 @@
+DateTime:
+    type: custom-scalar
+    config:
+        serialize: ["Chamilo\\ApiBundle\\GraphQL\\Type\\DateTimeType", "serialize"]
+        parseValue: ["Chamilo\\ApiBundle\\GraphQL\\Type\\DateTimeType", "parseValue"]
+        parseLiteral: ["Chamilo\\ApiBundle\\GraphQL\\Type\\DateTimeType", "parseLiteral"]

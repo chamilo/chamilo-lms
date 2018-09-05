@@ -61,7 +61,7 @@ UserMessage:
                 type: 'User'
                 resolve: "@=resolver('message_sender', [value])"
             sendDate:
-                type: 'String'
+                type: 'DateTime'
             excerpt:
                 type: 'String'
                 args:

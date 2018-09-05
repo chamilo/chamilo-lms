@@ -50,15 +50,6 @@ class IndexManager
     }
 
     /**
-     * @param bool $setLoginForm
-     */
-    public function set_login_form($setLoginForm = true)
-    {
-        global $loginFailed;
-        $this->tpl->setLoginForm($setLoginForm);
-    }
-
-    /**
      * @param array $personal_course_list
      */
     public function return_exercise_block($personal_course_list)

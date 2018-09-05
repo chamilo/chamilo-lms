@@ -149,7 +149,15 @@ class LegacyListener
                 $languageList[languageToCountryIsoCode($isoCode)] = $language;
             }
 
-            $twig->addGlobal('current_locale_iso', languageToCountryIsoCode($request->getLocale()));
+            $isoFixed = languageToCountryIsoCode($request->getLocale());
+            $twig->addGlobal(
+                'current_locale_info',
+                [
+                    'iso' => $isoFixed,
+                    'text' => $languageList[$isoFixed],
+                ]
+            );
+
             $twig->addGlobal('available_locales', $languages);
             $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
 

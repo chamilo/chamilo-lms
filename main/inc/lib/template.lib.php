@@ -235,11 +235,6 @@ class Template
         $this->assign('locale', api_get_language_isocode());
         $this->assign('login_class', null);
 
-        $allow = api_get_configuration_value('show_language_selector_in_menu');
-        if ($allow) {
-            $this->assign('language_form', api_display_language_form());
-        }
-
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
@@ -1113,29 +1108,6 @@ class Template
         }
 
         return $theme;
-    }
-
-    /**
-     * @param bool|true $setLoginForm
-     */
-    public function setLoginForm($setLoginForm = true)
-    {
-        global $loginFailed;
-        $userId = api_get_user_id();
-        if (!($userId) || api_is_anonymous($userId)) {
-            // Only display if the user isn't logged in.
-            $this->assign(
-                'login_language_form',
-                api_display_language_form(true, true)
-            );
-            if ($setLoginForm) {
-                $this->assign('login_form', $this->displayLoginForm());
-
-                if ($loginFailed) {
-                    $this->assign('login_failed', $this::handleLoginFailed());
-                }
-            }
-        }
     }
 
     /**

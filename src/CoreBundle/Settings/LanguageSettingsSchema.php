@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -31,6 +32,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_3' => '',
                     'language_priority_4' => '',
                     'hide_dltt_markup' => 'false',
+                    'show_language_selector_in_menu' => 'true'
                 ]
             );
 
@@ -48,16 +50,25 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
      */
     public function buildForm(FormBuilderInterface $builder)
     {
+        $choices = [
+            '' => '',
+            'PlatformLanguage' => 'platform_lang',  // default platform language
+            'UserLanguage' => 'user_profil_lang', // profile language of current user
+            'UserSelectedLanguage' => 'user_selected_lang', // language selected by user at login
+            'CourseLanguage' => 'course_lang', // language of the current course
+        ];
+
         $builder
             ->add('platform_language', 'language')
             ->add('allow_use_sub_language', YesNoType::class)
             ->add('auto_detect_language_custom_pages', YesNoType::class)
             ->add('show_different_course_language', YesNoType::class)
-            ->add('language_priority_1')
-            ->add('language_priority_2')
-            ->add('language_priority_3')
-            ->add('language_priority_4')
+            ->add('language_priority_1', ChoiceType::class, ['choices' => $choices])
+            ->add('language_priority_2', ChoiceType::class, ['choices' => $choices])
+            ->add('language_priority_3', ChoiceType::class, ['choices' => $choices])
+            ->add('language_priority_4', ChoiceType::class, ['choices' => $choices])
             ->add('hide_dltt_markup')
+            ->add('show_language_selector_in_menu', YesNoType::class)
         ;
     }
 }

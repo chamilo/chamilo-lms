@@ -2026,7 +2026,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * Get sentMessages
+     * Get sentMessages.
      *
      * @return ArrayCollection
      */
@@ -2036,7 +2036,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * Get receivedMessages
+     * Get receivedMessages.
      *
      * @return ArrayCollection
      */

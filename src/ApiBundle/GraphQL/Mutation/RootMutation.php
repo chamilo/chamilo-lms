@@ -4,14 +4,13 @@
 namespace Chamilo\ApiBundle\GraphQL\Mutation;
 
 use Chamilo\ApiBundle\GraphQL\Auth;
-use Chamilo\CoreBundle\Framework\Container;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Overblog\GraphQLBundle\Error\UserError;
 
 /**
- * Class RootMutation
+ * Class RootMutation.
  *
  * @package Chamilo\ApiBundle\GraphQL\Mutation
  */

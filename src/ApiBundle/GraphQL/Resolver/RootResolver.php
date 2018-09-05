@@ -10,13 +10,12 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Overblog\GraphQLBundle\Error\UserError;
 
 /**
- * Class RootResolver
+ * Class RootResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
 class RootResolver implements ResolverInterface, AliasedInterface
 {
-
     /**
      * Returns methods aliases.
      *

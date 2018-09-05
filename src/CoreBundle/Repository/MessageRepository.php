@@ -7,7 +7,8 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class MessageRepository
+ * Class MessageRepository.
+ *
  * @package Chamilo\CoreBundle\Repository
  */
 class MessageRepository extends EntityRepository

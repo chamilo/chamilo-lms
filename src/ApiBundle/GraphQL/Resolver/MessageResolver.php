@@ -8,7 +8,8 @@ use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class MessageResolver
+ * Class MessageResolver.
+ *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
 class MessageResolver implements ResolverInterface, AliasedInterface

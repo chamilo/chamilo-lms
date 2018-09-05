@@ -8,19 +8,19 @@ use Chamilo\UserBundle\Entity\User;
 use Firebase\JWT\JWT;
 
 /**
- * Class Auth
+ * Class Auth.
  *
  * @package Chamilo\ApiBundle\GraphQL
  */
 class Auth
 {
-
     /**
      * @param string $username
      * @param string $password
      *
-     * @return string
      * @throws \Exception
+     *
+     * @return string
      */
     public function getUserToken($username, $password): string
     {
@@ -43,27 +43,6 @@ class Auth
         }
 
         return self::generateToken($user->getId());
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return string
-     */
-    private static function generateToken($userId): string
-    {
-        $secret = Container::$container->getParameter('secret');
-        $time = time();
-
-        $payload = [
-            'iat' => $time,
-            'exp' => $time + (60 * 60 * 24),
-            'data' => [
-                'user' => $userId,
-            ],
-        ];
-
-        return JWT::encode($payload, $secret, 'HS384');
     }
 
     /**
@@ -90,6 +69,27 @@ class Auth
         }
 
         $context->offsetSet('user', $user);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return string
+     */
+    private static function generateToken($userId): string
+    {
+        $secret = Container::$container->getParameter('secret');
+        $time = time();
+
+        $payload = [
+            'iat' => $time,
+            'exp' => $time + (60 * 60 * 24),
+            'data' => [
+                'user' => $userId,
+            ],
+        ];
+
+        return JWT::encode($payload, $secret, 'HS384');
     }
 
     /**

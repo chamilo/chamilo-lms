@@ -3,7 +3,6 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
@@ -11,7 +10,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class UserResolver
+ * Class UserResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */

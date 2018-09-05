@@ -1,0 +1,14 @@
+.mejs__container{
+    background: transparent;
+}
+.mejs__overlay-button {
+    background: url(mejs-controls.svg) no-repeat;
+    background-position: 0 -39px;
+    height: 80px;
+    width: 80px;
+}
+.mejs__controls:not([style*="display: none"]) {
+    background: rgba(255,0,0,.7);
+    background: -webkit-linear-gradient(transparent,rgba(0,0,0,.35));
+    background: linear-gradient(#84bd00,rgb(132, 189,0.5));
+}

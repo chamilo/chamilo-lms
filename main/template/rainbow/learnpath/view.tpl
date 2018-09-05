@@ -335,7 +335,9 @@
             $('iframe#content_id').on('load', function () {
                 $.frameReady(
                     function () {
-
+                        $(document).ready(function () {
+                            $('video:not(.skip)').attr('preload', 'metadata');
+                        })
                     },
                     'top.content_name',
                     {
@@ -362,6 +364,7 @@
                             {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_query }}'},
                             {type: 'script', id: '_media1', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelement-and-player.min.js'},
                             {type: 'stylesheet', id: '_media2', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelementplayer.min.css'},
+                            {type: 'stylesheet', id: '_media3', src: '{{ _p.web_css_theme }}mediaelement.css'},
                             {type: 'script', id: '_media3', src: '{{ _p.web_lib }}javascript/iframe-js-loader.js'}
                         ]
                     }

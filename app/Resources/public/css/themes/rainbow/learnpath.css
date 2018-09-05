@@ -595,6 +595,9 @@ table.lp_overview img {
 .attempts .attempts-status li{
     display: inline-block;
 }
+.mejs__container{
+    background: transparent;
+}
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #learning_path_right_zone .lp-view-tabs .tab-content {

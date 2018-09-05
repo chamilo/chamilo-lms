@@ -303,6 +303,9 @@ blockquote p {
     font-weight: bold;
     color: #162a83;
 }
+.mejs__container{
+    background: transparent;
+}
 @media (max-width: 767px) {
     .img-responsive {
         display: block;

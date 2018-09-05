@@ -38,7 +38,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__tag (id INT AUTO_INCREMENT NOT NULL, context INT DEFAULT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, slug VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_CA57A1C7E25D857E (context), UNIQUE INDEX tag_context (slug, context), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__collection (id INT AUTO_INCREMENT NOT NULL, context INT DEFAULT NULL, media_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, slug VARCHAR(190) NOT NULL, description VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_A406B56AE25D857E (context), INDEX IDX_A406B56AEA9FDD75 (media_id), UNIQUE INDEX tag_collection (slug, context), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_A406B56A989D9B62 ON classification__collection (slug)');
-
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__context (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__category (id INT AUTO_INCREMENT NOT NULL, parent_id INT DEFAULT NULL, context INT DEFAULT NULL, media_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, slug VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, position INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_43629B36727ACA70 (parent_id), INDEX IDX_43629B36E25D857E (context), INDEX IDX_43629B36EA9FDD75 (media_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE TABLE IF NOT EXISTS media__gallery_media (id INT AUTO_INCREMENT NOT NULL, gallery_id INT DEFAULT NULL, media_id INT DEFAULT NULL, position INT NOT NULL, enabled TINYINT(1) NOT NULL, updated_at DATETIME NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_80D4C5414E7AF8F (gallery_id), INDEX IDX_80D4C541EA9FDD75 (media_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
@@ -125,7 +124,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE hook_observer CHANGE class_name class_name VARCHAR(190) DEFAULT NULL');
 
         $connection = $this->getEntityManager()->getConnection();
-        $sql = "SELECT * FROM course_category";
+        $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);
         $all = $result->fetchAll();
 
@@ -147,8 +146,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE settings_current ADD CONSTRAINT FK_62F79C3B9436187B FOREIGN KEY (access_url) REFERENCES access_url (id);');
         $this->addSql('ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL;');
         $this->addSql('ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE value value VARCHAR(190) DEFAULT NULL');
-        $this->addSql(' ALTER TABLE hook_event CHANGE class_name class_name VARCHAR(190) DEFAULT NULL;');
-
+        $this->addSql('ALTER TABLE hook_event CHANGE class_name class_name VARCHAR(190) DEFAULT NULL;');
 
         $this->addSql('ALTER TABLE access_url_rel_session ADD id INT AUTO_INCREMENT NOT NULL, CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE session_id session_id INT DEFAULT NULL, ADD PRIMARY KEY (id);');
         $this->addSql('ALTER TABLE access_url_rel_session ADD CONSTRAINT FK_6CBA5F5D613FECDF FOREIGN KEY (session_id) REFERENCES session (id);');
@@ -170,14 +168,16 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE session_category SET date_start = NULL WHERE date_start = "0000-00-00"');
         $this->addSql('UPDATE session_category SET date_end = NULL WHERE date_end = "0000-00-00"');
 
-        $table = $schema->getTable('message');
+        $this->addSql('DELETE FROM message WHERE user_sender_id IS NULL OR user_sender_id = 0');
+        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NULL OR user_sender_id = 0');
 
-        $this->addSql('DELETE FROM message WHERE user_sender_id IS NOT NULL AND user_sender_id <> "" AND user_sender_id NOT IN (SELECT id FROM user)');
-        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id <> "" AND user_receiver_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user)');
 
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
 
+        $table = $schema->getTable('message');
         if (!$table->hasIndex('idx_message_user_receiver_status')) {
             $this->addSql('CREATE INDEX idx_message_user_receiver_status ON message (user_receiver_id, msg_status)');
         }

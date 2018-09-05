@@ -11,16 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class PortfolioCategory.
  *
- * @package Chamilo\CoreBundle\Entity
- *
  * @ORM\Table(
  *  name="portfolio_category",
  *  indexes={
  *      @ORM\Index(name="user", columns={"user_id"})
  *  }
  * )
- * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class PortfolioCategory
 {

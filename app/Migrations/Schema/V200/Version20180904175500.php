@@ -20,6 +20,7 @@ class Version20180904175500 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        $this->addSql('CREATE INDEX IDX_B68FF524537A1329 ON message_attachment (message_id)');
         $this->addSql('ALTER TABLE message_attachment CHANGE message_id message_id BIGINT NOT NULL');
         $this->addSql('ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF524537A1329 FOREIGN KEY (message_id) REFERENCES message (id)');
     }
@@ -29,6 +30,5 @@ class Version20180904175500 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-
     }
 }

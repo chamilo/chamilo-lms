@@ -44,13 +44,6 @@ class TrackEUploads
     protected $uploadDate;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="upload_cours_id", type="string", length=40, nullable=false)
-     */
-    protected $uploadCoursId;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
@@ -117,30 +110,6 @@ class TrackEUploads
     public function getUploadDate()
     {
         return $this->uploadDate;
-    }
-
-    /**
-     * Set uploadCoursId.
-     *
-     * @param string $uploadCoursId
-     *
-     * @return TrackEUploads
-     */
-    public function setUploadCoursId($uploadCoursId)
-    {
-        $this->uploadCoursId = $uploadCoursId;
-
-        return $this;
-    }
-
-    /**
-     * Get uploadCoursId.
-     *
-     * @return string
-     */
-    public function getUploadCoursId()
-    {
-        return $this->uploadCoursId;
     }
 
     /**

@@ -567,7 +567,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL');
-        $this->addSql('ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL');
 
         $table = $schema->getTable('gradebook_category');
         if (!$table->hasColumn('gradebooks_to_validate_in_dependence')) {
@@ -672,6 +671,7 @@ class Version20 extends AbstractMigrationChamilo
         // Update template
         $this->addSql('DELETE FROM templates WHERE course_code NOT IN (SELECT code FROM course)');
         $this->addSql('ALTER TABLE templates ADD c_id INT DEFAULT NULL');
+        $this->addSql('CREATE INDEX IDX_6F287D8E91D79BD3 ON templates (c_id)');
         $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
         $this->addSql('UPDATE templates SET c_id = (SELECT id FROM course WHERE code = course_code)');
 
@@ -680,6 +680,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');
 
         $this->addSql('ALTER TABLE c_quiz_question_category ADD session_id INT DEFAULT NULL');
+        $this->addSql('CREATE INDEX IDX_1414369D613FECDF ON c_quiz_question_category (session_id)');
         $this->addSql('ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
 
         $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');

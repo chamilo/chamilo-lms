@@ -631,23 +631,28 @@ class Template
      */
     public static function getGlobals()
     {
+        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
+        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
+
         $_p = [
             'web' => api_get_path(WEB_PATH),
+            'web_public' => api_get_path(WEB_PUBLIC_PATH),
+            'web_url' => api_get_web_url(),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
-            //'web_css_theme' => api_get_path(WEB_CSS_PATH) . 'themes/' . $this->theme . '/',
+            //'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_plugin_asset' => api_get_path(WEB_PLUGIN_ASSET_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
-            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_query_vars' => api_htmlentities($queryString),
+            'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
+            'web_rel_code' => api_get_path(REL_CODE_PATH),
         ];
 
         $_s = [
@@ -1472,28 +1477,7 @@ class Template
      */
     private function getWebPaths()
     {
-        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
-        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
 
-        return [
-            'web' => api_get_path(WEB_PATH),
-            'web_url' => api_get_web_url(),
-            'web_relative' => api_get_path(REL_PATH),
-            'web_course' => api_get_path(WEB_COURSE_PATH),
-            'web_main' => api_get_path(WEB_CODE_PATH),
-            'web_css' => api_get_path(WEB_CSS_PATH),
-            'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
-            'web_ajax' => api_get_path(WEB_AJAX_PATH),
-            'web_img' => api_get_path(WEB_IMG_PATH),
-            'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
-            'web_upload' => api_get_path(WEB_UPLOAD_PATH),
-            'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($queryString),
-            'web_self_query_vars' => api_htmlentities($requestURI),
-            'web_cid_query' => api_get_cidreq(),
-            'web_rel_code' => api_get_path(REL_CODE_PATH),
-        ];
     }
 
     /**

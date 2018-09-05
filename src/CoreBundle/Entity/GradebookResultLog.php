@@ -16,9 +16,18 @@ class GradebookResultLog
     /**
      * @var int
      *
-     * @ORM\Column(name="id_result", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $idResult;
+    protected $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="result_id", type="integer", nullable=false)
+     */
+    protected $resultId;
 
     /**
      * @var int
@@ -47,39 +56,6 @@ class GradebookResultLog
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
     protected $score;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Set idResult.
-     *
-     * @param int $idResult
-     *
-     * @return GradebookResultLog
-     */
-    public function setIdResult($idResult)
-    {
-        $this->idResult = $idResult;
-
-        return $this;
-    }
-
-    /**
-     * Get idResult.
-     *
-     * @return int
-     */
-    public function getIdResult()
-    {
-        return $this->idResult;
-    }
 
     /**
      * Set userId.
@@ -185,5 +161,25 @@ class GradebookResultLog
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getResultId(): int
+    {
+        return $this->resultId;
+    }
+
+    /**
+     * @param int $resultId
+     *
+     * @return GradebookResultLog
+     */
+    public function setResultId(int $resultId): GradebookResultLog
+    {
+        $this->resultId = $resultId;
+
+        return $this;
     }
 }

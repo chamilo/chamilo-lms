@@ -512,8 +512,8 @@ function get_language_folder_list()
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
  *
- * @param string $param the parameter of which the value is returned
- * @param   string  If we want to give the path rather than take it from POST
+ * @param string $param      the parameter of which the value is returned
+ * @param string $updatePath If we want to give the path rather than take it from POST
  *
  * @return string the value of the parameter
  *
@@ -597,7 +597,7 @@ function get_config_param_from_db($param = '')
  * @param string $dbNameForm     DB name
  * @param int    $dbPortForm     DB port
  *
- * @return Database
+ * @return \Database
  */
 function connectToDatabase(
     $dbHostForm,
@@ -1063,13 +1063,15 @@ function display_requirements(
                         <input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : ''; ?>" />
                     </p>
                     <p>
-                        <button type="submit" class="btn btn-default" name="step1" value="<?php echo get_lang('Back'); ?>" >
-                            <em class="fa fa-backward"> <?php echo get_lang('Back'); ?></em>
-                        </button>
-                        <input type="hidden" name="is_executable" id="is_executable" value="-" />
-                        <button type="submit" class="btn btn-success" name="<?php echo isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'; ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
-                            <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
-                        </button>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-secondary" name="step1" value="<?php echo get_lang('Back'); ?>" >
+                                <em class="fa fa-backward"> <?php echo get_lang('Back'); ?></em>
+                            </button>
+                            <input type="hidden" name="is_executable" id="is_executable" value="-" />
+                            <button type="submit" class="btn btn-success" name="<?php echo isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'; ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
+                                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
+                            </button>
+                        </div>
                     </p>
                 </div>
             </div>
@@ -1167,14 +1169,14 @@ function display_requirements(
 
         // And now display the choice buttons (go back or install)?>
         <p align="center" style="padding-top:15px">
-        <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="<?php echo get_lang('Previous'); ?>" >
-            <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
-        </button>
-        <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
+            <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="<?php echo get_lang('Previous'); ?>" >
+                <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
+            </button>
+            <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
             echo 'disabled="disabled"';
         } ?> >
-            <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
-        </button>
+                <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
+            </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
             <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"'; ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
                 <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeVersion'); ?>
@@ -1533,19 +1535,51 @@ function display_database_settings_form(
         $database_exists_text = '';
     $manager = null;
     try {
-        $manager = connectToDatabase(
+        if ($installType === 'update') {
+            /** @var \Database $manager */
+            $manager = connectToDatabase(
+                $dbHostForm,
+                $dbUsernameForm,
+                $dbPassForm,
+                $dbNameForm,
+                $dbPortForm
+            );
+
+            $connection = $manager->getConnection();
+            $connection->connect();
+            $schemaManager = $connection->getSchemaManager();
+
+            // Test create/alter/drop table
+            $table = 'zXxTESTxX_'.mt_rand(0, 1000);
+            $sql = "CREATE TABLE $table (id INT AUTO_INCREMENT NOT NULL, name varchar(255), PRIMARY KEY(id))";
+            $connection->query($sql);
+            $tableCreationWorks = false;
+            $tableDropWorks = false;
+            if ($schemaManager->tablesExist($table)) {
+                $tableCreationWorks = true;
+                $sql = "ALTER TABLE $table ADD COLUMN name2 varchar(140) ";
+                $connection->query($sql);
+                $schemaManager->dropTable($table);
+                $tableDropWorks = $schemaManager->tablesExist($table) === false;
+            }
+        } else {
+            $manager = connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
                 null,
                 $dbPortForm
             );
-        $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
-        if (in_array($dbNameForm, $databases)) {
-            $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+
+            $schemaManager = $manager->getConnection()->getSchemaManager();
+            $databases = $schemaManager->listDatabases();
+            if (in_array($dbNameForm, $databases)) {
+                $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+            }
         }
     } catch (Exception $e) {
         $database_exists_text = $e->getMessage();
+        $manager = false;
     }
 
     if ($manager && $manager->getConnection()->isConnected()): ?>
@@ -1554,6 +1588,14 @@ function display_database_settings_form(
             Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br/>
             Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br/>
             Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br/>
+            <?php
+                if ($installType === 'update') {
+                    echo get_lang('CreateTableWorks').' <strong>Ok</strong>';
+                    echo '<br/ >';
+                    echo get_lang('AlterTableWorks').' <strong>Ok</strong>';
+                    echo '<br/ >';
+                    echo get_lang('DropColumnWorks').' <strong>Ok</strong>';
+                } ?>
         </div>
     <?php else: ?>
         <div id="db_status" class="alert alert-danger">
@@ -1569,20 +1611,20 @@ function display_database_settings_form(
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
        <?php if ($manager) {
-        ?>
+                    ?>
            <button type="submit" class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
-    } else {
-        ?>
+                } else {
+                    ?>
            <button
                    disabled="disabled"
                    type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
-    } ?>
+                } ?>
    </div>
     <?php
 }
@@ -3578,7 +3620,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {
     error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
 
-    echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+    echo '<a class="btn btn-secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
     echo '<div id="details" style="display:none">';
 
     $connection = $manager->getConnection();

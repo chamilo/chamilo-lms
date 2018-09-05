@@ -227,7 +227,7 @@ class SessionRelCourseRelUser
      *
      * @return int
      */
-    public function getLegalAgreement(): int
+    public function getLegalAgreement()
     {
         return $this->legalAgreement;
     }

@@ -38,7 +38,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__tag (id INT AUTO_INCREMENT NOT NULL, context INT DEFAULT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, slug VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_CA57A1C7E25D857E (context), UNIQUE INDEX tag_context (slug, context), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__collection (id INT AUTO_INCREMENT NOT NULL, context INT DEFAULT NULL, media_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, slug VARCHAR(190) NOT NULL, description VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_A406B56AE25D857E (context), INDEX IDX_A406B56AEA9FDD75 (media_id), UNIQUE INDEX tag_collection (slug, context), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_A406B56A989D9B62 ON classification__collection (slug)');
-
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__context (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE TABLE IF NOT EXISTS classification__category (id INT AUTO_INCREMENT NOT NULL, parent_id INT DEFAULT NULL, context INT DEFAULT NULL, media_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, slug VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, position INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_43629B36727ACA70 (parent_id), INDEX IDX_43629B36E25D857E (context), INDEX IDX_43629B36EA9FDD75 (media_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('CREATE TABLE IF NOT EXISTS media__gallery_media (id INT AUTO_INCREMENT NOT NULL, gallery_id INT DEFAULT NULL, media_id INT DEFAULT NULL, position INT NOT NULL, enabled TINYINT(1) NOT NULL, updated_at DATETIME NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_80D4C5414E7AF8F (gallery_id), INDEX IDX_80D4C541EA9FDD75 (media_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
@@ -125,7 +124,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE hook_observer CHANGE class_name class_name VARCHAR(190) DEFAULT NULL');
 
         $connection = $this->getEntityManager()->getConnection();
-        $sql = "SELECT * FROM course_category";
+        $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);
         $all = $result->fetchAll();
 
@@ -143,13 +142,11 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE course_category CHANGE parent_id parent_id INT DEFAULT NULL;');
-
         $this->addSql('ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id);');
         $this->addSql('ALTER TABLE settings_current ADD CONSTRAINT FK_62F79C3B9436187B FOREIGN KEY (access_url) REFERENCES access_url (id);');
         $this->addSql('ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL;');
         $this->addSql('ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE value value VARCHAR(190) DEFAULT NULL');
-        $this->addSql(' ALTER TABLE hook_event CHANGE class_name class_name VARCHAR(190) DEFAULT NULL;');
-
+        $this->addSql('ALTER TABLE hook_event CHANGE class_name class_name VARCHAR(190) DEFAULT NULL;');
 
         $this->addSql('ALTER TABLE access_url_rel_session ADD id INT AUTO_INCREMENT NOT NULL, CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE session_id session_id INT DEFAULT NULL, ADD PRIMARY KEY (id);');
         $this->addSql('ALTER TABLE access_url_rel_session ADD CONSTRAINT FK_6CBA5F5D613FECDF FOREIGN KEY (session_id) REFERENCES session (id);');
@@ -170,6 +167,17 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE session_category SET date_start = NULL WHERE date_start = "0000-00-00"');
         $this->addSql('UPDATE session_category SET date_end = NULL WHERE date_end = "0000-00-00"');
+
+        $this->addSql('DELETE FROM message WHERE user_sender_id IS NULL OR user_sender_id = 0');
+
+        $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
+        $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
+
+        $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
+
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
 
         $table = $schema->getTable('message');
         if (!$table->hasIndex('idx_message_user_receiver_status')) {
@@ -250,7 +258,7 @@ class Version20 extends AbstractMigrationChamilo
         $tables = [
             'shared_survey',
             'specific_field_values',
-            'templates'
+            'templates',
         ];
 
         foreach ($tables as $table) {
@@ -400,7 +408,7 @@ class Version20 extends AbstractMigrationChamilo
             'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
             //'show_toolshortcuts' => '',
-            'survey_email_sender_noreply'=> 'survey',
+            'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',
             'sessionadmin_autosubscribe' => 'registration',
             'sessionadmin_page_after_login' => 'registration',
@@ -410,7 +418,7 @@ class Version20 extends AbstractMigrationChamilo
             'icons_mode_svg' => 'display',
             'server_type' => 'platform',
             'show_official_code_whoisonline' => 'platform',
-            'show_terms_if_profile_completed' => 'ticket'
+            'show_terms_if_profile_completed' => 'ticket',
         ];
 
         foreach ($settings as $variable => $category) {
@@ -496,7 +504,7 @@ class Version20 extends AbstractMigrationChamilo
 
         // Portfolio
         if (!$schema->hasTable('portfolio')) {
-            $this->addSql('CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title LONGTEXT NOT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT "1" NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
+            $this->addSql('CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title LONGTEXT DEFAULT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT "1" NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
             $this->addSql('CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title LONGTEXT NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT "1" NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
             $this->addSql('ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
@@ -559,7 +567,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL');
-        $this->addSql('ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL');
 
         $table = $schema->getTable('gradebook_category');
         if (!$table->hasColumn('gradebooks_to_validate_in_dependence')) {
@@ -639,8 +646,8 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_C9FA0CBD1BAD783F ON c_document (resource_node_id)');
 
-
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
+        $this->addSql('UPDATE c_document SET session_id = null WHERE session_id = 0');
         $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
 
@@ -658,6 +665,55 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE access_url_rel_usergroup CHANGE access_url_id access_url_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD573444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
         $this->addSql('CREATE INDEX IDX_AD488DD573444FD5 ON access_url_rel_usergroup (access_url_id)');
+
+        $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
+
+        // Update template
+        $this->addSql('DELETE FROM templates WHERE course_code NOT IN (SELECT code FROM course)');
+        $this->addSql('ALTER TABLE templates ADD c_id INT DEFAULT NULL');
+        $this->addSql('CREATE INDEX IDX_6F287D8E91D79BD3 ON templates (c_id)');
+        $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+        $this->addSql('UPDATE templates SET c_id = (SELECT id FROM course WHERE code = course_code)');
+
+        $this->addSql('ALTER TABLE gradebook_result_log CHANGE id_result result_id INT NOT NULL');
+
+        $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');
+
+        $this->addSql('ALTER TABLE c_quiz_question_category ADD session_id INT DEFAULT NULL');
+        $this->addSql('CREATE INDEX IDX_1414369D613FECDF ON c_quiz_question_category (session_id)');
+        $this->addSql('ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+
+        $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+
+        $this->addSql('ALTER TABLE track_e_hotspot ADD CONSTRAINT FK_A89CC3B691D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+        $this->addSql('CREATE INDEX IDX_A89CC3B691D79BD3 ON track_e_hotspot (c_id)');
+
+        // Drop unused columns
+        $dropColumnsAndIndex = [
+            'track_e_uploads' => ['columns' => ['upload_cours_id'], 'index' => ['upload_cours_id']],
+            'track_e_hotspot' => ['columns' => ['hotspot_course_code'], 'index' => ['hotspot_course_code']],
+            'templates' => ['columns' => ['course_code'], 'index' => []],
+        ];
+
+        foreach ($dropColumnsAndIndex as $tableName => $data) {
+            if ($schema->hasTable($tableName)) {
+                $indexList = $data['index'];
+                foreach ($indexList as $index) {
+                    if ($table->hasIndex($index)) {
+                        $table->dropIndex($index);
+                    }
+                }
+
+                $columns = $data['columns'];
+                $table = $schema->getTable($tableName);
+                foreach ($columns as $column) {
+                    if ($table->hasColumn($column)) {
+                        $table->dropColumn($column);
+                    }
+                }
+            }
+        }
 
         // Drop unused tables
         $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type', 'openid_association'];

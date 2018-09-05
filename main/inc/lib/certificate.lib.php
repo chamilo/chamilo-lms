@@ -218,12 +218,13 @@ class Certificate extends Model
         }
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
-
+        $categoryId = 0;
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-            $my_category = Category::load($this->certificate_data['cat_id']);
+            $categoryId = $this->certificate_data['cat_id'];
+            $my_category = Category::load($categoryId);
         }
 
-        if (isset($my_category[0]) &&
+        if (isset($my_category[0]) && !empty($categoryId) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
             $courseInfo = api_get_course_info($my_category[0]->get_course_code());

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessUrl
 {
+    use CourseTrait;
+
     /**
      * @var int
      *
@@ -425,26 +428,6 @@ class AccessUrl
     public function setEmail($email)
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCourse()
-    {
-        return $this->course;
-    }
-
-    /**
-     * @param mixed $course
-     *
-     * @return AccessUrl
-     */
-    public function setCourse($course)
-    {
-        $this->course = $course;
 
         return $this;
     }

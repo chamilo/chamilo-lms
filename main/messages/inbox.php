@@ -146,7 +146,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
 if (!isset($_GET['del_msg'])) {
     $social_right_content .= MessageManager::inbox_display($keyword);
 } else {
-    $num_msg = intval($_POST['total']);
+    $num_msg = (int) $_POST['total'];
     for ($i = 0; $i < $num_msg; $i++) {
         if ($_POST[$i]) {
             //the user_id was necessary to delete a message??

@@ -2274,17 +2274,14 @@ class CourseManager
             return false;
         }
 
-        $codeFiltered = Database::escape_string($code);
-        $sql = "SELECT * FROM $table_course
-                WHERE code = '$codeFiltered'";
-        $res = Database::query($sql);
+        $course = api_get_course_info($code);
 
-        if (Database::num_rows($res) == 0) {
-            return;
+        if (empty($course)) {
+            return false;
         }
 
-        $course = Database::fetch_array($res);
-        $courseId = $course['id']; // int
+        $codeFiltered = $course['code'];
+        $courseId = $course['real_id']; // int
 
         $count = 0;
         if (api_is_multiple_url_enabled()) {
@@ -2296,7 +2293,7 @@ class CourseManager
             $count = UrlManager::getCountUrlRelCourse($courseId);
         }
 
-        if ($count == 0) {
+        if ($count === 0) {
             self::create_database_dump($code);
 
             $course_tables = AddCourse::get_course_tables();
@@ -2404,18 +2401,20 @@ class CourseManager
                     WHERE course_id = $courseId";
             Database::query($sql);
 
-            if (api_get_configuration_value('allow_skill_rel_items')) {
-                $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
-                Database::query($sql);
-            }
+            $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
+            Database::query($sql);
 
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables
             GroupManager::deleteAllGroupsFromCourse($courseId);
 
             // Delete the course from the database
-            $sql = "DELETE FROM $table_course WHERE id = $courseId";
-            Database::query($sql);
+            /*$sql = "DELETE FROM $table_course WHERE id = $courseId";
+            Database::query($sql);*/
+
+            $courseEntity = api_get_course_entity($courseId);
+            Database::getManager()->remove($courseEntity);
+            Database::getManager()->flush();
 
             // delete extra course fields
             $extraFieldValues = new ExtraFieldValue('course');
@@ -4337,7 +4336,7 @@ class CourseManager
         $now = date('Y-m-d h:i:s');
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
-        $course_visibility = $course_info['visibility'];
+        $course_visibility = (int) $course_info['visibility'];
 
         if ($course_visibility === COURSE_VISIBILITY_HIDDEN) {
             return '';

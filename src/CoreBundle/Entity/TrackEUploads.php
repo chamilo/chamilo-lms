@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
- *      @ORM\Index(name="upload_cours_id", columns={"upload_cours_id"}),
  *      @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
  *  }
  * )
@@ -21,6 +20,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEUploads
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="upload_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $uploadId;
+
     /**
      * @var int
      *
@@ -34,13 +42,6 @@ class TrackEUploads
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
     protected $uploadDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="upload_cours_id", type="string", length=40, nullable=false)
-     */
-    protected $uploadCoursId;
 
     /**
      * @var int
@@ -62,15 +63,6 @@ class TrackEUploads
      * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
      */
     protected $uploadSessionId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="upload_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $uploadId;
 
     /**
      * Set uploadUserId.
@@ -118,30 +110,6 @@ class TrackEUploads
     public function getUploadDate()
     {
         return $this->uploadDate;
-    }
-
-    /**
-     * Set uploadCoursId.
-     *
-     * @param string $uploadCoursId
-     *
-     * @return TrackEUploads
-     */
-    public function setUploadCoursId($uploadCoursId)
-    {
-        $this->uploadCoursId = $uploadCoursId;
-
-        return $this;
-    }
-
-    /**
-     * Get uploadCoursId.
-     *
-     * @return string
-     */
-    public function getUploadCoursId()
-    {
-        return $this->uploadCoursId;
     }
 
     /**

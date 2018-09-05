@@ -37,11 +37,12 @@ class Templates
     protected $description;
 
     /**
-     * @var string
+     * @var Course
      *
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $courseCode;
+    protected $course;
 
     /**
      * @var int
@@ -110,30 +111,6 @@ class Templates
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set courseCode.
-     *
-     * @param string $courseCode
-     *
-     * @return Templates
-     */
-    public function setCourseCode($courseCode)
-    {
-        $this->courseCode = $courseCode;
-
-        return $this;
-    }
-
-    /**
-     * Get courseCode.
-     *
-     * @return string
-     */
-    public function getCourseCode()
-    {
-        return $this->courseCode;
     }
 
     /**
@@ -216,5 +193,25 @@ class Templates
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse(): Course
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return Templates
+     */
+    public function setCourse(Course $course): Templates
+    {
+        $this->course = $course;
+
+        return $this;
     }
 }

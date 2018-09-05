@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +23,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEAttempt
 {
+    use CourseTrait;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
     /**
      * @var int
      *
@@ -67,13 +79,6 @@ class TrackEAttempt
     /**
      * @var int
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
-    protected $cId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
     protected $position;
@@ -100,13 +105,10 @@ class TrackEAttempt
     protected $filename;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $id;
+    protected $course;
 
     /**
      * Set exeId.
@@ -250,30 +252,6 @@ class TrackEAttempt
     public function getMarks()
     {
         return $this->marks;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return TrackEAttempt
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

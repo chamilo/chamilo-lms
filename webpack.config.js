@@ -1,5 +1,8 @@
-var Encore = require('@symfony/webpack-encore');
-var copyWebpackPlugin = require('copy-webpack-plugin');
+const Encore = require('@symfony/webpack-encore');
+const copyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+//const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 Encore
     .setOutputPath('public/build/')
@@ -16,7 +19,6 @@ Encore
     .enableLessLoader()
     .autoProvidejQuery() // not needed because in window.jQuery we set the $
     // Reads the "assets/js/vendor.js" file and it will generate the file public/build/vendor.js file
-    .addEntry('vendor', './assets/js/vendor.js')
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
     // Reads app.scss -> output as web/build/css/base.css
@@ -32,6 +34,8 @@ Encore
     .addStyleEntry('css/responsive', './assets/css/responsive.css')
     .addStyleEntry('css/scorm', './assets/css/scorm.css')
 
+    .addPlugin(new UglifyJsPlugin())
+    //.addPlugin(new OptimizeCSSAssetsPlugin())
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({
         $: 'jquery',
@@ -83,6 +87,13 @@ themes.forEach(function (theme) {
     },
     ]));
 });
+
+Encore.addPlugin(
+    new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery'
+    })
+);
 
 var config = Encore.getWebpackConfig();
 module.exports = config;

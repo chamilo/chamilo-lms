@@ -6,7 +6,6 @@ namespace Chamilo\UserBundle\Entity;
 //use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
@@ -305,12 +304,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $sessionAsGeneralCoach;
 
     /**
-     * @var ArrayCollection
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
-     */
-    //protected $extraFields;
-
-    /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
      */
     protected $resourceNodes;
@@ -453,6 +446,20 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userSender")
+     */
+    private $sentMessages;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="userReceiver")
+     */
+    private $receivedMessages;
 
     /**
      * Constructor.
@@ -1453,108 +1460,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getExtraFields()
-    {
-        return $this->extraFields;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExtraFieldList($extraFields)
-    {
-        $this->extraFields = new ArrayCollection();
-        foreach ($extraFields as $extraField) {
-            $this->addExtraFields($extraField);
-        }
-
-        return $this;
-    }
-
-    public function setExtraFields($extraFields)
-    {
-        $this->extraFields = $extraFields;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function addExtraFields(ExtraFieldValues $extraFieldValue)
-    {
-        $extraFieldValue->setUser($this);
-        $this->extraFields[] = $extraFieldValue;
-
-        return $this;
-    }*/
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addExtraFields(ExtraFieldValues $extraFieldValue)
-    {
-        //if (!$this->hasExtraField($attribute)) {
-        $extraFieldValue->setUser($this);
-        $this->extraFields[] = $extraFieldValue;
-        //}
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function removeExtraField(ExtraFieldValues $attribute)
-    {
-        //if ($this->hasExtraField($attribute)) {
-        //$this->extraFields->removeElement($attribute);
-        //$attribute->setUser($this);
-        //}
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function hasExtraField($attribute)
-    {
-        if (!$this->extraFields) {
-            return false;
-        }
-        return $this->extraFields->contains($attribute);
-    }*/
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasExtraFieldByName($attributeName)
-    {
-        foreach ($this->extraFields as $attribute) {
-            if ($attribute->getName() === $attributeName) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtraFieldByName($attributeName)
-    {
-        foreach ($this->extraFields as $attribute) {
-            if ($attribute->getName() === $attributeName) {
-                return $attribute;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Get sessionCourseSubscription.
      *
      * @return ArrayCollection
@@ -1564,6 +1469,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this->sessionCourseSubscriptions;
     }
 
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
     public function setSessionCourseSubscriptions($value)
     {
         $this->sessionCourseSubscriptions = $value;
@@ -1991,5 +1901,25 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $id = $this->id;
 
         return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+    }
+
+    /**
+     * Get sentMessages.
+     *
+     * @return ArrayCollection
+     */
+    public function getSentMessages()
+    {
+        return $this->sentMessages;
+    }
+
+    /**
+     * Get receivedMessages.
+     *
+     * @return ArrayCollection
+     */
+    public function getReceivedMessages()
+    {
+        return $this->receivedMessages;
     }
 }

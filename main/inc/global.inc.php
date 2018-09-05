@@ -34,7 +34,6 @@ require_once __DIR__.'/../../public/legacy.php';
 // Check the PHP version
 api_check_php_version(__DIR__.'/');
 
-
 try {
     // Get settings from .env file created when installation Chamilo
     $envFile = __DIR__.'/../../.env';
@@ -55,7 +54,6 @@ try {
     $request->setBaseUrl($request->getRequestUri());
     $response = $kernel->handle($request);
     $container = $kernel->getContainer();
-
 
     if ($kernel->isInstalled()) {
         require_once $kernel->getConfigurationFile();
@@ -389,106 +387,11 @@ try {
         }
     }
 
-    // Checking if we have a valid language. If not we set it to the platform language.
-    $valid_languages = api_get_languages();
-
-    if (!empty($valid_languages)) {
-        if (!in_array($user_language, $valid_languages)) {
-            $user_language = api_get_setting('platformLanguage');
-        }
-
-        $language_priority1 = api_get_setting('languagePriority1');
-        $language_priority2 = api_get_setting('languagePriority2');
-        $language_priority3 = api_get_setting('languagePriority3');
-        $language_priority4 = api_get_setting('languagePriority4');
-
-        if (isset($_GET['language']) ||
-            (isset($_POST['language_list']) && !empty($_POST['language_list'])) ||
-            !empty($browser_language)
-        ) {
-            $user_selected_language = $user_language; // $_GET['language']; or HTTP_ACCEPT_LANGUAGE
-            $_SESSION['user_language_choice'] = $user_selected_language;
-            $platformLanguage = $user_selected_language;
-        }
-
-        if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
-            $language_interface = api_get_language_from_type($language_priority4);
-        } else {
-            $language_interface = api_get_setting('platformLanguage');
-        }
-
-        if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
-            $language_interface = api_get_language_from_type($language_priority3);
-        } else {
-            if (isset($_SESSION['user_language_choice'])) {
-                $language_interface = $_SESSION['user_language_choice'];
-            }
-        }
-
-        if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false) {
-            $language_interface = api_get_language_from_type($language_priority2);
-        } else {
-            if (isset($_user['language'])) {
-                $language_interface = $_user['language'];
-            }
-        }
-
-        if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
-            $language_interface = api_get_language_from_type($language_priority1);
-        } else {
-            if (isset($_course['language'])) {
-                $language_interface = $_course['language'];
-            }
-        }
-
-        // If language is set via browser ignore the priority
-        if (isset($_GET['language'])) {
-            $language_interface = $user_language;
-        }
-
-        $allow = api_get_configuration_value('show_language_selector_in_menu');
-        // Overwrite all lang configs and use the menu language
-        if ($allow) {
-            if (isset($_SESSION['user_language_choice'])) {
-                $userEntity = api_get_user_entity(api_get_user_id());
-                if ($userEntity) {
-                    if (isset($_GET['language'])) {
-                        $language_interface = $_SESSION['user_language_choice'];
-                        $userEntity->setLanguage($language_interface);
-                        Database::getManager()->merge($userEntity);
-                        Database::getManager()->flush();
-
-                        // Update cache
-                        api_get_user_info(
-                            api_get_user_id(),
-                            true,
-                            false,
-                            true,
-                            false,
-                            true,
-                            true
-                        );
-                        if (isset($_SESSION['_user'])) {
-                            $_SESSION['_user']['language'] = $language_interface;
-                        }
-                    }
-                    $language_interface = $_SESSION['user_language_choice'] = $userEntity->getLanguage();
-                }
-            } else {
-                $userInfo = api_get_user_info();
-                if (!empty($userInfo['language'])) {
-                    $_SESSION['user_language_choice'] = $userInfo['language'];
-                    $language_interface = $userInfo['language'];
-                }
-            }
-        }
-    }
-
     /**
      * Include the trad4all language file.
      */
     // if the sub-language feature is on
-    $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+    /*$parent_path = SubLanguageManager::get_parent_language_path($language_interface);
     if (!empty($parent_path)) {
         // include English
         include $langpath.'english/trad4all.inc.php';
@@ -514,7 +417,7 @@ try {
         if (file_exists($langfile)) {
             include $langfile;
         }
-    }
+    }*/
 
     // include the local (contextual) parameters of this course or section
     //require_once __DIR__.'/local.inc.php';

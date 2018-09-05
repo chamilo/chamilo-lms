@@ -464,7 +464,7 @@ class MessageManager
             return false;
         } elseif ($totalFileSize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
-                get_lang("FilesSizeExceedsX"),
+                get_lang('FilesSizeExceedsX'),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
             );
 
@@ -481,15 +481,14 @@ class MessageManager
             //@todo it's possible to edit a message? yes, only for groups
             if (!empty($editMessageId)) {
                 $query = " UPDATE $table SET
-                                update_date = '".$now."',
-                                content = '".Database::escape_string($content)."'
+                              update_date = '".$now."',
+                              content = '".Database::escape_string($content)."'
                            WHERE id = '$editMessageId' ";
                 Database::query($query);
                 $messageId = $editMessageId;
             } else {
                 $params = [
                     'user_sender_id' => $user_sender_id,
-                    'user_receiver_id' => $receiver_user_id,
                     'msg_status' => MESSAGE_STATUS_UNREAD,
                     'send_date' => $now,
                     'title' => $subject,
@@ -498,6 +497,9 @@ class MessageManager
                     'parent_id' => $parent_id,
                     'update_date' => $now,
                 ];
+                if (!empty($receiver_user_id)) {
+                    $params['user_receiver_id'] = $receiver_user_id;
+                }
                 $messageId = Database::insert($table, $params);
             }
 
@@ -2256,6 +2258,8 @@ class MessageManager
 
     /**
      * Get the data of the last received messages for a user.
+     *
+     * @deprecated 2.0 Use Chamilo\CoreBundle\Repository\MessageRepository::getFromLastOneReceived
      *
      * @param int $userId The user id
      * @param int $lastId The id of the last received message

@@ -609,8 +609,8 @@ class UserRepository extends EntityRepository
                 'IP: '.$item->getUserIp(),
                 'Start: '.$date,
                 'Status: '.$item->getStatus(),
-               // 'Result: '.$item->getExeResult(),
-               // 'Weighting: '.$item->getExeWeighting(),
+                // 'Result: '.$item->getExeResult(),
+                // 'Weighting: '.$item->getExeWeighting(),
             ];
             $trackEExercises[] = implode(', ', $list);
         }
@@ -623,9 +623,10 @@ class UserRepository extends EntityRepository
         $trackEAttempt = [];
         /** @var TrackEAttempt $item */
         foreach ($result as $item) {
+            $date = $item->getTms() ? $item->getTms()->format($dateFormat) : '';
             $list = [
                 'Attempt #'.$item->getExeId(),
-                'Course # '.$item->getCId(),
+                'Course # '.$item->getCourse()->getCode(),
                 //'Answer: '.$item->getAnswer(),
                 'Session #'.$item->getSessionId(),
                 //'Marks: '.$item->getMarks(),
@@ -653,14 +654,51 @@ class UserRepository extends EntityRepository
             $trackECourseAccessList[] = implode(', ', $list);
         }
 
-        // TrackELogin
-        $criteria = [
-            'loginUserId' => $userId,
+        $checkEntities = [
+            'ChamiloCoreBundle:TrackELogin' => 'loginUserId',
+            'ChamiloCoreBundle:TrackEAccess' => 'accessUserId',
+            'ChamiloCoreBundle:TrackEOnline' => 'loginUserId',
+            'ChamiloCoreBundle:TrackEDefault' => 'defaultUserId',
+            'ChamiloCoreBundle:TrackELastaccess' => 'accessUserId',
+            'ChamiloCoreBundle:TrackEUploads' => 'uploadUserId',
+            'ChamiloCoreBundle:GradebookResult' => 'userId',
+            'ChamiloCoreBundle:TrackEDownloads' => 'downUserId',
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackELogin')->findBy($criteria);
+
+        $maxResults = 1000;
+        $trackResults = [];
+        foreach ($checkEntities as $entity => $field) {
+            $qb = $em->createQueryBuilder();
+            $qb->select($qb->expr()->count('l'))
+                ->from($entity, 'l')
+                ->where("l.$field = :login")
+                ->setParameter('login', $userId);
+            $query = $qb->getQuery();
+            $count = $query->getSingleScalarResult();
+
+            if ($count > $maxResults) {
+                $qb = $em->getRepository($entity)->createQueryBuilder('l');
+                $qb
+                    ->select('l')
+                    ->where("l.$field = :login")
+                    ->setParameter('login', $userId);
+                $qb
+                    ->setFirstResult(0)
+                    ->setMaxResults($maxResults)
+                ;
+                $result = $qb->getQuery()->getResult();
+            } else {
+                $criteria = [
+                    $field => $userId,
+                ];
+                $result = $em->getRepository($entity)->findBy($criteria);
+            }
+            $trackResults[$entity] = $result;
+        }
+
         $trackELoginList = [];
         /** @var TrackELogin $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackELogin'] as $item) {
             $startDate = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
             $endDate = $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
             $list = [
@@ -672,13 +710,9 @@ class UserRepository extends EntityRepository
         }
 
         // TrackEAccess
-        $criteria = [
-            'accessUserId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEAccess')->findBy($criteria);
         $trackEAccessList = [];
         /** @var TrackEAccess $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackEAccess'] as $item) {
             $date = $item->getAccessDate() ? $item->getAccessDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
@@ -689,13 +723,8 @@ class UserRepository extends EntityRepository
         }
 
         // TrackEOnline
-        $criteria = [
-            'loginUserId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEOnline')->findBy($criteria);
-        $trackEOnlineList = [];
         /** @var TrackEOnline $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackEOnline'] as $item) {
             $date = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
@@ -707,13 +736,9 @@ class UserRepository extends EntityRepository
         }
 
         // TrackEDefault
-        $criteria = [
-            'defaultUserId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEDefault')->findBy($criteria);
         $trackEDefault = [];
         /** @var TrackEDefault $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackEDefault'] as $item) {
             $date = $item->getDefaultDate() ? $item->getDefaultDate()->format($dateFormat) : '';
             $list = [
                 'Type: '.$item->getDefaultEventType(),
@@ -727,13 +752,9 @@ class UserRepository extends EntityRepository
         }
 
         // TrackELastaccess
-        $criteria = [
-            'accessUserId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackELastaccess')->findBy($criteria);
         $trackELastaccess = [];
         /** @var TrackELastaccess $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackELastaccess'] as $item) {
             $date = $item->getAccessDate() ? $item->getAccessDate()->format($dateFormat) : '';
             $list = [
                 'Course #'.$item->getCId(),
@@ -745,13 +766,9 @@ class UserRepository extends EntityRepository
         }
 
         // TrackEUploads
-        $criteria = [
-            'uploadUserId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEUploads')->findBy($criteria);
         $trackEUploads = [];
         /** @var TrackEUploads $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackEUploads'] as $item) {
             $date = $item->getUploadDate() ? $item->getUploadDate()->format($dateFormat) : '';
             $list = [
                 'Course #'.$item->getCId(),
@@ -761,13 +778,9 @@ class UserRepository extends EntityRepository
             $trackEUploads[] = implode(', ', $list);
         }
 
-        $criteria = [
-            'userId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:GradebookResult')->findBy($criteria);
         $gradebookResult = [];
         /** @var GradebookResult $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:GradebookResult'] as $item) {
             $date = $item->getCreatedAt() ? $item->getCreatedAt()->format($dateFormat) : '';
             $list = [
                 'Evaluation id# '.$item->getEvaluationId(),
@@ -777,13 +790,9 @@ class UserRepository extends EntityRepository
             $gradebookResult[] = implode(', ', $list);
         }
 
-        $criteria = [
-            'downUserId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEDownloads')->findBy($criteria);
         $trackEDownloads = [];
         /** @var TrackEDownloads $item */
-        foreach ($result as $item) {
+        foreach ($trackResults['ChamiloCoreBundle:TrackEDownloads'] as $item) {
             $date = $item->getDownDate() ? $item->getDownDate()->format($dateFormat) : '';
             $list = [
                 'File: '.$item->getDownDocPath(),
@@ -917,17 +926,21 @@ class UserRepository extends EntityRepository
 
         // Message
         $criteria = [
-            'userSenderId' => $userId,
+            'userSender' => $userId,
         ];
         $result = $em->getRepository('ChamiloCoreBundle:Message')->findBy($criteria);
         $messageList = [];
         /** @var Message $item */
         foreach ($result as $item) {
             $date = $item->getSendDate() ? $item->getSendDate()->format($dateFormat) : '';
+            $userName = '';
+            if ($item->getUserReceiver()) {
+                $userName = $item->getUserReceiver()->getUsername();
+            }
             $list = [
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$date,
-                'To user # '.$item->getUserReceiverId(),
+                'To user: '.$userName,
                 'Status'.$item->getMsgStatus(),
             ];
             $messageList[] = implode(', ', $list);
@@ -1253,7 +1266,8 @@ class UserRepository extends EntityRepository
 
         $extraFieldValues = new \ExtraFieldValue('user');
         $items = $extraFieldValues->getAllValuesByItem($userId);
-        $user->setExtraFields($items);
+        //$user->setExtraFields($items);
+        //$user->setExtraFields([]);
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {

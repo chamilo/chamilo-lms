@@ -1029,7 +1029,7 @@ class ImportCsv
                 }
 
                 if (empty($sessionId)) {
-                    $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
+                    $this->logger->addInfo("external_sessionID: $externalSessionId does not exists.");
                 }
                 $teacherId = null;
                 $sessionInfo = [];
@@ -1082,13 +1082,11 @@ class ImportCsv
                 $startDateMonth = substr($date, 4, 2);
                 $startDateDay = substr($date, 6, 8);
 
-                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
-                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
+                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.':00';
+                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.':00';
 
                 if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
-                    $this->logger->addInfo(
-                        "Verify your dates:  '$startDate' : '$endDate' "
-                    );
+                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
                     $errorFound = true;
                 }
 
@@ -1124,7 +1122,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo("No events to add");
+                $this->logger->addInfo('No events to add');
 
                 return 0;
             }
@@ -1134,9 +1132,7 @@ class ImportCsv
             $externalEventId = null;
 
             $extraField = new ExtraField('calendar_event');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
                 $this->logger->addInfo(
@@ -1396,6 +1392,12 @@ class ImportCsv
                         $this->logger->addInfo(
                             "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
+
+                        $senderId = $this->defaultAdminId;
+                        if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
+                            $senderId = $coaches[0];
+                        }
+
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
@@ -1409,12 +1411,12 @@ class ImportCsv
                             null,
                             null,
                             false,
-                            $this->defaultAdminId
+                            $senderId
                         );
 
                         if ($announcementId) {
-                            $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
-                            $this->logger->addInfo("<<--SENDING MAIL-->>");
+                            $this->logger->addInfo("Announcement added: $announcementId in $info");
+                            $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
                             $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,
@@ -1423,11 +1425,11 @@ class ImportCsv
                                 false,
                                 false,
                                 $this->logger,
-                                $this->defaultAdminId
+                                $senderId
                             );
                         } else {
                             $this->logger->addError(
-                                "Error when trying to add announcement with title ".$subject." here: $info"
+                                "Error when trying to add announcement with title $subject here: $info and SenderId = $senderId"
                             );
                         }
                     } else {

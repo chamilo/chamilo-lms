@@ -44,11 +44,12 @@ class MessageAttachment
     protected $size;
 
     /**
-     * @var int
+     * @var Message
      *
-     * @ORM\Column(name="message_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="attachments")
+     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
      */
-    protected $messageId;
+    protected $message;
 
     /**
      * @var string
@@ -130,27 +131,27 @@ class MessageAttachment
     }
 
     /**
-     * Set messageId.
+     * Set message.
      *
-     * @param int $messageId
+     * @param Message $message
      *
      * @return MessageAttachment
      */
-    public function setMessageId($messageId)
+    public function setMessage(Message $message)
     {
-        $this->messageId = $messageId;
+        $this->message = $message;
 
         return $this;
     }
 
     /**
-     * Get messageId.
+     * Get message.
      *
-     * @return int
+     * @return Message
      */
-    public function getMessageId()
+    public function getMessage()
     {
-        return $this->messageId;
+        return $this->message;
     }
 
     /**

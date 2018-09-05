@@ -127,7 +127,6 @@ $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
 // document path
-
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // picture path
@@ -308,6 +307,7 @@ if ($modifyIn == 'thisExercise') {
         $modifyIn = 'allExercises';
     }
 }
+
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 

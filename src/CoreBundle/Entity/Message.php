@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
  *     @ORM\Index(name="idx_message_parent", columns={"parent_id"})
  * })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
  */
 class Message
 {
@@ -31,18 +33,20 @@ class Message
     protected $id;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_sender_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sentMessages")
+     * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
-    protected $userSenderId;
+    protected $userSender;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_receiver_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="receivedMessages")
+     * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
      */
-    protected $userReceiverId;
+    protected $userReceiver;
 
     /**
      * @var bool
@@ -101,51 +105,66 @@ class Message
     protected $votes;
 
     /**
-     * Set userSenderId.
+     * @var ArrayCollection
      *
-     * @param int $userSenderId
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageAttachment", mappedBy="message")
+     */
+    protected $attachments;
+
+    /**
+     * Message constructor.
+     */
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
+
+    /**
+     * Set userSender.
+     *
+     * @param User $userSender
      *
      * @return Message
      */
-    public function setUserSenderId($userSenderId)
+    public function setUserSender(User $userSender)
     {
-        $this->userSenderId = $userSenderId;
+        $this->userSender = $userSender;
 
         return $this;
     }
 
     /**
-     * Get userSenderId.
+     * Get userSender.
      *
-     * @return int
+     * @return User
      */
-    public function getUserSenderId()
+    public function getUserSender()
     {
-        return $this->userSenderId;
+        return $this->userSender;
     }
 
     /**
-     * Set userReceiverId.
+     * Set userReceiver.
      *
-     * @param int $userReceiverId
+     * @param User $userReceiver
      *
      * @return Message
      */
-    public function setUserReceiverId($userReceiverId)
+    public function setUserReceiver(User $userReceiver)
     {
-        $this->userReceiverId = $userReceiverId;
+        $this->userReceiver = $userReceiver;
 
         return $this;
     }
 
     /**
-     * Get userReceiverId.
+     * Get userReceiver.
      *
-     * @return int
+     * @return User
      */
-    public function getUserReceiverId()
+    public function getUserReceiver()
     {
-        return $this->userReceiverId;
+        return $this->userReceiver;
     }
 
     /**
@@ -348,5 +367,15 @@ class Message
     public function getVotes()
     {
         return $this->votes;
+    }
+
+    /**
+     * Get attachments.
+     *
+     * @return ArrayCollection
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
     }
 }

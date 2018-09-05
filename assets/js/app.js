@@ -3,11 +3,7 @@ const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 Routing.setRoutingData(routes);
 
-import 'image-map-resizer';
-import 'jquery.scrollbar';
-import 'jquery-ui/ui/widgets/datepicker';
-import 'jquery-ui/ui/widgets/tooltip';
-import 'chosen-js';
+require('./vendor');
 
 // @todo rework url naming
 var homePublicUrl = Routing.generate('home') + 'public/';
@@ -455,7 +451,7 @@ function setCheckbox(value, table_id) {
 }
 
 function action_click(element, table_id) {
-    d = $("#"+table_id);
+    var d = $("#"+table_id);
     if (!confirm('ConfirmYourChoice')) {
     //if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
         return false;

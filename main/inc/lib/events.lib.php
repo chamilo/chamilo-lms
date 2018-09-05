@@ -305,7 +305,6 @@ class Event
         $sql = "INSERT INTO $table
                 ( upload_user_id,
                   c_id,
-                  upload_cours_id,
                   upload_work_id,
                   upload_date,
                   upload_session_id
@@ -313,7 +312,6 @@ class Event
                 VALUES (
                  $userId,
                  $courseId,
-                 '',
                  $documentId,
                  '$reallyNow',
                  $sessionId
@@ -742,7 +740,6 @@ class Event
             return Database::insert(
                 $table,
                 [
-                    'hotspot_course_code' => api_get_course_id(),
                     'hotspot_user_id' => api_get_user_id(),
                     'c_id' => api_get_course_int_id(),
                     'hotspot_exe_id' => $exeId,

@@ -3,13 +3,13 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEHotspot.
  *
  * @ORM\Table(name="track_e_hotspot", indexes={
- *     @ORM\Index(name="hotspot_course_code", columns={"hotspot_course_code"}),
  *     @ORM\Index(name="hotspot_user_id", columns={"hotspot_user_id"}),
  *     @ORM\Index(name="hotspot_exe_id", columns={"hotspot_exe_id"}),
  *     @ORM\Index(name="hotspot_question_id", columns={"hotspot_question_id"})
@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEHotspot
 {
+    use CourseTrait;
+
     /**
      * @var int
      *
@@ -35,18 +37,10 @@ class TrackEHotspot
     protected $hotspotUserId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="hotspot_course_code", type="string", length=50, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $hotspotCourseCode;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer", nullable=true)
-     */
-    protected $cId;
+    protected $course;
 
     /**
      * @var int
@@ -105,54 +99,6 @@ class TrackEHotspot
     public function getHotspotUserId()
     {
         return $this->hotspotUserId;
-    }
-
-    /**
-     * Set hotspotCourseCode.
-     *
-     * @param string $hotspotCourseCode
-     *
-     * @return TrackEHotspot
-     */
-    public function setHotspotCourseCode($hotspotCourseCode)
-    {
-        $this->hotspotCourseCode = $hotspotCourseCode;
-
-        return $this;
-    }
-
-    /**
-     * Get hotspotCourseCode.
-     *
-     * @return string
-     */
-    public function getHotspotCourseCode()
-    {
-        return $this->hotspotCourseCode;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return TrackEHotspot
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

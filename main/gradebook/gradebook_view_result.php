@@ -54,9 +54,130 @@ if (isset($_GET['selecteval'])) {
     $iscourse = !empty(api_get_course_id());
 }
 
+$allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+
+if (isset($_GET['action'])) {
+    switch ($_GET['action']) {
+        case 'delete_attempt':
+            $result = Result::load($_GET['editres']);
+            if ($allowMultipleAttempts && !empty($result) && isset($result[0]) && api_is_allowed_to_edit()) {
+                /** @var Result $result */
+                $result = $result[0];
+                $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
+                $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+                if (isset($_GET['result_attempt_id'])) {
+                    $attemptId = (int) $_GET['result_attempt_id'];
+                    $sql = "DELETE FROM $table WHERE result_id = ".$result->get_id()." AND id = $attemptId";
+                    Database::query($sql);
+                    Display::addFlash(Display::return_message(get_lang('Deleted')));
+                }
+
+                header('Location: '.$url.'&action=add_attempt');
+                exit;
+            }
+            break;
+        case 'add_attempt':
+            $result = Result::load($_GET['editres']);
+            if ($allowMultipleAttempts && !empty($result) && isset($result[0]) && api_is_allowed_to_edit()) {
+                /** @var Result $result */
+                $result = $result[0];
+                $backUrl = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq();
+                $interbreadcrumb[] = [
+                    'url' => $backUrl,
+                    'name' => get_lang('Details'),
+                ];
+
+                /** @var Evaluation $evaluation */
+                $evaluation = $eval[0];
+
+                $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+                $now = api_get_utc_datetime();
+
+                $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
+                $form = new FormValidator('attempt', 'post', $url.'&action=add_attempt');
+                $form->addHeader(get_lang('AddResult'));
+                $form->addLabel(get_lang('CurrentScore'), $result->get_score());
+
+                $form->addFloat(
+                    'score',
+                    [
+                        get_lang('Score'),
+                        null,
+                        '/ '.$evaluation->get_max(),
+                    ],
+                    true,
+                    [
+                        'size' => '4',
+                        'maxlength' => '5',
+                    ],
+                    false,
+                    0,
+                    $evaluation->get_max()
+                );
+
+                $form->addTextarea('comment', get_lang('Comment'));
+
+                /*$form->addRule(
+                    'score',
+                    get_lang('ValueTooBig'),
+                    'max_numeric_length',
+                    $evaluation->get_max()
+                );*/
+                $form->addButtonSave(get_lang('Save'));
+                $attemptList = ResultTable::getResultAttemptTable($result, $url);
+                $form->addLabel(get_lang('Attempts'), $attemptList);
+
+                if ($form->validate()) {
+                    $values = $form->getSubmitValues();
+                    $newScore = $values['score'];
+
+                    $newScore = api_number_format(
+                        $newScore,
+                        api_get_setting('gradebook_number_decimals')
+                    );
+
+                    $params = [
+                        'result_id' => $result->get_id(),
+                        'score' => $newScore,
+                        'comment' => $values['comment'],
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+
+                    Database::insert($table, $params);
+                    if ($newScore > $result->get_score()) {
+                        $result->set_score($newScore);
+                        $result->save();
+                    }
+                    Display::addFlash(Display::return_message(get_lang('Saved')));
+                    header('Location: '.api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq());
+                    exit;
+                }
+
+                Display::display_header();
+
+                $items[] = [
+                    'url' => $backUrl,
+                    'content' => Display::return_icon(
+                        'back.png',
+                        get_lang('Back'),
+                        [],
+                        ICON_SIZE_MEDIUM
+                    ),
+                ];
+
+                echo Display::actions($items);
+                $form->display();
+                Display::display_footer();
+                exit;
+            }
+            break;
+    }
+}
+
 if (isset($_GET['editres'])) {
     $edit_res_xml = Security::remove_XSS($_GET['editres']);
-    $resultedit = Result :: load($edit_res_xml);
+    $resultedit = Result::load($edit_res_xml);
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
@@ -76,15 +197,27 @@ if (isset($_GET['editres'])) {
         $result->set_evaluation_id($select_eval);
         $row_value = isset($values['score']) ? $values['score'] : 0;
         if (!empty($row_value) || $row_value == 0) {
-            $result->set_score(
-                api_number_format(
-                    $row_value,
-                    api_get_setting('gradebook_number_decimals')
-                )
+            $row_value = api_number_format(
+                $row_value,
+                api_get_setting('gradebook_number_decimals')
             );
+            $result->set_score($row_value);
         }
         $result->save();
-        unset($result);
+
+        if ($allowMultipleAttempts && !empty($result->get_id())) {
+            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+            $now = api_get_utc_datetime();
+            $params = [
+                'result_id' => $result->get_id(),
+                'score' => $row_value,
+                'comment' => $values['comment'],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            Database::insert($table, $params);
+        }
 
         Display::addFlash(Display::return_message(get_lang('ResultEdited'), 'normal', false));
         header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editresmessage=&'.api_get_cidreq());

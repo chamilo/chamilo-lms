@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * List all certificates filtered by session/course and month/year.
  *

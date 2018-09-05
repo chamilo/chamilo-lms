@@ -395,6 +395,11 @@ class EvalForm extends FormValidator
             $this->evaluation_object->get_max()
         );
 
+        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        if ($allowMultipleAttempts) {
+            $this->addTextarea('comment', get_lang('Comment'));
+        }
+
         $this->addButtonSave(get_lang('Edit'), 'submit');
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
     }

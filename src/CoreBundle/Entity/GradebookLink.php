@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookLink
 {
+    use CourseTrait;
+
     /**
      * @var int
      *
@@ -154,30 +157,6 @@ class GradebookLink
     public function getUserId()
     {
         return $this->userId;
-    }
-
-    /**
-     * Set course.
-     *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
-     * @return \Chamilo\CoreBundle\Entity\GradebookLink
-     */
-    public function setCourse(Course $course)
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    /**
-     * Get course.
-     *
-     * @return \Chamilo\CoreBundle\Entity\Course
-     */
-    public function getCourse()
-    {
-        return $this->course;
     }
 
     /**

@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Route;
+use \CourseManager;
 
 /**
  * Class LegacyListener
@@ -149,7 +150,15 @@ class LegacyListener
                 $languageList[languageToCountryIsoCode($isoCode)] = $language;
             }
 
-            $twig->addGlobal('current_locale_iso', languageToCountryIsoCode($request->getLocale()));
+            $isoFixed = languageToCountryIsoCode($request->getLocale());
+            $twig->addGlobal(
+                'current_locale_info',
+                [
+                    'iso' => $isoFixed,
+                    'text' => $languageList[$isoFixed],
+                ]
+            );
+
             $twig->addGlobal('available_locales', $languages);
             $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
 

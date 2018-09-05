@@ -1,0 +1,35 @@
+UserStatus:
+    type: enum
+    config:
+        description: "One of the statuses for the user."
+        values:
+            TEACHER:
+                description: "Global status of a user: Course Manager."
+                value: '@=constant("Chamilo\\UserBundle\\Entity\\User::TEACHER")'
+            SESSION_ADMIN:
+                description: "Global status of a user: Session Admin."
+                value: '@=constant("Chamilo\\UserBundle\\Entity\\User::SESSION_ADMIN")'
+            DRH:
+                description: "Global status of a user: Human Ressource Manager."
+                value: '@=constant("Chamilo\\UserBundle\\Entity\\User::DRH")'
+            STUDENT:
+                description: "Global status of a user: Student."
+                value: '@=constant("Chamilo\\UserBundle\\Entity\\User::STUDENT")'
+
+UserImageSize:
+    type: enum
+    config:
+        description: 'One of the sizes for the user picture.'
+        values:
+            SIZE_TINY:
+                description: 'Image in small size: 16px.'
+                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_TINY")'
+            SIZE_SMALL:
+                description: 'Image in small size: 32px.'
+                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_SMALL")'
+            SIZE_MEDIUM:
+                description: 'Image in small size: 64px.'
+                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_MEDIUM")'
+            SIZE_BIG:
+                description: 'Image in small size: 128px.'
+                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_BIG")'

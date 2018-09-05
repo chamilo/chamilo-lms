@@ -1,28 +1,29 @@
+{% if chamilo_settings_get('language.show_language_selector_in_menu') == 'true' %}
+{% autoescape false %}
 <div class="btn-group" role="group">
     <button
         type="button"
-        class="btn btn-secondary dropdown-toggle"
+        class="btn btn-default dropdown-toggle"
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
     >
-        <span class="flag-icon flag-icon-{{ current_locale_iso }}"></span>
-        {{ current_locale_iso }}
+        <span class="flag-icon flag-icon-{{ current_locale_info.iso }}"></span>
+        {{ current_locale_info.text }}
         <span class="caret">
         </span>
     </button>
     <div class="dropdown-menu" role="menu">
-        {% autoescape false %}
-            {% for index, locale in available_locales %}
-                <a class="dropdown-item" href="{{ app.request.attributes.get('_route') }}?_locale={{ index }}">
-                    <span class="flag-icon flag-icon-{{ index }}"></span>
-                    {{ locale }}
-                </a>
-            {% endfor %}
-        {% endautoescape %}
+        {% for index, locale in available_locales %}
+            <a class="dropdown-item" href="{{ app.request.attributes.get('_route') }}?_locale={{ index }}">
+                <span class="flag-icon flag-icon-{{ index }}"></span>
+                {{ locale }}
+            </a>
+        {% endfor %}
     </div>
 </div>
-
+{% endautoescape %}
+{% endif %}
 
 {#<div class="dropdown">#}
     {#<button type="button" id="dropdownMenu1" data-toggle="dropdown"#}

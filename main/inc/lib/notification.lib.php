@@ -303,8 +303,7 @@ class Notification extends Model
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
                         $extraHeaders = [];
-                        $noReply = api_get_setting('noreply_email_address');
-                        if (empty($noReply) && isset($senderInfo['email'])) {
+                        if (isset($senderInfo['email'])) {
                             $extraHeaders = [
                                 'reply_to' => [
                                     'name' => $senderInfo['complete_name'],

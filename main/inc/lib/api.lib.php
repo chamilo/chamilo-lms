@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CItemProperty;
@@ -1460,7 +1462,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
     $result['complete_name_with_username'] = $result['complete_name'];
 
-    if (!empty($user['username']) && api_get_setting('platform.hide_username_with_complete_name') === 'false') {
+    if (!empty($user['username']) && api_get_setting('profile.hide_username_with_complete_name') === 'false') {
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
     }
 
@@ -2069,7 +2071,7 @@ function api_get_course_info($course_code = null, $strict = false)
 /**
  * @param int $courseId
  *
- * @return \Chamilo\CoreBundle\Entity\Course
+ * @return Course
  */
 function api_get_course_entity($courseId = 0)
 {
@@ -2083,7 +2085,7 @@ function api_get_course_entity($courseId = 0)
 /**
  * @param int $id
  *
- * @return \Chamilo\CoreBundle\Entity\Session
+ * @return SessionEntity
  */
 function api_get_session_entity($id = 0)
 {
@@ -4723,6 +4725,8 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
  * @param bool Whether we use the JQuery Chozen library or not
  * (in some cases, like the indexing language picker, it can alter the presentation)
  *
+ * @deprecated
+ *
  * @return string
  */
 function api_get_languages_combo($name = 'language')
@@ -4756,71 +4760,6 @@ function api_get_languages_combo($name = 'language')
     $ret .= '</select>';
 
     return $ret;
-}
-
-/**
- * Displays a form (drop down menu) so the user can select his/her preferred language.
- * The form works with or without javascript.
- *
- * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
- * @param bool $showAsButton
- *
- * @return null|string Display the box directly
- */
-function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
-{
-    // Retrieve a complete list of all the languages.
-    $language_list = api_get_languages();
-
-    if (count($language_list) <= 1 && $hide_if_no_choice) {
-        // don't show any form
-        return '';
-    }
-
-    // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
-    if (isset($_SESSION['user_language_choice'])) {
-        $user_selected_language = $_SESSION['user_language_choice'];
-    }
-    if (empty($user_selected_language)) {
-        $user_selected_language = api_get_setting('platformLanguage');
-    }
-
-    $user_selected_language = 'en';
-    $countryCode = languageToCountryIsoCode($user_selected_language);
-    $language = api_get_language_from_iso($user_selected_language);
-
-    $url = api_get_self();
-    if ($showAsButton) {
-        $html = '<div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
-                '.$language->getOriginalName().'
-                <span class="caret">
-                </span>
-              </button>';
-    } else {
-        $html = '
-            <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
-                '.$language->getOriginalName().'
-                <span class="caret"></span>
-            </a>
-            ';
-    }
-
-    $html .= '<ul class="dropdown-menu" role="menu">';
-    foreach ($language_list as $iso => $data) {
-        $urlLink = $url.'?language='.$data;
-        $html .= '<li><a href="'.$urlLink.'">';
-        $html .= '<span class="flag-icon flag-icon-'.languageToCountryIsoCode($iso).'"></span> '.$data.'</a></li>';
-    }
-    $html .= '</ul>';
-
-    if ($showAsButton) {
-        $html .= '</div>';
-    }
-
-    return $html;
 }
 
 /**
@@ -4955,73 +4894,6 @@ function api_get_language_id($language)
     $row = Database::fetch_array($result);
 
     return $row['id'];
-}
-
-/**
- * Gets language of the requested type for the current user. Types are :
- * user_profil_lang : profile language of current user
- * user_select_lang : language selected by user at login
- * course_lang : language of the current course
- * platform_lang : default platform language.
- *
- * @param string $lang_type
- *
- * @return string
- */
-function api_get_language_from_type($lang_type)
-{
-    $return = false;
-    switch ($lang_type) {
-        case 'platform_lang':
-            $temp_lang = api_get_setting('platformLanguage');
-            if (!empty($temp_lang)) {
-                $return = $temp_lang;
-            }
-            break;
-        case 'user_profil_lang':
-            $_user = api_get_user_info();
-            if (isset($_user['language']) && !empty($_user['language'])) {
-                $return = $_user['language'];
-            }
-            break;
-        case 'user_selected_lang':
-            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
-                $return = $_SESSION['user_language_choice'];
-            }
-            break;
-        case 'course_lang':
-            global $_course;
-            $cidReq = null;
-            if (empty($_course)) {
-                // Code modified because the local.inc.php file it's declarated after this work
-                // causing the function api_get_course_info() returns a null value
-                $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
-                $cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
-                if (empty($cidReq) && !empty($cDir)) {
-                    $c = CourseManager::getCourseCodeFromDirectory($cDir);
-                    if ($c) {
-                        $cidReq = $c;
-                    }
-                }
-            }
-            $_course = api_get_course_info($cidReq);
-            if (isset($_course['language']) && !empty($_course['language'])) {
-                $return = $_course['language'];
-                $showCourseInUserLanguage = api_get_course_setting('show_course_in_user_language');
-                if ($showCourseInUserLanguage == 1) {
-                    $userInfo = api_get_user_info();
-                    if (isset($userInfo['language'])) {
-                        $return = $userInfo['language'];
-                    }
-                }
-            }
-            break;
-        default:
-            $return = false;
-            break;
-    }
-
-    return $return;
 }
 
 /**
@@ -8833,12 +8705,9 @@ function api_create_protected_dir($name, $parentDirectory)
 }
 
 /**
- * Sends an HTML email using the phpmailer class (and multipart/alternative to downgrade gracefully)
+ * Sends an email
  * Sender name and email can be specified, if not specified
  * name and email of the platform admin are used.
- *
- * @author Bert Vanderkimpen ICT&O UGent
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
  *
  * @param string    name of recipient
  * @param string    email of recipient
@@ -8851,9 +8720,7 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param bool      True for attaching a embedded file inside content html (optional)
  * @param array     Additional parameters
  *
- * @return int true if mail was sent
- *
- * @see             class.phpmailer.php
+ * @return bool true if mail was sent
  */
 function api_mail_html(
     $recipientName,
@@ -8864,9 +8731,13 @@ function api_mail_html(
     $senderEmail = '',
     $extra_headers = [],
     $data_file = [],
-    $embedded_image = false,
+    $embeddedImage = false,
     $additionalParameters = []
 ) {
+    if (!api_valid_email($recipientEmail)) {
+        return false;
+    }
+
     // Default values
     $notification = new Notification();
     $defaultEmail = $notification->getDefaultPlatformSenderEmail();
@@ -8900,11 +8771,6 @@ function api_mail_html(
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
     );*/
-
-
-    if (!api_valid_email($recipientEmail)) {
-        return 0;
-    }
 
     /*if (is_array($extra_headers) && count($extra_headers) > 0) {
         foreach ($extra_headers as $key => $value) {
@@ -8943,7 +8809,7 @@ function api_mail_html(
             }
         }
 
-        // Attachment ...
+        // Attachment
         if (!empty($data_file)) {
             foreach ($data_file as $file_attach) {
                 if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
@@ -8966,7 +8832,7 @@ function api_mail_html(
             'mail_header_style' => api_get_configuration_value('mail_header_style'),
             'mail_content_style' => api_get_configuration_value('mail_content_style'),
             'link' => $additionalParameters['link'] ?? '',
-            'automatic_email_text' => $automaticEmailText
+            'automatic_email_text' => $automaticEmailText,
         ];
 
         $paramsHtml = $paramsText = $params;
@@ -9006,8 +8872,6 @@ function api_mail_html(
 
         $type = $message->getHeaders()->get('Content-Type');
         $type->setCharset('utf-8');
-        //$type->setValue('text/html');
-
         Container::getMailer()->send($message);
 
         return true;

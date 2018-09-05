@@ -57,7 +57,6 @@ class Agenda
 
                 // Setting the course object if we are in a course
                 $courseInfo = api_get_course_info_by_id($courseId);
-
                 if (!empty($courseInfo)) {
                     $this->set_course($courseInfo);
                 }

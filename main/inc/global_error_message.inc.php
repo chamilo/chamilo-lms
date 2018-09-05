@@ -58,14 +58,14 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $root_rel = '';
     $installation_guide_url = $root_rel.'documentation/installation_guide.html';
     $css_list = [
-        'public/build/chamilo.css',
+        'public/build/vendor.css',
+        'public/build/css/app.css',
         'public/build/css/base.css',
         'public/build/css/themes/'.$theme.'/default.css',
     ];
 
     $web_img = 'main/img';
     $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../')).'/';
-
     $css_def = '';
     foreach ($css_list as $cssFile) {
         $cssFile = $root_sys.$cssFile;
@@ -272,34 +272,26 @@ EOM;
                     </div>
                 </header>
                 <section id="menu-bar">
-                <nav class="navbar navbar-default">
-                    <div class="container">        
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menuone" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>  
-                    <div class="collapse navbar-collapse" id="menuone">
-                        <ul class="nav navbar-nav">
-                            <li id="current" class="active tab-homepage"><a href="#" target="_self">Homepage</a></li>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div class="container">
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                          <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only"></span></a>
+                          </li>
                         </ul>
-                    </div>
+                        </div>
                     </div>
                 </nav>
                 </section>
                 
                 <section id="content-error">
                     <div class="container">
-                        <div class="panel panel-default">
-                        <div class="panel-body">
+                        <div class="well">                        
                             <div class="alert alert-danger" role="alert">
                                 {DESCRIPTION}
                                 {CODE}
                             </div>
-                        </div>
                         </div>
                     </div>
                 </section>

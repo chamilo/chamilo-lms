@@ -806,20 +806,25 @@ class Category implements GradebookItem
 
     /**
      * Shows all information of an category.
+     *
+     * @param int $categoryId
+     *
+     * @return array
      */
-    public function showAllCategoryInfo($categoryId = '')
+    public function showAllCategoryInfo($categoryId = 0)
     {
-        if ($categoryId == '') {
-            return null;
-        } else {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT * FROM '.$table.'
-                    WHERE id = '.intval($categoryId);
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
-
-            return $row;
+        $categoryId = (int) $categoryId;
+        if (empty($categoryId)) {
+            return [];
         }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT * FROM '.$table.'
+                WHERE id = '.$categoryId;
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return $row;
     }
 
     /**
@@ -913,7 +918,7 @@ class Category implements GradebookItem
      * Calculate the score of this category.
      *
      * @param int    $stud_id     student id (default: all students - then the average is returned)
-     * @param int    $session_id
+     * @param        $type
      * @param string $course_code
      * @param int    $session_id
      *

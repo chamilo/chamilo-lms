@@ -30,6 +30,7 @@
                         {% endif %}
                         {# Login, Courses, Skills menu #}
                         {{ render(controller('ChamiloThemeBundle:Sidebar:leftMenu', {'request' : app.request, pathInfo: pathInfo })) }}
+                        {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'index-left-column-notice'} )) }}
                     </section>
                 {% endblock %}
                 {% if plugin_menu_bottom %}

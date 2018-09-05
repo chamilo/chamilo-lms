@@ -5111,7 +5111,8 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
             $is_editor = api_is_allowed_to_edit(true, true, true);
             $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
 
-            if ($is_editor ||
+            if (($forceAccessForCourseAdmins && $isAllow) ||
+                $is_editor ||
                 $student_is_owner_of_work ||
                 ($doc_visible_for_all && $work_is_visible)
             ) {

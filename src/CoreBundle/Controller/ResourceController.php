@@ -280,10 +280,8 @@ class ResourceController extends BaseResourceController implements CourseControl
                     case 'user':
                         // Only for me
                         if (isset($share['only_me'])) {
-                            error_log('only_me');
                             $repository->addResourceOnlyToMe($resourceNode);
                         } else {
-                            error_log('others');
                             // To other users
                             $repository->addResourceToUserList($resourceNode, $idList);
                         }

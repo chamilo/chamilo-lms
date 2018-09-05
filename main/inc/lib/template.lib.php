@@ -216,7 +216,7 @@ class Template
         $this->set_course_parameters();
 
         // Setting administrator variables
-        $this->setAdministratorParams();
+        //$this->setAdministratorParams();
         //$this->setCSSEditor();
 
         // Header and footer are showed by default
@@ -234,11 +234,6 @@ class Template
         $this->assign('template', $this->templateFolder);
         $this->assign('locale', api_get_language_isocode());
         $this->assign('login_class', null);
-
-        $allow = api_get_configuration_value('show_language_selector_in_menu');
-        if ($allow) {
-            $this->assign('language_form', api_display_language_form());
-        }
 
         // Chamilo plugins
         if ($this->show_header) {
@@ -614,7 +609,7 @@ class Template
         $this->themeDir = self::getThemeDir($this->theme);
 
         // Setting app paths/URLs
-        $this->assign('_p', $this->getWebPaths());
+        //$this->assign('_p', $this->getWebPaths());
 
         // Here we can add system parameters that can be use in any template
         $_s = [
@@ -636,23 +631,28 @@ class Template
      */
     public static function getGlobals()
     {
+        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
+        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
+
         $_p = [
             'web' => api_get_path(WEB_PATH),
+            'web_public' => api_get_path(WEB_PUBLIC_PATH),
+            'web_url' => api_get_web_url(),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
-            //'web_css_theme' => api_get_path(WEB_CSS_PATH) . 'themes/' . $this->theme . '/',
+            //'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_plugin_asset' => api_get_path(WEB_PLUGIN_ASSET_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
-            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_query_vars' => api_htmlentities($queryString),
+            'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
+            'web_rel_code' => api_get_path(REL_CODE_PATH),
         ];
 
         $_s = [
@@ -915,8 +915,8 @@ class Template
 
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
-
-            $extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
+            $extraHeaders = '';
+            //$extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
             //Adding jquery ui by default
             $extraHeaders .= api_get_jquery_ui_js();
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -1113,29 +1113,6 @@ class Template
         }
 
         return $theme;
-    }
-
-    /**
-     * @param bool|true $setLoginForm
-     */
-    public function setLoginForm($setLoginForm = true)
-    {
-        global $loginFailed;
-        $userId = api_get_user_id();
-        if (!($userId) || api_is_anonymous($userId)) {
-            // Only display if the user isn't logged in.
-            $this->assign(
-                'login_language_form',
-                api_display_language_form(true, true)
-            );
-            if ($setLoginForm) {
-                $this->assign('login_form', $this->displayLoginForm());
-
-                if ($loginFailed) {
-                    $this->assign('login_failed', $this::handleLoginFailed());
-                }
-            }
-        }
     }
 
     /**
@@ -1494,37 +1471,6 @@ class Template
     }
 
     /**
-     * Get an array of all the web paths available (e.g. 'web' => 'https://my.chamilo.site/').
-     *
-     * @return array
-     */
-    private function getWebPaths()
-    {
-        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
-        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
-
-        return [
-            'web' => api_get_path(WEB_PATH),
-            'web_url' => api_get_web_url(),
-            'web_relative' => api_get_path(REL_PATH),
-            'web_course' => api_get_path(WEB_COURSE_PATH),
-            'web_main' => api_get_path(WEB_CODE_PATH),
-            'web_css' => api_get_path(WEB_CSS_PATH),
-            'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
-            'web_ajax' => api_get_path(WEB_AJAX_PATH),
-            'web_img' => api_get_path(WEB_IMG_PATH),
-            'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
-            'web_upload' => api_get_path(WEB_UPLOAD_PATH),
-            'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($queryString),
-            'web_self_query_vars' => api_htmlentities($requestURI),
-            'web_cid_query' => api_get_cidreq(),
-            'web_rel_code' => api_get_path(REL_CODE_PATH),
-        ];
-    }
-
-    /**
      * Set header parameters.
      *
      * @param bool $sendHeaders send headers
@@ -1611,10 +1557,7 @@ class Template
 
         $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
-
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
-
-        $this->assignAccessibilityBlock(); //Prepare the 'accessibility' var for the template
 
         // Preparing values for the menu
 
@@ -1755,30 +1698,7 @@ class Template
      */
     private function set_footer_parameters()
     {
-        if (api_get_setting('show_administrator_data') === 'true') {
-            $firstName = api_get_setting('administratorName');
-            $lastName = api_get_setting('administratorSurname');
 
-            if (!empty($firstName) && !empty($lastName)) {
-                $name = api_get_person_name($firstName, $lastName);
-            } else {
-                $name = $lastName;
-                if (empty($lastName)) {
-                    $name = $firstName;
-                }
-            }
-
-            $adminName = '';
-            // Administrator name
-            if (!empty($name)) {
-                $adminName = get_lang('Manager').' : '.
-                    Display::encrypted_mailto_link(
-                        api_get_setting('emailAdministrator'),
-                        $name
-                    );
-            }
-            $this->assign('administrator_name', $adminName);
-        }
 
         // Loading footer extra content
         if (!api_is_platform_admin()) {
@@ -1789,72 +1709,8 @@ class Template
         }
 
         // Tutor name
-        if (api_get_setting('show_tutor_data') == 'true') {
-            // Course manager
-            $courseId = api_get_course_int_id();
-            $id_session = api_get_session_id();
-            if (!empty($courseId)) {
-                $tutor_data = '';
-                if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session(
-                        $id_session,
-                        $courseId
-                    );
-                    $email_link = [];
-                    foreach ($coachs_email as $coach) {
-                        $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
-                    }
-                    if (count($coachs_email) > 1) {
-                        $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 1) {
-                        $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 0) {
-                        $tutor_data .= '';
-                    }
-                }
-                $this->assign('session_teachers', $tutor_data);
-            }
-        }
 
-        if (api_get_setting('show_teacher_data') == 'true') {
-            // course manager
-            $courseId = api_get_course_int_id();
-            if (!empty($courseId)) {
-                $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
-                    $teachers_parsed = [];
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
-                        }
-                    }
-                    $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
-                        $label = get_lang('Teachers');
-                    }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
-                }
-                $this->assign('teachers', $teacher_data);
-            }
-        }
-    }
 
-    /**
-     * Set administrator variables.
-     */
-    private function setAdministratorParams()
-    {
-        $_admin = [
-            'email' => api_get_setting('emailAdministrator'),
-            'surname' => api_get_setting('administratorSurname'),
-            'name' => api_get_setting('administratorName'),
-            'telephone' => api_get_setting('administratorTelephone'),
-        ];
-
-        $this->assign('_admin', $_admin);
     }
 
     /**
@@ -1949,28 +1805,6 @@ class Template
         }
 
         $this->assign('favico', $favico);
-
-        return true;
-    }
-
-    /**
-     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu).
-     *
-     * @return bool Always return true (even if empty string)
-     */
-    private function assignAccessibilityBlock()
-    {
-        $resize = '';
-        if (api_get_setting('accessibility_font_resize') == 'true') {
-            $resize .= '<div class="resize_font">';
-            $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '</div>';
-            $resize .= '</div>';
-        }
-        $this->assign('accessibility', $resize);
 
         return true;
     }

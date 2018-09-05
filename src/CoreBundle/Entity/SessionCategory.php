@@ -165,28 +165,4 @@ class SessionCategory
     {
         return $this->dateEnd;
     }
-
-    /**
-     * Set accessUrlId.
-     *
-     * @param int $accessUrlId
-     *
-     * @return SessionCategory
-     */
-    public function setAccessUrlId($accessUrlId)
-    {
-        $this->accessUrlId = $accessUrlId;
-
-        return $this;
-    }
-
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
-    }
 }

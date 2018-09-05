@@ -1,0 +1,21 @@
+Mutation:
+    type: object
+    config:
+        fields:
+            authenticate:
+                description: "Authenticate user."
+                type: "AuthenticatePayload!"
+                args:
+                    username:
+                        type: "String!"
+                    password:
+                        type: "String!"
+                resolve: "@=mutation('authenticate', [args])"
+
+AuthenticatePayload:
+    type: object
+    config:
+        fields:
+            token:
+                description: "Authorization token."
+                type: "String!"

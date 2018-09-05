@@ -1,0 +1,15 @@
+overblog_graphql:
+    definitions:
+        schema:
+            query: Query
+            mutation: Mutation
+        mappings:
+            auto_discover: false
+            types:
+#                -
+#                    type: yaml
+#                    dir: "%kernel.project_dir%/config/graphql/types"
+#                    suffix: ~
+                -
+                    type: yaml
+                    dir: "%kernel.root_dir%/ApiBundle/GraphQL/Type"

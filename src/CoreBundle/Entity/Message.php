@@ -44,7 +44,7 @@ class Message
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="receivedMessages")
-     * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
      */
     protected $userReceiver;
 

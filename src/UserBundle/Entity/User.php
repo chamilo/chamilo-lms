@@ -6,7 +6,6 @@ namespace Chamilo\UserBundle\Entity;
 //use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
@@ -1494,6 +1493,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this->sessionCourseSubscriptions;
     }
 
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
     public function setSessionCourseSubscriptions($value)
     {
         $this->sessionCourseSubscriptions = $value;

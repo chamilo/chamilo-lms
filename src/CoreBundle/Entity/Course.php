@@ -326,7 +326,6 @@ class Course
      */
     protected $courseTypeId;
 
-
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
      */

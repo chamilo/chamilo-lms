@@ -32,7 +32,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_3' => '',
                     'language_priority_4' => '',
                     'hide_dltt_markup' => 'false',
-                    'show_language_selector_in_menu' => 'true'
+                    'show_language_selector_in_menu' => 'true',
                 ]
             );
 

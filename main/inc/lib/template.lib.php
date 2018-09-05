@@ -1471,16 +1471,6 @@ class Template
     }
 
     /**
-     * Get an array of all the web paths available (e.g. 'web' => 'https://my.chamilo.site/').
-     *
-     * @return array
-     */
-    private function getWebPaths()
-    {
-
-    }
-
-    /**
      * Set header parameters.
      *
      * @param bool $sendHeaders send headers
@@ -1567,10 +1557,7 @@ class Template
 
         $this->assignFavIcon(); //Set a 'favico' var for the template
         $this->setHelp();
-
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
-
-        $this->assignAccessibilityBlock(); //Prepare the 'accessibility' var for the template
 
         // Preparing values for the menu
 
@@ -1905,28 +1892,6 @@ class Template
         }
 
         $this->assign('favico', $favico);
-
-        return true;
-    }
-
-    /**
-     * Assign HTML code to the 'accessibility' template variable (usually shown above top menu).
-     *
-     * @return bool Always return true (even if empty string)
-     */
-    private function assignAccessibilityBlock()
-    {
-        $resize = '';
-        if (api_get_setting('accessibility_font_resize') == 'true') {
-            $resize .= '<div class="resize_font">';
-            $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '</div>';
-            $resize .= '</div>';
-        }
-        $this->assign('accessibility', $resize);
 
         return true;
     }

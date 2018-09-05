@@ -39,20 +39,13 @@ class UserResolver implements ResolverInterface, AliasedInterface
     }
 
     /**
-     * @param int          $size
-     * @param \ArrayObject $context
+     * @param User $user
+     * @param int  $size
      *
      * @return string
      */
-    public function resolveUserPicture($size, \ArrayObject $context): string
+    public function resolveUserPicture(User $user, $size): string
     {
-        /** @var User $user */
-        $user = $context->offsetGet('user');
-
-        if (!$user) {
-            return null;
-        }
-
         $path = $user->getAvatarOrAnonymous((int) $size);
         $url = Container::getAsset()->getUrl($path);
 

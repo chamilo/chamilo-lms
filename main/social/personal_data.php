@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
-
 /**
  * @package chamilo.messages
  */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_set_more_memory_and_time_limits();
 
 api_block_anonymous_users();
 

@@ -326,10 +326,6 @@ class Course
      */
     protected $courseTypeId;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\NotebookBundle\Entity\CNotebook", mappedBy="course")
-     */
-    //protected $notebooks;
 
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
@@ -380,22 +376,6 @@ class Course
     public function getSessions()
     {
         return $this->sessions;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getNotebooks()
-    {
-        return $this->notebooks;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getItems()
-    {
-        return $this->items;
     }
 
     /**

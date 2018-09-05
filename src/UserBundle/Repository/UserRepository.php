@@ -626,7 +626,7 @@ class UserRepository extends EntityRepository
             $date = $item->getTms() ? $item->getTms()->format($dateFormat) : '';
             $list = [
                 'Attempt #'.$item->getExeId(),
-                'Course # '.$item->getCId(),
+                'Course # '.$item->getCourse()->getCode(),
                 //'Answer: '.$item->getAnswer(),
                 'Session #'.$item->getSessionId(),
                 //'Marks: '.$item->getMarks(),
@@ -926,17 +926,21 @@ class UserRepository extends EntityRepository
 
         // Message
         $criteria = [
-            'userSenderId' => $userId,
+            'userSender' => $userId,
         ];
         $result = $em->getRepository('ChamiloCoreBundle:Message')->findBy($criteria);
         $messageList = [];
         /** @var Message $item */
         foreach ($result as $item) {
             $date = $item->getSendDate() ? $item->getSendDate()->format($dateFormat) : '';
+            $userName = '';
+            if ($item->getUserReceiver()) {
+                $userName = $item->getUserReceiver()->getUsername();
+            }
             $list = [
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$date,
-                'To user # '.$item->getUserReceiverId(),
+                'To user: '.$userName,
                 'Status'.$item->getMsgStatus(),
             ];
             $messageList[] = implode(', ', $list);
@@ -1237,7 +1241,7 @@ class UserRepository extends EntityRepository
             $list = [];
             /** @var AccessUrlRelUser $portal */
             foreach ($portals as $portal) {
-                $portalInfo = \UrlManager::get_url_data_from_id($portal->getAccessUrlId());
+                $portalInfo = \UrlManager::get_url_data_from_id($portal->getUrl()->getId());
                 $list[] = $portalInfo['url'];
             }
         }
@@ -1262,7 +1266,8 @@ class UserRepository extends EntityRepository
 
         $extraFieldValues = new \ExtraFieldValue('user');
         $items = $extraFieldValues->getAllValuesByItem($userId);
-        $user->setExtraFields($items);
+        //$user->setExtraFields($items);
+        //$user->setExtraFields([]);
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {

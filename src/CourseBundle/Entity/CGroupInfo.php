@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CGroupInfo
 {
+    use CourseTrait;
+
     /**
      * @var int
      *
@@ -576,30 +579,6 @@ class CGroupInfo
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CGroupInfo
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

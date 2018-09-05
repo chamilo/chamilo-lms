@@ -4724,6 +4724,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
  * @param string The desired name= value for the select
  * @param bool Whether we use the JQuery Chozen library or not
  * (in some cases, like the indexing language picker, it can alter the presentation)
+ * @deprecated
  *
  * @return string
  */

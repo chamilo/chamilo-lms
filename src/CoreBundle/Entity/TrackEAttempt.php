@@ -255,30 +255,6 @@ class TrackEAttempt
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return TrackEAttempt
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * Set position.
      *
      * @param int $position

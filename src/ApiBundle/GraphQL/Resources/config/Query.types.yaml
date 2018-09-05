@@ -43,7 +43,7 @@ User:
                         description: 'Last received by the app message ID.'
                         type: 'Int'
                         defaultValue: 0
-                resolve: "@=resolver('user_messages', [value, args['lastId']])"
+                resolve: "@=resolver('user_messages', [value, args['lastId'], context])"
 
 UserMessage:
     type: object

@@ -6,6 +6,7 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
+use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
@@ -59,13 +60,21 @@ class UserResolver implements ResolverInterface, AliasedInterface
     }
 
     /**
-     * @param User $user
-     * @param int  $lastId
+     * @param User         $user
+     * @param int          $lastId
+     * @param \ArrayObject $context
      *
      * @return array
      */
-    public function resolveUserMessages(User $user, $lastId = 0): array
+    public function resolveUserMessages(User $user, $lastId = 0, \ArrayObject $context): array
     {
+        /** @var User $contextUser */
+        $contextUser = $context['user'];
+
+        if ($user->getId() !== $contextUser->getId()) {
+            throw new UserError(get_lang('UserInfoDoesNotMatch'));
+        }
+
         /** @var MessageRepository $messageRepo */
         $messageRepo = Container::getEntityManager()->getRepository('ChamiloCoreBundle:Message');
         $messages = $messageRepo->getFromLastOneReceived($user, (int) $lastId);

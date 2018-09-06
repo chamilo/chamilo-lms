@@ -994,7 +994,7 @@ class CourseHome
                 // If it's a link, we don't add the cidReq
 
                 if ($tool['image'] == 'file_html.png' || $tool['image'] == 'file_html_na.png') {
-                    $tool['link'] = $tool['link'].$qm_or_amp;
+                    $tool['link'] = $tool['link'];
                 } else {
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
                 }

@@ -3,25 +3,28 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
+use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class UserResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class UserResolver implements ResolverInterface, AliasedInterface
+class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
 {
     public const IMAGE_SIZE_TINY = 16;
     public const IMAGE_SIZE_SMALL = 32;
     public const IMAGE_SIZE_MEDIUM = 64;
     public const IMAGE_SIZE_BIG = 128;
+
+    use ApiGraphQLTrait;
 
     /**
      * Returns methods aliases.
@@ -48,10 +51,10 @@ class UserResolver implements ResolverInterface, AliasedInterface
      */
     public function resolveUserPicture(User $user, $size): string
     {
+        $assets = $this->container->get('templating.helper.assets');
         $path = $user->getAvatarOrAnonymous((int) $size);
-        $url = Container::getAsset()->getUrl($path);
 
-        return $url;
+        return $assets->getUrl($path);
     }
 
     /**
@@ -71,7 +74,7 @@ class UserResolver implements ResolverInterface, AliasedInterface
         }
 
         /** @var MessageRepository $messageRepo */
-        $messageRepo = Container::getEntityManager()->getRepository('ChamiloCoreBundle:Message');
+        $messageRepo = $this->em->getRepository('ChamiloCoreBundle:Message');
         $messages = $messageRepo->getFromLastOneReceived($user, (int) $lastId);
 
         return $messages;
@@ -80,10 +83,6 @@ class UserResolver implements ResolverInterface, AliasedInterface
     /**
      * @param User         $user
      * @param \ArrayObject $context
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return array
      */
@@ -98,11 +97,11 @@ class UserResolver implements ResolverInterface, AliasedInterface
 
         $courses = [];
         $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());
-        $em = Container::getEntityManager();
+        $coursesRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
 
         foreach ($coursesInfo as $courseInfo) {
             /** @var Course $course */
-            $course = $em->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
+            $course = $coursesRepo->find($courseInfo['real_id']);
 
             if ($course) {
                 $courses[] = $course;

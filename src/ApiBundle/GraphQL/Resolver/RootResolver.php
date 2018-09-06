@@ -3,19 +3,22 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
-use Chamilo\ApiBundle\GraphQL\Auth;
+use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Overblog\GraphQLBundle\Error\UserError;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class RootResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class RootResolver implements ResolverInterface, AliasedInterface
+class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
 {
+    use ApiGraphQLTrait;
+
     /**
      * Returns methods aliases.
      *
@@ -39,7 +42,7 @@ class RootResolver implements ResolverInterface, AliasedInterface
     public function resolverViewer(\ArrayObject $context)
     {
         try {
-            Auth::checkAuthorization($context);
+            $this->checkAuthorization($context);
         } catch (\Exception $exception) {
             throw new UserError($exception->getMessage());
         }

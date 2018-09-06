@@ -3,18 +3,21 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
+use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Framework\Container;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class CourseResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class CourseResolver implements ResolverInterface, AliasedInterface
+class CourseResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
 {
+    use ApiGraphQLTrait;
+
     /**
      * Returns methods aliases.
      *
@@ -49,7 +52,7 @@ class CourseResolver implements ResolverInterface, AliasedInterface
      */
     public function resolveTeachers(Course $course)
     {
-        $courseRepo = Container::getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+        $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
         $teachers = $courseRepo
             ->getSubscribedTeachers($course)
             ->getQuery()

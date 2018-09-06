@@ -3,17 +3,21 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
+use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Message;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class MessageResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class MessageResolver implements ResolverInterface, AliasedInterface
+class MessageResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
 {
+    use ApiGraphQLTrait;
+
     /**
      * Returns methods aliases.
      *
@@ -47,7 +51,7 @@ class MessageResolver implements ResolverInterface, AliasedInterface
      *
      * @return string
      */
-    public function resolveExcerpt($message, $length = 50)
+    public function resolveExcerpt(Message $message, $length = 50)
     {
         $striped = strip_tags($message->getContent());
         $replaced = str_replace(["\r\n", "\n"], ' ', $striped);

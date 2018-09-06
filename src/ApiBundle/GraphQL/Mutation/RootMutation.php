@@ -3,19 +3,22 @@
 
 namespace Chamilo\ApiBundle\GraphQL\Mutation;
 
-use Chamilo\ApiBundle\GraphQL\Auth;
+use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Overblog\GraphQLBundle\Error\UserError;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class RootMutation.
  *
  * @package Chamilo\ApiBundle\GraphQL\Mutation
  */
-class RootMutation implements MutationInterface, AliasedInterface
+class RootMutation implements MutationInterface, AliasedInterface, ContainerAwareInterface
 {
+    use ApiGraphQLTrait;
+
     /**
      * Returns methods aliases.
      *
@@ -39,7 +42,7 @@ class RootMutation implements MutationInterface, AliasedInterface
     public function mutationAuthenticate(Argument $args)
     {
         try {
-            $token = Auth::getUserToken($args['username'], $args['password']);
+            $token = $this->getUserToken($args['username'], $args['password']);
         } catch (\Exception $exception) {
             throw new UserError(get_lang('NotAllowed'));
         }

@@ -1698,8 +1698,6 @@ class Template
      */
     private function set_footer_parameters()
     {
-
-
         // Loading footer extra content
         if (!api_is_platform_admin()) {
             $extra_footer = trim(api_get_setting('footer_extra_content'));
@@ -1709,8 +1707,6 @@ class Template
         }
 
         // Tutor name
-
-
     }
 
     /**

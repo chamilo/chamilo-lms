@@ -81,10 +81,11 @@ class UserResolver implements ResolverInterface, AliasedInterface
      * @param User         $user
      * @param \ArrayObject $context
      *
-     * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return array
      */
     public function resolveCourses(User $user, \ArrayObject $context)
     {

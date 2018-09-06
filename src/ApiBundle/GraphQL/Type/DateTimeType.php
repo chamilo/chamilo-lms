@@ -6,7 +6,7 @@ namespace Chamilo\ApiBundle\GraphQL\Type;
 use GraphQL\Language\AST\Node;
 
 /**
- * Class DateTimeType
+ * Class DateTimeType.
  *
  * @package Chamilo\ApiBundle\GraphQL\Type
  */

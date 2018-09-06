@@ -5,12 +5,11 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class CourseResolver
+ * Class CourseResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */

@@ -41,6 +41,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *  }
  * )
  * @UniqueEntity("username")
+ *
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  *
  * @ORM\AttributeOverrides({
@@ -1520,7 +1521,10 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
             $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }*/
 
-    public function getUsername()
+    /**
+     * @return string
+     */
+    public function getUsername(): string
     {
         return $this->username;
     }

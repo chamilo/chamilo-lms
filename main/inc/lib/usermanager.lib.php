@@ -6399,7 +6399,7 @@ SQL;
      *
      * @return string
      */
-    public static function formatUserFullName(User $user, $includeUsername = false)
+    public static function formatUserFullName(User $user, $includeUsername = false): string
     {
         $fullName = api_get_person_name($user->getFirstname(), $user->getLastname());
 

@@ -26,7 +26,7 @@ class IndexController extends BaseController
      *
      * @return Response
      */
-    public function indexAction(): Response
+    public function indexAction(Request $request): Response
     {
         $pageController = new PageController();
         $user = $this->getUser();

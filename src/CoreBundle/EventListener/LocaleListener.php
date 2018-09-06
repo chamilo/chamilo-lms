@@ -57,7 +57,9 @@ class LocaleListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
-        if ($locale = $request->attributes->get('_locale')) {
+        //if ($locale = $request->getSession('_locale')) {
+        if (false) {
+        //if ($locale = $request->attributes->get('_locale')) {
             $request->getSession()->set('_locale', $locale);
         } else {
             $localeList = [];
@@ -77,7 +79,7 @@ class LocaleListener implements EventSubscriberInterface
             $userLocale = $request->getSession()->get('_locale_user');
             if (!empty($userLocale)) {
                 //$locale = $userLocale;
-                $localeList['user_profil_lang'] = $platformLocale;
+                $localeList['user_profil_lang'] = $userLocale;
             }
 
             // 3. Check course locale
@@ -120,7 +122,7 @@ class LocaleListener implements EventSubscriberInterface
                 'language_priority_1',
             ];
 
-            $locale = '';
+            $locale = $this->defaultLocale;
             foreach ($priorityList as $setting) {
                 $priority = $settings->getSetting("language.$setting");
                 if (!empty($priority) && isset($localeList[$priority])) {

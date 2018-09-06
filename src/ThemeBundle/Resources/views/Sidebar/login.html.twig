@@ -1,4 +1,4 @@
-{{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
+{% include 'ChamiloCoreBundle:Admin:switcher_links.html.twig' %}
 
 <form action="{{ path("fos_user_security_check") }}" method="post" name="formLogin" id="formLogin">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>

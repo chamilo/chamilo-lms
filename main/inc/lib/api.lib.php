@@ -4801,6 +4801,7 @@ function languageToCountryIsoCode($languageIsoCode)
         case 'ar':
             $country = 'ae';
             break;
+        case 'en_US':
         case 'en':
             $country = 'gb';
             break;
@@ -4808,7 +4809,7 @@ function languageToCountryIsoCode($languageIsoCode)
             $country = 'il';
             break;
         case 'uk':
-            $country = 'ua'; //Ukraine
+            $country = 'ua'; // Ukraine
             break;
         case 'da':
             $country = 'dk';

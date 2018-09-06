@@ -2,7 +2,7 @@
 
 {% block chamilo_right_column %}
 
-{{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
+{% include 'ChamiloCoreBundle:Admin:switcher_links.html.twig' %}
 
 Edit page '{{ page.slug }}' in '{{ page.site.locale }}'
 

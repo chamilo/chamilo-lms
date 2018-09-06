@@ -153,8 +153,8 @@ class LegacyListener
             $twig->addGlobal(
                 'current_locale_info',
                 [
-                    'iso' => $isoFixed,
-                    'text' => $languageList[$isoFixed],
+                    'flag' => $isoFixed,
+                    'text' => $languageList[$isoFixed] ?? 'English',
                 ]
             );
 

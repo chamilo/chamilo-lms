@@ -1090,7 +1090,7 @@ class UserManager
         }
 
         // Checking the user language
-        $languages = api_get_languages();
+        $languages = array_keys(api_get_languages());
         if (!in_array($language, $languages)) {
             $language = api_get_setting('platformLanguage');
         }
@@ -1126,6 +1126,7 @@ class UserManager
             ->setStatus($status)
             ->setAuthSource($auth_source)
             ->setLanguage($language)
+            ->setLocale($language)
             ->setEmail($email)
             ->setOfficialCode($official_code)
             ->setPhone($phone)

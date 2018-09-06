@@ -7,6 +7,13 @@ Query:
                 description: "A registered user on the platform."
                 type: "User"
                 resolve: "@=resolver('viewer', [context])"
+            course:
+                description: 'Get the data from a course on the platform.'
+                type: 'Course'
+                args:
+                    id:
+                        type: 'Int!'
+                resolve: "@=resolver('course', [args['id'], context])"
 
 User:
     type: object

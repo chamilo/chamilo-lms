@@ -4,6 +4,7 @@
 namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
@@ -31,6 +32,7 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     {
         return [
             'resolverViewer' => 'viewer',
+            'resolveCourse' => 'course',
         ];
     }
 
@@ -51,5 +53,25 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         $user = $context->offsetGet('user');
 
         return $user;
+    }
+
+    /**
+     * @param int          $courseId
+     * @param \ArrayObject $context
+     *
+     * @return Course|null
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function resolveCourse($courseId, \ArrayObject $context)
+    {
+        $this->checkAuthorization($context);
+
+        $course = $this->em->find('ChamiloCoreBundle:Course', $courseId);
+
+        $context->offsetSet('course', $course);
+
+        return $course;
     }
 }

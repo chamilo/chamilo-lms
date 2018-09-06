@@ -260,7 +260,8 @@ $(document).ready(function() {
         "#collapseFour",
         "#collapseFive",
         "#collapseSix",
-        "#collapseSeven"         
+        "#collapseSeven",
+        "#collapseEight"         
     ];
     
     $.each(blocks, function( index, value ) {          	
@@ -270,14 +271,7 @@ $(document).ready(function() {
         $(value).collapse("hide");
     });	   
 	
-    /*$("#filiere_panel").hide();			
-    $("#dispo_panel").hide();    		
-    $("#dispo_pendant_panel").hide();		
-    $("#niveau_panel").hide();		
-    $("#methode_panel").hide();		
-    $("#themes_panel").hide();    		
-    $("#objectifs_panel").hide();*/	
-            
+                
     $("#filiere").on("click", function() {		
         $("#filiere_panel").toggle();		
         return false;		
@@ -302,6 +296,11 @@ $(document).ready(function() {
         $("#methode_panel").toggle();		
         return false;		
     });		
+    
+    $("#enviroment").on("click", function() {		
+        $("#enviroment_panel").toggle();		
+        return false;		
+    });	
     
     $("#themes").on("click", function() {		
         $("#themes_panel").toggle();		
@@ -377,7 +376,10 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseOne]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('DisponibiliteAvant').'</a></div>');
+$userForm->addHtml(
+    '<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.
+    get_lang('DisponibiliteAvant').'</a></div>'
+);
 $userForm->addHtml('<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">');
 $userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibiliteAvantExplanation').'</p>');
 
@@ -412,6 +414,7 @@ foreach ($elements as $element) {
 
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
+    'moment_de_disponibilite'
 ];
 
 $extra = $extraField->addElements(
@@ -443,6 +446,7 @@ $fieldsToShow = [
     'datedebutstage',
     'datefinstage',
     'je_ne_connais_pas_encore_mes_dates_de_stage',
+    'deja_sur_place',
     'poursuiteapprentissagestage',
     'heures_disponibilite_par_semaine_stage',
 ];
@@ -613,7 +617,78 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSeven]');
 $userForm->addHtml('</div></div></div>');
+
+// Enviroment
+$userForm->addHtml('<div class="panel panel-default">');
+$userForm->addHtml(
+    '<div class="panel-heading">
+    <a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">'.
+    get_lang('MonEnvironnementDeTravail').'</a></div>');
+$userForm->addHtml('<div id="collapseEight" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingEight">');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('MonEnvironnementDeTravailExplanation').'</p>');
+
+$fieldsToShow = [
+    'outil_de_travail_ordinateur',
+    'outil_de_travail_ordinateur_so',
+    'outil_de_travail_tablette',
+    'outil_de_travail_tablette_so',
+    'outil_de_travail_smartphone',
+    'outil_de_travail_smartphone_so',
+];
+
+$userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro1'));
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields //$forceShowFields = false
+);
+
+$userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2'));
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+
+$fieldsToShow = [
+    'browser_platforme',
+    'browser_platforme_autre',
+    'browser_platforme_version',
+];
+
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields //$forceShowFields = false
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
+$userForm->addHtml('</div></div></div>');
 $userForm->addHtml('</div>');
+
+
+$userForm->addHtml('</div>');
+
+
+
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){

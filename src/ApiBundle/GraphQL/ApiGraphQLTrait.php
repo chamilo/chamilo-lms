@@ -6,6 +6,7 @@ namespace Chamilo\ApiBundle\GraphQL;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
+use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -120,5 +121,23 @@ trait ApiGraphQLTrait
         $data = (array) $jwt->data;
 
         return $data;
+    }
+
+    /**
+     * Throw a UserError if current user doesn't match with context's user
+     *
+     * @param \ArrayObject $context Current context
+     * @param User         $user    User to compare with the context's user
+     */
+    private function protectUserData(\ArrayObject $context, User $user)
+    {
+        /** @var User $contextUser */
+        $contextUser = $context['user'];
+
+        if ($user->getId() === $contextUser->getId()) {
+            return;
+        }
+
+        throw new UserError(get_lang('UserInfoDoesNotMatch'));
     }
 }

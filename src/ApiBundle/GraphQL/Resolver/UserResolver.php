@@ -66,12 +66,7 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      */
     public function resolveUserMessages(User $user, $lastId = 0, \ArrayObject $context): array
     {
-        /** @var User $contextUser */
-        $contextUser = $context['user'];
-
-        if ($user->getId() !== $contextUser->getId()) {
-            throw new UserError(get_lang('UserInfoDoesNotMatch'));
-        }
+        $this->protectUserData($context, $user);
 
         /** @var MessageRepository $messageRepo */
         $messageRepo = $this->em->getRepository('ChamiloCoreBundle:Message');
@@ -88,12 +83,7 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      */
     public function resolveCourses(User $user, \ArrayObject $context)
     {
-        /** @var User $contextUser */
-        $contextUser = $context['user'];
-
-        if ($user->getId() !== $contextUser->getId()) {
-            throw new UserError(get_lang('UserInfoDoesNotMatch'));
-        }
+        $this->protectUserData($context, $user);
 
         $courses = [];
         $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());

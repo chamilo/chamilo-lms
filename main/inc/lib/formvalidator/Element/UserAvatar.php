@@ -73,10 +73,10 @@ class UserAvatar extends HTML_QuickForm_input
         $html .= '
             <div class="media">
                 <div class="media-left">
-                    <img src="'.$userPicture.'" alt="'.$this->user->getCompleteName().'">
+                    <img src="'.$userPicture.'" alt="'.UserManager::formatUserFullName($this->user).'">
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">'.$this->user->getCompleteName().'</h4>
+                    <h4 class="media-heading">'.UserManager::formatUserFullName($this->user).'</h4>
                     '.$this->subTitle.'
                 </div>
             </div>

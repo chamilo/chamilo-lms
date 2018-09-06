@@ -38,7 +38,7 @@ foreach ($subscribedUsers as $subscribedUser) {
         continue;
     }
 
-    $hrmOptions[$hrm->getId()] = $hrm->getCompleteNameWithUsername();
+    $hrmOptions[$hrm->getId()] = UserManager::formatUserFullName($hrm, true);
 }
 
 $form = new FormValidator('assign_hrm');
@@ -89,7 +89,7 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = ['name' => get_lang('PlatformAdmin'), 'url' => 'index.php'];
 $interbreadcrumb[] = ['name' => get_lang('UserList'), 'url' => 'user_list.php'];
-$interbreadcrumb[] = ['name' => $user->getCompleteName(), 'url' => 'user_information.php?user_id='.$user->getId()];
+$interbreadcrumb[] = ['name' => UserManager::formatUserFullName($user), 'url' => 'user_information.php?user_id='.$user->getId()];
 
 $toolName = get_lang('AssignHrmToUser');
 

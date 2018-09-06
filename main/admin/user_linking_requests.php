@@ -147,7 +147,7 @@ $form = new FormValidator('user_linking_requests', 'get');
 $form->addSelectAjax(
     'hrm',
     get_lang('DRH'),
-    $hrm ? [$hrm->getId() => $hrm->getCompleteName()] : [],
+    $hrm ? [$hrm->getId() => UserManager::formatUserFullName($hrm)] : [],
     ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role']
 );
 $form->addButtonFilter(get_lang('Filter'));

@@ -270,7 +270,7 @@ switch ($action) {
         foreach ($users as $user) {
             $items[] = [
                 'id' => $user->getId(),
-                'text' => $user->getCompleteNameWithUsername(),
+                'text' => UserManager::formatUserFullName($user, true),
             ];
         }
 
@@ -320,7 +320,7 @@ switch ($action) {
         foreach ($users as $user) {
             $items[] = [
                 'id' => $user->getId(),
-                'text' => $user->getCompleteNameWithUsername(),
+                'text' => UserManager::formatUserFullName($user, true),
             ];
         }
 

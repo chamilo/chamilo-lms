@@ -1309,7 +1309,7 @@ class Template
 
         /** @var User $tutor */
         foreach ($tutors as $tutor) {
-            $names[] = $tutor->getCompleteName();
+            $names[] = UserManager::formatUserFullName($tutor);
         }
 
         return implode(CourseManager::USER_SEPARATOR, $names);
@@ -1339,7 +1339,7 @@ class Template
 
         /** @var User $teacher */
         foreach ($teachers as $teacher) {
-            $names[] = $teacher->getCompleteName();
+            $names[] = UserManager::formatUserFullName($teacher);
         }
 
         return implode(CourseManager::USER_SEPARATOR, $names);

@@ -27,6 +27,7 @@ class ChamiloExtension extends \Twig_Extension
             new \Twig_SimpleFilter('format_date', 'Template::format_date'),
             new \Twig_SimpleFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
             new \Twig_SimpleFilter('api_get_configuration_value', 'api_get_configuration_value'),
+            new \Twig_SimpleFilter('format_user_full_name', 'UserManager::formatUserFullName'),
         ];
     }
 

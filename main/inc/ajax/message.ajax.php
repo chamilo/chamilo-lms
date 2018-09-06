@@ -107,7 +107,7 @@ switch ($action) {
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteNameWithUsername();
+            $userName = UserManager::formatUserFullName($user, true);
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";

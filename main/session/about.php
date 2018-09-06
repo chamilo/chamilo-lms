@@ -64,7 +64,7 @@ foreach ($sessionCourses as $sessionRelCourse) {
     /** @var User $courseCoach */
     foreach ($courseCoaches as $courseCoach) {
         $coachData = [
-            'complete_name' => $courseCoach->getCompleteName(),
+            'complete_name' => UserManager::formatUserFullName($courseCoach),
             'image' => UserManager::getUserPicture(
                 $courseCoach->getId(),
                 USER_IMAGE_SIZE_ORIGINAL

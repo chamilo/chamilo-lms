@@ -2142,7 +2142,7 @@ function getPosts(
                 $postInfo['username_canonical'] = $user->getUsernameCanonical();
                 $postInfo['lastname'] = $user->getLastname();
                 $postInfo['firstname'] = $user->getFirstname();
-                $postInfo['complete_name'] = $user->getCompleteName();
+                $postInfo['complete_name'] = UserManager::formatUserFullName($user);
             }
         }
 

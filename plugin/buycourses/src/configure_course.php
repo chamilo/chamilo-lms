@@ -57,7 +57,7 @@ if ($editingCourse) {
     foreach ($teachers as $courseTeacher) {
         $teacher = $courseTeacher->getUser();
         $teachersOptions[] = [
-            'text' => $teacher->getCompleteName(),
+            'text' => UserManager::formatUserFullName($teacher),
             'value' => $teacher->getId(),
         ];
 
@@ -105,7 +105,7 @@ if ($editingCourse) {
     $sessionItem = $plugin->getSessionForConfiguration($session, $currency);
     $generalCoach = $session->getGeneralCoach();
     $generalCoachOption = [
-        'text' => $generalCoach->getCompleteName(),
+        'text' => UserManager::formatUserFullName($generalCoach),
         'value' => $generalCoach->getId(),
     ];
     $defaultBeneficiaries = [
@@ -123,7 +123,7 @@ if ($editingCourse) {
             }
 
             $courseCoachesOptions[] = [
-                'text' => $courseCoach->getCompleteName(),
+                'text' => UserManager::formatUserFullName($courseCoach),
                 'value' => $courseCoach->getId(),
             ];
             $defaultBeneficiaries[] = $courseCoach->getId();

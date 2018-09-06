@@ -59,7 +59,7 @@ $teachersData = [];
 foreach ($courseTeachers as $teacherSubscription) {
     $teacher = $teacherSubscription->getUser();
     $userData = [
-        'complete_name' => $teacher->getCompleteName(),
+        'complete_name' => UserManager::formatUserFullName($teacher),
         'image' => UserManager::getUserPicture(
             $teacher->getId(),
             USER_IMAGE_SIZE_ORIGINAL

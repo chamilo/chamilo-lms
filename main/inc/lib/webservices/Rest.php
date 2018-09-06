@@ -422,7 +422,7 @@ class Rest extends WebService
         return [
             'id' => intval($announcement['announcement']->getIid()),
             'title' => $announcement['announcement']->getTitle(),
-            'creatorName' => $announcement['item_property']->getInsertUser()->getCompleteName(),
+            'creatorName' => UserManager::formatUserFullName($announcement['item_property']->getInsertUser()),
             'date' => api_convert_and_format_date(
                 $announcement['item_property']->getInsertDate(),
                 DATE_TIME_FORMAT_LONG_24H
@@ -682,7 +682,7 @@ class Rest extends WebService
 
         $result = [
             'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
-            'fullName' => $this->user->getCompleteName(),
+            'fullName' => UserManager::formatUserFullName($this->user),
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
             'phone' => $this->user->getPhone(),
@@ -964,7 +964,7 @@ class Rest extends WebService
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteName();
+            $userName = UserManager::formatUserFullName($user);
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";

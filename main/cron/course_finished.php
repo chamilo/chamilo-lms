@@ -67,7 +67,7 @@ foreach ($sessions as $session) {
         );
 
         $bodyTemplate = new Template(null, false, false, false, false, false);
-        $bodyTemplate->assign('complete_user_name', $user->getCompleteName());
+        $bodyTemplate->assign('complete_user_name', UserManager::formatUserFullName($user));
         $bodyTemplate->assign('session_name', $session->getName());
 
         $bodyLayout = $bodyTemplate->get_template(
@@ -75,7 +75,7 @@ foreach ($sessions as $session) {
         );
 
         api_mail_html(
-            $user->getCompleteName(),
+            UserManager::formatUserFullName($user),
             $user->getEmail(),
             $subjectTemplate->fetch($subjectLayout),
             $bodyTemplate->fetch($bodyLayout),
@@ -84,7 +84,7 @@ foreach ($sessions as $session) {
         );
 
         echo '============'.PHP_EOL;
-        echo "Email sent to: {$user->getCompleteName()} ({$user->getEmail()})".PHP_EOL;
+        echo "Email sent to: ".UserManager::formatUserFullName($user)." ({$user->getEmail()})".PHP_EOL;
         echo "Session: {$session->getName()}".PHP_EOL;
         echo "End date: {$session->getAccessEndDate()->format('Y-m-d h:i')}".PHP_EOL;
     }

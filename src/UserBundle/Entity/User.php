@@ -496,7 +496,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function __toString()
     {
-        return $this->getCompleteName();
+        return \UserManager::formatUserFullName();
     }
 
     /**
@@ -781,30 +781,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * Return Complete Name with the Username.
-     *
-     * @return string
-     */
-    public function getCompleteNameWithUsername()
-    {
-        if (api_get_setting('profile.hide_username_with_complete_name') === 'true') {
-            return $this->getCompleteName();
-        }
-
-        return api_get_person_name($this->firstname, $this->lastname).' ('.$this->username.')';
-    }
-
-    /**
-     * @todo don't use api_get_person_name
-     *
-     * @return string
-     */
-    public function getCompleteName()
-    {
-        return api_get_person_name($this->firstname, $this->lastname);
-    }
-
-    /**
      * Returns the list of classes for the user.
      *
      * @return string
@@ -820,7 +796,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         }
         $classString = !empty($classList) ? ' ['.implode(', ', $classList).']' : null;
 
-        return $this->getCompleteName().$classString;
+        return \UserManager::formatUserFullName($this).$classString;
     }
 
     /**

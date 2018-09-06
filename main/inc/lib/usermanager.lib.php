@@ -6005,7 +6005,7 @@ SQL;
             .Display::url($url, $url);
 
         api_mail_html(
-            $user->getCompleteName(),
+            UserManager::formatUserFullName($user),
             $user->getEmail(),
             $mailSubject,
             $mailBody
@@ -6389,5 +6389,26 @@ SQL;
         }
 
         return $url;
+    }
+
+    /**
+     * Return the user's full name. Optionally with the username.
+     *
+     * @param User $user
+     * @param bool $includeUsername Optional. By default username is not included.
+     *
+     * @return string
+     */
+    public static function formatUserFullName(User $user, $includeUsername = false)
+    {
+        $fullName = api_get_person_name($user->getFirstname(), $user->getLastname());
+
+        if ($includeUsername && api_get_setting('profile.hide_username_with_complete_name') === 'false') {
+            $username = $user->getUsername();
+
+            return "$fullName ($username)";
+        }
+
+        return $fullName;
     }
 }

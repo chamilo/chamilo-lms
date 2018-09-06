@@ -172,7 +172,7 @@ if ($session->getNbrCourses() === 0) {
         $namesOfCoaches = [];
         $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH)
             ->forAll(function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
-                $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
+                $namesOfCoaches[] = UserManager::formatUserFullName($subscription->getUser(), true);
 
                 return true;
             });

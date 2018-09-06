@@ -88,7 +88,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+            if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nbAnswers = $answer->nbrAnswers;
             }
         }
@@ -130,10 +130,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $defaults['correct['.$i.']'] = '';
 
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
-                $correct = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
+                $defaults['comment['.$i.']'] = isset($answer->comment[$i]) ? $answer->comment[$i] : '';
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : '';
+                $correct = isset($answer->correct[$i]) ? $answer->correct[$i] : '';
                 $defaults['correct['.$i.']'] = $correct;
                 $j = 1;
                 if (!empty($optionData)) {

@@ -2041,7 +2041,7 @@ switch ($action) {
 
         $arrGrade = [];
         foreach ($exeResults as $exeResult) {
-            $arrGrade[$exeResult['exe_user_id']][$exeResult['exe_exo_id']] = $exeResult['exe_result'];
+            $arrGrade[$exeResult['exe_user_id']][$exeResult['exe_exo_id']] = $exeResult['score'];
         }
 
         $result = [];

@@ -165,7 +165,7 @@ if ($objExercise->selectAttempts() > 0) {
 
 $total_score = 0;
 if (!empty($exercise_stat_info)) {
-    $total_score = $exercise_stat_info['exe_result'];
+    $total_score = $exercise_stat_info['score'];
 }
 
 $max_score = $objExercise->get_max_score();

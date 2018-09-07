@@ -202,9 +202,9 @@ switch ($action) {
                     lastname,
                     aa.status,
                     start_date,
-                    exe_result,
-                    exe_weighting,
-                    exe_result/exe_weighting as score,
+                    score,
+                    max_score,
+                    score/max_score as score,
                     exe_duration,
                     questions_to_check,
                     orig_lp_id
@@ -215,9 +215,9 @@ switch ($action) {
                         t.exe_user_id,
                         status,
                         start_date,
-                        exe_result,
-                        exe_weighting,
-                        exe_result/exe_weighting as score,
+                        score,
+                        max_score,
+                        score/max_score as score,
                         exe_duration,
                         questions_to_check,
                         orig_lp_id
@@ -454,7 +454,7 @@ switch ($action) {
             if (!empty($exercise_stat_info)) {
                 // We know the user we get the exe_id.
                 $exeId = $exercise_stat_info['exe_id'];
-                $total_score = $exercise_stat_info['exe_result'];
+                $total_score = $exercise_stat_info['score'];
 
                 // Getting the list of attempts
                 $attemptList = Event::getAllExerciseEventByExeId($exeId);

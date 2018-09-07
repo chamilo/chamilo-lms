@@ -262,8 +262,8 @@ if ($objExercise->selectAttempts() > 0) {
                         }
                     }
                     $score = ExerciseLib::show_score(
-                        $last_attempt_info['exe_result'],
-                        $last_attempt_info['exe_weighting']
+                        $last_attempt_info['score'],
+                        $last_attempt_info['max_score']
                     );
                     $attempt_html .= Display::div(
                         get_lang('YourTotalScore').' '.$score,

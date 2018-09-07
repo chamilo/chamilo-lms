@@ -1047,7 +1047,7 @@ if (!empty($exerciseList)) {
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                $attempt_text .= ExerciseLib::show_score($row_track['score'], $row_track['max_score']);
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
@@ -1094,8 +1094,8 @@ if (!empty($exerciseList)) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';
                             $attempt_text .= ExerciseLib::show_score(
-                                $row_track['exe_result'],
-                                $row_track['exe_weighting']
+                                $row_track['score'],
+                                $row_track['max_score']
                             );
                         } else {
                             $attempt_text = get_lang('NotAttempted');
@@ -1267,8 +1267,8 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                     $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $attemptText = get_lang('LatestAttempt').' : ';
                     $attemptText .= ExerciseLib::show_score(
-                        $attempt['exe_result'],
-                        $attempt['exe_weighting']
+                        $attempt['score'],
+                        $attempt['max_score']
                     ).' ';
                     $attemptText .= $actions;
                 } else {

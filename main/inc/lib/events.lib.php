@@ -443,8 +443,8 @@ class Event
 
         $sql = "UPDATE $table SET
                exe_exo_id = $exoId,
-               exe_result = '$score',
-               exe_weighting = '$weighting',
+               score = '$score',
+               max_score = '$weighting',
                session_id = $sessionId,
                orig_lp_id = $learnpathId,
                orig_lp_item_id = $learnpathItemId,
@@ -1494,14 +1494,12 @@ class Event
         $best_score_return = [];
         foreach ($list as $student_result) {
             $user_id = $student_result['exe_user_id'];
-            $current_best_score[$user_id] = $student_result['exe_result'];
-
-            //echo $current_best_score[$user_id].' - '.$best_score_return[$user_id]['exe_result'].'<br />';
-            if (!isset($best_score_return[$user_id]['exe_result'])) {
+            $current_best_score[$user_id] = $student_result['score'];
+            if (!isset($best_score_return[$user_id]['score'])) {
                 $best_score_return[$user_id] = $student_result;
             }
 
-            if ($current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
+            if ($current_best_score[$user_id] > $best_score_return[$user_id]['score']) {
                 $best_score_return[$user_id] = $student_result;
             }
         }
@@ -1547,15 +1545,15 @@ class Event
         }
         //Getting the best results of every student
         $best_score_return = [];
-        $best_score_return['exe_result'] = 0;
+        $best_score_return['score'] = 0;
 
         foreach ($list as $result) {
             $current_best_score = $result;
-            if ($current_best_score['exe_result'] > $best_score_return['exe_result']) {
+            if ($current_best_score['score'] > $best_score_return['score']) {
                 $best_score_return = $result;
             }
         }
-        if (!isset($best_score_return['exe_weighting'])) {
+        if (!isset($best_score_return['max_score'])) {
             $best_score_return = [];
         }
 

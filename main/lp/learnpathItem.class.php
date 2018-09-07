@@ -2482,7 +2482,7 @@ class learnpathItem
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
-                                                $sql = 'SELECT exe_result, exe_weighting
+                                                $sql = 'SELECT score, max_score
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
                                                             exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
@@ -2500,8 +2500,8 @@ class learnpathItem
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore &&
-                                                            $quiz['exe_result'] <= $maxScore
+                                                        if ($quiz['score'] >= $minScore &&
+                                                            $quiz['score'] <= $maxScore
                                                         ) {
                                                             $returnstatus = true;
                                                         } else {
@@ -2514,7 +2514,7 @@ class learnpathItem
                                                         }
                                                     } else {
                                                         // Classic way
-                                                        if ($quiz['exe_result'] >=
+                                                        if ($quiz['score'] >=
                                                             $items[$refs_list[$prereqs_string]]->get_mastery_score()
                                                         ) {
                                                             $returnstatus = true;
@@ -2535,7 +2535,7 @@ class learnpathItem
                                         } else {
                                             // 3. For multiple attempts we check that there are minimum 1 item completed
                                             // Checking in the database.
-                                            $sql = 'SELECT exe_result, exe_weighting
+                                            $sql = 'SELECT score, max_score
                                                     FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
                                                         c_id = '.$course_id.' AND 
@@ -2552,7 +2552,7 @@ class learnpathItem
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                        if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
@@ -2564,7 +2564,7 @@ class learnpathItem
                                                             $returnstatus = false;
                                                         }
                                                     } else {
-                                                        if ($quiz['exe_result'] >=
+                                                        if ($quiz['score'] >=
                                                             $items[$refs_list[$prereqs_string]]->get_mastery_score()
                                                         ) {
                                                             $returnstatus = true;

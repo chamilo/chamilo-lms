@@ -553,21 +553,21 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $result = Database::query($sql);
         $attempts = Database::fetch_array($result);
 
-        $sql = "SELECT exe_id, exe_result, exe_weighting
+        $sql = "SELECT exe_id, score, max_score
                 FROM $exerciseStatsTable
                 WHERE
                     exe_user_id = $studentId AND
                     c_id = $courseId AND
                     exe_exo_id = ".$exercise['id']." AND
                     session_id = $sessionId
-                ORDER BY exe_result DESC
+                ORDER BY score DESC
                 LIMIT 1";
         $result = Database::query($sql);
         $score = 0;
         $weighting = 0;
         while ($scoreInfo = Database::fetch_array($result)) {
-            $score = $score + $scoreInfo['exe_result'];
-            $weighting = $weighting + $scoreInfo['exe_weighting'];
+            $score = $score + $scoreInfo['score'];
+            $weighting = $weighting + $scoreInfo['max_score'];
         }
 
         $percentageScore = 0;

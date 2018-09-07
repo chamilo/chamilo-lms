@@ -41,8 +41,8 @@ class HotpotatoesExerciseResult
             $sql = "SELECT firstname as userpart1, lastname as userpart2 ,
                     email,
                     tth.exe_name,
-                    tth.exe_result,
-                    tth.exe_weighting,
+                    tth.score,
+                    tth.max_score,
                     tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
                     WHERE   tu.user_id=tth.exe_user_id AND
@@ -51,7 +51,7 @@ class HotpotatoesExerciseResult
                     ORDER BY tth.c_id ASC, tth.exe_date ASC";
         } else {
             // get only this user's results
-            $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
+            $sql = "SELECT '', exe_name, score, max_score, exe_date
                     FROM $TBL_TRACK_HOTPOTATOES
                     WHERE
                         exe_user_id = '".$user_id."' AND
@@ -89,8 +89,8 @@ class HotpotatoesExerciseResult
                 $return[$i]['title'] = $title;
                 $return[$i]['exe_date'] = $hpresults[$i]['exe_date'];
 
-                $return[$i]['result'] = $hpresults[$i]['exe_result'];
-                $return[$i]['max'] = $hpresults[$i]['exe_weighting'];
+                $return[$i]['result'] = $hpresults[$i]['score'];
+                $return[$i]['max'] = $hpresults[$i]['max_score'];
             }
         }
         $this->results = $return;

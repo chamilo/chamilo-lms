@@ -63,7 +63,7 @@ foreach ($attempts as $attempt) {
     $em->merge($attempt);
 }
 
-$trackedExercise->setExeResult($newResult);
+$trackedExercise->setScore($newResult);
 
 $em->merge($trackedExercise);
 $em->flush();

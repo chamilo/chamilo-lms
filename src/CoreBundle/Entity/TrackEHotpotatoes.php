@@ -56,16 +56,16 @@ class TrackEHotpotatoes
     /**
      * @var int
      *
-     * @ORM\Column(name="exe_result", type="smallint", nullable=false)
+     * @ORM\Column(name="score", type="smallint", nullable=false)
      */
-    protected $exeResult;
+    protected $score;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="exe_weighting", type="smallint", nullable=false)
+     * @ORM\Column(name="max_score", type="smallint", nullable=false)
      */
-    protected $exeWeighting;
+    protected $maxScore;
 
     /**
      * Set exeName.
@@ -164,54 +164,6 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeResult.
-     *
-     * @param int $exeResult
-     *
-     * @return TrackEHotpotatoes
-     */
-    public function setExeResult($exeResult)
-    {
-        $this->exeResult = $exeResult;
-
-        return $this;
-    }
-
-    /**
-     * Get exeResult.
-     *
-     * @return int
-     */
-    public function getExeResult()
-    {
-        return $this->exeResult;
-    }
-
-    /**
-     * Set exeWeighting.
-     *
-     * @param int $exeWeighting
-     *
-     * @return TrackEHotpotatoes
-     */
-    public function setExeWeighting($exeWeighting)
-    {
-        $this->exeWeighting = $exeWeighting;
-
-        return $this;
-    }
-
-    /**
-     * Get exeWeighting.
-     *
-     * @return int
-     */
-    public function getExeWeighting()
-    {
-        return $this->exeWeighting;
-    }
-
-    /**
      * Get id.
      *
      * @return int
@@ -219,5 +171,45 @@ class TrackEHotpotatoes
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param int $score
+     *
+     * @return TrackEHotpotatoes
+     */
+    public function setScore(int $score): TrackEHotpotatoes
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxScore(): int
+    {
+        return $this->maxScore;
+    }
+
+    /**
+     * @param int $maxScore
+     *
+     * @return TrackEHotpotatoes
+     */
+    public function setMaxScore(int $maxScore): TrackEHotpotatoes
+    {
+        $this->maxScore = $maxScore;
+
+        return $this;
     }
 }

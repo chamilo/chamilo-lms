@@ -1016,8 +1016,8 @@ class Tracking
                                 if ($num_attempts > 0) {
                                     $n = 1;
                                     while ($row_attempts = Database::fetch_array($res_attempts)) {
-                                        $my_score = $row_attempts['exe_result'];
-                                        $my_maxscore = $row_attempts['exe_weighting'];
+                                        $my_score = $row_attempts['score'];
+                                        $my_maxscore = $row_attempts['max_score'];
                                         $my_exe_id = $row_attempts['exe_id'];
                                         $mktime_start_date = api_strtotime($row_attempts['start_date'], 'UTC');
                                         $mktime_exe_date = api_strtotime($row_attempts['exe_date'], 'UTC');
@@ -2090,7 +2090,7 @@ class Tracking
 
                 $count_quiz = Database::fetch_row(Database::query($sql));
                 $sql = "SELECT
-                        SUM(exe_result/exe_weighting*100) as avg_score,
+                        SUM(score/max_score*100) as avg_score,
                         COUNT(*) as num_attempts
                         $select_lp_id
                         FROM $tbl_stats_exercise
@@ -2284,8 +2284,8 @@ class Tracking
                     $session_id
                 );
 
-                if (!empty($best_attempt) && !empty($best_attempt['exe_weighting'])) {
-                    $result += $best_attempt['exe_result'] / $best_attempt['exe_weighting'];
+                if (!empty($best_attempt) && !empty($best_attempt['max_score'])) {
+                    $result += $best_attempt['score'] / $best_attempt['max_score'];
                 }
             }
             $result = $result / count($exercise_list);
@@ -2894,9 +2894,9 @@ class Tracking
                                 // the current lp for the current user
                                 $order = 'exe_date DESC';
                                 if ($getOnlyBestAttempt) {
-                                    $order = 'exe_result DESC';
+                                    $order = 'score DESC';
                                 }
-                                $sql = "SELECT exe_id, exe_result
+                                $sql = "SELECT exe_id, score
                                         FROM $tbl_stats_exercices
                                         WHERE
                                             exe_exo_id = '$item_path' AND
@@ -2922,7 +2922,7 @@ class Tracking
                                         if ($debug) {
                                             echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
                                         }
-                                        $score = $attemptResult['exe_result'];
+                                        $score = $attemptResult['score'];
                                     }
 
                                     if ($debug) {
@@ -4859,8 +4859,8 @@ class Tracking
                             $best = 0;
                             if (!empty($results)) {
                                 foreach ($results as $result) {
-                                    if (!empty($result['exe_weighting'])) {
-                                        $score = $result['exe_result'] / $result['exe_weighting'];
+                                    if (!empty($result['max_score'])) {
+                                        $score = $result['score'] / $result['max_score'];
                                         if ($score > $best) {
                                             $best = $score;
                                         }
@@ -4996,8 +4996,8 @@ class Tracking
                             );
 
                             $score = 0;
-                            if (!empty($user_result_data['exe_weighting']) && intval($user_result_data['exe_weighting']) != 0) {
-                                $score = intval($user_result_data['exe_result'] / $user_result_data['exe_weighting'] * 100);
+                            if (!empty($user_result_data['max_score']) && intval($user_result_data['max_score']) != 0) {
+                                $score = intval($user_result_data['score'] / $user_result_data['max_score'] * 100);
                             }
                             $time = api_strtotime($exercise_data['start_time']) ? api_strtotime($exercise_data['start_time'], 'UTC') : 0;
                             $all_exercise_start_time[] = $time;
@@ -5546,8 +5546,8 @@ class Tracking
                         $best_score = '';
                         if (!empty($best_score_data)) {
                             $best_score = ExerciseLib::show_score(
-                                $best_score_data['exe_result'],
-                                $best_score_data['exe_weighting']
+                                $best_score_data['score'],
+                                $best_score_data['max_score']
                             );
                         }
 
@@ -5560,8 +5560,8 @@ class Tracking
                             );
                             if (!empty($exercise_stat)) {
                                 // Always getting the BEST attempt
-                                $score = $exercise_stat['exe_result'];
-                                $weighting = $exercise_stat['exe_weighting'];
+                                $score = $exercise_stat['score'];
+                                $weighting = $exercise_stat['max_score'];
                                 $exe_id = $exercise_stat['exe_id'];
 
                                 $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
@@ -5985,12 +5985,12 @@ class Tracking
 
         foreach ($attempts as $attempt) {
             if (api_get_user_id() == $attempt['exe_user_id']) {
-                if ($attempt['exe_weighting'] != 0) {
-                    $my_exercise_result_array[] = $attempt['exe_result'] / $attempt['exe_weighting'];
+                if ($attempt['max_score'] != 0) {
+                    $my_exercise_result_array[] = $attempt['score'] / $attempt['max_score'];
                 }
             } else {
-                if ($attempt['exe_weighting'] != 0) {
-                    $exercise_result[] = $attempt['exe_result'] / $attempt['exe_weighting'];
+                if ($attempt['max_score'] != 0) {
+                    $exercise_result[] = $attempt['score'] / $attempt['max_score'];
                 }
             }
         }
@@ -6173,12 +6173,12 @@ class Tracking
         }
         foreach ($attempts as $attempt) {
             if (api_get_user_id() == $attempt['exe_user_id']) {
-                if ($attempt['exe_weighting'] != 0) {
-                    $my_exercise_result_array[] = $attempt['exe_result'] / $attempt['exe_weighting'];
+                if ($attempt['max_score'] != 0) {
+                    $my_exercise_result_array[] = $attempt['score'] / $attempt['max_score'];
                 }
             } else {
-                if ($attempt['exe_weighting'] != 0) {
-                    $exercise_result[] = $attempt['exe_result'] / $attempt['exe_weighting'];
+                if ($attempt['max_score'] != 0) {
+                    $exercise_result[] = $attempt['score'] / $attempt['max_score'];
                 }
             }
         }

@@ -171,7 +171,7 @@ if (isset($_REQUEST['comments']) &&
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
-    $exeWeighting = $track_exercise_info['exe_weighting'];
+    $exeWeighting = $track_exercise_info['max_score'];
 
     $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
@@ -237,7 +237,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     $sql = "UPDATE $TBL_TRACK_EXERCISES
-            SET exe_result = '".floatval($tot)."'
+            SET score = '".floatval($tot)."'
             WHERE exe_id = ".$id;
     Database::query($sql);
 
@@ -624,7 +624,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'],
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'],
+        ['name' => 'score', 'index' => 'score', 'width' => '50', 'align' => 'center', 'search' => 'true'],
         ['name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'],
         ['name' => 'status', 'index' => 'revised', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar

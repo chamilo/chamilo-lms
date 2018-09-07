@@ -48,16 +48,16 @@ class TrackEExercises
     /**
      * @var float
      *
-     * @ORM\Column(name="exe_result", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $exeResult;
+    protected $score;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="exe_weighting", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="max_score", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $exeWeighting;
+    protected $maxScore;
 
     /**
      * @var string
@@ -246,54 +246,6 @@ class TrackEExercises
     public function getExeExoId()
     {
         return $this->exeExoId;
-    }
-
-    /**
-     * Set exeResult.
-     *
-     * @param float $exeResult
-     *
-     * @return TrackEExercises
-     */
-    public function setExeResult($exeResult)
-    {
-        $this->exeResult = $exeResult;
-
-        return $this;
-    }
-
-    /**
-     * Get exeResult.
-     *
-     * @return float
-     */
-    public function getExeResult()
-    {
-        return $this->exeResult;
-    }
-
-    /**
-     * Set exeWeighting.
-     *
-     * @param float $exeWeighting
-     *
-     * @return TrackEExercises
-     */
-    public function setExeWeighting($exeWeighting)
-    {
-        $this->exeWeighting = $exeWeighting;
-
-        return $this;
-    }
-
-    /**
-     * Get exeWeighting.
-     *
-     * @return float
-     */
-    public function getExeWeighting()
-    {
-        return $this->exeWeighting;
     }
 
     /**
@@ -592,5 +544,45 @@ class TrackEExercises
     public function getExeId()
     {
         return $this->exeId;
+    }
+
+    /**
+     * @return float
+     */
+    public function getScore(): float
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param float $score
+     *
+     * @return TrackEExercises
+     */
+    public function setScore(float $score): TrackEExercises
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxScore(): float
+    {
+        return $this->maxScore;
+    }
+
+    /**
+     * @param float $maxScore
+     *
+     * @return TrackEExercises
+     */
+    public function setMaxScore(float $maxScore): TrackEExercises
+    {
+        $this->maxScore = $maxScore;
+
+        return $this;
     }
 }

@@ -1847,7 +1847,7 @@ class MySpace
     public static function exercises_results($user_id, $course_code, $session_id = false)
     {
         $courseId = api_get_course_int_id($course_code);
-        $sql = 'SELECT exe_result, exe_weighting
+        $sql = 'SELECT score, max_score
                 FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES)."
                 WHERE 
                     c_id = ' . $courseId . ' AND 
@@ -1860,8 +1860,8 @@ class MySpace
         $score_possible = 0;
         $questions_answered = 0;
         while ($row = Database::fetch_array($result)) {
-            $score_obtained += $row['exe_result'];
-            $score_possible += $row['exe_weighting'];
+            $score_obtained += $row['score'];
+            $score_possible += $row['max_score'];
             $questions_answered++;
         }
 

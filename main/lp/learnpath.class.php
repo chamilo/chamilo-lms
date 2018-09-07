@@ -12247,8 +12247,8 @@ EOD;
                     continue;
                 }
 
-                if (!empty($exerciseResultInfo['exe_weighting'])) {
-                    $exerciseResult = $exerciseResultInfo['exe_result'] * 100 / $exerciseResultInfo['exe_weighting'];
+                if (!empty($exerciseResultInfo['max_score'])) {
+                    $exerciseResult = $exerciseResultInfo['score'] * 100 / $exerciseResultInfo['max_score'];
                 } else {
                     $exerciseResult = 0;
                 }
@@ -12282,7 +12282,7 @@ EOD;
             $evaluationResultInfo = end($evaluationResultInfo);
 
             if ($evaluationResultInfo) {
-                $evaluationResult = $evaluationResultInfo['exe_result'] * 100 / $evaluationResultInfo['exe_weighting'];
+                $evaluationResult = $evaluationResultInfo['score'] * 100 / $evaluationResultInfo['max_score'];
 
                 if ($evaluationResult >= 80) {
                     $stars++;
@@ -12364,7 +12364,7 @@ EOD;
                     continue;
                 }
 
-                $totalExercisesResult += $exerciseResultInfo['exe_result'];
+                $totalExercisesResult += $exerciseResultInfo['score'];
             }
         }
 
@@ -12381,7 +12381,7 @@ EOD;
             $evaluationResultInfo = end($evaluationResultInfo);
 
             if ($evaluationResultInfo) {
-                $totalEvaluationResult += $evaluationResultInfo['exe_result'];
+                $totalEvaluationResult += $evaluationResultInfo['score'];
             }
         }
 

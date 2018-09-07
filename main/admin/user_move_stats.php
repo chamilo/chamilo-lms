@@ -43,8 +43,8 @@ function compare_data($result_message)
                     //Process data
                     $array = [
                         'exe_date' => get_lang('Date'),
-                        'exe_result' => get_lang('Score'),
-                        'exe_weighting' => get_lang('Weighting'),
+                        'score' => get_lang('Score'),
+                        'max_score' => get_lang('Weighting'),
                     ];
                     foreach ($item as $key => $value) {
                         if (in_array($key, array_keys($array))) {

@@ -316,15 +316,15 @@ if (!empty($_REQUEST['exeId']) &&
     if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
+        $sql = 'SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
         $duration = (int) $row_dates['exe_duration'];
-        $score = (float) $row_dates['exe_result'];
-        $max_score = (float) $row_dates['exe_weighting'];
+        $score = (float) $row_dates['score'];
+        $max_score = (float) $row_dates['max_score'];
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'

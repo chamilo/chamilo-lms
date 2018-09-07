@@ -202,7 +202,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ],
         ['name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'false'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'false'],
+        ['name' => 'score', 'index' => 'score', 'width' => '50', 'align' => 'left', 'search' => 'false'],
         ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false'],
     ];
 
@@ -228,7 +228,7 @@ if ($is_allowedToEdit || $is_tutor) {
     // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
     $column_model = [
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'false'],
+        ['name' => 'score', 'index' => 'score', 'width' => '50', 'align' => 'left', 'search' => 'false'],
         ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false'],
     ];
 }

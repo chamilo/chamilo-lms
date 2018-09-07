@@ -1869,7 +1869,7 @@ HOTSPOT;
                     GroupManager::get_user_group_name($data['user_id'])
                 ),
                 'exe_date' => $data['exe_date'],
-                'score' => $data['exe_result'].' / '.$data['exe_weighting'],
+                'score' => $data['score'].' / '.$data['max_score'],
                 'actions' => $actions,
             ];
         }
@@ -2117,8 +2117,8 @@ HOTSPOT;
                     official_code,
                     ce.title,
                     username,
-                    te.exe_result,
-                    te.exe_weighting,
+                    te.score,
+                    te.max_score,
                     te.exe_date,
                     te.exe_id,
                     te.session_id,
@@ -2160,8 +2160,8 @@ HOTSPOT;
                     username,
                     official_code,
                     tth.exe_name,
-                    tth.exe_result ,
-                    tth.exe_weighting,
+                    tth.score ,
+                    tth.max_score,
                     tth.exe_date";
             }
 
@@ -2327,7 +2327,7 @@ HOTSPOT;
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
                     $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
-                    $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
+                    $dt = api_convert_and_format_date($results[$i]['max_score']);
 
                     // we filter the results if we have the permission to
                     $result_disabled = 0;
@@ -2335,8 +2335,8 @@ HOTSPOT;
                         $result_disabled = (int) $results[$i]['results_disabled'];
                     }
                     if ($result_disabled == 0) {
-                        $my_res = $results[$i]['exe_result'];
-                        $my_total = $results[$i]['exe_weighting'];
+                        $my_res = $results[$i]['score'];
+                        $my_total = $results[$i]['max_score'];
                         $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
                         $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
 
@@ -3377,8 +3377,8 @@ EOT;
             $position = 1;
             $my_ranking = [];
             foreach ($best_attempts as $user_id => $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $my_ranking[$user_id] = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $my_ranking[$user_id] = $result['score'] / $result['max_score'];
                 } else {
                     $my_ranking[$user_id] = 0;
                 }
@@ -3460,8 +3460,8 @@ EOT;
             $position = 1;
             $my_ranking = [];
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $my_ranking[$result['exe_id']] = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $my_ranking[$result['exe_id']] = $result['score'] / $result['max_score'];
                 } else {
                     $my_ranking[$result['exe_id']] = 0;
                 }
@@ -3518,10 +3518,10 @@ EOT;
         $best_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) &&
-                    intval($result['exe_weighting']) != 0
+                if (!empty($result['max_score']) &&
+                    intval($result['max_score']) != 0
                 ) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                    $score = $result['score'] / $result['max_score'];
                     if ($score >= $best_score) {
                         $best_score = $score;
                         $best_score_data = $result;
@@ -3560,8 +3560,8 @@ EOT;
         $best_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $score = $result['score'] / $result['max_score'];
                     if ($score >= $best_score) {
                         $best_score = $score;
                         $best_score_data = $result;
@@ -3592,8 +3592,8 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $score = $result['score'] / $result['max_score'];
                     $avg_score += $score;
                 }
             }
@@ -3621,15 +3621,15 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval(
-                        $result['exe_weighting']
+                if (!empty($result['max_score']) && intval(
+                        $result['max_score']
                     ) != 0
                 ) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                    $score = $result['score'] / $result['max_score'];
                     $avg_score += $score;
                 }
             }
-            // We assume that all exe_weighting
+            // We assume that all max_score
             $avg_score = $avg_score / count($user_results);
         }
 
@@ -3656,12 +3656,12 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $score = $result['score'] / $result['max_score'];
                     $avg_score += $score;
                 }
             }
-            // We assume that all exe_weighting
+            // We assume that all max_score
             $avg_score = ($avg_score / count($user_results));
         }
 
@@ -3691,14 +3691,12 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $score = $result['score'] / $result['max_score'];
                     $avg_score += $score;
                 }
             }
-            //We asumme that all exe_weighting
-            //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
-            //$avg_score = ($avg_score / count($user_results));
+            // We asumme that all max_score
             if (!empty($user_count)) {
                 $avg_score = float_format($avg_score / $user_count, 1) * 100;
             } else {
@@ -3731,8 +3729,8 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                    $score = $result['exe_result'] / $result['exe_weighting'];
+                if (!empty($result['max_score']) && intval($result['max_score']) != 0) {
+                    $score = $result['score'] / $result['max_score'];
                     $avg_score += $score;
                 }
             }

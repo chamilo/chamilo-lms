@@ -113,7 +113,7 @@ foreach ($course_list as $current_course) {
             );
             // Looping Exercise Attempts
             foreach ($exercise_stats as $stats) {
-                $attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];
+                $attempt_result[$stats['exe_user_id']]['result'] += $stats['score'] / $stats['max_score'];
                 $attempt_result[$stats['exe_user_id']]['attempts']++;
             }
         }

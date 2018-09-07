@@ -200,7 +200,7 @@ if (!empty($main_result)) {
                         $html_result .= Display::tag('td', $lp_list_name[$lp_id]);
                         $html_result .= Display::tag('td', $exercise_list_name[$exercise_id]);
                         $html_result .= Display::tag('td', $user_list_name[$user_id]);
-                        $result = $attempt_data['exe_result'].' / '.$attempt_data['exe_weighting'];
+                        $result = $attempt_data['score'].' / '.$attempt_data['max_score'];
                         $html_result .= Display::tag('td', $attempt);
                         $html_result .= Display::tag('td', api_get_local_time($attempt_data['exe_date']));
                         $html_result .= Display::tag('td', $result);

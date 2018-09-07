@@ -3043,10 +3043,10 @@ class Exercise
             'orig_lp_id' => $safe_lp_id,
             'orig_lp_item_id' => $safe_lp_item_id,
             'orig_lp_item_view_id' => $safe_lp_item_view_id,
-            'exe_weighting' => $weight,
+            'max_score' => $weight,
             'user_ip' => Database::escape_string(api_get_real_ip()),
             'exe_date' => api_get_utc_datetime(),
-            'exe_result' => 0,
+            'score' => 0,
             'steps_counter' => 0,
             'exe_duration' => 0,
             'expired_time_control' => $clock_expired_time,
@@ -5792,7 +5792,7 @@ class Exercise
         if ($saved_results) {
             $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = "UPDATE $statsTable SET
-                        exe_result = exe_result + ".floatval($questionScore)."
+                        score = score + ".floatval($questionScore)."
                     WHERE exe_id = $exeId";
             Database::query($sql);
             if ($debug) {
@@ -6126,7 +6126,7 @@ class Exercise
             }
             $result = [
                 'score' => $totalScore,
-                'weight' => $track_exercise_info['exe_weighting'],
+                'weight' => $track_exercise_info['max_score'],
             ];
         }
 

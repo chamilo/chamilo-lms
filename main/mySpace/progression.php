@@ -44,15 +44,15 @@ if (Database::num_rows($result_course) > 0) {
     $header = [get_lang('Course', ''), get_lang('TempsFrequentation', ''), get_lang('Progression', ''), get_lang('MoyenneTest', '')];
     while ($a_course = Database::fetch_array($result_course)) {
         // TODO: This query is to be checked, there are no HotPotatoes tests results.
-        $sql_moy_test = "SELECT exe_result,exe_weighting
+        $sql_moy_test = "SELECT score,max_score
 			FROM $tbl_track_exercice
 			WHERE c_id = ".$a_course['id'];
         $result_moy_test = Database::query($sql_moy_test);
         $result = 0;
         $weighting = 0;
         while ($moy_test = Database::fetch_array($result_moy_test)) {
-            $result = $result + $moy_test['exe_result'];
-            $weighting = $weighting + $moy_test['exe_weighting'];
+            $result = $result + $moy_test['score'];
+            $weighting = $weighting + $moy_test['max_score'];
         }
         if ($weighting != 0) {
             $moyenne_test = round(($result * 100) / $weighting);

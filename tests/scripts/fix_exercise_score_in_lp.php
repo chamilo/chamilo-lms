@@ -16,9 +16,9 @@ $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $sql = "SELECT
             exe_id,
-            exe_result,
+            score,
             exe_user_id,
-            exe_result,
+            score,
             exe_exo_id,
             orig_lp_id,
             orig_lp_item_view_id,
@@ -74,17 +74,17 @@ if (!empty($items)) {
                 $count = count($attempts);
                 if ($count == 1) {
                     $attempt = current($attempts);
-                    $score = $item['exe_result'];
+                    $score = $item['score'];
 
-                    /* The attempt has empty exe_result and the LP is good
+                    /* The attempt has empty score and the LP is good
                        there must be another attempt, do nothing. */
-                    if ((empty($item['exe_result']) ||  $item['exe_result'] == 0) && !empty($attempt['score'])) {
+                    if ((empty($item['score']) ||  $item['score'] == 0) && !empty($attempt['score'])) {
                         var_dump('Skipped');
                         echo '<br />';
                         continue;
                     }
 
-                    echo "Score: ".$attempt['score']. ' - '.$item['exe_result'].'<br />';
+                    echo "Score: ".$attempt['score']. ' - '.$item['score'].'<br />';
 
                     $itemViewId = $attempt['lp_item_view_id'];
                     $sql = "UPDATE $table SET
@@ -106,8 +106,8 @@ if (!empty($items)) {
                 } else {
                     echo 'Cannot update multiple attempts checking attempts:<br />';
                     foreach ($attempts as $attempt) {
-                        if ($attempt['score'] == $item['exe_result']) {
-                            /*echo "Score: ".$attempt['score']. ' - '.$item['exe_result'].'<br />';
+                        if ($attempt['score'] == $item['score']) {
+                            /*echo "Score: ".$attempt['score']. ' - '.$item['score'].'<br />';
                             $itemViewId = $attempt['id'];
                             $sql = "UPDATE $tableExercise
                                     SET orig_lp_item_view_id = $itemViewId

@@ -59,8 +59,8 @@ function save_scores($file, $score)
         'exe_user_id' => $user_id,
         'exe_date' => $date,
         'c_id' => $c_id,
-        'exe_result' => $score,
-        'exe_weighting' => $weighting,
+        'score' => $score,
+        'max_score' => $weighting,
     ];
     Database::insert($TABLETRACK_HOTPOTATOES, $params);
 

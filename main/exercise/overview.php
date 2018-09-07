@@ -195,8 +195,8 @@ if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
         $score = ExerciseLib::show_score(
-            $attempt_result['exe_result'],
-            $attempt_result['exe_weighting']
+            $attempt_result['score'],
+            $attempt_result['max_score']
         );
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';

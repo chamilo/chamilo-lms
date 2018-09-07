@@ -181,7 +181,7 @@ if ($form->validate() && !empty($courseInfo)) {
     ];
     $columnModel[] = [
         'name' => 'score',
-        'index' => 'exe_result',
+        'index' => 'score',
         'width' => '50',
         'align' => 'center',
         'search' => 'true',

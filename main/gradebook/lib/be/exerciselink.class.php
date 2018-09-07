@@ -246,7 +246,7 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-                return [$data['exe_result'], $data['exe_weighting']];
+                return [$data['score'], $data['max_score']];
             } else {
                 return null;
             }
@@ -276,15 +276,15 @@ class ExerciseLink extends AbstractLink
                 }
 
                 if (!isset($students[$data['exe_user_id']])) {
-                    if ($data['exe_weighting'] != 0) {
-                        $students[$data['exe_user_id']] = $data['exe_result'];
+                    if ($data['max_score'] != 0) {
+                        $students[$data['exe_user_id']] = $data['score'];
                         $student_count++;
-                        if ($data['exe_result'] > $bestResult) {
-                            $bestResult = $data['exe_result'];
+                        if ($data['score'] > $bestResult) {
+                            $bestResult = $data['score'];
                         }
-                        $sum += $data['exe_result'] / $data['exe_weighting'];
-                        $sumResult += $data['exe_result'];
-                        $weight = $data['exe_weighting'];
+                        $sum += $data['score'] / $data['max_score'];
+                        $sumResult += $data['score'];
+                        $weight = $data['max_score'];
                     }
                 }
             }

@@ -15,7 +15,7 @@ $qb1 = $em->createQueryBuilder();
 $result1 = $qb1
     ->select('lp')
     ->from('ChamiloCourseBundle:CLp', 'lp')
-    ->innerJoin('ChamiloCourseBundle:CTool', 't', JOIN::WITH, 'lp.cId = t.course AND lp.name = t.name')
+    ->innerJoin('ChamiloCourseBundle:CTool', 't', JOIN::WITH, 'lp.cId = t.cId AND lp.name = t.name')
     ->where(
         $qb1->expr()->eq('t.link', ':link')
     )
@@ -37,7 +37,7 @@ foreach ($result1 as $i => $lp) {
             $qb2->expr()->andX(
                 $qb2->expr()->eq('t.link', ':link'),
                 $qb2->expr()->eq('t.name', ':name'),
-                $qb2->expr()->eq('t.course', ':cid')
+                $qb2->expr()->eq('t.cId', ':cid')
             )
         )
         ->setParameters([

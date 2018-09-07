@@ -265,7 +265,7 @@ if (!empty($courseList)) {
                 if (!empty($best_score_data)) {
                     $best_score = ExerciseLib::show_score(
                         $best_score_data['exe_result'],
-                        $best_score_data['exe_weighting']
+                        $best_score_data['max_score']
                     );
                 }
 
@@ -312,14 +312,14 @@ if (!empty($courseList)) {
                 $counter = 1;
                 foreach ($exerciseResultInfo as $result) {
                     $platform_score = ExerciseLib::show_score(
-                        $result['exe_result'],
-                        $result['exe_weighting']
+                        $result['score'],
+                        $result['max_score']
                     );
                     $my_score = 0;
-                    if (!empty($result['exe_weighting']) &&
-                        intval($result['exe_weighting']) != 0
+                    if (!empty($result['max_score']) &&
+                        intval($result['max_score']) != 0
                     ) {
-                        $my_score = $result['exe_result'] / $result['exe_weighting'];
+                        $my_score = $result['score'] / $result['max_score'];
                     }
                     $position = ExerciseLib::get_exercise_result_ranking(
                         $my_score,

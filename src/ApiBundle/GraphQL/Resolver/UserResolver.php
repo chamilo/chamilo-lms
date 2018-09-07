@@ -37,6 +37,7 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         return [
             'resolveUserPicture' => 'user_picture',
             'resolveUserMessages' => 'user_messages',
+            'resolveMessageContacts' => 'user_message_contacts',
             'resolveCourses' => 'user_courses',
         ];
     }
@@ -97,5 +98,26 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         }
 
         return $courses;
+    }
+
+    /**
+     * @param User         $user
+     * @param string       $filter
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function resolveMessageContacts(User $user, $filter, \ArrayObject $context): array
+    {
+        $this->protectUserData($context, $user);
+
+        if (strlen($filter) < 3) {
+            return [];
+        }
+
+        $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
+        $users = $usersRepo->findUsersToSendMessage($user->getId(), $filter);
+
+        return $users;
     }
 }

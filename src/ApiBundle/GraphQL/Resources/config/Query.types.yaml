@@ -51,6 +51,14 @@ User:
                         type: 'Int'
                         defaultValue: 0
                 resolve: "@=resolver('user_messages', [value, args['lastId'], context])"
+            messageContacts:
+                description: 'Get potential users to send a message for the current user.'
+                type: '[User]'
+                args:
+                    filter:
+                        description: 'The search text to filter the user list.'
+                        type: 'String!'
+                resolve: "@=resolver('user_message_contacts', [value, args['filter'], context])"
             courses:
                 description: 'Course list for the current user.'
                 type: '[Course]'

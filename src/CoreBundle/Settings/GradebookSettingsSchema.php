@@ -74,7 +74,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             ->add('gradebook_locking_enabled', YesNoType::class)
             ->add('gradebook_default_grade_model_id')
             ->add('gradebook_show_percentage_in_reports')
-            ->add('my_display_coloring')
+            ->add('my_display_coloring', YesNoType::class)
             ->add(
                 'student_publication_to_take_in_gradebook',
                 ChoiceType::class,

@@ -30,13 +30,13 @@ class TemplatesRepository extends EntityRepository
                 'ChamiloCoreBundle:Course',
                 'c',
                 Join::WITH,
-                $qb->expr()->eq('t.courseCode', 'c.code')
+                $qb->expr()->eq('t.id', 'c.id')
             )
             ->innerJoin(
                 'ChamiloCourseBundle:CDocument',
                 'd',
                 Join::WITH,
-                $qb->expr()->eq('c.id', 'd.cId')
+                $qb->expr()->eq('c.id', 'd.course')
             )
             ->where(
                 $qb->expr()->eq('d.iid', 't.refDoc')

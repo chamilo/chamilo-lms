@@ -667,6 +667,10 @@ class ImportCsv
                         false //$send_mail = false
                     );
 
+                    $row['extra_mail_notify_invitation'] = 1;
+                    $row['extra_mail_notify_message'] = 1;
+                    $row['extra_mail_notify_group_message'] = 1;
+
                     if ($userId) {
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') {
@@ -831,6 +835,10 @@ class ImportCsv
                         null, //$encrypt_method = '',
                         false //$send_mail = false
                     );
+
+                    $row['extra_mail_notify_invitation'] = 1;
+                    $row['extra_mail_notify_message'] = 1;
+                    $row['extra_mail_notify_group_message'] = 1;
 
                     if ($result) {
                         foreach ($row as $key => $value) {

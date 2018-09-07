@@ -7,7 +7,6 @@ use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
-use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -41,11 +40,7 @@ class RootMutation implements MutationInterface, AliasedInterface, ContainerAwar
      */
     public function mutationAuthenticate(Argument $args)
     {
-        try {
-            $token = $this->getUserToken($args['username'], $args['password']);
-        } catch (\Exception $exception) {
-            throw new UserError(get_lang('NotAllowed'));
-        }
+        $token = $this->getUserToken($args['username'], $args['password']);
 
         return [
             'token' => $token,

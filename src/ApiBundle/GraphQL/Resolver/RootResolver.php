@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
-use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -43,11 +42,7 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      */
     public function resolverViewer(\ArrayObject $context)
     {
-        try {
-            $this->checkAuthorization($context);
-        } catch (\Exception $exception) {
-            throw new UserError($exception->getMessage());
-        }
+        $this->checkAuthorization($context);
 
         /** @var User $user */
         $user = $context->offsetGet('user');
@@ -59,17 +54,17 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      * @param int          $courseId
      * @param \ArrayObject $context
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return Course|null
      */
     public function resolveCourse($courseId, \ArrayObject $context)
     {
         $this->checkAuthorization($context);
 
-        $course = $this->em->find('ChamiloCoreBundle:Course', $courseId);
+        try {
+            $course = $this->em->find('ChamiloCoreBundle:Course', $courseId);
+        } catch (\Exception $e) {
+            $course = null;
+        }
 
         $context->offsetSet('course', $course);
 

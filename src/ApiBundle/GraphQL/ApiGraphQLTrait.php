@@ -35,8 +35,6 @@ trait ApiGraphQLTrait
 
     /**
      * @param \ArrayObject $context
-     *
-     * @throws \Exception
      */
     public function checkAuthorization(\ArrayObject $context): void
     {
@@ -45,16 +43,20 @@ trait ApiGraphQLTrait
         $token = str_replace(['Bearer ', 'bearer '], '', $header);
 
         if (empty($token)) {
-            throw new \Exception(get_lang('NotAllowed'));
+            throw new UserError(get_lang('NotAllowed'));
         }
 
         $tokenData = $this->decodeToken($token);
 
-        /** @var User $user */
-        $user = $this->em->find('ChamiloUserBundle:User', $tokenData['user']);
+        try {
+            /** @var User $user */
+            $user = $this->em->find('ChamiloUserBundle:User', $tokenData['user']);
+        } catch (\Exception $e) {
+            $user = null;
+        }
 
         if (!$user) {
-            throw new \Exception(get_lang('NotAllowed'));
+            throw new UserError(get_lang('NotAllowed'));
         }
 
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
@@ -68,8 +70,6 @@ trait ApiGraphQLTrait
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
-     *
      * @return string
      */
     private function getUserToken($username, $password): string
@@ -78,7 +78,7 @@ trait ApiGraphQLTrait
         $user = $this->em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $username]);
 
         if (!$user) {
-            throw new \Exception(get_lang('NoUser'));
+            throw new UserError(get_lang('NoUser'));
         }
 
         $encoder = $this->container->get('chamilo_user.security.encoder');
@@ -89,7 +89,7 @@ trait ApiGraphQLTrait
         );
 
         if (!$isValid) {
-            throw new \Exception(get_lang('InvalidId'));
+            throw new UserError(get_lang('InvalidId'));
         }
 
         return self::encodeToken($user);
@@ -124,11 +124,16 @@ trait ApiGraphQLTrait
     private function decodeToken($token): array
     {
         $secret = $this->container->getParameter('secret');
-        $jwt = JWT::decode($token, $secret, ['HS384']);
 
-        $data = (array) $jwt->data;
+        try {
+            $jwt = JWT::decode($token, $secret, ['HS384']);
 
-        return $data;
+            $data = (array) $jwt->data;
+
+            return $data;
+        } catch (\Exception $exception) {
+            throw new UserError($exception->getMessage());
+        }
     }
 
     /**
@@ -176,6 +181,8 @@ trait ApiGraphQLTrait
     }
 
     /**
+     * Throw a UserError if current user is not allowed to course
+     *
      * @param Course       $course
      * @param \ArrayObject $context
      */

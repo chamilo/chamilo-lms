@@ -232,6 +232,29 @@ Feature: Exercise tool
     And I press "submitQuestion"
     Then I should see "Item added"
 
+  Scenario: Duplicate exercise
+    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Copy this exercise as a new one"
+    And I confirm the popup
+    Then I should see "Exercise copied"
+    And I should see "Exercise 1 - Copy"
+
+  Scenario: Import exercise to test questions categories
+    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    And I should see "Import quiz from Excel"
+    And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
+    When I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Exercise for Behat test"
+
+    Scenario: Import exercise from excel
+    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    Then I should see "Import quiz from Excel"
+    Then I attach the file "/main/exercise/quiz_template.xls" to "user_upload_quiz"
+    And I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Definition of oligarchy"
+
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
@@ -303,28 +326,28 @@ Feature: Exercise tool
     And I follow "Grade activity"
     Then I should see "Score for the test: 83 / 117"
 
-  Scenario: Duplicate exercise
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
-    And I follow "Copy this exercise as a new one"
-    And I confirm the popup
-    Then I should see "Exercise copied"
-    And I should see "Exercise 1 - Copy"
-
-  Scenario: Import exercise to test questions categories
-    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
-    And I should see "Import quiz from Excel"
-    And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
-    When I press "Upload"
-    And wait for the page to be loaded
-    Then I should see "Exercise for Behat test"
+  Scenario: Create a session "Session Exercise" and add user "acostea"
+    Given I am on "/main/session/session_add.php"
+    When I fill in the following:
+      | name | Session Exercise |
+    And I fill in select2 input "#coach_username" with id "1" and value "admin"
+    And I press "submit"
+    Then wait for the page to be loaded
+    Then I should see "Add courses to this session (Session Exercise)"
+    Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
+    And I press "add_course"
+    And I press "next"
+    Then I should see "Update successful"
+    Then I follow "Multiple registration"
+    Then I select "Costea Andrea (acostea)" from "nosessionUsersList[]"
+    And I press "add_user"
+    And I press "next"
+    Then I should see "Update successful"
 
   Scenario: Try exercise with categorized questions as student
-    Given I am a student subscribed to session "Session Exercise"
-    And I am on "/user_portal.php"
-    And I follow "Session Exercise"
-    And wait for the page to be loaded
-    And I follow "tabs2"
-    And I follow "TEMP"
+    Given I am a student
+    And I am on course "TEMP" homepage in session "Session Exercise"
+    Then I should see "TEMP (Session Exercise)"
     And I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise for Behat test"
     And I follow "Start test"
@@ -363,10 +386,8 @@ Feature: Exercise tool
 
   Scenario: Teacher see exercise results by categories
     Given I am on "/user_portal.php"
-    And I follow "Session Exercise"
-    And wait for the page to be loaded
-    And I follow "tabs2"
-    And I follow "TEMP"
+    And I am on course "TEMP" homepage in session "Session Exercise"
+    Then I should see "TEMP (Session Exercise)"
     And I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise for Behat test"
     And I follow "Results and feedback"
@@ -397,10 +418,9 @@ Feature: Exercise tool
     And I follow "Delete"
     Then I should see "Category deleted"
 
-  Scenario: Import exercise from excel
-    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
-    Then I should see "Import quiz from Excel"
-    Then I attach the file "/main/exercise/quiz_template.xls" to "user_upload_quiz"
-    And I press "Upload"
+  Scenario: Delete session
+    Given I am on "/main/session/session_list.php?keyword=Session+Exercise"
     And wait for the page to be loaded
-    Then I should see "Definition of oligarchy"
+    And I follow "Delete"
+    And I confirm the popup
+    Then I should see "Deleted"

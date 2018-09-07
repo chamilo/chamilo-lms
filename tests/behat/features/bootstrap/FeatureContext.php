@@ -474,30 +474,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am a student subscribed to session "([^"]*)"$/
-     *
-     * @param string$sessionName
-     */
-    public function iAmStudentSubscribedToXSession($sessionName)
-    {
-        $this->iAmAPlatformAdministrator();
-        $this->visit('/main/session/session_add.php');
-        $this->fillField('name', $sessionName);
-        $this->pressButton('Next step');
-        $this->selectOption('NoSessionCoursesList[]', 'TEMP (TEMP)');
-        $this->pressButton('add_course');
-        $this->pressButton('Next step');
-        $this->assertPageContainsText('Update successful');
-        $this->fillField('user_to_add', 'acostea');
-        $this->waitForThePageToBeLoaded();
-        $this->clickLink('Costea Andrea (acostea)');
-        $this->pressButton('Finish session creation');
-        $this->assertPageContainsText('Session overview');
-        //$this->assertPageContainsText('Costea Andrea (acostea)');
-        $this->iAmAStudent();
-    }
-
-    /**
      * Example: Then I should see the table "#category_results":
      *               | Categories    | Absolute score | Relative score |
      *               | Categoryname2 | 50 / 70        | 71.43%         |

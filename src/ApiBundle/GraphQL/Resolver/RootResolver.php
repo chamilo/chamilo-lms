@@ -59,10 +59,11 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      * @param int          $courseId
      * @param \ArrayObject $context
      *
-     * @return Course|null
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return Course|null
      */
     public function resolveCourse($courseId, \ArrayObject $context)
     {

@@ -7,7 +7,6 @@ use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
-use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -19,12 +18,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  */
 class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
 {
+    use ApiGraphQLTrait;
     public const IMAGE_SIZE_TINY = 16;
     public const IMAGE_SIZE_SMALL = 32;
     public const IMAGE_SIZE_MEDIUM = 64;
     public const IMAGE_SIZE_BIG = 128;
-
-    use ApiGraphQLTrait;
 
     /**
      * Returns methods aliases.

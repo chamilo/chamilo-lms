@@ -10,7 +10,8 @@ use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Trait ApiGraphQLTrait
+ * Trait ApiGraphQLTrait.
+ *
  * @package Chamilo\ApiBundle\GraphQL
  */
 trait ApiGraphQLTrait
@@ -27,6 +28,33 @@ trait ApiGraphQLTrait
     public function __construct(EntityManager $entityManager)
     {
         $this->em = $entityManager;
+    }
+
+    /**
+     * @param \ArrayObject $context
+     *
+     * @throws \Exception
+     */
+    public function checkAuthorization(\ArrayObject $context): void
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $header = $request->headers->get('Authorization');
+        $token = str_replace(['Bearer ', 'bearer '], '', $header);
+
+        if (empty($token)) {
+            throw new \Exception(get_lang('NotAllowed'));
+        }
+
+        $tokenData = $this->decodeToken($token);
+
+        /** @var User $user */
+        $user = $this->em->find('ChamiloUserBundle:User', $tokenData['user']);
+
+        if (!$user) {
+            throw new \Exception(get_lang('NotAllowed'));
+        }
+
+        $context->offsetSet('user', $user);
     }
 
     /**
@@ -82,33 +110,6 @@ trait ApiGraphQLTrait
     }
 
     /**
-     * @param \ArrayObject $context
-     *
-     * @throws \Exception
-     */
-    public function checkAuthorization(\ArrayObject $context): void
-    {
-        $request = $this->container->get('request_stack')->getCurrentRequest();
-        $header = $request->headers->get('Authorization');
-        $token = str_replace(['Bearer ', 'bearer '], '', $header);
-
-        if (empty($token)) {
-            throw new \Exception(get_lang('NotAllowed'));
-        }
-
-        $tokenData = $this->decodeToken($token);
-
-        /** @var User $user */
-        $user = $this->em->find('ChamiloUserBundle:User', $tokenData['user']);
-
-        if (!$user) {
-            throw new \Exception(get_lang('NotAllowed'));
-        }
-
-        $context->offsetSet('user', $user);
-    }
-
-    /**
      * @param string $token
      *
      * @return array
@@ -124,7 +125,7 @@ trait ApiGraphQLTrait
     }
 
     /**
-     * Throw a UserError if current user doesn't match with context's user
+     * Throw a UserError if current user doesn't match with context's user.
      *
      * @param \ArrayObject $context Current context
      * @param User         $user    User to compare with the context's user

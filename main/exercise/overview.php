@@ -77,15 +77,16 @@ $html = '';
 $message = '';
 $html .= '<div class="exercise-overview">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$edit_link = '';
+$editLink = '';
 if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
-    $edit_link = Display::url(
+    $editLink = Display::url(
         Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
         api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
-    $edit_link .= Display::url(
+    $editLink .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+        ['title' => get_lang('Results')]
     );
 }
 
@@ -94,11 +95,11 @@ $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM
 
 if (api_get_configuration_value('save_titles_as_html')) {
     $html .= Display::div(
-        $objExercise->get_formated_title().PHP_EOL.$edit_link
+        $objExercise->get_formated_title().PHP_EOL.$editLink
     );
 } else {
     $html .= Display::page_header(
-        $iconExercise.PHP_EOL.$objExercise->selectTitle().PHP_EOL.$edit_link
+        $iconExercise.PHP_EOL.$objExercise->selectTitle().PHP_EOL.$editLink
     );
 }
 
@@ -239,16 +240,16 @@ if (!empty($attempts)) {
         }
 
         if (in_array(
-            $objExercise->results_disabled,
-            [
-                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-                RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
-                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-            ]
-        ) || (
-            $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
-            $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
-        )
+                $objExercise->results_disabled,
+                [
+                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                    RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                ]
+            ) || (
+                $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
+                $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
+            )
         ) {
             if ($blockShowAnswers) {
                 $attempt_link = '';

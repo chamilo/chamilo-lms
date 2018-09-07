@@ -198,7 +198,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
+        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : 0;
         $my_comments = '';
         if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
             $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
@@ -216,6 +216,7 @@ if (isset($_REQUEST['comments']) &&
             ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]
         );
 
+        $sessionId = api_get_session_id();
         $params = [
             'exe_id' => $id,
             'question_id' => $my_questionid,
@@ -223,6 +224,7 @@ if (isset($_REQUEST['comments']) &&
             'insert_date' => api_get_utc_datetime(),
             'author' => api_get_user_id(),
             'teacher_comment' => $my_comments,
+            'session_id' => $sessionId
         ];
         Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
     }

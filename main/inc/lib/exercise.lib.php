@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -4943,21 +4944,24 @@ EOT;
     public static function getEmailNotification($senderId, $course_info, $test, $url)
     {
         $teacher_info = api_get_user_info($senderId);
-        $from_name = api_get_person_name(
+        $fromName = api_get_person_name(
             $teacher_info['firstname'],
             $teacher_info['lastname'],
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
 
-        $view = new Template('', false, false, false, false, false, false);
-        $view->assign('course_title', Security::remove_XSS($course_info['name']));
-        $view->assign('test_title', Security::remove_XSS($test));
-        $view->assign('url', $url);
-        $view->assign('teacher_name', $from_name);
-        $template = $view->get_template('mail/exercise_result_alert_body.tpl');
+        $params = [
+            'course_title' => Security::remove_XSS($course_info['name']),
+            'test_title' => Security::remove_XSS($test),
+            'url' => $url,
+            'teacher_name' => $fromName,
+        ];
 
-        return $view->fetch($template);
+        return Container::getTwig()->render(
+            'ChamiloCoreBundle:Mailer:Exercise/result_alert_body.html.twig',
+            $params
+        );
     }
 
     /**

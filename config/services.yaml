@@ -41,10 +41,13 @@ services:
         arguments:
             $debug: '%kernel.debug%'
 
-    Chamilo\ApiBundle\GraphQL\:
-        resource: '../src/ApiBundle/GraphQL/*'
-        exclude: '../src/ApiBundle/GraphQL/{Resources}'
-        tags: ['overblog_graphql.resolver', 'overblog_graphql.mutation']
+    Chamilo\ApiBundle\GraphQL\Resolver\:
+        resource: '../src/ApiBundle/GraphQL/Resolver'
+        tags: ['overblog_graphql.resolver']
+
+    Chamilo\ApiBundle\GraphQL\Mutation\:
+        resource: '../src/ApiBundle/GraphQL/Mutation'
+        tags: ['overblog_graphql.mutation']
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 

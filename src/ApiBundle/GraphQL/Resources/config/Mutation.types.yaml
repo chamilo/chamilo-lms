@@ -11,6 +11,18 @@ Mutation:
                     password:
                         type: "String!"
                 resolve: "@=mutation('authenticate', [args])"
+            viewerSendMessage:
+                description: 'Send messages to user contacts.'
+                type: '[ViewerSendMessagePayload]!'
+                args:
+                    receivers:
+                        description: 'Unique IDs of users who will receive the message.'
+                        type: '[Int]!'
+                    subject:
+                        type: 'String!'
+                    text:
+                        type: 'String!'
+                resolve: "@=mutation('user_send_message', [args, context])"
 
 AuthenticatePayload:
     type: object
@@ -19,3 +31,15 @@ AuthenticatePayload:
             token:
                 description: "Authorization token."
                 type: "String!"
+
+ViewerSendMessagePayload:
+    type: object
+    config:
+        description: 'The status for each message in queue.'
+        fields:
+            receiverId:
+                description: 'The unique ID for the receiver user.'
+                type: 'Int!'
+            sent:
+                description: "It indicates if the message was or wasn't sent."
+                type: 'Boolean!'

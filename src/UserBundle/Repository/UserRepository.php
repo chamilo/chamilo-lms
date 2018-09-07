@@ -407,12 +407,12 @@ class UserRepository extends EntityRepository
      * Find potential users to send a message.
      *
      * @param int    $currentUserId The current user ID
-     * @param string $search        The search text to filter the user list
+     * @param string $searchFilter  Optional. The search text to filter the user list
      * @param int    $limit         Optional. Sets the maximum number of results to retrieve
      *
      * @return mixed
      */
-    public function findUsersToSendMessage($currentUserId, $search, $limit = 10)
+    public function findUsersToSendMessage($currentUserId, $searchFilter = null, $limit = 10)
     {
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
@@ -473,12 +473,17 @@ class UserRepository extends EntityRepository
             }
         }
 
-        $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
+        $parameters = [];
+
+        if (!empty($searchFilter)) {
+            $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
+            $parameters['search'] = "%$searchFilter%";
+        }
 
         return $this->getEntityManager()
             ->createQuery($dql)
             ->setMaxResults($limit)
-            ->setParameters(['search' => "%$search%"])
+            ->setParameters($parameters)
             ->getResult();
     }
 

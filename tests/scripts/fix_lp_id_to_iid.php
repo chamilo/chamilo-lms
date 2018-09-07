@@ -207,4 +207,3 @@ foreach ($courses as $course) {
 
 echo 'finished';
 error_log('finished');
-

@@ -85,7 +85,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('gradebook_detailed_admin_view')
+            ->add('gradebook_detailed_admin_view', YesNoType::class)
             ->add('openbadges_backpack')
             ->add('hide_certificate_export_link', YesNoType::class)
             ->add('add_gradebook_certificates_cron_task_enabled', YesNoType::class)

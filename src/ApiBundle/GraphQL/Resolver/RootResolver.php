@@ -73,6 +73,8 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
 
         $context->offsetSet('course', $course);
 
+        $this->protectCourseData($course, $context);
+
         return $course;
     }
 }

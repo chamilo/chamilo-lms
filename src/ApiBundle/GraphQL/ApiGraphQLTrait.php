@@ -3,11 +3,14 @@
 
 namespace Chamilo\ApiBundle\GraphQL;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
 use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Trait ApiGraphQLTrait.
@@ -53,6 +56,10 @@ trait ApiGraphQLTrait
         if (!$user) {
             throw new \Exception(get_lang('NotAllowed'));
         }
+
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+        $this->container->get('session')->set('_security_main', serialize($token));
 
         $context->offsetSet('user', $user);
     }
@@ -140,5 +147,44 @@ trait ApiGraphQLTrait
         }
 
         throw new UserError(get_lang('UserInfoDoesNotMatch'));
+    }
+
+    /**
+     * @param Course       $course
+     * @param \ArrayObject $context
+     *
+     * @return bool
+     */
+    private function userIsAllowedToCourse(Course $course, \ArrayObject $context): bool
+    {
+        $authorizationChecker = $this->container->get('security.authorization_checker');
+        /** @var User $contextUser */
+        $contextUser = $context['user'];
+
+        if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        /** @var CourseRelUser $subscription */
+        foreach ($contextUser->getCourses() as $subscription) {
+            if ($subscription->getCourse()->getId() === $course->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Course       $course
+     * @param \ArrayObject $context
+     */
+    private function protectCourseData(Course $course, \ArrayObject $context)
+    {
+        if ($this->userIsAllowedToCourse($course, $context)) {
+            return;
+        }
+
+        throw new UserError(get_lang('NotAllowed'));
     }
 }

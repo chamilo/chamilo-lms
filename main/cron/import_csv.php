@@ -240,11 +240,11 @@ class ImportCsv
                 'teachers-static',
                 'courses-static',
                 'sessions-static',
-                'calendar-static',
                 'sessionsextid-static',
                 'unsubscribe-static',
                 'unsubsessionsextid-static',
                 'subsessionsextid-static',
+                'calendar-static',
             ];
 
             foreach ($sections as $section) {

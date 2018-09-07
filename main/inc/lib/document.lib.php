@@ -584,7 +584,7 @@ class DocumentManager
                     $tblTemplate = Database::get_main_table(TABLE_MAIN_TEMPLATES);
                     $sql = "SELECT id FROM $tblTemplate
                             WHERE
-                                course_code = '".$courseInfo['code']."' AND
+                                c_id = '".$courseInfo['real_id']."' AND
                                 user_id = '".api_get_user_id()."' AND
                                 ref_doc = '".$row['id']."'";
                     $templateResult = Database::query($sql);
@@ -998,7 +998,7 @@ class DocumentManager
             $session_id
         );
         self::delete_document_from_search_engine($course_info['code'], $document_id);
-        self::unset_document_as_template($document_id, $course_info['code'], $user_id);
+        self::unsetDocumentAsTemplate($document_id, $course_info['real_id'], $user_id);
 
         //Hard DB delete
         if ($remove_content_from_db) {
@@ -1407,17 +1407,17 @@ class DocumentManager
      * @param string $title
      * @param string $description
      * @param int    $document_id_for_template the document id
-     * @param string $course_code
+     * @param int    $courseId
      * @param int    $user_id
      * @param string $image
      *
      * @return bool
      */
-    public static function set_document_as_template(
+    public static function setDocumentAsTemplate(
         $title,
         $description,
         $document_id_for_template,
-        $course_code,
+        $courseId,
         $user_id,
         $image
     ) {
@@ -1426,7 +1426,7 @@ class DocumentManager
         $params = [
             'title' => $title,
             'description' => $description,
-            'course_code' => $course_code,
+            'c_id' => $courseId,
             'user_id' => $user_id,
             'ref_doc' => $document_id_for_template,
             'image' => $image,
@@ -1439,24 +1439,24 @@ class DocumentManager
     /**
      * Unset a document as template.
      *
-     * @param int    $document_id
-     * @param string $course_code
-     * @param int    $user_id
+     * @param int $document_id
+     * @param int $courseId
+     * @param int $user_id
      */
-    public static function unset_document_as_template(
+    public static function unsetDocumentAsTemplate(
         $document_id,
-        $course_code,
+        $courseId,
         $user_id
     ) {
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-        $course_code = Database::escape_string($course_code);
-        $user_id = intval($user_id);
-        $document_id = intval($document_id);
+        $course_code = (int) $courseId;
+        $user_id = (int) $user_id;
+        $document_id = (int) $document_id;
         $sql = 'SELECT id FROM '.$table_template.'
                 WHERE
-                    course_code="'.$course_code.'" AND
-                    user_id="'.$user_id.'" AND
-                    ref_doc="'.$document_id.'"';
+                    c_id = "'.$course_code.'" AND
+                    user_id = "'.$user_id.'" AND
+                    ref_doc = "'.$document_id.'"';
         $result = Database::query($sql);
         $template_id = Database::result($result, 0, 0);
 
@@ -1464,7 +1464,7 @@ class DocumentManager
 
         $sql = 'DELETE FROM '.$table_template.'
                 WHERE
-                    course_code="'.$course_code.'" AND
+                    c_id ="'.$courseId.'" AND
                     user_id="'.$user_id.'" AND
                     ref_doc="'.$document_id.'"';
 

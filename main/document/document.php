@@ -1526,11 +1526,11 @@ if ($isAllowedToEdit ||
             }
         }
 
-        DocumentManager::set_document_as_template(
+        DocumentManager::setDocumentAsTemplate(
             $title,
             '',
             $document_id_for_template,
-            $course_code,
+            api_get_course_int_id(),
             $user_id,
             $new_file_name
         );
@@ -1540,11 +1540,10 @@ if ($isAllowedToEdit ||
     }
 
     if (isset($_GET['remove_as_template'])) {
-        $document_id_for_template = intval($_GET['remove_as_template']);
         $user_id = api_get_user_id();
-        DocumentManager::unset_document_as_template(
-            $document_id_for_template,
-            $course_code,
+        DocumentManager::unsetDocumentAsTemplate(
+            $_GET['remove_as_template'],
+            api_get_course_int_id(),
             $user_id
         );
 

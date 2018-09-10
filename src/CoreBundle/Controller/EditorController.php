@@ -6,16 +6,18 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use FM\ElFinderPHP\Connector\ElFinderConnector;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class EditorController.
  *
- * @Route("/front")
+ * @Route("/editor")
  *
  * @deprecated not used for now
  *
@@ -26,10 +28,10 @@ class EditorController extends Controller
     /**
      * Get templates (left column when creating a document).
      *
-     * @Route("/editor/templates", name="editor_templates")
+     * @Route("/templates", name="editor_templates")
      * @Method({"GET"})
      */
-    public function editorTemplates()
+    public function editorTemplatesAction()
     {
         $editor = new CkEditor(
             $this->get('translator.default'),
@@ -38,13 +40,13 @@ class EditorController extends Controller
         $templates = $editor->simpleFormatTemplates();
 
         return $this->render(
-            '@ChamiloCore/default/javascript/editor/ckeditor/templates.html.twig',
+            '@ChamiloCore/Editor/templates.html.twig',
             ['templates' => $templates]
         );
     }
 
     /**
-     * @Route("/editor/filemanager", name="editor_filemanager")
+     * @Route("/filemanager", name="editor_filemanager")
      * @Method({"GET"})
      */
     public function editorFileManager(Request $request)
@@ -55,7 +57,7 @@ class EditorController extends Controller
         $sessionId = $request->get('session_id');
 
         return $this->render(
-            '@ChamiloCore/default/javascript/editor/ckeditor/elfinder.html.twig',
+            '@ChamiloCore/Editor/elfinder.html.twig',
             [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
@@ -64,7 +66,7 @@ class EditorController extends Controller
     }
 
     /**
-     * @Route("/editor/connector", name="editor_connector")
+     * @Route("/connector", name="editor_connector")
      * @Method({"GET|POST"})
      */
     public function editorConnector(Request $request)
@@ -114,19 +116,8 @@ class EditorController extends Controller
     }
 
     /**
-     * @Route("/login")
-     * @Method({"GET"})
-     */
-    public function showLoginAction()
-    {
-        return $this->render(
-            'ChamiloCoreBundle:Security:only_login.html.twig',
-            ['error' => null]
-        );
-    }
-
-    /**
-     * @Route("/config_editor", name="config_editor")
+     * @Route("/config", name="config_editor")
+     *
      * @Method({"GET"})
      *
      * @return Response
@@ -136,19 +127,17 @@ class EditorController extends Controller
         $moreButtonsInMaximizedMode = false;
         $settingsManager = $this->get('chamilo.settings.manager');
 
-        if ($settingsManager->getSetting('editor.more_buttons_maximized_mode') == 'true') {
+        if ($settingsManager->getSetting('editor.more_buttons_maximized_mode') === 'true') {
             $moreButtonsInMaximizedMode = true;
         }
-        $request = $this->get('request_stack')->getCurrentRequest();
-        $courseId = $request->get('course_id');
-        $sessionId = $request->get('session_id');
 
         return $this->render(
-            'ChamiloCoreBundle:default/javascript/editor/ckeditor:config_js.html.twig',
+            'ChamiloCoreBundle:Editor:config_js.html.twig',
             [
+                // @todo replace api_get_bootstrap_and_font_awesome
+                'bootstrap_css' => api_get_bootstrap_and_font_awesome(true),
+                'css_editor' => ChamiloApi::getEditorBlockStylePath(),
                 'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
-                'course_id' => $courseId,
-                'session_id' => $sessionId,
             ]
         );
     }

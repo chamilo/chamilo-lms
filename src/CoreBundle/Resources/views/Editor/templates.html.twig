@@ -1,6 +1,8 @@
+{% autoescape false %}
 CKEDITOR.addTemplates("default",
 {
     imagesPath: ' ',
     templates:
-        {{ templates|raw }}
+        {{ templates }}
 });
+{% endautoescape %}

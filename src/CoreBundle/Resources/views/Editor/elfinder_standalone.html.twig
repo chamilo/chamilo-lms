@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% set finderFolder = _p.web ~ 'vendor/studio-42/elfinder/' %}
 <!-- elFinder CSS (REQUIRED) -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ finderFolder }}css/elfinder.full.css">
@@ -14,6 +15,7 @@
     function getUrlParam(paramName) {
         var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
         var match = window.location.search.match(reParam);
+
         return (match && match.length > 1) ? match[1] : '';
     }
 
@@ -30,6 +32,6 @@
     });
 </script>
 <div id="elfinder"></div>
-
+{% endautoescape %}
 
 

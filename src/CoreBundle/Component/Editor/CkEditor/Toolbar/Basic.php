@@ -66,16 +66,10 @@ class Basic extends Toolbar
     ];
 
     /**
-     * Plugins this toolbar.
-     *
-     * @var array
-     */
-    public $plugins = [];
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(
+        $router,
         $toolbar = null,
         $config = [],
         $prefix = null
@@ -134,7 +128,7 @@ class Basic extends Toolbar
         }
 
         $this->defaultPlugins = array_merge($this->defaultPlugins, $plugins);
-        parent::__construct($toolbar, $config, $prefix);
+        parent::__construct($router, $toolbar, $config, $prefix);
     }
 
     /**
@@ -150,7 +144,7 @@ class Basic extends Toolbar
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php?'.api_get_cidreq();
+        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq();
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
@@ -176,7 +170,6 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'bootstrapck,'.api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/skins/bootstrapck/';
         $config['skin'] = 'moono-lisa';
 
         $config['image2_chamilo_alignClasses'] = [
@@ -237,7 +230,7 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }
@@ -273,10 +266,10 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            [api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }

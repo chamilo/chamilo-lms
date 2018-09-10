@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class Editor.
@@ -49,18 +50,23 @@ class Editor
     public $template;
 
     /**
-     * Constructor.
+     * Editor constructor.
+     *
+     * @param TranslatorInterface $translator
+     * @param RouterInterface     $urlGenerator
      */
-    public function __construct()
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        RouterInterface $urlGenerator
+    ) {
         $this->toolbarSet = 'Basic';
         $this->value = '';
         $this->config = [];
         $this->setConfigAttribute('width', '100%');
         $this->setConfigAttribute('height', '200');
         $this->setConfigAttribute('fullPage', false);
-        /*$this->translator = $translator;
-        $this->urlGenerator = $urlGenerator;*/
+        $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
         //$this->course = $course;
     }
 
@@ -95,9 +101,9 @@ class Editor
     /**
      * @return string
      */
-    public function editorReplace()
+    /*public function editorReplace()
     {
-        $toolbar = new Toolbar($this->toolbarSet, $this->config);
+        $toolbar = new Toolbar($this->urlGenerator, $this->toolbarSet, $this->config);
         $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
@@ -106,11 +112,10 @@ class Editor
            CKEDITOR.replace('".$this->name."',
                $javascript
            );
-           
-           </script>";
 
+           </script>";
         return $html;
-    }
+    }*/
 
     /**
      * @param string $key
@@ -128,7 +133,7 @@ class Editor
      */
     public function getConfigAttribute($key)
     {
-        return isset($this->config[$key]) ? $this->config[$key] : null;
+        return $this->config[$key] ?? null;
     }
 
     /**
@@ -165,22 +170,12 @@ class Editor
         }
     }
 
-    public function getEditorTemplate()
-    {
-        return null;
-    }
-
     /**
      * @return string
      */
     public function getEditorStandAloneTemplate()
     {
         return 'javascript/editor/elfinder_standalone.tpl';
-    }
-
-    public function formatTemplates($templates)
-    {
-        return null;
     }
 
     /**

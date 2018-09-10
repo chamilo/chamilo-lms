@@ -10,8 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Documents extends Basic
 {
-    public $plugins = [];
-
     /**
      * Get the toolbar config.
      *
@@ -20,7 +18,6 @@ class Documents extends Basic
     public function getConfig()
     {
         $config = [];
-
         if (api_get_setting('more_buttons_maximized_mode') !== 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
@@ -52,7 +49,7 @@ class Documents extends Basic
      *
      * @return array
      */
-    protected function getNormalToolbar()
+    protected function getNormalToolbar(): array
     {
         return [
             ['Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
@@ -94,7 +91,7 @@ class Documents extends Basic
      *
      * @return array
      */
-    protected function getMinimizedToolbar()
+    protected function getMinimizedToolbar(): array
     {
         return [
             $this->getNewPageBlock(),

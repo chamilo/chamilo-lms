@@ -175,6 +175,13 @@ class CourseListener
                 }
             }
 
+            $origin = $request->get('origin');
+            if (!empty($origin)) {
+                $sessionHandler->set('origin', $origin);
+            }
+
+            $sessionHandler->set('cid_req_url', $this->generateCourseUrl($course, $sessionId, $groupId, $origin));
+
             /*if (!$alreadyVisited ||
                 isset($alreadyVisited) && $alreadyVisited != $courseCode
             ) {
@@ -196,6 +203,28 @@ class CourseListener
             Container::setContainer($container);
             Container::setLegacyServices($container);
         }
+    }
+
+    /**
+     * @param Course $course
+     * @param int    $sessionId
+     * @param int    $groupId
+     * @param string $origin
+     *
+     * @return string
+     */
+    private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
+    {
+        if ($course) {
+            $cidReqURL = '&cidReq='.$course->getCode();
+            $cidReqURL .= '&id_session='.$sessionId;
+            $cidReqURL .= '&gidReq='.$groupId;
+            $cidReqURL .= '&origin='.$origin;
+
+            return $cidReqURL;
+        }
+
+        return '';
     }
 
     /**
@@ -330,6 +359,8 @@ class CourseListener
         $sessionHandler->remove('_locale_course');
         $sessionHandler->remove('courseObj');
         $sessionHandler->remove('sessionObj');
+        $sessionHandler->remove('cid_req_url');
+        $sessionHandler->remove('origin');
         //$request->setLocale($request->getPreferredLanguage());
     }
 }

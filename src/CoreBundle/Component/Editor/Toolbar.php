@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\Component\Editor;
 
-//use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class Toolbar.
@@ -18,28 +18,34 @@ class Toolbar
     public $defaultPlugins = [];
 
     /**
-     * @param string $toolbar
-     * @param array  $config
-     * @param string $prefix
+     * Toolbar constructor.
+     *
+     * @param RouterInterface $urlGenerator
+     * @param null            $toolbar
+     * @param array           $config
+     * @param null            $prefix
      */
     public function __construct(
+        $urlGenerator,
         $toolbar = null,
         $config = [],
         $prefix = null
     ) {
+        $this->urlGenerator = $urlGenerator;
+
         if (!empty($toolbar)) {
             $class = __NAMESPACE__."\\".$prefix."\\Toolbar\\".$toolbar;
             if (class_exists($class)) {
                 $this->setConfig($config);
-                $toolbarObj = new $class();
+                $toolbarObj = new $class($urlGenerator, $toolbar, $config);
                 $config = $toolbarObj->getConfig();
 
                 if (api_get_configuration_value('full_ckeditor_toolbar_set')) {
                     $basicClass = __NAMESPACE__."\\".$prefix."\\Toolbar\\Basic";
-                    $basicObj = new $basicClass();
+                    $basicObj = new $basicClass($urlGenerator, $toolbar, $config);
                     $basicConfig = $basicObj->getConfig();
 
-                    if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+                    if (api_get_setting('more_buttons_maximized_mode') === 'true') {
                         if (isset($config['toolbar'])) {
                             unset($config['toolbar']);
                         }
@@ -60,7 +66,14 @@ class Toolbar
         if (!empty($config)) {
             $this->updateConfig($config);
         }
-        //$this->urlGenerator = $urlGenerator;
+    }
+
+    /**
+     * @return RouterInterface
+     */
+    public function getUrlGenerator()
+    {
+        return $this->urlGenerator;
     }
 
     /**

@@ -417,7 +417,7 @@ class Version20 extends AbstractMigrationChamilo
             'add_gradebook_certificates_cron_task_enabled' => 'gradebook',
             'icons_mode_svg' => 'display',
             'server_type' => 'platform',
-            'show_official_code_whoisonline' => 'platform',
+            'show_official_code_whoisonline' => 'profile',
             'show_terms_if_profile_completed' => 'ticket',
         ];
 

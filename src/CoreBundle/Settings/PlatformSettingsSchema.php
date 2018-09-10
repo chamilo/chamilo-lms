@@ -49,7 +49,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'load_term_conditions_section' => 'login',
                     //'server_type' => 'prod', replaced by value in .env
                     'show_full_skill_name_on_skill_wheel' => 'false',
-                    'show_official_code_whoisonline' => 'false',
                     'show_tabs' => [],
                     'chamilo_database_version' => '2.0.0',
                     //
@@ -153,7 +152,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('show_full_skill_name_on_skill_wheel', YesNoType::class)
-            ->add('show_official_code_whoisonline', YesNoType::class)
             ->add(
                 'show_tabs',
                 ChoiceType::class,

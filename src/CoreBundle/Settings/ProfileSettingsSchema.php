@@ -39,6 +39,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'is_editable' => 'true',
                     'hide_username_with_complete_name' => 'false',
                     'hide_username_in_course_chat' => 'false',
+                    'show_official_code_whoisonline' => 'false',
                 ]
             )
             ->setTransformer(
@@ -97,6 +98,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('is_editable', YesNoType::class)
             ->add('hide_username_with_complete_name', YesNoType::class)
             ->add('hide_username_in_course_chat', YesNoType::class)
+            ->add('show_official_code_whoisonline', YesNoType::class)
         ;
     }
 }

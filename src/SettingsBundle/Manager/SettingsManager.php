@@ -427,7 +427,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_show_skype_account' => 'Platform',
             'allow_show_linkedin_url' => 'Platform',
             'enable_profile_user_address_geolocalization' => 'User',
-            'show_official_code_whoisonline' => 'User',
+            'show_official_code_whoisonline' => 'Profile',
             'icons_mode_svg' => 'display',
             'user_name_order' => 'display',
             'user_name_sort_by' => 'display',

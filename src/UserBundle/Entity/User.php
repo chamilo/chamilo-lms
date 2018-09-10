@@ -497,7 +497,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function __toString()
     {
-        return \UserManager::formatUserFullName();
+        return $this->getUsername();
     }
 
     /**

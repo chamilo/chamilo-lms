@@ -5,9 +5,11 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -59,16 +61,20 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     public function resolveCourse($courseId, \ArrayObject $context)
     {
         $this->checkAuthorization($context);
-
-        try {
-            $course = $this->em->find('ChamiloCoreBundle:Course', $courseId);
-        } catch (\Exception $e) {
-            $course = null;
-        }
+        $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
+        $course = $courseRepo->find($courseId);
 
         $context->offsetSet('course', $course);
 
-        $this->protectCourseData($course, $context);
+        if (!$course) {
+            throw new UserError(get_lang('NoCourse'));
+        }
+
+        $checker = $this->container->get('security.authorization_checker');
+
+        if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
+            throw new UserError(get_lang('NotAllowed'));
+        }
 
         return $course;
     }

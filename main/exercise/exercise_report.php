@@ -224,7 +224,7 @@ if (isset($_REQUEST['comments']) &&
             'insert_date' => api_get_utc_datetime(),
             'author' => api_get_user_id(),
             'teacher_comment' => $my_comments,
-            'session_id' => $sessionId
+            'session_id' => $sessionId,
         ];
         Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
     }

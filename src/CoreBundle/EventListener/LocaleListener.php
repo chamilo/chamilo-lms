@@ -59,7 +59,7 @@ class LocaleListener implements EventSubscriberInterface
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
         //if ($locale = $request->getSession('_locale')) {
         if (false) {
-        //if ($locale = $request->attributes->get('_locale')) {
+            //if ($locale = $request->attributes->get('_locale')) {
             $request->getSession()->set('_locale', $locale);
         } else {
             $localeList = [];

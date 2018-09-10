@@ -206,28 +206,6 @@ class CourseListener
     }
 
     /**
-     * @param Course $course
-     * @param int    $sessionId
-     * @param int    $groupId
-     * @param string $origin
-     *
-     * @return string
-     */
-    private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
-    {
-        if ($course) {
-            $cidReqURL = '&cidReq='.$course->getCode();
-            $cidReqURL .= '&id_session='.$sessionId;
-            $cidReqURL .= '&gidReq='.$groupId;
-            $cidReqURL .= '&origin='.$origin;
-
-            return $cidReqURL;
-        }
-
-        return '';
-    }
-
-    /**
      * @param FilterResponseEvent $event
      */
     public function onKernelResponse(FilterResponseEvent $event)
@@ -362,5 +340,27 @@ class CourseListener
         $sessionHandler->remove('cid_req_url');
         $sessionHandler->remove('origin');
         //$request->setLocale($request->getPreferredLanguage());
+    }
+
+    /**
+     * @param Course $course
+     * @param int    $sessionId
+     * @param int    $groupId
+     * @param string $origin
+     *
+     * @return string
+     */
+    private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
+    {
+        if ($course) {
+            $cidReqURL = '&cidReq='.$course->getCode();
+            $cidReqURL .= '&id_session='.$sessionId;
+            $cidReqURL .= '&gidReq='.$groupId;
+            $cidReqURL .= '&origin='.$origin;
+
+            return $cidReqURL;
+        }
+
+        return '';
     }
 }

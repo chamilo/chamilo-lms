@@ -49,20 +49,10 @@ class EditorController extends Controller
      * @Route("/filemanager", name="editor_filemanager")
      * @Method({"GET"})
      */
-    public function editorFileManager(Request $request)
+    public function editorFileManager()
     {
         \Chat::setDisableChat();
-
-        $courseId = $request->get('course_id');
-        $sessionId = $request->get('session_id');
-
-        return $this->render(
-            '@ChamiloCore/Editor/elfinder.html.twig',
-            [
-                'course_id' => $courseId,
-                'session_id' => $sessionId,
-            ]
-        );
+        return $this->render('@ChamiloCore/Editor/elfinder.html.twig');
     }
 
     /**

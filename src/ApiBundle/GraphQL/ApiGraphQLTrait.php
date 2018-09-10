@@ -181,7 +181,7 @@ trait ApiGraphQLTrait
     }
 
     /**
-     * Throw a UserError if current user is not allowed to course
+     * Throw a UserError if current user is not allowed to course.
      *
      * @param Course       $course
      * @param \ArrayObject $context

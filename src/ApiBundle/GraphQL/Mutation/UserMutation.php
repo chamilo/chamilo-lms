@@ -11,7 +11,8 @@ use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class UserMutation
+ * Class UserMutation.
+ *
  * @package Chamilo\ApiBundle\GraphQL\Mutation
  */
 class UserMutation implements MutationInterface, AliasedInterface, ContainerAwareInterface

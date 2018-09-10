@@ -65,10 +65,6 @@ RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 # service Information
 RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
 
-# This rule is very generic and should always remain at the bottom of .htaccess
-# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
-RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
-
 # Deny access
 RewriteRule ^(tests|.git|.env|.env.dist|config) - [F,L,NC]
 

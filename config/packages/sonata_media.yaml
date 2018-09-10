@@ -20,24 +20,6 @@ sonata_media:
                 small: {width: 100, quality: 100}
                 medium: {width: 300, quality: 100}
                 big: {width: 970, quality: 100}
-        course:
-            providers:
-                - sonata.media.provider.dailymotion
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-                - sonata.media.provider.vimeo
-            formats:
-                small: {width: 100, quality: 100}
-                big: {width: 970, quality: 100}
-        news:
-            providers:
-                - sonata.media.provider.dailymotion
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-            formats:
-                abstract: {width: 100, quality: 100}
-                wide: {width: 820, quality: 100}
 
         sonata_collection:
             providers:
@@ -52,12 +34,12 @@ sonata_media:
             formats:
                 preview: {width: 100, quality: 100}
                 wide: {width: 820, quality: 100}
-        user:
-            providers:
-                - sonata.media.provider.image
-            formats:
-                small: {width: 100, quality: 100}
-                big: {width: 970, quality: 100}
+#        user:
+#            providers:
+#                - sonata.media.provider.image
+#            formats:
+#                small: {width: 100, quality: 100}
+#                big: {width: 970, quality: 100}
     cdn:
         # define the public base url for the uploaded media
         server:

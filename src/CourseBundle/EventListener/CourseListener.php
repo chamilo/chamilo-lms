@@ -88,7 +88,8 @@ class CourseListener
         $course = null;
         if (!empty($courseCode)) {
             /** @var Course $course */
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
+
+            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['directory' => $courseCode]);
             if ($course === null) {
                 throw new NotFoundHttpException($translator->trans('Course does not exist'));
             }
@@ -137,11 +138,7 @@ class CourseListener
                     $session->setCurrentCourse($course);
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
-                    if (false === $checker->isGranted(
-                            SessionVoter::VIEW,
-                            $session
-                        )
-                    ) {
+                    if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
                         throw new AccessDeniedException($translator->trans('Unauthorised access to session!'));
                     }
 

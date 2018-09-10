@@ -9,8 +9,8 @@ require_once '../main/inc/global.inc.php';
  */
 $publicPath = api_get_path(WEB_PUBLIC_PATH);
 // http://localhost/chamilo2/courses/ABC/document/aa.html
-$courseCode = $_GET['courseCode'];
-$path = $_GET['url'];
+$courseCode = Security::remove_XSS($_GET['courseCode']);
+$path = Security::remove_XSS($_GET['url']);
 $url = $publicPath."courses/$courseCode/document/$path";
 header("Location: $url");
 exit;

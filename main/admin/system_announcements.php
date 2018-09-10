@@ -17,7 +17,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 $action_todo = false;
 
 // Access restrictions
@@ -224,7 +224,7 @@ if ($action_todo) {
             if (!isset($values[$key])) {
                 $values[$key] = false;
             }
-            $visibilityResult[$key] = $values[$key];
+            $visibilityResult[$key] = (int) $values[$key];
         }
 
         if ($values['lang'] == 'all') {

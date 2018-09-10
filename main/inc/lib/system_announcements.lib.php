@@ -6,32 +6,26 @@
  */
 class SystemAnnouncementManager
 {
-    const VISIBLE_GUEST = 'visible_guest';
-    const VISIBLE_STUDENT = 'visible_student';
-    const VISIBLE_TEACHER = 'visible_teacher';
-    // Requires DB change
-    const VISIBLE_DRH = 'visible_drh';
-    const VISIBLE_SESSION_ADMIN = 'visible_session_admin';
-    const VISIBLE_STUDENT_BOSS = 'visible_boss';
+    public const VISIBLE_GUEST = 'visible_guest';
+    public const VISIBLE_STUDENT = 'visible_student';
+    public const VISIBLE_TEACHER = 'visible_teacher';
+    public const VISIBLE_DRH = 'visible_drh';
+    public const VISIBLE_SESSION_ADMIN = 'visible_session_admin';
+    public const VISIBLE_STUDENT_BOSS = 'visible_boss';
 
     /**
      * @return array
      */
-    public static function getVisibilityList()
+    public static function getVisibilityList(): array
     {
-        $extraRoles = self::newRolesActivated();
-
         $visibleToUsers = [
             self::VISIBLE_TEACHER => get_lang('Teacher'),
             self::VISIBLE_STUDENT => get_lang('Student'),
             self::VISIBLE_GUEST => get_lang('Guest'),
         ];
-
-        if ($extraRoles) {
-            $visibleToUsers[self::VISIBLE_DRH] = get_lang('DRH');
-            $visibleToUsers[self::VISIBLE_SESSION_ADMIN] = get_lang('SessionAdministrator');
-            $visibleToUsers[self::VISIBLE_STUDENT_BOSS] = get_lang('StudentBoss');
-        }
+        $visibleToUsers[self::VISIBLE_DRH] = get_lang('DRH');
+        $visibleToUsers[self::VISIBLE_SESSION_ADMIN] = get_lang('SessionAdministrator');
+        $visibleToUsers[self::VISIBLE_STUDENT_BOSS] = get_lang('StudentBoss');
 
         return $visibleToUsers;
     }
@@ -639,9 +633,9 @@ class SystemAnnouncementManager
             ->setContent($content)
             ->setDateStart($dateStart)
             ->setDateEnd($dateEnd)
-            //->setVisibleTeacher($visible_teacher)
-            //->setVisibleStudent($visible_student)
-            //->setVisibleGuest($visible_guest)
+            /*->setVisibleTeacher($visible_teacher)
+            ->setVisibleStudent($visible_student)
+            ->setVisibleGuest($visible_guest)*/
             ->setAccessUrlId(api_get_current_access_url_id());
 
         $em->merge($announcement);
@@ -932,48 +926,30 @@ class SystemAnnouncementManager
     }
 
     /**
-     * @return bool
-     */
-    public static function newRolesActivated()
-    {
-        /* In order to use this option you need to run this SQL changes :
-         ALTER TABLE sys_announcement ADD COLUMN visible_drh INT DEFAULT 0;
-         ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
-         ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
-        */
-        return api_get_configuration_value('system_announce_extra_roles');
-    }
-
-    /**
      * @return string
      */
     public static function getCurrentUserVisibility()
     {
         if (api_is_anonymous()) {
-            return SystemAnnouncementManager::VISIBLE_GUEST;
+            return self::VISIBLE_GUEST;
         }
 
-        if (self::newRolesActivated()) {
-            if (api_is_student_boss()) {
-                return SystemAnnouncementManager::VISIBLE_STUDENT_BOSS;
-            }
+        if (api_is_student_boss()) {
+            return self::VISIBLE_STUDENT_BOSS;
+        }
 
-            if (api_is_session_admin()) {
-                return SystemAnnouncementManager::VISIBLE_SESSION_ADMIN;
-            }
+        if (api_is_session_admin()) {
+            return self::VISIBLE_SESSION_ADMIN;
+        }
 
-            if (api_is_drh()) {
-                return SystemAnnouncementManager::VISIBLE_DRH;
-            }
+        if (api_is_drh()) {
+            return self::VISIBLE_DRH;
+        }
 
-            if (api_is_teacher()) {
-                return SystemAnnouncementManager::VISIBLE_TEACHER;
-            } else {
-                return SystemAnnouncementManager::VISIBLE_STUDENT;
-            }
+        if (api_is_teacher()) {
+            return self::VISIBLE_TEACHER;
         } else {
-            // Default behaviour
-            return api_is_teacher() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
+            return self::VISIBLE_STUDENT;
         }
     }
 }

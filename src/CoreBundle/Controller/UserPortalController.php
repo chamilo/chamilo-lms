@@ -17,12 +17,15 @@ use Symfony\Component\HttpFoundation\Response;
  * @Route("/userportal")
  *
  * @package Chamilo\CoreBundle\Controller
+ *
  */
 class UserPortalController extends BaseController
 {
     /**
      * @Route("/add_course", name="add_course")
+     *
      * @Method({"GET|POST"})
+     *
      * @Security("has_role('ROLE_TEACHER')")
      *
      * @return Response
@@ -33,7 +36,7 @@ class UserPortalController extends BaseController
         // true  - the new course is requested only and it is created after approval;
         // false - the new course is created immediately, after filling this form.
         $courseValidation = false;
-        if (api_get_setting('course.course_validation') == 'true' &&
+        if (api_get_setting('course.course_validation') === 'true' &&
             !api_is_platform_admin()
         ) {
             $courseValidation = true;
@@ -42,7 +45,7 @@ class UserPortalController extends BaseController
         // Displaying the header.
         $tool_name = $courseValidation ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
 
-        if (api_get_setting('course.allow_users_to_create_courses') == 'false' &&
+        if (api_get_setting('course.allow_users_to_create_courses') === 'false' &&
             !api_is_platform_admin()
         ) {
             api_not_allowed(true);
@@ -170,10 +173,7 @@ class UserPortalController extends BaseController
             // then we may get the URL from Chamilo's module "Terms and conditions",
             // if it is activated.
             if (empty($terms_and_conditions_url)) {
-                if (api_get_setting(
-                        'registration.allow_terms_conditions'
-                    ) == 'true'
-                ) {
+                if (api_get_setting('registration.allow_terms_conditions') === 'true') {
                     $terms_and_conditions_url = api_get_path(WEB_CODE_PATH);
                     $terms_and_conditions_url .= 'auth/inscription.php?legal';
                 }
@@ -249,7 +249,6 @@ class UserPortalController extends BaseController
         // Validate the form.
         if ($form->validate()) {
             $course_values = $form->exportValues();
-
             $wanted_code = $course_values['wanted_code'];
             //$category_code = $course_values['category_code'];
             $category_code = '';
@@ -387,7 +386,9 @@ class UserPortalController extends BaseController
      * Userportal main page.
      *
      * @Route("/{type}/{filter}", name="userportal")
+     *
      * @Method({"GET"})
+     *
      * @Security("has_role('ROLE_USER')")
      *
      * @param string  $type       courses|sessions|mycoursecategories

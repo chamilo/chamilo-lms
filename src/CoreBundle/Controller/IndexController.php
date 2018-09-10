@@ -3,14 +3,11 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-//use Chamilo\CoreBundle\Admin\CourseAdmin;
 use Chamilo\CoreBundle\Framework\PageController;
-use Chamilo\PageBundle\Entity\Block;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 /**
  * Class IndexController
@@ -29,18 +26,10 @@ class IndexController extends BaseController
      */
     public function indexAction(Request $request): Response
     {
-        $pageController = new PageController();
-        $user = $this->getUser();
-        $userId = 0;
-        if ($user) {
-            $userId = $this->getUser()->getId();
-        }
-
         return $this->render(
             '@ChamiloCore/Index/index.html.twig',
             [
                 'content' => ''
-                //'home_page_block' => $pageController->returnHomePage()
             ]
         );
     }

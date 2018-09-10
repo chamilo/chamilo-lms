@@ -52,6 +52,7 @@ class EditorController extends Controller
     public function editorFileManager()
     {
         \Chat::setDisableChat();
+
         return $this->render('@ChamiloCore/Editor/elfinder.html.twig');
     }
 

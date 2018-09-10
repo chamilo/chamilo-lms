@@ -50,6 +50,7 @@ class Sequence
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
+     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
@@ -59,7 +60,7 @@ class Sequence
      */
     public function __toString()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**

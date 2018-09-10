@@ -43,12 +43,14 @@ class CategoryTranslation
 
     /**
      * @Gedmo\Slug(fields={"headline"}, updatable=false)
+     *
      * @ORM\Column(type="string", length=50, nullable=false)
      */
     protected $slug;
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string", length=190, nullable=false)
      */
     protected $locale;

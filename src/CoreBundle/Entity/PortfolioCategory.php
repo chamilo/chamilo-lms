@@ -79,7 +79,7 @@ class PortfolioCategory
      */
     public function __toString()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**

@@ -9,6 +9,7 @@ use Firebase\JWT\JWT;
 use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Trait ApiGraphQLTrait.
@@ -19,16 +20,25 @@ trait ApiGraphQLTrait
 {
     use ContainerAwareTrait;
 
+    /**
+     * @var EntityManager
+     */
     private $em;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     /**
      * ApiGraphQLTrait constructor.
      *
-     * @param EntityManager $entityManager
+     * @param EntityManager       $entityManager
+     * @param TranslatorInterface $translator
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, TranslatorInterface $translator)
     {
         $this->em = $entityManager;
+        $this->translator = $translator;
     }
 
     /**
@@ -41,7 +51,7 @@ trait ApiGraphQLTrait
         $token = str_replace(['Bearer ', 'bearer '], '', $header);
 
         if (empty($token)) {
-            throw new UserError(get_lang('NotAllowed'));
+            throw new UserError($this->translator->trans('NotAllowed'));
         }
 
         $tokenData = $this->decodeToken($token);
@@ -54,7 +64,7 @@ trait ApiGraphQLTrait
         }
 
         if (!$user) {
-            throw new UserError(get_lang('NotAllowed'));
+            throw new UserError($this->translator->trans('NotAllowed'));
         }
 
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
@@ -76,7 +86,7 @@ trait ApiGraphQLTrait
         $user = $this->em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $username]);
 
         if (!$user) {
-            throw new UserError(get_lang('NoUser'));
+            throw new UserError($this->translator->trans('NoUser'));
         }
 
         $encoder = $this->container->get('chamilo_user.security.encoder');
@@ -87,7 +97,7 @@ trait ApiGraphQLTrait
         );
 
         if (!$isValid) {
-            throw new UserError(get_lang('InvalidId'));
+            throw new UserError($this->translator->trans('InvalidId'));
         }
 
         return self::encodeToken($user);
@@ -149,6 +159,6 @@ trait ApiGraphQLTrait
             return;
         }
 
-        throw new UserError(get_lang('UserInfoDoesNotMatch'));
+        throw new UserError($this->translator->trans('UserInfoDoesNotMatch'));
     }
 }

@@ -67,13 +67,13 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         $context->offsetSet('course', $course);
 
         if (!$course) {
-            throw new UserError(get_lang('NoCourse'));
+            throw new UserError($this->translator->trans('NoCourse'));
         }
 
         $checker = $this->container->get('security.authorization_checker');
 
         if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-            throw new UserError(get_lang('NotAllowed'));
+            throw new UserError($this->translator->trans('NotAllowed'));
         }
 
         return $course;

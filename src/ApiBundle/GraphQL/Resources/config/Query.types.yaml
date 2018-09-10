@@ -120,3 +120,7 @@ Course:
                 description: 'Teachers list in course.'
                 type: "[User]"
                 resolve: "@=resolver('course_teachers', [value])"
+            tools:
+                description: 'List of names from available tools for student view.'
+                type: '[String]'
+                resolve: "@=resolver('course_tools', [value, context])"

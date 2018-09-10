@@ -31,6 +31,7 @@ class CourseResolver implements ResolverInterface, AliasedInterface, ContainerAw
         return [
             'resolvePicture' => 'course_picture',
             'resolveTeachers' => 'course_teachers',
+            'resolveTools' => 'course_tools',
         ];
     }
 
@@ -59,5 +60,17 @@ class CourseResolver implements ResolverInterface, AliasedInterface, ContainerAw
             ->getResult();
 
         return $teachers;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return array
+     */
+    public function resolveTools(Course $course)
+    {
+        $tools = \CourseHome::get_tools_category(TOOL_STUDENT_VIEW, $course->getId());
+
+        return array_column($tools, 'name');
     }
 }

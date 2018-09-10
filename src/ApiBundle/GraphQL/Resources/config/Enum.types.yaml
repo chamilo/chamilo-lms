@@ -16,20 +16,26 @@ UserStatus:
                 description: "Global status of a user: Student."
                 value: '@=constant("Chamilo\\UserBundle\\Entity\\User::STUDENT")'
 
-UserImageSize:
+ImageSize:
     type: enum
     config:
-        description: 'One of the sizes for the user picture.'
+        description: 'One of the sizes for the picture.'
         values:
             SIZE_TINY:
                 description: 'Image in small size: 16px.'
-                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_TINY")'
+                value: '@=constant("ICON_SIZE_TINY")'
             SIZE_SMALL:
-                description: 'Image in small size: 32px.'
-                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_SMALL")'
+                description: 'Image in small size: 22px.'
+                value: '@=constant("ICON_SIZE_SMALL")'
             SIZE_MEDIUM:
-                description: 'Image in small size: 64px.'
-                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_MEDIUM")'
+                description: 'Image in small size: 32px.'
+                value: '@=constant("ICON_SIZE_MEDIUM")'
+            SIZE_LARGE:
+                description: 'Image in small size: 48px.'
+                value: '@=constant("ICON_SIZE_LARGE")'
             SIZE_BIG:
+                description: 'Image in small size: 64px.'
+                value: '@=constant("ICON_SIZE_BIG")'
+            SIZE_HUGE:
                 description: 'Image in small size: 128px.'
-                value: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_BIG")'
+                value: '@=constant("ICON_SIZE_HUGE")'

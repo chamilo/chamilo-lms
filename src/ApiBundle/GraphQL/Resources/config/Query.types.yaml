@@ -39,8 +39,8 @@ User:
                 type: "String"
                 args:
                     size:
-                        type: "UserImageSize"
-                        defaultValue: '@=constant("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver::IMAGE_SIZE_SMALL")'
+                        type: "ImageSize"
+                        defaultValue: '@=constant("ICON_SIZE_MEDIUM")'
                 resolve: "@=resolver('user_picture', [value, args['size']])"
             messages:
                 description: 'Received messages for the user.'

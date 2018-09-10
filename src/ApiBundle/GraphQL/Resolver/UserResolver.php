@@ -19,10 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
-    public const IMAGE_SIZE_TINY = 16;
-    public const IMAGE_SIZE_SMALL = 32;
-    public const IMAGE_SIZE_MEDIUM = 64;
-    public const IMAGE_SIZE_BIG = 128;
 
     /**
      * Returns methods aliases.

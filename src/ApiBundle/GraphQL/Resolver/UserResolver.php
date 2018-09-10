@@ -32,6 +32,7 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     {
         return [
             'resolveUserPicture' => 'user_picture',
+            'resolveEmail' => 'user_email',
             'resolveUserMessages' => 'user_messages',
             'resolveMessageContacts' => 'user_message_contacts',
             'resolveCourses' => 'user_courses',
@@ -50,6 +51,31 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         $path = $user->getAvatarOrAnonymous((int) $size);
 
         return $assets->getUrl($path);
+    }
+
+    /**
+     * @param User         $user
+     * @param \ArrayObject $context
+     *
+     * @return string
+     */
+    public function resolveEmail(User $user, \ArrayObject $context)
+    {
+        /** @var User $contextUser */
+        $contextUser = $context['user'];
+
+        if ($user->getId() === $contextUser->getId()) {
+            return $user->getEmail();
+        }
+
+        $settingsManager = $this->container->get('chamilo.settings.manager');
+        $showEmail = $settingsManager->getSetting('display.show_email_addresses') === 'true';
+
+        if (!$showEmail) {
+            return '';
+        }
+
+        return $user->getEmail();
     }
 
     /**

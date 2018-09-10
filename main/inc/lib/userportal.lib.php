@@ -92,51 +92,6 @@ class IndexManager
     }
 
     /**
-     * @param bool $show_slide
-     *
-     * @return null|string
-     */
-    public function return_announcements($show_slide = true)
-    {
-        $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
-        $currentUserId = api_get_user_id();
-        if ($hideAnnouncements == 'true' && empty($currentUserId)) {
-            return null;
-        }
-        $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;
-        $announcement = intval($announcement);
-
-        if (!api_is_anonymous() && $this->user_id) {
-            $visibility = SystemAnnouncementManager::getCurrentUserVisibility();
-            if ($show_slide) {
-                $announcements = SystemAnnouncementManager::displayAnnouncementsSlider(
-                    $visibility,
-                    $announcement
-                );
-            } else {
-                $announcements = SystemAnnouncementManager::displayAllAnnouncements(
-                    $visibility,
-                    $announcement
-                );
-            }
-        } else {
-            if ($show_slide) {
-                $announcements = SystemAnnouncementManager::displayAnnouncementsSlider(
-                    SystemAnnouncementManager::VISIBLE_GUEST,
-                    $announcement
-                );
-            } else {
-                $announcements = SystemAnnouncementManager::displayAllAnnouncements(
-                    SystemAnnouncementManager::VISIBLE_GUEST,
-                    $announcement
-                );
-            }
-        }
-
-        return $announcements;
-    }
-
-    /**
      * Alias for the online_logout() function.
      *
      * @param bool  $redirect   Whether to ask online_logout to redirect to index.php or not

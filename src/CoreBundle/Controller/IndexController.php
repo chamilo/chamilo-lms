@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 /**
  * Class IndexController
@@ -34,13 +35,11 @@ class IndexController extends BaseController
         if ($user) {
             $userId = $this->getUser()->getId();
         }
-        $announcementsBlock = $pageController->getAnnouncements($userId);
 
         return $this->render(
             '@ChamiloCore/Index/index.html.twig',
             [
-                'content' => '',
-                'announcements_block' => $announcementsBlock,
+                'content' => ''
                 //'home_page_block' => $pageController->returnHomePage()
             ]
         );
@@ -50,6 +49,7 @@ class IndexController extends BaseController
      * Toggle the student view action.
      *
      * @Route("/toggle_student_view", methods={"GET"})
+     *
      * @Security("has_role('ROLE_TEACHER')")
      *
      * @param Request $request

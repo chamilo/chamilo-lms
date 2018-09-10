@@ -4,12 +4,14 @@
     {% autoescape false %}
         {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'welcome'} )) }}
 
-        {{ announcements_block }}
+        {% if chamilo_settings_get('announcement.hide_global_announcements_when_not_connected') == 'false' %}
+            {{ render(controller('ChamiloCoreBundle:News:news')) }}
+        {% endif %}
+
         {{ content }}
         {% if chamilo_settings_get('display.show_hot_courses') == 'true' %}
             {# See CourseBlockService.php #}
             {{ sonata_block_render({'type': 'chamilo_core.block.course'}) }}
         {% endif %}
-
     {% endautoescape %}
 {% endblock %}

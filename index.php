@@ -145,14 +145,15 @@ if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
         $hotCourses = $controller->return_hot_courses();
     }
+
     $announcements_block = $controller->return_announcements();
+
 }
 if (api_get_configuration_value('show_hot_sessions') === true) {
     $hotSessions = SessionManager::getHotSessions();
     $controller->tpl->assign('hot_sessions', $hotSessions);
 }
 $controller->tpl->assign('hot_courses', $hotCourses);
-$controller->tpl->assign('announcements_block', $announcements_block);
 if ($includeFile) {
     // If we are including a static page, then home_welcome is empty
     $controller->tpl->assign('home_welcome', '');

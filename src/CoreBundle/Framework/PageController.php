@@ -158,55 +158,6 @@ class PageController
     }
 
     /**
-     * Returns a list of announcements.
-     *
-     * @param int User ID
-     * @param bool True: show the announcements as a slider. False: show them as a vertical list
-     *
-     * @return string HTML list of announcements
-     */
-    public function getAnnouncements($user_id = null, $show_slide = true)
-    {
-        // Display System announcements
-        $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
-        if ($hideAnnouncements == 'true' && empty($user_id)) {
-            return null;
-        }
-
-        $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;
-        $announcement = intval($announcement);
-
-        if (!api_is_anonymous() && $user_id) {
-            $visibility = api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
-            if ($show_slide) {
-                $announcements = SystemAnnouncementManager::displayAnnouncementsSlider(
-                    $visibility,
-                    $announcement
-                );
-            } else {
-                $announcements = SystemAnnouncementManager::displayAllAnnouncements(
-                    $visibility,
-                    $announcement
-                );
-            }
-        } else {
-            if ($show_slide) {
-                $announcements = SystemAnnouncementManager::displayAnnouncementsSlider(
-                    SystemAnnouncementManager::VISIBLE_GUEST,
-                    $announcement
-                );
-            } else {
-                $announcements = SystemAnnouncementManager::displayAllAnnouncements(
-                    SystemAnnouncementManager::VISIBLE_GUEST,
-                    $announcement
-                );
-            }
-        }
-
-        return $announcements;
-    }
-
-    /**
      * Return the homepage, including announcements.
      *
      * @return string The portal's homepage as an HTML string

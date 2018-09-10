@@ -820,9 +820,9 @@ class SystemAnnouncementManager
      * @param string $visible see self::VISIBLE_* constants
      * @param int    $id      The identifier of the announcement to display
      *
-     * @return string
+     * @return array
      */
-    public static function displayAnnouncementsSlider($visible, $id = null)
+    public static function getAnnouncements($visible, $id = null) : array
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -837,7 +837,7 @@ class SystemAnnouncementManager
         $sql .= self::getVisibilityCondition($visible);
 
         if (isset($id) && !empty($id)) {
-            $id = intval($id);
+            $id = (int) $id;
             $sql .= " AND id = $id ";
         }
 
@@ -846,7 +846,7 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
-        $sql .= " ORDER BY date_start DESC";
+        $sql .= ' ORDER BY date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
 
@@ -871,14 +871,10 @@ class SystemAnnouncementManager
         }
 
         if (count($announcements) === 0) {
-            return null;
+            return [];
         }
 
-        $template = new Template(null, false, false);
-        $template->assign('announcements', $announcements);
-        $layout = $template->get_template('announcement/slider.tpl');
-
-        return $template->fetch($layout);
+        return $announcements;
     }
 
     /**
@@ -887,18 +883,19 @@ class SystemAnnouncementManager
      * @param int $announcementId The announcement ID
      * @param int $visibility     The announcement visibility
      *
-     * @return string The HTML code
+     * @return array
      */
-    public static function displayAnnouncement($announcementId, $visibility)
+    public static function getAnnouncement($announcementId, $visibility): array
     {
         $selectedUserLanguage = Database::escape_string(api_get_interface_language());
         $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now = api_get_utc_datetime();
+        $announcementId = (int) $announcementId;
 
         $whereConditions = [
             "(lang = ? OR lang IS NULL OR lang = '') " => $selectedUserLanguage,
             "AND (? >= date_start AND ? <= date_end) " => [$now, $now],
-            "AND id = ? " => intval($announcementId),
+            "AND id = ? " => $announcementId,
         ];
 
         $condition = self::getVisibilityCondition($visibility);
@@ -918,12 +915,9 @@ class SystemAnnouncementManager
             'first'
         );
 
-        $template = new Template(null, false, false);
-        $template->assign('announcement', $announcement);
-        $layout = $template->get_template('announcement/view.tpl');
-
-        return $template->fetch($layout);
+        return $announcement;
     }
+
 
     /**
      * @return string

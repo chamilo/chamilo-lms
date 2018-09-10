@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @Route("/userportal")
  *
  * @package Chamilo\CoreBundle\Controller
- *
  */
 class UserPortalController extends BaseController
 {

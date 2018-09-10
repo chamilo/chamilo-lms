@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class IndexController
  * author Julio Montoya <gugli100@gmail.com>.
+ *
  * @Route("/news")
  *
  * @package Chamilo\CoreBundle\Controller
@@ -40,7 +41,6 @@ class NewsController extends BaseController
     }
 
     /**
-     *
      * @Route("/{id}", name="news", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @param int $id

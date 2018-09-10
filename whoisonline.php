@@ -55,8 +55,6 @@ if (isset($_GET['id'])) {
     if (api_get_setting('allow_social_tool') == 'true' && api_user_is_login()) {
         header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=".intval($_GET['id']));
         exit;
-    } else {
-        $social_right_content .= SocialManager::display_individual_user($_GET['id']);
     }
 }
 

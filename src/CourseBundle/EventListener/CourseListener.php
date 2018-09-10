@@ -88,7 +88,6 @@ class CourseListener
         $course = null;
         if (!empty($courseCode)) {
             /** @var Course $course */
-
             $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['directory' => $courseCode]);
             if ($course === null) {
                 throw new NotFoundHttpException($translator->trans('Course does not exist'));

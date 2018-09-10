@@ -822,7 +822,7 @@ class SystemAnnouncementManager
      *
      * @return array
      */
-    public static function getAnnouncements($visible, $id = null) : array
+    public static function getAnnouncements($visible, $id = null): array
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -917,7 +917,6 @@ class SystemAnnouncementManager
 
         return $announcement;
     }
-
 
     /**
      * @return string

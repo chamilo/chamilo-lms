@@ -9,7 +9,6 @@ use Display;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrapView;
-use SystemAnnouncementManager;
 use UserManager;
 
 /**

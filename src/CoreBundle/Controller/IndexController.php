@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Framework\PageController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +28,7 @@ class IndexController extends BaseController
         return $this->render(
             '@ChamiloCore/Index/index.html.twig',
             [
-                'content' => ''
+                'content' => '',
             ]
         );
     }

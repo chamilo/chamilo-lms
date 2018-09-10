@@ -166,7 +166,8 @@ sonata_admin:
 
         extra_javascripts:
             - bundles/sonatapage/sonata-page.back.min.js
-            - bundles/ivoryckeditor/ckeditor.js
+#            - bundles/ivoryckeditor/ckeditor.js
+            - libs/ckeditor/ckeditor.js
             - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
             - bundles/sonataformatter/markitup/sets/markdown/set.js
             - bundles/sonataformatter/markitup/sets/html/set.js

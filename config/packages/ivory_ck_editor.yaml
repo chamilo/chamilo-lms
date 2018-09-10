@@ -1,7 +1,8 @@
 ivory_ck_editor:
     autoload: false
     base_path: "bundles/ivoryckeditor"
-    js_path: "bundles/ivoryckeditor/ckeditor.js"
+#    js_path: "bundles/ivoryckeditor/ckeditor.js"
+    js_path: "libs/ckeditor/ckeditor.js"
     default_config: default
     configs:
         chamilo:

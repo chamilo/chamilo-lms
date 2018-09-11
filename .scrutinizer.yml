@@ -33,7 +33,6 @@ filter:
         - 'main/fonts/*'
         - 'main/inc/ajax/Wami.swf'
         - 'main/inc/lib/browser/*'
-        - 'main/inc/lib/freemindflashbrowser/*'
         - 'main/inc/lib/internationalization_database/*'
         - 'main/inc/lib/javascript/*'
         - 'main/inc/lib/kses-0.2.2/*'

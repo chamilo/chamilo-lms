@@ -64,6 +64,10 @@ User:
                 description: 'Course list for the current user.'
                 type: '[Course]'
                 resolve: "@=resolver('user_courses', [value, context])"
+            sessions:
+                description: 'Session list for the current user.'
+                type: '[Session]'
+                resolve: "@=resolver('user_sessions', [value, context])"
 
 UserMessage:
     type: object
@@ -126,3 +130,58 @@ Course:
                 description: 'List of names from available tools for student view.'
                 type: '[String]'
                 resolve: "@=resolver('course_tools', [value, context])"
+
+SessionCategory:
+    type: object
+    config:
+        description: 'A session category.'
+        fields:
+            id:
+                description: 'The unique ID of the category.'
+                type: 'Int'
+            name:
+                type: 'String'
+            startDate:
+                type: 'DateTime'
+                resolve: "@=resolver('sessioncategory_startdate', [value])"
+            endDate:
+                type: 'DateTime'
+                resolve: "@=resolver('sessioncategory_enddate', [value])"
+
+Session:
+    type: object
+    config:
+        description: 'A session registered on the platform.'
+        fields:
+            id:
+                description: 'The unique ID of the session.'
+                type: 'Int'
+            name:
+                type: 'String'
+            category:
+                type: 'SessionCategory'
+            description:
+                type: 'String'
+                resolve: "@=resolver('session_description', [value])"
+            numberOfCourses:
+                type: 'Int'
+                resolve: "@=resolver('session_nbrcourses', [value])"
+            numberOfUsers:
+                type: 'Int'
+                resolve: "@=resolver('session_nbrusers', [value])"
+            duration:
+                type: 'Int'
+            displayStartDate:
+                type: 'DateTime'
+            displayEndDate:
+                type: 'DateTime'
+            accessStartDate:
+                type: 'DateTime'
+            accessEndDate:
+                type: 'DateTime'
+            coachAccessStartDate:
+                type: 'DateTime'
+            coachAccessEndDate:
+                type: 'DateTime'
+            generalCoach:
+                type: 'User'

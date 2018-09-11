@@ -73,26 +73,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
     api_delete_setting_option($id);
 }
 
-$form_search = new FormValidator(
-    'search_settings',
-    'get',
-    api_get_self(),
-    null,
-    [],
-    FormValidator::LAYOUT_INLINE
-);
-$form_search->addElement('text', 'search_field', null, [
-    'id' => 'search_field',
-    'aria-label' => get_lang('Search'),
-]);
-$form_search->addElement('hidden', 'category', 'search_setting');
-$form_search->addButtonSearch(get_lang('Search'), 'submit_button');
-$form_search->setDefaults(
-    ['search_field' => isset($_REQUEST['search_field']) ? $_REQUEST['search_field'] : null]
-);
-
-$form_search_html = $form_search->returnForm();
-
 $url_id = api_get_current_access_url_id();
 
 $settings = null;
@@ -485,25 +465,16 @@ if (!empty($_GET['category'])) {
         case 'Templates':
             handleTemplates();
             break;
-        case 'search_setting':
-            if (isset($_REQUEST['search_field'])) {
-                searchSetting($_REQUEST['search_field']);
-                $form->display();
-            }
-            break;
         default:
-            if (isset($form)) {
-                $form->display();
-            }
+            api_not_allowed(true);
+            break;
     }
 }
 $content = ob_get_clean();
 
 // Including the header (banner).
 Display::display_header($tool_name);
-echo Display::actions($action_array);
-echo '<br />';
-echo $form_search_html;
+
 echo $content;
 
 Display::display_footer();

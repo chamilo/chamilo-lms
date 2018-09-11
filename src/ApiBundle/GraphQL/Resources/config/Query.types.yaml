@@ -108,6 +108,8 @@ Course:
                 type: 'String'
             categoryCode:
                 type: 'String'
+            directory:
+                type: 'String'
             picture:
                 type: 'String'
                 args:

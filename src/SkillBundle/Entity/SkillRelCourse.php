@@ -28,6 +28,7 @@ class SkillRelCourse
 
     /**
      * @var Skill
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="courses")
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
      */
@@ -35,6 +36,7 @@ class SkillRelCourse
 
     /**
      * @var Course
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="skills", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
@@ -42,6 +44,7 @@ class SkillRelCourse
 
     /**
      * @var Session
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="skills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
@@ -51,6 +54,7 @@ class SkillRelCourse
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
@@ -59,6 +63,7 @@ class SkillRelCourse
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
+     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;

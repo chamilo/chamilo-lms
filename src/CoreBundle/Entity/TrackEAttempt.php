@@ -105,7 +105,7 @@ class TrackEAttempt
     protected $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;

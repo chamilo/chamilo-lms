@@ -330,6 +330,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $gradeBookCategories;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="user")
+     */
+    protected $sessions;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="auth_source", type="string", length=50, nullable=true, unique=false)

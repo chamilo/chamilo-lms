@@ -32,6 +32,7 @@ class Level
 
     /**
      * @Gedmo\SortablePosition
+     *
      * @ORM\Column(name="position", type="integer")
      */
     protected $position;
@@ -45,7 +46,8 @@ class Level
 
     /**
      * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="level")
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="levels")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
     protected $profile;

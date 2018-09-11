@@ -82,7 +82,7 @@ class Course
     protected $sessionUserSubscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $groups;
 
@@ -105,6 +105,11 @@ class Course
      * @var AccessUrl
      */
     protected $currentUrl;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
+     */
+    protected $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
@@ -149,12 +154,12 @@ class Course
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
      */
-    protected $specificFieldValues;
+    //protected $specificFieldValues;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
      */
-    protected $sharedSurveys;
+    //protected $sharedSurveys;
 
     /**
      * @var string

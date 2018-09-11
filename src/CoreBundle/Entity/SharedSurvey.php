@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class SharedSurvey
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="survey_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $surveyId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
@@ -82,15 +91,6 @@ class SharedSurvey
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
     protected $courseCode;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $surveyId;
 
     /**
      * Set code.

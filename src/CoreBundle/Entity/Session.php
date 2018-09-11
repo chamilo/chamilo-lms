@@ -48,6 +48,11 @@ class Session
     protected $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
+     */
+    protected $skills;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OrderBy({"position" = "ASC"})

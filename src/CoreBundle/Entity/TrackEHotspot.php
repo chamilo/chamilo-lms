@@ -37,7 +37,7 @@ class TrackEHotspot
     protected $hotspotUserId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEHotspots")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;

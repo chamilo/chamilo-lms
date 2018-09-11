@@ -31,7 +31,7 @@ class AccessUrlRelUser
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="portals")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -43,6 +43,26 @@ class AccessUrlRelUser
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return AccessUrlRelUser
+     */
+    public function setId(int $id): AccessUrlRelUser
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * @return string

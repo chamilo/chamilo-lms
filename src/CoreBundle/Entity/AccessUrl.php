@@ -46,11 +46,6 @@ class AccessUrl
     protected $sessionCategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
-     */
-    protected $courseCategory;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)

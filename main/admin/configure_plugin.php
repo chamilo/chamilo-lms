@@ -25,6 +25,7 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
 $content = '';
 $currentUrl = api_get_self()."?name=$pluginName";
 
+
 if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
     $form = $pluginInfo['settings_form'];
@@ -43,13 +44,12 @@ if (isset($pluginInfo['settings_form'])) {
         Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning')
     );
 }
-
 if (isset($form)) {
     if ($form->validate()) {
         $values = $form->getSubmitValues();
 
         // Fix only for bbb
-        if ($pluginName == 'bbb') {
+        if ($pluginName === 'bbb') {
             if (!isset($values['global_conference_allow_roles'])) {
                 $values['global_conference_allow_roles'] = [];
             }

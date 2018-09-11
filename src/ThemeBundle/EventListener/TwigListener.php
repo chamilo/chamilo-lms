@@ -147,17 +147,51 @@ class TwigListener implements EventSubscriberInterface
         }
 
         $appPlugin = new \AppPlugin();
-        // 1. Showing installed plugins in regions
-        $pluginRegions = $appPlugin->get_plugin_regions();
-        foreach ($pluginRegions as $region) {
-            $appPlugin->setPluginRegion($pluginRegionList, $region, $twig);
+        $installedPlugins = $appPlugin->getInstalledPluginListName();
+        $pluginRegions = $appPlugin->getPluginRegions();
+
+        $regionListContent = [];
+        foreach ($installedPlugins as $pluginName) {
+            foreach ($pluginRegions as $region) {
+                if (!isset($pluginRegionList[$region])) {
+                    continue;
+                }
+
+                if ('course_tool_plugin' === $region) {
+                    $courseRegions = $appPlugin->getPluginRegions();
+                    $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
+                    $courseInfo = api_get_course_info();
+                    if (empty($courseInfo)) {
+                        continue;
+                    }
+                    foreach ($courseRegions as $subRegion) {
+                        if (!empty($courseInfo)) {
+                            if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof \Plugin) {
+                                /** @var Plugin $plugin */
+                                $plugin = $pluginInfo['obj'];
+                                $regionListContent[$subRegion][] = $plugin->renderRegion($subRegion);
+                            }
+                        }
+                    }
+                } else {
+                    if (in_array($pluginName, $pluginRegionList[$region])) {
+                        $regionListContent[$region][] = $appPlugin->loadRegion(
+                            $pluginName,
+                            $region,
+                            $twig,
+                            true //$this->force_plugin_load
+                        );
+                    }
+                }
+            }
         }
 
-        //2. Loading the course plugin info
-        global $course_plugin;
-        if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {
-            //Load plugin get_langs
-//            $this->plugin->load_plugin_lang_variables($course_plugin);
+        foreach ($regionListContent as $region => $contentList) {
+            $contentToString = '';
+            foreach ($contentList as $content) {
+                $contentToString .= $content;
+            }
+            $twig->addGlobal("plugin_$region", $contentToString);
         }
     }
 

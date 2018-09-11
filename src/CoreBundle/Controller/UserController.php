@@ -23,7 +23,7 @@ class UserController extends BaseController
      *
      * @Template("ChamiloCoreBundle:User:profile.html.twig")
      *
-     * @return Response
+     * @return array
      */
     public function profileAction($username): array
     {

@@ -8,8 +8,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use FM\ElFinderPHP\Connector\ElFinderConnector;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +27,10 @@ class EditorController extends Controller
     /**
      * Get templates (left column when creating a document).
      *
-     * @Route("/templates", name="editor_templates")
-     * @Method({"GET"})
+     * @Route("/templates", methods={"GET"}, name="editor_templates")
+     *
+     * @return Response
+     *
      */
     public function editorTemplatesAction()
     {
@@ -46,8 +47,9 @@ class EditorController extends Controller
     }
 
     /**
-     * @Route("/filemanager", name="editor_filemanager")
-     * @Method({"GET"})
+     * @Route("/filemanager", methods={"GET"}, name="editor_filemanager")
+     *
+     * @return Response
      */
     public function editorFileManager()
     {
@@ -57,8 +59,10 @@ class EditorController extends Controller
     }
 
     /**
-     * @Route("/connector", name="editor_connector")
-     * @Method({"GET|POST"})
+     * @Route("/connector", methods={"GET", "POST"}, name="editor_connector")
+     *
+     * @return Response
+     *
      */
     public function editorConnector(Request $request)
     {
@@ -107,9 +111,7 @@ class EditorController extends Controller
     }
 
     /**
-     * @Route("/config", name="config_editor")
-     *
-     * @Method({"GET"})
+     * @Route("/config", methods={"GET"}, name="config_editor")
      *
      * @return Response
      */

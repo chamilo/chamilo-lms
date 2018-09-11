@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Form\Type\CourseType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +24,9 @@ class CourseController extends Controller
 {
     /**
      * @Route("/add")
+     *
      * @Security("has_role('ROLE_TEACHER')")
+     *
      * @Template
      *
      * @return Response

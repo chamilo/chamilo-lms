@@ -4,8 +4,7 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Framework\PageController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserPortalController extends BaseController
 {
     /**
-     * @Route("/add_course", name="add_course")
-     *
-     * @Method({"GET|POST"})
+     * @Route("/add_course", methods={"GET", "POST"}, name="add_course")
      *
      * @Security("has_role('ROLE_TEACHER')")
      *
@@ -56,11 +53,12 @@ class UserPortalController extends BaseController
         }
 
         $url = $this->generateUrl('add_course');
+
         // Build the form.
         $form = new \FormValidator('add_course', 'post', $url);
 
         // Form title
-        $form->addElement('header', $tool_name);
+        $form->addHeader($tool_name);
 
         // Title
         $form->addElement(
@@ -384,9 +382,7 @@ class UserPortalController extends BaseController
     /**
      * Userportal main page.
      *
-     * @Route("/{type}/{filter}", name="userportal")
-     *
-     * @Method({"GET"})
+     * @Route("/{type}/{filter}", methods={"GET"}, name="userportal")
      *
      * @Security("has_role('ROLE_USER')")
      *

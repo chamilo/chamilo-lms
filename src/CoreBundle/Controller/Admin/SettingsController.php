@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +20,7 @@ class SettingsController extends SyliusSettingsController
 {
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     *
      * @Route("/settings", name="admin_settings")
      *
      * @return Response

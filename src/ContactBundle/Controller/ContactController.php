@@ -5,7 +5,6 @@ namespace Chamilo\ContactBundle\Controller;
 
 use Chamilo\ContactBundle\Entity\Category;
 use Chamilo\ContactBundle\Form\Type\ContactType;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

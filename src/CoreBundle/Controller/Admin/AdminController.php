@@ -4,12 +4,11 @@
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class Administrator.
@@ -21,8 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminController extends BaseController
 {
     /**
-     * @Route("/", name="administration")
-     * @Method({"GET"})
+     * @Route("/", methods={"GET"}, name="administration")
      *
      * @return Response
      */

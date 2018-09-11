@@ -5,7 +5,9 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
@@ -34,6 +36,7 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         return [
             'resolverViewer' => 'viewer',
             'resolveCourse' => 'course',
+            'resolveSession' => 'session',
         ];
     }
 
@@ -77,5 +80,34 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         }
 
         return $course;
+    }
+
+    /**
+     * @param int          $sessionId
+     * @param \ArrayObject $context
+     *
+     * @return Session
+     */
+    public function resolveSession($sessionId, \ArrayObject $context)
+    {
+        $this->checkAuthorization($context);
+
+        $sessionManager = $this->container->get('chamilo_core.entity.manager.session_manager');
+        $translator = $this->translator;
+        /** @var Session $session */
+        $session = $sessionManager->find($sessionId);
+        $context->offsetSet('session', $session);
+
+        if (!$session) {
+            throw new UserError($translator->trans('NoSession'));
+        }
+
+        $checker = $this->container->get('security.authorization_checker');
+
+        if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
+            throw new UserError($translator->trans('NotAllowed'));
+        }
+
+        return $session;
     }
 }

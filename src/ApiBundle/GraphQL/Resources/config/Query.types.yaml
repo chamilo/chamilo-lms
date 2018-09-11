@@ -14,6 +14,13 @@ Query:
                     id:
                         type: 'Int!'
                 resolve: "@=resolver('course', [args['id'], context])"
+            session:
+                description: 'Get the data from a session on the platform.'
+                type: 'Session'
+                args:
+                    id:
+                        type: 'Int!'
+                resolve: "@=resolver('session', [args['id'], context])"
 
 User:
     type: object

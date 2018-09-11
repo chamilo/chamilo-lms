@@ -176,7 +176,7 @@ try {
     \Patchwork\Utf8\Bootup::initAll();
 
     // access_url == 1 is the default chamilo location
-    if ($_configuration['access_url'] != 1) {
+    /*if ($_configuration['access_url'] != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
             $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
@@ -193,9 +193,9 @@ try {
                 $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
             }
         }
-    }
+    }*/
 
-    $result = &api_get_settings(null, 'list', 1);
+    /*$result = &api_get_settings(null, 'list', 1);
     foreach ($result as &$row) {
         if ($_configuration['access_url'] != 1) {
             if ($url_info['active'] == 1) {
@@ -234,9 +234,9 @@ try {
                 $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
             }
         }
-    }
+    }*/
 
-    $result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+    /*$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
     $_plugins = [];
     foreach ($result as &$row) {
         $key = &$row['variable'];
@@ -250,7 +250,7 @@ try {
             $_setting[$key][$row['subkey']] = $row['selected_value'];
             $_plugins[$key][$row['subkey']] = $row['selected_value'];
         }
-    }
+    }*/
 
     // Error reporting settings.
     if (api_get_setting('server_type') === 'test') {

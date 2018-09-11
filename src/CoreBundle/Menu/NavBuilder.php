@@ -66,6 +66,8 @@ class NavBuilder implements ContainerAwareInterface
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav');
 
+        $settingsManager = $container->get('chamilo.settings.manager');
+
         $menu->addChild(
             $translator->trans('Home'),
             [
@@ -104,15 +106,17 @@ class NavBuilder implements ContainerAwareInterface
                 ]
             );
 
-            $menu->addChild(
-                $translator->trans('Social'),
-                [
-                    'route' => 'legacy_main',
-                    'routeParameters' => [
-                        'name' => 'social/home.php',
-                    ],
-                ]
-            );
+            if ('true' === $settingsManager->getSetting('social.allow_social_tool')) {
+                $menu->addChild(
+                    $translator->trans('Social'),
+                    [
+                        'route' => 'legacy_main',
+                        'routeParameters' => [
+                            'name' => 'social/home.php',
+                        ],
+                    ]
+                );
+            }
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu->addChild(

@@ -138,13 +138,13 @@ services:
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
     # Setting user and platform locale
-    chamilo_core.listener.plugin:
-        class: Chamilo\CoreBundle\EventListener\PluginListener
-        calls:
-            - [setContainer, ['@service_container']]
-        tags:
-            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
-            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 4}
+#    chamilo_core.listener.plugin:
+#        class: Chamilo\CoreBundle\EventListener\PluginListener
+#        calls:
+#            - [setContainer, ['@service_container']]
+#        tags:
+#            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+#            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 4}
 
 # deprecated use
 #    chamilo_core.listener.legacy_login_listener:

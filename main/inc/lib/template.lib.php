@@ -75,7 +75,7 @@ class Template
         // Page title
         $this->title = $title;
         $this->show_learnpath = $show_learnpath;
-        $this->setResponseCode($responseCode);
+        //$this->setResponseCode($responseCode);
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
@@ -88,171 +88,38 @@ class Template
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
 
-        $template_paths = [
+        /*$template_paths = [
             api_get_path(SYS_CODE_PATH).'template/overrides', // user defined templates
             api_get_path(SYS_CODE_PATH).'template', //template folder
             api_get_path(SYS_PLUGIN_PATH), // plugin folder
             api_get_path(SYS_PATH).'src/ThemeBundle/Resources/views',
-        ];
+        ];*/
 
-        $urlId = api_get_current_access_url_id();
-
-        $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
-
-        if (!is_dir($cache_folder)) {
-            //mkdir($cache_folder, api_get_permissions_for_new_directories(), true);
-        }
-
-        $loader = new Twig_Loader_Filesystem($template_paths);
-
-        $isTestMode = api_get_setting('server_type') === 'test';
-
-        //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
-        if ($isTestMode) {
-            $options = [
-                //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-                'autoescape' => false,
-                'debug' => true,
-                'auto_reload' => true,
-                'optimizations' => 0,
-                // turn on optimizations with -1
-                'strict_variables' => false,
-                //If set to false, Twig will silently ignore invalid variables
-            ];
-        } else {
-            $options = [
-                'cache' => $cache_folder,
-                //path to the cache folder
-                'autoescape' => false,
-                'debug' => false,
-                'auto_reload' => false,
-                'optimizations' => -1,
-                // turn on optimizations with -1
-                'strict_variables' => false,
-                //If set to false, Twig will silently ignore invalid variables
-            ];
-        }
-
-        //$this->twig = new Twig_Environment($loader, $options);
         $this->twig = Container::getTwig();
 
-        if ($isTestMode) {
-            //$this->twig->addExtension(new Twig_Extension_Debug());
-        }
-
-        // Twig filters setup
-        $filters = [
-            'get_plugin_lang',
-            'get_lang',
-            'api_get_path',
-            'api_get_local_time',
-            'api_convert_and_format_date',
-            'api_is_allowed_to_edit',
-            'api_get_user_info',
-            'api_get_configuration_value',
-            'api_get_setting',
-            [
-                'name' => 'return_message',
-                'callable' => 'Display::return_message_and_translate',
-            ],
-            [
-                'name' => 'display_page_header',
-                'callable' => 'Display::page_header_and_translate',
-            ],
-            [
-                'name' => 'display_page_subheader',
-                'callable' => 'Display::page_subheader_and_translate',
-            ],
-            [
-                'name' => 'icon',
-                'callable' => 'Template::get_icon_path',
-            ],
-            [
-                'name' => 'img',
-                'callable' => 'Template::get_image',
-            ],
-            [
-                'name' => 'format_date',
-                'callable' => 'Template::format_date',
-            ],
-            [
-                'name' => 'get_template',
-                'callable' => 'Template::findTemplateFilePath',
-            ],
-            [
-                'name' => 'date_to_time_ago',
-                'callable' => 'Display::dateToStringAgoAndLongDate',
-            ],
-        ];
-
-        foreach ($filters as $filter) {
-            if (is_array($filter)) {
-                //$this->twig->addFilter(new Twig_SimpleFilter($filter['name'], $filter['callable']));
-            } else {
-                //$this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
-            }
-        }
-
-        /*$this->twig->addFunction(
-            new TwigFunction('sonata_page_render_container', [$this, 'renderContainer'], ['is_safe' => ['html']])
-        );*/
-
-        $functions = [
-            ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],
-            ['name' => 'get_teachers_names', 'callable' => 'Template::returnTeachersNames'],
-        ];
-
-        foreach ($functions as $function) {
-            //$this->twig->addFunction(new Twig_SimpleFunction($function['name'], $function['callable']));
-        }
-
         // Setting system variables
-        $this->set_system_parameters();
+        //$this->set_system_parameters();
 
         // Setting user variables
-        $this->set_user_parameters();
+        //$this->set_user_parameters();
 
         // Setting course variables
-        $this->set_course_parameters();
+        //$this->set_course_parameters();
 
         // Setting administrator variables
         //$this->setAdministratorParams();
         //$this->setCSSEditor();
 
         // Header and footer are showed by default
-        $this->set_footer($show_footer);
-        $this->set_header($show_header);
+        //$this->set_footer($show_footer);
+        //$this->set_header($show_header);
 
-        $this->set_header_parameters($sendHeaders);
-        $this->set_footer_parameters();
+        //$this->set_header_parameters($sendHeaders);
+        //$this->set_footer_parameters();
 
         $defaultStyle = api_get_configuration_value('default_template');
         if (!empty($defaultStyle)) {
             $this->templateFolder = $defaultStyle;
-        }
-
-        $this->assign('template', $this->templateFolder);
-        $this->assign('locale', api_get_language_isocode());
-        $this->assign('login_class', null);
-
-        // Chamilo plugins
-        if ($this->show_header) {
-            if ($this->load_plugins) {
-                $this->plugin = new AppPlugin();
-
-                //1. Showing installed plugins in regions
-                $pluginRegions = $this->plugin->get_plugin_regions();
-                foreach ($pluginRegions as $region) {
-                    $this->set_plugin_region($region);
-                }
-
-                //2. Loading the course plugin info
-                global $course_plugin;
-                if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {
-                    //Load plugin get_langs
-                    $this->plugin->load_plugin_lang_variables($course_plugin);
-                }
-            }
         }
     }
 
@@ -1028,48 +895,6 @@ class Template
         $this->display($tpl);
     }
 
-    /**
-     * Sets the plugin content in a template variable.
-     *
-     * @param string $pluginRegion
-     */
-    public function set_plugin_region($pluginRegion)
-    {
-        if (!empty($pluginRegion)) {
-            $regionContent = $this->plugin->load_region(
-                $pluginRegion,
-                $this,
-                $this->force_plugin_load
-            );
-
-            $pluginList = $this->plugin->get_installed_plugins();
-            foreach ($pluginList as $plugin_name) {
-                // The plugin_info variable is available inside the plugin index
-                $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
-
-                if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
-                    $courseInfo = api_get_course_info();
-                    if (!empty($courseInfo)) {
-                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
-                            /** @var Plugin $plugin */
-                            $plugin = $pluginInfo['obj'];
-                            $regionContent .= $plugin->renderRegion($pluginRegion);
-                        }
-                    }
-                } else {
-                    continue;
-                }
-            }
-
-            if (!empty($regionContent)) {
-                $this->assign('plugin_'.$pluginRegion, $regionContent);
-            } else {
-                $this->assign('plugin_'.$pluginRegion, null);
-            }
-        }
-
-        return null;
-    }
 
     /**
      * @param string $template
@@ -1613,8 +1438,8 @@ class Template
         $this->assign('portal_name', $portal_name);
 
         //Menu
-        $menu = menuArray();
-        $this->assign('menu', $menu);
+        //$menu = menuArray();
+        //$this->assign('menu', $menu);
 
         $breadcrumb = '';
         // Hide breadcrumb in LP

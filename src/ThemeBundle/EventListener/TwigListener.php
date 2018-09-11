@@ -43,13 +43,18 @@ class TwigListener implements EventSubscriberInterface
         Container::setContainer($container);
         Container::setLegacyServices($container);
 
+        $settingsManager = $container->get('chamilo.settings.manager');
+
         $theme = api_get_visual_theme();
         $twig = $container->get('twig');
         $twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
-        if (api_get_setting('show_administrator_data') === 'true') {
-            $firstName = api_get_setting('administratorName');
-            $lastName = api_get_setting('administratorSurname');
+        if ($settingsManager->getSetting('display.show_administrator_data') === 'true') {
+            $firstName = $settingsManager->getSetting('admin.administrator_name');
+            $lastName = $settingsManager->getSetting('admin.administrator_surname');
+            $email = $settingsManager->getSetting('admin.administrator_email');
+            $phone = $settingsManager->getSetting('admin.administrator_phone');
+
             if (!empty($firstName) && !empty($lastName)) {
                 $name = api_get_person_name($firstName, $lastName);
             } else {
@@ -63,28 +68,34 @@ class TwigListener implements EventSubscriberInterface
             // Administrator name
             if (!empty($name)) {
                 $adminName = get_lang('Manager').' : ';
-                $adminName .= \Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), $name);
+                $adminName .= \Display::encrypted_mailto_link($email, $name);
             }
             $twig->addGlobal('administrator_name', $adminName);
+
+            $admin = [
+                'email' => $email,
+                'surname' => $lastName,
+                'name' => $firstName,
+                'telephone' => $phone,
+            ];
+
+            $twig->addGlobal('_admin', $admin);
         }
 
-        $admin = [
-            'email' => api_get_setting('emailAdministrator'),
-            'surname' => api_get_setting('administratorSurname'),
-            'name' => api_get_setting('administratorName'),
-            'telephone' => api_get_setting('administratorTelephone'),
-        ];
+        $extraFooter = trim($settingsManager->getSetting('tracking.footer_extra_content'));
+        $twig->addGlobal('footer_extra_content', $extraFooter);
 
-        $twig->addGlobal('_admin', $admin);
+        $extraHeader = trim($settingsManager->getSetting('tracking.header_extra_content'));
+        $twig->addGlobal('header_extra_content', $extraHeader);
 
-        if (api_get_setting('show_tutor_data') === 'true') {
+        if ($settingsManager->getSetting('display.show_tutor_data') === 'true') {
             // Course manager
             $courseId = api_get_course_int_id();
             $sessionId = api_get_session_id();
 
             if (!empty($courseId)) {
                 $tutorData = '';
-                if ($sessionId != 0) {
+                if ($sessionId !== 0) {
                     $coachEmail = \CourseManager::get_email_of_tutor_to_session(
                         $sessionId,
                         $courseId
@@ -124,6 +135,29 @@ class TwigListener implements EventSubscriberInterface
                 }
                 $twig->addGlobal('teachers', $teacherData);
             }
+        }
+
+        // Plugins - Region list
+        $pluginConfiguration = api_get_settings('Plugins', 'list', 1);
+        $pluginRegionList = [];
+        foreach ($pluginConfiguration as $plugin) {
+            if ($plugin['type'] === 'region') {
+                $pluginRegionList[$plugin['variable']][] = $plugin['subkey'];
+            }
+        }
+
+        $appPlugin = new \AppPlugin();
+        // 1. Showing installed plugins in regions
+        $pluginRegions = $appPlugin->get_plugin_regions();
+        foreach ($pluginRegions as $region) {
+            $appPlugin->setPluginRegion($pluginRegionList, $region, $twig);
+        }
+
+        //2. Loading the course plugin info
+        global $course_plugin;
+        if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {
+            //Load plugin get_langs
+//            $this->plugin->load_plugin_lang_variables($course_plugin);
         }
     }
 

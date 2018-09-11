@@ -260,14 +260,14 @@ class AppPlugin
      *
      * @return null|string
      */
-    public function load_region($region, $template, $forced = false)
+    public function loadRegion($pluginRegionList, $region, $template, $forced = false)
     {
-        if ($region == 'course_tool_plugin') {
+        if ($region === 'course_tool_plugin') {
             return '';
         }
 
         ob_start();
-        $this->get_all_plugin_contents_by_region($region, $template, $forced);
+        $this->get_all_plugin_contents_by_region($pluginRegionList, $region, $template, $forced);
         $content = ob_get_contents();
         ob_end_clean();
 
@@ -284,13 +284,12 @@ class AppPlugin
      */
     public function load_plugin_lang_variables($plugin_name)
     {
-        global $language_interface;
+        $language_interface = api_get_interface_language();
         $root = api_get_path(SYS_PLUGIN_PATH);
         $strings = null;
 
         // 1. Loading english if exists
-        $english_path = $root.$plugin_name."/lang/english.php";
-
+        $english_path = $root.$plugin_name.'/lang/english.php';
         if (is_readable($english_path)) {
             include $english_path;
 
@@ -302,7 +301,6 @@ class AppPlugin
         // 2. Loading the system language
         if ($language_interface != 'english') {
             $path = $root.$plugin_name."/lang/$language_interface.php";
-
             if (is_readable($path)) {
                 include $path;
                 if (!empty($strings)) {
@@ -311,7 +309,7 @@ class AppPlugin
                     }
                 }
             } else {
-                $interfaceLanguageId = api_get_language_id($language_interface);
+                /*$interfaceLanguageId = api_get_language_id($language_interface);
                 $interfaceLanguageInfo = api_get_language_info($interfaceLanguageId);
                 $languageParentId = intval($interfaceLanguageInfo['parent_id']);
 
@@ -328,7 +326,7 @@ class AppPlugin
                             }
                         }
                     }
-                }
+                }*/
             }
         }
     }
@@ -342,14 +340,14 @@ class AppPlugin
      *
      * @todo improve this function
      */
-    public function get_all_plugin_contents_by_region($region, $template, $forced = false)
+    public function get_all_plugin_contents_by_region($_plugins, $region, $template, $forced = false)
     {
-        global $_plugins;
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
             // Load the plugin information
             foreach ($_plugins[$region] as $plugin_name) {
                 // The plugin_info variable is available inside the plugin index
                 $plugin_info = $this->getPluginInfo($plugin_name, $forced);
+
 
                 // We also know where the plugin is
                 $plugin_info['current_region'] = $region;
@@ -373,7 +371,7 @@ class AppPlugin
                     }
 
                     // Setting the plugin info available in the template if exists.
-                    $template->assign($plugin_name, $_template);
+                    $template->addGlobal($plugin_name, $_template);
 
                     // Loading the Twig template plugin files if exists
                     $template_list = [];
@@ -697,5 +695,45 @@ class AppPlugin
         }
 
         return false;
+    }
+
+
+    public function setPluginRegion($pluginRegionList, $pluginRegion, $twig)
+    {
+        if (!empty($pluginRegion)) {
+            $regionContent = $this->loadRegion(
+                $pluginRegionList,
+                $pluginRegion,
+                $twig,
+                true //$this->force_plugin_load
+            );
+
+            $pluginList = $this->get_installed_plugins();
+            foreach ($pluginList as $plugin_name) {
+                // The plugin_info variable is available inside the plugin index
+                $pluginInfo = $this->getPluginInfo($plugin_name);
+
+                if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
+                    $courseInfo = api_get_course_info();
+                    if (!empty($courseInfo)) {
+                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
+                            /** @var Plugin $plugin */
+                            $plugin = $pluginInfo['obj'];
+                            $regionContent .= $plugin->renderRegion($pluginRegion);
+                        }
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+            if (!empty($regionContent)) {
+                $twig->addGlobal('plugin_'.$pluginRegion, $regionContent);
+            } else {
+                $twig->addGlobal('plugin_'.$pluginRegion, null);
+            }
+        }
+
+        return null;
     }
 }

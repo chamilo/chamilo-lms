@@ -838,8 +838,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $isInitialized = [];
-    $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
-    $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
+    $root_rel = $configuration['url_append'] ?? '';
 
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {
@@ -856,7 +855,7 @@ function api_get_path($path = '', $configuration = [])
         // upgraded to return correct results in this case.
 
         // Dealing with trailing slashes.
-        $slashed_root_web = api_add_trailing_slash($root_web);
+        $rootWebWithSlash = api_add_trailing_slash($root_web);
         $root_sys = api_add_trailing_slash($root_sys);
         $root_rel = api_add_trailing_slash($root_rel);
         $code_folder = api_add_trailing_slash($code_folder);
@@ -868,25 +867,25 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
         $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
 
-        $paths[$root_web][WEB_PATH] = $slashed_root_web;
-        $paths[$root_web][WEB_CODE_PATH] = $paths[$root_web][WEB_PATH].$code_folder;
-        $paths[$root_web][WEB_COURSE_PATH] = $paths[$root_web][WEB_PATH].$course_folder;
-        $paths[$root_web][WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][WEB_CODE_PATH].'default_course_document/';
-        $paths[$root_web][WEB_APP_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_APP_PATH];
-        $paths[$root_web][WEB_PLUGIN_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PLUGIN_PATH];
-        $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
-        $paths[$root_web][WEB_ARCHIVE_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_ARCHIVE_PATH];
+        $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
+        $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.$code_folder;
+        $paths[$root_web][WEB_COURSE_PATH] = $rootWebWithSlash.$course_folder;
+        $paths[$root_web][WEB_APP_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_APP_PATH];
+        $paths[$root_web][WEB_PLUGIN_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_PATH];
+        $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
+        $paths[$root_web][WEB_ARCHIVE_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_ARCHIVE_PATH];
+        $paths[$root_web][WEB_CSS_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_CSS_PATH];
+        $paths[$root_web][WEB_UPLOAD_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_UPLOAD_PATH];
+        $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PUBLIC_PATH];
+        $paths[$root_web][WEB_HOME_PATH] = $rootWebWithSlash.$paths[$root_web][REL_HOME_PATH];
 
-        $paths[$root_web][WEB_CSS_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_CSS_PATH];
+        $paths[$root_web][WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][WEB_CODE_PATH].'default_course_document/';
         $paths[$root_web][WEB_IMG_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_IMG_PATH];
         $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
         $paths[$root_web][WEB_LIBRARY_JS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_JS_PATH];
         $paths[$root_web][WEB_AJAX_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_AJAX_PATH];
         $paths[$root_web][WEB_FONTS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_FONTS_PATH];
         $paths[$root_web][WEB_TEMPLATE_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_TEMPLATE_PATH];
-        $paths[$root_web][WEB_UPLOAD_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_UPLOAD_PATH];
-        $paths[$root_web][WEB_PUBLIC_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PUBLIC_PATH];
-        $paths[$root_web][WEB_HOME_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][REL_HOME_PATH];
 
         $paths[$root_web][SYS_PATH] = $root_sys;
         $paths[$root_web][SYS_CODE_PATH] = $root_sys.$code_folder;

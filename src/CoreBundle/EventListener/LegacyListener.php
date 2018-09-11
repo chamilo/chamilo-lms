@@ -136,13 +136,6 @@ class LegacyListener
             // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
             //$theme = api_get_visual_theme();
             //$twig->addGlobal('favico', \Template::getPortalIcon($theme));
-
-            $extraFooter = trim(api_get_setting('footer_extra_content'));
-            $twig->addGlobal('footer_extra_content', $extraFooter);
-
-            $extraHeader = trim(api_get_setting('header_extra_content'));
-            $twig->addGlobal('header_extra_content', $extraHeader);
-
             $languages = api_get_languages();
             $languageList = [];
             foreach ($languages as $isoCode => $language) {

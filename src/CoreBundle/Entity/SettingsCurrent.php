@@ -23,11 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
 class SettingsCurrent
 {
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="settings", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
-     */
-    protected $url;
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -35,6 +30,14 @@ class SettingsCurrent
      * @ORM\GeneratedValue
      */
     protected $id;
+
+    /**
+     * @var AccessUrl
+     *
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="settings", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
+     */
+    protected $url;
 
     /**
      * @var string
@@ -98,13 +101,6 @@ class SettingsCurrent
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
     protected $subkeytext;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="access_url", type="integer", nullable=false, options={"default": 1 } )
-     */
-    protected $accessUrl;
 
     /**
      * @var int
@@ -342,30 +338,6 @@ class SettingsCurrent
     public function getSubkeytext()
     {
         return $this->subkeytext;
-    }
-
-    /**
-     * Set accessUrl.
-     *
-     * @param int $accessUrl
-     *
-     * @return SettingsCurrent
-     */
-    public function setAccessUrl($accessUrl)
-    {
-        $this->accessUrl = $accessUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get accessUrl.
-     *
-     * @return int
-     */
-    public function getAccessUrl()
-    {
-        return $this->accessUrl;
     }
 
     /**

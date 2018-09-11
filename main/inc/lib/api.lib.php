@@ -6015,7 +6015,7 @@ function api_add_setting(
         $value = trim($value);
     }
 
-    $criteria = ['variable' => $variable, 'accessUrl' => $accessUrlId];
+    $criteria = ['variable' => $variable, 'url' => $accessUrlId];
 
     if (!empty($subKey)) {
         $criteria['subkey'] = $subKey;
@@ -6037,6 +6037,8 @@ function api_add_setting(
     // Item not found for this access_url, we have to check if the whole thing is missing
     // (in which case we ignore the insert) or if there *is* a record but just for access_url = 1
     $setting = new SettingsCurrent();
+    $url = api_get_url_entity();
+
     $setting
         ->setVariable($variable)
         ->setSelectedValue($value)
@@ -6047,7 +6049,7 @@ function api_add_setting(
         ->setComment($comment)
         ->setScope($scope)
         ->setSubkeytext($subKeyText)
-        ->setAccessUrl($accessUrlId)
+        ->setUrl(api_get_url_entity())
         ->setAccessUrlChangeable($visibility);
 
     $em->persist($setting);

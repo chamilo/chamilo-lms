@@ -95,7 +95,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             ->setComment($comment)
             ->setScope($scope)
             ->setSubkeytext($subKeyText)
-            ->setAccessUrl($accessUrl)
+            ->setUrl($accessUrl)
             ->setAccessUrlChangeable($accessUrlChangeable)
             ->setAccessUrlLocked($accessUrlLocked);
 

@@ -10037,9 +10037,11 @@ class learnpath
             true
         );
 
+        $lpPathInfo = $this->generate_lp_folder(api_get_course_info());
+
         DocumentManager::build_directory_selector(
             $folders,
-            '',
+            $lpPathInfo['id'],
             [],
             true,
             $form,

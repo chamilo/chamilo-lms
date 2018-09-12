@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class CourseListener.
@@ -83,7 +84,6 @@ class CourseListener
         /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();
         $checker = $container->get('security.authorization_checker');
-
         $alreadyVisited = $sessionHandler->get('course_already_visited');
 
         $course = null;
@@ -347,7 +347,7 @@ class CourseListener
         $token = $this->container->get('security.token_storage')->getToken();
         if (null !== $token) {
             $user = $token->getUser();
-            if ($user) {
+            if ($user instanceof UserInterface) {
                 $user->removeRole('ROLE_CURRENT_COURSE_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_TEACHER');
                 $user->removeRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');

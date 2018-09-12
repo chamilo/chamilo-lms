@@ -296,6 +296,10 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
 
         $sessionsId = $this->getUserSessions($user);
 
+        if (empty($sessionsId)) {
+            return [];
+        }
+
         $qb = $this->em->createQueryBuilder();
         $result = $qb
             ->select('s')

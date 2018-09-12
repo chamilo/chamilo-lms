@@ -2394,29 +2394,6 @@ class Display
             $editProfileUrl = api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=".intval($userId);
         }
 
-        if (api_get_setting('sso_authentication') === 'true') {
-            $subSSOClass = api_get_setting('sso_authentication_subclass');
-            $objSSO = null;
-
-            if (!empty($subSSOClass)) {
-                $file = api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
-                if (file_exists($file)) {
-                    require_once $file;
-                    $subSSOClass = 'sso'.$subSSOClass;
-                    $objSSO = new $subSSOClass();
-                } else {
-                    throw new Exception("$subSSOClass file not set");
-                }
-            } else {
-                $objSSO = new sso();
-            }
-
-            $editProfileUrl = $objSSO->generateProfileEditingURL(
-                $userId,
-                $asAdmin
-            );
-        }
-
         return $editProfileUrl;
     }
 

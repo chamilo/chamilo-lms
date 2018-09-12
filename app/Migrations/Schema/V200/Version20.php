@@ -450,12 +450,12 @@ class Version20 extends AbstractMigrationChamilo
             'openid_authentication',
             //'platform_charset',
             'shibboleth_description',
-            /*'sso_authentication',
+            'sso_authentication',
             'sso_authentication_domain',
             'sso_authentication_auth_uri',
             'sso_authentication_unauth_uri',
             'sso_authentication_protocol',
-            'sso_force_redirect',*/
+            'sso_force_redirect',
         ];
 
         foreach ($settings as $setting) {

@@ -988,9 +988,6 @@ class Template
                 case 'multiple_connection_not_allowed':
                     $message = get_lang('MultipleConnectionsAreNotAllow');
                     break;
-                case 'unrecognize_sso_origin':
-                    //$message = get_lang('SSOError');
-                    break;
             }
         }
 

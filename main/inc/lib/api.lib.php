@@ -2415,30 +2415,6 @@ function api_check_password($password)
 }
 
 /**
- * Clears the user ID from the session if it was the anonymous user. Generally
- * used on out-of-tools pages to remove a user ID that could otherwise be used
- * in the wrong context.
- * This function is to be used in conjunction with the api_set_anonymous()
- * function to simulate the user existence in case of an anonymous visit.
- *
- * @param bool      database check switch - passed to api_is_anonymous()
- *
- * @return bool true if succesfully unregistered, false if not anonymous
- */
-function api_clear_anonymous($db_check = false)
-{
-    global $_user;
-    if (api_is_anonymous($_user['user_id'], $db_check)) {
-        unset($_user['user_id']);
-        Session::erase('_uid');
-
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * Returns the status string corresponding to the status code.
  *
  * @author Noel Dieschburg
@@ -2461,41 +2437,6 @@ function get_status_from_code($status_code)
     }
 }
 
-/**
- * Sets the current user as anonymous if it hasn't been identified yet. This
- * function should be used inside a tool only. The function api_clear_anonymous()
- * acts in the opposite direction by clearing the anonymous user's data every
- * time we get on a course homepage or on a neutral page (index, admin, my space).
- *
- * @return bool true if set user as anonymous, false if user was already logged in or anonymous id could not be found
- */
-function api_set_anonymous()
-{
-    return false;
-
-    global $_user;
-
-    if (!empty($_user['user_id'])) {
-        return false;
-    }
-
-    $user_id = api_get_anonymous_id();
-    if ($user_id == 0) {
-        return false;
-    }
-
-    if (isset($_user['is_anonymous'])) {
-        return false;
-    }
-
-    Session::erase('_user');
-    $_user['user_id'] = $user_id;
-    $_user['is_anonymous'] = true;
-    $GLOBALS['_user'] = $_user;
-    Session::write('_user', $_user);
-
-    return true;
-}
 
 /**
  * Gets the current Chamilo (not PHP/cookie) session ID.
@@ -2789,7 +2730,6 @@ function api_get_setting($variable)
         // deprecated settings
         // no break
         case 'openid_authentication':
-        case 'sso_authentication':
         case 'service_ppt2lp':
         case 'add_cas_login_button_cas_button_label':
         case 'add_cas_login_button_cas_button_comment':
@@ -3790,13 +3730,6 @@ function api_not_allowed(
     $response = $controller->showAction($request, $exception);
     $response->send();
     exit;
-
-    if (api_get_setting('sso_authentication') === 'true') {
-        global $osso;
-        if ($osso) {
-            $osso->logout();
-        }
-    }
 
     $home_url = api_get_path(WEB_PATH);
     $user_id = api_get_user_id();

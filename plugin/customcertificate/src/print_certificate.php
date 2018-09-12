@@ -32,6 +32,15 @@ if (intval($_GET['default']) == 1) {
     $enableCourse = api_get_course_setting('customcertificate_course_enable', $courseCode) == 1 ? true : false;
     $useDefault = api_get_course_setting('use_certificate_default', $courseCode) == 1 ? true : false;
 }
+
+if (empty($courseCode)) {
+    $courseCode = isset($_REQUEST['course_code']) ? Database::escape_string($_REQUEST['course_code']) : '';
+}
+
+if (empty($sessionId)) {
+    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : '';
+}
+
 $accessUrlId = api_get_current_access_url_id();
 
 $userList = [];

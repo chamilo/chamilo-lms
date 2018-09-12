@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 //use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Session
+ * Class Session.
  * UniqueEntity("name").
  *
  * @ORM\Table(
@@ -254,7 +254,6 @@ class Session
 
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
-        $this->nbrUsers = 0;
 
         $this->displayStartDate = new \DateTime();
         $this->displayEndDate = new \DateTime();
@@ -290,10 +289,14 @@ class Session
 
     /**
      * @param int $duration
+     *
+     * @return $this
      */
     public function setDuration($duration)
     {
         $this->duration = $duration;
+
+        return $this;
     }
 
     /**
@@ -504,7 +507,7 @@ class Session
      *
      * @return bool
      */
-    public function hasUserInCourse(User $user, Course $course, $status = null)
+    public function hasUserInCourse(User $user, Course $course, $status = null): bool
     {
         $relation = $this->getUserInCourse($user, $course, $status);
 
@@ -528,8 +531,12 @@ class Session
      *
      * @return bool
      */
-    public function hasCoachInCourseWithStatus(User $user, Course $course)
+    public function hasCoachInCourseWithStatus(User $user, Course $course = null): bool
     {
+        if (empty($course)) {
+            return false;
+        }
+
         return $this->hasUserInCourse($user, $course, self::COACH);
     }
 
@@ -894,8 +901,6 @@ class Session
     }
 
     /**
-     * Get id.
-     *
      * @return User
      */
     public function getGeneralCoach()
@@ -917,6 +922,7 @@ class Session
 
     /**
      * @return mixed
+     *
      * @return SessionCategory
      */
     public function getCategory()
@@ -939,7 +945,7 @@ class Session
     /**
      * @return array
      */
-    public static function getStatusList()
+    public static function getStatusList(): array
     {
         return [
             self::VISIBLE => 'status_visible',
@@ -954,7 +960,7 @@ class Session
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         $now = new \Datetime('now');
 
@@ -968,7 +974,7 @@ class Session
     /**
      * @return bool
      */
-    public function isActiveForStudent()
+    public function isActiveForStudent(): bool
     {
         $start = $this->getAccessStartDate();
         $end = $this->getAccessEndDate();
@@ -1007,6 +1013,8 @@ class Session
 
     /**
      * @param ArrayCollection $userCourseSubscriptions
+     *
+     * @return $this
      */
     public function setUserCourseSubscriptions($userCourseSubscriptions)
     {
@@ -1015,6 +1023,8 @@ class Session
         foreach ($userCourseSubscriptions as $item) {
             $this->addUserCourseSubscription($item);
         }
+
+        return $this;
     }
 
     /**
@@ -1135,7 +1145,7 @@ class Session
      *
      * @param bool $sendNotification
      *
-     * @return \Chamilo\CoreBundle\Entity\Session
+     * @return Session
      */
     public function setSendSubscriptionNotification($sendNotification)
     {
@@ -1300,12 +1310,32 @@ class Session
     }
 
     /**
-     * @param $start
-     * @param $end
+     * @param User $user
      *
      * @return bool
      */
-    protected function compareDates($start, $end)
+    public function isUserGeneralCoach(User $user): bool
+    {
+        $generalCoach = $this->getGeneralCoach();
+
+        if (!$generalCoach) {
+            return false;
+        }
+
+        if ($user->getId() === $generalCoach->getId()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return bool
+     */
+    protected function compareDates($start, $end): bool
     {
         $now = new \Datetime('now');
 

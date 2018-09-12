@@ -276,7 +276,7 @@ class SettingsManager implements SettingsManagerInterface
             'pdf_export_watermark_by_course' => 'Platform',
             'pdf_export_watermark_text' => 'Platform',
             'enabled_insertHtml' => 'Editor',
-            'students_export2pdf' => 'Tools',
+            'students_export2pdf' => 'Document',
             'exercise_min_score' => 'Course',
             'exercise_max_score' => 'Course',
             'show_users_folders' => 'Tools',

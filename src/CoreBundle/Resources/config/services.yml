@@ -44,10 +44,13 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@chamilo_core.entity.manager.course_manager'
+            - '@security.authorization_checker'
             - '@service_container'
         public: false
         tags:
             - {name: security.voter}
+
+    # group voter is inside CourseBundle
 
     # Session voter checks if a user has permissions to do actions in a session
     chamilo_core.security.authorization.voter.session_voter:
@@ -55,6 +58,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@chamilo_core.entity.manager.course_manager'
+            - '@security.authorization_checker'
             - '@service_container'
         public: false
         tags:
@@ -136,22 +140,6 @@ services:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 7}
             - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
-
-    # Setting user and platform locale
-#    chamilo_core.listener.plugin:
-#        class: Chamilo\CoreBundle\EventListener\PluginListener
-#        calls:
-#            - [setContainer, ['@service_container']]
-#        tags:
-#            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
-#            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 4}
-
-# deprecated use
-#    chamilo_core.listener.legacy_login_listener:
-#        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
-#        arguments: ["@service_container", '@security.token_storage']
-#        tags:
-#            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
 
     # Locale listener
     chamilo_core.listener.locale:

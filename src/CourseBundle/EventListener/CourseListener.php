@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -103,7 +104,6 @@ class CourseListener
         }
 
         global $cidReset;
-
         if ($cidReset === true) {
             $this->removeCourseFromSession($request);
 
@@ -122,8 +122,10 @@ class CourseListener
             // Session
             $sessionId = (int) $request->get('id_session');
             $session = null;
-
             if (empty($sessionId)) {
+                $sessionHandler->remove('session_name');
+                $sessionHandler->remove('id_session');
+                $sessionHandler->remove('sessionObj');
                 // Check if user is allowed to this course
                 // See CourseVoter.php
                 if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
@@ -132,7 +134,10 @@ class CourseListener
             } else {
                 $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                 if ($session) {
-                    $sessionHandler->set('sessionObj', $session);
+                    if ($session->hasCourse($course) === false) {
+                        throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
+                    }
+
                     //$course->setCurrentSession($session);
                     $session->setCurrentCourse($course);
                     // Check if user is allowed to this course-session
@@ -323,6 +328,7 @@ class CourseListener
             // "Logout" course
             $sessionHandler->remove('course_already_visited');
         }
+
         $sessionHandler->remove('toolgroup');
         $sessionHandler->remove('_gid');
         $sessionHandler->remove('is_allowed_in_course');
@@ -335,6 +341,20 @@ class CourseListener
         $sessionHandler->remove('sessionObj');
         $sessionHandler->remove('cid_req_url');
         $sessionHandler->remove('origin');
+
+        // Remove user temp roles
+        /** @var User $user */
+        $token = $this->container->get('security.token_storage')->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+            if ($user) {
+                $user->removeRole('ROLE_CURRENT_COURSE_STUDENT');
+                $user->removeRole('ROLE_CURRENT_COURSE_TEACHER');
+                $user->removeRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
+                $user->removeRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+            }
+        }
+
         //$request->setLocale($request->getPreferredLanguage());
     }
 

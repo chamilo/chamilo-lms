@@ -519,7 +519,7 @@ class Course
     public function hasUser(User $user)
     {
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("user", $user)
+            Criteria::expr()->eq('user', $user)
         );
 
         return $this->getUsers()->matching($criteria)->count() > 0;
@@ -533,7 +533,7 @@ class Course
     public function hasStudent(User $user)
     {
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("user", $user)
+            Criteria::expr()->eq('user', $user)
         );
 
         return $this->getStudents()->matching($criteria)->count() > 0;

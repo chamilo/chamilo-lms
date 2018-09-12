@@ -10,6 +10,8 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -27,24 +29,36 @@ class GroupVoter extends Voter
     private $entityManager;
     private $courseManager;
     private $groupManager;
+    private $authorizationChecker;
     private $container;
 
     /**
-     * @param EntityManager      $entityManager
-     * @param CourseManager      $courseManager
-     * @param GroupManager       $groupManager  ,
-     * @param ContainerInterface $container
+     * @param EntityManager                 $entityManager
+     * @param CourseManager                 $courseManager
+     * @param GroupManager                  $groupManager
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param ContainerInterface            $container
      */
     public function __construct(
         EntityManager $entityManager,
         CourseManager $courseManager,
         GroupManager $groupManager,
+        AuthorizationCheckerInterface $authorizationChecker,
         ContainerInterface $container
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
         $this->groupManager = $groupManager;
+        $this->authorizationChecker = $authorizationChecker;
         $this->container = $container;
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public function getAuthorizationChecker()
+    {
+        return $this->authorizationChecker;
     }
 
     /**
@@ -74,7 +88,7 @@ class GroupVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -98,7 +112,7 @@ class GroupVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $group, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $group, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -111,7 +125,7 @@ class GroupVoter extends Voter
             return false;
         }
 
-        $authChecker = $this->container->get('security.authorization_checker');
+        $authChecker = $this->getAuthorizationChecker();
 
         // Admins have access to everything
         if ($authChecker->isGranted('ROLE_ADMIN')) {

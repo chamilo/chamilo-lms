@@ -1730,6 +1730,19 @@ function api_get_user_entity($userId)
 }
 
 /**
+ * @return null|User
+ */
+function api_get_current_user()
+{
+    $token = Container::$container->get('security.token_storage')->getToken();
+    if (null !== $token) {
+        return $token->getUser();
+    }
+
+    return null;
+}
+
+/**
  * Finds all the information about a user from username instead of user id.
  *
  * @param string $username
@@ -3069,7 +3082,18 @@ function api_is_course_admin()
         return true;
     }
 
-    return Session::read('is_courseAdmin');
+    $user = api_get_current_user();
+    if ($user) {
+        if (
+            $user->hasRole('ROLE_CURRENT_SESSION_COURSE_TEACHER') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+    //return Session::read('is_courseAdmin');
 }
 
 /**
@@ -3479,7 +3503,7 @@ function api_is_allowed_to_edit(
             $is_allowed_coach_to_edit = false;
         }
 
-        if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
+        if (api_get_setting('allow_coach_to_edit_course_session') === 'true') {
             // Check if coach is allowed to edit a course.
             $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
         }
@@ -3490,27 +3514,26 @@ function api_is_allowed_to_edit(
     }
 
     // Check if the student_view is enabled, and if so, if it is activated.
-    if (api_get_setting('student_view_enabled') == 'true') {
+    if (api_get_setting('student_view_enabled') === 'true') {
+        $studentView = api_is_student_view_active();
         if (!empty($sessionId)) {
             // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
             }
 
-            if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
+            $is_allowed = false;
+            if (api_get_setting('allow_coach_to_edit_course_session') === 'true') {
                 // Check if coach is allowed to edit a course.
                 $is_allowed = $is_allowed_coach_to_edit;
-            } else {
-                $is_allowed = false;
             }
             if ($check_student_view) {
-                $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
+                $is_allowed = $is_allowed && $studentView === false;
             }
         } else {
+            $is_allowed = $is_courseAdmin;
             if ($check_student_view) {
-                $is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
-            } else {
-                $is_allowed = $is_courseAdmin;
+                $is_allowed = $is_courseAdmin && $studentView === false;
             }
         }
 
@@ -8336,6 +8359,20 @@ function api_is_allowed_in_course()
         return true;
     }
 
+    $user = api_get_current_user();
+    if ($user) {
+        if ($user->hasRole('ROLE_CURRENT_SESSION_COURSE_STUDENT') ||
+            $user->hasRole('ROLE_CURRENT_SESSION_COURSE_TEACHER') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_STUDENT') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+
+
     return Session::read('is_allowed_in_course');
 }
 
@@ -8981,7 +9018,7 @@ function api_is_student_view_active()
 {
     $studentView = Session::read('studentview');
 
-    return $studentView == 'studentview';
+    return $studentView === 'studentview';
 }
 
 /**

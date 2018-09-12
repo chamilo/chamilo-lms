@@ -5791,8 +5791,8 @@ class CourseManager
      */
     public static function getFirstCourseAccessPerSessionAndUser($sessionId, $userId)
     {
-        $sessionId = intval($sessionId);
-        $userId = intval($userId);
+        $sessionId = (int) $sessionId;
+        $userId = (int) $userId;
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT * FROM $table

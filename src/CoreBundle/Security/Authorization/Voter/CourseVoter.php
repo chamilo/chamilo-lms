@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,21 +27,33 @@ class CourseVoter extends Voter
 
     private $entityManager;
     private $courseManager;
+    private $authorizationChecker;
     private $container;
 
     /**
-     * @param EntityManagerInterface $entityManager
-     * @param CourseManager          $courseManager
-     * @param ContainerInterface     $container
+     * @param EntityManagerInterface        $entityManager
+     * @param CourseManager                 $courseManager
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param ContainerInterface            $container
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseManager $courseManager,
+        AuthorizationCheckerInterface $authorizationChecker,
         ContainerInterface $container
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
+        $this->authorizationChecker = $authorizationChecker;
         $this->container = $container;
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public function getAuthorizationChecker()
+    {
+        return $this->authorizationChecker;
     }
 
     /**
@@ -62,7 +75,7 @@ class CourseVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -86,7 +99,7 @@ class CourseVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $course, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $course, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -95,7 +108,7 @@ class CourseVoter extends Voter
             return false;
         }*/
 
-        $authChecker = $this->container->get('security.authorization_checker');
+        $authChecker = $this->getAuthorizationChecker();
 
         // Admins have access to everything
         if ($authChecker->isGranted('ROLE_ADMIN')) {
@@ -106,18 +119,18 @@ class CourseVoter extends Voter
         /** @var Course $course */
         switch ($attribute) {
             case self::VIEW:
-                // "Open to the world" no need to check if user is registered
+                // Course is hidden then is not visible for nobody expect admins.
+                if ($course->getVisibility() == Course::HIDDEN) {
+                    return false;
+                }
+
+                // "Open to the world" no need to check if user is registered or if user exists.
                 // Course::OPEN_WORLD
                 if ($course->isPublic()) {
                     return true;
                 }
 
-                // Course is hidden then is not visible for nobody expect admins
-                if ($course->getVisibility() == Course::HIDDEN) {
-                    return false;
-                }
-
-                // Other course visibility need to have a user set
+                // User should be instance of UserInterface.
                 if (!$user instanceof UserInterface) {
                     return false;
                 }
@@ -125,6 +138,11 @@ class CourseVoter extends Voter
                 // If user is logged in and is open platform, allow access.
                 if ($course->getVisibility() == Course::OPEN_PLATFORM) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
+
+                    if ($course->hasTeacher($user)) {
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+                    }
+
                     $token->setUser($user);
 
                     return true;
@@ -134,6 +152,11 @@ class CourseVoter extends Voter
                 // User must be subscribed in the course no matter if is teacher/student
                 if ($course->hasUser($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
+
+                    if ($course->hasTeacher($user)) {
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+                    }
+
                     $token->setUser($user);
 
                     return true;

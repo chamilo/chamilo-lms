@@ -18,16 +18,17 @@ User-Agent: *
 # Directories
 
 Disallow: /app/
+Disallow: /assets/
 Disallow: /bin/
+Disallow: /config/
 Disallow: /documentation/
 Disallow: /home/
 Disallow: /main/
 Disallow: /plugin/
+Disallow: /src/
 Disallow: /tests/
 Disallow: /vendor/
 
 # Files
 Disallow: /license.txt
 Disallow: /README.txt
-Disallow: /whoisonline.php
-Disallow: /whoisonlinesession.php

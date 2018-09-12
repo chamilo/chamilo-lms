@@ -110,9 +110,9 @@ class SessionManager
         ];
 
         foreach ($variables as $value) {
-            $result[$value."_to_local_time"] = null;
+            $result[$value.'_to_local_time'] = null;
             if (!empty($result[$value])) {
-                $result[$value."_to_local_time"] = api_get_local_time($result[$value]);
+                $result[$value.'_to_local_time'] = api_get_local_time($result[$value]);
             }
         }
 
@@ -189,8 +189,8 @@ class SessionManager
         }
 
         $name = Database::escape_string(trim($name));
-        $sessionCategoryId = intval($sessionCategoryId);
-        $visibility = intval($visibility);
+        $sessionCategoryId = (int) $sessionCategoryId;
+        $visibility = (int) $visibility;
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $startDate = Database::escape_string($startDate);
@@ -245,8 +245,8 @@ class SessionManager
                     'session_admin_id' => $sessionAdminId,
                     'visibility' => $visibility,
                     'description' => $description,
-                    'show_description' => intval($showDescription),
-                    'send_subscription_notification' => (int) $sendSubscriptionNotification,
+                    'show_description' => $showDescription,
+                    'send_subscription_notification' => $sendSubscriptionNotification,
                 ];
 
                 if (!empty($startDate)) {
@@ -278,7 +278,7 @@ class SessionManager
 
                 $values['position'] = 0;
                 $session_id = Database::insert($tbl_session, $values);
-                $duration = intval($duration);
+                $duration = (int) $duration;
 
                 if (!empty($duration)) {
                     $sql = "UPDATE $tbl_session SET
@@ -1583,10 +1583,11 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false
     ) {
-        $coachId = intval($coachId);
-        $sessionCategoryId = intval($sessionCategoryId);
-        $visibility = intval($visibility);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $coachId = (int) $coachId;
+        $sessionCategoryId = (int) $sessionCategoryId;
+        $visibility = (int) $visibility;
+
+        $em = Database::getManager();
 
         if (empty($name)) {
             Display::addFlash(
@@ -1641,60 +1642,61 @@ class SessionManager
 
                 return false;
             } else {
-                $values = [
-                    'name' => $name,
-                    'duration' => $duration,
-                    'id_coach' => $coachId,
-                    'description' => $description,
-                    'show_description' => intval($showDescription),
-                    'visibility' => $visibility,
-                    'send_subscription_notification' => $sendSubscriptionNotification,
-                    'access_start_date' => null,
-                    'access_end_date' => null,
-                    'display_start_date' => null,
-                    'display_end_date' => null,
-                    'coach_access_start_date' => null,
-                    'coach_access_end_date' => null,
-                ];
+                /** @var Session $sessionEntity */
+                $sessionEntity = api_get_session_entity($id);
+                $sessionEntity
+                    ->setName($name)
+                    ->setDuration($duration)
+                    ->setDescription($description)
+                    ->setShowDescription($showDescription)
+                    ->setVisibility($visibility)
+                    ->setSendSubscriptionNotification($sendSubscriptionNotification)
+                    ->setAccessStartDate(null)
+                    ->setAccessStartDate(null)
+                    ->setDisplayStartDate(null)
+                    ->setDisplayEndDate(null)
+                    ->setCoachAccessStartDate(null)
+                    ->setCoachAccessEndDate(null)
+                    ->setGeneralCoach(api_get_user_entity($coachId))
+                ;
 
                 if (!empty($sessionAdminId)) {
-                    $values['session_admin_id'] = $sessionAdminId;
+                    $sessionEntity->setSessionAdminId($sessionAdminId);
                 }
 
                 if (!empty($startDate)) {
-                    $values['access_start_date'] = api_get_utc_datetime($startDate);
+                    $sessionEntity->setAccessStartDate(api_get_utc_datetime($startDate, true, true));
                 }
 
                 if (!empty($endDate)) {
-                    $values['access_end_date'] = api_get_utc_datetime($endDate);
+                    $sessionEntity->setAccessEndDate(api_get_utc_datetime($endDate, true, true));
                 }
 
                 if (!empty($displayStartDate)) {
-                    $values['display_start_date'] = api_get_utc_datetime($displayStartDate);
+                    $sessionEntity->setDisplayStartDate(api_get_utc_datetime($displayStartDate, true, true));
                 }
 
                 if (!empty($displayEndDate)) {
-                    $values['display_end_date'] = api_get_utc_datetime($displayEndDate);
+                    $sessionEntity->setDisplayEndDate(api_get_utc_datetime($displayEndDate, true, true));
                 }
 
                 if (!empty($coachStartDate)) {
-                    $values['coach_access_start_date'] = api_get_utc_datetime($coachStartDate);
+                    $sessionEntity->setCoachAccessStartDate(api_get_utc_datetime($coachStartDate, true, true));
                 }
+
                 if (!empty($coachEndDate)) {
-                    $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
+                    $sessionEntity->setCoachAccessEndDate(api_get_utc_datetime($coachEndDate, true, true));
                 }
 
                 if (!empty($sessionCategoryId)) {
-                    $values['session_category_id'] = $sessionCategoryId;
+                    $category = $em->getRepository('ChamiloCoreBundle:SessionCategory')->find($sessionCategoryId);
+                    $sessionEntity->setCategory($category);
                 } else {
-                    $values['session_category_id'] = null;
+                    $sessionEntity->setCategory(null);
                 }
 
-                Database::update(
-                    $tbl_session,
-                    $values,
-                    ['id = ?' => $id]
-                );
+                $em->merge($sessionEntity);
+                $em->flush();
 
                 if (!empty($extraFields)) {
                     $extraFields['item_id'] = $id;

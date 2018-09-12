@@ -6,6 +6,7 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\UserBundle\Entity\User;
@@ -37,6 +38,7 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
             'resolverViewer' => 'viewer',
             'resolveCourse' => 'course',
             'resolveSession' => 'session',
+            'resolveSessionCategory' => 'sessioncategory',
         ];
     }
 
@@ -109,5 +111,26 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         }
 
         return $session;
+    }
+
+    /**
+     * @param int          $categoryId
+     * @param \ArrayObject $context
+     *
+     * @return SessionCategory|null
+     */
+    public function resolveSessionCategory($categoryId, \ArrayObject $context)
+    {
+        $this->checkAuthorization($context);
+
+        $repo = $this->em->getRepository('ChamiloCoreBundle:SessionCategory');
+        /** @var SessionCategory $category */
+        $category = $repo->find($categoryId);
+
+        if (!$category) {
+            throw new UserError($this->translator->trans('Session category not found.'));
+        }
+
+        return $category;
     }
 }

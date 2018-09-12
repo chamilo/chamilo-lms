@@ -21,6 +21,13 @@ Query:
                     id:
                         type: 'Int!'
                 resolve: "@=resolver('session', [args['id'], context])"
+            sessionCategory:
+                description: 'Get the data from a session category.'
+                type: 'SessionCategory'
+                args:
+                    id:
+                        type: 'Int!'
+                resolve: "@=resolver('sessioncategory', [args['id'], context])"
 
 User:
     type: object

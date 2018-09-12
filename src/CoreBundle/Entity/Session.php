@@ -48,7 +48,8 @@ class Session
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist",
+     *                                                                          "remove"})
      */
     protected $skills;
 
@@ -70,7 +71,8 @@ class Session
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="session", cascade={"persist"},
+     *                                                        orphanRemoval=true)
      */
     protected $userCourseSubscriptions;
 
@@ -85,7 +87,9 @@ class Session
     protected $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession", mappedBy="session",
+     *                                                                              cascade={"persist"},
+     *                                                                              orphanRemoval=true)
      */
     protected $urls;
 
@@ -240,7 +244,9 @@ class Session
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session",
+     *                                                                                cascade={"persist"},
+     *                                                                                orphanRemoval=true)
      */
     protected $studentPublications;
 
@@ -1355,6 +1361,66 @@ class Session
             if ($now <= $end) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if $user is course coach in any course
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasCoachInCourseList(User $user)
+    {
+        /** @var SessionRelCourse $sessionCourse */
+        foreach ($this->courses as $sessionCourse) {
+            if ($this->hasCoachInCourseWithStatus($user, $sessionCourse->getCourse())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if $user is student in any course
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasStudentInCourseList(User $user)
+    {
+        /** @var SessionRelCourse $sessionCourse */
+        foreach ($this->courses as $sessionCourse) {
+            if ($this->hasStudentInCourse($user, $sessionCourse->getCourse())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isReclaimableForUser(User $user)
+    {
+        if ($this->isUserGeneralCoach($user)) {
+            return true;
+        }
+
+        if ($this->hasCoachInCourseList($user)) {
+            return true;
+        }
+
+        if ($this->hasStudentInCourseList($user)) {
+            return true;
         }
 
         return false;

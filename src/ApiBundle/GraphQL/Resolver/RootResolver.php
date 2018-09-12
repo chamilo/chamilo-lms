@@ -66,6 +66,7 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     public function resolveCourse($courseId, \ArrayObject $context)
     {
         $this->checkAuthorization($context);
+
         $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
         $course = $courseRepo->find($courseId);
 
@@ -101,16 +102,23 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
         $context->offsetSet('session', $session);
 
         if (!$session) {
-            throw new UserError($translator->trans('NoSession'));
+            throw new UserError($translator->trans('Session not found.'));
         }
 
         $checker = $this->container->get('security.authorization_checker');
 
-        if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-            throw new UserError($translator->trans('NotAllowed'));
+        if ($checker->isGranted('ROLE_ADMIN')) {
+            return $session;
         }
 
-        return $session;
+        /** @var User $currentUser */
+        $currentUser = $context->offsetGet('user');
+
+        if ($session->isReclaimableForUser($currentUser)) {
+            return $session;
+        }
+
+        throw new UserError($translator->trans('Not allowed.'));
     }
 
     /**

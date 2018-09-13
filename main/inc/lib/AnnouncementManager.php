@@ -734,8 +734,7 @@ class AnnouncementManager
             }
 
             // Store in item_property (first the groups, then the users)
-            //if (!isset($to_users)) {
-            if (isset($to_users[0]) && $to_users[0] === 'everyone') {
+            if (empty($to_users) || (isset($to_users[0]) && $to_users[0] === 'everyone')) {
                 // when no user is selected we send it to everyone
                 $send_to = CourseManager::separateUsersGroups($to);
                 // storing the selected groups
@@ -1557,7 +1556,7 @@ class AnnouncementManager
         }
 
         if (!empty($userIdToSearch)) {
-            $userIdToSearch = intval($userIdToSearch);
+            $userIdToSearch = (int) $userIdToSearch;
             $searchCondition .= " AND (ip.insert_user_id = $userIdToSearch)";
         }
 
@@ -1572,7 +1571,6 @@ class AnnouncementManager
         ) {
             // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.
-
             //if (!empty($user_id)) {
             if (0) {
                 if (is_array($group_memberships) &&

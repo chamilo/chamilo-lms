@@ -113,7 +113,7 @@ class AnnouncementManager
             $extraFields = $extraField->get_all(['filter = ?' => 1]);
             if (!empty($extraFields)) {
                 foreach ($extraFields as $extra) {
-                    $data["extra_".$extra['variable']] = '';
+                    $data['extra_'.$extra['variable']] = '';
                 }
             }
 

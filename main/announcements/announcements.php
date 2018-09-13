@@ -545,6 +545,8 @@ switch ($action) {
             $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));
         }
 
+        $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
+        $defaults['send_me_a_copy_by_email'] = true;
         $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
@@ -552,6 +554,7 @@ switch ($action) {
             $data = $form->getSubmitValues();
             $data['users'] = isset($data['users']) ? $data['users'] : [];
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
+            $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
 
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
@@ -576,8 +579,15 @@ switch ($action) {
                             api_get_session_id(),
                             $id,
                             $sendToUsersInSession,
-                            isset($data['send_to_hrm_users'])
+                            isset($data['send_to_hrm_users']),
+                            null,
+                            $sendMeCopy
                         );
+                    }
+
+                    if ($sendMeCopy) {
+                        $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $id);
+                        $email->sendAnnouncementEmailToMySelf();
                     }
 
                     Display::addFlash(

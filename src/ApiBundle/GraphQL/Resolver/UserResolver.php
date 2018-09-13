@@ -7,7 +7,8 @@ use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
-use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -16,58 +17,59 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
+class UserResolver implements ResolverInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
     /**
-     * Returns methods aliases.
+     * @param User         $user
+     * @param Argument     $args
+     * @param ResolveInfo  $info
+     * @param \ArrayObject $context
      *
-     * For instance:
-     * array('myMethod' => 'myAlias')
-     *
-     * @return array
+     * @return null
      */
-    public static function getAliases(): array
+    public function __invoke(User $user, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
-        return [
-            'resolveUserPicture' => 'user_picture',
-            'resolveEmail' => 'user_email',
-            'resolveUserMessages' => 'user_messages',
-            'resolveMessageContacts' => 'user_message_contacts',
-            'resolveCourses' => 'user_courses',
-            'resolveSessions' => 'user_sessions',
-        ];
+        $context->offsetSet('user', $user);
+
+        $method = 'resolve'.ucfirst($info->fieldName);
+
+        if (method_exists($this, $method)) {
+            return $this->$method($user, $args, $context);
+        }
+
+        $method = 'get'.ucfirst($info->fieldName);
+
+        if (method_exists($user, $method)) {
+            return $user->$method();
+        }
+
+        return null;
     }
 
     /**
-     * @param User $user
-     * @param int  $size
+     * @param User     $user
+     * @param Argument $args
      *
      * @return string
      */
-    public function resolveUserPicture(User $user, $size): string
+    public function resolvePicture(User $user, Argument $args): string
     {
         $assets = $this->container->get('templating.helper.assets');
-        $path = $user->getAvatarOrAnonymous((int) $size);
+        $path = $user->getAvatarOrAnonymous((int) $args['size']);
 
         return $assets->getUrl($path);
     }
 
     /**
      * @param User         $user
-     * @param \ArrayObject $context
      *
      * @return string
      */
-    public function resolveEmail(User $user, \ArrayObject $context)
+    public function resolveEmail(User $user)
     {
-        /** @var User $contextUser */
-        $contextUser = $context['user'];
-
-        if ($user->getId() === $contextUser->getId()) {
-            return $user->getEmail();
-        }
+        $this->protectCurrentUserData($user);
 
         $settingsManager = $this->container->get('chamilo.settings.manager');
         $showEmail = $settingsManager->getSetting('display.show_email_addresses') === 'true';
@@ -80,32 +82,30 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     }
 
     /**
-     * @param User         $user
-     * @param int          $lastId
-     * @param \ArrayObject $context
+     * @param User     $user
+     * @param Argument $args
      *
      * @return array
      */
-    public function resolveUserMessages(User $user, $lastId = 0, \ArrayObject $context): array
+    public function resolveMessages(User $user, Argument $args): array
     {
-        $this->protectUserData($context, $user);
+        $this->protectCurrentUserData($user);
 
         /** @var MessageRepository $messageRepo */
         $messageRepo = $this->em->getRepository('ChamiloCoreBundle:Message');
-        $messages = $messageRepo->getFromLastOneReceived($user, (int) $lastId);
+        $messages = $messageRepo->getFromLastOneReceived($user, (int) $args['lastId']);
 
         return $messages;
     }
 
     /**
-     * @param User         $user
-     * @param \ArrayObject $context
+     * @param User $user
      *
      * @return array
      */
-    public function resolveCourses(User $user, \ArrayObject $context)
+    public function resolveCourses(User $user)
     {
-        $this->protectUserData($context, $user);
+        $this->protectCurrentUserData($user);
 
         $courses = [];
         $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());
@@ -132,7 +132,7 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      */
     public function resolveMessageContacts(User $user, $filter, \ArrayObject $context): array
     {
-        $this->protectUserData($context, $user);
+        $this->protectCurrentUserData($context, $user);
 
         if (strlen($filter) < 3) {
             return [];
@@ -290,9 +290,9 @@ class UserResolver implements ResolverInterface, AliasedInterface, ContainerAwar
      *
      * @return array
      */
-    public function resolveSessions(User $user, \ArrayObject $context): array
+    public function resolveSessions(User $user): array
     {
-        $this->protectUserData($context, $user);
+        $this->protectCurrentUserData($user);
 
         $sessionsId = $this->getUserSessions($user);
 

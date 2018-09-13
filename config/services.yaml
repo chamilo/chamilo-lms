@@ -18,6 +18,12 @@ services:
     _instanceof:
         Sylius\Bundle\ResourceBundle\Controller\ResourceController:
             autowire: false
+        GraphQL\Type\Definition\Type:
+            tags: ['overblog_graphql.type']
+        Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface:
+            tags: ['overblog_graphql.resolver']
+        Overblog\GraphQLBundle\Definition\Resolver\MutationInterface:
+            tags: ['overblog_graphql.mutation']
 
     Chamilo\CoreBundle\Controller\ResourceUploaderController:
         autowire: false
@@ -41,13 +47,8 @@ services:
         arguments:
             $debug: '%kernel.debug%'
 
-    Chamilo\ApiBundle\GraphQL\Resolver\:
-        resource: '../src/ApiBundle/GraphQL/Resolver'
-        tags: ['overblog_graphql.resolver']
-
-    Chamilo\ApiBundle\GraphQL\Mutation\:
-        resource: '../src/ApiBundle/GraphQL/Mutation'
-        tags: ['overblog_graphql.mutation']
+    Chamilo\ApiBundle\GraphQL\:
+        resource: "../src/ApiBundle/GraphQL/*"
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 

@@ -6,7 +6,7 @@ Query:
             viewer:
                 description: "A registered user on the platform."
                 type: "User"
-                resolve: "@=resolver('viewer', [context])"
+                resolve: '@=resolver("viewer")'
             course:
                 description: 'Get the data from a course on the platform.'
                 type: 'Course'
@@ -33,6 +33,7 @@ User:
     type: object
     config:
         description: "Registered user."
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\UserResolver", [value, args, info, context])'
         fields:
             id:
                 description: "The unique ID of the user."
@@ -45,7 +46,6 @@ User:
                 type: "String"
             email:
                 type: "String"
-                resolve: "@=resolver('user_email', [value, context])"
             officialCode:
                 type: "String"
             status:
@@ -56,7 +56,6 @@ User:
                     size:
                         type: "ImageSize"
                         defaultValue: '@=constant("ICON_SIZE_MEDIUM")'
-                resolve: "@=resolver('user_picture', [value, args['size']])"
             messages:
                 description: 'Received messages for the user.'
                 type: '[UserMessage]'
@@ -65,7 +64,6 @@ User:
                         description: 'Last received by the app message ID.'
                         type: 'Int'
                         defaultValue: 0
-                resolve: "@=resolver('user_messages', [value, args['lastId'], context])"
             messageContacts:
                 description: 'Get potential users to send a message for the current user.'
                 type: '[User]'
@@ -73,15 +71,12 @@ User:
                     filter:
                         description: 'The search text to filter the user list.'
                         type: 'String!'
-                resolve: "@=resolver('user_message_contacts', [value, args['filter'], context])"
             courses:
                 description: 'Course list for the current user.'
                 type: '[Course]'
-                resolve: "@=resolver('user_courses', [value, context])"
             sessions:
                 description: 'Session list for the current user.'
                 type: '[Session]'
-                resolve: "@=resolver('user_sessions', [value, context])"
 
 UserMessage:
     type: object
@@ -116,6 +111,7 @@ Course:
     type: object
     config:
         description: 'A course registered on the platform.'
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseResolver", [value, args, info, context])'
         fields:
             id:
                 description: 'The unique ID of the course.'
@@ -135,15 +131,12 @@ Course:
                         description: 'It indicates whether to get the full-sized image.'
                         type: 'Boolean'
                         defaultValue: false
-                resolve: "@=resolver('course_picture', [value, args['fullSize']])"
             teachers:
                 description: 'Teachers list in course.'
                 type: "[User]"
-                resolve: "@=resolver('course_teachers', [value])"
             tools:
                 description: 'List of names from available tools for student view.'
                 type: '[String]'
-                resolve: "@=resolver('course_tools', [value, context])"
 
 SessionCategory:
     type: object
@@ -166,6 +159,7 @@ Session:
     type: object
     config:
         description: 'A session registered on the platform.'
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\SessionResolver", [value, args, info, context])'
         fields:
             id:
                 description: 'The unique ID of the session.'
@@ -176,13 +170,10 @@ Session:
                 type: 'SessionCategory'
             description:
                 type: 'String'
-                resolve: "@=resolver('session_description', [value])"
             numberOfCourses:
                 type: 'Int'
-                resolve: "@=resolver('session_nbrcourses', [value])"
             numberOfUsers:
                 type: 'Int'
-                resolve: "@=resolver('session_nbrusers', [value])"
             duration:
                 type: 'Int'
             displayStartDate:
@@ -201,4 +192,3 @@ Session:
                 type: 'User'
             courses:
                 type: '[Course]'
-                resolve: "@=resolver('session_courses', [value])"

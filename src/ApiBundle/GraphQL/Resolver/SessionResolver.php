@@ -7,7 +7,8 @@ use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
-use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -16,26 +17,27 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class SessionResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
+class SessionResolver implements ResolverInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
-    /**
-     * Returns methods aliases.
-     *
-     * For instance:
-     * array('myMethod' => 'myAlias')
-     *
-     * @return array
-     */
-    public static function getAliases(): array
+    public function __invoke(Session $session, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
-        return [
-            'resolveDescription' => 'session_description',
-            'resolveNumberCourses' => 'session_nbrcourses',
-            'resolveNumberUsers' => 'session_nbrusers',
-            'resolveCourses' => 'session_courses',
-        ];
+        $context->offsetSet('session', $session);
+
+        $method = 'resolve'.ucfirst($info->fieldName);
+
+        if (method_exists($this, $method)) {
+            return $this->$method($session, $args, $context);
+        }
+
+        $method = 'get'.ucfirst($info->fieldName);
+
+        if (method_exists($session, $method)) {
+            return $session->$method();
+        }
+
+        return null;
     }
 
     /**
@@ -57,7 +59,7 @@ class SessionResolver implements ResolverInterface, AliasedInterface, ContainerA
      *
      * @return int
      */
-    public function resolveNumberCourses(Session $session): int
+    public function resolveNumberOfCourses(Session $session): int
     {
         return $session->getNbrCourses();
     }
@@ -67,7 +69,7 @@ class SessionResolver implements ResolverInterface, AliasedInterface, ContainerA
      *
      * @return int
      */
-    public function resolveNumberUsers(Session $session): int
+    public function resolveNumberOfUsers(Session $session): int
     {
         return $session->getNbrUsers();
     }

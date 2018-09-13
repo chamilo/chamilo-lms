@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\UserBundle\Entity\User;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
@@ -43,18 +42,15 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     }
 
     /**
-     * @param \ArrayObject $context
-     *
      * @return User
      */
-    public function resolverViewer(\ArrayObject $context)
+    public function resolverViewer(): User
     {
-        $this->checkAuthorization($context);
+        $this->checkAuthorization();
 
-        /** @var User $user */
-        $user = $context->offsetGet('user');
+        $token = $this->container->get('security.token_storage')->getToken();
 
-        return $user;
+        return $token->getUser();
     }
 
     /**

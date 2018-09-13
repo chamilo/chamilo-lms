@@ -41,10 +41,7 @@ trait ApiGraphQLTrait
         $this->translator = $translator;
     }
 
-    /**
-     * @param \ArrayObject $context
-     */
-    public function checkAuthorization(\ArrayObject $context): void
+    public function checkAuthorization()
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $header = $request->headers->get('Authorization');
@@ -70,8 +67,6 @@ trait ApiGraphQLTrait
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->container->get('security.token_storage')->setToken($token);
         $this->container->get('session')->set('_security_main', serialize($token));
-
-        $context->offsetSet('user', $user);
     }
 
     /**
@@ -145,20 +140,21 @@ trait ApiGraphQLTrait
     }
 
     /**
-     * Throw a UserError if current user doesn't match with context's user.
+     * Throw a UserError if $user doesn't match with the current user.
      *
-     * @param \ArrayObject $context Current context
-     * @param User         $user    User to compare with the context's user
+     * @param User $user User to compare with the context's user
      */
-    private function protectUserData(\ArrayObject $context, User $user)
+    private function protectCurrentUserData(User $user)
     {
-        /** @var User $contextUser */
-        $contextUser = $context['user'];
+        $token = $this->container->get('security.token_storage')->getToken();
 
-        if ($user->getId() === $contextUser->getId()) {
+        /** @var User $currentUser */
+        $currentUser = $token->getUser();
+
+        if ($user->getId() === $currentUser->getId()) {
             return;
         }
 
-        throw new UserError($this->translator->trans('UserInfoDoesNotMatch'));
+        throw new UserError($this->translator->trans("The user info doesn't match."));
     }
 }

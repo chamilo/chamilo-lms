@@ -5,7 +5,8 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
-use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,36 +15,46 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class CourseResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
+class CourseResolver implements ResolverInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
     /**
-     * Returns methods aliases.
+     * @param Course       $course
+     * @param Argument     $args
+     * @param ResolveInfo  $info
+     * @param \ArrayObject $context
      *
-     * For instance:
-     * array('myMethod' => 'myAlias')
-     *
-     * @return array
+     * @return null
      */
-    public static function getAliases()
+    public function __invoke(Course $course, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
-        return [
-            'resolvePicture' => 'course_picture',
-            'resolveTeachers' => 'course_teachers',
-            'resolveTools' => 'course_tools',
-        ];
+        $context->offsetSet('course', $course);
+
+        $method = 'resolve'.ucfirst($info->fieldName);
+
+        if (method_exists($this, $method)) {
+            return $this->$method($course, $args, $context);
+        }
+
+        $method = 'get'.ucfirst($info->fieldName);
+
+        if (method_exists($course, $method)) {
+            return $course->$method();
+        }
+
+        return null;
     }
 
     /**
-     * @param Course $course
-     * @param bool   $fullSize
+     * @param Course   $course
+     * @param Argument $args
      *
      * @return null|string
      */
-    public function resolvePicture(Course $course, $fullSize = false)
+    public function resolvePicture(Course $course, Argument $args)
     {
-        return \CourseManager::getPicturePath($course, $fullSize);
+        return \CourseManager::getPicturePath($course, $args['fullSize']);
     }
 
     /**

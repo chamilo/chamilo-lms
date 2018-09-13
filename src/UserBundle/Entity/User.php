@@ -1531,7 +1531,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function getUsername(): string
     {
-        return $this->username;
+        return (string) $this->username;
     }
 
     /**

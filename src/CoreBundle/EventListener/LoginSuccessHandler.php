@@ -3,10 +3,11 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
-use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -19,27 +20,33 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     protected $router;
     protected $checker;
+    protected $settingsManager;
 
     /**
+     * LoginSuccessHandler constructor.
+     *
      * @param UrlGeneratorInterface         $urlGenerator
      * @param AuthorizationCheckerInterface $checker
+     * @param SettingsManager               $settingsManager
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $checker)
-    {
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator,
+        AuthorizationCheckerInterface $checker,
+        SettingsManager $settingsManager
+    ) {
         $this->router = $urlGenerator;
         $this->checker = $checker;
+        $this->settingsManager = $settingsManager;
     }
 
     /**
      * @param Request        $request
      * @param TokenInterface $token
      *
-     * @return null|RedirectResponse|\Symfony\Component\Security\Http\Authentication\Response
+     * @return null|RedirectResponse|Response
      */
-    public function onAuthenticationSuccess(
-        Request $request,
-        TokenInterface $token
-    ) {
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
         /** @var User $user */
         $user = $token->getUser();
         $userId = $user->getId();
@@ -69,7 +76,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         $response = null;
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = api_get_setting('page_after_login');
+        $pageAfterLogin = $this->settingsManager->getSetting('registration.page_after_login');
 
         $legacyIndex = $this->router->generate('legacy_index', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -94,7 +101,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         //$session->set('_user', $userInfo);
         //$session->set('is_platformAdmin', \UserManager::is_admin($userId));
         //$session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
-
         // Redirecting to a course or a session.
         if (api_get_setting('course.go_to_course_after_login') === 'true') {
             // Get the courses list
@@ -117,7 +123,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $id_session = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
-
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
             }
 

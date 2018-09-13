@@ -10,8 +10,6 @@ twig:
         show_footer: true
         software_name: Chamilo
         version: 2
-        news_counter:
-        news_list:
         messages_count:
         message_link:
         execution_stats:

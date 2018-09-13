@@ -18,7 +18,7 @@ class Encoder extends BasePasswordEncoder
     protected $method;
 
     /**
-     * @param $method
+     * @param string $method
      */
     public function __construct($method)
     {

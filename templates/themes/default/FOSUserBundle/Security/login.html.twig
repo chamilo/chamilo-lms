@@ -4,7 +4,9 @@
     {% block sonata_user_login %}
         {% block sonata_user_login_error %}
             {% if error %}
-                <div class="alert alert-danger alert-danger">{{ error|trans({}, 'FOSUserBundle') }}</div>
+                <div class="alert alert-danger alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'FOSUserBundle') }}
+                </div>
             {% endif %}
         {% endblock %}
         <div class="login-box-body">
@@ -43,7 +45,11 @@
                     </div>
 
                     <div class="form-group has-feedback">
-                        <a href="{{ path('fos_user_resetting_request') }}">{{ 'forgotten_password'|trans({}, 'SonataUserBundle') }}</a>
+                        {#<a href="{{ path('fos_user_resetting_request') }}">#}
+                        <a href="{{ path('legacy_main', { 'name' : 'auth/lostPassword.php'}) }}">
+
+                            {{ 'forgotten_password'|trans({}, 'SonataUserBundle') }}
+                        </a>
                     </div>
 
                     <div class="form-group">

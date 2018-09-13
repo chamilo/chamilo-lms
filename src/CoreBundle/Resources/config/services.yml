@@ -212,7 +212,7 @@ services:
     # Auth listeners
     chamilo_core.listener.login_success_handler:
         class: Chamilo\CoreBundle\EventListener\LoginSuccessHandler
-        arguments: ['@router', '@security.authorization_checker']
+        arguments: ['@router', '@security.authorization_checker','@chamilo.settings.manager']
 
     chamilo_core.listener.logout_success_handler:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler

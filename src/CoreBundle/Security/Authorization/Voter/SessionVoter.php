@@ -139,24 +139,26 @@ class SessionVoter extends Voter
 
                         return true;
                     }
-
-                    return false;
                 }
 
                 if ($this->sessionIsAvailableByDuration($session, $user)) {
                     if ($userIsGeneralCoach) {
                         $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+
+                        return true;
                     }
 
                     if ($userIsCourseCoach) {
                         $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+
+                        return true;
                     }
 
                     if ($userIsStudent) {
                         $user->addRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
-                    }
 
-                    return true;
+                        return true;
+                    }
                 }
 
                 return false;

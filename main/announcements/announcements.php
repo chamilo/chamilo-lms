@@ -450,7 +450,7 @@ switch ($action) {
                 );
                 // when we want to remind the users who have never been active
                 // then we have a different subject and content for the announcement
-                if ($_GET['since'] == 'never') {
+                if ($_GET['since'] === 'never') {
                     $title_to_modify = sprintf(
                         get_lang('RemindInactiveLearnersMailSubject'),
                         api_get_setting('siteName')
@@ -475,6 +475,7 @@ switch ($action) {
         $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
         if (isset($announcementInfo) && !empty($announcementInfo)) {
             $to = AnnouncementManager::load_edit_users('announcement', $id);
+
             $defaults = [
                 'title' => $announcementInfo['title'],
                 'content' => $announcementInfo['content'],

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 
@@ -122,7 +123,12 @@ class AnnouncementManager
                     if (isset($extra['value'])) {
                         /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
                         $value = $extra['value'];
-                        $data['extra_'.$value->getField()->getVariable()] = $value->getValue();
+                        if ($value instanceof ExtraFieldValues) {
+                            $field = $value->getField();
+                            if ($field) {
+                                $data['extra_'.$field->getVariable()] = $value->getValue();
+                            }
+                        }
                     }
                 }
             }

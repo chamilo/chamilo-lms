@@ -199,6 +199,6 @@ Session:
                 type: 'DateTime'
             generalCoach:
                 type: 'User'
-            couses:
+            courses:
                 type: '[Course]'
                 resolve: "@=resolver('session_courses', [value])"

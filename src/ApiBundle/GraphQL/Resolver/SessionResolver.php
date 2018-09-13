@@ -6,7 +6,7 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -81,29 +81,18 @@ class SessionResolver implements ResolverInterface, AliasedInterface, ContainerA
     {
         $authChecker = $this->container->get('security.authorization_checker');
 
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
-            $courses = [];
+        $courses = [];
 
-            /** @var SessionRelCourse $sessionCourse */
-            foreach ($session->getCourses() as $sessionCourse) {
-                $courses[] = $sessionCourse->getCourse();
+        /** @var SessionRelCourse $sessionCourse */
+        foreach ($session->getCourses() as $sessionCourse) {
+            $course = $sessionCourse->getCourse();
+
+            $session->setCurrentCourse($course);
+
+            if (false !== $authChecker->isGranted(SessionVoter::VIEW, $session)) {
+                $courses[] = $course;
             }
-
-            return $courses;
         }
-
-        $token = $this->container->get('security.token_storage')->getToken();
-        /** @var User $user */
-        $user = $token->getUser();
-        $courseList = \UserManager::get_courses_list_by_session($user->getId(), $session->getId());
-        $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-        $qb = $courseRepo->createQueryBuilder('c');
-        $courses = $qb
-            ->where(
-                $qb->expr()->in('id', array_column($courseList, 'real_id'))
-            )
-            ->getQuery()
-            ->getResult();
 
         return $courses;
     }

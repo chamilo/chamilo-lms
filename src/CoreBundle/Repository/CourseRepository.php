@@ -109,8 +109,10 @@ class CourseRepository extends EntityRepository
     public function getSubscribedUsersByStatus(Course $course, $status)
     {
         $queryBuilder = $this->getSubscribedUsers($course);
-        $wherePart = $queryBuilder->expr()->andx();
-        $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
+        $queryBuilder
+            ->andWhere(
+                $queryBuilder->expr()->eq('subscriptions.status', $status)
+            );
 
         return $queryBuilder;
     }

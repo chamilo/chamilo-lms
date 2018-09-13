@@ -3229,7 +3229,11 @@ class Exercise
      */
     public function showTimeControlJS($time_left)
     {
-        $time_left = intval($time_left);
+        $time_left = (int) $time_left;
+        $script = "redirectExerciseToResult();";
+        if ($this->type == ALL_ON_ONE_PAGE) {
+            $script = "save_now_all('validate');";
+        }
 
         return "<script>
             function openClockWarning() {
@@ -3247,6 +3251,7 @@ class Exercise
                         send_form();
                     }
                 });
+                
                 $('#clock_warning').dialog('open');
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
@@ -3259,7 +3264,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    save_now_all('validate');
+                    $script
                 } else {
                     // In exercise_reminder.php
                     final_submit();

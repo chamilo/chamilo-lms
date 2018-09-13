@@ -105,20 +105,7 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
             throw new UserError($translator->trans('Session not found.'));
         }
 
-        $checker = $this->container->get('security.authorization_checker');
-
-        if ($checker->isGranted('ROLE_ADMIN')) {
-            return $session;
-        }
-
-        /** @var User $currentUser */
-        $currentUser = $context->offsetGet('user');
-
-        if ($session->isReclaimableForUser($currentUser)) {
-            return $session;
-        }
-
-        throw new UserError($translator->trans('Not allowed.'));
+        return $session;
     }
 
     /**

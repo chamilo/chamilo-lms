@@ -1403,26 +1403,4 @@ class Session
 
         return false;
     }
-
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function isReclaimableForUser(User $user)
-    {
-        if ($this->isUserGeneralCoach($user)) {
-            return true;
-        }
-
-        if ($this->hasCoachInCourseList($user)) {
-            return true;
-        }
-
-        if ($this->hasStudentInCourseList($user)) {
-            return true;
-        }
-
-        return false;
-    }
 }

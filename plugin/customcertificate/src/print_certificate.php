@@ -32,6 +32,15 @@ if (intval($_GET['default']) == 1) {
     $enableCourse = api_get_course_setting('customcertificate_course_enable', $courseCode) == 1 ? true : false;
     $useDefault = api_get_course_setting('use_certificate_default', $courseCode) == 1 ? true : false;
 }
+
+if (empty($courseCode)) {
+    $courseCode = isset($_REQUEST['course_code']) ? Database::escape_string($_REQUEST['course_code']) : '';
+}
+
+if (empty($sessionId)) {
+    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : '';
+}
+
 $accessUrlId = api_get_current_access_url_id();
 
 $userList = [];
@@ -269,52 +278,52 @@ foreach ($userList as $userInfo) {
 
     $htmlText .= '<tr>';
     $htmlText .= '<td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text1'])) ? $infoCertificate['signature_text1'] : '').
-                '</td>
+        ((!empty($infoCertificate['signature_text1'])) ? $infoCertificate['signature_text1'] : '').
+        '</td>
                 <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text2'])) ? $infoCertificate['signature_text2'] : '').
-                '</td>
+        ((!empty($infoCertificate['signature_text2'])) ? $infoCertificate['signature_text2'] : '').
+        '</td>
                 <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text3'])) ? $infoCertificate['signature_text3'] : '').
-                '</td>
+        ((!empty($infoCertificate['signature_text3'])) ? $infoCertificate['signature_text3'] : '').
+        '</td>
                 <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text4'])) ? $infoCertificate['signature_text4'] : '').
-                '</td>
+        ((!empty($infoCertificate['signature_text4'])) ? $infoCertificate['signature_text4'] : '').
+        '</td>
                 <td colspan="4" class="seals" style="width:'.(2 * $widthCell).'mm">
                     '.((!empty($infoCertificate['seal'])) ? $plugin->get_lang('Seal') : '').
-                '</td>';
+        '</td>';
     $htmlText .= '</tr>';
     $htmlText .= '<tr>';
     $htmlText .= '<td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature1']))
-                ? '<img style="max-height: 100px; max-width: '.$widthCell.'mm;"
+        ((!empty($infoCertificate['signature1']))
+            ? '<img style="max-height: 100px; max-width: '.$widthCell.'mm;"
                     src="'.$path.$infoCertificate['signature1'].'" />'
-                : '').
-                '</td>
+            : '').
+        '</td>
                 <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature2']))
-                ? '<img style="max-height: 100px; '.$widthCell.'mm;"
+        ((!empty($infoCertificate['signature2']))
+            ? '<img style="max-height: 100px; '.$widthCell.'mm;"
                     src="'.$path.$infoCertificate['signature2'].'" />'
-                : '').
-                '</td>
+            : '').
+        '</td>
                 <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature3']))
-                ? '<img style="max-height: 100px; '.$widthCell.'mm;"
+        ((!empty($infoCertificate['signature3']))
+            ? '<img style="max-height: 100px; '.$widthCell.'mm;"
                     src="'.$path.$infoCertificate['signature3'].'" />'
-                : '').
-                '</td>
+            : '').
+        '</td>
                 <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature4']))
-                ? '<img style="max-height: 100px; '.$widthCell.'mm;"
+        ((!empty($infoCertificate['signature4']))
+            ? '<img style="max-height: 100px; '.$widthCell.'mm;"
                     src="'.$path.$infoCertificate['signature4'].'" />'
-                : '').
-                '</td>
+            : '').
+        '</td>
                 <td colspan="4" class="logo-seals" style="width:'.(2 * $widthCell).'mm">'.
-                ((!empty($infoCertificate['seal']))
-                ? '<img style="max-height: 100px; '.(2 * $widthCell).'mm;"
+        ((!empty($infoCertificate['seal']))
+            ? '<img style="max-height: 100px; '.(2 * $widthCell).'mm;"
                     src="'.$path.$infoCertificate['seal'].'" />'
-                : '').
-                '</td>';
+            : '').
+        '</td>';
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
     $htmlText .= '</div>';

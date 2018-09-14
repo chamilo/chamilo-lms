@@ -1034,6 +1034,11 @@ class ImportCsv
 
                 if (empty($courseInfo)) {
                     $this->logger->addInfo("Course '$courseCode' does not exists");
+                } else {
+                    if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                        $this->logger->addInfo("Course '".$courseInfo['code']."' has hidden visiblity. Skip");
+                        $errorFound = true;
+                    }
                 }
 
                 if (empty($sessionId)) {
@@ -1043,7 +1048,6 @@ class ImportCsv
                 $sessionInfo = [];
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $sessionInfo = api_get_session_info($sessionId);
-
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
                         $courseInfo['real_id']

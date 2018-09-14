@@ -86,9 +86,8 @@ trait ApiGraphQLTrait
 
         $encoder = $this->container->get('security.password_encoder');
         $isValid = $encoder->isPasswordValid(
-            $user->getPassword(),
-            $password,
-            $user->getSalt()
+            $user,
+            $password
         );
 
         if (!$isValid) {

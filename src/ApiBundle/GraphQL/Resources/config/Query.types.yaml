@@ -130,7 +130,7 @@ Course:
                         type: 'Boolean'
                         defaultValue: false
             teachers:
-                description: 'Teachers list in course.'
+                description: 'Teachers list in course. Or tutors list from course in session.'
                 type: "[User]"
             tools:
                 description: 'List of names from available tools for student view.'

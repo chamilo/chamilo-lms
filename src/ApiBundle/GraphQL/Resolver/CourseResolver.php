@@ -5,6 +5,8 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
@@ -58,12 +60,31 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
     }
 
     /**
-     * @param Course $course
+     * @param Course       $course
+     * @param Argument     $args
+     * @param \ArrayObject $context
      *
      * @return array
      */
-    public function resolveTeachers(Course $course)
+    public function resolveTeachers(Course $course, Argument $args, \ArrayObject $context)
     {
+        if ($context->offsetExists('session')) {
+            /** @var Session $session */
+            $session = $context->offsetGet('session');
+
+            if ($session) {
+                $coaches = [];
+                $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH);
+
+                /** @var SessionRelCourseRelUser $coachSubscription */
+                foreach ($coachSubscriptions as $coachSubscription) {
+                    $coaches[] = $coachSubscription->getUser();
+                }
+
+                return $coaches;
+            }
+        }
+
         $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
         $teachers = $courseRepo
             ->getSubscribedTeachers($course)

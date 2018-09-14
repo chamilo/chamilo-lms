@@ -135,6 +135,9 @@ Course:
             tools:
                 description: 'List of names from available tools for student view.'
                 type: '[String]'
+            toolDescription:
+                description: 'Description Tool for the current course.'
+                type: 'ToolDescription'
 
 SessionCategory:
     type: object
@@ -189,3 +192,55 @@ Session:
                 type: 'User'
             courses:
                 type: '[Course]'
+
+CourseTool:
+    type: interface
+    config:
+        description: 'A course tool.'
+        resolveType: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseToolResolver", [typeResolver, value, info, context])'
+        fields:
+            name:
+                type: 'String'
+            category:
+                type: 'String'
+            image:
+                type: 'String'
+            customIcon:
+                type: 'String'
+            isVisible:
+                type: 'Boolean'
+
+ToolDescription:
+    type: object
+    config:
+        description: 'Global summary of the course.'
+        interfaces: [CourseTool]
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\ToolDescriptionResolver", [value, args, info, context])'
+        fields:
+            name:
+                type: 'String'
+            category:
+                type: 'String'
+            image:
+                type: 'String'
+            customIcon:
+                type: 'String'
+            isVisible:
+                type: 'Boolean'
+            descriptions:
+                type: '[CourseDescription]'
+
+CourseDescription:
+    type: object
+    config:
+        description: 'A section for the course description.'
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseDescriptionResolver", [value, args, info, context])'
+        fields:
+            id:
+                type: 'Int'
+            title:
+                type: 'String'
+            content:
+                type: 'String'
+            type:
+                type: 'Int'

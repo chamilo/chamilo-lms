@@ -23,11 +23,11 @@ trait ApiGraphQLTrait
     /**
      * @var EntityManager
      */
-    private $em;
+    protected $em;
     /**
      * @var TranslatorInterface
      */
-    private $translator;
+    protected $translator;
 
     /**
      * ApiGraphQLTrait constructor.

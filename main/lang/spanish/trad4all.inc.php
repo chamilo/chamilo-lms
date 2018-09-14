@@ -8326,4 +8326,7 @@ $DifferenceOfDaysAndCalendar = "Diferencia entre días y calendario";
 $SkillUserList = "Lista de competencias y usuarios";
 $CourseId = "ID de curso";
 $CareDetailView = "Vista detallada de vida estudiantil";
+$MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "Más datos disponibles en nuestra base de datos pero truncados por razones de eficiencia.";
+$SendAnnouncementCopyToMyself = "Enviarme una copia por e-mail.";
+$CourseHoursDuration = "Duración del curso (h)";
 ?>

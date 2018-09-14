@@ -3855,7 +3855,7 @@ $NewBloc = "Autre";
 $TeachingHours = "Heures académiques";
 $Area = "Département";
 $InProcess = "En cours";
-$CourseDescriptionUpdated = "La description du cour a été mise à jour";
+$CourseDescriptionUpdated = "La description du cours a été mise à jour";
 $CourseDescriptionDeleted = "La description du cours a été supprimée";
 $PreventSessionAdminsToManageAllUsersComment = "Lorsque cette option est activée, les administrateurs de sessions ne pourront voir que les utilisateurs qu'ils ont eux-mêmes créés.";
 $InvalidId = "Cet identifiant n'est pas valide.";
@@ -8234,4 +8234,7 @@ $DifferenceOfDaysAndCalendar = "Différence entre jours et calendrier";
 $SkillUserList = "Liste des compétences et utilisateurs";
 $CourseId = "ID de cours";
 $CareDetailView = "Vue détaillée de vie étudiante";
+$MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "Plus de données disponibles mais tronquées pour des raisons d'efficacité.";
+$SendAnnouncementCopyToMyself = "M'envoyer une copie par e-mail.";
+$CourseHoursDuration = "Durée du cours (h)";
 ?>

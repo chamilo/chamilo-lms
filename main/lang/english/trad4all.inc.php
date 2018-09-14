@@ -8303,4 +8303,5 @@ $CourseId = "Course ID";
 $CareDetailView = "Student care detail view";
 $MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "More data available in the database but trunked for efficiency reasons.";
 $SendAnnouncementCopyToMyself = "Send a copy by email to myself.";
+$CourseHoursDuration = "Course duration (h)";
 ?>

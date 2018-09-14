@@ -3229,7 +3229,11 @@ class Exercise
      */
     public function showTimeControlJS($time_left)
     {
-        $time_left = intval($time_left);
+        $time_left = (int) $time_left;
+        $script = "redirectExerciseToResult();";
+        if ($this->type == ALL_ON_ONE_PAGE) {
+            $script = "save_now_all('validate');";
+        }
 
         return "<script>
             function openClockWarning() {
@@ -3247,6 +3251,7 @@ class Exercise
                         send_form();
                     }
                 });
+                
                 $('#clock_warning').dialog('open');
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
@@ -3259,7 +3264,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    save_now_all('validate');
+                    $script
                 } else {
                     // In exercise_reminder.php
                     final_submit();
@@ -4731,6 +4736,7 @@ class Exercise
                                 $questionScore
                             );
                         } elseif ($answerType == HOT_SPOT) {
+                            $correctAnswerId = 0;
                             /**
                              * @var int
                              * @var TrackEHotspot $hotspot
@@ -8200,17 +8206,17 @@ class Exercise
                 '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
-            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
+
+            $msg = str_replace("#exercise#", $this->exercise, $msg);
+            $msg = str_replace("#firstName#", $user_info['firstname'], $msg);
+            $msg = str_replace("#lastName#", $user_info['lastname'], $msg);
+            $msg = str_replace("#mail#", $user_info['email'], $msg);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg);
 
             if ($origin != 'learnpath') {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
-            $msg1 = str_replace("#url#", $url_email, $msg);
-            $mail_content = $msg1;
+            $msg = str_replace("#url#", $url_email, $msg);
             $subject = get_lang('OpenQuestionsAttempted');
 
             if (!empty($teachers)) {
@@ -8218,7 +8224,7 @@ class Exercise
                     MessageManager::send_message_simple(
                         $user_id,
                         $subject,
-                        $mail_content
+                        $msg
                     );
                 }
             }

@@ -4284,7 +4284,7 @@ class CourseManager
         $now = date('Y-m-d h:i:s');
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
-        $course_visibility = $course_info['visibility'];
+        $course_visibility = (int) $course_info['visibility'];
 
         if ($course_visibility === COURSE_VISIBILITY_HIDDEN) {
             return '';
@@ -6051,7 +6051,7 @@ class CourseManager
     public static function addGroupMultiSelect($form, $groupInfo, $to = [])
     {
         $group_users = GroupManager::get_subscribed_users($groupInfo);
-        $array = self::buildSelectOptions(null, $group_users, $to);
+        $array = self::buildSelectOptions([$groupInfo], $group_users, $to);
 
         $result = [];
         foreach ($array as $content) {
@@ -6089,14 +6089,19 @@ class CourseManager
                         "GROUP:".$groupId,
                         $alreadySelected
                     )
-                    ) { // $alreadySelected is the array containing the groups (and users) that are already selected
-                        $user_label = ($thisGroup['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
-                        $user_disabled = ($thisGroup['userNb'] > 0) ? "" : "disabled=disabled";
+                    ) {
+                        $userCount = isset($thisGroup['userNb']) ? $thisGroup['userNb'] : 0;
+                        if (empty($userCount)) {
+                            $userCount = isset($thisGroup['count_users']) ? $thisGroup['count_users'] : 0;
+                        }
+                        // $alreadySelected is the array containing the groups (and users) that are already selected
+                        $user_label = ($userCount > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
+                        $user_disabled = ($userCount > 0) ? "" : "disabled=disabled";
                         $result[] = [
                             'disabled' => $user_disabled,
                             'value' => "GROUP:".$groupId,
                             // The space before "G" is needed in order to advmultiselect.php js puts groups first
-                            'content' => " G: ".$thisGroup['name']." - ".$thisGroup['userNb']." ".$user_label,
+                            'content' => " G: ".$thisGroup['name']." - ".$userCount." ".$user_label,
                         ];
                     }
                 }

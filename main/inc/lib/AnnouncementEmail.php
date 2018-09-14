@@ -275,6 +275,25 @@ class AnnouncementEmail
     }
 
     /**
+     * Send announcement by email to myself
+     */
+    public function sendAnnouncementEmailToMySelf()
+    {
+        $userId = api_get_user_id();
+        $subject = $this->subject();
+        $message = $this->message($userId);
+
+        MessageManager::send_message_simple(
+            $userId,
+            $subject,
+            $message,
+            api_get_user_id(),
+            false,
+            true
+        );
+    }
+
+    /**
      * Send emails to users.
      *
      * @param bool $sendToUsersInSession

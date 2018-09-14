@@ -240,11 +240,11 @@ class ImportCsv
                 'teachers-static',
                 'courses-static',
                 'sessions-static',
-                'calendar-static',
                 'sessionsextid-static',
                 'unsubscribe-static',
                 'unsubsessionsextid-static',
                 'subsessionsextid-static',
+                'calendar-static',
             ];
 
             foreach ($sections as $section) {
@@ -667,6 +667,10 @@ class ImportCsv
                         false //$send_mail = false
                     );
 
+                    $row['extra_mail_notify_invitation'] = 1;
+                    $row['extra_mail_notify_message'] = 1;
+                    $row['extra_mail_notify_group_message'] = 1;
+
                     if ($userId) {
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') {
@@ -831,6 +835,10 @@ class ImportCsv
                         null, //$encrypt_method = '',
                         false //$send_mail = false
                     );
+
+                    $row['extra_mail_notify_invitation'] = 1;
+                    $row['extra_mail_notify_message'] = 1;
+                    $row['extra_mail_notify_group_message'] = 1;
 
                     if ($result) {
                         foreach ($row as $key => $value) {
@@ -1026,13 +1034,20 @@ class ImportCsv
 
                 if (empty($courseInfo)) {
                     $this->logger->addInfo("Course '$courseCode' does not exists");
+                } else {
+                    if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                        $this->logger->addInfo("Course '".$courseInfo['code']."' has hidden visiblity. Skip");
+                        $errorFound = true;
+                    }
                 }
 
                 if (empty($sessionId)) {
-                    $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
+                    $this->logger->addInfo("external_sessionID: $externalSessionId does not exists.");
                 }
                 $teacherId = null;
+                $sessionInfo = [];
                 if (!empty($sessionId) && !empty($courseInfo)) {
+                    $sessionInfo = api_get_session_info($sessionId);
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
                         $courseInfo['real_id']
@@ -1054,7 +1069,6 @@ class ImportCsv
                             $teacher = current($teachers);
                             $teacherId = $teacher['user_id'];
                         } else {
-                            $sessionInfo = api_get_session_info($sessionId);
                             $teacherId = $sessionInfo['id_coach'];
                         }
                     }
@@ -1080,14 +1094,27 @@ class ImportCsv
                 $startDateMonth = substr($date, 4, 2);
                 $startDateDay = substr($date, 6, 8);
 
-                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
-                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
+                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.':00';
+                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.':00';
 
                 if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
-                    $this->logger->addInfo(
-                        "Verify your dates:  '$startDate' : '$endDate' "
-                    );
+                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
                     $errorFound = true;
+                }
+
+                // Check session dates
+                if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
+                    $date = new \DateTime($sessionInfo['access_start_date']);
+                    $interval = new \DateInterval('P7D');
+                    $date->sub($interval);
+                    if ($date->getTimestamp() > time()) {
+                        $this->logger->addInfo(
+                            "Calendar event # ".$row['external_calendar_itemID']." 
+                            in session [$externalSessionId] was not added 
+                            because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
+                        );
+                        $errorFound = true;
+                    }
                 }
 
                 if ($errorFound == false) {
@@ -1107,7 +1134,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo("No events to add");
+                $this->logger->addInfo('No events to add');
 
                 return 0;
             }
@@ -1117,9 +1144,7 @@ class ImportCsv
             $externalEventId = null;
 
             $extraField = new ExtraField('calendar_event');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
                 $this->logger->addInfo(
@@ -1379,6 +1404,12 @@ class ImportCsv
                         $this->logger->addInfo(
                             "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
+
+                        $senderId = $this->defaultAdminId;
+                        if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
+                            $senderId = $coaches[0];
+                        }
+
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
@@ -1392,12 +1423,12 @@ class ImportCsv
                             null,
                             null,
                             false,
-                            $this->defaultAdminId
+                            $senderId
                         );
 
                         if ($announcementId) {
-                            $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
-                            $this->logger->addInfo("<<--SENDING MAIL-->>");
+                            $this->logger->addInfo("Announcement added: $announcementId in $info");
+                            $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
                             $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,
@@ -1406,11 +1437,11 @@ class ImportCsv
                                 false,
                                 false,
                                 $this->logger,
-                                $this->defaultAdminId
+                                $senderId
                             );
                         } else {
                             $this->logger->addError(
-                                "Error when trying to add announcement with title ".$subject." here: $info"
+                                "Error when trying to add announcement with title $subject here: $info and SenderId = $senderId"
                             );
                         }
                     } else {

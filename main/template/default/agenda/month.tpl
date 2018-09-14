@@ -204,8 +204,13 @@ $(document).ready(function() {
     });
 
     FC.views.CustomView = CustomView; // register our class with the view system
+    var height = '';
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        height = 'auto';
+    }
 
 	var calendar = $('#calendar').fullCalendar({
+        height: height,
 		header: {
 			left: 'today,prev,next',
 			center: 'title',
@@ -412,7 +417,8 @@ $(document).ready(function() {
                     content: onHoverInfo,
                     position: {
                         at: 'top center',
-                        my: 'bottom center'
+                        my: 'bottom center',
+                        viewport: $(window)
                     }
                 });
 			}
@@ -422,6 +428,36 @@ $(document).ready(function() {
             var end = calEvent.end;
             var diffDays = moment(end).diff(start, 'days');
             var endDateMinusOne = '';
+
+            // If event is not editable then just return the qtip
+            if (!calEvent.editable) {
+                var onHoverInfo = '';
+                {% if calEvent.description %}
+                if (calEvent.description) {
+                    onHoverInfo = calEvent.description;
+                }
+                {% endif %}
+                {% if on_hover_info.comment %}
+                if (calEvent.comment) {
+                    onHoverInfo = onHoverInfo + calEvent.comment;
+                }
+                {% endif %}
+
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    $(this).qtip({
+                        overwrite: false,
+                        show: {ready: true},
+                        content: onHoverInfo,
+                        position: {
+                            at: 'top center',
+                            my: 'bottom center',
+                            viewport: $(window)
+                        }
+                    });
+
+                    return;
+                }
+            }
 
             if (end) {
                 var clone = end.clone();

@@ -336,6 +336,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             null,
             !$notEmptyList
         );
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: resume_session.php?id_session='.$id_session);
         exit;
     }

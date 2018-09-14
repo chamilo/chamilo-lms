@@ -2651,6 +2651,8 @@ class learnpathItem
 
                                                 return $returnstatus;
                                             }
+                                        } else {
+                                            return $returnstatus;
                                         }
                                     }
                                 } else {

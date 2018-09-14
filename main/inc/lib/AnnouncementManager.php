@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 
@@ -29,6 +30,7 @@ class AnnouncementManager
     {
         $tags = [
             '((user_name))',
+            '((user_email))',
             '((user_firstname))',
             '((user_lastname))',
             '((user_official_code))',
@@ -93,8 +95,10 @@ class AnnouncementManager
         $data['user_firstname'] = '';
         $data['user_lastname'] = '';
         $data['user_official_code'] = '';
+        $data['user_email'] = '';
         if (!empty($readerInfo)) {
             $data['user_name'] = $readerInfo['username'];
+            $data['user_email'] = $readerInfo['email'];
             $data['user_firstname'] = $readerInfo['firstname'];
             $data['user_lastname'] = $readerInfo['lastname'];
             $data['user_official_code'] = $readerInfo['official_code'];
@@ -110,7 +114,7 @@ class AnnouncementManager
             $extraFields = $extraField->get_all(['filter = ?' => 1]);
             if (!empty($extraFields)) {
                 foreach ($extraFields as $extra) {
-                    $data["extra_".$extra['variable']] = '';
+                    $data['extra_'.$extra['variable']] = '';
                 }
             }
 
@@ -119,7 +123,12 @@ class AnnouncementManager
                     if (isset($extra['value'])) {
                         /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
                         $value = $extra['value'];
-                        $data['extra_'.$value->getField()->getVariable()] = $value->getValue();
+                        if ($value instanceof ExtraFieldValues) {
+                            $field = $value->getField();
+                            if ($field) {
+                                $data['extra_'.$field->getVariable()] = $value->getValue();
+                            }
+                        }
                     }
                 }
             }
@@ -731,8 +740,7 @@ class AnnouncementManager
             }
 
             // Store in item_property (first the groups, then the users)
-            //if (!isset($to_users)) {
-            if (isset($to_users[0]) && $to_users[0] === 'everyone') {
+            if (empty($to_users) || (isset($to_users[0]) && $to_users[0] === 'everyone')) {
                 // when no user is selected we send it to everyone
                 $send_to = CourseManager::separateUsersGroups($to);
                 // storing the selected groups
@@ -1554,7 +1562,7 @@ class AnnouncementManager
         }
 
         if (!empty($userIdToSearch)) {
-            $userIdToSearch = intval($userIdToSearch);
+            $userIdToSearch = (int) $userIdToSearch;
             $searchCondition .= " AND (ip.insert_user_id = $userIdToSearch)";
         }
 
@@ -1569,7 +1577,6 @@ class AnnouncementManager
         ) {
             // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.
-
             //if (!empty($user_id)) {
             if (0) {
                 if (is_array($group_memberships) &&

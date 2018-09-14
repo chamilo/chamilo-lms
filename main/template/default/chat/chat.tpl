@@ -121,7 +121,13 @@ $(document).on('ready', function () {
                         '           </button>';
                 }
                 html += '           </li>' +
+
+                    {% if not 'hide_username_in_course_chat'|api_get_configuration_value %}
                     '           <li><small>' + user.username + '</small></li>' +
+                    {% else %}
+                    '           <li>&nbsp;</li>' +
+                    {% endif %}
+
                     '       </ul>' +
                     '   </div>' +
                     '</li>';

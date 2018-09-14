@@ -436,7 +436,7 @@ $content = $tpl->fetch($blogLayout);
 if ($actionsLeft) {
     $tpl->assign(
         'actions',
-        Display::return_introduction_section(TOOL_BLOGS)
+        Display::return_introduction_section(TOOL_BLOGS."_$blog_id")
             .Display::toolbarAction('toolbar', [$actionsLeft])
     );
 }

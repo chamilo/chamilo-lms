@@ -41,7 +41,12 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     $formToString = $form->returnForm();
 
     $formDelete = new FormValidator('delete_account', 'post', api_get_self().'?action=delete_account&user_id='.$userId);
-    $formDelete->addTextarea('explanation', [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')], [], true);
+    $formDelete->addTextarea(
+        'explanation',
+        [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')],
+        [],
+        true
+    );
     $formDelete->addHidden('action', 'delete_account');
     $formDelete->addButtonDelete(get_lang('DeleteAccount'));
     $formToString .= $formDelete->returnForm();
@@ -105,19 +110,6 @@ switch ($action) {
             $explanation = $formDelete->getSubmitValue('explanation');
             UserManager::createDataPrivacyExtraFields();
 
-            // Remove delete agreement if it was sent:
-            /*UserManager::update_extra_field_value(
-                $userId,
-                'request_for_legal_agreement_consent_removal',
-                ''
-            );
-
-            UserManager::update_extra_field_value(
-                $userId,
-                'request_for_legal_agreement_consent_removal_justification',
-                ''
-            );*/
-
             UserManager::update_extra_field_value(
                 $userId,
                 'request_for_delete_account',
@@ -173,13 +165,6 @@ switch ($action) {
                 'request_for_legal_agreement_consent_removal_justification',
                 $explanation
             );
-
-            /*$extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $userId,
-                'legal_accept'
-            );
-            $result = $extraFieldValue->delete($value['id']);*/
 
             Display::addFlash(Display::return_message(get_lang('Sent')));
 
@@ -255,7 +240,7 @@ if ($allowSocial) {
 $personalDataContent = '<ul>';
 $properties = json_decode($propertiesToJson);
 $webCoursePath = api_get_path(WEB_COURSE_PATH);
-
+$showWarningMessage = false;
 foreach ($properties as $key => $value) {
     if (is_array($value) || is_object($value)) {
         switch ($key) {
@@ -297,6 +282,9 @@ foreach ($properties as $key => $value) {
                     if (empty($subValue)) {
                         $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                     } else {
+                        if (count($subValue) === 1000) {
+                            $showWarningMessage = true;
+                        }
                         foreach ($subValue as $subSubValue) {
                             if ($category === 'DocumentsAdded') {
                                 $documentLink = Display::url(
@@ -445,6 +433,10 @@ $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
     $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
+}
+
+if ($showWarningMessage) {
+    Display::addFlash(Display::return_message(get_lang('MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons')));
 }
 
 // Block Social Avatar

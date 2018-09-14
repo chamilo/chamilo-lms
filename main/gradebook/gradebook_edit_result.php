@@ -37,8 +37,23 @@ if ($edit_result_form->validate()) {
         if (empty($score)) {
             $score = 0;
         }
-        $result->set_score(api_number_format($score, api_get_setting('gradebook_number_decimals')));
+        $score = api_number_format($score, api_get_setting('gradebook_number_decimals'));
+        $result->set_score($score);
         $result->save();
+
+        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        if ($allowMultipleAttempts) {
+            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
+            $now = api_get_utc_datetime();
+            $params = [
+                'result_id' => $result->get_id(),
+                'score' => $score,
+                'comment' => '',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+            Database::insert($table, $params);
+        }
     }
     Display::addFlash(Display::return_message(get_lang('AllResultsEdited')));
     header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq());

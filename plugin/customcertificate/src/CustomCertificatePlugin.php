@@ -216,12 +216,13 @@ class CustomCertificatePlugin extends Plugin
             return [];
         }
 
+        $userId = api_get_user_id();
         $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = "SELECT cer.user_id AS user_id, cat.session_id AS session_id, cat.course_code AS course_code
                 FROM $certificateTable cer
                 INNER JOIN $categoryTable cat
-                ON (cer.cat_id = cat.id)
+                ON (cer.cat_id = cat.id AND cer.user_id = $userId)
                 WHERE cer.id = $id";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
@@ -251,7 +252,7 @@ class CustomCertificatePlugin extends Plugin
     {
         $certId = (int) $certId;
         if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true') {
-            $infoCertificate = CustomCertificatePlugin::getCertificateData($certId);
+            $infoCertificate = self::getCertificateData($certId);
             if (!empty($infoCertificate)) {
                 if ($certificate->user_id == api_get_user_id() && !empty($certificate->certificate_data)) {
                     $certificateId = $certificate->certificate_data['id'];

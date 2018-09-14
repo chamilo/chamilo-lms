@@ -962,29 +962,38 @@ class Exercise
 
         $result['question_list'] = isset($question_list) ? $question_list : [];
         $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : [];
+        $parentsLoaded = [];
         // Adding category info in the category list with question list:
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
+
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
-                $cat = (array) $cat;
-                $cat['iid'] = $cat['id'];
+                if ($cat) {
+                    $cat = (array) $cat;
+                    $cat['iid'] = $cat['id'];
+                }
+
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
-                if (!empty($cat['parent_id'])) {
+                if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
+                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
                         $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
+                    $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
                     $path = $repo->getPath($categoryEntity);
+
                     $index = 0;
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
+
                     /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent */
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();

@@ -6,6 +6,7 @@
  * This means creating a new URL of ID 1 and moving all previous records
  * referencing ID 1 to ID 2.
  */
+die();
 require __DIR__.'/../../main/inc/global.inc.php';
 
 $tableAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL);

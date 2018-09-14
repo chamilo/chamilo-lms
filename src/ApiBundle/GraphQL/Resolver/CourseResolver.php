@@ -95,13 +95,24 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
     }
 
     /**
-     * @param Course $course
+     * @param Course       $course
+     *
+     * @param Argument     $args
+     * @param \ArrayObject $context
      *
      * @return array
      */
-    public function resolveTools(Course $course)
+    public function resolveTools(Course $course, Argument $args, \ArrayObject $context)
     {
-        $tools = \CourseHome::get_tools_category(TOOL_STUDENT_VIEW, $course->getId());
+        $sessionId = 0;
+
+        if ($context->offsetExists('session')) {
+            /** @var Session $session */
+            $session = $context->offsetGet('session');
+            $sessionId = $session->getId();
+        }
+
+        $tools = \CourseHome::get_tools_category(TOOL_STUDENT_VIEW, $course->getId(), $sessionId);
 
         return array_column($tools, 'name');
     }

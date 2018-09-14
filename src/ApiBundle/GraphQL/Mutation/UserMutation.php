@@ -35,19 +35,17 @@ class UserMutation implements MutationInterface, AliasedInterface, ContainerAwar
     }
 
     /**
-     * @param Argument     $args
-     * @param \ArrayObject $context
+     * @param Argument $args
      *
      * @return array
      */
-    public function mutateSendMessage(Argument $args, \ArrayObject $context): array
+    public function mutateSendMessage(Argument $args): array
     {
-        $this->checkAuthorization($context);
+        $this->checkAuthorization();
 
-        /** @var User $contextUser */
-        $contextUser = $context['user'];
+        $currentUser = $this->getCurrentUser();
         $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
-        $users = $usersRepo->findUsersToSendMessage($contextUser->getId());
+        $users = $usersRepo->findUsersToSendMessage($currentUser->getId());
         $result = [];
 
         foreach ($args['receivers'] as $receiverId) {
@@ -76,7 +74,7 @@ class UserMutation implements MutationInterface, AliasedInterface, ContainerAwar
                     0,
                     0,
                     0,
-                    $contextUser->getId()
+                    $currentUser->getId()
                 );
 
                 $item['sent'] = (bool) $messageId;

@@ -5,7 +5,8 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\SessionCategory;
-use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,24 +15,33 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class SessionCategoryResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
+class SessionCategoryResolver implements ResolverInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
     /**
-     * Returns methods aliases.
+     * @param SessionCategory $sessionCategory
+     * @param Argument        $args
+     * @param ResolveInfo     $info
+     * @param \ArrayObject    $context
      *
-     * For instance:
-     * array('myMethod' => 'myAlias')
-     *
-     * @return array
+     * @return null
      */
-    public static function getAliases(): array
+    public function __invoke(SessionCategory $sessionCategory, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
-        return [
-            'resolveStartDate' => 'sessioncategory_startdate',
-            'resolveEndDate' => 'sessioncategory_enddate',
-        ];
+        $method = 'resolve'.ucfirst($info->fieldName);
+
+        if (method_exists($this, $method)) {
+            return $this->$method($sessionCategory, $args, $context);
+        }
+
+        $method = 'get'.ucfirst($info->fieldName);
+
+        if (method_exists($sessionCategory, $method)) {
+            return $sessionCategory->$method();
+        }
+
+        return null;
     }
 
     /**

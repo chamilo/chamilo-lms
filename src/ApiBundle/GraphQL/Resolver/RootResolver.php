@@ -48,25 +48,20 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     {
         $this->checkAuthorization();
 
-        $token = $this->container->get('security.token_storage')->getToken();
-
-        return $token->getUser();
+        return $this->getCurrentUser();
     }
 
     /**
-     * @param int          $courseId
-     * @param \ArrayObject $context
+     * @param int $courseId
      *
      * @return Course|null
      */
-    public function resolveCourse($courseId, \ArrayObject $context)
+    public function resolveCourse($courseId)
     {
-        $this->checkAuthorization($context);
+        $this->checkAuthorization();
 
         $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
         $course = $courseRepo->find($courseId);
-
-        $context->offsetSet('course', $course);
 
         if (!$course) {
             throw new UserError($this->translator->trans('NoCourse'));
@@ -82,20 +77,18 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     }
 
     /**
-     * @param int          $sessionId
-     * @param \ArrayObject $context
+     * @param int $sessionId
      *
      * @return Session
      */
-    public function resolveSession($sessionId, \ArrayObject $context)
+    public function resolveSession($sessionId)
     {
-        $this->checkAuthorization($context);
+        $this->checkAuthorization();
 
         $sessionManager = $this->container->get('chamilo_core.entity.manager.session_manager');
         $translator = $this->translator;
         /** @var Session $session */
         $session = $sessionManager->find($sessionId);
-        $context->offsetSet('session', $session);
 
         if (!$session) {
             throw new UserError($translator->trans('Session not found.'));
@@ -105,14 +98,13 @@ class RootResolver implements ResolverInterface, AliasedInterface, ContainerAwar
     }
 
     /**
-     * @param int          $categoryId
-     * @param \ArrayObject $context
+     * @param int $categoryId
      *
      * @return SessionCategory|null
      */
-    public function resolveSessionCategory($categoryId, \ArrayObject $context)
+    public function resolveSessionCategory($categoryId)
     {
-        $this->checkAuthorization($context);
+        $this->checkAuthorization();
 
         $repo = $this->em->getRepository('ChamiloCoreBundle:SessionCategory');
         /** @var SessionCategory $category */

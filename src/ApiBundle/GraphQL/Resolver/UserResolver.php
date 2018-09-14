@@ -124,15 +124,14 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
     }
 
     /**
-     * @param User         $user
-     * @param string       $filter
-     * @param \ArrayObject $context
+     * @param User   $user
+     * @param string $filter
      *
      * @return array
      */
-    public function resolveMessageContacts(User $user, $filter, \ArrayObject $context): array
+    public function resolveMessageContacts(User $user, $filter): array
     {
-        $this->protectCurrentUserData($context, $user);
+        $this->protectCurrentUserData($user);
 
         if (strlen($filter) < 3) {
             return [];

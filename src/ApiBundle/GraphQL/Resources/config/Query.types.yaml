@@ -82,6 +82,7 @@ UserMessage:
     type: object
     config:
         description: 'Received message by user.'
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\MessageResolver", [value, args, info, context])'
         fields:
             id:
                 description: 'The unique ID of the message.'
@@ -92,7 +93,6 @@ UserMessage:
                 type: 'String'
             sender:
                 type: 'User'
-                resolve: "@=resolver('message_sender', [value])"
             sendDate:
                 type: 'DateTime'
             excerpt:
@@ -102,10 +102,8 @@ UserMessage:
                         description: 'The approximate desired length. 50 chars by default.'
                         type: 'Int'
                         defaultValue: 50
-                resolve: "@=resolver('message_excerpt', [value, args['length']])"
             hasAttachments:
                 type: 'Boolean'
-                resolve: "@=resolver('message_has_attachments', [value])"
 
 Course:
     type: object
@@ -142,6 +140,7 @@ SessionCategory:
     type: object
     config:
         description: 'A session category.'
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\SessionCategoryResolver", [value, args, info, context])'
         fields:
             id:
                 description: 'The unique ID of the category.'
@@ -150,10 +149,8 @@ SessionCategory:
                 type: 'String'
             startDate:
                 type: 'DateTime'
-                resolve: "@=resolver('sessioncategory_startdate', [value])"
             endDate:
                 type: 'DateTime'
-                resolve: "@=resolver('sessioncategory_enddate', [value])"
 
 Session:
     type: object

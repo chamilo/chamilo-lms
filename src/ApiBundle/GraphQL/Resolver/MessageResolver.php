@@ -5,7 +5,8 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Message;
-use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,25 +15,33 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
-class MessageResolver implements ResolverInterface, AliasedInterface, ContainerAwareInterface
+class MessageResolver implements ResolverInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
     /**
-     * Returns methods aliases.
+     * @param Message      $message
+     * @param Argument     $args
+     * @param ResolveInfo  $info
+     * @param \ArrayObject $context
      *
-     * For instance:
-     * array('myMethod' => 'myAlias')
-     *
-     * @return array
+     * @return null
      */
-    public static function getAliases()
+    public function __invoke(Message $message, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
-        return [
-            'resolveSender' => 'message_sender',
-            'resolveExcerpt' => 'message_excerpt',
-            'resolveHasAttachments' => 'message_has_attachments',
-        ];
+        $method = 'resolve'.ucfirst($info->fieldName);
+
+        if (method_exists($this, $method)) {
+            return $this->$method($message, $args, $context);
+        }
+
+        $method = 'get'.ucfirst($info->fieldName);
+
+        if (method_exists($message, $method)) {
+            return $message->$method();
+        }
+
+        return null;
     }
 
     /**
@@ -46,18 +55,18 @@ class MessageResolver implements ResolverInterface, AliasedInterface, ContainerA
     }
 
     /**
-     * @param Message $message
-     * @param int     $length
+     * @param Message  $message
+     * @param Argument $args
      *
      * @return string
      */
-    public function resolveExcerpt(Message $message, $length = 50)
+    public function resolveExcerpt(Message $message, Argument $args)
     {
         $striped = strip_tags($message->getContent());
         $replaced = str_replace(["\r\n", "\n"], ' ', $striped);
         $trimmed = trim($replaced);
 
-        return api_trunc_str($trimmed, $length);
+        return api_trunc_str($trimmed, $args['length']);
     }
 
     /**

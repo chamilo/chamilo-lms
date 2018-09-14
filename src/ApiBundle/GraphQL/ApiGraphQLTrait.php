@@ -146,15 +146,24 @@ trait ApiGraphQLTrait
      */
     private function protectCurrentUserData(User $user)
     {
-        $token = $this->container->get('security.token_storage')->getToken();
-
-        /** @var User $currentUser */
-        $currentUser = $token->getUser();
+        $currentUser = $this->getCurrentUser();
 
         if ($user->getId() === $currentUser->getId()) {
             return;
         }
 
         throw new UserError($this->translator->trans("The user info doesn't match."));
+    }
+
+    /**
+     * Get the current logged user.
+     *
+     * @return User
+     */
+    private function getCurrentUser(): User
+    {
+        $token = $this->container->get('security.token_storage')->getToken();
+
+        return $token->getUser();
     }
 }

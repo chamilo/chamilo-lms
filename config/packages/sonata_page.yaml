@@ -39,6 +39,8 @@ sonata_page:
         - ^/faq
         - ^/news
         - ^/user/(.*)
+        - ^/online
+        - ^/online/(.*)
         - ^/news/(.*)
         - ^/courses/(.*)
         - ^/editor/(.*)

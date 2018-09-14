@@ -15,15 +15,15 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
  */
 class Encoder extends BasePasswordEncoder
 {
-    protected $method;
+    private $passwordEncrypt;
 
     /**
-     * @param string $method
+     * @param string $passwordEncrypt
      */
-    public function __construct($method)
+    public function __construct(string $passwordEncrypt)
     {
-        $method = str_replace("'", '', trim($method));
-        $this->method = $method;
+        $passwordEncrypt = str_replace("'", '', trim($passwordEncrypt));
+        $this->passwordEncrypt = $passwordEncrypt;
     }
 
     /**
@@ -63,7 +63,7 @@ class Encoder extends BasePasswordEncoder
      */
     private function getEncoder()
     {
-        switch ($this->method) {
+        switch ($this->passwordEncrypt) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();
                 break;

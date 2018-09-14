@@ -33,10 +33,8 @@ services:
 #            - {name: twig.extension}
 
     # Chamilo custom password encoder (depends on the password_encryption param)
-    chamilo_user.security.encoder:
-        class: Chamilo\UserBundle\Security\Encoder
-        arguments:
-            - '%password_encryption%'
+#    chamilo_user.security.encoder:
+#        class: Chamilo\UserBundle\Security\Encoder
 
     # Course voter checks if a user has permissions to do actions in a course
     chamilo_core.security.authorization.voter.course_voter:
@@ -212,7 +210,10 @@ services:
     # Auth listeners
     chamilo_core.listener.login_success_handler:
         class: Chamilo\CoreBundle\EventListener\LoginSuccessHandler
-        arguments: ['@router', '@security.authorization_checker','@chamilo.settings.manager']
+        arguments: ['@router', '@security.authorization_checker', '@chamilo.settings.manager']
+        tags:
+            - {name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin}
+
 
     chamilo_core.listener.logout_success_handler:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler

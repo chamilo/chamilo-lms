@@ -10,8 +10,11 @@ if (!api_is_anonymous()) {
 
     //Getting the current user info.
     $user_info = api_get_user_info($user_id);
-
-    // You can also use template setting variables in the special variable called template.
-    $_template['user_info'] = $user_info;
-    $_template['username'] = $user_info['username'];
+    $_template['user_info'] = [];
+    $_template['username'] = '';
+    if ($user_info) {
+        // You can also use template setting variables in the special variable called template.
+        $_template['user_info'] = $user_info;
+        $_template['username'] = $user_info['username'];
+    }
 }

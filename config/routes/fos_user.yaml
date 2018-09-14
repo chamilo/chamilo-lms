@@ -1,4 +1,3 @@
-fos_user:
+#fos_user:
 #    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-
+#    resource: "@FOSUserBundle/Resources/config/routing/security.xml"

@@ -411,7 +411,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
         $translator = $this->container->get('translator');
         $settingManager = $this->container->get('chamilo.settings.manager');
 
-        if ($settingManager->getSetting('allow_registration') == 'true') {
+        if ($settingManager->getSetting('allow_registration') === 'true') {
             $menu->addChild(
                 $translator->trans(
                     'registration.submit',
@@ -421,12 +421,12 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 [
                     'route' => 'legacy_main',
                     'routeParameters' => ['name' => 'auth/inscription.php'],
-                    ["attributes" => ["id" => 'nav']],
+                    ['attributes' => ['id' => 'nav']],
                 ]
             );
         }
 
-        if ($settingManager->getSetting('allow_lostpassword') == 'true') {
+        if ($settingManager->getSetting('allow_lostpassword') === 'true') {
             $menu->addChild(
                 $translator->trans(
                     'resetting.request.submit',
@@ -437,7 +437,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     //'route' => 'fos_user_resetting_request',
                     'route' => 'legacy_main',
                     'routeParameters' => ['name' => 'auth/lostPassword.php'],
-                    ["attributes" => ["id" => 'nav']],
+                    ['attributes' => ['id' => 'nav']],
                 ]
             );
         }
@@ -459,7 +459,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $translator->trans('Forum'),
             [
                 'uri' => 'https://chamilo.org/forum/',
-                ["attributes" => ["id" => 'nav']],
+                ['attributes' => ['id' => 'nav']],
             ]
         );
 

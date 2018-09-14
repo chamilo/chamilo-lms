@@ -1,6 +1,6 @@
 hwi_oauth:
   connect:
-    account_connector: chamilo_user_provider
+    account_connector: chamilo_user.security.user_provider
   firewall_names:
     - admin
   resource_owners:

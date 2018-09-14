@@ -5,34 +5,35 @@
         {% block sonata_user_login_error %}
             {% if error %}
                 <div class="alert alert-danger alert-danger">
-                    {{ error.messageKey|trans(error.messageData, 'FOSUserBundle') }}
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
             {% endif %}
         {% endblock %}
+
         <div class="login-box-body">
             {% block sonata_user_login_form %}
-                <form action="{{ path("fos_user_security_check") }}"
-                      method="post" role="form">
-                    <input type="hidden" name="_csrf_token"
-                           value="{{ csrf_token('authenticate') }}"/>
+                <form action="{{ path("login") }}" method="post" role="form">
+                    {{ form_widget(form) }}
 
-                    <div class="form-group has-feedback">
-                        <label for="username"
-                               class="col-sm-4 control-label">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
 
-                        <input type="text" class="form-control" id="username"
-                               name="_username" value="{{ last_username }}"
-                               required="required"/>
-                    </div>
+                    {#<div class="form-group has-feedback">#}
+                        {#<label for="username"#}
+                               {#class="col-sm-4 control-label">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>#}
 
-                    <div class="form-group has-feedback">
-                        <label for="password"
-                               class="col-sm-4 control-label">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+                        {#<input type="text" class="form-control" id="username"#}
+                               {#name="_username" value="{{ last_username }}"#}
+                               {#required="required"/>#}
+                    {#</div>#}
 
-                        <input type="password" class="form-control"
-                               id="password"
-                               name="_password" required="required"/>
-                    </div>
+                    {#<div class="form-group has-feedback">#}
+                        {#<label for="password"#}
+                               {#class="col-sm-4 control-label">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>#}
+
+                        {#<input type="password" class="form-control"#}
+                               {#id="password"#}
+                               {#name="_password" required="required"/>#}
+                    {#</div>#}
 
                     <div class="form-group has-feedback">
                         <div class="checkbox control-group">
@@ -43,8 +44,6 @@
                             </label>
                         </div>
                     </div>
-
-
 
                     <div class="form-group has-feedback">
                         {#<a href="{{ path('fos_user_resetting_request') }}">#}

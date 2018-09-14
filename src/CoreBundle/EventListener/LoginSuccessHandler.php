@@ -12,11 +12,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * Class LoginSuccessHandler.
  */
-class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+//class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+class LoginSuccessHandler
 {
     protected $router;
     protected $checker;
@@ -45,10 +47,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      *
      * @return null|RedirectResponse|Response
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    //public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
+        $request = $event->getRequest();
+        $user = $event->getAuthenticationToken()->getUser();
         /** @var User $user */
-        $user = $token->getUser();
+        //$user = $token->getUser();
         $userId = $user->getId();
         $session = $request->getSession();
 

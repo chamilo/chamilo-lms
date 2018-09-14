@@ -3,7 +3,7 @@
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface:
-            id: chamilo_user.security.encoder
+            id: Chamilo\UserBundle\Security\Encoder
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
@@ -61,9 +61,12 @@ security:
                 csrf_token_generator: security.csrf.token_manager
                 login_path: /login
                 use_forward: false
-                check_path: /login_check
-                success_handler: chamilo_core.listener.login_success_handler
+                check_path: /login
+#                success_handler: chamilo_core.listener.login_success_handler
                 failure_path: null
+            guard:
+                authenticators:
+                    - chamilo_user.security.login_form_authenticator
             remember_me:
                 secret: '%secret%'
                 lifetime: 604800 # 1 week in seconds
@@ -77,8 +80,8 @@ security:
                     facebook: "/login/check-facebook"
                     google: "/login/check-google"
                     github: "/login/check-github"
-                login_path: /login
-                failure_path: /login
+                login_path: /login_oauth
+                failure_path: /login_oauth
                 use_forward: false
                 oauth_user_provider:
-                    service: chamilo_user_provider
+                    service: chamilo_user.security.user_provider

@@ -84,7 +84,7 @@ trait ApiGraphQLTrait
             throw new UserError($this->translator->trans('NoUser'));
         }
 
-        $encoder = $this->container->get('chamilo_user.security.encoder');
+        $encoder = $this->container->get('security.password_encoder');
         $isValid = $encoder->isPasswordValid(
             $user->getPassword(),
             $password,

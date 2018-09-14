@@ -18,6 +18,8 @@ sonata_admin_my_dashboard:
 sonata_user_admin_security_logout:
     path: /logout
 
+# Resources
+
 app_document:
     resource: |
         alias: app.document
@@ -33,6 +35,7 @@ app_document_index:
         _sylius:
             template: ChamiloCoreBundle:Document:show.html.twig
 
+# Create a folder
 app_document_create:
     path: /courses/{course}/resource/documents/new
     methods: [GET, POST]
@@ -42,6 +45,7 @@ app_document_create:
             template: ChamiloCoreBundle:Document:create.html.twig
             form: Chamilo\CoreBundle\Form\Type\DocumentType
 
+# Create a document
 app_document_create_document:
     path: /courses/{course}/resource/documents/new_document
     methods: [GET, POST]

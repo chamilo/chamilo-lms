@@ -133,11 +133,8 @@ Course:
                 description: 'Teachers list in course. Or tutors list from course in session.'
                 type: "[User]"
             tools:
-                description: 'List of names from available tools for student view.'
-                type: '[String]'
-            toolDescription:
-                description: 'Description Tool for the current course.'
-                type: 'ToolDescription'
+                description: 'List of available tools for student view.'
+                type: '[CourseTool]'
 
 SessionCategory:
     type: object
@@ -197,7 +194,7 @@ CourseTool:
     type: interface
     config:
         description: 'A course tool.'
-        resolveType: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseToolResolver", [typeResolver, value, info, context])'
+        resolveType: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseToolResolver", [value])'
         fields:
             name:
                 type: 'String'
@@ -228,7 +225,7 @@ ToolDescription:
             isVisible:
                 type: 'Boolean'
             descriptions:
-                type: '[CourseDescription]'
+                type: '[CourseDescription]!'
 
 CourseDescription:
     type: object

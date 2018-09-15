@@ -5,8 +5,11 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CourseBundle\Entity\CTool;
+use Doctrine\ORM\EntityManager;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Resolver\TypeResolver;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class CourseToolResolver
@@ -17,31 +20,39 @@ class CourseToolResolver implements ResolverInterface, ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
-    public function __invoke()
-    {
-        //return null;
-        //$method = 'resolve'.ucfirst($info->fieldName);
-        //
-        //if (method_exists($this, $method)) {
-        //    return $this->$method($tool, $context);
-        //}
-        //
-        //$method = 'get'.ucfirst($info->fieldName);
-        //
-        //if (method_exists($tool, $method)) {
-        //    return $tool->$method();
-        //}
+    /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
 
-        //return (new CTool());
+    /**
+     * CourseToolResolver constructor.
+     *
+     * @param EntityManager       $entityManager
+     * @param TranslatorInterface $translator
+     * @param TypeResolver        $typeResolver
+     */
+    public function __construct(
+        EntityManager $entityManager,
+        TranslatorInterface $translator,
+        TypeResolver $typeResolver
+    )
+    {
+        $this->em = $entityManager;
+        $this->translator = $translator;
+        $this->typeResolver = $typeResolver;
     }
 
     /**
      * @param CTool $tool
      *
-     * @return bool
+     * @return \GraphQL\Type\Definition\Type
      */
-    public function resolveIsVisible($tool)
+    public function __invoke(CTool $tool)
     {
-        return !!$tool->getVisibility();
+        switch ($tool->getName()) {
+            case TOOL_COURSE_DESCRIPTION:
+                return $this->typeResolver->resolve('ToolDescription');
+        }
     }
 }

@@ -7,8 +7,6 @@ use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CourseBundle\Entity\CTool;
-use Doctrine\Common\Collections\Criteria;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
@@ -115,49 +113,25 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
         }
 
         $tools = \CourseHome::get_tools_category(TOOL_STUDENT_VIEW, $course->getId(), $sessionId);
+        $tools = array_filter($tools, function ($tool) {
+            switch ($tool['name']) {
+                case TOOL_COURSE_DESCRIPTION:
+                    return true;
+                default:
+                    return false;
+            }
+        });
 
-        return array_column($tools, 'name');
-    }
+        $ids = array_column($tools, 'iid');
 
-    /**
-     * @param Course       $course
-     * @param Argument     $args
-     * @param \ArrayObject $context
-     *
-     * @return CTool
-     */
-    public function resolveToolDescription(Course $course, Argument $args, \ArrayObject $context)
-    {
-        $criteria = Criteria::create()
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select('t')
+            ->from('ChamiloCourseBundle:CTool', 't')
             ->where(
-                Criteria::expr()->eq('name', TOOL_COURSE_DESCRIPTION)
+                $qb->expr()->in('t.id', $ids)
             );
 
-        if ($context->offsetExists('session')) {
-            /** @var Session $session */
-            $session = $context->offsetGet('session');
-
-            if ($session) {
-                //$criteria->andWhere(
-                //    Criteria::expr()->eq('sessionId', $session->getId())
-                //);
-            }
-        }
-
-        $tool = $course->getTools()->matching($criteria)->current();
-
-        return $tool ?: null;
-    }
-
-    /**
-     * @param Course $course
-     *
-     * @return array
-     */
-    public function resolveFoo(Course $course)
-    {
-        $tools = $course->getTools();
-
-        return $tools;
+        return $qb->getQuery()->getResult();
     }
 }

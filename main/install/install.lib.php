@@ -2166,7 +2166,7 @@ function installSettings(
 
 /**
  * Executes DB changes based in the classes defined in
- * src/Chamilo/CoreBundle/Migrations/Schema/*.
+ * src/CoreBundle/Migrations/Schema/*.
  *
  * @param string        $chamiloVersion
  * @param EntityManager $manager
@@ -2186,9 +2186,9 @@ function migrate($chamiloVersion, EntityManager $manager)
     // default name is: doctrine_migration_versions)
     $config->setMigrationsTableName('version');
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
-    $config->setMigrationsNamespace('Application\Migrations\Schema\V'.$chamiloVersion);
+    $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
-    $versionPath = api_get_path(SYS_PATH).'app/Migrations/Schema/V'.$chamiloVersion;
+    $versionPath = api_get_path(SYS_PATH).'src/CoreBundle/Migrations/Schema/V'.$chamiloVersion;
     error_log("Reading files from dir: $versionPath");
     $config->setMigrationsDirectory($versionPath);
     // Load your migrations

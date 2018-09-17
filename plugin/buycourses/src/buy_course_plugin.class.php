@@ -593,7 +593,7 @@ class BuyCoursesPlugin extends Plugin
         $courseInfo = [
             'id' => $course->getId(),
             'title' => $course->getTitle(),
-            'description' => $courseDescription->getContent(),
+            'description' => $courseDescription ? $courseDescription->getContent() : null,
             'code' => $course->getCode(),
             'visual_code' => $course->getVisualCode(),
             'teachers' => [],

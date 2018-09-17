@@ -680,6 +680,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
         $this->addSql('UPDATE templates SET c_id = (SELECT id FROM course WHERE code = course_code)');
 
+        $this->addSql('DELETE FROM gradebook_result_log WHERE id_result IS NULL');
         $this->addSql('ALTER TABLE gradebook_result_log CHANGE id_result result_id INT NOT NULL');
 
         $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');

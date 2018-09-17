@@ -666,7 +666,12 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD573444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
         $this->addSql('CREATE INDEX IDX_AD488DD573444FD5 ON access_url_rel_usergroup (access_url_id)');
 
+        $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id = 0 OR exe_user_id IS NULL');
+        $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_user_id exe_user_id INT NOT NULL');
+
+        $this->addSql('UPDATE track_e_exercises SET session_id = 0 WHERE session_id IS NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
+        $this->addSql('ALTER TABLE settings_current CHANGE access_url access_url INT DEFAULT NULL');
 
         // Update template
         $this->addSql('DELETE FROM templates WHERE course_code NOT IN (SELECT code FROM course)');

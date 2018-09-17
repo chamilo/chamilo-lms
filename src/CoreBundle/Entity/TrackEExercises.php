@@ -20,7 +20,7 @@ class TrackEExercises
     /**
      * @var int
      *
-     * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
+     * @ORM\Column(name="exe_user_id", type="integer", nullable=false)
      */
     protected $exeUserId;
 

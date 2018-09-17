@@ -148,8 +148,12 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
             $langvar = $GLOBALS[$variable];
         } elseif (isset($GLOBALS["lang$variable"])) {
             $langvar = $GLOBALS["lang$variable"];
-        } elseif (!$returnEmptyIfNotFound) {
-            $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+        } else {
+            if (!$returnEmptyIfNotFound) {
+                $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+            } else {
+                return '';
+            }
         }
     }
     if (empty($langvar) || !is_string($langvar) && !$returnEmptyIfNotFound) {

@@ -1,0 +1,227 @@
+html, html a, body {
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  transition: all 0.3s ease-in-out;
+}
+
+body {
+  font-family: $font-primary;
+  font-size: 14px;
+  color: $default-text-color;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-secondary;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+
+  a {
+    font-family: $font-secondary;
+  }
+
+  small {
+    font-weight: 300;
+    color: lighten($default-dark, 5%);
+  }
+}
+
+p {
+  font-family: $font-primary;
+  line-height: 1.9;
+}
+
+.lead {
+  font-size: 18px;
+}
+
+ul {
+  margin-bottom: 0;
+}
+
+a {
+  color: $default-info;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: darken($default-info, 10%);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.text-gray {
+    &:hover,
+    &:focus,
+    &.active {
+      color: $default-dark !important;
+    }
+  }
+}
+
+:focus {
+  outline: none;
+}
+
+hr {
+  border-top: 1px solid $border-color;
+}
+
+.btn-create-one{
+  border-color: #b8daff;
+  background-color: #cce5ff;
+  color: #004085 !important;
+}
+.btn-create-two{
+  border-color: #c3e6cb;
+  background-color: #d4edda;
+  color: #155724 !important;
+}
+.btn-create-three{
+  border-color: #cecece;
+  background-color: #ffffff;
+  color: #374548 !important;
+}
+.footer p{
+  margin: 0;
+  padding: 0;
+}
+.footer{
+  padding: 18px;
+}
+
+// ---------------------------------------------------------
+// @TOC
+// ---------------------------------------------------------
+
+// + @Page Container
+// + @Main Content
+// + @Full Container
+// + @Collapsed State
+
+// ---------------------------------------------------------
+// @Page Container
+// ---------------------------------------------------------
+
+.page-container {
+  min-height: 100vh;
+  padding-left: $offscreen-size;
+  transition: all 0.2s ease;
+
+  @include between($breakpoint-md, $breakpoint-xl) {
+    padding-left: $collapsed-size;
+  }
+
+  @include to($breakpoint-md) {
+    padding-left: 0;
+  }
+}
+
+// ---------------------------------------------------------
+// @Main Content
+// ---------------------------------------------------------
+
+.main-content {
+  padding: 85px 20px 20px;
+  min-height: calc(100vh - 61px);
+  &.bg-content{
+    background-color: $theme-bg;
+  }
+
+  @include to($breakpoint-md) {
+    padding: 85px 5px 5px;
+  }
+}
+
+.remain-height {
+  height: calc(100vh - 126px);
+}
+
+// ---------------------------------------------------------
+// @Full Container
+// ---------------------------------------------------------
+
+.full-container {
+  left: $offscreen-size;
+  min-height: calc(100vh - #{$header-height});
+  position: absolute;
+  right: 0;
+  top: $header-height;
+  transition: all 0.2s ease;
+
+  @include between($breakpoint-md, $breakpoint-xl) {
+    left: 0;
+    padding-left: $collapsed-size;
+  }
+
+  @include to($breakpoint-md) {
+    left: 0;
+  }
+}
+
+// ---------------------------------------------------------
+// @Collapsed State
+// ---------------------------------------------------------
+
+.is-collapsed {
+  .page-container {
+    padding-left: $collapsed-size;
+
+    @include to($breakpoint-md) {
+      padding-left: 0;
+    }
+
+    @include between($breakpoint-md, $breakpoint-xl) {
+      padding-left: $offscreen-size;
+    }
+  }
+
+  .full-container {
+    left: $collapsed-size;
+
+    @include to($breakpoint-md) {
+      left: 0;
+    }
+
+    @include between($breakpoint-md, $breakpoint-xl) {
+      left: $offscreen-size;
+      padding-left: 0;
+    }
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+  .sidebar-menu .nav-header{
+    display: none;
+  }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+  .sidebar-menu .nav-header{
+    display: none;
+  }
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+
+}
+

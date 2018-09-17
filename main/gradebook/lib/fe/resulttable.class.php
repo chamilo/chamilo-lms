@@ -169,12 +169,10 @@ class ResultTable extends SortableTable
      * @param string $url
      *
      * @return string
-     *
      */
     public static function getResultAttemptTable($result, $url = '')
     {
         if (empty($result)) {
-
             return '';
         }
 

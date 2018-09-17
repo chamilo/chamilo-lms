@@ -275,7 +275,7 @@ class AnnouncementEmail
     }
 
     /**
-     * Send announcement by email to myself
+     * Send announcement by email to myself.
      */
     public function sendAnnouncementEmailToMySelf()
     {

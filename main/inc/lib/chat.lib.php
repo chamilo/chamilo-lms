@@ -281,7 +281,6 @@ class Chat extends Model
                 $to_user_id
             );
 
-
             $chatItems = self::getLatestChat($fromUserId, $to_user_id, 5);
 
             // Cleaning tsChatBoxes

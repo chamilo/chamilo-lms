@@ -9,6 +9,8 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
  */
 class AddCourse
 {
+    public const FIRST_EXPIRATION_DATE = 31536000; // 365 days in seconds
+
     /**
      * Defines the four needed keys to create a course based on several parameters.
      *
@@ -996,7 +998,7 @@ class AddCourse
      */
     public static function register_course($params)
     {
-        global $error_msg, $firstExpirationDelay;
+        global $error_msg;
         $title = $params['title'];
         // Fix amp
         $title = str_replace('&amp;', '&', $title);
@@ -1056,7 +1058,7 @@ class AddCourse
 
         if (empty($expiration_date)) {
             $expiration_date = api_get_utc_datetime(
-                time() + $firstExpirationDelay
+                time() + self::FIRST_EXPIRATION_DATE
             );
         } else {
             $expiration_date = api_get_utc_datetime($expiration_date);

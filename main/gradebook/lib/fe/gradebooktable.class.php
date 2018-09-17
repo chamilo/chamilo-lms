@@ -104,28 +104,28 @@ class GradebookTable extends SortableTable
 
         $model = ExerciseLib::getCourseScoreModel();
 
-        if ($this->teacherView) {
-            $this->set_header(
-                $column++,
-                get_lang('Weight'),
-                '',
-                'width="100px"'
-            );
-        } else {
-            $this->set_header($column++, get_lang('Weight'), false);
-            $this->set_header($column++, get_lang('Result'), false);
-            if (empty($model)) {
-                if (in_array(1, $this->loadStats)) {
-                    $this->set_header($column++, get_lang('Ranking'), false);
-                }
-                if (in_array(2, $this->loadStats)) {
-                    $this->set_header($column++, get_lang('BestScore'), false);
-                }
-                if (in_array(3, $this->loadStats)) {
-                    $this->set_header($column++, get_lang('Average'), false);
-                }
-            }
+        $this->set_header(
+            $column++,
+            get_lang('Weight'),
+            '',
+            'width="100px"'
+        );
+        $this->set_header($column++, get_lang('Result'), false);
 
+        if (empty($model)) {
+            if (in_array(1, $this->loadStats)) {
+                $this->set_header($column++, get_lang('Ranking'), false);
+            }
+            if (in_array(2, $this->loadStats)) {
+                $this->set_header($column++, get_lang('BestScore'), false);
+            }
+            if (in_array(3, $this->loadStats)) {
+                $this->set_header($column++, get_lang('Average'), false);
+            }
+        }
+
+        if ($this->teacherView) {
+        } else {
             if (!empty($cats)) {
                 if ($this->exportToPdf == false) {
                     $this->set_header($column++, get_lang('Actions'), false);

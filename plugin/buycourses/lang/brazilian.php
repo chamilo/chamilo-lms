@@ -47,7 +47,7 @@ $strings['CancelOrder'] = "Anular ordem";
 $strings['BankAccountInformation'] = "Detalhes da conta bancária";
 $strings['BankAccount'] = "Contas bancárias";
 $strings['OnceItIsConfirmedYouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'] = "Uma vez confirmada, você receberá um e-mail com os dados bancários e uma referência de ordem.";
-$strings['SubscriptionToCourseXSuccessful'] = "Sua inscrição para \"%s\ foi concluída com sucesso.";
+$strings['SubscriptionToCourseXSuccessful'] = "Sua inscrição para <a href=\"%s\"><strong>\"%s\"</strong></a> foi concluída com sucesso.";
 $strings['OrderCanceled'] = "Ordem cancelada";
 $strings['OrderStatus'] = "Status do pedido";
 $strings['SearchByStatus'] = "Pesquisar por estado";

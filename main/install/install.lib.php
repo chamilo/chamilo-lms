@@ -3674,26 +3674,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
                     include __DIR__.'/update-configuration.inc.php';
-
-                    $configurationFiles = [
-                        'mail.conf.php',
-                        'profile.conf.php',
-                        'course_info.conf.php',
-                        'add_course.conf.php',
-                        'events.conf.php',
-                        'auth.conf.php',
-                    ];
-
-                    error_log('Copy conf files');
-
-                    foreach ($configurationFiles as $file) {
-                        if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/'.$file)) {
-                            copy(
-                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
-                                api_get_path(CONFIGURATION_PATH).$file
-                            );
-                        }
-                    }
                 }
 
                 error_log('Upgrade 1.10.x process concluded! ('.date('Y-m-d H:i:s').')');

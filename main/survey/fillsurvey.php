@@ -446,18 +446,16 @@ if ($survey_data['form_fields'] != '' &&
 
     if (isset($list['official_code']) && $list['official_code'] == 1) {
         //    OFFICIAL CODE
-        if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-            $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
-            if (api_get_setting('profile', 'officialcode') !== 'true') {
-                $form->freeze('official_code');
-            }
-            $form->applyFilter('official_code', 'stripslashes');
-            $form->applyFilter('official_code', 'trim');
-            if (api_get_setting('registration', 'officialcode') == 'true' &&
-                api_get_setting('profile', 'officialcode') == 'true'
-            ) {
-                $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
-            }
+        $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
+        if (api_get_setting('profile', 'officialcode') !== 'true') {
+            $form->freeze('official_code');
+        }
+        $form->applyFilter('official_code', 'stripslashes');
+        $form->applyFilter('official_code', 'trim');
+        if (api_get_setting('registration', 'officialcode') == 'true' &&
+            api_get_setting('profile', 'officialcode') == 'true'
+        ) {
+            $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
 

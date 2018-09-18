@@ -1723,8 +1723,7 @@ EOT;
      */
     public function addPasswordRule($elementName, $groupName = '')
     {
-        // Constant defined in old config/profile.conf.php
-        if (CHECK_PASS_EASY_TO_FIND === true) {
+        if (api_get_setting('security.check_password') == 'true') {
             $message = get_lang('PassTooEasy').': '.api_generate_password();
 
             if (!empty($groupName)) {

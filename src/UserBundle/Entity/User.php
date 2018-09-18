@@ -305,7 +305,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $sessionAsGeneralCoach;
 
     /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
      */
     protected $resourceNodes;
 

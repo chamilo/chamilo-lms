@@ -142,6 +142,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             // old settings with no category
             ->add('chamilo_database_version')
             ->add('registered', YesNoType::class)
+            ->add('keep_old_images_after_delete', YesNoType::class)
             ->add(
                 'load_term_conditions_section',
                 ChoiceType::class,

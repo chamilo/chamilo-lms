@@ -1,0 +1,122 @@
+{% autoescape false %}
+<ul class="sidebar-menu scrollable pos-r">
+    {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : true}) }}
+
+    <li class="sidebar-divider"></li>
+    <li class="nav-item dropdown">
+        <a class="dropdown-toggle" href="javascript:void(0);">
+                <span class="icon-holder">
+                  <i class="c-icon-sidebar fas fa-user-friends"></i>
+                </span>
+            <span class="title">Gestión de usuarios</span>
+            <span class="arrow">
+                  <i class="ti-angle-right"></i>
+                </span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a class='sidebar-link' href="#">Lista de usuarios</a>
+            </li>
+            <li>
+                <a class='sidebar-link' href="#">Gestionar campos de usuario</a>
+            </li>
+            <li>
+                <a class='sidebar-link' href="#">Crear un usuario</a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="dropdown-toggle" href="javascript:void(0);">
+                <span class="icon-holder">
+                    <i class="c-icon-sidebar fa fa-graduation-cap"></i>
+                  </span>
+            <span class="title">Gestión de cursos</span>
+            <span class="arrow">
+                    <i class="ti-angle-right"></i>
+                  </span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a class='sidebar-link' href="#">Lista de cursos</a>
+            </li>
+            <li>
+                <a class='sidebar-link' href="#">Categorias de cursos</a>
+            </li>
+            <li>
+                <a class='sidebar-link' href="#">Crear un curso</a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="dropdown-toggle" href="javascript:void(0);">
+                <span class="icon-holder">
+                    <i class="c-icon-sidebar fa fa-book"></i>
+                  </span>
+            <span class="title">Gestión de sesiones</span>
+            <span class="arrow">
+                    <i class="ti-angle-right"></i>
+                  </span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a class='sidebar-link' href="#">Lista de sesiones de formación</a>
+            </li>
+            <li>
+                <a class='sidebar-link' href="#">Categorías de sesiones de formación</a>
+            </li>
+            <li>
+                <a class='sidebar-link' href="#">Crear una sesión</a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="dropdown-toggle" href="javascript:void(0);">
+                <span class="icon-holder">
+                  <i class="c-icon-sidebar fa fa-language"></i>
+                </span>
+            <span class="title">Idioma</span>
+            <span class="arrow">
+                  <i class="ti-angle-right"></i>
+                </span>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="nav-item dropdown">
+                <a href="#">
+                    <span>Lista de idiomas</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#">
+                    <span>Sub idiomas</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="sidebar-divider"></li>
+    <li class="nav-item">
+        <a class='sidebar-link' href="#">
+                <span class="icon-holder">
+                  <i class="c-icon-sidebar far fa-file-alt"></i>
+                </span>
+            <span class="title">Documentación</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class='sidebar-link' href="#">
+                <span class="icon-holder">
+                  <i class="c-icon-sidebar fa fa-users"></i>
+                </span>
+            <span class="title">Foros</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class='sidebar-link' href="#">
+                <span class="icon-holder">
+                  <i class="c-icon-sidebar fab fa-github"></i>
+                </span>
+            <span class="title">Repositorio Github</span>
+        </a>
+    </li>
+</ul>
+{% endautoescape %}

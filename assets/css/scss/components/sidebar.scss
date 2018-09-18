@@ -268,6 +268,26 @@
     a {
       color: $default-white;
       transition: all 0.3s ease;
+      display: block;
+      font-size: 14px;
+      font-weight: normal;
+      padding: 5px 15px;
+      position: relative;
+      white-space: nowrap;
+
+      .fa{
+        border-radius: 6px;
+        display: inline-block;
+        font-size: 17px;
+        height: 35px;
+        left: 0;
+        line-height: 35px;
+        margin-right: 14px;
+        position: relative;
+        text-align: center;
+        transition: all 0.3s ease;
+        width: 35px;
+      }
 
       &.active{
         background: $default-active;
@@ -319,29 +339,6 @@
             }
           }
         }
-      }
-    }
-
-    > a {
-      display: block;
-      font-size: 14px;
-      font-weight: normal;
-      padding: 5px 15px;
-      position: relative;
-      white-space: nowrap;
-
-      .icon-holder {
-        border-radius: 6px;
-        display: inline-block;
-        font-size: 17px;
-        height: 35px;
-        left: 0;
-        line-height: 35px;
-        margin-right: 14px;
-        position: relative;
-        text-align: center;
-        transition: all 0.3s ease;
-        width: 35px;
       }
     }
   }

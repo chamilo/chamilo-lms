@@ -109,20 +109,20 @@
                 <li class="btn-padding">
                     <a class="btn btn-light btn-create-two btn-sm" href="{{ url('legacy_main', { 'name' : 'main/create_course/add_course.php' }) }}">
                         <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
-                        Crear un curso
+                        {{ "AddCourse"|trans }}
                     </a>
                 </li>
                 <li class="btn-padding">
 
                     <a class="btn btn-light btn-create-one btn-sm" href="{{ url('legacy_main', { 'name' : 'session/session_add.php' }) }}">
                         <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
-                        Crear una sesión
+                        {{ "AddSession"|trans }}
                     </a>
                 </li>
                 <li class="btn-padding">
                     <a class="btn btn-light btn-create-three btn-sm" href="{{ path('legacy_main', { 'name' : '../user_portal.php'}) }}">
                         <i class="fa fa-graduation-cap fa-lg" aria-hidden="true"></i>
-                        Mis cursos
+                        {{ "MyCourses"|trans }}
                     </a>
                 </li>
 

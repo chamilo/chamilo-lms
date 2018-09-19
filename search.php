@@ -680,6 +680,8 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
+$userForm->addHtml('<p class="text-info">'.get_lang('MonEnvironnementDeTravailRenvoiFAQ').'</p>');
+
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 $userForm->addHtml('</div></div></div>');
 $userForm->addHtml('</div>');

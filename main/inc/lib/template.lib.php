@@ -1856,7 +1856,7 @@ class Template
 
                     $metaDescription = api_get_setting('meta_description');
                     if (!empty($course->getDescription())) {
-                        $socialMeta .= '<meta property="og:description" content="'.$course->getDescription().'" />'."\n";
+                        $socialMeta .= '<meta property="og:description" content="'.strip_tags($course->getDescription()).'" />'."\n";
                     } elseif (!empty($metaDescription)) {
                         $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
                     }

@@ -8,8 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version111
- * Migrate file to updated to Chamilo 1.11
- *
+ * Migrate file to updated to Chamilo 1.11.
  */
 class Version111 extends AbstractMigrationChamilo
 {
@@ -172,7 +171,6 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE plugin_ticket_ticket ADD id INT, ADD code VARCHAR(255) NOT NULL');
 
             $this->addSql('UPDATE plugin_ticket_priority SET sys_insert_datetime = NOW() WHERE sys_insert_datetime IS NULL');
-
 
             $this->addSql('UPDATE plugin_ticket_priority SET sys_insert_user_id = 1 WHERE sys_insert_user_id IS NULL');
 

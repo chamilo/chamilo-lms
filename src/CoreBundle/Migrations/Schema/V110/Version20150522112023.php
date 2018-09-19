@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Usergroup changes
+ * Usergroup changes.
  */
 class Version20150522112023 extends AbstractMigrationChamilo
 {

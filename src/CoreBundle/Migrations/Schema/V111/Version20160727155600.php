@@ -5,11 +5,11 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V111;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Chamilo\CoreBundle\Entity\BranchSync;
 
 /**
  * Class Version20160727155600
- * Add an initial branch_sync
+ * Add an initial branch_sync.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160727155600 extends AbstractMigrationChamilo
@@ -41,7 +41,7 @@ class Version20160727155600 extends AbstractMigrationChamilo
             ->getRepository('ChamiloCoreBundle:BranchSync')
             ->findOneBy([
                 'branchName' => 'localhost',
-                'accessUrlId' => 1
+                'accessUrlId' => 1,
             ]);
 
         $em->remove($branchSync);

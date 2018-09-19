@@ -8,7 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150527114220
- * Lp category
+ * Lp category.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150527114220 extends AbstractMigrationChamilo

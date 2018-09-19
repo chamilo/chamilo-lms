@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150803163400
+ * Class Version20150803163400.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
@@ -33,7 +33,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
 
@@ -67,7 +67,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
     }
@@ -87,7 +87,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
                     'o.variable',
                     [
                         'cron_remind_course_expiration_activate',
-                        'cron_course_finished_activate'
+                        'cron_course_finished_activate',
                     ]
                 )
             );
@@ -101,11 +101,10 @@ class Version20150803163400 extends AbstractMigrationChamilo
                     [
                         'cron_remind_course_expiration_activate',
                         'cron_remind_course_expiration_frequency',
-                        'cron_course_finished_activate'
+                        'cron_course_finished_activate',
                     ]
                 )
             );
         $deleteSettings->getQuery()->execute();
     }
-
 }

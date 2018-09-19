@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class IndexController
  * author Julio Montoya <gugli100@gmail.com>.
+ *
  * @Route("/online")
  *
  * @package Chamilo\CoreBundle\Controller
@@ -61,7 +62,6 @@ class OnlineController extends BaseController
     }
 
     /**
-     *
      * @Route("/in_sessions", name="online_users_in_session", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @param int $id
@@ -79,6 +79,7 @@ class OnlineController extends BaseController
         );
 
         $users = \SocialManager::display_user_list($users);
+
         return $this->render(
             '@ChamiloCore/Online/index.html.twig',
             [

@@ -8,12 +8,12 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160808154200
- * Set ponderation and destination for questions and answers
+ * Set ponderation and destination for questions and answers.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160808154200 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */

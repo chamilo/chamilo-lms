@@ -7,13 +7,12 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150821150000
+ * Class Version20150821150000.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150821150000 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -29,7 +28,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'display_mini_month_calendar'
+                        'display_mini_month_calendar',
                     ]
                 )
             );
@@ -40,7 +39,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'display_mini_month_calendar'
+                        'display_mini_month_calendar',
                     ]
                 )
             );
@@ -50,7 +49,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'display_upcoming_events'
+                        'display_upcoming_events',
                     ]
                 )
             );
@@ -61,7 +60,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'display_upcoming_events'
+                        'display_upcoming_events',
                     ]
                 )
             );
@@ -71,7 +70,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'number_of_upcoming_events'
+                        'number_of_upcoming_events',
                     ]
                 )
             );
@@ -82,7 +81,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'allow_reservation'
+                        'allow_reservation',
                     ]
                 )
             );
@@ -93,7 +92,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'allow_reservation'
+                        'allow_reservation',
                     ]
                 )
             );
@@ -120,7 +119,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
         $this->addSettingCurrent(
@@ -138,7 +137,7 @@ class Version20150821150000 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
         $this->addSettingCurrent(
@@ -170,9 +169,8 @@ class Version20150821150000 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
     }
-
 }

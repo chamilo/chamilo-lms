@@ -7,7 +7,8 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20160405112100
+ * Class Version20160405112100.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160405112100 extends AbstractMigrationChamilo
@@ -43,7 +44,7 @@ class Version20160405112100 extends AbstractMigrationChamilo
             }
         }
 
-         // Skill
+        // Skill
         if ($schema->hasTable('skill')) {
             $this->addSql('ALTER TABLE skill CHANGE name name VARCHAR(255) NOT NULL, CHANGE short_code short_code VARCHAR(100) NOT NULL, CHANGE description description LONGTEXT NOT NULL, CHANGE icon icon VARCHAR(255) NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL;');
         }
@@ -58,7 +59,6 @@ class Version20160405112100 extends AbstractMigrationChamilo
             $this->addSql('UPDATE skill_rel_user SET user_id = NULL WHERE user_id = 0');
             $this->addSql('UPDATE skill_rel_user SET session_id = NULL WHERE session_id = 0');
             $this->addSql('UPDATE skill_rel_user SET acquired_level = NULL WHERE acquired_level = 0');
-
 
             if ($table->hasForeignKey('FK_79D3D95AA76ED395') == false) {
                 $this->addSql('ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
@@ -98,7 +98,7 @@ class Version20160405112100 extends AbstractMigrationChamilo
             }
         }
 
-         // skill_level
+        // skill_level
         if ($schema->hasTable('skill_level')) {
             $table = $schema->getTable('skill_level');
             $this->addSql('ALTER TABLE skill_level CHANGE profile_id profile_id INT DEFAULT NULL, CHANGE position position INT NOT NULL, CHANGE short_name short_name VARCHAR(255) NOT NULL;');
@@ -109,9 +109,6 @@ class Version20160405112100 extends AbstractMigrationChamilo
                 $this->addSql('CREATE INDEX IDX_BFC25F2FCCFA12B8 ON skill_level (profile_id);');
             }
         }
-
-
-
     }
 
     /**

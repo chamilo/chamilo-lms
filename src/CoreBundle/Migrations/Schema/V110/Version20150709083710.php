@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Agenda
+ * Agenda.
  */
 class Version20150709083710 extends AbstractMigrationChamilo
 {

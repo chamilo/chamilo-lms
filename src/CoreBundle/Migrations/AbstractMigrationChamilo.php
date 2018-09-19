@@ -9,7 +9,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Class AbstractMigrationChamilo
+ * Class AbstractMigrationChamilo.
  *
  * @package Chamilo\CoreBundle\Migrations
  */
@@ -31,14 +31,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     public function getEntityManager()
     {
         if (empty($this->manager)) {
-            $dbParams = array(
+            $dbParams = [
                 'driver' => 'pdo_mysql',
                 'host' => $this->connection->getHost(),
                 'user' => $this->connection->getUsername(),
                 'password' => $this->connection->getPassword(),
                 'dbname' => $this->connection->getDatabase(),
-                'port' => $this->connection->getPort()
-            );
+                'port' => $this->connection->getPort(),
+            ];
             $database = new \Database();
             $database->connect(
                 $dbParams,
@@ -52,22 +52,23 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     }
 
     /**
-     * Speeds up SettingsCurrent creation
-     * @param string $variable The variable itself
-     * @param string $subKey The subkey
-     * @param string $type The type of setting (text, radio, select, etc)
-     * @param string $category The category (Platform, User, etc)
-     * @param string $selectedValue The default value
-     * @param string $title The setting title string name
-     * @param string $comment The setting comment string name
-     * @param string $scope The scope
-     * @param string $subKeyText Text if there is a subKey
-     * @param int $accessUrl What URL it is for
-     * @param bool $accessUrlChangeable Whether it can be changed on each url
-     * @param bool $accessUrlLocked Whether the setting for the current URL is
-     * locked to the current value
-     * @param array $options Optional array in case of a radio-type field,
-     * to insert options
+     * Speeds up SettingsCurrent creation.
+     *
+     * @param string $variable            The variable itself
+     * @param string $subKey              The subkey
+     * @param string $type                The type of setting (text, radio, select, etc)
+     * @param string $category            The category (Platform, User, etc)
+     * @param string $selectedValue       The default value
+     * @param string $title               The setting title string name
+     * @param string $comment             The setting comment string name
+     * @param string $scope               The scope
+     * @param string $subKeyText          Text if there is a subKey
+     * @param int    $accessUrl           What URL it is for
+     * @param bool   $accessUrlChangeable Whether it can be changed on each url
+     * @param bool   $accessUrlLocked     Whether the setting for the current URL is
+     *                                    locked to the current value
+     * @param array  $options             Optional array in case of a radio-type field,
+     *                                    to insert options
      */
     public function addSettingCurrent(
         $variable,
@@ -82,7 +83,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $accessUrl = 1,
         $accessUrlChangeable = false,
         $accessUrlLocked = true,
-        $options = array()
+        $options = []
     ) {
         $setting = new SettingsCurrent();
         $setting
@@ -125,6 +126,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
     /**
      * @param string $variable
+     *
      * @return mixed
      */
     public function getConfigurationValue($variable)
@@ -133,16 +135,17 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         if (isset($_configuration[$variable])) {
             return $_configuration[$variable];
         }
+
         return false;
     }
+
     /**
-     * Remove a setting completely
+     * Remove a setting completely.
+     *
      * @param string $variable The setting variable name
-     * @return void
      */
     public function removeSettingCurrent($variable)
     {
         //to be implemented
     }
-
 }

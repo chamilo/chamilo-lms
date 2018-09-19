@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160315155700
- * Change type of the course_creation_use_template setting
+ * Change type of the course_creation_use_template setting.
  */
 class Version20160315155700 extends AbstractMigrationChamilo
 {
@@ -27,6 +27,5 @@ class Version20160315155700 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-
     }
 }

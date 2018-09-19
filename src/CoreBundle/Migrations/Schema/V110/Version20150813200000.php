@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Calendar color
+ * Calendar color.
  */
 class Version20150813200000 extends AbstractMigrationChamilo
 {
@@ -26,7 +26,7 @@ class Version20150813200000 extends AbstractMigrationChamilo
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'math_mimetex'
+                        'math_mimetex',
                     ]
                 )
             );
@@ -37,7 +37,7 @@ class Version20150813200000 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'math_mimetex'
+                        'math_mimetex',
                     ]
                 )
             );
@@ -64,7 +64,7 @@ class Version20150813200000 extends AbstractMigrationChamilo
             true,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
     }

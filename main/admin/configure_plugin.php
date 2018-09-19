@@ -25,7 +25,6 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
 $content = '';
 $currentUrl = api_get_self()."?name=$pluginName";
 
-
 if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
     $form = $pluginInfo['settings_form'];

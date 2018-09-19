@@ -11,7 +11,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class CourseDescriptionResolver
+ * Class CourseDescriptionResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
@@ -24,8 +24,6 @@ class CourseDescriptionResolver implements ResolverInterface, ContainerAwareInte
      * @param Argument           $args
      * @param ResolveInfo        $info
      * @param \ArrayObject       $context
-     *
-     * @return null
      */
     public function __invoke(CCourseDescription $description, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {

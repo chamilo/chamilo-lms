@@ -249,12 +249,11 @@ class CourseListener
         global $cidReset;
         //$cidReset = $sessionHandler->get('cid_reset', false);
 
-// This controller implements ToolInterface? Then set the course/session
+        // This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&
             (
                 $controllerList[0] instanceof CourseControllerInterface ||
                 $controllerList[0] instanceof ResourceController
-
 
                 //|| $controllerList[0] instanceof LegacyController
             )
@@ -290,15 +289,15 @@ class CourseListener
             $controllerNameParts = explode('.', $controllerActionParts[0]);
             $controllerName = $controllerActionParts[0];
 
-            /*$toolName = null;
-            $toolAction = null;
-            if (isset($controllerNameParts[1]) &&
-                $controllerNameParts[1] == 'controller'
-            ) {
-                $toolName = $this->container->get($controllerName)->getToolName();
-                $action = str_replace('action', '', $controllerActionParts[1]);
-                $toolAction = $toolName.'.'.$action;
-            }*/
+        /*$toolName = null;
+        $toolAction = null;
+        if (isset($controllerNameParts[1]) &&
+            $controllerNameParts[1] == 'controller'
+        ) {
+            $toolName = $this->container->get($controllerName)->getToolName();
+            $action = str_replace('action', '', $controllerActionParts[1]);
+            $toolAction = $toolName.'.'.$action;
+        }*/
 
             //$container->get('twig')->addGlobal('tool.name', $toolName);
             //$container->get('twig')->addGlobal('tool.action', $toolAction);

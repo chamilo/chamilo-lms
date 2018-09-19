@@ -3,14 +3,14 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use Doctrine\DBAL\Schema\Schema;
 
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CourseBundle\Entity\CSurvey;
-
 /**
- * Class Version20170627122900
+ * Class Version20170627122900.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V200
  */
 class Version20170627122900 extends AbstractMigrationChamilo
@@ -30,7 +30,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
         $extraField = $em->getRepository('ChamiloCoreBundle:ExtraField')
             ->findOneBy([
                 'variable' => 'is_mandatory',
-                'extraFieldType' => ExtraField::SURVEY_FIELD_TYPE
+                'extraFieldType' => ExtraField::SURVEY_FIELD_TYPE,
             ]);
 
         if (!$extraField) {
@@ -48,7 +48,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             ')
             ->setParameters([
                 'variable' => 'is_mandatory',
-                'ef_type' => ExtraField::SURVEY_FIELD_TYPE
+                'ef_type' => ExtraField::SURVEY_FIELD_TYPE,
             ])
             ->getResult();
 

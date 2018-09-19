@@ -895,7 +895,6 @@ class Template
         $this->display($tpl);
     }
 
-
     /**
      * @param string $template
      *

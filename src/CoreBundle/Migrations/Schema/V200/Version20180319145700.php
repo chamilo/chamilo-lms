@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20180319145700
+ * Class Version20180319145700.
  *
  * Add indexes related to course surveys
  *
@@ -15,7 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20180319145700 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */

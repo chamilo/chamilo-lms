@@ -5,7 +5,6 @@ namespace Chamilo\UserBundle\Security;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Form\LoginType;
 use Doctrine\ORM\EntityManager;
-use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,11 +12,11 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class LoginFormAuthenticator.
@@ -81,7 +80,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function checkCredentials($credentials, UserInterface $user)
     {
         if (!$this->passwordEncoder->isPasswordValid($user, $credentials['_password'])) {
-
             return false;
         }
 
@@ -131,7 +129,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request): array
     {
         if ($request->getPathInfo() !== '/login' || !$request->isMethod('POST')) {
-
             return false;
         }
 
@@ -147,5 +144,4 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         return $data;
     }
-
 }

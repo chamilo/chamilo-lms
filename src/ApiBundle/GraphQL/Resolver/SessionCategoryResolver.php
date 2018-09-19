@@ -11,7 +11,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class SessionCategoryResolver
+ * Class SessionCategoryResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
@@ -24,8 +24,6 @@ class SessionCategoryResolver implements ResolverInterface, ContainerAwareInterf
      * @param Argument        $args
      * @param ResolveInfo     $info
      * @param \ArrayObject    $context
-     *
-     * @return null
      */
     public function __invoke(SessionCategory $sessionCategory, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {

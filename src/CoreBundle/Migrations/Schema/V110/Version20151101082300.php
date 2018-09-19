@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Calendar color
+ * Calendar color.
  */
 class Version20151101082300 extends AbstractMigrationChamilo
 {

@@ -26,8 +26,6 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
      * @param Argument     $args
      * @param ResolveInfo  $info
      * @param \ArrayObject $context
-     *
-     * @return null
      */
     public function __invoke(Course $course, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
@@ -96,7 +94,6 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
 
     /**
      * @param Course       $course
-     *
      * @param Argument     $args
      * @param \ArrayObject $context
      *

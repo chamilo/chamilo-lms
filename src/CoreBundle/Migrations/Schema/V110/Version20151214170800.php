@@ -39,7 +39,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
 
         foreach ($answers as $answer) {
             // Recover the real image size to recalculate coordinates
-            $imagePath = __DIR__ . "/../../../../courses/{$answer['directory']}/document/images/{$answer['picture']}";
+            $imagePath = __DIR__."/../../../../courses/{$answer['directory']}/document/images/{$answer['picture']}";
             if (!file_exists($imagePath)) {
                 error_log("Migration: Image does not exists: $imagePath");
                 $imagePath = realpath($imagePath);
@@ -88,9 +88,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     $newPairedString[] = $newRadiusY;
                     break;
                 case 'poly':
-                    //no break;
                 case 'delineation':
-                    //no break
                 case 'oar':
                     $paired = [];
                     foreach ($oldPairedString as $pairString) {

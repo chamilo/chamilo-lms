@@ -7,13 +7,12 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150713132630
+ * Class Version20150713132630.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150805161000 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -36,5 +35,4 @@ class Version20150805161000 extends AbstractMigrationChamilo
         $sessionTable = $schema->getTable('session');
         $sessionTable->dropColumn('send_subscription_notification');
     }
-
 }

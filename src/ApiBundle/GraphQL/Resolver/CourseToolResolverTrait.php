@@ -8,7 +8,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 
 /**
- * Trait CourseToolResolverTrait
+ * Trait CourseToolResolverTrait.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */

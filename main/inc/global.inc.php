@@ -279,7 +279,7 @@ try {
     // Fixes bug in Chamilo 1.8.7.1 array was not set
     $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
     $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
-    
+
     /*  LOAD LANGUAGE FILES SECTION */
     // if we use the javascript version (without go button) we receive a get
     // if we use the non-javascript version (with the go button) we receive a post

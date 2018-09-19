@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Lp changes
+ * Lp changes.
  */
 class Version20150603181728 extends AbstractMigrationChamilo
 {
@@ -31,7 +31,6 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_lp');
         if (!$table->hasColumn('max_attempts')) {
             $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL');
-
         }
 
         if (!$table->hasColumn('subscribe_users')) {

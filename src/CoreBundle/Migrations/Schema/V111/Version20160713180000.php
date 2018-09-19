@@ -8,13 +8,15 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160713180000
- * Add option to use SVG icons instead of their PNG version
+ * Add option to use SVG icons instead of their PNG version.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160713180000 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -26,6 +28,7 @@ class Version20160713180000 extends AbstractMigrationChamilo
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

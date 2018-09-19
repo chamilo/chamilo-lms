@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add branch
+ * Add branch.
  */
 class Version20150603142550 extends AbstractMigrationChamilo
 {

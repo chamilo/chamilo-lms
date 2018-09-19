@@ -7,13 +7,12 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150819095300
+ * Class Version20150819095300.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150819095300 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -41,5 +40,4 @@ class Version20150819095300 extends AbstractMigrationChamilo
         $skillTable->dropColumn('status');
         $skillTable->dropColumn('updated_at');
     }
-
 }

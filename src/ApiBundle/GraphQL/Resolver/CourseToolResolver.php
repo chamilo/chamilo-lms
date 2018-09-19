@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Class CourseToolResolver
+ * Class CourseToolResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */
@@ -36,8 +36,7 @@ class CourseToolResolver implements ResolverInterface, ContainerAwareInterface
         EntityManager $entityManager,
         TranslatorInterface $translator,
         TypeResolver $typeResolver
-    )
-    {
+    ) {
         $this->em = $entityManager;
         $this->translator = $translator;
         $this->typeResolver = $typeResolver;

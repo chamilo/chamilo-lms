@@ -2437,7 +2437,6 @@ function get_status_from_code($status_code)
     }
 }
 
-
 /**
  * Gets the current Chamilo (not PHP/cookie) session ID.
  *
@@ -8304,7 +8303,6 @@ function api_is_allowed_in_course()
     }
 
     return false;
-
 
     return Session::read('is_allowed_in_course');
 }

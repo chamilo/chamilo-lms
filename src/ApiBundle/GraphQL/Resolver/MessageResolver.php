@@ -24,8 +24,6 @@ class MessageResolver implements ResolverInterface, ContainerAwareInterface
      * @param Argument     $args
      * @param ResolveInfo  $info
      * @param \ArrayObject $context
-     *
-     * @return null
      */
     public function __invoke(Message $message, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {

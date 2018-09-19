@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add indexes
+ * Add indexes.
  */
 class Version20151214164000 extends AbstractMigrationChamilo
 {

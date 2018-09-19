@@ -7,13 +7,12 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150812230500
+ * Class Version20150812230500.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150812230500 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -34,7 +33,7 @@ class Version20150812230500 extends AbstractMigrationChamilo
             false,
             [
                 ['value' => 'true', 'text' => 'Yes'],
-                ['value' => 'false', 'text' => 'No']
+                ['value' => 'false', 'text' => 'No'],
             ]
         );
     }
@@ -53,7 +52,7 @@ class Version20150812230500 extends AbstractMigrationChamilo
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'allow_coach_feedback_exercises'
+                        'allow_coach_feedback_exercises',
                     ]
                 )
             );
@@ -65,11 +64,10 @@ class Version20150812230500 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'allow_coach_feedback_exercises'
+                        'allow_coach_feedback_exercises',
                     ]
                 )
             );
         $deleteSettings->getQuery()->execute();
     }
-
 }

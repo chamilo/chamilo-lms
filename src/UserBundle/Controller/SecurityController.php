@@ -5,7 +5,6 @@ namespace Chamilo\UserBundle\Controller;
 
 use Chamilo\UserBundle\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends Controller
 {
     /**
-     *
      * @Route("/login", name="login")
      *
      * @return Response
@@ -37,7 +35,8 @@ class SecurityController extends Controller
     }
 
     /**
-     * Used in the home page
+     * Used in the home page.
+     *
      * @return Response
      */
     public function loginSideBarAction()

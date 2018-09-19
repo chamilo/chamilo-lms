@@ -5,10 +5,10 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use \Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Version110
+ * Class Version110.
  *
  * Migrate file to updated to Chamilo 1.10
  *
@@ -88,7 +88,7 @@ class Version110 extends AbstractMigrationChamilo
             $session->addColumn(
                 'show_description',
                 'smallint',
-                array('default' => 0, 'unsigned' => true)
+                ['default' => 0, 'unsigned' => true]
             );
         }
         $sessionTable = $schema->getTable('session');
@@ -270,7 +270,7 @@ class Version110 extends AbstractMigrationChamilo
             'c_wiki',
             //'c_wiki_conf',
             'c_wiki_discuss',
-            'c_wiki_mailcue'
+            'c_wiki_mailcue',
         ];
 
         foreach ($tables as $table) {
@@ -652,7 +652,8 @@ class Version110 extends AbstractMigrationChamilo
     }
 
     /**
-     * We don't allow downgrades yet
+     * We don't allow downgrades yet.
+     *
      * @param Schema $schema
      */
     public function down(Schema $schema)

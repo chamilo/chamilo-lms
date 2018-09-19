@@ -8,14 +8,15 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Version20170904173000
+ * Class Version20170904173000.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V200
  */
 class Version20170904173000 extends AbstractMigrationChamilo
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function getOrder()
     {
         return 3;

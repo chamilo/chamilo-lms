@@ -49,7 +49,7 @@
                 <div id="tabs-{{ loop.index }}" class="settings-block col-md-6">
                     {% set header %}
                         {{ block_item.icon|raw }} {{ block_item.label }}
-                        {% if block_item.editable and _u.is_admin %}
+                        {% if block_item.editable and is_granted('ROLE_ADMIN') %}
                             <button type="button" class="btn btn-link btn-sm admin-edit-block float-right"
                                     data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
                                 <img src="{{ "edit.png"|icon(22) }}" width="22" height="22"

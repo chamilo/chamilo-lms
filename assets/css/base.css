@@ -123,10 +123,6 @@ select {
     cursor: pointer;
 }
 
-.logo {
-    margin: 10px 0;
-}
-
 #form-login .input-group {
     margin-top: 10px;
     margin-bottom: 10px;

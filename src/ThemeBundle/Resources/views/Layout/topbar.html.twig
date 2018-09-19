@@ -1,73 +1,338 @@
 <!-- Topbar -->
 {% autoescape false %}
-{% if show_toolbar == 1 %}
-    <nav id="toolbar-admin" class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ _p.web }}">
-            <img src="{{ "icon-chamilo.png"|icon(22) }}" title="{{ "siteName" | get_setting }}">
-        </a>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.search-toggle').on('click', e => {
+                $('.search-box, .search-input').toggleClass('active');
+                $('.search-input input').focus();
+                e.preventDefault();
+            });
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            // Sidebar links
+            $('.sidebar .sidebar-menu li a').on('click', function () {
+                const $this = $(this);
 
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ _p.web }}user_portal.php"> {{ "MyCourses"|get_lang }}
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" data-toggle="dropdown" href="#">
-                            {{'Tracking'|get_lang }}<b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ _p.web_main }}mySpace/">{{ "CoursesReporting"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}mySpace/index.php?view=admin">{{ "AdminReports"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}tracking/exams.php">{{ "ExamsReporting"|get_lang }}</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{{ _p.web_main }}dashboard/">{{ "Dashboard"|get_lang }}</a></li>
-                        </ul>
-                    </li>
-                    {% if is_granted('ROLE_ADMIN') == 1 %}
-                    <li class="nav-item dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'Administration'|get_lang }}<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ _p.web_main }}admin/">{{ "Home"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}admin/user_list.php">{{ "UserList"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}admin/course_list.php">{{ "CourseList"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}session/session_list.php">{{ "SessionList"|get_lang }}</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{{ _p.web_main }}admin/settings.php">{{ "Settings"|get_lang }}</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{{ _p.web_main }}admin/settings.php?category=Plugins">{{ "Plugins"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}admin/settings.php?category=Regions">{{ "Regions"|get_lang }}</a></li>
-                        </ul>
-                    </li>
+                if ($this.parent().hasClass('open')) {
+                    $this
+                        .parent()
+                        .children('.dropdown-menu')
+                        .slideUp(200, () => {
+                            $this.parent().removeClass('open');
+                        });
+                } else {
+                    $this
+                        .parent()
+                        .parent()
+                        .children('li.open')
+                        .children('.dropdown-menu')
+                        .slideUp(200);
 
-                    <li class="nav-item dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Add'|get_lang }}<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ _p.web_main }}admin/user_add.php">{{ "User"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}admin/course_add.php">{{ "Course"|get_lang }}</a></li>
-                            <li><a href="{{ _p.web_main }}session/session_add.php">{{ "Session"|get_lang }}</a></li>
-                        </ul>
-                    </li>
-                    {% endif %}
-                </ul>
+                    $this
+                        .parent()
+                        .parent()
+                        .children('li.open')
+                        .children('a')
+                        .removeClass('open');
 
-                {% if is_granted('ROLE_ADMIN') == 1 %}
-                <form class="form-inline my-2 my-lg-0" role="search" action="{{ _p.web_main }}admin/user_list.php" method="get">
-                    <input type="text" class="form-control" placeholder="{{'SearchUsers'|get_lang }}" name="keyword">
-                </form>
-                {% endif %}
+                    $this
+                        .parent()
+                        .parent()
+                        .children('li.open')
+                        .removeClass('open');
 
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ path('logout') }}">{{ "Logout"|get_lang }}</a></li>
-                </ul>
-            </div> <!-- /nav collapse -->
-        {% endif %}
-    </nav><!-- /topbar -->
-{% endif %}
+                    $this
+                        .parent()
+                        .children('.dropdown-menu')
+                        .slideDown(200, () => {
+                            $this.parent().addClass('open');
+                        });
+                }
+            });
 
+            // Sidebar Activity Class
+            const sidebarLinks = $('.sidebar').find('.sidebar-link');
+
+            sidebarLinks
+                .each((index, el) => {
+                    $(el).removeClass('active');
+                })
+                .filter(function () {
+                    const href = $(this).attr('href');
+                    const pattern = href[0] === '/' ? href.substr(1) : href;
+                    return pattern === (window.location.pathname).substr(1);
+                })
+                .addClass('active');
+
+            // ٍSidebar Toggle
+            $('.sidebar-toggle').on('click', e => {
+                $('.app').toggleClass('is-collapsed');
+                e.preventDefault();
+            });
+
+            /**
+             * Wait untill sidebar fully toggled (animated in/out)
+             * then trigger window resize event in order to recalculate
+             * masonry layout widths and gutters.
+             */
+            $('#sidebar-toggle').click(e => {
+                e.preventDefault();
+                setTimeout(() => {
+                    window.dispatchEvent(window.EVENT);
+                }, 300);
+            });
+        });
+    </script>
+    <div class="header navbar">
+        <div class="header-container">
+
+            <!-- NAVBAR LEFT -->
+            <ul class="nav-left">
+                <li>
+                    <a id='sidebar-toggle' class="sidebar-toggle" href="javascript:void(0);">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </li>
+                <li class="search-box">
+                    <a class="search-toggle no-pdd-right" href="javascript:void(0);">
+                        <i class="search-icon fas fa-search pdd-right-10"></i>
+                        <i class="search-icon-close fas fa-times pdd-right-10"></i>
+                    </a>
+                </li>
+                <li class="search-input">
+                    <input class="form-control" type="text" placeholder="Buscar curso...">
+                </li>
+            </ul>
+            <!-- END NAVBAR LEFT -->
+            <!-- NAVBAR RIGHT -->
+            {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+            <ul class="nav-right">
+                <li class="btn-padding">
+                    <a class="btn btn-light btn-create-two btn-sm" href="{{ url('legacy_main', { 'name' : 'main/create_course/add_course.php' }) }}">
+                        <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                        Crear un curso
+                    </a>
+                </li>
+                <li class="btn-padding">
+
+                    <a class="btn btn-light btn-create-one btn-sm" href="{{ url('legacy_main', { 'name' : 'session/session_add.php' }) }}">
+                        <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                        Crear una sesión
+                    </a>
+                </li>
+                <li class="btn-padding">
+                    <a class="btn btn-light btn-create-three btn-sm" href="{{ path('legacy_main', { 'name' : '../user_portal.php'}) }}">
+                        <i class="fa fa-graduation-cap fa-lg" aria-hidden="true"></i>
+                        Mis cursos
+                    </a>
+                </li>
+
+                <li class="btn-menu">
+                    <a href="{{ url('legacy_main', { 'name' : 'calendar/agenda_js.php' }) }}">
+                        <i class="fa fa-calendar fa-lg" aria-hidden="true"></i>
+                    </a>
+                </li>
+
+                <li class="notifications dropdown">
+                    <span class="counter bgc-red">3</span>
+                    <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+                        <i class="far fa-bell"></i>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li class="pX-20 pY-15 bdB">
+                            <i class="ti-bell pR-10"></i>
+                            <span class="fsz-sm fw-600 c-grey-900">Notifications</span>
+                        </li>
+                        <li>
+                            <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                                <li>
+                                    <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                                        <div class="peer mR-15">
+                                            <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/1.jpg" alt="">
+                                        </div>
+                                        <div class="peer peer-greed">
+                            <span>
+                              <span class="fw-500">John Doe</span>
+                              <span class="c-grey-600">liked your <span class="text-dark">post</span>
+                              </span>
+                            </span>
+                                            <p class="m-0">
+                                                <small class="fsz-xs">5 mins ago</small>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                                        <div class="peer mR-15">
+                                            <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/2.jpg" alt="">
+                                        </div>
+                                        <div class="peer peer-greed">
+                            <span>
+                              <span class="fw-500">Moo Doe</span>
+                              <span class="c-grey-600">liked your <span class="text-dark">cover image</span>
+                              </span>
+                            </span>
+                                            <p class="m-0">
+                                                <small class="fsz-xs">7 mins ago</small>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                                        <div class="peer mR-15">
+                                            <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/3.jpg" alt="">
+                                        </div>
+                                        <div class="peer peer-greed">
+                            <span>
+                              <span class="fw-500">Lee Doe</span>
+                              <span class="c-grey-600">commented on your <span class="text-dark">video</span>
+                              </span>
+                            </span>
+                                            <p class="m-0">
+                                                <small class="fsz-xs">10 mins ago</small>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="pX-20 pY-15 ta-c bdT">
+                    <span>
+                      <a href="" class="c-grey-600 cH-blue fsz-sm td-n">View All Notifications <i class="ti-angle-right fsz-xs mL-10"></i></a>
+                    </span>
+                        </li>
+                    </ul>
+                </li>
+                <li class="notifications dropdown">
+                    <span class="counter bgc-blue">3</span>
+                    <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+                        <i class="far fa-envelope"></i>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li class="pX-20 pY-15 bdB">
+                            <i class="ti-email pR-10"></i>
+                            <span class="fsz-sm fw-600">Emails</span>
+                        </li>
+                        <li>
+                            <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                                <li>
+                                    <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                                        <div class="peer mR-15">
+                                            <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/1.jpg" alt="">
+                                        </div>
+                                        <div class="peer peer-greed">
+                                            <div>
+                                                <div class="peers jc-sb fxw-nw mB-5">
+                                                    <div class="peer">
+                                                        <p class="fw-500 mB-0">John Doe</p>
+                                                    </div>
+                                                    <div class="peer">
+                                                        <small class="fsz-xs">5 mins ago</small>
+                                                    </div>
+                                                </div>
+                                                <span class="c-grey-600 fsz-sm">
+                                Want to create your own customized data generator for your app...
+                              </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                                        <div class="peer mR-15">
+                                            <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/2.jpg" alt="">
+                                        </div>
+                                        <div class="peer peer-greed">
+                                            <div>
+                                                <div class="peers jc-sb fxw-nw mB-5">
+                                                    <div class="peer">
+                                                        <p class="fw-500 mB-0">Moo Doe</p>
+                                                    </div>
+                                                    <div class="peer">
+                                                        <small class="fsz-xs">15 mins ago</small>
+                                                    </div>
+                                                </div>
+                                                <span class="c-grey-600 fsz-sm">
+                                Want to create your own customized data generator for your app...
+                              </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                                        <div class="peer mR-15">
+                                            <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/3.jpg" alt="">
+                                        </div>
+                                        <div class="peer peer-greed">
+                                            <div>
+                                                <div class="peers jc-sb fxw-nw mB-5">
+                                                    <div class="peer">
+                                                        <p class="fw-500 mB-0">Lee Doe</p>
+                                                    </div>
+                                                    <div class="peer">
+                                                        <small class="fsz-xs">25 mins ago</small>
+                                                    </div>
+                                                </div>
+                                                <span class="c-grey-600 fsz-sm">
+                                Want to create your own customized data generator for your app...
+                              </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="pX-20 pY-15 ta-c bdT">
+                    <span>
+                      <a href="email.html" class="c-grey-600 cH-blue fsz-sm td-n">View All Email <i class="fs-xs ti-angle-right mL-10"></i></a>
+                    </span>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1" data-toggle="dropdown">
+                        <div class="peer mR-10">
+                            <img class="w-2r bdrs-50p" src="{{ asset(app.user.avatarOrAnonymous(32)) }}" alt="{{ app.user.completeName }}">
+                        </div>
+                        <div class="peer">
+                            <span class="fsz-sm">{{ app.user.completeName }}</span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu fsz-sm">
+                        <li>
+                            <a title="{{ "Inbox"|trans }}" class="dropdown-item"
+                               href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
+                                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }}" class="dropdown-item">
+                                <em class="fa fa-chart-pie"></em> {{ 'PendingSurveys'|get_lang }}
+                            </a>
+                        </li>
+                        <li>
+                            <a title="{{ "MyCertificates"|trans }}" class="dropdown-item"
+                               href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' }) }}">
+                                <em class="fa fa-graduation-cap"
+                                    aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
+                            </a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a id="logout_button" title="{{ "Logout"|trans }}" class="dropdown-item"
+                               href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}">
+                                <em class="fa fa-sign-out-alt"></em> {{ "Logout"|trans }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            {% endif %}
+            <!-- END NAVBAR RIGHT -->
+        </div>
+    </div>
 {% endautoescape %}

@@ -249,12 +249,15 @@ class CourseListener
         global $cidReset;
         //$cidReset = $sessionHandler->get('cid_reset', false);
 
-        // This controller implements ToolInterface? Then set the course/session
+// This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&
             (
-                $controllerList[0] instanceof CourseControllerInterface
+                $controllerList[0] instanceof CourseControllerInterface ||
+                $controllerList[0] instanceof ResourceController
+
+
                 //|| $controllerList[0] instanceof LegacyController
-            ) && $cidReset === false
+            )
         ) {
             $controller = $controllerList[0];
 
@@ -269,12 +272,12 @@ class CourseListener
                 // Legacy code
                 $courseCode = $course->getCode();
 
-                $courseInfo = api_get_course_info($courseCode);
-                $container->get('twig')->addGlobal('course', $course);
+                //$courseInfo = api_get_course_info($courseCode);
+                //$container->get('twig')->addGlobal('course', $course);
 
-                $sessionHandler->set('_real_cid', $course->getId());
-                $sessionHandler->set('_cid', $course->getCode());
-                $sessionHandler->set('_course', $courseInfo);
+                //$sessionHandler->set('_real_cid', $course->getId());
+                //$sessionHandler->set('_cid', $course->getCode());
+                //$sessionHandler->set('_course', $courseInfo);
             }
 
             if ($session) {
@@ -300,9 +303,9 @@ class CourseListener
             //$container->get('twig')->addGlobal('tool.name', $toolName);
             //$container->get('twig')->addGlobal('tool.action', $toolAction);
 
-            $sessionHandler->set('_gid', $groupId);
+            //$sessionHandler->set('_gid', $groupId);
             //$sessionHandler->set('is_allowed_in_course', true);
-            $sessionHandler->set('id_session', $sessionId);
+            //$sessionHandler->set('id_session', $sessionId);
         } else {
             $ignore = [
                 'fos_js_routing.controller:indexAction',

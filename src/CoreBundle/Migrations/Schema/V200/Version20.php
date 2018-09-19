@@ -342,7 +342,6 @@ class Version20 extends AbstractMigrationChamilo
             'allow_hr_skills_management' => 'skill',
             'accessibility_font_resize' => 'display',
             'account_valid_duration' => 'profile',
-            'activate_email_template' => 'mail',
             'allow_global_chat' => 'chat',
             'allow_lostpassword' => 'registration',
             'allow_registration' => 'registration',
@@ -456,6 +455,7 @@ class Version20 extends AbstractMigrationChamilo
             'sso_authentication_unauth_uri',
             'sso_authentication_protocol',
             'sso_force_redirect',
+            'activate_email_template'
         ];
 
         foreach ($settings as $setting) {

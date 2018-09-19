@@ -258,13 +258,6 @@ if (api_is_platform_admin()) {
         ];
     }
 
-    /* Event settings */
-
-    if (api_get_setting('activate_email_template') == 'true') {
-        // @deprecated to be removed in 2.x
-        $items[] = ['url' => 'event_controller.php?action=listing', 'label' => get_lang('EventMessageManagement')];
-    }
-
     $items[] = ['url' => 'extra_field_list.php', 'label' => get_lang('ExtraFields')];
 
     if (!empty($_configuration['multiple_access_urls'])) {

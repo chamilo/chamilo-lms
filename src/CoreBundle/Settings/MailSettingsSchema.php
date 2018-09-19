@@ -23,7 +23,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'noreply_email_address' => 'no_reply@example.com',
-                    'activate_email_template' => 'false',
                 ]
             )
         ;
@@ -37,6 +36,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('noreply_email_address', 'email')
-            ->add('activate_email_template', YesNoType::class);
+        ;
     }
 }

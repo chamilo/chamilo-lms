@@ -284,15 +284,6 @@ class AdminController extends BaseController
                 'label' => get_lang('Reports'),
             ];
 
-            /* Event settings */
-
-            if (api_get_setting('mail.activate_email_template') == 'true') {
-                $items[] = [
-                    'url' => $adminUrl.'event_controller.php?action=listing',
-                    'label' => get_lang('EventMessageManagement'),
-                ];
-            }
-
             if (api_get_multiple_access_url()) {
                 if (api_is_global_platform_admin()) {
                     $items[] = [

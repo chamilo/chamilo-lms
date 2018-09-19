@@ -25,7 +25,6 @@ filter:
         - 'main/admin/db.php'
         - 'main/admin/ldap_synchro.php'
         - 'main/chat/emoji_strategy.php'
-        - 'main/default_course_document'
         - 'main/document/Wami.swf'
         - 'main/fonts/*'
         - 'main/inc/ajax/Wami.swf'

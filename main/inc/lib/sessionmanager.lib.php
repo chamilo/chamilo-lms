@@ -1770,6 +1770,8 @@ class SessionManager
             }
         }
 
+        $sessionInfo = api_get_session_info($id_checked);
+
         // Delete documents inside a session
         $courses = self::getCoursesInSession($id_checked);
         foreach ($courses as $courseId) {
@@ -1825,7 +1827,7 @@ class SessionManager
         Event::addEvent(
             LOG_SESSION_DELETE,
             LOG_SESSION_ID,
-            $id_checked,
+            $sessionInfo['name'].' - id:'.$id_checked,
             api_get_utc_datetime(),
             $userId
         );

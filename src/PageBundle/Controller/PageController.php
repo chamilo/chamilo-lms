@@ -74,7 +74,6 @@ class PageController extends BaseController
     public function createPage($pageSlug, $redirect, Request $request)
     {
         $container = $this->container;
-        //$siteSelector = $container->get('sonata.page.site.selector');
 
         $siteManager = $container->get('sonata.page.manager.site');
         $host = $request->getHost();
@@ -281,11 +280,8 @@ class PageController extends BaseController
      *
      * @return Response
      */
-    public function renderPageAction(string $slug, Request $request): Response
+    public function renderPageAction(string $slug, Request $request, $showEditPageLink = true): Response
     {
-        /*$siteSelector = $this->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();*/
-
         $container = $this->container;
         $siteManager = $container->get('sonata.page.manager.site');
         $host = $request->getHost();
@@ -309,6 +305,7 @@ class PageController extends BaseController
             [
                 'page' => $page,
                 'slug' => $slug,
+                'show_edit_page_link' => $showEditPageLink,
                 'content' => 'welcome',
             ]
         );

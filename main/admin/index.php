@@ -22,22 +22,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $nameTools = get_lang('PlatformAdmin');
-
 $accessUrlId = 0;
-/** @var Filesystem $fileSystem */
-$fileSystem = Container::$container->get('home_filesystem');
-$adminExtraContentDir = 'admin/';
-
-if (api_is_multiple_url_enabled()) {
-    $accessUrlId = api_get_current_access_url_id();
-
-    if ($accessUrlId != -1) {
-        $urlInfo = api_get_access_url($accessUrlId);
-        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
-        $cleanUrl = str_replace('/', '-', $url);
-        $adminExtraContentDir = "$cleanUrl/admin/";
-    }
-}
 
 // Displaying the header
 if (api_is_platform_admin()) {
@@ -82,12 +67,6 @@ $blocks['users']['icon'] = Display::return_icon(
 );
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 $blocks['users']['class'] = 'block-admin-users';
-
-$usersBlockExtraFile = "{$adminExtraContentDir}block-admin-users_extra.html";
-
-if ($fileSystem->has($usersBlockExtraFile)) {
-    $blocks['users']['extraContent'] = $fileSystem->read($usersBlockExtraFile);
-}
 
 $search_form = '
     <form method="get" class="form-inline" action="user_list.php">
@@ -148,13 +127,6 @@ if (api_is_platform_admin()) {
     $blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
     $blocks['courses']['class'] = 'block-admin-courses';
     $blocks['courses']['editable'] = true;
-
-    $coursesBlockExtraFile = "{$adminExtraContentDir}block-admin-courses_extra.html";
-
-    if ($fileSystem->has($coursesBlockExtraFile)) {
-        $blocks['courses']['extraContent'] = $fileSystem->read($coursesBlockExtraFile);
-    }
-
     $search_form = ' <form method="get" class="form-inline" action="course_list.php">
             <div class="form-group">
                 <input class="form-control" type="text" name="keyword" value=""
@@ -207,13 +179,6 @@ if (api_is_platform_admin()) {
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
     $blocks['platform']['class'] = 'block-admin-platform';
     $blocks['platform']['editable'] = true;
-
-    $platformBlockExtraFile = "{$adminExtraContentDir}block-admin-platform_extra.html";
-
-    if ($fileSystem->has($platformBlockExtraFile)) {
-        $blocks['platform']['extraContent'] = $fileSystem->read($platformBlockExtraFile);
-    }
-
     $search_form = ' <form method="get" action="'.api_get_path(WEB_PUBLIC_PATH).'admin/settings/search_settings'.'" class="form-inline">
             <div class="form-group">
                 <input class="form-control"
@@ -291,12 +256,6 @@ $blocks['sessions']['icon'] = Display::return_icon(
 );
 $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 $blocks['sessions']['class'] = 'block-admin-sessions';
-
-$sessionsBlockExtraFile = "{$adminExtraContentDir}block-admin-sessions_extra.html";
-
-if ($fileSystem->has($sessionsBlockExtraFile)) {
-    $blocks['sessions']['extraContent'] = $fileSystem->read($sessionsBlockExtraFile);
-}
 
 if (api_is_platform_admin()) {
     $blocks['sessions']['editable'] = true;
@@ -657,6 +616,7 @@ if ($useCookieValidation === 'true') {
 }
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
+$tpl->assign('web_public', api_get_path(WEB_PUBLIC_PATH));
 $tpl->assign('blocks', $blocks);
 
 if (api_is_platform_admin()) {
@@ -678,7 +638,7 @@ if (api_is_platform_admin()) {
         $extraData = array_map(['Security', 'remove_XSS'], $extraData);
 
         if (!empty($extraData['block'])) {
-            $fileSystem->put('admin/'.$extraData['block'].'_extra.html', $extraData['extra_content']);
+            //$fileSystem->put('admin/'.$extraData['block'].'_extra.html', $extraData['extra_content']);
 
             header('Location: '.api_get_self());
             exit;

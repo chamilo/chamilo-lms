@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Version20170608164500
+ * Class Version20170608164500.
  *
  * Fix c_quiz_question changing data type of type field to integer
  *

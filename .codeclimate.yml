@@ -62,7 +62,6 @@ plugins:
     enabled: false
 
 exclude_patterns:
-  - cli-config.php
   - var/cache/
   - var/log/
   - app/config/
@@ -72,9 +71,6 @@ exclude_patterns:
   - app/Resources/
   - main/admin/db.php
   - main/admin/ldap_synchro.php
-  - main/auth/cas/lib/
-  - main/auth/shibboleth
-  - main/auth/openid
   - main/chat/emoji_strategy.php
   - main/default_course_document
   - main/document/Wami.swf
@@ -89,17 +85,13 @@ exclude_patterns:
   - main/inc/lib/nusoap/
   - main/inc/lib/opengraph/*
   - main/inc/lib/ppt2png/
-  - main/inc/lib/phpseclib
   - main/inc/lib/pear/
-  - main/inc/lib/phpmailer/
-  - main/inc/lib/phpseclib/
   - main/inc/lib/svg-edit/
   - main/inc/lib/swfobject/
   - main/inc/lib/wami-recorder/
   - main/inc/lib/xajax/
   - main/lp/packaging/
   - main/template/
-  - main/img/
   - main/lang/
   - public/libs/
   - public/img/
@@ -108,8 +100,6 @@ exclude_patterns:
   - plugin/buycourses/src/Requests.php
   - plugin/buycourses/src/paypalfunctions.php
   - plugin/vchamilo/cli/
-  - plugin/kannelsms/vendor/
-  - plugin/clockworksms/vendor/
   - plugin/pens/lib
   - plugin/bbb/lib/bbb_api.php
   - plugin/ims_lti/OAuthSimple.php

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Set null to post_parent_id when it is 0 on c_forum_post table
+ * Set null to post_parent_id when it is 0 on c_forum_post table.
  */
 class Version20160808110200 extends AbstractMigrationChamilo
 {

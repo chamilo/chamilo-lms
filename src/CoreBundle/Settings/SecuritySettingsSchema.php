@@ -31,6 +31,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'captcha_number_mistakes_to_block_account' => '',
                 'captcha_time_to_block' => '',
                 'prevent_multiple_simultaneous_login' => 'false',
+                'check_password' => 'false',
             ]
         );
         $allowedTypes = [
@@ -57,6 +58,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('captcha_number_mistakes_to_block_account', 'text')
             ->add('captcha_time_to_block', 'text')
             ->add('prevent_multiple_simultaneous_login', YesNoType::class)
+            ->add('check_password', YesNoType::class)
 
         ;
     }

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Calendar color
+ * Calendar color.
  */
 class Version20150825141100 extends AbstractMigrationChamilo
 {
@@ -31,7 +31,7 @@ class Version20150825141100 extends AbstractMigrationChamilo
             true,
             [
                 ['value' => 'true', 'text' => 'Yes'],
-                ['value' => 'false', 'text' => 'No']
+                ['value' => 'false', 'text' => 'No'],
             ]
         );
     }

@@ -8,7 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150527120703
- * LP autolunch -> autolaunch
+ * LP autolunch -> autolaunch.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150527101600 extends AbstractMigrationChamilo
@@ -34,12 +35,12 @@ class Version20150527101600 extends AbstractMigrationChamilo
             [
                 [
                     'value' => 1,
-                    'text' => 'Yes'
+                    'text' => 'Yes',
                 ],
                 [
                     'value' => 0,
-                    'text' => 'No'
-                ]
+                    'text' => 'No',
+                ],
             ]
         );
     }

@@ -8,10 +8,10 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use FM\ElFinderPHP\Connector\ElFinderConnector;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class EditorController.
@@ -30,7 +30,6 @@ class EditorController extends Controller
      * @Route("/templates", methods={"GET"}, name="editor_templates")
      *
      * @return Response
-     *
      */
     public function editorTemplatesAction()
     {
@@ -62,7 +61,6 @@ class EditorController extends Controller
      * @Route("/connector", methods={"GET", "POST"}, name="editor_connector")
      *
      * @return Response
-     *
      */
     public function editorConnector(Request $request)
     {

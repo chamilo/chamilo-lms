@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Calendar color
+ * Calendar color.
  */
 class Version20150813143000 extends AbstractMigrationChamilo
 {
@@ -31,7 +31,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
             true,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
         $this->addSettingCurrent(
@@ -49,7 +49,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
         $this->addSettingCurrent(
@@ -67,7 +67,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
             true,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
         $this->addSettingCurrent(
@@ -85,7 +85,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
             true,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
         $this->addSettingCurrent(
@@ -117,7 +117,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
             false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
+                1 => ['value' => 'false', 'text' => 'No'],
             ]
         );
     }
@@ -142,7 +142,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
                         'course_catalog_published',
                         'user_reset_password',
                         'user_reset_password_token_limit',
-                        'my_courses_view_by_session'
+                        'my_courses_view_by_session',
                     ]
                 )
             );
@@ -157,7 +157,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
                         'gradebook_detailed_admin_view',
                         'course_catalog_published',
                         'user_reset_password',
-                        'my_courses_view_by_session'
+                        'my_courses_view_by_session',
                     ]
                 )
             );

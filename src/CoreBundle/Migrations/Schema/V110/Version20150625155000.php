@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Session date changes
+ * Session date changes.
  */
 class Version20150625155000 extends AbstractMigrationChamilo
 {
@@ -20,7 +20,7 @@ class Version20150625155000 extends AbstractMigrationChamilo
         $sql = "SELECT id FROM extra_field WHERE variable = 'captcha_blocked_until_date'";
         $result = $connection->executeQuery($sql)->fetchAll();
         if (empty($result)) {
-            $this->addSql("INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0, NOW())" );
+            $this->addSql("INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0, NOW())");
         }
     }
 
@@ -34,5 +34,4 @@ class Version20150625155000 extends AbstractMigrationChamilo
                 extra_field_type = 1 AND
                 field_type = 1");
     }
-
 }

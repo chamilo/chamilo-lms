@@ -2027,7 +2027,7 @@ class UserManager
 
         // Let us delete them.
         if ($old_file != 'unknown.jpg') {
-            if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
+            if (api_get_setting('platform.keep_old_images_after_delete') == 'true') {
                 $prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
                 @rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
                 @rename($path.'medium_'.$old_file, $path.$prefix.'medium_'.$old_file);
@@ -2056,15 +2056,13 @@ class UserManager
         }
 
         // This is the common name for the new photos.
-        if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && $old_file != 'unknown.jpg') {
+        if ($old_file != 'unknown.jpg') {
             $old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
             $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
             $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
         } else {
             $filename = api_replace_dangerous_char($filename);
-            if (PREFIX_IMAGE_FILENAME_WITH_UID) {
-                $filename = uniqid('').'_'.$filename;
-            }
+            $filename = uniqid('').'_'.$filename;
             // We always prefix user photos with user ids, so on setting
             // api_get_setting('split_users_upload_directory') === 'true'
             // the correspondent directories to be found successfully.

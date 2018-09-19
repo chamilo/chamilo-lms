@@ -9,18 +9,13 @@
             }
         });
 
-        {% if _u.is_admin %}
-        (function (CKEDITOR) {
-            CKEDITOR.replace('extra_content');
-
-            var extraContentEditor = CKEDITOR.instances.extra_content;
-
+        {% if is_granted('ROLE_ADMIN') %}
             $('button.admin-edit-block').on('click', function (e) {
                 e.preventDefault();
-
+                /*
                 var $self = $(this);
 
-                var extraContent = $.ajax('{{ _p.web_ajax }}admin.ajax.php', {
+                var extraContent = $.ajax('{{ web_admin_ajax_url }}', {
                     type: 'post',
                     data: {
                         a: 'get_extra_content',
@@ -29,72 +24,70 @@
                 });
 
                 $.when(extraContent).done(function (content) {
-                    extraContentEditor.setData(content);
+                    //extraContentEditor.setData(content);
                     $('#extra-block').val($self.data('id'));
                     $('#modal-extra-title').text($self.data('label'));
 
                     $('#modal-extra').modal('show');
-                });
+                });*/
             });
-        })(window.CKEDITOR);
         {% endif %}
     });
 </script>
 
 <section id="settings">
     <div class="row">
-        {% set columns = 2 %}
-        {% for block_item in blocks %}
-            {% if block_item.items %}
-                <div id="tabs-{{ loop.index }}" class="settings-block col-md-6">
-                    {% set header %}
-                        {{ block_item.icon|raw }} {{ block_item.label }}
-                        {% if block_item.editable and _u.is_admin %}
-                            <button type="button" class="btn btn-link btn-sm admin-edit-block float-right"
-                                    data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
-                                <img src="{{ "edit.png"|icon(22) }}" width="22" height="22"
-                                     alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}"/>
-                            </button>
-                        {% endif %}
-                    {% endset %}
+    {% set columns = 2 %}
+    {% for block_item in blocks %}
+        {% if block_item.items %}
+            <div id="tabs-{{ loop.index }}" class="settings-block col-md-6">
+                {% set header %}
+                    {{ block_item.icon|raw }} {{ block_item.label }}
+                    {% if block_item.editable and is_granted('ROLE_ADMIN') %}
+                        <a href="{{ web_public ~ 'internal_page/edit/' ~ block_item.class }}"
+                           class="btn btn-link btn-sm admin-edit-block float-right">
+                            <img src="{{ "edit.png"|icon(22) }}" alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}" />
+                        </a>
+                    {% endif %}
+                {% endset %}
 
-                    {% set content %}
-                        <div style="display: block;">
-                            {{ block_item.search_form|raw }}
+                {% set content %}
+                    <div style="display: block;">
+                        {{ block_item.search_form|raw }}
+                    </div>
+                    {% if block_item.items is not null %}
+                        <div class="block-items-admin">
+                            <ul class="list-items-admin">
+                                {% for url in block_item.items %}
+                                    <li>
+                                        <a href="{{ url.url }}">
+                                            {{ url.label }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        {% if block_item.items is not null %}
-                            <div class="block-items-admin">
-                                <ul class="list-items-admin">
-                                    {% for url in block_item.items %}
-                                        <li>
-                                            <a href="{{ url.url }}">
-                                                {{ url.label }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
+                    {% endif %}
 
-                        {% if block_item.extra is not null %}
-                            <div>
-                                {{ block_item.extra|raw }}
-                            </div>
-                        {% endif %}
+                    {% if block_item.extra is not null %}
+                        <div>
+                            {{ block_item.extra|raw }}
+                        </div>
+                    {% endif %}
 
-                        {% if block_item.extraContent %}
-                            <div>{{ block_item.extraContent|raw }}</div>
-                        {% endif %}
-                    {% endset %}
+                    {% if block_item.editable %}
+                        {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': block_item.class, 'showEditPageLink': false} )) }}
+                    {% endif %}
+                {% endset %}
 
-                    {{ macro.panel(header, content) }}
-                </div>
-            {% endif %}
-        {% endfor %}
+                {{ macro.panel(header, content) }}
+            </div>
+        {% endif %}
+    {% endfor %}
     </div>
 </section>
 
-{% if _u.is_admin %}
+{% if is_granted('ROLE_ADMIN') %}
     <div class="modal fade" id="modal-extra">
         <div class="modal-dialog">
             <div class="modal-content">

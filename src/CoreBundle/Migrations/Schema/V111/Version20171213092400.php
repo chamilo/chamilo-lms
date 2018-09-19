@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20171213092400
+ * Class Version20171213092400.
  *
  * Fix some missing queries for migration from 1.10 to 1.11 (GH#2214)
  * These are minor changes caused by the move from static SQL to ORM entities

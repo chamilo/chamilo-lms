@@ -8,7 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20161028123400
- * Add primary key as auto increment in c_student_publication_comment
+ * Add primary key as auto increment in c_student_publication_comment.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20161028123400 extends AbstractMigrationChamilo

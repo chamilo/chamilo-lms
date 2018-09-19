@@ -8,7 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160907140300
- * Change tables engine to InnoDB
+ * Change tables engine to InnoDB.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160907140300 extends AbstractMigrationChamilo
@@ -26,7 +27,6 @@ class Version20160907140300 extends AbstractMigrationChamilo
             ],
             'chat' => [
                 'sent',
-
             ],
             'course' => [
                 'last_visit',
@@ -59,7 +59,7 @@ class Version20160907140300 extends AbstractMigrationChamilo
                 'send_date',
             ],
             'notification' => [
-                'sent_at'
+                'sent_at',
             ],
             'promotion' => [
                 'created_at',
@@ -86,7 +86,6 @@ class Version20160907140300 extends AbstractMigrationChamilo
             ],
             'track_e_attempt_recording' => [
                 'insert_date',
-
             ],
             'track_e_course_access' => [
                 'login_course_date',
@@ -191,12 +190,11 @@ class Version20160907140300 extends AbstractMigrationChamilo
                 'reminder_date',
             ],
             'c_userinfo_content' => [
-                'edition_time'
+                'edition_time',
             ],
             'c_wiki_discuss' => [
                 'dtime',
             ],
-
         ];
         // Needed to update 0000-00-00 00:00:00 values
         $this->addSql('SET sql_mode = ""');

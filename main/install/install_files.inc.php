@@ -28,10 +28,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         api_get_path(CONFIGURATION_PATH).'profile.conf.dist.php',
         api_get_path(CONFIGURATION_PATH).'profile.conf.php'
     );
-    copy(
-        api_get_path(CONFIGURATION_PATH).'auth.conf.dist.php',
-        api_get_path(CONFIGURATION_PATH).'auth.conf.php'
-    );
 } else {
     echo 'You are not allowed here !'.__FILE__;
 }

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Calendar color
+ * Calendar color.
  */
 class Version20150810132615 extends AbstractMigrationChamilo
 {

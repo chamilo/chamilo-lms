@@ -240,22 +240,19 @@ if ($user_already_registered_show_terms === false &&
         }
     }
 
-    // OFFICIAL CODE
-    if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-        if (in_array('official_code', $allowedFields)) {
-            $form->addElement(
-                'text',
+    if (in_array('official_code', $allowedFields)) {
+        $form->addElement(
+            'text',
+            'official_code',
+            get_lang('OfficialCode'),
+            ['size' => 40]
+        );
+        if (api_get_setting('registration', 'officialcode') == 'true') {
+            $form->addRule(
                 'official_code',
-                get_lang('OfficialCode'),
-                ['size' => 40]
+                get_lang('ThisFieldIsRequired'),
+                'required'
             );
-            if (api_get_setting('registration', 'officialcode') == 'true') {
-                $form->addRule(
-                    'official_code',
-                    get_lang('ThisFieldIsRequired'),
-                    'required'
-                );
-            }
         }
     }
 

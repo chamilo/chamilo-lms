@@ -8,12 +8,12 @@ use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
 //use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sonata\PageBundle\Entity\PageManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class PageController.
@@ -74,7 +74,6 @@ class PageController extends BaseController
     public function createPage($pageSlug, $redirect, Request $request)
     {
         $container = $this->container;
-        //$siteSelector = $container->get('sonata.page.site.selector');
 
         $siteManager = $container->get('sonata.page.manager.site');
         $host = $request->getHost();
@@ -281,11 +280,8 @@ class PageController extends BaseController
      *
      * @return Response
      */
-    public function renderPageAction(string $slug, Request $request): Response
+    public function renderPageAction(string $slug, Request $request, $showEditPageLink = true): Response
     {
-        /*$siteSelector = $this->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();*/
-
         $container = $this->container;
         $siteManager = $container->get('sonata.page.manager.site');
         $host = $request->getHost();
@@ -309,6 +305,7 @@ class PageController extends BaseController
             [
                 'page' => $page,
                 'slug' => $slug,
+                'show_edit_page_link' => $showEditPageLink,
                 'content' => 'welcome',
             ]
         );

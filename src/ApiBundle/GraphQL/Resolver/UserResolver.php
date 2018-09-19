@@ -26,8 +26,6 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
      * @param Argument     $args
      * @param ResolveInfo  $info
      * @param \ArrayObject $context
-     *
-     * @return null
      */
     public function __invoke(User $user, Argument $args, ResolveInfo $info, \ArrayObject $context)
     {
@@ -63,7 +61,7 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
     }
 
     /**
-     * @param User         $user
+     * @param User $user
      *
      * @return string
      */
@@ -141,6 +139,35 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
         $users = $usersRepo->findUsersToSendMessage($user->getId(), $filter);
 
         return $users;
+    }
+
+    /**
+     * @param User         $user
+     * @param \ArrayObject $context
+     *
+     * @return array
+     */
+    public function resolveSessions(User $user): array
+    {
+        $this->protectCurrentUserData($user);
+
+        $sessionsId = $this->getUserSessions($user);
+
+        if (empty($sessionsId)) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $result = $qb
+            ->select('s')
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->where(
+                $qb->expr()->in('s.id', $sessionsId)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $result;
     }
 
     /**
@@ -281,34 +308,5 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
         }
 
         return $results;
-    }
-
-    /**
-     * @param User         $user
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
-    public function resolveSessions(User $user): array
-    {
-        $this->protectCurrentUserData($user);
-
-        $sessionsId = $this->getUserSessions($user);
-
-        if (empty($sessionsId)) {
-            return [];
-        }
-
-        $qb = $this->em->createQueryBuilder();
-        $result = $qb
-            ->select('s')
-            ->from('ChamiloCoreBundle:Session', 's')
-            ->where(
-                $qb->expr()->in('s.id', $sessionsId)
-            )
-            ->getQuery()
-            ->getResult();
-
-        return $result;
     }
 }

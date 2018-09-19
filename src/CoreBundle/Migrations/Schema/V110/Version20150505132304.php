@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Extra fields changes
+ * Extra fields changes.
  */
 class Version20150505132304 extends AbstractMigrationChamilo
 {
@@ -47,7 +47,6 @@ class Version20150505132304 extends AbstractMigrationChamilo
      */
     public function postUp(Schema $schema)
     {
-
     }
 
     /**

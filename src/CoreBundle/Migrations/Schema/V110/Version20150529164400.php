@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type as TableColumnType;
 
 /**
- * Session date changes
+ * Session date changes.
  */
 class Version20150529164400 extends AbstractMigrationChamilo
 {
@@ -63,5 +63,4 @@ class Version20150529164400 extends AbstractMigrationChamilo
     {
         $schema->dropTable('gradebook_score_log');
     }
-
 }

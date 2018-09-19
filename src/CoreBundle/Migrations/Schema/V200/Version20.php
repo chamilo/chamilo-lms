@@ -9,8 +9,7 @@ use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20
- * Migrate file to updated to Chamilo 2.0
- *
+ * Migrate file to updated to Chamilo 2.0.
  */
 class Version20 extends AbstractMigrationChamilo
 {
@@ -70,7 +69,6 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE media__gallery_media ADD CONSTRAINT FK_80D4C5414E7AF8F FOREIGN KEY (gallery_id) REFERENCES media__gallery (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE media__gallery_media ADD CONSTRAINT FK_80D4C541EA9FDD75 FOREIGN KEY (media_id) REFERENCES media__media (id) ON DELETE CASCADE;');
-
 
         $this->addSql('ALTER TABLE media__media ADD CONSTRAINT FK_5C6DD74E12469DE2 FOREIGN KEY (category_id) REFERENCES classification__category (id) ON DELETE SET NULL;');
 
@@ -210,7 +208,7 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX user_course_session_date ON track_e_access (access_user_id, c_id, access_session_id, access_date)');
         }
 
-         // Update iso
+        // Update iso
         $sql = "UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language);";
         $this->addSql($sql);
 
@@ -278,26 +276,26 @@ class Version20 extends AbstractMigrationChamilo
                 ALTER TABLE $table ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT
             ");*/
         }
-/*
-        $this->addSql("ALTER TABLE personal_agenda DROP course");
-
-        $this->addSql("
-            ALTER TABLE specific_field_values
-            ADD c_id int(11) NOT NULL,
-            ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
-        ");
-
-        $this->addSql("
-            ALTER TABLE track_e_hotspot
-            CHANGE c_id c_id int(11) NOT NULL AFTER hotspot_course_code,
-            ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
-        ");
-        $this->addSql("
-            UPDATE track_e_hotspot teh
-            SET teh.c_id = (SELECT id FROM course WHERE code = teh.hotspot_course_code)
-            WHERE teh.hotspot_course_code != NULL OR hotspot_course_code != ''
-        ");
-        $this->addSql("ALTER TABLE personal_agenda DROP hotspot_course_code");*/
+        /*
+                $this->addSql("ALTER TABLE personal_agenda DROP course");
+        
+                $this->addSql("
+                    ALTER TABLE specific_field_values
+                    ADD c_id int(11) NOT NULL,
+                    ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
+                ");
+        
+                $this->addSql("
+                    ALTER TABLE track_e_hotspot
+                    CHANGE c_id c_id int(11) NOT NULL AFTER hotspot_course_code,
+                    ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
+                ");
+                $this->addSql("
+                    UPDATE track_e_hotspot teh
+                    SET teh.c_id = (SELECT id FROM course WHERE code = teh.hotspot_course_code)
+                    WHERE teh.hotspot_course_code != NULL OR hotspot_course_code != ''
+                ");
+                $this->addSql("ALTER TABLE personal_agenda DROP hotspot_course_code");*/
 
         // Update settings variable name
         $settings = [
@@ -342,7 +340,6 @@ class Version20 extends AbstractMigrationChamilo
             'allow_hr_skills_management' => 'skill',
             'accessibility_font_resize' => 'display',
             'account_valid_duration' => 'profile',
-            'activate_email_template' => 'mail',
             'allow_global_chat' => 'chat',
             'allow_lostpassword' => 'registration',
             'allow_registration' => 'registration',
@@ -456,6 +453,7 @@ class Version20 extends AbstractMigrationChamilo
             'sso_authentication_unauth_uri',
             'sso_authentication_protocol',
             'sso_force_redirect',
+            'activate_email_template',
         ];
 
         foreach ($settings as $setting) {
@@ -736,7 +734,6 @@ class Version20 extends AbstractMigrationChamilo
     }
 
     /**
-     *
      * @param Schema $schema
      */
     public function down(Schema $schema)

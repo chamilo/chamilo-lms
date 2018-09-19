@@ -5,17 +5,18 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V111;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20160705192000
- * Add accumulate scorm time to c_lp table
+ * Add accumulate scorm time to c_lp table.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160705192000 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -36,11 +37,11 @@ class Version20160705192000 extends AbstractMigrationChamilo
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function down(Schema $schema)
     {
-
     }
 }

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150504182600
+ * Class Version20150504182600.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
@@ -28,7 +28,7 @@ class Version20150504182600 extends AbstractMigrationChamilo
                 WHERE english_name IN ('spanish', 'italian', 'portuguese', 'simpl_chinese', 'french')";
         $result = $connection->executeQuery($sql);
         $dataList = $result->fetchAll();
-        $languages = array();
+        $languages = [];
 
         if (!empty($dataList)) {
             foreach ($dataList as $data) {
@@ -36,36 +36,37 @@ class Version20150504182600 extends AbstractMigrationChamilo
             }
         }
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'quechua_cusco'
+            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'quechua_cusco'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'galician'
+            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'galician'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'esperanto'
+            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'esperanto'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'catalan'
+            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'catalan'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'asturian'
+            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'asturian'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'friulian'
+            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'friulian'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['french'] . " WHERE english_name = 'occitan'
+            UPDATE language SET parent_id = ".$languages['french']." WHERE english_name = 'occitan'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['portuguese'] . " WHERE english_name = 'brazilian'
+            UPDATE language SET parent_id = ".$languages['portuguese']." WHERE english_name = 'brazilian'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = " . $languages['simpl_chinese'] . " WHERE english_name = 'trad_chinese'
+            UPDATE language SET parent_id = ".$languages['simpl_chinese']." WHERE english_name = 'trad_chinese'
         ");
     }
 
     /**
-     * We don't allow downgrades yet
+     * We don't allow downgrades yet.
+     *
      * @param Schema $schema
      */
     public function down(Schema $schema)

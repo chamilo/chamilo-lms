@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20160331103600
+ * Class Version20160331103600.
  */
 class Version20160331103600 extends AbstractMigrationChamilo
 {
@@ -43,6 +43,5 @@ class Version20160331103600 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-
     }
 }

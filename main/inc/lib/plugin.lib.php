@@ -329,10 +329,10 @@ class AppPlugin
     }
 
     /**
-     * @param array    $_plugins
-     * @param string   $region
+     * @param array            $_plugins
+     * @param string           $region
      * @param Twig_Environment $template
-     * @param bool     $forced
+     * @param bool             $forced
      *
      * @return bool
      *
@@ -392,7 +392,7 @@ class AppPlugin
      * @staticvar array $plugin_data
      *
      * @param string $pluginName
-     * @param bool   $forced      load from DB or from the static array
+     * @param bool   $forced     load from DB or from the static array
      *
      * @return array
      *
@@ -402,7 +402,7 @@ class AppPlugin
     {
         //$pluginData = Session::read('plugin_data');
         if (0) {
-        //if (isset($pluginData[$pluginName]) && $forced == false) {
+            //if (isset($pluginData[$pluginName]) && $forced == false) {
             return $pluginData[$pluginName];
         } else {
             $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$pluginName/plugin.php";
@@ -694,7 +694,6 @@ class AppPlugin
      * @param array            $pluginRegionList
      * @param string           $pluginRegion
      * @param Twig_Environment $twig
-     *
      */
     public function setPluginRegion($pluginRegionList, $pluginRegion, $twig)
     {

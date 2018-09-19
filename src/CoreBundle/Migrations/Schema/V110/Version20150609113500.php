@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Session date changes
+ * Session date changes.
  */
 class Version20150609113500 extends AbstractMigrationChamilo
 {
@@ -34,5 +34,4 @@ class Version20150609113500 extends AbstractMigrationChamilo
                 extra_field_type = 2 AND
                 field_type = 10");
     }
-
 }

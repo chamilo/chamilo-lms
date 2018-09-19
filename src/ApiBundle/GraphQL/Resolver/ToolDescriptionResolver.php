@@ -11,7 +11,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class ToolDescriptionResolver
+ * Class ToolDescriptionResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */

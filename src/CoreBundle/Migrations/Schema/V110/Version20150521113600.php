@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Username changes
+ * Username changes.
  */
 class Version20150521113600 extends AbstractMigrationChamilo
 {

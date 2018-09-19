@@ -5,17 +5,18 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V111;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20160706145000
- * Add tag extra field for skills
+ * Add tag extra field for skills.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160706145000 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -31,6 +32,7 @@ class Version20160706145000 extends AbstractMigrationChamilo
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

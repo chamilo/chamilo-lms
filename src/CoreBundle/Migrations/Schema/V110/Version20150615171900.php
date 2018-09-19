@@ -8,13 +8,12 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Version20150615171900 class
- * Change in CCourseDescription entity
+ * Change in CCourseDescription entity.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class Version20150615171900 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -30,5 +29,4 @@ class Version20150615171900 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE c_course_description CHANGE description_type description_type BOOLEAN NOT NULL');
     }
-
 }

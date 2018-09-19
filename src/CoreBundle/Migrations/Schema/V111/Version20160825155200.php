@@ -5,17 +5,18 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V111;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20160825155200
- * Add option to allow download documents with the api key
+ * Add option to allow download documents with the api key.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160825155200 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -36,13 +37,14 @@ class Version20160825155200 extends AbstractMigrationChamilo
             true,
             [
                 ['value' => 'false', 'text' => 'No'],
-                ['value' => 'true', 'text' => 'Yes']
+                ['value' => 'true', 'text' => 'Yes'],
             ]
         );
     }
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

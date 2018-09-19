@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * GradebookCategory changes
+ * GradebookCategory changes.
  */
 class Version20150706135000 extends AbstractMigrationChamilo
 {

@@ -5,10 +5,9 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
- * Add new indexes
+ * Add new indexes.
  */
 class Version20151119082400 extends AbstractMigrationChamilo
 {

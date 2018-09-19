@@ -4,11 +4,11 @@
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**

@@ -8,7 +8,8 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseFOSUBProv
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class FOSUBUserProvider
+ * Class FOSUBUserProvider.
+ *
  * @package Chamilo\UserBundle\Security
  */
 class FOSUBUserProvider extends BaseFOSUBProvider

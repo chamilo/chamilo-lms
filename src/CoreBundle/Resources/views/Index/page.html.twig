@@ -1,4 +1,4 @@
-{% if is_granted('ROLE_ADMIN') %}
+{% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
 <a href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-primary" >
     <i class="fas fa-edit"></i> {{ "header.edit_page"|trans({}, 'SonataPageBundle') }}
 </a>

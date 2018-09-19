@@ -46,6 +46,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'pdf_logo_header' => '',
                     'allow_my_files' => 'true',
                     'registered' => 'false',
+                    'keep_old_images_after_delete' => 'true',
                     'load_term_conditions_section' => 'login',
                     //'server_type' => 'prod', replaced by value in .env
                     'show_full_skill_name_on_skill_wheel' => 'false',
@@ -141,6 +142,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             // old settings with no category
             ->add('chamilo_database_version')
             ->add('registered', YesNoType::class)
+            ->add('keep_old_images_after_delete', YesNoType::class)
             ->add(
                 'load_term_conditions_section',
                 ChoiceType::class,

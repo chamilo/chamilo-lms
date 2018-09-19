@@ -1077,9 +1077,9 @@ function actionsFilter($id)
 function searchImageFilter($image)
 {
     if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/templates_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/templates_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
     }
 }
 
@@ -1150,8 +1150,7 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_APP_PATH)
-                    .'home/default_platform_document/template_thumb/'.$template->getImage()
+                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/'.$template->getImage()
                     .'" alt="'.get_lang('TemplatePreview')
                     .'"/>'
             );
@@ -1160,7 +1159,7 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
+                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
             );
         }
 
@@ -1194,7 +1193,9 @@ function addEditTemplate()
                     $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
 
                     // The upload directory.
-                    $upload_dir = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/';
+                    // todo
+
+                    $upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
 
                     // Create the directory if it does not exist.
                     if (!is_dir($upload_dir)) {

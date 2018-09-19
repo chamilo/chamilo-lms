@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Fix c_quiz_answer's correct field for id_auto
+ * Fix c_quiz_answer's correct field for id_auto.
  */
 class Version20160707131900 extends AbstractMigrationChamilo
 {

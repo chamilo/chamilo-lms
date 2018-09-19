@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type as TableColumnType;
 
 /**
- * Session date changes
+ * Session date changes.
  */
 class Version20150608104600 extends AbstractMigrationChamilo
 {
@@ -66,5 +66,4 @@ class Version20150608104600 extends AbstractMigrationChamilo
     {
         $schema->dropTable('extra_field_rel_tag');
     }
-
 }

@@ -9,7 +9,7 @@
         <li class="item">
             {{ user.complete_name }}
         </li>
-        {% if _u.is_admin == 1 %}
+        {% if is_granted('ROLE_ADMIN') %}
             <li class="item">
                 <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
                     <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">

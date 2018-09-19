@@ -8,13 +8,15 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160715122300
- * Add association mapping between Session and CStudentPublication
+ * Add association mapping between Session and CStudentPublication.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160715122300 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -29,6 +31,7 @@ class Version20160715122300 extends AbstractMigrationChamilo
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

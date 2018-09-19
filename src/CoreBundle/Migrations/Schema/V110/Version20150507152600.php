@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150507152600
+ * Class Version20150507152600.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
@@ -56,7 +56,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'HideGlobalAnnouncementsWhenNotLoggedInText',
             'HideGlobalAnnouncementsWhenNotLoggedInComment',
             null,
@@ -78,7 +78,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Course',
-            ($value?$value:''),
+            ($value ? $value : ''),
             'CourseCreationUsesTemplateText',
             'CourseCreationUsesTemplateComment',
             null,
@@ -100,7 +100,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'radio',
             'Security',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'EnablePasswordStrengthCheckerText',
             'EnablePasswordStrengthCheckerComment',
             null,
@@ -122,7 +122,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'radio',
             'Security',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'EnableCaptchaText',
             'EnableCaptchaComment',
             null,
@@ -141,7 +141,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Security',
-            ($value?$value:5),
+            ($value ? $value : 5),
             'CaptchaNumberOfMistakesBeforeBlockingAccountText',
             'CaptchaNumberOfMistakesBeforeBlockingAccountComment',
             null,
@@ -158,7 +158,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Security',
-            ($value?$value:5),
+            ($value ? $value : 5),
             'CaptchaTimeAccountIsLockedText',
             'CaptchaTimeAccountIsLockedComment',
             null,
@@ -176,7 +176,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'DRHAccessToAllSessionContentText',
             'DRHAccessToAllSessionContentComment',
             null,
@@ -195,7 +195,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'ShowGroupForaInGeneralToolText',
             'ShowGroupForaInGeneralToolComment',
             null,
@@ -214,7 +214,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'TutorsCanAssignStudentsToSessionsText',
             'TutorsCanAssignStudentsToSessionsComment',
             null,
@@ -227,7 +227,8 @@ class Version20150507152600 extends AbstractMigrationChamilo
     }
 
     /**
-     * We don't allow downgrades yet
+     * We don't allow downgrades yet.
+     *
      * @param Schema $schema
      */
     public function down(Schema $schema)

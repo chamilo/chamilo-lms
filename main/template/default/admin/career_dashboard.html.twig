@@ -8,7 +8,7 @@
             <div id="career-{{ item.id }}" class="career panel panel-default">
                 <div class="panel-heading">
                     <h4>
-                        {% if _u.is_admin %}
+                        {% if is_granted('ROLE_ADMIN') %}
                             <a href="{{ _p.web }}main/admin/careers.php?action=edit&id={{ item.id }}">
                                 {{ item.name }}
                             </a>

@@ -152,20 +152,17 @@ $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
-//    OFFICIAL CODE
-if (defined('CONFVAL_ASK_FOR_OFFICIAL_CODE') && CONFVAL_ASK_FOR_OFFICIAL_CODE === true) {
-    $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
-    if (api_get_setting('profile', 'officialcode') !== 'true') {
-        $form->freeze('official_code');
-    }
-    $form->applyFilter('official_code', 'stripslashes');
-    $form->applyFilter('official_code', 'trim');
-    $form->applyFilter('official_code', 'html_filter');
-    if (api_get_setting('registration', 'officialcode') === 'true' &&
-        api_get_setting('profile', 'officialcode') === 'true'
-    ) {
-        $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
-    }
+$form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
+if (api_get_setting('profile', 'officialcode') !== 'true') {
+    $form->freeze('official_code');
+}
+$form->applyFilter('official_code', 'stripslashes');
+$form->applyFilter('official_code', 'trim');
+$form->applyFilter('official_code', 'html_filter');
+if (api_get_setting('registration', 'officialcode') === 'true' &&
+    api_get_setting('profile', 'officialcode') === 'true'
+) {
+    $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 //    EMAIL

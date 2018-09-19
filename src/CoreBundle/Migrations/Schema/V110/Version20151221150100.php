@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Fix c_quiz_answer's correct field for id_auto
+ * Fix c_quiz_answer's correct field for id_auto.
  */
 class Version20151221150100 extends AbstractMigrationChamilo
 {
@@ -36,7 +36,7 @@ class Version20151221150100 extends AbstractMigrationChamilo
             WHERE
                 a.answer = qa.id AND
                 q.c_id = a.c_id AND
-                q.type IN (" . MATCHING . ", " . DRAGGABLE . ", " . MATCHING_DRAGGABLE . ")
+                q.type IN (".MATCHING.", ".DRAGGABLE.", ".MATCHING_DRAGGABLE.")
         ");
 
         $this->addSql("
@@ -49,7 +49,7 @@ class Version20151221150100 extends AbstractMigrationChamilo
             WHERE
                 a.correct = b.id AND
                 q.c_id = a.c_id AND
-                q.type IN (" . MATCHING . ", " . DRAGGABLE . ", " . MATCHING_DRAGGABLE . ")
+                q.type IN (".MATCHING.", ".DRAGGABLE.", ".MATCHING_DRAGGABLE.")
         ");
         $this->addSql("ALTER TABLE c_quiz_answer DROP INDEX idx_qa_question_id_temp");
         $this->addSql("ALTER TABLE c_quiz_answer DROP INDEX idx_qa_id_temp");

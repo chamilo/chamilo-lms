@@ -13,7 +13,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class SessionResolver
+ * Class SessionResolver.
  *
  * @package Chamilo\ApiBundle\GraphQL\Resolver
  */

@@ -8,7 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150527120703
- * LP autolunch -> autolaunch
+ * LP autolunch -> autolaunch.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150527120703 extends AbstractMigrationChamilo

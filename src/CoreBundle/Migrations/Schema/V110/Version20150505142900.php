@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Version20150505142900
+ * Class Version20150505142900.
  *
  * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
@@ -67,7 +67,8 @@ class Version20150505142900 extends AbstractMigrationChamilo
     }
 
     /**
-     * We don't allow downgrades yet
+     * We don't allow downgrades yet.
+     *
      * @param Schema $schema
      */
     public function down(Schema $schema)

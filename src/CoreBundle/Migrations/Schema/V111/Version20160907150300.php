@@ -8,7 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160907150300
- * Change tables engine to InnoDB
+ * Change tables engine to InnoDB.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160907150300 extends AbstractMigrationChamilo
@@ -177,11 +178,12 @@ class Version20160907150300 extends AbstractMigrationChamilo
         'user_rel_user',
         'usergroup_rel_course',
         'usergroup_rel_question',
-        'usergroup_rel_session'
+        'usergroup_rel_session',
     ];
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -200,6 +202,7 @@ class Version20160907150300 extends AbstractMigrationChamilo
 
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

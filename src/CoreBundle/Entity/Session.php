@@ -928,7 +928,6 @@ class Session
 
     /**
      * @return mixed
-     *
      * @return SessionCategory
      */
     public function getCategory()
@@ -1336,6 +1335,44 @@ class Session
     }
 
     /**
+     * Check if $user is course coach in any course.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasCoachInCourseList(User $user)
+    {
+        /** @var SessionRelCourse $sessionCourse */
+        foreach ($this->courses as $sessionCourse) {
+            if ($this->hasCoachInCourseWithStatus($user, $sessionCourse->getCourse())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if $user is student in any course.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasStudentInCourseList(User $user)
+    {
+        /** @var SessionRelCourse $sessionCourse */
+        foreach ($this->courses as $sessionCourse) {
+            if ($this->hasStudentInCourse($user, $sessionCourse->getCourse())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param \DateTime $start
      * @param \DateTime $end
      *
@@ -1359,44 +1396,6 @@ class Session
 
         if (!empty($end)) {
             if ($now <= $end) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if $user is course coach in any course
-     *
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function hasCoachInCourseList(User $user)
-    {
-        /** @var SessionRelCourse $sessionCourse */
-        foreach ($this->courses as $sessionCourse) {
-            if ($this->hasCoachInCourseWithStatus($user, $sessionCourse->getCourse())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if $user is student in any course
-     *
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function hasStudentInCourseList(User $user)
-    {
-        /** @var SessionRelCourse $sessionCourse */
-        foreach ($this->courses as $sessionCourse) {
-            if ($this->hasStudentInCourse($user, $sessionCourse->getCourse())) {
                 return true;
             }
         }

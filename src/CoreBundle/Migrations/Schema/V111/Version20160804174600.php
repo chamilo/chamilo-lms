@@ -3,18 +3,18 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
 
+use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Chamilo\CoreBundle\Entity\SystemTemplate;
 
 /**
  * Class Version20160804174600
- * Set doctype html5 for system templates
+ * Set doctype html5 for system templates.
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160804174600 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -648,7 +648,7 @@ class Version20160804174600 extends AbstractMigrationChamilo
             'TemplateTitleTable' => $templateTitleTable,
             'TemplateTitleAudio' => $templateTitleAudio,
             'TemplateTitleVideo' => $templateTitleVideo,
-            'TemplateTitleFlash' => $templateTitleFlash
+            'TemplateTitleFlash' => $templateTitleFlash,
         ];
 
         foreach ($templates as $title => $content) {
@@ -1206,7 +1206,7 @@ class Version20160804174600 extends AbstractMigrationChamilo
             'TemplateTitleTable' => $templateTitleTable,
             'TemplateTitleAudio' => $templateTitleAudio,
             'TemplateTitleVideo' => $templateTitleVideo,
-            'TemplateTitleFlash' => $templateTitleFlash
+            'TemplateTitleFlash' => $templateTitleFlash,
         ];
 
         foreach ($templates as $title => $content) {

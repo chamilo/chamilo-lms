@@ -82,7 +82,7 @@ $strings['CancelOrder'] = "Annuleer order";
 $strings['BankAccountInformation'] = "Bankgegevens";
 $strings['BankAccount'] = "Bankrekening";
 $strings['OnceItIsConfirmedYouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'] = "Eenmaal bevestigd, ontvangt u een e-mail met de bankgegevens en een orderreferentie.";
-$strings['SubscriptionToCourseXSuccessful'] = "Uw aankoop op \"%s \" werd met succes afgerond.";
+$strings['SubscriptionToCourseXSuccessful'] = "Uw aankoop op <a href=\"%s\"><strong>\"%s\"</strong></a> werd met succes afgerond.";
 $strings['OrderCanceled'] = "Order geannuleerd";
 $strings['OrderStatus'] = "Bestelstatus";
 $strings['PayoutStatus'] = "Betalingsstatus";

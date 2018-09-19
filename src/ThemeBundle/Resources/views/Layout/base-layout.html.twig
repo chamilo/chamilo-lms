@@ -17,132 +17,134 @@
 {% endblock %}
 
 <body
-    class="{{ section_name }}"
+    class="{{ section_name }} app"
     {{ sonata_seo_html_attributes() }}
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
 >
 <noscript>{{ "NoJavascript" | trans }}</noscript>
 
-{% block chamilo_wrap %}
-    {% autoescape false %}
-    <div id="wrap">
-        <div id="navigation" class="notification-panel">
-            {{ help_content }}
-            {{ bug_notification }}
-        </div>
-        {# topbar #}
-        {% block chamilo_topbar %}
-            {# creatable variable is set by the sonata page #}
-            {% if not creatable %}
-            {% include "@ChamiloTheme/Layout/topbar.html.twig" %}
-            {% endif %}
-        {% endblock %}
-        <div class="extra-header">{{ header_extra_content }}</div>
-        {% block chamilo_header %}
-        <header>
-            <div class="extra-header">
-                {{ header_extra_content }}
-            </div>
+<!-- SPINNER LOADER -->
+<div id='loader'>
+    <div class="spinner"></div>
+</div>
+<!-- END SPINNER -->
 
-            <section id="main" class="container">
-                {% if plugin_header_main %}
-                    <div class="row">
-                        <div class="col-lg-12">
-                            {{ plugin_header_main }}
-                        </div>
+<script>
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        setTimeout(() => {
+            loader.classList.add('fadeOut');
+        }, 1000);
+    });
+</script>
+
+<!-- APP CONTENT -->
+<div>
+    <!-- APP SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <!-- SIDEBAR LOGO -->
+            <div class="sidebar-logo">
+                <div class="peers ai-c fxw-nw">
+                    <div class="peer peer-greed">
+                        <a class="sidebar-link td-n" href="{{ url('legacy_index') }}">
+                            <div class="peers ai-c fxw-nw">
+                                <div class="peer">
+                                    <div class="logo">
+                                        <img src="{{ asset('build/css/themes/'~ theme ~'/images/logo_chamilo.svg') }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                {% endif %}
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="logo">
-                            <a href="{{ url('legacy_index') }}">
-                            <img src="{{ asset('build/css/themes/'~ theme ~'/images/header-logo.png') }}"/>
+                    <div class="peer">
+                        <div class="mobile-toggle sidebar-toggle">
+                            <a href="" class="td-n">
+                                <i class="ti-arrow-circle-left"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-9">
-                        <div class="col-sm-4">
-                            {% if plugin_header_left is not null %}
-                                <div id="plugin_header_left">
-                                    {{ plugin_header_left }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-4">
-                            {% if plugin_header_center is not null %}
-                                <div id="plugin_header_center">
-                                    {{ plugin_header_center }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-4">
-                            {% if plugin_header_right is not null %}
-                                <div id="plugin_header_right">
-                                    {{ plugin_header_right }}
-                                </div>
-                            {% endif %}
-                            <div class="section-notifications">
-                                <ul id="notifications" class="nav nav-pills pull-right">
-                                    {{ notification_menu }}
-                                </ul>
-                            </div>
-                            {% if chamilo_settings_get("display.accessibility_font_resize")  == 'true' %}
-                                <div class="resize_font">
-                                    <div class="btn-group">
-                                        <a title= "{{ 'DecreaseFontSize' | trans }}" href="#" class="decrease_font btn btn-default">
-                                            <em class="fa fa-font"></em>
-                                        </a>
-                                        <a title= "{{ 'ResetFontSize' | trans }}" href="#" class="reset_font btn btn-default">
-                                            <em class="fa fa-font"></em>
-                                        </a>
-                                        <a title= "{{ 'IncreaseFontSize' | trans }}" href="#" class="increase_font btn btn-default">
-                                            <em class="fa fa-font"></em>
-                                        </a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
                 </div>
-            </section>
-
-            {# menu #}
+            </div>
+            <!-- END SIDEBAR LOGO -->
+            <!-- SIDEBAR MENU -->
+            {# SIDEBAR MENU #}
             {% block chamilo_menu %}
                 <div id="menu-bar">
                     {# creatable variable is set by the sonata page #}
                     {% if not creatable %}
                         {# course navigation links/shortcuts need to be activated by the admin #}
-                        {% include "@ChamiloTheme/Layout/menu.html.twig" %}
+                        {% include "@ChamiloTheme/Layout/sidebar.html.twig" %}
                     {% endif %}
                 </div>
             {% endblock %}
-        </header>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END APP SIDEBAR -->
+    <!-- PAGE CONTAINER -->
+
+    <div class="page-container">
+        <!-- TOOLBAR USER -->
+        {% block chamilo_header %}
+            {% include '@ChamiloTheme/Layout/topbar.html.twig' %}
+        {% endblock %}
+        <!-- END TOOLBAR USER -->
+        {% block chamilo_wrap %}
+        <!-- MAIN CONTENT -->
+        {% autoescape false %}
+        <main class='main-content bg-content'>
+            <div id='mainContent'>
+                <div class="gap-20 masonry pos-r">
+                    {% block page_content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </main>
+        {% endautoescape %}
+        <!-- END MAIN CONTENT -->
         {% endblock %}
 
-        {#<div id="top_main_content" class="container">#}
-        <div id="top_main_content" class="container">
-        {# course navigation links/shortcuts need to be activated by the admin #}
-        {% include "@ChamiloTheme/Layout/course_navigation.html.twig" %}
-            {#<header class="header">#}
-                {#{% block chamilo_logo %}#}
-                {#<a href="#" class="logo">#}
-                    {#Chamilo#}
-                    {#&#123;&#35;{{- chamilo_settings_get('platform.institution') -}}&#35;&#125;#}
-                {#</a>#}
-                {#{% endblock %}#}
-                {#{% block chamilo_main_navbar %}#}
-                {#<!-- Header Navbar: style can be found in header.less -->#}
-                {#{% endblock %}#}
-            {#</header>#}
-        {% block page_content %}
-        {% endblock %}
-        </div> {# end top_main_content #}
-    </div> {# End page-wrap div #}
+    </div>
+    <!-- END PAGE CONTAINER -->
+    <!-- FOOTER -->
     {% block chamilo_footer %}
         {% include '@ChamiloTheme/Layout/footer.html.twig' %}
     {% endblock %}
-{% endautoescape %}
-{% endblock %} {# End chamilo_wrap block #}
+    <!-- END FOOTER -->
+
+</div>
+<!-- END APP CONTENT -->
+
+<div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="expand-image-modal-title">&nbsp;</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+{# Global modal, load content by AJAX call to href attribute on anchor tag with 'ajax' class #}
+<div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="global-modal-title">&nbsp;</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

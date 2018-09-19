@@ -1,0 +1,26 @@
+{% autoescape false %}
+<ul class="sidebar-menu scrollable pos-r">
+    {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : true}) }}
+
+    <li class="sidebar-divider"></li>
+
+    <li class="nav-item">
+        <a class='sidebar-link' href="https://docs.chamilo.org/">
+            <i class="far fa-file-alt"></i>
+            {{ "Documentation"|get_lang }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class='sidebar-link' href="https://forum.chamilo.org/">
+            <i class="fa fa-users"></i>
+            {{ "Forums"|get_lang }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class='sidebar-link' href="https://github.com/chamilo/chamilo-lms">
+            <i class="fab fa-github"></i>
+            {{ "GithubRepository"|get_lang }}
+        </a>
+    </li>
+</ul>
+{% endautoescape %}

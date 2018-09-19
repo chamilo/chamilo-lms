@@ -97,9 +97,11 @@
         <main class='main-content bg-content'>
             <div id='mainContent'>
                 <div class="gap-20 masonry pos-r">
-                    {% block page_content %}
+                    <div class="container">
+                        {% block page_content %}
 
-                    {% endblock %}
+                        {% endblock %}
+                    </div>
                 </div>
             </div>
         </main>

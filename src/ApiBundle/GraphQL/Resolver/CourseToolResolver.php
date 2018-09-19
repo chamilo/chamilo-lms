@@ -52,6 +52,8 @@ class CourseToolResolver implements ResolverInterface, ContainerAwareInterface
         switch ($tool->getName()) {
             case TOOL_COURSE_DESCRIPTION:
                 return $this->typeResolver->resolve('ToolDescription');
+            case TOOL_ANNOUNCEMENT:
+                return $this->typeResolver->resolve('ToolAnnouncements');
         }
     }
 }

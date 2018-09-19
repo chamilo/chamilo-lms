@@ -241,3 +241,40 @@ CourseDescription:
                 type: 'String'
             type:
                 type: 'Int'
+
+ToolAnnouncements:
+    type: object
+    config:
+        description: 'Announcements related to the course.'
+        interfaces: [CourseTool]
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\ToolAnnouncementsResolver", [value, args, info, context])'
+        fields:
+            name:
+                type: 'String'
+            category:
+                type: 'String'
+            image:
+                type: 'String'
+            customIcon:
+                type: 'String'
+            isVisible:
+                type: 'Boolean'
+            announcements:
+                type: '[CourseAnnouncement]!'
+
+CourseAnnouncement:
+    type: object
+    config:
+        description: 'Course announcement.'
+        resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseAnnouncementResolver", [value, args, info, context])'
+        fields:
+            id:
+                type: 'Int'
+            title:
+                type: 'String'
+            content:
+                type: 'String'
+            by:
+                type: 'User'
+            lastUpdateDate:
+                type: 'DateTime'

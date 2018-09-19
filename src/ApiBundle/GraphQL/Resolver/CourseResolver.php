@@ -113,6 +113,7 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
         $tools = array_filter($tools, function ($tool) {
             switch ($tool['name']) {
                 case TOOL_COURSE_DESCRIPTION:
+                case TOOL_ANNOUNCEMENT:
                     return true;
                 default:
                     return false;

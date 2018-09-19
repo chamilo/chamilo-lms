@@ -328,10 +328,7 @@ switch ($action) {
 
                 if ($saleIsCompleted) {
                     Display::addFlash(
-                        Display::return_message(
-                            sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $sale['product_name']),
-                            'success'
-                        )
+                        $plugin->getSubscriptionSuccessMessage($sale)
                     );
                 }
             }

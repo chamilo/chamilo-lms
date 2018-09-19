@@ -33,10 +33,7 @@ if (isset($_GET['order'])) {
             $plugin->completeSale($sale['id']);
             $plugin->storePayouts($sale['id']);
             Display::addFlash(
-                Display::return_message(
-                    sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $sale['product_name']),
-                    'success'
-                )
+                $plugin->getSubscriptionSuccessMessage($sale)
             );
 
             $urlToRedirect .= http_build_query([

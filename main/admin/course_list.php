@@ -46,7 +46,9 @@ function get_number_of_courses()
     } elseif (isset($_GET['keyword_code'])) {
         $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
         $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
-        $keyword_category = Database::escape_string("%".$_GET['keyword_category']."%");
+        $keyword_category = isset($_GET['keyword_category'])
+            ? Database::escape_string("%".$_GET['keyword_category']."%")
+            : null;
         $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
         $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
         $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
@@ -55,12 +57,15 @@ function get_number_of_courses()
         $sql .= " WHERE
                     (c.code LIKE '".$keyword_code."' OR c.visual_code LIKE '".$keyword_code."') AND
                     c.title LIKE '".$keyword_title."' AND
-                    c.category_code LIKE '".$keyword_category."' AND
                     c.course_language LIKE '".$keyword_language."' AND
                     c.visibility LIKE '".$keyword_visibility."' AND
                     c.subscribe LIKE '".$keyword_subscribe."' AND
                     c.unsubscribe LIKE '".$keyword_unsubscribe."'
         ";
+
+        if (!empty($keyword_category)) {
+            $sql .= " AND c.category_code LIKE '".$keyword_category."' ";
+        }
     }
 
     // adding the filter to see the user's only of the current access_url
@@ -127,7 +132,9 @@ function get_course_data($from, $number_of_items, $column, $direction)
     } elseif (isset($_GET['keyword_code'])) {
         $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
         $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
-        $keyword_category = Database::escape_string("%".$_GET['keyword_category']."%");
+        $keyword_category = isset($_GET['keyword_category'])
+            ? Database::escape_string("%".$_GET['keyword_category']."%")
+            : null;
         $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
         $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
         $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
@@ -136,11 +143,14 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $sql .= " WHERE
                 (code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
                 title LIKE '".$keyword_title."' AND
-                category_code LIKE '".$keyword_category."' AND
                 course_language LIKE '".$keyword_language."' AND
                 visibility LIKE '".$keyword_visibility."' AND
                 subscribe LIKE '".$keyword_subscribe."' AND
                 unsubscribe LIKE '".$keyword_unsubscribe."'";
+
+        if (!empty($keyword_category)) {
+            $sql .= " AND category_code LIKE '".$keyword_category."' ";
+        }
     }
 
     // Adding the filter to see the user's only of the current access_url.
@@ -531,7 +541,9 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     } elseif (isset($_GET['keyword_code'])) {
         $parameters['keyword_code'] = Security::remove_XSS($_GET['keyword_code']);
         $parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
-        $parameters['keyword_category'] = Security::remove_XSS($_GET['keyword_category']);
+        if (isset($_GET['keyword_category'])) {
+            $parameters['keyword_category'] = Security::remove_XSS($_GET['keyword_category']);
+        }
         $parameters['keyword_language'] = Security::remove_XSS($_GET['keyword_language']);
         $parameters['keyword_visibility'] = Security::remove_XSS($_GET['keyword_visibility']);
         $parameters['keyword_subscribe'] = Security::remove_XSS($_GET['keyword_subscribe']);

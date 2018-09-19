@@ -30,7 +30,7 @@
                     <h3 class="page-header">{{ course.title }}</h3>
                     <ul class="items-teacher list-unstyled">
                         {% for teacher in course.teachers %}
-                            <li><em class="fa fa-user"></em> {{ teacher }}</li>
+                            <li><em class="fa fa-user" aria-hidden="true"></em> {{ teacher.name }}</li>
                         {% endfor %}
                     </ul>
                     <p>
@@ -57,7 +57,7 @@
                         {% for course in session.courses %}
                             <dt>{{ course.title }}</dt>
                             {% for coach in course.coaches %}
-                                <dd><em class="fa fa-user fa-fw"></em> {{ coach }}</dd>
+                                <dd><em class="fa fa-user fa-fw" aria-hidden="true"></em> {{ coach.name }}</dd>
                             {% endfor %}
                         {% endfor %}
                     </dl>

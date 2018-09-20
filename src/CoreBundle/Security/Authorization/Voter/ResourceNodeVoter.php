@@ -194,7 +194,7 @@ class ResourceNodeVoter extends Voter
             $rights = $rightFromResourceLink;
         } else {
             // Taken the rights from the default tool
-            $rights = $link->getResourceNode()->getTool()->getToolResourceRights();
+            $rights = $link->getResourceNode()->getTool()->getToolResourceRight();
         }
 
         // Asked mask

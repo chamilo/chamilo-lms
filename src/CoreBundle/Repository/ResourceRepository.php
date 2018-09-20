@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -77,11 +77,11 @@ class ResourceRepository extends EntityRepository
 
     /**
      * @param ResourceNode   $resourceNode
-     * @param ResourceRights $right
+     * @param ResourceRight $right
      *
      * @return ResourceLink
      */
-    public function addResourceToEveryone(ResourceNode $resourceNode, ResourceRights $right): ResourceLink
+    public function addResourceToEveryone(ResourceNode $resourceNode, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -98,11 +98,11 @@ class ResourceRepository extends EntityRepository
     /**
      * @param ResourceNode   $resourceNode
      * @param Course         $course
-     * @param ResourceRights $right
+     * @param ResourceRight $right
      *
      * @return ResourceLink
      */
-    public function addResourceToCourse(ResourceNode $resourceNode, Course $course, ResourceRights $right): ResourceLink
+    public function addResourceToCourse(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -167,7 +167,7 @@ class ResourceRepository extends EntityRepository
      * @param ResourceNode   $resourceNode
      * @param Course         $course
      * @param Session        $session
-     * @param ResourceRights $right
+     * @param ResourceRight $right
      *
      * @return ResourceLink
      */
@@ -175,7 +175,7 @@ class ResourceRepository extends EntityRepository
         ResourceNode $resourceNode,
         Course $course,
         Session $session,
-        ResourceRights $right
+        ResourceRight $right
     ) {
         $resourceLink = $this->addResourceToCourse(
             $resourceNode,
@@ -192,7 +192,7 @@ class ResourceRepository extends EntityRepository
      * @param ResourceNode   $resourceNode
      * @param Course         $course
      * @param CGroupInfo     $group
-     * @param ResourceRights $right
+     * @param ResourceRight $right
      *
      * @return ResourceLink
      */
@@ -200,7 +200,7 @@ class ResourceRepository extends EntityRepository
         ResourceNode $resourceNode,
         Course $course,
         CGroupInfo $group,
-        ResourceRights $right
+        ResourceRight $right
     ) {
         $resourceLink = $this->addResourceToCourse(
             $resourceNode,
@@ -214,16 +214,16 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode   $resourceNode
-     * @param Usergroup      $group
-     * @param ResourceRights $right
+     * @param ResourceNode $resourceNode
+     * @param Usergroup $group
+     * @param ResourceRight $right
      *
      * @return ResourceLink
      */
     public function addResourceToGroup(
         ResourceNode $resourceNode,
         Usergroup $group,
-        ResourceRights $right
+        ResourceRight $right
     ) {
         $resourceLink = new ResourceLink();
         $resourceLink

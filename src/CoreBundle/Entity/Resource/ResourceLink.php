@@ -62,9 +62,9 @@ class ResourceLink implements ResourceInterface
     protected $userGroup;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRights", mappedBy="resourceLink", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRight", mappedBy="resourceLink", cascade={"persist", "remove"})
      */
-    protected $rights;
+    protected $resourceRight;
 
     /**
      * @var bool
@@ -203,11 +203,11 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * @param ResourceRights $right
+     * @param ResourceRight $right
      *
      * @return $this
      */
-    public function addRight(ResourceRights $right)
+    public function addRight(ResourceRight $right)
     {
         $right->setResourceLink($this);
         $this->rights[] = $right;

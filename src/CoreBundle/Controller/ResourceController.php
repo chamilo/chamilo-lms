@@ -9,7 +9,7 @@ use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Source\Entity;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
@@ -247,7 +247,7 @@ class ResourceController extends BaseResourceController implements CourseControl
 
                 $resourceRight = null;
                 if (isset($share['mask'])) {
-                    $resourceRight = new ResourceRights();
+                    $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($share['mask'])
                         ->setRole($share['role'])

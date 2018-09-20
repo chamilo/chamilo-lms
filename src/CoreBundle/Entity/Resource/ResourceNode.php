@@ -90,7 +90,7 @@ class ResourceNode
     /**
      * @var ResourceFile
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", mappedBy="node")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode")
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
      */
     protected $resourceFile;

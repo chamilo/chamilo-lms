@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="resource_rights")
+ * @ORM\Table(name="resource_right")
  */
-class ResourceRights
+class ResourceRight
 {
     /**
      * @ORM\Id

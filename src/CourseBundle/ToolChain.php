@@ -5,7 +5,7 @@ namespace Chamilo\CourseBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\Entity\ToolResourceRights;
+use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Tool\BaseTool;
@@ -98,20 +98,20 @@ class ToolChain
      */
     public function setToolPermissions(Tool $tool)
     {
-        $toolResourceRight = new ToolResourceRights();
+        $toolResourceRight = new ToolResourceRight();
         $toolResourceRight
             ->setRole('ROLE_TEACHER')
             ->setMask(ResourceNodeVoter::getEditorMask())
         ;
 
-        $toolResourceRightReader = new ToolResourceRights();
+        $toolResourceRightReader = new ToolResourceRight();
         $toolResourceRightReader
             ->setRole('ROLE_STUDENT')
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;
 
-        $tool->addToolResourceRights($toolResourceRight);
-        $tool->addToolResourceRights($toolResourceRightReader);
+        $tool->addToolResourceRight($toolResourceRight);
+        $tool->addToolResourceRight($toolResourceRightReader);
     }
 
     /**

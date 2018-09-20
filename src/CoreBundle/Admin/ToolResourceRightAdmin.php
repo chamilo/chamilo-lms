@@ -3,18 +3,18 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
-use Chamilo\CoreBundle\Entity\ToolResourceRights;
+use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class ToolResourceRightsAdmin.
+ * Class ToolResourceRightAdmin.
  *
  * @package Chamilo\CoreBundle\Admin
  */
-class ToolResourceRightsAdmin extends AbstractAdmin
+class ToolResourceRightAdmin extends AbstractAdmin
 {
     /**
      * {@inheritdoc}
@@ -26,12 +26,12 @@ class ToolResourceRightsAdmin extends AbstractAdmin
             ->add(
                 'role',
                 'choice',
-                ['choices' => ToolResourceRights::getDefaultRoles()]
+                ['choices' => ToolResourceRight::getDefaultRoles()]
             )
             ->add(
                 'mask',
                 'choice',
-                ['choices' => ToolResourceRights::getMaskList()]
+                ['choices' => ToolResourceRight::getMaskList()]
             )
         ;
     }

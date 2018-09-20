@@ -31,7 +31,7 @@ class ResourceType
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="types")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceTypes")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
     protected $tool;

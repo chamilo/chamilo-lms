@@ -5,13 +5,19 @@ parameters:
     chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
     chamilo_course.settings.schema_registry.class: Sylius\Component\Registry\ServiceRegistry
     chamilo_course.entity.manager.group_manager.class: Chamilo\CourseBundle\Entity\Manager\GroupManager
+    chamilo_course.entity.manager.announcement_manager.class: Chamilo\CourseBundle\Entity\Manager\AnnouncementManager
     chamilo_course.entity.group: Chamilo\CourseBundle\Entity\CGroupInfo
+    chamilo_course.entity.announcement: Chamilo\CourseBundle\Entity\CAnnouncement
 
 services:
     # Managers
     chamilo_course.entity.manager.group_manager:
         class: '%chamilo_course.entity.manager.group_manager.class%'
         arguments: ['%chamilo_course.entity.group%', '@doctrine']
+
+    chamilo_course.entity.manager.announcement_manager:
+        class: '%chamilo_course.entity.manager.announcement_manager.class%'
+        arguments: ['%chamilo_course.entity.announcement%', '@doctrine']
 
     # Event Listeners
     chamilo_course.listener.course:

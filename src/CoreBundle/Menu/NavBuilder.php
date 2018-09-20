@@ -72,6 +72,7 @@ class NavBuilder implements ContainerAwareInterface
             $translator->trans('Home'),
             [
                 'route' => 'legacy_index',
+                'icon' => 'home',
             ]
         );
 
@@ -80,6 +81,7 @@ class NavBuilder implements ContainerAwareInterface
                 $translator->trans('MyCourses'),
                 [
                     'route' => 'legacy_main',
+                    'icon' => 'book',
                     'routeParameters' => [
                         'name' => '../user_portal.php',
                     ],
@@ -90,6 +92,7 @@ class NavBuilder implements ContainerAwareInterface
                 $translator->trans('Calendar'),
                 [
                     'route' => 'legacy_main',
+                    'icon' => 'calendar-alt',
                     'routeParameters' => [
                         'name' => 'calendar/agenda_js.php',
                     ],
@@ -100,6 +103,7 @@ class NavBuilder implements ContainerAwareInterface
                 $translator->trans('Reporting'),
                 [
                     'route' => 'legacy_main',
+                    'icon' => 'chart-bar',
                     'routeParameters' => [
                         'name' => 'mySpace/index.php',
                     ],
@@ -111,6 +115,7 @@ class NavBuilder implements ContainerAwareInterface
                     $translator->trans('Social'),
                     [
                         'route' => 'legacy_main',
+                        'icon' => 'heart',
                         'routeParameters' => [
                             'name' => 'social/home.php',
                         ],
@@ -123,6 +128,7 @@ class NavBuilder implements ContainerAwareInterface
                     $translator->trans('Dashboard'),
                     [
                         'route' => 'legacy_main',
+                        'icon' => 'cube',
                         'routeParameters' => [
                             'name' => 'dashboard/index.php',
                         ],
@@ -132,6 +138,7 @@ class NavBuilder implements ContainerAwareInterface
                     $translator->trans('Administration'),
                     [
                         'route' => 'legacy_main',
+                        'icon' => 'cogs',
                         'routeParameters' => [
                             'name' => 'admin/index.php',
                         ],
@@ -232,8 +239,8 @@ class NavBuilder implements ContainerAwareInterface
 
         // Set CSS classes for the items
         foreach ($menu->getChildren() as $child) {
-            $child
-                ->setLinkAttribute('class', 'nav-link')
+                $child
+                ->setLinkAttribute('class', 'sidebar-link')
                 ->setAttribute('class', 'nav-item');
         }
 

@@ -79,8 +79,16 @@ switch ($action) {
         $result = $extraField->searchOptionsFromTags($from, $search, $options);
         $options = [];
         $groups = [];
+
         foreach ($result as $data) {
-            $groups[$data['display_text']][] = [
+            // Try to get the translation
+            $displayText = $data['display_text'];
+            $valueToTranslate = str_replace('-', '', $data['value']);
+            $valueTranslated = str_replace(['[=', '=]'], '', get_lang($valueToTranslate));
+            if ($valueToTranslate != $valueTranslated) {
+                $displayText = $valueTranslated;
+            }
+            $groups[$displayText][] = [
                 'id' => $data['id'],
                 'text' => $data['tag'],
             ];

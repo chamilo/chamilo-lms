@@ -443,7 +443,9 @@ $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 
 $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
-    $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
+    // OFAJ CHANGE ------------------
+    //$url = api_get_path(WEB_CODE_PATH).'social/terms.php';
+    $url = api_get_path(WEB_PATH).get_lang('LinkToUseConditions');
     $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
 }
 

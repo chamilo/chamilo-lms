@@ -266,6 +266,11 @@ services:
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.cas, namespace: cas}
 
+    chamilo_core.settings.certificate:
+        class: Chamilo\CoreBundle\Settings\CertificateSettingsSchema
+        tags:
+        - {name: sylius.settings_schema, alias: chamilo_core.settings.certificate, namespace: certificate}
+
     chamilo_core.settings.chat:
         class: Chamilo\CoreBundle\Settings\ChatSettingsSchema
         tags:
@@ -333,6 +338,11 @@ services:
         class: Chamilo\CoreBundle\Settings\LanguageSettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: language}
+
+    chamilo_core.settings.learning_path:
+        class: Chamilo\CoreBundle\Settings\LearningPathSettingsSchema
+        tags:
+        - {name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: lp}
 
     chamilo_core.settings.mail:
         class: Chamilo\CoreBundle\Settings\MailSettingsSchema

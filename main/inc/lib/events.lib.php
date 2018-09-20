@@ -14,45 +14,6 @@ use ChamiloSession as Session;
 class Event
 {
     /**
-     * @author Sebastien Piraux <piraux_seb@hotmail.com>
-     * @desc Record information for open event (when homepage is opened)
-     */
-    public static function open()
-    {
-        global $_configuration;
-        global $TABLETRACK_OPEN;
-
-        // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
-        // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
-        // $_SERVER['HTTP_REFERER'] : provide information about refering url
-        if (isset($_SERVER['HTT_REFERER'])) {
-            $referer = Database::escape_string($_SERVER['HTTP_REFERER']);
-        } else {
-            $referer = '';
-        }
-        // record informations only if user comes from another site
-        //if(!eregi($_configuration['root_web'],$referer))
-        $pos = strpos($referer, $_configuration['root_web']);
-        if ($pos === false && $referer != '') {
-            $ip = api_get_real_ip();
-            $remhost = @gethostbyaddr($ip);
-            if ($remhost == $ip) {
-                $remhost = "Unknown";
-            } // don't change this
-            $reallyNow = api_get_utc_datetime();
-            $params = [
-                'open_remote_host' => Database::escape_string($remhost),
-                'open_agent' => $_SERVER['HTTP_USER_AGENT'],
-                'open_referer' => $referer,
-                'open_date' => $reallyNow,
-            ];
-            Database::insert($TABLETRACK_OPEN, $params);
-        }
-
-        return 1;
-    }
-
-    /**
      * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
      * @author Julio Montoya
      *

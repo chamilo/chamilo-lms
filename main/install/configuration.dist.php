@@ -26,24 +26,12 @@
 /**
  * Database connection settings.
  */
-// Database host
-$_configuration['db_host'] = '{DATABASE_HOST}';
-// Database port
-$_configuration['db_port'] = '{DATABASE_PORT}';
-// Database name
-$_configuration['main_database'] = '{DATABASE_MAIN}';
-// Database username
-$_configuration['db_user'] = '{DATABASE_USER}';
-// Database password
-$_configuration['db_password'] = '{DATABASE_PASSWORD}';
 // Enable access to database management for platform admins.
 $_configuration['db_manager_enabled'] = false;
 
 /**
  * Directory settings.
  */
-// URL to the root of your Chamilo installation, e.g.: http://www.mychamilo.com/
-$_configuration['root_web'] = '{ROOT_WEB}';
 
 // Path to the webroot of system, example: /var/www/
 $_configuration['root_sys'] = '{ROOT_SYS}';
@@ -51,29 +39,6 @@ $_configuration['root_sys'] = '{ROOT_SYS}';
 // Path from your WWW-root to the root of your Chamilo installation,
 // example: chamilo (this means chamilo is installed in /var/www/chamilo/
 $_configuration['url_append'] = '{URL_APPEND_PATH}';
-
-/**
- * Login modules settings.
- */
-// CAS IMPLEMENTATION
-// -> Go to your portal Chamilo > Administration > CAS to activate CAS
-// You can leave these lines uncommented even if you don't use CAS authentification
-//$extAuthSource["cas"]["login"] = $_configuration['root_sys']."main/auth/cas/login.php";
-//$extAuthSource["cas"]["newUser"] = $_configuration['root_sys']."main/auth/cas/newUser.php";
-
-// NEW LDAP IMPLEMENTATION BASED ON external_login info
-// -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
-// $extAuthSource["extldap"]["login"] = $_configuration['root_sys']."main/auth/external_login/login.ldap.php";
-// $extAuthSource["extldap"]["newUser"] = $_configuration['root_sys']."main/auth/external_login/newUser.ldap.php";
-//
-// FACEBOOK IMPLEMENTATION BASED ON external_login info
-// -> Uncomment the line bellow to activate Facebook Auth AND edit app/config/auth.conf.php for configuration
-// $_configuration['facebook_auth'] = 1;
-//
-// OTHER EXTERNAL LOGIN INFORMATION
-// To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
-// $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys']."main/auth/external_login/newUser.php";
-// $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys']."main/auth/external_login/updateUser.php";
 
 /**
  * Hosting settings - Allows you to set limits to the Chamilo portal when
@@ -150,8 +115,6 @@ $_configuration['cdn'] = [
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Hash function method
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
-// You may have to restart your web server if you change this
-$_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
@@ -173,35 +136,10 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
  */
 // Uncomment the following to prevent all admins to use the "login as" feature
 //$_configuration['login_as_forbidden_globally'] = true;
-// If session_stored_in_db is false, an alternative session storage mechanism
-// can be used, which allows for a volatile storage in Memcache, and a more
-// permanent "backup" storage in the database, every once in a while (see
-// frequency). This is generally used in HA clusters configurations
-// This requires memcache or memcached and the php5-memcache module to be setup
-//$_configuration['session_stored_in_db_as_backup'] = true;
-// Define the different memcache servers available
-//$_configuration['memcache_server'] = array(
-//    0 => array(
-//        'host' => 'chamilo8',
-//        'port' => '11211',
-//    ),
-//    1 => array(
-//        'host' => 'chamilo9',
-//        'port' => '11211',
-//    ),
-//);
-// Define the frequency to which the data must be stored in the database
-//$_configuration['session_stored_after_n_times'] = 10;
+
 // If the database is down this css style will be used to show the errors.
 //$_configuration['theme_fallback'] = 'chamilo'; // (chamilo theme)
-// The default template that will be use in the system.
-//$_configuration['default_template'] = 'default'; // (main/template/default)
-// Hide fields in the main/user/user.php page
 //$_configuration['hide_user_field_from_list'] = ['fields' => ['username']];
-// Aspell Settings
-//$_configuration['aspell_bin'] = '/usr/bin/hunspell';
-//$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';
-//$_configuration['aspell_temp_dir'] = './';
 // Custom name_order_conventions
 //$_configuration['name_order_conventions'] = array(
 // 'french' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name')
@@ -239,34 +177,25 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'birthday'
     ]
 ];*/
-// Boost option to ignore encoding check for learning paths
-//$_configuration['lp_fixed_encoding'] = 'false';
+
 // Fix urls changing http with https in scorm packages.
 //$_configuration['lp_replace_http_to_https'] = false;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
 // Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
 //$_configuration['document_manage_deleted_files'] = false;
-// Hide tabs in the main/session/index.php page
-//$_configuration['session_hide_tab_list'] = array();
-// Show invisible exercise in LP list
-//$_configuration['show_invisible_exercise_in_lp_list'] = false;
+
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
-// If true exercises added in LP can be modified.
-//$_configuration['force_edit_exercise_in_lp'] = false;
+
 // List of driver to plugin in ckeditor
 //$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];
-// Hide send to hrm users options in announcements
-//$_configuration['announcements_hide_send_to_hrm_users'] = true;
-// Hide certificate link in index/userportal pages
-//$_configuration['hide_my_certificate_link'] = false;
+
 // Hide header and footer in certificate pdf
 //$_configuration['hide_header_footer_in_certificate'] = false;
-// Security: block direct access from logged in users to contents in OPEN (but not public) courses. Set to true to block
-//$_configuration['block_registered_users_access_to_open_course_contents'] = false;
+
 // Allows syncing the database with the current entity schema
 //$_configuration['sync_db_with_schema'] = false;
 // When exporting a LP, all files and folders in the same path of an html will be exported too.

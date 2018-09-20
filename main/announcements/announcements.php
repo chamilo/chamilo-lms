@@ -539,7 +539,7 @@ switch ($action) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
         }
 
-        $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
+        $config = api_get_configuration_value('announcement.hide_send_to_hrm_users');
 
         if ($config === false) {
             $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));

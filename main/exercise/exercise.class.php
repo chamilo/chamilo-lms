@@ -216,7 +216,7 @@ class Exercise
                 $this->lpList = Database::store_result($result, 'ASSOC');
             }
 
-            $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
+            $this->force_edit_exercise_in_lp = api_get_setting('lp.show_invisible_exercise_in_lp_toc') === 'true';
 
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;

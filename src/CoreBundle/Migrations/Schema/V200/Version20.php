@@ -154,9 +154,6 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_8456658091D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
 
-        $this->addSql('DROP INDEX user_sco_course_sv ON track_stored_values;');
-        $this->addSql('DROP INDEX user_sco_course_sv_stack ON track_stored_values_stack;');
-
         $this->addSql('UPDATE c_tool SET name = "blog" WHERE name = "blog_management" ');
         $this->addSql('UPDATE c_tool SET name = "agenda" WHERE name = "calendar_event" ');
         $this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
@@ -278,13 +275,13 @@ class Version20 extends AbstractMigrationChamilo
         }
         /*
                 $this->addSql("ALTER TABLE personal_agenda DROP course");
-        
+
                 $this->addSql("
                     ALTER TABLE specific_field_values
                     ADD c_id int(11) NOT NULL,
                     ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
                 ");
-        
+
                 $this->addSql("
                     ALTER TABLE track_e_hotspot
                     CHANGE c_id c_id int(11) NOT NULL AFTER hotspot_course_code,
@@ -724,8 +721,15 @@ class Version20 extends AbstractMigrationChamilo
             }
         }
 
-        // Drop unused tables
-        $dropTables = ['event_email_template', 'event_sent', 'user_rel_event_type', 'openid_association'];
+        // Drop tables
+        $dropTables = [
+            'event_email_template',
+            'event_sent',
+            'user_rel_event_type',
+            'openid_association',
+            'track_stored_values',
+            'track_stored_values_stack',
+        ];
         foreach ($dropTables as $table) {
             if ($schema->hasTable($table)) {
                 $schema->dropTable($table);

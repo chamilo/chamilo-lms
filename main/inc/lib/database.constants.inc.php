@@ -294,10 +294,6 @@ define('TABLE_USERGROUP_REL_USERGROUP', 'usergroup_rel_usergroup');
 // Mail notifications
 define('TABLE_NOTIFICATION', 'notification');
 
-//Storage api tables
-define('TABLE_TRACK_STORED_VALUES', 'track_stored_values');
-define('TABLE_TRACK_STORED_VALUES_STACK', 'track_stored_values_stack');
-
 define('TABLE_MAIN_SKILL', 'skill');
 define('TABLE_MAIN_SKILL_REL_SKILL', 'skill_rel_skill');
 define('TABLE_MAIN_SKILL_REL_GRADEBOOK', 'skill_rel_gradebook');

@@ -98,9 +98,6 @@ if (!empty($_POST['submitAuth'])) {
             }
         }
     }
-} else {
-    // Only if login form was not sent because if the form is sent the user was already on the page.
-    Event::open();
 }
 
 if (!api_is_anonymous()) {

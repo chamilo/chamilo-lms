@@ -558,7 +558,6 @@ if (@$_POST['step2']) {
         }
 
         // For version 1.9
-        $urlForm = $_configuration['root_web'];
         $encryptPassForm = get_config_param('password_encryption');
         // Managing the $encryptPassForm
         if ($encryptPassForm == '1') {

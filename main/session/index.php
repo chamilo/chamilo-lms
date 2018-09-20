@@ -652,9 +652,10 @@ $tabs = [
     $reportingTab,
 ];
 
-$tabToHide = api_get_configuration_value('session_hide_tab_list');
+$tabToHide = api_get_setting('session.hide_tab_list');
 
 if (!empty($tabToHide)) {
+    $tabToHide = explode(',', $tabToHide);
     foreach ($tabToHide as $columnId) {
         unset($headers[$columnId]);
         unset($tabs[$columnId]);

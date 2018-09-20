@@ -31,6 +31,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'exercise_max_ckeditors_in_page' => '0',
                     'configure_exercise_visibility_in_course' => 'false',
                     'exercise_invisible_in_session' => 'false',
+                    'allow_edit_exercise_in_lp' => 'false',
                 ]
             )
         ;

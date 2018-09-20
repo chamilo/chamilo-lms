@@ -8,11 +8,11 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class AnnouncementSettingsSchema.
+ * Class LearningPathSettingsSchema.
  *
  * @package Chamilo\CoreBundle\Settings
  */
-class AnnouncementSettingsSchema extends AbstractSettingsSchema
+class LearningPathSettingsSchema extends AbstractSettingsSchema
 {
     /**
      * {@inheritdoc}
@@ -22,13 +22,13 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'hide_global_announcements_when_not_connected' => 'false',
-                    'hide_send_to_hrm_users' => 'true'
+                    'fixed_encoding' => 'false',
+                    'show_invisible_exercise_in_lp_toc' => 'false'
                 ]
             );
 
         $allowedTypes = [
-            'hide_global_announcements_when_not_connected' => ['string'],
+            'fixed_encoding' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -39,8 +39,8 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('hide_global_announcements_when_not_connected', YesNoType::class)
-            ->add('hide_send_to_hrm_users', YesNoType::class)
+            ->add('fixed_encoding', YesNoType::class)
+            ->add('show_invisible_exercise_in_lp_toc', YesNoType::class)
         ;
     }
 }

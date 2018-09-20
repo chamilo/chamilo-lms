@@ -343,8 +343,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
         $checker = $this->container->get('security.authorization_checker');
         $translator = $this->container->get('translator');
         $settingsManager = $this->container->get('chamilo.settings.manager');
-        //$allow = $settingsManager->getSetting('hide_my_certificate_link');
-        $allow = api_get_configuration_value('hide_my_certificate_link');
+        $allow = $settingsManager->getSetting('certificate.hide_my_certificate_link');
 
         $menu = $factory->createItem('root');
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {

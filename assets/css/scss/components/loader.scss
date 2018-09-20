@@ -1,15 +1,17 @@
+// ---------------------------------------------------------
+// SPINNER LOAD
+// ---------------------------------------------------------
+
 #loader {
   transition: all 0.3s ease-in-out;
   opacity: 1;
-  display: default;
+  display: initial;
 }
 
 #loader.fadeOut {
   opacity: 0;
   display: none;
 }
-
-
 
 .spinner {
   width: 40px;

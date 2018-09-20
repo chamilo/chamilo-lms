@@ -16,17 +16,20 @@ if (empty($url)) {
 
     return;
 }
-
-$channel = Reader::import($url);
-
-if (!empty($channel)) {
-    /** @var FeedInterface $item */
-    foreach ($channel as $item) {
-        $title = $item->getTitle();
-        $link = $item->getLink();
-        if (!empty($link)) {
-            $title = Display::url($title, $link, ['target' => '_blank']);
+try {
+    $channel = Reader::import($url);
+    if (!empty($channel)) {
+        /** @var FeedInterface $item */
+        foreach ($channel as $item) {
+            $title = $item->getTitle();
+            $link = $item->getLink();
+            if (!empty($link)) {
+                $title = Display::url($title, $link, ['target' => '_blank']);
+            }
+            echo Display::panel($item->getDescription(), $title);
         }
-        echo Display::panel($item->getDescription(), $title);
     }
+} catch (Exception $e) {
+    echo Display::return_message($plugin->get_lang('no_valid_rss'), 'warning');
+    error_log($e->getMessage());
 }

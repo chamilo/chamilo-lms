@@ -45,14 +45,9 @@ class Tool
     protected $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="tool", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
      */
-    protected $resourceNodes;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ToolResourceRights", mappedBy="tool", cascade={"persist", "remove"})
-     */
-    protected $toolResourceRights;
+    protected $resourceTypes;
 
     /**
      * @return string

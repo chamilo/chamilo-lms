@@ -36,21 +36,15 @@ class ResourceNode
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceNodes")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
+     * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id")
      */
-    protected $tool;
+    protected $resourceType;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
     protected $links;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\AbstractResource", inversedBy="resourceNodes", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="resource_id", referencedColumnName="id")
-     */
-    //protected $resource;
 
     /**
      * @ORM\ManyToOne(
@@ -92,6 +86,14 @@ class ResourceNode
      * @ORM\Column(name="path", type="string", length=3000, nullable=true)
      */
     protected $path;
+
+    /**
+     * @var ResourceFile
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", mappedBy="node")
+     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
+     */
+    protected $resourceFile;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")

@@ -66,6 +66,7 @@ class ResourceNodeVoter extends Voter
     {
         $builder = new MaskBuilder();
         $builder
+            ->add(self::VIEW)
             ->add(self::EDIT)
         ;
 

@@ -341,7 +341,7 @@ class DocumentManager
             return true;
         } else {
             // no forced download, just let the browser decide what to do according to the mimetype
-            $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
+            $lpFixedEncoding = api_get_setting('lp.fixed_encoding') === 'true';
 
             // Commented to let courses content to be cached in order to improve performance:
             //header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');

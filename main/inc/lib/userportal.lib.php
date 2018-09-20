@@ -246,7 +246,7 @@ class IndexManager
         $items = [];
 
         if (!api_is_anonymous() &&
-            api_get_configuration_value('hide_my_certificate_link') === false
+            api_get_setting('certificate.hide_my_certificate_link') === 'false'
         ) {
             $items[] = [
                 'icon' => Display::return_icon('graduation.png', get_lang('MyCertificates')),

@@ -8,11 +8,11 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class AnnouncementSettingsSchema.
+ * Class CertificateSettingsSchema.
  *
  * @package Chamilo\CoreBundle\Settings
  */
-class AnnouncementSettingsSchema extends AbstractSettingsSchema
+class CertificateSettingsSchema extends AbstractSettingsSchema
 {
     /**
      * {@inheritdoc}
@@ -22,13 +22,13 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'hide_global_announcements_when_not_connected' => 'false',
-                    'hide_send_to_hrm_users' => 'true'
+                    'hide_my_certificate_link' => 'false',
+                    'hide_header_footer' => 'false'
                 ]
             );
 
         $allowedTypes = [
-            'hide_global_announcements_when_not_connected' => ['string'],
+            'hide_my_certificate_link' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -39,8 +39,8 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('hide_global_announcements_when_not_connected', YesNoType::class)
-            ->add('hide_send_to_hrm_users', YesNoType::class)
+            ->add('hide_my_certificate_link', YesNoType::class)
+            ->add('hide_header_footer', YesNoType::class)
         ;
     }
 }

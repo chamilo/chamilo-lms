@@ -10116,7 +10116,7 @@ class learnpath
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $condition_session = api_get_session_condition($session_id, true, true);
-        $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
+        $setting = api_get_setting('lp.show_invisible_exercise_in_lp_toc') === 'true';
 
         $activeCondition = ' active <> -1 ';
         if ($setting) {

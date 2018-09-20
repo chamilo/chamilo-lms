@@ -117,7 +117,7 @@ class Template
         //$this->set_header_parameters($sendHeaders);
         //$this->set_footer_parameters();
 
-        $defaultStyle = api_get_configuration_value('default_template');
+        $defaultStyle = api_get_setting('display.default_template');
         if (!empty($defaultStyle)) {
             $this->templateFolder = $defaultStyle;
         }
@@ -1293,6 +1293,7 @@ class Template
 
     /**
      * Set header parameters.
+     * @deprecated
      *
      * @param bool $sendHeaders send headers
      */
@@ -1417,7 +1418,7 @@ class Template
         $this->assign('pending_survey_url', $pendingSurveyLink);
 
         // Certificate Link
-        $allow = api_get_configuration_value('hide_my_certificate_link');
+        $allow = api_get_configuration_value('certificate.hide_my_certificate_link');
         if ($allow === false) {
             $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
             $certificateLink = Display::url(

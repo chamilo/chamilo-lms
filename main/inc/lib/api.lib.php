@@ -8436,7 +8436,7 @@ function api_warn_hosting_contact($limitName)
 }
 
 /**
- * Gets value of a variable from app/config/configuration.php
+ * Gets value of a variable from config/configuration.php
  * Variables that are not set in the configuration.php file but set elsewhere:
  * - virtual_css_theme_folder (vchamilo plugin)
  * - access_url (global.inc.php)

@@ -64,7 +64,6 @@ plugins:
 exclude_patterns:
   - var/cache/
   - var/log/
-  - app/config/
   - config/
   - app/SymfonyRequirements.php
   - app/Migrations/

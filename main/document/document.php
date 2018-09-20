@@ -399,7 +399,7 @@ switch ($action) {
                 $orientation = in_array($certificateOrientation, ['landscape', 'portrait'])
                     ? $certificateOrientation
                     : 'landscape';
-                $showHeaderAndFooter = !api_get_configuration_value('hide_header_footer_in_certificate');
+                $showHeaderAndFooter = !api_get_configuration_value('certificate.hide_header_footer') === 'true';
             }
 
             DocumentManager::export_to_pdf($document_id, $course_code, $orientation, $showHeaderAndFooter);

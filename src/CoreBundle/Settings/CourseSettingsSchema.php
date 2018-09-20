@@ -109,6 +109,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'enable_record_audio' => 'false',
                     'lp_show_reduced_report' => 'false',
                     'course_creation_splash_screen' => 'true',
+                    'block_registered_users_access_to_open_course_contents' => 'false', // @todo
                 ]
             )
             ->setTransformer(
@@ -249,6 +250,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('enable_record_audio', YesNoType::class)
             ->add('lp_show_reduced_report', YesNoType::class)
             ->add('course_creation_splash_screen', YesNoType::class)
+            ->add('block_registered_users_access_to_open_course_contents', YesNoType::class)
         ;
     }
 }

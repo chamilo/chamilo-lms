@@ -298,6 +298,8 @@ class AnnouncementEmail
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
      * @param int  $senderId             related to the main user
+     *
+     * @return array
      */
     public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0)
     {
@@ -314,6 +316,7 @@ class AnnouncementEmail
         if (empty($users) && !empty($this->logger)) {
             $this->logger->addInfo('User list is empty. No emails will be sent.');
         }
+        $messageSentTo = [];
         foreach ($users as $user) {
             $message = $this->message($user['user_id']);
             $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);
@@ -323,6 +326,8 @@ class AnnouncementEmail
                         'Announcement: #'.$this->announcement('id').'. Send email to user: #'.$user['user_id']
                     );
                 }
+
+                $messageSentTo[] = $user['user_id'];
                 MessageManager::send_message_simple(
                     $user['user_id'],
                     $subject,
@@ -359,6 +364,7 @@ class AnnouncementEmail
                     );
                     if (!empty($userList)) {
                         foreach ($userList as $user) {
+                            $messageSentTo[] = $user['user_id'];
                             MessageManager::send_message_simple(
                                 $user['user_id'],
                                 $subject,
@@ -374,6 +380,9 @@ class AnnouncementEmail
         }
 
         $this->logMailSent();
+        $messageSentTo = array_unique($messageSentTo);
+
+        return $messageSentTo;
     }
 
     /**

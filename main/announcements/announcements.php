@@ -574,8 +574,9 @@ switch ($action) {
                     );
 
                     // Send mail
+                    $messageSentTo = [];
                     if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
-                        AnnouncementManager::sendEmail(
+                        $messageSentTo = AnnouncementManager::sendEmail(
                             api_get_course_info(),
                             api_get_session_id(),
                             $id,
@@ -584,7 +585,7 @@ switch ($action) {
                         );
                     }
 
-                    if ($sendMeCopy) {
+                    if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {
                         $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $id);
                         $email->sendAnnouncementEmailToMySelf();
                     }
@@ -638,8 +639,9 @@ switch ($action) {
                         );
 
                         // Send mail
+                        $messageSentTo = [];
                         if (isset($data['email_ann']) && $data['email_ann']) {
-                            AnnouncementManager::sendEmail(
+                            $messageSentTo = AnnouncementManager::sendEmail(
                                 api_get_course_info(),
                                 api_get_session_id(),
                                 $insert_id,
@@ -647,7 +649,7 @@ switch ($action) {
                             );
                         }
 
-                        if ($sendMeCopy) {
+                        if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {
                             $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $insert_id);
                             $email->sendAnnouncementEmailToMySelf();
                         }

@@ -286,7 +286,7 @@ class Template
      */
     public function display_two_col_template()
     {
-        $template = '@ChamiloTheme/Layout/layout_two_col.html.twig';
+        $template = '@ChamiloTheme/Layout/layout_content.html.twig';
         $this->returnResponse($this->params, $template);
     }
 

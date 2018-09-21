@@ -76,7 +76,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode   $resourceNode
+     * @param ResourceNode  $resourceNode
      * @param ResourceRight $right
      *
      * @return ResourceLink
@@ -96,8 +96,8 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode   $resourceNode
-     * @param Course         $course
+     * @param ResourceNode  $resourceNode
+     * @param Course        $course
      * @param ResourceRight $right
      *
      * @return ResourceLink
@@ -164,9 +164,9 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode   $resourceNode
-     * @param Course         $course
-     * @param Session        $session
+     * @param ResourceNode  $resourceNode
+     * @param Course        $course
+     * @param Session       $session
      * @param ResourceRight $right
      *
      * @return ResourceLink
@@ -189,9 +189,9 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode   $resourceNode
-     * @param Course         $course
-     * @param CGroupInfo     $group
+     * @param ResourceNode  $resourceNode
+     * @param Course        $course
+     * @param CGroupInfo    $group
      * @param ResourceRight $right
      *
      * @return ResourceLink
@@ -214,8 +214,8 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param Usergroup $group
+     * @param ResourceNode  $resourceNode
+     * @param Usergroup     $group
      * @param ResourceRight $right
      *
      * @return ResourceLink

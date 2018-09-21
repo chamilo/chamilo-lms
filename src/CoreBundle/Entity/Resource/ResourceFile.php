@@ -3,9 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\UserBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -40,6 +37,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
+     *
      * @var string
      *
      * @ORM\Column(name="original_filename", type="string", nullable=false)
@@ -48,6 +46,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
+     *
      * @var string
      *
      * @ORM\Column(name="size", type="string", nullable=false)
@@ -56,6 +55,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
+     *
      * @var string
      *
      * @ORM\Column(name="width", type="string", nullable=true)
@@ -64,6 +64,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
+     *
      * @var string
      *
      * @ORM\Column(name="height", type="string", nullable=true)

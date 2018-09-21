@@ -1293,6 +1293,7 @@ class Template
 
     /**
      * Set header parameters.
+     *
      * @deprecated
      *
      * @param bool $sendHeaders send headers

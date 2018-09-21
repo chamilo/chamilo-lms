@@ -46,7 +46,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_days_before_coach_access' => '',
                     'show_session_description' => 'false',
                     'remove_session_url' => 'false',
-                    'hide_tab_list' => ''
+                    'hide_tab_list' => '',
                 ]
             )
         ;

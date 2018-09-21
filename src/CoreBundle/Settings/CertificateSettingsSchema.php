@@ -23,7 +23,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'hide_my_certificate_link' => 'false',
-                    'hide_header_footer' => 'false'
+                    'hide_header_footer' => 'false',
                 ]
             );
 

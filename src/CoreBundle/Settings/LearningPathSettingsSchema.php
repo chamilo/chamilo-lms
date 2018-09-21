@@ -23,7 +23,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'fixed_encoding' => 'false',
-                    'show_invisible_exercise_in_lp_toc' => 'false'
+                    'show_invisible_exercise_in_lp_toc' => 'false',
                 ]
             );
 

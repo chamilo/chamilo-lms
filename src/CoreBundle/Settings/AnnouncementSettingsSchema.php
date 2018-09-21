@@ -23,7 +23,7 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'hide_global_announcements_when_not_connected' => 'false',
-                    'hide_send_to_hrm_users' => 'true'
+                    'hide_send_to_hrm_users' => 'true',
                 ]
             );
 

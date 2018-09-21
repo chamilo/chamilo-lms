@@ -11,7 +11,6 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
 
 class AnnouncementManager extends BaseEntityManager
 {
-
     /**
      * @param User            $user
      * @param Course          $course
@@ -25,8 +24,9 @@ class AnnouncementManager extends BaseEntityManager
      * @param string          $titleToSearch
      * @param User|null       $userToSearch
      *
-     * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return mixed
      */
     public function getAnnouncements(
         User $user,

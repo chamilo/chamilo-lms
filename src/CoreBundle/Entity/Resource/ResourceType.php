@@ -4,8 +4,6 @@
 namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\UserBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,7 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="resource_type")
- *
  */
 class ResourceType
 {

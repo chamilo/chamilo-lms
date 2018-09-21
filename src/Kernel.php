@@ -104,7 +104,7 @@ class Kernel extends BaseKernel
      */
     public function getConfigurationFile()
     {
-        return $this->getRealRootDir().'app/config/configuration.php';
+        return $this->getRealRootDir().'config/configuration.php';
     }
 
     /**

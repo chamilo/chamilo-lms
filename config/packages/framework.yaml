@@ -1,4 +1,5 @@
 framework:
+    form: ~
     secret: '%env(APP_SECRET)%'
     default_locale: '%env(APP_LOCALE)%'
     translator:

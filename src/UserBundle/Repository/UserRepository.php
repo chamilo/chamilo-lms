@@ -877,7 +877,7 @@ class UserRepository extends EntityRepository
         foreach ($result as $item) {
             $list = [
                 'Course # '.$item->getCId(),
-                'Group #'.$item->getGroupId(),
+                'Group #'.$item->getGroup()->getId(),
                 'Role: '.$item->getStatus(),
             ];
             $cGroupRelUser[] = implode(', ', $list);

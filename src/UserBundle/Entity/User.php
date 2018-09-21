@@ -468,6 +468,20 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     private $receivedMessages;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="user")
+     */
+    private $courseGroupMemberships;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user")
+     */
+    private $tutoredCourseGroups;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -495,6 +509,9 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $this->expired = false;
         $this->roles = [];
         $this->credentialsExpired = false;
+
+        $this->courseGroupMemberships = new ArrayCollection();
+        $this->tutoredCourseGroups = new ArrayCollection();
     }
 
     /**
@@ -1930,5 +1947,21 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getReceivedMessages()
     {
         return $this->receivedMessages;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourseGroupMemberships(): ArrayCollection
+    {
+        return $this->courseGroupMemberships;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTutoredCourseGroups(): ArrayCollection
+    {
+        return $this->tutoredCourseGroups;
     }
 }

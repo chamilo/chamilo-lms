@@ -5,6 +5,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Traits\CourseTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -172,6 +173,20 @@ class CGroupInfo
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
+     */
+    protected $userMemberships;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
+     */
+    protected $tutorMemberships;
 
     /**
      * Set name.
@@ -599,5 +614,21 @@ class CGroupInfo
         $this->documentAccess = $documentAccess;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUserMemberships(): ArrayCollection
+    {
+        return $this->userMemberships;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTutorMemberships(): ArrayCollection
+    {
+        return $this->tutorMemberships;
     }
 }

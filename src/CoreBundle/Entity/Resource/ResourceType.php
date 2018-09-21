@@ -67,6 +67,7 @@ class ResourceType
 
     /**
      * @param mixed $id
+     *
      * @return ResourceType
      */
     public function setId($id)
@@ -106,6 +107,7 @@ class ResourceType
 
     /**
      * @param Tool $tool
+     *
      * @return ResourceType
      */
     public function setTool($tool)
@@ -125,6 +127,7 @@ class ResourceType
 
     /**
      * @param mixed $resourceNodes
+     *
      * @return ResourceType
      */
     public function setResourceNodes($resourceNodes)

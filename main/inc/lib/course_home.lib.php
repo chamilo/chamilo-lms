@@ -133,6 +133,7 @@ class CourseHome
             if ($tool['image'] == 'scormbuilder.gif') {
                 // check if the published learnpath is visible for student
                 $lpId = self::getPublishedLpIdFromLink($tool['link']);
+
                 if (!api_is_allowed_to_edit(null, true) &&
                     !learnpath::is_lp_visible_for_student(
                         $lpId,
@@ -526,11 +527,6 @@ class CourseHome
                     )';
                 }
 
-                /*$sql = "SELECT *
-                        FROM $course_tool_table t
-                        $conditions AND
-                        c_id = $course_id $condition_session
-                        ";*/
                 // Add order if there are LPs
                 $sql = "SELECT t.* FROM $course_tool_table t
                         LEFT JOIN $lpTable l 
@@ -541,9 +537,6 @@ class CourseHome
                 $orderBy = '';
                 break;
             case TOOL_AUTHORING:
-                /*$sql = "SELECT * FROM $course_tool_table t
-                        WHERE category = 'authoring' AND c_id = $course_id $condition_session
-                        ";*/
                 $sql = "SELECT t.* FROM $course_tool_table t
                         LEFT JOIN $lpTable l 
                         ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
@@ -654,12 +647,16 @@ class CourseHome
                     );
                     $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
 
-                    $add = learnpath::is_lp_visible_for_student(
-                        $lpId,
-                        $userId,
-                        api_get_course_id(),
-                        api_get_session_id()
-                    );
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $add = true;
+                    } else {
+                        $add = learnpath::is_lp_visible_for_student(
+                            $lpId,
+                            $userId,
+                            api_get_course_id(),
+                            api_get_session_id()
+                        );
+                    }
                     if ($path) {
                         $temp_row['custom_image'] = $path;
                     }

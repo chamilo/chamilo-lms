@@ -36,6 +36,13 @@ class ResourceNode
     protected $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable = true)
+     */
+    protected $description;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id")
      */
@@ -153,6 +160,8 @@ class ResourceNode
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     /**
@@ -169,6 +178,8 @@ class ResourceNode
     public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -402,6 +413,26 @@ class ResourceNode
     public function setResourceFile(ResourceFile $resourceFile): ResourceNode
     {
         $this->resourceFile = $resourceFile;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return ResourceNode
+     */
+    public function setDescription(string $description): ResourceNode
+    {
+        $this->description = $description;
 
         return $this;
     }

@@ -344,6 +344,4 @@ class ResourceFile
 
         return $this;
     }
-
-
 }

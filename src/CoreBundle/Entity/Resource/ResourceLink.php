@@ -72,7 +72,7 @@ class ResourceLink implements ResourceInterface
     protected $resourceRight;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
@@ -317,6 +317,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param int $visibility
+     *
      * @return ResourceLink
      */
     public function setVisibility(int $visibility): ResourceLink

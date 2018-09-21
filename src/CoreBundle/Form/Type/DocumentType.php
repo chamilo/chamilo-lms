@@ -58,7 +58,7 @@ class DocumentType extends AbstractType
                 'rights',
                 'collection',
                 array(
-                    'type' => new ResourceRightsType(),
+                    'type' => new ResourceRightType(),
                     'mapped' => false,
                     'allow_add' => true,
                 )

@@ -66,6 +66,7 @@ class ResourceNodeVoter extends Voter
     {
         $builder = new MaskBuilder();
         $builder
+            ->add(self::VIEW)
             ->add(self::EDIT)
         ;
 
@@ -193,7 +194,7 @@ class ResourceNodeVoter extends Voter
             $rights = $rightFromResourceLink;
         } else {
             // Taken the rights from the default tool
-            $rights = $link->getResourceNode()->getTool()->getToolResourceRights();
+            $rights = $link->getResourceNode()->getTool()->getToolResourceRight();
         }
 
         // Asked mask

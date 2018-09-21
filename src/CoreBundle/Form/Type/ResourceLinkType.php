@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\Form\Type;
 
-use Chamilo\CoreBundle\Entity\ToolResourceRights;
+use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,7 +48,7 @@ class ResourceLinkType extends AbstractType
                 'role',
                 ChoiceType::class,
                 [
-                    'choices' => ToolResourceRights::getDefaultRoles(),
+                    'choices' => ToolResourceRight::getDefaultRoles(),
                     'mapped' => false,
                 ]
             )
@@ -56,14 +56,14 @@ class ResourceLinkType extends AbstractType
                 'mask',
                 ChoiceType::class,
                 [
-                    'choices' => ToolResourceRights::getMaskList(),
+                    'choices' => ToolResourceRight::getMaskList(),
                     'mapped' => false,
                 ]
             )/*->add(
                 'rights',
                 'collection',
                 array(
-                    'type' => new ResourceRightsType(),
+                    'type' => new ResourceRightType(),
                     'allow_add'    => true,
                 )
             )*/

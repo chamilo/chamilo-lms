@@ -24,7 +24,7 @@ class ToolAdmin extends AbstractAdmin
             ->add('name')
             ->add('description', 'ckeditor')
             ->add(
-                'toolResourceRights',
+                'toolResourceRight',
                 'sonata_type_collection',
                 [
                 'cascade_validation' => true,
@@ -38,7 +38,7 @@ class ToolAdmin extends AbstractAdmin
                     //'multiple' => true
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('content' => $users),
-                    'admin_code' => 'sonata.admin.tool_resource_rights',
+                    'admin_code' => 'sonata.admin.tool_resource_right',
                 ]
             )
             /*->add('image', 'sonata_media_type', array(

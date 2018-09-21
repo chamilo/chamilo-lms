@@ -52,7 +52,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'hide_logout_button' => 'false',
                     'show_link_ticket_notification' => 'false',
                     'icons_mode_svg' => 'false',
-                    'default_template' => 'default'
+                    'default_template' => 'default',
                 ]
             );
 

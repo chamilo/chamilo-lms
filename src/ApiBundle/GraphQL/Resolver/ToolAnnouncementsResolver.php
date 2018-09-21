@@ -6,7 +6,6 @@ namespace Chamilo\ApiBundle\GraphQL\Resolver;
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CTool;
 use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Argument;

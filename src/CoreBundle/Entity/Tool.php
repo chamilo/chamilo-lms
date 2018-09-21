@@ -45,14 +45,9 @@ class Tool
     protected $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="tool", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
      */
-    protected $resourceNodes;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ToolResourceRights", mappedBy="tool", cascade={"persist", "remove"})
-     */
-    protected $toolResourceRights;
+    protected $resourceTypes;
 
     /**
      * @return string
@@ -65,32 +60,32 @@ class Tool
     /**
      * @return ArrayCollection
      */
-    public function getToolResourceRights()
+    public function getToolResourceRight()
     {
-        return $this->toolResourceRights;
+        return $this->toolResourceRight;
     }
 
     /**
-     * @param ArrayCollection $toolResourceRights
+     * @param ArrayCollection $toolResourceRight
      */
-    public function setToolResourceRights($toolResourceRights)
+    public function setToolResourceRight($toolResourceRight)
     {
-        $this->toolResourceRights = new ArrayCollection();
+        $this->toolResourceRight = new ArrayCollection();
 
-        foreach ($toolResourceRights as $toolResourceRight) {
-            $this->addToolResourceRights($toolResourceRight);
+        foreach ($toolResourceRight as $toolResourceRight) {
+            $this->addToolResourceRight($toolResourceRight);
         }
     }
 
     /**
-     * @param ToolResourceRights $toolResourceRight
+     * @param ToolResourceRight $toolResourceRight
      *
      * @return $this
      */
-    public function addToolResourceRights(ToolResourceRights $toolResourceRight)
+    public function addToolResourceRight(ToolResourceRight $toolResourceRight)
     {
         $toolResourceRight->setTool($this);
-        $this->toolResourceRights[] = $toolResourceRight;
+        $this->toolResourceRight[] = $toolResourceRight;
 
         return $this;
     }

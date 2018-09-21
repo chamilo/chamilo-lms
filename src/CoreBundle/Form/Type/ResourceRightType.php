@@ -3,17 +3,17 @@
 
 namespace Chamilo\CoreBundle\Form\Type;
 
-use Chamilo\CoreBundle\Entity\ToolResourceRights;
+use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ResourceRightsType.
+ * Class ResourceRightType.
  *
  * @package Chamilo\CoreBundle\Form\Type
  */
-class ResourceRightsType extends AbstractType
+class ResourceRightType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,12 +24,12 @@ class ResourceRightsType extends AbstractType
             ->add(
                 'role',
                 'choice',
-                ['choices' => ToolResourceRights::getDefaultRoles()]
+                ['choices' => ToolResourceRight::getDefaultRoles()]
             )
             ->add(
                 'mask',
                 'choice',
-                ['choices' => ToolResourceRights::getMaskList()]
+                ['choices' => ToolResourceRight::getMaskList()]
             );
     }
 
@@ -40,7 +40,7 @@ class ResourceRightsType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceRights',
+                'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceRight',
             ]
         );
     }

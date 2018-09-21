@@ -429,8 +429,6 @@ function write_system_config_file($path)
                 Your problems can be related on two possible causes:<br />
                 <ul>
                   <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
-                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. 
-                  If possible, try to switch it off.</li>
                 </ul>
                 <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
                 Please go back to step 5.
@@ -545,6 +543,8 @@ function get_config_param($param, $updatePath = '')
             $updateFromConfigFile = 'main/inc/conf/configuration.php';
         } elseif (file_exists($updatePath.'app/config/configuration.php')) {
             $updateFromConfigFile = 'app/config/configuration.php';
+        } elseif (file_exists($updatePath.'config/configuration.php')) {
+            $updateFromConfigFile = 'config/configuration.php';
         } else {
             // Give up recovering.
             //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
@@ -868,11 +868,7 @@ function display_requirements(
                 <th>'.get_lang('Recommended').'</th>
                 <th>'.get_lang('Actual').'</th>
             </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('safe_mode', 'OFF').'</td>
-            </tr>
+            
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
@@ -882,21 +878,6 @@ function display_requirements(
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('file_uploads', 'ON').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('magic_quotes_gpc', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('magic_quotes_runtime', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('register_globals', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
@@ -1015,12 +996,8 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH)).'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'default_course_document/images/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' <br />('.get_lang('SuggestionOnlyToEnableSubLanguageFeatureOrUpgradeProcess').')</td>
+                <td class="requirements-item">'.api_get_path(SYS_PATH).'config</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH).'config').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_PATH).'vendor/</td>

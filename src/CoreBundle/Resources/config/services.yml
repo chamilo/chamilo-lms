@@ -269,7 +269,7 @@ services:
     chamilo_core.settings.certificate:
         class: Chamilo\CoreBundle\Settings\CertificateSettingsSchema
         tags:
-        - {name: sylius.settings_schema, alias: chamilo_core.settings.certificate, namespace: certificate}
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.certificate, namespace: certificate}
 
     chamilo_core.settings.chat:
         class: Chamilo\CoreBundle\Settings\ChatSettingsSchema
@@ -339,10 +339,10 @@ services:
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: language}
 
-    chamilo_core.settings.learning_path:
+    chamilo_core.settings.lp:
         class: Chamilo\CoreBundle\Settings\LearningPathSettingsSchema
         tags:
-        - {name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: lp}
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.lp, namespace: lp}
 
     chamilo_core.settings.mail:
         class: Chamilo\CoreBundle\Settings\MailSettingsSchema

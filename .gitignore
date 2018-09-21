@@ -16,7 +16,9 @@ var/log/*
 /app/config/events.conf.php
 /app/config/mail.conf.php
 /app/config/profile.conf.php
+/config/configuration.php
 /app/config/configuration.php
+/main/inc/conf/configuration.php
 
 # Courses
 var/courses/*
@@ -53,12 +55,11 @@ plugin/vchamilo/templates/*
 vendor
 web/assets/*
 
-
 ###> symfony/framework-bundle ###
 .env
 /public/bundles/
 /var/
-/vendor/
+/vendor
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###

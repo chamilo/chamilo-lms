@@ -191,27 +191,16 @@ Session:
                 type: '[Course]'
 
 CourseTool:
-    type: interface
+    type: union
     config:
-        description: 'A course tool.'
+        description: 'Course tools'
         resolveType: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\CourseToolResolver", [value])'
-        fields:
-            name:
-                type: 'String'
-            category:
-                type: 'String'
-            image:
-                type: 'String'
-            customIcon:
-                type: 'String'
-            isVisible:
-                type: 'Boolean'
+        types: [ToolDescription, ToolAnnouncements]
 
 ToolDescription:
     type: object
     config:
         description: 'Global summary of the course.'
-        interfaces: [CourseTool]
         resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\ToolDescriptionResolver", [value, args, info, context])'
         fields:
             name:
@@ -246,7 +235,6 @@ ToolAnnouncements:
     type: object
     config:
         description: 'Announcements related to the course.'
-        interfaces: [CourseTool]
         resolveField: '@=resolver("Chamilo\\ApiBundle\\GraphQL\\Resolver\\ToolAnnouncementsResolver", [value, args, info, context])'
         fields:
             name:

@@ -18,6 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ResourceLink implements ResourceInterface
 {
+    public const VISIBILITY_DRAFT = 0;
+    public const VISIBILITY_PENDING = 1;
+    public const VISIBILITY_PUBLISHED = 2;
+    public const VISIBILITY_DELETED = 3;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -69,16 +74,9 @@ class ResourceLink implements ResourceInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="private", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
-    protected $private;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="public", type="boolean", nullable=true, unique=false)
-     */
-    protected $public;
+    protected $visibility;
 
     /**
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
@@ -95,7 +93,7 @@ class ResourceLink implements ResourceInterface
      */
     public function __construct()
     {
-        $this->rights = new ArrayCollection();
+        $this->resourceRight = new ArrayCollection();
     }
 
     /**
@@ -147,56 +145,16 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isPrivate()
-    {
-        return $this->private;
-    }
-
-    /**
-     * @param bool $private
-     */
-    public function setPrivate($private)
-    {
-        $this->private = $private;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPublic()
-    {
-        return $this->public;
-    }
-
-    /**
-     * @param bool $public
-     */
-    public function setPublic($public)
-    {
-        $this->public = $public;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getRights()
-    {
-        return $this->rights;
-    }
-
-    /**
      * @param ArrayCollection $rights
      *
      * @return $this
      */
-    public function setRights(ArrayCollection $rights)
+    public function setResourceRight(ArrayCollection $rights)
     {
-        $this->rights = new ArrayCollection();
+        $this->resourceRight = new ArrayCollection();
 
         foreach ($rights as $right) {
-            $this->addRight($right);
+            $this->addResourceRight($right);
         }
 
         return $this;
@@ -207,10 +165,10 @@ class ResourceLink implements ResourceInterface
      *
      * @return $this
      */
-    public function addRight(ResourceRight $right)
+    public function addResourceRight(ResourceRight $right)
     {
         $right->setResourceLink($this);
-        $this->rights[] = $right;
+        $this->resourceRight[] = $right;
 
         return $this;
     }

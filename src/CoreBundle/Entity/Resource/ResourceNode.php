@@ -44,7 +44,7 @@ class ResourceNode
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
-    protected $links;
+    protected $resourceLinks;
 
     /**
      * @ORM\ManyToOne(
@@ -114,7 +114,6 @@ class ResourceNode
      */
     public function __construct()
     {
-        $this->rights = new ArrayCollection();
         $this->children = new ArrayCollection();
     }
 
@@ -178,30 +177,6 @@ class ResourceNode
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * Returns the tool.
-     *
-     * @return Tool
-     */
-    public function getTool()
-    {
-        return $this->tool;
-    }
-
-    /**
-     * Returns the resource type.
-     *
-     * @param Tool $tool
-     *
-     * @return $this
-     */
-    public function setTool(Tool $tool)
-    {
-        $this->tool = $tool;
-
-        return $this;
     }
 
     /**
@@ -372,22 +347,62 @@ class ResourceNode
     }
 
     /**
-     * @param $resource
-     *
-     * @return $this
+     * @return ResourceType
      */
-    public function setResource($resource)
+    public function getResourceType()
     {
-        $this->resource = $resource;
+        return $this->resourceType;
+    }
+
+    /**
+     * @param ResourceType $resourceType
+     *
+     * @return ResourceNode
+     */
+    public function setResourceType($resourceType)
+    {
+        $this->resourceType = $resourceType;
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return mixed
      */
-    public function getLinks()
+    public function getResourceLinks()
     {
-        return $this->links;
+        return $this->resourceLinks;
+    }
+
+    /**
+     * @param mixed $resourceLinks
+     *
+     * @return ResourceNode
+     */
+    public function setResourceLinks($resourceLinks)
+    {
+        $this->resourceLinks = $resourceLinks;
+
+        return $this;
+    }
+
+    /**
+     * @return ResourceFile
+     */
+    public function getResourceFile(): ResourceFile
+    {
+        return $this->resourceFile;
+    }
+
+    /**
+     * @param ResourceFile $resourceFile
+     *
+     * @return ResourceNode
+     */
+    public function setResourceFile(ResourceFile $resourceFile): ResourceNode
+    {
+        $this->resourceFile = $resourceFile;
+
+        return $this;
     }
 }

@@ -135,6 +135,10 @@ Course:
             tools:
                 description: 'List of available tools for student view.'
                 type: '[CourseTool]'
+                args:
+                    type:
+                        description: 'Filter by one type of tool'
+                        type: 'CourseToolType'
 
 SessionCategory:
     type: object

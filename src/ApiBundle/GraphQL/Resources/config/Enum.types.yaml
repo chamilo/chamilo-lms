@@ -39,3 +39,13 @@ ImageSize:
             SIZE_HUGE:
                 description: 'Image in small size: 128px.'
                 value: '@=constant("ICON_SIZE_HUGE")'
+
+CourseToolType:
+    type: enum
+    config:
+        description: 'One of the types of course tool'
+        values:
+            TOOL_DESCRIPTION:
+                value: '@=constant("TOOL_COURSE_DESCRIPTION")'
+            TOOL_ANNOUNCEMENT:
+                value: '@=constant("TOOL_ANNOUNCEMENT")'

@@ -1240,6 +1240,13 @@ class CourseHome
         $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
 
+        $conditionSession = api_get_session_condition(
+            $sessionId,
+            true,
+            true,
+            'session_id'
+        );
+
         if (!empty($course_id)) {
             $course_tools_table = Database::get_course_table(TABLE_TOOL_LIST);
             /* 	Link to the Course homepage */
@@ -1248,7 +1255,11 @@ class CourseHome
             $navigation_items['home']['name'] = get_lang('CourseHomepageLink');
 
             $sql = "SELECT * FROM $course_tools_table
-                    WHERE c_id = $course_id AND visibility='1' and admin='0'
+                    WHERE 
+                      c_id = $course_id AND 
+                      visibility = '1' AND 
+                      admin = '0'
+                      $conditionSession
                     ORDER BY id ASC";
             $result = Database::query($sql);
 
@@ -1329,6 +1340,7 @@ class CourseHome
     public static function show_navigation_menu()
     {
         $navigation_items = self::get_navigation_items(true);
+
         $course_id = api_get_course_id();
 
         $class = null;

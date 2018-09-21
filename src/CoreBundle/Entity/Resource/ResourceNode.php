@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;

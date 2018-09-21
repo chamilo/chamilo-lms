@@ -325,4 +325,12 @@ class ResourceLink implements ResourceInterface
 
         return $this;
     }
+
+    /**
+     * @return $this
+     */
+    public function getResource()
+    {
+        return $this;
+    }
 }

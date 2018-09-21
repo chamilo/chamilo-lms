@@ -2217,6 +2217,37 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * @param array $saleInfo
+     *
+     * @return string
+     */
+    public function getSubscriptionSuccessMessage(array $saleInfo)
+    {
+        switch ($saleInfo['product_type']) {
+            case self::PRODUCT_TYPE_COURSE:
+                $courseInfo = api_get_course_info_by_id($saleInfo['product_id']);
+                $url = api_get_course_url($courseInfo['code']);
+                break;
+            case self::PRODUCT_TYPE_SESSION:
+                $sessionId = (int) $saleInfo['product_id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+                break;
+            default:
+                $url = '#';
+        }
+
+        return Display::return_message(
+            sprintf(
+                $this->get_lang('SubscriptionToCourseXSuccessful'),
+                $url,
+                $saleInfo['product_name']
+            ),
+            'success',
+            false
+        );
+    }
+
+    /**
      * Filter the registered courses for show in plugin catalog.
      *
      * @return array
@@ -2540,37 +2571,6 @@ class BuyCoursesPlugin extends Plugin
             $serviceSaleTable,
             ['status' => (int) $newStatus],
             ['id = ?' => (int) $serviceSaleId]
-        );
-    }
-
-    /**
-     * @param array $saleInfo
-     *
-     * @return string
-     */
-    public function getSubscriptionSuccessMessage(array $saleInfo)
-    {
-        switch ($saleInfo['product_type']) {
-            case self::PRODUCT_TYPE_COURSE:
-                $courseInfo = api_get_course_info_by_id($saleInfo['product_id']);
-                $url = api_get_course_url($courseInfo['code']);
-                break;
-            case self::PRODUCT_TYPE_SESSION:
-                $sessionId = (int) $saleInfo['product_id'];
-                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
-                break;
-            default:
-                $url = '#';
-        }
-
-        return Display::return_message(
-            sprintf(
-                $this->get_lang('SubscriptionToCourseXSuccessful'),
-                $url,
-                $saleInfo['product_name']
-            ),
-            'success',
-            false
         );
     }
 }

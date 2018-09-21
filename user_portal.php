@@ -303,4 +303,3 @@ Session::erase('session_id');
 Session::erase('id_session');
 Session::erase('studentview');
 api_remove_in_gradebook();
-

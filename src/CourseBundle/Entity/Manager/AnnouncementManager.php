@@ -87,33 +87,36 @@ class AnnouncementManager extends BaseEntityManager
                     $extraGroupCondition";
             }
         } else {
-            $groupMemberships = \GroupManager::get_group_ids(
-                $course->getId(),
-                $user->getId()
-            );
+            $groupMemberships =  $user->getGroupMembershipsInCourse($course);
+            $tutoredGroups = $user->getTutoredGroupsInCourse($course);
+            $memberships = array_merge($groupMemberships->toArray(), $tutoredGroups->toArray());
 
-            if (is_array($groupMemberships) && count($groupMemberships) > 0) {
+            if (!empty($memberships)) {
                 if ($allowUserEditSetting && !api_is_anonymous()) {
+                    $parameters['memberships'] = $memberships;
                     $condUserId = " AND (
                             ip.lasteditUserId = ".$user->getId()." OR(
                                 (ip.toUser = ".$user->getId()." OR ip.toUser IS NULL) OR
-                                (ip.group IS NULL OR ip.group IN (0, ".implode(', ', $groupMemberships)."))
+                                (ip.group IS NULL OR ip.group = 0 OR ip.group IN :memberships)
                             )
                         ) ";
 
                     if (!empty($group)) {
+                        unset($parameters['memberships']);
                         $condUserId = " AND (
                                 ip.lasteditUserId = ".$user->getId()." OR ip.group IS NULL OR ip.group IN (0, ".$group->getId()
                             .")
                             ) ".$extraGroupCondition;
                     }
                 } else {
+                    $parameters['memberships'] = $memberships;
                     $condUserId = " AND (
                             (ip.toUser = ".$user->getId().") OR ip.toUser IS NULL) AND
-                            (ip.group IS NULL OR ip.group IN (0, ".implode(', ', $groupMemberships)."))
+                            (ip.group IS NULL OR ip.group = 0 OR ip.group IN :memberships)
                         ) ";
 
                     if (!empty($group)) {
+                        unset($parameters['memberships']);
                         $condUserId = " AND (
                             (ip.toUser = ".$user->getId().") OR ip.toUser IS NULL) AND
                             (ip.group IS NULL OR ip.group IN (0, ".$group->getId()."))

@@ -6,10 +6,12 @@ namespace Chamilo\UserBundle\Entity;
 //use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 //use FOS\UserBundle\Model\GroupInterface;
@@ -1963,5 +1965,35 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getTutoredCourseGroups(): ArrayCollection
     {
         return $this->tutoredCourseGroups;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return ArrayCollection
+     */
+    public function getGroupMembershipsInCourse(Course $course): ArrayCollection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('cId', $course)
+        );
+
+        return $this->courseGroupMemberships->matching($criteria);
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return ArrayCollection
+     */
+    public function getTutoredGroupsInCourse(Course $course): ArrayCollection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('cId', $course->getId())
+        );
+
+        return $this->tutoredCourseGroups->matching($criteria);
     }
 }

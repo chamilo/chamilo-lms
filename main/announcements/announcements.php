@@ -580,9 +580,7 @@ switch ($action) {
                             api_get_session_id(),
                             $id,
                             $sendToUsersInSession,
-                            isset($data['send_to_hrm_users']),
-                            null,
-                            $sendMeCopy
+                            isset($data['send_to_hrm_users'])
                         );
                     }
 
@@ -623,13 +621,14 @@ switch ($action) {
                         $insert_id = AnnouncementManager::add_group_announcement(
                             $data['title'],
                             $data['content'],
-                            ['GROUP:'.$group_id],
+                            $group_id,
                             $data['users'],
                             $file,
                             $file_comment,
                             $sendToUsersInSession
                         );
                     }
+
                     if ($insert_id) {
                         Display::addFlash(
                             Display::return_message(
@@ -647,6 +646,12 @@ switch ($action) {
                                 $sendToUsersInSession
                             );
                         }
+
+                        if ($sendMeCopy) {
+                            $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $insert_id);
+                            $email->sendAnnouncementEmailToMySelf();
+                        }
+
                         Security::clear_token();
                         header('Location: '.$homeUrl);
                         exit;

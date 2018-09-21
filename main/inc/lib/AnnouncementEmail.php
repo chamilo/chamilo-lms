@@ -282,7 +282,6 @@ class AnnouncementEmail
         $userId = api_get_user_id();
         $subject = $this->subject();
         $message = $this->message($userId);
-
         MessageManager::send_message_simple(
             $userId,
             $subject,
@@ -315,7 +314,6 @@ class AnnouncementEmail
         if (empty($users) && !empty($this->logger)) {
             $this->logger->addInfo('User list is empty. No emails will be sent.');
         }
-
         foreach ($users as $user) {
             $message = $this->message($user['user_id']);
             $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);

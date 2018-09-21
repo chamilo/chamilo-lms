@@ -698,7 +698,7 @@ class AnnouncementManager
     public static function add_group_announcement(
         $title,
         $newContent,
-        $to,
+        $groupId,
         $to_users,
         $file = [],
         $file_comment = '',
@@ -739,13 +739,27 @@ class AnnouncementManager
                 );
             }
 
-            // Store in item_property (first the groups, then the users)
-            if (empty($to_users) || (isset($to_users[0]) && $to_users[0] === 'everyone')) {
-                // when no user is selected we send it to everyone
-                $send_to = CourseManager::separateUsersGroups($to);
-                // storing the selected groups
-                if (is_array($send_to['groups'])) {
-                    foreach ($send_to['groups'] as $group) {
+            $send_to_groups = CourseManager::separateUsersGroups($to);
+            $send_to_users = CourseManager::separateUsersGroups($to_users);
+
+            // if nothing was selected in the menu then send to all the group
+            $sentToAllGroup = false;
+            if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
+                $groupInfo = GroupManager::get_group_properties($groupId);
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_ANNOUNCEMENT,
+                    $last_id,
+                    'AnnouncementAdded',
+                    api_get_user_id(),
+                    $groupInfo
+                );
+                $sentToAllGroup = true;
+            }
+
+            if ($sentToAllGroup === false) {
+                if (!empty($send_to_users['groups'])) {
+                    foreach ($send_to_users['groups'] as $group) {
                         $groupInfo = GroupManager::get_group_properties($group);
                         api_item_property_update(
                             $courseInfo,
@@ -757,26 +771,19 @@ class AnnouncementManager
                         );
                     }
                 }
-            } else {
-                $send_to_groups = CourseManager::separateUsersGroups($to);
-                $send_to_users = CourseManager::separateUsersGroups($to_users);
-                $to_groups = $send_to_groups['groups'];
-                $to_users = $send_to_users['users'];
-                // storing the selected users
-                if (is_array($to_users) && is_array($to_groups)) {
-                    foreach ($to_groups as $group) {
-                        $groupInfo = GroupManager::get_group_properties($group);
-                        foreach ($to_users as $user) {
-                            api_item_property_update(
-                                $courseInfo,
-                                TOOL_ANNOUNCEMENT,
-                                $last_id,
-                                'AnnouncementAdded',
-                                api_get_user_id(),
-                                $groupInfo,
-                                $user
-                            );
-                        }
+
+                $groupInfo = GroupManager::get_group_properties($groupId);
+                if (!empty($send_to_users['users'])) {
+                    foreach ($send_to_users['users'] as $user) {
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_ANNOUNCEMENT,
+                            $last_id,
+                            'AnnouncementAdded',
+                            api_get_user_id(),
+                            $groupInfo,
+                            $user
+                        );
                     }
                 }
             }
@@ -1073,6 +1080,7 @@ class AnnouncementManager
                     ip.tool='announcement' AND
                     announcement.id = $id
                 ";
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::fetch_array($result);
@@ -1123,6 +1131,7 @@ class AnnouncementManager
 
         $sql = "SELECT to_user_id, to_group_id FROM $table
                 WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
+
         $result = Database::query($sql);
         $to = [];
         while ($row = Database::fetch_array($result)) {
@@ -1132,7 +1141,9 @@ class AnnouncementManager
                 // it was send to one specific user
                 case null:
                     if (isset($row['to_user_id']) && !empty($row['to_user_id'])) {
-                        $to[] = 'USER:'.$row['to_user_id'];
+                        if (!in_array('USER:'.$row['to_user_id'], $to)) {
+                            $to[] = 'USER:'.$row['to_user_id'];
+                        }
                     }
                     break;
                 // it was sent to everyone
@@ -1140,7 +1151,15 @@ class AnnouncementManager
                     return 'everyone';
                     break;
                 default:
-                    $to[] = 'GROUP:'.$toGroup;
+                    if (isset($row['to_user_id']) && !empty($row['to_user_id'])) {
+                        if (!in_array('USER:'.$row['to_user_id'], $to)) {
+                            $to[] = 'USER:'.$row['to_user_id'];
+                        }
+                    }
+                    if (!in_array('GROUP:'.$toGroup, $to)) {
+                        $to[] = 'GROUP:'.$toGroup;
+                    }
+                    break;
             }
         }
 

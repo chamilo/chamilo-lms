@@ -4,7 +4,16 @@
 
 {% for item in hot_courses %}
     {% if item.title %}
-        <div class="col-xs-12 col-sm-6 col-md-4">
+
+            {% set tools %}
+                {% if item.categoryName != '' %}
+                    <span class="category">{{ item.categoryName }}</span>
+                    <div class="cribbon"></div>
+                {% endif %}
+                <div class="user-actions">{{ item.description_button }}</div>
+
+            {% endset %}
+
             {% set image %}
                 {% if item.is_registered %}
                     <a title="{{ item.title}}" href="{{ item.course_public_url }}">
@@ -16,21 +25,19 @@
             {% endset %}
 
             {% set content %}
-                {% if item.categoryName != '' %}
-                    <span class="category">{{ item.categoryName }}</span>
-                    <div class="cribbon"></div>
-                {% endif %}
+
+
 
                 <div class="card-title">
-                    <div class="user-actions">{{ item.description_button }}</div>
+
                     {% if item.is_registered %}
-                        <h4 class="title">
-                            <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ item.course_public_url }}">{{ item.title_cut}}</a>
-                        </h4>
+                        <h5 class="title">
+                            <a title="{{ item.title }}" href="{{ item.course_public_url }}">{{ item.title_cut}}</a>
+                        </h5>
                     {% else %}
-                        <h4 class="title" title="{{ item.title }}">
+                        <h5 class="title" title="{{ item.title }}">
                             {{ item.title_cut}}
-                        </h4>
+                        </h5>
                     {% endif %}
                 </div>
 
@@ -77,7 +84,7 @@
 
             {{ macro.panel('', content, '', '', '', image) }}
 
-        </div>
+
     {% endif %}
 {% endfor %}
 {% endautoescape %}

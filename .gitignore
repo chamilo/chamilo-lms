@@ -1,3 +1,9 @@
+# Chamilo 1.x
+
+app
+courses
+web/assets/*
+
 # Cache directories
 
 var/cache/*
@@ -9,15 +15,8 @@ var/log/*
 /node_modules/
 
 # Chamilo configuration
-/app/config/parameters.yml
-/app/config/add_course.conf.php
-/app/config/auth.conf.php
-/app/config/course_info.conf.php
-/app/config/events.conf.php
-/app/config/mail.conf.php
-/app/config/profile.conf.php
 /config/configuration.php
-/app/config/configuration.php
+
 /main/inc/conf/configuration.php
 
 # Courses
@@ -25,7 +24,6 @@ var/courses/*
 !var/courses/.gitkeep
 
 # Home
-app/home/*
 components/*
 
 # Upload content
@@ -53,7 +51,6 @@ plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
 vendor
-web/assets/*
 
 ###> symfony/framework-bundle ###
 .env

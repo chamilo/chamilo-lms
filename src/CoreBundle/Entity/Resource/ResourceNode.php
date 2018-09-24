@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,10 +29,19 @@ class ResourceNode
 
     /**
      * @Gedmo\TreePathSource
+     *
      * @ORM\Column()
+     *
      * @Assert\NotBlank()
      */
     protected $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable = true)
+     */
+    protected $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
@@ -44,7 +52,7 @@ class ResourceNode
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
-    protected $links;
+    protected $resourceLinks;
 
     /**
      * @ORM\ManyToOne(
@@ -58,6 +66,7 @@ class ResourceNode
 
     /**
      * @Gedmo\TreeParent
+     *
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode",
      *     inversedBy="children"
@@ -114,7 +123,6 @@ class ResourceNode
      */
     public function __construct()
     {
-        $this->rights = new ArrayCollection();
         $this->children = new ArrayCollection();
     }
 
@@ -154,6 +162,8 @@ class ResourceNode
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     /**
@@ -170,6 +180,8 @@ class ResourceNode
     public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -178,30 +190,6 @@ class ResourceNode
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * Returns the tool.
-     *
-     * @return Tool
-     */
-    public function getTool()
-    {
-        return $this->tool;
-    }
-
-    /**
-     * Returns the resource type.
-     *
-     * @param Tool $tool
-     *
-     * @return $this
-     */
-    public function setTool(Tool $tool)
-    {
-        $this->tool = $tool;
-
-        return $this;
     }
 
     /**
@@ -372,22 +360,82 @@ class ResourceNode
     }
 
     /**
-     * @param $resource
-     *
-     * @return $this
+     * @return ResourceType
      */
-    public function setResource($resource)
+    public function getResourceType()
     {
-        $this->resource = $resource;
+        return $this->resourceType;
+    }
+
+    /**
+     * @param ResourceType $resourceType
+     *
+     * @return ResourceNode
+     */
+    public function setResourceType($resourceType)
+    {
+        $this->resourceType = $resourceType;
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return mixed
      */
-    public function getLinks()
+    public function getResourceLinks()
     {
-        return $this->links;
+        return $this->resourceLinks;
+    }
+
+    /**
+     * @param mixed $resourceLinks
+     *
+     * @return ResourceNode
+     */
+    public function setResourceLinks($resourceLinks)
+    {
+        $this->resourceLinks = $resourceLinks;
+
+        return $this;
+    }
+
+    /**
+     * @return ResourceFile
+     */
+    public function getResourceFile(): ResourceFile
+    {
+        return $this->resourceFile;
+    }
+
+    /**
+     * @param ResourceFile $resourceFile
+     *
+     * @return ResourceNode
+     */
+    public function setResourceFile(ResourceFile $resourceFile): ResourceNode
+    {
+        $this->resourceFile = $resourceFile;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return ResourceNode
+     */
+    public function setDescription(string $description): ResourceNode
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

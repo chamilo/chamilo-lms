@@ -6,10 +6,12 @@ namespace Chamilo\UserBundle\Entity;
 //use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 //use FOS\UserBundle\Model\GroupInterface;
@@ -133,12 +135,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="locked", type="boolean")
      */
     protected $locked;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="enabled", type="boolean")
      */
     //protected $enabled;
@@ -157,12 +161,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="credentials_expire_at", type="datetime", nullable=true, unique=false)
      */
     protected $credentialsExpireAt;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="expires_at", type="datetime", nullable=true, unique=false)
      */
     protected $expiresAt;
@@ -468,6 +474,20 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     private $receivedMessages;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="user")
+     */
+    protected $courseGroupsAsMember;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user")
+     */
+    protected $courseGroupsAsTutor;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -495,6 +515,9 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $this->expired = false;
         $this->roles = [];
         $this->credentialsExpired = false;
+
+        $this->courseGroupsAsMember = new ArrayCollection();
+        $this->courseGroupsAsTutor = new ArrayCollection();
     }
 
     /**
@@ -1930,5 +1953,51 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getReceivedMessages()
     {
         return $this->receivedMessages;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourseGroupsAsMember(): ArrayCollection
+    {
+        return $this->courseGroupsAsMember;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourseGroupsAsTutor(): ArrayCollection
+    {
+        return $this->courseGroupsAsTutor;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return ArrayCollection
+     */
+    public function getCourseGroupsAsMemberFromCourse(Course $course): ArrayCollection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('cId', $course)
+        );
+
+        return $this->courseGroupsAsMember->matching($criteria);
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return ArrayCollection
+     */
+    public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('cId', $course->getId())
+        );
+
+        return $this->courseGroupsAsTutor->matching($criteria);
     }
 }

@@ -100,7 +100,7 @@ class ResourceFile
     protected $resourceNode;
 
     /**
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
@@ -123,5 +123,225 @@ class ResourceFile
      */
     public function __construct()
     {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     *
+     * @return ResourceFile
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @param string $hash
+     *
+     * @return ResourceFile
+     */
+    public function setHash(string $hash): ResourceFile
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalFilename(): string
+    {
+        return $this->originalFilename;
+    }
+
+    /**
+     * @param string $originalFilename
+     *
+     * @return ResourceFile
+     */
+    public function setOriginalFilename(string $originalFilename): ResourceFile
+    {
+        $this->originalFilename = $originalFilename;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSize(): string
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param string $size
+     *
+     * @return ResourceFile
+     */
+    public function setSize(string $size): ResourceFile
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidth(): string
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param string $width
+     *
+     * @return ResourceFile
+     */
+    public function setWidth(string $width): ResourceFile
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeight(): string
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param string $height
+     *
+     * @return ResourceFile
+     */
+    public function setHeight(string $height): ResourceFile
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCopyright(): string
+    {
+        return $this->copyright;
+    }
+
+    /**
+     * @param string $copyright
+     *
+     * @return ResourceFile
+     */
+    public function setCopyright(string $copyright): ResourceFile
+    {
+        $this->copyright = $copyright;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentType(): string
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * @param string $contentType
+     *
+     * @return ResourceFile
+     */
+    public function setContentType(string $contentType): ResourceFile
+    {
+        $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtension(): string
+    {
+        return $this->extension;
+    }
+
+    /**
+     * @param string $extension
+     *
+     * @return ResourceFile
+     */
+    public function setExtension(string $extension): ResourceFile
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * @return ResourceNode
+     */
+    public function getResourceNode(): ResourceNode
+    {
+        return $this->resourceNode;
+    }
+
+    /**
+     * @param ResourceNode $resourceNode
+     *
+     * @return ResourceFile
+     */
+    public function setResourceNode(ResourceNode $resourceNode): ResourceFile
+    {
+        $this->resourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     *
+     * @return ResourceFile
+     */
+    public function setEnabled(bool $enabled): ResourceFile
+    {
+        $this->enabled = $enabled;
+
+        return $this;
     }
 }

@@ -154,7 +154,7 @@ $courseItem = [
 $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
 $metaInfo .= '<meta property="og:type" content="website" />';
 $metaInfo .= '<meta property="og:title" content="'.$courseItem['title'].'" />';
-$metaInfo .= '<meta property="og:description" content="'.$courseDescription.'" />';
+$metaInfo .= '<meta property="og:description" content="'.strip_tags($courseDescription).'" />';
 $metaInfo .= '<meta property="og:image" content="'.$courseItem['image'].'" />';
 
 $htmlHeadXtra[] = $metaInfo;

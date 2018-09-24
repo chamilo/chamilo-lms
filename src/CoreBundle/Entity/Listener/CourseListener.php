@@ -58,13 +58,6 @@ class CourseListener
             $this->checkLimit($repo, $course, $url);
             $this->toolChain->addToolsInCourse($course, $this->settingsManager);
         }
-
-        /*
-        error_log('ddd');
-        $course->setDescription( ' dq sdqs dqs dqs ');
-
-        $args->getEntityManager()->persist($course);
-        $args->getEntityManager()->flush();*/
     }
 
     /**
@@ -79,7 +72,6 @@ class CourseListener
     {
         if ($course) {
             $url = $course->getCurrentUrl();
-
             $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
 
             $this->checkLimit($repo, $course, $url);

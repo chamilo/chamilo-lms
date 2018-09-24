@@ -217,56 +217,6 @@ if (!empty($action)) {
         // for news file, $topf for top file, $noticef for noticefile,
         // $ext for '.html'
         switch ($action) {
-            case 'edit_top':
-                // Filter
-                $home_top = trim(stripslashes($_POST['home_top']));
-
-                // Write
-                if (is_writable($homep)) {
-                    // Default
-                    if (is_writable($homep.$topf.'_'.$lang.$ext)) {
-                        $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
-                        fputs($fp, $home_top);
-                        fclose($fp);
-
-                        // Language
-                        foreach ($_languages['name'] as $key => $value) {
-                            $lang_name = $_languages['folder'][$key];
-                            if (isset($_POST[$lang_name])) {
-                                $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
-                                fputs($fp, $home_top);
-                                fclose($fp);
-                            }
-                        }
-                    } else {
-                        $errorMsg = get_lang('HomePageFilesNotWritable');
-                    }
-                } else {
-                    //File does not exist
-                    $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
-                    fputs($fp, $home_top);
-                    fclose($fp);
-
-                    foreach ($_languages['name'] as $key => $value) {
-                        $lang_name = $_languages['folder'][$key];
-                        if (isset($_POST[$lang_name])) {
-                            if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-                                $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
-                                fputs($fp, $home_top);
-                                fclose($fp);
-                            }
-                        }
-                    }
-                }
-
-                Event::addEvent(
-                    LOG_HOMEPAGE_CHANGED,
-                    'edit_top',
-                    cut(strip_tags($home_top), 254),
-                    api_get_utc_datetime(),
-                    api_get_user_id()
-                );
-                break;
             case 'edit_notice':
                 // Filter
                 $notice_title = trim(strip_tags(stripslashes($_POST['notice_title'])));
@@ -1009,7 +959,6 @@ switch ($action) {
                     <!-- login block -->
                     <div id="login-block" class="panel panel-default">
                         <div class="panel-body">
-                            <?php echo api_display_language_form(false, true); ?>
                             <form id="form-login" class="form-horizontal">
                                 <div class="input-group">
                                     <div class="input-group-addon"><em class="fa fa-user"></em></div>

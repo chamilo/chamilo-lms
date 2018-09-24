@@ -8292,7 +8292,7 @@ function api_is_allowed_in_course()
     }
 
     $user = api_get_current_user();
-    if ($user) {
+    if ($user instanceof User) {
         if ($user->hasRole('ROLE_CURRENT_SESSION_COURSE_STUDENT') ||
             $user->hasRole('ROLE_CURRENT_SESSION_COURSE_TEACHER') ||
             $user->hasRole('ROLE_CURRENT_COURSE_STUDENT') ||
@@ -8303,8 +8303,6 @@ function api_is_allowed_in_course()
     }
 
     return false;
-
-    return Session::read('is_allowed_in_course');
 }
 
 /**

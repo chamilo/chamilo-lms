@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-9">
         {{ macro.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
-        {{ macro.panel('PersonalDataKeptOnYou' | get_lang, personal_data.data) }}
+        {{ display.collapse('', 'PersonalDataKeptOnYou' | get_lang, personal_data.data, false, 'false') }}
 
         {% if personal_data.responsible %}
             {{ macro.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}

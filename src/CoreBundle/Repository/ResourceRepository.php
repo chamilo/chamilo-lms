@@ -86,7 +86,7 @@ class ResourceRepository extends EntityRepository
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setResourceNode($resourceNode)
-            ->addRight($right)
+            ->addResourceRight($right)
             ->setPublic(true);
 
         $this->getEntityManager()->persist($resourceLink);
@@ -108,7 +108,7 @@ class ResourceRepository extends EntityRepository
         $resourceLink
             ->setResourceNode($resourceNode)
             ->setCourse($course)
-            ->addRight($right);
+            ->addResourceRight($right);
         $this->getEntityManager()->persist($resourceLink);
         $this->getEntityManager()->flush();
 
@@ -229,7 +229,7 @@ class ResourceRepository extends EntityRepository
         $resourceLink
             ->setResourceNode($resourceNode)
             ->setUserGroup($group)
-            ->addRight($right);
+            ->addResourceRight($right);
 
         return $resourceLink;
     }

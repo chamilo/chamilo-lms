@@ -1641,7 +1641,7 @@ class GradebookUtils
 
         $gradebooktable->userId = $userId;
 
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit(null, true)) {
             /*$gradebooktable->td_attributes = [
                 4 => 'class=centered',
             ];*/

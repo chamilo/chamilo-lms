@@ -5,6 +5,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Traits\CourseTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -172,6 +173,20 @@ class CGroupInfo
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
+     */
+    protected $members;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
+     */
+    protected $tutors;
 
     /**
      * Set name.
@@ -597,6 +612,66 @@ class CGroupInfo
     public function setDocumentAccess(int $documentAccess): CGroupInfo
     {
         $this->documentAccess = $documentAccess;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocAccess(): int
+    {
+        return $this->docAccess;
+    }
+
+    /**
+     * @param int $docAccess
+     *
+     * @return CGroupInfo
+     */
+    public function setDocAccess(int $docAccess): CGroupInfo
+    {
+        $this->docAccess = $docAccess;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getMembers(): ArrayCollection
+    {
+        return $this->members;
+    }
+
+    /**
+     * @param ArrayCollection $members
+     *
+     * @return CGroupInfo
+     */
+    public function setMembers(ArrayCollection $members): CGroupInfo
+    {
+        $this->members = $members;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTutors(): ArrayCollection
+    {
+        return $this->tutors;
+    }
+
+    /**
+     * @param ArrayCollection $tutors
+     *
+     * @return CGroupInfo
+     */
+    public function setTutors(ArrayCollection $tutors): CGroupInfo
+    {
+        $this->tutors = $tutors;
 
         return $this;
     }

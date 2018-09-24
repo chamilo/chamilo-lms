@@ -56,4 +56,84 @@ class ResourceType
     public function __construct()
     {
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     *
+     * @return ResourceType
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return ResourceType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Tool
+     */
+    public function getTool()
+    {
+        return $this->tool;
+    }
+
+    /**
+     * @param Tool $tool
+     *
+     * @return ResourceType
+     */
+    public function setTool($tool)
+    {
+        $this->tool = $tool;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResourceNodes()
+    {
+        return $this->resourceNodes;
+    }
+
+    /**
+     * @param mixed $resourceNodes
+     *
+     * @return ResourceType
+     */
+    public function setResourceNodes($resourceNodes)
+    {
+        $this->resourceNodes = $resourceNodes;
+
+        return $this;
+    }
 }

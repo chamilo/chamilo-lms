@@ -1,16 +1,16 @@
 {# special macros to generate repeated html code #}
 
-{% macro collapse(name, title, content, list = false) %}
+{% macro collapse(name, title, content, list = false, expanded = 'true') %}
     <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default" id="{{ name }}_block">
             <div class="panel-heading" role="tab">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#{{ name }}" href="#{{ name }}Collapse" aria-expanded="true" aria-controls="{{ name }}Collapse">
+                    <a role="button" data-toggle="collapse" data-parent="#{{ name }}" href="#{{ name }}Collapse" aria-expanded="{{ expanded }}" aria-controls="{{ name }}Collapse">
                         {{ title }}
                     </a>
                 </h4>
             </div>
-            <div style="" aria-expanded="true" id="{{ name }}Collapse" class="panel-collapse collapse in" role="tabpanel">
+            <div style="" aria-expanded="{{ expanded }}" id="{{ name }}Collapse" class="panel-collapse collapse {{  expanded == 'true' ? 'in' : '' }}" role="tabpanel">
                 <div class="panel-body">
                     {% if list %}
                         <ul class="nav nav-pills nav-stacked">

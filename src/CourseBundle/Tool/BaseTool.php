@@ -40,7 +40,6 @@ abstract class BaseTool implements ToolInterface
         $this->admin = 0;
         $this->courseSettings = $courseSettings;
         $this->types = $types;
-        var_dump($types);
     }
 
     /**
@@ -108,6 +107,8 @@ abstract class BaseTool implements ToolInterface
     }
 
     /**
+     * @param $settings
+     *
      * @return int
      */
     public function setCourseSettings($settings)
@@ -123,14 +124,20 @@ abstract class BaseTool implements ToolInterface
         return $this->courseSettings;
     }
 
+    /**
+     * @param string $type
+     */
     public function addType($type)
     {
         $this->types[] = $type;
     }
 
+    /**
+     * @return array
+     */
     public function getTypes()
     {
-       return $this->types;
+        return $this->types;
     }
 
     /**

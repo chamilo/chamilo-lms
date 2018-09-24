@@ -126,7 +126,7 @@ services:
             - calendar/agenda.php
             - agenda.gif
             - chamilo_course.settings.agenda
-            - {name: calendar_event}, {name: calendar_event_attachment}
+            - [calendar_event, calendar_event_attachment]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -146,7 +146,7 @@ services:
             - announcements/announcements.php
             - valves.gif
             - chamilo_course.settings.announcement
-            - {name: announcement}
+            - [announcement]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -165,7 +165,7 @@ services:
             - work/work.php
             - works.gif
             - chamilo_course.settings.assignment
-            -
+            - [work]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -184,7 +184,7 @@ services:
             - attendance/index.php
             - attendance.gif
             - '@chamilo_course.settings.attendance'
-            - {name: attendance}
+            - [attendance]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -203,7 +203,7 @@ services:
             - blog/blog_admin.php
             - blog_admin.gif
             - '@chamilo_course.settings.blog'
-            - {name: blog}
+            - [blog_management]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -222,7 +222,7 @@ services:
             - course_description/index.php
             - info.gif
             - '@chamilo_course.settings.course_description'
-            -
+            - [course_description]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -260,7 +260,7 @@ services:
             - course_progress/index.php
             - course_progress.gif
             - '@chamilo_course.settings.course_progress'
-            -
+            - [thematic, thematic_advance, thematic_plan]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -279,7 +279,7 @@ services:
             - document/document.php
             - folder_document.gif
             - '@chamilo_course.settings.document'
-            -
+            - [document]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -298,7 +298,7 @@ services:
             - dropbox/index.php
             - dropbox.gif
             - '@chamilo_course.settings.dropbox'
-            -
+            - [dropbox]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -317,7 +317,7 @@ services:
             - exercise/exercise.php
             - quiz.gif
             - '@chamilo_course.settings.exercise'
-            -
+            - [quiz, test_category]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -336,7 +336,7 @@ services:
             - forum/index.php
             - forum.gif
             - '@chamilo_course.settings.forum'
-            -
+            - [forum, forum_attachment, forum_category, forum_post, forum_thread]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -355,7 +355,7 @@ services:
             - glossary/index.php
             - glossary.gif
             - '@chamilo_course.settings.glossary'
-            -
+            - [glossary]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -412,7 +412,7 @@ services:
             - lp/lp_controller.php
             - scorms.gif
             - '@chamilo_course.settings.learning_path'
-            -
+            - [learnpath, learnpath_category]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -431,7 +431,7 @@ services:
             - link/link.php
             - links.gif
             - '@chamilo_course.settings.link'
-            -
+            - [link, link_category]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -474,7 +474,7 @@ services:
             - notebook/index.php
             - notebook.gif
             - '@chamilo_course.settings.notebook'
-            -
+            - [notebook]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -506,7 +506,7 @@ services:
             - survey/survey_list.php
             - survey.gif
             - '@chamilo_course.settings.survey'
-            -
+            - [survey]
             -
         tags:
             - {name: chamilo_course.tool}
@@ -561,7 +561,7 @@ services:
             - wiki/index.php
             - wiki.gif
             - '@chamilo_course.settings.wiki'
-            -
+            - [wiki]
             -
         tags:
             - {name: chamilo_course.tool}

@@ -34,6 +34,12 @@ if (empty($student_id)) {
 // user info
 $user_info = api_get_user_info($student_id);
 
+$allowToQualify = api_is_allowed_to_edit(null, true) ||
+    api_is_course_tutor() ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_student_boss();
+
 $allowedToTrackUser = true;
 if (!api_is_session_admin() &&
     !api_is_drh() &&
@@ -1536,11 +1542,17 @@ if (empty($details)) {
                 if (Database::num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database::result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0) {
-                        echo '<a href="../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code
+                        $qualifyLink = '';
+                        if ($allowToQualify) {
+                            $qualifyLink = '&action=qualify';
+                        }
+                        $attemptLink = '../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code
                             .'&id_session='.$sessionId.'&session_id='.$sessionId.'&student='.$student_id.'&origin='
-                            .(empty($origin) ? 'tracking' : $origin).'">'
-                            .Display::return_icon('quiz.png')
-                            .'</a>';
+                            .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
+                        echo Display::url(
+                            Display::return_icon('quiz.png', get_lang('Exercise')),
+                            $attemptLink
+                        );
                     }
                 }
                 echo '</td>';

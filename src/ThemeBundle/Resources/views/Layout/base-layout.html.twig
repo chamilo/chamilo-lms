@@ -95,10 +95,12 @@
         <!-- MAIN CONTENT -->
         {% autoescape false %}
         <main class='main-content bg-content'>
-            <div class="container">
+            <div class="container box-body">
+                <div class="pt-1 pb-1">
                 {% block page_content %}
 
                 {% endblock %}
+                </div>
             </div>
         </main>
         {% endautoescape %}

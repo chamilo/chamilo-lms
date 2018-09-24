@@ -1,7 +1,12 @@
 {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
-<a href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-primary" >
-    <i class="fas fa-edit"></i> {{ "header.edit_page"|trans({}, 'SonataPageBundle') }}
-</a>
+    <div class="box-header">
+        <div class="float-right">
+            <a title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}" href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-light btn-sm" >
+                <i class="fas fa-pencil-alt"></i>
+            </a>
+        </div>
+        <h5>{{ "IntroductionOfPlatform"|trans }}</h5>
+    </div>
 {% endif %}
 
 {{ sonata_page_render_container('content', page) }}

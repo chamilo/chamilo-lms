@@ -131,9 +131,11 @@ hr {
   padding: 85px 20px 20px;
   min-height: calc(100vh - 61px);
   &.bg-content{
-    background-color: $theme-bg;
+    background-color: $default-background;
   }
-
+  .box-body{
+    background-color: $default-white;
+  }
   @include to($breakpoint-md) {
     padding: 85px 5px 5px;
   }
@@ -205,8 +207,6 @@ footer {
   position: relative;
 }
 
-
-
 // ---------------------------------------------------------
 // @Text Align
 // ---------------------------------------------------------
@@ -247,3 +247,10 @@ footer {
 .lh-0    { line-height: 0 !important; }
 .lh-1    { line-height: 1 !important; }
 .lh-3\/2 { line-height: 1.5 !important; }
+
+.box-header{
+  color: $grey-900;
+  display: block;
+  padding: 10px;
+  position: relative;
+}

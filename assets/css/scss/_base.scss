@@ -196,4 +196,54 @@ hr {
   }
 }
 
+// ---------------------------------------------------------
+// FOOTER
+// ---------------------------------------------------------
 
+footer {
+  z-index: 1;
+  position: relative;
+}
+
+
+
+// ---------------------------------------------------------
+// @Text Align
+// ---------------------------------------------------------
+
+.ta-c { text-align: center !important; }
+.ta-l { text-align: left !important; }
+.ta-r { text-align: right !important; }
+
+// ---------------------------------------------------------
+// @Font Size
+// ---------------------------------------------------------
+
+.fsz-xs   { font-size: 0.75rem !important; }
+.fsz-sm   { font-size: 0.87rem !important; }
+.fsz-def  { font-size: 1rem !important; }
+.fsz-md   { font-size: 1.15rem !important; }
+.fsz-lg   { font-size: 1.4rem !important; }
+.fsz-xl   { font-size: 1.7rem !important; }
+
+// ---------------------------------------------------------
+// @Font Weight
+// ---------------------------------------------------------
+
+.fw-100 { font-weight: 100 !important; }
+.fw-200 { font-weight: 200 !important; }
+.fw-300 { font-weight: 300 !important; }
+.fw-400 { font-weight: 400 !important; }
+.fw-500 { font-weight: 500 !important; }
+.fw-600 { font-weight: 600 !important; }
+.fw-700 { font-weight: 700 !important; }
+.fw-800 { font-weight: 800 !important; }
+.fw-900 { font-weight: 900 !important; }
+
+// ---------------------------------------------------------
+// @Line Height
+// ---------------------------------------------------------
+
+.lh-0    { line-height: 0 !important; }
+.lh-1    { line-height: 1 !important; }
+.lh-3\/2 { line-height: 1.5 !important; }

@@ -1,4 +1,6 @@
-@import "utils/index";
-@import 'settings/index';
-@import 'screens/index';
-@import 'components/index';
+@import 'variables';
+@import "media";
+@import 'loader';
+@import 'base';
+@import 'topbar';
+@import 'sidebar';

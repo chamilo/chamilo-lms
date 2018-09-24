@@ -126,12 +126,10 @@
     width: 100%;
 
     .logo {
-      background-position: center left;
-      background-repeat: no-repeat;
+      background: no-repeat center left;
       display: inline-block;
       min-height: calc(#{$header-height} - 1px);
       width: 100%;
-      width: 70px;
     }
 
     .logo-text {
@@ -174,7 +172,7 @@
   position: relative;
   background: linear-gradient(180deg, #0181bf, #00bcda);
 
-  .nav-header{
+  .nav-header {
     margin-top: 10px;
     margin-bottom: 10px;
     padding-left: 10px;
@@ -183,11 +181,11 @@
     color: $default-white;
   }
 
-  .sidebar-divider{
+  .sidebar-divider {
     height: 0;
     margin: .5rem 0;
     overflow: hidden;
-    border-top: 1px solid  #217aa4;
+    border-top: 1px solid #217aa4;
     border-bottom: 1px solid #16b1fd;
   }
 
@@ -228,7 +226,7 @@
         > a {
           color: $default-white;
 
-          &.dropdown-toggle{
+          &.dropdown-toggle {
             background: $default-active;
           }
 
@@ -265,7 +263,7 @@
       position: relative;
       white-space: nowrap;
 
-      i{
+      i {
         border-radius: 6px;
         display: inline-block;
         font-size: 17px;
@@ -279,7 +277,7 @@
         width: 35px;
       }
 
-      &.active{
+      &.active {
         background: $default-active;
       }
 
@@ -353,7 +351,7 @@
           overflow-x: hidden;
 
           > li {
-            &.nav-header{
+            &.nav-header {
               display: none;
             }
 
@@ -383,7 +381,6 @@
       &:hover {
         width: $offscreen-size;
 
-
         .sidebar-inner {
           .sidebar-logo {
             border-bottom: 1px solid $border-color;
@@ -392,7 +389,7 @@
 
           .sidebar-menu {
             > li {
-              &.nav-header{
+              &.nav-header {
                 display: inline-block;
               }
               > a {

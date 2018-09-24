@@ -1,4 +1,14 @@
 // ---------------------------------------------------------
+// BREAKPOINTS
+// ---------------------------------------------------------
+
+$breakpoint-xl : 1440px;
+$breakpoint-lg : 1200px;
+$breakpoint-md : 992px;
+$breakpoint-sm : 768px;
+$breakpoint-xs : 0;
+
+// ---------------------------------------------------------
 // GREYSCALE COLORS
 // ---------------------------------------------------------
 
@@ -12,17 +22,6 @@ $grey-700             : #72777a;
 $grey-800             : #565a5c;
 $grey-900             : #313435;
 
-$grey-colors-alt: (
-        grey-100 : #f9fafb,
-        grey-200 : #f2f3f5,
-        grey-300 : #e6eaf0,
-        grey-400 : #d3d9e3,
-        grey-500 : #b9c2d0,
-        grey-600 : #7c8695,
-        grey-700 : #72777a,
-        grey-800 : #565a5c,
-        grey-900 : #313435,
-);
 
 // ---------------------------------------------------------
 // COLORS THEME DEFAULT
@@ -53,7 +52,7 @@ $inverse-warning      : lighten($default-warning, 45%);
 // OTHERS
 // ---------------------------------------------------------
 
-$border-color         : #e6ecf5;
+
 $collapsed-size       : 70px;
 $header-height        : 65px;
 $offscreen-size       : 280px;
@@ -71,3 +70,11 @@ $theme-info           : $default-info;
 $theme-primary        : $default-primary;
 $theme-success        : desaturate($default-success, 5%);
 $theme-bg             : #FFFFFF;
+
+// ---------------------------------------------------------
+// FONTS
+// ---------------------------------------------------------
+
+$font-primary: Roboto, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+$font-secondary: $font-primary;
+$font-size-base: 0.875rem;

@@ -12,7 +12,7 @@
   transition: all 0.2s ease;
   width: calc(100% - #{$offscreen-size});
   z-index: 800;
-  box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.15);
+  box-shadow: 0px 8px 20px -10px rgba(0, 0, 0, 0.15);
 
   @include to($breakpoint-md) {
     width: 100%;
@@ -27,7 +27,7 @@
 
     height: $header-height;
 
-    .btn-menu{
+    .btn-menu {
       padding-left: 10px;
       padding-right: 0;
     }
@@ -42,7 +42,7 @@
       > li {
         float: left;
 
-        &.btn-padding{
+        &.btn-padding {
           padding-top: 15px;
           padding-bottom: 15px;
           margin-left: 5px;
@@ -57,7 +57,7 @@
           padding: 0 15px;
           transition: all 0.2s ease-in-out;
 
-          &.btn{
+          &.btn {
             min-height: 30px;
             padding: 0 10px;
             line-height: 30px;
@@ -193,10 +193,6 @@
         width: 85px;
       }
 
-      @include placeholder {
-        color: lighten($default-text-color, 20%);
-        font-style: italic;
-      }
     }
   }
 }

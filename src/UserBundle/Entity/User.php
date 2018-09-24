@@ -135,12 +135,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="locked", type="boolean")
      */
     protected $locked;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="enabled", type="boolean")
      */
     //protected $enabled;
@@ -159,12 +161,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="credentials_expire_at", type="datetime", nullable=true, unique=false)
      */
     protected $credentialsExpireAt;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="expires_at", type="datetime", nullable=true, unique=false)
      */
     protected $expiresAt;
@@ -474,14 +478,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="user")
      */
-    private $courseGroupMemberships;
+    protected $courseGroupsAsMember;
 
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user")
      */
-    private $tutoredCourseGroups;
+    protected $courseGroupsAsTutor;
 
     /**
      * Constructor.
@@ -512,8 +516,8 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $this->roles = [];
         $this->credentialsExpired = false;
 
-        $this->courseGroupMemberships = new ArrayCollection();
-        $this->tutoredCourseGroups = new ArrayCollection();
+        $this->courseGroupsAsMember = new ArrayCollection();
+        $this->courseGroupsAsTutor = new ArrayCollection();
     }
 
     /**
@@ -1954,17 +1958,17 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * @return ArrayCollection
      */
-    public function getCourseGroupMemberships(): ArrayCollection
+    public function getCourseGroupsAsMember(): ArrayCollection
     {
-        return $this->courseGroupMemberships;
+        return $this->courseGroupsAsMember;
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getTutoredCourseGroups(): ArrayCollection
+    public function getCourseGroupsAsTutor(): ArrayCollection
     {
-        return $this->tutoredCourseGroups;
+        return $this->courseGroupsAsTutor;
     }
 
     /**
@@ -1972,14 +1976,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @return ArrayCollection
      */
-    public function getGroupMembershipsInCourse(Course $course): ArrayCollection
+    public function getCourseGroupsAsMemberFromCourse(Course $course): ArrayCollection
     {
         $criteria = Criteria::create();
         $criteria->where(
             Criteria::expr()->eq('cId', $course)
         );
 
-        return $this->courseGroupMemberships->matching($criteria);
+        return $this->courseGroupsAsMember->matching($criteria);
     }
 
     /**
@@ -1987,13 +1991,13 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @return ArrayCollection
      */
-    public function getTutoredGroupsInCourse(Course $course): ArrayCollection
+    public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection
     {
         $criteria = Criteria::create();
         $criteria->where(
             Criteria::expr()->eq('cId', $course->getId())
         );
 
-        return $this->tutoredCourseGroups->matching($criteria);
+        return $this->courseGroupsAsTutor->matching($criteria);
     }
 }

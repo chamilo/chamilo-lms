@@ -179,14 +179,14 @@ class CGroupInfo
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
      */
-    protected $userMemberships;
+    protected $members;
 
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
      */
-    protected $tutorMemberships;
+    protected $tutors;
 
     /**
      * Set name.
@@ -617,18 +617,62 @@ class CGroupInfo
     }
 
     /**
-     * @return ArrayCollection
+     * @return int
      */
-    public function getUserMemberships(): ArrayCollection
+    public function getDocAccess(): int
     {
-        return $this->userMemberships;
+        return $this->docAccess;
+    }
+
+    /**
+     * @param int $docAccess
+     *
+     * @return CGroupInfo
+     */
+    public function setDocAccess(int $docAccess): CGroupInfo
+    {
+        $this->docAccess = $docAccess;
+
+        return $this;
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getTutorMemberships(): ArrayCollection
+    public function getMembers(): ArrayCollection
     {
-        return $this->tutorMemberships;
+        return $this->members;
+    }
+
+    /**
+     * @param ArrayCollection $members
+     *
+     * @return CGroupInfo
+     */
+    public function setMembers(ArrayCollection $members): CGroupInfo
+    {
+        $this->members = $members;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTutors(): ArrayCollection
+    {
+        return $this->tutors;
+    }
+
+    /**
+     * @param ArrayCollection $tutors
+     *
+     * @return CGroupInfo
+     */
+    public function setTutors(ArrayCollection $tutors): CGroupInfo
+    {
+        $this->tutors = $tutors;
+
+        return $this;
     }
 }

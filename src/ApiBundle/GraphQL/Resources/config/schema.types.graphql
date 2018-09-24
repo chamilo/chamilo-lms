@@ -1,0 +1,133 @@
+type Query {
+    "The current user logged in the API."
+    viewer: User!
+    "Get the data from a course on the platform."
+    course(id: Int!): Course!
+    "Get the data from a session on the platform."
+    session(id: Int!): Session!
+    "Get the data from a session category."
+    sessionCategory(id: Int!): SessionCategory!
+}
+
+# Objects
+
+"A registered user on the platform."
+type User {
+    "The unique ID of the user."
+    id: Int
+    firstname: String
+    lastname: String
+    username: String
+    email: String
+    officialCode: String
+    status: UserStatus
+    picture(size: ImageSize = SIZE_SMALL): String
+    "Received messages for the user."
+    messages(
+        "Last received by the app message ID."
+        lastId: Int = 0
+    ): [UserMessage!]
+    "Get potential users to send a message for the current user."
+    messageContacts(
+        "The search text to filter the user list."
+        filter: String!
+    ): [User!]
+    "Course list for the current user."
+    courses: [Course!]
+    "Session list for the current user."
+    sessions: [Session!]
+}
+
+"Received message by user."
+type UserMessage {
+    "The unique ID of the message."
+    id: Int
+    title: String
+    content: String
+    sender: User!
+    sendDate: DateTime
+    excerpt(
+        "The approximate desired length. 50 chars by default."
+        length: Int = 50
+    ): String
+    hasAttachments: Boolean
+}
+
+"A course registered on the platform."
+type Course {
+    "The unique ID of the course."
+    id: Int
+    title: String
+    code: String!
+    categoryCode: String
+    directory: String
+    picture(
+        "It indicates whether to get the full-sized image."
+        fullSize: Boolean = false
+    ): String
+    "Teachers list in course. Or tutors list from course in session."
+    teachers: [User!]
+}
+
+"A session registered on the platform."
+type Session {
+    "The unique ID of the session."
+    id: Int
+    name: String
+    category: SessionCategory
+    description: String
+    numberOfCourses: Int
+    numberOfUsers: Int
+    duration: Int
+    displayStartDate: DateTime
+    displayEndDate: DateTime
+    accessStartDate: DateTime
+    accessEndDate: DateTime
+    coachAccessStartDate: DateTime
+    coachAccessEndDate: DateTime
+    generalCoach: User!
+    courses: [Course!]
+}
+
+"A session category."
+type SessionCategory {
+    "The unique ID of the category."
+    id: Int
+    name: String
+    startDate: DateTime
+    endDate: DateTime
+}
+
+# Enums
+
+"One of the statuses for the user."
+enum UserStatus {
+    "Global status of a user: Course Manager."
+    TEACHER
+    "Global status of a user: Session Admin."
+    SESSION_ADMIN
+    "Global status of a user: Human Ressource Manager."
+    DRH
+    "Global status of a user: Student."
+    STUDENT
+}
+
+"One of the sizes for the picture."
+enum ImageSize {
+    "Image in small size: 16px."
+    SIZE_TINY
+    "Image in small size: 22px."
+    SIZE_SMALL
+    "Image in small size: 32px."
+    SIZE_MEDIUM
+    "Image in small size: 48px."
+    SIZE_LARGE
+    "Image in small size: 64px."
+    SIZE_BIG
+    "Image in small size: 128px."
+    SIZE_HUGE
+}
+
+# Scalars
+
+scalar DateTime

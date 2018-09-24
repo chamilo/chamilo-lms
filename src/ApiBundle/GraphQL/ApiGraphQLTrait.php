@@ -3,11 +3,13 @@
 
 namespace Chamilo\ApiBundle\GraphQL;
 
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
 use Overblog\GraphQLBundle\Error\UserError;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -30,17 +32,26 @@ trait ApiGraphQLTrait
     protected $translator;
 
     /**
+     * @var SettingsManager
+     */
+    protected $settingsManager;
+
+    /**
      * ApiGraphQLTrait constructor.
      *
-     * @param EntityManager       $entityManager
-     * @param TranslatorInterface $translator
+     * @param ContainerInterface $container
      */
-    public function __construct(EntityManager $entityManager, TranslatorInterface $translator)
+    public function __construct(ContainerInterface $container)
     {
-        $this->em = $entityManager;
-        $this->translator = $translator;
+        $this->container = $container;
+        $this->em = $container->get('doctrine.orm.entity_manager');
+        $this->translator = $container->get('translator');
+        $this->settingsManager = $container->get('chamilo.settings.manager');
     }
 
+    /**
+     * Check if the Authorization header was sent to decode the token and authenticate manually the user.
+     */
     public function checkAuthorization()
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();

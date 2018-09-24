@@ -1,63 +1,65 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\ApiBundle\GraphQL\Resolver;
+namespace Chamilo\ApiBundle\GraphQL\Map;
 
 use Chamilo\ApiBundle\GraphQL\ApiGraphQLTrait;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\UserBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class UserResolver.
+ * Class UserResolverMap.
  *
- * @package Chamilo\ApiBundle\GraphQL\Resolver
+ * @package Chamilo\ApiBundle\GraphQL\Map
  */
-class UserResolver implements ResolverInterface, ContainerAwareInterface
+class UserResolverMap extends ResolverMap implements ContainerAwareInterface
 {
     use ApiGraphQLTrait;
 
     /**
-     * @param User         $user
-     * @param Argument     $args
-     * @param ResolveInfo  $info
-     * @param \ArrayObject $context
+     * @return array
      */
-    public function __invoke(User $user, Argument $args, ResolveInfo $info, \ArrayObject $context)
+    protected function map()
     {
-        $context->offsetSet('user', $user);
+        return [
+            'User' => [
+                self::RESOLVE_FIELD => function (
+                    User $user,
+                    Argument $args,
+                    \ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    $context->offsetSet('user', $user);
 
-        $method = 'resolve'.ucfirst($info->fieldName);
+                    switch ($info->fieldName) {
+                        case 'email':
+                            return $this->resolveEmail($user);
+                        case 'picture':
+                            return $this->resolvePicture($user, $args['size']);
+                        case 'messages':
+                            return $this->resolveMessages($user, $args['lastId']);
+                        case 'messageContacts':
+                            return $this->resolveMessageContacts($user, $args['filter']);
+                        case 'courses':
+                            return $this->resolveCourses($user);
+                        case 'sessions':
+                            return $this->resolveSessions($user);
+                        default:
+                            $method = 'get'.ucfirst($info->fieldName);
 
-        if (method_exists($this, $method)) {
-            return $this->$method($user, $args, $context);
-        }
+                            if (method_exists($user, $method)) {
+                                return $user->$method();
+                            }
 
-        $method = 'get'.ucfirst($info->fieldName);
-
-        if (method_exists($user, $method)) {
-            return $user->$method();
-        }
-
-        return null;
-    }
-
-    /**
-     * @param User     $user
-     * @param Argument $args
-     *
-     * @return string
-     */
-    public function resolvePicture(User $user, Argument $args): string
-    {
-        $assets = $this->container->get('templating.helper.assets');
-        $path = $user->getAvatarOrAnonymous((int) $args['size']);
-
-        return $assets->getUrl($path);
+                            return null;
+                    }
+                },
+            ],
+        ];
     }
 
     /**
@@ -65,12 +67,11 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
      *
      * @return string
      */
-    public function resolveEmail(User $user)
+    private function resolveEmail(User $user)
     {
         $this->protectCurrentUserData($user);
 
-        $settingsManager = $this->container->get('chamilo.settings.manager');
-        $showEmail = $settingsManager->getSetting('display.show_email_addresses') === 'true';
+        $showEmail = $this->settingsManager->getSetting('display.show_email_addresses') === 'true';
 
         if (!$showEmail) {
             return '';
@@ -80,54 +81,39 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
     }
 
     /**
-     * @param User     $user
-     * @param Argument $args
+     * @param User $user
+     * @param int  $size
      *
-     * @return array
+     * @return string
      */
-    public function resolveMessages(User $user, Argument $args): array
+    private function resolvePicture(User $user, $size)
     {
-        $this->protectCurrentUserData($user);
+        $assets = $this->container->get('templating.helper.assets');
+        $path = $user->getAvatarOrAnonymous((int) $size);
 
-        /** @var MessageRepository $messageRepo */
-        $messageRepo = $this->em->getRepository('ChamiloCoreBundle:Message');
-        $messages = $messageRepo->getFromLastOneReceived($user, (int) $args['lastId']);
-
-        return $messages;
+        return $assets->getUrl($path);
     }
 
     /**
      * @param User $user
+     * @param int  $lastId
      *
-     * @return array
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function resolveCourses(User $user)
+    private function resolveMessages(User $user, $lastId)
     {
         $this->protectCurrentUserData($user);
 
-        $courses = [];
-        $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());
-        $coursesRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-
-        foreach ($coursesInfo as $courseInfo) {
-            /** @var Course $course */
-            $course = $coursesRepo->find($courseInfo['real_id']);
-
-            if ($course) {
-                $courses[] = $course;
-            }
-        }
-
-        return $courses;
+        return $user->getUnreadReceivedMessages($lastId);
     }
 
     /**
      * @param User   $user
      * @param string $filter
      *
-     * @return array
+     * @return array|mixed
      */
-    public function resolveMessageContacts(User $user, $filter): array
+    private function resolveMessageContacts(User $user, $filter)
     {
         $this->protectCurrentUserData($user);
 
@@ -142,32 +128,28 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
     }
 
     /**
-     * @param User         $user
-     * @param \ArrayObject $context
+     * @param User $user
      *
      * @return array
      */
-    public function resolveSessions(User $user): array
+    private function resolveCourses(User $user)
     {
         $this->protectCurrentUserData($user);
 
-        $sessionsId = $this->getUserSessions($user);
+        $coursesInfo = \CourseManager::get_courses_list_by_user_id($user->getId());
+        $coursesRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
+        $courses = [];
 
-        if (empty($sessionsId)) {
-            return [];
+        foreach ($coursesInfo as $courseInfo) {
+            /** @var Course $course */
+            $course = $coursesRepo->find($courseInfo['real_id']);
+
+            if ($course) {
+                $courses[] = $course;
+            }
         }
 
-        $qb = $this->em->createQueryBuilder();
-        $result = $qb
-            ->select('s')
-            ->from('ChamiloCoreBundle:Session', 's')
-            ->where(
-                $qb->expr()->in('s.id', $sessionsId)
-            )
-            ->getQuery()
-            ->getResult();
-
-        return $result;
+        return $courses;
     }
 
     /**
@@ -308,5 +290,33 @@ class UserResolver implements ResolverInterface, ContainerAwareInterface
         }
 
         return $results;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function resolveSessions(User $user)
+    {
+        $this->protectCurrentUserData($user);
+
+        $sessionsId = $this->getUserSessions($user);
+
+        if (empty($sessionsId)) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $result = $qb
+            ->select('s')
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->where(
+                $qb->expr()->in('s.id', $sessionsId)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $result;
     }
 }

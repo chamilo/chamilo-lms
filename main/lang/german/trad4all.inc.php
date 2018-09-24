@@ -7978,9 +7978,9 @@ $GoToSurvey = "Zur Umfrage";
 $OralExpressionHelpText = "Du kannst während der Aufnahme auf « Aufnahme anhalten » klicken. Wenn du nicht zufrieden bist, nimm dich erneut auf. Dies wird die vorherige Aufnahme überschreiben. Zufrieden? Um deine Aufnahme zu senden, klick einfach auf « Übung beenden ».";
 $MyGeneralCertificate = "Mein Zertifikat";
 $BossAlertMsgSentToUserXTitle = "Follow-up Nachricht über Lernende %s";
-$BossAlertUserXSentMessageToUserYWithLinkZ = "Hallo,<br/><br/>
-
-Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
-
-Die Nachricht ist an %s sichtbar";
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Hallo,<br/><br/>Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>Die Nachricht ist an %s sichtbar";
+$WhyYouWantToDeleteYourLegalAgreement = "Sie können unten einen Löschantrag stellen, um die erteilte Zustimmung zurückzuziehen oder Ihr Konto zu löschen.</br>Nachdem Sie die Zustimmung zu unseren Nutzungsbedingungen zurückgezogen haben, müssen Sie beim nächsten Login diese erneut zustimmen, denn wir Ihnen keinen Zugang zu Ihrem persönlichen Lernpfad ermöglichen können, wenn wir Ihre persönlichen Daten nicht verarbeiten dürfen.</br>Nachdem Sie den Löschantrag gestellt haben, wird Ihr Konto tatsächlich gelöscht, inklusiv alle besuchte Insel und kontobezogene Daten. Deswegen bitten wir Sie, diese Möglichkeit nach reifer Überlegung zu nutzen.</br>In beiden Fällen werden die Administratorinnen und Administratoren dieser Seite Ihre Anfrage überprüfen, um jegliches Missverständnis und den ungewollten unwiederunflichen Verlust Ihrer Daten zu vermeiden";
+$ExplanationDeleteLegal = "Bitte Begünden Sie kurz, warum Sie diesen Löschantrag stellen, damit wir das Löschen bestmöglich veranlassen können.";
+$DeleteAccount = "konto löschen";
+$ExplanationDeleteAccount = "Bitte Begünden Sie kurz, warum Sie diesen Löschantrag stellen, damit wir das Löschen bestmöglich veranlassen können.";
 ?>

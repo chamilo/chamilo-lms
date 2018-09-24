@@ -11953,7 +11953,7 @@ EOD;
      */
     public static function getCountCategories($courseId)
     {
-        if (empty($course_id)) {
+        if (empty($courseId)) {
             return 0;
         }
         $em = Database::getManager();

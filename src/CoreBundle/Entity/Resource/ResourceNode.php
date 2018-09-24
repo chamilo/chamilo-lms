@@ -29,7 +29,9 @@ class ResourceNode
 
     /**
      * @Gedmo\TreePathSource
+     *
      * @ORM\Column()
+     *
      * @Assert\NotBlank()
      */
     protected $name;
@@ -64,6 +66,7 @@ class ResourceNode
 
     /**
      * @Gedmo\TreeParent
+     *
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode",
      *     inversedBy="children"

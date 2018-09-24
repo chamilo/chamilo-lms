@@ -19,7 +19,7 @@ class ResourceRight
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", inversedBy="rights")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", inversedBy="resourceRight")
      * @ORM\JoinColumn(name="resource_link_id", referencedColumnName="id")
      */
     protected $resourceLink;

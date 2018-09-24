@@ -9,6 +9,11 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Sonata\CoreBundle\Model\BaseEntityManager;
 
+/**
+ * Class AnnouncementManager.
+ *
+ * @package Chamilo\CourseBundle\Entity\Manager
+ */
 class AnnouncementManager extends BaseEntityManager
 {
     /**
@@ -87,8 +92,8 @@ class AnnouncementManager extends BaseEntityManager
                     $extraGroupCondition";
             }
         } else {
-            $groupMemberships =  $user->getGroupMembershipsInCourse($course);
-            $tutoredGroups = $user->getTutoredGroupsInCourse($course);
+            $groupMemberships = $user->getCourseGroupsAsMemberFromCourse($course);
+            $tutoredGroups = $user->getCourseGroupsAsTutorFromCourse($course);
             $memberships = array_merge($groupMemberships->toArray(), $tutoredGroups->toArray());
 
             if (!empty($memberships)) {

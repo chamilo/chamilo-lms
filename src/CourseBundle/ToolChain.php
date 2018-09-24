@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -11,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sonata\AdminBundle\Form\Type\ModelReferenceType;
 
 /**
  * Class ToolChain.
@@ -89,6 +91,18 @@ class ToolChain
             ;
             $this->setToolPermissions($toolEntity);
             $manager->persist($toolEntity);
+
+            $types = $tool->getTypes();
+            if (!empty($types)) {
+                foreach ($types as $type) {
+                    $name = $type['name'];
+                    $resourceType = new ResourceType();
+                    $resourceType->setName($name);
+                    $resourceType->setTool($toolEntity);
+                    $manager->persist($resourceType);
+                }
+            }
+
             $manager->flush();
         }
     }

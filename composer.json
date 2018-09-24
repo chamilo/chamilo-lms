@@ -3,7 +3,7 @@
     "description": "E-learning and collaboration software",
     "type": "project",
     "homepage": "http://www.chamilo.org",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-or-later",
     "support": {
         "forum": "https://chamilo.org/forum",
         "irc": "irc://irc.freenode.org/chamilo",
@@ -13,8 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Chamilo\\": "src/",
-            "Application\\": "app/"
+            "Chamilo\\": "src/"
         },
         "classmap": [
             "main/auth",
@@ -71,7 +70,6 @@
         "symfony/annotations-pack": "^1.0",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/apache-pack": "^1.0",
-        "symfony/var-dumper": "^4.0",
 
         "apy/datagrid-bundle" : "dev-master",
 
@@ -102,7 +100,6 @@
         "stof/doctrine-extensions-bundle": "~1.0",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
         "sylius/resource-bundle": "1.2.*",
-
 
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "gedmo/doctrine-extensions": "~2.4",
@@ -160,6 +157,7 @@
         "firebase/php-jwt": "^5.0"
     },
     "require-dev": {
+        "symfony/var-dumper": "^4.0",
         "friendsofphp/php-cs-fixer": "^2.7",
         "symfony/browser-kit": "^4.0",
         "symfony/css-selector": "^4.0",

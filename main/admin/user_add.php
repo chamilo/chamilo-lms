@@ -245,7 +245,7 @@ $form->addElement(
 );
 
 //drh list (display only if student)
-$display = isset($_POST['status']) && $_POST['status'] == STUDENT || !isset($_POST['status']) ? 'block' : 'none';
+$display = (isset($_POST['status']) && $_POST['status'] == STUDENT) || !isset($_POST['status']) ? 'block' : 'none';
 
 //@todo remove the drh list here. This code is unused
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');

@@ -120,6 +120,12 @@ class CourseResolver implements ResolverInterface, ContainerAwareInterface
             }
         });
 
+        if (!empty($args['type'])) {
+            $tools = array_filter($tools, function ($tool) use ($args) {
+                return $tool['name'] === $args['type'];
+            });
+        }
+
         $ids = array_column($tools, 'iid');
 
         $qb = $this->em->createQueryBuilder();

@@ -1339,7 +1339,7 @@ class GroupManager
 
         /** @var CGroupRelUser $subscription */
         foreach ($subscriptions as $subscription) {
-            $users[] = api_get_user_info($subscription->getUserId());
+            $users[] = api_get_user_info($subscription->getUser()->getId());
         }
 
         return $users;

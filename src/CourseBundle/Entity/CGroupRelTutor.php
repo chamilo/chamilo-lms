@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,29 +43,31 @@ class CGroupRelTutor
     protected $id;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="courseGroupsAsTutor")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $userId;
+    protected $user;
 
     /**
-     * @var int
+     * @var CGroupInfo
      *
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="tutors")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
-    protected $groupId;
+    protected $group;
 
     /**
      * Set userId.
      *
-     * @param int $userId
+     * @param User $user
      *
      * @return CGroupRelTutor
      */
-    public function setUserId($userId)
+    public function setUser(User $user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -72,35 +75,35 @@ class CGroupRelTutor
     /**
      * Get userId.
      *
-     * @return int
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * Set groupId.
+     * Set group.
      *
-     * @param int $groupId
+     * @param CGroupInfo $group
      *
      * @return CGroupRelTutor
      */
-    public function setGroupId($groupId)
+    public function setGroup(CGroupInfo $group)
     {
-        $this->groupId = $groupId;
+        $this->group = $group;
 
         return $this;
     }
 
     /**
-     * Get groupId.
+     * Get group.
      *
-     * @return int
+     * @return CGroupInfo
      */
-    public function getGroupId()
+    public function getGroup()
     {
-        return $this->groupId;
+        return $this->group;
     }
 
     /**

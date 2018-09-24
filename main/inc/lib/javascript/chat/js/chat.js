@@ -41,6 +41,7 @@ var widthBox = 320; // see css class .chatbox
 function set_user_status(status)
 {
     if (status == 1) {
+        stopChatHeartBeat();
         startChatHeartBeat();
         $('.user_status_main').html(online_button);
         $('#chatboxtitlemain').html(connect_lang);

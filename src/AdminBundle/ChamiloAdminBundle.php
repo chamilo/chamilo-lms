@@ -6,9 +6,9 @@ namespace Chamilo\AdminBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ApplicationSonataAdminBundle.
+ * Class ChamiloAdminBundle.
  *
- * @package Application\Sonata\AdminBundle
+ * @package Chamilo\AdminBundle
  */
 class ChamiloAdminBundle extends Bundle
 {

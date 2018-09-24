@@ -43,12 +43,13 @@ if (isset($pluginInfo['settings_form'])) {
         Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning')
     );
 }
+
 if (isset($form)) {
     if ($form->validate()) {
         $values = $form->getSubmitValues();
 
         // Fix only for bbb
-        if ($pluginName === 'bbb') {
+        if ($pluginName == 'bbb') {
             if (!isset($values['global_conference_allow_roles'])) {
                 $values['global_conference_allow_roles'] = [];
             }

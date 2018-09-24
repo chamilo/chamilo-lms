@@ -240,11 +240,11 @@ class ImportCsv
                 'teachers-static',
                 'courses-static',
                 'sessions-static',
-                'calendar-static',
                 'sessionsextid-static',
                 'unsubscribe-static',
                 'unsubsessionsextid-static',
                 'subsessionsextid-static',
+                'calendar-static',
             ];
 
             foreach ($sections as $section) {
@@ -667,6 +667,10 @@ class ImportCsv
                         false //$send_mail = false
                     );
 
+                    $row['extra_mail_notify_invitation'] = 1;
+                    $row['extra_mail_notify_message'] = 1;
+                    $row['extra_mail_notify_group_message'] = 1;
+
                     if ($userId) {
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') {
@@ -831,6 +835,10 @@ class ImportCsv
                         null, //$encrypt_method = '',
                         false //$send_mail = false
                     );
+
+                    $row['extra_mail_notify_invitation'] = 1;
+                    $row['extra_mail_notify_message'] = 1;
+                    $row['extra_mail_notify_group_message'] = 1;
 
                     if ($result) {
                         foreach ($row as $key => $value) {
@@ -1026,6 +1034,11 @@ class ImportCsv
 
                 if (empty($courseInfo)) {
                     $this->logger->addInfo("Course '$courseCode' does not exists");
+                } else {
+                    if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                        $this->logger->addInfo("Course '".$courseInfo['code']."' has hidden visiblity. Skip");
+                        $errorFound = true;
+                    }
                 }
 
                 if (empty($sessionId)) {
@@ -1035,7 +1048,6 @@ class ImportCsv
                 $sessionInfo = [];
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $sessionInfo = api_get_session_info($sessionId);
-
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
                         $courseInfo['real_id']

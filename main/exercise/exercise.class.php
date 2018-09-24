@@ -962,29 +962,38 @@ class Exercise
 
         $result['question_list'] = isset($question_list) ? $question_list : [];
         $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : [];
+        $parentsLoaded = [];
         // Adding category info in the category list with question list:
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
+
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
-                $cat = (array) $cat;
-                $cat['iid'] = $cat['id'];
+                if ($cat) {
+                    $cat = (array) $cat;
+                    $cat['iid'] = $cat['id'];
+                }
+
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
-                if (!empty($cat['parent_id'])) {
+                if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
+                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
                         $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
+                    $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
                     $path = $repo->getPath($categoryEntity);
+
                     $index = 0;
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
+
                     /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent */
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
@@ -3229,7 +3238,11 @@ class Exercise
      */
     public function showTimeControlJS($time_left)
     {
-        $time_left = intval($time_left);
+        $time_left = (int) $time_left;
+        $script = "redirectExerciseToResult();";
+        if ($this->type == ALL_ON_ONE_PAGE) {
+            $script = "save_now_all('validate');";
+        }
 
         return "<script>
             function openClockWarning() {
@@ -3247,6 +3260,7 @@ class Exercise
                         send_form();
                     }
                 });
+                
                 $('#clock_warning').dialog('open');
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
@@ -3259,7 +3273,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    save_now_all('validate');
+                    $script
                 } else {
                     // In exercise_reminder.php
                     final_submit();

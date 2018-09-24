@@ -23,7 +23,7 @@ Encore
     .addEntry('bootstrap', './assets/js/bootstrap.js')
     // Reads app.scss -> output as web/build/css/base.css
     .addStyleEntry('css/app', './assets/css/app.scss')
-    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
+    //.addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
 
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')
@@ -46,34 +46,7 @@ Encore
 ;
 
 var themes = [
-    'academica',
-    'baby_orange',
-    'beach',
-    'blue_lagoon',
-    'chamilo',
-    'chamilo_electric_blue',
-    'chamilo_green',
-    'chamilo_orange',
-    'chamilo_red',
-    'chamilo_sport_red',
-    'cool_blue',
-    'corporate',
-    'cosmic_campus',
-    'delicious_bordeaux',
-    'empire_green',
-    'fruity_orange',
-    'holi',
-    'journal',
-    'kiddy',
-    'medical',
-    'readable',
-    'royal_purple',
-    'silver_line',
-    'simplex',
-    'sober_brown',
-    'spacelab',
-    'steel_grey',
-    'tasty_olive',
+    'chamilo'
 ];
 
 // Add Chamilo themes

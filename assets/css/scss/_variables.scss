@@ -39,16 +39,6 @@ $default-white        : #fff;
 $default-active       : #006b9e;
 
 // ---------------------------------------------------------
-// INVERTED COLORS
-// ---------------------------------------------------------
-
-$inverse-danger       : lighten($default-danger, 35%);
-$inverse-info         : lighten($default-info, 45%);
-$inverse-primary      : lighten($default-primary, 30%);
-$inverse-success      : lighten($default-success, 45%);
-$inverse-warning      : lighten($default-warning, 45%);
-
-// ---------------------------------------------------------
 // OTHERS
 // ---------------------------------------------------------
 
@@ -56,19 +46,6 @@ $inverse-warning      : lighten($default-warning, 45%);
 $collapsed-size       : 70px;
 $header-height        : 65px;
 $offscreen-size       : 280px;
-$side-nav-dark        : #313644;
-$side-nav-dark-border : rgba(120, 130, 140, 0.3);
-$side-nav-dark-font   : #99abb4;
-
-// ---------------------------------------------------------
-// HEADER THEMES
-// ---------------------------------------------------------
-
-$theme-danger         : #f53f61;
-$theme-dark           : lighten($side-nav-dark, 10%);
-$theme-info           : $default-info;
-$theme-primary        : $default-primary;
-$theme-success        : desaturate($default-success, 5%);
 $theme-bg             : #FFFFFF;
 
 // ---------------------------------------------------------

@@ -2126,3 +2126,7 @@ blockquote p {
 .toolbar-cookie {
     bottom:90px;
 }
+
+.ofaj-search .form-group label {
+    font-weight: normal;
+}

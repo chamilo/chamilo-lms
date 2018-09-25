@@ -9,7 +9,32 @@ type Query {
     sessionCategory(id: Int!): SessionCategory!
 }
 
+type Mutation {
+    "Authenticate user."
+    authenticate(username: String!, password: String!): AuthenticatePayload!
+    "Send messages to user contacts."
+    viewerSendMessage(
+        "Unique IDs of users who will receive the message."
+        receivers: [Int!]!,
+        subject: String!,
+        content: String!
+    ): [ViewerSendMessagePayload!]
+}
+
 # Objects
+
+type AuthenticatePayload {
+    "Authorization token."
+    token: String!
+}
+
+"The status for each message in queue."
+type ViewerSendMessagePayload {
+    "The unique ID for the receiver user."
+    receiverId: Int!
+    "It indicates if the message was or wasn't sent."
+    sent: Boolean!
+}
 
 "A registered user on the platform."
 type User {

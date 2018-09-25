@@ -81,34 +81,6 @@ trait ApiGraphQLTrait
     }
 
     /**
-     * @param string $username
-     * @param string $password
-     *
-     * @return string
-     */
-    private function getUserToken($username, $password): string
-    {
-        /** @var User $user */
-        $user = $this->em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $username]);
-
-        if (!$user) {
-            throw new UserError($this->translator->trans('NoUser'));
-        }
-
-        $encoder = $this->container->get('security.password_encoder');
-        $isValid = $encoder->isPasswordValid(
-            $user,
-            $password
-        );
-
-        if (!$isValid) {
-            throw new UserError($this->translator->trans('InvalidId'));
-        }
-
-        return self::encodeToken($user);
-    }
-
-    /**
      * @param User $user
      *
      * @return string

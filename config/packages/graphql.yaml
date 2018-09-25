@@ -2,11 +2,13 @@ overblog_graphql:
     definitions:
         schema:
             query: Query
+            mutation: Mutation
             resolver_maps:
                 - Chamilo\ApiBundle\GraphQL\Map\RootResolverMap
                 - Chamilo\ApiBundle\GraphQL\Map\UserResolverMap
                 - Chamilo\ApiBundle\GraphQL\Map\EnumResolverMap
                 - Chamilo\ApiBundle\GraphQL\Map\ScalarResolverMap
+                - Chamilo\ApiBundle\GraphQL\Map\MutationResolverMap
         mappings:
             types:
                 -

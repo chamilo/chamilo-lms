@@ -1138,7 +1138,7 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result)) {
             // This is the iid of c_group_info
             $toGroup = $row['to_group_id'];
-            if (!empty($groupId) && $groupId != $toGroup) {
+            if (empty($row['to_user_id']) && !empty($groupId) && $groupId != $toGroup) {
                 continue;
             }
             switch ($toGroup) {
